@@ -1,42 +1,40 @@
 # veworld-mobile
 
+# Environment setup
+
+I order to run this project install the following dependencies:
+
+**Global Dependencies**
+
+```
+- Homebrew
+- Node - v18.12.1
+- Ruby - v2.7.5
+```
+
+**Platform specific**
+
+iOS:
+
+Download Xcode form the Mac AppStore
+
+```
+- Xcode - v14.2
+```
+
+**Android**
+
+```
+- JDK - zulu11
+- Android Studio
+```
+
+Follow the official React Native [documentation](https://reactnative.dev/docs/environment-setup) for detailed explenation and additional steps.
+
+#
+
 # Git Conventions
 
-# Commits
+### Convential commits
 
-This repo uses [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) and [commitlint](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional).
-
-Example of usage:
-
-`chore(api): add axios library`
-
-**\* **NOTE** \*** lowercase rule is impossed.
-
-Basic form of commit messages:
-
-```
-<type>[optional scope]: <description>
-
-[optional body]
-
-[optional footer(s)]
-
-```
-
--   **Type:**
-
-```
-[
-  'build',
-  'chore',
-  'ci',
-  'docs',
-  'feat',
-  'fix',
-  'perf',
-  'refactor',
-  'revert',
-  'style',
-  'test'
-];
-```
+Read more [here](./docs/conventioanl_commits.md)
