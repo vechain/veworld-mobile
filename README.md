@@ -8,7 +8,7 @@ This repo uses [Conventional Commits](https://www.conventionalcommits.org/en/v1.
 
 Example of usage:
 
-`chore[api]: add axios library `
+`chore(api): add axios library`
 
 **\* **NOTE** \*** lowercase rule is impossed.
 
