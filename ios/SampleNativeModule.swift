@@ -28,6 +28,6 @@ class SampleNativeModule: NSObject {
       reject("NativeScrypt", error.localizedDescription, error)
     }
     
-    resolve(" Hello \(text)!")
+    resolve("Hello \(text)")
   }
 }
