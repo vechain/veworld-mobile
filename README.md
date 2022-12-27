@@ -38,3 +38,8 @@ Follow the official React Native [documentation](https://reactnative.dev/docs/en
 ### Convential commits
 
 Read more [here](./docs/conventioanl_commits.md)
+
+
+# Testing 
+
+This project uses [Detox](https://wix.github.io/Detox/docs/introduction/getting-started/) for E2E tests. Read more [here](./docs/detox.md)

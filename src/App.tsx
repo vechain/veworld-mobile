@@ -1,43 +1,32 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
     SafeAreaView,
     ScrollView,
     StatusBar,
-    StyleSheet,
     Text,
-    useColorScheme,
     NativeModules,
     TouchableOpacity,
 } from 'react-native'
 
-import {Colors} from 'react-native/Libraries/NewAppScreen'
-
 const {SampleNativeModule} = NativeModules
 
 const App = () => {
-    const isDarkMode = useColorScheme() === 'dark'
-
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    }
+    const [nativeText, setNativeText] = useState('')
 
     const onPressNativeModule = async () => {
         const res = await SampleNativeModule.getText('Vechain')
-        console.log(res)
+        setNativeText(res)
     }
 
     return (
-        <SafeAreaView style={backgroundStyle}>
-            <StatusBar
-                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                backgroundColor={backgroundStyle.backgroundColor}
-            />
-            <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                style={backgroundStyle}>
-                <TouchableOpacity onPress={onPressNativeModule}>
+        <SafeAreaView>
+            <StatusBar />
+            <ScrollView contentInsetAdjustmentBehavior="automatic">
+                <TouchableOpacity testID="Button" onPress={onPressNativeModule}>
                     <Text>Press me to call a native function</Text>
                 </TouchableOpacity>
+
+                {nativeText && <Text>{nativeText}</Text>}
             </ScrollView>
         </SafeAreaView>
     )
