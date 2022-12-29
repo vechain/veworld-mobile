@@ -5,13 +5,28 @@
  * @format
  */
 
-module.exports = {
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
-  },
-};
+const {getDefaultConfig} = require('metro-config')
+
+module.exports = (async () => {
+    const {
+        resolver: {sourceExts},
+    } = await getDefaultConfig(__dirname)
+
+    const exts = process.env.RN_SRC_EXT
+        ? process.env.RN_SRC_EXT.split(',').concat(sourceExts)
+        : sourceExts
+
+    return {
+        transformer: {
+            getTransformOptions: async () => ({
+                transform: {
+                    experimentalImportSupport: false,
+                    inlineRequires: true,
+                },
+            }),
+        },
+        resolver: {
+            sourceExts: [...exts, 'cjs'],
+        },
+    }
+})()

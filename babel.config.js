@@ -11,6 +11,7 @@ module.exports = {
                     '~Navigation': './src/Navigation',
                     '~Common': './src/Common',
                     '~Components': './src/Components',
+                    '~i18n': './src/i18n',
                 },
                 extensions: ['.js', '.jsx', '.json', '.tsx', '.ts'],
             },

@@ -7,6 +7,8 @@ import {
     NativeModules,
     TouchableOpacity,
 } from 'react-native'
+import {Translation} from '~Components'
+import {TestScreen} from '~Screens/Onboarding/TestScreen'
 
 const {SampleNativeModule} = NativeModules
 
@@ -19,16 +21,22 @@ const App = () => {
     }
 
     return (
-        <SafeAreaView>
-            <StatusBar />
-            <ScrollView contentInsetAdjustmentBehavior="automatic">
-                <TouchableOpacity testID="Button" onPress={onPressNativeModule}>
-                    <Text>Press me to call a native function</Text>
-                </TouchableOpacity>
+        <Translation>
+            <SafeAreaView>
+                <StatusBar />
+                <ScrollView contentInsetAdjustmentBehavior="automatic">
+                    <TouchableOpacity
+                        testID="Button"
+                        onPress={onPressNativeModule}>
+                        <Text>Press me to call a native function</Text>
+                    </TouchableOpacity>
 
-                {nativeText && <Text>{nativeText}</Text>}
-            </ScrollView>
-        </SafeAreaView>
+                    <TestScreen />
+
+                    {nativeText && <Text>{nativeText}</Text>}
+                </ScrollView>
+            </SafeAreaView>
+        </Translation>
     )
 }
 
