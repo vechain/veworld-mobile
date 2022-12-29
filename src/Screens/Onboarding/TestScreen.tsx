@@ -7,7 +7,7 @@ export const TestScreen = () => {
 
     return (
         <View>
-            <Text>Test {LL.HI({name: 'VeChain'})}</Text>
+            <Text>{LL.HI({name: 'VeChain'})}</Text>
         </View>
     )
 }
