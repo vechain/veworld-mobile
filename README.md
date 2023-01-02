@@ -29,6 +29,34 @@ Download Xcode form the Mac AppStore
 - Android Studio
 ```
 
+
+# Run the project
+
+
+The first time you clone the repo you need to do: 
+
+```js
+- yarn install
+- npx pod-install
+```
+
+then on every other time:
+
+### iOS
+```js
+- yarn start
+- yarn ios
+```
+
+
+### Android
+
+``` js
+- yarn start
+- yarn android
+```
+
+
 Follow the official React Native [documentation](https://reactnative.dev/docs/environment-setup) for detailed explenation and additional steps.
 
 #
