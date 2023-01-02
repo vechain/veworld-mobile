@@ -2,12 +2,12 @@ import React, {useState} from 'react'
 import {NativeModules, TouchableOpacity} from 'react-native'
 import {
     Translation,
-    VWSafeArea,
-    VWScrollView,
-    VWSpacer,
-    VWStatusBar,
-    VWText,
-    VWView,
+    BaseSafeArea,
+    BaseScrollView,
+    BaseSpacer,
+    BaseStatusBar,
+    BaseText,
+    BaseView,
 } from '~Components'
 import {TestScreen} from '~Screens/Onboarding/TestScreen'
 
@@ -23,28 +23,28 @@ const App = () => {
 
     return (
         <Translation>
-            <VWSafeArea />
-            <VWStatusBar />
+            <BaseSafeArea />
+            <BaseStatusBar />
 
-            <VWScrollView>
+            <BaseScrollView>
                 <TouchableOpacity testID="Button" onPress={onPressNativeModule}>
-                    <VWText>Press me to call a native function</VWText>
+                    <BaseText>Press me to call a native function</BaseText>
                 </TouchableOpacity>
 
-                <VWSpacer height={20} />
+                <BaseSpacer height={20} />
 
                 <TestScreen />
 
-                <VWSpacer height={20} />
+                <BaseSpacer height={20} />
 
-                {nativeText && <VWText>{nativeText}</VWText>}
+                {nativeText && <BaseText>{nativeText}</BaseText>}
 
-                <VWSpacer height={20} />
+                <BaseSpacer height={20} />
 
-                <VWView>
-                    <VWText>TEST TEXT</VWText>
-                </VWView>
-            </VWScrollView>
+                <BaseView>
+                    <BaseText font="largeTitle">TEST TEXT</BaseText>
+                </BaseView>
+            </BaseScrollView>
         </Translation>
     )
 }

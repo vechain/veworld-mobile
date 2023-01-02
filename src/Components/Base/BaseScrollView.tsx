@@ -7,7 +7,7 @@ type Props = {
     flexGrow?: boolean
 } & ScrollViewProps
 
-export const VWScrollView: FC<Props> = props => {
+export const BaseScrollView: FC<Props> = props => {
     const {style, ...otherProps} = props
     const theme = useTheme()
 

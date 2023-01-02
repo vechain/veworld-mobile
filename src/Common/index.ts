@@ -1,3 +1,5 @@
 export * from './Hooks'
 export * from './Theme/Theme'
-export * from './Theme/types'
+export * from './Theme/Types'
+export * from './Theme/Enums'
+export * from './Types'

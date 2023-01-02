@@ -1,30 +1,30 @@
-import {Typography} from '~Common'
+import {TFonts, Typography, Fonts} from '~Common'
 
 export const cumputeFontSize = (
-    font: string | undefined,
+    font: TFonts | undefined,
     typography: Typography,
 ) => {
-    if (font === 'largeTitle') {
+    if (font === Fonts.largeTitle) {
         return typography.largeTitle.fontSize
     }
 
-    if (font === 'title') {
+    if (font === Fonts.title) {
         return typography.title.fontSize
     }
 
-    if (font === 'subTitle') {
+    if (font === Fonts.subTitle) {
         return typography.subTitle.fontSize
     }
 
-    if (font === 'body') {
+    if (font === Fonts.body) {
         return typography.body.fontSize
     }
 
-    if (font === 'footnote') {
+    if (font === Fonts.footnote) {
         return typography.footnote.fontSize
     }
 
-    if (font === 'caption') {
+    if (font === Fonts.caption) {
         return typography.caption.fontSize
     }
 

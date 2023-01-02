@@ -24,7 +24,7 @@ type Props = {
     isFlex?: boolean
 } & ViewProps
 
-export const VWView = (props: Props) => {
+export const BaseView = (props: Props) => {
     const {style, ...otherProps} = props
     const theme = useTheme()
 

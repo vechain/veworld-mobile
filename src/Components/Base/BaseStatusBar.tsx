@@ -7,7 +7,7 @@ type Props = {
     transparent?: boolean
 } & StatusBarProps
 
-export const VWStatusBar = (props: Props) => {
+export const BaseStatusBar = (props: Props) => {
     const theme = useTheme()
     const barStyle = useMemo(
         () =>

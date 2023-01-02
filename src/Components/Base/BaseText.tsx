@@ -1,24 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useMemo} from 'react'
 import {Text, TextProps} from 'react-native'
-import {useTheme} from '~Common'
-import {VWView} from './VWView'
+import {TFonts, TWeight, useTheme} from '~Common'
+import {BaseView} from './BaseView'
 import {cumputeFontSize} from './Helpers/ComputeFontSize'
 
 type Props = {
-    weight?:
-        | 'normal'
-        | 'bold'
-        | '100'
-        | '200'
-        | '300'
-        | '400'
-        | '500'
-        | '600'
-        | '700'
-        | '800'
-        | '900'
-    font?: 'largeTitle' | 'title' | 'subTitle' | 'body' | 'footnote' | 'caption'
+    weight?: TWeight
+    font?: TFonts
     align?: 'left' | 'center' | 'right'
     italic?: boolean
     color?: string
@@ -30,7 +19,7 @@ type Props = {
     py?: number
 } & TextProps
 
-export const VWText = (props: Props) => {
+export const BaseText = (props: Props) => {
     const {style, ...otherProps} = props
     const theme = useTheme()
 
@@ -41,7 +30,7 @@ export const VWText = (props: Props) => {
     )
 
     return (
-        <VWView
+        <BaseView
             m={props.m ? props.m : undefined}
             mx={props.mx ? props.mx : undefined}
             my={props.my ? props.my : undefined}
@@ -61,6 +50,6 @@ export const VWText = (props: Props) => {
                 ]}
                 {...otherProps}
             />
-        </VWView>
+        </BaseView>
     )
 }
