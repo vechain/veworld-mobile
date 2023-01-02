@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
+import {NativeModules, TouchableOpacity} from 'react-native'
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    Text,
-    NativeModules,
-    TouchableOpacity,
-} from 'react-native'
-import {Translation} from '~Components'
+    Translation,
+    BaseSafeArea,
+    BaseScrollView,
+    BaseSpacer,
+    BaseStatusBar,
+    BaseText,
+    BaseView,
+} from '~Components'
 import {TestScreen} from '~Screens/Onboarding/TestScreen'
 
 const {SampleNativeModule} = NativeModules
@@ -22,20 +23,28 @@ const App = () => {
 
     return (
         <Translation>
-            <SafeAreaView>
-                <StatusBar />
-                <ScrollView contentInsetAdjustmentBehavior="automatic">
-                    <TouchableOpacity
-                        testID="Button"
-                        onPress={onPressNativeModule}>
-                        <Text>Press me to call a native function</Text>
-                    </TouchableOpacity>
+            <BaseSafeArea />
+            <BaseStatusBar />
 
-                    <TestScreen />
+            <BaseScrollView>
+                <TouchableOpacity testID="Button" onPress={onPressNativeModule}>
+                    <BaseText>Press me to call a native function</BaseText>
+                </TouchableOpacity>
 
-                    {nativeText && <Text>{nativeText}</Text>}
-                </ScrollView>
-            </SafeAreaView>
+                <BaseSpacer height={20} />
+
+                <TestScreen />
+
+                <BaseSpacer height={20} />
+
+                {nativeText && <BaseText>{nativeText}</BaseText>}
+
+                <BaseSpacer height={20} />
+
+                <BaseView>
+                    <BaseText font="largeTitle">TEST TEXT</BaseText>
+                </BaseView>
+            </BaseScrollView>
         </Translation>
     )
 }

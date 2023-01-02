@@ -1,0 +1,20 @@
+export type TFonts =
+    | 'largeTitle'
+    | 'title'
+    | 'subTitle'
+    | 'body'
+    | 'footnote'
+    | 'caption'
+
+export type TWeight =
+    | 'normal'
+    | 'bold'
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
