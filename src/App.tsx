@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
+import {NativeModules, TouchableOpacity} from 'react-native'
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    Text,
-    NativeModules,
-    TouchableOpacity,
-} from 'react-native'
-import {Translation} from '~Components'
+    Translation,
+    VWSafeArea,
+    VWScrollView,
+    VWSpacer,
+    VWStatusBar,
+    VWText,
+    VWView,
+} from '~Components'
 import {TestScreen} from '~Screens/Onboarding/TestScreen'
 
 const {SampleNativeModule} = NativeModules
@@ -22,20 +23,28 @@ const App = () => {
 
     return (
         <Translation>
-            <SafeAreaView>
-                <StatusBar />
-                <ScrollView contentInsetAdjustmentBehavior="automatic">
-                    <TouchableOpacity
-                        testID="Button"
-                        onPress={onPressNativeModule}>
-                        <Text>Press me to call a native function</Text>
-                    </TouchableOpacity>
+            <VWSafeArea />
+            <VWStatusBar />
 
-                    <TestScreen />
+            <VWScrollView>
+                <TouchableOpacity testID="Button" onPress={onPressNativeModule}>
+                    <VWText>Press me to call a native function</VWText>
+                </TouchableOpacity>
 
-                    {nativeText && <Text>{nativeText}</Text>}
-                </ScrollView>
-            </SafeAreaView>
+                <VWSpacer height={20} />
+
+                <TestScreen />
+
+                <VWSpacer height={20} />
+
+                {nativeText && <VWText>{nativeText}</VWText>}
+
+                <VWSpacer height={20} />
+
+                <VWView>
+                    <VWText>TEST TEXT</VWText>
+                </VWView>
+            </VWScrollView>
         </Translation>
     )
 }

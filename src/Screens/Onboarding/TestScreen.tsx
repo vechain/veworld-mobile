@@ -1,13 +1,13 @@
-import {Text, View} from 'react-native'
 import React from 'react'
 import {useI18nContext} from '~i18n'
+import {VWText, VWView} from '~Components'
 
 export const TestScreen = () => {
     const {LL} = useI18nContext()
 
     return (
-        <View>
-            <Text>{LL.HI({name: 'VeChain'})}</Text>
-        </View>
+        <VWView>
+            <VWText>{LL.HI({name: 'VeChain'})}</VWText>
+        </VWView>
     )
 }
