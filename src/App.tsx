@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {NativeModules, TouchableOpacity} from 'react-native'
+import {NativeModules} from 'react-native'
 import {
     Translation,
     BaseSafeArea,
@@ -8,6 +8,7 @@ import {
     BaseStatusBar,
     BaseText,
     BaseView,
+    BaseButton,
 } from '~Components'
 import {TestScreen} from '~Screens/Onboarding/TestScreen'
 
@@ -27,9 +28,14 @@ const App = () => {
             <BaseStatusBar />
 
             <BaseScrollView>
-                <TouchableOpacity testID="Button" onPress={onPressNativeModule}>
-                    <BaseText>Press me to call a native function</BaseText>
-                </TouchableOpacity>
+                <BaseButton
+                    testID="Button"
+                    action={onPressNativeModule}
+                    mx={20}>
+                    <BaseText isButton>
+                        Press me to call a native function
+                    </BaseText>
+                </BaseButton>
 
                 <BaseSpacer height={20} />
 
@@ -41,8 +47,10 @@ const App = () => {
 
                 <BaseSpacer height={20} />
 
-                <BaseView>
-                    <BaseText font="largeTitle">TEST TEXT</BaseText>
+                <BaseView background="pink" mx={20}>
+                    <BaseText font="largeTitle" px={20}>
+                        TEST TEXT
+                    </BaseText>
                 </BaseView>
             </BaseScrollView>
         </Translation>

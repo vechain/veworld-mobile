@@ -4,6 +4,7 @@ import {Text, TextProps} from 'react-native'
 import {TFonts, TWeight, useTheme} from '~Common'
 import {BaseView} from './BaseView'
 import {cumputeFontSize} from './Helpers/ComputeFontSize'
+import {computeTextColor} from './Helpers/ComputeTextColor'
 
 type Props = {
     weight?: TWeight
@@ -11,6 +12,7 @@ type Props = {
     align?: 'left' | 'center' | 'right'
     italic?: boolean
     color?: string
+    isButton?: boolean
     m?: number
     mx?: number
     my?: number
@@ -29,18 +31,30 @@ export const BaseText = (props: Props) => {
         [props.font],
     )
 
+    const computeColor = useMemo(
+        () =>
+            computeTextColor(
+                props.isButton,
+                props.color,
+                theme.colors.text,
+                theme.colors.button,
+            ),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [props.color, props.isButton, theme.isDark],
+    )
+
     return (
         <BaseView
-            m={props.m ? props.m : undefined}
-            mx={props.mx ? props.mx : undefined}
-            my={props.my ? props.my : undefined}
-            p={props.p ? props.p : undefined}
-            px={props.px ? props.px : undefined}
-            py={props.py ? props.py : undefined}>
+            m={props.m}
+            mx={props.mx}
+            my={props.my}
+            p={props.p}
+            px={props.px}
+            py={props.py}>
             <Text
                 style={[
                     {
-                        color: props.color ? props.color : theme.colors.text,
+                        color: computeColor,
                         fontWeight: props.weight ? props.weight : 'normal',
                         fontSize: cumputeFont,
                         textAlign: props.align,

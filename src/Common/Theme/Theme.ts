@@ -33,6 +33,7 @@ export const Theme: ThemeType = {
             text: 'white',
             tabicon: '#b1b1b1',
             tabiconInactive: '#595959',
+            button: '#7e3ab9',
         },
     },
     light: {
@@ -43,6 +44,7 @@ export const Theme: ThemeType = {
             text: 'black',
             tabicon: 'black',
             tabiconInactive: '#595959',
+            button: '#b66aca',
         },
     },
 }
