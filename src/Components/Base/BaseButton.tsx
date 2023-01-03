@@ -1,14 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
-import {
-    TouchableOpacity,
-    TouchableOpacityProps,
-    TouchableHighlightProps,
-    StyleSheet,
-} from 'react-native'
+import {TouchableOpacity, TouchableOpacityProps, StyleSheet} from 'react-native'
 import React from 'react'
 import {useTheme} from '~Common'
-
-type PlatformButton = TouchableOpacityProps | TouchableHighlightProps
 
 type Props = {
     action: () => void
@@ -23,7 +16,7 @@ type Props = {
     py?: number
     w?: number
     h?: number
-} & PlatformButton
+} & TouchableOpacityProps
 
 export const BaseButton = (props: Props) => {
     const {style, disabled = false, ...otherProps} = props
@@ -53,7 +46,7 @@ export const BaseButton = (props: Props) => {
                     opacity: disabled ? 0.5 : 1,
                 },
                 style,
-                s.default,
+                baseStyle.default,
             ]}
             {...otherProps}>
             {props.children}
@@ -61,7 +54,7 @@ export const BaseButton = (props: Props) => {
     )
 }
 
-const s = StyleSheet.create({
+const baseStyle = StyleSheet.create({
     default: {
         borderRadius: 8,
         borderWidth: 1,

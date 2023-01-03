@@ -2,11 +2,7 @@ export const computeBarStyle = (
     isHero: boolean | undefined,
     isDark: boolean,
 ) => {
-    if (isHero) {
-        return 'light-content'
-    }
-
-    if (isDark) {
+    if (isHero || isDark) {
         return 'light-content'
     }
 
