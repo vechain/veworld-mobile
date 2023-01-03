@@ -5,6 +5,7 @@ export type ThemeVariant = {
         text: string
         tabicon: string
         tabiconInactive: string
+        button: string
     }
 }
 
