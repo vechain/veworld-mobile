@@ -1,6 +1,8 @@
 import React from 'react'
 import {BaseButton, BaseSafeArea, BaseSpacer, BaseText} from '~Components'
 import {useNavigation} from '@react-navigation/native'
+import VectorImage from 'react-native-vector-image'
+import {VeChainVetLogo} from '~Assets'
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -14,7 +16,9 @@ export const WelcomeScreen = () => {
     return (
         <>
             <BaseSafeArea transparent />
-            <BaseText>WelcomeScreen</BaseText>
+            <BaseText font="largeTitle_accent">Welcome to VeWorld</BaseText>
+
+            <VectorImage source={VeChainVetLogo} />
 
             <BaseSpacer height={20} />
 

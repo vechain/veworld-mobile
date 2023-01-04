@@ -16,21 +16,25 @@
     "e2e.android.build.r": "detox build --configuration android.emu.release",
     "e2e.android.test.d": "detox test --configuration android.emu.debug",
     "e2e.android.test.r": "detox test --configuration android.emu.release",
-    "typesafe-i18n": "typesafe-i18n"
+    "typesafe-i18n": "typesafe-i18n",
+    "gen-svg": "react-native-vector-image generate"
   },
   "dependencies": {
+    "@klarna/react-native-vector-drawable": "^0.4.0",
     "@react-native-community/blur": "^4.3.0",
     "@react-navigation/bottom-tabs": "^6.5.2",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.7",
     "babel-plugin-module-resolver": "^4.1.0",
     "expo": "^47.0.0",
+    "expo-font": "~11.0.1",
     "expo-localization": "~14.0.0",
     "react": "18.1.0",
     "react-native": "0.70.6",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.2",
     "react-native-vector-icons": "^9.2.0",
+    "react-native-vector-image": "^0.3.3",
     "react-redux": "^8.0.5"
   },
   "devDependencies": {

@@ -17,33 +17,52 @@ export type Constants = {
 
 export type Typography = {
     largeTitle: {
+        fontFamily: string
         fontSize: number
     }
     title: {
+        fontFamily: string
         fontSize: number
     }
     subTitle: {
+        fontFamily: string
         fontSize: number
-        fontWeight:
-            | 'normal'
-            | 'bold'
-            | '100'
-            | '200'
-            | '300'
-            | '400'
-            | '500'
-            | '600'
-            | '700'
-            | '800'
-            | '900'
     }
     body: {
+        fontFamily: string
         fontSize: number
     }
     caption: {
+        fontFamily: string
         fontSize: number
     }
     footnote: {
+        fontFamily: string
+        fontSize: number
+    }
+
+    largeTitle_accent: {
+        fontFamily: string
+        fontSize: number
+    }
+    title_accent: {
+        fontFamily: string
+        fontSize: number
+    }
+    subTitle_accent: {
+        fontFamily: string
+        fontSize: number
+    }
+    body_accent: {
+        fontFamily: string
+        fontSize: number
+    }
+    caption_accent: {
+        fontFamily: string
+        fontSize: number
+    }
+    footnote_accent: {
+        fontFamily: string
         fontSize: number
     }
 }

@@ -11,7 +11,8 @@
             "~Navigation/*": ["./src/Navigation/*"],
             "~Common/*": ["./src/Common/*"],
             "~Components/*": ["./src/Components/*"],
-            "~i18n/*": ["./src/i18n/*"]
+            "~i18n/*": ["./src/i18n/*"],
+            "~Assets/*": ["./src/Assets/*"]
         }
     }
 }
