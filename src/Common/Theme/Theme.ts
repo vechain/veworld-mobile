@@ -3,26 +3,62 @@ import {ThemeType} from './Types'
 export const Theme: ThemeType = {
     constants: {
         transparent: 'transparent',
+        bgDark: 'black',
+        bgLght: 'white',
     },
 
     typography: {
-        largeTitle: {
+        // INTER
+        large_title: {
+            fontFamily: 'Inter-Bold',
             fontSize: 34,
         },
         title: {
+            fontFamily: 'Inter-Regular',
             fontSize: 28,
         },
-        subTitle: {
+        sub_title: {
+            fontFamily: 'Inter-Bold',
             fontSize: 22,
-            fontWeight: '600',
         },
         body: {
+            fontFamily: 'Inter-Regular',
             fontSize: 17,
         },
         footnote: {
+            fontFamily: 'Inter-Light',
             fontSize: 13,
         },
-        caption: {fontSize: 11},
+        caption: {
+            fontSize: 11,
+            fontFamily: 'Inter-Light',
+        },
+
+        // MONO
+        large_title_accent: {
+            fontFamily: 'Mono-Extra-Bold',
+            fontSize: 34,
+        },
+        title_accent: {
+            fontFamily: 'Mono_Bold',
+            fontSize: 28,
+        },
+        sub_title_accent: {
+            fontFamily: 'Mono_Bold',
+            fontSize: 22,
+        },
+        body_accent: {
+            fontFamily: 'Mono-Regular',
+            fontSize: 17,
+        },
+        footnote_accent: {
+            fontFamily: 'Mono-Light',
+            fontSize: 13,
+        },
+        caption_accent: {
+            fontSize: 11,
+            fontFamily: 'Mono-Light',
+        },
     },
 
     dark: {
@@ -33,6 +69,7 @@ export const Theme: ThemeType = {
             text: 'white',
             tabicon: '#b1b1b1',
             tabiconInactive: '#595959',
+            button: '#7e3ab9',
         },
     },
     light: {
@@ -43,6 +80,7 @@ export const Theme: ThemeType = {
             text: 'black',
             tabicon: 'black',
             tabiconInactive: '#595959',
+            button: '#b66aca',
         },
     },
 }

@@ -4,6 +4,7 @@ module.exports = {
         [
             'module-resolver',
             {
+                root: ['./src'],
                 alias: {
                     '~Storage': './src/Storage',
                     '~Screens': './src/Screens',
@@ -11,6 +12,7 @@ module.exports = {
                     '~Common': './src/Common',
                     '~Components': './src/Components',
                     '~i18n': './src/i18n',
+                    '~Assets': './src/Assets',
                     http: "stream-http",
                     https: "https-browserify",
                     crypto: 'react-native-quick-crypto',
@@ -18,7 +20,7 @@ module.exports = {
                     buffer: '@craftzdog/react-native-buffer',
                     '@ethersproject/pbkdf2': './patches/patch-pbkdf2.js',
                     url: "url"
-                }
+                },
             },
         ],
     ],

@@ -36,19 +36,19 @@ export const BaseView = (props: Props) => {
                     flexDirection: props.orientation
                         ? props.orientation
                         : 'column',
-                    justifyContent: props.justify ? props.justify : undefined,
-                    alignItems: props.align ? props.align : undefined,
+                    justifyContent: props.justify,
+                    alignItems: props.align,
                     backgroundColor: props.background
                         ? props.background
                         : theme.constants.transparent,
-                    width: props.w ? `${props.w}%` : undefined,
-                    height: props.h ? `${props.h}%` : undefined,
-                    margin: props.m && props.m,
-                    marginVertical: props.mx && props.mx,
-                    marginHorizontal: props.my && props.my,
-                    padding: props.p && props.p,
-                    paddingVertical: props.py && props.py,
-                    paddingHorizontal: props.px && props.px,
+                    width: props.w && `${props.w}%`,
+                    height: props.h && `${props.h}%`,
+                    margin: props.m,
+                    marginVertical: props.my,
+                    marginHorizontal: props.mx,
+                    padding: props.p,
+                    paddingVertical: props.py,
+                    paddingHorizontal: props.px,
                 },
                 style,
             ]}
