@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {NativeModules, TouchableOpacity} from 'react-native'
 import {
     Translation,
@@ -42,21 +42,28 @@ const driver = new DriverNoVendor(
 )
 
 const thor = newThor(driver)
+const address = "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa"
 
 const App = () => {
     const [nativeText, setNativeText] = useState('')
+    const [vthoBalance, setVthoBalance] = useState('')
+    const [blockNumber, setBlockNumber] = useState<number>()
 
     const onPressNativeModule = async () => {
         const res = await SampleNativeModule.getText('Vechain')
         setNativeText(res)
     }
 
+    useEffect(() => {
+        queryChain()
+    }, [])
+
     const queryChain = async () => {
         while(true){
             const next = await thor.ticker().next()
-            const acc = await thor.account("0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa").get()
-            console.log(acc)
-            console.log(next.number)
+            setBlockNumber(next.number)
+            const acc = await thor.account(address).get()
+            setVthoBalance(acc.energy.toString())
         }
     }
 
@@ -83,8 +90,17 @@ const App = () => {
                 <BaseSpacer height={20} />
 
                 <BaseView>
-                    <BaseText font="largeTitle">TEST TEXT</BaseText>
+                    <BaseText >Balance for {address}: </BaseText>
+                    <BaseText style={{fontWeight: "bold"}}> {vthoBalance}</BaseText>
                 </BaseView>
+
+                <BaseSpacer height={20} />
+
+                <BaseView>
+                    <BaseText >Block Number </BaseText>
+                    <BaseText style={{fontWeight: "bold"}}> {blockNumber}</BaseText>
+                </BaseView>
+
             </BaseScrollView>
         </Translation>
     )
