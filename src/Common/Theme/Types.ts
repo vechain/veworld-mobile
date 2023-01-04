@@ -1,3 +1,5 @@
+import {TBaseFnotStyle} from '~Common/Types'
+
 export type ThemeVariant = {
     isDark: boolean
     colors: {
@@ -16,36 +18,18 @@ export type Constants = {
 }
 
 export type Typography = {
-    largeTitle: {
-        fontSize: number
-    }
-    title: {
-        fontSize: number
-    }
-    subTitle: {
-        fontSize: number
-        fontWeight:
-            | 'normal'
-            | 'bold'
-            | '100'
-            | '200'
-            | '300'
-            | '400'
-            | '500'
-            | '600'
-            | '700'
-            | '800'
-            | '900'
-    }
-    body: {
-        fontSize: number
-    }
-    caption: {
-        fontSize: number
-    }
-    footnote: {
-        fontSize: number
-    }
+    large_title: TBaseFnotStyle
+    title: TBaseFnotStyle
+    sub_title: TBaseFnotStyle
+    body: TBaseFnotStyle
+    caption: TBaseFnotStyle
+    footnote: TBaseFnotStyle
+    large_title_accent: TBaseFnotStyle
+    title_accent: TBaseFnotStyle
+    sub_title_accent: TBaseFnotStyle
+    body_accent: TBaseFnotStyle
+    caption_accent: TBaseFnotStyle
+    footnote_accent: TBaseFnotStyle
 }
 
 export type ThemeType = {

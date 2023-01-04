@@ -1,13 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useMemo} from 'react'
 import {Text, TextProps} from 'react-native'
-import {TFonts, TWeight, useTheme} from '~Common'
+import {TFonts, useTheme} from '~Common'
 import {BaseView} from './BaseView'
-import {cumputeFontSize} from './Helpers/ComputeFontSize'
 import {computeTextColor} from './Helpers/ComputeTextColor'
 
 type Props = {
-    weight?: TWeight
     font?: TFonts
     align?: 'left' | 'center' | 'right'
     italic?: boolean
@@ -25,10 +23,14 @@ export const BaseText = (props: Props) => {
     const {style, ...otherProps} = props
     const theme = useTheme()
 
-    const cumputeFont = useMemo(
-        () => cumputeFontSize(props.font, theme.typography),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [props.font],
+    const computeFont = useMemo(
+        () => theme.typography[props.font ?? 'body'].fontSize,
+        [props.font, theme.typography],
+    )
+
+    const computeFamily = useMemo(
+        () => theme.typography[props.font ?? 'body'].fontFamily,
+        [props.font, theme.typography],
     )
 
     const computeColor = useMemo(
@@ -55,8 +57,8 @@ export const BaseText = (props: Props) => {
                 style={[
                     {
                         color: computeColor,
-                        fontWeight: props.weight ? props.weight : 'normal',
-                        fontSize: cumputeFont,
+                        fontSize: computeFont,
+                        fontFamily: computeFamily,
                         textAlign: props.align,
                         fontStyle: props.italic ? 'italic' : 'normal',
                     },

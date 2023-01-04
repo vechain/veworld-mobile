@@ -1,20 +1,18 @@
 export type TFonts =
-    | 'largeTitle'
+    | 'large_title'
     | 'title'
-    | 'subTitle'
+    | 'sub_title'
     | 'body'
     | 'footnote'
     | 'caption'
+    | 'large_title_accent'
+    | 'title_accent'
+    | 'sub_title_accent'
+    | 'body_accent'
+    | 'footnote_accent'
+    | 'caption_accent'
 
-export type TWeight =
-    | 'normal'
-    | 'bold'
-    | '100'
-    | '200'
-    | '300'
-    | '400'
-    | '500'
-    | '600'
-    | '700'
-    | '800'
-    | '900'
+export type TBaseFnotStyle = {
+    fontFamily: string
+    fontSize: number
+}
