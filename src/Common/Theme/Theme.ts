@@ -3,6 +3,8 @@ import {ThemeType} from './Types'
 export const Theme: ThemeType = {
     constants: {
         transparent: 'transparent',
+        bgDark: 'black',
+        bgLght: 'white',
     },
 
     typography: {

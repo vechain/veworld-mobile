@@ -11,6 +11,8 @@ export type ThemeVariant = {
 
 export type Constants = {
     transparent: 'transparent'
+    bgDark: string
+    bgLght: string
 }
 
 export type Typography = {
