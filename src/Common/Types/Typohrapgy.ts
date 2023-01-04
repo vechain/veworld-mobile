@@ -1,13 +1,18 @@
 export type TFonts =
-    | 'largeTitle'
+    | 'large_title'
     | 'title'
-    | 'subTitle'
+    | 'sub_title'
     | 'body'
     | 'footnote'
     | 'caption'
-    | 'largeTitle_accent'
+    | 'large_title_accent'
     | 'title_accent'
-    | 'subTitle_accent'
+    | 'sub_title_accent'
     | 'body_accent'
     | 'footnote_accent'
     | 'caption_accent'
+
+export type TBaseFnotStyle = {
+    fontFamily: string
+    fontSize: number
+}

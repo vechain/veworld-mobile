@@ -23,7 +23,7 @@ export const BaseText = (props: Props) => {
     const {style, ...otherProps} = props
     const theme = useTheme()
 
-    const cumputeFont = useMemo(
+    const computeFont = useMemo(
         () => theme.typography[props.font ?? 'body'].fontSize,
         [props.font, theme.typography],
     )
@@ -57,7 +57,7 @@ export const BaseText = (props: Props) => {
                 style={[
                     {
                         color: computeColor,
-                        fontSize: cumputeFont,
+                        fontSize: computeFont,
                         fontFamily: computeFamily,
                         textAlign: props.align,
                         fontStyle: props.italic ? 'italic' : 'normal',

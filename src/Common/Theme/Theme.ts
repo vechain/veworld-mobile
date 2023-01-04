@@ -9,7 +9,7 @@ export const Theme: ThemeType = {
 
     typography: {
         // INTER
-        largeTitle: {
+        large_title: {
             fontFamily: 'Inter-Bold',
             fontSize: 34,
         },
@@ -17,7 +17,7 @@ export const Theme: ThemeType = {
             fontFamily: 'Inter-Regular',
             fontSize: 28,
         },
-        subTitle: {
+        sub_title: {
             fontFamily: 'Inter-Bold',
             fontSize: 22,
         },
@@ -35,7 +35,7 @@ export const Theme: ThemeType = {
         },
 
         // MONO
-        largeTitle_accent: {
+        large_title_accent: {
             fontFamily: 'Mono-Extra-Bold',
             fontSize: 34,
         },
@@ -43,7 +43,7 @@ export const Theme: ThemeType = {
             fontFamily: 'Mono_Bold',
             fontSize: 28,
         },
-        subTitle_accent: {
+        sub_title_accent: {
             fontFamily: 'Mono_Bold',
             fontSize: 22,
         },

@@ -16,7 +16,7 @@ export const WelcomeScreen = () => {
     return (
         <>
             <BaseSafeArea transparent />
-            <BaseText font="largeTitle_accent">Welcome to VeWorld</BaseText>
+            <BaseText font="large_title_accent">Welcome to VeWorld</BaseText>
 
             <VectorImage source={VeChainVetLogo} />
 
