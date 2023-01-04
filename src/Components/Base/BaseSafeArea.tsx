@@ -1,8 +1,24 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react'
-import {SafeAreaView} from 'react-native'
+import {SafeAreaView} from 'react-native-safe-area-context'
 import {useTheme} from '~Common'
 
-export const BaseSafeArea = () => {
+type Props = {
+    bg?: string
+    transparent?: boolean
+}
+
+export const BaseSafeArea = ({bg, transparent}: Props) => {
     const theme = useTheme()
-    return <SafeAreaView style={{backgroundColor: theme.colors.background}} />
+    return (
+        <SafeAreaView
+            style={{
+                backgroundColor: transparent
+                    ? 'transparent'
+                    : bg
+                    ? bg
+                    : theme.colors.background,
+            }}
+        />
+    )
 }
