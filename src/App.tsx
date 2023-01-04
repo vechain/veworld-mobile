@@ -41,7 +41,6 @@ const driver = new DriverNoVendor(
     }
 )
 
-
 const thor = newThor(driver)
 
 const App = () => {
