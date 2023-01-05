@@ -1,9 +1,9 @@
-import React, {useRef, useState, useEffect} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {AppState as _Appstate} from 'react-native'
 
 export const AppState = () => {
     const appState = useRef(_Appstate.currentState)
-    const [appStateVisible, setAppStateVisible] = useState(appState.current)
+    const [, setAppStateVisible] = useState(appState.current)
 
     useEffect(() => {
         const subscription = _Appstate.addEventListener(

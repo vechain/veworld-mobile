@@ -10,6 +10,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "yarn prettier --write src",
+    "format:check": "yarn prettier --check src",
     "e2e.ios.build.d": "detox build --configuration ios.sim.debug",
     "e2e.ios.build.r": "detox build --configuration ios.sim.release",
     "e2e.ios.test.d": "detox test --configuration ios.sim.debug",
