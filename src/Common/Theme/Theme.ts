@@ -11,7 +11,7 @@ export const Theme: ThemeType = {
         // INTER
         large_title: {
             fontFamily: 'Inter-Bold',
-            fontSize: 34,
+            fontSize: 32,
         },
         title: {
             fontFamily: 'Inter-Regular',
@@ -23,7 +23,7 @@ export const Theme: ThemeType = {
         },
         body: {
             fontFamily: 'Inter-Regular',
-            fontSize: 17,
+            fontSize: 16,
         },
         footnote: {
             fontFamily: 'Inter-Light',
@@ -37,7 +37,7 @@ export const Theme: ThemeType = {
         // MONO
         large_title_accent: {
             fontFamily: 'Mono-Extra-Bold',
-            fontSize: 34,
+            fontSize: 32,
         },
         title_accent: {
             fontFamily: 'Mono_Bold',
@@ -49,7 +49,7 @@ export const Theme: ThemeType = {
         },
         body_accent: {
             fontFamily: 'Mono-Regular',
-            fontSize: 17,
+            fontSize: 16,
         },
         footnote_accent: {
             fontFamily: 'Mono-Light',
@@ -69,7 +69,7 @@ export const Theme: ThemeType = {
             text: 'white',
             tabicon: '#b1b1b1',
             tabiconInactive: '#595959',
-            button: '#7e3ab9',
+            button: '#270089', // todo.vas -> cahnge with correct colors
         },
     },
     light: {
@@ -80,7 +80,7 @@ export const Theme: ThemeType = {
             text: 'black',
             tabicon: 'black',
             tabiconInactive: '#595959',
-            button: '#b66aca',
+            button: '#270089',
         },
     },
 }

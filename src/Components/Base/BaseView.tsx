@@ -22,6 +22,7 @@ type Props = {
     px?: number
     py?: number
     isFlex?: boolean
+    grow?: number
 } & ViewProps
 
 export const BaseView = (props: Props) => {
@@ -38,6 +39,7 @@ export const BaseView = (props: Props) => {
                         : 'column',
                     justifyContent: props.justify,
                     alignItems: props.align,
+                    flexGrow: props.grow,
                     backgroundColor: props.background
                         ? props.background
                         : theme.constants.transparent,
