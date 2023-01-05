@@ -1,5 +1,5 @@
 import React from 'react'
-import {Translation, BaseStatusBar} from '~Components'
+import {BaseStatusBar, Translation} from '~Components'
 import {SwitchStack} from '~Navigation'
 import {useFonts} from 'expo-font'
 import {
@@ -7,10 +7,10 @@ import {
     Inter_Light,
     Inter_Medium,
     Inter_Regular,
-    Mono_Extra_Bold,
     Mono_Bold,
-    Mono_Regular,
+    Mono_Extra_Bold,
     Mono_Light,
+    Mono_Regular,
 } from '~Assets'
 
 const App = () => {
