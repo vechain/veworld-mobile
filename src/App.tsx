@@ -13,7 +13,7 @@ import {
     Mono_Regular,
 } from '~Assets'
 
-console.log('Hello World 2')
+console.log('Hello World 3')
 
 const App = () => {
     const [fontsLoaded] = useFonts({
