@@ -7,6 +7,7 @@ import {
     BaseView,
 } from '~Components'
 import {useNavigation} from '@react-navigation/native'
+import {Routes} from '~Navigation'
 import VectorImage from 'react-native-vector-image'
 import {VeChainVetLogo} from '~Assets'
 import {useTheme} from '~Common'
@@ -18,7 +19,7 @@ export const WelcomeScreen = () => {
     const {LL} = useI18nContext()
 
     const onNavigate = () => {
-        nav.navigate('Onboarding')
+        nav.navigate(Routes.ONBOARDING)
     }
 
     return (
