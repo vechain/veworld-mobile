@@ -3,7 +3,6 @@ import React, {useMemo} from 'react'
 import {Text, TextProps} from 'react-native'
 import {TFonts, useTheme} from '~Common'
 import {BaseView} from './BaseView'
-import {computeTextColor} from './Helpers/ComputeTextColor'
 
 type Props = {
     font?: TFonts
@@ -33,18 +32,6 @@ export const BaseText = (props: Props) => {
         [props.font, theme.typography],
     )
 
-    const computeColor = useMemo(
-        () =>
-            computeTextColor(
-                props.isButton,
-                props.color,
-                theme.colors.text,
-                theme.colors.button,
-            ),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [props.color, props.isButton, theme.isDark],
-    )
-
     return (
         <BaseView
             m={props.m}
@@ -56,7 +43,7 @@ export const BaseText = (props: Props) => {
             <Text
                 style={[
                     {
-                        color: computeColor,
+                        color: props.color ? props.color : theme.colors.text,
                         fontSize: computeFont,
                         fontFamily: computeFamily,
                         textAlign: props.align,

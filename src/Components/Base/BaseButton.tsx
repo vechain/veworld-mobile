@@ -2,12 +2,15 @@
 import {TouchableOpacity, TouchableOpacityProps, StyleSheet} from 'react-native'
 import React from 'react'
 import {useTheme} from '~Common'
+import {BaseText} from './BaseText'
+import {LocalizedString} from 'typesafe-i18n'
 
 type Props = {
     action: () => void
     disabled?: boolean
     children: React.ReactNode
-    background?: string
+    filled?: boolean
+    title: LocalizedString
     m?: number
     mx?: number
     my?: number
@@ -29,12 +32,12 @@ export const BaseButton = (props: Props) => {
             disabled={disabled}
             style={[
                 {
-                    backgroundColor: props.background
-                        ? props.background
-                        : theme.colors.background,
-                    borderColor: props.background
-                        ? props.background
-                        : theme.colors.button,
+                    backgroundColor: props.filled
+                        ? theme.colors.button
+                        : theme.constants.transparent,
+                    borderColor: props.filled
+                        ? theme.colors.button
+                        : theme.constants.transparent,
                     width: props.w && `${props.w}%`,
                     height: props.h && `${props.h}%`,
                     margin: props.m,
@@ -49,7 +52,13 @@ export const BaseButton = (props: Props) => {
                 baseStyle.default,
             ]}
             {...otherProps}>
-            {props.children}
+            <BaseText
+                color={
+                    props.filled ? theme.colors.background : theme.colors.button
+                }
+                font="body_accent">
+                {props.title}
+            </BaseText>
         </TouchableOpacity>
     )
 }
