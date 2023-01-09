@@ -1,16 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
-import {TouchableOpacity, TouchableOpacityProps, StyleSheet} from 'react-native'
+import {
+    TouchableOpacity,
+    TouchableOpacityProps,
+    StyleSheet,
+    FlexAlignType,
+} from 'react-native'
 import React from 'react'
-import {useTheme} from '~Common'
+import {TFonts, useTheme} from '~Common'
 import {BaseText} from './BaseText'
 import {LocalizedString} from 'typesafe-i18n'
 
 type Props = {
     action: () => void
     disabled?: boolean
-    children: React.ReactNode
     filled?: boolean
-    title: LocalizedString
+    title: LocalizedString | string
     m?: number
     mx?: number
     my?: number
@@ -19,6 +23,8 @@ type Props = {
     py?: number
     w?: number
     h?: number
+    font?: TFonts
+    selfAlign?: 'auto' | FlexAlignType | undefined
 } & TouchableOpacityProps
 
 export const BaseButton = (props: Props) => {
@@ -47,6 +53,7 @@ export const BaseButton = (props: Props) => {
                     paddingVertical: props.py ? props.py : 14,
                     paddingHorizontal: props.px,
                     opacity: disabled ? 0.5 : 1,
+                    alignSelf: props.selfAlign,
                 },
                 style,
                 baseStyle.default,
@@ -56,7 +63,7 @@ export const BaseButton = (props: Props) => {
                 color={
                     props.filled ? theme.colors.background : theme.colors.button
                 }
-                font="body_accent">
+                font={props.font ? props.font : 'body_accent'}>
                 {props.title}
             </BaseText>
         </TouchableOpacity>

@@ -8,7 +8,7 @@ type Props = {
 }
 
 export const Translation = ({children}: Props) => {
-    // todo.vas -> get app state changes from Appstate to dynamically update locale prop
+    // todo.vas -> issue #25
 
     const [localeLoaded, setLocaleLoaded] = useState<Locales | null>(null)
 

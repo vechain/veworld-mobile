@@ -57,7 +57,6 @@ export const WelcomeScreen = () => {
                             filled
                             action={onNavigate}
                             w={100}
-                            children={undefined}
                             title={LL.BTN_GET_STARTED()}
                         />
                     </BaseView>
