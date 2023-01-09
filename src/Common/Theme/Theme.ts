@@ -69,7 +69,7 @@ export const Theme: ThemeType = {
             text: 'white',
             tabicon: '#b1b1b1',
             tabiconInactive: '#595959',
-            button: '#270089', // todo.vas -> cahnge with correct colors
+            button: '#270089',
         },
     },
     light: {

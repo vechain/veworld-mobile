@@ -53,6 +53,7 @@ export const BaseButton = (props: Props) => {
                     paddingVertical: props.py ? props.py : 14,
                     paddingHorizontal: props.px,
                     opacity: disabled ? 0.5 : 1,
+                    alignSelf: props.selfAlign,
                 },
                 style,
                 baseStyle.default,

@@ -11,6 +11,8 @@ import {
     VeChainVetLogoWithTitle,
 } from '~Assets'
 import {ListSlide} from './Components/ListSlide'
+import {Slide} from './Types'
+import {STEPS} from './Enums'
 
 export const OnboardingScreen = () => {
     const nav = useNavigation()
@@ -22,22 +24,22 @@ export const OnboardingScreen = () => {
 
     const slides = [
         {
-            title: LL.TITLE_ONBARDING_01(),
-            text: LL.BD_ONBOARDING_01(),
+            title: LL.TITLE_ONBARDING_SLIDE_01(),
+            text: LL.BD_ONBOARDING_SLIDE_01(),
             icon: BuyInfoIcon,
-            button: LL.BTN_ONBOARDING_01(),
+            button: LL.BTN_ONBOARDING_SLIDE_01(),
         },
         {
-            title: LL.TITLE_ONBARDING_02(),
-            text: LL.BD_ONBOARDING_02(),
+            title: LL.TITLE_ONBARDING_SLIDE_02(),
+            text: LL.BD_ONBOARDING_SLIDE_02(),
             icon: SustainableIcon,
-            button: LL.BTN_ONBOARDING_02(),
+            button: LL.BTN_ONBOARDING_SLIDE_02(),
         },
         {
-            title: LL.TITLE_ONBARDING_03(),
-            text: LL.BD_ONBOARDING_03(),
+            title: LL.TITLE_ONBARDING_SLIDE_03(),
+            text: LL.BD_ONBOARDING_SLIDE_03(),
             icon: CustomizationIcon,
-            button: LL.BTN_ONBOARDING_03(),
+            button: LL.BTN_ONBOARDING_SLIDE_03(),
         },
     ]
 
@@ -45,7 +47,7 @@ export const OnboardingScreen = () => {
         let activeIndex = viewableItems[0].index
         setBtnIndex(activeIndex)
 
-        if (activeIndex < 2) {
+        if (activeIndex < STEPS.SAFE_AND_FAST) {
             setListIndex(activeIndex + 1)
         }
     }, [])
@@ -55,7 +57,7 @@ export const OnboardingScreen = () => {
             flatListRef.current.scrollToIndex({index: ListIndex})
         }
 
-        if (BtnIndex === 2) {
+        if (BtnIndex === STEPS.SAFE_AND_FAST) {
             nav.goBack() // todo.vas -> navigate to nextpage
         }
     }
@@ -73,7 +75,9 @@ export const OnboardingScreen = () => {
                 <FlatList
                     ref={flatListRef}
                     data={slides}
-                    renderItem={({item}) => <ListSlide item={item} />}
+                    renderItem={({item}: {item: Slide}) => (
+                        <ListSlide item={item} />
+                    )}
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
                     horizontal
@@ -87,7 +91,7 @@ export const OnboardingScreen = () => {
                     <BaseButton
                         action={onNavigate}
                         font="footnote_accent"
-                        title={LL.SKIP()}
+                        title={LL.BTN_ONBOARDING_SKIP()}
                         selfAlign="flex-start"
                         px={5}
                     />

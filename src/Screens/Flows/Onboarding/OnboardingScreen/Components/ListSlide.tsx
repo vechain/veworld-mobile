@@ -2,15 +2,10 @@ import {Dimensions} from 'react-native'
 import React from 'react'
 import {BaseSpacer, BaseText, BaseView} from '~Components'
 import VectorImage from 'react-native-vector-image'
-import {LocalizedString} from 'typesafe-i18n'
+import {Slide} from '../Types'
 
 type Props = {
-    item: {
-        title: LocalizedString
-        text: LocalizedString
-        icon: any
-        button: LocalizedString
-    }
+    item: Slide
 }
 
 export const ListSlide = ({item}: Props) => {

@@ -21,15 +21,19 @@ type RootTranslation = {
 	/**
 	 * N​E​X​T​:​ ​S​U​S​T​A​I​N​A​B​L​E
 	 */
-	BTN_ONBOARDING_01: string
+	BTN_ONBOARDING_SLIDE_01: string
 	/**
 	 * N​E​X​T​:​ ​S​A​F​E​ ​A​N​D​ ​F​A​S​T
 	 */
-	BTN_ONBOARDING_02: string
+	BTN_ONBOARDING_SLIDE_02: string
 	/**
 	 * N​E​X​T​:​ ​C​R​E​A​T​E​ ​P​A​S​S​W​O​R​D
 	 */
-	BTN_ONBOARDING_03: string
+	BTN_ONBOARDING_SLIDE_03: string
+	/**
+	 * S​k​i​p​ ​a​h​e​a​d​ ​t​o​ ​c​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_ONBOARDING_SKIP: string
 	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
@@ -41,15 +45,15 @@ type RootTranslation = {
 	/**
 	 * V​i​e​w​i​n​g​ ​a​n​d​ ​m​a​n​a​g​i​n​g​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​ ​h​a​s​ ​n​e​v​e​r​ ​b​e​e​n​ ​e​a​s​i​e​r​.
 	 */
-	BD_ONBOARDING_01: string
+	BD_ONBOARDING_SLIDE_01: string
 	/**
 	 * U​s​i​n​g​ ​I​n​n​o​v​a​t​i​v​e​ ​G​r​e​e​n​ ​T​e​c​h​n​o​l​o​g​y​,​ ​C​o​n​t​i​n​u​e​s​ ​B​u​i​l​d​i​n​g​ ​T​h​e​ ​F​u​t​u​r​e​ ​o​f​ ​S​a​f​e​.
 	 */
-	BD_ONBOARDING_02: string
+	BD_ONBOARDING_SLIDE_02: string
 	/**
 	 * W​a​l​l​e​t​ ​E​x​t​e​n​s​i​o​n​ ​p​r​o​v​i​d​e​s​ ​a​ ​s​i​m​p​l​e​r​ ​a​n​d​ ​s​e​c​u​r​e​d​ ​w​a​y​ ​t​o​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​c​o​i​n​s​.
 	 */
-	BD_ONBOARDING_03: string
+	BD_ONBOARDING_SLIDE_03: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -57,19 +61,15 @@ type RootTranslation = {
 	/**
 	 * S​e​a​m​l​e​s​s​l​y​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​c​r​y​p​t​o
 	 */
-	TITLE_ONBARDING_01: string
+	TITLE_ONBARDING_SLIDE_01: string
 	/**
 	 * S​u​s​t​a​i​n​a​b​l​e
 	 */
-	TITLE_ONBARDING_02: string
+	TITLE_ONBARDING_SLIDE_02: string
 	/**
 	 * C​u​s​t​o​m​i​z​a​b​l​e​,​ ​s​a​f​e​ ​a​n​d​ ​f​a​s​t
 	 */
-	TITLE_ONBARDING_03: string
-	/**
-	 * S​k​i​p​ ​a​h​e​a​d​ ​t​o​ ​c​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
-	 */
-	SKIP: string
+	TITLE_ONBARDING_SLIDE_03: string
 }
 
 export type TranslationFunctions = {
@@ -80,15 +80,19 @@ export type TranslationFunctions = {
 	/**
 	 * NEXT: SUSTAINABLE
 	 */
-	BTN_ONBOARDING_01: () => LocalizedString
+	BTN_ONBOARDING_SLIDE_01: () => LocalizedString
 	/**
 	 * NEXT: SAFE AND FAST
 	 */
-	BTN_ONBOARDING_02: () => LocalizedString
+	BTN_ONBOARDING_SLIDE_02: () => LocalizedString
 	/**
 	 * NEXT: CREATE PASSWORD
 	 */
-	BTN_ONBOARDING_03: () => LocalizedString
+	BTN_ONBOARDING_SLIDE_03: () => LocalizedString
+	/**
+	 * Skip ahead to create password
+	 */
+	BTN_ONBOARDING_SKIP: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -100,15 +104,15 @@ export type TranslationFunctions = {
 	/**
 	 * Viewing and managing your crypto assets has never been easier.
 	 */
-	BD_ONBOARDING_01: () => LocalizedString
+	BD_ONBOARDING_SLIDE_01: () => LocalizedString
 	/**
 	 * Using Innovative Green Technology, Continues Building The Future of Safe.
 	 */
-	BD_ONBOARDING_02: () => LocalizedString
+	BD_ONBOARDING_SLIDE_02: () => LocalizedString
 	/**
 	 * Wallet Extension provides a simpler and secured way to manage your coins.
 	 */
-	BD_ONBOARDING_03: () => LocalizedString
+	BD_ONBOARDING_SLIDE_03: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
@@ -116,19 +120,15 @@ export type TranslationFunctions = {
 	/**
 	 * Seamlessly manage your crypto
 	 */
-	TITLE_ONBARDING_01: () => LocalizedString
+	TITLE_ONBARDING_SLIDE_01: () => LocalizedString
 	/**
 	 * Sustainable
 	 */
-	TITLE_ONBARDING_02: () => LocalizedString
+	TITLE_ONBARDING_SLIDE_02: () => LocalizedString
 	/**
 	 * Customizable, safe and fast
 	 */
-	TITLE_ONBARDING_03: () => LocalizedString
-	/**
-	 * Skip ahead to create password
-	 */
-	SKIP: () => LocalizedString
+	TITLE_ONBARDING_SLIDE_03: () => LocalizedString
 }
 
 export type Formatters = {}
