@@ -50,7 +50,7 @@ export const OnboardingScreen = () => {
         }
     }, [])
 
-    const onNavigate = () => {
+    const onButtonPress = () => {
         if (flatListRef.current) {
             flatListRef.current.scrollToIndex({index: ListIndex})
         }
@@ -58,6 +58,10 @@ export const OnboardingScreen = () => {
         if (BtnIndex === 2) {
             nav.goBack() // todo.vas -> navigate to nextpage
         }
+    }
+
+    const onNavigate = () => {
+        nav.goBack() // todo.vas -> navigate to nextpage
     }
 
     return (
@@ -81,8 +85,16 @@ export const OnboardingScreen = () => {
 
                 <BaseView align="center" w={100} px={20}>
                     <BaseButton
-                        filled
                         action={onNavigate}
+                        font="footnote_accent"
+                        title={LL.SKIP()}
+                        selfAlign="flex-start"
+                        px={5}
+                    />
+
+                    <BaseButton
+                        filled
+                        action={onButtonPress}
                         w={100}
                         mx={20}
                         title={slides[BtnIndex].button}
