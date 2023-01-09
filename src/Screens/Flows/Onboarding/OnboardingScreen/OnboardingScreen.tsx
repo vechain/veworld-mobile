@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native'
 import VectorImage from 'react-native-vector-image'
 import {BaseButton, BaseSafeArea, BaseSpacer, BaseView} from '~Components'
 import {useI18nContext} from '~i18n'
+import {Routes} from '~Navigation'
 import {
     BuyInfoIcon,
     CustomizationIcon,
@@ -58,12 +59,12 @@ export const OnboardingScreen = () => {
         }
 
         if (BtnIndex === STEPS.SAFE_AND_FAST) {
-            nav.goBack() // todo.vas -> navigate to nextpage
+            nav.navigate(Routes.SECURITY)
         }
     }
 
     const onNavigate = () => {
-        nav.goBack() // todo.vas -> navigate to nextpage
+        nav.navigate(Routes.SECURITY)
     }
 
     return (
