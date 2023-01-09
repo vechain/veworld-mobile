@@ -8,9 +8,8 @@ import {LocalizedString} from 'typesafe-i18n'
 type Props = {
     action: () => void
     disabled?: boolean
-    children: React.ReactNode
     filled?: boolean
-    title: LocalizedString
+    title: LocalizedString | string
     m?: number
     mx?: number
     my?: number

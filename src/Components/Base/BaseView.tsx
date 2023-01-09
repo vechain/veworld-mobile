@@ -23,6 +23,7 @@ type Props = {
     py?: number
     isFlex?: boolean
     grow?: number
+    wrap?: boolean
 } & ViewProps
 
 export const BaseView = (props: Props) => {
@@ -34,6 +35,7 @@ export const BaseView = (props: Props) => {
             style={[
                 {
                     flex: props.isFlex ? 1 : 0,
+                    flexWrap: props.wrap ? 'wrap' : 'nowrap',
                     flexDirection: props.orientation
                         ? props.orientation
                         : 'column',

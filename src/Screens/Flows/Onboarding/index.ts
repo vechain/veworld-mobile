@@ -1,2 +1,2 @@
-export * from './OnboardingScreen'
-export * from './WelcomeScreen'
+export * from './OnboardingScreen/OnboardingScreen'
+export * from './WelcomeScreen/WelcomeScreen'
