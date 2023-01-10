@@ -51,16 +51,16 @@ export const useCheckBiometrics = () => {
     const getBiometricsType = useMemo(() => {
         if (DeviceSecurity === SCLevel.BIOMETRIC) {
             if (SuppoertedBiometrics === AuthType.FACIAL_RECOGNITION) {
-                return 'face ID'
+                return 'Face ID'
             }
 
             if (SuppoertedBiometrics === AuthType.FINGERPRINT) {
-                return 'fingerprint'
+                return 'Fingerprint'
             }
 
-            return 'iris'
+            return 'Iris'
         } else {
-            return 'device pin or gesture'
+            return 'Device Pin'
         }
     }, [DeviceSecurity, SuppoertedBiometrics])
 

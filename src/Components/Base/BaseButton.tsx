@@ -14,6 +14,7 @@ type Props = {
     action: () => void
     disabled?: boolean
     filled?: boolean
+    bordered?: boolean
     title: LocalizedString | string
     m?: number
     mx?: number
@@ -41,7 +42,7 @@ export const BaseButton = (props: Props) => {
                     backgroundColor: props.filled
                         ? theme.colors.button
                         : theme.constants.transparent,
-                    borderColor: props.filled
+                    borderColor: props.bordered
                         ? theme.colors.button
                         : theme.constants.transparent,
                     width: props.w && `${props.w}%`,

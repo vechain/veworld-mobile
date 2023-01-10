@@ -10,6 +10,8 @@ const en: BaseTranslation = {
     BTN_ONBOARDING_SLIDE_02: 'NEXT: SAFE AND FAST',
     BTN_ONBOARDING_SLIDE_03: 'NEXT: CREATE PASSWORD',
     BTN_ONBOARDING_SKIP: 'Skip ahead to create password',
+    BTN_SECURTY_01: 'Use {type:string}',
+    BTN_SECURITY_02: 'Create password',
 
     // BODY
     BD_GDPR:
@@ -28,6 +30,7 @@ const en: BaseTranslation = {
     TITLE_ONBARDING_SLIDE_01: 'Seamlessly manage your crypto',
     TITLE_ONBARDING_SLIDE_02: 'Sustainable',
     TITLE_ONBARDING_SLIDE_03: 'Customizable, safe and fast',
+    TITLE_SECURITY: 'Protect your Wallet',
 
 }
 
