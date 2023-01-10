@@ -1,28 +1,46 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
-    // BaseSwitch,
+    BaseSwitch,
     BaseText,
     BaseView,
 } from '~Components'
-// import {Biometrics, useCheckBiometrics, useRenderCounter} from '~Common'
+import {Biometrics, useCheckBiometrics} from '~Common'
+import {SecurityLevel} from '~Common/Enums'
 
 export const SecurityScreen = () => {
-    // const {IsBiometrics, BiometricType, SuppoertedBiometrics, IsLoading} =
-    //     useCheckBiometrics()
-
-    // const [IsOn, setIsOn] = useState(false)
+    const {DeviceSecurity, getBiometricsType} = useCheckBiometrics()
+    const [IsBtnDisabled, setIsBtnDisabled] = useState(true)
 
     const onButtonPress = async () => {
-        // let isAuth = await Biometrics.authenticateWithbiometric()
+        let {success} = await Biometrics.authenticateWithbiometric()
+        if (success) {
+            // create keychain now probably
+            onNavigate()
+        } else {
+            // handle failure message
+        }
     }
 
-    // const onToggleAction = useCallback(() => {
-    //     console.log('CALLED')
-    //     setIsOn(prev => prev!)
-    // }, [])
+    const onToggleAction = (isOn: boolean) => {
+        setIsBtnDisabled(!isOn)
+    }
+
+    const onNavigate = () => {}
+
+    if (DeviceSecurity === SecurityLevel.NONE) {
+        return (
+            <BaseSafeArea grow={1}>
+                <BaseView align="center" justify="center" grow={1} mx={20}>
+                    <BaseText font="body">
+                        Please enable biometrics or device pin to continue
+                    </BaseText>
+                </BaseView>
+            </BaseSafeArea>
+        )
+    }
 
     return (
         <BaseSafeArea grow={1}>
@@ -38,9 +56,10 @@ export const SecurityScreen = () => {
                     </BaseText>
                 </BaseView>
 
-                {/* {IsBiometrics && (
-                    <BaseSwitch toggleAction={onToggleAction} isOn={IsOn} />
-                )} */}
+                <BaseView orientation="row" justify="space-between" w={100}>
+                    <BaseText>Secure with {getBiometricsType}</BaseText>
+                    <BaseSwitch toggleAction={onToggleAction} />
+                </BaseView>
 
                 <BaseView align="center" w={100}>
                     <BaseButton
@@ -49,6 +68,7 @@ export const SecurityScreen = () => {
                         w={100}
                         mx={20}
                         title={'GO!'}
+                        disabled={IsBtnDisabled}
                     />
                 </BaseView>
             </BaseView>

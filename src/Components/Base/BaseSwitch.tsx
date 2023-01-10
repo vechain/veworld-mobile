@@ -1,28 +1,35 @@
 import {Switch, ViewProps} from 'react-native'
-import React, {memo} from 'react'
+import React, {useState} from 'react'
+import {useTheme} from '~Common'
 
 type Props = {
     trackColors?: string[]
     thumbColor?: string
     disabled?: boolean
     ios_bg?: string
-    toggleAction: () => void
-    isOn: boolean
+    toggleAction: (isOn: boolean) => void
 } & ViewProps
 
-export const BaseSwitch = memo((props: Props) => {
-    console.log(props.isOn)
+export const BaseSwitch = (props: Props) => {
+    const theme = useTheme()
+    const [isEnabled, setIsEnabled] = useState(false)
+    const toggleSwitch = () => {
+        props.toggleAction(!isEnabled)
+        setIsEnabled(previousState => !previousState)
+    }
 
     return (
         <Switch
             trackColor={{
                 false: props.trackColors ? props.trackColors[0] : '#767577',
-                true: props.trackColors ? props.trackColors[1] : '#81b0ff',
+                true: props.trackColors
+                    ? props.trackColors[1]
+                    : theme.colors.button,
             }}
-            thumbColor={props.isOn ? '#f5dd4b' : '#f4f3f4'}
+            thumbColor={theme.colors.background}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={props.toggleAction}
-            value={props.isOn}
+            onValueChange={toggleSwitch}
+            value={isEnabled}
         />
     )
-})
+}

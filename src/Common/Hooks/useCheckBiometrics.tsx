@@ -1,6 +1,11 @@
 import {AuthenticationType, SecurityLevel} from 'expo-local-authentication'
-import {useCallback, useEffect, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
+import {TAuthenticationType, TSecurityLevel} from '~Common/Types'
 import {Biometrics} from '~Common/Utils'
+import {
+    AuthenticationType as AuthType,
+    SecurityLevel as SCLevel,
+} from '~Common/Enums'
 
 /*
     Curernt biometrics availabilty check logic
@@ -17,28 +22,25 @@ import {Biometrics} from '~Common/Utils'
 */
 
 export const useCheckBiometrics = () => {
-    const [IsLoading, setIsLoading] = useState(false)
-    const [IsBiometrics, setIsBiometrics] = useState<boolean | undefined>()
-    const [BiometricType, setBiometricType] = useState<string | undefined>()
+    const [DeviceSecurity, setDeviceSecurity] = useState<
+        TSecurityLevel | undefined
+    >()
     const [SuppoertedBiometrics, setSuppoertedBiometrics] = useState<
-        string | undefined
+        TAuthenticationType | undefined
     >()
 
     const init = useCallback(async () => {
-        setIsLoading(true)
         let level = await Biometrics.getDeviceEnrolledLevel()
         let isHardware = await Biometrics.getGeviceHasHardware()
         let isEnrolled = await Biometrics.getIsDeviceEnrolled()
-        let type = await Biometrics.getBiometricTypeAvailable()
+        let typeAvalable = await Biometrics.getBiometricTypeAvailable()
 
         if (isHardware && isEnrolled && level !== SecurityLevel.NONE) {
             let leveleType = SecurityLevel[level]
-            // @ts-ignore
-            let bioType = AuthenticationType[type]
-            setBiometricType(leveleType)
-            setIsBiometrics(true)
+            // @ts-ignore // compiler misses enum for some reason
+            let bioType = AuthenticationType[typeAvalable]
+            setDeviceSecurity(leveleType as TSecurityLevel)
             setSuppoertedBiometrics(bioType)
-            setIsLoading(false)
         }
     }, [])
 
@@ -46,5 +48,21 @@ export const useCheckBiometrics = () => {
         init()
     }, [init])
 
-    return {IsBiometrics, BiometricType, SuppoertedBiometrics, IsLoading}
+    const getBiometricsType = useMemo(() => {
+        if (DeviceSecurity === SCLevel.BIOMETRIC) {
+            if (SuppoertedBiometrics === AuthType.FACIAL_RECOGNITION) {
+                return 'face ID'
+            }
+
+            if (SuppoertedBiometrics === AuthType.FINGERPRINT) {
+                return 'fingerprint'
+            }
+
+            return 'iris'
+        } else {
+            return 'device pin or gesture'
+        }
+    }, [DeviceSecurity, SuppoertedBiometrics])
+
+    return {DeviceSecurity, getBiometricsType}
 }
