@@ -35,6 +35,22 @@ type RootTranslation = {
 	 */
 	BTN_ONBOARDING_SKIP: string
 	/**
+	 * N​E​X​T​:​ ​C​U​S​T​O​D​Y
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_01: string
+	/**
+	 * N​E​X​T​:​ ​S​A​F​E​T​Y
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_02: string
+	/**
+	 * N​E​X​T​:​ ​S​E​C​R​E​T​ ​P​H​R​A​S​E
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_03: string
+	/**
+	 * S​k​i​p​ ​a​h​e​a​d​ ​t​o​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	BTN_WALLET_TUTORIAL_SKIP: string
+	/**
 	 * U​s​e​ ​{​t​y​p​e​}
 	 * @param {string} type
 	 */
@@ -64,6 +80,18 @@ type RootTranslation = {
 	 */
 	BD_ONBOARDING_SLIDE_03: string
 	/**
+	 * T​h​e​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​ ​i​s​ ​y​o​u​r​ ​o​n​l​y​ ​w​a​y​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​f​u​n​d​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​b​e​ ​n​e​e​d​e​d​ ​w​h​e​n​ ​i​m​p​o​r​t​i​n​g​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​o​r​ ​t​o​ ​V​e​W​o​r​l​d​.
+	 */
+	BD_WALLET_TUTORIAL_SLIDE_01: string
+	/**
+	 * I​f​ ​y​o​u​ ​l​o​s​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​y​o​u​ ​w​i​l​l​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​a​l​l​ ​t​h​e​ ​f​u​n​d​s​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​Y​o​u​ ​s​h​o​u​l​d​ ​n​e​v​e​r​ ​s​h​a​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​.
+	 */
+	BD_WALLET_TUTORIAL_SLIDE_02: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​a​n​d​ ​s​t​o​r​e​ ​i​t​ ​s​o​m​e​w​h​e​r​e​ ​s​a​f​e​,​ ​s​a​v​e​ ​i​t​ ​i​n​ ​a​n​ ​e​n​c​r​y​p​t​e​d​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​ ​o​r​ ​b​e​s​t​ ​o​f​ ​a​l​l​ ​m​e​m​o​r​i​z​e​ ​a​n​d​ ​n​e​v​e​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.
+	 */
+	BD_WALLET_TUTORIAL_SLIDE_03: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	WELCOME_TO: string
@@ -79,26 +107,6 @@ type RootTranslation = {
 	 * C​u​s​t​o​m​i​z​a​b​l​e​,​ ​s​a​f​e​ ​a​n​d​ ​f​a​s​t
 	 */
 	TITLE_ONBARDING_SLIDE_03: string
-	/**
-	 * P​r​o​t​e​c​t​ ​y​o​u​r​ ​W​a​l​l​e​t
-	 */
-	TITLE_SECURITY: string
-	/**
-	 * F​a​c​e​ ​I​D
-	 */
-	FACE_ID: string
-	/**
-	 * F​i​n​g​e​r​p​r​i​n​t
-	 */
-	FINGERPRINT: string
-	/**
-	 * i​r​i​s
-	 */
-	IRIS: string
-	/**
-	 * D​e​v​i​c​e​ ​P​i​n
-	 */
-	DEVICE_PIN: string
 }
 
 export type TranslationFunctions = {
@@ -122,6 +130,22 @@ export type TranslationFunctions = {
 	 * Skip ahead to create password
 	 */
 	BTN_ONBOARDING_SKIP: () => LocalizedString
+	/**
+	 * NEXT: CUSTODY
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
+	/**
+	 * NEXT: SAFETY
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
+	/**
+	 * NEXT: SECRET PHRASE
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
+	 * Skip ahead to recovery phrase
+	 */
+	BTN_WALLET_TUTORIAL_SKIP: () => LocalizedString
 	/**
 	 * Use {type}
 	 */
@@ -151,6 +175,18 @@ export type TranslationFunctions = {
 	 */
 	BD_ONBOARDING_SLIDE_03: () => LocalizedString
 	/**
+	 * The secret phrase is your only way to access your funds. This will be needed when importing your crypto wallet from or to VeWorld.
+	 */
+	BD_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
+	/**
+	 * If you lose this phrase you will lose access to all the funds available on your wallet. You should never share your secret phrase.
+	 */
+	BD_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
+	/**
+	 * You can write it down and store it somewhere safe, save it in an encrypted password manager or best of all memorize and never write it down.
+	 */
+	BD_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	WELCOME_TO: () => LocalizedString
@@ -166,26 +202,6 @@ export type TranslationFunctions = {
 	 * Customizable, safe and fast
 	 */
 	TITLE_ONBARDING_SLIDE_03: () => LocalizedString
-	/**
-	 * Protect your Wallet
-	 */
-	TITLE_SECURITY: () => LocalizedString
-	/**
-	 * Face ID
-	 */
-	FACE_ID: () => LocalizedString
-	/**
-	 * Fingerprint
-	 */
-	FINGERPRINT: () => LocalizedString
-	/**
-	 * iris
-	 */
-	IRIS: () => LocalizedString
-	/**
-	 * Device Pin
-	 */
-	DEVICE_PIN: () => LocalizedString
 }
 
 export type Formatters = {}
