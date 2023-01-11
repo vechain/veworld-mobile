@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react'
-import {View, ViewProps} from 'react-native'
+import {FlexAlignType, View, ViewProps} from 'react-native'
 import {useTheme} from '~Common'
 
 type Props = {
@@ -15,6 +15,7 @@ type Props = {
         | 'space-between'
         | 'space-around'
     align?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
+    selfAlign?: 'auto' | FlexAlignType | undefined
     m?: number
     mx?: number
     my?: number
@@ -42,6 +43,7 @@ export const BaseView = (props: Props) => {
                     justifyContent: props.justify,
                     alignItems: props.align,
                     flexGrow: props.grow,
+                    alignSelf: props.selfAlign,
                     backgroundColor: props.background
                         ? props.background
                         : theme.constants.transparent,

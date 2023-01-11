@@ -1,2 +1,2 @@
-export * from './Typohrapgy'
+export * from './Platform'
 export * from './Biometrics'

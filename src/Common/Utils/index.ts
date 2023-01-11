@@ -1,1 +1,1 @@
-export * from './Platform'
+export * from './Helpers'
