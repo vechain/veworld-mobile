@@ -32,6 +32,13 @@ const en: BaseTranslation = {
     TITLE_ONBARDING_SLIDE_03: 'Customizable, safe and fast',
     TITLE_SECURITY: 'Protect your Wallet',
 
+
+    // ELEMENTS
+    FACE_ID: 'Face ID',
+    FINGERPRINT: 'Fingerprint',
+    IRIS: 'iris',
+    DEVICE_PIN: 'Device Pin',
+
 }
 
 export default en

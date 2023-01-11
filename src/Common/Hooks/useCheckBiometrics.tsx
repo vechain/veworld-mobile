@@ -6,11 +6,12 @@ import {
     AuthenticationType as AuthType,
     SecurityLevel as SCLevel,
 } from '~Common/Enums'
+import {useI18nContext} from '~i18n'
 
 /*
     Curernt biometrics availabilty check logic
 
-        if it has haedware AND
+        if it has hardware AND
             it has already enrolled
                 Ask to auth
 
@@ -22,6 +23,8 @@ import {
 */
 
 export const useCheckBiometrics = () => {
+    const {LL} = useI18nContext()
+
     const [DeviceSecurity, setDeviceSecurity] = useState<
         TSecurityLevel | undefined
     >()
@@ -51,18 +54,18 @@ export const useCheckBiometrics = () => {
     const getBiometricsType = useMemo(() => {
         if (DeviceSecurity === SCLevel.BIOMETRIC) {
             if (SuppoertedBiometrics === AuthType.FACIAL_RECOGNITION) {
-                return 'Face ID'
+                return LL.FACE_ID()
             }
 
             if (SuppoertedBiometrics === AuthType.FINGERPRINT) {
-                return 'Fingerprint'
+                return LL.FINGERPRINT()
             }
 
-            return 'Iris'
+            return LL.IRIS()
         } else {
-            return 'Device Pin'
+            return LL.DEVICE_PIN()
         }
-    }, [DeviceSecurity, SuppoertedBiometrics])
+    }, [DeviceSecurity, LL, SuppoertedBiometrics])
 
     return {DeviceSecurity, getBiometricsType}
 }
