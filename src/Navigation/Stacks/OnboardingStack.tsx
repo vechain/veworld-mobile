@@ -4,6 +4,7 @@ import {
     OnboardingScreen,
     SecurityScreen,
     TutorialScreen,
+    WalletTypeSelectionScreen,
     WelcomeScreen,
 } from '~Screens'
 
@@ -12,6 +13,7 @@ export type RootStackParamListOnboarding = {
     Onboarding: undefined
     Security: undefined
     Wallet_Tutorial: undefined
+    Wallet_Type_Creation: undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -29,6 +31,12 @@ export const OnboardingStack = () => {
                 <Onboarding.Screen
                     name="Onboarding"
                     component={OnboardingScreen}
+                    options={{headerShown: false}}
+                />
+
+                <Onboarding.Screen
+                    name="Wallet_Type_Creation"
+                    component={WalletTypeSelectionScreen}
                     options={{headerShown: false}}
                 />
 
