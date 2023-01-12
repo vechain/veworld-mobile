@@ -37,6 +37,10 @@ const en: BaseTranslation = {
     TITLE_ONBARDING_SLIDE_01: 'Seamlessly manage your crypto',
     TITLE_ONBARDING_SLIDE_02: 'Sustainable',
     TITLE_ONBARDING_SLIDE_03: 'Customizable, safe and fast',
+    TITLE_SECURITY: 'Protect your wallet',
+    TITLE_WALLET_TUTORIAL_SLIDE_01: 'Secret recovery phrase',
+    TITLE_WALLET_TUTORIAL_SLIDE_02: 'The key to your crypto',
+    TITLE_WALLET_TUTORIAL_SLIDE_03: 'Keep your phrase safe',
 
 }
 

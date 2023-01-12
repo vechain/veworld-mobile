@@ -107,6 +107,22 @@ type RootTranslation = {
 	 * C​u​s​t​o​m​i​z​a​b​l​e​,​ ​s​a​f​e​ ​a​n​d​ ​f​a​s​t
 	 */
 	TITLE_ONBARDING_SLIDE_03: string
+	/**
+	 * P​r​o​t​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	TITLE_SECURITY: string
+	/**
+	 * S​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_01: string
+	/**
+	 * T​h​e​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_02: string
+	/**
+	 * K​e​e​p​ ​y​o​u​r​ ​p​h​r​a​s​e​ ​s​a​f​e
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_03: string
 }
 
 export type TranslationFunctions = {
@@ -202,6 +218,22 @@ export type TranslationFunctions = {
 	 * Customizable, safe and fast
 	 */
 	TITLE_ONBARDING_SLIDE_03: () => LocalizedString
+	/**
+	 * Protect your wallet
+	 */
+	TITLE_SECURITY: () => LocalizedString
+	/**
+	 * Secret recovery phrase
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
+	/**
+	 * The key to your crypto
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
+	/**
+	 * Keep your phrase safe
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
 }
 
 export type Formatters = {}
