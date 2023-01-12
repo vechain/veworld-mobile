@@ -65,7 +65,9 @@ export const SecurityScreen = () => {
                         w={100}
                         mx={20}
                         my={20}
-                        title={LL.BTN_SECURTY_01({type: getBiometricsType})}
+                        title={LL.BTN_SECURTY_USE_TYPE({
+                            type: getBiometricsType,
+                        })}
                         disabled={IsBiometricsButtonDisabled}
                     />
 
@@ -74,7 +76,7 @@ export const SecurityScreen = () => {
                         action={onPasswordPress}
                         w={100}
                         mx={20}
-                        title={LL.BTN_SECURITY_02()}
+                        title={LL.BTN_SECURITY_CREATE_PASSWORD()}
                     />
                 </BaseView>
             </BaseView>
