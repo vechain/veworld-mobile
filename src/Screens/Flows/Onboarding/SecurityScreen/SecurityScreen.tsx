@@ -24,6 +24,7 @@ export const SecurityScreen = () => {
         let {success} = await Biometrics.authenticateWithbiometric()
         if (success) {
         } else {
+            // handle failure message
         }
     }
 

@@ -1,0 +1,113 @@
+import {FlatList} from 'react-native'
+import React, {useCallback, useRef, useState} from 'react'
+import {useNavigation} from '@react-navigation/native'
+import {useI18nContext} from '~i18n'
+import {Routes} from '~Navigation'
+import {
+    BaseButton,
+    BaseSafeArea,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from '~Components'
+import {ListSlide} from '../Components/ListSlide'
+import {Slide} from '../Types'
+import {STEPS} from '../Enums'
+import {ChessIcon, KeyIcon, ShieldIcon} from '~Assets'
+
+export const TutorialScreen = () => {
+    const nav = useNavigation()
+    const {LL} = useI18nContext()
+
+    const flatListRef = useRef<FlatList | null>(null)
+    const [ListIndex, setListIndex] = useState(1)
+    const [BtnIndex, setBtnIndex] = useState(0)
+
+    const slides = [
+        {
+            title: LL.TITLE_WALLET_TUTORIAL_SLIDE_01(),
+            text: LL.BD_WALLET_TUTORIAL_SLIDE_01(),
+            icon: ShieldIcon,
+            button: LL.BTN_WALLET_TUTORIAL_SLIDE_01(),
+        },
+        {
+            title: LL.TITLE_WALLET_TUTORIAL_SLIDE_02(),
+            text: LL.BD_WALLET_TUTORIAL_SLIDE_02(),
+            icon: KeyIcon,
+            button: LL.BTN_WALLET_TUTORIAL_SLIDE_02(),
+        },
+        {
+            title: LL.TITLE_WALLET_TUTORIAL_SLIDE_03(),
+            text: LL.BD_WALLET_TUTORIAL_SLIDE_03(),
+            icon: ChessIcon,
+            button: LL.BTN_WALLET_TUTORIAL_SLIDE_03(),
+        },
+    ]
+
+    const onViewableItemsChanged = useCallback(({viewableItems}: any) => {
+        let activeIndex = viewableItems[0].index
+        setBtnIndex(activeIndex)
+
+        if (activeIndex < STEPS.SAFETY) {
+            setListIndex(activeIndex + 1)
+        }
+    }, [])
+
+    const onButtonPress = () => {
+        if (flatListRef.current) {
+            flatListRef.current.scrollToIndex({index: ListIndex})
+        }
+
+        if (BtnIndex === STEPS.SAFETY) {
+            nav.navigate(Routes.SECURITY)
+        }
+    }
+
+    const onNavigate = () => {
+        nav.navigate(Routes.SECURITY)
+    }
+
+    return (
+        <BaseSafeArea grow={1}>
+            <BaseSpacer height={20} />
+            <BaseView align="center" grow={1}>
+                <BaseText font="large_title">Create Wallet</BaseText>
+
+                <FlatList
+                    ref={flatListRef}
+                    data={slides}
+                    renderItem={({item}: {item: Slide}) => (
+                        <ListSlide item={item} />
+                    )}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    horizontal
+                    pagingEnabled={true}
+                    snapToAlignment="start"
+                    onViewableItemsChanged={onViewableItemsChanged}
+                    keyExtractor={item => item.title}
+                />
+
+                <BaseView align="center" w={100} px={20}>
+                    <BaseButton
+                        action={onNavigate}
+                        font="footnote_accent"
+                        title={LL.BTN_WALLET_TUTORIAL_SKIP()}
+                        selfAlign="flex-start"
+                        px={5}
+                    />
+
+                    <BaseButton
+                        filled
+                        action={onButtonPress}
+                        w={100}
+                        mx={20}
+                        title={slides[BtnIndex].button}
+                    />
+                </BaseView>
+            </BaseView>
+
+            <BaseSpacer height={40} />
+        </BaseSafeArea>
+    )
+}

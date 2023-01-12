@@ -14,13 +14,13 @@ PODS:
     - ExpoModulesCore
   - EXLocalAuthentication (13.0.2):
     - ExpoModulesCore
-  - Expo (47.0.11):
+  - Expo (47.0.13):
     - ExpoModulesCore
   - ExpoKeepAwake (11.0.1):
     - ExpoModulesCore
   - ExpoLocalization (14.0.0):
     - ExpoModulesCore
-  - ExpoModulesCore (1.1.0):
+  - ExpoModulesCore (1.1.1):
     - React-Core
     - ReactCommon/turbomodule/core
   - FBLazyVector (0.70.6)
@@ -611,10 +611,10 @@ SPEC CHECKSUMS:
   EXFileSystem: 60602b6eefa6873f97172c684b7537c9760b50d6
   EXFont: 319606bfe48c33b5b5063fb0994afdc496befe80
   EXLocalAuthentication: 78cc5a00b13745b41d16d189ab332b61a01299f9
-  Expo: dedd83acfd4d70cbec6ac2f1b4433462d95c70bc
+  Expo: b9fa98bf260992312ee3c424400819fb9beadafe
   ExpoKeepAwake: 69b59d0a8d2b24de9f82759c39b3821fec030318
   ExpoLocalization: e202d1e2a4950df17ac8d0889d65a1ffd7532d7e
-  ExpoModulesCore: 089e1ac0f0edee4dd0af0eb4e3f7b44d72cc418d
+  ExpoModulesCore: 485dff3a59b036a33b6050c0a5aea3cf1037fdd1
   FBLazyVector: 48289402952f4f7a4e235de70a9a590aa0b79ef4
   FBReactNativeSpec: dd1186fd05255e3457baa2f4ca65e94c2cd1e3ac
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0

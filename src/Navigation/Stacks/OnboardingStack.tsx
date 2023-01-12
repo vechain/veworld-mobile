@@ -1,11 +1,17 @@
 import React from 'react'
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
-import {OnboardingScreen, SecurityScreen, WelcomeScreen} from '~Screens'
+import {
+    OnboardingScreen,
+    SecurityScreen,
+    TutorialScreen,
+    WelcomeScreen,
+} from '~Screens'
 
 export type RootStackParamListOnboarding = {
     Welcome: undefined
     Onboarding: undefined
     Security: undefined
+    Wallet_Tutorial: undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -29,6 +35,12 @@ export const OnboardingStack = () => {
                 <Onboarding.Screen
                     name="Security"
                     component={SecurityScreen}
+                    options={{headerShown: false}}
+                />
+
+                <Onboarding.Screen
+                    name="Wallet_Tutorial"
+                    component={TutorialScreen}
                     options={{headerShown: false}}
                 />
             </Onboarding.Group>
