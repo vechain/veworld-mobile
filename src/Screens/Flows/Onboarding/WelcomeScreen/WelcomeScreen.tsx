@@ -28,7 +28,9 @@ export const WelcomeScreen = () => {
 
             <BaseView align="center" mx={20} grow={1}>
                 <BaseView orientation="row">
-                    <BaseText font="large_title">{LL.WELCOME_TO()}</BaseText>
+                    <BaseText font="large_title">
+                        {LL.TITLE_WELCOME_TO()}
+                    </BaseText>
                     <BaseText font="large_title" color={theme.colors.button}>
                         VeWorld
                     </BaseText>

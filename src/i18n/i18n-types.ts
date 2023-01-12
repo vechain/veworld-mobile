@@ -54,11 +54,11 @@ type RootTranslation = {
 	 * U​s​e​ ​{​t​y​p​e​}
 	 * @param {string} type
 	 */
-	BTN_SECURTY_01: RequiredParams<'type'>
+	BTN_SECURTY_USE_TYPE: RequiredParams<'type'>
 	/**
 	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
 	 */
-	BTN_SECURITY_02: string
+	BTN_SECURITY_CREATE_PASSWORD: string
 	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
@@ -94,7 +94,7 @@ type RootTranslation = {
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
-	WELCOME_TO: string
+	TITLE_WELCOME_TO: string
 	/**
 	 * S​e​a​m​l​e​s​s​l​y​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​c​r​y​p​t​o
 	 */
@@ -181,11 +181,11 @@ export type TranslationFunctions = {
 	/**
 	 * Use {type}
 	 */
-	BTN_SECURTY_01: (arg: { type: string }) => LocalizedString
+	BTN_SECURTY_USE_TYPE: (arg: { type: string }) => LocalizedString
 	/**
 	 * Create password
 	 */
-	BTN_SECURITY_02: () => LocalizedString
+	BTN_SECURITY_CREATE_PASSWORD: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -221,7 +221,7 @@ export type TranslationFunctions = {
 	/**
 	 * Welcome to 
 	 */
-	WELCOME_TO: () => LocalizedString
+	TITLE_WELCOME_TO: () => LocalizedString
 	/**
 	 * Seamlessly manage your crypto
 	 */

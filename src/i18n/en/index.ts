@@ -14,8 +14,8 @@ const en: BaseTranslation = {
     BTN_WALLET_TUTORIAL_SLIDE_02: 'NEXT: SAFETY',
     BTN_WALLET_TUTORIAL_SLIDE_03: 'NEXT: SECRET PHRASE',
     BTN_WALLET_TUTORIAL_SKIP: 'Skip ahead to recovery phrase',
-    BTN_SECURTY_01: 'Use {type:string}',
-    BTN_SECURITY_02: 'Create password',
+    BTN_SECURTY_USE_TYPE: 'Use {type:string}',
+    BTN_SECURITY_CREATE_PASSWORD: 'Create password',
 
     // BODY
     BD_GDPR:
@@ -33,7 +33,7 @@ const en: BaseTranslation = {
     BD_WALLET_TUTORIAL_SLIDE_03: 'You can write it down and store it somewhere safe, save it in an encrypted password manager or best of all memorize and never write it down.',
 
     // TITLES
-    WELCOME_TO: 'Welcome to ',
+    TITLE_WELCOME_TO: 'Welcome to ',
     TITLE_ONBARDING_SLIDE_01: 'Seamlessly manage your crypto',
     TITLE_ONBARDING_SLIDE_02: 'Sustainable',
     TITLE_ONBARDING_SLIDE_03: 'Customizable, safe and fast',
@@ -43,7 +43,6 @@ const en: BaseTranslation = {
     TITLE_WALLET_TUTORIAL_SLIDE_03: 'Keep your phrase safe',
 
     // ELEMENTS
-
     FACE_ID: 'Face ID',
     FINGERPRINT: 'Fingerprint',
     IRIS: 'Iris',
