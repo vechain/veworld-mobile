@@ -123,6 +123,22 @@ type RootTranslation = {
 	 * K​e​e​p​ ​y​o​u​r​ ​p​h​r​a​s​e​ ​s​a​f​e
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: string
+	/**
+	 * F​a​c​e​ ​I​D
+	 */
+	FACE_ID: string
+	/**
+	 * F​i​n​g​e​r​p​r​i​n​t
+	 */
+	FINGERPRINT: string
+	/**
+	 * I​r​i​s
+	 */
+	IRIS: string
+	/**
+	 * D​e​v​i​c​e​ ​P​i​n
+	 */
+	DEVICE_PIN: string
 }
 
 export type TranslationFunctions = {
@@ -234,6 +250,22 @@ export type TranslationFunctions = {
 	 * Keep your phrase safe
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
+	 * Face ID
+	 */
+	FACE_ID: () => LocalizedString
+	/**
+	 * Fingerprint
+	 */
+	FINGERPRINT: () => LocalizedString
+	/**
+	 * Iris
+	 */
+	IRIS: () => LocalizedString
+	/**
+	 * Device Pin
+	 */
+	DEVICE_PIN: () => LocalizedString
 }
 
 export type Formatters = {}

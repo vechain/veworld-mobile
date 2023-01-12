@@ -42,6 +42,13 @@ const en: BaseTranslation = {
     TITLE_WALLET_TUTORIAL_SLIDE_02: 'The key to your crypto',
     TITLE_WALLET_TUTORIAL_SLIDE_03: 'Keep your phrase safe',
 
+    // ELEMENTS
+
+    FACE_ID: 'Face ID',
+    FINGERPRINT: 'Fingerprint',
+    IRIS: 'Iris',
+    DEVICE_PIN: 'Device Pin',
+
 }
 
 export default en
