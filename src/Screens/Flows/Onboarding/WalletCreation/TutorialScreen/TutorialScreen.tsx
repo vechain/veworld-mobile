@@ -8,12 +8,15 @@ import {
     BaseText,
     BaseView,
 } from '~Components'
+import {useNavigation} from '@react-navigation/native'
+import {Routes} from '~Navigation'
 import {ListSlide} from '../Components/ListSlide'
 import {Slide} from '../Types'
 import {STEPS} from '../Enums'
 import {ChessIcon, KeyIcon, ShieldIcon} from '~Assets'
 
 export const TutorialScreen = () => {
+    const nav = useNavigation()
     const {LL} = useI18nContext()
 
     const flatListRef = useRef<FlatList | null>(null)
@@ -56,10 +59,13 @@ export const TutorialScreen = () => {
         }
 
         if (BtnIndex === STEPS.SAFETY) {
+            nav.navigate(Routes.SEED_PHRASE)
         }
     }
 
-    const onNavigate = () => {}
+    const onNavigate = () => {
+        nav.navigate(Routes.SEED_PHRASE)
+    }
 
     return (
         <BaseSafeArea grow={1}>

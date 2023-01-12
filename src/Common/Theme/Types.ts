@@ -15,6 +15,7 @@ export type Constants = {
     transparent: 'transparent'
     bgDark: string
     bgLght: string
+    lightGrey: string
 }
 
 export type Typography = {

@@ -14,6 +14,7 @@ type Props = {
         | 'center'
         | 'space-between'
         | 'space-around'
+        | 'space-evenly'
     align?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
     selfAlign?: 'auto' | FlexAlignType | undefined
     m?: number
