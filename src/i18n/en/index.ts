@@ -16,6 +16,8 @@ const en: BaseTranslation = {
     BTN_WALLET_TUTORIAL_SKIP: 'Skip ahead to recovery phrase',
     BTN_SECURTY_USE_TYPE: 'Use {type:string}',
     BTN_SECURITY_CREATE_PASSWORD: 'Create password',
+    BTN_CREATE_WALLET_TYPE_CREATE_NEW: 'Create new wallet',
+    BTN_CREATE_WALLET_TYPE_IMPORT: 'Import wallet',
 
     // BODY
     BD_GDPR:
@@ -41,6 +43,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_TUTORIAL_SLIDE_01: 'Secret recovery phrase',
     TITLE_WALLET_TUTORIAL_SLIDE_02: 'The key to your crypto',
     TITLE_WALLET_TUTORIAL_SLIDE_03: 'Keep your phrase safe',
+    TITLE_CREATE_WALLET_TYPE: 'Create Wallet',
 
     // ELEMENTS
     FACE_ID: 'Face ID',

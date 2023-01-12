@@ -1,8 +1,6 @@
 import {FlatList} from 'react-native'
 import React, {useCallback, useRef, useState} from 'react'
-import {useNavigation} from '@react-navigation/native'
 import {useI18nContext} from '~i18n'
-import {Routes} from '~Navigation'
 import {
     BaseButton,
     BaseSafeArea,
@@ -16,7 +14,6 @@ import {STEPS} from '../Enums'
 import {ChessIcon, KeyIcon, ShieldIcon} from '~Assets'
 
 export const TutorialScreen = () => {
-    const nav = useNavigation()
     const {LL} = useI18nContext()
 
     const flatListRef = useRef<FlatList | null>(null)
@@ -59,13 +56,10 @@ export const TutorialScreen = () => {
         }
 
         if (BtnIndex === STEPS.SAFETY) {
-            nav.navigate(Routes.SECURITY)
         }
     }
 
-    const onNavigate = () => {
-        nav.navigate(Routes.SECURITY)
-    }
+    const onNavigate = () => {}
 
     return (
         <BaseSafeArea grow={1}>

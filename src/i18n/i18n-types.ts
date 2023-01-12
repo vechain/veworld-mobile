@@ -60,6 +60,14 @@ type RootTranslation = {
 	 */
 	BTN_SECURITY_CREATE_PASSWORD: string
 	/**
+	 * C​r​e​a​t​e​ ​n​e​w​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW: string
+	/**
+	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -124,6 +132,10 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: string
 	/**
+	 * C​r​e​a​t​e​ ​W​a​l​l​e​t
+	 */
+	TITLE_CREATE_WALLET_TYPE: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -186,6 +198,14 @@ export type TranslationFunctions = {
 	 * Create password
 	 */
 	BTN_SECURITY_CREATE_PASSWORD: () => LocalizedString
+	/**
+	 * Create new wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW: () => LocalizedString
+	/**
+	 * Import wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -250,6 +270,10 @@ export type TranslationFunctions = {
 	 * Keep your phrase safe
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
+	 * Create Wallet
+	 */
+	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
 	 * Face ID
 	 */
