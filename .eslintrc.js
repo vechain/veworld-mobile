@@ -11,6 +11,7 @@ module.exports = {
                 "no-shadow": "off",
                 "no-undef": "off",
                 semi: "off",
+                quotes: [2, "double", { avoidEscape: true }],
             },
         },
     ],
