@@ -5,15 +5,15 @@
  * @format
  */
 
-const {getDefaultConfig} = require('metro-config')
+const { getDefaultConfig } = require("metro-config")
 
 module.exports = (async () => {
     const {
-        resolver: {sourceExts},
+        resolver: { sourceExts },
     } = await getDefaultConfig(__dirname)
 
     const exts = process.env.RN_SRC_EXT
-        ? process.env.RN_SRC_EXT.split(',').concat(sourceExts)
+        ? process.env.RN_SRC_EXT.split(",").concat(sourceExts)
         : sourceExts
 
     return {
@@ -26,7 +26,7 @@ module.exports = (async () => {
             }),
         },
         resolver: {
-            sourceExts: [...exts, 'cjs'],
+            sourceExts: [...exts, "cjs"],
         },
     }
 })()

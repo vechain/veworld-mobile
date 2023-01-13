@@ -1,6 +1,6 @@
-import React, {FC} from 'react'
-import Icon from 'react-native-vector-icons/Ionicons'
-import {useTheme} from '~Common'
+import React, { FC } from "react"
+import Icon from "react-native-vector-icons/Ionicons"
+import { useTheme } from "~Common"
 
 type Props = {
     focused: boolean
@@ -8,7 +8,7 @@ type Props = {
     title: string
 }
 
-export const TabIcon: FC<Props> = ({focused, size, title}) => {
+export const TabIcon: FC<Props> = ({ focused, size, title }) => {
     const theme = useTheme()
     return (
         <Icon

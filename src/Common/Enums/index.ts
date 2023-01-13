@@ -1,1 +1,1 @@
-export * from './Biometrics'
+export * from "./Biometrics"

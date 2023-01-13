@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -7,31 +7,31 @@ import {
     BaseView,
     CheckBoxWithText,
     MnemonicCard,
-} from '~Components'
-import {Alert} from 'react-native'
-import * as Clipboard from 'expo-clipboard'
-import {useI18nContext} from '~i18n'
-import {sanifySeed} from '~Common'
+} from "~Components"
+import { Alert } from "react-native"
+import * as Clipboard from "expo-clipboard"
+import { useI18nContext } from "~i18n"
+import { sanifySeed } from "~Common"
 
 export const SeedPhraseScreen = () => {
-    const {LL} = useI18nContext()
+    const { LL } = useI18nContext()
 
-    const [Mnemonic, setMnemonic] = useState('')
+    const [Mnemonic, setMnemonic] = useState("")
     const [MnemonicArray, _setMnemonicArray] = useState<string[]>(
-        Array.from({length: 12}),
+        Array.from({ length: 12 }),
     )
 
     const [IsChecked, setIsChecked] = useState(false)
 
     const onCopyToClipboard = async () => {
         await Clipboard.setStringAsync(Mnemonic)
-        Alert.alert('Copied to clipboard')
+        Alert.alert("Copied to clipboard")
     }
 
     // todo.vas -> remove once wallet service is up
     useEffect(() => {
         let text =
-            'cactus quit copper cluster refuse palace faith kid atom reward draft decade'
+            "cactus quit copper cluster refuse palace faith kid atom reward draft decade"
 
         let seed = sanifySeed(text)
 

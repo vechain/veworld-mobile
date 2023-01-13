@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useMemo} from 'react'
-import {Text, TextProps} from 'react-native'
-import {TFonts, useTheme} from '~Common'
-import {BaseView} from './BaseView'
+import React, { useMemo } from "react"
+import { Text, TextProps } from "react-native"
+import { TFonts, useTheme } from "~Common"
+import { BaseView } from "./BaseView"
 
 type Props = {
     font?: TFonts
-    align?: 'left' | 'center' | 'right'
+    align?: "left" | "center" | "right"
     italic?: boolean
     color?: string
     isButton?: boolean
@@ -21,16 +21,16 @@ type Props = {
 } & TextProps
 
 export const BaseText = (props: Props) => {
-    const {style, ...otherProps} = props
+    const { style, ...otherProps } = props
     const theme = useTheme()
 
     const computeFont = useMemo(
-        () => theme.typography[props.font ?? 'body'].fontSize,
+        () => theme.typography[props.font ?? "body"].fontSize,
         [props.font, theme.typography],
     )
 
     const computeFamily = useMemo(
-        () => theme.typography[props.font ?? 'body'].fontFamily,
+        () => theme.typography[props.font ?? "body"].fontFamily,
         [props.font, theme.typography],
     )
 
@@ -51,7 +51,7 @@ export const BaseText = (props: Props) => {
                         fontSize: computeFont,
                         fontFamily: computeFamily,
                         textAlign: props.align,
-                        fontStyle: props.italic ? 'italic' : 'normal',
+                        fontStyle: props.italic ? "italic" : "normal",
                     },
                     style,
                 ]}

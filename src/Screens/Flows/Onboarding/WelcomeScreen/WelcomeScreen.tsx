@@ -1,22 +1,22 @@
-import React from 'react'
+import React from "react"
 import {
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-} from '~Components'
-import {useNavigation} from '@react-navigation/native'
-import {Routes} from '~Navigation'
-import VectorImage from 'react-native-vector-image'
-import {VeChainVetLogo} from '~Assets'
-import {useTheme} from '~Common'
-import {useI18nContext} from '~i18n'
+} from "~Components"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import VectorImage from "react-native-vector-image"
+import { VeChainVetLogo } from "~Assets"
+import { useTheme } from "~Common"
+import { useI18nContext } from "~i18n"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
     const theme = useTheme()
-    const {LL} = useI18nContext()
+    const { LL } = useI18nContext()
 
     const onNavigate = () => {
         nav.navigate(Routes.ONBOARDING)

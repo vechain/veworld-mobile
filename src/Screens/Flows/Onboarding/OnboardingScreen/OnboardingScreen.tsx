@@ -1,23 +1,23 @@
-import React, {useCallback, useRef, useState} from 'react'
-import {FlatList} from 'react-native'
-import {useNavigation} from '@react-navigation/native'
-import VectorImage from 'react-native-vector-image'
-import {BaseButton, BaseSafeArea, BaseSpacer, BaseView} from '~Components'
-import {useI18nContext} from '~i18n'
-import {Routes} from '~Navigation'
+import React, { useCallback, useRef, useState } from "react"
+import { FlatList } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import VectorImage from "react-native-vector-image"
+import { BaseButton, BaseSafeArea, BaseSpacer, BaseView } from "~Components"
+import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
 import {
     BuyInfoIcon,
     CustomizationIcon,
     SustainableIcon,
     VeChainVetLogoWithTitle,
-} from '~Assets'
-import {ListSlide} from './Components/ListSlide'
-import {Slide} from './Types'
-import {STEPS} from './Enums'
+} from "~Assets"
+import { ListSlide } from "./Components/ListSlide"
+import { Slide } from "./Types"
+import { STEPS } from "./Enums"
 
 export const OnboardingScreen = () => {
     const nav = useNavigation()
-    const {LL} = useI18nContext()
+    const { LL } = useI18nContext()
 
     const flatListRef = useRef<FlatList | null>(null)
     const [ListIndex, setListIndex] = useState(1)
@@ -44,7 +44,7 @@ export const OnboardingScreen = () => {
         },
     ]
 
-    const onViewableItemsChanged = useCallback(({viewableItems}: any) => {
+    const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
         let activeIndex = viewableItems[0].index
         setBtnIndex(activeIndex)
 
@@ -55,7 +55,7 @@ export const OnboardingScreen = () => {
 
     const onButtonPress = () => {
         if (flatListRef.current) {
-            flatListRef.current.scrollToIndex({index: ListIndex})
+            flatListRef.current.scrollToIndex({ index: ListIndex })
         }
 
         if (BtnIndex === STEPS.SAFE_AND_FAST) {
@@ -76,7 +76,7 @@ export const OnboardingScreen = () => {
                 <FlatList
                     ref={flatListRef}
                     data={slides}
-                    renderItem={({item}: {item: Slide}) => (
+                    renderItem={({ item }: { item: Slide }) => (
                         <ListSlide item={item} />
                     )}
                     showsHorizontalScrollIndicator={false}

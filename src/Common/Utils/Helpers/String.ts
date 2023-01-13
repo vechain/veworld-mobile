@@ -7,7 +7,7 @@
 export const sanifySeed = (seed: string) => {
     return seed
         .toLowerCase()
-        .replace(/\n/g, ' ')
-        .split(' ')
+        .replace(/\n/g, " ")
+        .split(" ")
         .filter(s => s)
 }

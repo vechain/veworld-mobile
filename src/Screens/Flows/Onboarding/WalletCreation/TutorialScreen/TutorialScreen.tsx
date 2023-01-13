@@ -1,23 +1,23 @@
-import {FlatList} from 'react-native'
-import React, {useCallback, useRef, useState} from 'react'
-import {useI18nContext} from '~i18n'
+import { FlatList } from "react-native"
+import React, { useCallback, useRef, useState } from "react"
+import { useI18nContext } from "~i18n"
 import {
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-} from '~Components'
-import {useNavigation} from '@react-navigation/native'
-import {Routes} from '~Navigation'
-import {ListSlide} from '../Components/ListSlide'
-import {Slide} from '../Types'
-import {STEPS} from '../Enums'
-import {ChessIcon, KeyIcon, ShieldIcon} from '~Assets'
+} from "~Components"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import { ListSlide } from "../Components/ListSlide"
+import { Slide } from "../Types"
+import { STEPS } from "../Enums"
+import { ChessIcon, KeyIcon, ShieldIcon } from "~Assets"
 
 export const TutorialScreen = () => {
     const nav = useNavigation()
-    const {LL} = useI18nContext()
+    const { LL } = useI18nContext()
 
     const flatListRef = useRef<FlatList | null>(null)
     const [ListIndex, setListIndex] = useState(1)
@@ -44,7 +44,7 @@ export const TutorialScreen = () => {
         },
     ]
 
-    const onViewableItemsChanged = useCallback(({viewableItems}: any) => {
+    const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
         let activeIndex = viewableItems[0].index
         setBtnIndex(activeIndex)
 
@@ -55,7 +55,7 @@ export const TutorialScreen = () => {
 
     const onButtonPress = () => {
         if (flatListRef.current) {
-            flatListRef.current.scrollToIndex({index: ListIndex})
+            flatListRef.current.scrollToIndex({ index: ListIndex })
         }
 
         if (BtnIndex === STEPS.SAFETY) {
@@ -76,7 +76,7 @@ export const TutorialScreen = () => {
                 <FlatList
                     ref={flatListRef}
                     data={slides}
-                    renderItem={({item}: {item: Slide}) => (
+                    renderItem={({ item }: { item: Slide }) => (
                         <ListSlide item={item} />
                     )}
                     showsHorizontalScrollIndicator={false}

@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
-import {Tabbar} from '~Navigation/Tabs'
-import {OnboardingStack} from './OnboardingStack'
+import React, { useState } from "react"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { Tabbar } from "~Navigation/Tabs"
+import { OnboardingStack } from "./OnboardingStack"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -21,13 +21,13 @@ export const SwitchStack = () => {
                 <Switch.Screen
                     name="Tabbar"
                     component={Tabbar}
-                    options={{headerShown: false}}
+                    options={{ headerShown: false }}
                 />
             ) : (
                 <Switch.Screen
                     name="OnboardingStack"
                     component={OnboardingStack}
-                    options={{headerShown: false}}
+                    options={{ headerShown: false }}
                 />
             )}
         </Switch.Navigator>

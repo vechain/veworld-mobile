@@ -1,22 +1,22 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react'
-import {FlexAlignType, View, ViewProps} from 'react-native'
-import {useTheme} from '~Common'
+import React from "react"
+import { FlexAlignType, View, ViewProps } from "react-native"
+import { useTheme } from "~Common"
 
 type Props = {
     w?: number
     h?: number
     background?: string
-    orientation?: 'row' | 'column'
+    orientation?: "row" | "column"
     justify?:
-        | 'flex-start'
-        | 'flex-end'
-        | 'center'
-        | 'space-between'
-        | 'space-around'
-        | 'space-evenly'
-    align?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
-    selfAlign?: 'auto' | FlexAlignType | undefined
+        | "flex-start"
+        | "flex-end"
+        | "center"
+        | "space-between"
+        | "space-around"
+        | "space-evenly"
+    align?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline"
+    selfAlign?: "auto" | FlexAlignType | undefined
     m?: number
     mx?: number
     my?: number
@@ -29,7 +29,7 @@ type Props = {
 } & ViewProps
 
 export const BaseView = (props: Props) => {
-    const {style, ...otherProps} = props
+    const { style, ...otherProps } = props
     const theme = useTheme()
 
     return (
@@ -37,10 +37,10 @@ export const BaseView = (props: Props) => {
             style={[
                 {
                     flex: props.isFlex ? 1 : 0,
-                    flexWrap: props.wrap ? 'wrap' : 'nowrap',
+                    flexWrap: props.wrap ? "wrap" : "nowrap",
                     flexDirection: props.orientation
                         ? props.orientation
-                        : 'column',
+                        : "column",
                     justifyContent: props.justify,
                     alignItems: props.align,
                     flexGrow: props.grow,

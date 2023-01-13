@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react'
-import {Locales, TypesafeI18n, isLocale, loadLocaleAsync} from '~i18n'
-import * as Localization from 'expo-localization'
-import '../../Common/polyfill'
+import React, { useEffect, useState } from "react"
+import { Locales, TypesafeI18n, isLocale, loadLocaleAsync } from "~i18n"
+import * as Localization from "expo-localization"
+import "../../Common/polyfill"
 
 type Props = {
     children: React.ReactNode
 }
 
-export const Translation = ({children}: Props) => {
+export const Translation = ({ children }: Props) => {
     // todo.vas -> issue #25
 
     const [localeLoaded, setLocaleLoaded] = useState<Locales | null>(null)
@@ -17,7 +17,7 @@ export const Translation = ({children}: Props) => {
             const DEFAULT_LOCALE =
                 Localization.getLocales()
                     .map(loc => loc.languageCode)
-                    .find(isLocale) ?? 'en'
+                    .find(isLocale) ?? "en"
 
             await loadLocaleAsync(DEFAULT_LOCALE)
             setLocaleLoaded(DEFAULT_LOCALE)

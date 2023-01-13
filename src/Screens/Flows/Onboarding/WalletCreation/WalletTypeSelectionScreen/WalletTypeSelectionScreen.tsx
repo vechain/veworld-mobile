@@ -1,18 +1,18 @@
-import {useNavigation} from '@react-navigation/native'
-import React from 'react'
+import { useNavigation } from "@react-navigation/native"
+import React from "react"
 import {
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-} from '~Components'
-import {Routes} from '~Navigation'
-import {useI18nContext} from '~i18n'
+} from "~Components"
+import { Routes } from "~Navigation"
+import { useI18nContext } from "~i18n"
 
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
-    const {LL} = useI18nContext()
+    const { LL } = useI18nContext()
 
     const onCreateWallet = () => {
         nav.navigate(Routes.WALLET_TUTORIAL)

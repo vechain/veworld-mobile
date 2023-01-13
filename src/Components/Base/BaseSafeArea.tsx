@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react'
-import {SafeAreaView} from 'react-native-safe-area-context'
-import {useTheme} from '~Common'
+import React from "react"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { useTheme } from "~Common"
 
 type Props = {
     bg?: string
@@ -17,7 +17,7 @@ export const BaseSafeArea = (props: Props) => {
             style={{
                 flexGrow: props.grow,
                 backgroundColor: props.transparent
-                    ? 'transparent'
+                    ? "transparent"
                     : props.bg
                     ? props.bg
                     : theme.colors.background,

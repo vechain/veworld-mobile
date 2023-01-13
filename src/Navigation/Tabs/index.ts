@@ -1,1 +1,1 @@
-export * from './Tabbar'
+export * from "./Tabbar"

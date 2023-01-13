@@ -1,10 +1,10 @@
-import React from 'react'
-import {StyleSheet} from 'react-native'
-import {BaseText, BaseView} from '~Components/Base'
-import {useI18nContext} from '~i18n'
+import React from "react"
+import { StyleSheet } from "react-native"
+import { BaseText, BaseView } from "~Components/Base"
+import { useI18nContext } from "~i18n"
 
-export const HideView = ({background}: {background: string}) => {
-    const {LL} = useI18nContext()
+export const HideView = ({ background }: { background: string }) => {
+    const { LL } = useI18nContext()
 
     return (
         <BaseView

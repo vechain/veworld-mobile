@@ -1,5 +1,5 @@
-import React from 'react'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import React from "react"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     OnboardingScreen,
     SecurityScreen,
@@ -7,7 +7,7 @@ import {
     TutorialScreen,
     WalletTypeSelectionScreen,
     WelcomeScreen,
-} from '~Screens'
+} from "~Screens"
 
 export type RootStackParamListOnboarding = {
     Welcome: undefined
@@ -22,42 +22,42 @@ const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
 
 export const OnboardingStack = () => {
     return (
-        <Onboarding.Navigator screenOptions={{headerShown: false}}>
+        <Onboarding.Navigator screenOptions={{ headerShown: false }}>
             <Onboarding.Group>
                 <Onboarding.Screen
                     name="Welcome"
                     component={WelcomeScreen}
-                    options={{headerShown: false}}
+                    options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
                     name="Onboarding"
                     component={OnboardingScreen}
-                    options={{headerShown: false}}
+                    options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
                     name="Wallet_Type_Creation"
                     component={WalletTypeSelectionScreen}
-                    options={{headerShown: false}}
+                    options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
                     name="Wallet_Tutorial"
                     component={TutorialScreen}
-                    options={{headerShown: false}}
+                    options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
                     name="Seed_Phrase"
                     component={SeedPhraseScreen}
-                    options={{headerShown: false}}
+                    options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
                     name="Security"
                     component={SecurityScreen}
-                    options={{headerShown: false}}
+                    options={{ headerShown: false }}
                 />
             </Onboarding.Group>
         </Onboarding.Navigator>

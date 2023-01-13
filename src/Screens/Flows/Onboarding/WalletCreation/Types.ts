@@ -1,4 +1,4 @@
-import {LocalizedString} from 'typesafe-i18n'
+import { LocalizedString } from "typesafe-i18n"
 
 export type Slide = {
     title: LocalizedString

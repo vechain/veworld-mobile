@@ -4,11 +4,11 @@ import {
     TouchableOpacityProps,
     StyleSheet,
     FlexAlignType,
-} from 'react-native'
-import React from 'react'
-import {TFonts, useTheme} from '~Common'
-import {BaseText} from './BaseText'
-import {LocalizedString} from 'typesafe-i18n'
+} from "react-native"
+import React from "react"
+import { TFonts, useTheme } from "~Common"
+import { BaseText } from "./BaseText"
+import { LocalizedString } from "typesafe-i18n"
 
 type Props = {
     action: () => void
@@ -25,11 +25,11 @@ type Props = {
     w?: number
     h?: number
     font?: TFonts
-    selfAlign?: 'auto' | FlexAlignType | undefined
+    selfAlign?: "auto" | FlexAlignType | undefined
 } & TouchableOpacityProps
 
 export const BaseButton = (props: Props) => {
-    const {style, disabled = false, ...otherProps} = props
+    const { style, disabled = false, ...otherProps } = props
     const theme = useTheme()
 
     return (
@@ -64,7 +64,7 @@ export const BaseButton = (props: Props) => {
                 color={
                     props.filled ? theme.colors.background : theme.colors.button
                 }
-                font={props.font ? props.font : 'body_accent'}>
+                font={props.font ? props.font : "body_accent"}>
                 {props.title}
             </BaseText>
         </TouchableOpacity>
@@ -75,6 +75,6 @@ const baseStyle = StyleSheet.create({
     default: {
         borderRadius: 8,
         borderWidth: 1,
-        alignItems: 'center',
+        alignItems: "center",
     },
 })

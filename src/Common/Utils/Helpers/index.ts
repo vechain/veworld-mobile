@@ -1,3 +1,3 @@
-export * from './Platform'
-export * from './Biometrics'
-export * from './String'
+export * from "./Platform"
+export * from "./Biometrics"
+export * from "./String"

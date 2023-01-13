@@ -1,8 +1,8 @@
-import React, {FC} from 'react'
-import BouncyCheckbox from 'react-native-bouncy-checkbox'
-import {BaseText} from '~Components/Base'
-import {TFonts, useTheme} from '~Common'
-import {LocalizedString} from 'typesafe-i18n'
+import React, { FC } from "react"
+import BouncyCheckbox from "react-native-bouncy-checkbox"
+import { BaseText } from "~Components/Base"
+import { TFonts, useTheme } from "~Common"
+import { LocalizedString } from "typesafe-i18n"
 
 type Props = {
     font?: TFonts
@@ -28,7 +28,7 @@ export const CheckBoxWithText: FC<Props> = ({
             fillColor={theme.colors.button}
             textComponent={
                 <BaseText
-                    font={font ?? 'footnote'}
+                    font={font ?? "footnote"}
                     color={fontColor}
                     my={10}
                     w={87}
