@@ -1,7 +1,7 @@
-import React, {useMemo} from 'react'
-import {StatusBar, StatusBarProps} from 'react-native'
-import {useTheme} from '~Common'
-import {computeBarStyle} from './Helpers/ComputeBarStyle'
+import React, { useMemo } from "react"
+import { StatusBar, StatusBarProps } from "react-native"
+import { useTheme } from "~Common"
+import { computeBarStyle } from "./Helpers/ComputeBarStyle"
 
 type Props = {
     hero?: boolean

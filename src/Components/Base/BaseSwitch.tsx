@@ -1,6 +1,6 @@
-import {Switch, ViewProps} from 'react-native'
-import React, {useState} from 'react'
-import {useTheme} from '~Common'
+import { Switch, ViewProps } from "react-native"
+import React, { useState } from "react"
+import { useTheme } from "~Common"
 
 type Props = {
     trackColors?: string[]
@@ -21,7 +21,7 @@ export const BaseSwitch = (props: Props) => {
     return (
         <Switch
             trackColor={{
-                false: props.trackColors ? props.trackColors[0] : '#767577',
+                false: props.trackColors ? props.trackColors[0] : "#767577",
                 true: props.trackColors
                     ? props.trackColors[1]
                     : theme.colors.button,

@@ -1,16 +1,16 @@
-import React, {FC, useCallback, useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
-import {BaseText, BaseView} from '~Components/Base'
-import {BlurView} from './BlurView'
-import {isAndroid, isIOS, useTheme} from '~Common'
-import {HideView} from './HideView.android'
+import React, { FC, useCallback, useState } from "react"
+import { TouchableWithoutFeedback } from "react-native"
+import Icon from "react-native-vector-icons/Ionicons"
+import { BaseText, BaseView } from "~Components/Base"
+import { BlurView } from "./BlurView"
+import { isAndroid, isIOS, useTheme } from "~Common"
+import { HideView } from "./HideView.android"
 
 type Props = {
     mnemonicArray: string[]
 }
 
-export const MnemonicCard: FC<Props> = ({mnemonicArray}) => {
+export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     const theme = useTheme()
 
     const [Show, setShow] = useState(false)
@@ -44,7 +44,7 @@ export const MnemonicCard: FC<Props> = ({mnemonicArray}) => {
 
                 <BaseView w={8} justify="center" align="center">
                     <Icon
-                        name={Show ? 'eye-off-outline' : 'eye-outline'}
+                        name={Show ? "eye-off-outline" : "eye-outline"}
                         size={18}
                         color={theme.colors.button}
                     />

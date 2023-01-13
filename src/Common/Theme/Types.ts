@@ -1,4 +1,4 @@
-import {TBaseFnotStyle} from '~Common/Types'
+import { TBaseFnotStyle } from "~Common/Types"
 
 export type ThemeVariant = {
     isDark: boolean
@@ -12,7 +12,7 @@ export type ThemeVariant = {
 }
 
 export type Constants = {
-    transparent: 'transparent'
+    transparent: "transparent"
     bgDark: string
     bgLght: string
     lightGrey: string

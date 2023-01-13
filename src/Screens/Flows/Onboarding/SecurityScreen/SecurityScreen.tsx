@@ -1,19 +1,19 @@
-import React, {useMemo} from 'react'
+import React, { useMemo } from "react"
 import {
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-} from '~Components'
-import {Biometrics, useCheckBiometrics} from '~Common'
-import {SecurityLevel} from '~Common/Enums'
-import {useI18nContext} from '~i18n'
+} from "~Components"
+import { Biometrics, useCheckBiometrics } from "~Common"
+import { SecurityLevel } from "~Common/Enums"
+import { useI18nContext } from "~i18n"
 
 export const SecurityScreen = () => {
-    const {LL} = useI18nContext()
+    const { LL } = useI18nContext()
 
-    const {DeviceSecurity, getBiometricsType} = useCheckBiometrics()
+    const { DeviceSecurity, getBiometricsType } = useCheckBiometrics()
 
     const IsBiometricsButtonDisabled = useMemo(
         () => (DeviceSecurity === SecurityLevel.BIOMETRIC ? false : true),
@@ -21,7 +21,7 @@ export const SecurityScreen = () => {
     )
 
     const onBiometricsPress = async () => {
-        let {success} = await Biometrics.authenticateWithbiometric()
+        let { success } = await Biometrics.authenticateWithbiometric()
         if (success) {
         } else {
             // handle failure message

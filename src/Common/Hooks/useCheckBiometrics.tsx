@@ -1,12 +1,12 @@
-import {AuthenticationType, SecurityLevel} from 'expo-local-authentication'
-import {useCallback, useEffect, useMemo, useState} from 'react'
-import {TAuthenticationType, TSecurityLevel} from '~Common/Types'
-import {Biometrics} from '~Common/Utils'
+import { AuthenticationType, SecurityLevel } from "expo-local-authentication"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { TAuthenticationType, TSecurityLevel } from "~Common/Types"
+import { Biometrics } from "~Common/Utils"
 import {
     AuthenticationType as AuthType,
     SecurityLevel as SCLevel,
-} from '~Common/Enums'
-import {useI18nContext} from '~i18n'
+} from "~Common/Enums"
+import { useI18nContext } from "~i18n"
 
 /*
     Curernt biometrics availabilty check logic
@@ -23,7 +23,7 @@ import {useI18nContext} from '~i18n'
 */
 
 export const useCheckBiometrics = () => {
-    const {LL} = useI18nContext()
+    const { LL } = useI18nContext()
 
     const [DeviceSecurity, setDeviceSecurity] = useState<
         TSecurityLevel | undefined
@@ -67,5 +67,5 @@ export const useCheckBiometrics = () => {
         }
     }, [DeviceSecurity, LL, SuppoertedBiometrics])
 
-    return {DeviceSecurity, getBiometricsType}
+    return { DeviceSecurity, getBiometricsType }
 }

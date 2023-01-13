@@ -3,8 +3,8 @@ export const computeBarStyle = (
     isDark: boolean,
 ) => {
     if (isHero || isDark) {
-        return 'light-content'
+        return "light-content"
     }
 
-    return 'dark-content'
+    return "dark-content"
 }

@@ -1,6 +1,6 @@
-import React from 'react'
-import {StyleSheet, ViewProps} from 'react-native'
-import {BlurView as BV, BlurViewProps} from '@react-native-community/blur'
+import React from "react"
+import { StyleSheet, ViewProps } from "react-native"
+import { BlurView as BV, BlurViewProps } from "@react-native-community/blur"
 
 type Props = {
     cornerRadius?: number
