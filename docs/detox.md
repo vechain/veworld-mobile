@@ -87,14 +87,14 @@ and then change the desired device on the `detoxrc.js` file.
 
 Next you need to do some changes/patching on some of the native android files:
 
-- Build scripts:
-  - `android/build.gradle`
-  - `android/app/build.gradle`
-- Native test code:
-  - `android/app/src/androidTest/java/com/<your.package>/DetoxTest.java`
-- Manifests:
-  - `android/app/src/main/AndroidManifest.xml`
-  - `android/app/src/main/res/xml/network_security_config.xml`
+-   Build scripts:
+    -   `android/build.gradle`
+    -   `android/app/build.gradle`
+-   Native test code:
+    -   `android/app/src/androidTest/java/com/<your.package>/DetoxTest.java`
+-   Manifests:
+    -   `android/app/src/main/AndroidManifest.xml`
+    -   `android/app/src/main/res/xml/network_security_config.xml`
 
 ### Patching build scripts
 
@@ -249,14 +249,14 @@ In order to run new tests (on new app features) we first need to build the app.
 
 ### iOS
 
-- `npx pod-install`
-- `detox build --configuration ios.sim.debug`
-- `detox build --configuration ios.sim.release`
+-   `npx pod-install`
+-   `detox build --configuration ios.sim.debug`
+-   `detox build --configuration ios.sim.release`
 
 ### Android
 
-- `detox build --configuration android.emu.debug`
-- `detox build --configuration android.emu.release`
+-   `detox build --configuration android.emu.debug`
+-   `detox build --configuration android.emu.release`
 
 # Run tests
 
@@ -264,13 +264,13 @@ In order to run new tests (on new app features) we first need to build the app.
 
 ### iOS
 
-- `detox test --configuration ios.sim.debug`
-- `detox test --configuration ios.sim.release`
+-   `detox test --configuration ios.sim.debug`
+-   `detox test --configuration ios.sim.release`
 
 ### Android
 
-- `detox test --configuration android.emu.debug`
-- `detox test --configuration android.emu.release`
+-   `detox test --configuration android.emu.debug`
+-   `detox test --configuration android.emu.release`
 -
 
 # Cucumber Installation - WIP

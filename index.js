@@ -1,12 +1,12 @@
-import React, {useMemo} from 'react'
-import {AppRegistry} from 'react-native'
+import React, { useMemo } from "react"
+import { AppRegistry } from "react-native"
 // import {Provider} from 'react-redux'
-import App from './src/App'
-import {name as appName} from './app.json'
+import App from "./src/App"
+import { name as appName } from "./app.json"
 
-import {NavigationContainer} from '@react-navigation/native'
-import {SafeAreaProvider} from 'react-native-safe-area-context'
-import {useColorScheme, useTheme} from '~Common'
+import { NavigationContainer } from "@react-navigation/native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { useColorScheme, useTheme } from "~Common"
 // import {store} from '~Storage/Redux'
 
 const getTheme = (scheme, colorTheme) => {
