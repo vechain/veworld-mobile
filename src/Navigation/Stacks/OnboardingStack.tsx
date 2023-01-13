@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import {
     OnboardingScreen,
     SecurityScreen,
+    SeedPhraseScreen,
     TutorialScreen,
     WalletTypeSelectionScreen,
     WelcomeScreen,
@@ -14,6 +15,7 @@ export type RootStackParamListOnboarding = {
     Security: undefined
     Wallet_Tutorial: undefined
     Wallet_Type_Creation: undefined
+    Seed_Phrase: undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -41,14 +43,20 @@ export const OnboardingStack = () => {
                 />
 
                 <Onboarding.Screen
-                    name="Security"
-                    component={SecurityScreen}
+                    name="Wallet_Tutorial"
+                    component={TutorialScreen}
                     options={{headerShown: false}}
                 />
 
                 <Onboarding.Screen
-                    name="Wallet_Tutorial"
-                    component={TutorialScreen}
+                    name="Seed_Phrase"
+                    component={SeedPhraseScreen}
+                    options={{headerShown: false}}
+                />
+
+                <Onboarding.Screen
+                    name="Security"
+                    component={SecurityScreen}
                     options={{headerShown: false}}
                 />
             </Onboarding.Group>

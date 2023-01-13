@@ -44,7 +44,6 @@ export const WalletTypeSelectionScreen = () => {
                         mx={20}
                         my={20}
                         title={LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW()}
-                        disabled={false}
                     />
 
                     <BaseButton

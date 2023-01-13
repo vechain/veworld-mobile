@@ -18,6 +18,9 @@ const en: BaseTranslation = {
     BTN_SECURITY_CREATE_PASSWORD: 'Create password',
     BTN_CREATE_WALLET_TYPE_CREATE_NEW: 'Create new wallet',
     BTN_CREATE_WALLET_TYPE_IMPORT: 'Import wallet',
+    BTN_MNEMONIC_BACKUP: 'Backup',
+    BTN_MNEMONIC_CHECKBOX: 'I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.',
+    BTN_MNEMONIC_CLIPBOARD: 'Copy mnemonic to clipboard',
 
     // BODY
     BD_GDPR:
@@ -33,6 +36,9 @@ const en: BaseTranslation = {
     BD_WALLET_TUTORIAL_SLIDE_01: 'The secret phrase is your only way to access your funds. This will be needed when importing your crypto wallet from or to VeWorld.',
     BD_WALLET_TUTORIAL_SLIDE_02: 'If you lose this phrase you will lose access to all the funds available on your wallet. You should never share your secret phrase.',
     BD_WALLET_TUTORIAL_SLIDE_03: 'You can write it down and store it somewhere safe, save it in an encrypted password manager or best of all memorize and never write it down.',
+    BD_MNEMONIC_BACKUP: 'Store this phrase in a password manager, write it down or memorize it.',
+    BD_MNEMONIC_DISCLAIMER: 'Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.',
+    BD_MNEMONIC_SUBTITLE: 'Your Secret Recovery Phrase makes it easy to back up and restore your account.',
 
     // TITLES
     TITLE_WELCOME_TO: 'Welcome to ',
@@ -44,12 +50,14 @@ const en: BaseTranslation = {
     TITLE_WALLET_TUTORIAL_SLIDE_02: 'The key to your crypto',
     TITLE_WALLET_TUTORIAL_SLIDE_03: 'Keep your phrase safe',
     TITLE_CREATE_WALLET_TYPE: 'Create Wallet',
+    TITLE_MNEMONIC: 'Your Mnemonic',
 
     // ELEMENTS
     FACE_ID: 'Face ID',
     FINGERPRINT: 'Fingerprint',
     IRIS: 'Iris',
     DEVICE_PIN: 'Device Pin',
+    TAP_TO_VIEW: 'Tap to view',
 
 }
 

@@ -5,6 +5,7 @@ export const Theme: ThemeType = {
         transparent: 'transparent',
         bgDark: 'black',
         bgLght: 'white',
+        lightGrey: '#D3D3D3',
     },
 
     typography: {

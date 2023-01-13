@@ -1,11 +1,22 @@
 import React from 'react'
-import {StyleSheet} from 'react-native'
-import {BlurView as BV} from '@react-native-community/blur'
+import {StyleSheet, ViewProps} from 'react-native'
+import {BlurView as BV, BlurViewProps} from '@react-native-community/blur'
 
-export const BlurView = () => {
+type Props = {
+    cornerRadius?: number
+} & BlurViewProps &
+    ViewProps
+
+export const BlurView = (props: Props) => {
     return (
         <BV
-            style={StyleSheet.absoluteFill}
+            style={[
+                StyleSheet.absoluteFill,
+                {
+                    borderTopLeftRadius: props.cornerRadius,
+                    borderBottomLeftRadius: props.cornerRadius,
+                },
+            ]}
             blurType="light"
             blurAmount={10}
             reducedTransparencyFallbackColor="white"

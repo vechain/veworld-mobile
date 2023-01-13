@@ -16,6 +16,8 @@ type Props = {
     p?: number
     px?: number
     py?: number
+    w?: number
+    h?: number
 } & TextProps
 
 export const BaseText = (props: Props) => {
@@ -39,7 +41,9 @@ export const BaseText = (props: Props) => {
             my={props.my}
             p={props.p}
             px={props.px}
-            py={props.py}>
+            py={props.py}
+            w={props.w}
+            h={props.h}>
             <Text
                 style={[
                     {

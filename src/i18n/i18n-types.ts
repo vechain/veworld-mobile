@@ -68,6 +68,18 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: string
 	/**
+	 * B​a​c​k​u​p
+	 */
+	BTN_MNEMONIC_BACKUP: string
+	/**
+	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​s​a​v​e​d​ ​t​h​e​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​ ​a​n​d​ ​I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​I​ ​a​m​ ​r​e​s​p​o​n​s​i​b​l​e​ ​i​f​ ​I​ ​l​o​s​e​ ​i​t​.
+	 */
+	BTN_MNEMONIC_CHECKBOX: string
+	/**
+	 * C​o​p​y​ ​m​n​e​m​o​n​i​c​ ​t​o​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BTN_MNEMONIC_CLIPBOARD: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -99,6 +111,18 @@ type RootTranslation = {
 	 * Y​o​u​ ​c​a​n​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​a​n​d​ ​s​t​o​r​e​ ​i​t​ ​s​o​m​e​w​h​e​r​e​ ​s​a​f​e​,​ ​s​a​v​e​ ​i​t​ ​i​n​ ​a​n​ ​e​n​c​r​y​p​t​e​d​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​ ​o​r​ ​b​e​s​t​ ​o​f​ ​a​l​l​ ​m​e​m​o​r​i​z​e​ ​a​n​d​ ​n​e​v​e​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.
 	 */
 	BD_WALLET_TUTORIAL_SLIDE_03: string
+	/**
+	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
+	 */
+	BD_MNEMONIC_BACKUP: string
+	/**
+	 * N​e​v​e​r​ ​d​i​s​c​l​o​s​e​ ​y​o​u​r​ ​S​e​c​r​e​t​ ​R​e​c​o​v​e​r​y​ ​P​h​r​a​s​e​.​ ​A​n​y​o​n​e​ ​w​i​t​h​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​c​a​n​ ​t​a​k​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​c​r​y​p​t​o​s​ ​f​o​r​e​v​e​r​.
+	 */
+	BD_MNEMONIC_DISCLAIMER: string
+	/**
+	 * Y​o​u​r​ ​S​e​c​r​e​t​ ​R​e​c​o​v​e​r​y​ ​P​h​r​a​s​e​ ​m​a​k​e​s​ ​i​t​ ​e​a​s​y​ ​t​o​ ​b​a​c​k​ ​u​p​ ​a​n​d​ ​r​e​s​t​o​r​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​.
+	 */
+	BD_MNEMONIC_SUBTITLE: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -136,6 +160,10 @@ type RootTranslation = {
 	 */
 	TITLE_CREATE_WALLET_TYPE: string
 	/**
+	 * Y​o​u​r​ ​M​n​e​m​o​n​i​c
+	 */
+	TITLE_MNEMONIC: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -151,6 +179,10 @@ type RootTranslation = {
 	 * D​e​v​i​c​e​ ​P​i​n
 	 */
 	DEVICE_PIN: string
+	/**
+	 * T​a​p​ ​t​o​ ​v​i​e​w
+	 */
+	TAP_TO_VIEW: string
 }
 
 export type TranslationFunctions = {
@@ -207,6 +239,18 @@ export type TranslationFunctions = {
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: () => LocalizedString
 	/**
+	 * Backup
+	 */
+	BTN_MNEMONIC_BACKUP: () => LocalizedString
+	/**
+	 * I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.
+	 */
+	BTN_MNEMONIC_CHECKBOX: () => LocalizedString
+	/**
+	 * Copy mnemonic to clipboard
+	 */
+	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -238,6 +282,18 @@ export type TranslationFunctions = {
 	 * You can write it down and store it somewhere safe, save it in an encrypted password manager or best of all memorize and never write it down.
 	 */
 	BD_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
+	 * Store this phrase in a password manager, write it down or memorize it.
+	 */
+	BD_MNEMONIC_BACKUP: () => LocalizedString
+	/**
+	 * Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.
+	 */
+	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
+	/**
+	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
+	 */
+	BD_MNEMONIC_SUBTITLE: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
@@ -275,6 +331,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
+	 * Your Mnemonic
+	 */
+	TITLE_MNEMONIC: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -290,6 +350,10 @@ export type TranslationFunctions = {
 	 * Device Pin
 	 */
 	DEVICE_PIN: () => LocalizedString
+	/**
+	 * Tap to view
+	 */
+	TAP_TO_VIEW: () => LocalizedString
 }
 
 export type Formatters = {}
