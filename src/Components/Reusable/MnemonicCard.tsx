@@ -3,7 +3,8 @@ import {TouchableWithoutFeedback} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {BaseText, BaseView} from '~Components/Base'
 import {BlurView} from './BlurView'
-import {useTheme} from '~Common'
+import {isAndroid, isIOS, useTheme} from '~Common'
+import {HideView} from './HideView.android'
 
 type Props = {
     mnemonicArray: string[]
@@ -35,7 +36,10 @@ export const MnemonicCard: FC<Props> = ({mnemonicArray}) => {
                             w={33}>{`${index + 1}. ${word}`}</BaseText>
                     ))}
 
-                    {!Show && <BlurView cornerRadius={12} />}
+                    {!Show && isIOS() && <BlurView cornerRadius={12} />}
+                    {!Show && isAndroid() && (
+                        <HideView background={theme.colors.background} />
+                    )}
                 </BaseView>
 
                 <BaseView w={8} justify="center" align="center">

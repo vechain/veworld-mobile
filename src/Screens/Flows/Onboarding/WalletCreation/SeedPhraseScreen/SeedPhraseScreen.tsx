@@ -63,7 +63,7 @@ export const SeedPhraseScreen = () => {
                         action={onCopyToClipboard}
                         w={100}
                         title={LL.BTN_MNEMONIC_CLIPBOARD()}
-                        disabled={false}
+                        disabled={!Mnemonic}
                     />
 
                     <MnemonicCard mnemonicArray={MnemonicArray} />

@@ -12,7 +12,10 @@ export const BlurView = (props: Props) => {
         <BV
             style={[
                 StyleSheet.absoluteFill,
-                {borderRadius: props.cornerRadius},
+                {
+                    borderTopLeftRadius: props.cornerRadius,
+                    borderBottomLeftRadius: props.cornerRadius,
+                },
             ]}
             blurType="light"
             blurAmount={10}

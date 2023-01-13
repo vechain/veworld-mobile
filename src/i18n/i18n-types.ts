@@ -179,6 +179,10 @@ type RootTranslation = {
 	 * D​e​v​i​c​e​ ​P​i​n
 	 */
 	DEVICE_PIN: string
+	/**
+	 * T​a​p​ ​t​o​ ​v​i​e​w
+	 */
+	TAP_TO_VIEW: string
 }
 
 export type TranslationFunctions = {
@@ -346,6 +350,10 @@ export type TranslationFunctions = {
 	 * Device Pin
 	 */
 	DEVICE_PIN: () => LocalizedString
+	/**
+	 * Tap to view
+	 */
+	TAP_TO_VIEW: () => LocalizedString
 }
 
 export type Formatters = {}

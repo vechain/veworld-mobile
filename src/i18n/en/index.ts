@@ -57,6 +57,7 @@ const en: BaseTranslation = {
     FINGERPRINT: 'Fingerprint',
     IRIS: 'Iris',
     DEVICE_PIN: 'Device Pin',
+    TAP_TO_VIEW: 'Tap to view',
 
 }
 
