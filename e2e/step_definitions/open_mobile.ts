@@ -1,9 +1,10 @@
 import { Given, Then } from "@cucumber/cucumber"
+import detox from "detox"
 
 Given("The user opens the app", function () {
-    return "skipped"
+    //TODO: Not implemented
 })
 
-Then("The user should see the welcome screen", function () {
-    return "skipped"
+Then("The user should see the welcome screen", async function () {
+    await detox.element(by.text("GET STARTED")).tap()
 })
