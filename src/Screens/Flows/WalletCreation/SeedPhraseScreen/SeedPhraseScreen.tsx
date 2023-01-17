@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -19,17 +19,17 @@ export const SeedPhraseScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const [Mnemonic, setMnemonic] = useState("")
-    const [MnemonicArray, _setMnemonicArray] = useState<string[]>(
+    const [mnemonic, setMnemonic] = useState("")
+    const [mnemonicArray, _setMnemonicArray] = useState<string[]>(
         Array.from({ length: 12 }),
     )
 
     const [IsChecked, setIsChecked] = useState(false)
 
-    const onCopyToClipboard = async () => {
-        await Clipboard.setStringAsync(Mnemonic)
+    const onCopyToClipboard = useCallback(async () => {
+        await Clipboard.setStringAsync(mnemonic)
         Alert.alert("Copied to clipboard")
-    }
+    }, [mnemonic])
 
     // todo.vas -> remove once wallet service is up
     useEffect(() => {
@@ -44,9 +44,9 @@ export const SeedPhraseScreen = () => {
         }
     }, [])
 
-    const onBackupPress = () => {
+    const onBackupPress = useCallback(() => {
         nav.navigate(Routes.SECURITY)
-    }
+    }, [nav])
 
     return (
         <BaseSafeArea grow={1}>
@@ -68,10 +68,10 @@ export const SeedPhraseScreen = () => {
                         action={onCopyToClipboard}
                         w={100}
                         title={LL.BTN_MNEMONIC_CLIPBOARD()}
-                        disabled={!Mnemonic}
+                        disabled={!mnemonic}
                     />
 
-                    <MnemonicCard mnemonicArray={MnemonicArray} />
+                    <MnemonicCard mnemonicArray={mnemonicArray} />
 
                     <BaseText font="footnote_accent" color="red" my={10}>
                         {LL.BD_MNEMONIC_DISCLAIMER()}

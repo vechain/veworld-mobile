@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -15,17 +15,17 @@ export const SecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
-    const onBiometricsPress = async () => {
+    const onBiometricsPress = useCallback(async () => {
         let { success } = await Biometrics.authenticateWithbiometric()
         if (success) {
         } else {
             // handle failure message
         }
-    }
+    }, [])
 
-    const onPasswordPress = () => {
+    const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_PASSWORD)
-    }
+    }, [nav])
 
     return (
         <BaseSafeArea grow={1}>
