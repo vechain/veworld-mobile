@@ -4,6 +4,7 @@ export type ThemeVariant = {
     isDark: boolean
     colors: {
         background: string
+        reversed_bg: string
         text: string
         tabicon: string
         tabiconInactive: string

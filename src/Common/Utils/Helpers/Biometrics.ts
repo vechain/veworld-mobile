@@ -3,7 +3,7 @@ import * as LocalAuthentication from "expo-local-authentication"
 export const Biometrics = {
     getDeviceEnrolledLevel: async () => {
         let level = await LocalAuthentication.getEnrolledLevelAsync()
-        return level
+        return LocalAuthentication.SecurityLevel[level]
     },
 
     getGeviceHasHardware: async () => {
@@ -18,7 +18,8 @@ export const Biometrics = {
 
     getBiometricTypeAvailable: async () => {
         let type = await LocalAuthentication.supportedAuthenticationTypesAsync()
-        return type
+        // @ts-ignore // compiler misses enum for some reason
+        return LocalAuthentication.AuthenticationType[type]
     },
 
     authenticateWithbiometric: async () => {

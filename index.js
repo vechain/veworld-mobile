@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import { AppRegistry } from "react-native"
+import { enableAllPlugins } from "immer"
 // import {Provider} from 'react-redux'
 import App from "./src/App"
 import { name as appName } from "./app.json"
@@ -8,6 +9,9 @@ import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme, useTheme } from "~Common"
 // import {store} from '~Storage/Redux'
+
+// immer setup
+enableAllPlugins()
 
 const getTheme = (scheme, colorTheme) => {
     const theme = {

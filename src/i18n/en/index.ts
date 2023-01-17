@@ -46,6 +46,8 @@ const en: BaseTranslation = {
         "Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.",
     BD_MNEMONIC_SUBTITLE:
         "Your Secret Recovery Phrase makes it easy to back up and restore your account.",
+    BD_USER_PASSWORD_CONFIRM: "Confirm your PIN",
+    BD_USER_PASSWORD_ERROR: "  PIN doesn't match. Try again.",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -58,6 +60,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_TUTORIAL_SLIDE_03: "Keep your phrase safe",
     TITLE_CREATE_WALLET_TYPE: "Create Wallet",
     TITLE_MNEMONIC: "Your Mnemonic",
+    TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
 
     // ELEMENTS
     FACE_ID: "Face ID",

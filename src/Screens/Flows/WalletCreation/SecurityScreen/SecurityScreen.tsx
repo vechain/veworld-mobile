@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -6,19 +6,14 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Biometrics, useCheckBiometrics } from "~Common"
-import { SecurityLevel } from "~Common/Enums"
+import { Biometrics } from "~Common"
 import { useI18nContext } from "~i18n"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 export const SecurityScreen = () => {
     const { LL } = useI18nContext()
-
-    const { DeviceSecurity, getBiometricsType } = useCheckBiometrics()
-
-    const IsBiometricsButtonDisabled = useMemo(
-        () => (DeviceSecurity === SecurityLevel.BIOMETRIC ? false : true),
-        [DeviceSecurity],
-    )
+    const nav = useNavigation()
 
     const onBiometricsPress = async () => {
         let { success } = await Biometrics.authenticateWithbiometric()
@@ -28,18 +23,8 @@ export const SecurityScreen = () => {
         }
     }
 
-    const onPasswordPress = () => {}
-
-    if (DeviceSecurity === SecurityLevel.NONE) {
-        return (
-            <BaseSafeArea grow={1}>
-                <BaseView align="center" justify="center" grow={1} mx={20}>
-                    <BaseText font="body">
-                        Please enable biometrics or device pin to continue
-                    </BaseText>
-                </BaseView>
-            </BaseSafeArea>
-        )
+    const onPasswordPress = () => {
+        nav.navigate(Routes.USER_PASSWORD)
     }
 
     return (
@@ -66,9 +51,8 @@ export const SecurityScreen = () => {
                         mx={20}
                         my={20}
                         title={LL.BTN_SECURTY_USE_TYPE({
-                            type: getBiometricsType,
+                            type: "getBiometricsType",
                         })}
-                        disabled={IsBiometricsButtonDisabled}
                     />
 
                     <BaseButton

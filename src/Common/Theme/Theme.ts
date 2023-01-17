@@ -67,6 +67,7 @@ export const Theme: ThemeType = {
 
         colors: {
             background: "black",
+            reversed_bg: "white",
             text: "white",
             tabicon: "#b1b1b1",
             tabiconInactive: "#595959",
@@ -78,6 +79,7 @@ export const Theme: ThemeType = {
 
         colors: {
             background: "white",
+            reversed_bg: "black",
             text: "black",
             tabicon: "black",
             tabiconInactive: "#595959",
