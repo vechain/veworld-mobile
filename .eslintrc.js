@@ -11,8 +11,15 @@ module.exports = {
                 "no-shadow": "off",
                 "no-undef": "off",
                 semi: "off",
+                curly: "off",
                 quotes: [2, "double", { avoidEscape: true }],
             },
         },
+    ],
+    ignorePatterns: [
+        "*spec.tsx",
+        "*spec.ts",
+        "src/test/**/*",
+        "src/i18n/i18n*",
     ],
 }
