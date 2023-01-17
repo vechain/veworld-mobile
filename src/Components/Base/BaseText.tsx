@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
-import { Text, TextProps } from "react-native"
+import { FlexAlignType, Text, TextProps } from "react-native"
 import { TFonts, useTheme } from "~Common"
 import { BaseView } from "./BaseView"
 
@@ -18,6 +18,14 @@ type Props = {
     py?: number
     w?: number
     h?: number
+    alignContainer?: FlexAlignType
+    justifyContainer?:
+        | "flex-start"
+        | "flex-end"
+        | "center"
+        | "space-between"
+        | "space-around"
+        | "space-evenly"
 } & TextProps
 
 export const BaseText = (props: Props) => {
@@ -36,6 +44,8 @@ export const BaseText = (props: Props) => {
 
     return (
         <BaseView
+            align={props.alignContainer}
+            justify={props.justifyContainer}
             m={props.m}
             mx={props.mx}
             my={props.my}

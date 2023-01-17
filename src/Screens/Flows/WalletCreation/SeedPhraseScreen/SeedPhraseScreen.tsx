@@ -12,8 +12,11 @@ import { Alert } from "react-native"
 import * as Clipboard from "expo-clipboard"
 import { useI18nContext } from "~i18n"
 import { sanifySeed } from "~Common"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 export const SeedPhraseScreen = () => {
+    const nav = useNavigation()
     const { LL } = useI18nContext()
 
     const [Mnemonic, setMnemonic] = useState("")
@@ -41,7 +44,9 @@ export const SeedPhraseScreen = () => {
         }
     }, [])
 
-    const onBackupPress = () => {}
+    const onBackupPress = () => {
+        nav.navigate(Routes.SECURITY)
+    }
 
     return (
         <BaseSafeArea grow={1}>

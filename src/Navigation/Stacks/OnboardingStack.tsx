@@ -7,6 +7,7 @@ import {
     TutorialScreen,
     WalletTypeSelectionScreen,
     WelcomeScreen,
+    UserPasswordScreen,
 } from "~Screens"
 
 export type RootStackParamListOnboarding = {
@@ -16,6 +17,7 @@ export type RootStackParamListOnboarding = {
     Wallet_Tutorial: undefined
     Wallet_Type_Creation: undefined
     Seed_Phrase: undefined
+    User_Password: undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -24,6 +26,12 @@ export const OnboardingStack = () => {
     return (
         <Onboarding.Navigator screenOptions={{ headerShown: false }}>
             <Onboarding.Group>
+                <Onboarding.Screen
+                    name="User_Password"
+                    component={UserPasswordScreen}
+                    options={{ headerShown: false }}
+                />
+
                 <Onboarding.Screen
                     name="Welcome"
                     component={WelcomeScreen}
