@@ -68,7 +68,7 @@ export const OnboardingScreen = () => {
     }
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="ONBOARDING_SCREEN">
             <BaseSpacer height={20} />
             <BaseView align="center" grow={1}>
                 <VectorImage source={VeChainVetLogoWithTitle} />
