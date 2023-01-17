@@ -8,9 +8,12 @@ import {
 } from "~Components"
 import { Biometrics } from "~Common"
 import { useI18nContext } from "~i18n"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 export const SecurityScreen = () => {
     const { LL } = useI18nContext()
+    const nav = useNavigation()
 
     const onBiometricsPress = async () => {
         let { success } = await Biometrics.authenticateWithbiometric()
@@ -20,7 +23,9 @@ export const SecurityScreen = () => {
         }
     }
 
-    const onPasswordPress = () => {}
+    const onPasswordPress = () => {
+        nav.navigate(Routes.USER_PASSWORD)
+    }
 
     return (
         <BaseSafeArea grow={1}>

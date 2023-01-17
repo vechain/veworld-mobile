@@ -7,13 +7,13 @@ import { useI18nContext } from "~i18n"
 type Props = {
     UserPinArray: (string | undefined)[]
     isPINRetype: boolean
-    isPINErorr: boolean
+    isPinError: boolean
 }
 
 export const PasswordPins: FC<Props> = ({
     UserPinArray,
     isPINRetype,
-    isPINErorr,
+    isPinError,
 }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
@@ -55,7 +55,7 @@ export const PasswordPins: FC<Props> = ({
                 </BaseText>
             )}
 
-            {isPINErorr && (
+            {isPinError && (
                 <BaseText
                     font="body_accent"
                     color="red"

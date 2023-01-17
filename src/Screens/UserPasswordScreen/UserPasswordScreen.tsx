@@ -7,14 +7,14 @@ import { NumPad } from "./Components/NumPad"
 
 export const UserPasswordScreen = () => {
     const { LL } = useI18nContext()
-    const { IsPINErorr, IsPINRetype, onDigitPress, UserPinArray, IsSuccess } =
+    const { isPinError, isPinRetype, onDigitPress, userPinArray, isSuccess } =
         useOnDigitPress()
 
     useEffect(() => {
-        if (IsSuccess) {
+        if (isSuccess) {
             // secure wallet & navigate
         }
-    }, [IsSuccess])
+    }, [isSuccess])
 
     return (
         <BaseSafeArea grow={1}>
@@ -31,9 +31,9 @@ export const UserPasswordScreen = () => {
                 </BaseView>
                 <BaseSpacer height={60} />
                 <PasswordPins
-                    UserPinArray={UserPinArray}
-                    isPINRetype={IsPINRetype}
-                    isPINErorr={IsPINErorr}
+                    UserPinArray={userPinArray}
+                    isPINRetype={isPinRetype}
+                    isPinError={isPinError}
                 />
                 <NumPad onDigitPress={onDigitPress} />
             </BaseView>

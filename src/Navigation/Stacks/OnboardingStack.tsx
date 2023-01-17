@@ -27,12 +27,6 @@ export const OnboardingStack = () => {
         <Onboarding.Navigator screenOptions={{ headerShown: false }}>
             <Onboarding.Group>
                 <Onboarding.Screen
-                    name="User_Password"
-                    component={UserPasswordScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
                     name="Welcome"
                     component={WelcomeScreen}
                     options={{ headerShown: false }}
@@ -65,6 +59,12 @@ export const OnboardingStack = () => {
                 <Onboarding.Screen
                     name="Security"
                     component={SecurityScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name="User_Password"
+                    component={UserPasswordScreen}
                     options={{ headerShown: false }}
                 />
             </Onboarding.Group>

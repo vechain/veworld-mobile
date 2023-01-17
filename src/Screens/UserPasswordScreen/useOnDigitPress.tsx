@@ -2,31 +2,31 @@ import { useEffect, useState } from "react"
 import produce from "immer"
 
 export const useOnDigitPress = () => {
-    const [IsPINErorr, setIsPINErorr] = useState(false)
-    const [IsPINRetype, setIsPINRetype] = useState(false)
-    const [IsSuccess, setIsSuccess] = useState(false)
-    const [UserPin, setUserPin] = useState("")
-    const [PINMatch, setPINMatch] = useState(false)
-    const [PINTypedCounter, setPINTypedCounter] = useState(0)
-    const [UserPinArray, setUserPinArray] = useState<Array<string | undefined>>(
+    const [isPinError, setIsPinError] = useState(false)
+    const [isPinRetype, setIsPinRetype] = useState(false)
+    const [isSuccess, setIsSuccess] = useState(false)
+    const [userPin, setUserPin] = useState("")
+    const [pinMatch, setPinMatch] = useState(false)
+    const [pinTypedCounter, setPinTypedCounter] = useState(0)
+    const [userPinArray, setUserPinArray] = useState<Array<string | undefined>>(
         Array.from({ length: 6 }),
     )
 
     const onDigitPress = (digit: string) => {
         // protect for ui overflow
-        if (!UserPinArray.includes(undefined)) {
+        if (!userPinArray.includes(undefined)) {
             return
         }
         // remove error UI when user re-enters pin
-        setIsPINErorr(false)
+        setIsPinError(false)
         // get index of array element to remove
-        const index = UserPinArray.findIndex(pin => pin === undefined)
+        const index = userPinArray.findIndex(pin => pin === undefined)
 
         // set user PIN (logic)
         setUserPin(prevState => {
             const _newState = prevState.concat(digit)
             // return old state if user has alrady typed PIN once
-            return PINTypedCounter === 0 ? _newState : prevState
+            return pinTypedCounter === 0 ? _newState : prevState
         })
 
         // set user PIN (UI)
@@ -42,8 +42,8 @@ export const useOnDigitPress = () => {
                 // Pin state (UI) is loaded with 6 "undefined" values in order to have the empty pins printed on screen
                 // When the first pin completion is finished from the user we setup logic here
                 if (!draft.includes(undefined)) {
-                    setPINTypedCounter(prev => prev + 1)
-                    setPINMatch(draft.join("") === UserPin)
+                    setPinTypedCounter(prev => prev + 1)
+                    setPinMatch(draft.join("") === userPin)
                 }
             }),
         )
@@ -51,46 +51,46 @@ export const useOnDigitPress = () => {
 
     // Remove pin for pin confirmation with a small delay
     useEffect(() => {
-        if (PINTypedCounter === 1 && !UserPinArray.includes(undefined)) {
+        if (pinTypedCounter === 1 && !userPinArray.includes(undefined)) {
             setTimeout(() => {
                 setUserPinArray(Array.from({ length: 6 }))
             }, 300)
         }
-    }, [PINTypedCounter, UserPinArray])
+    }, [pinTypedCounter, userPinArray])
 
     // set ui promt for pin confirmation
     useEffect(() => {
-        if (PINTypedCounter === 1) {
-            setIsPINRetype(true)
+        if (pinTypedCounter === 1) {
+            setIsPinRetype(true)
         }
-    }, [PINTypedCounter])
+    }, [pinTypedCounter])
 
     // set ui promt for pin error
     useEffect(() => {
-        if (PINTypedCounter === 2 && !PINMatch) {
+        if (pinTypedCounter === 2 && !pinMatch) {
             setUserPin("")
-            setPINMatch(false)
-            setPINTypedCounter(0)
+            setPinMatch(false)
+            setPinTypedCounter(0)
             setUserPinArray(Array.from({ length: 6 }))
-            setIsPINRetype(false)
-            setIsPINErorr(true)
+            setIsPinRetype(false)
+            setIsPinError(true)
         }
-    }, [PINMatch, PINTypedCounter])
+    }, [pinMatch, pinTypedCounter])
 
     // set success
     useEffect(() => {
-        if (PINTypedCounter === 2 && PINMatch) {
+        if (pinTypedCounter === 2 && pinMatch) {
             setIsSuccess(true)
         }
-    }, [PINMatch, PINTypedCounter])
+    }, [pinMatch, pinTypedCounter])
 
     return {
-        IsPINErorr,
-        IsPINRetype,
         onDigitPress,
-        UserPinArray,
-        PINMatch,
-        PINTypedCounter,
-        IsSuccess,
+        userPinArray,
+        pinMatch,
+        pinTypedCounter,
+        isSuccess,
+        isPinError,
+        isPinRetype,
     }
 }
