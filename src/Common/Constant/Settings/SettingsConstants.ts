@@ -1,10 +1,14 @@
-import { SecurityPrivacy, Settings, Theme } from "~Model/Settings"
-import { Network } from "~Model/Network"
-import { NETWORK_TYPE } from "~Model/Network/enums"
-import { WALLET_MODE } from "~Model/Wallet/enums"
+import {
+    SecurityPrivacy,
+    Settings,
+    Theme,
+    Network,
+    NETWORK_TYPE,
+    WALLET_MODE,
+    CURRENCY,
+} from "~Model"
 import { genesises } from "../Thor/ThorConstants"
-import { CURRENCY } from "~Model/Settings/enums"
-import { ENV } from "~Common/Enums/Env"
+import { ENV } from "~Common"
 
 const REACT_APP_ENV = (process.env.REACT_APP_ENV || ENV.PROD) as ENV
 

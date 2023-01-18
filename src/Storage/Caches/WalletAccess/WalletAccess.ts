@@ -1,8 +1,7 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { WALLET_STATUS } from "~Model/Wallet/enums"
-import { RootState } from "~Storage/Caches/cache"
-import { WalletAccess } from "~Model/Wallet"
-import { debug } from "~Common/Logger/Logger"
+import { debug } from "~Common"
+import { WALLET_STATUS, WalletAccess } from "~Model"
+import { RootState } from "../cache"
 
 export const initialWalletAccessState: WalletAccess = {
     status: WALLET_STATUS.NOT_INITIALISED,

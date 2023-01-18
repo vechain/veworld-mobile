@@ -1,3 +1,3 @@
 import BalanceStore from "./BalanceStore"
 
-export default BalanceStore
+export { BalanceStore }

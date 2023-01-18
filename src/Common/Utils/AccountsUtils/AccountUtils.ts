@@ -1,6 +1,6 @@
 import AddressUtils from "../AddressUtils"
-import { Account, WalletAccount } from "~Model/Account"
-import { Contact } from "~Model/Contact"
+import { Account, WalletAccount, Contact } from "~Model"
+
 import Format from "../FormattingUtils"
 
 /**

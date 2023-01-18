@@ -1,16 +1,16 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import { veWorldErrors } from "~Common/Errors"
 import axios from "axios"
-import { genesises } from "~Common/constants/Thor/ThorConstants"
-import { Settings } from "~Model/Settings"
-import SettingService from "../index"
 import { DriverNoVendor, SimpleNet } from "@vechain/connex-driver"
-import { getCurrentAccount } from "~Storage/Caches/AccountCache"
-import { getAllNetworks, getNetworkById } from "~Storage/Caches/SettingsCache"
-import { Network } from "~Model/Network"
 import { newThor } from "@vechain/connex-framework/dist/thor"
 import { v4 as uuid } from "uuid"
-import { debug, warn, error } from "~Common/Logger/Logger"
+import {
+    AppThunk,
+    getAllNetworks,
+    getCurrentAccount,
+    getNetworkById,
+} from "~Storage/Caches"
+import { ThorConstants, debug, error, veWorldErrors, warn } from "~Common"
+import { Network, Settings } from "~Model"
+import SettingService from "../SettingService"
 
 /**
  * Adds a new network and switches to that network.
@@ -30,7 +30,7 @@ export const addCustomNode =
             const block = await axios.get<Connex.Thor.Block>(`${url}/blocks/0`)
 
             //Check if this is a network that we know
-            const type = genesises.which(block.data.id)
+            const type = ThorConstants.genesises.which(block.data.id)
 
             const newNetworkId = uuid()
 

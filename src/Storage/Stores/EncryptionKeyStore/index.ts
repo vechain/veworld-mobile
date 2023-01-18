@@ -1,3 +1,3 @@
 import EncryptionKeyStore from "./EncryptionKeyStore"
 
-export default EncryptionKeyStore
+export { EncryptionKeyStore }

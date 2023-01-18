@@ -1,8 +1,8 @@
 import { Network } from "../Network"
 import { Contact } from "../Contact"
-import { WALLET_MODE } from "../Wallet/enums"
+import { WALLET_MODE } from "../Wallet"
 import { StorageData } from "../StorageData"
-import { CURRENCY } from "./enums"
+import { CURRENCY } from "./enum"
 
 /**
  * All settings

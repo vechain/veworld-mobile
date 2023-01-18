@@ -1,5 +1,5 @@
 import type { abi } from "thor-devkit"
-import { NETWORK_TYPE } from "~Model/Network/enums"
+import { NETWORK_TYPE } from "~Model"
 import vip180 from "./abis/VIP180.abi"
 
 const paramsGet: abi.Function.Definition = {

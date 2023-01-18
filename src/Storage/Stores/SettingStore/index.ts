@@ -1,3 +1,3 @@
 import SettingStore from "./SettingStore"
 
-export default SettingStore
+export { SettingStore }

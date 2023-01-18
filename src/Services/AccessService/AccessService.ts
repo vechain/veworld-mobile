@@ -1,22 +1,15 @@
-import {
-    clearEntireCache,
-    updateWalletStatus,
-} from "~Storage/Caches/WalletAccess"
-import { WALLET_STATUS } from "~Model/Wallet/enums"
-import { AppThunk } from "~Storage/Caches/cache"
-import TokenService from "../TokenService"
-import BackupService from "../BackupService"
-import SettingService from "../SettingService"
-import EncryptionKeyService from "../EncryptionKeyService"
-import AccountService from "../AccountService"
-import ActivityService from "../ActivityService"
-import DeviceService from "../DeviceService"
-import ConnectedAppService from "../ConnectedAppService"
-import LocalWalletService from "../LocalWalletService"
-import { veWorldErrors } from "~Common/Errors"
-import { EncryptionKey } from "~Model/EncryptionKey"
-import BalanceService from "../BalanceService"
-import { debug, error } from "~Common/Logger/Logger"
+import { debug, error, veWorldErrors } from "~Common"
+import { EncryptionKey, WALLET_STATUS } from "~Model"
+import AccountService from "~Services/AccountService"
+import ActivityService from "~Services/ActivityService"
+import BalanceService from "~Services/BalanceService"
+import ConnectedAppService from "~Services/ConnectedAppService"
+import DeviceService from "~Services/DeviceService"
+import EncryptionKeyService from "~Services/EncryptionKeyService"
+import LocalWalletService from "~Services/LocalWalletService"
+import SettingService from "~Services/SettingService/SettingService"
+import TokenService from "~Services/TokenService"
+import { AppThunk, clearEntireCache, updateWalletStatus } from "~Storage/Caches"
 
 /**
  * Locks VeWorld
@@ -69,10 +62,11 @@ const unlock =
 
         try {
             // Check if a recovery is required. If there is data in the backupStore then restore it.
-            if (await BackupService.exists()) {
-                await BackupService.restore()
-                await BackupService.reset()
-            }
+            // TODO: Do we need backup service? Why isn't it ported from the extension?
+            // if (await BackupService.exists()) {
+            //     await BackupService.restore()
+            //     await BackupService.reset()
+            // }
 
             // Unlock all of the stores
             AccountService.unlock(encryptionKey.generatedKey)

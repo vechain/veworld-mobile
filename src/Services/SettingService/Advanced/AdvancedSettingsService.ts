@@ -1,19 +1,15 @@
-import { WALLET_STATUS } from "~Model/Wallet/enums"
-import { AppThunk } from "~Storage/Caches/cache"
-import SettingService from "../index"
-import { Settings } from "~Model/Settings"
-import EncryptionKeyService from "../../EncryptionKeyService"
-import LocalWalletService from "../../LocalWalletService"
-import { veWorldErrors } from "~Common/Errors"
-import BackupService from "../../BackupService"
-import ActivityService from "../../ActivityService"
-import ConnectedAppService from "../../ConnectedAppService"
-import TokenService from "../../TokenService"
-import AccountService from "../../AccountService"
-import DeviceService from "../../DeviceService"
-import { updateWalletStatus } from "~Storage/Caches/WalletAccess"
-import BalanceService from "../../BalanceService"
-import { debug, warn, error } from "~Common/Logger/Logger"
+import { debug, error, veWorldErrors, warn } from "~Common"
+import { Settings, WALLET_STATUS } from "~Model"
+import SettingService from "../SettingService"
+import { AppThunk, updateWalletStatus } from "~Storage/Caches"
+import EncryptionKeyService from "~Services/EncryptionKeyService"
+import LocalWalletService from "~Services/LocalWalletService"
+import ActivityService from "~Services/ActivityService"
+import ConnectedAppService from "~Services/ConnectedAppService"
+import TokenService from "~Services/TokenService"
+import BalanceService from "~Services/BalanceService"
+import DeviceService from "~Services/DeviceService"
+import AccountService from "~Services/AccountService"
 
 export const toggleConfirmTx =
     (): AppThunk<Promise<void>> => async dispatch => {
@@ -43,7 +39,8 @@ export const resetVeWorld =
 
             // Reset all wallet data
             await LocalWalletService.reset()
-            await BackupService.reset()
+            // TODO: ??
+            // await BackupService.reset()
             await EncryptionKeyService.reset()
             await dispatch(SettingService.reset())
             await dispatch(ActivityService.reset())

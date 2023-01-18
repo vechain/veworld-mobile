@@ -1,5 +1,5 @@
-import EncryptedStore from "../EncryptedStore"
-import { AccountStorageData } from "~Model/Account"
+import { EncryptedStore } from "../EncryptedStore"
+import { AccountStorageData } from "~Model"
 
 const ACCOUNTS_KEY = "veworld-accounts"
 

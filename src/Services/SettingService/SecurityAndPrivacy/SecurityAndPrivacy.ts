@@ -1,12 +1,9 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import { AutoLockTime, Settings } from "~Model/Settings"
-import SettingService from "../index"
-import EncryptionKeyService from "../../EncryptionKeyService"
-import { veWorldErrors } from "~Common/Errors"
-import LocalWalletService from "../../LocalWalletService"
-import { WALLET_MODE } from "~Model/Wallet/enums"
-import AutoUnlockKeyService from "~Common/services/AutoUnlockKeyService"
-import { debug, info, warn, error } from "~Common/Logger/Logger"
+import { AutoLockTime, Settings, WALLET_MODE } from "~Model"
+import { AppThunk } from "~Storage/Caches"
+import SettingService from "../SettingService"
+import { debug, error, info, veWorldErrors, warn } from "~Common"
+import LocalWalletService from "~Services/LocalWalletService"
+import EncryptionKeyService from "~Services/EncryptionKeyService"
 
 export const toggleShowIncomingTransactions =
     (): AppThunk<Promise<void>> => async dispatch => {
@@ -63,7 +60,8 @@ export const resetPassword = async (
             await EncryptionKeyService.update(encryptionKeys)
 
             // Update the encryption key in the cache
-            await AutoUnlockKeyService.update(encryptionKeys)
+            // TODO: Should we port?
+            // await AutoUnlockKeyService.update(encryptionKeys)
         }
     } catch (e) {
         error(e)
@@ -98,7 +96,8 @@ export const changeModeToUnlocked =
             await dispatch(updateLocalWalletMode(WALLET_MODE.UNLOCKED))
 
             // Update the key in the service worker
-            await AutoUnlockKeyService.update(encryptionKey)
+            // TODO: Should we port?
+            // await AutoUnlockKeyService.update(encryptionKey)
         } catch (e) {
             error(e)
             throw veWorldErrors.rpc.internal({
@@ -121,7 +120,8 @@ export const changeModeToAskToSign =
             await dispatch(updateLocalWalletMode(WALLET_MODE.ASK_TO_SIGN))
 
             // Update the key in the service worker
-            await AutoUnlockKeyService.update(encryptionKey)
+            // TODO: Should we port?
+            // await AutoUnlockKeyService.update(encryptionKey)
 
             // Lock the encryption key and local wallet stores
             EncryptionKeyService.lock()

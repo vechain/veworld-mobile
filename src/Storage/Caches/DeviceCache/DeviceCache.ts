@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "~Storage/Caches/cache"
-import { Device } from "~Model/Device"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { DEVICE_TYPE } from "~Model/Wallet/enums"
+import { DEVICE_TYPE, Device } from "~Model"
+import { RootState } from "../cache"
+import { AddressUtils } from "~Common"
 
 export const initialDeviceState: Device[] = []
 

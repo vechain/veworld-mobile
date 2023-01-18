@@ -1,40 +1,41 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import {
-    getAllNetworks,
-    getCurrentNetwork,
-} from "~Storage/Caches/SettingsCache"
-import NetworkService from "../SettingService/Network"
-import { SendTransactionPayload } from "~Common/models/ConnectedApps"
-import { WalletAccount } from "~Model/Account"
-import {
-    ConnexTransactionData,
-    CreateBodyParams,
-    TransactionType,
-    TransferData,
-} from "~Model/Transaction"
-import {
-    getFungibleTokens,
-    getFungibleTokensForAccount,
-} from "~Storage/Caches/TokenCache"
-import TransactionUtils from "~Common/Utils/TransactionUtils"
-import SettingService from "../SettingService"
-import ThorService from "../ThorService"
 import { address, Transaction } from "thor-devkit"
-import { veWorldErrors } from "~Common/Errors"
+import {
+    AddressUtils,
+    debug,
+    DIRECTIONS,
+    error,
+    HexUtils,
+    TokenConstants,
+    TransactionUtils,
+    veWorldErrors,
+    warn,
+} from "~Common"
 import {
     ActivityStatus,
+    ActivityType,
     ConnectedAppTxActivity,
+    ConnexTransactionData,
+    CreateBodyParams,
+    FungibleToken,
     FungibleTokenActivity,
-} from "~Model/Activity"
-import { ActivityType } from "~Model/Activity/enum"
-import ActivityService from "../ActivityService"
-import { VET } from "~Common/constants/Token/TokenConstants"
-import { FungibleToken } from "~Model/Token"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import HexUtils from "~Common/Utils/HexUtils"
-import { DIRECTIONS } from "~Common/enums/enums"
-import { debug, error, warn } from "~Common/Logger/Logger"
-import DelegationService from "../DelegationService/DelegationService"
+    TransactionType,
+    TransferData,
+    WalletAccount,
+} from "~Model"
+import {
+    ActivityService,
+    DelegationService,
+    SettingService,
+    ThorService,
+} from "~Services"
+import NetworkService from "~Services/SettingService/Network"
+import {
+    AppThunk,
+    getAllNetworks,
+    getCurrentNetwork,
+    getFungibleTokens,
+    getFungibleTokensForAccount,
+} from "~Storage/Caches"
 
 const getTransaction =
     (txId: string): AppThunk<Promise<Connex.Thor.Transaction | null>> =>
@@ -84,7 +85,7 @@ const buildTokenTransaction =
                 network,
             )
 
-            if (transferData.token.symbol === VET.symbol) {
+            if (transferData.token.symbol === TokenConstants.VET.symbol) {
                 return ThorService.createTransferVetTransaction(
                     thorClient,
                     transferData.destinationAddress,
@@ -140,7 +141,11 @@ const sendTokenTransferTransaction =
 
             const clause = signedTx.body.clauses[0]
             if (clause.data === "0x") {
-                token = { ...VET, genesisId: network.genesis.id, custom: false }
+                token = {
+                    ...TokenConstants.VET,
+                    genesisId: network.genesis.id,
+                    custom: false,
+                }
                 toAddress = clause.to
                 amount = clause.value
             } else {
@@ -259,6 +264,7 @@ const sendConnectedAppTransaction =
 
 const buildConnectedAppTransaction =
     (
+        // TODO: SendTransactionPayload
         request: SendTransactionPayload,
         sender: string,
         account: WalletAccount,

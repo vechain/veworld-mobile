@@ -1,5 +1,5 @@
-import { DeviceStorageData } from "~Model/Device"
-import EncryptedStore from "../EncryptedStore"
+import { DeviceStorageData } from "~Model"
+import { EncryptedStore } from "../EncryptedStore"
 
 const KEY = "veworld-devices"
 

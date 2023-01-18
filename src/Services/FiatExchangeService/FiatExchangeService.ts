@@ -1,18 +1,16 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import { getSettings } from "~Storage/Caches/SettingsCache"
-import { updateCurrency } from "~Storage/Caches/CurrencyCache"
-import { CurrencyExchangeRate } from "~Model/Currency"
-import FiatExchangeClients from "../../clients/fiat"
-import { FiatExchangeClient } from "../../clients/fiat/model"
-import { veWorldErrors } from "~Common/Errors"
-import { VeChainToken } from "~Model/Token"
-import { debug, warn, error } from "~Common/Logger/Logger"
+// import FiatExchangeClients from "../../clients/fiat"
+// import { FiatExchangeClient } from "../../clients/fiat/model"
 
+import { debug, error, veWorldErrors, warn } from "~Common"
+import { CurrencyExchangeRate, VeChainToken } from "~Model"
+import { AppThunk, getSettings, updateCurrency } from "~Storage/Caches"
+
+// TODO: To be ported?
 //ALWAYS put CoinGecko first
-const exchangeProviders: FiatExchangeClient[] = [
-    FiatExchangeClients.CoinGecko,
-    FiatExchangeClients.CoinBase,
-]
+// const exchangeProviders: FiatExchangeClient[] = [
+//     FiatExchangeClients.CoinGecko,
+//     FiatExchangeClients.CoinBase,
+// ]
 
 const getCurrencies = async (): Promise<string[]> => {
     debug("Getting currencies")

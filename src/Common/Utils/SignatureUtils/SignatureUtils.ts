@@ -1,4 +1,4 @@
-import { WALLET_MODE, DEVICE_TYPE } from "~Model/Wallet/enums"
+import { WALLET_MODE, DEVICE_TYPE } from "~Model/Wallet/enum"
 import { Device } from "~Model/Device"
 import * as utils from "thorify/dist/utils"
 import { address, blake2b256, secp256k1 } from "thor-devkit"

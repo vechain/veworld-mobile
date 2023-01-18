@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "~Storage/Caches/cache"
-import { Balance } from "~Model/Balance"
-import AddressUtils from "~Common/Utils/AddressUtils"
+import { Balance } from "~Model"
+import { RootState } from "../cache"
 import { getCurrentNetwork } from "../SettingsCache"
+import { AddressUtils } from "~Common"
 import { getCurrentAccount } from "../AccountCache"
 
 export const initialBalanceState: Balance[] = []

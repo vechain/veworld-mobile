@@ -1,4 +1,4 @@
-import { VET, VTHO } from "../../constants/Token/TokenConstants"
+import { VET, VTHO } from "../../Constant/Token/TokenConstants"
 import { FungibleToken } from "~Model/Token"
 
 /**

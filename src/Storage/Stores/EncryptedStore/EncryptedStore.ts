@@ -1,10 +1,8 @@
 import passworder from "@metamask/browser-passworder"
 import { Mutex } from "async-mutex"
 import { Store } from "../interface"
-import { StorageData } from "~Model/StorageData"
-import { veWorldErrors } from "~Common/Errors"
-import HexUtils from "~Common/Utils/HexUtils"
-import { debug, warn, error } from "~Common/Logger/Logger"
+import { StorageData } from "~Model"
+import { HexUtils, veWorldErrors, debug, warn, error } from "~Common"
 
 // TODO: This class was designed for use in a browser extension. Need to port it to mobile.
 

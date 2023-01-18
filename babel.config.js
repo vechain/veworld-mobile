@@ -7,6 +7,8 @@ module.exports = {
                 root: ["./src"],
                 alias: {
                     "~Storage": "./src/Storage",
+                    "~Model": "./src/Model",
+                    "~Services": "./src/Services",
                     "~Screens": "./src/Screens",
                     "~Navigation": "./src/Navigation",
                     "~Common": "./src/Common",

@@ -1,18 +1,26 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import { getWalletMode } from "~Storage/Caches/SettingsCache"
-import { DEVICE_TYPE, WALLET_MODE } from "~Model/Wallet/enums"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { address, HDNode, mnemonic } from "thor-devkit"
-import { Device } from "~Model/Device"
-import DeviceService from "../DeviceService"
-import HexUtils from "~Common/Utils/HexUtils"
-import AccountService from "../AccountService"
-import { Wallet, WalletStorageData } from "~Model/Wallet"
-import LocalWalletStore from "~/Storage/Stores/LocalWalletStore"
 import Web3 from "web3"
-import CryptoUtils from "~Common/Utils/CryptoUtils"
-import { veWorldErrors } from "~Common/Errors"
-import { debug, info, warn, error } from "~Common/Logger/Logger"
+import { address, HDNode, mnemonic } from "thor-devkit"
+import { AppThunk, getWalletMode } from "~Storage/Caches"
+import {
+    AddressUtils,
+    CryptoUtils,
+    HexUtils,
+    debug,
+    error,
+    info,
+    veWorldErrors,
+    warn,
+} from "~Common"
+import {
+    DEVICE_TYPE,
+    Device,
+    WALLET_MODE,
+    Wallet,
+    WalletStorageData,
+} from "~Model"
+import { LocalWalletStore } from "~Storage/Stores"
+import DeviceService from "~Services/DeviceService"
+import AccountService from "~Services/AccountService"
 
 const web3 = new Web3()
 
@@ -158,8 +166,8 @@ const backupMnemonic =
             // Get the wallet
             const storage = await LocalWalletStore.get()
 
-            const wallet = storage.wallets.find(wal =>
-                AddressUtils.compareAddresses(wal.rootAddress, rootAddress),
+            const wallet = storage.wallets.find(_wallet =>
+                AddressUtils.compareAddresses(_wallet.rootAddress, rootAddress),
             )
             if (!wallet || !wallet.mnemonic) {
                 throw veWorldErrors.rpc.resourceNotFound({

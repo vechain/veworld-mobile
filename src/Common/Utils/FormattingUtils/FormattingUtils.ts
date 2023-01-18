@@ -5,7 +5,7 @@ import { veWorldErrors } from "~Common/Errors"
 import { error } from "~Common/Logger/Logger"
 import { detectLocale } from "../../../i18n"
 
-import { CURRENCY } from "~Model/Settings/enums"
+import { CURRENCY } from "~Model/Settings/enum"
 
 export const ROUND_DECIMAL_DEFAULT = 2
 

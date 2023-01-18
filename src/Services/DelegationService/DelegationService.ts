@@ -1,7 +1,6 @@
-import axios from "axios"
-import { veWorldErrors } from "~Common/Errors"
+// import axios from "axios"
 import { Transaction } from "thor-devkit"
-import HexUtils from "~Common/Utils/HexUtils/HexUtils"
+import { HexUtils, veWorldErrors } from "~Common"
 
 /**
  * TODO: Can be used later on to delegation in-extension transactions

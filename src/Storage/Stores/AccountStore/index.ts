@@ -1,3 +1,3 @@
 import AccountStore from "./AccountStore"
 
-export default AccountStore
+export { AccountStore }

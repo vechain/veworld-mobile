@@ -1,4 +1,4 @@
-import { WALLET_STATUS } from "./enums"
+import { WALLET_STATUS } from "./enum"
 import { StorageData } from "../StorageData"
 
 /**

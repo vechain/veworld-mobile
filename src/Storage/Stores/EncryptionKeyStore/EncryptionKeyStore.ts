@@ -1,5 +1,5 @@
-import { EncryptionKey } from "~Model/EncryptionKey"
-import EncryptedStore from "../EncryptedStore"
+import { EncryptionKey } from "~Model"
+import { EncryptedStore } from "../EncryptedStore"
 
 const KEY = "veworld-encryption-key"
 

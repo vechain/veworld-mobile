@@ -1,12 +1,8 @@
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { AppThunk } from "~Storage/Caches/cache"
-import { updateDevice } from "~Storage/Caches/DeviceCache"
-import { Device, DeviceStorageData } from "~Model/Device"
-import DeviceStore from "~Storage/Stores/DeviceStore"
-import AccountService from "../AccountService"
-import { veWorldErrors } from "~Common/Errors"
-import { DEVICE_TYPE } from "~Model/Wallet/enums"
-import { debug, error } from "~Common/Logger/Logger"
+import { AddressUtils, debug, error, veWorldErrors } from "~Common"
+import { DEVICE_TYPE, Device, DeviceStorageData } from "~Model"
+import AccountService from "~Services/AccountService"
+import { AppThunk, updateDevice } from "~Storage/Caches"
+import { DeviceStore } from "~Storage/Stores"
 
 /**
  * Returns the devices from the store

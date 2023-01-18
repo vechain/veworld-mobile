@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "~Storage/Caches/cache"
 import {
     AccountStorageData,
+    DEVICE_TYPE,
+    Device,
     GroupedAccounts,
     WalletAccount,
-} from "~Model/Account"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { Device } from "~Model/Device"
-import { DEVICE_TYPE } from "~Model/Wallet/enums"
+} from "~Model"
+import { RootState } from "../cache"
+import { AddressUtils } from "~Common"
 
 export const initialAccountState: AccountStorageData = {
     accounts: [],

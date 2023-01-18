@@ -1,22 +1,21 @@
 import { abi, address, Transaction } from "thor-devkit"
-import {
-    abis,
-    DEFAULT_GAS_COEFFICIENT,
-} from "~Common/constants/Thor/ThorConstants"
 import axios from "axios"
-import TransactionUtils from "~Common/Utils/GasUtils"
-import HexUtils from "~Common/Utils/HexUtils"
-import { Network } from "~Model/Network"
-import { veWorldErrors } from "~Common/Errors"
-import { VET } from "~Common/constants/Token/TokenConstants"
+import BigNumber from "bignumber.js"
+import {
+    FormattingUtils,
+    ThorConstants,
+    TokenConstants,
+    veWorldErrors,
+    TransactionUtils,
+    warn,
+    HexUtils,
+} from "~Common"
 import {
     CreateBodyParams,
+    Network,
     TransactionType,
     TransactionWithRevertData,
-} from "~Model/Transaction"
-import BigNumber from "bignumber.js"
-import { scaleNumberUp } from "~Common/Utils/FormattingUtils/FormattingUtils"
-import { warn } from "~Common/Logger/Logger"
+} from "~Model"
 
 const createTransferVetTransaction = async (
     thorClient: Connex.Thor,
@@ -33,7 +32,10 @@ const createTransferVetTransaction = async (
     const clauses = [
         {
             to: destination,
-            value: scaleNumberUp(amount, VET.decimals),
+            value: FormattingUtils.scaleNumberUp(
+                amount,
+                TokenConstants.VET.decimals,
+            ),
             data: "0x",
         },
     ]
@@ -63,9 +65,12 @@ const createTransferFungibleTokenTransaction = async (
             message: `Invalid destination address provided ${destination}`,
         })
 
-    const func = new abi.Function(abis.vip180.transfer)
+    const func = new abi.Function(ThorConstants.abis.vip180.transfer)
 
-    const data = func.encode(destination, scaleNumberUp(amount, decimals))
+    const data = func.encode(
+        destination,
+        FormattingUtils.scaleNumberUp(amount, decimals),
+    )
 
     const clauses = [
         {
@@ -92,6 +97,7 @@ const createBody = async (
     let isReverted = false
 
     // estimate gas
+    // TODO: FIX
     const gas = await TransactionUtils.estimateGas(
         params.thorClient,
         params.clauses,
@@ -120,7 +126,7 @@ const createBody = async (
                 data: item.data || "0x",
             }
         }),
-        gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
+        gasPriceCoef: ThorConstants.DEFAULT_GAS_COEFFICIENT,
         gas: gas.gas,
         dependsOn: params.dependsOn || null,
         nonce: HexUtils.generateRandom(8),

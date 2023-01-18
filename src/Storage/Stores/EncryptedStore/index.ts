@@ -1,3 +1,3 @@
 import EncryptedStore from "./EncryptedStore"
 
-export default EncryptedStore
+export { EncryptedStore }

@@ -1,24 +1,21 @@
 import { address } from "thor-devkit"
-import { AppDispatch, AppThunk } from "~Storage/Caches/cache"
 import {
+    AddressUtils,
+    FormattingUtils,
+    TokenConstants,
+    debug,
+    error,
+    veWorldErrors,
+} from "~Common"
+import { AccountStorageData, DEVICE_TYPE, Device, WalletAccount } from "~Model"
+import BalanceService from "~Services/BalanceService"
+import {
+    AppDispatch,
+    AppThunk,
     initialAccountState,
     updateAccounts,
-} from "~Storage/Caches/AccountCache"
-import AccountStore from "~Storage/Stores/AccountStore"
-import { AccountStorageData, WalletAccount } from "~Model/Account"
-import BalanceService from "../BalanceService"
-import { ThunkActionDispatch } from "redux-thunk/src/types"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { Device } from "~Model/Device"
-import {
-    compareAddresses,
-    getAddressFromXPub,
-} from "~Common/Utils/AddressUtils/AddressUtils"
-import Format from "~Common/Utils/FormattingUtils"
-import { DEVICE_TYPE } from "~Model/Wallet/enums"
-import { veWorldErrors } from "~Common/Errors"
-import { VET, VTHO } from "~Common/constants/Token/TokenConstants"
-import { debug, error } from "~Common/Logger/Logger"
+} from "~Storage/Caches"
+import { AccountStore } from "~Storage/Stores"
 
 const nextAccountId = (accounts: WalletAccount[]): number =>
     Math.max(...accounts.map(acc => acc.id), 0) + 1
@@ -41,7 +38,7 @@ const update =
             const ensureSelectedAndUpdated = (storage: AccountStorageData) => {
                 if (storage.accounts.length > 0) {
                     const currentAccountExist = storage.accounts.find(acc =>
-                        compareAddresses(
+                        AddressUtils.compareAddresses(
                             acc.address,
                             storage.currentAccount?.address,
                         ),
@@ -217,7 +214,10 @@ const getAccountForIndex = (
             message: "The XPub can't be null for HD devices",
         })
 
-    const accountAddress = getAddressFromXPub(device.xPub, walletIndex)
+    const accountAddress = AddressUtils.getAddressFromXPub(
+        device.xPub,
+        walletIndex,
+    )
 
     return {
         alias: nextAlias(accountId),
@@ -268,16 +268,25 @@ const hasBalance =
                 message: "The XPub can't be null for HD devices",
             })
 
-        const accountAddress = getAddressFromXPub(device.xPub, accountIndex)
+        const accountAddress = AddressUtils.getAddressFromXPub(
+            device.xPub,
+            accountIndex,
+        )
 
         const { balance, energy } = await dispatch(
             BalanceService.getVetAndVthoBalancesFromBlockchain(accountAddress),
         )
         const scaledBalance = Number(
-            Format.scaleNumberDown(balance, VET.decimals),
+            FormattingUtils.scaleNumberDown(
+                balance,
+                TokenConstants.VET.decimals,
+            ),
         )
         const scaledEnergy = Number(
-            Format.scaleNumberDown(energy, VTHO.decimals),
+            FormattingUtils.scaleNumberDown(
+                energy,
+                TokenConstants.VTHO.decimals,
+            ),
         )
 
         return scaledBalance > 0 || scaledEnergy > 0
@@ -287,6 +296,7 @@ const hasBalance =
  * Set the provided account as the selected account
  * @param accountAddress - the account to select
  */
+// TODO: port -> ThunkActionDispatch
 const select =
     (accountAddress: string): AppThunk<Promise<void>> =>
     async (dispatch: ThunkActionDispatch<AppDispatch>) => {
@@ -505,7 +515,7 @@ const toggleVisible =
             const accountsUpdate = (storage: AccountStorageData) => {
                 // Update visible flag for each provided account according to mode
                 storage.accounts.forEach(acc => {
-                    const isCurrentAccount = compareAddresses(
+                    const isCurrentAccount = AddressUtils.compareAddresses(
                         acc.address,
                         storage.currentAccount?.address,
                     )

@@ -1,5 +1,5 @@
-import { Settings } from "~Model/Settings"
-import EncryptedStore from "../EncryptedStore"
+import { Settings } from "~Model"
+import { EncryptedStore } from "../EncryptedStore"
 
 const SETTINGS_KEY = "veworld-settings"
 

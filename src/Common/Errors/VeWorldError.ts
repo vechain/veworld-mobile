@@ -1,7 +1,8 @@
-import * as i18n from "../../i18n"
+//TODO: substitute with mobile i18n
+// import * as i18n from "../../i18n"
 import { getErrorName, getErrorType } from "./Errors"
 
-const I18_NAMESPACE = "veWorldErrors"
+// const I18_NAMESPACE = "veWorldErrors"
 
 export class VeWorldError extends Error {
     public readonly statusCode: number
@@ -36,11 +37,12 @@ export class VeWorldError extends Error {
         const errorName = getErrorName(vError.statusCode, errorType)
         if (!errorName) return defaultMessage
 
-        const i18nKey = `${errorType}.${errorName}.${vError.i18nID}`
-        const keyWithNamespace = `${I18_NAMESPACE}:${i18nKey}`
-        const i18nMessage = i18n.t(keyWithNamespace)
+        // TODO: Fix
+        // const i18nKey = `${errorType}.${errorName}.${vError.i18nID}`
+        // const keyWithNamespace = `${I18_NAMESPACE}:${i18nKey}`
+        // const i18nMessage = i18n.t(keyWithNamespace)
 
-        if (i18nMessage !== i18nKey) return i18nMessage
+        // if (i18nMessage !== i18nKey) return i18nMessage
 
         return defaultMessage
     }

@@ -2,7 +2,7 @@ import { FungibleToken } from "../Token"
 import { ClauseWithMetadata } from "../Transaction"
 import { ActivityType } from "./enum"
 import { StorageData } from "../StorageData"
-import { DIRECTIONS } from "~Common/Enums/Transactions"
+import { DIRECTIONS } from "~Common"
 import { Certificate } from "thor-devkit"
 
 /**

@@ -1,8 +1,3 @@
-import { AppThunk, RootState } from "~Storage/Caches/cache"
-import { getVisibleAccounts } from "~Storage/Caches/AccountCache"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { getWalletMode } from "~Storage/Caches/SettingsCache"
-import { DEVICE_TYPE, WALLET_MODE } from "~Model/Wallet/enums"
 import {
     blake2b256,
     Certificate,
@@ -10,11 +5,16 @@ import {
     secp256k1,
     Transaction,
 } from "thor-devkit"
-import { getAllDevices } from "~Storage/Caches/DeviceCache"
-import LocalWalletService from "../LocalWalletService"
-import { veWorldErrors } from "~Common/Errors"
-import HexUtils from "~Common/Utils/HexUtils"
-import { debug, error } from "~Common/Logger/Logger"
+import { AddressUtils, debug, error, HexUtils, veWorldErrors } from "~Common"
+import { DEVICE_TYPE, WALLET_MODE } from "~Model"
+import LocalWalletService from "~Services/LocalWalletService"
+import {
+    AppThunk,
+    getAllDevices,
+    getVisibleAccounts,
+    getWalletMode,
+    RootState,
+} from "~Storage/Caches"
 
 const getSigningDevice = (
     accountIndex: number,
@@ -138,9 +138,9 @@ const sign =
             //3. Get the wallet
             const storage = await LocalWalletService.get()
 
-            const wallet = storage.wallets.find(wal =>
+            const wallet = storage.wallets.find(_wallet =>
                 AddressUtils.compareAddresses(
-                    wal.rootAddress,
+                    _wallet.rootAddress,
                     device.rootAddress,
                 ),
             )

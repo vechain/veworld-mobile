@@ -19,7 +19,7 @@ import {
     initialConnectedAppsState,
 } from "./ConnectedAppCache"
 import { initialOnboardState, onboardSlice } from "./OnboardCache"
-import { getDefaultSettings } from "~Common/constants/Settings/SettingsConstants"
+import { SettingsConstants } from "~Common"
 
 const combinedReducer = combineReducers({
     account: accountSlice.reducer,
@@ -41,7 +41,7 @@ export const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
         state = {
             account: initialAccountState,
             walletAccess: initialWalletAccessState,
-            settings: getDefaultSettings(),
+            settings: SettingsConstants.getDefaultSettings(),
             tokens: initialTokenState,
             balances: initialBalanceState,
             activities: initialActivityState,

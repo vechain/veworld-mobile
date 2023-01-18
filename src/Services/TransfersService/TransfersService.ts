@@ -1,9 +1,11 @@
 import { abi, address } from "thor-devkit"
-import { abis } from "~Common/constants/Thor/ThorConstants"
-import { FungibleToken, TransferLogItem } from "~Model/Token"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { DIRECTIONS } from "~Common/Enums/Transactions"
-import { VET } from "~Common/constants/Token/TokenConstants"
+import {
+    AddressUtils,
+    DIRECTIONS,
+    ThorConstants,
+    TokenConstants,
+} from "~Common"
+import { FungibleToken, TransferLogItem } from "~Model"
 
 export interface IQueryParams {
     thor: Connex.Thor
@@ -18,7 +20,7 @@ export interface IQueryParams {
 const getTransfers = async (
     params: IQueryParams,
 ): Promise<TransferLogItem[]> => {
-    return params.token.symbol === VET.symbol
+    return params.token.symbol === TokenConstants.VET.symbol
         ? getVetTransfers(params)
         : getTokenTransfers(params)
 }
@@ -81,7 +83,7 @@ const getTokenTransfers = async (
         .cache([params.accountAddress])
         .apply(params.offset, params.size)
 
-    const ev = new abi.Event(abis.vip180.TransferEvent)
+    const ev = new abi.Event(ThorConstants.abis.vip180.TransferEvent)
 
     return events.map(item => {
         const decode = ev.decode(item.data, item.topics)
@@ -109,14 +111,20 @@ const buildEventCriteria = (
     addr: string,
 ): Connex.Thor.Filter.Criteria<"event">[] => {
     const from = tokens.map(item => {
-        return thor.account(item).event(abis.vip180.TransferEvent).asCriteria({
-            from: addr,
-        })
+        return thor
+            .account(item)
+            .event(ThorConstants.abis.vip180.TransferEvent)
+            .asCriteria({
+                from: addr,
+            })
     })
     const to = tokens.map(item => {
-        return thor.account(item).event(abis.vip180.TransferEvent).asCriteria({
-            to: addr,
-        })
+        return thor
+            .account(item)
+            .event(ThorConstants.abis.vip180.TransferEvent)
+            .asCriteria({
+                to: addr,
+            })
     })
     return [...from, ...to]
 }

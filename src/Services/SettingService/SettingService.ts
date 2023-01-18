@@ -1,10 +1,7 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import { updateSettings } from "~Storage/Caches/SettingsCache"
-import { Settings } from "~Model/Settings"
-import SettingStore from "~Storage/Stores/SettingStore"
-import { getDefaultSettings } from "~Common/constants/Settings/SettingsConstants"
-import { veWorldErrors } from "~Common/Errors"
-import { debug, error } from "~Common/Logger/Logger"
+import { SettingsConstants, debug, error, veWorldErrors } from "~Common"
+import { Settings } from "~Model"
+import { AppThunk, updateSettings } from "~Storage/Caches"
+import { SettingStore } from "~Storage/Stores"
 
 const get = async (): Promise<Settings> => SettingStore.get()
 
@@ -12,7 +9,7 @@ const reset = (): AppThunk<Promise<void>> => async dispatch => {
     debug("Resetting settings")
 
     try {
-        const defaultSettings = getDefaultSettings()
+        const defaultSettings = SettingsConstants.getDefaultSettings()
         await SettingStore.insert(defaultSettings)
         dispatch(updateSettings(defaultSettings))
     } catch (e) {

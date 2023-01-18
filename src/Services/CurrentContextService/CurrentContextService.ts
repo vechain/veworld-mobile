@@ -1,11 +1,13 @@
+import { debug } from "~Common"
+
 export const CURRENT_CONTEXT_KEY = "current-context"
-import { debug } from "~Common/Logger/Logger"
 
 /**
  * Stores the id of the current context
  * @returns
  */
 
+// TODO: Chrome replace with?
 const get = async (): Promise<string> => {
     debug("Getting the current context")
     return (await chrome.storage.session.get([CURRENT_CONTEXT_KEY]))[

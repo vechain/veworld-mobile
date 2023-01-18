@@ -1,5 +1,5 @@
 import { XPub } from "../Crypto"
-import { DEVICE_TYPE } from "../Wallet/enums"
+import { DEVICE_TYPE } from "../Wallet"
 import { StorageData } from "../StorageData"
 
 /** A model for storing data about any connected devices such as hardware wallets

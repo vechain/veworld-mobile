@@ -1,15 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "~Storage/Caches/cache"
-import { Settings } from "~Model/Settings"
-import { getDefaultSettings } from "~Common/constants/Settings/SettingsConstants"
-import { Network } from "~Model/Network"
-import { ContactType } from "~Model/Contact/enum"
-import { Account } from "~Model/Account"
-import { genesises } from "~Common/constants/Thor/ThorConstants"
+import { SettingsConstants, ThorConstants } from "~Common"
+import { Account, ContactType, Network, Settings } from "~Model"
+import { RootState } from "../cache"
 
 export const settingSlice = createSlice({
     name: "settings",
-    initialState: getDefaultSettings(),
+    initialState: SettingsConstants.getDefaultSettings(),
     reducers: {
         updateSettings: (_, action: PayloadAction<Settings>) => {
             return action.payload
@@ -28,7 +24,7 @@ export const showFiatRates = (state: RootState) => {
     const network = state.settings.network.currentNetwork
 
     return (
-        network.genesis.id === genesises.main.id ||
+        network.genesis.id === ThorConstants.genesises.main.id ||
         state.settings.network.showConversionOtherNets
     )
 }
@@ -87,15 +83,6 @@ export const getContactById = (id?: string) => (state: RootState) => {
             contact => contact.id === id,
         )
 }
-
-// export const getColorTheme = (state: RootState) => {
-//     const theme = window.localStorage.getItem(WINDOW_THEME_KEY)
-
-//     if (theme && state.walletAccess.status !== WALLET_STATUS.UNLOCKED)
-//         return theme
-
-//     return state.settings.general.theme
-// }
 
 export const getDownloadStateLog = (state: RootState) => {
     return {

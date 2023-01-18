@@ -1,5 +1,5 @@
-import { TokenStorageArea } from "~Model/Token"
-import EncryptedStore from "../EncryptedStore"
+import { TokenStorageArea } from "~Model"
+import { EncryptedStore } from "../EncryptedStore"
 
 const TOKENS_KEY = "veworld-tokens"
 

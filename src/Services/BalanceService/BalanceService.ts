@@ -1,18 +1,20 @@
-import { veWorldErrors } from "~Common/Errors"
-import AddressUtils from "~Common/Utils/AddressUtils"
 import {
+    AddressUtils,
+    ThorConstants,
+    TokenConstants,
+    debug,
+    error,
+    veWorldErrors,
+} from "~Common"
+import { Balance, BalanceStorageData } from "~Model"
+import { SettingService } from "~Services"
+import {
+    AppThunk,
     getBalancesForAccount,
+    getCurrentNetwork,
     updateBalances,
-} from "~Storage/Caches/BalanceCache"
-import { AppThunk } from "~Storage/Caches/cache"
-import { getCurrentNetwork } from "~Storage/Caches/SettingsCache"
-import { Balance, BalanceStorageData } from "~Model/Balance"
-import BalanceStore from "~Storage/Stores/BalanceStore"
-import { VET, VTHO } from "~Common/constants/Token/TokenConstants"
-import SettingService from "../SettingService"
-import { abis } from "~Common/constants/Thor/ThorConstants"
-import axios from "axios"
-import { debug, error } from "~Common/Logger/Logger"
+} from "~Storage/Caches"
+import { BalanceStore } from "~Storage/Stores"
 
 /**
  * Returns the balances from the store
@@ -209,11 +211,25 @@ const updateAllForAccount =
             )
 
             // 2. Ensure VET and VTHO are included
-            if (!adds.some(a => AddressUtils.compareAddresses(a, VET.address)))
-                adds.push(VET.address)
+            if (
+                !adds.some(a =>
+                    AddressUtils.compareAddresses(
+                        a,
+                        TokenConstants.VET.address,
+                    ),
+                )
+            )
+                adds.push(TokenConstants.VET.address)
 
-            if (!adds.some(a => AddressUtils.compareAddresses(a, VTHO.address)))
-                adds.push(VTHO.address)
+            if (
+                !adds.some(a =>
+                    AddressUtils.compareAddresses(
+                        a,
+                        TokenConstants.VTHO.address,
+                    ),
+                )
+            )
+                adds.push(TokenConstants.VTHO.address)
 
             // 3. Update balances
             await dispatch(addOrUpdate(adds, accountAddress))
@@ -245,13 +261,23 @@ const getBalanceFromBlockchain =
 
             // We get the balance differently depending on whether it's a VIP180 or VET/VTHO
             let balance: string
-            if (AddressUtils.compareAddresses(tokenAddress, VET.address))
+            if (
+                AddressUtils.compareAddresses(
+                    tokenAddress,
+                    TokenConstants.VET.address,
+                )
+            )
                 balance = (
                     await dispatch(
                         getVetAndVthoBalancesFromBlockchain(accountAddress),
                     )
                 ).balance
-            else if (AddressUtils.compareAddresses(tokenAddress, VTHO.address))
+            else if (
+                AddressUtils.compareAddresses(
+                    tokenAddress,
+                    TokenConstants.VTHO.address,
+                )
+            )
                 balance = (
                     await dispatch(
                         getVetAndVthoBalancesFromBlockchain(accountAddress),
@@ -289,6 +315,7 @@ const getVetAndVthoBalancesFromBlockchain =
 
         const network = getCurrentNetwork(getState())
 
+        // TODO: install axios?
         const accountResponse = await axios.get<Connex.Thor.Account>(
             `${network.url}/accounts/${address}`,
         )
@@ -308,7 +335,7 @@ const getTokenBalanceFromBlockchain =
         try {
             const res = await thorClient
                 .account(tokenAddress)
-                .method(abis.vip180.balanceOf)
+                .method(ThorConstants.abis.vip180.balanceOf)
                 .call(accountAddress)
 
             return res.decoded[0]

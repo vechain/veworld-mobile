@@ -1,8 +1,6 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import { Settings, Theme } from "~Model/Settings"
-import SettingService from "../index"
-import { CURRENCY } from "~Model/Settings/enums"
-import { WINDOW_THEME_KEY } from "~Common/constants/Settings/SettingsConstants"
+import { CURRENCY, Settings, Theme } from "~Model"
+import { AppThunk } from "~Storage/Caches"
+import SettingService from "../SettingService"
 
 export const updateCurrency =
     (currency: CURRENCY): AppThunk<Promise<void>> =>
@@ -22,6 +20,7 @@ export const toggleShowNoBalanceTokens =
         return dispatch(SettingService.update(showNoBalanceTokensUpdate))
     }
 
+// TODO: remove
 export const selectTheme =
     (theme: Theme): AppThunk<Promise<void>> =>
     async dispatch => {

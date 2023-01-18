@@ -1,13 +1,9 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { veWorldErrors } from "~Common/Errors"
-import { address } from "thor-devkit"
-import { Settings } from "~Model/Settings"
-import SettingService from "../index"
-import { ContactType } from "~Model/Contact/enum"
-import { getAccount } from "~Storage/Caches/AccountCache"
 import { v4 as uuid } from "uuid"
-import { debug, info, warn, error } from "~Common/Logger/Logger"
+import { address } from "thor-devkit"
+import { AddressUtils, debug, error, info, veWorldErrors, warn } from "~Common"
+import { ContactType, Settings } from "~Model"
+import { AppThunk, getAccount } from "~Storage/Caches"
+import SettingService from "../SettingService"
 
 export const addCachedContact =
     (addr: string): AppThunk<Promise<void>> =>

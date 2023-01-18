@@ -1,5 +1,5 @@
-import { ConnectedAppStorageData } from "~Model/ConnectedApp"
-import EncryptedStore from "../EncryptedStore"
+import { ConnectedAppStorageData } from "~Model"
+import { EncryptedStore } from "../EncryptedStore"
 
 const CONNECTED_APPS_KEY = "veworld-connected-apps"
 

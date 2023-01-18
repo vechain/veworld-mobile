@@ -1,5 +1,5 @@
-import { ActivityStorageData } from "~Model/Activity"
-import EncryptedStore from "../EncryptedStore/EncryptedStore"
+import { ActivityStorageData } from "~Model"
+import { EncryptedStore } from "../EncryptedStore"
 
 const ACTIVITIES_KEY = "veworld-activity"
 

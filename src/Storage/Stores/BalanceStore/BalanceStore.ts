@@ -1,5 +1,5 @@
 import { BalanceStorageData } from "~Model/Balance"
-import EncryptedStore from "../EncryptedStore"
+import { EncryptedStore } from "../EncryptedStore"
 
 const BALANCES_KEY = "veworld-balances"
 

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { CurrencyCache, CurrencyExchangeRate } from "~Model/Currency"
-import { RootState } from "~Storage/Caches/cache"
+import { CurrencyCache, CurrencyExchangeRate } from "~Model"
+import { RootState } from "../cache"
 
 export const initialCurrencyState: CurrencyCache = {
     availableCurrencies: [],

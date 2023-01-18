@@ -1,20 +1,23 @@
-import { veWorldErrors } from "~Common/Errors"
-import { updateFungibleTokens } from "~Storage/Caches/TokenCache"
-import { AppThunk } from "~Storage/Caches/cache"
-import { FungibleToken, TokenStorageArea } from "~Model/Token"
-import TokenStore from "~Storage/Stores/TokenStore"
-import { defaultTokens } from "~Common/constants/Token/TokenConstants"
-import { getBalancesForSelectedAccount } from "~Storage/Caches/BalanceCache"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import BalanceService from "../BalanceService"
-import { getCurrentAccount } from "~Storage/Caches/AccountCache"
-import { NETWORK_TYPE } from "~Model/Network/enums"
 import axios from "axios"
-import { getCurrentNetwork } from "~Storage/Caches/SettingsCache"
-import SettingService from "../SettingService"
-import { abis } from "~Common/constants/Thor/ThorConstants"
 import { address } from "thor-devkit"
-import { debug, error } from "~Common/Logger/Logger"
+import {
+    AddressUtils,
+    ThorConstants,
+    TokenConstants,
+    debug,
+    error,
+    veWorldErrors,
+} from "~Common"
+import { FungibleToken, NETWORK_TYPE, TokenStorageArea } from "~Model"
+import { BalanceService, SettingService } from "~Services"
+import {
+    AppThunk,
+    getBalancesForSelectedAccount,
+    getCurrentAccount,
+    getCurrentNetwork,
+    updateFungibleTokens,
+} from "~Storage/Caches"
+import { TokenStore } from "~Storage/Stores"
 
 const TOKEN_URL = process.env.REACT_APP_TOKEN_REGISTRY_URL
 /**
@@ -58,9 +61,9 @@ const reset = (): AppThunk<Promise<void>> => async dispatch => {
 
     try {
         await TokenStore.insert({
-            fungible: defaultTokens,
+            fungible: TokenConstants.defaultTokens,
         })
-        dispatch(updateFungibleTokens(defaultTokens))
+        dispatch(updateFungibleTokens(TokenConstants.defaultTokens))
     } catch (e) {
         error(e)
         throw veWorldErrors.rpc.internal({
@@ -83,9 +86,15 @@ const addCustomToken =
 
             const contract = thor.account(addr)
 
-            const tokenName = await contract.method(abis.vip180.name).call()
-            const tokenSymbol = await contract.method(abis.vip180.symbol).call()
-            const decimals = await contract.method(abis.vip180.decimals).call()
+            const tokenName = await contract
+                .method(ThorConstants.abis.vip180.name)
+                .call()
+            const tokenSymbol = await contract
+                .method(ThorConstants.abis.vip180.symbol)
+                .call()
+            const decimals = await contract
+                .method(ThorConstants.abis.vip180.decimals)
+                .call()
 
             const customToken: FungibleToken = {
                 genesisId: network.genesis.id,

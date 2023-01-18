@@ -1,20 +1,27 @@
-import { AppThunk } from "~Storage/Caches/cache"
-import { VET_DERIVATION_PATH } from "~Common/constants/Ledger/LedgerConstants"
-import { DEVICE_TYPE } from "~Model/Wallet/enums"
-import { Device } from "~Model/Device"
-import DeviceService from "../DeviceService"
-import AccountService from "../AccountService"
+// TODO: to be ported?
+// import { VET_DERIVATION_PATH } from "~Common/constants/Ledger/LedgerConstants"
+// import VETLedgerApp, { VETLedgerAccount } from "~Common/ledger/VETLedgerApp"
+
+// TODO: install?
 import { DeviceModel } from "@ledgerhq/devices"
-import { Mutex } from "async-mutex"
-import { veWorldErrors } from "~Common/Errors"
-import { LedgerAccounts } from "~Model/Ledger"
-import { Certificate, HDNode, Transaction } from "thor-devkit"
-import BalanceService from "../BalanceService"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import HexUtils from "~Common/Utils/HexUtils"
-import VETLedgerApp, { VETLedgerAccount } from "~Common/ledger/VETLedgerApp"
-import { debug, error, warn } from "~Common/Logger/Logger"
+
 import { Buffer } from "buffer"
+import { Certificate, HDNode, Transaction } from "thor-devkit"
+import { Mutex } from "async-mutex"
+import { DEVICE_TYPE, Device, LedgerAccounts } from "~Model"
+import {
+    AddressUtils,
+    HexUtils,
+    LedgerConstants,
+    debug,
+    error,
+    veWorldErrors,
+    warn,
+} from "~Common"
+import { AppThunk } from "~Storage/Caches"
+import BalanceService from "~Services/BalanceService"
+import DeviceService from "~Services/DeviceService"
+import AccountService from "~Services/AccountService"
 
 const ledgerMutex = new Mutex()
 
@@ -32,7 +39,7 @@ const signCertificate = async (
 
             const dataToSign = Buffer.from(Certificate.encode(cert), "utf8")
 
-            const path = `${VET_DERIVATION_PATH}/${index}`
+            const path = `${LedgerConstants.VET_DERIVATION_PATH}/${index}`
             const signature = await vetLedger.signJSON(path, dataToSign)
 
             return HexUtils.addPrefix(signature.toString("hex"))
@@ -64,7 +71,7 @@ const signTransaction = async (
         try {
             await validateRootAddress(device.rootAddress, vetLedger)
 
-            const path = `${VET_DERIVATION_PATH}/${index}`
+            const path = `${LedgerConstants.VET_DERIVATION_PATH}/${index}`
             transaction.signature = await vetLedger.signTransaction(
                 path,
                 transaction.encode(),
@@ -193,7 +200,7 @@ const validateRootAddress = async (
 ) => {
     debug("Validating root address")
     const rootAccount = await vetLedger.getAccount(
-        VET_DERIVATION_PATH,
+        LedgerConstants.VET_DERIVATION_PATH,
         false,
         false,
     )

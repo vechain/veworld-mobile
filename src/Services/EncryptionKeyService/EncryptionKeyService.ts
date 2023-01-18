@@ -1,8 +1,6 @@
-import EncryptionKeyStore from "~Storage/Stores/EncryptionKeyStore"
-import { veWorldErrors } from "~Common/Errors"
-import { EncryptionKey } from "~Model/EncryptionKey"
-import AutoUnlockKeyService from "~Common/services/AutoUnlockKeyService"
-import { debug, error } from "~Common/Logger/Logger"
+import { debug, error, veWorldErrors } from "~Common"
+import { EncryptionKey } from "~Model"
+import { EncryptionKeyStore } from "~Storage/Stores"
 
 const get = async (): Promise<EncryptionKey> => await EncryptionKeyStore.get()
 
@@ -25,7 +23,8 @@ const reset = async () => {
 
     try {
         await EncryptionKeyStore.clear()
-        await AutoUnlockKeyService.reset()
+        // TODO: Do we need it? NOt ported
+        // await AutoUnlockKeyService.reset()
     } catch (e) {
         error(e)
         throw veWorldErrors.rpc.internal({

@@ -1,3 +1,3 @@
 import ConnectedAppStore from "./ConnectedAppStore"
 
-export default ConnectedAppStore
+export { ConnectedAppStore }

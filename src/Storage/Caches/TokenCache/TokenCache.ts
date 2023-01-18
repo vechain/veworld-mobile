@@ -1,13 +1,9 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "~Storage/Caches/cache"
-import {
-    FungibleToken,
-    FungibleTokenWithBalance,
-    TokenCache,
-} from "~Model/Token"
+import { FungibleToken, FungibleTokenWithBalance, TokenCache } from "~Model"
+import { RootState } from "../cache"
 import { getCurrentNetwork, getGeneralSettings } from "../SettingsCache"
 import { getAllBalances, getBalancesForAccount } from "../BalanceCache"
-import AddressUtils from "~Common/Utils/AddressUtils"
+import { AddressUtils } from "~Common"
 import { getCurrentAccount } from "../AccountCache"
 
 export const initialTokenState: TokenCache = { fungible: [] }

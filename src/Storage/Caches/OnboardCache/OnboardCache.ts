@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "~Storage/Caches/cache"
-import { OnboardState } from "~Model/Onboard"
-import { OnboardStage } from "~Model/Onboard/enum"
+import { OnboardStage, OnboardState } from "~Model"
+import { RootState } from "../cache"
 
 export const initialOnboardState: OnboardState = {
     stage: OnboardStage.BEGINNING,

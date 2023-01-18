@@ -1,19 +1,21 @@
-import { veWorldErrors } from "~Common/Errors"
-import HexUtils from "~Common/Utils/HexUtils"
-import { AppThunk } from "~Storage/Caches/cache"
-import { EncryptionKey } from "~Model/EncryptionKey"
-import { WALLET_MODE } from "~Model/Wallet/enums"
-import { getDefaultSettings } from "~Common/constants/Settings/SettingsConstants"
-import AccountService from "../AccountService"
-import ActivityService from "../ActivityService"
-import BalanceService from "../BalanceService"
-import ConnectedAppService from "../ConnectedAppService"
-import DeviceService from "../DeviceService"
-import EncryptionKeyService from "../EncryptionKeyService"
-import LocalWalletService from "../LocalWalletService"
-import SettingService from "../SettingService"
-import TokenService from "../TokenService"
-import { info, error } from "~Common/Logger/Logger"
+import {
+    HexUtils,
+    SettingsConstants,
+    error,
+    info,
+    veWorldErrors,
+} from "~Common"
+import { EncryptionKey, WALLET_MODE } from "~Model"
+import AccountService from "~Services/AccountService"
+import ActivityService from "~Services/ActivityService"
+import BalanceService from "~Services/BalanceService"
+import ConnectedAppService from "~Services/ConnectedAppService"
+import DeviceService from "~Services/DeviceService"
+import EncryptionKeyService from "~Services/EncryptionKeyService"
+import LocalWalletService from "~Services/LocalWalletService"
+import SettingService from "~Services/SettingService"
+import TokenService from "~Services/TokenService"
+import { AppThunk } from "~Storage/Caches"
 
 /**
  * Initialises a new VeWorld wallet. This should only be called once during the onboarding process.
@@ -28,7 +30,7 @@ const initialiseNewWallet =
         try {
             const exists = await EncryptionKeyService.exists()
 
-            const defaultSettings = getDefaultSettings()
+            const defaultSettings = SettingsConstants.getDefaultSettings()
 
             if (exists)
                 throw veWorldErrors.rpc.invalidRequest({

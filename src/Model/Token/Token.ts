@@ -6,7 +6,7 @@
  * @field `icon` - An image used for display purposes
  * @field `custom` - A flag to indicate if this token is a custom token
  */
-import { DIRECTIONS } from "~Common/enums/enums"
+import { DIRECTIONS } from "~Common"
 import { StorageData } from "../StorageData"
 import { Balance } from "../Balance"
 

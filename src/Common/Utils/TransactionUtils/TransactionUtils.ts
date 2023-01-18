@@ -1,9 +1,9 @@
 import { abi } from "thor-devkit"
 import { BigNumber } from "bignumber.js"
-import { abis } from "../../constants/Thor/ThorConstants"
+import { abis } from "../../Constant/Thor/ThorConstants"
 import { Token } from "~Model/Token"
 import { ClauseType, ClauseWithMetadata } from "~Model/Transaction"
-import { VET } from "../../constants/Token/TokenConstants"
+import { VET } from "../../Constant/Token/TokenConstants"
 import { ConnexClause } from "~Model/Connex"
 import { error } from "~Common/Logger/Logger"
 

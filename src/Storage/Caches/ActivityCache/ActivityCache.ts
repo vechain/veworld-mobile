@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "~Storage/Caches/cache"
-import { Activity } from "~Model/Activity"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import { ActivityType } from "~Model/Activity/enum"
+import { Activity, ActivityType } from "~Model"
+import { RootState } from "../cache"
+import { AddressUtils } from "~Common"
 
 export const initialActivityState: Activity[] = []
 
