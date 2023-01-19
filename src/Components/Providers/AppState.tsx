@@ -1,31 +1,36 @@
-import React, { useEffect, useRef, useState } from "react"
-import { AppState as _Appstate } from "react-native"
+import React, { useEffect, useRef } from "react"
+import { AppStateStatus, AppState as _Appstate } from "react-native"
+import { updateAppState, useAppDispatch } from "~Storage/Caches"
 
+/**
+ * @name AppState
+ * @description Determines the current and previous app state and saves it in cache
+ * @returns void JSX.Element
+ */
 export const AppState = () => {
+    const dispatch = useAppDispatch()
     const appState = useRef(_Appstate.currentState)
-    const [, setAppStateVisible] = useState(appState.current)
 
     useEffect(() => {
+        let previousAppState: AppStateStatus
         const subscription = _Appstate.addEventListener(
             "change",
             nextAppState => {
-                if (
-                    appState.current.match(/inactive|background/) &&
-                    nextAppState === "active"
-                ) {
-                    console.log("App has come to the foreground!")
-                }
-
+                previousAppState = appState.current
                 appState.current = nextAppState
-                setAppStateVisible(appState.current)
-                console.log("AppState", appState.current)
+                dispatch(
+                    updateAppState({
+                        currentState: nextAppState,
+                        previousState: previousAppState,
+                    }),
+                )
             },
         )
 
         return () => {
             subscription.remove()
         }
-    }, [])
+    }, [dispatch])
 
     return <></>
 }

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -18,9 +18,9 @@ export const WelcomeScreen = () => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const onNavigate = () => {
+    const onNavigate = useCallback(() => {
         nav.navigate(Routes.ONBOARDING)
-    }
+    }, [nav])
 
     return (
         <BaseSafeArea grow={1}>
