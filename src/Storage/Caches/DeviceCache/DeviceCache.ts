@@ -16,19 +16,3 @@
 // })
 
 // export const { updateDevice } = deviceSlice.actions
-
-// export const getAllDevices = (state: RootState) => state.devices
-
-// export const getAllDevicesForType =
-//     (walletType: DEVICE_TYPE) =>
-//     (state: RootState): Device[] => {
-//         return state.devices.filter(device => device.type === walletType)
-//     }
-
-// export const getDevice =
-//     (rootAddress?: string) =>
-//     (state: RootState): Device | undefined => {
-//         return state.devices.find(dev =>
-//             AddressUtils.compareAddresses(dev.rootAddress, rootAddress),
-//         )
-//     }
