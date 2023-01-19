@@ -7,6 +7,8 @@
         "paths": {
             "~*": ["./src/*"],
             "~Storage/*": ["./src/Storage/*"],
+            "~Model/*": ["./src/Model/*"],
+            "~Services/*": ["./src/Services/*"],
             "~Screens/*": ["./src/Screens/*"],
             "~Navigation/*": ["./src/Navigation/*"],
             "~Common/*": ["./src/Common/*"],
@@ -14,5 +16,6 @@
             "~i18n/*": ["./src/i18n/*"],
             "~Assets/*": ["./src/Assets/*"]
         }
-    }
+    },
+    "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx"]
 }

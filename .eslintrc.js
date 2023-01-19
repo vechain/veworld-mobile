@@ -12,6 +12,7 @@ module.exports = {
                 "no-shadow": "off",
                 "no-undef": "off",
                 semi: "off",
+                curly: "off",
                 quotes: [2, "double", { avoidEscape: true }],
             },
         },

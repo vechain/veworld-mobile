@@ -1,0 +1,5 @@
+// export enum ActivityType {
+//     FUNGIBLE_TOKEN = "FUNGIBLE_TOKEN",
+//     CONNECTED_APP_TRANSACTION = "CONNECTED_APP_TRANSACTION",
+//     SIGN_CERT = "SIGN_CERT",
+// }
