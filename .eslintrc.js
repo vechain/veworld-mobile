@@ -16,10 +16,4 @@ module.exports = {
             },
         },
     ],
-    ignorePatterns: [
-        "*spec.tsx",
-        "*spec.ts",
-        "src/test/**/*",
-        "src/i18n/i18n*",
-    ],
 }
