@@ -21,11 +21,11 @@ export const PasswordPins: FC<Props> = ({
     return (
         <BaseView h={10}>
             <BaseView orientation="row" justify="center">
-                {UserPinArray.map(digit => {
+                {UserPinArray.map((digit, index) => {
                     if (digit) {
                         return (
                             <BaseView
-                                key={digit}
+                                key={`digit${index}`}
                                 mx={10}
                                 background={theme.colors.reversed_bg}
                                 style={[
@@ -37,7 +37,7 @@ export const PasswordPins: FC<Props> = ({
                     } else {
                         return (
                             <BaseView
-                                key={digit}
+                                key={`digit${index}`}
                                 mx={10}
                                 style={[
                                     baseStyle.pinBase,

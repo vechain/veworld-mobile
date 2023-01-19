@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppState } from "~Model"
 
 export const initialAppState: AppState = {
-    currentState: "inactive",
-    previousState: "unknown",
+    currentState: "active",
+    previousState: "inactive",
 }
 
 export const appStateSlice = createSlice({

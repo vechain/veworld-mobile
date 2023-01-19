@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet } from "react-native"
-import React from "react"
+import React, { useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
@@ -9,13 +9,20 @@ type Props = {
 }
 
 export const NumPad = ({ onDigitPress }: Props) => {
+    const onPress = useCallback(
+        (digit: string) => () => {
+            onDigitPress(digit)
+        },
+        [onDigitPress],
+    )
+
     return (
         <BaseView orientation="row" wrap w={100}>
             {numPad.map((digit, index) => (
                 <BaseView style={baseStyles.width} key={index}>
                     {digit !== "blank" ? (
                         <Pressable
-                            onPress={() => onDigitPress(digit)}
+                            onPress={onPress(digit)}
                             style={baseStyles.paddingH}>
                             <BaseText
                                 font="large_title_accent"

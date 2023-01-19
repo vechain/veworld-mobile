@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react"
 import { Locales, TypesafeI18n, isLocale, loadLocaleAsync } from "~i18n"
 import * as Localization from "expo-localization"
 import "~Common/polyfill"
+import { useAppSelector } from "~Storage/Caches"
+import { selectCurrentAppState, selectPreviousAppState } from "~Selectors"
+import { AppStateType } from "~Model"
 
 type Props = {
     children: React.ReactNode
 }
 
 export const Translation = ({ children }: Props) => {
-    // todo.vas -> issue #25
+    const currentAppState = useAppSelector(selectCurrentAppState)
+    const previousAppState = useAppSelector(selectPreviousAppState)
 
     const [localeLoaded, setLocaleLoaded] = useState<Locales | null>(null)
 
@@ -22,8 +26,11 @@ export const Translation = ({ children }: Props) => {
             await loadLocaleAsync(DEFAULT_LOCALE)
             setLocaleLoaded(DEFAULT_LOCALE)
         }
-        init()
-    }, [])
+
+        if (currentAppState === AppStateType.ACTIVE) {
+            init()
+        }
+    }, [currentAppState, previousAppState])
 
     if (localeLoaded === null) {
         return null
