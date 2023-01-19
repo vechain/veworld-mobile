@@ -10,3 +10,4 @@
 // export * from "./WalletAccess"
 export * from "./cache"
 export * from "./hooks"
+export * from "./AppStateCache"

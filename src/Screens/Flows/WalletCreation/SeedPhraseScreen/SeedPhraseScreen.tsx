@@ -11,7 +11,7 @@ import {
 import { Alert } from "react-native"
 import * as Clipboard from "expo-clipboard"
 import { useI18nContext } from "~i18n"
-import { sanifySeed } from "~Common"
+import { SeedUtils } from "~Common"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 
@@ -36,7 +36,7 @@ export const SeedPhraseScreen = () => {
         let text =
             "cactus quit copper cluster refuse palace faith kid atom reward draft decade"
 
-        let seed = sanifySeed(text)
+        let seed = SeedUtils.sanifySeed(text)
 
         if (seed.length === 12) {
             setMnemonic(text)

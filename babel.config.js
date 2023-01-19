@@ -15,6 +15,7 @@ module.exports = {
                     "~Components": "./src/Components",
                     "~i18n": "./src/i18n",
                     "~Assets": "./src/Assets",
+                    "~Selectors": "./src/Selectors",
                     http: "stream-http",
                     https: "https-browserify",
                     crypto: "react-native-quick-crypto",

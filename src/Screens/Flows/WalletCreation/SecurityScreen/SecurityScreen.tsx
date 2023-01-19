@@ -6,7 +6,7 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Biometrics } from "~Common"
+import { BiometricsUtils } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -16,7 +16,7 @@ export const SecurityScreen = () => {
     const nav = useNavigation()
 
     const onBiometricsPress = useCallback(async () => {
-        let { success } = await Biometrics.authenticateWithbiometric()
+        let { success } = await BiometricsUtils.authenticateWithbiometric()
         if (success) {
         } else {
             // handle failure message
