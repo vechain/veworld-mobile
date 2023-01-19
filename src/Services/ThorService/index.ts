@@ -1,3 +1,3 @@
-import ThorService from "./ThorService"
+// import ThorService from "./ThorService"
 
-export default ThorService
+// export default ThorService

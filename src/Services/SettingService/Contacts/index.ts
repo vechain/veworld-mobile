@@ -1,3 +1,3 @@
-import * as ContactsSettings from "./ContactSettings"
+// import * as ContactsSettings from "./ContactSettings"
 
-export default ContactsSettings
+// export default ContactsSettings
