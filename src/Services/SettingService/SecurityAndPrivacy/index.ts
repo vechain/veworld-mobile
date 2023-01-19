@@ -1,3 +1,3 @@
-import * as SecurityAndPrivacy from "./SecurityAndPrivacy"
+// import * as SecurityAndPrivacy from "./SecurityAndPrivacy"
 
-export default SecurityAndPrivacy
+// export default SecurityAndPrivacy

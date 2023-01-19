@@ -1,3 +1,3 @@
-import * as GeneralSettingsService from "./GeneralSettingsService"
+// import * as GeneralSettingsService from "./GeneralSettingsService"
 
-export default GeneralSettingsService
+// export default GeneralSettingsService
