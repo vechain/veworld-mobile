@@ -45,7 +45,7 @@ export const SeedPhraseScreen = () => {
     }, [])
 
     const onBackupPress = useCallback(() => {
-        nav.navigate(Routes.SECURITY)
+        nav.navigate(Routes.CONFIRM_SEED_PHRASE)
     }, [nav])
 
     return (
