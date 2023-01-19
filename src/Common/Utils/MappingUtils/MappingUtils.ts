@@ -1,7 +1,10 @@
-import { ActivityStatus, FungibleTokenActivity } from "~Model/Activity"
-import { ActivityType } from "~Model/Activity/enum"
-import { Network } from "~Model/Network"
-import { TransferLogItem } from "~Model/Token"
+import {
+    ActivityStatus,
+    FungibleTokenActivity,
+    ActivityType,
+    Network,
+    TransferLogItem,
+} from "~Model"
 
 /**
  * Map a transferLog to a FungibleTokenActivity

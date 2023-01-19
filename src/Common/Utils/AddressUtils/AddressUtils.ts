@@ -1,11 +1,6 @@
 import { address, HDNode } from "thor-devkit"
-import { XPub } from "~Model/Crypto"
-
-import { veWorldErrors } from "~Common/Errors"
-import { Network } from "~Model/Network"
-import { NETWORK_TYPE } from "~Model/Network/enums"
-import { error } from "~Common/Logger/Logger"
-import HexUtils from "../HexUtils"
+import { XPub, Network, NETWORK_TYPE } from "~Model"
+import { veWorldErrors, error, HexUtils } from "~Common"
 import CryptoUtils from "../CryptoUtils"
 
 /**

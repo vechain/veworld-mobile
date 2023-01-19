@@ -1,11 +1,11 @@
 import { BigNumber } from "bignumber.js"
+
+//TODO: add libraries
+import { detectLocale } from "../../../i18n"
 import dayjs from "dayjs"
 import RelativeTime from "dayjs/plugin/relativeTime"
-import { veWorldErrors } from "~Common/Errors"
-import { error } from "~Common/Logger/Logger"
-import { detectLocale } from "../../../i18n"
-
-import { CURRENCY } from "~Model/Settings/enum"
+import { veWorldErrors, error } from "~Common"
+import { CURRENCY } from "~Model"
 
 export const ROUND_DECIMAL_DEFAULT = 2
 

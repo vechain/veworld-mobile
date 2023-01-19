@@ -1,11 +1,7 @@
 import { abi } from "thor-devkit"
 import { BigNumber } from "bignumber.js"
-import { abis } from "../../Constant/Thor/ThorConstants"
-import { Token } from "~Model/Token"
-import { ClauseType, ClauseWithMetadata } from "~Model/Transaction"
-import { VET } from "../../Constant/Token/TokenConstants"
-import { ConnexClause } from "~Model/Connex"
-import { error } from "~Common/Logger/Logger"
+import { ClauseType, ClauseWithMetadata, Token, ConnexClause } from "~Model"
+import { ThorConstants, TokenConstants, error } from "~Common"
 
 /**
  * Function lifted from Sync2 with some modifications
@@ -38,7 +34,7 @@ const interpretClauses = (
             result.unshift({
                 ...clause,
                 type: ClauseType.TRANSFER,
-                tokenSymbol: VET.symbol,
+                tokenSymbol: TokenConstants.VET.symbol,
                 amount: amount.toNumber(),
                 to: clause.to,
                 data: "0x",
@@ -106,7 +102,8 @@ const interpretContractCalls = (clause: ConnexClause, tokens: Token[]) => {
     return result
 }
 
-const TRANSFER_SIG = new abi.Function(abis.vip180.transfer).signature
+const TRANSFER_SIG = new abi.Function(ThorConstants.abis.vip180.transfer)
+    .signature
 
 //Function lifted from Sync2 with some modifications
 const decodeAsTokenTransferClause = (
@@ -120,7 +117,7 @@ const decodeAsTokenTransferClause = (
     if (to === token.address && data.startsWith(TRANSFER_SIG)) {
         try {
             const decoded = abi.decodeParameters(
-                abis.vip180.transfer.inputs,
+                ThorConstants.abis.vip180.transfer.inputs,
                 "0x" + data.slice(TRANSFER_SIG.length),
             )
             return {

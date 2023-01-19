@@ -1,20 +1,20 @@
 import BigNumber from "bignumber.js"
 import { Transaction } from "thor-devkit"
-import { abis, BASE_GAS_PRICE } from "../../Constant/Thor/ThorConstants"
+import { ThorConstants } from "~Common/Constant"
 
 const paramsCache: Record<string, string> = {}
 
 const getBaseGasPrice = async (thor: Connex.Thor): Promise<string> => {
-    const k = `${thor.genesis.id}-${BASE_GAS_PRICE}`
+    const k = `${thor.genesis.id}-${ThorConstants.BASE_GAS_PRICE}`
     if (paramsCache[k]) {
         return paramsCache[k]
     } else {
         const address = "0x0000000000000000000000000000506172616d73"
         const result = await thor
             .account(address)
-            .method(abis.paramsGet)
+            .method(ThorConstants.abis.paramsGet)
             .cache([address])
-            .call(BASE_GAS_PRICE)
+            .call(ThorConstants.BASE_GAS_PRICE)
 
         paramsCache[k] = result.data
         return result.data

@@ -1,4 +1,4 @@
-import { VET, VTHO } from "../../Constant/Token/TokenConstants"
+import { TokenConstants } from "~Common/Constant"
 import { FungibleToken } from "~Model/Token"
 
 /**
@@ -7,7 +7,10 @@ import { FungibleToken } from "~Model/Token"
  * @returns boolean representing whether this is an external token
  */
 const isExternalToken = (token: FungibleToken): boolean => {
-    return token.symbol !== VET.symbol && token.symbol !== VTHO.symbol
+    return (
+        token.symbol !== TokenConstants.VET.symbol &&
+        token.symbol !== TokenConstants.VTHO.symbol
+    )
 }
 
 const isCustomToken = (token: FungibleToken): boolean => {

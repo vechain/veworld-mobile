@@ -1,10 +1,9 @@
-import { WALLET_MODE, DEVICE_TYPE } from "~Model/Wallet/enum"
-import { Device } from "~Model/Device"
-import * as utils from "thorify/dist/utils"
-import { address, blake2b256, secp256k1 } from "thor-devkit"
+import { WALLET_MODE, DEVICE_TYPE, Device } from "~Model"
+// import * as utils from "thorify/dist/utils"
+// import { address, blake2b256, secp256k1 } from "thor-devkit"
+import { blake2b256 } from "thor-devkit"
 import web3 from "web3"
-import { veWorldErrors } from "~Common/Errors"
-import AddressUtils from "../AddressUtils"
+import { AddressUtils, veWorldErrors } from "~Common"
 
 const getSignType = (
     walletMode: WALLET_MODE,
@@ -28,12 +27,13 @@ const recover = (
         message = hashMessage(message)
     }
 
-    const hexBuffer = Buffer.from(utils.sanitizeHex(message), "hex")
-    const signatureBuffer = Buffer.from(utils.sanitizeHex(signature), "hex")
-    const pubKey = secp256k1.recover(hexBuffer, signatureBuffer)
-    const addr = address.fromPublicKey(pubKey)
+    // const hexBuffer = Buffer.from(utils.sanitizeHex(message), "hex")
+    // const signatureBuffer = Buffer.from(utils.sanitizeHex(signature), "hex")
+    // const pubKey = secp256k1.recover(hexBuffer, signatureBuffer)
+    // const addr = address.fromPublicKey(pubKey)
 
-    return utils.toPrefixedHex(addr)
+    // return utils.toPrefixedHex(addr)
+    return ""
 }
 
 //Copied from thorify: https://github.com/vechain/thorify/blob/master/src/extend/accounts.ts
