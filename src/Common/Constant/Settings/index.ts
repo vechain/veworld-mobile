@@ -1,3 +1,3 @@
-import * as SettingsConstants from "./SettingsConstants"
+// import * as SettingsConstants from "./SettingsConstants"
 
-export default SettingsConstants
+// export default SettingsConstants

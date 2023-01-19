@@ -1,6 +1,6 @@
-import { EncryptionKey } from "~Model"
-import { EncryptedStore } from "../EncryptedStore"
+// import { EncryptionKey } from "~Model"
+// import { EncryptedStore } from "../EncryptedStore"
 
-const KEY = "veworld-encryption-key"
+// const KEY = "veworld-encryption-key"
 
-export default new EncryptedStore<EncryptionKey>(KEY)
+// export default new EncryptedStore<EncryptionKey>(KEY)

@@ -1,6 +1,6 @@
-import { Settings } from "~Model"
-import { EncryptedStore } from "../EncryptedStore"
+// import { Settings } from "~Model"
+// import { EncryptedStore } from "../EncryptedStore"
 
-const SETTINGS_KEY = "veworld-settings"
+// const SETTINGS_KEY = "veworld-settings"
 
-export default new EncryptedStore<Settings>(SETTINGS_KEY)
+// export default new EncryptedStore<Settings>(SETTINGS_KEY)

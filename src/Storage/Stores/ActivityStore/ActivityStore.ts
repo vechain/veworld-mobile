@@ -1,6 +1,6 @@
-import { ActivityStorageData } from "~Model"
-import { EncryptedStore } from "../EncryptedStore"
+// import { ActivityStorageData } from "~Model"
+// import { EncryptedStore } from "../EncryptedStore"
 
-const ACTIVITIES_KEY = "veworld-activity"
+// const ACTIVITIES_KEY = "veworld-activity"
 
-export default new EncryptedStore<ActivityStorageData>(ACTIVITIES_KEY)
+// export default new EncryptedStore<ActivityStorageData>(ACTIVITIES_KEY)

@@ -1,5 +1,5 @@
-export enum OnboardStage {
-    BEGINNING,
-    PASSWORD_SET,
-    COMPLETE,
-}
+// export enum OnboardStage {
+//     BEGINNING,
+//     PASSWORD_SET,
+//     COMPLETE,
+// }

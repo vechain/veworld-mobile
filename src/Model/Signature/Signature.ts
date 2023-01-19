@@ -1,5 +1,5 @@
-import { Certificate, Transaction } from "thor-devkit"
+// import { Certificate, Transaction } from "thor-devkit"
 
-export type SignPayload = Certificate | Transaction
+// export type SignPayload = Certificate | Transaction
 
-export type SignType = "cert" | "tx"
+// export type SignType = "cert" | "tx"
