@@ -1,31 +1,28 @@
 import React, { useCallback, useEffect } from "react"
-import {
-    Biometrics,
-    AuthenticationType as AuthType,
-    SecurityLevel as SCLevel,
-} from "~Common"
+import { BiometricsUtils } from "~Common"
+import { AuthenticationType, SecurityLevelType } from "~Model"
 import { useI18nContext } from "~i18n"
 
 const Security = () => {
     const { LL } = useI18nContext()
 
     const init = useCallback(async () => {
-        let level = await Biometrics.getDeviceEnrolledLevel()
+        let level = await BiometricsUtils.getDeviceEnrolledLevel()
         // let isHardware = await Biometrics.getGeviceHasHardware()
         // let isEnrolled = await Biometrics.getIsDeviceEnrolled()
-        let typeAvalable = await Biometrics.getBiometricTypeAvailable()
+        let typeAvalable = await BiometricsUtils.getBiometricTypeAvailable()
 
         // console.log("level", level) // SECRET
         // console.log("isHardware", isHardware) // true
         // console.log("isEnrolled", isEnrolled) // false
         // console.log("typeAvalable", typeAvalable) // FACIAL_RECOGNITION
 
-        if (level === SCLevel.BIOMETRIC) {
-            if (typeAvalable === AuthType.FACIAL_RECOGNITION) {
+        if (level === SecurityLevelType.BIOMETRIC) {
+            if (typeAvalable === AuthenticationType.FACIAL_RECOGNITION) {
                 return LL.FACE_ID()
             }
 
-            if (typeAvalable === AuthType.FINGERPRINT) {
+            if (typeAvalable === AuthenticationType.FINGERPRINT) {
                 return LL.FINGERPRINT()
             }
 

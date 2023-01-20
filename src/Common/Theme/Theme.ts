@@ -1,4 +1,4 @@
-import { ThemeType } from "./Types"
+import { ThemeType } from "~Model"
 
 export const Theme: ThemeType = {
     constants: {

@@ -4,6 +4,7 @@ import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
 import { PasswordPins } from "./Components/PasswordPins"
 import { NumPad } from "./Components/NumPad"
+import { Fonts } from "~Model"
 
 export const UserPasswordScreen = () => {
     const { LL } = useI18nContext()
@@ -21,11 +22,11 @@ export const UserPasswordScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="flex-start" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font="large_title">
+                    <BaseText font={Fonts.large_title}>
                         {LL.TITLE_USER_PASSWORD()}
                     </BaseText>
 
-                    <BaseText font="body" my={10}>
+                    <BaseText font={Fonts.body} my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     </BaseText>
                 </BaseView>

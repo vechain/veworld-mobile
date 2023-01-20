@@ -10,6 +10,7 @@ import { BiometricsUtils } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { Fonts } from "~Model"
 
 export const SecurityScreen = () => {
     const { LL } = useI18nContext()
@@ -32,11 +33,11 @@ export const SecurityScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font="large_title">
+                    <BaseText font={Fonts.large_title}>
                         {LL.TITLE_SECURITY()}
                     </BaseText>
 
-                    <BaseText font="body" my={10}>
+                    <BaseText font={Fonts.body} my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                         sed do eiusmod tempor incididunt ut labore et dolore
                         magna aliqua.

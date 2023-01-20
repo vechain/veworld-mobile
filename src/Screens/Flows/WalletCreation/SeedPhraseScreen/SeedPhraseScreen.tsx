@@ -14,6 +14,7 @@ import { useI18nContext } from "~i18n"
 import { SeedUtils } from "~Common"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { Fonts } from "~Model"
 
 export const SeedPhraseScreen = () => {
     const nav = useNavigation()
@@ -53,11 +54,11 @@ export const SeedPhraseScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font="large_title" align="left">
+                    <BaseText font={Fonts.large_title} align="left">
                         {LL.TITLE_MNEMONIC()}
                     </BaseText>
 
-                    <BaseText font="body" my={10}>
+                    <BaseText font={Fonts.body} my={10}>
                         {LL.BD_MNEMONIC_SUBTITLE()}
                     </BaseText>
 
@@ -73,11 +74,11 @@ export const SeedPhraseScreen = () => {
 
                     <MnemonicCard mnemonicArray={mnemonicArray} />
 
-                    <BaseText font="footnote_accent" color="red" my={10}>
+                    <BaseText font={Fonts.footnote_accent} color="red" my={10}>
                         {LL.BD_MNEMONIC_DISCLAIMER()}
                     </BaseText>
 
-                    <BaseText font="footnote">
+                    <BaseText font={Fonts.footnote}>
                         {LL.BD_MNEMONIC_BACKUP()}
                     </BaseText>
                 </BaseView>
