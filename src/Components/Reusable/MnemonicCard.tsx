@@ -5,6 +5,7 @@ import { BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
 import { PlatformUtils, useTheme } from "~Common"
 import { HideView } from "./HideView.android"
+import { Fonts } from "~Model"
 
 type Props = {
     mnemonicArray: string[]
@@ -30,7 +31,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                     justify="space-between">
                     {mnemonicArray.map((word, index) => (
                         <BaseText
-                            font="footnote_accent"
+                            font={Fonts.footnote_accent}
                             key={`word${index}`}
                             my={8}
                             w={33}>{`${index + 1}. ${word}`}</BaseText>

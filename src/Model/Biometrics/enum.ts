@@ -3,7 +3,7 @@ export enum AuthenticationType {
     FACIAL_RECOGNITION = "FACIAL_RECOGNITION",
     IRIS = "IRIS",
 }
-export enum SecurityLevel {
+export enum SecurityLevelType {
     NONE = "NONE",
     SECRET = "SECRET",
     BIOMETRIC = "BIOMETRIC",

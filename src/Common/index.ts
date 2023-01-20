@@ -1,8 +1,5 @@
 export * from "./Hooks"
 export * from "./Theme/Theme"
-export * from "./Theme/Types"
-export * from "./Theme/Enums"
-export * from "./Types"
 export * from "./Utils"
 export * from "./Enums"
 // export * from "./Constant"

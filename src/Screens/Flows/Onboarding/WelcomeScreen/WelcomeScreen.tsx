@@ -12,6 +12,7 @@ import VectorImage from "react-native-vector-image"
 import { VeChainVetLogo } from "~Assets"
 import { useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
+import { Fonts } from "~Model"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -28,10 +29,12 @@ export const WelcomeScreen = () => {
 
             <BaseView align="center" mx={20} grow={1}>
                 <BaseView orientation="row">
-                    <BaseText font="large_title">
+                    <BaseText font={Fonts.large_title}>
                         {LL.TITLE_WELCOME_TO()}
                     </BaseText>
-                    <BaseText font="large_title" color={theme.colors.button}>
+                    <BaseText
+                        font={Fonts.large_title}
+                        color={theme.colors.button}>
                         VeWorld
                     </BaseText>
                 </BaseView>
@@ -51,7 +54,7 @@ export const WelcomeScreen = () => {
                     </BaseView>
 
                     <BaseView align="center" w={100}>
-                        <BaseText font="caption" py={10}>
+                        <BaseText font={Fonts.caption} py={10}>
                             {LL.BD_GDPR()}
                         </BaseText>
 

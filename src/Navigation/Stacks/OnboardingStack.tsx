@@ -8,6 +8,7 @@ import {
     WalletTypeSelectionScreen,
     WelcomeScreen,
     UserPasswordScreen,
+    ConfirmSeedPhraseScreen,
 } from "~Screens"
 
 export type RootStackParamListOnboarding = {
@@ -18,6 +19,7 @@ export type RootStackParamListOnboarding = {
     Wallet_Type_Creation: undefined
     Seed_Phrase: undefined
     User_Password: undefined
+    Confirm_Seed_Phrase: undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -53,6 +55,12 @@ export const OnboardingStack = () => {
                 <Onboarding.Screen
                     name="Seed_Phrase"
                     component={SeedPhraseScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name="Confirm_Seed_Phrase"
+                    component={ConfirmSeedPhraseScreen}
                     options={{ headerShown: false }}
                 />
 

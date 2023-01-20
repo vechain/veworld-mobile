@@ -19,3 +19,5 @@
 // export * from "./Transaction"
 // export * from "./Wallet"
 export * from "./AppState"
+export * from "./Biometrics"
+export * from "./Theme"

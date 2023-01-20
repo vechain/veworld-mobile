@@ -2,6 +2,7 @@ import React, { FC } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Common"
 import { BaseText, BaseView } from "~Components"
+import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -50,14 +51,17 @@ export const PasswordPins: FC<Props> = ({
             </BaseView>
 
             {isPINRetype && (
-                <BaseText font="body_accent" alignContainer="center" my={10}>
+                <BaseText
+                    font={Fonts.body_accent}
+                    alignContainer="center"
+                    my={10}>
                     {LL.BD_USER_PASSWORD_CONFIRM()}
                 </BaseText>
             )}
 
             {isPinError && (
                 <BaseText
-                    font="body_accent"
+                    font={Fonts.body_accent}
                     color="red"
                     alignContainer="center"
                     my={10}>

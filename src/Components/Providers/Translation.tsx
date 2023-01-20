@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react"
 import { Locales, TypesafeI18n, isLocale, loadLocaleAsync } from "~i18n"
 import * as Localization from "expo-localization"
 import "~Common/polyfill"
-import { useAppSelector } from "~Storage/Caches"
-import { selectCurrentAppState, selectPreviousAppState } from "~Selectors"
+import {
+    selectCurrentAppState,
+    selectPreviousAppState,
+    useAppSelector,
+} from "~Storage/Caches"
+
 import { AppStateType } from "~Model"
 
 type Props = {
