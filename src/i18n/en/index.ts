@@ -64,6 +64,7 @@ const en: BaseTranslation = {
 
     // ELEMENTS
     FACE_ID: "Face ID",
+    TOUCH_ID: "Touch ID",
     FINGERPRINT: "Fingerprint",
     IRIS: "Iris",
     DEVICE_PIN: "Device Pin",

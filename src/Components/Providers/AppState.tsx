@@ -18,6 +18,7 @@ export const AppState = () => {
             nextAppState => {
                 previousAppState = appState.current
                 appState.current = nextAppState
+
                 dispatch(
                     updateAppState({
                         currentState: nextAppState,

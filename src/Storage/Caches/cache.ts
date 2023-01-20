@@ -8,6 +8,7 @@ import {
 } from "@reduxjs/toolkit"
 import { appStateSlice, initialAppState } from "./AppStateCache"
 import { initialWalletState, walletStateSlice } from "./WalletCache"
+import { biometricsSlice, initialBiometricsState } from "./BiometricsCache"
 // import { accountSlice, initialAccountState } from "./AccountCache"
 // import { initialWalletAccessState, walletAccessSlice } from "./WalletAccess"
 // import { settingSlice } from "./SettingsCache"
@@ -26,6 +27,7 @@ import { initialWalletState, walletStateSlice } from "./WalletCache"
 const combinedReducer = combineReducers({
     appState: appStateSlice.reducer,
     walletState: walletStateSlice.reducer,
+    biometricsState: biometricsSlice.reducer,
     // account: accountSlice.reducer,
     // walletAccess: walletAccessSlice.reducer,
     // settings: settingSlice.reducer,
@@ -45,6 +47,7 @@ export const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
         state = {
             appState: initialAppState,
             walletState: initialWalletState,
+            biometricsState: initialBiometricsState,
             // account: initialAccountState,
             // walletAccess: initialWalletAccessState,
             // settings: SettingsConstants.getDefaultSettings(),

@@ -6,7 +6,7 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { BiometricsUtils } from "~Common"
+import { BiometricsUtils, useBiometricType } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -15,6 +15,8 @@ import { Fonts } from "~Model"
 export const SecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
+
+    const { isBiometrics, biometricType } = useBiometricType()
 
     const onBiometricsPress = useCallback(async () => {
         let { success } = await BiometricsUtils.authenticateWithbiometric()
@@ -45,16 +47,18 @@ export const SecurityScreen = () => {
                 </BaseView>
 
                 <BaseView align="center" w={100}>
-                    <BaseButton
-                        filled
-                        action={onBiometricsPress}
-                        w={100}
-                        mx={20}
-                        my={20}
-                        title={LL.BTN_SECURTY_USE_TYPE({
-                            type: "getBiometricsType",
-                        })}
-                    />
+                    {isBiometrics && (
+                        <BaseButton
+                            filled
+                            action={onBiometricsPress}
+                            w={100}
+                            mx={20}
+                            my={20}
+                            title={LL.BTN_SECURTY_USE_TYPE({
+                                type: biometricType,
+                            })}
+                        />
+                    )}
 
                     <BaseButton
                         bordered

@@ -180,6 +180,10 @@ type RootTranslation = {
 	 */
 	FACE_ID: string
 	/**
+	 * T​o​u​c​h​ ​I​D
+	 */
+	TOUCH_ID: string
+	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
 	FINGERPRINT: string
@@ -2377,6 +2381,10 @@ export type TranslationFunctions = {
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
+	/**
+	 * Touch ID
+	 */
+	TOUCH_ID: () => LocalizedString
 	/**
 	 * Fingerprint
 	 */

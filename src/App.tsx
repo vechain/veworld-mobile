@@ -1,5 +1,5 @@
 import React from "react"
-import { AppState, BaseStatusBar, Translation } from "~Components"
+import { AppState, BaseStatusBar, Security, Translation } from "~Components"
 import { SwitchStack } from "~Navigation"
 import { useFonts } from "expo-font"
 import {
@@ -28,9 +28,10 @@ const App = () => {
     if (fontsLoaded) {
         return (
             <>
-                <AppState />
-
                 <Translation>
+                    <AppState />
+                    <Security />
+
                     <BaseStatusBar />
                     <SwitchStack />
                 </Translation>
