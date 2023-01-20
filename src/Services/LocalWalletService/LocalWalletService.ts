@@ -1,4 +1,3 @@
-// import Web3 from "web3"
 // import { address, HDNode, mnemonic } from "thor-devkit"
 // import { AppThunk, getWalletMode } from "~Storage/Caches"
 // import {
@@ -22,67 +21,10 @@
 // import DeviceService from "~Services/DeviceService"
 // import AccountService from "~Services/AccountService"
 
-// const web3 = new Web3()
+import { mnemonic } from "thor-devkit"
+import { setMnemonic, purgeWalletState } from "~Storage/Caches"
 
-// const generateMnemonicPhrase = (): string[] => mnemonic.generate()
-
-// const addPrivateKeyWallet =
-//     (
-//         alias: string,
-//         privateKey: string,
-//         encryptionKey?: string,
-//     ): AppThunk<Promise<string>> =>
-//     async (dispatch, getState) => {
-//         info("Adding a new private key local wallet")
-
-//         const mode = getWalletMode(getState())
-
-//         try {
-//             // If the wallet mode is ASK_TO_SIGN then we need to unlock the wallet
-//             if (mode === WALLET_MODE.ASK_TO_SIGN) {
-//                 if (!encryptionKey)
-//                     throw veWorldErrors.provider.unauthorized({
-//                         message: "failed_to_get_password",
-//                     })
-//                 LocalWalletStore.unlock(encryptionKey)
-//             }
-
-//             const acc = web3.eth.accounts.privateKeyToAccount(privateKey)
-
-//             const addr = address.toChecksumed(acc.address)
-
-//             const wallet: Wallet = {
-//                 privateKey: privateKey,
-//                 nonce: HexUtils.generateRandom(256),
-//                 rootAddress: addr,
-//             }
-
-//             const device: Device = {
-//                 alias: alias,
-//                 rootAddress: addr,
-//                 type: DEVICE_TYPE.LOCAL_PRIVATE_KEY,
-//             }
-
-//             // Add Device
-//             await dispatch(DeviceService.add(device))
-
-//             // Add accounts
-//             await dispatch(AccountService.addForNewDevice(device))
-
-//             // Persist the wallet - Do this last in case of failure
-//             await add(wallet, mode, encryptionKey)
-
-//             return device.rootAddress
-//         } catch (e) {
-//             error(e)
-//             throw veWorldErrors.rpc.internal({
-//                 error: e,
-//                 message: "failed_to_add_wallet",
-//             })
-//         } finally {
-//             if (mode === WALLET_MODE.ASK_TO_SIGN) LocalWalletStore.lock()
-//         }
-//     }
+export const generateMnemonicPhrase = (): string[] => mnemonic.generate()
 
 // const addMnemonicWallet =
 //     (
@@ -325,17 +267,19 @@
 // const changeEncryptionKey = (newKey: string) =>
 //     LocalWalletStore.changeEncryptionKey(newKey)
 
-// export default {
-//     checkEncryptionKey,
-//     changeEncryptionKey,
-//     backupMnemonic,
-//     generateMnemonicPhrase,
-//     addMnemonicWallet,
-//     addPrivateKeyWallet,
-//     lock,
-//     unlock,
-//     reset,
-//     exists,
-//     remove,
-//     get,
-// }
+export default {
+    // checkEncryptionKey,
+    // changeEncryptionKey,
+    // backupMnemonic,
+    generateMnemonicPhrase,
+    setMnemonic,
+    purgeWalletState,
+    // addMnemonicWallet,
+    // addPrivateKeyWallet,
+    // lock,
+    // unlock,
+    // reset,
+    // exists,
+    // remove,
+    // get,
+}

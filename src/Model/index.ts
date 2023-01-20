@@ -17,7 +17,7 @@
 // export * from "./StorageData"
 // export * from "./Token"
 // export * from "./Transaction"
-// export * from "./Wallet"
+export * from "./Wallet"
 export * from "./AppState"
 export * from "./Biometrics"
 export * from "./Theme"

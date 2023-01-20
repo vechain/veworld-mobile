@@ -1,3 +1,3 @@
-// import LocalWalletService from "./LocalWalletService"
+import LocalWalletService from "./LocalWalletService"
 
-// export default LocalWalletService
+export default LocalWalletService

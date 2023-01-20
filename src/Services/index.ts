@@ -10,7 +10,7 @@
 // import FiatExchangeService from "./FiatExchangeService"
 // import LedgerService from "./LedgerService"
 // import LocalSigningService from "./LocalSigningService"
-// import LocalWalletService from "./LocalWalletService"
+import LocalWalletService from "./LocalWalletService"
 // import OnboardingService from "./OnboardingService"
 // import SettingService from "./SettingService"
 // import ThorService from "./ThorService"
@@ -18,24 +18,24 @@
 // import TransactionService from "./TransactionService"
 // import TransfersService from "./TransfersService"
 
-// export {
-//     AccessService,
-//     AccountService,
-//     ActivityService,
-//     BalanceService,
-//     ConnectedAppService,
-//     CurrentContextService,
-//     DelegationService,
-//     DeviceService,
-//     EncryptionKeyService,
-//     FiatExchangeService,
-//     LedgerService,
-//     LocalSigningService,
-//     LocalWalletService,
-//     OnboardingService,
-//     SettingService,
-//     ThorService,
-//     TokenService,
-//     TransactionService,
-//     TransfersService,
-// }
+export {
+    //     AccessService,
+    //     AccountService,
+    //     ActivityService,
+    //     BalanceService,
+    //     ConnectedAppService,
+    //     CurrentContextService,
+    //     DelegationService,
+    //     DeviceService,
+    //     EncryptionKeyService,
+    //     FiatExchangeService,
+    //     LedgerService,
+    //     LocalSigningService,
+    LocalWalletService,
+    //     OnboardingService,
+    //     SettingService,
+    //     ThorService,
+    //     TokenService,
+    //     TransactionService,
+    //     TransfersService,
+}

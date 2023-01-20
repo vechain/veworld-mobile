@@ -55,7 +55,8 @@
         "react-redux": "^8.0.5",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
-        "url": "^0.11.0"
+        "url": "^0.11.0",
+        "thor-devkit": "https://github.com/vechainfoundation/thor-devkit.js"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",

@@ -7,6 +7,7 @@ import {
     ThunkDispatch,
 } from "@reduxjs/toolkit"
 import { appStateSlice, initialAppState } from "./AppStateCache"
+import { initialWalletState, walletStateSlice } from "./WalletCache"
 // import { accountSlice, initialAccountState } from "./AccountCache"
 // import { initialWalletAccessState, walletAccessSlice } from "./WalletAccess"
 // import { settingSlice } from "./SettingsCache"
@@ -24,6 +25,7 @@ import { appStateSlice, initialAppState } from "./AppStateCache"
 
 const combinedReducer = combineReducers({
     appState: appStateSlice.reducer,
+    walletState: walletStateSlice.reducer,
     // account: accountSlice.reducer,
     // walletAccess: walletAccessSlice.reducer,
     // settings: settingSlice.reducer,
@@ -42,6 +44,7 @@ export const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
     if (action.type === "wallet/clearEntireCache") {
         state = {
             appState: initialAppState,
+            walletState: initialWalletState,
             // account: initialAccountState,
             // walletAccess: initialWalletAccessState,
             // settings: SettingsConstants.getDefaultSettings(),

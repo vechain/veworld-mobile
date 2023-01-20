@@ -30,3 +30,5 @@
 // export interface WalletStorageData extends StorageData {
 //     wallets: Wallet[]
 // }
+
+export type WalletState = { mnemonic: string }
