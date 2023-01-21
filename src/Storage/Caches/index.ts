@@ -11,5 +11,5 @@
 export * from "./cache"
 export * from "./hooks"
 export * from "./AppStateCache"
-export * from "./WalletCache"
+export * from "./LocalWalletCache"
 export * from "./BiometricsCache"

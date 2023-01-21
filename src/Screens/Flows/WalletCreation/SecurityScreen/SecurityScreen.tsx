@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -6,25 +6,52 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { BiometricsUtils, useBiometricType } from "~Common"
+import { AsyncStoreType, BiometricsUtils, useBiometricType } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { Fonts } from "~Model"
+import { Device, Fonts } from "~Model"
+import { LocalWalletService } from "~Services"
+import { selectMnemonic, useAppDispatch, useAppSelector } from "~Storage/Caches"
+import { AsyncStore, KeychainStore } from "~Storage/Stores"
 
 export const SecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
+    const mnemonic = useAppSelector(selectMnemonic)
 
-    const { isBiometrics, biometricType } = useBiometricType()
+    const { isShowBiometricsButton, currentSecurityLevel } = useBiometricType()
+
+    useEffect(() => {
+        const init = async () => {
+            let devices = await AsyncStore.getFor<Device[]>(
+                AsyncStoreType.Devices,
+            )
+
+            let wallet = await KeychainStore.get(devices![0].rootAddress, true)
+            if (wallet) {
+                console.log("username", wallet.username)
+                console.log("service", wallet.service)
+                console.log("storage", wallet.storage)
+                console.log("password", JSON.parse(wallet.password))
+            }
+        }
+
+        init()
+    }, [])
 
     const onBiometricsPress = useCallback(async () => {
         let { success } = await BiometricsUtils.authenticateWithbiometric()
         if (success) {
-        } else {
-            // handle failure message
+            dispatch(
+                LocalWalletService.createMnemonicWallet(
+                    "Account 1",
+                    mnemonic.split(" "),
+                ),
+            )
         }
-    }, [])
+    }, [dispatch, mnemonic])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_PASSWORD)
@@ -47,7 +74,7 @@ export const SecurityScreen = () => {
                 </BaseView>
 
                 <BaseView align="center" w={100}>
-                    {isBiometrics && (
+                    {isShowBiometricsButton && (
                         <BaseButton
                             filled
                             action={onBiometricsPress}
@@ -55,7 +82,7 @@ export const SecurityScreen = () => {
                             mx={20}
                             my={20}
                             title={LL.BTN_SECURTY_USE_TYPE({
-                                type: biometricType,
+                                type: currentSecurityLevel!,
                             })}
                         />
                     )}

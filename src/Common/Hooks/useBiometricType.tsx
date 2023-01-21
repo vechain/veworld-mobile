@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react"
-import { LocalizedString } from "typesafe-i18n"
+import { useMemo } from "react"
 import { PlatformUtils } from "~Common/Utils"
 import { AuthenticationType, SecurityLevelType } from "~Model"
 import {
@@ -16,37 +15,43 @@ export const useBiometricType = () => {
     const typeAvalable = useAppSelector(selectAvailableAuthType)
     const isBiometrics = useAppSelector(selectIsBiometrics)
 
-    const [biometricType, setBiometricType] = useState<LocalizedString>(
-        LL.FACE_ID(),
-    )
+    const isShowBiometricsButton = useMemo(() => {
+        if (PlatformUtils.isIOS() && level !== SecurityLevelType.NONE) {
+            return true
+        } else if (PlatformUtils.isAndroid() && isBiometrics) {
+            return true
+        } else {
+            return false
+        }
+    }, [isBiometrics, level])
 
-    useEffect(() => {
+    const currentSecurityLevel = useMemo(() => {
         if (PlatformUtils.isIOS()) {
             if (level === SecurityLevelType.BIOMETRIC) {
                 if (typeAvalable === AuthenticationType.FACIAL_RECOGNITION) {
-                    setBiometricType(LL.FACE_ID())
+                    return LL.FACE_ID()
                 }
 
                 if (typeAvalable === AuthenticationType.FINGERPRINT) {
-                    setBiometricType(LL.TOUCH_ID())
+                    return LL.TOUCH_ID()
                 }
             } else {
-                setBiometricType(LL.DEVICE_PIN())
+                return LL.DEVICE_PIN()
             }
         }
 
         if (PlatformUtils.isAndroid()) {
             if (level === SecurityLevelType.BIOMETRIC) {
                 if (typeAvalable === AuthenticationType.FACIAL_RECOGNITION) {
-                    setBiometricType(LL.FACE_ID())
+                    return LL.FACE_ID()
                 }
 
                 if (typeAvalable === AuthenticationType.FINGERPRINT) {
-                    setBiometricType(LL.FINGERPRINT())
+                    return LL.FINGERPRINT()
                 }
             }
         }
     }, [LL, level, typeAvalable])
 
-    return { isBiometrics, biometricType }
+    return { isShowBiometricsButton, currentSecurityLevel }
 }

@@ -26,7 +26,7 @@ export {
     //     ConnectedAppService,
     //     CurrentContextService,
     //     DelegationService,
-    //     DeviceService,
+    // DeviceService,
     //     EncryptionKeyService,
     //     FiatExchangeService,
     //     LedgerService,

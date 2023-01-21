@@ -1,2 +1,2 @@
 export * from "./Wallet"
-// export * from "./enum"
+export * from "./enum"

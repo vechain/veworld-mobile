@@ -1,5 +1,4 @@
 // import { address, HDNode, mnemonic } from "thor-devkit"
-// import { AppThunk, getWalletMode } from "~Storage/Caches"
 // import {
 //     AddressUtils,
 //     CryptoUtils,
@@ -21,115 +20,87 @@
 // import DeviceService from "~Services/DeviceService"
 // import AccountService from "~Services/AccountService"
 
-import { mnemonic } from "thor-devkit"
-import { setMnemonic, purgeWalletState } from "~Storage/Caches"
+import { mnemonic, HDNode } from "thor-devkit"
+import { AsyncStoreType, CryptoUtils, HexUtils, error } from "~Common"
+import { DEVICE_TYPE, Device, Wallet } from "~Model"
+import { setMnemonic, purgeWalletState, AppThunk } from "~Storage/Caches"
+import { AsyncStore, KeychainStore } from "~Storage/Stores"
 
 export const generateMnemonicPhrase = (): string[] => mnemonic.generate()
 
-// const addMnemonicWallet =
-//     (
-//         alias: string,
-//         mnemonicPhrase: string[],
-//         encryptionKey?: string,
-//     ): AppThunk<Promise<string>> =>
-//     async (dispatch, getState) => {
-//         info("Adding a new mnemonic phrase local wallet")
+const createMnemonicWallet =
+    (
+        alias: string,
+        mnemonicPhrase: string[],
+        encryptionKey?: string,
+    ): AppThunk<void> =>
+    async (dispatch, _) => {
+        try {
+            if (mnemonicPhrase.length !== 12) {
+                error("mnemonicPhrase.length !== 12")
+                return
+            }
 
-//         const mode = getWalletMode(getState())
+            const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
 
-//         try {
-//             if (mnemonicPhrase.length !== 12)
-//                 throw veWorldErrors.rpc.invalidRequest({
-//                     message: "wrong_mnemonic_length",
-//                 })
+            const wallet: Wallet = {
+                mnemonic: mnemonicPhrase,
+                nonce: HexUtils.generateRandom(256),
+                rootAddress: hdNode.address,
+            }
 
-//             // If the wallet mode is ASK_TO_SIGN then we need to unlock the wallet
-//             if (mode === WALLET_MODE.ASK_TO_SIGN) {
-//                 if (!encryptionKey)
-//                     throw veWorldErrors.provider.unauthorized({
-//                         message: "failed_to_get_password",
-//                     })
-//                 LocalWalletStore.unlock(encryptionKey)
-//             }
+            const device: Device = {
+                alias: alias,
+                xPub: CryptoUtils.xPubFromHdNode(hdNode),
+                rootAddress: hdNode.address,
+                type: DEVICE_TYPE.LOCAL_MNEMONIC,
+            }
 
-//             // Add new wallet as a device
-//             const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
+            dispatch(backupWallet(wallet, encryptionKey))
+            dispatch(backupDevice(device))
+        } catch (e) {
+            error(e)
+        }
+    }
 
-//             const wallet: Wallet = {
-//                 mnemonic: mnemonicPhrase,
-//                 nonce: HexUtils.generateRandom(256),
-//                 rootAddress: hdNode.address,
-//             }
+const backupWallet =
+    (wallet: Wallet, encryptionKey?: string): AppThunk<void> =>
+    async () => {
+        try {
+            if (encryptionKey) {
+            } else {
+                await KeychainStore.set<Wallet>(
+                    wallet.rootAddress,
+                    wallet,
+                    true,
+                )
+            }
+        } catch (e) {
+            error(e)
+        }
+    }
 
-//             const device: Device = {
-//                 alias: alias,
-//                 xPub: CryptoUtils.xPubFromHdNode(hdNode),
-//                 rootAddress: hdNode.address,
-//                 type: DEVICE_TYPE.LOCAL_MNEMONIC,
-//             }
+const backupDevice =
+    (device: Device): AppThunk<void> =>
+    async () => {
+        try {
+            let devices = await AsyncStore.getFor<Device[]>(
+                AsyncStoreType.Devices,
+            )
 
-//             // Add the device
-//             await dispatch(DeviceService.add(device))
+            if (devices) {
+                devices.push(device)
+                await AsyncStore.set<Device[]>(devices, AsyncStoreType.Devices)
+                return
+            }
 
-//             // Add accounts
-//             await dispatch(AccountService.addForNewDevice(device))
+            await AsyncStore.set<Device[]>([device], AsyncStoreType.Devices)
 
-//             // Persist the wallet - Do this last in case of failure
-//             await add(wallet, mode, encryptionKey)
-
-//             return device.rootAddress
-//         } catch (e) {
-//             error(e)
-//             throw veWorldErrors.rpc.internal({
-//                 error: e,
-//                 message: "failed_to_import_mnemonic",
-//             })
-//         } finally {
-//             if (mode === WALLET_MODE.ASK_TO_SIGN) LocalWalletStore.lock()
-//         }
-//     }
-
-// const backupMnemonic =
-//     (
-//         rootAddress: string,
-//         encryptionKey?: string,
-//     ): AppThunk<Promise<string[]>> =>
-//     async (_, getState) => {
-//         warn("Backing up mnemonic")
-
-//         const mode = getWalletMode(getState())
-
-//         let mnemon
-//         const releaseLock = await LocalWalletStore.acquireMutex()
-//         try {
-//             if (mode === WALLET_MODE.ASK_TO_SIGN && encryptionKey)
-//                 LocalWalletStore.unlock(encryptionKey)
-
-//             // Get the wallet
-//             const storage = await LocalWalletStore.get()
-
-//             const wallet = storage.wallets.find(_wallet =>
-//                 AddressUtils.compareAddresses(_wallet.rootAddress, rootAddress),
-//             )
-//             if (!wallet || !wallet.mnemonic) {
-//                 throw veWorldErrors.rpc.resourceNotFound({
-//                     message: `No HD wallet found with root address ${rootAddress}`,
-//                 })
-//             }
-
-//             mnemon = wallet.mnemonic
-//         } catch (e) {
-//             error(e)
-//             throw veWorldErrors.rpc.internal({
-//                 error: e,
-//                 message: "failed_to_get_mnemonic",
-//             })
-//         } finally {
-//             if (mode === WALLET_MODE.ASK_TO_SIGN) LocalWalletStore.lock()
-//             releaseLock()
-//         }
-//         return mnemon
-//     }
+            // set device to redux
+        } catch (e) {
+            error(e)
+        }
+    }
 
 // const get = async () => await LocalWalletStore.get()
 
@@ -271,10 +242,12 @@ export default {
     // checkEncryptionKey,
     // changeEncryptionKey,
     // backupMnemonic,
+    backupWallet,
+    backupDevice,
     generateMnemonicPhrase,
     setMnemonic,
     purgeWalletState,
-    // addMnemonicWallet,
+    createMnemonicWallet,
     // addPrivateKeyWallet,
     // lock,
     // unlock,

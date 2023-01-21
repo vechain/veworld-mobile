@@ -7,7 +7,7 @@ import {
     ThunkDispatch,
 } from "@reduxjs/toolkit"
 import { appStateSlice, initialAppState } from "./AppStateCache"
-import { initialWalletState, walletStateSlice } from "./WalletCache"
+import { initialWalletState, walletStateSlice } from "./LocalWalletCache"
 import { biometricsSlice, initialBiometricsState } from "./BiometricsCache"
 // import { accountSlice, initialAccountState } from "./AccountCache"
 // import { initialWalletAccessState, walletAccessSlice } from "./WalletAccess"
