@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -6,14 +6,13 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { AsyncStoreType, BiometricsUtils, useBiometricType } from "~Common"
+import { BiometricsUtils, useBiometricType } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { Device, Fonts } from "~Model"
+import { Fonts } from "~Model"
 import { LocalWalletService } from "~Services"
 import { selectMnemonic, useAppDispatch, useAppSelector } from "~Storage/Caches"
-import { AsyncStore, KeychainStore } from "~Storage/Stores"
 
 export const SecurityScreen = () => {
     const { LL } = useI18nContext()
@@ -22,24 +21,6 @@ export const SecurityScreen = () => {
     const mnemonic = useAppSelector(selectMnemonic)
 
     const { isShowBiometricsButton, currentSecurityLevel } = useBiometricType()
-
-    useEffect(() => {
-        const init = async () => {
-            let devices = await AsyncStore.getFor<Device[]>(
-                AsyncStoreType.Devices,
-            )
-
-            let wallet = await KeychainStore.get(devices![0].rootAddress, true)
-            if (wallet) {
-                console.log("username", wallet.username)
-                console.log("service", wallet.service)
-                console.log("storage", wallet.storage)
-                console.log("password", JSON.parse(wallet.password))
-            }
-        }
-
-        init()
-    }, [])
 
     const onBiometricsPress = useCallback(async () => {
         let { success } = await BiometricsUtils.authenticateWithbiometric()

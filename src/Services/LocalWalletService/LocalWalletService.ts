@@ -1,25 +1,3 @@
-// import { address, HDNode, mnemonic } from "thor-devkit"
-// import {
-//     AddressUtils,
-//     CryptoUtils,
-//     HexUtils,
-//     debug,
-//     error,
-//     info,
-//     veWorldErrors,
-//     warn,
-// } from "~Common"
-// import {
-//     DEVICE_TYPE,
-//     Device,
-//     WALLET_MODE,
-//     Wallet,
-//     WalletStorageData,
-// } from "~Model"
-// import { LocalWalletStore } from "~Storage/Stores"
-// import DeviceService from "~Services/DeviceService"
-// import AccountService from "~Services/AccountService"
-
 import { mnemonic, HDNode } from "thor-devkit"
 import { AsyncStoreType, CryptoUtils, HexUtils, error } from "~Common"
 import { DEVICE_TYPE, Device, Wallet } from "~Model"
@@ -68,6 +46,12 @@ const backupWallet =
     async () => {
         try {
             if (encryptionKey) {
+                // encrypt wallet first - then
+                // await KeychainStore.set<Wallet>(
+                //     wallet.rootAddress,
+                //     wallet,
+                //     false,
+                // )
             } else {
                 await KeychainStore.set<Wallet>(
                     wallet.rootAddress,
@@ -82,7 +66,7 @@ const backupWallet =
 
 const backupDevice =
     (device: Device): AppThunk<void> =>
-    async () => {
+    async dispatch => {
         try {
             let devices = await AsyncStore.getFor<Device[]>(
                 AsyncStoreType.Devices,
@@ -95,21 +79,13 @@ const backupDevice =
             }
 
             await AsyncStore.set<Device[]>([device], AsyncStoreType.Devices)
+            dispatch(purgeWalletState())
 
             // set device to redux
         } catch (e) {
             error(e)
         }
     }
-
-// const get = async () => await LocalWalletStore.get()
-
-// const lock = () => LocalWalletStore.lock()
-
-// const unlock = (key: string) => LocalWalletStore.unlock(key)
-
-// export const exists = async (): Promise<boolean> =>
-//     await LocalWalletStore.exists()
 
 // /**
 //  * Reset the wallet store
@@ -242,8 +218,6 @@ export default {
     // checkEncryptionKey,
     // changeEncryptionKey,
     // backupMnemonic,
-    backupWallet,
-    backupDevice,
     generateMnemonicPhrase,
     setMnemonic,
     purgeWalletState,
