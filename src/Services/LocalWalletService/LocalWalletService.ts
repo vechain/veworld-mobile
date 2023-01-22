@@ -6,6 +6,15 @@ import { AsyncStore, KeychainStore } from "~Storage/Stores"
 
 export const generateMnemonicPhrase = (): string[] => mnemonic.generate()
 
+/**
+ * Create a wallet and a device from mnemonic
+ * @typedef AppThunk
+ * @description Creates a Wallet and a Device and saves them on Keychain and AsyncStore respectively. Cleans up wallet cache.
+ * @param alias
+ * @param mnemonicPhrase
+ * @optional encryptionKey
+ * @returns Void
+ */
 const createMnemonicWallet =
     (
         alias: string,
@@ -27,8 +36,9 @@ const createMnemonicWallet =
                 rootAddress: hdNode.address,
             }
 
+            let deviceIndex = await getDeviceIndex()
             const device: Device = {
-                alias: alias,
+                alias: `${alias} ${deviceIndex}`,
                 xPub: CryptoUtils.xPubFromHdNode(hdNode),
                 rootAddress: hdNode.address,
                 type: DEVICE_TYPE.LOCAL_MNEMONIC,
@@ -75,10 +85,13 @@ const backupDevice =
             if (devices) {
                 devices.push(device)
                 await AsyncStore.set<Device[]>(devices, AsyncStoreType.Devices)
+                await updateDeviceIndex()
+                dispatch(purgeWalletState())
                 return
             }
 
             await AsyncStore.set<Device[]>([device], AsyncStoreType.Devices)
+            await updateDeviceIndex()
             dispatch(purgeWalletState())
 
             // set device to redux
@@ -86,6 +99,28 @@ const backupDevice =
             error(e)
         }
     }
+
+const updateDeviceIndex = async () => {
+    let lastIndex = await AsyncStore.getFor<string>(AsyncStoreType.DeviceIndex)
+    if (lastIndex) {
+        let newIndex = parseInt(lastIndex, 10)
+        await AsyncStore.set<string>(
+            JSON.stringify(newIndex + 1),
+            AsyncStoreType.DeviceIndex,
+        )
+        return
+    }
+    await AsyncStore.set<string>("1", AsyncStoreType.DeviceIndex)
+}
+
+const getDeviceIndex = async () => {
+    let lastIndex = await AsyncStore.getFor<string>(AsyncStoreType.DeviceIndex)
+    if (lastIndex) {
+        let newIndex = parseInt(lastIndex, 10)
+        return newIndex + 1
+    }
+    return 1
+}
 
 // /**
 //  * Reset the wallet store

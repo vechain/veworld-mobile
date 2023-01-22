@@ -19,7 +19,6 @@ export const SecurityScreen = () => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const mnemonic = useAppSelector(selectMnemonic)
-
     const { isShowBiometricsButton, currentSecurityLevel } = useBiometricType()
 
     const onBiometricsPress = useCallback(async () => {
@@ -27,12 +26,12 @@ export const SecurityScreen = () => {
         if (success) {
             dispatch(
                 LocalWalletService.createMnemonicWallet(
-                    "Account 1",
+                    LL.WALLET_LABEL_account(),
                     mnemonic.split(" "),
                 ),
             )
         }
-    }, [dispatch, mnemonic])
+    }, [LL, dispatch, mnemonic])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_PASSWORD)

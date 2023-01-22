@@ -7,7 +7,7 @@ import {
     TutorialScreen,
     WalletTypeSelectionScreen,
     WelcomeScreen,
-    UserPasswordScreen,
+    UserCreatePasswordScreen,
     ConfirmSeedPhraseScreen,
 } from "~Screens"
 
@@ -72,7 +72,7 @@ export const OnboardingStack = () => {
 
                 <Onboarding.Screen
                     name="User_Password"
-                    component={UserPasswordScreen}
+                    component={UserCreatePasswordScreen}
                     options={{ headerShown: false }}
                 />
             </Onboarding.Group>

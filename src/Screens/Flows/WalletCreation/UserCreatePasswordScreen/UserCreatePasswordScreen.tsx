@@ -6,7 +6,7 @@ import { PasswordPins } from "./Components/PasswordPins"
 import { NumPad } from "./Components/NumPad"
 import { Fonts } from "~Model"
 
-export const UserPasswordScreen = () => {
+export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
     const { isPinError, isPinRetype, onDigitPress, userPinArray, isSuccess } =
         useOnDigitPress()
