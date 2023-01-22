@@ -1,6 +1,7 @@
 import { HDNode } from "thor-devkit"
 import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
+import { Wallet } from "~Model"
 
 export const xPubFromHdNode = (hdNode: HDNode): XPub => {
     return {
@@ -29,4 +30,18 @@ export function shuffleArray<T>(arr: T[]) {
         .map(value => ({ value, sort: random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value)
+}
+
+export const encrypt = (wallet: Wallet, encryptionKey: string) => {
+    const cipher = crypto.createCipher("aes256", encryptionKey)
+    let ciph = cipher.update(JSON.stringify(wallet), "utf-8", "hex")
+    ciph += cipher.final("hex")
+    return ciph as string
+}
+
+export const decrypt = (encryptedWalet: string, encryptionKey: string) => {
+    const decipher = crypto.createDecipher("aes256", encryptionKey)
+    let txt = decipher.update(encryptedWalet, "hex", "utf-8")
+    txt += decipher.final("utf-8")
+    return txt as string
 }

@@ -23,7 +23,7 @@ export const SecurityScreen = () => {
 
     const onBiometricsPress = useCallback(async () => {
         let { success } = await BiometricsUtils.authenticateWithbiometric()
-        if (success) {
+        if (success && mnemonic) {
             dispatch(
                 LocalWalletService.createMnemonicWallet(
                     LL.WALLET_LABEL_account(),

@@ -23,6 +23,8 @@ const createMnemonicWallet =
     ): AppThunk<void> =>
     async (dispatch, _) => {
         try {
+            console.log(mnemonicPhrase)
+
             if (mnemonicPhrase.length !== 12) {
                 error("mnemonicPhrase.length !== 12")
                 return
@@ -56,19 +58,20 @@ const backupWallet =
     async () => {
         try {
             if (encryptionKey) {
-                // encrypt wallet first - then
-                // await KeychainStore.set<Wallet>(
-                //     wallet.rootAddress,
-                //     wallet,
-                //     false,
-                // )
-            } else {
-                await KeychainStore.set<Wallet>(
-                    wallet.rootAddress,
+                const encryptedWallet = CryptoUtils.encrypt(
                     wallet,
-                    true,
+                    encryptionKey,
                 )
+
+                await KeychainStore.set<string>(
+                    wallet.rootAddress,
+                    encryptedWallet,
+                    false,
+                )
+                return
             }
+
+            await KeychainStore.set<Wallet>(wallet.rootAddress, wallet, true)
         } catch (e) {
             error(e)
         }
@@ -120,6 +123,48 @@ const getDeviceIndex = async () => {
         return newIndex + 1
     }
     return 1
+}
+
+export const getDevices = async () =>
+    await AsyncStore.getFor<Device[]>(AsyncStoreType.Devices)
+
+export const getDevice = async (deviceAddress: string) => {
+    const devices = await AsyncStore.getFor<Device[]>(AsyncStoreType.Devices)
+    let device: Device | undefined
+    if (devices) {
+        device = devices.find(d => d.rootAddress === deviceAddress)
+    }
+    return device
+}
+
+export const getWalletFor = async (
+    deviceAddress: string,
+    encryptionKey?: string,
+) => {
+    let wallet: Wallet
+
+    try {
+        if (encryptionKey) {
+            let encryptedWallet = await KeychainStore.get(deviceAddress, false)
+            if (encryptedWallet) {
+                let _wallet = CryptoUtils.decrypt(
+                    encryptedWallet.password,
+                    encryptionKey,
+                )
+
+                wallet = JSON.parse(_wallet)
+            }
+        } else {
+            let encryptedWallet = await KeychainStore.get(deviceAddress, true)
+            if (encryptedWallet) {
+                wallet = JSON.parse(encryptedWallet.password)
+            }
+        }
+    } catch (e) {
+        error(e)
+    }
+
+    return wallet!
 }
 
 // /**
@@ -257,6 +302,8 @@ export default {
     setMnemonic,
     purgeWalletState,
     createMnemonicWallet,
+    getDevices,
+    getWalletFor,
     // addPrivateKeyWallet,
     // lock,
     // unlock,

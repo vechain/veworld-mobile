@@ -92,5 +92,6 @@ export const useOnDigitPress = () => {
         isSuccess,
         isPinError,
         isPinRetype,
+        userPin,
     }
 }
