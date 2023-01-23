@@ -1,4 +1,5 @@
 import * as Keychain from "react-native-keychain"
+// import * as i18n from "~i18n"
 
 export async function set<T>(key: string, data: T, accessControl: boolean) {
     let options = {
@@ -21,6 +22,9 @@ export async function get(
     key: string,
     accessControl: boolean,
 ): Promise<Keychain.UserCredentials | false> {
+    // const locale = i18n.detectLocale()
+    // 18n.i18n()[locale].ACCOUNT_account_update_fail
+
     let options = {
         accessControl: accessControl
             ? Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE
