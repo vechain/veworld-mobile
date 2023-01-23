@@ -9,6 +9,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme, useTheme } from "~Common"
 import { store } from "~Storage/Caches"
+import { RealmProvider } from "~Storage/Realm"
 
 // immer setup
 enableAllPlugins()
@@ -34,11 +35,13 @@ const Main = () => {
 
     return (
         <Provider store={store}>
-            <NavigationContainer theme={colorScheme}>
-                <SafeAreaProvider>
-                    <App />
-                </SafeAreaProvider>
-            </NavigationContainer>
+            <RealmProvider>
+                <NavigationContainer theme={colorScheme}>
+                    <SafeAreaProvider>
+                        <App />
+                    </SafeAreaProvider>
+                </NavigationContainer>
+            </RealmProvider>
         </Provider>
     )
 }

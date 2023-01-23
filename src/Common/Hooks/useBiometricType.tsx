@@ -13,17 +13,17 @@ export const useBiometricType = () => {
     const { LL } = useI18nContext()
     const level = useAppSelector(selectSecurityLevel)
     const typeAvalable = useAppSelector(selectAvailableAuthType)
-    const isBiometrics = useAppSelector(selectIsBiometrics)
+    const _isBiometrics = useAppSelector(selectIsBiometrics)
 
-    const isShowBiometricsButton = useMemo(() => {
+    const isBiometrics = useMemo(() => {
         if (PlatformUtils.isIOS() && level !== SecurityLevelType.NONE) {
             return true
-        } else if (PlatformUtils.isAndroid() && isBiometrics) {
+        } else if (PlatformUtils.isAndroid() && _isBiometrics) {
             return true
         } else {
             return false
         }
-    }, [isBiometrics, level])
+    }, [_isBiometrics, level])
 
     const currentSecurityLevel = useMemo(() => {
         if (PlatformUtils.isIOS()) {
@@ -31,7 +31,6 @@ export const useBiometricType = () => {
                 if (typeAvalable === AuthenticationType.FACIAL_RECOGNITION) {
                     return LL.FACE_ID()
                 }
-
                 if (typeAvalable === AuthenticationType.FINGERPRINT) {
                     return LL.TOUCH_ID()
                 }
@@ -45,7 +44,6 @@ export const useBiometricType = () => {
                 if (typeAvalable === AuthenticationType.FACIAL_RECOGNITION) {
                     return LL.FACE_ID()
                 }
-
                 if (typeAvalable === AuthenticationType.FINGERPRINT) {
                     return LL.FINGERPRINT()
                 }
@@ -53,5 +51,5 @@ export const useBiometricType = () => {
         }
     }, [LL, level, typeAvalable])
 
-    return { isShowBiometricsButton, currentSecurityLevel }
+    return { isBiometrics, currentSecurityLevel }
 }

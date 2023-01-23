@@ -16,8 +16,10 @@ export async function set<T>(data: T, key: string) {
 export async function getFor<T>(key: string) {
     try {
         const value = await AsyncStorage.getItem(key)
-        if (value !== null) {
-            let stringToData = JSON.parse(value)
+        if (value && typeof value === "string") {
+            return value
+        } else {
+            let stringToData = JSON.parse(value!)
             return stringToData as T
         }
     } catch (e) {

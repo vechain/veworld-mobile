@@ -5,7 +5,7 @@
 // import ConnectedAppService from "./ConnectedAppService"
 // import CurrentContextService from "./CurrentContextService"
 // import DelegationService from "./DelegationService"
-import DeviceService from "./DeviceService"
+// import DeviceService from "./DeviceService"
 // import EncryptionKeyService from "./EncryptionKeyService"
 // import FiatExchangeService from "./FiatExchangeService"
 // import LedgerService from "./LedgerService"
@@ -26,7 +26,7 @@ export {
     //     ConnectedAppService,
     //     CurrentContextService,
     //     DelegationService,
-    DeviceService,
+    // DeviceService,
     //     EncryptionKeyService,
     //     FiatExchangeService,
     //     LedgerService,

@@ -39,9 +39,13 @@ export const encrypt = (wallet: Wallet, encryptionKey: string) => {
     return ciph as string
 }
 
-export const decrypt = (encryptedWalet: string, encryptionKey: string) => {
+export function decrypt<T>(encryptedWalet: string, encryptionKey: string): T {
     const decipher = crypto.createDecipher("aes256", encryptionKey)
     let txt = decipher.update(encryptedWalet, "hex", "utf-8")
     txt += decipher.final("utf-8")
-    return txt as string
+    let txtToString = txt.toString()
+    let parsed = JSON.parse(txtToString)
+    return parsed
 }
+
+export const getRandomKey = () => crypto.randomUUID()

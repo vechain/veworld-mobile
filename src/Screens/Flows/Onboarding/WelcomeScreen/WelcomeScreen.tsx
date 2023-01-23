@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -10,14 +10,37 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import VectorImage from "react-native-vector-image"
 import { VeChainVetLogo } from "~Assets"
-import { useTheme } from "~Common"
+import { CryptoUtils, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
-import { Fonts } from "~Model"
+import { Fonts, Wallet } from "~Model"
+import { useQuery, Device } from "~Storage/Realm"
+import KeychainService from "~Services/KeychainService"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
     const theme = useTheme()
     const { LL } = useI18nContext()
+    const devices = useQuery(Device)
+
+    useEffect(() => {
+        const init = async () => {
+            if (devices) {
+                for await (const device of devices) {
+                    console.log(device.rootAddress)
+                    console.log("-------")
+                    let key = await KeychainService.getEncryptionKey(true)
+                    let wallet = CryptoUtils.decrypt<Wallet>(
+                        device.wallet,
+                        key!,
+                    )
+                    console.log(wallet)
+                    console.log("-------")
+                }
+            }
+        }
+
+        init()
+    }, [devices])
 
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.ONBOARDING)

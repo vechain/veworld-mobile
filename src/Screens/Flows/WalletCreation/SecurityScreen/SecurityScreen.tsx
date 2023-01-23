@@ -13,25 +13,34 @@ import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
 import { LocalWalletService } from "~Services"
 import { selectMnemonic, useAppDispatch, useAppSelector } from "~Storage/Caches"
+import { useRealm } from "~Storage/Realm"
 
 export const SecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const dispatch = useAppDispatch()
+    const realm = useRealm()
     const mnemonic = useAppSelector(selectMnemonic)
-    const { isShowBiometricsButton, currentSecurityLevel } = useBiometricType()
+    const { isBiometrics, currentSecurityLevel } = useBiometricType()
 
     const onBiometricsPress = useCallback(async () => {
         let { success } = await BiometricsUtils.authenticateWithbiometric()
         if (success && mnemonic) {
-            dispatch(
-                LocalWalletService.createMnemonicWallet(
-                    LL.WALLET_LABEL_account(),
-                    mnemonic.split(" "),
-                ),
-            )
+            try {
+                dispatch(
+                    LocalWalletService.createMnemonicWallet(
+                        LL.WALLET_LABEL_account(),
+                        mnemonic.split(" "),
+                        realm,
+                        isBiometrics,
+                    ),
+                )
+            } catch (error) {
+                // TODO handle error
+                console.log(error)
+            }
         }
-    }, [LL, dispatch, mnemonic])
+    }, [LL, dispatch, isBiometrics, mnemonic, realm])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_PASSWORD)
@@ -54,7 +63,7 @@ export const SecurityScreen = () => {
                 </BaseView>
 
                 <BaseView align="center" w={100}>
-                    {isShowBiometricsButton && (
+                    {isBiometrics && (
                         <BaseButton
                             filled
                             action={onBiometricsPress}
