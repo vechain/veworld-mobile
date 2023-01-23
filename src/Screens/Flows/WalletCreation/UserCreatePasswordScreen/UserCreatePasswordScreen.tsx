@@ -7,10 +7,12 @@ import { NumPad } from "./Components/NumPad"
 import { Fonts } from "~Model"
 import { selectMnemonic, useAppDispatch, useAppSelector } from "~Storage/Caches"
 import { LocalWalletService } from "~Services"
+import { useRealm } from "~Storage/Realm"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const realm = useRealm()
     const {
         isPinError,
         isPinRetype,
@@ -24,15 +26,19 @@ export const UserCreatePasswordScreen = () => {
 
     useEffect(() => {
         if (isSuccess && mnemonic) {
+            let isBiometrics = false
+
             dispatch(
                 LocalWalletService.createMnemonicWallet(
-                    LL.WALLET_LABEL_account(),
+                    LL.WALLET_LABEL_account(), // move to service?
                     mnemonic.split(" "),
+                    realm,
+                    isBiometrics,
                     userPin,
                 ),
             )
         }
-    }, [LL, dispatch, isSuccess, mnemonic, userPin])
+    }, [LL, dispatch, isSuccess, mnemonic, realm, userPin])
 
     return (
         <BaseSafeArea grow={1}>

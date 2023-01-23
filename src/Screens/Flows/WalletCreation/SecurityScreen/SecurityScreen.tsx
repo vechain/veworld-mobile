@@ -29,7 +29,7 @@ export const SecurityScreen = () => {
             try {
                 dispatch(
                     LocalWalletService.createMnemonicWallet(
-                        LL.WALLET_LABEL_account(),
+                        LL.WALLET_LABEL_account(), // move to service?
                         mnemonic.split(" "),
                         realm,
                         isBiometrics,

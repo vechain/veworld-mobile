@@ -13,14 +13,17 @@ const createMnemonicWallet =
         mnemonicPhrase: string[],
         realm: Realm,
         accessControl: boolean,
+        userPassword?: string,
     ): AppThunk<void> =>
     async dispatch => {
         try {
+            // do
             if (mnemonicPhrase.length !== 12) {
                 error("mnemonicPhrase.length !== 12")
                 return
             }
 
+            // if this throws we don't need the check above?
             const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
 
             const wallet = {
@@ -37,11 +40,20 @@ const createMnemonicWallet =
                 type: DEVICE_TYPE.LOCAL_MNEMONIC,
             }
 
-            let encryprionKey = await KeychainService.getEncryptionKey(
-                accessControl,
+            let encryprionKey: string | undefined
+
+            if (!userPassword) {
+                encryprionKey =
+                    await KeychainService.getOrGenerateEncryptionKey(
+                        accessControl,
+                    )
+            }
+
+            const encryptedWallet = CryptoUtils.encrypt(
+                wallet,
+                userPassword || encryprionKey!,
             )
 
-            const encryptedWallet = CryptoUtils.encrypt(wallet, encryprionKey!)
             let device = {
                 ..._device,
                 wallet: encryptedWallet,
@@ -52,11 +64,25 @@ const createMnemonicWallet =
             })
 
             await updateDeviceIndex()
-            dispatch(purgeWalletState())
-            await KeychainService.setEncryptionKey(
-                encryprionKey!,
-                accessControl,
+
+            let isKey = await AsyncStore.getFor<string>(
+                AsyncStoreType.isEncryptionKey,
             )
+
+            // Set encryption key only the first time
+            if (!isKey) {
+                await KeychainService.setEncryptionKey(
+                    encryprionKey!,
+                    accessControl,
+                )
+
+                await AsyncStore.set<string>(
+                    "YES",
+                    AsyncStoreType.isEncryptionKey,
+                )
+            }
+
+            dispatch(purgeWalletState())
         } catch (e) {
             error(e)
         }

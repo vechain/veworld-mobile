@@ -1,5 +1,5 @@
 export enum AsyncStoreType {
     Devices = "@DEVICES",
     DeviceIndex = "@DEVICE_INDEX",
-    EncryptionKey = "@ENCRYPTION_KEY",
+    isEncryptionKey = "@ENCRYPTION_KEY",
 }

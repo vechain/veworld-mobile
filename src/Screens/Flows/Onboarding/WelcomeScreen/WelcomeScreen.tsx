@@ -28,7 +28,9 @@ export const WelcomeScreen = () => {
                 for await (const device of devices) {
                     console.log(device.rootAddress)
                     console.log("-------")
-                    let key = await KeychainService.getEncryptionKey(true)
+                    let key = await KeychainService.getOrGenerateEncryptionKey(
+                        true,
+                    )
                     let wallet = CryptoUtils.decrypt<Wallet>(
                         device.wallet,
                         key!,

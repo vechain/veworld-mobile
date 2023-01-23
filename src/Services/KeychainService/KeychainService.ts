@@ -2,7 +2,7 @@ import { CryptoUtils } from "~Common"
 import { AsyncStore, KeychainStore } from "~Storage/Stores"
 import { AsyncStoreType, error } from "~Common"
 
-const getEncryptionKey = async (accessControl: boolean) => {
+const getOrGenerateEncryptionKey = async (accessControl: boolean) => {
     /*
             KEY CREATION FLOW
                 check if flag exists in async storage
@@ -10,12 +10,11 @@ const getEncryptionKey = async (accessControl: boolean) => {
                         get key from keychain to decrypt wallet
                     if not
                         create key
-                            use it - save it in keychain - add an async storage flag that exists
     */
 
     try {
         let isKey = await AsyncStore.getFor<string>(
-            AsyncStoreType.EncryptionKey,
+            AsyncStoreType.isEncryptionKey,
         )
 
         if (isKey) {
@@ -28,7 +27,6 @@ const getEncryptionKey = async (accessControl: boolean) => {
             }
         } else {
             let key = CryptoUtils.getRandomKey()
-            await AsyncStore.set<string>("YES", AsyncStoreType.EncryptionKey)
             return key
         }
     } catch (err) {
@@ -44,4 +42,4 @@ const setEncryptionKey = async (key: string, accessControl: boolean) => {
     }
 }
 
-export default { getEncryptionKey, setEncryptionKey }
+export default { getOrGenerateEncryptionKey, setEncryptionKey }
