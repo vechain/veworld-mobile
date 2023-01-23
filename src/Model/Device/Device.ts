@@ -22,3 +22,7 @@ export interface Device {
 export interface DeviceStorageData extends StorageData {
     devices: Device[]
 }
+
+export type DeviceState = {
+    devices: Device[]
+}

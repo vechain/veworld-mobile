@@ -1,6 +1,7 @@
 import { mnemonic, HDNode } from "thor-devkit"
 import { AsyncStoreType, CryptoUtils, HexUtils, error } from "~Common"
 import { DEVICE_TYPE, Device, Wallet } from "~Model"
+import DeviceService from "~Services/DeviceService"
 import { setMnemonic, purgeWalletState, AppThunk } from "~Storage/Caches"
 import { AsyncStore, KeychainStore } from "~Storage/Stores"
 
@@ -23,8 +24,6 @@ const createMnemonicWallet =
     ): AppThunk<void> =>
     async (dispatch, _) => {
         try {
-            console.log(mnemonicPhrase)
-
             if (mnemonicPhrase.length !== 12) {
                 error("mnemonicPhrase.length !== 12")
                 return
@@ -47,7 +46,7 @@ const createMnemonicWallet =
             }
 
             dispatch(backupWallet(wallet, encryptionKey))
-            dispatch(backupDevice(device))
+            dispatch(DeviceService.backupDevice(device))
         } catch (e) {
             error(e)
         }
@@ -55,7 +54,7 @@ const createMnemonicWallet =
 
 const backupWallet =
     (wallet: Wallet, encryptionKey?: string): AppThunk<void> =>
-    async () => {
+    async dispatch => {
         try {
             if (encryptionKey) {
                 const encryptedWallet = CryptoUtils.encrypt(
@@ -68,53 +67,16 @@ const backupWallet =
                     encryptedWallet,
                     false,
                 )
-                return
-            }
-
-            await KeychainStore.set<Wallet>(wallet.rootAddress, wallet, true)
-        } catch (e) {
-            error(e)
-        }
-    }
-
-const backupDevice =
-    (device: Device): AppThunk<void> =>
-    async dispatch => {
-        try {
-            let devices = await AsyncStore.getFor<Device[]>(
-                AsyncStoreType.Devices,
-            )
-
-            if (devices) {
-                devices.push(device)
-                await AsyncStore.set<Device[]>(devices, AsyncStoreType.Devices)
-                await updateDeviceIndex()
                 dispatch(purgeWalletState())
                 return
             }
 
-            await AsyncStore.set<Device[]>([device], AsyncStoreType.Devices)
-            await updateDeviceIndex()
+            await KeychainStore.set<Wallet>(wallet.rootAddress, wallet, true)
             dispatch(purgeWalletState())
-
-            // set device to redux
         } catch (e) {
             error(e)
         }
     }
-
-const updateDeviceIndex = async () => {
-    let lastIndex = await AsyncStore.getFor<string>(AsyncStoreType.DeviceIndex)
-    if (lastIndex) {
-        let newIndex = parseInt(lastIndex, 10)
-        await AsyncStore.set<string>(
-            JSON.stringify(newIndex + 1),
-            AsyncStoreType.DeviceIndex,
-        )
-        return
-    }
-    await AsyncStore.set<string>("1", AsyncStoreType.DeviceIndex)
-}
 
 const getDeviceIndex = async () => {
     let lastIndex = await AsyncStore.getFor<string>(AsyncStoreType.DeviceIndex)
@@ -123,18 +85,6 @@ const getDeviceIndex = async () => {
         return newIndex + 1
     }
     return 1
-}
-
-export const getDevices = async () =>
-    await AsyncStore.getFor<Device[]>(AsyncStoreType.Devices)
-
-export const getDevice = async (deviceAddress: string) => {
-    const devices = await AsyncStore.getFor<Device[]>(AsyncStoreType.Devices)
-    let device: Device | undefined
-    if (devices) {
-        device = devices.find(d => d.rootAddress === deviceAddress)
-    }
-    return device
 }
 
 export const getWalletFor = async (
@@ -168,12 +118,6 @@ export const getWalletFor = async (
 }
 
 // /**
-//  * Reset the wallet store
-//  * The store must be unlocked
-//  */
-// const reset = async () => await LocalWalletStore.clear()
-
-// /**
 //  * Update the wallet store
 //  * The store must be unlocked
 //  * @param walletUpdate - The update to apply to the wallets
@@ -201,45 +145,6 @@ export const getWalletFor = async (
 //         })
 //     } finally {
 //         if (mode === WALLET_MODE.ASK_TO_SIGN) LocalWalletStore.lock()
-//     }
-// }
-
-// const add = async (
-//     wallet: Wallet,
-//     mode: WALLET_MODE,
-//     encryptionKey?: string,
-// ) => {
-//     try {
-//         const existing = await exists()
-
-//         if (!existing) {
-//             return await LocalWalletStore.insert({ wallets: [wallet] })
-//         }
-
-//         const walletUpdate = (storage: WalletStorageData) => {
-//             if (
-//                 storage.wallets.some(wall =>
-//                     AddressUtils.compareAddresses(
-//                         wall.rootAddress,
-//                         wallet.rootAddress,
-//                     ),
-//                 )
-//             ) {
-//                 throw veWorldErrors.rpc.invalidRequest({
-//                     message: "wallet_already_exists",
-//                 })
-//             }
-
-//             storage.wallets.push(wallet)
-//         }
-
-//         await update(walletUpdate, mode, encryptionKey)
-//     } catch (e) {
-//         error(e)
-//         throw veWorldErrors.rpc.internal({
-//             error: e,
-//             message: "failed_to_add_wallet",
-//         })
 //     }
 // }
 
@@ -284,16 +189,6 @@ export const getWalletFor = async (
 //         }
 //     }
 
-// /**
-//  * Checks if the encryptionKey can decrypt the wallet store
-//  * @param encryptionKey - the key to check
-//  */
-// const checkEncryptionKey = async (encryptionKey: string): Promise<boolean> =>
-//     await LocalWalletStore.checkEncryptionKey(encryptionKey)
-
-// const changeEncryptionKey = (newKey: string) =>
-//     LocalWalletStore.changeEncryptionKey(newKey)
-
 export default {
     // checkEncryptionKey,
     // changeEncryptionKey,
@@ -302,7 +197,6 @@ export default {
     setMnemonic,
     purgeWalletState,
     createMnemonicWallet,
-    getDevices,
     getWalletFor,
     // addPrivateKeyWallet,
     // lock,

@@ -4,6 +4,11 @@
 // import { AppThunk, updateDevice } from "~Storage/Caches"
 // import { DeviceStore } from "~Storage/Stores"
 
+import { AsyncStoreType, error } from "~Common"
+import { Device } from "~Model"
+import { AppThunk, setDevices } from "~Storage/Caches"
+import { AsyncStore } from "~Storage/Stores"
+
 // /**
 //  * Returns the devices from the store
 //  * @returns return the devices from the store
@@ -201,14 +206,58 @@
 
 // const unlock = (key: string) => DeviceStore.unlock(key)
 
-// export default {
-//     get,
-//     remove,
-//     update,
-//     rename,
-//     reset,
-//     initialiseCache,
-//     add,
-//     unlock,
-//     lock,
-// }
+const backupDevice =
+    (device: Device): AppThunk<void> =>
+    async () => {
+        try {
+            let devices = await AsyncStore.getFor<Device[]>(
+                AsyncStoreType.Devices,
+            )
+
+            if (devices) {
+                devices.push(device)
+                await AsyncStore.set<Device[]>(devices, AsyncStoreType.Devices)
+                await updateDeviceIndex()
+                return
+            }
+
+            await AsyncStore.set<Device[]>([device], AsyncStoreType.Devices)
+            await updateDeviceIndex()
+            // set device to redux
+        } catch (e) {
+            error(e)
+        }
+    }
+
+const updateDeviceIndex = async () => {
+    let lastIndex = await AsyncStore.getFor<string>(AsyncStoreType.DeviceIndex)
+    if (lastIndex) {
+        let newIndex = parseInt(lastIndex, 10)
+        await AsyncStore.set<string>(
+            JSON.stringify(newIndex + 1),
+            AsyncStoreType.DeviceIndex,
+        )
+        return
+    }
+    await AsyncStore.set<string>("1", AsyncStoreType.DeviceIndex)
+}
+
+export const setDevicesToCache = (): AppThunk<void> => async (dispatch, _) => {
+    let devices = await AsyncStore.getFor<Device[]>(AsyncStoreType.Devices)
+    if (devices) {
+        dispatch(setDevices(devices))
+    }
+}
+
+export default {
+    backupDevice,
+    // get,
+    // remove,
+    // update,
+    // rename,
+    // reset,
+    // initialiseCache,
+    // add,
+    // unlock,
+    // lock,
+}

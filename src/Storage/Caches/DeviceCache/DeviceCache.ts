@@ -1,18 +1,18 @@
-// import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-// import { DEVICE_TYPE, Device } from "~Model"
-// import { RootState } from "../cache"
-// import { AddressUtils } from "~Common"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { Device, DeviceState } from "~Model"
 
-// export const initialDeviceState: Device[] = []
+export const initialDeviceState: DeviceState = {
+    devices: [],
+}
 
-// export const deviceSlice = createSlice({
-//     name: "devices",
-//     initialState: initialDeviceState,
-//     reducers: {
-//         updateDevice: (_, action: PayloadAction<Device[]>) => {
-//             return action.payload
-//         },
-//     },
-// })
+export const deviceSlice = createSlice({
+    name: "devices",
+    initialState: initialDeviceState,
+    reducers: {
+        setDevices: (state, action: PayloadAction<Device[]>) => {
+            state.devices = action.payload
+        },
+    },
+})
 
-// export const { updateDevice } = deviceSlice.actions
+export const { setDevices } = deviceSlice.actions

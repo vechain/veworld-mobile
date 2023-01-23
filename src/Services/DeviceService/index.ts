@@ -1,3 +1,3 @@
-// import DeviceService from "./DeviceService"
+import DeviceService from "./DeviceService"
 
-// export default DeviceService
+export default DeviceService

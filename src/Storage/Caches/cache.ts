@@ -16,7 +16,7 @@ import { biometricsSlice, initialBiometricsState } from "./BiometricsCache"
 // import { initialTokenState, tokenSlice } from "./TokenCache"
 // import { activitySlice, initialActivityState } from "./ActivityCache"
 // import { currencySlice, initialCurrencyState } from "./CurrencyCache"
-// import { deviceSlice, initialDeviceState } from "./DeviceCache"
+import { deviceSlice, initialDeviceState } from "./DeviceCache"
 // import {
 //     connectedAppSlice,
 //     initialConnectedAppsState,
@@ -28,6 +28,7 @@ const combinedReducer = combineReducers({
     appState: appStateSlice.reducer,
     walletState: walletStateSlice.reducer,
     biometricsState: biometricsSlice.reducer,
+    devices: deviceSlice.reducer,
     // account: accountSlice.reducer,
     // walletAccess: walletAccessSlice.reducer,
     // settings: settingSlice.reducer,
@@ -35,7 +36,7 @@ const combinedReducer = combineReducers({
     // balances: balanceSlice.reducer,
     // activities: activitySlice.reducer,
     // currency: currencySlice.reducer,
-    // devices: deviceSlice.reducer,
+
     // connectedApps: connectedAppSlice.reducer,
     // onboard: onboardSlice.reducer,
 })
@@ -48,6 +49,7 @@ export const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
             appState: initialAppState,
             walletState: initialWalletState,
             biometricsState: initialBiometricsState,
+            devices: initialDeviceState,
             // account: initialAccountState,
             // walletAccess: initialWalletAccessState,
             // settings: SettingsConstants.getDefaultSettings(),
@@ -55,7 +57,6 @@ export const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
             // balances: initialBalanceState,
             // activities: initialActivityState,
             // currency: initialCurrencyState,
-            // devices: initialDeviceState,
             // connectedApps: initialConnectedAppsState,
             // onboard: initialOnboardState,
         }
