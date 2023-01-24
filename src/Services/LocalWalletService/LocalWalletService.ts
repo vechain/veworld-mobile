@@ -107,11 +107,12 @@ const finilizeSetup = async (
     accessControl?: boolean,
 ) => {
     await updateDeviceIndex()
-    let isKey = await AsyncStore.getFor<string>(AsyncStoreType.isEncryptionKey)
+    let isKey = await AsyncStore.getFor<string>(AsyncStoreType.IsEncryptionKey)
     // Set encryption key only the first time and only if is biometrics
     if (!isKey && !userPassword) {
         await KeychainService.setEncryptionKey(encryprionKey!, accessControl!)
-        await AsyncStore.set<string>("YES", AsyncStoreType.isEncryptionKey)
+        await AsyncStore.set<string>("YES", AsyncStoreType.IsEncryptionKey)
+        await AsyncStore.set<string>("YES", AsyncStoreType.IsFirstAppLoad)
     }
 }
 

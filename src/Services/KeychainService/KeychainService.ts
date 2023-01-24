@@ -13,14 +13,11 @@ const getOrGenerateEncryptionKey = async (accessControl: boolean) => {
 
     try {
         let isKey = await AsyncStore.getFor<string>(
-            AsyncStoreType.isEncryptionKey,
+            AsyncStoreType.IsEncryptionKey,
         )
 
         if (isKey) {
-            let encKey = await KeychainStore.get(
-                "VeWorld_Wallet_key",
-                accessControl,
-            )
+            let encKey = await KeychainStore.get(accessControl)
             if (encKey) {
                 return encKey
             }
@@ -33,16 +30,24 @@ const getOrGenerateEncryptionKey = async (accessControl: boolean) => {
     }
 }
 
-const setEncryptionKey = async (key: string, accessControl: boolean) => {
+const setEncryptionKey = async (Enckey: string, accessControl: boolean) => {
     try {
-        await KeychainStore.set<string>(
-            "VeWorld_Wallet_key",
-            key,
-            accessControl,
-        )
+        await KeychainStore.set(Enckey, accessControl)
     } catch (err) {
         error(err)
     }
 }
 
-export default { getOrGenerateEncryptionKey, setEncryptionKey }
+const removeEncryptionKey = async () => {
+    try {
+        await KeychainStore.remove()
+    } catch (err) {
+        error(err)
+    }
+}
+
+export default {
+    getOrGenerateEncryptionKey,
+    setEncryptionKey,
+    removeEncryptionKey,
+}
