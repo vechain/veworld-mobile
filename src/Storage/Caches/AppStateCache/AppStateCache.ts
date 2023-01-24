@@ -3,7 +3,7 @@ import { AppState } from "~Model"
 
 export const initialAppState: AppState = {
     currentState: "active",
-    previousState: "inactive",
+    previousState: "unknown",
 }
 
 export const appStateSlice = createSlice({

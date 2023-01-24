@@ -5,7 +5,7 @@ import { useOnDigitPress } from "./useOnDigitPress"
 import { PasswordPins } from "./Components/PasswordPins"
 import { NumPad } from "./Components/NumPad"
 import { Fonts } from "~Model"
-import { selectMnemonic, useAppDispatch, useAppSelector } from "~Storage/Caches"
+import { useAppDispatch } from "~Storage/Caches"
 import { LocalWalletService } from "~Services"
 import { useRealm } from "~Storage/Realm"
 
@@ -22,23 +22,11 @@ export const UserCreatePasswordScreen = () => {
         userPin,
     } = useOnDigitPress()
 
-    const mnemonic = useAppSelector(selectMnemonic)
-
     useEffect(() => {
-        if (isSuccess && mnemonic) {
-            let isBiometrics = false
-
-            dispatch(
-                LocalWalletService.createMnemonicWallet(
-                    LL.WALLET_LABEL_account(), // move to service?
-                    mnemonic.split(" "),
-                    realm,
-                    isBiometrics,
-                    userPin,
-                ),
-            )
+        if (isSuccess) {
+            dispatch(LocalWalletService.createMnemonicWallet(realm, userPin))
         }
-    }, [LL, dispatch, isSuccess, mnemonic, realm, userPin])
+    }, [dispatch, isSuccess, realm, userPin])
 
     return (
         <BaseSafeArea grow={1}>

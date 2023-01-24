@@ -61,6 +61,7 @@ const en: BaseTranslation = {
     TITLE_CREATE_WALLET_TYPE: "Create Wallet",
     TITLE_MNEMONIC: "Your Mnemonic",
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
+  
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -69,6 +70,7 @@ const en: BaseTranslation = {
     IRIS: "Iris",
     DEVICE_PIN: "Device Pin",
     TAP_TO_VIEW: "Tap to view",
+    BIOMETRICS_PROMPT: "Please use Biometrics to secure your wallet.",
 
 
     // Common Buttons

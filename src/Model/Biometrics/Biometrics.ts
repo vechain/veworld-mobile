@@ -6,4 +6,5 @@ export type BiometricState = {
     authtypeAvailable: TAuthentication
     isDeviceEnrolled: boolean
     isHardwareAvailable: boolean
+    accessControl?: boolean
 }

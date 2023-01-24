@@ -1,6 +1,5 @@
-import { CryptoUtils } from "~Common"
 import { AsyncStore, KeychainStore } from "~Storage/Stores"
-import { AsyncStoreType, error } from "~Common"
+import { AsyncStoreType, error, CryptoUtils } from "~Common"
 
 const getOrGenerateEncryptionKey = async (accessControl: boolean) => {
     /*
@@ -18,12 +17,12 @@ const getOrGenerateEncryptionKey = async (accessControl: boolean) => {
         )
 
         if (isKey) {
-            let userCreds = await KeychainStore.get(
+            let encKey = await KeychainStore.get(
                 "VeWorld_Wallet_key",
                 accessControl,
             )
-            if (userCreds) {
-                return userCreds.password
+            if (encKey) {
+                return encKey
             }
         } else {
             let key = CryptoUtils.getRandomKey()
@@ -36,7 +35,11 @@ const getOrGenerateEncryptionKey = async (accessControl: boolean) => {
 
 const setEncryptionKey = async (key: string, accessControl: boolean) => {
     try {
-        KeychainStore.set<string>("VeWorld_Wallet_key", key, accessControl)
+        await KeychainStore.set<string>(
+            "VeWorld_Wallet_key",
+            key,
+            accessControl,
+        )
     } catch (err) {
         error(err)
     }

@@ -3,6 +3,7 @@ import { BiometricsUtils } from "~Common"
 import { AppStateType } from "~Model"
 import {
     selectCurrentAppState,
+    selectPreviousAppState,
     setBiometrics,
     useAppDispatch,
     useAppSelector,
@@ -11,6 +12,7 @@ import {
 export const Security = () => {
     const dispatch = useAppDispatch()
     const currentAppState = useAppSelector(selectCurrentAppState)
+    const previousAppState = useAppSelector(selectPreviousAppState)
 
     const init = useCallback(async () => {
         let level = await BiometricsUtils.getDeviceEnrolledLevel()
@@ -29,10 +31,13 @@ export const Security = () => {
     }, [dispatch])
 
     useEffect(() => {
-        if (currentAppState === AppStateType.ACTIVE) {
+        if (
+            currentAppState === AppStateType.ACTIVE &&
+            previousAppState !== AppStateType.INACTIVE
+        ) {
             init()
         }
-    }, [currentAppState, init])
+    }, [currentAppState, init, previousAppState])
 
     return <></>
 }

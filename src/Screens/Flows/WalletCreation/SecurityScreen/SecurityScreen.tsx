@@ -6,13 +6,13 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { BiometricsUtils, useBiometricType } from "~Common"
+import { useBiometricType } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
 import { LocalWalletService } from "~Services"
-import { selectMnemonic, useAppDispatch, useAppSelector } from "~Storage/Caches"
+import { useAppDispatch } from "~Storage/Caches"
 import { useRealm } from "~Storage/Realm"
 
 export const SecurityScreen = () => {
@@ -20,27 +20,16 @@ export const SecurityScreen = () => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const realm = useRealm()
-    const mnemonic = useAppSelector(selectMnemonic)
     const { isBiometrics, currentSecurityLevel } = useBiometricType()
 
     const onBiometricsPress = useCallback(async () => {
-        let { success } = await BiometricsUtils.authenticateWithbiometric()
-        if (success && mnemonic) {
-            try {
-                dispatch(
-                    LocalWalletService.createMnemonicWallet(
-                        LL.WALLET_LABEL_account(), // move to service?
-                        mnemonic.split(" "),
-                        realm,
-                        isBiometrics,
-                    ),
-                )
-            } catch (error) {
-                // TODO handle error
-                console.log(error)
-            }
+        try {
+            dispatch(LocalWalletService.createMnemonicWallet(realm))
+        } catch (error) {
+            // TODO handle error
+            console.log(error)
         }
-    }, [LL, dispatch, isBiometrics, mnemonic, realm])
+    }, [dispatch, realm])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_PASSWORD)

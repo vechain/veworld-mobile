@@ -200,6 +200,10 @@ type RootTranslation = {
 	 */
 	TAP_TO_VIEW: string
 	/**
+	 * P​l​e​a​s​e​ ​u​s​e​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	BIOMETRICS_PROMPT: string
+	/**
 	 * B​a​c​k
 	 */
 	COMMON_BTN_back: string
@@ -2401,6 +2405,10 @@ export type TranslationFunctions = {
 	 * Tap to view
 	 */
 	TAP_TO_VIEW: () => LocalizedString
+	/**
+	 * Please use Biometrics to secure your wallet.
+	 */
+	BIOMETRICS_PROMPT: () => LocalizedString
 	/**
 	 * Back
 	 */
