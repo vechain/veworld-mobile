@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-export async function set<T>(data: T, key: string) {
+export async function set(data: string, key: string) {
     try {
         if (typeof data === "string") {
             await AsyncStorage.setItem(key, data as string)

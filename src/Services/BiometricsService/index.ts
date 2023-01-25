@@ -1,3 +1,3 @@
-import { setBiometrics } from "~Storage/Caches"
+import { setBiometrics, setSecurtyDowngrade } from "~Storage/Caches"
 
-export { setBiometrics }
+export { setBiometrics, setSecurtyDowngrade }

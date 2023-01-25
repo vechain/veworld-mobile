@@ -1,5 +1,12 @@
 import React from "react"
-import { AppState, BaseStatusBar, Security, Translation } from "~Components"
+import {
+    AppState,
+    BaseStatusBar,
+    BaseText,
+    BaseView,
+    Security,
+    Translation,
+} from "~Components"
 import { SwitchStack } from "~Navigation"
 import { useFonts } from "expo-font"
 import {
@@ -12,8 +19,13 @@ import {
     Mono_Light,
     Mono_Regular,
 } from "~Assets"
+import { selectSecurityDowngrade, useAppSelector } from "~Storage/Caches"
+
+const WALLET_EXIST_PLACEHOLDER = true
 
 const App = () => {
+    const isSecurityDowngrade = useAppSelector(selectSecurityDowngrade)
+
     const [fontsLoaded] = useFonts({
         "Inter-Bold": Inter_Bold,
         "Inter-Regular": Inter_Regular,
@@ -33,6 +45,18 @@ const App = () => {
                     <Security />
 
                     <BaseStatusBar />
+
+                    {isSecurityDowngrade && WALLET_EXIST_PLACEHOLDER && (
+                        <BaseView
+                            style={{
+                                flex: 1,
+                                backgroundColor: "red",
+                                // position: "absolute",
+                            }}>
+                            <BaseText>DOWNGRADE DETECTED!!!!</BaseText>
+                        </BaseView>
+                    )}
+
                     <SwitchStack />
                 </Translation>
             </>

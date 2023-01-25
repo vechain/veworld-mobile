@@ -3,4 +3,5 @@ export enum AsyncStoreType {
     DeviceIndex = "@DEVICE_INDEX",
     IsEncryptionKey = "@ENCRYPTION_KEY",
     IsFirstAppLoad = "@FIRST_APP_LOAD",
+    IsSecurityDowngrade = "@SECURITY_DOWNGRADE",
 }

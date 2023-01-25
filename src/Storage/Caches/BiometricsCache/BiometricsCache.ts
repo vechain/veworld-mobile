@@ -7,6 +7,7 @@ export const initialBiometricsState: BiometricState = {
     isDeviceEnrolled: false,
     isHardwareAvailable: false,
     accessControl: false,
+    isSecurityDowngrade: false,
 }
 
 export const biometricsSlice = createSlice({
@@ -29,7 +30,12 @@ export const biometricsSlice = createSlice({
             state.isHardwareAvailable = payload.isHardwareAvailable
             state.accessControl = isBiometrics
         },
+
+        setSecurtyDowngrade: (state, action: PayloadAction<boolean>) => {
+            const { payload } = action
+            state.isSecurityDowngrade = payload
+        },
     },
 })
 
-export const { setBiometrics } = biometricsSlice.actions
+export const { setBiometrics, setSecurtyDowngrade } = biometricsSlice.actions

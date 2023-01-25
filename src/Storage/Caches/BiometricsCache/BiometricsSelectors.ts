@@ -25,3 +25,8 @@ export const selectIsBiometrics = createSelector(biometricsSlice, state => {
 
     return true
 })
+
+export const selectSecurityDowngrade = createSelector(
+    biometricsSlice,
+    state => state.isSecurityDowngrade,
+)

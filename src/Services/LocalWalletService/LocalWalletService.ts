@@ -49,13 +49,13 @@ const updateDeviceIndex = async () => {
     let lastIndex = await AsyncStore.getFor<string>(AsyncStoreType.DeviceIndex)
     if (lastIndex) {
         let newIndex = parseInt(lastIndex, 10)
-        await AsyncStore.set<string>(
+        await AsyncStore.set(
             JSON.stringify(newIndex + 1),
             AsyncStoreType.DeviceIndex,
         )
         return
     }
-    await AsyncStore.set<string>("1", AsyncStoreType.DeviceIndex)
+    await AsyncStore.set("1", AsyncStoreType.DeviceIndex)
 }
 
 const getNodes = async (mnemonicPhrase: string[]) => {
@@ -111,8 +111,8 @@ const finilizeSetup = async (
     // Set encryption key only the first time and only if is biometrics
     if (!isKey && !userPassword) {
         await KeychainService.setEncryptionKey(encryprionKey!, accessControl!)
-        await AsyncStore.set<string>("YES", AsyncStoreType.IsEncryptionKey)
-        await AsyncStore.set<string>("YES", AsyncStoreType.IsFirstAppLoad)
+        await AsyncStore.set("YES", AsyncStoreType.IsEncryptionKey)
+        await AsyncStore.set("YES", AsyncStoreType.IsFirstAppLoad)
     }
 }
 
