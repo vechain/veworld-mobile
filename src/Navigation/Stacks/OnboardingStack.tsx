@@ -2,24 +2,17 @@ import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     OnboardingScreen,
-    SecurityScreen,
-    SeedPhraseScreen,
-    TutorialScreen,
-    WalletTypeSelectionScreen,
     WelcomeScreen,
     UserCreatePasswordScreen,
-    ConfirmSeedPhraseScreen,
+    AppSecurityScreen,
 } from "~Screens"
+import { Routes } from "~Navigation/Enums"
 
 export type RootStackParamListOnboarding = {
     Welcome: undefined
     Onboarding: undefined
-    Security: undefined
-    Wallet_Tutorial: undefined
-    Wallet_Type_Creation: undefined
-    Seed_Phrase: undefined
-    User_Password: undefined
-    Confirm_Seed_Phrase: undefined
+    User_Create_Password: undefined
+    App_Security: undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -29,53 +22,35 @@ export const OnboardingStack = () => {
         <Onboarding.Navigator screenOptions={{ headerShown: false }}>
             <Onboarding.Group>
                 <Onboarding.Screen
-                    name="Welcome"
+                    name={Routes.WELCOME}
                     component={WelcomeScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="Onboarding"
+                    name={Routes.ONBOARDING}
                     component={OnboardingScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="Wallet_Type_Creation"
-                    component={WalletTypeSelectionScreen}
+                    name={Routes.APP_SECURITY}
+                    component={AppSecurityScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="Wallet_Tutorial"
-                    component={TutorialScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name="Seed_Phrase"
-                    component={SeedPhraseScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name="Confirm_Seed_Phrase"
-                    component={ConfirmSeedPhraseScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name="Security"
-                    component={SecurityScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name="User_Password"
+                    name={Routes.USER_CREATE_PASSWORD}
                     component={UserCreatePasswordScreen}
                     options={{ headerShown: false }}
                 />
             </Onboarding.Group>
+
+            {/* <Onboarding.Group
+                screenOptions={{
+                    presentation: "fullScreenModal",
+
+            </Onboarding.Group> */}
         </Onboarding.Navigator>
     )
 }

@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"
-import { Provider } from "react-redux"
-import App from "./src/App"
+import { Provider as ReduxProvider } from "react-redux"
+import { EntryPoint } from "./src/EntryPoint.tsx"
 import { name as appName } from "./app.json"
 
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AsyncStoreType, useColorScheme, useTheme } from "~Common"
 import { store } from "~Storage/Caches"
-import { RealmProvider } from "~Storage/Realm"
 import { AsyncStore } from "~Storage/Stores"
 import KeychainService from "~Services/KeychainService"
+import { Translation as TranslationProvider } from "~Components"
 
 // immer setup
 enableAllPlugins()
@@ -32,7 +32,7 @@ const Main = () => {
 
     /*
         Keychain values persist between new app installs. This is an expected behaviour.
-        Work around is to clear the keychain by checking a flag in the async store.
+        Work around is to clear the keychain by checking a value in the async store.
     */
     const cleanKeychain = useCallback(async () => {
         const value = await AsyncStore.getFor(AsyncStoreType.IsFirstAppLoad)
@@ -51,15 +51,15 @@ const Main = () => {
     )
 
     return (
-        <Provider store={store}>
+        <ReduxProvider store={store}>
             <NavigationContainer theme={colorScheme}>
-                <RealmProvider>
-                    <SafeAreaProvider>
-                        <App />
-                    </SafeAreaProvider>
-                </RealmProvider>
+                <SafeAreaProvider>
+                    <TranslationProvider>
+                        <EntryPoint />
+                    </TranslationProvider>
+                </SafeAreaProvider>
             </NavigationContainer>
-        </Provider>
+        </ReduxProvider>
     )
 }
 

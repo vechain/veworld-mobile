@@ -31,23 +31,6 @@ export const Security = () => {
                 AsyncStoreType.IsSecurityDowngrade,
             )
 
-            console.log("oldSecurityLevel", oldSecurityLevel)
-            console.log("level", level)
-
-            /*
-                if oldSecurityLevel exists in store
-
-                    Allways have the last level saved in store
-                        compare last saved with new one
-                            -> define downgrade => if old is boimetric and new is not biometric
-                            -> define upgrade => if old was anything but biometric and new is biometric
-
-
-                else oldSecurityLevel doesn't exist
-                     its first time so write it to async store
-
-            */
-
             if (oldSecurityLevel) {
                 if (isSecurityDowngrade(oldSecurityLevel, level)) {
                     dispatch(setSecurtyDowngrade(true))

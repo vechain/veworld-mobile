@@ -1,6 +1,9 @@
 import * as SecureStore from "expo-secure-store"
 import * as i18n from "~i18n"
 
+// const WALLET_KEY = "VeWorld_Wallet_key"
+// const REALM_KEY = "VeWorld_Realm_key"
+
 export async function set(encKey: string, accessControl: boolean) {
     const locale = i18n.detectLocale()
     let promptTitle = i18n.i18n()[locale].BIOMETRICS_PROMPT()
