@@ -13,6 +13,7 @@ export type RootStackParamListOnboarding = {
     Onboarding: undefined
     User_Create_Password: undefined
     App_Security: undefined
+    Wallet_Type_Creation: undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -22,18 +23,6 @@ export const OnboardingStack = () => {
         <Onboarding.Navigator screenOptions={{ headerShown: false }}>
             <Onboarding.Group>
                 <Onboarding.Screen
-                    name={Routes.WELCOME}
-                    component={WelcomeScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name={Routes.ONBOARDING}
-                    component={OnboardingScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
                     name={Routes.APP_SECURITY}
                     component={AppSecurityScreen}
                     options={{ headerShown: false }}
@@ -42,6 +31,18 @@ export const OnboardingStack = () => {
                 <Onboarding.Screen
                     name={Routes.USER_CREATE_PASSWORD}
                     component={UserCreatePasswordScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.WELCOME}
+                    component={WelcomeScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.ONBOARDING}
+                    component={OnboardingScreen}
                     options={{ headerShown: false }}
                 />
             </Onboarding.Group>

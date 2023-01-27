@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"
 import { Provider as ReduxProvider } from "react-redux"
@@ -15,6 +15,8 @@ import { Translation as TranslationProvider } from "~Components"
 
 // immer setup
 enableAllPlugins()
+
+export const AppContext = React.createContext()
 
 const getTheme = (scheme, colorTheme) => {
     const theme = {
@@ -50,15 +52,23 @@ const Main = () => {
         [scheme, theme],
     )
 
+    const [isEncryptionKey, setIsEncryptionKey] = useState(false)
+
     return (
         <ReduxProvider store={store}>
-            <NavigationContainer theme={colorScheme}>
-                <SafeAreaProvider>
-                    <TranslationProvider>
-                        <EntryPoint />
-                    </TranslationProvider>
-                </SafeAreaProvider>
-            </NavigationContainer>
+            <AppContext.Provider
+                value={{
+                    isEncryptionKey,
+                    setIsEncryptionKey,
+                }}>
+                <NavigationContainer theme={colorScheme}>
+                    <SafeAreaProvider>
+                        <TranslationProvider>
+                            <EntryPoint />
+                        </TranslationProvider>
+                    </SafeAreaProvider>
+                </NavigationContainer>
+            </AppContext.Provider>
         </ReduxProvider>
     )
 }

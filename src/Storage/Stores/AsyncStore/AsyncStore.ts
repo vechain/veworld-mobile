@@ -51,14 +51,13 @@ export const clearAll = async () => {
     }
 }
 
-// export async function multiGet(keys: string[]) {
-//     try {
-//         let data = await AsyncStorage.multiGet(keys)
-//         return JSON.parse(data)
-//     } catch (e) {
-//         console.log(e)
-//     }
-// }
+export async function multiGet(keys: string[]) {
+    try {
+        return await AsyncStorage.multiGet(keys)
+    } catch (e) {
+        console.log(e)
+    }
+}
 
 // export const multiSet = async (data: [string, string][]) => {
 //     try {

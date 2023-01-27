@@ -11,21 +11,15 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
-// import crypto from "react-native-quick-crypto"
-// import { useAppDispatch } from "~Storage/Caches"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    // const dispatch = useAppDispatch()
     const { isBiometrics, currentSecurityLevel } = useBiometricType()
 
     const onBiometricsPress = useCallback(async () => {
-        // const arr = new Uint8Array(64)
-        // const keyBuff = crypto.getRandomValues(arr) as ArrayBuffer
-        // const key64: string = Buffer.from(keyBuff).toString("base64")
-        // nav.navigate(Routes.WALLET_TPYE_CREATION)
-    }, [])
+        nav.navigate(Routes.WALLET_TPYE_CREATION)
+    }, [nav])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)

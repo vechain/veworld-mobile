@@ -29,22 +29,14 @@ export const EntryPoint = () => {
         "Mono-Light": Mono_Light,
     })
 
-    /**
-     * @description
-     * Ordering is important here.
-     * Providers that don't render anything should be first.
-     * SecurityDowngradeScreen must be above any component that renders anything.
-     * Locker must be above App.
-     */
     return (
         <>
             <AppState />
             <Security />
 
-            {isSecurityDowngrade && <SecurityDowngradeScreen />}
-
             {fontsLoaded && (
                 <RealmProvider>
+                    {isSecurityDowngrade && <SecurityDowngradeScreen />}
                     <App />
                 </RealmProvider>
             )}

@@ -1,30 +1,9 @@
-import { AsyncStore, KeychainStore } from "~Storage/Stores"
-import { AsyncStoreType, error, CryptoUtils } from "~Common"
+import { KeychainStore } from "~Storage/Stores"
+import { error } from "~Common"
 
-const getOrGenerateEncryptionKey = async (accessControl: boolean) => {
-    /*
-            KEY CREATION FLOW
-                check if flag exists in async storage
-                    if yes
-                        get key from keychain to decrypt wallet
-                    if not
-                        create key
-    */
-
+const getEncryptionKey = async (accessControl: boolean) => {
     try {
-        let isKey = await AsyncStore.getFor<string>(
-            AsyncStoreType.IsEncryptionKey,
-        )
-
-        if (isKey) {
-            let encKey = await KeychainStore.get(accessControl)
-            if (encKey) {
-                return encKey
-            }
-        } else {
-            let key = CryptoUtils.getRandomKey()
-            return key
-        }
+        return await KeychainStore.get(accessControl)
     } catch (err) {
         error(err)
     }
@@ -47,7 +26,7 @@ const removeEncryptionKey = async () => {
 }
 
 export default {
-    getOrGenerateEncryptionKey,
+    getEncryptionKey,
     setEncryptionKey,
     removeEncryptionKey,
 }
