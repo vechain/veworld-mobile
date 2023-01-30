@@ -1,15 +1,18 @@
-import React, { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AppStateStatus, AppState as _Appstate } from "react-native"
-import { useCache } from "~Storage/Realm"
 
 /**
  * @name AppState
  * @description Determines the current and previous app state and saves it in cache
  * @returns void JSX.Element
  */
-export const AppState = () => {
-    const cache = useCache()
+
+export const useAppState = () => {
     const appState = useRef(_Appstate.currentState)
+
+    const [previousState, setPreviousState] =
+        useState<AppStateStatus>("unknown")
+    const [currentState, setCurrentState] = useState<AppStateStatus>("active")
 
     useEffect(() => {
         let previousAppState: AppStateStatus
@@ -19,19 +22,15 @@ export const AppState = () => {
                 previousAppState = appState.current
                 appState.current = nextAppState
 
-                cache.write(() => {
-                    cache.create("AppState", {
-                        currentState: nextAppState,
-                        previousState: previousAppState,
-                    })
-                })
+                setCurrentState(nextAppState)
+                setPreviousState(previousAppState)
             },
         )
 
         return () => {
             subscription.remove()
         }
-    }, [cache])
+    }, [])
 
-    return <></>
+    return [previousState, currentState]
 }

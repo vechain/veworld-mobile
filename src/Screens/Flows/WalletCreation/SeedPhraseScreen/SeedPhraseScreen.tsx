@@ -14,14 +14,13 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
-import { LocalWalletService } from "~Services"
-import { useAppDispatch } from "~Storage/Caches"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
+import { useCache } from "~Storage/Realm"
 
 export const SeedPhraseScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const dispatch = useAppDispatch()
+    const cache = useCache()
 
     const [IsChecked, setIsChecked] = useState(false)
     const { mnemonic, mnemonicArray } = useGenerateMnemonic()
@@ -32,9 +31,9 @@ export const SeedPhraseScreen = () => {
     }, [mnemonic])
 
     const onBackupPress = useCallback(() => {
-        dispatch(LocalWalletService.setMnemonic(mnemonic))
+        cache.write(() => cache.create("Mnemonic", { mnemonic }))
         nav.navigate(Routes.CONFIRM_SEED_PHRASE)
-    }, [dispatch, mnemonic, nav])
+    }, [cache, mnemonic, nav])
 
     return (
         <BaseSafeArea grow={1}>

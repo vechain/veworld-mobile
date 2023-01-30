@@ -1,5 +1,4 @@
-import React from "react"
-import { AppState, RealmProvider, Security } from "~Components"
+import React, { useCallback, useEffect, useMemo } from "react"
 import {
     Inter_Bold,
     Inter_Light,
@@ -10,13 +9,18 @@ import {
     Mono_Light,
     Mono_Regular,
 } from "~Assets"
-import { selectSecurityDowngrade, useAppSelector } from "~Storage/Caches"
 import { App } from "./App"
 import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen } from "~Screens"
+import { Config, useStoreQuery } from "~Storage/Realm"
+import KeychainService from "~Services/KeychainService"
+import { AppState, Security } from "~Components"
 
 export const EntryPoint = () => {
-    const isSecurityDowngrade = useAppSelector(selectSecurityDowngrade)
+    // const appConfig = useStoreObject(Config, "APP_CONFIG")
+    // todo: this is a workaround until the new version is installed, then use the above
+    const result = useStoreQuery(Config)
+    const appConfig = useMemo(() => result.sorted("_id"), [result])
 
     const [fontsLoaded] = useFonts({
         "Inter-Bold": Inter_Bold,
@@ -29,17 +33,28 @@ export const EntryPoint = () => {
         "Mono-Light": Mono_Light,
     })
 
+    /*
+        Keychain values persist between new app installs. This is an expected behaviour.
+        Work around is to clear the keychain by checking a value in the async store.
+    */
+    const cleanKeychain = useCallback(async () => {
+        const value = appConfig[0]?.isFirstAppLoad
+
+        if (value) {
+            await KeychainService.removeEncryptionKey()
+        }
+    }, [appConfig])
+
+    useEffect(() => {
+        cleanKeychain()
+    }, [cleanKeychain])
+
     return (
         <>
             <AppState />
             <Security />
-
-            {fontsLoaded && (
-                <RealmProvider>
-                    {isSecurityDowngrade && <SecurityDowngradeScreen />}
-                    <App />
-                </RealmProvider>
-            )}
+            {appConfig[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
+            {fontsLoaded && <App />}
         </>
     )
 }

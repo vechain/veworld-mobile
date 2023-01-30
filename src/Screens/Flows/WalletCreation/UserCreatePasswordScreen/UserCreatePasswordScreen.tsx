@@ -5,13 +5,11 @@ import { useOnDigitPress } from "./useOnDigitPress"
 import { PasswordPins } from "./Components/PasswordPins"
 import { NumPad } from "./Components/NumPad"
 import { Fonts } from "~Model"
-// import { useAppDispatch } from "~Storage/Caches"
 import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
+// import { Routes } from "~Navigation"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
-    // const dispatch = useAppDispatch()
     const nav = useNavigation()
     const {
         isPinError,
@@ -24,8 +22,6 @@ export const UserCreatePasswordScreen = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            console.log("ENTER")
-            nav.navigate(Routes.WALLET_TPYE_CREATION)
         }
     }, [isSuccess, nav])
 

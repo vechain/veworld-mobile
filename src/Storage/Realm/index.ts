@@ -1,18 +1,11 @@
 import { createRealmContext } from "@realm/react"
-import { Device, XPub, Config } from "./Model"
-
-const SecureRealmconfig = {
-    path: "secured.realm",
-    deleteRealmIfMigrationNeeded:
-        process.env.NODE_ENV === "development" ? true : false,
-    schema: [Device, XPub],
-}
+import { Device, XPub, Config, AppState, Biometrics, Mnemonic } from "./Model"
 
 const Realmconfig = {
     path: "persisted.realm",
     deleteRealmIfMigrationNeeded:
         process.env.NODE_ENV === "development" ? true : false,
-    schema: [Config],
+    schema: [Device, XPub, Config],
 }
 
 const inMemoryRealmconfig = {
@@ -20,7 +13,7 @@ const inMemoryRealmconfig = {
     inMemory: true,
     deleteRealmIfMigrationNeeded:
         process.env.NODE_ENV === "development" ? true : false,
-    schema: [Device, XPub],
+    schema: [AppState, Biometrics, Mnemonic],
 }
 
 process.env.NODE_ENV === "development" &&
@@ -30,17 +23,10 @@ process.env.NODE_ENV === "development" &&
     )
 
 const {
-    RealmProvider: SecureStoreProvider,
-    useRealm: useSecureStore,
-    useObject: useSecuredObject,
-    useQuery: useSecuredQuery,
-} = createRealmContext(SecureRealmconfig)
-
-const {
     RealmProvider: StoreProvider,
     useRealm: useStore,
-    useObject,
-    useQuery,
+    useObject: useStoreObject,
+    useQuery: useStoreQuery,
 } = createRealmContext(Realmconfig)
 
 const {
@@ -54,12 +40,11 @@ export {
     Device,
     XPub,
     Config,
-    useObject,
-    useQuery,
-    SecureStoreProvider,
-    useSecureStore,
-    useSecuredObject,
-    useSecuredQuery,
+    Biometrics,
+    AppState,
+    Mnemonic,
+    useStoreObject,
+    useStoreQuery,
     StoreProvider,
     useStore,
     CacheProvider,

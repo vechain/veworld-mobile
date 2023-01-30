@@ -14,7 +14,7 @@ export const ConfirmSeedPhraseScreen = () => {
     const nav = useNavigation()
 
     const onConfirmPress = () => {
-        nav.navigate(Routes.SECURITY)
+        nav.navigate(Routes.APP_SECURITY)
     }
 
     return (

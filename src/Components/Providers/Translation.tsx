@@ -2,22 +2,15 @@ import React, { useEffect, useState } from "react"
 import { Locales, TypesafeI18n, isLocale, loadLocaleAsync } from "~i18n"
 import * as Localization from "expo-localization"
 import "~Common/polyfill"
-import {
-    selectCurrentAppState,
-    selectPreviousAppState,
-    useAppSelector,
-} from "~Storage/Caches"
-
 import { AppStateType } from "~Model"
+import { useAppState } from "~Common"
 
 type Props = {
     children: React.ReactNode
 }
 
 export const Translation = ({ children }: Props) => {
-    const currentAppState = useAppSelector(selectCurrentAppState)
-    const previousAppState = useAppSelector(selectPreviousAppState)
-
+    const [, currentState] = useAppState()
     const [localeLoaded, setLocaleLoaded] = useState<Locales | null>(null)
 
     useEffect(() => {
@@ -31,10 +24,10 @@ export const Translation = ({ children }: Props) => {
             setLocaleLoaded(DEFAULT_LOCALE)
         }
 
-        if (currentAppState === AppStateType.ACTIVE) {
+        if (currentState === AppStateType.ACTIVE) {
             init()
         }
-    }, [currentAppState, previousAppState])
+    }, [currentState])
 
     if (localeLoaded === null) {
         return null

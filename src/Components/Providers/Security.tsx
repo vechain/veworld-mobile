@@ -1,15 +1,7 @@
-import React, { useCallback, useEffect } from "react"
-import { AsyncStoreType, BiometricsUtils } from "~Common"
-import { AppStateType, TSecurityLevel } from "~Model"
-import {
-    selectCurrentAppState,
-    selectPreviousAppState,
-    setBiometrics,
-    setSecurtyDowngrade,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Caches"
-import { AsyncStore } from "~Storage/Stores"
+import React, { useCallback, useEffect, useMemo } from "react"
+import { BiometricsUtils, useAppState } from "~Common"
+import { AppStateType, SecurityLevelType, TSecurityLevel } from "~Model"
+import { Config, useCache, useStore, useStoreQuery } from "~Storage/Realm"
 
 const {
     getDeviceEnrolledLevel,
@@ -21,36 +13,39 @@ const {
 } = BiometricsUtils
 
 export const Security = () => {
-    const dispatch = useAppDispatch()
-    const currentAppState = useAppSelector(selectCurrentAppState)
-    const previousAppState = useAppSelector(selectPreviousAppState)
+    const cache = useCache()
+    const store = useStore()
+    const [previousState, currentState] = useAppState()
+
+    // const appConfig = useStoreObject(Config, "APP_STATE")
+    // todo: this is a workaround until the new version is installed, then use the above
+    const result1 = useStoreQuery(Config)
+    const config = useMemo(() => result1.sorted("_id"), [result1])
 
     const checkSecurityDowngrade = useCallback(
         async (level: TSecurityLevel) => {
-            const oldSecurityLevel = await AsyncStore.getFor<string>(
-                AsyncStoreType.IsSecurityDowngrade,
-            )
+            const oldSecurityLevel = config[0].lastSecurityLevel
 
             if (oldSecurityLevel) {
                 if (isSecurityDowngrade(oldSecurityLevel, level)) {
-                    dispatch(setSecurtyDowngrade(true))
-                    await AsyncStore.set(
-                        level,
-                        AsyncStoreType.IsSecurityDowngrade,
-                    )
+                    store.write(() => {
+                        config[0].isSecurityDowngrade = true
+                        config[0].lastSecurityLevel = level
+                    })
                 } else if (isSecurityUpgrade(oldSecurityLevel, level)) {
-                    dispatch(setSecurtyDowngrade(false))
-                    await AsyncStore.set(
-                        level,
-                        AsyncStoreType.IsSecurityDowngrade,
-                    )
+                    store.write(() => {
+                        config[0].isSecurityDowngrade = false
+                        config[0].lastSecurityLevel = level
+                    })
                 }
             } else {
                 // this is called only the first time the app is loaded
-                await AsyncStore.set(level, AsyncStoreType.IsSecurityDowngrade)
+                store.write(() => {
+                    config[0].lastSecurityLevel = level
+                })
             }
         },
-        [dispatch],
+        [config, store],
     )
 
     const init = useCallback(async () => {
@@ -59,26 +54,36 @@ export const Security = () => {
         let isEnrolled = await getIsDeviceEnrolled()
         let typeAvalable = await getBiometricTypeAvailable()
 
-        dispatch(
-            setBiometrics({
-                currentSecurityLevel: level,
-                authtypeAvailable: typeAvalable,
-                isDeviceEnrolled: isEnrolled,
-                isHardwareAvailable: isHardware,
-            }),
-        )
+        let accessControll =
+            !isEnrolled || !isHardware || level !== SecurityLevelType.BIOMETRIC
+                ? false
+                : true
+
+        cache.write(() => {
+            cache.create(
+                "Biometrics",
+                {
+                    currentSecurityLevel: level,
+                    authtypeAvailable: typeAvalable,
+                    isDeviceEnrolled: isEnrolled,
+                    isHardwareAvailable: isHardware,
+                    accessControl: accessControll,
+                },
+                Realm.UpdateMode.Modified,
+            )
+        })
 
         await checkSecurityDowngrade(level)
-    }, [checkSecurityDowngrade, dispatch])
+    }, [cache, checkSecurityDowngrade])
 
     useEffect(() => {
         if (
-            currentAppState === AppStateType.ACTIVE &&
-            previousAppState !== AppStateType.INACTIVE
+            currentState === AppStateType.ACTIVE &&
+            previousState !== AppStateType.INACTIVE
         ) {
             init()
         }
-    }, [currentAppState, init, previousAppState])
+    }, [cache, currentState, init, previousState])
 
     return <></>
 }
