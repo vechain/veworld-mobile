@@ -11,7 +11,7 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
-import { Biometrics, useCachedQuery } from "~Storage/Realm"
+import { Biometrics, useCachedQuery } from "~Storage"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()

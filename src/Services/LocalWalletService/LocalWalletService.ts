@@ -8,33 +8,31 @@
 
 // export const generateMnemonicPhrase = (): string[] => mnemonic.generate()
 
-// const createMnemonicWallet =
-//     (realm: Realm, userPassword?: string): AppThunk<void> =>
-//     async (dispatch, getState) => {
-//         try {
-//             let mnemonicPhrase = getState().walletState.mnemonic.split(" ")
-//             let accessControl = getState().biometricsState.accessControl
+// const createMnemonicWallet = async (realm: Realm, userPassword?: string) => {
+//     try {
+//         // let mnemonicPhrase = getState().walletState.mnemonic.split(" ")
+//         // let accessControl = getState().biometricsState.accessControl
 
-//             const { wallet, device } = await getNodes(mnemonicPhrase)
-//             const { encryprionKey, encryptedWallet } = await handleEncryptrion(
-//                 accessControl,
-//                 wallet,
-//                 userPassword,
-//             )
+//         const { wallet, device } = await getNodes(mnemonicPhrase)
+//         const { encryprionKey, encryptedWallet } = await handleEncryptrion(
+//             accessControl,
+//             wallet,
+//             userPassword,
+//         )
 
-//             realm.write(() => {
-//                 realm.create("Device", {
-//                     ...device,
-//                     wallet: encryptedWallet,
-//                 })
+//         realm.write(() => {
+//             realm.create("Device", {
+//                 ...device,
+//                 wallet: encryptedWallet,
 //             })
+//         })
 
-//             await finilizeSetup(userPassword, encryprionKey, accessControl)
-//             dispatch(purgeWalletState())
-//         } catch (e) {
-//             error(e)
-//         }
+//         await finilizeSetup(userPassword, encryprionKey, accessControl)
+//         dispatch(purgeWalletState())
+//     } catch (e) {
+//         error(e)
 //     }
+// }
 
 // const getDeviceIndex = async () => {
 //     let lastIndex = await AsyncStore.getFor<string>(AsyncStoreType.DeviceIndex)
@@ -87,11 +85,11 @@
 // ) => {
 //     let encryprionKey: string | undefined
 
-//     // if (!userPassword) {
-//     //     encryprionKey = await KeychainService.getOrGenerateEncryptionKey(
-//     //         accessControl!,
-//     //     )
-//     // }
+//     if (!userPassword) {
+//         encryprionKey = await KeychainService.getOrGenerateEncryptionKey(
+//             accessControl!,
+//         )
+//     }
 
 //     const encryptedWallet = CryptoUtils.encrypt(
 //         wallet,

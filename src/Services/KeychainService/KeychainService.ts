@@ -1,9 +1,9 @@
-import { KeychainStore } from "~Storage/Stores"
+import { Keychain } from "~Storage"
 import { error } from "~Common"
 
 const getEncryptionKey = async (accessControl: boolean) => {
     try {
-        return await KeychainStore.get(accessControl)
+        return await Keychain.get(accessControl)
     } catch (err) {
         error(err)
     }
@@ -11,7 +11,7 @@ const getEncryptionKey = async (accessControl: boolean) => {
 
 const setEncryptionKey = async (Enckey: string, accessControl: boolean) => {
     try {
-        await KeychainStore.set(Enckey, accessControl)
+        await Keychain.set(Enckey, accessControl)
     } catch (err) {
         error(err)
     }
@@ -19,7 +19,7 @@ const setEncryptionKey = async (Enckey: string, accessControl: boolean) => {
 
 const removeEncryptionKey = async () => {
     try {
-        await KeychainStore.remove()
+        await Keychain.remove()
     } catch (err) {
         error(err)
     }

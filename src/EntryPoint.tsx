@@ -12,7 +12,7 @@ import {
 import { App } from "./App"
 import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen } from "~Screens"
-import { Config, useStore, useStoreQuery } from "~Storage/Realm"
+import { Config, useStore, useStoreQuery } from "~Storage"
 import KeychainService from "~Services/KeychainService"
 import { Security } from "~Components"
 
@@ -21,7 +21,7 @@ export const EntryPoint = () => {
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
     const result = useStoreQuery(Config)
-    const appConfig = useMemo(() => result.sorted("_id"), [result])
+    const config = useMemo(() => result.sorted("_id"), [result])
 
     const [fontsLoaded] = useFonts({
         "Inter-Bold": Inter_Bold,
@@ -39,22 +39,30 @@ export const EntryPoint = () => {
         Work around is to clear the keychain by checking a value in the async store.
     */
     const cleanKeychain = useCallback(async () => {
-        const value = appConfig[0]?.isFirstAppLoad
+        const value = config[0]?.isFirstAppLoad
         if (value) {
             await KeychainService.removeEncryptionKey()
-        } else {
-            store.write(() => store.create("Config", {}))
         }
-    }, [appConfig, store])
+    }, [config])
+
+    const initRealmModels = useCallback(() => {
+        store.write(() => {
+            let _config = store.objects("Config")
+            if (!_config[0]) {
+                store.create("Config", {})
+            }
+        })
+    }, [store])
 
     useEffect(() => {
+        initRealmModels()
         cleanKeychain()
-    }, [cleanKeychain])
+    }, [cleanKeychain, initRealmModels])
 
     return (
         <>
             <Security />
-            {appConfig[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
+            {config[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
             {fontsLoaded && <App />}
         </>
     )
