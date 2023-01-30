@@ -14,7 +14,7 @@ import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen } from "~Screens"
 import { Config, useStore, useStoreQuery } from "~Storage/Realm"
 import KeychainService from "~Services/KeychainService"
-import { AppState, Security } from "~Components"
+import { Security } from "~Components"
 
 export const EntryPoint = () => {
     const store = useStore()
@@ -53,7 +53,6 @@ export const EntryPoint = () => {
 
     return (
         <>
-            <AppState />
             <Security />
             {appConfig[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
             {fontsLoaded && <App />}

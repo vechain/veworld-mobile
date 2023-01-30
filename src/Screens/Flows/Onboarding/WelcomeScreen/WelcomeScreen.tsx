@@ -64,6 +64,7 @@ export const WelcomeScreen = () => {
                             w={100}
                             title={LL.BTN_GET_STARTED()}
                             testID="GET_STARTED_BTN"
+                            haptics="medium"
                         />
                     </BaseView>
                 </BaseView>
