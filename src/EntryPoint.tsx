@@ -12,11 +12,12 @@ import {
 import { App } from "./App"
 import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen } from "~Screens"
-import { Config, useStoreQuery } from "~Storage/Realm"
+import { Config, useStore, useStoreQuery } from "~Storage/Realm"
 import KeychainService from "~Services/KeychainService"
 import { AppState, Security } from "~Components"
 
 export const EntryPoint = () => {
+    const store = useStore()
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
     const result = useStoreQuery(Config)
@@ -39,11 +40,12 @@ export const EntryPoint = () => {
     */
     const cleanKeychain = useCallback(async () => {
         const value = appConfig[0]?.isFirstAppLoad
-
         if (value) {
             await KeychainService.removeEncryptionKey()
+        } else {
+            store.write(() => store.create("Config", {}))
         }
-    }, [appConfig])
+    }, [appConfig, store])
 
     useEffect(() => {
         cleanKeychain()
