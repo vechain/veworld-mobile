@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Tabbar } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
-import { Config, useStoreQuery } from "~Storage/Realm"
+import { Config, useStoreQuery } from "~Storage"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined

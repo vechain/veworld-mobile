@@ -36,7 +36,6 @@ export const BaseButton = (props: Props) => {
     const theme = useTheme()
 
     const onButtonPress = useCallback(() => {
-        props.action()
         if (props.haptics) {
             switch (props.haptics) {
                 case Haptics.ImpactFeedbackStyle.Light:
@@ -55,6 +54,8 @@ export const BaseButton = (props: Props) => {
                     break
             }
         }
+
+        props.action()
     }, [props])
 
     return (

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { BiometricsUtils, useAppState } from "~Common"
 import { AppStateType, SecurityLevelType, TSecurityLevel } from "~Model"
-import { Config, useCache, useStore, useStoreQuery } from "~Storage/Realm"
+import { Config, useCache, useStore, useStoreQuery } from "~Storage"
 
 const {
     getDeviceEnrolledLevel,

@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
-import { useCache } from "~Storage/Realm"
+import { useCache } from "~Storage"
 
 export const SeedPhraseScreen = () => {
     const nav = useNavigation()

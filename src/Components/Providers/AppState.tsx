@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { AppStateStatus, AppState as _Appstate } from "react-native"
-import { useCache } from "~Storage/Realm"
+import { useCache } from "~Storage"
 
 /**
  * @name AppState

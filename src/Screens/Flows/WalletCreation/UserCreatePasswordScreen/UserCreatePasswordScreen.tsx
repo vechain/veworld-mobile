@@ -5,12 +5,10 @@ import { useOnDigitPress } from "./useOnDigitPress"
 import { PasswordPins } from "./Components/PasswordPins"
 import { NumPad } from "./Components/NumPad"
 import { Fonts } from "~Model"
-import { useNavigation } from "@react-navigation/native"
-// import { Routes } from "~Navigation"
+import { Config, useStore } from "~Storage"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
-    const nav = useNavigation()
     const {
         isPinError,
         isPinRetype,
@@ -20,10 +18,23 @@ export const UserCreatePasswordScreen = () => {
         // userPin,
     } = useOnDigitPress()
 
+    const store = useStore()
+
     useEffect(() => {
         if (isSuccess) {
+            store.write(() => {
+                const config = store.objectForPrimaryKey<Config>(
+                    "Config",
+                    "APP_CONFIG",
+                )
+
+                if (config) {
+                    config.isWallet = true
+                    config.isFirstAppLoad = false
+                }
+            })
         }
-    }, [isSuccess, nav])
+    }, [isSuccess, store])
 
     return (
         <BaseSafeArea grow={1}>
