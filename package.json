@@ -31,7 +31,7 @@
         "@react-navigation/bottom-tabs": "^6.5.2",
         "@react-navigation/native": "^6.1.1",
         "@react-navigation/native-stack": "^6.9.7",
-        "@realm/react": "0.4.2",
+        "@realm/react": "0.4.1",
         "@reduxjs/toolkit": "^1.9.1",
         "@vechain/connex-driver": "^2.0.12",
         "@vechain/connex-framework": "^2.0.12",
