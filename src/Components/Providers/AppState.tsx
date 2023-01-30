@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { AppStateStatus, AppState as _Appstate } from "react-native"
-import { updateAppState, useAppDispatch } from "~Storage/Caches"
+import { useCache } from "~Storage/Realm"
 
 /**
  * @name AppState
@@ -8,7 +8,7 @@ import { updateAppState, useAppDispatch } from "~Storage/Caches"
  * @returns void JSX.Element
  */
 export const AppState = () => {
-    const dispatch = useAppDispatch()
+    const cache = useCache()
     const appState = useRef(_Appstate.currentState)
 
     useEffect(() => {
@@ -18,19 +18,20 @@ export const AppState = () => {
             nextAppState => {
                 previousAppState = appState.current
                 appState.current = nextAppState
-                dispatch(
-                    updateAppState({
+
+                cache.write(() => {
+                    cache.create("AppState", {
                         currentState: nextAppState,
                         previousState: previousAppState,
-                    }),
-                )
+                    })
+                })
             },
         )
 
         return () => {
             subscription.remove()
         }
-    }, [dispatch])
+    }, [cache])
 
     return <></>
 }

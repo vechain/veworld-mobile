@@ -1,14 +1,13 @@
 import React, { useMemo } from "react"
 import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"
-import { Provider } from "react-redux"
-import App from "./src/App"
+import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme, useTheme } from "~Common"
-import { store } from "~Storage/Caches"
+import { RealmProvider, Translation as TranslationProvider } from "~Components"
 
 // immer setup
 enableAllPlugins()
@@ -33,13 +32,15 @@ const Main = () => {
     )
 
     return (
-        <Provider store={store}>
+        <RealmProvider>
             <NavigationContainer theme={colorScheme}>
                 <SafeAreaProvider>
-                    <App />
+                    <TranslationProvider>
+                        <EntryPoint />
+                    </TranslationProvider>
                 </SafeAreaProvider>
             </NavigationContainer>
-        </Provider>
+        </RealmProvider>
     )
 }
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -11,43 +11,29 @@ import {
 import { Alert } from "react-native"
 import * as Clipboard from "expo-clipboard"
 import { useI18nContext } from "~i18n"
-import { SeedUtils } from "~Common"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
+import { useGenerateMnemonic } from "./useGenerateMnemonic"
+import { useCache } from "~Storage/Realm"
 
 export const SeedPhraseScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-
-    const [mnemonic, setMnemonic] = useState("")
-    const [mnemonicArray, _setMnemonicArray] = useState<string[]>(
-        Array.from({ length: 12 }),
-    )
+    const cache = useCache()
 
     const [IsChecked, setIsChecked] = useState(false)
+    const { mnemonic, mnemonicArray } = useGenerateMnemonic()
 
     const onCopyToClipboard = useCallback(async () => {
         await Clipboard.setStringAsync(mnemonic)
-        Alert.alert("Copied to clipboard")
+        Alert.alert("Success!", "Mnemonic copied to clipboard")
     }, [mnemonic])
 
-    // todo.vas -> remove once wallet service is up
-    useEffect(() => {
-        let text =
-            "cactus quit copper cluster refuse palace faith kid atom reward draft decade"
-
-        let seed = SeedUtils.sanifySeed(text)
-
-        if (seed.length === 12) {
-            setMnemonic(text)
-            _setMnemonicArray(seed)
-        }
-    }, [])
-
     const onBackupPress = useCallback(() => {
+        cache.write(() => cache.create("Mnemonic", { mnemonic }))
         nav.navigate(Routes.CONFIRM_SEED_PHRASE)
-    }, [nav])
+    }, [cache, mnemonic, nav])
 
     return (
         <BaseSafeArea grow={1}>

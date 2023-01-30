@@ -180,6 +180,10 @@ type RootTranslation = {
 	 */
 	FACE_ID: string
 	/**
+	 * T​o​u​c​h​ ​I​D
+	 */
+	TOUCH_ID: string
+	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
 	FINGERPRINT: string
@@ -195,6 +199,10 @@ type RootTranslation = {
 	 * T​a​p​ ​t​o​ ​v​i​e​w
 	 */
 	TAP_TO_VIEW: string
+	/**
+	 * P​l​e​a​s​e​ ​u​s​e​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	BIOMETRICS_PROMPT: string
 	/**
 	 * B​a​c​k
 	 */
@@ -2378,6 +2386,10 @@ export type TranslationFunctions = {
 	 */
 	FACE_ID: () => LocalizedString
 	/**
+	 * Touch ID
+	 */
+	TOUCH_ID: () => LocalizedString
+	/**
 	 * Fingerprint
 	 */
 	FINGERPRINT: () => LocalizedString
@@ -2393,6 +2405,10 @@ export type TranslationFunctions = {
 	 * Tap to view
 	 */
 	TAP_TO_VIEW: () => LocalizedString
+	/**
+	 * Please use Biometrics to secure your wallet.
+	 */
+	BIOMETRICS_PROMPT: () => LocalizedString
 	/**
 	 * Back
 	 */

@@ -1,6 +1,7 @@
 {
     "extends": "@tsconfig/react-native/tsconfig.json",
     "compilerOptions": {
+        "experimentalDecorators": true,
         "jsx": "react",
         "skipLibCheck": true,
         "types": ["node", "jest"],
