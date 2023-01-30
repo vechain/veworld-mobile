@@ -15,8 +15,7 @@
             "~Common/*": ["./src/Common/*"],
             "~Components/*": ["./src/Components/*"],
             "~i18n/*": ["./src/i18n/*"],
-            "~Assets/*": ["./src/Assets/*"],
-            "~Selectors/*": ["./src/Selectors/*"]
+            "~Assets/*": ["./src/Assets/*"]
         }
     },
     "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx"]

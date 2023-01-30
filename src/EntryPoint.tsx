@@ -12,12 +12,14 @@ import {
 import { App } from "./App"
 import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen } from "~Screens"
-import { Config, useStore, useStoreQuery } from "~Storage"
+import { Config, useCache, useStore, useStoreQuery } from "~Storage"
 import KeychainService from "~Services/KeychainService"
 import { Security } from "~Components"
+import RealmPlugin from "realm-flipper-plugin-device"
 
 export const EntryPoint = () => {
     const store = useStore()
+    const cache = useCache()
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
     const result = useStoreQuery(Config)
@@ -61,7 +63,12 @@ export const EntryPoint = () => {
 
     return (
         <>
+            {process.env.NODE_ENV === "development" && (
+                <RealmPlugin realms={[store, cache]} />
+            )}
+
             <Security />
+
             {config[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
             {fontsLoaded && <App />}
         </>
