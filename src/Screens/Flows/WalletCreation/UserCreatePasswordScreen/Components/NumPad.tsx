@@ -2,6 +2,7 @@ import { Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
 import { Fonts } from "~Model"
+import * as Haptics from "expo-haptics"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
 
@@ -13,6 +14,7 @@ export const NumPad = ({ onDigitPress }: Props) => {
     const onPress = useCallback(
         (digit: string) => () => {
             onDigitPress(digit)
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         },
         [onDigitPress],
     )

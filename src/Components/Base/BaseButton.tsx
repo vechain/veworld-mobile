@@ -5,10 +5,12 @@ import {
     StyleSheet,
     FlexAlignType,
 } from "react-native"
-import React from "react"
-import { TFonts, useTheme } from "~Common"
+import React, { useCallback } from "react"
+import { useTheme } from "~Common"
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
+import { TFonts } from "~Model"
+import * as Haptics from "expo-haptics"
 
 type Props = {
     action: () => void
@@ -25,16 +27,39 @@ type Props = {
     w?: number
     h?: number
     font?: TFonts
-    selfAlign?: "auto" | FlexAlignType | undefined
+    selfAlign?: "auto" | FlexAlignType
+    haptics?: "light" | "medium" | "heavy"
 } & TouchableOpacityProps
 
 export const BaseButton = (props: Props) => {
     const { style, disabled = false, ...otherProps } = props
     const theme = useTheme()
 
+    const onButtonPress = useCallback(() => {
+        props.action()
+        if (props.haptics) {
+            switch (props.haptics) {
+                case Haptics.ImpactFeedbackStyle.Light:
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                    break
+
+                case Haptics.ImpactFeedbackStyle.Medium:
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                    break
+
+                case Haptics.ImpactFeedbackStyle.Heavy:
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+                    break
+
+                default:
+                    break
+            }
+        }
+    }, [props])
+
     return (
         <TouchableOpacity
-            onPress={props.action}
+            onPress={onButtonPress}
             activeOpacity={0.7}
             disabled={disabled}
             style={[

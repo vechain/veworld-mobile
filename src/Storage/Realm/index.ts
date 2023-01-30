@@ -1,11 +1,19 @@
 import { createRealmContext } from "@realm/react"
-import { Device, XPub, Config, AppState, Biometrics, Mnemonic } from "./Model"
+import {
+    Device,
+    XPub,
+    Config,
+    AppState,
+    Biometrics,
+    Mnemonic,
+    Account,
+} from "./Model"
 
 const Realmconfig = {
     path: "persisted.realm",
     deleteRealmIfMigrationNeeded:
         process.env.NODE_ENV === "development" ? true : false,
-    schema: [Device, XPub, Config],
+    schema: [Device, XPub, Config, Account],
 }
 
 const inMemoryRealmconfig = {
@@ -43,6 +51,7 @@ export {
     Biometrics,
     AppState,
     Mnemonic,
+    Account,
     useStoreObject,
     useStoreQuery,
     StoreProvider,
