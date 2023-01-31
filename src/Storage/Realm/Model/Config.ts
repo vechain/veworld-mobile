@@ -5,8 +5,9 @@ export class Config extends Object<Config> {
     isEncryptionKey = false
     isFirstAppLoad = true
     isWallet = false
-    lastSecurityLevel: "NONE" | "SECRET" | "BIOMETRIC" = "NONE"
+    lastSecurityLevel?: string
     isSecurityDowngrade = false
+    userSelectedSecurtiy = "NONE"
 
     static primaryKey = "_id"
 

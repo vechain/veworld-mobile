@@ -2,11 +2,11 @@ import { Object } from "realm"
 
 export class Biometrics extends Object<Biometrics> {
     _id = "BIOMETRICS"
-    currentSecurityLevel?: "NONE" | "SECRET" | "BIOMETRIC"
-    authtypeAvailable?: "FINGERPRINT" | "FACIAL_RECOGNITION" | "IRIS"
-    isDeviceEnrolled?: boolean
-    isHardwareAvailable?: boolean
-    accessControl?: boolean
+    currentSecurityLevel = "BIOMETRIC"
+    authtypeAvailable = "FACIAL_RECOGNITION"
+    isDeviceEnrolled = true
+    isHardwareAvailable = true
+    accessControl = true
 
     static primaryKey = "_id"
 }

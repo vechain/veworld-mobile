@@ -10,10 +10,13 @@ import { XPub } from "./XPub"
 export class Device extends Object<Device, "rootAddress"> {
     @index // index devices with address
     rootAddress!: string
-    xPub?: XPub
+
     type!: string
     alias!: string
     wallet!: string
+    index!: number
+
+    xPub?: XPub
     accounts?: Account[]
 
     static primaryKey = "rootAddress"

@@ -3,6 +3,14 @@ import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
 import { Wallet } from "~Model"
 
+/*
+    https://nodejs.org/api/crypto.html#cryptocreatecipherivalgorithm-key-iv-options
+
+    Initialization vectors should be unpredictable and unique; ideally, they will be cryptographically random. They do not have to be secret: IVs are typically just added to ciphertext messages unencrypted. It may sound contradictory that something has to be unpredictable and unique, but does not have to be secret; remember that an attacker must not be able to predict ahead of time what a given IV will be.
+*/
+const buf = Buffer.alloc(16)
+const iv = crypto.randomFillSync(buf)
+
 export const xPubFromHdNode = (hdNode: HDNode): XPub => {
     return {
         publicKey: hdNode.publicKey.toString("hex"),
@@ -33,19 +41,27 @@ export function shuffleArray<T>(arr: T[]) {
 }
 
 export const encrypt = (wallet: Wallet, encryptionKey: string) => {
-    const cipher = crypto.createCipher("aes256", encryptionKey)
+    let key = crypto
+        .createHash("sha256")
+        .update(encryptionKey)
+        .digest("hex")
+        .substr(0, 32)
+    const cipher = crypto.createCipheriv("aes256", key, iv)
     let ciph = cipher.update(JSON.stringify(wallet), "utf-8", "hex")
     ciph += cipher.final("hex")
     return ciph as string
 }
 
 export function decrypt<T>(encryptedWalet: string, encryptionKey: string): T {
-    const decipher = crypto.createDecipher("aes256", encryptionKey)
+    let key = crypto
+        .createHash("sha256")
+        .update(encryptionKey)
+        .digest("hex")
+        .substr(0, 32)
+    const decipher = crypto.createDecipheriv("aes256", key, iv)
     let txt = decipher.update(encryptedWalet, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
     let parsed = JSON.parse(txtToString)
     return parsed
 }
-
-export const getRandomKey = () => crypto.randomUUID()

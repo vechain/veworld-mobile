@@ -2,17 +2,16 @@
 // import { AsyncStoreType, CryptoUtils, HexUtils, error } from "~Common"
 // import { DEVICE_TYPE, Wallet } from "~Model"
 // import KeychainService from "~Services/KeychainService"
-// import { setMnemonic, purgeWalletState, AppThunk } from "~Storage/Caches"
-// import { AsyncStore } from "~Storage/Stores"
 // import * as i18n from "~i18n"
 
 // export const generateMnemonicPhrase = (): string[] => mnemonic.generate()
 
-// const createMnemonicWallet = async (realm: Realm, userPassword?: string) => {
+// const createMnemonicWallet = async (
+//     mnemonicPhrase: string[],
+//     accessControl: boolean,
+//     userPassword?: string,
+// ) => {
 //     try {
-//         // let mnemonicPhrase = getState().walletState.mnemonic.split(" ")
-//         // let accessControl = getState().biometricsState.accessControl
-
 //         const { wallet, device } = await getNodes(mnemonicPhrase)
 //         const { encryprionKey, encryptedWallet } = await handleEncryptrion(
 //             accessControl,

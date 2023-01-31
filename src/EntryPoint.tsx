@@ -48,13 +48,12 @@ export const EntryPoint = () => {
     }, [config])
 
     const initRealmModels = useCallback(() => {
-        store.write(() => {
-            let _config = store.objects("Config")
-            if (!_config[0]) {
+        if (!config[0]) {
+            store.write(() => {
                 store.create("Config", {})
-            }
-        })
-    }, [store])
+            })
+        }
+    }, [config, store])
 
     useEffect(() => {
         initRealmModels()
