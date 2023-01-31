@@ -69,7 +69,7 @@ export const Security = () => {
                     isHardwareAvailable: isHardware,
                     accessControl: accessControll,
                 },
-                Realm.UpdateMode.Modified,
+                Realm.UpdateMode.All,
             )
         })
 

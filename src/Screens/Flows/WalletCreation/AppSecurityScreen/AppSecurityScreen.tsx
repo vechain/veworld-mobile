@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -6,24 +6,21 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { useBiometricType } from "~Common"
+import { useBiometricType, useCreateWalletWithBiometrics } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
-import { Biometrics, useCachedQuery } from "~Storage"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { currentSecurityLevel } = useBiometricType()
+    const { onCreateWallet, accessControl } = useCreateWalletWithBiometrics()
 
-    // const biometrics = useStoreObject(Biometrics, "BIOMETRICS")
-    // todo: this is a workaround until the new version is installed, then use the above
-    const result = useCachedQuery(Biometrics)
-    const biometrics = useMemo(() => result.sorted("_id"), [result])
-
-    const onBiometricsPress = useCallback(async () => {}, [])
+    const onBiometricsPress = useCallback(async () => {
+        onCreateWallet()
+    }, [onCreateWallet])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)
@@ -46,7 +43,7 @@ export const AppSecurityScreen = () => {
                 </BaseView>
 
                 <BaseView align="center" w={100}>
-                    {biometrics[0]?.accessControl && (
+                    {accessControl && (
                         <BaseButton
                             filled
                             action={onBiometricsPress}
