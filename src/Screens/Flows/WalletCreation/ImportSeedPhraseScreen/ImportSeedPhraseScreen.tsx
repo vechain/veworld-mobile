@@ -11,19 +11,30 @@ import {
 import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import { SeedUtils, useTheme } from "~Common"
-import { Keyboard, TextInput } from "react-native"
+import { CryptoUtils, SeedUtils } from "~Common"
+import { Keyboard } from "react-native"
+import { useCache } from "~Storage"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 
 export const ImportSeedPhraseScreen = () => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
+    const cache = useCache()
+    const nav = useNavigation()
 
-    const [, setPastedSeed] = useState<string[]>()
+    const [, setPasteSeed] = useState<string[]>()
     const [seed, setSeed] = useState<string>("")
-    const [, serIsError] = useState(false)
+    const [isError, serIsError] = useState(false)
+    const [isDisabled, setIsDisabled] = useState(true)
 
     const onVarify = () => {
-        // TODO: varify seed is valid (create wallet in bg)
+        if (CryptoUtils.varifySeedPhrase(seed)) {
+            cache.write(() => cache.create("Mnemonic", { mnemonic: seed }))
+            nav.navigate(Routes.APP_SECURITY)
+        } else {
+            serIsError(true)
+        }
     }
 
     const onPasteFronClipboard = async () => {
@@ -32,19 +43,33 @@ export const ImportSeedPhraseScreen = () => {
             let _seed = await Clipboard.getStringAsync()
             let sanified = SeedUtils.sanifySeed(_seed)
             if (sanified.length === 12) {
-                setPastedSeed(sanified)
+                setPasteSeed(sanified)
                 setSeed(sanified.join(" "))
+                setIsDisabled(false)
                 Keyboard.dismiss()
             } else {
+                setIsDisabled(true)
                 serIsError(true)
-                onClearSeed()
+                setPasteSeed(sanified)
+                setSeed(sanified.join(" "))
             }
+        }
+    }
+
+    const onChangeText = (text: string) => {
+        let wordCounter = text.split(" ").filter(str => str !== "").length
+        setSeed(text)
+        if (wordCounter === 12) {
+            setIsDisabled(false)
+        } else {
+            setIsDisabled(true)
         }
     }
 
     const onClearSeed = () => {
         setSeed("")
-        setPastedSeed([])
+        setPasteSeed([])
+        serIsError(false)
     }
 
     return (
@@ -82,24 +107,10 @@ export const ImportSeedPhraseScreen = () => {
 
                         <BaseSpacer height={40} />
 
-                        <TextInput
-                            style={{
-                                borderWidth: 1,
-                                borderColor: "black",
-                                borderRadius: 8,
-                                padding: 20,
-                                height: 140,
-                                fontSize: theme.typography.body_accent.fontSize,
-                                fontFamily:
-                                    theme.typography.body_accent.fontFamily,
-                                lineHeight: 28,
-                            }}
-                            autoCapitalize="none"
-                            autoComplete="off"
-                            multiline={true}
-                            numberOfLines={4}
-                            onChangeText={setSeed}
-                            value={seed}
+                        <ImportMnemonicView
+                            seed={seed}
+                            onChangeText={onChangeText}
+                            isError={isError}
                         />
                     </BaseView>
 
@@ -117,7 +128,7 @@ export const ImportSeedPhraseScreen = () => {
                             action={onVarify}
                             w={100}
                             title={LL.BTN_IMPORT_WALLET_VARIFY()}
-                            disabled={true}
+                            disabled={isDisabled}
                         />
                     </BaseView>
                 </BaseView>
