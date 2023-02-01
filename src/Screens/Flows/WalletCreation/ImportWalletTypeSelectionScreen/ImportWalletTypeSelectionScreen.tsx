@@ -11,17 +11,15 @@ import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 
-export const WalletTypeSelectionScreen = () => {
+export const ImportWalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const onCreateWallet = () => {
-        nav.navigate(Routes.WALLET_TUTORIAL)
+    const onImportWithMnemonic = () => {
+        nav.navigate(Routes.IMPORT_SEED_PHRASE)
     }
 
-    const onImportWallet = () => {
-        nav.navigate(Routes.WALLET_TPYE_IMPORT)
-    }
+    const onImportWithHardware = () => {}
 
     return (
         <BaseSafeArea grow={1}>
@@ -29,31 +27,43 @@ export const WalletTypeSelectionScreen = () => {
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
                     <BaseText font={Fonts.large_title}>
-                        {LL.TITLE_CREATE_WALLET_TYPE()}
+                        {LL.TITLE_IMPORT_WALLET_TYPE()}
                     </BaseText>
 
                     <BaseText font={Fonts.body} my={10}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
+                        {LL.BD_IMPORT_WALLET_TYPE()}
                     </BaseText>
                 </BaseView>
 
-                <BaseView align="center" w={100}>
+                <BaseView w={100}>
+                    <BaseText font={Fonts.sub_title} my={10}>
+                        {LL.SB_IMPORT_WALLET_TYPE_SEED()}
+                    </BaseText>
+                    <BaseText font={Fonts.body}>
+                        {LL.BD_IMPORT_WALLET_TYPE_SEED()}
+                    </BaseText>
                     <BaseButton
                         filled
-                        action={onCreateWallet}
+                        action={onImportWithMnemonic}
                         w={100}
-                        mx={20}
                         my={20}
-                        title={LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW()}
+                        title={LL.BTN_CREATE_WALLET_TYPE_IMPORT()}
                     />
 
+                    <BaseSpacer height={20} />
+
+                    <BaseText font={Fonts.sub_title} my={10}>
+                        {LL.SB_IMPORT_WALLET_TYPE_HARDWARE()}
+                    </BaseText>
+                    <BaseText font={Fonts.body}>
+                        {LL.BD_IMPORT_WALLET_TYPE_HARDWARE()}
+                    </BaseText>
+
+                    <BaseSpacer height={20} />
                     <BaseButton
                         bordered
-                        action={onImportWallet}
+                        action={onImportWithHardware}
                         w={100}
-                        mx={20}
                         title={LL.BTN_CREATE_WALLET_TYPE_IMPORT()}
                     />
                 </BaseView>

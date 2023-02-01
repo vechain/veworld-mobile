@@ -80,6 +80,22 @@ type RootTranslation = {
 	 */
 	BTN_MNEMONIC_CLIPBOARD: string
 	/**
+	 * V​e​r​i​f​y
+	 */
+	BTN_IMPORT_WALLET_VERIFY: string
+	/**
+	 * W​h​e​r​e​ ​c​a​n​ ​I​ ​f​i​n​d​ ​i​t​?
+	 */
+	BTN_WALLET_IMPORT_HELP: string
+	/**
+	 * P​a​s​t​e​ ​f​r​o​m​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BTN_IMPORT_WALLET_CLIPBOARD: string
+	/**
+	 * E​m​p​t​y​ ​p​h​r​a​s​e
+	 */
+	BTN_IMPORT_WALLET_CLEAR: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -132,6 +148,22 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​y​p​e​ ​o​f​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t
+	 */
+	BD_IMPORT_WALLET_TYPE: string
+	/**
+	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​1​2​-​w​o​r​d​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
+	 */
+	BD_IMPORT_WALLET_TYPE_SEED: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​w​h​i​c​h​ ​w​i​l​l​ ​g​i​v​e​ ​y​o​u​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​n​e​w​ ​a​n​d​ ​e​x​i​s​t​i​n​g​ ​a​c​c​o​u​n​t​s​.
+	 */
+	BD_IMPORT_WALLET_TYPE_HARDWARE: string
+	/**
+	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​1​2​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	BD_WALLET_IMPORT_LOCAL: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -168,6 +200,10 @@ type RootTranslation = {
 	 */
 	TITLE_CREATE_WALLET_TYPE: string
 	/**
+	 * I​m​p​o​r​t​ ​W​a​l​l​e​t
+	 */
+	TITLE_IMPORT_WALLET_TYPE: string
+	/**
 	 * Y​o​u​r​ ​M​n​e​m​o​n​i​c
 	 */
 	TITLE_MNEMONIC: string
@@ -175,6 +211,18 @@ type RootTranslation = {
 	 * C​h​o​o​s​e​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
 	 */
 	TITLE_USER_PASSWORD: string
+	/**
+	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
+	 */
+	TITLE_WALLET_IMPORT_LOCAL: string
+	/**
+	 * L​o​c​a​l​ ​w​a​l​l​e​t
+	 */
+	SB_IMPORT_WALLET_TYPE_SEED: string
+	/**
+	 * H​a​r​d​w​a​r​e​ ​W​a​l​l​e​t
+	 */
+	SB_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -2286,6 +2334,22 @@ export type TranslationFunctions = {
 	 */
 	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
 	/**
+	 * Verify
+	 */
+	BTN_IMPORT_WALLET_VERIFY: () => LocalizedString
+	/**
+	 * Where can I find it?
+	 */
+	BTN_WALLET_IMPORT_HELP: () => LocalizedString
+	/**
+	 * Paste from clipboard
+	 */
+	BTN_IMPORT_WALLET_CLIPBOARD: () => LocalizedString
+	/**
+	 * Empty phrase
+	 */
+	BTN_IMPORT_WALLET_CLEAR: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -2338,6 +2402,22 @@ export type TranslationFunctions = {
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
+	 * Select the type of wallet you want to import
+	 */
+	BD_IMPORT_WALLET_TYPE: () => LocalizedString
+	/**
+	 * To access your previous wallet, you can enter your 12-word recovery phrase.
+	 */
+	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
+	/**
+	 * You can connect a hardware wallet which will give you access to your new and existing accounts.
+	 */
+	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
+	/**
+	 * Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase
+	 */
+	BD_WALLET_IMPORT_LOCAL: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -2374,6 +2454,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
+	 * Import Wallet
+	 */
+	TITLE_IMPORT_WALLET_TYPE: () => LocalizedString
+	/**
 	 * Your Mnemonic
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
@@ -2381,6 +2465,18 @@ export type TranslationFunctions = {
 	 * Choose your 6-digit PIN
 	 */
 	TITLE_USER_PASSWORD: () => LocalizedString
+	/**
+	 * Import Local Wallet
+	 */
+	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
+	/**
+	 * Local wallet
+	 */
+	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
+	/**
+	 * Hardware Wallet
+	 */
+	SB_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
 	 * Face ID
 	 */

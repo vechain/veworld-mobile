@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { createRealmContext } from "@realm/react"
 import {
     Device,
@@ -60,4 +61,14 @@ export {
     useCache,
     useCachedObject,
     useCachedQuery,
+}
+
+export enum RealmClass {
+    Device = "Device",
+    XPub = "XPub",
+    Config = "Config",
+    Biometrics = "Biometrics",
+    AppState = "AppState",
+    Mnemonic = "Mnemonic",
+    Account = "Account",
 }

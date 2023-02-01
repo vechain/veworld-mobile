@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { AppStateStatus, AppState as _Appstate } from "react-native"
-import { useCache } from "~Storage"
+import { RealmClass, useCache } from "~Storage"
 
 /**
  * @name AppState
@@ -20,7 +20,7 @@ export const AppState = () => {
                 appState.current = nextAppState
 
                 cache.write(() => {
-                    cache.create("AppState", {
+                    cache.create(RealmClass.AppState, {
                         currentState: nextAppState,
                         previousState: previousAppState,
                     })

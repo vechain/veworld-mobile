@@ -45,7 +45,8 @@ export const encrypt = (wallet: Wallet, encryptionKey: string) => {
         .createHash("sha256")
         .update(encryptionKey)
         .digest("hex")
-        .substr(0, 32)
+        .substring(0, 32)
+
     const cipher = crypto.createCipheriv("aes256", key, iv)
     let ciph = cipher.update(JSON.stringify(wallet), "utf-8", "hex")
     ciph += cipher.final("hex")
@@ -57,11 +58,22 @@ export function decrypt<T>(encryptedWalet: string, encryptionKey: string): T {
         .createHash("sha256")
         .update(encryptionKey)
         .digest("hex")
-        .substr(0, 32)
+        .substring(0, 32)
+
     const decipher = crypto.createDecipheriv("aes256", key, iv)
     let txt = decipher.update(encryptedWalet, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
     let parsed = JSON.parse(txtToString)
     return parsed
+}
+
+export const verifySeedPhrase = (seed: string) => {
+    let hdNode
+    try {
+        hdNode = HDNode.fromMnemonic(seed.split(" "))
+    } catch (error) {
+        console.log(error)
+    }
+    return hdNode ? true : false
 }
