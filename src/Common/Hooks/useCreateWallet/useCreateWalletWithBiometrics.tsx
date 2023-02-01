@@ -7,6 +7,7 @@ import {
     Config,
     Device,
     Mnemonic,
+    RealmClass,
     useCache,
     useCachedQuery,
     useStore,
@@ -62,7 +63,7 @@ export const useCreateWalletWithBiometrics = () => {
                     )
 
                 store.write(() => {
-                    store.create("Device", {
+                    store.create(RealmClass.Device, {
                         ...device,
                         wallet: encryptedWallet,
                     })

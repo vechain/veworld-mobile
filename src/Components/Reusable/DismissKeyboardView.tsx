@@ -1,19 +1,20 @@
 import React, { ReactNode } from "react"
-import { TouchableWithoutFeedback, Keyboard, View } from "react-native"
+import {
+    TouchableWithoutFeedback,
+    Keyboard,
+    ViewProps,
+    ScrollViewProps,
+} from "react-native"
 
 type Props = {
-    grow?: number
     children: ReactNode
-}
+} & ViewProps &
+    ScrollViewProps
 
-const DismissKeyboardHOC = (Comp: any) => {
-    return ({ children, ...props }: Props) => (
+export const DismissKeyboardView = ({ children }: Props) => {
+    return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <Comp {...props} style={{ flexGrow: props.grow }}>
-                {children}
-            </Comp>
+            {children}
         </TouchableWithoutFeedback>
     )
 }
-
-export const DismissKeyboardView = DismissKeyboardHOC(View)

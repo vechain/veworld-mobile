@@ -13,7 +13,7 @@ import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { CryptoUtils, SeedUtils } from "~Common"
 import { Keyboard } from "react-native"
-import { useCache } from "~Storage"
+import { RealmClass, useCache } from "~Storage"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
@@ -25,15 +25,17 @@ export const ImportSeedPhraseScreen = () => {
 
     const [, setPasteSeed] = useState<string[]>()
     const [seed, setSeed] = useState<string>("")
-    const [isError, serIsError] = useState(false)
+    const [isError, setIsError] = useState(false)
     const [isDisabled, setIsDisabled] = useState(true)
 
-    const onVarify = () => {
-        if (CryptoUtils.varifySeedPhrase(seed)) {
-            cache.write(() => cache.create("Mnemonic", { mnemonic: seed }))
+    const onVerify = () => {
+        if (CryptoUtils.verifySeedPhrase(seed)) {
+            cache.write(() =>
+                cache.create(RealmClass.Mnemonic, { mnemonic: seed }),
+            )
             nav.navigate(Routes.APP_SECURITY)
         } else {
-            serIsError(true)
+            setIsError(true)
         }
     }
 
@@ -49,7 +51,7 @@ export const ImportSeedPhraseScreen = () => {
                 Keyboard.dismiss()
             } else {
                 setIsDisabled(true)
-                serIsError(true)
+                setIsError(true)
                 setPasteSeed(sanified)
                 setSeed(sanified.join(" "))
             }
@@ -69,11 +71,11 @@ export const ImportSeedPhraseScreen = () => {
     const onClearSeed = () => {
         setSeed("")
         setPasteSeed([])
-        serIsError(false)
+        setIsError(false)
     }
 
     return (
-        <DismissKeyboardView grow={1}>
+        <DismissKeyboardView>
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
                 <BaseView
@@ -125,9 +127,9 @@ export const ImportSeedPhraseScreen = () => {
 
                         <BaseButton
                             filled
-                            action={onVarify}
+                            action={onVerify}
                             w={100}
-                            title={LL.BTN_IMPORT_WALLET_VARIFY()}
+                            title={LL.BTN_IMPORT_WALLET_VERIFY()}
                             disabled={isDisabled}
                         />
                     </BaseView>

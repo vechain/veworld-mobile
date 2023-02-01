@@ -12,7 +12,7 @@ import {
 import { App } from "./App"
 import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen } from "~Screens"
-import { Config, useCache, useStore, useStoreQuery } from "~Storage"
+import { Config, RealmClass, useCache, useStore, useStoreQuery } from "~Storage"
 import KeychainService from "~Services/KeychainService"
 import { Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
@@ -50,7 +50,7 @@ export const EntryPoint = () => {
     const initRealmModels = useCallback(() => {
         if (!config[0]) {
             store.write(() => {
-                store.create("Config", {})
+                store.create(RealmClass.Config, {})
             })
         }
     }, [config, store])
@@ -68,7 +68,10 @@ export const EntryPoint = () => {
 
             <Security />
 
-            {config[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
+            {fontsLoaded && config[0]?.isSecurityDowngrade && (
+                <SecurityDowngradeScreen />
+            )}
+
             {fontsLoaded && <App />}
         </>
     )

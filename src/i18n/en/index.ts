@@ -22,7 +22,7 @@ const en: BaseTranslation = {
     BTN_MNEMONIC_CHECKBOX:
         "I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.",
     BTN_MNEMONIC_CLIPBOARD: "Copy mnemonic to clipboard",
-    BTN_IMPORT_WALLET_VARIFY: "Varify",
+    BTN_IMPORT_WALLET_VERIFY: "Verify",
     BTN_WALLET_IMPORT_HELP: "Where can I find it?",
     BTN_IMPORT_WALLET_CLIPBOARD: "Paste from clipboard",
     BTN_IMPORT_WALLET_CLEAR: "Empty phrase",

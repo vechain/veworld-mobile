@@ -80,9 +80,9 @@ type RootTranslation = {
 	 */
 	BTN_MNEMONIC_CLIPBOARD: string
 	/**
-	 * V​a​r​i​f​y
+	 * V​e​r​i​f​y
 	 */
-	BTN_IMPORT_WALLET_VARIFY: string
+	BTN_IMPORT_WALLET_VERIFY: string
 	/**
 	 * W​h​e​r​e​ ​c​a​n​ ​I​ ​f​i​n​d​ ​i​t​?
 	 */
@@ -2334,9 +2334,9 @@ export type TranslationFunctions = {
 	 */
 	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
 	/**
-	 * Varify
+	 * Verify
 	 */
-	BTN_IMPORT_WALLET_VARIFY: () => LocalizedString
+	BTN_IMPORT_WALLET_VERIFY: () => LocalizedString
 	/**
 	 * Where can I find it?
 	 */

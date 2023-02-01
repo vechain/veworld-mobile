@@ -1,3 +1,1 @@
-// import LocalWalletService from "./LocalWalletService"
-
-// export { LocalWalletService }
+export * from "./KeychainService"

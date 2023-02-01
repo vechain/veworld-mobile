@@ -5,6 +5,7 @@ import {
     Config,
     Device,
     Mnemonic,
+    RealmClass,
     useCache,
     useCachedQuery,
     useStore,
@@ -52,7 +53,7 @@ export const useCreateWalletWithPassword = () => {
                     )
 
                     store.write(() => {
-                        store.create("Device", {
+                        store.create(RealmClass.Device, {
                             ...device,
                             wallet: encryptedWallet,
                         })

@@ -86,18 +86,20 @@ export const OnboardingStack = () => {
                     component={AppSecurityScreen}
                     options={{ headerShown: false }}
                 />
-            </Onboarding.Group>
 
-            <Onboarding.Group
-                screenOptions={{
-                    presentation: "fullScreenModal",
-                }}>
                 <Onboarding.Screen
                     name={Routes.USER_CREATE_PASSWORD}
                     component={UserCreatePasswordScreen}
                     options={{ headerShown: false }}
                 />
             </Onboarding.Group>
+
+            {/* <Onboarding.Group
+                screenOptions={{
+                    presentation: "fullScreenModal",
+                }}>
+
+            </Onboarding.Group> */}
         </Onboarding.Navigator>
     )
 }
