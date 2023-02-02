@@ -1,26 +1,18 @@
-import React from "react"
+import React, { useCallback } from "react"
 import Carousel from "react-native-reanimated-carousel"
-import { FadeInRight } from "react-native-reanimated"
-import {
-    StyleProp,
-    ViewStyle,
-    ViewProps,
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-} from "react-native"
-import { LongPressGestureHandler } from "react-native-gesture-handler"
-import type { AnimateProps } from "react-native-reanimated"
-import Animated, { useSharedValue } from "react-native-reanimated"
-import Constants from "expo-constants"
+import { FadeIn, FadeInRight } from "react-native-reanimated"
+import { StyleSheet, Dimensions } from "react-native"
+import { useSharedValue } from "react-native-reanimated"
 import { PaginationItem } from "./PaginationItem"
+import { Card } from "./Card"
+import { BaseSpacer, BaseView } from "~Components"
+import { useActiveCard } from "../Hooks/useActiveCard"
 
-const viewCount = 5
 const width = Dimensions.get("window").width - 40
+
 const StackConfig = {
     showLength: 3,
-    stackInterval: 18,
+    stackInterval: 15,
     rotateZDeg: 0,
     scaleInterval: 0.05,
     opacityInterval: 0.5,
@@ -30,6 +22,26 @@ let devices = [...new Array(6).keys()]
 
 export const DeviceCarousel = () => {
     const progressValue = useSharedValue<number>(0)
+    const { onScrollBegin, onScrollEnd } = useActiveCard()
+
+    const onProgressChange = useCallback(
+        (_: number, absoluteProgress: number) => {
+            progressValue.value = absoluteProgress
+        },
+        [progressValue],
+    )
+
+    const renderItem = useCallback(({ index }: { index: number }) => {
+        return (
+            <Card
+                index={index}
+                key={index}
+                entering={FadeInRight.delay(
+                    (devices.length - index) * 50,
+                ).duration(200)}
+            />
+        )
+    }, [])
 
     return (
         <>
@@ -44,34 +56,29 @@ export const DeviceCarousel = () => {
                 mode={"horizontal-stack"}
                 data={devices}
                 modeConfig={StackConfig}
-                onProgressChange={(_, absoluteProgress) =>
-                    (progressValue.value = absoluteProgress)
-                }
-                customConfig={() => ({ type: "positive", viewCount })}
-                renderItem={({ index }) => (
-                    <SBItem
-                        index={index}
-                        key={index}
-                        entering={FadeInRight.delay(
-                            (viewCount - index) * 100,
-                        ).duration(200)}
-                    />
-                )}
+                onProgressChange={onProgressChange}
+                renderItem={renderItem}
+                onScrollBegin={onScrollBegin}
+                onScrollEnd={onScrollEnd}
             />
 
+            <BaseSpacer height={10} />
+
             {!!progressValue && (
-                <View style={baseStyles.dotContainer}>
-                    {devices.map((device, index) => {
-                        return (
-                            <PaginationItem
-                                animValue={progressValue}
-                                index={index}
-                                key={index}
-                                length={devices.length}
-                            />
-                        )
-                    })}
-                </View>
+                <BaseView
+                    orientation="row"
+                    justify="space-between"
+                    selfAlign="center">
+                    {devices.map((_, index) => (
+                        <PaginationItem
+                            animValue={progressValue}
+                            index={index}
+                            key={index}
+                            length={devices.length}
+                            entering={FadeIn.duration(200)}
+                        />
+                    ))}
+                </BaseView>
             )}
         </>
     )
@@ -84,43 +91,4 @@ const baseStyles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    dotContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignSelf: "center",
-        paddingTop: 10,
-    },
-    itemContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#28008C",
-        borderRadius: 22,
-    },
 })
-
-interface Props extends AnimateProps<ViewProps> {
-    style?: StyleProp<ViewStyle>
-    index: number
-    pretty?: boolean
-}
-
-export const SBItem: React.FC<Props> = props => {
-    const { style, index, pretty, ...animatedViewProps } = props
-    const enablePretty = Constants?.manifest?.extra?.enablePretty || false
-    const [, setIsPretty] = React.useState(pretty || enablePretty)
-    return (
-        <LongPressGestureHandler
-            onActivated={() => {
-                setIsPretty(true)
-            }}>
-            <Animated.View style={{ flex: 1 }} {...animatedViewProps}>
-                <View style={[baseStyles.itemContainer, style]}>
-                    <Text style={{ fontSize: 30, color: "white" }}>
-                        {index}
-                    </Text>
-                </View>
-            </Animated.View>
-        </LongPressGestureHandler>
-    )
-}

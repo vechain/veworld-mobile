@@ -1,14 +1,25 @@
-import React from "react"
-// import React, { useMemo } from "react"
-// import { Device, useStoreQuery } from "~Storage"
+import React, { useMemo } from "react"
 import { DeviceCarousel } from "./Components/DeviceCarousel"
 import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Fonts } from "~Model"
+import {
+    ActiveWalletCard,
+    useCachedQuery,
+    Device,
+    useStoreQuery,
+} from "~Storage"
 
 export const HomeScreen = () => {
     // todo: this is a workaround until the new version is installed
-    // const result = useStoreQuery(Device)
-    // const devices = useMemo(() => result.sorted("rootAddress"), [result])
+    const result1 = useStoreQuery(Device)
+    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
+
+    // todo: this is a workaround until the new version is installed
+    const result2 = useCachedQuery(ActiveWalletCard)
+    const activeCard = useMemo(() => result2.sorted("_id"), [result2])
+
+    console.log(devices)
+    console.log(activeCard)
 
     return (
         <BaseSafeArea>
