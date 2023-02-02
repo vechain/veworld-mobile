@@ -2,7 +2,7 @@ import React from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon, BlurView } from "~Components"
 import { useTheme } from "~Common"
-import { HomeStack } from "~Navigation/Stacks"
+import { HomeStack, SettingsStack } from "~Navigation/Stacks"
 
 const Tab = createBottomTabNavigator()
 
@@ -28,6 +28,21 @@ export const Tabbar = () => {
                             focused={focused}
                             size={size}
                             title={"Wallet"}
+                        />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="Settings"
+                component={SettingsStack}
+                options={{
+                    tabBarLabel: "Settings",
+                    tabBarIcon: ({ focused, size }) => (
+                        <TabIcon
+                            focused={focused}
+                            size={size}
+                            title={"Settings"}
                         />
                     ),
                 }}
