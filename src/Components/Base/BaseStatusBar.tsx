@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { memo, useMemo } from "react"
 import { StatusBar, StatusBarProps } from "react-native"
 import { useTheme } from "~Common"
 import { computeBarStyle } from "./Helpers/ComputeBarStyle"
@@ -6,15 +6,19 @@ import { computeBarStyle } from "./Helpers/ComputeBarStyle"
 type Props = {
     hero?: boolean
     transparent?: boolean
+    contentBasedOnScroll?: boolean
 } & StatusBarProps
 
-export const BaseStatusBar = (props: Props) => {
+export const BaseStatusBar = memo((props: Props) => {
     const theme = useTheme()
 
-    const barStyle = useMemo(
-        () => computeBarStyle(props.hero, theme.isDark),
-        [props.hero, theme.isDark],
-    )
+    const barStyle = useMemo(() => {
+        if (props.contentBasedOnScroll) {
+            return "light-content"
+        } else {
+            return computeBarStyle(props.hero, theme.isDark)
+        }
+    }, [props.hero, theme.isDark, props.contentBasedOnScroll])
 
     return (
         <StatusBar
@@ -28,4 +32,4 @@ export const BaseStatusBar = (props: Props) => {
             {...props}
         />
     )
-}
+})

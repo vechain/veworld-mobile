@@ -13,16 +13,16 @@ const LONG_WIDTH = 20
 export const TabbarHeader = ({
     action,
 }: {
-    action: (activeScreen: string) => void
+    action: (activeScreen: number) => void
 }) => {
     const progressValue = useSharedValue<number>(0)
 
     const onTokensPress = () => {
-        action("Token")
+        action(0)
         progressValue.value = 0
     }
     const onNftPress = () => {
-        action("NFT")
+        action(1)
         progressValue.value = 1
     }
 
