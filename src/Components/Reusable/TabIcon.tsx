@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, memo } from "react"
 import { StyleSheet, View } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useTheme } from "~Common"
@@ -9,7 +9,7 @@ type Props = {
     title: string
 }
 
-export const TabIcon: FC<Props> = ({ focused, title }) => {
+export const TabIcon: FC<Props> = memo(({ focused, title }) => {
     const theme = useTheme()
 
     return (
@@ -31,7 +31,7 @@ export const TabIcon: FC<Props> = ({ focused, title }) => {
             {focused && <View style={baseStyles.dot} />}
         </BaseView>
     )
-}
+})
 
 const baseStyles = StyleSheet.create({
     container: { borderRadius: 8, height: 44, width: 44 },

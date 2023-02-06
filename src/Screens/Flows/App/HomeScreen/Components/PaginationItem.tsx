@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, memo } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import Animated, {
     AnimateProps,
@@ -15,38 +15,35 @@ interface Props extends AnimateProps<ViewProps> {
     animValue: Animated.SharedValue<number>
 }
 
-export const PaginationItem: FC<Props> = ({
-    animValue,
-    index,
-    length,
-    ...animatedViewProps
-}) => {
-    const animatedWidth = useAnimatedStyle(() => {
-        let dotWidth = withTiming(
-            Math.round(animValue.value) === index ? LONG_WIDTH : WIDTH,
-        )
-        if (index === 0 && animValue.value > length - 1) {
-            dotWidth = LONG_WIDTH
-        }
-        return {
-            width: dotWidth,
-        }
-    }, [])
+export const PaginationItem: FC<Props> = memo(
+    ({ animValue, index, length, ...animatedViewProps }) => {
+        const animatedWidth = useAnimatedStyle(() => {
+            let dotWidth = withTiming(
+                Math.round(animValue.value) === index ? LONG_WIDTH : WIDTH,
+            )
+            if (index === 0 && animValue.value > length - 1) {
+                dotWidth = LONG_WIDTH
+            }
+            return {
+                width: dotWidth,
+            }
+        }, [])
 
-    return (
-        <Animated.View
-            {...animatedViewProps}
-            style={[
-                baseStyles.container,
-                {
-                    width: WIDTH,
-                    height: WIDTH,
-                },
-                animatedWidth,
-            ]}
-        />
-    )
-}
+        return (
+            <Animated.View
+                {...animatedViewProps}
+                style={[
+                    baseStyles.container,
+                    {
+                        width: WIDTH,
+                        height: WIDTH,
+                    },
+                    animatedWidth,
+                ]}
+            />
+        )
+    },
+)
 
 const baseStyles = StyleSheet.create({
     container: {

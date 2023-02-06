@@ -1,12 +1,12 @@
-import React, { useCallback } from "react"
+import React, { memo, useCallback } from "react"
 import Carousel from "react-native-reanimated-carousel"
-import { FadeIn, FadeInRight } from "react-native-reanimated"
+import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
-import { useSharedValue } from "react-native-reanimated"
 import { PaginationItem } from "./PaginationItem"
 import { Card } from "./Card"
 import { BaseSpacer, BaseView } from "~Components"
 import { useActiveCard } from "../Hooks/useActiveCard"
+import { devices_mock } from "~Common"
 
 const width = Dimensions.get("window").width - 40
 
@@ -18,9 +18,7 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-let devices = [...new Array(6).keys()]
-
-export const DeviceCarousel = () => {
+export const DeviceCarousel = memo(() => {
     const progressValue = useSharedValue<number>(0)
     const { onScrollBegin, onScrollEnd } = useActiveCard()
 
@@ -37,7 +35,7 @@ export const DeviceCarousel = () => {
                 index={index}
                 key={index}
                 entering={FadeInRight.delay(
-                    (devices.length - index) * 50,
+                    (devices_mock.length - index) * 50,
                 ).duration(200)}
             />
         )
@@ -54,7 +52,7 @@ export const DeviceCarousel = () => {
                 snapEnabled={true}
                 scrollAnimationDuration={1000}
                 mode={"horizontal-stack"}
-                data={devices}
+                data={devices_mock}
                 modeConfig={StackConfig}
                 onProgressChange={onProgressChange}
                 renderItem={renderItem}
@@ -69,12 +67,12 @@ export const DeviceCarousel = () => {
                     orientation="row"
                     justify="space-between"
                     selfAlign="center">
-                    {devices.map((_, index) => (
+                    {devices_mock.map((device, index) => (
                         <PaginationItem
                             animValue={progressValue}
                             index={index}
-                            key={index}
-                            length={devices.length}
+                            key={device.rootAddress}
+                            length={devices_mock.length}
                             entering={FadeIn.delay(220).duration(250)}
                         />
                     ))}
@@ -82,7 +80,7 @@ export const DeviceCarousel = () => {
             )}
         </>
     )
-}
+})
 
 const baseStyles = StyleSheet.create({
     carouselContainer: {
