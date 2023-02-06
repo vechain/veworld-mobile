@@ -9,4 +9,5 @@ export enum Routes {
     IMPORT_SEED_PHRASE = "Import_Seed_Phrase",
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",
+    SETTINGS = "Settings",
 }

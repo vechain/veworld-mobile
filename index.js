@@ -8,6 +8,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme, useTheme } from "~Common"
 import { RealmProvider, Translation as TranslationProvider } from "~Components"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 // immer setup
 enableAllPlugins()
@@ -32,15 +33,18 @@ const Main = () => {
     )
 
     return (
-        <RealmProvider>
-            <NavigationContainer theme={colorScheme}>
-                <SafeAreaProvider>
-                    <TranslationProvider>
-                        <EntryPoint />
-                    </TranslationProvider>
-                </SafeAreaProvider>
-            </NavigationContainer>
-        </RealmProvider>
+        // eslint-disable-next-line react-native/no-inline-styles
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <RealmProvider>
+                <NavigationContainer theme={colorScheme}>
+                    <SafeAreaProvider>
+                        <TranslationProvider>
+                            <EntryPoint />
+                        </TranslationProvider>
+                    </SafeAreaProvider>
+                </NavigationContainer>
+            </RealmProvider>
+        </GestureHandlerRootView>
     )
 }
 

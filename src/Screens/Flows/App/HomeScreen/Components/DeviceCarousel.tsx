@@ -75,7 +75,7 @@ export const DeviceCarousel = () => {
                             index={index}
                             key={index}
                             length={devices.length}
-                            entering={FadeIn.duration(200)}
+                            entering={FadeIn.delay(220).duration(250)}
                         />
                     ))}
                 </BaseView>
