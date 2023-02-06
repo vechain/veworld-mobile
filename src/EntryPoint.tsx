@@ -16,6 +16,7 @@ import { Config, RealmClass, useCache, useStore, useStoreQuery } from "~Storage"
 import KeychainService from "~Services/KeychainService"
 import { Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
+import RNBootSplash from "react-native-bootsplash"
 
 export const EntryPoint = () => {
     const store = useStore()
@@ -59,6 +60,16 @@ export const EntryPoint = () => {
         initRealmModels()
         cleanKeychain()
     }, [cleanKeychain, initRealmModels])
+
+    useEffect(() => {
+        const init = async () => {
+            if (fontsLoaded) {
+                await RNBootSplash.hide({ fade: true })
+            }
+        }
+
+        init()
+    }, [fontsLoaded])
 
     return (
         <>
