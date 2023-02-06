@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import {
     StyleProp,
     ViewStyle,
@@ -15,7 +15,7 @@ interface Props extends AnimateProps<ViewProps> {
     index: number
 }
 
-export const Card: React.FC<Props> = props => {
+export const Card: React.FC<Props> = memo(props => {
     const { style, index, ...animatedViewProps } = props
 
     return (
@@ -25,7 +25,7 @@ export const Card: React.FC<Props> = props => {
             </View>
         </Animated.View>
     )
-}
+})
 
 const baseStyles = StyleSheet.create({
     container: {

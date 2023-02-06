@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from "react"
+import React, { memo } from "react"
 import { FlexAlignType, View, ViewProps } from "react-native"
 import { useTheme } from "~Common"
 
@@ -28,7 +28,7 @@ type Props = {
     wrap?: boolean
 } & ViewProps
 
-export const BaseView = (props: Props) => {
+export const BaseView = memo((props: Props) => {
     const { style, ...otherProps } = props
     const theme = useTheme()
 
@@ -62,4 +62,4 @@ export const BaseView = (props: Props) => {
             {...otherProps}
         />
     )
-}
+})
