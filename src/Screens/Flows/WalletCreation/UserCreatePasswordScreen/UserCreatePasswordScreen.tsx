@@ -1,12 +1,17 @@
 import React, { useEffect } from "react"
-import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseSafeArea,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    PasswordPins,
+    NumPad,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
-import { PasswordPins } from "./Components/PasswordPins"
-import { NumPad } from "./Components/NumPad"
 import { Fonts } from "~Model"
 import { useCreateWalletWithPassword } from "~Common"
-import { Config, RealmClass, useStore } from "~Storage"
+import { AppLock, Config, RealmClass, useCache, useStore } from "~Storage"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
@@ -20,6 +25,7 @@ export const UserCreatePasswordScreen = () => {
     } = useOnDigitPress()
 
     const store = useStore()
+    const cache = useCache()
     const { onCreateWallet, isComplete } = useCreateWalletWithPassword()
 
     useEffect(() => {
@@ -30,6 +36,15 @@ export const UserCreatePasswordScreen = () => {
 
     useEffect(() => {
         if (isComplete) {
+            cache.write(() => {
+                let appLock = cache.objectForPrimaryKey<AppLock>(
+                    RealmClass.AppLock,
+                    "APP_LOCK",
+                )
+                if (appLock) {
+                    appLock.status = "UNLOCKED"
+                }
+            })
             store.write(() => {
                 let config = store.objectForPrimaryKey<Config>(
                     RealmClass.Config,
@@ -40,7 +55,7 @@ export const UserCreatePasswordScreen = () => {
                 }
             })
         }
-    }, [isComplete, store])
+    }, [cache, isComplete, store])
 
     return (
         <BaseSafeArea grow={1}>

@@ -5,7 +5,7 @@ export class Config extends Object<Config> {
     isEncryptionKey = false
     isFirstAppLoad = true
     isWallet = false
-    lastSecurityLevel?: string
+    lastSecurityLevel = "NONE"
     isSecurityDowngrade = false
     userSelectedSecurtiy = "NONE"
 
@@ -18,6 +18,7 @@ export class Config extends Object<Config> {
             isWallet: false,
             isSecurityDowngrade: false,
             lastSecurityLevel: "NONE",
+            userSelectedSecurtiy: "NONE",
         })
     }
 }

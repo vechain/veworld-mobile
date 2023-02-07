@@ -7,7 +7,7 @@ import { useI18nContext } from "~i18n"
 
 type Props = {
     UserPinArray: (string | undefined)[]
-    isPINRetype: boolean
+    isPINRetype?: boolean
     isPinError: boolean
 }
 

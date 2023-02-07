@@ -11,8 +11,16 @@ import {
 } from "~Assets"
 import { App } from "./App"
 import { useFonts } from "expo-font"
-import { SecurityDowngradeScreen } from "~Screens"
-import { Config, RealmClass, useCache, useStore, useStoreQuery } from "~Storage"
+import { SecurityDowngradeScreen, LockScreen } from "~Screens"
+import {
+    AppLock,
+    Config,
+    RealmClass,
+    useCache,
+    useCachedQuery,
+    useStore,
+    useStoreQuery,
+} from "~Storage"
 import KeychainService from "~Services/KeychainService"
 import { Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
@@ -21,10 +29,15 @@ import RNBootSplash from "react-native-bootsplash"
 export const EntryPoint = () => {
     const store = useStore()
     const cache = useCache()
+
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
-    const result = useStoreQuery(Config)
-    const config = useMemo(() => result.sorted("_id"), [result])
+    const result1 = useStoreQuery(Config)
+    const config = useMemo(() => result1.sorted("_id"), [result1])
+
+    // todo: this is a workaround until the new version is installed
+    const result2 = useCachedQuery(AppLock)
+    const appLock = useMemo(() => result2.sorted("_id"), [result2])
 
     const [fontsLoaded] = useFonts({
         "Inter-Bold": Inter_Bold,
@@ -48,28 +61,42 @@ export const EntryPoint = () => {
         }
     }, [config])
 
-    const initRealmModels = useCallback(() => {
+    const initRealmClasses = useCallback(() => {
+        if (!appLock[0]) {
+            cache.write(() => {
+                cache.create(RealmClass.AppLock, { status: "LOCKED" })
+            })
+        }
         if (!config[0]) {
             store.write(() => {
                 store.create(RealmClass.Config, {})
             })
         }
-    }, [config, store])
+    }, [appLock, cache, config, store])
 
     useEffect(() => {
-        initRealmModels()
+        initRealmClasses()
         cleanKeychain()
-    }, [cleanKeychain, initRealmModels])
+    }, [cleanKeychain, initRealmClasses])
 
     useEffect(() => {
         const init = async () => {
-            if (fontsLoaded) {
+            if (fontsLoaded && appLock[0]?.status) {
                 await RNBootSplash.hide({ fade: true })
             }
         }
-
         init()
-    }, [fontsLoaded])
+    }, [appLock, fontsLoaded])
+
+    console.log(appLock)
+
+    if (
+        appLock[0]?.status === "LOCKED" &&
+        !config[0]?.isFirstAppLoad &&
+        fontsLoaded
+    ) {
+        return <LockScreen />
+    }
 
     return (
         <>
@@ -82,7 +109,6 @@ export const EntryPoint = () => {
             {fontsLoaded && config[0]?.isSecurityDowngrade && (
                 <SecurityDowngradeScreen />
             )}
-
             {fontsLoaded && <App />}
         </>
     )
