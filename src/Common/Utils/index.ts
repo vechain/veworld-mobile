@@ -10,7 +10,7 @@ import CryptoUtils from "./CryptoUtils"
 // import GasUtils from "./GasUtils"
 import HexUtils from "./HexUtils"
 // import MappingUtils from "./MappingUtils"
-// import PasswordUtils from "./PasswordUtils"
+import PasswordUtils from "./PasswordUtils"
 import PlatformUtils from "./PlatformUtils"
 import SeedUtils from "./SeedUtils"
 // import SignatureUtils from "./SignatureUtils"
@@ -31,7 +31,7 @@ export {
     // GasUtils,
     HexUtils,
     // MappingUtils,
-    // PasswordUtils,
+    PasswordUtils,
     PlatformUtils,
     SeedUtils,
     // SignatureUtils,

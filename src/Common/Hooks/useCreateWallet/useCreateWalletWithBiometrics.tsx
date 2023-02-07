@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { CryptoUtils, HexUtils } from "~Common/Utils"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
@@ -22,6 +22,8 @@ import { getDeviceIndex, getNodes } from "./Helpers"
 export const useCreateWalletWithBiometrics = () => {
     const store = useStore()
     const cache = useCache()
+
+    const [isComplete, setIsComplete] = useState(false)
 
     // const config = useCacheObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -85,22 +87,24 @@ export const useCreateWalletWithBiometrics = () => {
 
         // If first time creating wallet
         if (!config[0].isEncryptionKey) {
-            await KeychainService.setEncryptionKey(
-                encryprionKey!,
-                accessControl,
-            )
+            await KeychainService.setEncryptionKey(encryprionKey, accessControl)
             store.write(() => {
                 config[0].isEncryptionKey = true
                 config[0].isFirstAppLoad = false
                 config[0].userSelectedSecurtiy =
                     UserSelectedSecurityLevel.BIOMETRIC
-                config[0].isWallet = true
             })
         }
+
+        setIsComplete(true)
     }
     //* [END] - Finilize Wallet Setup
 
-    return { onCreateWallet, accessControl: biometrics[0].accessControl! }
+    return {
+        onCreateWallet,
+        accessControl: biometrics[0].accessControl,
+        isComplete,
+    }
 }
 
 // CREATE WALLET HELPER FUNCTIONS
@@ -131,7 +135,7 @@ const handleEncryptrion = async (
         encryprionKey = HexUtils.generateRandom(8)
     }
 
-    encryptedWallet = CryptoUtils.encrypt(wallet, encryprionKey)
+    encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryprionKey)
 
     return { encryprionKey, encryptedWallet }
 }

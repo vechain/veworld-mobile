@@ -6,6 +6,7 @@ import { PasswordPins } from "./Components/PasswordPins"
 import { NumPad } from "./Components/NumPad"
 import { Fonts } from "~Model"
 import { useCreateWalletWithPassword } from "~Common"
+import { Config, RealmClass, useStore } from "~Storage"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
@@ -18,13 +19,28 @@ export const UserCreatePasswordScreen = () => {
         userPin,
     } = useOnDigitPress()
 
-    const { onCreateWallet } = useCreateWalletWithPassword()
+    const store = useStore()
+    const { onCreateWallet, isComplete } = useCreateWalletWithPassword()
 
     useEffect(() => {
         if (isSuccess) {
             onCreateWallet(userPin)
         }
     }, [isSuccess, onCreateWallet, userPin])
+
+    useEffect(() => {
+        if (isComplete) {
+            store.write(() => {
+                let config = store.objectForPrimaryKey<Config>(
+                    RealmClass.Config,
+                    "APP_CONFIG",
+                )
+                if (config) {
+                    config.isWallet = true
+                }
+            })
+        }
+    }, [isComplete, store])
 
     return (
         <BaseSafeArea grow={1}>
