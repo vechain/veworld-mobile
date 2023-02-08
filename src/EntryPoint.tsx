@@ -67,6 +67,7 @@ export const EntryPoint = () => {
                 cache.create(RealmClass.AppLock, { status: "LOCKED" })
             })
         }
+
         if (!config[0]) {
             store.write(() => {
                 store.create(RealmClass.Config, {})
@@ -88,9 +89,19 @@ export const EntryPoint = () => {
         init()
     }, [appLock, fontsLoaded])
 
+    useEffect(() => {
+        if (!config[0].isAppLockActive) {
+            cache.write(() => {
+                appLock[0].status = "UNLOCKED"
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     if (
         appLock[0]?.status === "LOCKED" &&
         !config[0]?.isFirstAppLoad &&
+        config[0].isAppLockActive &&
         fontsLoaded
     ) {
         return <LockScreen />

@@ -1,25 +1,23 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { Switch } from "react-native"
 import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
-import { AppLock, useCache, useCachedQuery } from "~Storage"
+import { Config, useStore, useStoreQuery } from "~Storage"
 
 export const SettingsScreen = () => {
-    const cache = useCache()
+    const store = useStore()
     // todo: this is a workaround until the new version is installed
-    const result = useCachedQuery(AppLock)
-    const appLock = useMemo(() => result.sorted("_id"), [result])
+    const result = useStoreQuery(Config)
+    const config = useMemo(() => result.sorted("_id"), [result])
 
-    const [isEnabled, setIsEnabled] = useState(
-        appLock[0].status === "LOCKED" ? true : false,
-    )
+    const [isEnabled, setIsEnabled] = useState(config[0].isAppLockActive)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState)
 
     useEffect(() => {
-        cache.write(() => {
-            appLock[0].status = isEnabled ? "LOCKED" : "UNLOCKED"
+        store.write(() => {
+            config[0].isAppLockActive = isEnabled
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cache, isEnabled])
+    }, [isEnabled])
 
     return (
         <>

@@ -8,6 +8,7 @@ export class Config extends Object<Config> {
     lastSecurityLevel = "NONE"
     isSecurityDowngrade = false
     userSelectedSecurtiy = "NONE"
+    isAppLockActive = true
 
     static primaryKey = "_id"
 
@@ -19,6 +20,7 @@ export class Config extends Object<Config> {
             isSecurityDowngrade: false,
             lastSecurityLevel: "NONE",
             userSelectedSecurtiy: "NONE",
+            isAppLockActive: true,
         })
     }
 }
