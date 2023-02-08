@@ -67,6 +67,7 @@ export const EntryPoint = () => {
         }
     }, [config])
 
+    // this can be done in Realm provider but current version of Realm is bugged
     const initRealmClasses = useCallback(() => {
         if (!appLock[0]) {
             cache.write(() => {
@@ -88,13 +89,15 @@ export const EntryPoint = () => {
 
     useEffect(() => {
         const init = async () => {
-            // if is biometrics available
             if (biometrics[0]?.accessControl) {
+                if (!config[0].isAppLockActive || config[0]?.isFirstAppLoad) {
+                    await RNBootSplash.hide({ fade: true })
+                    return
+                }
+
                 if (
-                    appLock[0]?.status === "LOCKED" && // and status is Locked
-                    !config[0]?.isFirstAppLoad && // and is NOT on onBoarding phase
-                    config[0].isAppLockActive && // and user has activated pref in app settings
-                    fontsLoaded // fonts are loaded (app is ready)
+                    appLock[0]?.status === "LOCKED" &&
+                    config[0].isAppLockActive
                 ) {
                     let { success } =
                         await BiometricsUtils.authenticateWithbiometric()
@@ -103,25 +106,20 @@ export const EntryPoint = () => {
                         cache.write(() => {
                             appLock[0].status = "UNLOCKED"
                         })
+                        return
                     }
-                } else if (
-                    !config[0].isAppLockActive &&
-                    !config[0]?.isFirstAppLoad &&
-                    fontsLoaded
-                ) {
-                    await RNBootSplash.hide({ fade: true })
-                    cache.write(() => {
-                        appLock[0].status = "UNLOCKED"
-                    })
                 }
             } else {
+                // show lock screen
                 if (fontsLoaded && appLock[0]?.status) {
                     await RNBootSplash.hide({ fade: true })
+                    return
                 }
             }
         }
         init()
-    }, [appLock, biometrics, cache, config, fontsLoaded])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [biometrics, cache, config, fontsLoaded])
 
     // overwrite default cache if use hasn't activated the preference in app settings
     // used for first time the user activates the pref in app settings
@@ -156,7 +154,7 @@ export const EntryPoint = () => {
                 <SecurityDowngradeScreen />
             )}
 
-            {fontsLoaded && appLock[0].status === "UNLOCKED" && (
+            {fontsLoaded && (
                 <>
                     <BaseStatusBar />
                     <SwitchStack />
