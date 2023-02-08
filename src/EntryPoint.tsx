@@ -88,8 +88,6 @@ export const EntryPoint = () => {
         init()
     }, [appLock, fontsLoaded])
 
-    console.log(appLock)
-
     if (
         appLock[0]?.status === "LOCKED" &&
         !config[0]?.isFirstAppLoad &&

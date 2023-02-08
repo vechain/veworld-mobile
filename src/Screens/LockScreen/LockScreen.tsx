@@ -15,6 +15,7 @@ import { useOnDigitPress } from "./useOnDigitPress"
 export const LockScreen = () => {
     const { LL } = useI18nContext()
     const cache = useCache()
+
     // todo: this is a workaround until the new version is installed
     const result = useCachedQuery(AppLock)
     const appLock = useMemo(() => result.sorted("_id"), [result])
