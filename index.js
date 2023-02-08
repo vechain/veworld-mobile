@@ -7,7 +7,11 @@ import { name as appName } from "./app.json"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme, useTheme } from "~Common"
-import { RealmProvider, Translation as TranslationProvider } from "~Components"
+import {
+    Biometrics,
+    RealmProvider,
+    Translation as TranslationProvider,
+} from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 // immer setup
@@ -39,6 +43,7 @@ const Main = () => {
                 <NavigationContainer theme={colorScheme}>
                     <SafeAreaProvider>
                         <TranslationProvider>
+                            <Biometrics />
                             <EntryPoint />
                         </TranslationProvider>
                     </SafeAreaProvider>

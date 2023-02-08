@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { Fonts, Wallet } from "~Model"
+import { Fonts } from "~Model"
 import {
     ActiveWalletCard,
     useCachedQuery,
@@ -22,8 +22,8 @@ import {
     SlideInRight,
     useSharedValue,
 } from "react-native-reanimated"
-import { CryptoUtils, PasswordUtils } from "~Common"
-import KeychainService from "~Services/KeychainService"
+// import { CryptoUtils, PasswordUtils } from "~Common"
+// import KeychainService from "~Services/KeychainService"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -61,22 +61,22 @@ export const HomeScreen = () => {
     // Sample decryption with password
     useEffect(() => {
         const init = async () => {
-            let wallet = devices[0].wallet
-            if (wallet) {
-                let encryptedKey = await KeychainService.getEncryptionKey(false)
-                if (encryptedKey) {
-                    const hashedKey = PasswordUtils.hash("000122") // user input password
-                    let decryptedKey = CryptoUtils.decrypt<string>(
-                        encryptedKey,
-                        hashedKey,
-                    )
-                    let _wallet = CryptoUtils.decrypt<Wallet>(
-                        wallet,
-                        decryptedKey,
-                    )
-                    console.log(_wallet)
-                }
-            }
+            // let wallet = devices[0].wallet
+            // if (wallet) {
+            //     let encryptedKey = await KeychainService.getEncryptionKey(false)
+            //     if (encryptedKey) {
+            //         const hashedKey = PasswordUtils.hash("000122") // user input password
+            //         let decryptedKey = CryptoUtils.decrypt<string>(
+            //             encryptedKey,
+            //             hashedKey,
+            //         )
+            //         let _wallet = CryptoUtils.decrypt<Wallet>(
+            //             wallet,
+            //             decryptedKey,
+            //         )
+            //         console.log(_wallet)
+            //     }
+            // }
         }
         init()
         // eslint-disable-next-line react-hooks/exhaustive-deps

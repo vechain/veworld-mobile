@@ -9,11 +9,11 @@ import {
     Mono_Light,
     Mono_Regular,
 } from "~Assets"
-import { App } from "./App"
 import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen, LockScreen } from "~Screens"
 import {
     AppLock,
+    Biometrics,
     Config,
     RealmClass,
     useCache,
@@ -22,9 +22,11 @@ import {
     useStoreQuery,
 } from "~Storage"
 import KeychainService from "~Services/KeychainService"
-import { Security } from "~Components"
+import { BaseStatusBar, Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
+import { SwitchStack } from "~Navigation"
+import { BiometricsUtils } from "~Common"
 
 export const EntryPoint = () => {
     const store = useStore()
@@ -38,6 +40,10 @@ export const EntryPoint = () => {
     // todo: this is a workaround until the new version is installed
     const result2 = useCachedQuery(AppLock)
     const appLock = useMemo(() => result2.sorted("_id"), [result2])
+
+    // todo: this is a workaround until the new version is installed, then use the above
+    const result3 = useCachedQuery(Biometrics)
+    const biometrics = useMemo(() => result3.sorted("_id"), [result3])
 
     const [fontsLoaded] = useFonts({
         "Inter-Bold": Inter_Bold,
@@ -82,13 +88,43 @@ export const EntryPoint = () => {
 
     useEffect(() => {
         const init = async () => {
-            if (fontsLoaded && appLock[0]?.status) {
-                await RNBootSplash.hide({ fade: true })
+            // if is biometrics available
+            if (biometrics[0]?.accessControl) {
+                if (
+                    appLock[0]?.status === "LOCKED" && // and status is Locked
+                    !config[0]?.isFirstAppLoad && // and is NOT on onBoarding phase
+                    config[0].isAppLockActive && // and user has activated pref in app settings
+                    fontsLoaded // fonts are loaded (app is ready)
+                ) {
+                    let { success } =
+                        await BiometricsUtils.authenticateWithbiometric()
+                    if (success) {
+                        await RNBootSplash.hide({ fade: true })
+                        cache.write(() => {
+                            appLock[0].status = "UNLOCKED"
+                        })
+                    }
+                } else if (
+                    !config[0].isAppLockActive &&
+                    !config[0]?.isFirstAppLoad &&
+                    fontsLoaded
+                ) {
+                    await RNBootSplash.hide({ fade: true })
+                    cache.write(() => {
+                        appLock[0].status = "UNLOCKED"
+                    })
+                }
+            } else {
+                if (fontsLoaded && appLock[0]?.status) {
+                    await RNBootSplash.hide({ fade: true })
+                }
             }
         }
         init()
-    }, [appLock, fontsLoaded])
+    }, [appLock, biometrics, cache, config, fontsLoaded])
 
+    // overwrite default cache if use hasn't activated the preference in app settings
+    // used for first time the user activates the pref in app settings
     useEffect(() => {
         if (!config[0].isAppLockActive) {
             cache.write(() => {
@@ -99,10 +135,11 @@ export const EntryPoint = () => {
     }, [])
 
     if (
-        appLock[0]?.status === "LOCKED" &&
-        !config[0]?.isFirstAppLoad &&
-        config[0].isAppLockActive &&
-        fontsLoaded
+        appLock[0]?.status === "LOCKED" && // cache status default is LOCKED (this is set to UNLOCKED on LockScreen)
+        !config[0]?.isFirstAppLoad && // dont' show while on onBoarding phase
+        config[0].isAppLockActive && // user has activated the preference in app settings
+        !biometrics[0]?.accessControl && // it's not biometrics enabled
+        fontsLoaded // fonts are loaded (app is ready)
     ) {
         return <LockScreen />
     }
@@ -118,7 +155,13 @@ export const EntryPoint = () => {
             {fontsLoaded && config[0]?.isSecurityDowngrade && (
                 <SecurityDowngradeScreen />
             )}
-            {fontsLoaded && <App />}
+
+            {fontsLoaded && appLock[0].status === "UNLOCKED" && (
+                <>
+                    <BaseStatusBar />
+                    <SwitchStack />
+                </>
+            )}
         </>
     )
 }
