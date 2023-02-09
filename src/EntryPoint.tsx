@@ -27,6 +27,7 @@ import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
 import { SwitchStack } from "~Navigation"
 import { BiometricsUtils } from "~Common"
+import { UserSelectedSecurityLevel } from "~Model"
 
 export const EntryPoint = () => {
     const store = useStore()
@@ -89,7 +90,12 @@ export const EntryPoint = () => {
 
     useEffect(() => {
         const init = async () => {
-            if (biometrics[0]?.accessControl) {
+            if (
+                biometrics[0]?.accessControl &&
+                appLock[0]?.status !== "UNLOCKED" &&
+                config[0].userSelectedSecurtiy ===
+                    UserSelectedSecurityLevel.BIOMETRIC
+            ) {
                 if (!config[0].isAppLockActive || config[0]?.isFirstAppLoad) {
                     await RNBootSplash.hide({ fade: true })
                     return
@@ -102,24 +108,22 @@ export const EntryPoint = () => {
                     let { success } =
                         await BiometricsUtils.authenticateWithbiometric()
                     if (success) {
-                        await RNBootSplash.hide({ fade: true })
                         cache.write(() => {
                             appLock[0].status = "UNLOCKED"
                         })
-                        return
+                        await RNBootSplash.hide({ fade: true })
                     }
                 }
             } else {
-                // show lock screen
+                // shows lock screen
                 if (fontsLoaded && appLock[0]?.status) {
                     await RNBootSplash.hide({ fade: true })
-                    return
                 }
             }
         }
-        init()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [biometrics, cache, config, fontsLoaded])
+
+        appLock[0] && biometrics[0] && config[0] && fontsLoaded && init()
+    }, [appLock, biometrics, cache, config, fontsLoaded])
 
     // overwrite default cache if use hasn't activated the preference in app settings
     // used for first time the user activates the pref in app settings
@@ -137,6 +141,7 @@ export const EntryPoint = () => {
         !config[0]?.isFirstAppLoad && // dont' show while on onBoarding phase
         config[0].isAppLockActive && // user has activated the preference in app settings
         !biometrics[0]?.accessControl && // it's not biometrics enabled
+        config[0].userSelectedSecurtiy === UserSelectedSecurityLevel.PASSWORD && // guard against change of securoty level
         fontsLoaded // fonts are loaded (app is ready)
     ) {
         return <LockScreen />

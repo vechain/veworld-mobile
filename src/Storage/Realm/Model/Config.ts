@@ -2,13 +2,19 @@ import { Object } from "realm"
 
 export class Config extends Object<Config> {
     _id = "APP_CONFIG"
+
+    // internal
     isEncryptionKey = false
-    isFirstAppLoad = true
     isWallet = false
-    lastSecurityLevel = "NONE"
-    isSecurityDowngrade = false
+
+    // lock screen
+    isFirstAppLoad = true
     userSelectedSecurtiy = "NONE"
     isAppLockActive = true
+
+    // downgrade
+    lastSecurityLevel = "NONE"
+    isSecurityDowngrade = false
 
     static primaryKey = "_id"
 

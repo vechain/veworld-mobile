@@ -35,6 +35,10 @@ export const HomeScreen = () => {
 
     const handleScrollPOsition = useCallback(
         (event: ScrollEvent) => {
+            //TODO: iphone 14 pro -59 / iphone 11 -48
+            // inconsistemcy in values creates probelms to animation
+            // console.log(event.nativeEvent.contentOffset.y)
+
             scrollValue.value = event.nativeEvent.contentOffset.y
             event.nativeEvent.contentOffset.y > -20
                 ? setChangeContent(true)
