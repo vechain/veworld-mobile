@@ -1,8 +1,10 @@
 import React from "react"
+import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { TabIcon, BlurView } from "~Components"
+import { TabIcon } from "~Components"
 import { useTheme } from "~Common"
-import { HomeStack } from "~Navigation/Stacks"
+import { HomeStack, SettingsStack } from "~Navigation/Stacks"
+import { isIOS } from "~Common/Utils/PlatformUtils/Platform"
 
 const Tab = createBottomTabNavigator()
 
@@ -13,25 +15,57 @@ export const Tabbar = () => {
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
-                tabBarActiveTintColor: theme.colors.tabicon,
-                tabBarInactiveTintColor: theme.colors.tabiconInactive,
-                tabBarStyle: { position: "absolute" },
-                tabBarBackground: () => <BlurView />,
+                tabBarShowLabel: false,
+                tabBarStyle: {
+                    backgroundColor: theme.colors.background,
+                    ...baseStyles.tabbar,
+                    ...baseStyles.shadow,
+                },
             }}>
             <Tab.Screen
                 name="HomeStack"
                 component={HomeStack}
                 options={{
                     tabBarLabel: "Wallet",
-                    tabBarIcon: ({ focused, size }) => (
-                        <TabIcon
-                            focused={focused}
-                            size={size}
-                            title={"Wallet"}
-                        />
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon focused={focused} title={"Wallet"} />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="Settings"
+                component={SettingsStack}
+                options={{
+                    tabBarLabel: "Settings",
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon focused={focused} title={"Settings"} />
                     ),
                 }}
             />
         </Tab.Navigator>
     )
 }
+
+const baseStyles = StyleSheet.create({
+    tabbar: {
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        borderTopWidth: 0,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        height: isIOS() ? 86 : 68,
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: -1,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 20,
+        elevation: 5,
+    },
+})

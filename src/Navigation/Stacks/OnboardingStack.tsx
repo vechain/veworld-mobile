@@ -9,6 +9,8 @@ import {
     ConfirmSeedPhraseScreen,
     AppSecurityScreen,
     UserCreatePasswordScreen,
+    ImportWalletTypeSelectionScreen,
+    ImportSeedPhraseScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
@@ -17,8 +19,10 @@ export type RootStackParamListOnboarding = {
     Onboarding: undefined
     Wallet_Tutorial: undefined
     Wallet_Type_Creation: undefined
+    Wallet_Type_Import: undefined
     Seed_Phrase: undefined
     Confirm_Seed_Phrase: undefined
+    Import_Seed_Phrase: undefined
     User_Create_Password: undefined
     App_Security: undefined
 }
@@ -48,6 +52,12 @@ export const OnboardingStack = () => {
                 />
 
                 <Onboarding.Screen
+                    name={Routes.WALLET_TPYE_IMPORT}
+                    component={ImportWalletTypeSelectionScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
                     name={Routes.WALLET_TUTORIAL}
                     component={TutorialScreen}
                     options={{ headerShown: false }}
@@ -66,22 +76,30 @@ export const OnboardingStack = () => {
                 />
 
                 <Onboarding.Screen
+                    name={Routes.IMPORT_SEED_PHRASE}
+                    component={ImportSeedPhraseScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
                     name={Routes.APP_SECURITY}
                     component={AppSecurityScreen}
                     options={{ headerShown: false }}
                 />
-            </Onboarding.Group>
 
-            <Onboarding.Group
-                screenOptions={{
-                    presentation: "fullScreenModal",
-                }}>
                 <Onboarding.Screen
                     name={Routes.USER_CREATE_PASSWORD}
                     component={UserCreatePasswordScreen}
                     options={{ headerShown: false }}
                 />
             </Onboarding.Group>
+
+            {/* <Onboarding.Group
+                screenOptions={{
+                    presentation: "fullScreenModal",
+                }}>
+
+            </Onboarding.Group> */}
         </Onboarding.Navigator>
     )
 }

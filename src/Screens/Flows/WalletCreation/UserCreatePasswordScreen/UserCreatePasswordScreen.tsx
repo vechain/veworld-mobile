@@ -5,7 +5,7 @@ import { useOnDigitPress } from "./useOnDigitPress"
 import { PasswordPins } from "./Components/PasswordPins"
 import { NumPad } from "./Components/NumPad"
 import { Fonts } from "~Model"
-import { Config, useStore } from "~Storage"
+import { useCreateWalletWithPassword } from "~Common"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
@@ -15,26 +15,16 @@ export const UserCreatePasswordScreen = () => {
         onDigitPress,
         userPinArray,
         isSuccess,
-        // userPin,
+        userPin,
     } = useOnDigitPress()
 
-    const store = useStore()
+    const { onCreateWallet } = useCreateWalletWithPassword()
 
     useEffect(() => {
         if (isSuccess) {
-            store.write(() => {
-                const config = store.objectForPrimaryKey<Config>(
-                    "Config",
-                    "APP_CONFIG",
-                )
-
-                if (config) {
-                    config.isWallet = true
-                    config.isFirstAppLoad = false
-                }
-            })
+            onCreateWallet(userPin)
         }
-    }, [isSuccess, store])
+    }, [isSuccess, onCreateWallet, userPin])
 
     return (
         <BaseSafeArea grow={1}>

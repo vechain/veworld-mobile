@@ -1,10 +1,9 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { FC } from "react"
 import { ScrollView, ScrollViewProps } from "react-native"
 import { useTheme } from "~Common"
 
 type Props = {
-    flexGrow?: boolean
+    grow?: number
 } & ScrollViewProps
 
 export const BaseScrollView: FC<Props> = props => {
@@ -13,7 +12,7 @@ export const BaseScrollView: FC<Props> = props => {
 
     return (
         <ScrollView
-            contentContainerStyle={{ flexGrow: props.flexGrow ? 1 : 0 }}
+            contentContainerStyle={{ flexGrow: props.grow }}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             contentInsetAdjustmentBehavior="automatic"

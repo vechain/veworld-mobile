@@ -19,7 +19,9 @@ export const WalletTypeSelectionScreen = () => {
         nav.navigate(Routes.WALLET_TUTORIAL)
     }
 
-    const onImportWallet = () => {}
+    const onImportWallet = () => {
+        nav.navigate(Routes.WALLET_TPYE_IMPORT)
+    }
 
     return (
         <BaseSafeArea grow={1}>

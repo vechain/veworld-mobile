@@ -12,10 +12,11 @@ import {
 import { App } from "./App"
 import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen } from "~Screens"
-import { Config, useCache, useStore, useStoreQuery } from "~Storage"
+import { Config, RealmClass, useCache, useStore, useStoreQuery } from "~Storage"
 import KeychainService from "~Services/KeychainService"
 import { Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
+import RNBootSplash from "react-native-bootsplash"
 
 export const EntryPoint = () => {
     const store = useStore()
@@ -48,18 +49,27 @@ export const EntryPoint = () => {
     }, [config])
 
     const initRealmModels = useCallback(() => {
-        store.write(() => {
-            let _config = store.objects("Config")
-            if (!_config[0]) {
-                store.create("Config", {})
-            }
-        })
-    }, [store])
+        if (!config[0]) {
+            store.write(() => {
+                store.create(RealmClass.Config, {})
+            })
+        }
+    }, [config, store])
 
     useEffect(() => {
         initRealmModels()
         cleanKeychain()
     }, [cleanKeychain, initRealmModels])
+
+    useEffect(() => {
+        const init = async () => {
+            if (fontsLoaded) {
+                await RNBootSplash.hide({ fade: true })
+            }
+        }
+
+        init()
+    }, [fontsLoaded])
 
     return (
         <>
@@ -69,7 +79,10 @@ export const EntryPoint = () => {
 
             <Security />
 
-            {config[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
+            {fontsLoaded && config[0]?.isSecurityDowngrade && (
+                <SecurityDowngradeScreen />
+            )}
+
             {fontsLoaded && <App />}
         </>
     )

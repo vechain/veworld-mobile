@@ -10,15 +10,14 @@ const Home = createNativeStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
     return (
-        <Home.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}>
+        <Home.Navigator screenOptions={{ headerShown: false }}>
             <Home.Group>
                 <Home.Screen
                     name="Home"
                     component={HomeScreen}
-                    options={{ headerShown: false }}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
             </Home.Group>
         </Home.Navigator>

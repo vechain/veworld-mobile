@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { BiometricsUtils, useAppState } from "~Common"
 import { AppStateType, SecurityLevelType, TSecurityLevel } from "~Model"
-import { Config, useCache, useStore, useStoreQuery } from "~Storage"
+import { Config, RealmClass, useCache, useStore, useStoreQuery } from "~Storage"
 
 const {
     getDeviceEnrolledLevel,
@@ -61,7 +61,7 @@ export const Security = () => {
 
         cache.write(() => {
             cache.create(
-                "Biometrics",
+                RealmClass.Biometrics,
                 {
                     currentSecurityLevel: level,
                     authtypeAvailable: typeAvalable,
@@ -69,7 +69,7 @@ export const Security = () => {
                     isHardwareAvailable: isHardware,
                     accessControl: accessControll,
                 },
-                Realm.UpdateMode.Modified,
+                Realm.UpdateMode.All,
             )
         })
 

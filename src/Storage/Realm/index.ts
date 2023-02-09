@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { createRealmContext } from "@realm/react"
 import {
     Device,
@@ -7,6 +8,7 @@ import {
     Biometrics,
     Mnemonic,
     Account,
+    ActiveWalletCard,
 } from "./Model"
 
 const Realmconfig = {
@@ -21,7 +23,7 @@ const inMemoryRealmconfig = {
     inMemory: true,
     deleteRealmIfMigrationNeeded:
         process.env.NODE_ENV === "development" ? true : false,
-    schema: [AppState, Biometrics, Mnemonic],
+    schema: [AppState, Biometrics, Mnemonic, ActiveWalletCard],
 }
 
 process.env.NODE_ENV === "development" &&
@@ -52,6 +54,7 @@ export {
     AppState,
     Mnemonic,
     Account,
+    ActiveWalletCard,
     useStoreObject,
     useStoreQuery,
     StoreProvider,
@@ -60,4 +63,15 @@ export {
     useCache,
     useCachedObject,
     useCachedQuery,
+}
+
+export enum RealmClass {
+    Device = "Device",
+    XPub = "XPub",
+    Config = "Config",
+    Biometrics = "Biometrics",
+    AppState = "AppState",
+    Mnemonic = "Mnemonic",
+    Account = "Account",
+    ActiveWalletCard = "ActiveWalletCard",
 }
