@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo } from "react"
-import {
-    Inter_Bold,
-    Inter_Light,
-    Inter_Medium,
-    Inter_Regular,
-    Mono_Bold,
-    Mono_Extra_Bold,
-    Mono_Light,
-    Mono_Regular,
-} from "~Assets"
-import { useFonts } from "expo-font"
+// import {
+//     Inter_Bold,
+//     Inter_Light,
+//     Inter_Medium,
+//     Inter_Regular,
+//     Mono_Bold,
+//     Mono_Extra_Bold,
+//     Mono_Light,
+//     Mono_Regular,
+// } from "~Assets"
+// import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen, LockScreen } from "~Screens"
 import {
     AppLock,
@@ -26,12 +26,19 @@ import { BaseStatusBar, Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
 import { SwitchStack } from "~Navigation"
-import { BiometricsUtils } from "~Common"
-import { UserSelectedSecurityLevel } from "~Model"
+import {
+    AppLockStatus,
+    AppUnlockFlow,
+    BiometricsUtils,
+    useAppLockStatus,
+    useUnlockFlow,
+} from "~Common"
 
 export const EntryPoint = () => {
     const store = useStore()
     const cache = useCache()
+    const appLockStatus = useAppLockStatus()
+    const unlockFlow = useUnlockFlow()
 
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -46,27 +53,26 @@ export const EntryPoint = () => {
     const result3 = useCachedQuery(Biometrics)
     const biometrics = useMemo(() => result3.sorted("_id"), [result3])
 
-    const [fontsLoaded] = useFonts({
-        "Inter-Bold": Inter_Bold,
-        "Inter-Regular": Inter_Regular,
-        "Inter-Light": Inter_Light,
-        "Inter-Medium": Inter_Medium,
-        "Mono-Extra-Bold": Mono_Extra_Bold,
-        "Mono-Bold": Mono_Bold,
-        "Mono-Regular": Mono_Regular,
-        "Mono-Light": Mono_Light,
-    })
+    // const [fontsLoaded] = useFonts({
+    //     "Inter-Bold": Inter_Bold,
+    //     "Inter-Regular": Inter_Regular,
+    //     "Inter-Light": Inter_Light,
+    //     "Inter-Medium": Inter_Medium,
+    //     "Mono-Extra-Bold": Mono_Extra_Bold,
+    //     "Mono-Bold": Mono_Bold,
+    //     "Mono-Regular": Mono_Regular,
+    //     "Mono-Light": Mono_Light,
+    // })
 
     /*
         Keychain values persist between new app installs. This is an expected behaviour.
         Work around is to clear the keychain by checking a value in the async store.
     */
     const cleanKeychain = useCallback(async () => {
-        const value = config[0]?.isFirstAppLoad
-        if (value) {
+        if (appLockStatus === AppLockStatus.INIT_STATE) {
             await KeychainService.removeEncryptionKey()
         }
-    }, [config])
+    }, [appLockStatus])
 
     // this can be done in Realm provider but current version of Realm is bugged
     const initRealmClasses = useCallback(() => {
@@ -88,61 +94,40 @@ export const EntryPoint = () => {
         cleanKeychain()
     }, [cleanKeychain, initRealmClasses])
 
-    useEffect(() => {
-        const init = async () => {
-            if (
-                biometrics[0]?.accessControl &&
-                appLock[0]?.status !== "UNLOCKED" &&
-                config[0].userSelectedSecurtiy ===
-                    UserSelectedSecurityLevel.BIOMETRIC
-            ) {
-                if (!config[0].isAppLockActive || config[0]?.isFirstAppLoad) {
-                    await RNBootSplash.hide({ fade: true })
-                    return
-                }
-
-                if (
-                    appLock[0]?.status === "LOCKED" &&
-                    config[0].isAppLockActive
-                ) {
-                    let { success } =
-                        await BiometricsUtils.authenticateWithbiometric()
-                    if (success) {
-                        cache.write(() => {
-                            appLock[0].status = "UNLOCKED"
-                        })
-                        await RNBootSplash.hide({ fade: true })
-                    }
-                }
-            } else {
-                // shows lock screen
-                if (fontsLoaded && appLock[0]?.status) {
-                    await RNBootSplash.hide({ fade: true })
-                }
-            }
-        }
-
-        appLock[0] && biometrics[0] && config[0] && fontsLoaded && init()
-    }, [appLock, biometrics, cache, config, fontsLoaded])
-
-    // overwrite default cache if use hasn't activated the preference in app settings
-    // used for first time the user activates the pref in app settings
-    useEffect(() => {
-        if (!config[0].isAppLockActive) {
-            cache.write(() => {
-                appLock[0].status = "UNLOCKED"
-            })
-        }
+    const initBiometricUnlock = useCallback(async () => {
+        let { success } = await BiometricsUtils.authenticateWithbiometric()
+        cache.write(() => (appLock[0].status = "UNLOCKED"))
+        success && (await RNBootSplash.hide({ fade: true }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cache])
+
+    const initUserPasswordUnlock = useCallback(async () => {
+        await RNBootSplash.hide({ fade: true })
     }, [])
 
+    useEffect(() => {
+        const init = async () => {
+            if (unlockFlow === AppUnlockFlow.BIO_UNLOCK) {
+                initBiometricUnlock()
+            } else {
+                initUserPasswordUnlock()
+            }
+        }
+        biometrics[0] && config[0] && unlockFlow && init()
+    }, [
+        biometrics,
+        config,
+        initBiometricUnlock,
+        initUserPasswordUnlock,
+        unlockFlow,
+    ])
+
+    console.log("appLockStatus", appLockStatus)
+    console.log("unlockFlow", unlockFlow)
+
     if (
-        appLock[0]?.status === "LOCKED" && // cache status default is LOCKED (this is set to UNLOCKED on LockScreen)
-        !config[0]?.isFirstAppLoad && // dont' show while on onBoarding phase
-        config[0].isAppLockActive && // user has activated the preference in app settings
-        !biometrics[0]?.accessControl && // it's not biometrics enabled
-        config[0].userSelectedSecurtiy === UserSelectedSecurityLevel.PASSWORD && // guard against change of securoty level
-        fontsLoaded // fonts are loaded (app is ready)
+        appLockStatus === AppLockStatus.LOCKED_STATE &&
+        unlockFlow === AppUnlockFlow.PASS_UNLOCK
     ) {
         return <LockScreen />
     }
@@ -155,16 +140,12 @@ export const EntryPoint = () => {
 
             <Security />
 
-            {fontsLoaded && config[0]?.isSecurityDowngrade && (
-                <SecurityDowngradeScreen />
-            )}
+            {config[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
 
-            {fontsLoaded && (
-                <>
-                    <BaseStatusBar />
-                    <SwitchStack />
-                </>
-            )}
+            <>
+                <BaseStatusBar />
+                <SwitchStack />
+            </>
         </>
     )
 }

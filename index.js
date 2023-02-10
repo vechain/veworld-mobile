@@ -13,6 +13,17 @@ import {
     Translation as TranslationProvider,
 } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { useFonts } from "expo-font"
+import {
+    Inter_Bold,
+    Inter_Light,
+    Inter_Medium,
+    Inter_Regular,
+    Mono_Bold,
+    Mono_Extra_Bold,
+    Mono_Light,
+    Mono_Regular,
+} from "~Assets"
 
 // immer setup
 enableAllPlugins()
@@ -31,6 +42,17 @@ const Main = () => {
     const scheme = useColorScheme()
     const theme = useTheme()
 
+    const [fontsLoaded] = useFonts({
+        "Inter-Bold": Inter_Bold,
+        "Inter-Regular": Inter_Regular,
+        "Inter-Light": Inter_Light,
+        "Inter-Medium": Inter_Medium,
+        "Mono-Extra-Bold": Mono_Extra_Bold,
+        "Mono-Bold": Mono_Bold,
+        "Mono-Regular": Mono_Regular,
+        "Mono-Light": Mono_Light,
+    })
+
     const colorScheme = useMemo(
         () => getTheme(scheme, theme.colors.background),
         [scheme, theme],
@@ -44,7 +66,7 @@ const Main = () => {
                     <SafeAreaProvider>
                         <TranslationProvider>
                             <Biometrics />
-                            <EntryPoint />
+                            {fontsLoaded && <EntryPoint />}
                         </TranslationProvider>
                     </SafeAreaProvider>
                 </NavigationContainer>

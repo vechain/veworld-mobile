@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -11,15 +11,12 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
-import { Config, RealmClass, useStore } from "~Storage"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const store = useStore()
     const { currentSecurityLevel } = useBiometricType()
-    const { onCreateWallet, accessControl, isComplete } =
-        useCreateWalletWithBiometrics()
+    const { onCreateWallet, accessControl } = useCreateWalletWithBiometrics()
 
     const onBiometricsPress = useCallback(async () => {
         onCreateWallet()
@@ -28,20 +25,6 @@ export const AppSecurityScreen = () => {
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)
     }, [nav])
-
-    useEffect(() => {
-        if (isComplete) {
-            store.write(() => {
-                let config = store.objectForPrimaryKey<Config>(
-                    RealmClass.Config,
-                    "APP_CONFIG",
-                )
-                if (config) {
-                    config.isWallet = true
-                }
-            })
-        }
-    }, [isComplete, store])
 
     return (
         <BaseSafeArea grow={1}>

@@ -56,19 +56,12 @@ export const useCreateWalletWithPassword = () => {
                         await handleEncryptrion(
                             wallet,
                             hashedKey,
-                            config[0].isEncryptionKey,
+                            config[0].isEncryptionKeyCreated,
                         )
-
-                    store.write(() => {
-                        store.create(RealmClass.Device, {
-                            ...device,
-                            wallet: encryptedWallet,
-                        })
-                    })
 
                     cache.write(() => cache.delete(_mnemonic))
 
-                    if (!config[0].isEncryptionKey) {
+                    if (!config[0].isEncryptionKeyCreated) {
                         const accessControl = false
 
                         const encryptedKey = CryptoUtils.encrypt<string>(
@@ -81,12 +74,18 @@ export const useCreateWalletWithPassword = () => {
                             accessControl,
                         )
                         store.write(() => {
-                            config[0].isEncryptionKey = true
-                            config[0].isFirstAppLoad = false
+                            config[0].isEncryptionKeyCreated = true
                             config[0].userSelectedSecurtiy =
                                 UserSelectedSecurityLevel.PASSWORD
                         })
                     }
+
+                    store.write(() => {
+                        store.create(RealmClass.Device, {
+                            ...device,
+                            wallet: encryptedWallet,
+                        })
+                    })
 
                     setIsComplete(true)
                 }
@@ -110,13 +109,13 @@ export const useCreateWalletWithPassword = () => {
 const handleEncryptrion = async (
     wallet: Wallet,
     hashedKey: string,
-    isEncryptionKey: boolean,
+    isEncryptionKeyCreated: boolean,
 ) => {
     let encryptedWallet: string
     let encryprionKey = ""
     const accessControl = false
 
-    if (isEncryptionKey) {
+    if (isEncryptionKeyCreated) {
         let _encryprionKey = await KeychainService.getEncryptionKey(
             accessControl,
         )

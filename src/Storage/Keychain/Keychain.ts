@@ -33,7 +33,5 @@ export async function get(accessControl: boolean): Promise<string | null> {
 }
 
 export async function remove() {
-    let res = await SecureStore.deleteItemAsync("VeWorld_Wallet_key")
-    process.env.NODE_ENV === "development" &&
-        console.log("KEYCHAIN DELETE OLD ENCRYPTION KEY : ", res)
+    await SecureStore.deleteItemAsync("VeWorld_Wallet_key")
 }

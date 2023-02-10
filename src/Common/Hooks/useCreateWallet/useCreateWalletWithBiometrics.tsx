@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { CryptoUtils, HexUtils } from "~Common/Utils"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
@@ -22,8 +22,6 @@ import { getDeviceIndex, getNodes } from "./Helpers"
 export const useCreateWalletWithBiometrics = () => {
     const store = useStore()
     const cache = useCache()
-
-    const [isComplete, setIsComplete] = useState(false)
 
     // const config = useCacheObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -61,7 +59,7 @@ export const useCreateWalletWithBiometrics = () => {
                     await handleEncryptrion(
                         accessControl,
                         wallet,
-                        config[0].isEncryptionKey,
+                        config[0].isEncryptionKeyCreated,
                     )
 
                 store.write(() => {
@@ -86,24 +84,20 @@ export const useCreateWalletWithBiometrics = () => {
         cache.write(() => cache.delete(_mnemonic))
 
         // If first time creating wallet
-        if (!config[0].isEncryptionKey) {
+        if (!config[0].isEncryptionKeyCreated) {
             await KeychainService.setEncryptionKey(encryprionKey, accessControl)
             store.write(() => {
-                config[0].isEncryptionKey = true
-                config[0].isFirstAppLoad = false
+                config[0].isEncryptionKeyCreated = true
                 config[0].userSelectedSecurtiy =
                     UserSelectedSecurityLevel.BIOMETRIC
             })
         }
-
-        setIsComplete(true)
     }
     //* [END] - Finilize Wallet Setup
 
     return {
         onCreateWallet,
         accessControl: biometrics[0].accessControl,
-        isComplete,
     }
 }
 
@@ -113,18 +107,18 @@ export const useCreateWalletWithBiometrics = () => {
  *
  * @param accessControl
  * @param wallet
- * @param isEncryptionKey
+ * @param isEncryptionKeyCreated
  * @returns
  */
 const handleEncryptrion = async (
     accessControl: boolean, // if biometrics(ios) or if fingerprint (android)
     wallet: Wallet,
-    isEncryptionKey: boolean, // if an encryption key is already generated
+    isEncryptionKeyCreated: boolean, // if an encryption key is already generated
 ) => {
     let encryptedWallet: string
     let encryprionKey = ""
 
-    if (isEncryptionKey) {
+    if (isEncryptionKeyCreated) {
         let _encryprionKey = await KeychainService.getEncryptionKey(
             accessControl,
         )

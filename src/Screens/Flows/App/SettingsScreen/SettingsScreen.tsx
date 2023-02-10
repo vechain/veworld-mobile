@@ -1,10 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { Switch } from "react-native"
 import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
-import { Config, useStore, useStoreQuery } from "~Storage"
+import {
+    AppLock,
+    Config,
+    RealmClass,
+    useCache,
+    useStore,
+    useStoreQuery,
+} from "~Storage"
 
 export const SettingsScreen = () => {
     const store = useStore()
+    const cache = useCache()
+
     // todo: this is a workaround until the new version is installed
     const result = useStoreQuery(Config)
     const config = useMemo(() => result.sorted("_id"), [result])
@@ -13,6 +22,15 @@ export const SettingsScreen = () => {
     const toggleSwitch = () => setIsEnabled(previousState => !previousState)
 
     useEffect(() => {
+        cache.write(() => {
+            let appLock = cache.objectForPrimaryKey<AppLock>(
+                RealmClass.AppLock,
+                "APP_LOCK",
+            )
+            if (appLock) {
+                appLock.status = "UNLOCKED"
+            }
+        })
         store.write(() => {
             config[0].isAppLockActive = isEnabled
         })

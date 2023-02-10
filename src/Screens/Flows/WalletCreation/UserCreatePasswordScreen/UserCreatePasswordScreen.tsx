@@ -11,10 +11,11 @@ import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
 import { Fonts } from "~Model"
 import { useCreateWalletWithPassword } from "~Common"
-import { AppLock, Config, RealmClass, useCache, useStore } from "~Storage"
+import { AppLock, RealmClass, useCache } from "~Storage"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
+    const cache = useCache()
     const {
         isPinError,
         isPinRetype,
@@ -23,9 +24,6 @@ export const UserCreatePasswordScreen = () => {
         isSuccess,
         userPin,
     } = useOnDigitPress()
-
-    const store = useStore()
-    const cache = useCache()
     const { onCreateWallet, isComplete } = useCreateWalletWithPassword()
 
     useEffect(() => {
@@ -45,17 +43,8 @@ export const UserCreatePasswordScreen = () => {
                     appLock.status = "UNLOCKED"
                 }
             })
-            store.write(() => {
-                let config = store.objectForPrimaryKey<Config>(
-                    RealmClass.Config,
-                    "APP_CONFIG",
-                )
-                if (config) {
-                    config.isWallet = true
-                }
-            })
         }
-    }, [cache, isComplete, store])
+    }, [cache, isComplete])
 
     return (
         <BaseSafeArea grow={1}>

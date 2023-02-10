@@ -4,11 +4,9 @@ export class Config extends Object<Config> {
     _id = "APP_CONFIG"
 
     // internal
-    isEncryptionKey = false
-    isWallet = false
+    isEncryptionKeyCreated = false
 
     // lock screen
-    isFirstAppLoad = true
     userSelectedSecurtiy = "NONE"
     isAppLockActive = true
 
@@ -20,9 +18,7 @@ export class Config extends Object<Config> {
 
     constructor(realm: Realm) {
         super(realm, {
-            isEncryptionKey: false,
-            isFirstAppLoad: true,
-            isWallet: false,
+            isEncryptionKeyCreated: false,
             isSecurityDowngrade: false,
             lastSecurityLevel: "NONE",
             userSelectedSecurtiy: "NONE",
