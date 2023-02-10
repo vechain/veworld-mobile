@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -6,21 +6,69 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { useBiometricType, useCreateWalletWithBiometrics } from "~Common"
+import {
+    BiometricsUtils,
+    useBiometricType,
+    useCreateWalletWithBiometrics,
+} from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
+import {
+    AppLock,
+    Config,
+    RealmClass,
+    useCache,
+    useStore,
+    useStoreQuery,
+} from "~Storage"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
+
+    const store = useStore()
+    const cache = useCache()
+
+    // todo: this is a workaround until the new version is installed, then use the above
+    const result1 = useStoreQuery(Config)
+    const config = useMemo(() => result1.sorted("_id"), [result1])
+
     const { currentSecurityLevel } = useBiometricType()
-    const { onCreateWallet, accessControl } = useCreateWalletWithBiometrics()
+    const { onCreateWallet, accessControl, isComplete } =
+        useCreateWalletWithBiometrics()
 
     const onBiometricsPress = useCallback(async () => {
         onCreateWallet()
     }, [onCreateWallet])
+
+    useEffect(() => {
+        if (isComplete) {
+            const init = async () => {
+                let { success } =
+                    await BiometricsUtils.authenticateWithbiometric()
+
+                if (success) {
+                    cache.write(() => {
+                        let appLock = cache.objectForPrimaryKey<AppLock>(
+                            RealmClass.AppLock,
+                            "APP_LOCK",
+                        )
+                        if (appLock) {
+                            appLock.status = "UNLOCKED"
+                        }
+                    })
+
+                    store.write(() => {
+                        config[0].isWalletCreated = true
+                    })
+                }
+            }
+
+            init()
+        }
+    }, [cache, config, isComplete, store])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)

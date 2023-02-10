@@ -18,15 +18,23 @@ export const useUnlockFlow = () => {
                 UserSelectedSecurityLevel.BIOMETRIC
         ) {
             return AppUnlockFlow.BIO_UNLOCK
-        } else {
+        }
+
+        if (
+            config[0]?.userSelectedSecurtiy ===
+            UserSelectedSecurityLevel.PASSWORD
+        ) {
             return AppUnlockFlow.PASS_UNLOCK
         }
+
+        return AppUnlockFlow.NONE
     }, [biometrics, config])
 
     return unlockFlow
 }
 
 export enum AppUnlockFlow {
+    NONE = "NONE",
     BIO_UNLOCK = "BIO_UNLOCK",
     PASS_UNLOCK = "PASS_UNLOCK",
 }

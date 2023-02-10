@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -11,7 +11,14 @@ import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
 import { Fonts } from "~Model"
 import { useCreateWalletWithPassword } from "~Common"
-import { AppLock, RealmClass, useCache } from "~Storage"
+import {
+    AppLock,
+    Config,
+    RealmClass,
+    useCache,
+    useStore,
+    useStoreQuery,
+} from "~Storage"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
@@ -25,6 +32,12 @@ export const UserCreatePasswordScreen = () => {
         userPin,
     } = useOnDigitPress()
     const { onCreateWallet, isComplete } = useCreateWalletWithPassword()
+
+    // todo: this is a workaround until the new version is installed, then use the above
+    const result1 = useStoreQuery(Config)
+    const config = useMemo(() => result1.sorted("_id"), [result1])
+
+    const store = useStore()
 
     useEffect(() => {
         if (isSuccess) {
@@ -43,8 +56,12 @@ export const UserCreatePasswordScreen = () => {
                     appLock.status = "UNLOCKED"
                 }
             })
+
+            store.write(() => {
+                config[0].isWalletCreated = true
+            })
         }
-    }, [cache, isComplete])
+    }, [cache, config, isComplete, store])
 
     return (
         <BaseSafeArea grow={1}>

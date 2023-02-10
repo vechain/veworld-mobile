@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { CryptoUtils, HexUtils } from "~Common/Utils"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
@@ -22,6 +22,8 @@ import { getDeviceIndex, getNodes } from "./Helpers"
 export const useCreateWalletWithBiometrics = () => {
     const store = useStore()
     const cache = useCache()
+
+    const [isComplete, setIsComplete] = useState(false)
 
     // const config = useCacheObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -68,6 +70,7 @@ export const useCreateWalletWithBiometrics = () => {
                         wallet: encryptedWallet,
                     })
                 })
+
                 finilizeSetup(accessControl, encryprionKey)
             }
         } catch (error) {
@@ -92,12 +95,15 @@ export const useCreateWalletWithBiometrics = () => {
                     UserSelectedSecurityLevel.BIOMETRIC
             })
         }
+
+        setIsComplete(true)
     }
     //* [END] - Finilize Wallet Setup
 
     return {
         onCreateWallet,
         accessControl: biometrics[0].accessControl,
+        isComplete,
     }
 }
 

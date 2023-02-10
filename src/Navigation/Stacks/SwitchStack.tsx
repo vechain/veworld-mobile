@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Tabbar } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
-import { AppLockStatus, useAppLockStatus } from "~Common"
+import { AppInitState, useAppInitState } from "~Common"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -11,10 +11,10 @@ export type RootStackParamListSwitch = {
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
 export const SwitchStack = () => {
-    const state = useAppLockStatus()
+    const state = useAppInitState()
 
     const RenderStacks = useMemo(() => {
-        if (state === AppLockStatus.INIT_STATE) {
+        if (state === AppInitState.INIT_STATE) {
             return (
                 <Switch.Screen
                     name="OnboardingStack"

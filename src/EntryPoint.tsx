@@ -1,19 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react"
-// import {
-//     Inter_Bold,
-//     Inter_Light,
-//     Inter_Medium,
-//     Inter_Regular,
-//     Mono_Bold,
-//     Mono_Extra_Bold,
-//     Mono_Light,
-//     Mono_Regular,
-// } from "~Assets"
-// import { useFonts } from "expo-font"
 import { SecurityDowngradeScreen, LockScreen } from "~Screens"
 import {
     AppLock,
-    Biometrics,
     Config,
     RealmClass,
     useCache,
@@ -49,27 +37,12 @@ export const EntryPoint = () => {
     const result2 = useCachedQuery(AppLock)
     const appLock = useMemo(() => result2.sorted("_id"), [result2])
 
-    // todo: this is a workaround until the new version is installed, then use the above
-    const result3 = useCachedQuery(Biometrics)
-    const biometrics = useMemo(() => result3.sorted("_id"), [result3])
-
-    // const [fontsLoaded] = useFonts({
-    //     "Inter-Bold": Inter_Bold,
-    //     "Inter-Regular": Inter_Regular,
-    //     "Inter-Light": Inter_Light,
-    //     "Inter-Medium": Inter_Medium,
-    //     "Mono-Extra-Bold": Mono_Extra_Bold,
-    //     "Mono-Bold": Mono_Bold,
-    //     "Mono-Regular": Mono_Regular,
-    //     "Mono-Light": Mono_Light,
-    // })
-
     /*
         Keychain values persist between new app installs. This is an expected behaviour.
-        Work around is to clear the keychain by checking a value in the async store.
+        Work around is to clear the keychain by checking if it's the first app load.
     */
     const cleanKeychain = useCallback(async () => {
-        if (appLockStatus === AppLockStatus.INIT_STATE) {
+        if (appLockStatus === AppLockStatus.NO_LOCK) {
             await KeychainService.removeEncryptionKey()
         }
     }, [appLockStatus])
@@ -94,41 +67,27 @@ export const EntryPoint = () => {
         cleanKeychain()
     }, [cleanKeychain, initRealmClasses])
 
-    const initBiometricUnlock = useCallback(async () => {
-        let { success } = await BiometricsUtils.authenticateWithbiometric()
-        cache.write(() => (appLock[0].status = "UNLOCKED"))
-        success && (await RNBootSplash.hide({ fade: true }))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cache])
-
-    const initUserPasswordUnlock = useCallback(async () => {
-        await RNBootSplash.hide({ fade: true })
-    }, [])
-
     useEffect(() => {
         const init = async () => {
-            if (unlockFlow === AppUnlockFlow.BIO_UNLOCK) {
-                initBiometricUnlock()
-            } else {
-                initUserPasswordUnlock()
+            if (
+                appLockStatus === AppLockStatus.NO_LOCK ||
+                isLockScreenFlow(appLockStatus, unlockFlow)
+            ) {
+                await RNBootSplash.hide({ fade: true })
+            }
+
+            if (isBiometricLockFlow(appLockStatus, unlockFlow)) {
+                let { success } =
+                    await BiometricsUtils.authenticateWithbiometric()
+                if (success) {
+                    await RNBootSplash.hide({ fade: true })
+                }
             }
         }
-        biometrics[0] && config[0] && unlockFlow && init()
-    }, [
-        biometrics,
-        config,
-        initBiometricUnlock,
-        initUserPasswordUnlock,
-        unlockFlow,
-    ])
+        init()
+    }, [appLockStatus, unlockFlow])
 
-    console.log("appLockStatus", appLockStatus)
-    console.log("unlockFlow", unlockFlow)
-
-    if (
-        appLockStatus === AppLockStatus.LOCKED_STATE &&
-        unlockFlow === AppUnlockFlow.PASS_UNLOCK
-    ) {
+    if (isLockScreenFlow(appLockStatus, unlockFlow)) {
         return <LockScreen />
     }
 
@@ -147,5 +106,25 @@ export const EntryPoint = () => {
                 <SwitchStack />
             </>
         </>
+    )
+}
+
+export const isLockScreenFlow = (
+    appLockStatus: AppLockStatus | undefined,
+    unlockFlow: AppUnlockFlow,
+) => {
+    return (
+        appLockStatus === AppLockStatus.LOCKED_STATE &&
+        unlockFlow === AppUnlockFlow.PASS_UNLOCK
+    )
+}
+
+export const isBiometricLockFlow = (
+    appLockStatus: AppLockStatus | undefined,
+    unlockFlow: AppUnlockFlow,
+) => {
+    return (
+        appLockStatus === AppLockStatus.LOCKED_STATE &&
+        unlockFlow === AppUnlockFlow.BIO_UNLOCK
     )
 }

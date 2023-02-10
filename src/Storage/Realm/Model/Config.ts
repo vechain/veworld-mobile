@@ -5,6 +5,7 @@ export class Config extends Object<Config> {
 
     // internal
     isEncryptionKeyCreated = false
+    isWalletCreated = false
 
     // lock screen
     userSelectedSecurtiy = "NONE"
@@ -23,6 +24,7 @@ export class Config extends Object<Config> {
             lastSecurityLevel: "NONE",
             userSelectedSecurtiy: "NONE",
             isAppLockActive: true,
+            isWalletCreated: false,
         })
     }
 }
