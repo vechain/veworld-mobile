@@ -57,6 +57,7 @@ const en: BaseTranslation = {
     BD_IMPORT_WALLET_TYPE_HARDWARE: "You can connect a hardware wallet which will give you access to your new and existing accounts.",
     BD_WALLET_IMPORT_LOCAL:
     "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
+    BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -72,6 +73,7 @@ const en: BaseTranslation = {
     TITLE_MNEMONIC: "Your Mnemonic",
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
+    TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
@@ -89,6 +91,8 @@ const en: BaseTranslation = {
 
     // Common Buttons
     COMMON_BTN_back: "Back",
+    COMMON_BTN_RETRY: "Retry",
+    COMMON_BTN_SIGN_OUT: "Sign out",
     COMMON_BTN_next: "Next",
     COMMON_BTN_cancel: "Cancel",
     COMMON_BTN_connect: "Connect",
