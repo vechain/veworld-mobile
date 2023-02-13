@@ -6,10 +6,10 @@
  * @value `NOT_INITIALISED` - The wallet has not been setup yet
  */
 export enum WALLET_STATUS {
-    FIRST_TIME_ACCESS = "first-time-access",
-    LOCKED = "locked",
-    UNLOCKED = "unlocked",
-    NOT_INITIALISED = "not-initialised",
+    FIRST_TIME_ACCESS = "FIRST_TIME_ACCESS",
+    LOCKED = "LOCKED",
+    UNLOCKED = "UNLOCKED",
+    NOT_INITIALISED = "NOT_INITIALISED",
 }
 
 /**

@@ -1,15 +1,7 @@
 import { HDNode } from "thor-devkit"
 import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
-import { Wallet } from "~Model"
-
-/*
-    https://nodejs.org/api/crypto.html#cryptocreatecipherivalgorithm-key-iv-options
-
-    Initialization vectors should be unpredictable and unique; ideally, they will be cryptographically random. They do not have to be secret: IVs are typically just added to ciphertext messages unencrypted. It may sound contradictory that something has to be unpredictable and unique, but does not have to be secret; remember that an attacker must not be able to predict ahead of time what a given IV will be.
-*/
-const buf = Buffer.alloc(16)
-const iv = crypto.randomFillSync(buf)
+import PasswordUtils from "../PasswordUtils"
 
 export const xPubFromHdNode = (hdNode: HDNode): XPub => {
     return {
@@ -40,28 +32,20 @@ export function shuffleArray<T>(arr: T[]) {
         .map(({ value }) => value)
 }
 
-export const encrypt = (wallet: Wallet, encryptionKey: string) => {
-    let key = crypto
-        .createHash("sha256")
-        .update(encryptionKey)
-        .digest("hex")
-        .substring(0, 32)
-
+export function encrypt<T>(data: T, encryptionKey: string): string {
+    const key = PasswordUtils.hash(encryptionKey)
+    const iv = PasswordUtils.getIV()
     const cipher = crypto.createCipheriv("aes256", key, iv)
-    let ciph = cipher.update(JSON.stringify(wallet), "utf-8", "hex")
+    let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
     return ciph as string
 }
 
-export function decrypt<T>(encryptedWalet: string, encryptionKey: string): T {
-    let key = crypto
-        .createHash("sha256")
-        .update(encryptionKey)
-        .digest("hex")
-        .substring(0, 32)
-
+export function decrypt<T>(data: string, encryptionKey: string): T {
+    const key = PasswordUtils.hash(encryptionKey)
+    const iv = PasswordUtils.getIV()
     const decipher = crypto.createDecipheriv("aes256", key, iv)
-    let txt = decipher.update(encryptedWalet, "hex", "utf-8")
+    let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
     let parsed = JSON.parse(txtToString)

@@ -9,6 +9,7 @@ import {
     Mnemonic,
     Account,
     ActiveWalletCard,
+    AppLock,
 } from "./Model"
 
 const Realmconfig = {
@@ -23,7 +24,7 @@ const inMemoryRealmconfig = {
     inMemory: true,
     deleteRealmIfMigrationNeeded:
         process.env.NODE_ENV === "development" ? true : false,
-    schema: [AppState, Biometrics, Mnemonic, ActiveWalletCard],
+    schema: [AppState, Biometrics, Mnemonic, ActiveWalletCard, AppLock],
 }
 
 process.env.NODE_ENV === "development" &&
@@ -55,6 +56,7 @@ export {
     Mnemonic,
     Account,
     ActiveWalletCard,
+    AppLock,
     useStoreObject,
     useStoreQuery,
     StoreProvider,
@@ -74,4 +76,5 @@ export enum RealmClass {
     Mnemonic = "Mnemonic",
     Account = "Account",
     ActiveWalletCard = "ActiveWalletCard",
+    AppLock = "AppLock",
 }

@@ -1,14 +1,28 @@
-import React, { useEffect } from "react"
-import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
+import React, { useEffect, useMemo } from "react"
+import {
+    BaseSafeArea,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    PasswordPins,
+    NumPad,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
-import { PasswordPins } from "./Components/PasswordPins"
-import { NumPad } from "./Components/NumPad"
-import { Fonts } from "~Model"
+import { Fonts, WALLET_STATUS } from "~Model"
 import { useCreateWalletWithPassword } from "~Common"
+import {
+    AppLock,
+    Config,
+    RealmClass,
+    useCache,
+    useStore,
+    useStoreQuery,
+} from "~Storage"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
+    const cache = useCache()
     const {
         isPinError,
         isPinRetype,
@@ -17,14 +31,37 @@ export const UserCreatePasswordScreen = () => {
         isSuccess,
         userPin,
     } = useOnDigitPress()
+    const { onCreateWallet, isComplete } = useCreateWalletWithPassword()
 
-    const { onCreateWallet } = useCreateWalletWithPassword()
+    // todo: this is a workaround until the new version is installed, then use the above
+    const result1 = useStoreQuery(Config)
+    const config = useMemo(() => result1.sorted("_id"), [result1])
+
+    const store = useStore()
 
     useEffect(() => {
         if (isSuccess) {
             onCreateWallet(userPin)
         }
     }, [isSuccess, onCreateWallet, userPin])
+
+    useEffect(() => {
+        if (isComplete) {
+            cache.write(() => {
+                let appLock = cache.objectForPrimaryKey<AppLock>(
+                    RealmClass.AppLock,
+                    "APP_LOCK",
+                )
+                if (appLock) {
+                    appLock.status = WALLET_STATUS.UNLOCKED
+                }
+            })
+
+            store.write(() => {
+                config[0].isWalletCreated = true
+            })
+        }
+    }, [cache, config, isComplete, store])
 
     return (
         <BaseSafeArea grow={1}>

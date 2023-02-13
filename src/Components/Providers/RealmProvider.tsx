@@ -26,10 +26,6 @@ export const RealmProvider = ({ children }: Props) => {
     // }
     // }, [])
 
-    // useEffect(() => {
-    // init()
-    // }, [])
-
     return (
         <CacheProvider>
             <StoreProvider>{children}</StoreProvider>

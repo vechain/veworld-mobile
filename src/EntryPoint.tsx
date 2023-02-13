@@ -1,75 +1,85 @@
 import React, { useCallback, useEffect, useMemo } from "react"
+import { SecurityDowngradeScreen, LockScreen } from "~Screens"
 import {
-    Inter_Bold,
-    Inter_Light,
-    Inter_Medium,
-    Inter_Regular,
-    Mono_Bold,
-    Mono_Extra_Bold,
-    Mono_Light,
-    Mono_Regular,
-} from "~Assets"
-import { App } from "./App"
-import { useFonts } from "expo-font"
-import { SecurityDowngradeScreen } from "~Screens"
-import { Config, RealmClass, useCache, useStore, useStoreQuery } from "~Storage"
-import KeychainService from "~Services/KeychainService"
-import { Security } from "~Components"
+    AppLock,
+    Config,
+    RealmClass,
+    useCache,
+    useCachedQuery,
+    useStore,
+    useStoreQuery,
+} from "~Storage"
+import { BaseStatusBar, Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
+import { SwitchStack } from "~Navigation"
+import {
+    AppLockStatus,
+    BiometricsUtils,
+    LockScreenUtils,
+    useAppLockStatus,
+    useUnlockFlow,
+} from "~Common"
 
 export const EntryPoint = () => {
     const store = useStore()
     const cache = useCache()
+    const appLockStatus = useAppLockStatus()
+    const unlockFlow = useUnlockFlow()
+
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
-    const result = useStoreQuery(Config)
-    const config = useMemo(() => result.sorted("_id"), [result])
+    const result1 = useStoreQuery(Config)
+    const config = useMemo(() => result1.sorted("_id"), [result1])
 
-    const [fontsLoaded] = useFonts({
-        "Inter-Bold": Inter_Bold,
-        "Inter-Regular": Inter_Regular,
-        "Inter-Light": Inter_Light,
-        "Inter-Medium": Inter_Medium,
-        "Mono-Extra-Bold": Mono_Extra_Bold,
-        "Mono-Bold": Mono_Bold,
-        "Mono-Regular": Mono_Regular,
-        "Mono-Light": Mono_Light,
-    })
+    // todo: this is a workaround until the new version is installed
+    const result2 = useCachedQuery(AppLock)
+    const appLock = useMemo(() => result2.sorted("_id"), [result2])
 
-    /*
-        Keychain values persist between new app installs. This is an expected behaviour.
-        Work around is to clear the keychain by checking a value in the async store.
-    */
-    const cleanKeychain = useCallback(async () => {
-        const value = config[0]?.isFirstAppLoad
-        if (value) {
-            await KeychainService.removeEncryptionKey()
+    // this can be done in Realm provider but current version of Realm is bugged
+    const initRealmClasses = useCallback(() => {
+        if (!appLock[0]) {
+            cache.write(() => {
+                cache.create(RealmClass.AppLock, { status: "LOCKED" })
+            })
         }
-    }, [config])
 
-    const initRealmModels = useCallback(() => {
         if (!config[0]) {
             store.write(() => {
                 store.create(RealmClass.Config, {})
             })
         }
-    }, [config, store])
+    }, [appLock, cache, config, store])
 
     useEffect(() => {
-        initRealmModels()
-        cleanKeychain()
-    }, [cleanKeychain, initRealmModels])
+        initRealmClasses()
+    }, [initRealmClasses])
 
     useEffect(() => {
         const init = async () => {
-            if (fontsLoaded) {
+            if (
+                appLockStatus === AppLockStatus.NO_LOCK ||
+                LockScreenUtils.isLockScreenFlow(appLockStatus, unlockFlow)
+            ) {
                 await RNBootSplash.hide({ fade: true })
             }
-        }
 
+            if (
+                LockScreenUtils.isBiometricLockFlow(appLockStatus, unlockFlow)
+            ) {
+                let { success } =
+                    await BiometricsUtils.authenticateWithbiometric()
+                if (success) {
+                    await RNBootSplash.hide({ fade: true })
+                }
+            }
+        }
         init()
-    }, [fontsLoaded])
+    }, [appLockStatus, unlockFlow])
+
+    if (LockScreenUtils.isLockScreenFlow(appLockStatus, unlockFlow)) {
+        return <LockScreen />
+    }
 
     return (
         <>
@@ -79,11 +89,12 @@ export const EntryPoint = () => {
 
             <Security />
 
-            {fontsLoaded && config[0]?.isSecurityDowngrade && (
-                <SecurityDowngradeScreen />
-            )}
+            {config[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
 
-            {fontsLoaded && <App />}
+            <>
+                <BaseStatusBar />
+                <SwitchStack />
+            </>
         </>
     )
 }
