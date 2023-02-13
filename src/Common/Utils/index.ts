@@ -13,6 +13,7 @@ import HexUtils from "./HexUtils"
 import PasswordUtils from "./PasswordUtils"
 import PlatformUtils from "./PlatformUtils"
 import SeedUtils from "./SeedUtils"
+import LockScreenUtils from "./LockScreenUtils"
 // import SignatureUtils from "./SignatureUtils"
 // import TokenUtils from "./TokenUtils"
 // import TransactionUtils from "./TransactionUtils"
@@ -34,6 +35,7 @@ export {
     PasswordUtils,
     PlatformUtils,
     SeedUtils,
+    LockScreenUtils,
     // SignatureUtils,
     // TokenUtils,
     // TransactionUtils,

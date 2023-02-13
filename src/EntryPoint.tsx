@@ -9,15 +9,14 @@ import {
     useStore,
     useStoreQuery,
 } from "~Storage"
-import KeychainService from "~Services/KeychainService"
 import { BaseStatusBar, Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
 import { SwitchStack } from "~Navigation"
 import {
     AppLockStatus,
-    AppUnlockFlow,
     BiometricsUtils,
+    LockScreenUtils,
     useAppLockStatus,
     useUnlockFlow,
 } from "~Common"
@@ -37,16 +36,6 @@ export const EntryPoint = () => {
     const result2 = useCachedQuery(AppLock)
     const appLock = useMemo(() => result2.sorted("_id"), [result2])
 
-    /*
-        Keychain values persist between new app installs. This is an expected behaviour.
-        Work around is to clear the keychain by checking if it's the first app load.
-    */
-    const cleanKeychain = useCallback(async () => {
-        if (appLockStatus === AppLockStatus.NO_LOCK) {
-            await KeychainService.removeEncryptionKey()
-        }
-    }, [appLockStatus])
-
     // this can be done in Realm provider but current version of Realm is bugged
     const initRealmClasses = useCallback(() => {
         if (!appLock[0]) {
@@ -64,19 +53,20 @@ export const EntryPoint = () => {
 
     useEffect(() => {
         initRealmClasses()
-        cleanKeychain()
-    }, [cleanKeychain, initRealmClasses])
+    }, [initRealmClasses])
 
     useEffect(() => {
         const init = async () => {
             if (
                 appLockStatus === AppLockStatus.NO_LOCK ||
-                isLockScreenFlow(appLockStatus, unlockFlow)
+                LockScreenUtils.isLockScreenFlow(appLockStatus, unlockFlow)
             ) {
                 await RNBootSplash.hide({ fade: true })
             }
 
-            if (isBiometricLockFlow(appLockStatus, unlockFlow)) {
+            if (
+                LockScreenUtils.isBiometricLockFlow(appLockStatus, unlockFlow)
+            ) {
                 let { success } =
                     await BiometricsUtils.authenticateWithbiometric()
                 if (success) {
@@ -87,7 +77,7 @@ export const EntryPoint = () => {
         init()
     }, [appLockStatus, unlockFlow])
 
-    if (isLockScreenFlow(appLockStatus, unlockFlow)) {
+    if (LockScreenUtils.isLockScreenFlow(appLockStatus, unlockFlow)) {
         return <LockScreen />
     }
 
@@ -106,25 +96,5 @@ export const EntryPoint = () => {
                 <SwitchStack />
             </>
         </>
-    )
-}
-
-export const isLockScreenFlow = (
-    appLockStatus: AppLockStatus | undefined,
-    unlockFlow: AppUnlockFlow,
-) => {
-    return (
-        appLockStatus === AppLockStatus.LOCKED_STATE &&
-        unlockFlow === AppUnlockFlow.PASS_UNLOCK
-    )
-}
-
-export const isBiometricLockFlow = (
-    appLockStatus: AppLockStatus | undefined,
-    unlockFlow: AppUnlockFlow,
-) => {
-    return (
-        appLockStatus === AppLockStatus.LOCKED_STATE &&
-        unlockFlow === AppUnlockFlow.BIO_UNLOCK
     )
 }
