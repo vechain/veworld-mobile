@@ -57,7 +57,7 @@ export const useCreateWalletWithBiometrics = () => {
                     deviceIndex,
                 )
 
-                const { encryprionKey, encryptedWallet } =
+                const { encryptionKey, encryptedWallet } =
                     await handleEncryptrion(wallet)
 
                 store.write(() => {
@@ -67,7 +67,7 @@ export const useCreateWalletWithBiometrics = () => {
                     })
                 })
 
-                finilizeSetup(accessControl, encryprionKey, deviceIndex)
+                finilizeSetup(accessControl, encryptionKey, deviceIndex)
             }
         } catch (error) {
             console.log("CREATE WALLET ERROR : ", error)
@@ -78,12 +78,12 @@ export const useCreateWalletWithBiometrics = () => {
     //* [START] - Finilize Wallet Setup
     const finilizeSetup = async (
         accessControl: boolean,
-        encryprionKey: string,
+        encryptionKey: string,
         deviceIndex: number,
     ) => {
         cache.write(() => cache.delete(_mnemonic))
         await KeychainService.setEncryptionKey(
-            encryprionKey,
+            encryptionKey,
             deviceIndex,
             accessControl,
         )
@@ -111,7 +111,7 @@ export const useCreateWalletWithBiometrics = () => {
  * @returns
  */
 const handleEncryptrion = async (wallet: Wallet) => {
-    let encryprionKey = HexUtils.generateRandom(8)
-    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryprionKey)
-    return { encryprionKey, encryptedWallet }
+    let encryptionKey = HexUtils.generateRandom(8)
+    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
+    return { encryptionKey, encryptedWallet }
 }

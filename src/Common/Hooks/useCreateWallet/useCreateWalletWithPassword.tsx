@@ -52,13 +52,13 @@ export const useCreateWalletWithPassword = () => {
                     )
 
                     const hashedKey = PasswordUtils.hash(userPassword)
-                    const { encryprionKey, encryptedWallet } =
+                    const { encryptionKey, encryptedWallet } =
                         await handleEncryptrion(wallet)
 
                     cache.write(() => cache.delete(_mnemonic))
 
                     const encryptedKey = CryptoUtils.encrypt<string>(
-                        encryprionKey,
+                        encryptionKey,
                         hashedKey,
                     )
 
@@ -97,7 +97,7 @@ export const useCreateWalletWithPassword = () => {
  * @returns
  */
 const handleEncryptrion = async (wallet: Wallet) => {
-    let encryprionKey = HexUtils.generateRandom(8)
-    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryprionKey)
-    return { encryprionKey, encryptedWallet }
+    let encryptionKey = HexUtils.generateRandom(8)
+    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
+    return { encryptionKey, encryptedWallet }
 }
