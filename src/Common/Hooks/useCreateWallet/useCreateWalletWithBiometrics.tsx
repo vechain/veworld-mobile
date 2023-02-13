@@ -57,12 +57,8 @@ export const useCreateWalletWithBiometrics = () => {
                     deviceIndex,
                 )
 
-                const { encryptionKey, encryptedWallet } =
-                    await handleEncryption(
-                        accessControl,
-                        wallet,
-                        config[0].isEncryptionKeyCreated,
-                    )
+                const { encryprionKey, encryptedWallet } =
+                    await handleEncryptrion(wallet)
 
                 store.write(() => {
                     store.create(RealmClass.Device, {
@@ -71,7 +67,7 @@ export const useCreateWalletWithBiometrics = () => {
                     })
                 })
 
-                finilizeSetup(accessControl, encryptionKey)
+                finilizeSetup(accessControl, encryprionKey, deviceIndex)
             }
         } catch (error) {
             console.log("CREATE WALLET ERROR : ", error)
@@ -82,19 +78,18 @@ export const useCreateWalletWithBiometrics = () => {
     //* [START] - Finilize Wallet Setup
     const finilizeSetup = async (
         accessControl: boolean,
-        encryptionKey: string,
+        encryprionKey: string,
+        deviceIndex: number,
     ) => {
         cache.write(() => cache.delete(_mnemonic))
-
-        // If first time creating wallet
-        if (!config[0].isEncryptionKeyCreated) {
-            await KeychainService.setEncryptionKey(encryptionKey, accessControl)
-            store.write(() => {
-                config[0].isEncryptionKeyCreated = true
-                config[0].userSelectedSecurtiy =
-                    UserSelectedSecurityLevel.BIOMETRIC
-            })
-        }
+        await KeychainService.setEncryptionKey(
+            encryprionKey,
+            deviceIndex,
+            accessControl,
+        )
+        store.write(() => {
+            config[0].userSelectedSecurtiy = UserSelectedSecurityLevel.BIOMETRIC
+        })
 
         setIsComplete(true)
     }
@@ -113,29 +108,10 @@ export const useCreateWalletWithBiometrics = () => {
  *
  * @param accessControl
  * @param wallet
- * @param isEncryptionKeyCreated
  * @returns
  */
-const handleEncryption = async (
-    accessControl: boolean, // if biometrics(ios) or if fingerprint (android)
-    wallet: Wallet,
-    isEncryptionKeyCreated: boolean, // if an encryption key is already generated
-) => {
-    let encryptedWallet = ""
-    let encryptionKey = ""
-
-    if (isEncryptionKeyCreated) {
-        let _encryptionKey = await KeychainService.getEncryptionKey(
-            accessControl,
-        )
-        if (_encryptionKey) {
-            encryptionKey = _encryptionKey
-        }
-    } else {
-        encryptionKey = HexUtils.generateRandom(8)
-    }
-
-    encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
-
-    return { encryptionKey, encryptedWallet }
+const handleEncryptrion = async (wallet: Wallet) => {
+    let encryprionKey = HexUtils.generateRandom(8)
+    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryprionKey)
+    return { encryprionKey, encryptedWallet }
 }

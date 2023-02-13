@@ -6,7 +6,11 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { useBiometricType, useCreateWalletWithBiometrics } from "~Common"
+import {
+    BiometricsUtils,
+    useBiometricType,
+    useCreateWalletWithBiometrics,
+} from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -36,7 +40,10 @@ export const AppSecurityScreen = () => {
         useCreateWalletWithBiometrics()
 
     const onBiometricsPress = useCallback(async () => {
-        onCreateWallet()
+        let { success } = await BiometricsUtils.authenticateWithbiometric()
+        if (success) {
+            onCreateWallet()
+        }
     }, [onCreateWallet])
 
     useEffect(() => {
