@@ -27,22 +27,31 @@ export const useCreateWalletWithBiometrics = () => {
 
     // const config = useCacheObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
-    const result4 = useStoreQuery(Config)
-    const config = useMemo(() => result4.sorted("_id"), [result4])
+    const configQuery = useStoreQuery(Config)
+    const config = useMemo(() => configQuery.sorted("_id"), [configQuery])
 
     // todo - remove sort when new version is installed
-    const result3 = useStoreQuery(Device)
-    const devices = useMemo(() => result3.sorted("rootAddress"), [result3])
+    const deviceQuery = useStoreQuery(Device)
+    const devices = useMemo(
+        () => deviceQuery.sorted("rootAddress"),
+        [deviceQuery],
+    )
 
     // const mnemonic = useCacheObject(Mnemonic, "WALLET_MNEMONIC")
     // todo: this is a workaround until the new version is installed, then use the above
-    const result2 = useCachedQuery(Mnemonic)
-    const _mnemonic = useMemo(() => result2.sorted("_id"), [result2])
+    const mnemonicQuery = useCachedQuery(Mnemonic)
+    const _mnemonic = useMemo(
+        () => mnemonicQuery.sorted("_id"),
+        [mnemonicQuery],
+    )
 
     // const biometrics = useCacheObject(Biometrics, "BIOMETRICS")
     // todo: this is a workaround until the new version is installed, then use the above
-    const result1 = useCachedQuery(Biometrics)
-    const biometrics = useMemo(() => result1.sorted("_id"), [result1])
+    const biometricsQuery = useCachedQuery(Biometrics)
+    const biometrics = useMemo(
+        () => biometricsQuery.sorted("_id"),
+        [biometricsQuery],
+    )
 
     //* [START] - Create Wallet
     const onCreateWallet = async () => {
@@ -58,7 +67,7 @@ export const useCreateWalletWithBiometrics = () => {
                 )
 
                 const { encryptionKey, encryptedWallet } =
-                    await handleEncryptrion(wallet)
+                    await handleEncryption(wallet)
 
                 store.write(() => {
                     store.create(RealmClass.Device, {
@@ -67,7 +76,7 @@ export const useCreateWalletWithBiometrics = () => {
                     })
                 })
 
-                finilizeSetup(accessControl, encryptionKey, deviceIndex)
+                finalizeSetup(accessControl, encryptionKey, deviceIndex)
             }
         } catch (error) {
             console.log("CREATE WALLET ERROR : ", error)
@@ -76,7 +85,7 @@ export const useCreateWalletWithBiometrics = () => {
     //* [END] - Create Wallet
 
     //* [START] - Finilize Wallet Setup
-    const finilizeSetup = async (
+    const finalizeSetup = async (
         accessControl: boolean,
         encryptionKey: string,
         deviceIndex: number,
@@ -110,7 +119,7 @@ export const useCreateWalletWithBiometrics = () => {
  * @param wallet
  * @returns
  */
-const handleEncryptrion = async (wallet: Wallet) => {
+const handleEncryption = async (wallet: Wallet) => {
     let encryptionKey = HexUtils.generateRandom(8)
     let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
     return { encryptionKey, encryptedWallet }
