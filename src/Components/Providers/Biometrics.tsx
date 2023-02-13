@@ -5,7 +5,7 @@ import { RealmClass, useCache } from "~Storage"
 
 const {
     getDeviceEnrolledLevel,
-    getGeviceHasHardware,
+    getDeviceHasHardware,
     getIsDeviceEnrolled,
     getBiometricTypeAvailable,
 } = BiometricsUtils
@@ -16,11 +16,11 @@ export const Biometrics = () => {
 
     const init = useCallback(async () => {
         let level = await getDeviceEnrolledLevel()
-        let isHardware = await getGeviceHasHardware()
+        let isHardware = await getDeviceHasHardware()
         let isEnrolled = await getIsDeviceEnrolled()
         let typeAvalable = await getBiometricTypeAvailable()
 
-        let accessControll =
+        let accessControl =
             !isEnrolled || !isHardware || level !== SecurityLevelType.BIOMETRIC
                 ? false
                 : true
@@ -33,7 +33,7 @@ export const Biometrics = () => {
                     authtypeAvailable: typeAvalable,
                     isDeviceEnrolled: isEnrolled,
                     isHardwareAvailable: isHardware,
-                    accessControl: accessControll,
+                    accessControl: accessControl,
                 },
                 Realm.UpdateMode.All,
             )

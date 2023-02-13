@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { Switch } from "react-native"
 import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
+import { WALLET_STATUS } from "~Model"
 import {
     AppLock,
     Config,
@@ -28,7 +29,7 @@ export const SettingsScreen = () => {
                 "APP_LOCK",
             )
             if (appLock) {
-                appLock.status = "UNLOCKED"
+                appLock.status = WALLET_STATUS.UNLOCKED
             }
         })
         store.write(() => {

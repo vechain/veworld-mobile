@@ -7,7 +7,7 @@ import {
     NumPad,
     PasswordPins,
 } from "~Components"
-import { Fonts } from "~Model"
+import { Fonts, WALLET_STATUS } from "~Model"
 import { AppLock, useCache, useCachedQuery } from "~Storage"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
@@ -26,7 +26,7 @@ export const LockScreen = () => {
     useEffect(() => {
         if (isSuccess) {
             cache.write(() => {
-                appLock[0].status = "UNLOCKED"
+                appLock[0].status = WALLET_STATUS.UNLOCKED
             })
         }
     }, [appLock, cache, isSuccess])

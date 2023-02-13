@@ -58,7 +58,7 @@ export const useCreateWalletWithBiometrics = () => {
                 )
 
                 const { encryprionKey, encryptedWallet } =
-                    await handleEncryptrion(
+                    await handleEncryption(
                         accessControl,
                         wallet,
                         config[0].isEncryptionKeyCreated,
@@ -116,20 +116,20 @@ export const useCreateWalletWithBiometrics = () => {
  * @param isEncryptionKeyCreated
  * @returns
  */
-const handleEncryptrion = async (
+const handleEncryption = async (
     accessControl: boolean, // if biometrics(ios) or if fingerprint (android)
     wallet: Wallet,
     isEncryptionKeyCreated: boolean, // if an encryption key is already generated
 ) => {
-    let encryptedWallet: string
+    let encryptedWallet = ""
     let encryprionKey = ""
 
     if (isEncryptionKeyCreated) {
-        let _encryprionKey = await KeychainService.getEncryptionKey(
+        let _encryptionKey = await KeychainService.getEncryptionKey(
             accessControl,
         )
-        if (_encryprionKey) {
-            encryprionKey = _encryprionKey
+        if (_encryptionKey) {
+            encryprionKey = _encryptionKey
         }
     } else {
         encryprionKey = HexUtils.generateRandom(8)

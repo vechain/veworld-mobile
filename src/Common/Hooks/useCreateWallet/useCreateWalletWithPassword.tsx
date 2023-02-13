@@ -53,7 +53,7 @@ export const useCreateWalletWithPassword = () => {
 
                     const hashedKey = PasswordUtils.hash(userPassword)
                     const { encryprionKey, encryptedWallet } =
-                        await handleEncryptrion(
+                        await handleEncryption(
                             wallet,
                             hashedKey,
                             config[0].isEncryptionKeyCreated,
@@ -106,22 +106,22 @@ export const useCreateWalletWithPassword = () => {
  * @param userPassword
  * @returns
  */
-const handleEncryptrion = async (
+const handleEncryption = async (
     wallet: Wallet,
     hashedKey: string,
     isEncryptionKeyCreated: boolean,
 ) => {
-    let encryptedWallet: string
+    let encryptedWallet = ""
     let encryprionKey = ""
     const accessControl = false
 
     if (isEncryptionKeyCreated) {
-        let _encryprionKey = await KeychainService.getEncryptionKey(
+        let _encryptionKey = await KeychainService.getEncryptionKey(
             accessControl,
         )
-        if (_encryprionKey) {
-            CryptoUtils.decrypt<string>(_encryprionKey, hashedKey)
-            encryprionKey = _encryprionKey
+        if (_encryptionKey) {
+            CryptoUtils.decrypt<string>(_encryptionKey, hashedKey)
+            encryprionKey = _encryptionKey
         }
     } else {
         encryprionKey = HexUtils.generateRandom(8)

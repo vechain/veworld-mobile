@@ -10,7 +10,7 @@ import { useBiometricType, useCreateWalletWithBiometrics } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { Fonts } from "~Model"
+import { Fonts, WALLET_STATUS } from "~Model"
 import {
     AppLock,
     Config,
@@ -47,7 +47,7 @@ export const AppSecurityScreen = () => {
                     "APP_LOCK",
                 )
                 if (appLock) {
-                    appLock.status = "UNLOCKED"
+                    appLock.status = WALLET_STATUS.UNLOCKED
                 }
             })
 

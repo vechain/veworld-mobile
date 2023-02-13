@@ -6,7 +6,7 @@ export const getDeviceEnrolledLevel = async () => {
     return LocalAuthentication.SecurityLevel[level] as TSecurityLevel
 }
 
-export const getGeviceHasHardware = async () => {
+export const getDeviceHasHardware = async () => {
     let hasHardware = await LocalAuthentication.hasHardwareAsync()
     return hasHardware
 }

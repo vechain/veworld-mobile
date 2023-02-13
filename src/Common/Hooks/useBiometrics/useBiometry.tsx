@@ -2,19 +2,19 @@ import { useCallback, useEffect, useState } from "react"
 import { BiometricsUtils } from "~Common/Utils"
 import { SecurityLevelType } from "~Model"
 
-const { getDeviceEnrolledLevel, getGeviceHasHardware, getIsDeviceEnrolled } =
+const { getDeviceEnrolledLevel, getDeviceHasHardware, getIsDeviceEnrolled } =
     BiometricsUtils
 
 export const useBiometry = () => {
     const [level, setLevel] = useState("")
-    const [accessControll, setAccessControll] = useState(false)
+    const [accessControl, setaccessControl] = useState(false)
 
     const init = useCallback(async () => {
         let _level = await getDeviceEnrolledLevel()
-        let _isHardware = await getGeviceHasHardware()
+        let _isHardware = await getDeviceHasHardware()
         let _isEnrolled = await getIsDeviceEnrolled()
 
-        let _accessControll =
+        let _accessControl =
             !_isEnrolled ||
             !_isHardware ||
             _level !== SecurityLevelType.BIOMETRIC
@@ -22,7 +22,7 @@ export const useBiometry = () => {
                 : true
 
         setLevel(_level)
-        setAccessControll(_accessControll)
+        setaccessControl(_accessControl)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -30,5 +30,5 @@ export const useBiometry = () => {
         init()
     }, [init])
 
-    return { level, accessControll }
+    return { level, accessControl }
 }

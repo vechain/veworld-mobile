@@ -9,7 +9,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
-import { Fonts } from "~Model"
+import { Fonts, WALLET_STATUS } from "~Model"
 import { useCreateWalletWithPassword } from "~Common"
 import {
     AppLock,
@@ -53,7 +53,7 @@ export const UserCreatePasswordScreen = () => {
                     "APP_LOCK",
                 )
                 if (appLock) {
-                    appLock.status = "UNLOCKED"
+                    appLock.status = WALLET_STATUS.UNLOCKED
                 }
             })
 
