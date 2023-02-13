@@ -20,6 +20,7 @@ import {
     useAppLockStatus,
     useUnlockFlow,
 } from "~Common"
+import { WALLET_STATUS } from "~Model"
 
 export const EntryPoint = () => {
     const store = useStore()
@@ -29,18 +30,20 @@ export const EntryPoint = () => {
 
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
-    const result1 = useStoreQuery(Config)
-    const config = useMemo(() => result1.sorted("_id"), [result1])
+    const configQuery = useStoreQuery(Config)
+    const config = useMemo(() => configQuery.sorted("_id"), [configQuery])
 
     // todo: this is a workaround until the new version is installed
-    const result2 = useCachedQuery(AppLock)
-    const appLock = useMemo(() => result2.sorted("_id"), [result2])
+    const appLockQuery = useCachedQuery(AppLock)
+    const appLock = useMemo(() => appLockQuery.sorted("_id"), [appLockQuery])
 
     // this can be done in Realm provider but current version of Realm is bugged
     const initRealmClasses = useCallback(() => {
         if (!appLock[0]) {
             cache.write(() => {
-                cache.create(RealmClass.AppLock, { status: "LOCKED" })
+                cache.create(RealmClass.AppLock, {
+                    status: WALLET_STATUS.LOCKED,
+                })
             })
         }
 
