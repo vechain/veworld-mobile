@@ -57,7 +57,7 @@ export const useCreateWalletWithBiometrics = () => {
                     deviceIndex,
                 )
 
-                const { encryprionKey, encryptedWallet } =
+                const { encryptionKey, encryptedWallet } =
                     await handleEncryption(
                         accessControl,
                         wallet,
@@ -71,7 +71,7 @@ export const useCreateWalletWithBiometrics = () => {
                     })
                 })
 
-                finilizeSetup(accessControl, encryprionKey)
+                finilizeSetup(accessControl, encryptionKey)
             }
         } catch (error) {
             console.log("CREATE WALLET ERROR : ", error)
@@ -82,13 +82,13 @@ export const useCreateWalletWithBiometrics = () => {
     //* [START] - Finilize Wallet Setup
     const finilizeSetup = async (
         accessControl: boolean,
-        encryprionKey: string,
+        encryptionKey: string,
     ) => {
         cache.write(() => cache.delete(_mnemonic))
 
         // If first time creating wallet
         if (!config[0].isEncryptionKeyCreated) {
-            await KeychainService.setEncryptionKey(encryprionKey, accessControl)
+            await KeychainService.setEncryptionKey(encryptionKey, accessControl)
             store.write(() => {
                 config[0].isEncryptionKeyCreated = true
                 config[0].userSelectedSecurtiy =
@@ -122,20 +122,20 @@ const handleEncryption = async (
     isEncryptionKeyCreated: boolean, // if an encryption key is already generated
 ) => {
     let encryptedWallet = ""
-    let encryprionKey = ""
+    let encryptionKey = ""
 
     if (isEncryptionKeyCreated) {
         let _encryptionKey = await KeychainService.getEncryptionKey(
             accessControl,
         )
         if (_encryptionKey) {
-            encryprionKey = _encryptionKey
+            encryptionKey = _encryptionKey
         }
     } else {
-        encryprionKey = HexUtils.generateRandom(8)
+        encryptionKey = HexUtils.generateRandom(8)
     }
 
-    encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryprionKey)
+    encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
 
-    return { encryprionKey, encryptedWallet }
+    return { encryptionKey, encryptedWallet }
 }

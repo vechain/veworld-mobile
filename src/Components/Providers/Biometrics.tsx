@@ -21,9 +21,7 @@ export const Biometrics = () => {
         let typeAvalable = await getBiometricTypeAvailable()
 
         let accessControl =
-            !isEnrolled || !isHardware || level !== SecurityLevelType.BIOMETRIC
-                ? false
-                : true
+            isEnrolled && isHardware && level === SecurityLevelType.BIOMETRIC
 
         cache.write(() => {
             cache.create(

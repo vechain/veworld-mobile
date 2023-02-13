@@ -52,7 +52,7 @@ export const useCreateWalletWithPassword = () => {
                     )
 
                     const hashedKey = PasswordUtils.hash(userPassword)
-                    const { encryprionKey, encryptedWallet } =
+                    const { encryptionKey, encryptedWallet } =
                         await handleEncryption(
                             wallet,
                             hashedKey,
@@ -65,7 +65,7 @@ export const useCreateWalletWithPassword = () => {
                         const accessControl = false
 
                         const encryptedKey = CryptoUtils.encrypt<string>(
-                            encryprionKey,
+                            encryptionKey,
                             hashedKey,
                         )
 
@@ -112,7 +112,7 @@ const handleEncryption = async (
     isEncryptionKeyCreated: boolean,
 ) => {
     let encryptedWallet = ""
-    let encryprionKey = ""
+    let encryptionKey = ""
     const accessControl = false
 
     if (isEncryptionKeyCreated) {
@@ -121,12 +121,12 @@ const handleEncryption = async (
         )
         if (_encryptionKey) {
             CryptoUtils.decrypt<string>(_encryptionKey, hashedKey)
-            encryprionKey = _encryptionKey
+            encryptionKey = _encryptionKey
         }
     } else {
-        encryprionKey = HexUtils.generateRandom(8)
+        encryptionKey = HexUtils.generateRandom(8)
     }
 
-    encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryprionKey)
-    return { encryprionKey, encryptedWallet }
+    encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
+    return { encryptionKey, encryptedWallet }
 }
