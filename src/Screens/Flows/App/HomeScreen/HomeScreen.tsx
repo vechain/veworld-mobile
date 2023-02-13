@@ -22,8 +22,6 @@ import {
     SlideInRight,
     useSharedValue,
 } from "react-native-reanimated"
-// import { CryptoUtils, PasswordUtils } from "~Common"
-// import KeychainService from "~Services/KeychainService"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -62,14 +60,41 @@ export const HomeScreen = () => {
         setFirstLoad(false)
     }, [])
 
+    // Sample decryption with biometrics
+    useEffect(() => {
+        const init = async () => {
+            // let wallet = devices[0].wallet
+            // if (wallet) {
+            //     let encryptedKey = await KeychainService.getEncryptionKey(
+            //         devices[0].index,
+            //         true,
+            //     )
+            //     if (encryptedKey) {
+            //         let _wallet = CryptoUtils.decrypt<Wallet>(
+            //             wallet,
+            //             encryptedKey,
+            //         )
+            //         console.log(_wallet)
+            //     }
+            // }
+        }
+
+        setTimeout(() => {
+            init()
+        }, 5000)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     // Sample decryption with password
     useEffect(() => {
         const init = async () => {
             // let wallet = devices[0].wallet
             // if (wallet) {
-            //     let encryptedKey = await KeychainService.getEncryptionKey(false)
+            //     let encryptedKey = await KeychainService.getEncryptionKey(
+            //         devices[0].index,
+            //     )
             //     if (encryptedKey) {
-            //         const hashedKey = PasswordUtils.hash("000122") // user input password
+            //         const hashedKey = PasswordUtils.hash("000000") // user input password
             //         let decryptedKey = CryptoUtils.decrypt<string>(
             //             encryptedKey,
             //             hashedKey,
@@ -78,11 +103,13 @@ export const HomeScreen = () => {
             //             wallet,
             //             decryptedKey,
             //         )
-            //         console.log(_wallet)
+            //         console.log("_wallet : ", _wallet)
             //     }
             // }
         }
-        init()
+        setTimeout(() => {
+            init()
+        }, 5000)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
