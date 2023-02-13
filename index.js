@@ -7,8 +7,23 @@ import { name as appName } from "./app.json"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme, useTheme } from "~Common"
-import { RealmProvider, Translation as TranslationProvider } from "~Components"
+import {
+    Biometrics,
+    RealmProvider,
+    Translation as TranslationProvider,
+} from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { useFonts } from "expo-font"
+import {
+    Inter_Bold,
+    Inter_Light,
+    Inter_Medium,
+    Inter_Regular,
+    Mono_Bold,
+    Mono_Extra_Bold,
+    Mono_Light,
+    Mono_Regular,
+} from "~Assets"
 
 // immer setup
 enableAllPlugins()
@@ -27,6 +42,17 @@ const Main = () => {
     const scheme = useColorScheme()
     const theme = useTheme()
 
+    const [fontsLoaded] = useFonts({
+        "Inter-Bold": Inter_Bold,
+        "Inter-Regular": Inter_Regular,
+        "Inter-Light": Inter_Light,
+        "Inter-Medium": Inter_Medium,
+        "Mono-Extra-Bold": Mono_Extra_Bold,
+        "Mono-Bold": Mono_Bold,
+        "Mono-Regular": Mono_Regular,
+        "Mono-Light": Mono_Light,
+    })
+
     const colorScheme = useMemo(
         () => getTheme(scheme, theme.colors.background),
         [scheme, theme],
@@ -39,7 +65,8 @@ const Main = () => {
                 <NavigationContainer theme={colorScheme}>
                     <SafeAreaProvider>
                         <TranslationProvider>
-                            <EntryPoint />
+                            <Biometrics />
+                            {fontsLoaded && <EntryPoint />}
                         </TranslationProvider>
                     </SafeAreaProvider>
                 </NavigationContainer>

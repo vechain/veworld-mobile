@@ -33,6 +33,10 @@ export const HomeScreen = () => {
 
     const handleScrollPOsition = useCallback(
         (event: ScrollEvent) => {
+            //TODO: iphone 14 pro -59 / iphone 11 -48
+            // inconsistemcy in values creates probelms to animation
+            // console.log(event.nativeEvent.contentOffset.y)
+
             scrollValue.value = event.nativeEvent.contentOffset.y
             event.nativeEvent.contentOffset.y > -20
                 ? setChangeContent(true)
@@ -54,6 +58,59 @@ export const HomeScreen = () => {
 
     useEffect(() => {
         setFirstLoad(false)
+    }, [])
+
+    // Sample decryption with biometrics
+    useEffect(() => {
+        const init = async () => {
+            // let wallet = devices[0].wallet
+            // if (wallet) {
+            //     let encryptedKey = await KeychainService.getEncryptionKey(
+            //         devices[0].index,
+            //         true,
+            //     )
+            //     if (encryptedKey) {
+            //         let _wallet = CryptoUtils.decrypt<Wallet>(
+            //             wallet,
+            //             encryptedKey,
+            //         )
+            //         console.log(_wallet)
+            //     }
+            // }
+        }
+
+        setTimeout(() => {
+            init()
+        }, 5000)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    // Sample decryption with password
+    useEffect(() => {
+        const init = async () => {
+            // let wallet = devices[0].wallet
+            // if (wallet) {
+            //     let encryptedKey = await KeychainService.getEncryptionKey(
+            //         devices[0].index,
+            //     )
+            //     if (encryptedKey) {
+            //         const hashedKey = PasswordUtils.hash("000000") // user input password
+            //         let decryptedKey = CryptoUtils.decrypt<string>(
+            //             encryptedKey,
+            //             hashedKey,
+            //         )
+            //         let _wallet = CryptoUtils.decrypt<Wallet>(
+            //             wallet,
+            //             decryptedKey,
+            //         )
+            //         console.log("_wallet : ", _wallet)
+            //     }
+            // }
+        }
+        setTimeout(() => {
+            init()
+        }, 5000)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

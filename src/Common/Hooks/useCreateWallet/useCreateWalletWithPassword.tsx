@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from "react"
-import { CryptoUtils } from "~Common/Utils"
+import { useCallback, useMemo, useState } from "react"
+import { CryptoUtils, HexUtils, PasswordUtils } from "~Common/Utils"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import {
     Config,
@@ -12,6 +12,7 @@ import {
     useStoreQuery,
 } from "~Storage"
 import { getDeviceIndex, getNodes } from "./Helpers"
+import KeychainService from "~Services/KeychainService"
 
 /**
  * useCreateWalletWithPassword
@@ -20,6 +21,8 @@ import { getDeviceIndex, getNodes } from "./Helpers"
 export const useCreateWalletWithPassword = () => {
     const store = useStore()
     const cache = useCache()
+
+    const [isComplete, setIsComplete] = useState(false)
 
     // const config = useCacheObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -47,28 +50,34 @@ export const useCreateWalletWithPassword = () => {
                         mnemonicPhrase.split(" "),
                         deviceIndex,
                     )
-                    const { encryptedWallet } = await handleEncryptrion(
-                        wallet,
-                        userPassword,
+
+                    const hashedKey = PasswordUtils.hash(userPassword)
+                    const { encryptionKey, encryptedWallet } =
+                        await handleEncryptrion(wallet)
+
+                    cache.write(() => cache.delete(_mnemonic))
+
+                    const encryptedKey = CryptoUtils.encrypt<string>(
+                        encryptionKey,
+                        hashedKey,
+                    )
+
+                    await KeychainService.setEncryptionKey(
+                        encryptedKey,
+                        deviceIndex,
                     )
 
                     store.write(() => {
+                        config[0].userSelectedSecurtiy =
+                            UserSelectedSecurityLevel.PASSWORD
+
                         store.create(RealmClass.Device, {
                             ...device,
                             wallet: encryptedWallet,
                         })
                     })
 
-                    cache.write(() => cache.delete(_mnemonic))
-
-                    if (config[0].isFirstAppLoad) {
-                        store.write(() => {
-                            config[0].isFirstAppLoad = false
-                            config[0].userSelectedSecurtiy =
-                                UserSelectedSecurityLevel.PASSWORD
-                            config[0].isWallet = true
-                        })
-                    }
+                    setIsComplete(true)
                 }
             } catch (error) {
                 console.log("CREATE WALLET ERROR : ", error)
@@ -78,19 +87,17 @@ export const useCreateWalletWithPassword = () => {
     )
     //* [END] - Create Wallet
 
-    return { onCreateWallet }
+    return { onCreateWallet, isComplete }
 }
 
 /**
  *
- * @param accessControl
- * @param userSelectedSecurtiy
  * @param wallet
- * @param isEncryptionKey
  * @param userPassword
  * @returns
  */
-const handleEncryptrion = async (wallet: Wallet, userPassword: string) => {
-    let encryptedWallet = CryptoUtils.encrypt(wallet, userPassword)
-    return { undefined, encryptedWallet }
+const handleEncryptrion = async (wallet: Wallet) => {
+    let encryptionKey = HexUtils.generateRandom(8)
+    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
+    return { encryptionKey, encryptedWallet }
 }
