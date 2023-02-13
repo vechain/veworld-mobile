@@ -53,34 +53,24 @@ export const useCreateWalletWithPassword = () => {
 
                     const hashedKey = PasswordUtils.hash(userPassword)
                     const { encryptionKey, encryptedWallet } =
-                        await handleEncryption(
-                            wallet,
-                            hashedKey,
-                            config[0].isEncryptionKeyCreated,
-                        )
+                        await handleEncryptrion(wallet)
 
                     cache.write(() => cache.delete(_mnemonic))
 
-                    if (!config[0].isEncryptionKeyCreated) {
-                        const accessControl = false
+                    const encryptedKey = CryptoUtils.encrypt<string>(
+                        encryptionKey,
+                        hashedKey,
+                    )
 
-                        const encryptedKey = CryptoUtils.encrypt<string>(
-                            encryptionKey,
-                            hashedKey,
-                        )
-
-                        await KeychainService.setEncryptionKey(
-                            encryptedKey,
-                            accessControl,
-                        )
-                        store.write(() => {
-                            config[0].isEncryptionKeyCreated = true
-                            config[0].userSelectedSecurtiy =
-                                UserSelectedSecurityLevel.PASSWORD
-                        })
-                    }
+                    await KeychainService.setEncryptionKey(
+                        encryptedKey,
+                        deviceIndex,
+                    )
 
                     store.write(() => {
+                        config[0].userSelectedSecurtiy =
+                            UserSelectedSecurityLevel.PASSWORD
+
                         store.create(RealmClass.Device, {
                             ...device,
                             wallet: encryptedWallet,
@@ -106,27 +96,8 @@ export const useCreateWalletWithPassword = () => {
  * @param userPassword
  * @returns
  */
-const handleEncryption = async (
-    wallet: Wallet,
-    hashedKey: string,
-    isEncryptionKeyCreated: boolean,
-) => {
-    let encryptedWallet = ""
-    let encryptionKey = ""
-    const accessControl = false
-
-    if (isEncryptionKeyCreated) {
-        let _encryptionKey = await KeychainService.getEncryptionKey(
-            accessControl,
-        )
-        if (_encryptionKey) {
-            CryptoUtils.decrypt<string>(_encryptionKey, hashedKey)
-            encryptionKey = _encryptionKey
-        }
-    } else {
-        encryptionKey = HexUtils.generateRandom(8)
-    }
-
-    encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
+const handleEncryptrion = async (wallet: Wallet) => {
+    let encryptionKey = HexUtils.generateRandom(8)
+    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
     return { encryptionKey, encryptedWallet }
 }
