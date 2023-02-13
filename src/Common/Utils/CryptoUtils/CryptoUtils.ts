@@ -2,6 +2,9 @@ import { HDNode } from "thor-devkit"
 import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
 import PasswordUtils from "../PasswordUtils"
+import HexUtils from "../HexUtils"
+import { Wallet } from "~Model"
+import KeychainService from "~Services/KeychainService"
 
 export const xPubFromHdNode = (hdNode: HDNode): XPub => {
     return {
@@ -60,4 +63,33 @@ export const verifySeedPhrase = (seed: string) => {
         console.log(error)
     }
     return hdNode ? true : false
+}
+
+/**
+ * Encrypt new wallet and insert encryptionKey in keychain
+ * @param wallet
+ * @param deviceIndex
+ * @param accessControl
+ * @param hashEncryptionKey if provided, it is used to hash the encyptionKey (after being used to encypt the wallet)
+ * @returns
+ */
+
+export const encryptWallet = async (
+    wallet: Wallet,
+    deviceIndex: number,
+    accessControl: boolean,
+    hashEncryptionKey?: string,
+) => {
+    let encryptionKey = HexUtils.generateRandom(8)
+    let encryptedWallet = encrypt<Wallet>(wallet, encryptionKey)
+
+    if (hashEncryptionKey)
+        encryptionKey = encrypt<string>(encryptionKey, hashEncryptionKey)
+
+    await KeychainService.setEncryptionKey(
+        encryptionKey,
+        deviceIndex,
+        accessControl,
+    )
+    return { encryptionKey, encryptedWallet }
 }

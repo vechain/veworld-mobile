@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react"
-import { CryptoUtils, HexUtils } from "~Common/Utils"
-import { UserSelectedSecurityLevel, Wallet } from "~Model"
-import KeychainService from "~Services/KeychainService"
+import { encryptWallet } from "~Common/Utils/CryptoUtils/CryptoUtils"
+import { UserSelectedSecurityLevel } from "~Model"
 import {
     Biometrics,
     Config,
@@ -66,17 +65,23 @@ export const useCreateWalletWithBiometrics = () => {
                     deviceIndex,
                 )
 
-                const { encryptionKey, encryptedWallet } =
-                    await handleEncryption(wallet)
+                const { encryptedWallet } = await encryptWallet(
+                    wallet,
+                    device.index,
+                    accessControl,
+                )
 
                 store.write(() => {
                     store.create(RealmClass.Device, {
                         ...device,
                         wallet: encryptedWallet,
                     })
+                    config[0].userSelectedSecurtiy =
+                        UserSelectedSecurityLevel.BIOMETRIC
                 })
+                cache.write(() => cache.delete(_mnemonic))
 
-                finalizeSetup(accessControl, encryptionKey, deviceIndex)
+                setIsComplete(true)
             }
         } catch (error) {
             console.log("CREATE WALLET ERROR : ", error)
@@ -84,43 +89,9 @@ export const useCreateWalletWithBiometrics = () => {
     }
     //* [END] - Create Wallet
 
-    //* [START] - Finilize Wallet Setup
-    const finalizeSetup = async (
-        accessControl: boolean,
-        encryptionKey: string,
-        deviceIndex: number,
-    ) => {
-        cache.write(() => cache.delete(_mnemonic))
-        await KeychainService.setEncryptionKey(
-            encryptionKey,
-            deviceIndex,
-            accessControl,
-        )
-        store.write(() => {
-            config[0].userSelectedSecurtiy = UserSelectedSecurityLevel.BIOMETRIC
-        })
-
-        setIsComplete(true)
-    }
-    //* [END] - Finilize Wallet Setup
-
     return {
         onCreateWallet,
         accessControl: biometrics[0].accessControl,
         isComplete,
     }
-}
-
-// CREATE WALLET HELPER FUNCTIONS
-
-/**
- *
- * @param accessControl
- * @param wallet
- * @returns
- */
-const handleEncryption = async (wallet: Wallet) => {
-    let encryptionKey = HexUtils.generateRandom(8)
-    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
-    return { encryptionKey, encryptedWallet }
 }

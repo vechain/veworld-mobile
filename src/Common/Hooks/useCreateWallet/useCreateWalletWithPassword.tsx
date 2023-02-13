@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react"
-import { CryptoUtils, HexUtils, PasswordUtils } from "~Common/Utils"
-import { UserSelectedSecurityLevel, Wallet } from "~Model"
+import { PasswordUtils } from "~Common/Utils"
+import { UserSelectedSecurityLevel } from "~Model"
 import {
     Config,
     Device,
@@ -12,7 +12,7 @@ import {
     useStoreQuery,
 } from "~Storage"
 import { getDeviceIndex, getNodes } from "./Helpers"
-import KeychainService from "~Services/KeychainService"
+import { encryptWallet } from "~Common/Utils/CryptoUtils/CryptoUtils"
 
 /**
  * useCreateWalletWithPassword
@@ -56,21 +56,15 @@ export const useCreateWalletWithPassword = () => {
                         mnemonicPhrase.split(" "),
                         deviceIndex,
                     )
-
-                    const hashedKey = PasswordUtils.hash(userPassword)
-                    const { encryptionKey, encryptedWallet } =
-                        await handleEncryption(wallet)
-
                     cache.write(() => cache.delete(_mnemonic))
 
-                    const encryptedKey = CryptoUtils.encrypt<string>(
-                        encryptionKey,
-                        hashedKey,
-                    )
+                    const hashedKey = PasswordUtils.hash(userPassword)
 
-                    await KeychainService.setEncryptionKey(
-                        encryptedKey,
+                    const { encryptedWallet } = await encryptWallet(
+                        wallet,
                         deviceIndex,
+                        false,
+                        hashedKey,
                     )
 
                     store.write(() => {
@@ -94,16 +88,4 @@ export const useCreateWalletWithPassword = () => {
     //* [END] - Create Wallet
 
     return { onCreateWallet, isComplete }
-}
-
-/**
- *
- * @param wallet
- * @param userPassword
- * @returns
- */
-const handleEncryption = async (wallet: Wallet) => {
-    let encryptionKey = HexUtils.generateRandom(8)
-    let encryptedWallet = CryptoUtils.encrypt<Wallet>(wallet, encryptionKey)
-    return { encryptionKey, encryptedWallet }
 }
