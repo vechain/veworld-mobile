@@ -36,10 +36,10 @@ export const useOnDigitPress = () => {
 
     const _validatePIN = useCallback(
         async (_userPinArray: string[]) => {
-            try {
-                let isValid = await validatePassword(_userPinArray)
+            let isValid = await validatePassword(_userPinArray)
+            if (isValid) {
                 setIsSuccess(!!isValid)
-            } catch (error) {
+            } else {
                 setIsPinError(true)
                 setUserPinArray(Array.from({ length: 6 }))
             }
