@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import produce from "immer"
-import KeychainService from "~Services/KeychainService"
-import { CryptoUtils, PasswordUtils } from "~Common"
+import { usePasswordValidation } from "~Common"
 
 export const useOnDigitPress = () => {
     const [isPinError, setIsPinError] = useState(false)
@@ -9,6 +8,8 @@ export const useOnDigitPress = () => {
     const [userPinArray, setUserPinArray] = useState<Array<string | undefined>>(
         Array.from({ length: 6 }),
     )
+
+    const { validatePassword } = usePasswordValidation()
 
     const onDigitPress = (digit: string) => {
         // protect for ui overflow
@@ -33,20 +34,18 @@ export const useOnDigitPress = () => {
         )
     }
 
-    const _validatePIN = useCallback(async (_userPinArray: string[]) => {
-        try {
-            //TODO: #72
-            let encryptedKey = await KeychainService.getEncryptionKey(1, false)
-            if (encryptedKey) {
-                const hashedKey = PasswordUtils.hash(_userPinArray.join(""))
-                CryptoUtils.decrypt<string>(encryptedKey, hashedKey)
-                setIsSuccess(true)
+    const _validatePIN = useCallback(
+        async (_userPinArray: string[]) => {
+            try {
+                let isValid = await validatePassword(_userPinArray)
+                setIsSuccess(!!isValid)
+            } catch (error) {
+                setIsPinError(true)
+                setUserPinArray(Array.from({ length: 6 }))
             }
-        } catch (error) {
-            setIsPinError(true)
-            setUserPinArray(Array.from({ length: 6 }))
-        }
-    }, [])
+        },
+        [validatePassword],
+    )
 
     useEffect(() => {
         if (!userPinArray.includes(undefined)) {
