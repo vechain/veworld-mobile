@@ -38,17 +38,17 @@ export const EnableBiometrics = () => {
         [biometricsQuery],
     )
 
-    const {
-        isOpen: isPasswordPromptOpen,
-        onOpen: openPasswordPrompt,
-        onClose: closePasswordPrompt,
-    } = useDisclosure()
-
     const deviceQuery = useStoreQuery(Device)
     const devices = useMemo(
         () => deviceQuery.sorted("rootAddress"),
         [deviceQuery],
     )
+
+    const {
+        isOpen: isPasswordPromptOpen,
+        onOpen: openPasswordPrompt,
+        onClose: closePasswordPrompt,
+    } = useDisclosure()
 
     const isEnabled = useMemo(
         () => unlockFlow === AppUnlockFlow.BIO_UNLOCK,
@@ -78,15 +78,11 @@ export const EnableBiometrics = () => {
                         device.wallet,
                         decryptedKey,
                     )
-                    console.log(device.wallet)
 
                     const { encryptedWallet: updatedEncryptedWallet } =
                         await encryptWallet(_wallet, device.index, true)
 
-                    console.log("encrypted", encryptWallet)
                     device.wallet = updatedEncryptedWallet
-
-                    console.log("\n", updatedEncryptedWallet)
                 } else {
                     console.log(`No key for ${device.alias}`)
                 }
