@@ -13,7 +13,6 @@ import {
 } from "~Storage"
 import { getDeviceIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
-const { encryptWallet } = CryptoUtils
 
 /**
  * useCreateWalletWithBiometrics
@@ -66,7 +65,7 @@ export const useCreateWalletWithBiometrics = () => {
                     deviceIndex,
                 )
 
-                const { encryptedWallet } = await encryptWallet(
+                const { encryptedWallet } = await CryptoUtils.encryptWallet(
                     wallet,
                     device.index,
                     accessControl,

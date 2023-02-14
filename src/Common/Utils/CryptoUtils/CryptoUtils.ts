@@ -6,14 +6,14 @@ import HexUtils from "../HexUtils"
 import { Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
 
-export const xPubFromHdNode = (hdNode: HDNode): XPub => {
+const xPubFromHdNode = (hdNode: HDNode): XPub => {
     return {
         publicKey: hdNode.publicKey.toString("hex"),
         chainCode: hdNode.chainCode.toString("hex"),
     }
 }
 
-export const hdNodeFromXPub = (xPub: XPub) => {
+const hdNodeFromXPub = (xPub: XPub) => {
     return HDNode.fromPublicKey(
         Buffer.from(xPub.publicKey, "hex"),
         Buffer.from(xPub.chainCode, "hex"),
@@ -21,21 +21,21 @@ export const hdNodeFromXPub = (xPub: XPub) => {
 }
 
 //Alternative to `Math.random()` that returns a cryptographically secure random number
-export const random = () => {
+const random = () => {
     const arr = new Uint32Array(1)
     crypto.getRandomValues(arr)
     return arr[0] * Math.pow(2, -32)
 }
 
 //schwartzian transform implmenetation O(nlogn), very good for small arrays
-export function shuffleArray<T>(arr: T[]) {
+function shuffleArray<T>(arr: T[]) {
     return arr
         .map(value => ({ value, sort: random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value)
 }
 
-export function encrypt<T>(data: T, encryptionKey: string): string {
+function encrypt<T>(data: T, encryptionKey: string): string {
     const key = PasswordUtils.hash(encryptionKey)
     const iv = PasswordUtils.getIV()
     const cipher = crypto.createCipheriv("aes256", key, iv)
@@ -44,7 +44,7 @@ export function encrypt<T>(data: T, encryptionKey: string): string {
     return ciph as string
 }
 
-export function decrypt<T>(data: string, encryptionKey: string): T {
+function decrypt<T>(data: string, encryptionKey: string): T {
     const key = PasswordUtils.hash(encryptionKey)
     const iv = PasswordUtils.getIV()
     const decipher = crypto.createDecipheriv("aes256", key, iv)
@@ -55,7 +55,7 @@ export function decrypt<T>(data: string, encryptionKey: string): T {
     return parsed
 }
 
-export const verifySeedPhrase = (seed: string) => {
+const verifySeedPhrase = (seed: string) => {
     let hdNode
     try {
         hdNode = HDNode.fromMnemonic(seed.split(" "))
@@ -74,7 +74,7 @@ export const verifySeedPhrase = (seed: string) => {
  * @returns
  */
 
-export const encryptWallet = async (
+const encryptWallet = async (
     wallet: Wallet,
     deviceIndex: number,
     accessControl: boolean,
@@ -92,4 +92,15 @@ export const encryptWallet = async (
         accessControl,
     )
     return { encryptionKey, encryptedWallet }
+}
+
+export default {
+    xPubFromHdNode,
+    hdNodeFromXPub,
+    random,
+    shuffleArray,
+    encrypt,
+    decrypt,
+    verifySeedPhrase,
+    encryptWallet,
 }

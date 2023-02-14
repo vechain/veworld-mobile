@@ -8,7 +8,6 @@ import {
     useDisclosure,
     useUnlockFlow,
 } from "~Common"
-import { encryptWallet } from "~Common/Utils/CryptoUtils/CryptoUtils"
 import { BaseText, BaseView } from "~Components"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
@@ -85,7 +84,11 @@ export const EnableBiometrics = () => {
                     )
 
                     const { encryptedWallet: updatedEncryptedWallet } =
-                        await encryptWallet(_wallet, device.index, true)
+                        await CryptoUtils.encryptWallet(
+                            _wallet,
+                            device.index,
+                            true,
+                        )
 
                     device.wallet = updatedEncryptedWallet
                 } else {
