@@ -13,7 +13,6 @@ import {
 } from "~Storage"
 import { getDeviceIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
-const { encryptWallet } = CryptoUtils
 
 /**
  * useCreateWalletWithPassword
@@ -61,7 +60,7 @@ export const useCreateWalletWithPassword = () => {
 
                     const hashedKey = PasswordUtils.hash(userPassword)
                     const accessControl = false
-                    const { encryptedWallet } = await encryptWallet(
+                    const { encryptedWallet } = await CryptoUtils.encryptWallet(
                         wallet,
                         deviceIndex,
                         accessControl,
