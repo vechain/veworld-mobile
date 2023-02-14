@@ -1,6 +1,7 @@
 import { Alert as RNAlert } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import * as i18n from "~i18n"
+import { AlertButtonStyle, AlertContent } from "./enums"
 
 const Alert = (
     title: LocalizedString,
@@ -9,7 +10,7 @@ const Alert = (
     buttonAction: () => void,
     cancelTitle?: LocalizedString,
     cancelAction?: () => void,
-    cancelButtonStyle?: "cancel" | "default" | "destructive" | undefined,
+    cancelButtonStyle?: AlertButtonStyle | undefined,
 ) => {
     let action = { text: buttonTitle, onPress: buttonAction }
     let cancel = {
@@ -18,7 +19,7 @@ const Alert = (
         style: cancelButtonStyle ?? "cancel",
     }
 
-    let config: any
+    let config: AlertContent[]
 
     if (cancelTitle) {
         config = [cancel, action]
