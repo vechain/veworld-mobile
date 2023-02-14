@@ -59,10 +59,16 @@ export const EntryPoint = () => {
         initRealmClasses()
     }, [initRealmClasses])
 
+    const isSecurityDowngrade = useMemo(
+        () => config[0]?.isSecurityDowngrade,
+        [config],
+    )
+
     useEffect(() => {
         const init = async () => {
             if (
                 appLockStatus === AppLockStatus.NO_LOCK ||
+                isSecurityDowngrade ||
                 LockScreenUtils.isLockScreenFlow(appLockStatus, unlockFlow)
             ) {
                 await RNBootSplash.hide({ fade: true })
@@ -75,7 +81,7 @@ export const EntryPoint = () => {
             }
         }
         init()
-    }, [appLockStatus, unlockFlow])
+    }, [appLockStatus, unlockFlow, isSecurityDowngrade])
 
     const unlockWallet = useCallback(() => {
         cache.write(() => {
@@ -95,12 +101,14 @@ export const EntryPoint = () => {
 
             <Security />
 
-            {config[0]?.isSecurityDowngrade && <SecurityDowngradeScreen />}
+            {isSecurityDowngrade && <SecurityDowngradeScreen />}
 
-            <>
-                <BaseStatusBar />
-                <SwitchStack />
-            </>
+            {!isSecurityDowngrade && (
+                <>
+                    <BaseStatusBar />
+                    <SwitchStack />
+                </>
+            )}
         </>
     )
 }
