@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react"
-import { encryptWallet } from "~Common/Utils/CryptoUtils/CryptoUtils"
 import { UserSelectedSecurityLevel } from "~Model"
 import {
     Biometrics,
@@ -13,6 +12,8 @@ import {
     useStoreQuery,
 } from "~Storage"
 import { getDeviceIndex, getNodes } from "./Helpers"
+import { CryptoUtils } from "~Common/Utils"
+const { encryptWallet } = CryptoUtils
 
 /**
  * useCreateWalletWithBiometrics

@@ -12,7 +12,8 @@ import {
     useStoreQuery,
 } from "~Storage"
 import { getDeviceIndex, getNodes } from "./Helpers"
-import { encryptWallet } from "~Common/Utils/CryptoUtils/CryptoUtils"
+import { CryptoUtils } from "~Common/Utils"
+const { encryptWallet } = CryptoUtils
 
 /**
  * useCreateWalletWithPassword
@@ -59,11 +60,11 @@ export const useCreateWalletWithPassword = () => {
                     cache.write(() => cache.delete(_mnemonic))
 
                     const hashedKey = PasswordUtils.hash(userPassword)
-
+                    const accessControl = false
                     const { encryptedWallet } = await encryptWallet(
                         wallet,
                         deviceIndex,
-                        false,
+                        accessControl,
                         hashedKey,
                     )
 

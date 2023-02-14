@@ -11,10 +11,10 @@ import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
 
-interface ILockScreen {
+type Props = {
     onSuccess: (password: string) => void
 }
-export const LockScreen: React.FC<ILockScreen> = ({ onSuccess }) => {
+export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
     const { LL } = useI18nContext()
 
     const { isPinError, onDigitPress, userPinArray, isSuccess } =
