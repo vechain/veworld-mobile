@@ -35,6 +35,7 @@ export const useOnDigitPress = () => {
 
     const _validatePIN = useCallback(async (_userPinArray: string[]) => {
         try {
+            //TODO: #72
             let encryptedKey = await KeychainService.getEncryptionKey(1, false)
             if (encryptedKey) {
                 const hashedKey = PasswordUtils.hash(_userPinArray.join(""))
