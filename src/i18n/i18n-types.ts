@@ -164,6 +164,10 @@ type RootTranslation = {
 	 */
 	BD_WALLET_IMPORT_LOCAL: string
 	/**
+	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​F​a​c​e​ ​I​D​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​a​l​l​e​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​l​o​g​ ​o​u​t​,​ ​o​r​ ​r​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
+	 */
+	BD_ALERT_FACE_ID_CANCELLED: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -216,6 +220,10 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
 	/**
+	 * F​a​c​e​ ​I​D​ ​C​a​n​c​e​l​l​e​d
+	 */
+	TITLE_ALERT_FACE_ID_CANCELLED: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -255,6 +263,14 @@ type RootTranslation = {
 	 * B​a​c​k
 	 */
 	COMMON_BTN_back: string
+	/**
+	 * R​e​t​r​y
+	 */
+	COMMON_BTN_RETRY: string
+	/**
+	 * S​i​g​n​ ​o​u​t
+	 */
+	COMMON_BTN_SIGN_OUT: string
 	/**
 	 * N​e​x​t
 	 */
@@ -2418,6 +2434,10 @@ export type TranslationFunctions = {
 	 */
 	BD_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
+	 * You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?
+	 */
+	BD_ALERT_FACE_ID_CANCELLED: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -2470,6 +2490,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
+	 * Face ID Cancelled
+	 */
+	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -2509,6 +2533,14 @@ export type TranslationFunctions = {
 	 * Back
 	 */
 	COMMON_BTN_back: () => LocalizedString
+	/**
+	 * Retry
+	 */
+	COMMON_BTN_RETRY: () => LocalizedString
+	/**
+	 * Sign out
+	 */
+	COMMON_BTN_SIGN_OUT: () => LocalizedString
 	/**
 	 * Next
 	 */

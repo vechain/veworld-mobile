@@ -14,6 +14,7 @@ import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
 import { SwitchStack } from "~Navigation"
 import {
+    AlertUtils,
     AppLockStatus,
     BiometricsUtils,
     LockScreenUtils,
@@ -67,11 +68,7 @@ export const EntryPoint = () => {
             if (
                 LockScreenUtils.isBiometricLockFlow(appLockStatus, unlockFlow)
             ) {
-                let { success } =
-                    await BiometricsUtils.authenticateWithbiometric()
-                if (success) {
-                    await RNBootSplash.hide({ fade: true })
-                }
+                await recursiveFaceId()
             }
         }
         init()
@@ -97,4 +94,23 @@ export const EntryPoint = () => {
             </>
         </>
     )
+}
+
+const recursiveFaceId = async () => {
+    let results = await BiometricsUtils.authenticateWithbiometric()
+    if (results.success) {
+        await RNBootSplash.hide({ fade: true })
+        return
+    } else if (results.error) {
+        AlertUtils.showCancelledFaceIdAlert(
+            async () => {
+                // TODO: SIGN OUT USER
+                console.log("cancel action - SIGN OUT USER")
+                return
+            },
+            async () => {
+                await recursiveFaceId()
+            },
+        )
+    }
 }
