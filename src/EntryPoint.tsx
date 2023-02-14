@@ -80,8 +80,14 @@ export const EntryPoint = () => {
         init()
     }, [appLockStatus, unlockFlow])
 
+    const unlockWallet = useCallback(() => {
+        cache.write(() => {
+            appLock[0].status = WALLET_STATUS.UNLOCKED
+        })
+    }, [cache, appLock])
+
     if (LockScreenUtils.isLockScreenFlow(appLockStatus, unlockFlow)) {
-        return <LockScreen />
+        return <LockScreen onSuccess={unlockWallet} />
     }
 
     return (

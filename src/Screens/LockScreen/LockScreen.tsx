@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect } from "react"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -7,29 +7,24 @@ import {
     NumPad,
     PasswordPins,
 } from "~Components"
-import { Fonts, WALLET_STATUS } from "~Model"
-import { AppLock, useCache, useCachedQuery } from "~Storage"
+import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
 
-export const LockScreen = () => {
+interface ILockScreen {
+    onSuccess: (password: string) => void
+}
+export const LockScreen: React.FC<ILockScreen> = ({ onSuccess }) => {
     const { LL } = useI18nContext()
-    const cache = useCache()
-
-    // todo: this is a workaround until the new version is installed
-    const result = useCachedQuery(AppLock)
-    const appLock = useMemo(() => result.sorted("_id"), [result])
 
     const { isPinError, onDigitPress, userPinArray, isSuccess } =
         useOnDigitPress()
 
     useEffect(() => {
         if (isSuccess) {
-            cache.write(() => {
-                appLock[0].status = WALLET_STATUS.UNLOCKED
-            })
+            onSuccess(userPinArray.join(""))
         }
-    }, [appLock, cache, isSuccess])
+    }, [isSuccess, onSuccess, userPinArray])
 
     return (
         <BaseSafeArea grow={1}>
