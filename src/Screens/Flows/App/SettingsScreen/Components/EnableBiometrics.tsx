@@ -1,10 +1,11 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Switch } from "react-native"
 import {
     AppUnlockFlow,
     BiometricsUtils,
     CryptoUtils,
     PasswordUtils,
+    useDisclosure,
     useUnlockFlow,
 } from "~Common"
 import { encryptWallet } from "~Common/Utils/CryptoUtils/CryptoUtils"
@@ -37,7 +38,11 @@ export const EnableBiometrics = () => {
         [biometricsQuery],
     )
 
-    const [isPasswordPromptOpen, setIsPasswordPromptOpen] = useState(false)
+    const {
+        isOpen: isPasswordPromptOpen,
+        onOpen: openPasswordPrompt,
+        onClose: closePasswordPrompt,
+    } = useDisclosure()
 
     const deviceQuery = useStoreQuery(Device)
     const devices = useMemo(
@@ -48,15 +53,6 @@ export const EnableBiometrics = () => {
     const isEnabled = useMemo(
         () => unlockFlow === AppUnlockFlow.BIO_UNLOCK,
         [unlockFlow],
-    )
-
-    const openPasswordPrompt = useCallback(() => {
-        setIsPasswordPromptOpen(true)
-    }, [])
-
-    const closePasswordPrompt = useCallback(
-        () => setIsPasswordPromptOpen(false),
-        [],
     )
 
     const requireBiometricsAndEnableIt = useCallback(async () => {
