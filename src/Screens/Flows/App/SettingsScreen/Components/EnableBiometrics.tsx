@@ -38,6 +38,11 @@ export const EnableBiometrics = () => {
         [biometricsQuery],
     )
 
+    const isBiometricsEnabled = useMemo(
+        () => biometrics[0].accessControl,
+        [biometrics],
+    )
+
     const deviceQuery = useStoreQuery(Device)
     const devices = useMemo(
         () => deviceQuery.sorted("rootAddress"),
@@ -103,25 +108,28 @@ export const EnableBiometrics = () => {
         ],
     )
 
-    return (
-        <>
-            <RequireUserPassword
-                isOpen={isPasswordPromptOpen}
-                onClose={closePasswordPrompt}
-                onSuccess={enableBiometrics}
-            />
-            <BaseView
-                justify="space-between"
-                w={100}
-                align="center"
-                orientation="row">
-                <BaseText>Enable Biometrics</BaseText>
-                <Switch
-                    disabled={isEnabled}
-                    onValueChange={requireBiometricsAndEnableIt}
-                    value={isEnabled}
+    if (isBiometricsEnabled)
+        return (
+            <>
+                <RequireUserPassword
+                    isOpen={isPasswordPromptOpen}
+                    onClose={closePasswordPrompt}
+                    onSuccess={enableBiometrics}
                 />
-            </BaseView>
-        </>
-    )
+                <BaseView
+                    justify="space-between"
+                    w={100}
+                    align="center"
+                    orientation="row">
+                    <BaseText>Enable Biometrics</BaseText>
+                    <Switch
+                        disabled={isEnabled}
+                        onValueChange={requireBiometricsAndEnableIt}
+                        value={isEnabled}
+                    />
+                </BaseView>
+            </>
+        )
+
+    return <></>
 }
