@@ -4,7 +4,7 @@ import { SettingsScreen } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
 export type RootStackParamListSettings = {
-    Settings: undefined
+    [Routes.SETTINGS]: undefined
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
