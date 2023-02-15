@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React from "react"
+import React, { useMemo } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -9,12 +9,19 @@ import {
 } from "~Components"
 import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
+import { Device, useStoreQuery } from "~Storage"
 
 export const ConfirmSeedPhraseScreen = () => {
     const nav = useNavigation()
+    const result1 = useStoreQuery(Device)
+    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
 
     const onConfirmPress = () => {
-        nav.navigate(Routes.APP_SECURITY)
+        if (devices.length) {
+            nav.navigate(Routes.WALLET_SUCCESS)
+        } else {
+            nav.navigate(Routes.APP_SECURITY)
+        }
     }
 
     return (

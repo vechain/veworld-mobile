@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { Fonts } from "~Model"
+import { BaseSpacer, BaseView } from "~Components"
 import {
     ActiveWalletCard,
     useCachedQuery,
@@ -15,6 +14,7 @@ import {
     PlatformScrollView,
     DeviceCarousel,
     SafeAreaAndStatusBar,
+    Header,
 } from "./Components"
 import {
     FadeInRight,
@@ -22,10 +22,14 @@ import {
     SlideInRight,
     useSharedValue,
 } from "react-native-reanimated"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
 export const HomeScreen = () => {
+    const nav = useNavigation()
+
     const [activeScreen, setActiveScreen] = useState(0)
     const [firstLoad, setFirstLoad] = useState(true)
     const [changeContent, setChangeContent] = useState(false)
@@ -113,15 +117,15 @@ export const HomeScreen = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const onHeaderPress = () => {
+        nav.navigate(Routes.CREATE_WALLET_FLOW)
+    }
+
     return (
         <>
             <PlatformScrollView handleScrollPOsition={handleScrollPOsition}>
                 <BaseView align="center">
-                    <BaseView align="flex-start" selfAlign="flex-start" mx={20}>
-                        <BaseText font={Fonts.body}>Welcome to</BaseText>
-                        <BaseText font={Fonts.large_title}>VeWorld</BaseText>
-                    </BaseView>
-
+                    <Header action={onHeaderPress} />
                     <BaseSpacer height={20} />
                     <DeviceCarousel />
                 </BaseView>

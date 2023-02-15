@@ -10,4 +10,6 @@ export enum Routes {
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",
     SETTINGS = "Settings",
+    CREATE_WALLET_FLOW = "Create_Wallet_Flow",
+    WALLET_SUCCESS = "Wallet_Success",
 }
