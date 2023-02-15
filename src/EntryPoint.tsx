@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { SecurityDowngradeScreen, LockScreen } from "~Screens"
 import {
     AppLock,
@@ -19,15 +19,21 @@ import {
     BiometricsUtils,
     LockScreenUtils,
     useAppLock,
+    useAppState,
     useWalletSecurity,
 } from "~Common"
-import { WALLET_STATUS } from "~Model"
+import { AppStateType, WALLET_STATUS } from "~Model"
+import { BiometricsPlaceholder } from "~Screens/BiometricsPlaceholder"
 
 export const EntryPoint = () => {
     const store = useStore()
     const cache = useCache()
-    const { appLockStatus, unlockApp } = useAppLock()
+
+    const { appLockStatus, unlockApp, lockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
+
+    const [isBackground, setIsBackground] = useState(false)
+    const [previousState, currentState] = useAppState()
 
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -37,6 +43,20 @@ export const EntryPoint = () => {
     // todo: this is a workaround until the new version is installed
     const appLockQuery = useCachedQuery(AppLock)
     const appLock = useMemo(() => appLockQuery.sorted("_id"), [appLockQuery])
+
+    const transitionedToBackground = useMemo(
+        () =>
+            currentState === AppStateType.BACKGROUND &&
+            previousState === AppStateType.ACTIVE,
+        [currentState, previousState],
+    )
+
+    const transitionedFromBackground = useMemo(
+        () =>
+            currentState === AppStateType.ACTIVE &&
+            previousState === AppStateType.BACKGROUND,
+        [currentState, previousState],
+    )
 
     // this can be done in Realm provider but current version of Realm is bugged
     const initRealmClasses = useCallback(() => {
@@ -55,9 +75,31 @@ export const EntryPoint = () => {
         }
     }, [appLock, cache, config, store])
 
+    /*
+     * Biometrics validation transitions AppStatus into 'inactive' state
+     * Make sure from the flow point of view, that the background state isn't removed
+     * until we unlock the wallet
+     */
+    const unlockFromBackground = useCallback(() => {
+        unlockApp()
+        setIsBackground(false)
+    }, [unlockApp])
+
     useEffect(() => {
         initRealmClasses()
     }, [initRealmClasses])
+
+    useEffect(() => {
+        if (transitionedFromBackground) {
+            setIsBackground(true)
+        }
+    }, [transitionedFromBackground])
+
+    useEffect(() => {
+        if (transitionedToBackground) {
+            lockApp()
+        }
+    }, [transitionedToBackground, lockApp])
 
     useEffect(() => {
         const init = async () => {
@@ -78,8 +120,18 @@ export const EntryPoint = () => {
                 await recursiveFaceId()
             }
         }
-        init()
-    }, [appLockStatus, walletSecurity, isSecurityDowngrade])
+        // Ensure not coming from background when handling splash screen
+        if (!isBackground) init()
+    }, [appLockStatus, walletSecurity, isSecurityDowngrade, isBackground])
+
+    if (
+        isBackground &&
+        appLockStatus !== AppLockStatus.NO_LOCK &&
+        !isSecurityDowngrade &&
+        LockScreenUtils.isBiometricLockFlow(appLockStatus, walletSecurity)
+    ) {
+        return <BiometricsPlaceholder onSuccess={unlockFromBackground} />
+    }
 
     if (LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)) {
         return <LockScreen onSuccess={unlockApp} />
@@ -93,9 +145,9 @@ export const EntryPoint = () => {
 
             <Security />
 
-            {isSecurityDowngrade && <SecurityDowngradeScreen />}
-
-            {!isSecurityDowngrade && (
+            {isSecurityDowngrade ? (
+                <SecurityDowngradeScreen />
+            ) : (
                 <>
                     <BaseStatusBar />
                     <SwitchStack />
@@ -106,7 +158,7 @@ export const EntryPoint = () => {
 }
 
 const recursiveFaceId = async () => {
-    let results = await BiometricsUtils.authenticateWithbiometric()
+    let results = await BiometricsUtils.authenticateWithBiometric()
     if (results.success) {
         await RNBootSplash.hide({ fade: true })
         return

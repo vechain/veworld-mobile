@@ -18,7 +18,7 @@ export const EnableBiometrics = () => {
     } = useDisclosure()
 
     const requireBiometricsAndEnableIt = useCallback(async () => {
-        let { success } = await BiometricsUtils.authenticateWithbiometric()
+        let { success } = await BiometricsUtils.authenticateWithBiometric()
         if (success) openPasswordPrompt()
     }, [openPasswordPrompt])
 

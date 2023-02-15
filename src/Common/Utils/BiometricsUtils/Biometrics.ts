@@ -22,7 +22,7 @@ export const getBiometricTypeAvailable = async () => {
     return LocalAuthentication.AuthenticationType[type] as TAuthentication
 }
 
-export const authenticateWithbiometric = async () => {
+export const authenticateWithBiometric = async () => {
     let isAuth = await LocalAuthentication.authenticateAsync({
         disableDeviceFallback: true,
     })
