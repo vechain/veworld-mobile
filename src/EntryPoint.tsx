@@ -32,7 +32,7 @@ export const EntryPoint = () => {
     const { appLockStatus, unlockApp, lockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
-    const [isBackground, setIsBackground] = useState(false)
+    const [isBackgroundTransition, setIsBackgroundTransition] = useState(false)
     const [previousState, currentState] = useAppState()
 
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
@@ -82,7 +82,7 @@ export const EntryPoint = () => {
      */
     const unlockFromBackground = useCallback(() => {
         unlockApp()
-        setIsBackground(false)
+        setIsBackgroundTransition(false)
     }, [unlockApp])
 
     useEffect(() => {
@@ -91,7 +91,7 @@ export const EntryPoint = () => {
 
     useEffect(() => {
         if (transitionedFromBackground) {
-            setIsBackground(true)
+            setIsBackgroundTransition(true)
         }
     }, [transitionedFromBackground])
 
@@ -121,11 +121,16 @@ export const EntryPoint = () => {
             }
         }
         // Ensure not coming from background when handling splash screen
-        if (!isBackground) init()
-    }, [appLockStatus, walletSecurity, isSecurityDowngrade, isBackground])
+        if (!isBackgroundTransition) init()
+    }, [
+        appLockStatus,
+        walletSecurity,
+        isSecurityDowngrade,
+        isBackgroundTransition,
+    ])
 
     if (
-        isBackground &&
+        isBackgroundTransition &&
         appLockStatus !== AppLockStatus.NO_LOCK &&
         !isSecurityDowngrade &&
         LockScreenUtils.isBiometricLockFlow(appLockStatus, walletSecurity)
