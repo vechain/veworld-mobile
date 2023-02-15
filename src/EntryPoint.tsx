@@ -58,6 +58,13 @@ export const EntryPoint = () => {
         [currentState, previousState],
     )
 
+    const openingFromClosed = useMemo(
+        () =>
+            currentState === AppStateType.ACTIVE &&
+            previousState === AppStateType.UNKNOWN,
+        [currentState, previousState],
+    )
+
     // this can be done in Realm provider but current version of Realm is bugged
     const initRealmClasses = useCallback(() => {
         if (!appLock[0]) {
@@ -120,13 +127,14 @@ export const EntryPoint = () => {
                 await recursiveFaceId()
             }
         }
-        // Ensure not coming from background when handling splash screen
-        if (!isBackgroundTransition) init()
+        // Handle splash screen only when opening app from closed state
+        if (openingFromClosed) init()
     }, [
         appLockStatus,
         walletSecurity,
         isSecurityDowngrade,
         isBackgroundTransition,
+        openingFromClosed,
     ])
 
     if (
@@ -168,6 +176,7 @@ const recursiveFaceId = async () => {
         await RNBootSplash.hide({ fade: true })
         return
     } else if (results.error) {
+        console.log("results.error: " + results.error)
         AlertUtils.showCancelledFaceIdAlert(
             async () => {
                 // TODO: SIGN OUT USER
