@@ -176,7 +176,6 @@ const recursiveFaceId = async () => {
         await RNBootSplash.hide({ fade: true })
         return
     } else if (results.error) {
-        console.log("results.error: " + results.error)
         AlertUtils.showCancelledFaceIdAlert(
             async () => {
                 // TODO: SIGN OUT USER
