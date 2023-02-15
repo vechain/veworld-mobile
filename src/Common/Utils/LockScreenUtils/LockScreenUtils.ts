@@ -1,5 +1,4 @@
-import { AppLockStatus } from "~Common/Hooks"
-import { WalletSecurity } from "~Common/Hooks"
+import { AppLockStatus, WalletSecurity } from "~Common/Hooks"
 
 const isLockScreenFlow = (
     appLockStatus: AppLockStatus | undefined,
