@@ -43,9 +43,10 @@ export const Security = () => {
                 })
             }
         } else {
-            store.write(() => {
-                config[0].lastSecurityLevel = level
-            })
+            if (config[0]?.lastSecurityLevel && level)
+                store.write(() => {
+                    config[0].lastSecurityLevel = level
+                })
         }
     }, [biometrics, config, store])
 
