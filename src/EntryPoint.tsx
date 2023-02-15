@@ -19,11 +19,11 @@ import {
     BiometricsUtils,
     LockScreenUtils,
     useAppLock,
-    useAppState,
     useWalletSecurity,
 } from "~Common"
-import { AppStateType, WALLET_STATUS } from "~Model"
+import { WALLET_STATUS } from "~Model"
 import { BiometricsPlaceholder } from "~Screens/BiometricsPlaceholder"
+import { useAppStateTransitions } from "~Common/Hooks/useAppStateTransitions"
 
 export const EntryPoint = () => {
     const store = useStore()
@@ -33,7 +33,8 @@ export const EntryPoint = () => {
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
     const [isBackgroundTransition, setIsBackgroundTransition] = useState(false)
-    const [previousState, currentState] = useAppState()
+    const { activeToBackground, backgroundToActive, closedToActive } =
+        useAppStateTransitions()
 
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -43,27 +44,6 @@ export const EntryPoint = () => {
     // todo: this is a workaround until the new version is installed
     const appLockQuery = useCachedQuery(AppLock)
     const appLock = useMemo(() => appLockQuery.sorted("_id"), [appLockQuery])
-
-    const transitionedToBackground = useMemo(
-        () =>
-            currentState === AppStateType.BACKGROUND &&
-            previousState === AppStateType.ACTIVE,
-        [currentState, previousState],
-    )
-
-    const transitionedFromBackground = useMemo(
-        () =>
-            currentState === AppStateType.ACTIVE &&
-            previousState === AppStateType.BACKGROUND,
-        [currentState, previousState],
-    )
-
-    const openingFromClosed = useMemo(
-        () =>
-            currentState === AppStateType.ACTIVE &&
-            previousState === AppStateType.UNKNOWN,
-        [currentState, previousState],
-    )
 
     // this can be done in Realm provider but current version of Realm is bugged
     const initRealmClasses = useCallback(() => {
@@ -83,9 +63,9 @@ export const EntryPoint = () => {
     }, [appLock, cache, config, store])
 
     /*
-     * Biometrics validation transitions AppStatus into 'inactive' state
+     * Biometrics validation prompt transitions the AppStatus into 'inactive' state
      * Make sure from the flow point of view, that the background state isn't removed
-     * until we unlock the wallet
+     * until we unlock the wallet, and not only when the bio is prompted
      */
     const unlockFromBackground = useCallback(() => {
         unlockApp()
@@ -97,16 +77,16 @@ export const EntryPoint = () => {
     }, [initRealmClasses])
 
     useEffect(() => {
-        if (transitionedFromBackground) {
+        if (backgroundToActive) {
             setIsBackgroundTransition(true)
         }
-    }, [transitionedFromBackground])
+    }, [backgroundToActive])
 
     useEffect(() => {
-        if (transitionedToBackground) {
+        if (activeToBackground) {
             lockApp()
         }
-    }, [transitionedToBackground, lockApp])
+    }, [activeToBackground, lockApp])
 
     useEffect(() => {
         const init = async () => {
@@ -128,13 +108,13 @@ export const EntryPoint = () => {
             }
         }
         // Handle splash screen only when opening app from closed state
-        if (openingFromClosed) init()
+        if (closedToActive) init()
     }, [
         appLockStatus,
         walletSecurity,
         isSecurityDowngrade,
         isBackgroundTransition,
-        openingFromClosed,
+        closedToActive,
     ])
 
     if (
