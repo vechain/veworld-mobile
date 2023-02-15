@@ -6,25 +6,52 @@ type Props = {
 }
 
 export const RealmProvider = ({ children }: Props) => {
-    // const [key, setKey] = useState<ArrayBuffer | null>(null)
+    // const [buffKey, setBuffKey] = useState<ArrayBuffer | undefined>()
+    // const [isKey, setIsKey] = useState(false)
 
-    // const init = useCallback(async () => {
-    // const res = await KeychainService.getEncryptionKey(true)
-    // console.log("KEYCHAIN ------>", res)
-    // if (res) {
-    //     const key64 = Buffer.from(res!, "base64")
+    // const getKey = async (encKey: string) => {
+    //     const key64 = Buffer.from(encKey, "base64")
     //     const keyToArr = new Uint8Array(key64)
-    //     let _key = keyToArr
-    //     setKey(_key)
+
+    //     // set key64 to cache and save once the user has chosen security level (can't use realm)
+
+    //     setBuffKey(keyToArr)
+    //     setIsKey(true)
     // }
-    // else {
+
+    // const createKey = () => {
     //     const arr = new Uint8Array(64)
     //     const keyBuff = crypto.getRandomValues(arr) as ArrayBuffer
-    //     setKey(keyBuff)
+
     //     const key64: string = Buffer.from(keyBuff).toString("base64")
-    //     await KeychainService.setEncryptionKey(key64, isBiometryEnabled)
+    //     // set key64 to cache and save once the user has chosen security level (can't use realm)
+
+    //     setBuffKey(keyBuff)
+    //     setIsKey(true)
     // }
+
+    // const init = useCallback(async () => {
+    //     // need to know if a realm key is ever created (smtn liek async storage)
+    //     const isFirstTime = true
+    //     if (isFirstTime) {
+    //         createKey()
+    //     } else {
+    //         // need to create a hook to get results live
+    //         // need to know what the user has selected as sec level
+    //         // can't use realm (we're outside of the provider)
+    //         let isBio = true
+    //         const encKey = await KeychainService.getRealmKey(isBio)
+    //         getKey(encKey!)
+    //     }
     // }, [])
+
+    // useEffect(() => {
+    //     init()
+    // }, [init])
+
+    // if (!isKey) {
+    //     return <></>
+    // }
 
     return (
         <CacheProvider>
