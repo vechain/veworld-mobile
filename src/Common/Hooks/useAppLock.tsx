@@ -1,8 +1,10 @@
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
+import { WALLET_STATUS } from "~Model"
 import {
     AppLock,
     Config,
     Device,
+    useCache,
     useCachedQuery,
     useStoreQuery,
 } from "~Storage"
@@ -21,7 +23,8 @@ export const useAppInitState = () => {
     return appStatus
 }
 
-export const useAppLockStatus = () => {
+export const useAppLock = () => {
+    const cache = useCache()
     // todo: this is a workaround until the new version is installed
     const result = useStoreQuery(Device)
     const devices = useMemo(() => result.sorted("rootAddress"), [result])
@@ -34,7 +37,7 @@ export const useAppLockStatus = () => {
     const result2 = useCachedQuery(AppLock)
     const appLock = useMemo(() => result2.sorted("_id"), [result2])
 
-    const appStatus = useMemo(() => {
+    const appLockStatus = useMemo(() => {
         if (!devices.length || !config[0].isAppLockActive) {
             return AppLockStatus.NO_LOCK
         }
@@ -44,7 +47,19 @@ export const useAppLockStatus = () => {
         }
     }, [appLock, config, devices.length])
 
-    return appStatus
+    const unlockApp = useCallback(() => {
+        cache.write(() => {
+            appLock[0].status = WALLET_STATUS.UNLOCKED
+        })
+    }, [cache, appLock])
+
+    const lockApp = useCallback(() => {
+        cache.write(() => {
+            appLock[0].status = WALLET_STATUS.LOCKED
+        })
+    }, [cache, appLock])
+
+    return { appLockStatus, lockApp, unlockApp }
 }
 
 export enum AppInitState {
