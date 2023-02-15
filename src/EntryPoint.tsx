@@ -18,16 +18,16 @@ import {
     AppLockStatus,
     BiometricsUtils,
     LockScreenUtils,
-    useAppLockStatus,
-    useUnlockFlow,
+    useAppLock,
+    useWalletSecurity,
 } from "~Common"
 import { WALLET_STATUS } from "~Model"
 
 export const EntryPoint = () => {
     const store = useStore()
     const cache = useCache()
-    const appLockStatus = useAppLockStatus()
-    const unlockFlow = useUnlockFlow()
+    const { appLockStatus, unlockApp } = useAppLock()
+    const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -59,38 +59,30 @@ export const EntryPoint = () => {
         initRealmClasses()
     }, [initRealmClasses])
 
-    const isSecurityDowngrade = useMemo(
-        () => config[0]?.isSecurityDowngrade,
-        [config],
-    )
-
     useEffect(() => {
         const init = async () => {
             if (
                 appLockStatus === AppLockStatus.NO_LOCK ||
                 isSecurityDowngrade ||
-                LockScreenUtils.isLockScreenFlow(appLockStatus, unlockFlow)
+                LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)
             ) {
                 await RNBootSplash.hide({ fade: true })
             }
 
             if (
-                LockScreenUtils.isBiometricLockFlow(appLockStatus, unlockFlow)
+                LockScreenUtils.isBiometricLockFlow(
+                    appLockStatus,
+                    walletSecurity,
+                )
             ) {
                 await recursiveFaceId()
             }
         }
         init()
-    }, [appLockStatus, unlockFlow, isSecurityDowngrade])
+    }, [appLockStatus, walletSecurity, isSecurityDowngrade])
 
-    const unlockWallet = useCallback(() => {
-        cache.write(() => {
-            appLock[0].status = WALLET_STATUS.UNLOCKED
-        })
-    }, [cache, appLock])
-
-    if (LockScreenUtils.isLockScreenFlow(appLockStatus, unlockFlow)) {
-        return <LockScreen onSuccess={unlockWallet} />
+    if (LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)) {
+        return <LockScreen onSuccess={unlockApp} />
     }
 
     return (
