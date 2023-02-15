@@ -1,4 +1,6 @@
-import React from "react"
+import React, { useCallback, useEffect, useState } from "react"
+import crypto from "react-native-quick-crypto"
+import KeychainService from "~Services/KeychainService"
 import { CacheProvider, StoreProvider } from "~Storage"
 
 type Props = {
@@ -6,56 +8,49 @@ type Props = {
 }
 
 export const RealmProvider = ({ children }: Props) => {
-    // const [buffKey, setBuffKey] = useState<ArrayBuffer | undefined>()
-    // const [isKey, setIsKey] = useState(false)
+    const [buffKey, setBuffKey] = useState<ArrayBuffer | undefined>()
+    const [isKey, setIsKey] = useState(false)
 
-    // const getKey = async (encKey: string) => {
-    //     const key64 = Buffer.from(encKey, "base64")
-    //     const keyToArr = new Uint8Array(key64)
+    const getKey = async (encKey: string) => {
+        const key64 = Buffer.from(encKey, "base64")
+        const keyToArr = new Uint8Array(key64)
 
-    //     // set key64 to cache and save once the user has chosen security level (can't use realm)
+        process.env.NODE_ENV === "development" &&
+            console.log("Realm Encryption key : ", key64.toString("hex"))
 
-    //     setBuffKey(keyToArr)
-    //     setIsKey(true)
-    // }
+        setBuffKey(keyToArr)
+        setIsKey(true)
+    }
 
-    // const createKey = () => {
-    //     const arr = new Uint8Array(64)
-    //     const keyBuff = crypto.getRandomValues(arr) as ArrayBuffer
+    const createKey = async () => {
+        const arr = new Uint8Array(64)
+        const keyBuff = crypto.getRandomValues(arr) as ArrayBuffer
+        const key64: string = Buffer.from(keyBuff).toString("base64")
+        await KeychainService.setRealmKey(key64)
+        setBuffKey(keyBuff)
+        setIsKey(true)
+    }
 
-    //     const key64: string = Buffer.from(keyBuff).toString("base64")
-    //     // set key64 to cache and save once the user has chosen security level (can't use realm)
+    const init = useCallback(async () => {
+        const encKey = await KeychainService.getRealmKey()
+        if (encKey) {
+            getKey(encKey!)
+        } else {
+            await createKey()
+        }
+    }, [])
 
-    //     setBuffKey(keyBuff)
-    //     setIsKey(true)
-    // }
+    useEffect(() => {
+        init()
+    }, [init])
 
-    // const init = useCallback(async () => {
-    //     // need to know if a realm key is ever created (smtn liek async storage)
-    //     const isFirstTime = true
-    //     if (isFirstTime) {
-    //         createKey()
-    //     } else {
-    //         // need to create a hook to get results live
-    //         // need to know what the user has selected as sec level
-    //         // can't use realm (we're outside of the provider)
-    //         let isBio = true
-    //         const encKey = await KeychainService.getRealmKey(isBio)
-    //         getKey(encKey!)
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     init()
-    // }, [init])
-
-    // if (!isKey) {
-    //     return <></>
-    // }
+    if (!isKey) {
+        return <></>
+    }
 
     return (
         <CacheProvider>
-            <StoreProvider>{children}</StoreProvider>
+            <StoreProvider encryptionKey={buffKey}>{children}</StoreProvider>
         </CacheProvider>
     )
 }

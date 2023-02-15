@@ -67,20 +67,10 @@ const setEncryptionKey = async (
     }
 }
 
-const getRealmKey = async (accessControl?: boolean) => {
-    let options: any
-
-    if (accessControl) {
-        options = {
-            requireAuthentication: accessControl,
-            keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: REALM_KEY,
-        }
-    } else {
-        options = {
-            keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: REALM_KEY,
-        }
+const getRealmKey = async () => {
+    const options = {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        keychainService: REALM_KEY,
     }
 
     try {
@@ -90,20 +80,10 @@ const getRealmKey = async (accessControl?: boolean) => {
     }
 }
 
-const setRealmKey = async (Enckey: string, accessControl?: boolean) => {
-    let options: any
-
-    if (accessControl) {
-        options = {
-            requireAuthentication: accessControl,
-            keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: REALM_KEY,
-        }
-    } else {
-        options = {
-            keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: REALM_KEY,
-        }
+const setRealmKey = async (Enckey: string) => {
+    const options = {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        keychainService: REALM_KEY,
     }
 
     try {
