@@ -1,21 +1,21 @@
-import { AppLockStatus, AppUnlockFlow } from "~Common/Hooks"
+import { AppLockStatus, WalletSecurity } from "~Common/Hooks"
 
 const isLockScreenFlow = (
     appLockStatus: AppLockStatus | undefined,
-    unlockFlow: AppUnlockFlow,
+    walletSecurity: WalletSecurity,
 ) => {
     return (
         appLockStatus === AppLockStatus.LOCKED_STATE &&
-        unlockFlow === AppUnlockFlow.PASS_UNLOCK
+        walletSecurity === WalletSecurity.PASS_UNLOCK
     )
 }
 const isBiometricLockFlow = (
     appLockStatus: AppLockStatus | undefined,
-    unlockFlow: AppUnlockFlow,
+    walletSecurity: WalletSecurity,
 ) => {
     return (
         appLockStatus === AppLockStatus.LOCKED_STATE &&
-        unlockFlow === AppUnlockFlow.BIO_UNLOCK
+        walletSecurity === WalletSecurity.BIO_UNLOCK
     )
 }
 

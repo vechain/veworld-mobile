@@ -4,7 +4,6 @@ import {
     Device,
     XPub,
     Config,
-    AppState,
     Biometrics,
     Mnemonic,
     Account,
@@ -24,7 +23,7 @@ const inMemoryRealmconfig = {
     inMemory: true,
     deleteRealmIfMigrationNeeded:
         process.env.NODE_ENV === "development" ? true : false,
-    schema: [AppState, Biometrics, Mnemonic, ActiveWalletCard, AppLock],
+    schema: [Biometrics, Mnemonic, ActiveWalletCard, AppLock],
 }
 
 process.env.NODE_ENV === "development" &&
@@ -52,7 +51,6 @@ export {
     XPub,
     Config,
     Biometrics,
-    AppState,
     Mnemonic,
     Account,
     ActiveWalletCard,

@@ -1,52 +1,15 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { Switch } from "react-native"
-import {
-    AppUnlockFlow,
-    BiometricsUtils,
-    CryptoUtils,
-    PasswordUtils,
-    useDisclosure,
-    useUnlockFlow,
-} from "~Common"
+import { BiometricsUtils, useDisclosure, useWalletSecurity } from "~Common"
 import { BaseText, BaseView } from "~Components"
-import { UserSelectedSecurityLevel, Wallet } from "~Model"
-import KeychainService from "~Services/KeychainService"
-import {
-    Biometrics,
-    Config,
-    Device,
-    useCache,
-    useCachedQuery,
-    useStore,
-    useStoreQuery,
-} from "~Storage"
 import { RequireUserPassword } from "../../HomeScreen/Components"
 
 export const EnableBiometrics = () => {
-    const store = useStore()
-    const cache = useCache()
-
-    const unlockFlow = useUnlockFlow()
-    // todo: this is a workaround until the new version is installed
-    const result = useStoreQuery(Config)
-    const config = useMemo(() => result.sorted("_id"), [result])
-
-    const biometricsQuery = useCachedQuery(Biometrics)
-    const biometrics = useMemo(
-        () => biometricsQuery.sorted("_id"),
-        [biometricsQuery],
-    )
-
-    const isBiometricsEnabled = useMemo(
-        () => biometrics[0].accessControl,
-        [biometrics],
-    )
-
-    const deviceQuery = useStoreQuery(Device)
-    const devices = useMemo(
-        () => deviceQuery.sorted("rootAddress"),
-        [deviceQuery],
-    )
+    const {
+        isBiometricsEnabled,
+        isWalletSecurityBiometrics,
+        runSecurityUpgrade,
+    } = useWalletSecurity()
 
     const {
         isOpen: isPasswordPromptOpen,
@@ -54,70 +17,22 @@ export const EnableBiometrics = () => {
         onClose: closePasswordPrompt,
     } = useDisclosure()
 
-    const isEnabled = useMemo(
-        () => unlockFlow === AppUnlockFlow.BIO_UNLOCK,
-        [unlockFlow],
-    )
-
     const requireBiometricsAndEnableIt = useCallback(async () => {
         let { success } = await BiometricsUtils.authenticateWithbiometric()
         if (success) openPasswordPrompt()
     }, [openPasswordPrompt])
 
-    const enableBiometrics = useCallback(
-        async (password: string) => {
-            store.beginTransaction()
-
-            for (const device of devices) {
-                let encryptedKey = await KeychainService.getEncryptionKey(
-                    device.index,
-                    isEnabled,
-                )
-                if (encryptedKey) {
-                    const decryptedKey = CryptoUtils.decrypt<string>(
-                        encryptedKey,
-                        PasswordUtils.hash(password),
-                    )
-                    let _wallet = CryptoUtils.decrypt<Wallet>(
-                        device.wallet,
-                        decryptedKey,
-                    )
-
-                    const { encryptedWallet: updatedEncryptedWallet } =
-                        await CryptoUtils.encryptWallet(
-                            _wallet,
-                            device.index,
-                            true,
-                        )
-
-                    device.wallet = updatedEncryptedWallet
-                } else {
-                    console.log(`No key for ${device.alias}`)
-                }
-            }
-            config[0].userSelectedSecurtiy = UserSelectedSecurityLevel.BIOMETRIC
-            store.commitTransaction()
-            cache.write(() => (biometrics[0].accessControl = true))
-            closePasswordPrompt()
-        },
-        [
-            store,
-            cache,
-            config,
-            biometrics,
-            devices,
-            isEnabled,
-            closePasswordPrompt,
-        ],
+    const onPasswordSuccess = useCallback(
+        (password: string) => runSecurityUpgrade(password, closePasswordPrompt),
+        [runSecurityUpgrade, closePasswordPrompt],
     )
-
     if (isBiometricsEnabled)
         return (
             <>
                 <RequireUserPassword
                     isOpen={isPasswordPromptOpen}
                     onClose={closePasswordPrompt}
-                    onSuccess={enableBiometrics}
+                    onSuccess={onPasswordSuccess}
                 />
                 <BaseView
                     justify="space-between"
@@ -126,9 +41,9 @@ export const EnableBiometrics = () => {
                     orientation="row">
                     <BaseText>Enable Biometrics</BaseText>
                     <Switch
-                        disabled={isEnabled}
+                        disabled={isWalletSecurityBiometrics}
                         onValueChange={requireBiometricsAndEnableIt}
-                        value={isEnabled}
+                        value={isWalletSecurityBiometrics}
                     />
                 </BaseView>
             </>
