@@ -11,20 +11,22 @@ import {
     UserCreatePasswordScreen,
     ImportWalletTypeSelectionScreen,
     ImportSeedPhraseScreen,
+    WalletSuccessScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
 export type RootStackParamListOnboarding = {
-    Welcome: undefined
-    Onboarding: undefined
-    Wallet_Tutorial: undefined
-    Wallet_Type_Creation: undefined
-    Wallet_Type_Import: undefined
-    Seed_Phrase: undefined
-    Confirm_Seed_Phrase: undefined
-    Import_Seed_Phrase: undefined
-    User_Create_Password: undefined
-    App_Security: undefined
+    [Routes.WELCOME]: undefined
+    [Routes.ONBOARDING]: undefined
+    [Routes.WALLET_TUTORIAL]: undefined
+    [Routes.WALLET_TPYE_CREATION]: undefined
+    [Routes.WALLET_TPYE_IMPORT]: undefined
+    [Routes.SEED_PHRASE]: undefined
+    [Routes.CONFIRM_SEED_PHRASE]: undefined
+    [Routes.IMPORT_SEED_PHRASE]: undefined
+    [Routes.USER_CREATE_PASSWORD]: undefined
+    [Routes.APP_SECURITY]: undefined
+    [Routes.WALLET_SUCCESS]: undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -92,14 +94,13 @@ export const OnboardingStack = () => {
                     component={UserCreatePasswordScreen}
                     options={{ headerShown: false }}
                 />
+
+                <Onboarding.Screen
+                    name={Routes.WALLET_SUCCESS}
+                    component={WalletSuccessScreen}
+                    options={{ headerShown: false }}
+                />
             </Onboarding.Group>
-
-            {/* <Onboarding.Group
-                screenOptions={{
-                    presentation: "fullScreenModal",
-                }}>
-
-            </Onboarding.Group> */}
         </Onboarding.Navigator>
     )
 }

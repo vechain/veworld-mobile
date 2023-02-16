@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React from "react"
+import { useConditionalNavigation } from "~Common"
 import {
     BaseButton,
     BaseSafeArea,
@@ -14,9 +15,10 @@ import { useI18nContext } from "~i18n"
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
+    const navigate = useConditionalNavigation()
 
     const onCreateWallet = () => {
-        nav.navigate(Routes.WALLET_TUTORIAL)
+        navigate(Routes.SEED_PHRASE, Routes.WALLET_TUTORIAL)
     }
 
     const onImportWallet = () => {

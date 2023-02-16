@@ -2,6 +2,7 @@ import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     ConfirmSeedPhraseScreen,
+    ImportSeedPhraseScreen,
     ImportWalletTypeSelectionScreen,
     SeedPhraseScreen,
     TutorialScreen,
@@ -18,6 +19,7 @@ export type RootStackParamListCreateWalletApp = {
     [Routes.WALLET_TUTORIAL]: undefined
     [Routes.CONFIRM_SEED_PHRASE]: undefined
     [Routes.WALLET_SUCCESS]: undefined
+    [Routes.IMPORT_SEED_PHRASE]: undefined
 }
 
 const CreateWalletApp =
@@ -59,6 +61,12 @@ export const CreateWalletAppStack = () => {
             <CreateWalletApp.Screen
                 name={Routes.WALLET_SUCCESS}
                 component={WalletSuccessScreen}
+                options={{ headerShown: false }}
+            />
+
+            <CreateWalletApp.Screen
+                name={Routes.IMPORT_SEED_PHRASE}
+                component={ImportSeedPhraseScreen}
                 options={{ headerShown: false }}
             />
         </CreateWalletApp.Navigator>

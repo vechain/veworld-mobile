@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -14,26 +14,11 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { Fonts, WALLET_STATUS } from "~Model"
-import {
-    AppLock,
-    Config,
-    RealmClass,
-    useCache,
-    useStore,
-    useStoreQuery,
-} from "~Storage"
+import { Fonts } from "~Model"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-
-    const store = useStore()
-    const cache = useCache()
-
-    // todo: this is a workaround until the new version is installed, then use the above
-    const result1 = useStoreQuery(Config)
-    const config = useMemo(() => result1.sorted("_id"), [result1])
 
     const { currentSecurityLevel } = useBiometricType()
     const { onCreateWallet, accessControl, isComplete } =
@@ -48,21 +33,9 @@ export const AppSecurityScreen = () => {
 
     useEffect(() => {
         if (isComplete) {
-            cache.write(() => {
-                let appLock = cache.objectForPrimaryKey<AppLock>(
-                    RealmClass.AppLock,
-                    "APP_LOCK",
-                )
-                if (appLock) {
-                    appLock.status = WALLET_STATUS.UNLOCKED
-                }
-            })
-
-            store.write(() => {
-                config[0].isWalletCreated = true
-            })
+            nav.navigate(Routes.WALLET_SUCCESS)
         }
-    }, [cache, config, isComplete, store])
+    }, [isComplete, nav])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)

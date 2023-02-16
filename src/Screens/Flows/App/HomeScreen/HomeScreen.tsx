@@ -57,7 +57,7 @@ export const HomeScreen = () => {
     const result2 = useCachedQuery(ActiveWalletCard)
     const activeCard = useMemo(() => result2.sorted("_id"), [result2])
 
-    console.log(devices)
+    console.log(devices.length)
     console.log(activeCard)
 
     useEffect(() => {

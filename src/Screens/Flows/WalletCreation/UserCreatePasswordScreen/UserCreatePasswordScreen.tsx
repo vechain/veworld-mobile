@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect } from "react"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -9,20 +9,13 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
-import { Fonts, WALLET_STATUS } from "~Model"
+import { Fonts } from "~Model"
 import { useCreateWalletWithPassword } from "~Common"
-import {
-    AppLock,
-    Config,
-    RealmClass,
-    useCache,
-    useStore,
-    useStoreQuery,
-} from "~Storage"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
 
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
-    const cache = useCache()
     const {
         isPinError,
         isPinRetype,
@@ -32,12 +25,7 @@ export const UserCreatePasswordScreen = () => {
         userPin,
     } = useOnDigitPress()
     const { onCreateWallet, isComplete } = useCreateWalletWithPassword()
-
-    // todo: this is a workaround until the new version is installed, then use the above
-    const result1 = useStoreQuery(Config)
-    const config = useMemo(() => result1.sorted("_id"), [result1])
-
-    const store = useStore()
+    const nav = useNavigation()
 
     useEffect(() => {
         if (isSuccess) {
@@ -47,21 +35,9 @@ export const UserCreatePasswordScreen = () => {
 
     useEffect(() => {
         if (isComplete) {
-            cache.write(() => {
-                let appLock = cache.objectForPrimaryKey<AppLock>(
-                    RealmClass.AppLock,
-                    "APP_LOCK",
-                )
-                if (appLock) {
-                    appLock.status = WALLET_STATUS.UNLOCKED
-                }
-            })
-
-            store.write(() => {
-                config[0].isWalletCreated = true
-            })
+            nav.navigate(Routes.WALLET_SUCCESS)
         }
-    }, [cache, config, isComplete, store])
+    }, [isComplete, nav])
 
     return (
         <BaseSafeArea grow={1}>
