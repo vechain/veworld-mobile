@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react"
-import { BaseSafeArea } from "~Components"
 import { useBiometricsValidation } from "~Common/Hooks/useBiometricsValidation"
+import { BackgroundScreen } from "./BackgroundScreen"
 
 type BiometricsPlaceholderProps = {
     onSuccess: () => void
@@ -21,5 +21,5 @@ export const BiometricsPlaceholder: React.FC<BiometricsPlaceholderProps> = ({
         validateBiometrics()
     }, [validateBiometrics])
 
-    return <BaseSafeArea grow={1} style={{ backgroundColor: "#28008C" }} />
+    return <BackgroundScreen />
 }

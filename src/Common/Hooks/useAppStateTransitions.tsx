@@ -7,22 +7,29 @@ export const useAppStateTransitions = () => {
 
     const activeToBackground = useMemo(
         () =>
-            currentState === AppStateType.BACKGROUND &&
-            previousState === AppStateType.ACTIVE,
+            previousState === AppStateType.ACTIVE &&
+            currentState === AppStateType.BACKGROUND,
         [currentState, previousState],
     )
 
     const backgroundToActive = useMemo(
         () =>
-            currentState === AppStateType.ACTIVE &&
-            previousState === AppStateType.BACKGROUND,
+            previousState === AppStateType.BACKGROUND &&
+            currentState === AppStateType.ACTIVE,
         [currentState, previousState],
     )
 
     const closedToActive = useMemo(
         () =>
-            currentState === AppStateType.ACTIVE &&
-            previousState === AppStateType.UNKNOWN,
+            previousState === AppStateType.UNKNOWN &&
+            currentState === AppStateType.ACTIVE,
+        [currentState, previousState],
+    )
+
+    const inactiveToBackground = useMemo(
+        () =>
+            previousState === AppStateType.INACTIVE &&
+            currentState === AppStateType.BACKGROUND,
         [currentState, previousState],
     )
 
@@ -30,5 +37,6 @@ export const useAppStateTransitions = () => {
         activeToBackground,
         backgroundToActive,
         closedToActive,
+        inactiveToBackground,
     }
 }

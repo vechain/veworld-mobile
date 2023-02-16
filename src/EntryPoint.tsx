@@ -24,6 +24,7 @@ import {
 import { WALLET_STATUS } from "~Model"
 import { BiometricsPlaceholder } from "~Screens/BiometricsPlaceholder"
 import { useAppStateTransitions } from "~Common/Hooks/useAppStateTransitions"
+import { BackgroundScreen } from "~Screens/BackgroundScreen"
 
 export const EntryPoint = () => {
     const store = useStore()
@@ -33,8 +34,13 @@ export const EntryPoint = () => {
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
     const [isBackgroundTransition, setIsBackgroundTransition] = useState(false)
-    const { activeToBackground, backgroundToActive, closedToActive } =
-        useAppStateTransitions()
+    const [isInactiveScreen, setIsInactiveScreen] = useState(false)
+    const {
+        activeToBackground,
+        backgroundToActive,
+        closedToActive,
+        inactiveToBackground,
+    } = useAppStateTransitions()
 
     // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
@@ -79,6 +85,7 @@ export const EntryPoint = () => {
     useEffect(() => {
         if (backgroundToActive) {
             setIsBackgroundTransition(true)
+            setIsInactiveScreen(false)
         }
     }, [backgroundToActive])
 
@@ -87,6 +94,12 @@ export const EntryPoint = () => {
             lockApp()
         }
     }, [activeToBackground, lockApp])
+
+    useEffect(() => {
+        if (inactiveToBackground) {
+            setIsInactiveScreen(true)
+        }
+    }, [inactiveToBackground])
 
     useEffect(() => {
         const init = async () => {
@@ -109,13 +122,7 @@ export const EntryPoint = () => {
         }
         // Handle splash screen only when opening app from closed state
         if (closedToActive) init()
-    }, [
-        appLockStatus,
-        walletSecurity,
-        isSecurityDowngrade,
-        isBackgroundTransition,
-        closedToActive,
-    ])
+    }, [appLockStatus, walletSecurity, isSecurityDowngrade, closedToActive])
 
     if (
         isBackgroundTransition &&
@@ -135,6 +142,8 @@ export const EntryPoint = () => {
             {process.env.NODE_ENV === "development" && (
                 <RealmPlugin realms={[store, cache]} />
             )}
+
+            {isInactiveScreen && <BackgroundScreen />}
 
             <Security />
 
