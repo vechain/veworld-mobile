@@ -40,7 +40,7 @@ export const AppSecurityScreen = () => {
         useCreateWalletWithBiometrics()
 
     const onBiometricsPress = useCallback(async () => {
-        let { success } = await BiometricsUtils.authenticateWithbiometric()
+        let { success } = await BiometricsUtils.authenticateWithBiometric()
         if (success) {
             onCreateWallet()
         }
