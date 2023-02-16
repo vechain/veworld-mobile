@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -14,28 +14,23 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { Fonts } from "~Model"
+import { Fonts, SecurityLevelType } from "~Model"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
     const { currentSecurityLevel } = useBiometricType()
-    const { onCreateWallet, accessControl, isComplete } =
-        useCreateWalletWithBiometrics()
+    const { accessControl } = useCreateWalletWithBiometrics()
 
     const onBiometricsPress = useCallback(async () => {
         let { success } = await BiometricsUtils.authenticateWithbiometric()
         if (success) {
-            onCreateWallet()
+            nav.navigate(Routes.WALLET_SUCCESS, {
+                securityLevelSelected: SecurityLevelType.BIOMETRIC,
+            })
         }
-    }, [onCreateWallet])
-
-    useEffect(() => {
-        if (isComplete) {
-            nav.navigate(Routes.WALLET_SUCCESS)
-        }
-    }, [isComplete, nav])
+    }, [nav])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)

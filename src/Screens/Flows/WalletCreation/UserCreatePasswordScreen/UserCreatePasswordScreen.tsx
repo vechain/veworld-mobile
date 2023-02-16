@@ -9,8 +9,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
-import { Fonts } from "~Model"
-import { useCreateWalletWithPassword } from "~Common"
+import { Fonts, SecurityLevelType } from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 
@@ -24,20 +23,16 @@ export const UserCreatePasswordScreen = () => {
         isSuccess,
         userPin,
     } = useOnDigitPress()
-    const { onCreateWallet, isComplete } = useCreateWalletWithPassword()
     const nav = useNavigation()
 
     useEffect(() => {
         if (isSuccess) {
-            onCreateWallet(userPin)
+            nav.navigate(Routes.WALLET_SUCCESS, {
+                securityLevelSelected: SecurityLevelType.SECRET,
+                userPin,
+            })
         }
-    }, [isSuccess, onCreateWallet, userPin])
-
-    useEffect(() => {
-        if (isComplete) {
-            nav.navigate(Routes.WALLET_SUCCESS)
-        }
-    }, [isComplete, nav])
+    }, [isSuccess, nav, userPin])
 
     return (
         <BaseSafeArea grow={1}>

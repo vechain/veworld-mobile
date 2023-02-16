@@ -1,12 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseSpacer, BaseView } from "~Components"
-import {
-    ActiveWalletCard,
-    useCachedQuery,
-    Device,
-    useStoreQuery,
-} from "~Storage"
+import { ActiveWalletCard, useCachedQuery } from "~Storage"
 import {
     CoinList,
     NFTList,
@@ -50,14 +45,9 @@ export const HomeScreen = () => {
     )
 
     // todo: this is a workaround until the new version is installed
-    const result1 = useStoreQuery(Device)
-    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
-
-    // todo: this is a workaround until the new version is installed
     const result2 = useCachedQuery(ActiveWalletCard)
     const activeCard = useMemo(() => result2.sorted("_id"), [result2])
 
-    console.log(devices.length)
     console.log(activeCard)
 
     useEffect(() => {

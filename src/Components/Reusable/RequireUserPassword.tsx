@@ -1,6 +1,6 @@
 import React from "react"
 import { BaseModal, IBaseModal } from "~Components"
-import { LockScreen } from "~Screens/LockScreen/LockScreen"
+import { LockScreen } from "~Screens"
 
 interface IRequireUserPassword extends Omit<IBaseModal, "children"> {
     onSuccess: (password: string) => void

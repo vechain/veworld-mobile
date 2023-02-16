@@ -6,10 +6,12 @@ import {
     ImportWalletTypeSelectionScreen,
     SeedPhraseScreen,
     TutorialScreen,
+    UserCreatePasswordScreen,
     WalletSuccessScreen,
     WalletTypeSelectionScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
+import { SecurityLevelType } from "~Model"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -18,8 +20,14 @@ export type RootStackParamListCreateWalletApp = {
     [Routes.WALLET_TPYE_IMPORT]: undefined
     [Routes.WALLET_TUTORIAL]: undefined
     [Routes.CONFIRM_SEED_PHRASE]: undefined
-    [Routes.WALLET_SUCCESS]: undefined
     [Routes.IMPORT_SEED_PHRASE]: undefined
+    [Routes.WALLET_SUCCESS]:
+        | {
+              securityLevelSelected?: SecurityLevelType
+              userPin?: string
+          }
+        | undefined
+    [Routes.USER_CREATE_PASSWORD]: undefined
 }
 
 const CreateWalletApp =
@@ -67,6 +75,12 @@ export const CreateWalletAppStack = () => {
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_SEED_PHRASE}
                 component={ImportSeedPhraseScreen}
+                options={{ headerShown: false }}
+            />
+
+            <CreateWalletApp.Screen
+                name={Routes.USER_CREATE_PASSWORD}
+                component={UserCreatePasswordScreen}
                 options={{ headerShown: false }}
             />
         </CreateWalletApp.Navigator>

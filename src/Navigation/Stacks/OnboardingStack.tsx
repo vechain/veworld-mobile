@@ -14,6 +14,7 @@ import {
     WalletSuccessScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
+import { SecurityLevelType } from "~Model"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
@@ -26,7 +27,12 @@ export type RootStackParamListOnboarding = {
     [Routes.IMPORT_SEED_PHRASE]: undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
     [Routes.APP_SECURITY]: undefined
-    [Routes.WALLET_SUCCESS]: undefined
+    [Routes.WALLET_SUCCESS]:
+        | {
+              securityLevelSelected?: SecurityLevelType
+              userPin?: string
+          }
+        | undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()

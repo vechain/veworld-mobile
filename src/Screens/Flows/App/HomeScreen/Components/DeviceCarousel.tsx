@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
@@ -7,6 +7,7 @@ import { Card } from "./Card"
 import { BaseSpacer, BaseView } from "~Components"
 import { useActiveCard } from "../Hooks/useActiveCard"
 import { devices_mock } from "~Common"
+import { Device, useStoreQuery } from "~Storage"
 
 const width = Dimensions.get("window").width - 40
 
@@ -22,6 +23,10 @@ export const DeviceCarousel = memo(() => {
     const progressValue = useSharedValue<number>(0)
     const { onScrollBegin, onScrollEnd } = useActiveCard()
 
+    // todo: this is a workaround until the new version is installed
+    const result1 = useStoreQuery(Device)
+    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
+
     const onProgressChange = useCallback(
         (_: number, absoluteProgress: number) => {
             progressValue.value = absoluteProgress
@@ -29,17 +34,20 @@ export const DeviceCarousel = memo(() => {
         [progressValue],
     )
 
-    const renderItem = useCallback(({ index }: { index: number }) => {
-        return (
-            <Card
-                index={index}
-                key={index}
-                entering={FadeInRight.delay(
-                    (devices_mock.length - index) * 50,
-                ).duration(200)}
-            />
-        )
-    }, [])
+    const renderItem = useCallback(
+        ({ index }: { index: number }) => {
+            return (
+                <Card
+                    device={devices[index]}
+                    key={index}
+                    entering={FadeInRight.delay(
+                        (devices_mock.length - index) * 50,
+                    ).duration(200)}
+                />
+            )
+        },
+        [devices],
+    )
 
     return (
         <>
@@ -52,7 +60,7 @@ export const DeviceCarousel = memo(() => {
                 snapEnabled={true}
                 scrollAnimationDuration={1000}
                 mode={"horizontal-stack"}
-                data={devices_mock}
+                data={devices as unknown as Device[]}
                 modeConfig={StackConfig}
                 onProgressChange={onProgressChange}
                 renderItem={renderItem}
@@ -67,12 +75,12 @@ export const DeviceCarousel = memo(() => {
                     orientation="row"
                     justify="space-between"
                     selfAlign="center">
-                    {devices_mock.map((device, index) => (
+                    {devices.map((device, index) => (
                         <PaginationItem
                             animValue={progressValue}
                             index={index}
                             key={device.rootAddress}
-                            length={devices_mock.length}
+                            length={devices.length}
                             entering={FadeIn.delay(220).duration(250)}
                         />
                     ))}

@@ -1,8 +1,7 @@
 import React, { useCallback } from "react"
 import { Switch } from "react-native"
 import { BiometricsUtils, useDisclosure, useWalletSecurity } from "~Common"
-import { BaseText, BaseView } from "~Components"
-import { RequireUserPassword } from "../../HomeScreen/Components"
+import { BaseText, BaseView, RequireUserPassword } from "~Components"
 
 export const EnableBiometrics = () => {
     const {
