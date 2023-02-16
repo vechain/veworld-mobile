@@ -24,7 +24,7 @@ export const AppSecurityScreen = () => {
     const { accessControl } = useCreateWalletWithBiometrics()
 
     const onBiometricsPress = useCallback(async () => {
-        let { success } = await BiometricsUtils.authenticateWithbiometric()
+        let { success } = await BiometricsUtils.authenticateWithBiometric()
         if (success) {
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.BIOMETRIC,
