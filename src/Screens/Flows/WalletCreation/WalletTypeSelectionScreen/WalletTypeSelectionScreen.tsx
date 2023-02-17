@@ -26,7 +26,7 @@ export const WalletTypeSelectionScreen = () => {
         navigate(
             config[0]?.isWalletCreated,
             Routes.SEED_PHRASE,
-            Routes.APP_SECURITY,
+            Routes.WALLET_TUTORIAL,
         )
     }
 
