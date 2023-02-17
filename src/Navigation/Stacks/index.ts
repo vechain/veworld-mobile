@@ -9,7 +9,7 @@ import { RootStackParamListHome } from "./HomeStack"
 import { RootStackParamListSettings } from "./SettingsStack"
 import { RootStackParamListCreateWalletApp } from "./CreateWalletAppStack"
 
-type ScreenRootParams = RootStackParamListOnboarding &
+export type ScreenRootParams = RootStackParamListOnboarding &
     RootStackParamListHome &
     RootStackParamListSettings &
     RootStackParamListCreateWalletApp
