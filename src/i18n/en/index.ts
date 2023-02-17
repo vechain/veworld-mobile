@@ -585,6 +585,7 @@ const en: BaseTranslation = {
     WALLET_IMPORT_hardware_forget: "Forget this device",
 
     // Wallet Labels
+    WALLET_LABEL_wallet: "Wallet",
     WALLET_LABEL_local: "Local",
     WALLET_LABEL_address: "Address",
     WALLET_LABEL_account_name: "Account {accountId}",

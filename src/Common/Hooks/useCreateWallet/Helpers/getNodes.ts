@@ -12,7 +12,7 @@ import * as i18n from "~i18n"
 export const getNodes = (mnemonicPhrase: string[], deviceIndex: number) => {
     const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
     const locale = i18n.detectLocale()
-    let alias = i18n.i18n()[locale].WALLET_LABEL_account()
+    let alias = i18n.i18n()[locale].WALLET_LABEL_wallet()
 
     const wallet = {
         mnemonic: mnemonicPhrase,
@@ -26,6 +26,7 @@ export const getNodes = (mnemonicPhrase: string[], deviceIndex: number) => {
         rootAddress: hdNode.address,
         type: DEVICE_TYPE.LOCAL_MNEMONIC,
         index: deviceIndex,
+        accounts: [],
     }
 
     return { wallet, device }

@@ -1,14 +1,15 @@
 import { index, Object } from "realm"
 
-export class Account extends Object<Account, "rootAddress"> {
+export class Account extends Object<Account> {
     @index
-    rootAddress!: string
+    address!: string
 
     id!: number
     index!: number
     visible!: boolean
     alias!: string
-    address!: string
 
-    static primaryKey = "rootAddress"
+    parent!: Realm.Types.LinkingObjects<Account, "Device">
+
+    static primaryKey = "address"
 }

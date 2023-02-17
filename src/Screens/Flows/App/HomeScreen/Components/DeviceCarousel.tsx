@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
@@ -7,7 +7,8 @@ import { Card } from "./Card"
 import { BaseSpacer, BaseView } from "~Components"
 import { useActiveCard } from "../Hooks/useActiveCard"
 import { devices_mock } from "~Common"
-import { Device, useStoreQuery } from "~Storage"
+import { Device } from "~Storage"
+import { Object, Results } from "realm"
 
 const width = Dimensions.get("window").width - 40
 
@@ -19,13 +20,13 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-export const DeviceCarousel = memo(() => {
+export const DeviceCarousel = ({
+    devices,
+}: {
+    devices: Results<Device & Object<unknown, never>>
+}) => {
     const progressValue = useSharedValue<number>(0)
     const { onScrollBegin, onScrollEnd } = useActiveCard()
-
-    // todo: this is a workaround until the new version is installed
-    const result1 = useStoreQuery(Device)
-    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
 
     const onProgressChange = useCallback(
         (_: number, absoluteProgress: number) => {
@@ -88,7 +89,7 @@ export const DeviceCarousel = memo(() => {
             )}
         </>
     )
-})
+}
 
 const baseStyles = StyleSheet.create({
     carouselContainer: {

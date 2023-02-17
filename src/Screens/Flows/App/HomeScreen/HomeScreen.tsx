@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseSpacer, BaseView } from "~Components"
-import { ActiveWalletCard, useCachedQuery } from "~Storage"
+import {
+    ActiveWalletCard,
+    Device,
+    useCachedQuery,
+    useStoreQuery,
+} from "~Storage"
 import {
     CoinList,
     NFTList,
@@ -24,6 +29,7 @@ type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
 export const HomeScreen = () => {
     const nav = useNavigation()
+    // const createAccountFor = useCreateAccount()
 
     const [activeScreen, setActiveScreen] = useState(0)
     const [firstLoad, setFirstLoad] = useState(true)
@@ -47,6 +53,10 @@ export const HomeScreen = () => {
     // todo: this is a workaround until the new version is installed
     const result2 = useCachedQuery(ActiveWalletCard)
     const activeCard = useMemo(() => result2.sorted("_id"), [result2])
+
+    // todo: this is a workaround until the new version is installed
+    const result1 = useStoreQuery(Device)
+    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
 
     console.log(activeCard)
 
@@ -108,6 +118,9 @@ export const HomeScreen = () => {
     }, [])
 
     const onHeaderPress = () => {
+        // createAccountFor(
+        //     devices.filtered(`index == ${activeCard[0]?.activeIndex ?? 1}`),
+        // )
         nav.navigate(Routes.CREATE_WALLET_FLOW)
     }
 
@@ -117,7 +130,7 @@ export const HomeScreen = () => {
                 <BaseView align="center">
                     <Header action={onHeaderPress} />
                     <BaseSpacer height={20} />
-                    <DeviceCarousel />
+                    <DeviceCarousel devices={devices} />
                 </BaseView>
 
                 <BaseSpacer height={10} />
@@ -151,3 +164,48 @@ export const HomeScreen = () => {
         </>
     )
 }
+
+// import * as i18n from "~i18n"
+// import { Results } from "realm"
+
+// const useCreateAccount = () => {
+//     const store = useStore()
+
+//     const createAccountFor = useCallback(
+//         (device: Results<Device>) => {
+//             const locale = i18n.detectLocale()
+//             let alias = i18n.i18n()[locale].WALLET_LABEL_account()
+
+//             if (!device[0].xPub) {
+//                 return
+//             }
+
+//             let nextIndex = device[0].accounts?.length
+//                 ? device[0].accounts?.length + 1
+//                 : 1
+
+//             console.log(nextIndex)
+//             const address = AddressUtils.getAddressFromXPub(
+//                 device[0].xPub,
+//                 nextIndex,
+//             )
+
+//             let account: Account
+
+//             store.write(() => {
+//                 account = store.create(RealmClass.Account, {
+//                     address: address,
+//                     index: nextIndex,
+//                     visible: true,
+//                     id: nextIndex,
+//                     alias: `${alias} ${nextIndex}`,
+//                 })
+
+//                 device[0].accounts?.push(account)
+//             })
+//         },
+//         [store],
+//     )
+
+//     return createAccountFor
+// }

@@ -1793,6 +1793,10 @@ type RootTranslation = {
 	 */
 	WALLET_IMPORT_hardware_forget: string
 	/**
+	 * W​a​l​l​e​t
+	 */
+	WALLET_LABEL_wallet: string
+	/**
 	 * L​o​c​a​l
 	 */
 	WALLET_LABEL_local: string
@@ -4061,6 +4065,10 @@ export type TranslationFunctions = {
 	 * Forget this device
 	 */
 	WALLET_IMPORT_hardware_forget: () => LocalizedString
+	/**
+	 * Wallet
+	 */
+	WALLET_LABEL_wallet: () => LocalizedString
 	/**
 	 * Local
 	 */
