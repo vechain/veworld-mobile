@@ -24,25 +24,18 @@ import {
 import { WALLET_STATUS } from "~Model"
 import { BiometricsPlaceholder } from "~Screens/BiometricsPlaceholder"
 import { useAppStateTransitions } from "~Common/Hooks/useAppStateTransitions"
-import { BackgroundScreen } from "~Screens/BackgroundScreen"
 
 export const EntryPoint = () => {
     const store = useStore()
     const cache = useCache()
 
-    const { appLockStatus, unlockApp, lockApp } = useAppLock()
+    const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
+    const { closedToActive, inactiveToBackground, backgroundToActive } =
+        useAppStateTransitions()
 
-    const [isBackgroundTransition, setIsBackgroundTransition] = useState(false)
-    const [isInactiveScreen, setIsInactiveScreen] = useState(false)
-    const {
-        activeToBackground,
-        backgroundToActive,
-        closedToActive,
-        inactiveToBackground,
-    } = useAppStateTransitions()
+    const [_isAppLock, setisAppLock] = useState(false)
 
-    // const appConfig = useStoreObject(Config, "APP_CONFIG")
     // todo: this is a workaround until the new version is installed, then use the above
     const configQuery = useStoreQuery(Config)
     const config = useMemo(() => configQuery.sorted("_id"), [configQuery])
@@ -68,36 +61,13 @@ export const EntryPoint = () => {
         }
     }, [appLock, cache, config, store])
 
-    /*
-     * Biometrics validation prompt transitions the AppStatus into 'inactive' state
-     * Make sure from the flow point of view, that the background state isn't removed
-     * until we unlock the wallet, and not only when the bio is prompted
-     */
-    const unlockFromBackground = useCallback(() => {
-        unlockApp()
-        setIsBackgroundTransition(false)
-    }, [unlockApp])
-
     useEffect(() => {
         initRealmClasses()
     }, [initRealmClasses])
 
     useEffect(() => {
-        if (backgroundToActive) {
-            setIsBackgroundTransition(true)
-            setIsInactiveScreen(false)
-        }
-    }, [backgroundToActive])
-
-    useEffect(() => {
-        if (activeToBackground) {
-            lockApp()
-        }
-    }, [activeToBackground, lockApp])
-
-    useEffect(() => {
         if (inactiveToBackground) {
-            setIsInactiveScreen(true)
+            setisAppLock(true)
         }
     }, [inactiveToBackground])
 
@@ -125,12 +95,17 @@ export const EntryPoint = () => {
     }, [appLockStatus, walletSecurity, isSecurityDowngrade, closedToActive])
 
     if (
-        isBackgroundTransition &&
+        _isAppLock &&
         appLockStatus !== AppLockStatus.NO_LOCK &&
         !isSecurityDowngrade &&
         LockScreenUtils.isBiometricLockFlow(appLockStatus, walletSecurity)
     ) {
-        return <BiometricsPlaceholder onSuccess={unlockFromBackground} />
+        return (
+            <BiometricsPlaceholder
+                setisAppLock={setisAppLock}
+                backgroundToActive={backgroundToActive}
+            />
+        )
     }
 
     if (LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)) {
@@ -142,8 +117,6 @@ export const EntryPoint = () => {
             {process.env.NODE_ENV === "development" && (
                 <RealmPlugin realms={[store, cache]} />
             )}
-
-            {isInactiveScreen && <BackgroundScreen />}
 
             <Security />
 

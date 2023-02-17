@@ -1,25 +1,42 @@
-import React, { useCallback, useEffect } from "react"
-import { useBiometricsValidation } from "~Common/Hooks/useBiometricsValidation"
-import { BackgroundScreen } from "./BackgroundScreen"
+import React, { FC, useCallback, useEffect } from "react"
+import { AlertUtils, BiometricsUtils } from "~Common"
+import { BaseView } from "~Components"
 
-type BiometricsPlaceholderProps = {
-    onSuccess: () => void
+type Props = {
+    setisAppLock: (isAppLock: boolean) => void
+    backgroundToActive: boolean
 }
 
-export const BiometricsPlaceholder: React.FC<BiometricsPlaceholderProps> = ({
-    onSuccess,
+export const BiometricsPlaceholder: FC<Props> = ({
+    setisAppLock,
+    backgroundToActive,
 }) => {
-    const { isSuccess } = useBiometricsValidation()
-
     const validateBiometrics = useCallback(async () => {
-        if (isSuccess) {
-            onSuccess()
+        const recursiveFaceId = async () => {
+            let results = await BiometricsUtils.authenticateWithBiometric()
+            if (results.success) {
+                setisAppLock(false)
+                return
+            } else if (results.error) {
+                AlertUtils.showCancelledFaceIdAlert(
+                    async () => {
+                        // TODO: SIGN OUT USER
+                        console.log("cancel action - SIGN OUT USER")
+                        return
+                    },
+                    async () => {
+                        await recursiveFaceId()
+                    },
+                )
+            }
         }
-    }, [isSuccess, onSuccess])
+
+        recursiveFaceId()
+    }, [setisAppLock])
 
     useEffect(() => {
-        validateBiometrics()
-    }, [validateBiometrics])
+        backgroundToActive && validateBiometrics()
+    }, [backgroundToActive, validateBiometrics])
 
-    return <BackgroundScreen />
+    return <BaseView grow={1} background="#28008C" />
 }
