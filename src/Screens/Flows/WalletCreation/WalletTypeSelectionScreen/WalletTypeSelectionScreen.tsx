@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useMemo } from "react"
-import { useConditionalNavigation } from "~Common"
 import {
     BaseButton,
     BaseSafeArea,
@@ -14,7 +13,6 @@ import { Config, useStoreQuery } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const WalletTypeSelectionScreen = () => {
-    const navigate = useConditionalNavigation()
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
@@ -23,15 +21,15 @@ export const WalletTypeSelectionScreen = () => {
     const config = useMemo(() => result2.sorted("_id"), [result2])
 
     const onCreateWallet = () => {
-        navigate(
-            config[0]?.isWalletCreated,
-            Routes.SEED_PHRASE,
-            Routes.WALLET_TUTORIAL,
-        )
+        if (config[0]?.isWalletCreated) {
+            nav.navigate(Routes.SEED_PHRASE)
+        } else {
+            nav.navigate(Routes.WALLET_TUTORIAL)
+        }
     }
 
     const onImportWallet = () => {
-        nav.navigate(Routes.WALLET_TPYE_IMPORT)
+        nav.navigate(Routes.WALLET_TYPE_IMPORT)
     }
 
     return (

@@ -20,8 +20,8 @@ export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
     [Routes.ONBOARDING]: undefined
     [Routes.WALLET_TUTORIAL]: undefined
-    [Routes.WALLET_TPYE_CREATION]: undefined
-    [Routes.WALLET_TPYE_IMPORT]: undefined
+    [Routes.WALLET_TYPE_CREATION]: undefined
+    [Routes.WALLET_TYPE_IMPORT]: undefined
     [Routes.SEED_PHRASE]: undefined
     [Routes.CONFIRM_SEED_PHRASE]: undefined
     [Routes.IMPORT_SEED_PHRASE]: undefined
@@ -54,13 +54,13 @@ export const OnboardingStack = () => {
                 />
 
                 <Onboarding.Screen
-                    name={Routes.WALLET_TPYE_CREATION}
+                    name={Routes.WALLET_TYPE_CREATION}
                     component={WalletTypeSelectionScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name={Routes.WALLET_TPYE_IMPORT}
+                    name={Routes.WALLET_TYPE_IMPORT}
                     component={ImportWalletTypeSelectionScreen}
                     options={{ headerShown: false }}
                 />

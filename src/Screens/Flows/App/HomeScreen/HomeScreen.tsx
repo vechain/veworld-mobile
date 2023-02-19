@@ -22,9 +22,7 @@ import {
     SlideInRight,
     useSharedValue,
 } from "react-native-reanimated"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
-// import { useCreateAccount } from "~Common"
+import { useCreateAccount } from "~Common"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -32,8 +30,7 @@ type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
-    const nav = useNavigation()
-    // const createAccountFor = useCreateAccount()
+    const createAccountFor = useCreateAccount()
 
     const [activeScreen, setActiveScreen] = useState(0)
     const [firstLoad, setFirstLoad] = useState(true)
@@ -69,9 +66,8 @@ export const HomeScreen = () => {
     }, [])
 
     const onHeaderPress = () => {
-        // const _device = devices[0]
-        // createAccountFor(_device)
-        nav.navigate(Routes.CREATE_WALLET_FLOW)
+        const _device = devices[0]
+        createAccountFor(_device)
     }
 
     return (
