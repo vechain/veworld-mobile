@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { Fonts } from "~Model"
-import {
-    ActiveWalletCard,
-    useCachedQuery,
-    Device,
-    useStoreQuery,
-} from "~Storage"
+import { BaseSpacer, BaseView } from "~Components"
+import { ActiveWalletCard, useCachedQuery } from "~Storage"
 import {
     CoinList,
     NFTList,
@@ -15,6 +9,7 @@ import {
     PlatformScrollView,
     DeviceCarousel,
     SafeAreaAndStatusBar,
+    Header,
 } from "./Components"
 import {
     FadeInRight,
@@ -22,10 +17,14 @@ import {
     SlideInRight,
     useSharedValue,
 } from "react-native-reanimated"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
 export const HomeScreen = () => {
+    const nav = useNavigation()
+
     const [activeScreen, setActiveScreen] = useState(0)
     const [firstLoad, setFirstLoad] = useState(true)
     const [changeContent, setChangeContent] = useState(false)
@@ -46,14 +45,9 @@ export const HomeScreen = () => {
     )
 
     // todo: this is a workaround until the new version is installed
-    const result1 = useStoreQuery(Device)
-    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
-
-    // todo: this is a workaround until the new version is installed
     const result2 = useCachedQuery(ActiveWalletCard)
     const activeCard = useMemo(() => result2.sorted("_id"), [result2])
 
-    console.log(devices)
     console.log(activeCard)
 
     useEffect(() => {
@@ -113,15 +107,15 @@ export const HomeScreen = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const onHeaderPress = () => {
+        nav.navigate(Routes.CREATE_WALLET_FLOW)
+    }
+
     return (
         <>
             <PlatformScrollView handleScrollPOsition={handleScrollPOsition}>
                 <BaseView align="center">
-                    <BaseView align="flex-start" selfAlign="flex-start" mx={20}>
-                        <BaseText font={Fonts.body}>Welcome to</BaseText>
-                        <BaseText font={Fonts.large_title}>VeWorld</BaseText>
-                    </BaseView>
-
+                    <Header action={onHeaderPress} />
                     <BaseSpacer height={20} />
                     <DeviceCarousel />
                 </BaseView>

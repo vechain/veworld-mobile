@@ -26,6 +26,7 @@ const en: BaseTranslation = {
     BTN_WALLET_IMPORT_HELP: "Where can I find it?",
     BTN_IMPORT_WALLET_CLIPBOARD: "Paste from clipboard",
     BTN_IMPORT_WALLET_CLEAR: "Empty phrase",
+    BTN_WALLET_SUCCESS: "CREATE WALLET",
 
     // BODY
     BD_GDPR:
@@ -58,6 +59,7 @@ const en: BaseTranslation = {
     BD_WALLET_IMPORT_LOCAL:
     "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
+    BD_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -74,6 +76,7 @@ const en: BaseTranslation = {
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
+    TITLE_WALLET_SUCCESS: "You're finally one of us!",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",

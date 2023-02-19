@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React from "react"
+import React, { useMemo } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -9,18 +9,27 @@ import {
 } from "~Components"
 import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
+import { Config, useStoreQuery } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
+    // todo: this is a workaround until the new version is installed
+    const result2 = useStoreQuery(Config)
+    const config = useMemo(() => result2.sorted("_id"), [result2])
+
     const onCreateWallet = () => {
-        nav.navigate(Routes.WALLET_TUTORIAL)
+        if (config[0]?.isWalletCreated) {
+            nav.navigate(Routes.SEED_PHRASE)
+        } else {
+            nav.navigate(Routes.WALLET_TUTORIAL)
+        }
     }
 
     const onImportWallet = () => {
-        nav.navigate(Routes.WALLET_TPYE_IMPORT)
+        nav.navigate(Routes.WALLET_TYPE_IMPORT)
     }
 
     return (

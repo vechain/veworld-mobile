@@ -96,6 +96,10 @@ type RootTranslation = {
 	 */
 	BTN_IMPORT_WALLET_CLEAR: string
 	/**
+	 * C​R​E​A​T​E​ ​W​A​L​L​E​T
+	 */
+	BTN_WALLET_SUCCESS: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -168,6 +172,10 @@ type RootTranslation = {
 	 */
 	BD_ALERT_FACE_ID_CANCELLED: string
 	/**
+	 * I​f​ ​y​o​u​ ​h​a​v​e​ ​a​n​y​ ​d​o​u​b​t​s​ ​a​b​o​u​t​ ​h​o​w​ ​t​h​e​ ​a​p​p​ ​w​o​r​k​s​,​ ​p​l​e​a​s​e​ ​f​o​l​l​o​w​ ​o​u​r​ ​d​o​c​u​m​e​n​t​a​t​i​o​n​ ​o​n​ ​V​e​c​h​a​i​n​.​o​r​g
+	 */
+	BD_WALLET_SUCCESS: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -223,6 +231,10 @@ type RootTranslation = {
 	 * F​a​c​e​ ​I​D​ ​C​a​n​c​e​l​l​e​d
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: string
+	/**
+	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
+	 */
+	TITLE_WALLET_SUCCESS: string
 	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
@@ -2366,6 +2378,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_IMPORT_WALLET_CLEAR: () => LocalizedString
 	/**
+	 * CREATE WALLET
+	 */
+	BTN_WALLET_SUCCESS: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -2438,6 +2454,10 @@ export type TranslationFunctions = {
 	 */
 	BD_ALERT_FACE_ID_CANCELLED: () => LocalizedString
 	/**
+	 * If you have any doubts about how the app works, please follow our documentation on Vechain.org
+	 */
+	BD_WALLET_SUCCESS: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -2493,6 +2513,10 @@ export type TranslationFunctions = {
 	 * Face ID Cancelled
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
+	/**
+	 * You're finally one of us!
+	 */
+	TITLE_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * Local wallet
 	 */
