@@ -1,12 +1,35 @@
 import { Object } from "realm"
 
-export class Biometrics extends Object<Biometrics> {
-    _id = "BIOMETRICS"
-    currentSecurityLevel = "BIOMETRIC"
-    authtypeAvailable = "FACIAL_RECOGNITION"
-    isDeviceEnrolled = true
-    isHardwareAvailable = true
-    accessControl = true
+export class Biometrics extends Object {
+    _id!: string
+    currentSecurityLevel!: string
+    authtypeAvailable!: string
+    isDeviceEnrolled!: boolean
+    isHardwareAvailable!: boolean
+    accessControl!: boolean
 
-    static primaryKey = "_id"
+    static getName(): string {
+        return Biometrics.schema.name
+    }
+
+    static PrimaryKey(): string {
+        return Biometrics.schema.primaryKey
+    }
+
+    static schema = {
+        name: "Biometrics",
+        primaryKey: "_id",
+
+        properties: {
+            _id: { type: "string", default: "BIOMETRICS" },
+            currentSecurityLevel: { type: "string", default: "BIOMETRIC" },
+            authtypeAvailable: {
+                type: "string",
+                default: "FACIAL_RECOGNITION",
+            },
+            isDeviceEnrolled: { type: "bool", default: true },
+            isHardwareAvailable: { type: "bool", default: true },
+            accessControl: { type: "bool", default: true },
+        },
+    }
 }

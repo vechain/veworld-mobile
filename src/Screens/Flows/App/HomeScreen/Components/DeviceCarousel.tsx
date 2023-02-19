@@ -6,9 +6,7 @@ import { PaginationItem } from "./PaginationItem"
 import { Card } from "./Card"
 import { BaseSpacer, BaseView } from "~Components"
 import { useActiveCard } from "../Hooks/useActiveCard"
-import { devices_mock } from "~Common"
-import { Device } from "~Storage"
-import { Object, Results } from "realm"
+import { Account } from "~Storage"
 
 const width = Dimensions.get("window").width - 40
 
@@ -20,11 +18,7 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-export const DeviceCarousel = ({
-    devices,
-}: {
-    devices: Results<Device & Object<unknown, never>>
-}) => {
+export const DeviceCarousel = ({ acounts }: { acounts: Account[] }) => {
     const progressValue = useSharedValue<number>(0)
     const { onScrollBegin, onScrollEnd } = useActiveCard()
 
@@ -39,15 +33,15 @@ export const DeviceCarousel = ({
         ({ index }: { index: number }) => {
             return (
                 <Card
-                    device={devices[index]}
+                    account={acounts[index]}
                     key={index}
                     entering={FadeInRight.delay(
-                        (devices_mock.length - index) * 50,
+                        (acounts.length - index) * 50,
                     ).duration(200)}
                 />
             )
         },
-        [devices],
+        [acounts],
     )
 
     return (
@@ -60,8 +54,8 @@ export const DeviceCarousel = ({
                 pagingEnabled={true}
                 snapEnabled={true}
                 scrollAnimationDuration={1000}
-                mode={"horizontal-stack"}
-                data={devices as unknown as Device[]}
+                mode="horizontal-stack"
+                data={acounts}
                 modeConfig={StackConfig}
                 onProgressChange={onProgressChange}
                 renderItem={renderItem}
@@ -76,12 +70,12 @@ export const DeviceCarousel = ({
                     orientation="row"
                     justify="space-between"
                     selfAlign="center">
-                    {devices.map((device, index) => (
+                    {acounts.map((account, index) => (
                         <PaginationItem
                             animValue={progressValue}
                             index={index}
-                            key={device.rootAddress}
-                            length={devices.length}
+                            key={account.address}
+                            length={acounts.length}
                             entering={FadeIn.delay(220).duration(250)}
                         />
                     ))}

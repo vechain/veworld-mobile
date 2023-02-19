@@ -2,14 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { Switch } from "react-native"
 import { BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
-import {
-    AppLock,
-    Config,
-    RealmClass,
-    useCache,
-    useStore,
-    useStoreQuery,
-} from "~Storage"
+import { AppLock, Config, useCache, useStore, useStoreQuery } from "~Storage"
 
 export const SecureApp = () => {
     const store = useStore()
@@ -25,8 +18,8 @@ export const SecureApp = () => {
         (newValue: boolean) => {
             cache.write(() => {
                 let appLock = cache.objectForPrimaryKey<AppLock>(
-                    RealmClass.AppLock,
-                    "APP_LOCK",
+                    AppLock.getName(),
+                    AppLock.PrimaryKey(),
                 )
                 if (appLock) {
                     appLock.status = WALLET_STATUS.UNLOCKED

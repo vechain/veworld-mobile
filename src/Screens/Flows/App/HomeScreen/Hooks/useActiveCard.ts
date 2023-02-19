@@ -1,37 +1,37 @@
 import { useCallback } from "react"
-import { ActiveWalletCard, RealmClass, useCache } from "~Storage"
+import { ActiveWalletCard, useCache } from "~Storage"
 
 export const useActiveCard = () => {
     const cache = useCache()
 
     const onScrollBegin = useCallback(() => {
+        let card = cache.objects<ActiveWalletCard>(ActiveWalletCard.getName())
+
         cache.write(() => {
-            let card = cache.objectForPrimaryKey<ActiveWalletCard>(
-                RealmClass.ActiveWalletCard,
-                "ACTIVE_WALLET_CARD",
-            )
-            if (card) {
-                card.isLoading = true
+            if (card[0]) {
+                card[0].isLoading = true
             } else {
-                let _card = cache.create<ActiveWalletCard>(
-                    RealmClass.ActiveWalletCard,
-                    {},
+                console.log(
+                    "REALM CLASS:: ACTIVE WALLET CARD :: NOT INITIALIZED",
                 )
-                _card.isLoading = true
             }
         })
     }, [cache])
 
     const onScrollEnd = useCallback(
         (index: number) => {
+            let card = cache.objects<ActiveWalletCard>(
+                ActiveWalletCard.getName(),
+            )
+
             cache.write(() => {
-                let card = cache.objectForPrimaryKey<ActiveWalletCard>(
-                    RealmClass.ActiveWalletCard,
-                    "ACTIVE_WALLET_CARD",
-                )
-                if (card) {
-                    card.isLoading = false
-                    card.activeIndex = index
+                if (card[0]) {
+                    card[0].isLoading = false
+                    card[0].activeIndex = index
+                } else {
+                    console.log(
+                        "REALM CLASS:: ACTIVE WALLET CARD :: NOT INITIALIZED",
+                    )
                 }
             })
         },

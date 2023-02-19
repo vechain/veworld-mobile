@@ -1,23 +1,52 @@
-import { index, Object } from "realm"
 import { Account } from "./Account"
 import { XPub } from "./XPub"
+import { Object } from "realm"
 
-// Supported types
-// https://www.mongodb.com/docs/realm/sdk/react-native/realm-database/schemas/field-types/
-// example: // Realm.Types.Int = 0;
-
-// / Specify that the name and description fields are required when creating an instance with `new`
-export class Device extends Object<Device> {
-    @index // index devices with address
-    rootAddress!: string
-
+export class Device extends Object {
     type!: string
     alias!: string
     wallet!: string
     index!: number
-
+    rootAddress!: string
+    accounts!: Account[]
+    createdAt?: string
     xPub?: XPub
-    accounts?: Account[]
 
-    static primaryKey = "rootAddress"
+    static getName(): string {
+        return Device.schema.name
+    }
+
+    static PrimaryKey(): string {
+        return Device.schema.primaryKey
+    }
+
+    static schema = {
+        name: "Device",
+        primaryKey: "rootAddress",
+
+        properties: {
+            type: "string",
+            alias: "string",
+            rootAddress: "string",
+            wallet: "string",
+            index: { type: "int", indexed: true },
+            xPub: "XPub?",
+            createdAt: {
+                type: "string",
+                indexed: true,
+                default: new Date().toISOString(),
+            },
+            accounts: "Account[]",
+        },
+    }
 }
+
+// interface IDevice {
+//     alias: string
+//     xPub: XPub
+//     rootAddress: string
+//     type: string
+//     index: number
+//     accounts: Account[]
+//     wallet: string
+// }

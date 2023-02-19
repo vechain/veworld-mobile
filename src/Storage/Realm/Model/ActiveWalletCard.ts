@@ -1,10 +1,26 @@
 import { Object } from "realm"
 
-export class ActiveWalletCard extends Object<ActiveWalletCard> {
-    _id = "ACTIVE_WALLET_CARD"
+export class ActiveWalletCard extends Object {
+    _id!: string
+    isLoading!: boolean
+    activeIndex!: number
 
-    isLoading = false
-    activeIndex = 0
+    static getName(): string {
+        return ActiveWalletCard.schema.name
+    }
 
-    static primaryKey = "_id"
+    static PrimaryKey(): string {
+        return ActiveWalletCard.schema.primaryKey
+    }
+
+    static schema = {
+        name: "ActiveWalletCard",
+        primaryKey: "_id",
+
+        properties: {
+            _id: { type: "string", default: "ACTIVE_WALLET_CARD" },
+            activeIndex: { type: "int", default: 0 },
+            isLoading: { type: "bool", default: false },
+        },
+    }
 }

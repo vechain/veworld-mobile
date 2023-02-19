@@ -2,6 +2,7 @@ import { CryptoUtils, HexUtils } from "~Common/Utils"
 import { DEVICE_TYPE } from "~Model"
 import { HDNode } from "thor-devkit"
 import * as i18n from "~i18n"
+import { Account } from "~Storage"
 
 /**
  *
@@ -9,7 +10,11 @@ import * as i18n from "~i18n"
  * @param deviceIndex
  * @returns
  */
-export const getNodes = (mnemonicPhrase: string[], deviceIndex: number) => {
+export const getNodes = (
+    mnemonicPhrase: string[],
+    deviceIndex: number,
+    aliasIndex: number,
+) => {
     const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
     const locale = i18n.detectLocale()
     let alias = i18n.i18n()[locale].WALLET_LABEL_wallet()
@@ -21,12 +26,12 @@ export const getNodes = (mnemonicPhrase: string[], deviceIndex: number) => {
     }
 
     const device = {
-        alias: `${alias} ${deviceIndex}`,
+        alias: `${alias} ${aliasIndex}`,
         xPub: CryptoUtils.xPubFromHdNode(hdNode),
         rootAddress: hdNode.address,
         type: DEVICE_TYPE.LOCAL_MNEMONIC,
         index: deviceIndex,
-        accounts: [],
+        accounts: [] as Account[],
     }
 
     return { wallet, device }

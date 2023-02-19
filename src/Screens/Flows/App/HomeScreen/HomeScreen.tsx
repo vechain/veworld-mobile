@@ -24,8 +24,12 @@ import {
 } from "react-native-reanimated"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+// import { useCreateAccount } from "~Common"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
+
+//todo: get currently active wallet
+const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
     const nav = useNavigation()
@@ -64,63 +68,9 @@ export const HomeScreen = () => {
         setFirstLoad(false)
     }, [])
 
-    // Sample decryption with biometrics
-    useEffect(() => {
-        const init = async () => {
-            // let wallet = devices[0].wallet
-            // if (wallet) {
-            //     let encryptedKey = await KeychainService.getEncryptionKey(
-            //         devices[0].index,
-            //         true,
-            //     )
-            //     if (encryptedKey) {
-            //         let _wallet = CryptoUtils.decrypt<Wallet>(
-            //             wallet,
-            //             encryptedKey,
-            //         )
-            //         console.log(_wallet)
-            //     }
-            // }
-        }
-
-        setTimeout(() => {
-            init()
-        }, 5000)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    // Sample decryption with password
-    useEffect(() => {
-        const init = async () => {
-            // let wallet = devices[0].wallet
-            // if (wallet) {
-            //     let encryptedKey = await KeychainService.getEncryptionKey(
-            //         devices[0].index,
-            //     )
-            //     if (encryptedKey) {
-            //         const hashedKey = PasswordUtils.hash("000000") // user input password
-            //         let decryptedKey = CryptoUtils.decrypt<string>(
-            //             encryptedKey,
-            //             hashedKey,
-            //         )
-            //         let _wallet = CryptoUtils.decrypt<Wallet>(
-            //             wallet,
-            //             decryptedKey,
-            //         )
-            //         console.log("_wallet : ", _wallet)
-            //     }
-            // }
-        }
-        setTimeout(() => {
-            init()
-        }, 5000)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
     const onHeaderPress = () => {
-        // createAccountFor(
-        //     devices.filtered(`index == ${activeCard[0]?.activeIndex ?? 1}`),
-        // )
+        // const _device = devices[0]
+        // createAccountFor(_device)
         nav.navigate(Routes.CREATE_WALLET_FLOW)
     }
 
@@ -130,7 +80,7 @@ export const HomeScreen = () => {
                 <BaseView align="center">
                     <Header action={onHeaderPress} />
                     <BaseSpacer height={20} />
-                    <DeviceCarousel devices={devices} />
+                    <DeviceCarousel acounts={devices[ACTIVE_WALLET].accounts} />
                 </BaseView>
 
                 <BaseSpacer height={10} />
@@ -165,47 +115,70 @@ export const HomeScreen = () => {
     )
 }
 
-// import * as i18n from "~i18n"
-// import { Results } from "realm"
+/*
+!Sample get inverse relationship
+useEffect(() => {
+    const init = async () => {
+        let accounts = devices[0].accounts
+        if (accounts) {
+            console.log(accounts)
+            let parent = accounts[0].linkingObjects("Device", "accounts")
+            if (parent) {
+                console.log("parent", parent)
+            }
+        }
+    }
 
-// const useCreateAccount = () => {
-//     const store = useStore()
+    setTimeout(() => {
+        init()
+    }, 5000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
 
-//     const createAccountFor = useCallback(
-//         (device: Results<Device>) => {
-//             const locale = i18n.detectLocale()
-//             let alias = i18n.i18n()[locale].WALLET_LABEL_account()
+!Sample decryption with biometrics
+useEffect(() => {
+    const init = async () => {
+        let wallet = devices[0].wallet
+        if (wallet) {
+            let encryptedKey = await KeychainService.getEncryptionKey(
+                devices[0].index,
+                true,
+            )
+            if (encryptedKey) {
+                let _wallet = CryptoUtils.decrypt<Wallet>(wallet, encryptedKey)
+                console.log(_wallet)
+            }
+        }
+    }
 
-//             if (!device[0].xPub) {
-//                 return
-//             }
+    setTimeout(() => {
+        init()
+    }, 5000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
 
-//             let nextIndex = device[0].accounts?.length
-//                 ? device[0].accounts?.length + 1
-//                 : 1
-
-//             console.log(nextIndex)
-//             const address = AddressUtils.getAddressFromXPub(
-//                 device[0].xPub,
-//                 nextIndex,
-//             )
-
-//             let account: Account
-
-//             store.write(() => {
-//                 account = store.create(RealmClass.Account, {
-//                     address: address,
-//                     index: nextIndex,
-//                     visible: true,
-//                     id: nextIndex,
-//                     alias: `${alias} ${nextIndex}`,
-//                 })
-
-//                 device[0].accounts?.push(account)
-//             })
-//         },
-//         [store],
-//     )
-
-//     return createAccountFor
-// }
+!Sample decryption with password
+useEffect(() => {
+    const init = async () => {
+        let wallet = devices[0].wallet
+        if (wallet) {
+            let encryptedKey = await KeychainService.getEncryptionKey(
+                devices[0].index,
+            )
+            if (encryptedKey) {
+                const hashedKey = PasswordUtils.hash("000000") // user input password
+                let decryptedKey = CryptoUtils.decrypt<string>(
+                    encryptedKey,
+                    hashedKey,
+                )
+                let _wallet = CryptoUtils.decrypt<Wallet>(wallet, decryptedKey)
+                console.log("_wallet : ", _wallet)
+            }
+        }
+    }
+    setTimeout(() => {
+        init()
+    }, 5000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
+*/

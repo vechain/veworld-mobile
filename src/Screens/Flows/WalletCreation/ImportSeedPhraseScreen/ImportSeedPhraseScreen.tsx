@@ -13,7 +13,7 @@ import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { CryptoUtils, SeedUtils, useConditionalNavigation } from "~Common"
 import { Keyboard } from "react-native"
-import { Config, RealmClass, useCache, useStoreQuery } from "~Storage"
+import { Config, Mnemonic, useCache, useStoreQuery } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 
@@ -34,7 +34,7 @@ export const ImportSeedPhraseScreen = () => {
     const onVerify = () => {
         if (CryptoUtils.verifySeedPhrase(seed)) {
             cache.write(() =>
-                cache.create(RealmClass.Mnemonic, { mnemonic: seed }),
+                cache.create(Mnemonic.getName(), { mnemonic: seed }),
             )
 
             navigate(

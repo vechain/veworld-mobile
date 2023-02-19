@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
-import { RealmClass, useCache } from "~Storage"
+import { Mnemonic, useCache } from "~Storage"
 
 export const SeedPhraseScreen = () => {
     const nav = useNavigation()
@@ -31,7 +31,10 @@ export const SeedPhraseScreen = () => {
     }, [mnemonic])
 
     const onBackupPress = useCallback(() => {
-        cache.write(() => cache.create(RealmClass.Mnemonic, { mnemonic }))
+        cache.write(() => {
+            let _mnemonic = cache.objects<Mnemonic>(Mnemonic.getName())
+            _mnemonic[0].mnemonic = mnemonic
+        })
         nav.navigate(Routes.CONFIRM_SEED_PHRASE)
     }, [cache, mnemonic, nav])
 
