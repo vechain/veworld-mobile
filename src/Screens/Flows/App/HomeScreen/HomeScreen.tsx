@@ -76,7 +76,9 @@ export const HomeScreen = () => {
                 <BaseView align="center">
                     <Header action={onHeaderPress} />
                     <BaseSpacer height={20} />
-                    <DeviceCarousel acounts={devices[ACTIVE_WALLET].accounts} />
+                    <DeviceCarousel
+                        accounts={devices[ACTIVE_WALLET].accounts}
+                    />
                 </BaseView>
 
                 <BaseSpacer height={10} />

@@ -62,7 +62,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
         if (config[0]?.isWalletCreated) {
             if (
-                config[0].userSelectedSecurtiy === SecurityLevelType.BIOMETRIC
+                config[0].userSelectedSecurity === SecurityLevelType.BIOMETRIC
             ) {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()

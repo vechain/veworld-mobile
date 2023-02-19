@@ -18,7 +18,7 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-export const DeviceCarousel = ({ acounts }: { acounts: Account[] }) => {
+export const DeviceCarousel = ({ accounts }: { accounts: Account[] }) => {
     const progressValue = useSharedValue<number>(0)
     const { onScrollBegin, onScrollEnd } = useActiveCard()
 
@@ -33,15 +33,15 @@ export const DeviceCarousel = ({ acounts }: { acounts: Account[] }) => {
         ({ index }: { index: number }) => {
             return (
                 <Card
-                    account={acounts[index]}
+                    account={accounts[index]}
                     key={index}
                     entering={FadeInRight.delay(
-                        (acounts.length - index) * 50,
+                        (accounts.length - index) * 50,
                     ).duration(200)}
                 />
             )
         },
-        [acounts],
+        [accounts],
     )
 
     return (
@@ -55,7 +55,7 @@ export const DeviceCarousel = ({ acounts }: { acounts: Account[] }) => {
                 snapEnabled={true}
                 scrollAnimationDuration={1000}
                 mode="horizontal-stack"
-                data={acounts}
+                data={accounts}
                 modeConfig={StackConfig}
                 onProgressChange={onProgressChange}
                 renderItem={renderItem}
@@ -70,12 +70,12 @@ export const DeviceCarousel = ({ acounts }: { acounts: Account[] }) => {
                     orientation="row"
                     justify="space-between"
                     selfAlign="center">
-                    {acounts.map((account, index) => (
+                    {accounts.map((account, index) => (
                         <PaginationItem
                             animValue={progressValue}
                             index={index}
                             key={account.address}
-                            length={acounts.length}
+                            length={accounts.length}
                             entering={FadeIn.delay(220).duration(250)}
                         />
                     ))}

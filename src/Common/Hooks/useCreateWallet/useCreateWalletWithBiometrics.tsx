@@ -96,7 +96,7 @@ export const useCreateWalletWithBiometrics = () => {
 
                     _device.accounts.push(account)
 
-                    config[0].userSelectedSecurtiy =
+                    config[0].userSelectedSecurity =
                         UserSelectedSecurityLevel.BIOMETRIC
                 })
 
