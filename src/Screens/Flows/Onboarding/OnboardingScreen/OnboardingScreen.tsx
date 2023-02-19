@@ -60,12 +60,12 @@ export const OnboardingScreen = () => {
         }
 
         if (BtnIndex === STEPS.SAFE_AND_FAST) {
-            nav.navigate(Routes.WALLET_TPYE_CREATION)
+            nav.navigate(Routes.WALLET_TYPE_CREATION)
         }
     }
 
     const onNavigate = () => {
-        nav.navigate(Routes.WALLET_TPYE_CREATION)
+        nav.navigate(Routes.WALLET_TYPE_CREATION)
     }
 
     return (

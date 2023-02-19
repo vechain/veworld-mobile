@@ -11,16 +11,17 @@ import {
 import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import { CryptoUtils, SeedUtils, useConditionalNavigation } from "~Common"
+import { CryptoUtils, SeedUtils } from "~Common"
 import { Keyboard } from "react-native"
 import { Config, RealmClass, useCache, useStoreQuery } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
+import { useNavigation } from "@react-navigation/native"
 
 export const ImportSeedPhraseScreen = () => {
     const { LL } = useI18nContext()
     const cache = useCache()
-    const navigate = useConditionalNavigation()
+    const nav = useNavigation()
 
     const [, setPasteSeed] = useState<string[]>()
     const [seed, setSeed] = useState<string>("")
@@ -37,11 +38,11 @@ export const ImportSeedPhraseScreen = () => {
                 cache.create(RealmClass.Mnemonic, { mnemonic: seed }),
             )
 
-            navigate(
-                config[0]?.isWalletCreated,
-                Routes.WALLET_SUCCESS,
-                Routes.APP_SECURITY,
-            )
+            if (config[0]?.isWalletCreated) {
+                nav.navigate(Routes.WALLET_SUCCESS)
+            } else {
+                nav.navigate(Routes.APP_SECURITY)
+            }
         } else {
             setIsError(true)
         }

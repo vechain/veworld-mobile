@@ -1,5 +1,5 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useMemo } from "react"
-import { useConditionalNavigation } from "~Common"
 import {
     BaseButton,
     BaseSafeArea,
@@ -12,18 +12,18 @@ import { Routes } from "~Navigation"
 import { Config, useStoreQuery } from "~Storage"
 
 export const ConfirmSeedPhraseScreen = () => {
-    const navigate = useConditionalNavigation()
+    const nav = useNavigation()
 
     // todo: this is a workaround until the new version is installed
     const result2 = useStoreQuery(Config)
     const config = useMemo(() => result2.sorted("_id"), [result2])
 
     const onConfirmPress = () => {
-        navigate(
-            config[0]?.isWalletCreated,
-            Routes.WALLET_SUCCESS,
-            Routes.APP_SECURITY,
-        )
+        if (config[0]?.isWalletCreated) {
+            nav.navigate(Routes.WALLET_SUCCESS)
+        } else {
+            nav.navigate(Routes.APP_SECURITY)
+        }
     }
 
     return (
