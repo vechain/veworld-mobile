@@ -65,10 +65,10 @@ export const HomeScreen = () => {
         setFirstLoad(false)
     }, [])
 
-    const onHeaderPress = () => {
-        const _device = devices[0]
+    const onHeaderPress = useCallback(() => {
+        const _device = devices[ACTIVE_WALLET]
         createAccountFor(_device)
-    }
+    }, [createAccountFor, devices])
 
     return (
         <>
