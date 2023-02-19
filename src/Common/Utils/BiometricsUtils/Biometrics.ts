@@ -1,5 +1,6 @@
 import * as LocalAuthentication from "expo-local-authentication"
 import { TSecurityLevel, TAuthentication, SecurityLevelType } from "~Model"
+import * as i18n from "~i18n"
 
 export const getDeviceEnrolledLevel = async () => {
     let level = await LocalAuthentication.getEnrolledLevelAsync()
@@ -23,9 +24,16 @@ export const getBiometricTypeAvailable = async () => {
 }
 
 export const authenticateWithBiometric = async () => {
+    const locale = i18n.detectLocale()
+    const promptMessage = i18n.i18n()[locale].COMMON_BTN_cancel()
+    const cancelLabel = i18n.i18n()[locale].BIOMETRICS_PROMPT()
+
     let isAuth = await LocalAuthentication.authenticateAsync({
         disableDeviceFallback: true,
+        promptMessage,
+        cancelLabel,
     })
+
     return isAuth
 }
 

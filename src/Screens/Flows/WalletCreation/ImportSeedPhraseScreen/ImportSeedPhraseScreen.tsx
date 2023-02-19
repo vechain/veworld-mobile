@@ -34,9 +34,10 @@ export const ImportSeedPhraseScreen = () => {
 
     const onVerify = () => {
         if (CryptoUtils.verifySeedPhrase(seed)) {
-            cache.write(() =>
-                cache.create(Mnemonic.getName(), { mnemonic: seed }),
-            )
+            cache.write(() => {
+                let _mnemonic = cache.objects<Mnemonic>(Mnemonic.getName())
+                _mnemonic[0].mnemonic = seed
+            })
 
             if (config[0]?.isWalletCreated) {
                 nav.navigate(Routes.WALLET_SUCCESS)
