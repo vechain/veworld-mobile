@@ -1,14 +1,39 @@
-import { index, Object } from "realm"
+import { Object } from "realm"
 
-export class Account extends Object<Account, "rootAddress"> {
-    @index
-    rootAddress!: string
-
-    id!: number
+export class Account extends Object {
+    address!: string
     index!: number
     visible!: boolean
     alias!: string
-    address!: string
+    createdAt!: string
 
-    static primaryKey = "rootAddress"
+    static getName(): string {
+        return Account.schema.name
+    }
+
+    static PrimaryKey(): string {
+        return Account.schema.primaryKey
+    }
+
+    static schema = {
+        name: "Account",
+        primaryKey: "address",
+
+        properties: {
+            address: { type: "string", indexed: true },
+            index: "int",
+            visible: "bool",
+            parent: {
+                type: "linkingObjects",
+                objectType: "Device",
+                property: "accounts",
+            },
+            alias: "string",
+            createdAt: {
+                type: "string",
+                indexed: true,
+                default: new Date().toISOString(),
+            },
+        },
+    }
 }

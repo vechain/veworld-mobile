@@ -13,7 +13,7 @@ import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { CryptoUtils, SeedUtils } from "~Common"
 import { Keyboard } from "react-native"
-import { Config, RealmClass, useCache, useStoreQuery } from "~Storage"
+import { Config, Mnemonic, useCache, useStoreQuery } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 import { useNavigation } from "@react-navigation/native"
@@ -34,9 +34,10 @@ export const ImportSeedPhraseScreen = () => {
 
     const onVerify = () => {
         if (CryptoUtils.verifySeedPhrase(seed)) {
-            cache.write(() =>
-                cache.create(RealmClass.Mnemonic, { mnemonic: seed }),
-            )
+            cache.write(() => {
+                let _mnemonic = cache.objects<Mnemonic>(Mnemonic.getName())
+                _mnemonic[0].mnemonic = seed
+            })
 
             if (config[0]?.isWalletCreated) {
                 nav.navigate(Routes.WALLET_SUCCESS)

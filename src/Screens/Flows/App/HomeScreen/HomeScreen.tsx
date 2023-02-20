@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseSpacer, BaseView } from "~Components"
-import { ActiveWalletCard, useCachedQuery } from "~Storage"
+import {
+    ActiveWalletCard,
+    Device,
+    useCachedQuery,
+    useStoreQuery,
+} from "~Storage"
 import {
     CoinList,
     NFTList,
@@ -17,13 +22,15 @@ import {
     SlideInRight,
     useSharedValue,
 } from "react-native-reanimated"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
+import { useCreateAccount } from "~Common"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
+//todo: get currently active wallet
+const ACTIVE_WALLET = 0
+
 export const HomeScreen = () => {
-    const nav = useNavigation()
+    const createAccountFor = useCreateAccount()
 
     const [activeScreen, setActiveScreen] = useState(0)
     const [firstLoad, setFirstLoad] = useState(true)
@@ -48,68 +55,20 @@ export const HomeScreen = () => {
     const result2 = useCachedQuery(ActiveWalletCard)
     const activeCard = useMemo(() => result2.sorted("_id"), [result2])
 
+    // todo: this is a workaround until the new version is installed
+    const result1 = useStoreQuery(Device)
+    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
+
     console.log(activeCard)
 
     useEffect(() => {
         setFirstLoad(false)
     }, [])
 
-    // Sample decryption with biometrics
-    useEffect(() => {
-        const init = async () => {
-            // let wallet = devices[0].wallet
-            // if (wallet) {
-            //     let encryptedKey = await KeychainService.getEncryptionKey(
-            //         devices[0].index,
-            //         true,
-            //     )
-            //     if (encryptedKey) {
-            //         let _wallet = CryptoUtils.decrypt<Wallet>(
-            //             wallet,
-            //             encryptedKey,
-            //         )
-            //         console.log(_wallet)
-            //     }
-            // }
-        }
-
-        setTimeout(() => {
-            init()
-        }, 5000)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    // Sample decryption with password
-    useEffect(() => {
-        const init = async () => {
-            // let wallet = devices[0].wallet
-            // if (wallet) {
-            //     let encryptedKey = await KeychainService.getEncryptionKey(
-            //         devices[0].index,
-            //     )
-            //     if (encryptedKey) {
-            //         const hashedKey = PasswordUtils.hash("000000") // user input password
-            //         let decryptedKey = CryptoUtils.decrypt<string>(
-            //             encryptedKey,
-            //             hashedKey,
-            //         )
-            //         let _wallet = CryptoUtils.decrypt<Wallet>(
-            //             wallet,
-            //             decryptedKey,
-            //         )
-            //         console.log("_wallet : ", _wallet)
-            //     }
-            // }
-        }
-        setTimeout(() => {
-            init()
-        }, 5000)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const onHeaderPress = () => {
-        nav.navigate(Routes.CREATE_WALLET_FLOW)
-    }
+    const onHeaderPress = useCallback(() => {
+        const _device = devices[ACTIVE_WALLET]
+        createAccountFor(_device)
+    }, [createAccountFor, devices])
 
     return (
         <>
@@ -117,7 +76,9 @@ export const HomeScreen = () => {
                 <BaseView align="center">
                     <Header action={onHeaderPress} />
                     <BaseSpacer height={20} />
-                    <DeviceCarousel />
+                    <DeviceCarousel
+                        accounts={devices[ACTIVE_WALLET].accounts}
+                    />
                 </BaseView>
 
                 <BaseSpacer height={10} />
@@ -151,3 +112,71 @@ export const HomeScreen = () => {
         </>
     )
 }
+
+/*
+!Sample get inverse relationship
+useEffect(() => {
+    const init = async () => {
+        let accounts = devices[0].accounts
+        if (accounts) {
+            console.log(accounts)
+            let parent = accounts[0].linkingObjects("Device", "accounts")
+            if (parent) {
+                console.log("parent", parent)
+            }
+        }
+    }
+
+    setTimeout(() => {
+        init()
+    }, 5000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
+
+!Sample decryption with biometrics
+useEffect(() => {
+    const init = async () => {
+        let wallet = devices[0].wallet
+        if (wallet) {
+            let encryptedKey = await KeychainService.getEncryptionKey(
+                devices[0].index,
+                true,
+            )
+            if (encryptedKey) {
+                let _wallet = CryptoUtils.decrypt<Wallet>(wallet, encryptedKey)
+                console.log(_wallet)
+            }
+        }
+    }
+
+    setTimeout(() => {
+        init()
+    }, 5000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
+
+!Sample decryption with password
+useEffect(() => {
+    const init = async () => {
+        let wallet = devices[0].wallet
+        if (wallet) {
+            let encryptedKey = await KeychainService.getEncryptionKey(
+                devices[0].index,
+            )
+            if (encryptedKey) {
+                const hashedKey = PasswordUtils.hash("000000") // user input password
+                let decryptedKey = CryptoUtils.decrypt<string>(
+                    encryptedKey,
+                    hashedKey,
+                )
+                let _wallet = CryptoUtils.decrypt<Wallet>(wallet, decryptedKey)
+                console.log("_wallet : ", _wallet)
+            }
+        }
+    }
+    setTimeout(() => {
+        init()
+    }, 5000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
+*/

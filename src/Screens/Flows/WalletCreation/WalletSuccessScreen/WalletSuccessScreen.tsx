@@ -12,14 +12,7 @@ import VectorImage from "react-native-vector-image"
 import { VeChainVetLogo } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Fonts, SecurityLevelType, WALLET_STATUS } from "~Model"
-import {
-    AppLock,
-    Config,
-    RealmClass,
-    useCache,
-    useStore,
-    useStoreQuery,
-} from "~Storage"
+import { AppLock, Config, useCache, useStore, useStoreQuery } from "~Storage"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -69,7 +62,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
         if (config[0]?.isWalletCreated) {
             if (
-                config[0].userSelectedSecurtiy === SecurityLevelType.BIOMETRIC
+                config[0].userSelectedSecurity === SecurityLevelType.BIOMETRIC
             ) {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
@@ -121,12 +114,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 }, 500)
             } else {
                 cache.write(() => {
-                    let appLock = cache.objectForPrimaryKey<AppLock>(
-                        RealmClass.AppLock,
-                        "APP_LOCK",
-                    )
-                    if (appLock) {
-                        appLock.status = WALLET_STATUS.UNLOCKED
+                    let appLock = cache.objects<AppLock>(AppLock.getName())
+                    if (appLock[0]) {
+                        appLock[0].status = WALLET_STATUS.UNLOCKED
                     }
                 })
                 store.write(() => {

@@ -1,14 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { SecurityDowngradeScreen, LockScreen } from "~Screens"
-import {
-    AppLock,
-    Config,
-    RealmClass,
-    useCache,
-    useCachedQuery,
-    useStore,
-    useStoreQuery,
-} from "~Storage"
+import { useCache, useStore } from "~Storage"
 import { BaseStatusBar, Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
@@ -19,9 +11,9 @@ import {
     BiometricsUtils,
     LockScreenUtils,
     useAppLock,
+    useInitRealmClasses,
     useWalletSecurity,
 } from "~Common"
-import { WALLET_STATUS } from "~Model"
 import { BiometricsPlaceholder } from "~Screens/BiometricsPlaceholder"
 import { useAppStateTransitions } from "~Common/Hooks/useAppStateTransitions"
 
@@ -29,38 +21,14 @@ export const EntryPoint = () => {
     const store = useStore()
     const cache = useCache()
 
+    useInitRealmClasses()
+
     const { appLockStatus, unlockApp, lockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
     const [isBackgroundTransition, setIsBackgroundTransition] = useState(false)
     const { activeToBackground, backgroundToActive, closedToActive } =
         useAppStateTransitions()
-
-    // const appConfig = useStoreObject(Config, "APP_CONFIG")
-    // todo: this is a workaround until the new version is installed, then use the above
-    const configQuery = useStoreQuery(Config)
-    const config = useMemo(() => configQuery.sorted("_id"), [configQuery])
-
-    // todo: this is a workaround until the new version is installed
-    const appLockQuery = useCachedQuery(AppLock)
-    const appLock = useMemo(() => appLockQuery.sorted("_id"), [appLockQuery])
-
-    // this can be done in Realm provider but current version of Realm is bugged
-    const initRealmClasses = useCallback(() => {
-        if (!appLock[0]) {
-            cache.write(() => {
-                cache.create(RealmClass.AppLock, {
-                    status: WALLET_STATUS.LOCKED,
-                })
-            })
-        }
-
-        if (!config[0]) {
-            store.write(() => {
-                store.create(RealmClass.Config, {})
-            })
-        }
-    }, [appLock, cache, config, store])
 
     /*
      * Biometrics validation prompt transitions the AppStatus into 'inactive' state
@@ -71,10 +39,6 @@ export const EntryPoint = () => {
         unlockApp()
         setIsBackgroundTransition(false)
     }, [unlockApp])
-
-    useEffect(() => {
-        initRealmClasses()
-    }, [initRealmClasses])
 
     useEffect(() => {
         if (backgroundToActive) {

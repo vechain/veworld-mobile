@@ -1,18 +1,19 @@
 import { useCallback, useMemo, useState } from "react"
-import { PasswordUtils } from "~Common/Utils"
+import { PasswordUtils, CryptoUtils } from "~Common/Utils"
 import { UserSelectedSecurityLevel } from "~Model"
 import {
+    Account,
     Config,
     Device,
     Mnemonic,
-    RealmClass,
+    XPub,
     useCache,
     useCachedQuery,
     useStore,
     useStoreQuery,
 } from "~Storage"
-import { getDeviceIndex, getNodes } from "./Helpers"
-import { CryptoUtils } from "~Common/Utils"
+import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
+import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 
 /**
  * useCreateWalletWithPassword
@@ -51,11 +52,14 @@ export const useCreateWalletWithPassword = () => {
 
             try {
                 if (mnemonicPhrase) {
-                    const deviceIndex = getDeviceIndex(devices)
+                    const { deviceIndex, aliasIndex } =
+                        getDeviceAndAliasIndex(devices)
                     const { wallet, device } = getNodes(
                         mnemonicPhrase.split(" "),
                         deviceIndex,
+                        aliasIndex,
                     )
+
                     cache.write(() => cache.delete(_mnemonic))
 
                     const hashedKey = PasswordUtils.hash(userPassword)
@@ -68,13 +72,27 @@ export const useCreateWalletWithPassword = () => {
                     )
 
                     store.write(() => {
-                        config[0].userSelectedSecurtiy =
-                            UserSelectedSecurityLevel.PASSWORD
+                        const xPub = store.create<XPub>(XPub.getName(), {
+                            ...device.xPub,
+                        })
 
-                        store.create(RealmClass.Device, {
+                        let _device = store.create<Device>(Device.getName(), {
                             ...device,
+                            xPub,
                             wallet: encryptedWallet,
                         })
+
+                        let account = store.create<Account>(Account.getName(), {
+                            address: device.rootAddress,
+                            index: 0,
+                            visible: true,
+                            alias: `${getAliasName} ${1}`,
+                        })
+
+                        _device.accounts.push(account)
+
+                        config[0].userSelectedSecurity =
+                            UserSelectedSecurityLevel.PASSWORD
                     })
 
                     setIsComplete(true)

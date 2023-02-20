@@ -39,14 +39,14 @@ export const useWalletSecurity = () => {
     const walletSecurity = useMemo(() => {
         if (
             isBiometricsEnabled &&
-            config[0]?.userSelectedSecurtiy ===
+            config[0]?.userSelectedSecurity ===
                 UserSelectedSecurityLevel.BIOMETRIC
         ) {
             return WalletSecurity.BIO_UNLOCK
         }
 
         if (
-            config[0]?.userSelectedSecurtiy ===
+            config[0]?.userSelectedSecurity ===
             UserSelectedSecurityLevel.PASSWORD
         ) {
             return WalletSecurity.PASS_UNLOCK
@@ -109,7 +109,7 @@ export const useWalletSecurity = () => {
                     console.log(`No key for ${device.alias}`)
                 }
             }
-            config[0].userSelectedSecurtiy = UserSelectedSecurityLevel.BIOMETRIC
+            config[0].userSelectedSecurity = UserSelectedSecurityLevel.BIOMETRIC
             store.commitTransaction()
             cache.write(() => (biometrics[0].accessControl = true))
             onSuccessCallback && onSuccessCallback()

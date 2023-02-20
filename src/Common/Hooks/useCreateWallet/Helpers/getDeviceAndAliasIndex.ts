@@ -9,11 +9,12 @@ import { Device } from "~Storage"
 
 type RealmDevice = Results<Device & Object<unknown, never>>
 
-export const getDeviceIndex = (devices: RealmDevice) => {
+export const getDeviceAndAliasIndex = (devices: RealmDevice) => {
     let lastIndex = devices.length
     if (lastIndex) {
         let newIndex = lastIndex + 1
-        return newIndex
+        return { deviceIndex: devices.length, aliasIndex: newIndex }
     }
-    return 1
+
+    return { deviceIndex: 0, aliasIndex: 1 }
 }

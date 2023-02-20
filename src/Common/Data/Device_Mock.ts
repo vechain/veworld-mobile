@@ -1,6 +1,6 @@
 export const devices_mock = [
     {
-        alias: "Account 1",
+        alias: "Wallet 1",
         index: 1,
         rootAddress: "0x3127989b662d4dd1286028daac3bda41a49445ea",
         type: "local-mnemonic",
@@ -8,7 +8,7 @@ export const devices_mock = [
         xPub: [Object],
     },
     {
-        alias: "Account 2",
+        alias: "Wallet 2",
         index: 2,
         rootAddress: "0x05a1e48549961E5038440e26248e78743FD26c1D",
         type: "local-mnemonic",
@@ -16,7 +16,7 @@ export const devices_mock = [
         xPub: [Object],
     },
     {
-        alias: "Account 3",
+        alias: "Wallet 3",
         index: 3,
         rootAddress: "0x26B793b9033Fe02664b7C758057e43Fe07655aee",
         type: "local-mnemonic",
@@ -24,7 +24,7 @@ export const devices_mock = [
         xPub: [Object],
     },
     {
-        alias: "Account 4",
+        alias: "Wallet 4",
         index: 4,
         rootAddress: "0xD84Da6177849Be9089073792D3DFc4ac62Cd00Cb",
         type: "local-mnemonic",
@@ -32,7 +32,7 @@ export const devices_mock = [
         xPub: [Object],
     },
     {
-        alias: "Account 5",
+        alias: "Wallet 5",
         index: 5,
         rootAddress: "0x8fA952e0d789c5fCbf021aE1DA0A08217C6F75C5",
         type: "local-mnemonic",

@@ -1,4 +1,4 @@
-// import AddressUtils from "./AddressUtils"
+import AddressUtils from "./AddressUtils"
 // import AccountsUtils from "./AccountsUtils"
 // import AliasUtils from "./AliasUtils"
 // import AsyncUtils from "./AsyncUtils"
@@ -24,7 +24,7 @@ export {
     // AliasUtils,
     // AsyncUtils,
     // AccountsUtils,
-    // AddressUtils,
+    AddressUtils,
     BiometricsUtils,
     // BloomUtils,
     CryptoUtils,

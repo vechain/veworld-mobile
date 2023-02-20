@@ -1,30 +1,34 @@
 import { Object } from "realm"
 
-export class Config extends Object<Config> {
-    _id = "APP_CONFIG"
+export class Config extends Object {
+    _id!: string
+    isEncryptionKeyCreated!: boolean
+    isWalletCreated!: boolean
+    userSelectedSecurity!: string
+    isAppLockActive!: boolean
+    lastSecurityLevel!: string
+    isSecurityDowngrade!: boolean
 
-    // internal
-    isEncryptionKeyCreated = false
-    isWalletCreated = false
+    static getName(): string {
+        return Config.schema.name
+    }
 
-    // lock screen
-    userSelectedSecurtiy = "NONE"
-    isAppLockActive = true
+    static PrimaryKey(): string {
+        return Config.schema.primaryKey
+    }
 
-    // downgrade
-    lastSecurityLevel = "NONE"
-    isSecurityDowngrade = false
+    static schema = {
+        name: "Config",
+        primaryKey: "_id",
 
-    static primaryKey = "_id"
-
-    constructor(realm: Realm) {
-        super(realm, {
-            isEncryptionKeyCreated: false,
-            isSecurityDowngrade: false,
-            lastSecurityLevel: "NONE",
-            userSelectedSecurtiy: "NONE",
-            isAppLockActive: true,
-            isWalletCreated: false,
-        })
+        properties: {
+            _id: { type: "string", default: "APP_CONFIG" },
+            isEncryptionKeyCreated: { type: "bool", default: false },
+            isWalletCreated: { type: "bool", default: false },
+            userSelectedSecurity: { type: "string", default: "NONE" },
+            isAppLockActive: { type: "bool", default: true },
+            lastSecurityLevel: { type: "string", default: "NONE" },
+            isSecurityDowngrade: { type: "bool", default: false },
+        },
     }
 }

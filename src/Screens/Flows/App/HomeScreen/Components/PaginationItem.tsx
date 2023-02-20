@@ -27,7 +27,7 @@ export const PaginationItem: FC<Props> = memo(
             return {
                 width: dotWidth,
             }
-        }, [])
+        }, [length])
 
         return (
             <Animated.View

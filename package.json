@@ -70,7 +70,6 @@
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
-        "@babel/plugin-proposal-decorators": "^7.20.13",
         "@babel/runtime": "^7.12.5",
         "@commitlint/cli": "^17.3.0",
         "@commitlint/config-conventional": "^17.3.0",
@@ -79,7 +78,6 @@
         "@formatjs/intl-locale": "^3.0.11",
         "@formatjs/intl-pluralrules": "^5.1.8",
         "@react-native-community/eslint-config": "^2.0.0",
-        "@realm/babel-plugin": "^0.1.1",
         "@tsconfig/react-native": "^2.0.2",
         "@types/cucumber": "^7.0.0",
         "@types/detox": "^18.1.0",

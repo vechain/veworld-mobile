@@ -1,18 +1,20 @@
 import { useMemo, useState } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
 import {
+    Account,
     Biometrics,
     Config,
     Device,
     Mnemonic,
-    RealmClass,
+    XPub,
     useCache,
     useCachedQuery,
     useStore,
     useStoreQuery,
 } from "~Storage"
-import { getDeviceIndex, getNodes } from "./Helpers"
+import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
+import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 
 /**
  * useCreateWalletWithBiometrics
@@ -59,10 +61,13 @@ export const useCreateWalletWithBiometrics = () => {
 
         try {
             if (mnemonicPhrase) {
-                const deviceIndex = getDeviceIndex(devices)
+                const { deviceIndex, aliasIndex } =
+                    getDeviceAndAliasIndex(devices)
+
                 const { wallet, device } = getNodes(
                     mnemonicPhrase.split(" "),
                     deviceIndex,
+                    aliasIndex,
                 )
 
                 const { encryptedWallet } = await CryptoUtils.encryptWallet(
@@ -72,13 +77,29 @@ export const useCreateWalletWithBiometrics = () => {
                 )
 
                 store.write(() => {
-                    store.create(RealmClass.Device, {
+                    const xPub = store.create<XPub>(XPub.getName(), {
+                        ...device.xPub,
+                    })
+
+                    let _device = store.create<Device>(Device.getName(), {
                         ...device,
+                        xPub,
                         wallet: encryptedWallet,
                     })
-                    config[0].userSelectedSecurtiy =
+
+                    let account = store.create<Account>(Account.getName(), {
+                        address: device.rootAddress,
+                        index: 0,
+                        visible: true,
+                        alias: `${getAliasName} ${1}`,
+                    })
+
+                    _device.accounts.push(account)
+
+                    config[0].userSelectedSecurity =
                         UserSelectedSecurityLevel.BIOMETRIC
                 })
+
                 cache.write(() => cache.delete(_mnemonic))
 
                 setIsComplete(true)
