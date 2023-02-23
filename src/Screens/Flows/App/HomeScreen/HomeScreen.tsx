@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseSpacer, BaseView } from "~Components"
 import {
@@ -17,13 +17,9 @@ import {
     SafeAreaAndStatusBar,
     Header,
 } from "./Components"
-import {
-    FadeInRight,
-    SlideInLeft,
-    SlideInRight,
-    useSharedValue,
-} from "react-native-reanimated"
+import { useSharedValue } from "react-native-reanimated"
 import { useCreateAccount } from "~Common"
+import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -33,9 +29,10 @@ const ACTIVE_WALLET = 0
 export const HomeScreen = () => {
     const { store, cache } = useRealm()
     const createAccountFor = useCreateAccount()
+    const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
+        useMeoizedAnimation()
 
     const [activeScreen, setActiveScreen] = useState(0)
-    const [firstLoad, setFirstLoad] = useState(true)
     const [changeContent, setChangeContent] = useState(false)
     const scrollValue = useSharedValue<number>(-59)
 
@@ -62,10 +59,6 @@ export const HomeScreen = () => {
     const devices = useListListener(Device.getName(), store) as Device[]
 
     useEffect(() => {
-        setFirstLoad(false)
-    }, [])
-
-    useEffect(() => {
         console.log("activeCard", activeCard)
         console.log("HOME SCREEN devices", devices)
     }, [activeCard, devices])
@@ -74,18 +67,6 @@ export const HomeScreen = () => {
         const _device = devices[ACTIVE_WALLET]
         createAccountFor(_device)
     }, [createAccountFor, devices])
-
-    const coinListEnter = useMemo(
-        () =>
-            firstLoad
-                ? FadeInRight.delay(220).duration(250)
-                : SlideInLeft.delay(50).duration(200),
-        [firstLoad],
-    )
-    const coinListExit = useMemo(() => SlideInRight.delay(50).duration(200), [])
-
-    const NFTListEnter = useMemo(() => SlideInRight.delay(50).duration(200), [])
-    const NFTListExit = useMemo(() => SlideInLeft.delay(50).duration(200), [])
 
     return (
         <>
