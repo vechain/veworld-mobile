@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -13,7 +13,7 @@ import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { CryptoUtils, SeedUtils } from "~Common"
 import { Keyboard } from "react-native"
-import { Config, Mnemonic, useCache, useStoreQuery } from "~Storage"
+import { Config, Mnemonic, useCache, useStoreObject } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 import { useNavigation } from "@react-navigation/native"
@@ -28,9 +28,7 @@ export const ImportSeedPhraseScreen = () => {
     const [isError, setIsError] = useState(false)
     const [isDisabled, setIsDisabled] = useState(true)
 
-    // todo: this is a workaround until the new version is installed
-    const result2 = useStoreQuery(Config)
-    const config = useMemo(() => result2.sorted("_id"), [result2])
+    const config = useStoreObject<Config>(Config.getName(), Config.PrimaryKey())
 
     const onVerify = () => {
         if (CryptoUtils.verifySeedPhrase(seed)) {
@@ -39,7 +37,7 @@ export const ImportSeedPhraseScreen = () => {
                 _mnemonic[0].mnemonic = seed
             })
 
-            if (config[0]?.isWalletCreated) {
+            if (config?.isWalletCreated) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)

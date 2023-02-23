@@ -2,7 +2,6 @@ import { Object } from "realm"
 
 export class Config extends Object {
     _id!: string
-    isEncryptionKeyCreated!: boolean
     isWalletCreated!: boolean
     userSelectedSecurity!: string
     isAppLockActive!: boolean
@@ -14,7 +13,7 @@ export class Config extends Object {
     }
 
     static PrimaryKey(): string {
-        return Config.schema.primaryKey
+        return Config.schema.name
     }
 
     static schema = {
@@ -22,8 +21,7 @@ export class Config extends Object {
         primaryKey: "_id",
 
         properties: {
-            _id: { type: "string", default: "APP_CONFIG" },
-            isEncryptionKeyCreated: { type: "bool", default: false },
+            _id: { type: "string", default: "Config" },
             isWalletCreated: { type: "bool", default: false },
             userSelectedSecurity: { type: "string", default: "NONE" },
             isAppLockActive: { type: "bool", default: true },

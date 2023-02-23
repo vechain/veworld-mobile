@@ -20,7 +20,7 @@ const StackConfig = {
 
 export const DeviceCarousel = ({ accounts }: { accounts: Account[] }) => {
     const progressValue = useSharedValue<number>(0)
-    const { onScrollBegin, onScrollEnd } = useActiveCard()
+    const onScrollEnd = useActiveCard()
 
     const onProgressChange = useCallback(
         (_: number, absoluteProgress: number) => {
@@ -59,8 +59,7 @@ export const DeviceCarousel = ({ accounts }: { accounts: Account[] }) => {
                 modeConfig={StackConfig}
                 onProgressChange={onProgressChange}
                 renderItem={renderItem}
-                onScrollBegin={onScrollBegin}
-                onScrollEnd={onScrollEnd}
+                onSnapToItem={onScrollEnd}
             />
 
             <BaseSpacer height={10} />

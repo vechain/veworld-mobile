@@ -23,7 +23,7 @@ export const RealmProvider = ({ children }: Props) => {
 
         const encKey = await KeychainService.getRealmKey()
         if (encKey) {
-            getKey(encKey!)
+            getKey(encKey)
         } else {
             await createKey()
         }

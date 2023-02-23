@@ -2,13 +2,13 @@ import React, { useCallback } from "react"
 import { Switch } from "react-native"
 import { BiometricsUtils, useDisclosure, useWalletSecurity } from "~Common"
 import { BaseText, BaseView, RequireUserPassword } from "~Components"
+import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
 
 export const EnableBiometrics = () => {
-    const {
-        isBiometricsEnabled,
-        isWalletSecurityBiometrics,
-        runSecurityUpgrade,
-    } = useWalletSecurity()
+    const { isBiometricsEnabled, isWalletSecurityBiometrics } =
+        useWalletSecurity()
+
+    const runSecurityUpgrade = useSecurityUpgrade()
 
     const {
         isOpen: isPasswordPromptOpen,

@@ -4,7 +4,7 @@ import { BaseSpacer, BaseView } from "~Components"
 import {
     ActiveWalletCard,
     Device,
-    useCachedQuery,
+    useCachedObject,
     useStoreQuery,
 } from "~Storage"
 import {
@@ -51,21 +51,27 @@ export const HomeScreen = () => {
         [scrollValue],
     )
 
-    // todo: this is a workaround until the new version is installed
-    const result2 = useCachedQuery(ActiveWalletCard)
-    const activeCard = useMemo(() => result2.sorted("_id"), [result2])
+    const activeCard = useCachedObject<ActiveWalletCard>(
+        ActiveWalletCard.getName(),
+        ActiveWalletCard.PrimaryKey(),
+    )
 
-    // todo: this is a workaround until the new version is installed
-    const result1 = useStoreQuery(Device)
-    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
-
-    console.log(activeCard)
+    const deviceQuery = useStoreQuery(Device)
+    const devices = useMemo(
+        () => deviceQuery.sorted("rootAddress"),
+        [deviceQuery],
+    )
 
     useEffect(() => {
         setFirstLoad(false)
     }, [])
 
-    const onHeaderPress = useCallback(() => {
+    useEffect(() => {
+        console.log("activeCard", activeCard)
+        console.log("HOME SCREEN devices", devices)
+    }, [activeCard, devices])
+
+    const onHeaderButtonPress = useCallback(() => {
         const _device = devices[ACTIVE_WALLET]
         createAccountFor(_device)
     }, [createAccountFor, devices])
@@ -74,7 +80,7 @@ export const HomeScreen = () => {
         <>
             <PlatformScrollView handleScrollPOsition={handleScrollPOsition}>
                 <BaseView align="center">
-                    <Header action={onHeaderPress} />
+                    <Header action={onHeaderButtonPress} />
                     <BaseSpacer height={20} />
                     <DeviceCarousel
                         accounts={devices[ACTIVE_WALLET].accounts}

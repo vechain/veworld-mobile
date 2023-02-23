@@ -29,6 +29,7 @@ export const useCreateAccount = () => {
                     visible: true,
                     alias: `${getAliasName} ${aliasIndex}`,
                 })
+
                 device.accounts?.push(account)
             })
         },

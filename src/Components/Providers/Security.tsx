@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect } from "react"
 import { BiometricsUtils, useAppState } from "~Common"
 import { AppStateType, TSecurityLevel } from "~Model"
 import {
     Biometrics,
     Config,
     useCache,
-    useCachedQuery,
+    useCachedObject,
     useStore,
-    useStoreQuery,
+    useStoreObject,
 } from "~Storage"
 
 const { isSecurityDowngrade, isSecurityUpgrade } = BiometricsUtils
@@ -17,36 +17,36 @@ export const Security = () => {
     const store = useStore()
     const [previousState, currentState] = useAppState()
 
-    // const appConfig = useStoreObject(Config, "APP_STATE")
-    // todo: this is a workaround until the new version is installed, then use the above
-    const result1 = useStoreQuery(Config)
-    const config = useMemo(() => result1.sorted("_id"), [result1])
+    const config = useStoreObject<Config>(Config.getName(), Config.PrimaryKey())
 
-    // todo: this is a workaround until the new version is installed, then use the above
-    const result2 = useCachedQuery(Biometrics)
-    const biometrics = useMemo(() => result2.sorted("_id"), [result2])
+    const biometrics = useCachedObject<Biometrics>(
+        Biometrics.getName(),
+        Biometrics.PrimaryKey(),
+    )
 
     const checkSecurityDowngrade = useCallback(async () => {
-        const oldSecurityLevel = config[0]?.lastSecurityLevel
-        const level = biometrics[0]?.currentSecurityLevel as TSecurityLevel
+        const oldSecurityLevel = config?.lastSecurityLevel
+        const level = biometrics?.currentSecurityLevel as TSecurityLevel
 
-        if (oldSecurityLevel !== "NONE" && level) {
-            if (isSecurityDowngrade(oldSecurityLevel, level)) {
-                store.write(() => {
-                    config[0].isSecurityDowngrade = true
-                    config[0].lastSecurityLevel = level
-                })
-            } else if (isSecurityUpgrade(oldSecurityLevel, level)) {
-                store.write(() => {
-                    config[0].isSecurityDowngrade = false
-                    config[0].lastSecurityLevel = level
-                })
+        if (config) {
+            if (oldSecurityLevel !== "NONE" && level) {
+                if (isSecurityDowngrade(oldSecurityLevel!, level)) {
+                    store.write(() => {
+                        config.isSecurityDowngrade = true
+                        config.lastSecurityLevel = level
+                    })
+                } else if (isSecurityUpgrade(oldSecurityLevel!, level)) {
+                    store.write(() => {
+                        config.isSecurityDowngrade = false
+                        config.lastSecurityLevel = level
+                    })
+                }
+            } else {
+                if (config?.lastSecurityLevel && level)
+                    store.write(() => {
+                        config.lastSecurityLevel = level
+                    })
             }
-        } else {
-            if (config[0]?.lastSecurityLevel && level)
-                store.write(() => {
-                    config[0].lastSecurityLevel = level
-                })
         }
     }, [biometrics, config, store])
 

@@ -4,9 +4,11 @@ import KeychainService from "~Services/KeychainService"
 import { Device, useStoreQuery } from "~Storage"
 
 export const usePasswordValidation = () => {
-    // todo: this is a workaround until the new version is installed
-    const result1 = useStoreQuery(Device)
-    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
+    const deviceQuery = useStoreQuery(Device)
+    const devices = useMemo(
+        () => deviceQuery.sorted("rootAddress"),
+        [deviceQuery],
+    )
 
     const validatePassword = useCallback(
         async (userPassword: string[]) => {

@@ -27,7 +27,6 @@ export const Biometrics = () => {
             cache.create(
                 RealmBiometrics.getName(),
                 {
-                    _id: "BIOMETRICS",
                     currentSecurityLevel: level,
                     authtypeAvailable: typeAvalable,
                     isDeviceEnrolled: isEnrolled,

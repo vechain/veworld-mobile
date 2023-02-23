@@ -1,31 +1,30 @@
 import { useMemo } from "react"
 import { PlatformUtils } from "~Common/Utils"
 import { AuthenticationType, SecurityLevelType } from "~Model"
-import { Biometrics, useCachedQuery } from "~Storage"
+import { Biometrics, useCachedObject } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const useBiometricType = () => {
     const { LL } = useI18nContext()
 
-    // const biometrics = useStoreObject(Biometrics, "BIOMETRICS")
-    // todo: this is a workaround until the new version is installed, then use the above
-    const result = useCachedQuery(Biometrics)
-    const biometrics = useMemo(() => result.sorted("_id"), [result])
+    const biometrics = useCachedObject<Biometrics>(
+        Biometrics.getName(),
+        Biometrics.PrimaryKey(),
+    )
 
     const currentSecurityLevel = useMemo(() => {
         if (PlatformUtils.isIOS()) {
             if (
-                biometrics[0]?.currentSecurityLevel ===
-                SecurityLevelType.BIOMETRIC
+                biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
             ) {
                 if (
-                    biometrics[0]?.authtypeAvailable ===
+                    biometrics?.authtypeAvailable ===
                     AuthenticationType.FACIAL_RECOGNITION
                 ) {
                     return LL.FACE_ID()
                 }
                 if (
-                    biometrics[0]?.authtypeAvailable ===
+                    biometrics?.authtypeAvailable ===
                     AuthenticationType.FINGERPRINT
                 ) {
                     return LL.TOUCH_ID()
@@ -37,17 +36,16 @@ export const useBiometricType = () => {
 
         if (PlatformUtils.isAndroid()) {
             if (
-                biometrics[0]?.currentSecurityLevel ===
-                SecurityLevelType.BIOMETRIC
+                biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
             ) {
                 if (
-                    biometrics[0]?.authtypeAvailable ===
+                    biometrics?.authtypeAvailable ===
                     AuthenticationType.FACIAL_RECOGNITION
                 ) {
                     return LL.FACE_ID()
                 }
                 if (
-                    biometrics[0]?.authtypeAvailable ===
+                    biometrics?.authtypeAvailable ===
                     AuthenticationType.FINGERPRINT
                 ) {
                     return LL.FINGERPRINT()

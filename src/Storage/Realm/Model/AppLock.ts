@@ -9,7 +9,7 @@ export class AppLock extends Object {
     }
 
     static PrimaryKey(): string {
-        return AppLock.schema.primaryKey
+        return AppLock.schema.name
     }
 
     static schema = {
@@ -17,7 +17,7 @@ export class AppLock extends Object {
         primaryKey: "_id",
 
         properties: {
-            _id: { type: "string", default: "APP_LOCK" },
+            _id: { type: "string", default: "AppLock" },
             status: "string",
         },
     }

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { WALLET_STATUS } from "~Model"
 import {
     ActiveWalletCard,
@@ -13,30 +13,26 @@ export const useInitRealmClasses = () => {
     const store = useStore()
     const cache = useCache()
 
-    const init = () => {
+    const init = useCallback(() => {
         cache.write(() => {
             cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
-        })
-
-        cache.write(() => {
             cache.create(ActiveWalletCard.getName(), {})
-        })
-
-        cache.write(() => {
             cache.create(Mnemonic.getName(), {})
         })
 
-        let config = store.objects<Config>(Config.getName())
+        let config = store.objectForPrimaryKey<Config>(
+            Config.getName(),
+            Config.PrimaryKey(),
+        )
 
-        if (!config[0]) {
+        if (!config) {
             store.write(() => {
                 store.create(Config.getName(), {})
             })
         }
-    }
+    }, [cache, store])
 
     useEffect(() => {
         init()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [init])
 }

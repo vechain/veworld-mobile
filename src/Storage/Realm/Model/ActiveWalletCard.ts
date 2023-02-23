@@ -2,7 +2,6 @@ import { Object } from "realm"
 
 export class ActiveWalletCard extends Object {
     _id!: string
-    isLoading!: boolean
     activeIndex!: number
 
     static getName(): string {
@@ -10,7 +9,7 @@ export class ActiveWalletCard extends Object {
     }
 
     static PrimaryKey(): string {
-        return ActiveWalletCard.schema.primaryKey
+        return ActiveWalletCard.schema.name
     }
 
     static schema = {
@@ -18,9 +17,8 @@ export class ActiveWalletCard extends Object {
         primaryKey: "_id",
 
         properties: {
-            _id: { type: "string", default: "ACTIVE_WALLET_CARD" },
+            _id: { type: "string", default: "ActiveWalletCard" },
             activeIndex: { type: "int", default: 0 },
-            isLoading: { type: "bool", default: false },
         },
     }
 }

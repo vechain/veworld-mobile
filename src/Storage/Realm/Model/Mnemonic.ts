@@ -9,7 +9,7 @@ export class Mnemonic extends Object {
     }
 
     static PrimaryKey(): string {
-        return Mnemonic.schema.primaryKey
+        return Mnemonic.schema.name
     }
 
     static schema = {
@@ -17,7 +17,7 @@ export class Mnemonic extends Object {
         primaryKey: "_id",
 
         properties: {
-            _id: { type: "string", default: "WALLET_MNEMONIC" },
+            _id: { type: "string", default: "Mnemonic" },
             mnemonic: { type: "string", default: "" },
         },
     }
