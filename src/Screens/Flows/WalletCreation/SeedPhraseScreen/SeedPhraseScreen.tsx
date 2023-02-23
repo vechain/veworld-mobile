@@ -15,12 +15,12 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { Fonts } from "~Model"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
-import { Mnemonic, useCache } from "~Storage"
+import { Mnemonic, useRealm } from "~Storage"
 
 export const SeedPhraseScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const cache = useCache()
+    const { cache } = useRealm()
 
     const [IsChecked, setIsChecked] = useState(false)
     const { mnemonic, mnemonicArray } = useGenerateMnemonic()
@@ -32,8 +32,14 @@ export const SeedPhraseScreen = () => {
 
     const onBackupPress = useCallback(() => {
         cache.write(() => {
-            let _mnemonic = cache.objects<Mnemonic>(Mnemonic.getName())
-            _mnemonic[0].mnemonic = mnemonic
+            let _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
+                Mnemonic.getName(),
+                Mnemonic.PrimaryKey(),
+            )
+
+            if (_mnemonic) {
+                _mnemonic.mnemonic = mnemonic
+            }
         })
         nav.navigate(Routes.CONFIRM_SEED_PHRASE)
     }, [cache, mnemonic, nav])

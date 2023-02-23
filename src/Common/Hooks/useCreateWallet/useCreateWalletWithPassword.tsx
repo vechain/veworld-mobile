@@ -1,18 +1,7 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
 import { UserSelectedSecurityLevel } from "~Model"
-import {
-    Account,
-    Config,
-    Device,
-    Mnemonic,
-    XPub,
-    useCache,
-    useCachedObject,
-    useStore,
-    useStoreObject,
-    useStoreQuery,
-} from "~Storage"
+import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 
@@ -21,20 +10,18 @@ import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
  * @returns
  */
 export const useCreateWalletWithPassword = () => {
-    const store = useStore()
-    const cache = useCache()
+    const { store, cache } = useRealm()
 
     const [isComplete, setIsComplete] = useState(false)
 
-    const config = useStoreObject<Config>(Config.getName(), Config.PrimaryKey())
-
-    const deviceQuery = useStoreQuery(Device)
-    const devices = useMemo(
-        () => deviceQuery.sorted("rootAddress"),
-        [deviceQuery],
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.PrimaryKey(),
     )
 
-    const _mnemonic = useCachedObject<Mnemonic>(
+    const devices = store.objects<Device>(Device.getName())
+
+    const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
         Mnemonic.getName(),
         Mnemonic.PrimaryKey(),
     )

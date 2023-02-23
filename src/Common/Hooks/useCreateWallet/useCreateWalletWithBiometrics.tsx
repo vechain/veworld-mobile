@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
 import {
     Account,
@@ -7,11 +7,8 @@ import {
     Device,
     Mnemonic,
     XPub,
-    useCache,
-    useCachedObject,
-    useStore,
-    useStoreObject,
-    useStoreQuery,
+    useObjectListener,
+    useRealm,
 } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
@@ -22,28 +19,27 @@ import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
  * @returns
  */
 export const useCreateWalletWithBiometrics = () => {
-    const store = useStore()
-    const cache = useCache()
+    const { store, cache } = useRealm()
 
     const [isComplete, setIsComplete] = useState(false)
 
-    const config = useStoreObject<Config>(Config.getName(), Config.PrimaryKey())
-
-    const deviceQuery = useStoreQuery(Device)
-    const devices = useMemo(
-        () => deviceQuery.sorted("rootAddress"),
-        [deviceQuery],
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.PrimaryKey(),
     )
 
-    const _mnemonic = useCachedObject<Mnemonic>(
+    const devices = store.objects<Device>(Device.getName())
+
+    const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
         Mnemonic.getName(),
         Mnemonic.PrimaryKey(),
     )
 
-    const biometrics = useCachedObject<Biometrics>(
+    const biometrics = useObjectListener(
         Biometrics.getName(),
         Biometrics.PrimaryKey(),
-    )
+        cache,
+    ) as Biometrics
 
     //* [START] - Create Wallet
     const onCreateWallet = async () => {

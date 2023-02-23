@@ -13,14 +13,13 @@ import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { CryptoUtils, SeedUtils } from "~Common"
 import { Keyboard } from "react-native"
-import { Config, Mnemonic, useCache, useStoreObject } from "~Storage"
+import { Config, Mnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 import { useNavigation } from "@react-navigation/native"
 
 export const ImportSeedPhraseScreen = () => {
     const { LL } = useI18nContext()
-    const cache = useCache()
     const nav = useNavigation()
 
     const [, setPasteSeed] = useState<string[]>()
@@ -28,7 +27,12 @@ export const ImportSeedPhraseScreen = () => {
     const [isError, setIsError] = useState(false)
     const [isDisabled, setIsDisabled] = useState(true)
 
-    const config = useStoreObject<Config>(Config.getName(), Config.PrimaryKey())
+    const { store, cache } = useRealm()
+
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.PrimaryKey(),
+    )
 
     const onVerify = () => {
         if (CryptoUtils.verifySeedPhrase(seed)) {

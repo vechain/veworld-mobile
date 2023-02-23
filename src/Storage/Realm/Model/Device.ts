@@ -40,13 +40,3 @@ export class Device extends Object {
         },
     }
 }
-
-// interface IDevice {
-//     alias: string
-//     xPub: XPub
-//     rootAddress: string
-//     type: string
-//     index: number
-//     accounts: Account[]
-//     wallet: string
-// }

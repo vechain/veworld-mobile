@@ -4,8 +4,9 @@ import { BaseSpacer, BaseView } from "~Components"
 import {
     ActiveWalletCard,
     Device,
-    useCachedObject,
-    useStoreQuery,
+    useRealm,
+    useListListener,
+    useObjectListener,
 } from "~Storage"
 import {
     CoinList,
@@ -30,6 +31,7 @@ type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
+    const { store, cache } = useRealm()
     const createAccountFor = useCreateAccount()
 
     const [activeScreen, setActiveScreen] = useState(0)
@@ -51,16 +53,13 @@ export const HomeScreen = () => {
         [scrollValue],
     )
 
-    const activeCard = useCachedObject<ActiveWalletCard>(
+    const activeCard = useObjectListener(
         ActiveWalletCard.getName(),
         ActiveWalletCard.PrimaryKey(),
-    )
+        cache,
+    ) as ActiveWalletCard
 
-    const deviceQuery = useStoreQuery(Device)
-    const devices = useMemo(
-        () => deviceQuery.sorted("rootAddress"),
-        [deviceQuery],
-    )
+    const devices = useListListener(Device.getName(), store) as Device[]
 
     useEffect(() => {
         setFirstLoad(false)
@@ -75,6 +74,18 @@ export const HomeScreen = () => {
         const _device = devices[ACTIVE_WALLET]
         createAccountFor(_device)
     }, [createAccountFor, devices])
+
+    const coinListEnter = useMemo(
+        () =>
+            firstLoad
+                ? FadeInRight.delay(220).duration(250)
+                : SlideInLeft.delay(50).duration(200),
+        [firstLoad],
+    )
+    const coinListExit = useMemo(() => SlideInRight.delay(50).duration(200), [])
+
+    const NFTListEnter = useMemo(() => SlideInRight.delay(50).duration(200), [])
+    const NFTListExit = useMemo(() => SlideInLeft.delay(50).duration(200), [])
 
     return (
         <>
@@ -94,17 +105,13 @@ export const HomeScreen = () => {
                 <BaseView orientation="row" grow={1}>
                     {activeScreen === 0 ? (
                         <CoinList
-                            entering={
-                                firstLoad
-                                    ? FadeInRight.delay(220).duration(250)
-                                    : SlideInLeft.delay(50).duration(200)
-                            }
-                            exiting={SlideInRight.delay(50).duration(200)}
+                            entering={coinListEnter}
+                            exiting={coinListExit}
                         />
                     ) : (
                         <NFTList
-                            entering={SlideInRight.delay(50).duration(200)}
-                            exiting={SlideInLeft.delay(50).duration(200)}
+                            entering={NFTListEnter}
+                            exiting={NFTListExit}
                         />
                     )}
                 </BaseView>

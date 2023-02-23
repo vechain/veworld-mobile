@@ -1,11 +1,11 @@
 import { AddressUtils } from "~Common"
-import { Account, Device, useStore } from "~Storage"
+import { Account, Device, useRealm } from "~Storage"
 import { useCallback } from "react"
 import { getAccountAndAliasIndex } from "./Helpers/getAccountAndAliasIndex"
 import { getAliasName } from "./Helpers/getAliasName"
 
 export const useCreateAccount = () => {
-    const store = useStore()
+    const { store } = useRealm()
 
     const createAccountFor = useCallback(
         (device: Device & Realm.Object<unknown, never>) => {

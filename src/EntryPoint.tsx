@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { SecurityDowngradeScreen, LockScreen } from "~Screens"
-import { useCache, useStore } from "~Storage"
+import { useRealm } from "~Storage"
 import { BaseStatusBar, Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
@@ -10,23 +10,15 @@ import {
     BiometricsUtils,
     LockScreenUtils,
     useAppLock,
-    useInitRealmClasses,
-    useRenderCounter,
     useWalletSecurity,
-    useAppStateTransitions,
 } from "~Common"
 import { WALLET_STATUS } from "~Model"
 
 export const EntryPoint = () => {
-    const store = useStore()
-    const cache = useCache()
-
-    useInitRealmClasses()
-    useRenderCounter("EntryPoint")
+    const { store, cache } = useRealm()
 
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
-    const { closedToActive } = useAppStateTransitions()
 
     useEffect(() => {
         const init = async () => {
@@ -48,8 +40,8 @@ export const EntryPoint = () => {
             }
         }
 
-        if (closedToActive) init()
-    }, [appLockStatus, walletSecurity, isSecurityDowngrade, closedToActive])
+        init()
+    }, [appLockStatus, walletSecurity, isSecurityDowngrade])
 
     if (LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)) {
         return <LockScreen onSuccess={unlockApp} />

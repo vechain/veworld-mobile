@@ -1,8 +1,8 @@
 import { useCallback } from "react"
-import { ActiveWalletCard, useCache } from "~Storage"
+import { ActiveWalletCard, useRealm } from "~Storage"
 
 export const useActiveCard = () => {
-    const cache = useCache()
+    const { cache } = useRealm()
 
     let card = cache.objectForPrimaryKey<ActiveWalletCard>(
         ActiveWalletCard.getName(),

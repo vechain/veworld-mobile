@@ -7,13 +7,10 @@ import { name as appName } from "./app.json"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme, useTheme } from "~Common"
-import {
-    Biometrics,
-    RealmProvider,
-    Translation as TranslationProvider,
-} from "~Components"
+import { Biometrics, Translation as TranslationProvider } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
+import { RealmContextProvider } from "~Storage"
 import {
     Inter_Bold,
     Inter_Light,
@@ -61,7 +58,7 @@ const Main = () => {
     return (
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <RealmProvider>
+            <RealmContextProvider>
                 <NavigationContainer theme={colorScheme}>
                     <SafeAreaProvider>
                         <TranslationProvider>
@@ -70,7 +67,7 @@ const Main = () => {
                         </TranslationProvider>
                     </SafeAreaProvider>
                 </NavigationContainer>
-            </RealmProvider>
+            </RealmContextProvider>
         </GestureHandlerRootView>
     )
 }

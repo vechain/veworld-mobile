@@ -31,7 +31,6 @@
         "@react-navigation/material-top-tabs": "^6.5.3",
         "@react-navigation/native": "^6.1.1",
         "@react-navigation/native-stack": "^6.9.7",
-        "@realm/react": "0.4.1",
         "@vechain/connex-driver": "^2.0.12",
         "@vechain/connex-framework": "^2.0.12",
         "babel-plugin-module-resolver": "^4.1.0",

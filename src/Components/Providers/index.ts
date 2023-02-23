@@ -1,5 +1,4 @@
 export * from "./Translation"
 export * from "./WrappedTranslation"
 export * from "./Security"
-export * from "./RealmProvider/RealmProvider"
 export * from "./Biometrics"

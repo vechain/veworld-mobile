@@ -12,7 +12,7 @@ import VectorImage from "react-native-vector-image"
 import { VeChainVetLogo } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Fonts, SecurityLevelType, WALLET_STATUS } from "~Model"
-import { AppLock, Config, useCache, useStore, useStoreObject } from "~Storage"
+import { AppLock, Config, useRealm } from "~Storage"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -35,8 +35,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const cache = useCache()
-    const store = useStore()
+    const { store, cache } = useRealm()
 
     const {
         onCreateWallet: createWalletWithBiometrics,
@@ -53,7 +52,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onClose: closePasswordPrompt,
     } = useDisclosure()
 
-    const config = useStoreObject<Config>(Config.getName(), Config.PrimaryKey())
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.PrimaryKey(),
+    )
 
     const onButtonPress = useCallback(async () => {
         let params = route.params

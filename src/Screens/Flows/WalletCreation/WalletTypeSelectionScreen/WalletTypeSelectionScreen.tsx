@@ -9,14 +9,19 @@ import {
 } from "~Components"
 import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
-import { Config, useStoreObject } from "~Storage"
+import { Config, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const config = useStoreObject<Config>(Config.getName(), Config.PrimaryKey())
+    const { store } = useRealm()
+
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.PrimaryKey(),
+    )
 
     const onCreateWallet = () => {
         if (config?.isWalletCreated) {

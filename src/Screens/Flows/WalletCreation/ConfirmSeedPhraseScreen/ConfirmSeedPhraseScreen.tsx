@@ -9,12 +9,16 @@ import {
 } from "~Components"
 import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
-import { Config, useStoreObject } from "~Storage"
+import { Config, useRealm } from "~Storage"
 
 export const ConfirmSeedPhraseScreen = () => {
     const nav = useNavigation()
+    const { store } = useRealm()
 
-    const config = useStoreObject<Config>(Config.getName(), Config.PrimaryKey())
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.PrimaryKey(),
+    )
 
     const onConfirmPress = () => {
         if (config?.isWalletCreated) {

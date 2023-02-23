@@ -1,14 +1,11 @@
-import { useCallback, useMemo } from "react"
+import { useCallback } from "react"
 import { CryptoUtils, PasswordUtils } from "~Common/Utils"
 import KeychainService from "~Services/KeychainService"
-import { Device, useStoreQuery } from "~Storage"
+import { Device, useRealm } from "~Storage"
 
 export const usePasswordValidation = () => {
-    const deviceQuery = useStoreQuery(Device)
-    const devices = useMemo(
-        () => deviceQuery.sorted("rootAddress"),
-        [deviceQuery],
-    )
+    const { store } = useRealm()
+    const devices = store.objects<Device>(Device.getName())
 
     const validatePassword = useCallback(
         async (userPassword: string[]) => {

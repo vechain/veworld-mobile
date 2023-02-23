@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { memo, useCallback } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
@@ -18,7 +18,7 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-export const DeviceCarousel = ({ accounts }: { accounts: Account[] }) => {
+export const DeviceCarousel = memo(({ accounts }: { accounts: Account[] }) => {
     const progressValue = useSharedValue<number>(0)
     const onScrollEnd = useActiveCard()
 
@@ -82,7 +82,7 @@ export const DeviceCarousel = ({ accounts }: { accounts: Account[] }) => {
             )}
         </>
     )
-}
+})
 
 const baseStyles = StyleSheet.create({
     carouselContainer: {

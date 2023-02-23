@@ -1,17 +1,9 @@
 import { useCallback, useEffect } from "react"
 import { WALLET_STATUS } from "~Model"
-import {
-    ActiveWalletCard,
-    AppLock,
-    Config,
-    Mnemonic,
-    useCache,
-    useStore,
-} from "~Storage"
+import { ActiveWalletCard, AppLock, Config, Mnemonic, useRealm } from "~Storage"
 
 export const useInitRealmClasses = () => {
-    const store = useStore()
-    const cache = useCache()
+    const { store, cache } = useRealm()
 
     const init = useCallback(() => {
         cache.write(() => {
