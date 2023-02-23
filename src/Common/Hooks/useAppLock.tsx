@@ -1,21 +1,12 @@
 import { useCallback, useMemo } from "react"
 import { WALLET_STATUS } from "~Model"
-import { AppLock, Config, useObjectListener, useRealm } from "~Storage"
+import { useConfig, useRealm, useAppLock } from "~Storage"
 
-export const useAppLock = () => {
-    const { store, cache } = useRealm()
+export const useAppLockStatus = () => {
+    const { cache } = useRealm()
 
-    const config = useObjectListener(
-        Config.getName(),
-        Config.PrimaryKey(),
-        store,
-    ) as Config
-
-    const appLock = useObjectListener(
-        AppLock.getName(),
-        AppLock.PrimaryKey(),
-        cache,
-    ) as AppLock
+    const config = useConfig()
+    const appLock = useAppLock()
 
     const appLockStatus = useMemo(() => {
         if (!config?.isWalletCreated || !config?.isAppLockActive) {

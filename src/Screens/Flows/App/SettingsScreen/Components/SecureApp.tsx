@@ -2,16 +2,12 @@ import React, { useCallback, useMemo } from "react"
 import { Switch } from "react-native"
 import { BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
-import { AppLock, Config, useRealm, useObjectListener } from "~Storage"
+import { AppLock, useRealm, useConfig } from "~Storage"
 
 export const SecureApp = () => {
     const { store, cache } = useRealm()
 
-    const config = useObjectListener(
-        Config.getName(),
-        Config.PrimaryKey(),
-        store,
-    ) as Config
+    const config = useConfig()
 
     const isEnabled = useMemo(() => config?.isAppLockActive, [config])
 

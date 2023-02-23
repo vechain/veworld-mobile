@@ -2,13 +2,12 @@ import { useState } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
 import {
     Account,
-    Biometrics,
-    Config,
     Device,
     Mnemonic,
     XPub,
-    useObjectListener,
     useRealm,
+    useConfig,
+    useBiometrics,
 } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
@@ -23,23 +22,14 @@ export const useCreateWalletWithBiometrics = () => {
 
     const [isComplete, setIsComplete] = useState(false)
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.PrimaryKey(),
-    )
-
+    const config = useConfig()
+    const biometrics = useBiometrics()
     const devices = store.objects<Device>(Device.getName())
 
     const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
         Mnemonic.getName(),
         Mnemonic.PrimaryKey(),
     )
-
-    const biometrics = useObjectListener(
-        Biometrics.getName(),
-        Biometrics.PrimaryKey(),
-        cache,
-    ) as Biometrics
 
     //* [START] - Create Wallet
     const onCreateWallet = async () => {

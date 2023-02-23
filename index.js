@@ -10,7 +10,12 @@ import { useColorScheme, useTheme } from "~Common"
 import { Biometrics, Translation as TranslationProvider } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
-import { RealmContextProvider } from "~Storage"
+import {
+    AppLockContextProvider,
+    BiometricsContextProvider,
+    ConfigContextProvider,
+    RealmContextProvider,
+} from "~Storage"
 import {
     Inter_Bold,
     Inter_Light,
@@ -59,14 +64,20 @@ const Main = () => {
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RealmContextProvider>
-                <NavigationContainer theme={colorScheme}>
-                    <SafeAreaProvider>
-                        <TranslationProvider>
-                            <Biometrics />
-                            {fontsLoaded && <EntryPoint />}
-                        </TranslationProvider>
-                    </SafeAreaProvider>
-                </NavigationContainer>
+                <BiometricsContextProvider>
+                    <ConfigContextProvider>
+                        <AppLockContextProvider>
+                            <NavigationContainer theme={colorScheme}>
+                                <SafeAreaProvider>
+                                    <TranslationProvider>
+                                        <Biometrics />
+                                        {fontsLoaded && <EntryPoint />}
+                                    </TranslationProvider>
+                                </SafeAreaProvider>
+                            </NavigationContainer>
+                        </AppLockContextProvider>
+                    </ConfigContextProvider>
+                </BiometricsContextProvider>
             </RealmContextProvider>
         </GestureHandlerRootView>
     )

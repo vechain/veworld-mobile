@@ -8,7 +8,7 @@ import {
     Account,
     ActiveWalletCard,
     AppLock,
-} from "./Model"
+} from "../Model"
 import KeychainService from "~Services/KeychainService"
 import { WALLET_STATUS } from "~Model"
 import crypto from "react-native-quick-crypto"
@@ -107,6 +107,7 @@ const initRealmClasses = (cache: Realm, store: Realm) => {
         cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
         cache.create(ActiveWalletCard.getName(), {})
         cache.create(Mnemonic.getName(), {})
+        cache.create(Biometrics.getName(), {})
     })
 
     let config = store.objectForPrimaryKey<Config>(

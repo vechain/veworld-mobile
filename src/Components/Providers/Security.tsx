@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react"
 import { BiometricsUtils, useAppState } from "~Common"
 import { AppStateType, TSecurityLevel } from "~Model"
-import { Biometrics, Config, useObjectListener, useRealm } from "~Storage"
+import { useBiometrics, useConfig, useRealm } from "~Storage"
 
 const { isSecurityDowngrade, isSecurityUpgrade } = BiometricsUtils
 
@@ -9,17 +9,9 @@ export const Security = () => {
     const { store, cache } = useRealm()
     const [previousState, currentState] = useAppState()
 
-    const config = useObjectListener(
-        Config.getName(),
-        Config.PrimaryKey(),
-        store,
-    ) as Config
-
-    const biometrics = useObjectListener(
-        Biometrics.getName(),
-        Biometrics.PrimaryKey(),
-        cache,
-    ) as Biometrics
+    const config = useConfig()
+    const biometrics = useBiometrics()
+    console.log({ config }, { biometrics })
 
     const checkSecurityDowngrade = useCallback(async () => {
         const oldSecurityLevel = config?.lastSecurityLevel
@@ -33,6 +25,11 @@ export const Security = () => {
                         config.lastSecurityLevel = level
                     })
                 } else if (isSecurityUpgrade(oldSecurityLevel!, level)) {
+                    store.write(() => {
+                        config.isSecurityDowngrade = false
+                        config.lastSecurityLevel = level
+                    })
+                } else {
                     store.write(() => {
                         config.isSecurityDowngrade = false
                         config.lastSecurityLevel = level

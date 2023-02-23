@@ -1,21 +1,10 @@
 import { useMemo } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
-import { Biometrics, Config, useObjectListener, useRealm } from "~Storage"
+import { useBiometrics, useConfig } from "~Storage"
 
 export const useWalletSecurity = () => {
-    const { store, cache } = useRealm()
-
-    const config = useObjectListener(
-        Config.getName(),
-        Config.PrimaryKey(),
-        store,
-    ) as Config
-
-    const biometrics = useObjectListener(
-        Biometrics.getName(),
-        Biometrics.PrimaryKey(),
-        cache,
-    ) as Biometrics
+    const config = useConfig()
+    const biometrics = useBiometrics()
 
     const isBiometricsEnabled = useMemo(
         () => biometrics?.accessControl,

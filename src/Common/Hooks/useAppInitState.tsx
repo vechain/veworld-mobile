@@ -1,13 +1,8 @@
 import { useMemo } from "react"
-import { Config, useObjectListener, useRealm } from "~Storage"
+import { useConfig } from "~Storage/Realm/Context/ConfigContext"
 
 export const useAppInitState = () => {
-    const { store } = useRealm()
-    const config = useObjectListener(
-        Config.getName(),
-        Config.PrimaryKey(),
-        store,
-    ) as Config
+    const config = useConfig()
 
     const appStatus = useMemo(() => {
         if (!config?.isWalletCreated) {

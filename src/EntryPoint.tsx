@@ -9,7 +9,7 @@ import {
     AlertUtils,
     BiometricsUtils,
     LockScreenUtils,
-    useAppLock,
+    useAppLockStatus,
     useWalletSecurity,
 } from "~Common"
 import { WALLET_STATUS } from "~Model"
@@ -17,7 +17,7 @@ import { WALLET_STATUS } from "~Model"
 export const EntryPoint = () => {
     const { store, cache } = useRealm()
 
-    const { appLockStatus, unlockApp } = useAppLock()
+    const { appLockStatus, unlockApp } = useAppLockStatus()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
     useEffect(() => {
