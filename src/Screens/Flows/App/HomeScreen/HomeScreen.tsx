@@ -36,7 +36,7 @@ export const HomeScreen = () => {
     const [changeContent, setChangeContent] = useState(false)
     const scrollValue = useSharedValue<number>(-59)
 
-    const handleScrollPOsition = useCallback(
+    const handleScrollPosition = useCallback(
         (event: ScrollEvent) => {
             //TODO: iphone 14 pro -59 / iphone 11 -48
             // inconsistemcy in values creates probelms to animation
@@ -70,7 +70,7 @@ export const HomeScreen = () => {
 
     return (
         <>
-            <PlatformScrollView handleScrollPOsition={handleScrollPOsition}>
+            <PlatformScrollView handleScrollPosition={handleScrollPosition}>
                 <BaseView align="center">
                     <Header action={onHeaderButtonPress} />
                     <BaseSpacer height={20} />
