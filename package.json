@@ -50,6 +50,7 @@
         "react-native": "0.70.6",
         "react-native-bootsplash": "^4.4.2",
         "react-native-bouncy-checkbox": "^3.0.6",
+        "react-native-drop-shadow": "^0.0.6",
         "react-native-flipper": "^0.177.0",
         "react-native-gesture-handler": "^2.9.0",
         "react-native-pager-view": "^6.1.2",

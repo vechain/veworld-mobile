@@ -32,7 +32,7 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 ref={ref}
                 enablePanDownToClose={true}
                 index={0}
-                backgroundStyle={[styles.backgroundStyle, styles.shadowProp]}
+                backgroundStyle={[styles.backgroundStyle]}
                 backdropComponent={renderBackdrop}
                 {...props}>
                 <BaseView w={100} p={24} align="center">
@@ -48,12 +48,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#FAFAFA",
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
-    },
-    shadowProp: {
-        shadowColor: "#171717",
-        shadowOffset: { width: -2, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
     },
 })
 

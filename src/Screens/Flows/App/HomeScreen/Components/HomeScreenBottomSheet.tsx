@@ -3,7 +3,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { Device } from "~Model"
 import { useCreateAccount } from "~Common"
-import { BaseText, BaseTouchableBox } from "~Components"
+import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
 
 type Props = {
     activeDevice: Device
@@ -33,6 +33,7 @@ const HomeScreenBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 <BaseTouchableBox action={onCreateAccount}>
                     <BaseText>Add Account</BaseText>
                 </BaseTouchableBox>
+                <BaseSpacer height={16} />
                 <BaseTouchableBox action={onCreateAccount}>
                     <BaseText>Add Wallet</BaseText>
                 </BaseTouchableBox>
