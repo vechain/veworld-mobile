@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
-import { Device } from "~Model"
 import { useCreateAccount } from "~Common"
 import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import { Device, useListListener, useRealm } from "~Storage"
 
 type Props = {
     activeDevice: Device
@@ -13,8 +15,15 @@ type Props = {
 const HomeScreenBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ activeDevice, onClose }, ref) => {
         const createAccountFor = useCreateAccount()
+        const nav = useNavigation()
+        const { store } = useRealm()
+        const devices = useListListener(Device.getName(), store) as Device[]
 
         const snapPoints = useMemo(() => ["50%"], [])
+
+        const navigateToCreateWallet = useCallback(() => {
+            nav.navigate(Routes.CREATE_WALLET_FLOW)
+        }, [nav])
 
         const onCreateAccount = useCallback(() => {
             createAccountFor(activeDevice)
@@ -34,8 +43,8 @@ const HomeScreenBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     <BaseText>Add Account</BaseText>
                 </BaseTouchableBox>
                 <BaseSpacer height={16} />
-                <BaseTouchableBox action={onCreateAccount}>
-                    <BaseText>Add Wallet</BaseText>
+                <BaseTouchableBox action={navigateToCreateWallet}>
+                    <BaseText>Add Wallet ({devices.length} available)</BaseText>
                 </BaseTouchableBox>
             </BaseBottomSheet>
         )

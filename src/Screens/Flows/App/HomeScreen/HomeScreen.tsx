@@ -13,9 +13,9 @@ import {
     NFTList,
     TabbarHeader,
     PlatformScrollView,
-    DeviceCarousel,
     SafeAreaAndStatusBar,
     Header,
+    AccountsCarousel,
 } from "./Components"
 import { useSharedValue } from "react-native-reanimated"
 import { useBottomSheetModal } from "~Common"
@@ -84,7 +84,7 @@ export const HomeScreen = () => {
                 <BaseView align="center">
                     <Header action={openBottomSheetMenu} />
                     <BaseSpacer height={20} />
-                    <DeviceCarousel
+                    <AccountsCarousel
                         accounts={devices[ACTIVE_WALLET].accounts}
                     />
                 </BaseView>
