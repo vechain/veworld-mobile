@@ -3,7 +3,6 @@ import {
     Device,
     XPub,
     Config,
-    Biometrics,
     Mnemonic,
     Account,
     ActiveWalletCard,
@@ -81,7 +80,7 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
 
 const initCacheRealm = () => {
     const instance = new Realm({
-        schema: [Biometrics, Mnemonic, ActiveWalletCard, AppLock],
+        schema: [Mnemonic, ActiveWalletCard, AppLock],
         path: "inMemory.realm",
         inMemory: true,
         deleteRealmIfMigrationNeeded:

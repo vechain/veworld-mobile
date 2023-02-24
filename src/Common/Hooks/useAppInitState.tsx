@@ -3,6 +3,7 @@ import { Config, useObjectListener, useRealm } from "~Storage"
 
 export const useAppInitState = () => {
     const { store } = useRealm()
+
     const config = useObjectListener(
         Config.getName(),
         Config.getPrimaryKey(),
