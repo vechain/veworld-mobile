@@ -1,13 +1,19 @@
 import React, { useCallback, useEffect } from "react"
-import { BiometricsUtils, useAppState } from "~Common"
+import {
+    BiometricsUtils,
+    useAppLock,
+    useAppState,
+    useBiometrics,
+} from "~Common"
 import { AppStateType, TSecurityLevel } from "~Model"
-import { Biometrics, Config, useObjectListener, useRealm } from "~Storage"
+import { Config, useObjectListener, useRealm } from "~Storage"
 
 const { isSecurityDowngrade, isSecurityUpgrade } = BiometricsUtils
 
 export const Security = () => {
     const { store, cache } = useRealm()
     const [previousState, currentState] = useAppState()
+    const { appLockStatus } = useAppLock()
 
     const config = useObjectListener(
         Config.getName(),
@@ -15,11 +21,7 @@ export const Security = () => {
         store,
     ) as Config
 
-    const biometrics = useObjectListener(
-        Biometrics.getName(),
-        Biometrics.getPrimaryKey(),
-        cache,
-    ) as Biometrics
+    const biometrics = useBiometrics()
 
     const checkSecurityDowngrade = useCallback(async () => {
         const oldSecurityLevel = config?.lastSecurityLevel
@@ -27,12 +29,16 @@ export const Security = () => {
 
         if (config) {
             if (oldSecurityLevel !== "NONE" && level) {
-                if (isSecurityDowngrade(oldSecurityLevel!, level)) {
+                if (
+                    isSecurityDowngrade(oldSecurityLevel, level, appLockStatus!)
+                ) {
                     store.write(() => {
                         config.isSecurityDowngrade = true
                         config.lastSecurityLevel = level
                     })
-                } else if (isSecurityUpgrade(oldSecurityLevel!, level)) {
+                } else if (
+                    isSecurityUpgrade(oldSecurityLevel, level, appLockStatus!)
+                ) {
                     store.write(() => {
                         config.isSecurityDowngrade = false
                         config.lastSecurityLevel = level
@@ -45,7 +51,7 @@ export const Security = () => {
                     })
             }
         }
-    }, [biometrics, config, store])
+    }, [appLockStatus, biometrics?.currentSecurityLevel, config, store])
 
     const init = useCallback(async () => {
         checkSecurityDowngrade()

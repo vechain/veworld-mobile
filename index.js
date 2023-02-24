@@ -7,7 +7,7 @@ import { name as appName } from "./app.json"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useColorScheme, useTheme } from "~Common"
-import { Biometrics, Translation as TranslationProvider } from "~Components"
+import { Translation as TranslationProvider } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import { RealmContextProvider } from "~Storage"
@@ -62,7 +62,6 @@ const Main = () => {
                 <NavigationContainer theme={colorScheme}>
                     <SafeAreaProvider>
                         <TranslationProvider>
-                            <Biometrics />
                             {fontsLoaded && <EntryPoint />}
                         </TranslationProvider>
                     </SafeAreaProvider>
