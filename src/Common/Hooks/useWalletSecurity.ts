@@ -12,6 +12,16 @@ export const useWalletSecurity = () => {
         store,
     ) as Config
 
+    const userSelectedSecurity = useMemo(
+        () => config?.userSelectedSecurity,
+        [config?.userSelectedSecurity],
+    )
+
+    const isSecurityDowngrade = useMemo(
+        () => config?.isSecurityDowngrade,
+        [config],
+    )
+
     const biometrics = useBiometrics()
 
     const isBiometricsEnabled = useMemo(
@@ -22,36 +32,31 @@ export const useWalletSecurity = () => {
     const walletSecurity = useMemo(() => {
         if (
             isBiometricsEnabled &&
-            config?.userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC
+            userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC
         ) {
             return WalletSecurity.BIO_UNLOCK
         }
 
-        if (
-            config?.userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD
-        ) {
+        if (userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD) {
             return WalletSecurity.PASS_UNLOCK
         }
 
         return WalletSecurity.NONE
-    }, [config, isBiometricsEnabled])
+    }, [isBiometricsEnabled, userSelectedSecurity])
 
     const isWalletSecurityBiometrics = useMemo(
         () => walletSecurity === WalletSecurity.BIO_UNLOCK,
         [walletSecurity],
     )
+
     const isWalletSecurityPassword = useMemo(
         () => walletSecurity === WalletSecurity.PASS_UNLOCK,
         [walletSecurity],
     )
+
     const isWalletSecurityNone = useMemo(
         () => walletSecurity === WalletSecurity.NONE,
         [walletSecurity],
-    )
-
-    const isSecurityDowngrade = useMemo(
-        () => config?.isSecurityDowngrade,
-        [config],
     )
 
     return {

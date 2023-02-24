@@ -20,7 +20,7 @@ export const EntryPoint = () => {
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
-    // TODO: Going form SecurityDowngrade to normal this is called twice and enters twice in "isBiometricLockFlow" causing the biometric prompt to be called twice
+    // TODO: #114
     useEffect(() => {
         const init = async () => {
             if (
@@ -54,7 +54,7 @@ export const EntryPoint = () => {
                 <RealmPlugin realms={[store, cache]} />
             )}
 
-            <Security />
+            <Security appLockStatus={appLockStatus} />
 
             {isSecurityDowngrade ? (
                 <SecurityDowngradeScreen />
