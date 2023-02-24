@@ -47,9 +47,7 @@ const HomeScreenBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     align="center">
                     <BaseText>Devices</BaseText>
                     <BaseTouchableBox action={navigateToCreateWallet}>
-                        <BaseText>
-                            Add Wallet ({devices.length} available)
-                        </BaseText>
+                        <BaseText>Add Wallet</BaseText>
                     </BaseTouchableBox>
                 </BaseView>
                 <BaseSpacer height={16} />
