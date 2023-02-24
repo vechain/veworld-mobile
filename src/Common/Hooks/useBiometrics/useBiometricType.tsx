@@ -11,7 +11,7 @@ export const useBiometricType = () => {
 
     const biometrics = useObjectListener(
         Biometrics.getName(),
-        Biometrics.PrimaryKey(),
+        Biometrics.getPrimaryKey(),
         cache,
     ) as Biometrics
 

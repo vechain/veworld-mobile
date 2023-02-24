@@ -34,7 +34,7 @@ export const SeedPhraseScreen = () => {
         cache.write(() => {
             let _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
                 Mnemonic.getName(),
-                Mnemonic.PrimaryKey(),
+                Mnemonic.getPrimaryKey(),
             )
 
             if (_mnemonic) {

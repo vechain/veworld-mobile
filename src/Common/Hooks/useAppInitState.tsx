@@ -5,7 +5,7 @@ export const useAppInitState = () => {
     const { store } = useRealm()
     const config = useObjectListener(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
         store,
     ) as Config
 

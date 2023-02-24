@@ -16,7 +16,7 @@ export class Device extends Object {
         return Device.schema.name
     }
 
-    static PrimaryKey(): string {
+    static getPrimaryKey(): string {
         return Device.schema.primaryKey
     }
 

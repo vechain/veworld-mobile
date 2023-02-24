@@ -14,7 +14,7 @@ export const useInitRealmClasses = () => {
 
         let config = store.objectForPrimaryKey<Config>(
             Config.getName(),
-            Config.PrimaryKey(),
+            Config.getPrimaryKey(),
         )
 
         if (!config) {

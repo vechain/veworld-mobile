@@ -6,7 +6,7 @@ export const useActiveCard = () => {
 
     let card = cache.objectForPrimaryKey<ActiveWalletCard>(
         ActiveWalletCard.getName(),
-        ActiveWalletCard.PrimaryKey(),
+        ActiveWalletCard.getPrimaryKey(),
     )
 
     const onScrollEnd = useCallback(

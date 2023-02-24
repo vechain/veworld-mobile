@@ -8,7 +8,7 @@ export class ActiveWalletCard extends Object {
         return ActiveWalletCard.schema.name
     }
 
-    static PrimaryKey(): string {
+    static getPrimaryKey(): string {
         return ActiveWalletCard.schema.name
     }
 

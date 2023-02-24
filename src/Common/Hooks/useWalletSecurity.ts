@@ -7,13 +7,13 @@ export const useWalletSecurity = () => {
 
     const config = useObjectListener(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
         store,
     ) as Config
 
     const biometrics = useObjectListener(
         Biometrics.getName(),
-        Biometrics.PrimaryKey(),
+        Biometrics.getPrimaryKey(),
         cache,
     ) as Biometrics
 

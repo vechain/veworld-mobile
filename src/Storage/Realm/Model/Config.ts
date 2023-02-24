@@ -12,7 +12,7 @@ export class Config extends Object {
         return Config.schema.name
     }
 
-    static PrimaryKey(): string {
+    static getPrimaryKey(): string {
         return Config.schema.name
     }
 

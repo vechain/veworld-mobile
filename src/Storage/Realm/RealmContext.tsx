@@ -111,7 +111,7 @@ const initRealmClasses = (cache: Realm, store: Realm) => {
 
     let config = store.objectForPrimaryKey<Config>(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
     )
 
     if (!config) {

@@ -8,7 +8,7 @@ export class Mnemonic extends Object {
         return Mnemonic.schema.name
     }
 
-    static PrimaryKey(): string {
+    static getPrimaryKey(): string {
         return Mnemonic.schema.name
     }
 

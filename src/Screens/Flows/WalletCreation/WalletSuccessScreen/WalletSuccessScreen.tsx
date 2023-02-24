@@ -54,7 +54,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
     )
 
     const onButtonPress = useCallback(async () => {

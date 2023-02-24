@@ -25,19 +25,19 @@ export const useCreateWalletWithBiometrics = () => {
 
     const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
     )
 
     const devices = store.objects<Device>(Device.getName())
 
     const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
         Mnemonic.getName(),
-        Mnemonic.PrimaryKey(),
+        Mnemonic.getPrimaryKey(),
     )
 
     const biometrics = useObjectListener(
         Biometrics.getName(),
-        Biometrics.PrimaryKey(),
+        Biometrics.getPrimaryKey(),
         cache,
     ) as Biometrics
 

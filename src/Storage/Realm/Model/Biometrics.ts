@@ -12,7 +12,7 @@ export class Biometrics extends Object {
         return Biometrics.schema.name
     }
 
-    static PrimaryKey(): string {
+    static getPrimaryKey(): string {
         return Biometrics.schema.name
     }
 

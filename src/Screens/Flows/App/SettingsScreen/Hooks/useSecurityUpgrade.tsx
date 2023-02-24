@@ -18,12 +18,12 @@ export const useSecurityUpgrade = () => {
 
     const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
     )
 
     const biometrics = cache.objectForPrimaryKey<Biometrics>(
         Biometrics.getName(),
-        Biometrics.PrimaryKey(),
+        Biometrics.getPrimaryKey(),
     )
 
     const runSecurityUpgrade = useCallback(

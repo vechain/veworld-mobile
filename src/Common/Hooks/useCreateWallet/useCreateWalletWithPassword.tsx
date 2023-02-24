@@ -16,14 +16,14 @@ export const useCreateWalletWithPassword = () => {
 
     const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
     )
 
     const devices = store.objects<Device>(Device.getName())
 
     const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
         Mnemonic.getName(),
-        Mnemonic.PrimaryKey(),
+        Mnemonic.getPrimaryKey(),
     )
 
     //* [START] - Create Wallet

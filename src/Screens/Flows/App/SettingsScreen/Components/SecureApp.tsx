@@ -9,7 +9,7 @@ export const SecureApp = () => {
 
     const config = useObjectListener(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
         store,
     ) as Config
 
@@ -20,7 +20,7 @@ export const SecureApp = () => {
             cache.write(() => {
                 let appLock = cache.objectForPrimaryKey<AppLock>(
                     AppLock.getName(),
-                    AppLock.PrimaryKey(),
+                    AppLock.getPrimaryKey(),
                 )
                 if (appLock) {
                     appLock.status = WALLET_STATUS.UNLOCKED

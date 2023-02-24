@@ -52,7 +52,7 @@ export const HomeScreen = () => {
 
     const activeCard = useObjectListener(
         ActiveWalletCard.getName(),
-        ActiveWalletCard.PrimaryKey(),
+        ActiveWalletCard.getPrimaryKey(),
         cache,
     ) as ActiveWalletCard
 

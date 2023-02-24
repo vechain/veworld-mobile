@@ -7,13 +7,13 @@ export const useAppLock = () => {
 
     const config = useObjectListener(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
         store,
     ) as Config
 
     const appLock = useObjectListener(
         AppLock.getName(),
-        AppLock.PrimaryKey(),
+        AppLock.getPrimaryKey(),
         cache,
     ) as AppLock
 

@@ -17,7 +17,7 @@ export const ConfirmSeedPhraseScreen = () => {
 
     const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
-        Config.PrimaryKey(),
+        Config.getPrimaryKey(),
     )
 
     const onConfirmPress = () => {

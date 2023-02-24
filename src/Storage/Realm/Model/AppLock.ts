@@ -8,7 +8,7 @@ export class AppLock extends Object {
         return AppLock.schema.name
     }
 
-    static PrimaryKey(): string {
+    static getPrimaryKey(): string {
         return AppLock.schema.name
     }
 
