@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect } from "react"
-import { BiometricsUtils, useAppLock, useAppState, useBiometry } from "~Common"
+import {
+    BiometricsUtils,
+    useAppLock,
+    useAppState,
+    useBiometrics,
+} from "~Common"
 import { AppStateType, TSecurityLevel } from "~Model"
 import { Config, useObjectListener, useRealm } from "~Storage"
 
@@ -16,7 +21,7 @@ export const Security = () => {
         store,
     ) as Config
 
-    const biometrics = useBiometry()
+    const biometrics = useBiometrics()
 
     const checkSecurityDowngrade = useCallback(async () => {
         const oldSecurityLevel = config?.lastSecurityLevel

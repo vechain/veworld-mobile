@@ -11,7 +11,7 @@ const {
     getBiometricTypeAvailable,
 } = BiometricsUtils
 
-export const useBiometry = () => {
+export const useBiometrics = () => {
     const [previousState, currentState] = useAppState()
     const [biometrics, setBiometrics] = useState<BiometricState | undefined>()
 

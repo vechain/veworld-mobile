@@ -4,7 +4,7 @@ import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
-import { useBiometry } from "../useBiometrics"
+import { useBiometrics } from "../useBiometrics"
 
 /**
  * useCreateWalletWithBiometrics
@@ -27,7 +27,7 @@ export const useCreateWalletWithBiometrics = () => {
         Mnemonic.getPrimaryKey(),
     )
 
-    const biometrics = useBiometry()
+    const biometrics = useBiometrics()
 
     //* [START] - Create Wallet
     const onCreateWallet = async () => {
