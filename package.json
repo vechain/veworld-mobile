@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
+        "@gorhom/bottom-sheet": "^4.4.5",
         "@klarna/react-native-vector-drawable": "^0.4.0",
         "@react-native-community/blur": "^4.3.0",
         "@react-navigation/bottom-tabs": "^6.5.2",
