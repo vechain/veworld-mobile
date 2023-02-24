@@ -11,7 +11,7 @@ export class Account extends Object {
         return Account.schema.name
     }
 
-    static PrimaryKey(): string {
+    static getPrimaryKey(): string {
         return Account.schema.primaryKey
     }
 

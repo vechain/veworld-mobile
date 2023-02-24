@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo } from "react"
+import React, { FC, useCallback, useEffect } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -12,7 +12,7 @@ import VectorImage from "react-native-vector-image"
 import { VeChainVetLogo } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Fonts, SecurityLevelType, WALLET_STATUS } from "~Model"
-import { AppLock, Config, useCache, useStore, useStoreQuery } from "~Storage"
+import { AppLock, Config, useRealm } from "~Storage"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -35,8 +35,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const cache = useCache()
-    const store = useStore()
+    const { store, cache } = useRealm()
 
     const {
         onCreateWallet: createWalletWithBiometrics,
@@ -53,17 +52,16 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onClose: closePasswordPrompt,
     } = useDisclosure()
 
-    // todo: this is a workaround until the new version is installed
-    const result2 = useStoreQuery(Config)
-    const config = useMemo(() => result2.sorted("_id"), [result2])
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.getPrimaryKey(),
+    )
 
     const onButtonPress = useCallback(async () => {
         let params = route.params
 
-        if (config[0]?.isWalletCreated) {
-            if (
-                config[0].userSelectedSecurity === SecurityLevelType.BIOMETRIC
-            ) {
+        if (config?.isWalletCreated) {
+            if (config.userSelectedSecurity === SecurityLevelType.BIOMETRIC) {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
                 if (success) {
@@ -96,7 +94,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     useEffect(() => {
         if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
-            if (config[0]?.isWalletCreated) {
+            if (config?.isWalletCreated) {
                 closePasswordPrompt()
 
                 setTimeout(() => {
@@ -120,7 +118,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     }
                 })
                 store.write(() => {
-                    config[0].isWalletCreated = true
+                    if (config) {
+                        config.isWalletCreated = true
+                    }
                 })
             }
         }

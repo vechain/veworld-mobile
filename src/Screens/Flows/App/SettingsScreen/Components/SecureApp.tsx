@@ -2,31 +2,34 @@ import React, { useCallback, useMemo } from "react"
 import { Switch } from "react-native"
 import { BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
-import { AppLock, Config, useCache, useStore, useStoreQuery } from "~Storage"
+import { AppLock, Config, useRealm, useObjectListener } from "~Storage"
 
 export const SecureApp = () => {
-    const store = useStore()
-    const cache = useCache()
+    const { store, cache } = useRealm()
 
-    // todo: this is a workaround until the new version is installed
-    const result = useStoreQuery(Config)
-    const config = useMemo(() => result.sorted("_id"), [result])
+    const config = useObjectListener(
+        Config.getName(),
+        Config.getPrimaryKey(),
+        store,
+    ) as Config
 
-    const isEnabled = useMemo(() => config[0].isAppLockActive, [config])
+    const isEnabled = useMemo(() => config?.isAppLockActive, [config])
 
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
             cache.write(() => {
                 let appLock = cache.objectForPrimaryKey<AppLock>(
                     AppLock.getName(),
-                    AppLock.PrimaryKey(),
+                    AppLock.getPrimaryKey(),
                 )
                 if (appLock) {
                     appLock.status = WALLET_STATUS.UNLOCKED
                 }
             })
             store.write(() => {
-                config[0].isAppLockActive = newValue
+                if (config) {
+                    config.isAppLockActive = newValue
+                }
             })
         },
         [cache, config, store],

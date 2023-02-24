@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseSpacer, BaseView } from "~Components"
 import {
     ActiveWalletCard,
     Device,
-    useCachedQuery,
-    useStoreQuery,
+    useRealm,
+    useListListener,
+    useObjectListener,
 } from "~Storage"
 import {
     CoinList,
@@ -16,13 +17,9 @@ import {
     SafeAreaAndStatusBar,
     Header,
 } from "./Components"
-import {
-    FadeInRight,
-    SlideInLeft,
-    SlideInRight,
-    useSharedValue,
-} from "react-native-reanimated"
+import { useSharedValue } from "react-native-reanimated"
 import { useCreateAccount } from "~Common"
+import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -30,10 +27,12 @@ type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
+    const { store, cache } = useRealm()
     const createAccountFor = useCreateAccount()
+    const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
+        useMeoizedAnimation()
 
     const [activeScreen, setActiveScreen] = useState(0)
-    const [firstLoad, setFirstLoad] = useState(true)
     const [changeContent, setChangeContent] = useState(false)
     const scrollValue = useSharedValue<number>(-59)
 
@@ -51,21 +50,20 @@ export const HomeScreen = () => {
         [scrollValue],
     )
 
-    // todo: this is a workaround until the new version is installed
-    const result2 = useCachedQuery(ActiveWalletCard)
-    const activeCard = useMemo(() => result2.sorted("_id"), [result2])
+    const activeCard = useObjectListener(
+        ActiveWalletCard.getName(),
+        ActiveWalletCard.getPrimaryKey(),
+        cache,
+    ) as ActiveWalletCard
 
-    // todo: this is a workaround until the new version is installed
-    const result1 = useStoreQuery(Device)
-    const devices = useMemo(() => result1.sorted("rootAddress"), [result1])
-
-    console.log(activeCard)
+    const devices = useListListener(Device.getName(), store) as Device[]
 
     useEffect(() => {
-        setFirstLoad(false)
-    }, [])
+        console.log("activeCard", activeCard)
+        console.log("HOME SCREEN devices", devices)
+    }, [activeCard, devices])
 
-    const onHeaderPress = useCallback(() => {
+    const onHeaderButtonPress = useCallback(() => {
         const _device = devices[ACTIVE_WALLET]
         createAccountFor(_device)
     }, [createAccountFor, devices])
@@ -74,7 +72,7 @@ export const HomeScreen = () => {
         <>
             <PlatformScrollView handleScrollPOsition={handleScrollPOsition}>
                 <BaseView align="center">
-                    <Header action={onHeaderPress} />
+                    <Header action={onHeaderButtonPress} />
                     <BaseSpacer height={20} />
                     <DeviceCarousel
                         accounts={devices[ACTIVE_WALLET].accounts}
@@ -88,17 +86,13 @@ export const HomeScreen = () => {
                 <BaseView orientation="row" grow={1}>
                     {activeScreen === 0 ? (
                         <CoinList
-                            entering={
-                                firstLoad
-                                    ? FadeInRight.delay(220).duration(250)
-                                    : SlideInLeft.delay(50).duration(200)
-                            }
-                            exiting={SlideInRight.delay(50).duration(200)}
+                            entering={coinListEnter}
+                            exiting={coinListExit}
                         />
                     ) : (
                         <NFTList
-                            entering={SlideInRight.delay(50).duration(200)}
-                            exiting={SlideInLeft.delay(50).duration(200)}
+                            entering={NFTListEnter}
+                            exiting={NFTListExit}
                         />
                     )}
                 </BaseView>

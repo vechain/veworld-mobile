@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { memo, useState } from "react"
 import { ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { useTheme } from "~Common"
@@ -7,7 +7,7 @@ import { Fonts } from "~Model"
 
 interface Props extends AnimateProps<ViewProps> {}
 
-export const NFTList = ({ ...animatedViewProps }: Props) => {
+export const NFTList = memo(({ ...animatedViewProps }: Props) => {
     const [data] = useState([...new Array(2).keys()])
     const theme = useTheme()
 
@@ -34,4 +34,4 @@ export const NFTList = ({ ...animatedViewProps }: Props) => {
             ))}
         </Animated.View>
     )
-}
+})

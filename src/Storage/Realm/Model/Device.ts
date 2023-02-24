@@ -16,7 +16,7 @@ export class Device extends Object {
         return Device.schema.name
     }
 
-    static PrimaryKey(): string {
+    static getPrimaryKey(): string {
         return Device.schema.primaryKey
     }
 
@@ -40,13 +40,3 @@ export class Device extends Object {
         },
     }
 }
-
-// interface IDevice {
-//     alias: string
-//     xPub: XPub
-//     rootAddress: string
-//     type: string
-//     index: number
-//     accounts: Account[]
-//     wallet: string
-// }

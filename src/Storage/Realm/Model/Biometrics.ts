@@ -12,8 +12,8 @@ export class Biometrics extends Object {
         return Biometrics.schema.name
     }
 
-    static PrimaryKey(): string {
-        return Biometrics.schema.primaryKey
+    static getPrimaryKey(): string {
+        return Biometrics.schema.name
     }
 
     static schema = {
@@ -21,7 +21,7 @@ export class Biometrics extends Object {
         primaryKey: "_id",
 
         properties: {
-            _id: { type: "string", default: "BIOMETRICS" },
+            _id: { type: "string", default: "Biometrics" },
             currentSecurityLevel: { type: "string", default: "BIOMETRIC" },
             authtypeAvailable: {
                 type: "string",

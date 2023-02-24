@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
 import {
     Account,
@@ -7,10 +7,8 @@ import {
     Device,
     Mnemonic,
     XPub,
-    useCache,
-    useCachedQuery,
-    useStore,
-    useStoreQuery,
+    useObjectListener,
+    useRealm,
 } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
@@ -21,46 +19,35 @@ import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
  * @returns
  */
 export const useCreateWalletWithBiometrics = () => {
-    const store = useStore()
-    const cache = useCache()
+    const { store, cache } = useRealm()
 
     const [isComplete, setIsComplete] = useState(false)
 
-    // const config = useCacheObject(Config, "APP_CONFIG")
-    // todo: this is a workaround until the new version is installed, then use the above
-    const configQuery = useStoreQuery(Config)
-    const config = useMemo(() => configQuery.sorted("_id"), [configQuery])
-
-    // todo - remove sort when new version is installed
-    const deviceQuery = useStoreQuery(Device)
-    const devices = useMemo(
-        () => deviceQuery.sorted("rootAddress"),
-        [deviceQuery],
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.getPrimaryKey(),
     )
 
-    // const mnemonic = useCacheObject(Mnemonic, "WALLET_MNEMONIC")
-    // todo: this is a workaround until the new version is installed, then use the above
-    const mnemonicQuery = useCachedQuery(Mnemonic)
-    const _mnemonic = useMemo(
-        () => mnemonicQuery.sorted("_id"),
-        [mnemonicQuery],
+    const devices = store.objects<Device>(Device.getName())
+
+    const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
+        Mnemonic.getName(),
+        Mnemonic.getPrimaryKey(),
     )
 
-    // const biometrics = useCacheObject(Biometrics, "BIOMETRICS")
-    // todo: this is a workaround until the new version is installed, then use the above
-    const biometricsQuery = useCachedQuery(Biometrics)
-    const biometrics = useMemo(
-        () => biometricsQuery.sorted("_id"),
-        [biometricsQuery],
-    )
+    const biometrics = useObjectListener(
+        Biometrics.getName(),
+        Biometrics.getPrimaryKey(),
+        cache,
+    ) as Biometrics
 
     //* [START] - Create Wallet
     const onCreateWallet = async () => {
-        let mnemonicPhrase = _mnemonic[0]?.mnemonic
-        let accessControl = biometrics[0].accessControl
+        let mnemonicPhrase = _mnemonic?.mnemonic
+        let accessControl = biometrics?.accessControl
 
         try {
-            if (mnemonicPhrase) {
+            if (mnemonicPhrase && accessControl) {
                 const { deviceIndex, aliasIndex } =
                     getDeviceAndAliasIndex(devices)
 
@@ -96,8 +83,10 @@ export const useCreateWalletWithBiometrics = () => {
 
                     _device.accounts.push(account)
 
-                    config[0].userSelectedSecurity =
-                        UserSelectedSecurityLevel.BIOMETRIC
+                    if (config) {
+                        config.userSelectedSecurity =
+                            UserSelectedSecurityLevel.BIOMETRIC
+                    }
                 })
 
                 cache.write(() => cache.delete(_mnemonic))
@@ -112,7 +101,7 @@ export const useCreateWalletWithBiometrics = () => {
 
     return {
         onCreateWallet,
-        accessControl: biometrics[0].accessControl,
+        accessControl: biometrics?.accessControl,
         isComplete,
     }
 }

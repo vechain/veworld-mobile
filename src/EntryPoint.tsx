@@ -1,61 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { SecurityDowngradeScreen, LockScreen } from "~Screens"
-import { useCache, useStore } from "~Storage"
+import { useRealm } from "~Storage"
 import { BaseStatusBar, Security } from "~Components"
 import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
 import { SwitchStack } from "~Navigation"
 import {
     AlertUtils,
-    AppLockStatus,
     BiometricsUtils,
     LockScreenUtils,
     useAppLock,
-    useInitRealmClasses,
     useWalletSecurity,
 } from "~Common"
-import { BiometricsPlaceholder } from "~Screens/BiometricsPlaceholder"
-import { useAppStateTransitions } from "~Common/Hooks/useAppStateTransitions"
+import { WALLET_STATUS } from "~Model"
 
 export const EntryPoint = () => {
-    const store = useStore()
-    const cache = useCache()
+    const { store, cache } = useRealm()
 
-    useInitRealmClasses()
-
-    const { appLockStatus, unlockApp, lockApp } = useAppLock()
+    const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
-
-    const [isBackgroundTransition, setIsBackgroundTransition] = useState(false)
-    const { activeToBackground, backgroundToActive, closedToActive } =
-        useAppStateTransitions()
-
-    /*
-     * Biometrics validation prompt transitions the AppStatus into 'inactive' state
-     * Make sure from the flow point of view, that the background state isn't removed
-     * until we unlock the wallet, and not only when the bio is prompted
-     */
-    const unlockFromBackground = useCallback(() => {
-        unlockApp()
-        setIsBackgroundTransition(false)
-    }, [unlockApp])
-
-    useEffect(() => {
-        if (backgroundToActive) {
-            setIsBackgroundTransition(true)
-        }
-    }, [backgroundToActive])
-
-    useEffect(() => {
-        if (activeToBackground) {
-            lockApp()
-        }
-    }, [activeToBackground, lockApp])
 
     useEffect(() => {
         const init = async () => {
             if (
-                appLockStatus === AppLockStatus.NO_LOCK ||
+                appLockStatus === WALLET_STATUS.NOT_INITIALISED ||
                 isSecurityDowngrade ||
                 LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)
             ) {
@@ -71,24 +39,9 @@ export const EntryPoint = () => {
                 await recursiveFaceId()
             }
         }
-        // Handle splash screen only when opening app from closed state
-        if (closedToActive) init()
-    }, [
-        appLockStatus,
-        walletSecurity,
-        isSecurityDowngrade,
-        isBackgroundTransition,
-        closedToActive,
-    ])
 
-    if (
-        isBackgroundTransition &&
-        appLockStatus !== AppLockStatus.NO_LOCK &&
-        !isSecurityDowngrade &&
-        LockScreenUtils.isBiometricLockFlow(appLockStatus, walletSecurity)
-    ) {
-        return <BiometricsPlaceholder onSuccess={unlockFromBackground} />
-    }
+        init()
+    }, [appLockStatus, walletSecurity, isSecurityDowngrade])
 
     if (LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)) {
         return <LockScreen onSuccess={unlockApp} />

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useMemo } from "react"
+import React from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -9,17 +9,19 @@ import {
 } from "~Components"
 import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
-import { Config, useStoreQuery } from "~Storage"
+import { Config, useRealm } from "~Storage"
 
 export const ConfirmSeedPhraseScreen = () => {
     const nav = useNavigation()
+    const { store } = useRealm()
 
-    // todo: this is a workaround until the new version is installed
-    const result2 = useStoreQuery(Config)
-    const config = useMemo(() => result2.sorted("_id"), [result2])
+    const config = store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.getPrimaryKey(),
+    )
 
     const onConfirmPress = () => {
-        if (config[0]?.isWalletCreated) {
+        if (config?.isWalletCreated) {
             nav.navigate(Routes.WALLET_SUCCESS)
         } else {
             nav.navigate(Routes.APP_SECURITY)
