@@ -7,23 +7,18 @@ import {
 } from "~Common"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
-import { Biometrics, Config, Device, useRealm } from "~Storage"
+import { Config, Device, useRealm } from "~Storage"
 
 export const useSecurityUpgrade = () => {
     const { walletSecurity } = useWalletSecurity()
 
-    const { store, cache } = useRealm()
+    const { store } = useRealm()
 
     const devices = store.objects<Device>(Device.getName())
 
     const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
         Config.getPrimaryKey(),
-    )
-
-    const biometrics = cache.objectForPrimaryKey<Biometrics>(
-        Biometrics.getName(),
-        Biometrics.getPrimaryKey(),
     )
 
     const runSecurityUpgrade = useCallback(
@@ -64,13 +59,10 @@ export const useSecurityUpgrade = () => {
                 config.userSelectedSecurity =
                     UserSelectedSecurityLevel.BIOMETRIC
                 store.commitTransaction()
-                cache.write(() => {
-                    if (biometrics) biometrics.accessControl = true
-                })
                 onSuccessCallback && onSuccessCallback()
             }
         },
-        [store, cache, config, biometrics, devices, walletSecurity],
+        [store, config, devices, walletSecurity],
     )
 
     return runSecurityUpgrade

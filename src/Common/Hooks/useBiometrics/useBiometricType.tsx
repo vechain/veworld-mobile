@@ -1,19 +1,13 @@
 import { useMemo } from "react"
 import { PlatformUtils } from "~Common/Utils"
 import { AuthenticationType, SecurityLevelType } from "~Model"
-import { Biometrics, useObjectListener, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
+import { useBiometrics } from "./useBiometrics"
 
 export const useBiometricType = () => {
     const { LL } = useI18nContext()
 
-    const { cache } = useRealm()
-
-    const biometrics = useObjectListener(
-        Biometrics.getName(),
-        Biometrics.getPrimaryKey(),
-        cache,
-    ) as Biometrics
+    const biometrics = useBiometrics()
 
     const currentSecurityLevel = useMemo(() => {
         if (PlatformUtils.isIOS()) {

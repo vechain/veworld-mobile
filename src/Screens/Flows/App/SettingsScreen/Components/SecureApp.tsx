@@ -17,19 +17,19 @@ export const SecureApp = () => {
 
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
+            let appLock = cache.objectForPrimaryKey<AppLock>(
+                AppLock.getName(),
+                AppLock.getPrimaryKey(),
+            )
+
             cache.write(() => {
-                let appLock = cache.objectForPrimaryKey<AppLock>(
-                    AppLock.getName(),
-                    AppLock.getPrimaryKey(),
-                )
                 if (appLock) {
                     appLock.status = WALLET_STATUS.UNLOCKED
                 }
             })
+
             store.write(() => {
-                if (config) {
-                    config.isAppLockActive = newValue
-                }
+                config.isAppLockActive = newValue
             })
         },
         [cache, config, store],

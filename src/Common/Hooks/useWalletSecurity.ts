@@ -1,9 +1,10 @@
 import { useMemo } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
-import { Biometrics, Config, useObjectListener, useRealm } from "~Storage"
+import { Config, useObjectListener, useRealm } from "~Storage"
+import { useBiometrics } from "./useBiometrics"
 
 export const useWalletSecurity = () => {
-    const { store, cache } = useRealm()
+    const { store } = useRealm()
 
     const config = useObjectListener(
         Config.getName(),
@@ -11,11 +12,17 @@ export const useWalletSecurity = () => {
         store,
     ) as Config
 
-    const biometrics = useObjectListener(
-        Biometrics.getName(),
-        Biometrics.getPrimaryKey(),
-        cache,
-    ) as Biometrics
+    const userSelectedSecurity = useMemo(
+        () => config?.userSelectedSecurity,
+        [config?.userSelectedSecurity],
+    )
+
+    const isSecurityDowngrade = useMemo(
+        () => config?.isSecurityDowngrade,
+        [config],
+    )
+
+    const biometrics = useBiometrics()
 
     const isBiometricsEnabled = useMemo(
         () => biometrics?.accessControl,
@@ -25,36 +32,31 @@ export const useWalletSecurity = () => {
     const walletSecurity = useMemo(() => {
         if (
             isBiometricsEnabled &&
-            config?.userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC
+            userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC
         ) {
             return WalletSecurity.BIO_UNLOCK
         }
 
-        if (
-            config?.userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD
-        ) {
+        if (userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD) {
             return WalletSecurity.PASS_UNLOCK
         }
 
         return WalletSecurity.NONE
-    }, [config, isBiometricsEnabled])
+    }, [isBiometricsEnabled, userSelectedSecurity])
 
     const isWalletSecurityBiometrics = useMemo(
         () => walletSecurity === WalletSecurity.BIO_UNLOCK,
         [walletSecurity],
     )
+
     const isWalletSecurityPassword = useMemo(
         () => walletSecurity === WalletSecurity.PASS_UNLOCK,
         [walletSecurity],
     )
+
     const isWalletSecurityNone = useMemo(
         () => walletSecurity === WalletSecurity.NONE,
         [walletSecurity],
-    )
-
-    const isSecurityDowngrade = useMemo(
-        () => config?.isSecurityDowngrade,
-        [config],
     )
 
     return {

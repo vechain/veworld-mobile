@@ -62,12 +62,16 @@ export const HomeScreen = () => {
         cache,
     ) as ActiveWalletCard
 
+    const activeCardIndex = useMemo(
+        () => activeCard.activeIndex,
+        [activeCard.activeIndex],
+    )
+
     const devices = useListListener(Device.getName(), store) as Device[]
 
     useEffect(() => {
-        console.log("activeCard", activeCard)
-        console.log("HOME SCREEN devices", devices)
-    }, [activeCard, devices])
+        console.log("activeCardIndex", activeCardIndex)
+    }, [activeCardIndex])
 
     const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
 

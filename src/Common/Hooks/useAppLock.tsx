@@ -11,6 +11,9 @@ export const useAppLock = () => {
         store,
     ) as Config
 
+    const isWalletCreated = useMemo(() => config?.isWalletCreated, [config])
+    const isAppLockActive = useMemo(() => config?.isAppLockActive, [config])
+
     const appLock = useObjectListener(
         AppLock.getName(),
         AppLock.getPrimaryKey(),
@@ -18,14 +21,14 @@ export const useAppLock = () => {
     ) as AppLock
 
     const appLockStatus = useMemo(() => {
-        if (!config?.isWalletCreated || !config?.isAppLockActive) {
+        if (!isWalletCreated || !isAppLockActive) {
             return WALLET_STATUS.NOT_INITIALISED
         }
 
-        if (config?.isAppLockActive && appLock?.status === "LOCKED") {
+        if (isAppLockActive && appLock?.status === "LOCKED") {
             return WALLET_STATUS.LOCKED
         }
-    }, [appLock, config])
+    }, [appLock?.status, isAppLockActive, isWalletCreated])
 
     const unlockApp = useCallback(() => {
         if (appLock) {

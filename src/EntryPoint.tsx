@@ -20,6 +20,7 @@ export const EntryPoint = () => {
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
+    // TODO: #114
     useEffect(() => {
         const init = async () => {
             if (
@@ -53,7 +54,7 @@ export const EntryPoint = () => {
                 <RealmPlugin realms={[store, cache]} />
             )}
 
-            <Security />
+            <Security appLockStatus={appLockStatus} />
 
             {isSecurityDowngrade ? (
                 <SecurityDowngradeScreen />
@@ -71,16 +72,14 @@ const recursiveFaceId = async () => {
     let results = await BiometricsUtils.authenticateWithBiometric()
     if (results.success) {
         await RNBootSplash.hide({ fade: true })
-        return
     } else if (results.error) {
         AlertUtils.showCancelledFaceIdAlert(
             async () => {
                 // TODO: SIGN OUT USER
                 console.log("cancel action - SIGN OUT USER")
-                return
             },
             async () => {
-                await recursiveFaceId()
+                return await recursiveFaceId()
             },
         )
     }
