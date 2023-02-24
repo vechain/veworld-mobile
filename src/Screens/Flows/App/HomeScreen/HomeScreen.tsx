@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseSpacer, BaseView } from "~Components"
 import {
@@ -18,8 +18,9 @@ import {
     Header,
 } from "./Components"
 import { useSharedValue } from "react-native-reanimated"
-import { useCreateAccount } from "~Common"
+import { useBottomSheetModal } from "~Common"
 import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
+import HomeScreenBottomSheet from "./Components/HomeScreenBottomSheet"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -28,7 +29,12 @@ const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
     const { store, cache } = useRealm()
-    const createAccountFor = useCreateAccount()
+    const {
+        ref: bottomSheetRef,
+        onOpen: openBottomSheetMenu,
+        onClose: closeBottomSheetMenu,
+    } = useBottomSheetModal()
+
     const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
         useMeoizedAnimation()
 
@@ -63,16 +69,20 @@ export const HomeScreen = () => {
         console.log("HOME SCREEN devices", devices)
     }, [activeCard, devices])
 
-    const onHeaderButtonPress = useCallback(() => {
-        const _device = devices[ACTIVE_WALLET]
-        createAccountFor(_device)
-    }, [createAccountFor, devices])
+    const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
+
+    const getActiveScreen = useCallback(() => {
+        if (activeScreen === 0)
+            return <CoinList entering={coinListEnter} exiting={coinListExit} />
+
+        return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
+    }, [activeScreen, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
 
     return (
-        <>
+        <BaseView>
             <PlatformScrollView handleScrollPosition={handleScrollPosition}>
                 <BaseView align="center">
-                    <Header action={onHeaderButtonPress} />
+                    <Header action={openBottomSheetMenu} />
                     <BaseSpacer height={20} />
                     <DeviceCarousel
                         accounts={devices[ACTIVE_WALLET].accounts}
@@ -84,17 +94,7 @@ export const HomeScreen = () => {
                 <BaseSpacer height={20} />
 
                 <BaseView orientation="row" grow={1}>
-                    {activeScreen === 0 ? (
-                        <CoinList
-                            entering={coinListEnter}
-                            exiting={coinListExit}
-                        />
-                    ) : (
-                        <NFTList
-                            entering={NFTListEnter}
-                            exiting={NFTListExit}
-                        />
-                    )}
+                    {getActiveScreen()}
                 </BaseView>
             </PlatformScrollView>
 
@@ -103,7 +103,12 @@ export const HomeScreen = () => {
                 statusBarContent={changeContent}
                 scrollValue={scrollValue}
             />
-        </>
+            <HomeScreenBottomSheet
+                ref={bottomSheetRef}
+                onClose={closeBottomSheetMenu}
+                activeDevice={activeDevice}
+            />
+        </BaseView>
     )
 }
 

@@ -21,6 +21,7 @@ import {
     Mono_Light,
     Mono_Regular,
 } from "~Assets"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 // immer setup
 enableAllPlugins()
@@ -58,16 +59,18 @@ const Main = () => {
     return (
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <RealmContextProvider>
-                <NavigationContainer theme={colorScheme}>
-                    <SafeAreaProvider>
-                        <TranslationProvider>
-                            <Biometrics />
-                            {fontsLoaded && <EntryPoint />}
-                        </TranslationProvider>
-                    </SafeAreaProvider>
-                </NavigationContainer>
-            </RealmContextProvider>
+            <BottomSheetModalProvider>
+                <RealmContextProvider>
+                    <NavigationContainer theme={colorScheme}>
+                        <SafeAreaProvider>
+                            <TranslationProvider>
+                                <Biometrics />
+                                {fontsLoaded && <EntryPoint />}
+                            </TranslationProvider>
+                        </SafeAreaProvider>
+                    </NavigationContainer>
+                </RealmContextProvider>
+            </BottomSheetModalProvider>
         </GestureHandlerRootView>
     )
 }
