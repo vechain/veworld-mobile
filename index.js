@@ -59,8 +59,8 @@ const Main = () => {
     return (
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <BottomSheetModalProvider>
-                <RealmContextProvider>
+            <RealmContextProvider>
+                <BottomSheetModalProvider>
                     <NavigationContainer theme={colorScheme}>
                         <SafeAreaProvider>
                             <TranslationProvider>
@@ -69,8 +69,8 @@ const Main = () => {
                             </TranslationProvider>
                         </SafeAreaProvider>
                     </NavigationContainer>
-                </RealmContextProvider>
-            </BottomSheetModalProvider>
+                </BottomSheetModalProvider>
+            </RealmContextProvider>
         </GestureHandlerRootView>
     )
 }
