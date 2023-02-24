@@ -3,7 +3,6 @@ import {
     CryptoUtils,
     PasswordUtils,
     WalletSecurity,
-    useBiometrics,
     useWalletSecurity,
 } from "~Common"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
@@ -13,7 +12,7 @@ import { Config, Device, useRealm } from "~Storage"
 export const useSecurityUpgrade = () => {
     const { walletSecurity } = useWalletSecurity()
 
-    const { store, cache } = useRealm()
+    const { store } = useRealm()
 
     const devices = store.objects<Device>(Device.getName())
 
@@ -21,8 +20,6 @@ export const useSecurityUpgrade = () => {
         Config.getName(),
         Config.getPrimaryKey(),
     )
-
-    const biometrics = useBiometrics()
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
@@ -62,13 +59,10 @@ export const useSecurityUpgrade = () => {
                 config.userSelectedSecurity =
                     UserSelectedSecurityLevel.BIOMETRIC
                 store.commitTransaction()
-                cache.write(() => {
-                    if (biometrics) biometrics.accessControl = true
-                })
                 onSuccessCallback && onSuccessCallback()
             }
         },
-        [store, cache, config, biometrics, devices, walletSecurity],
+        [store, config, devices, walletSecurity],
     )
 
     return runSecurityUpgrade
