@@ -1,7 +1,13 @@
-import React from "react"
-import { View, StyleSheet } from "react-native"
-import { BottomSheetModal, BottomSheetProps } from "@gorhom/bottom-sheet"
+import React, { useCallback } from "react"
+import { StyleSheet } from "react-native"
+import {
+    BottomSheetBackdrop,
+    BottomSheetBackdropProps,
+    BottomSheetModal,
+    BottomSheetProps,
+} from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BaseView } from "./BaseView"
 
 type Props = BottomSheetProps & {
     children: React.ReactNode
@@ -9,14 +15,29 @@ type Props = BottomSheetProps & {
 
 const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ children, ...props }, ref) => {
+        const renderBackdrop = useCallback(
+            (props_: BottomSheetBackdropProps) => (
+                <BottomSheetBackdrop
+                    {...props_}
+                    pressBehavior="close"
+                    opacity={0.5}
+                    disappearsOnIndex={-1}
+                />
+            ),
+            [],
+        )
+
         return (
             <BottomSheetModal
                 ref={ref}
                 enablePanDownToClose={true}
                 index={0}
                 backgroundStyle={[styles.backgroundStyle, styles.shadowProp]}
+                backdropComponent={renderBackdrop}
                 {...props}>
-                <View style={styles.contentContainer}>{children}</View>
+                <BaseView w={100} p={24} align="center">
+                    {children}
+                </BaseView>
             </BottomSheetModal>
         )
     },
@@ -33,12 +54,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: -2, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
-    },
-    contentContainer: {
-        flex: 1,
-        width: "100%",
-        padding: 24,
-        alignItems: "center",
     },
 })
 
