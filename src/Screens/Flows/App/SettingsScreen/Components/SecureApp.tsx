@@ -29,9 +29,7 @@ export const SecureApp = () => {
             })
 
             store.write(() => {
-                if (config) {
-                    config.isAppLockActive = newValue
-                }
+                config.isAppLockActive = newValue
             })
         },
         [cache, config, store],

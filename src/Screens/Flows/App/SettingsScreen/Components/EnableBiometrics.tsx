@@ -7,7 +7,6 @@ import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
 export const EnableBiometrics = () => {
     const { isBiometricsEnabled, isWalletSecurityBiometrics } =
         useWalletSecurity()
-
     const runSecurityUpgrade = useSecurityUpgrade()
 
     const {

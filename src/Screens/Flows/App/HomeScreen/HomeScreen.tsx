@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseSpacer, BaseView } from "~Components"
 import {
@@ -56,12 +56,16 @@ export const HomeScreen = () => {
         cache,
     ) as ActiveWalletCard
 
+    const activeCardIndex = useMemo(
+        () => activeCard.activeIndex,
+        [activeCard.activeIndex],
+    )
+
     const devices = useListListener(Device.getName(), store) as Device[]
 
     useEffect(() => {
-        console.log("activeCard", activeCard)
-        console.log("HOME SCREEN devices", devices)
-    }, [activeCard, devices])
+        console.log("activeCardIndex", activeCardIndex)
+    }, [activeCardIndex])
 
     const onHeaderButtonPress = useCallback(() => {
         const _device = devices[ACTIVE_WALLET]
