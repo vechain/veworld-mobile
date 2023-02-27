@@ -2,10 +2,10 @@ import React, { memo, useCallback } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
-import { PaginationItem } from "./PaginationItem"
-import { Card } from "./Card"
+import { PaginationItem } from "../PaginationItem"
+import { AccountCard } from "./AccountCard"
 import { BaseSpacer, BaseView } from "~Components"
-import { useActiveCard } from "../Hooks/useActiveCard"
+import { useActiveCard } from "../../Hooks/useActiveCard"
 import { Account } from "~Storage"
 
 const width = Dimensions.get("window").width - 40
@@ -18,7 +18,9 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-export const DeviceCarousel = memo(({ accounts }: { accounts: Account[] }) => {
+type Props = { accounts: Account[] }
+
+export const AccountsCarousel: React.FC<Props> = memo(({ accounts }) => {
     const progressValue = useSharedValue<number>(0)
     const onScrollEnd = useActiveCard()
 
@@ -32,7 +34,7 @@ export const DeviceCarousel = memo(({ accounts }: { accounts: Account[] }) => {
     const renderItem = useCallback(
         ({ index }: { index: number }) => {
             return (
-                <Card
+                <AccountCard
                     account={accounts[index]}
                     key={index}
                     entering={FadeInRight.delay(

@@ -7,19 +7,19 @@ type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
 type Props = {
     children: React.ReactNode
-    handleScrollPOsition: (event: ScrollEvent) => void
+    handleScrollPosition: (event: ScrollEvent) => void
 }
 
 export const PlatformScrollView = ({
     children,
-    handleScrollPOsition,
+    handleScrollPosition,
 }: Props) => {
     if (isIOS()) {
         return (
             <BaseScrollView
                 grow={1}
                 scrollEventThrottle={16}
-                onScroll={handleScrollPOsition}>
+                onScroll={handleScrollPosition}>
                 {children}
             </BaseScrollView>
         )
