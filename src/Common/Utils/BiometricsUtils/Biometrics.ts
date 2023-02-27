@@ -6,6 +6,7 @@ import {
     WALLET_STATUS,
 } from "~Model"
 import * as i18n from "~i18n"
+import PlatformUtils from "../PlatformUtils"
 
 export const getDeviceEnrolledLevel = async () => {
     let level = await LocalAuthentication.getEnrolledLevelAsync()
@@ -30,14 +31,23 @@ export const getBiometricTypeAvailable = async () => {
 
 export const authenticateWithBiometric = async () => {
     const locale = i18n.detectLocale()
-    const promptMessage = i18n.i18n()[locale].COMMON_BTN_cancel()
-    const cancelLabel = i18n.i18n()[locale].BIOMETRICS_PROMPT()
+    const promptMessage = i18n.i18n()[locale].BIOMETRICS_PROMPT()
+    const cancelLabel = i18n.i18n()[locale].COMMON_BTN_cancel()
 
-    let isAuth = await LocalAuthentication.authenticateAsync({
-        disableDeviceFallback: true,
-        promptMessage,
-        cancelLabel,
-    })
+    let isAuth: LocalAuthentication.LocalAuthenticationResult
+    // if statement used this way because passing undefiend on iOS is breaking the authentication prompt
+    if (PlatformUtils.isAndroid()) {
+        isAuth = await LocalAuthentication.authenticateAsync({
+            disableDeviceFallback: true,
+            promptMessage,
+            cancelLabel,
+        })
+    } else {
+        isAuth = await LocalAuthentication.authenticateAsync({
+            disableDeviceFallback: true,
+            cancelLabel,
+        })
+    }
 
     return isAuth
 }
