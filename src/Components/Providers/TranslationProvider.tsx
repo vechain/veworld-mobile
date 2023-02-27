@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Locales, TypesafeI18n, isLocale, loadLocaleAsync } from "~i18n"
+import { Locales, TypesafeI18n, isLocale, loadLocale_sync } from "~i18n"
 import * as Localization from "expo-localization"
 import "~Common/polyfill"
 import { AppStateType } from "~Model"
@@ -9,7 +9,7 @@ type Props = {
     children: React.ReactNode
 }
 
-export const Translation = ({ children }: Props) => {
+export const TranslationProvider = ({ children }: Props) => {
     const [, currentState] = useAppState()
     const [localeLoaded, setLocaleLoaded] = useState<Locales | null>(null)
 
@@ -20,7 +20,7 @@ export const Translation = ({ children }: Props) => {
                     .map(loc => loc.languageCode)
                     .find(isLocale) ?? "en"
 
-            await loadLocaleAsync(DEFAULT_LOCALE)
+            loadLocale_sync(DEFAULT_LOCALE)
             setLocaleLoaded(DEFAULT_LOCALE)
         }
 
