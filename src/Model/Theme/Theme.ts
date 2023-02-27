@@ -17,23 +17,30 @@ export type TBaseFontStyle = {
     fontSize: number
 }
 
+export type Colors = {
+    primary: string
+    primaryDisabled: string
+    secondary: string
+    tertiary: string
+    disabled: string
+    danger: string
+    success: string
+    text: string
+    background: string
+    backgroundReversed: string
+    card: string
+    border: string
+    notification: string
+}
+
+export type Shadows = {
+    card: Object
+    bottom: Object
+}
+
 export type ThemeVariant = {
     isDark: boolean
-    colors: {
-        primary: string
-        primaryDisabled: string
-        secondary: string
-        tertiary: string
-        disabled: string
-        danger: string
-        success: string
-        text: string
-        background: string
-        backgroundReversed: string
-        card: string
-        border: string
-        notification: string
-    }
+    colors: Colors
 }
 
 export type Constants = {
@@ -61,6 +68,19 @@ export type Typography = {
 export type ThemeType = {
     constants: Constants
     typography: Typography
-    dark: ThemeVariant
-    light: ThemeVariant
+    colors: {
+        dark: ThemeVariant
+        light: ThemeVariant
+    }
+    shadows: {
+        dark: Shadows
+        light: Shadows
+    }
+}
+
+export type useThemeType = {
+    constants: Constants
+    typography: Typography
+    colors: Colors
+    shadows: Shadows
 }

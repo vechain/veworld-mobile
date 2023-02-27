@@ -1,5 +1,6 @@
 import { ThemeType } from "~Model"
 import { colors } from "./Colors"
+import { shadows } from "./Shadows"
 
 export const Theme: ThemeType = {
     constants: {
@@ -62,7 +63,12 @@ export const Theme: ThemeType = {
             fontFamily: "Mono-Light",
         },
     },
-
-    light: colors.light,
-    dark: colors.dark,
+    shadows: {
+        light: shadows.light,
+        dark: shadows.dark,
+    },
+    colors: {
+        light: colors.light,
+        dark: colors.dark,
+    },
 }

@@ -8,7 +8,8 @@ import {
 } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
-import { useThemedStyles, useThemeType } from "~Common"
+import { useThemedStyles } from "~Common"
+import { useThemeType } from "~Model"
 
 type Props = BottomSheetProps & {
     children: React.ReactNode

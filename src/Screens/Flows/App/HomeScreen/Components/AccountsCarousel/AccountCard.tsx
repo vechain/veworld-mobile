@@ -2,8 +2,9 @@ import React, { memo } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
-import { useTheme, useThemedStyles, useThemeType } from "~Common"
+import { useTheme, useThemedStyles } from "~Common"
 import { BaseText, BaseView } from "~Components"
+import { useThemeType } from "~Model"
 import { Account } from "~Storage"
 
 interface Props extends AnimateProps<ViewProps> {
