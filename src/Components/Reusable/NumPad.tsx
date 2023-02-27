@@ -30,8 +30,11 @@ export const NumPad = ({ onDigitPress }: Props) => {
                     {digit !== "blank" ? (
                         <DropShadow style={theme.shadows.card}>
                             <Pressable
-                                onPress={onPress(digit)}
-                                style={themedStyles.pressable}>
+                                style={({ pressed }) => [
+                                    themedStyles.pressable,
+                                    { opacity: pressed ? 0.5 : 1.0 },
+                                ]}
+                                onPress={onPress(digit)}>
                                 <BaseText
                                     font={Fonts.large_title_accent}
                                     alignContainer="center">
