@@ -20,15 +20,17 @@ export const useAppLock = () => {
         cache,
     ) as AppLock
 
+    const appLoclStatus = useMemo(() => appLock?.status, [appLock?.status])
+
     const appLockStatus = useMemo(() => {
         if (!isWalletCreated || !isAppLockActive) {
             return WALLET_STATUS.NOT_INITIALISED
         }
 
-        if (isAppLockActive && appLock?.status === "LOCKED") {
+        if (isAppLockActive && appLoclStatus === "LOCKED") {
             return WALLET_STATUS.LOCKED
         }
-    }, [appLock?.status, isAppLockActive, isWalletCreated])
+    }, [appLoclStatus, isAppLockActive, isWalletCreated])
 
     const unlockApp = useCallback(() => {
         if (appLock) {
