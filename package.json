@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "purge": "rm -rf node_modules && rm -rf yarn.lock && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
-        "postinstall": "npx pod-install && yarn husky install",
+        "postinstall": "npx pod-install && yarn husky install && patch-package",
         "doctor": "react-native doctor",
         "android": "react-native run-android",
         "ios": "react-native run-ios --simulator 'iPhone 14 Pro'",
@@ -48,6 +48,7 @@
         "immer": "^9.0.18",
         "jsdoc": "^4.0.0",
         "lodash.isequal": "^4.5.0",
+        "patch-package": "^6.5.1",
         "react": "18.1.0",
         "react-native": "0.70.6",
         "react-native-bootsplash": "^4.4.2",

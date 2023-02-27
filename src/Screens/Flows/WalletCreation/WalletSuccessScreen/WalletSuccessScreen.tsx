@@ -52,13 +52,13 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onClose: closePasswordPrompt,
     } = useDisclosure()
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
-
     const onButtonPress = useCallback(async () => {
         let params = route.params
+
+        const config = store.objectForPrimaryKey<Config>(
+            Config.getName(),
+            Config.getPrimaryKey(),
+        )
 
         if (config?.isWalletCreated) {
             if (config.userSelectedSecurity === SecurityLevelType.BIOMETRIC) {
@@ -81,7 +81,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         }
     }, [
         route.params,
-        config,
+        store,
         createWalletWithBiometrics,
         openPasswordPrompt,
         createWalletWithPassword,
@@ -94,10 +94,15 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     useEffect(() => {
         if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
+            const config = store.objectForPrimaryKey<Config>(
+                Config.getName(),
+                Config.getPrimaryKey(),
+            )
+
             if (config?.isWalletCreated) {
                 closePasswordPrompt()
 
-                setTimeout(() => {
+                if (!isPasswordPromptOpen) {
                     /*
                     Navigate to parent stack (where the CreateWalletAppStack is declared)
                     and close the modal.
@@ -109,14 +114,19 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                             parent.goBack()
                         }
                     }
-                }, 500)
+                }
             } else {
+                let appLock = cache.objectForPrimaryKey<AppLock>(
+                    AppLock.getName(),
+                    AppLock.getPrimaryKey(),
+                )
+
                 cache.write(() => {
-                    let appLock = cache.objects<AppLock>(AppLock.getName())
-                    if (appLock[0]) {
-                        appLock[0].status = WALLET_STATUS.UNLOCKED
+                    if (appLock) {
+                        appLock.status = WALLET_STATUS.UNLOCKED
                     }
                 })
+
                 store.write(() => {
                     if (config) {
                         config.isWalletCreated = true
@@ -127,7 +137,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     }, [
         cache,
         closePasswordPrompt,
-        config,
+        isPasswordPromptOpen,
         isWalletCreatedWithBiometrics,
         isWalletCreatedWithPassword,
         nav,

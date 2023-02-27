@@ -19,7 +19,9 @@ export const BaseModal: React.FC<IBaseModal> = ({
             animationType="slide"
             transparent={false}
             visible={isOpen}
+            hardwareAccelerated
             presentationStyle="fullScreen"
+            onDismiss={onClose}
             onRequestClose={onClose}>
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />

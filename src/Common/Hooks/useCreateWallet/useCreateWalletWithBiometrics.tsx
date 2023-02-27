@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
 import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
@@ -15,24 +15,27 @@ export const useCreateWalletWithBiometrics = () => {
 
     const [isComplete, setIsComplete] = useState(false)
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
-
-    const devices = store.objects<Device>(Device.getName())
-
-    const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-        Mnemonic.getName(),
-        Mnemonic.getPrimaryKey(),
-    )
-
     const biometrics = useBiometrics()
+    const accessControl = useMemo(
+        () => biometrics?.accessControl,
+        [biometrics?.accessControl],
+    )
 
     //* [START] - Create Wallet
-    const onCreateWallet = async () => {
+    const onCreateWallet = useCallback(async () => {
+        const config = store.objectForPrimaryKey<Config>(
+            Config.getName(),
+            Config.getPrimaryKey(),
+        )
+
+        const devices = store.objects<Device>(Device.getName())
+
+        const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
+            Mnemonic.getName(),
+            Mnemonic.getPrimaryKey(),
+        )
+
         let mnemonicPhrase = _mnemonic?.mnemonic
-        let accessControl = biometrics?.accessControl
 
         try {
             if (mnemonicPhrase && accessControl) {
@@ -44,6 +47,10 @@ export const useCreateWalletWithBiometrics = () => {
                     deviceIndex,
                     aliasIndex,
                 )
+
+                cache.write(() => {
+                    mnemonicPhrase = ""
+                })
 
                 const { encryptedWallet } = await CryptoUtils.encryptWallet(
                     wallet,
@@ -77,14 +84,12 @@ export const useCreateWalletWithBiometrics = () => {
                     }
                 })
 
-                cache.write(() => cache.delete(_mnemonic))
-
                 setIsComplete(true)
             }
         } catch (error) {
             console.log("CREATE WALLET ERROR : ", error)
         }
-    }
+    }, [accessControl, cache, store])
     //* [END] - Create Wallet
 
     return {
