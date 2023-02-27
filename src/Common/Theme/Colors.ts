@@ -26,7 +26,7 @@ const light: ThemeVariant = {
         danger: Colors.DARK_RED,
         success: Colors.DARK_GREEN,
         text: Colors.DARK_PURPLE,
-        background: Colors.GRAY,
+        background: Colors.WHITE,
         backgroundReversed: Colors.DARK_PURPLE,
         card: Colors.WHITE,
         border: Colors.DARK_PURPLE,

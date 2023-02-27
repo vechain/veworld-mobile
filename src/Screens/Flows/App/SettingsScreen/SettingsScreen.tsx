@@ -1,6 +1,7 @@
 import React from "react"
 import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
 import { EnableBiometrics, SecureApp } from "./Components"
+import { ChangeTheme } from "./Components/ChangeTheme"
 
 export const SettingsScreen = () => {
     return (
@@ -12,6 +13,8 @@ export const SettingsScreen = () => {
                 <SecureApp />
                 <BaseSpacer height={20} />
                 <EnableBiometrics />
+                <BaseSpacer height={20} />
+                <ChangeTheme />
             </BaseView>
         </>
     )

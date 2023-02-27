@@ -8,6 +8,7 @@ import {
 } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
+import { useThemedStyles, useThemeType } from "~Common"
 
 type Props = BottomSheetProps & {
     children: React.ReactNode
@@ -15,6 +16,8 @@ type Props = BottomSheetProps & {
 
 const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ children, ...props }, ref) => {
+        const themedStyles = useThemedStyles(styles)
+
         const renderBackdrop = useCallback(
             (props_: BottomSheetBackdropProps) => (
                 <BottomSheetBackdrop
@@ -32,7 +35,7 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 ref={ref}
                 enablePanDownToClose={true}
                 index={0}
-                backgroundStyle={[styles.backgroundStyle]}
+                backgroundStyle={[themedStyles]}
                 backdropComponent={renderBackdrop}
                 {...props}>
                 <BaseView w={100} p={24} align="flex-start">
@@ -43,12 +46,13 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     },
 )
 
-const styles = StyleSheet.create({
-    backgroundStyle: {
-        backgroundColor: "#FAFAFA",
-        borderTopLeftRadius: 24,
-        borderTopRightRadius: 24,
-    },
-})
+const styles = (theme: useThemeType) =>
+    StyleSheet.create({
+        backgroundStyle: {
+            backgroundColor: theme.colors.background,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+        },
+    })
 
 export default BaseBottomSheet

@@ -117,14 +117,27 @@ const initRealmClasses = (
         cache.create(Mnemonic.getName(), {})
     })
 
-    let config = store.objectForPrimaryKey<Config>(
+    const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
         Config.getPrimaryKey(),
     )
 
+    console.log({ config })
+
     if (!config) {
         store.write(() => {
             store.create(Config.getName(), {})
+        })
+    }
+
+    const userPreferences = store.objectForPrimaryKey<UserPreferences>(
+        UserPreferences.getName(),
+        UserPreferences.getPrimaryKey(),
+    )
+
+    if (!userPreferences) {
+        console.log("ok2")
+        store.write(() => {
             store.create(UserPreferences.getName(), { theme: colorScheme })
         })
     }

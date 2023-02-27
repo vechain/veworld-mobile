@@ -1,4 +1,5 @@
 import React from "react"
+import { useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { Fonts } from "~Model"
 
@@ -7,6 +8,7 @@ type Props = {
 }
 
 export const Header = ({ action }: Props) => {
+    const theme = useTheme()
     return (
         <BaseView
             w={100}
@@ -22,7 +24,7 @@ export const Header = ({ action }: Props) => {
             <BaseIcon
                 title={"add-sharp"}
                 size={32}
-                bg={"lime"}
+                bg={theme.colors.secondary}
                 action={action}
             />
         </BaseView>

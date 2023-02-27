@@ -3,7 +3,7 @@ import { ThemeType, ThemeVariant } from "~Model"
 import { Theme } from "../Theme/Theme"
 import { useColorScheme } from "./useColorScheme"
 
-type useThemeType = Omit<ThemeType, "dark" | "light"> & ThemeVariant
+export type useThemeType = Omit<ThemeType, "dark" | "light"> & ThemeVariant
 export const useTheme = (): useThemeType => {
     const colorScheme = useColorScheme()
     const colorsTheme = Theme[colorScheme]
@@ -14,7 +14,7 @@ export const useTheme = (): useThemeType => {
 
 export const useThemedStyles = <T,>(
     styles: (theme: useThemeType) => StyleProp<T>,
-): StyleProp<T> => {
+) => {
     const theme = useTheme()
     return styles(theme)
 }
