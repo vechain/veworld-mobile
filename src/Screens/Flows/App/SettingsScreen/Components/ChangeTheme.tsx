@@ -17,16 +17,12 @@ export const ChangeTheme = () => {
         [userPreferences],
     )
 
-    console.log({ isDark })
-
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
-            console.log({ newValue })
             const mode = newValue ? "dark" : "light"
             store.write(() => {
                 if (userPreferences) {
                     userPreferences.theme = mode
-                    console.log({ userPreferences })
                 }
             })
         },

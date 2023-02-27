@@ -6,7 +6,7 @@ import { name as appName } from "./app.json"
 
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { useColorScheme, useTheme } from "~Common"
+import { useTheme } from "~Common"
 import { TranslationProvider } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
@@ -27,16 +27,6 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 enableAllPlugins()
 
 const Main = () => {
-    const theme = useTheme()
-
-    const navigationTheme = useMemo(
-        () => ({
-            dark: theme.isDark,
-            colors: theme.colors,
-        }),
-        [theme],
-    )
-
     const [fontsLoaded] = useFonts({
         "Inter-Bold": Inter_Bold,
         "Inter-Regular": Inter_Regular,
@@ -53,16 +43,33 @@ const Main = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RealmContextProvider>
                 <BottomSheetModalProvider>
-                    <NavigationContainer theme={navigationTheme}>
+                    <NavigationProvider>
                         <SafeAreaProvider>
                             <TranslationProvider>
                                 {fontsLoaded && <EntryPoint />}
                             </TranslationProvider>
                         </SafeAreaProvider>
-                    </NavigationContainer>
+                    </NavigationProvider>
                 </BottomSheetModalProvider>
             </RealmContextProvider>
         </GestureHandlerRootView>
+    )
+}
+
+const NavigationProvider = ({ children }) => {
+    const theme = useTheme()
+
+    const navigationTheme = useMemo(
+        () => ({
+            dark: theme.isDark,
+            colors: theme.colors,
+        }),
+        [theme],
+    )
+    return (
+        <NavigationContainer theme={navigationTheme}>
+            {children}
+        </NavigationContainer>
     )
 }
 

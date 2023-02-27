@@ -9,7 +9,7 @@ export class UserPreferences extends Object {
     }
 
     static getPrimaryKey(): string {
-        return UserPreferences.schema.primaryKey
+        return UserPreferences.schema.name
     }
 
     static schema = {
@@ -17,7 +17,7 @@ export class UserPreferences extends Object {
         primaryKey: "_id",
 
         properties: {
-            _id: { type: "string", default: this.getName() },
+            _id: { type: "string", default: "UserPreferences" },
             theme: { type: "string", default: "light" },
         },
     }

@@ -136,7 +136,6 @@ const initRealmClasses = (
     )
 
     if (!userPreferences) {
-        console.log("ok2")
         store.write(() => {
             store.create(UserPreferences.getName(), { theme: colorScheme })
         })
