@@ -1,9 +1,10 @@
 import { Platform } from "react-native"
 
-export const isIOS = () => {
+const isIOS = () => {
     return Platform.OS === "ios"
 }
-
-export const isAndroid = () => {
+const isAndroid = () => {
     return Platform.OS === "android"
 }
+
+export { isIOS, isAndroid }
