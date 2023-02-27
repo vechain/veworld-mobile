@@ -9,21 +9,21 @@ import {
 } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
-import { Account } from "~Storage"
+import { Device } from "~Storage"
 
 interface Props extends AnimateProps<ViewProps> {
     style?: StyleProp<ViewStyle>
-    account: Account
+    device: Device
 }
 
-export const Card: React.FC<Props> = memo(props => {
-    const { style, account, ...animatedViewProps } = props
+export const DeviceCard: React.FC<Props> = memo(props => {
+    const { style, device, ...animatedViewProps } = props
 
     return (
         <Animated.View style={baseStyles.container} {...animatedViewProps}>
             <View style={[baseStyles.itemContainer, style]}>
                 <Text style={{ fontSize: 12, color: "white" }}>
-                    {account.address}
+                    {device.alias} ({device.accounts.length} accounts)
                 </Text>
             </View>
         </Animated.View>
