@@ -1,25 +1,19 @@
 import { useMemo } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
-import { Config, useObjectListener, useRealm } from "~Storage"
+import { useConfigEntity } from "./Entities"
 import { useBiometrics } from "./useBiometrics"
 
 export const useWalletSecurity = () => {
-    const { store } = useRealm()
-
-    const config = useObjectListener(
-        Config.getName(),
-        Config.getPrimaryKey(),
-        store,
-    ) as Config
+    const configEntity = useConfigEntity()
 
     const userSelectedSecurity = useMemo(
-        () => config?.userSelectedSecurity,
-        [config?.userSelectedSecurity],
+        () => configEntity?.userSelectedSecurity,
+        [configEntity?.userSelectedSecurity],
     )
 
     const isSecurityDowngrade = useMemo(
-        () => config?.isSecurityDowngrade,
-        [config],
+        () => configEntity?.isSecurityDowngrade,
+        [configEntity],
     )
 
     const biometrics = useBiometrics()
