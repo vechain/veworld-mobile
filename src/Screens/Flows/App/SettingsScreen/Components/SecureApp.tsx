@@ -7,7 +7,7 @@ import { AppLock, useRealm } from "~Storage"
 
 export const SecureApp = () => {
     const { store, cache } = useRealm()
-    const { configEntity } = useConfigEntity()
+    const configEntity = useConfigEntity()
 
     const isEnabled = useMemo(
         () => configEntity?.isAppLockActive,

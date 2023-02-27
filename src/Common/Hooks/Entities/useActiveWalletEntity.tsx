@@ -9,5 +9,5 @@ export const useActiveWalletEntity = () => {
         cache,
     ) as ActiveWalletCard
 
-    return { activeWalletEntity }
+    return activeWalletEntity
 }

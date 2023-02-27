@@ -2,7 +2,7 @@ import { useMemo } from "react"
 import { useConfigEntity } from "./Entities"
 
 export const useAppInitState = () => {
-    const { configEntity } = useConfigEntity()
+    const configEntity = useConfigEntity()
 
     const isWalletCreated = useMemo(
         () => configEntity?.isWalletCreated,

@@ -9,5 +9,5 @@ export const useAppLockEntity = () => {
         cache,
     ) as AppLock
 
-    return { appLockEntity }
+    return appLockEntity
 }

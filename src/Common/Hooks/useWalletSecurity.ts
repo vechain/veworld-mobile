@@ -4,7 +4,7 @@ import { useConfigEntity } from "./Entities"
 import { useBiometrics } from "./useBiometrics"
 
 export const useWalletSecurity = () => {
-    const { configEntity } = useConfigEntity()
+    const configEntity = useConfigEntity()
 
     const userSelectedSecurity = useMemo(
         () => configEntity?.userSelectedSecurity,

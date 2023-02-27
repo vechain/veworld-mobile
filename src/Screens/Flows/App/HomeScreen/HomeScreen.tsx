@@ -24,7 +24,7 @@ const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
     const { store } = useRealm()
-    const { activeWalletEntity } = useActiveWalletEntity()
+    const activeWalletEntity = useActiveWalletEntity()
     const {
         ref: bottomSheetRef,
         onOpen: openBottomSheetMenu,

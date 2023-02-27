@@ -9,5 +9,5 @@ export const useConfigEntity = () => {
         store,
     ) as Config
 
-    return { configEntity }
+    return configEntity
 }
