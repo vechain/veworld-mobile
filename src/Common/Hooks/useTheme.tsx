@@ -1,4 +1,3 @@
-import { StyleProp } from "react-native"
 import { ThemeType, ThemeVariant } from "~Model"
 import { Theme } from "../Theme/Theme"
 import { useUserPreferencesEntity } from "./Entities"
@@ -12,9 +11,7 @@ export const useTheme = (): useThemeType => {
     return { ...colorsTheme, constants, typography }
 }
 
-export const useThemedStyles = <T,>(
-    styles: (theme: useThemeType) => StyleProp<T>,
-) => {
+export const useThemedStyles = (styles: (theme: useThemeType) => any) => {
     const theme = useTheme()
     return styles(theme)
 }

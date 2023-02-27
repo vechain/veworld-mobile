@@ -66,10 +66,10 @@ export const BaseButton = (props: Props) => {
             style={[
                 {
                     backgroundColor: props.filled
-                        ? theme.colors.button
+                        ? theme.colors.primary
                         : theme.constants.transparent,
                     borderColor: props.bordered
-                        ? theme.colors.button
+                        ? theme.colors.primary
                         : theme.constants.transparent,
                     width: props.w && `${props.w}%`,
                     height: props.h && `${props.h}%`,
@@ -88,7 +88,7 @@ export const BaseButton = (props: Props) => {
             {...otherProps}>
             <BaseText
                 color={
-                    props.filled ? theme.colors.background : theme.colors.button
+                    props.filled ? theme.colors.background : theme.colors.text
                 }
                 font={props.font ? props.font : "body_accent"}>
                 {props.title}

@@ -25,7 +25,7 @@ export const TabIcon: FC<Props> = memo(({ focused, title }) => {
                         : `${title.toLocaleLowerCase()}-outline`
                 }
                 size={22}
-                color={theme.colors.tabicon}
+                color={focused ? theme.colors.text : theme.colors.primary}
             />
 
             {focused && <View style={baseStyles.dot} />}

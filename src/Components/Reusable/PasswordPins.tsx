@@ -28,10 +28,10 @@ export const PasswordPins: FC<Props> = ({
                             <BaseView
                                 key={`digit${index}`}
                                 mx={10}
-                                background={theme.colors.reversed_bg}
+                                background={theme.colors.text}
                                 style={[
                                     baseStyle.pinBase,
-                                    { borderColor: theme.colors.reversed_bg },
+                                    { borderColor: theme.colors.text },
                                 ]}
                             />
                         )
@@ -42,7 +42,10 @@ export const PasswordPins: FC<Props> = ({
                                 mx={10}
                                 style={[
                                     baseStyle.pinBase,
-                                    { borderColor: theme.colors.reversed_bg },
+                                    {
+                                        borderColor:
+                                            theme.colors.primaryDisabled,
+                                    },
                                 ]}
                             />
                         )

@@ -17,7 +17,7 @@ export const Tabbar = () => {
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
-                    backgroundColor: theme.colors.background,
+                    backgroundColor: theme.colors.card,
                     ...baseStyles.tabbar,
                     ...baseStyles.shadow,
                 },

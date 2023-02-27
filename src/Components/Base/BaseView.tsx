@@ -26,6 +26,7 @@ type Props = {
     isFlex?: boolean
     grow?: number
     wrap?: boolean
+    radius?: number
 } & ViewProps
 
 export const BaseView = memo((props: Props) => {
@@ -56,6 +57,7 @@ export const BaseView = memo((props: Props) => {
                     padding: props.p,
                     paddingVertical: props.py,
                     paddingHorizontal: props.px,
+                    borderRadius: props.radius || 0,
                 },
                 style,
             ]}
