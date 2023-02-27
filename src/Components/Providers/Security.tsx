@@ -1,23 +1,15 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { BiometricsUtils, useAppState, useBiometrics } from "~Common"
 import { AppStateType, TSecurityLevel, WALLET_STATUS } from "~Model"
-import { Config, useObjectListener, useRealm } from "~Storage"
+import { Config, useRealm } from "~Storage"
 
 const { isSecurityDowngrade, isSecurityUpgrade } = BiometricsUtils
 
 type Props = { appLockStatus: WALLET_STATUS | undefined }
 
 export const Security = ({ appLockStatus }: Props) => {
-    const { store, cache } = useRealm()
+    const { store } = useRealm()
     const [previousState, currentState] = useAppState()
-
-    const config = useObjectListener(
-        Config.getName(),
-        Config.getPrimaryKey(),
-        store,
-    ) as Config
-
-    const lastSecurityLevel = useMemo(() => config.lastSecurityLevel, [config])
 
     const biometrics = useBiometrics()
 
@@ -27,6 +19,13 @@ export const Security = ({ appLockStatus }: Props) => {
     )
 
     const checkSecurityDowngrade = useCallback(async () => {
+        const config = store.objectForPrimaryKey(
+            Config.getName(),
+            Config.getPrimaryKey(),
+        ) as Config
+
+        const lastSecurityLevel = config.lastSecurityLevel
+
         if (lastSecurityLevel !== "NONE" && level) {
             if (isSecurityDowngrade(lastSecurityLevel, level, appLockStatus!)) {
                 store.write(() => {
@@ -47,7 +46,7 @@ export const Security = ({ appLockStatus }: Props) => {
                     config.lastSecurityLevel = level
                 })
         }
-    }, [appLockStatus, config, lastSecurityLevel, level, store])
+    }, [appLockStatus, level, store])
 
     const init = useCallback(async () => {
         checkSecurityDowngrade()
@@ -60,7 +59,7 @@ export const Security = ({ appLockStatus }: Props) => {
         ) {
             init()
         }
-    }, [cache, currentState, init, previousState])
+    }, [currentState, init, previousState])
 
     return <></>
 }
