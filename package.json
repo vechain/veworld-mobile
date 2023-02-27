@@ -5,6 +5,7 @@
     "scripts": {
         "purge": "rm -rf node_modules && rm -rf yarn.lock && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
         "postinstall": "npx pod-install && yarn husky install",
+        "doctor": "react-native doctor",
         "android": "react-native run-android",
         "ios": "react-native run-ios --simulator 'iPhone 14 Pro'",
         "start": "react-native start",
