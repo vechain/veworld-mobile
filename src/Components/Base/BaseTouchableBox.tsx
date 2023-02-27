@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import DropShadow from "react-native-drop-shadow"
 import { useTheme, useThemedStyles } from "~Common"
-import { useThemeType } from "~Model"
+import { ThemeType } from "~Model"
 
 type Props = {
     action: () => void
@@ -21,7 +21,7 @@ export const BaseTouchableBox: React.FC<Props> = ({ action, children }) => {
     )
 }
 
-const styles = (theme: useThemeType) =>
+const styles = (theme: ThemeType) =>
     StyleSheet.create({
         shadow: theme.shadows.card,
         container: {

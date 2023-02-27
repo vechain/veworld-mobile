@@ -9,7 +9,7 @@ import {
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
 import { useThemedStyles } from "~Common"
-import { useThemeType } from "~Model"
+import { ThemeType } from "~Model"
 
 type Props = BottomSheetProps & {
     children: React.ReactNode
@@ -47,7 +47,7 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     },
 )
 
-const styles = (theme: useThemeType) =>
+const styles = (theme: ThemeType) =>
     StyleSheet.create({
         backgroundStyle: {
             backgroundColor: theme.colors.background,

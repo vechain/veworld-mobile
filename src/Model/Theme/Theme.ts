@@ -38,11 +38,6 @@ export type Shadows = {
     bottom: Object
 }
 
-export type ThemeVariant = {
-    isDark: boolean
-    colors: Colors
-}
-
 export type Constants = {
     transparent: "transparent"
     bgDark: string
@@ -66,19 +61,7 @@ export type Typography = {
 }
 
 export type ThemeType = {
-    constants: Constants
-    typography: Typography
-    colors: {
-        dark: ThemeVariant
-        light: ThemeVariant
-    }
-    shadows: {
-        dark: Shadows
-        light: Shadows
-    }
-}
-
-export type useThemeType = {
+    isDark: boolean
     constants: Constants
     typography: Typography
     colors: Colors

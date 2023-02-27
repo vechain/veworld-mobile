@@ -2,7 +2,8 @@ import { ThemeType } from "~Model"
 import { colors } from "./Colors"
 import { shadows } from "./Shadows"
 
-export const Theme: ThemeType = {
+export const Theme = (type: "light" | "dark"): ThemeType => ({
+    isDark: type === "dark",
     constants: {
         transparent: "transparent",
         bgDark: "black",
@@ -63,12 +64,6 @@ export const Theme: ThemeType = {
             fontFamily: "Mono-Light",
         },
     },
-    shadows: {
-        light: shadows.light,
-        dark: shadows.dark,
-    },
-    colors: {
-        light: colors.light,
-        dark: colors.dark,
-    },
-}
+    shadows: shadows[type],
+    colors: colors[type],
+})

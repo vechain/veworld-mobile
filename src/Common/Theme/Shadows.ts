@@ -2,7 +2,7 @@ import { colors } from "./Colors"
 
 const light = {
     card: {
-        shadowColor: colors.light.colors.primary,
+        shadowColor: colors.light.primary,
 
         shadowOffset: {
             height: 0,
@@ -12,7 +12,7 @@ const light = {
         shadowRadius: 16,
     },
     bottom: {
-        shadowColor: colors.light.colors.primary,
+        shadowColor: colors.light.primary,
         shadowOffset: {
             height: 0,
             width: 0,
@@ -25,7 +25,7 @@ const light = {
 const dark = {
     card: {},
     bottom: {
-        shadowColor: colors.dark.colors.primary,
+        shadowColor: colors.dark.primary,
         shadowOffset: {
             height: -4,
             width: 0,
