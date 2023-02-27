@@ -20,12 +20,19 @@ export type TBaseFontStyle = {
 export type ThemeVariant = {
     isDark: boolean
     colors: {
-        background: string
-        reversed_bg: string
+        primary: string
+        primaryDisabled: string
+        secondary: string
+        tertiary: string
+        disabled: string
+        danger: string
+        success: string
         text: string
-        tabicon: string
-        tabiconInactive: string
-        button: string
+        background: string
+        backgroundReversed: string
+        card: string
+        border: string
+        notification: string
     }
 }
 

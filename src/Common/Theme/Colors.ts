@@ -1,3 +1,5 @@
+import { ThemeVariant } from "~Model"
+
 enum Colors {
     WHITE = "#FFFFFF",
     WHITE_DISABLED = "#E5E5E5",
@@ -13,43 +15,42 @@ enum Colors {
     LIGHT_GREEN = "#AAD836",
 }
 
-type ColorTheme = {
-    primary: string
-    secondary: string
-    secondaryDisabled: string
-    tertiary: string
-    disabled: string
-    danger: string
-    success: string
-    text: string
-    background: string
-    box: string
+const light: ThemeVariant = {
+    isDark: false,
+    colors: {
+        primary: Colors.DARK_PURPLE,
+        primaryDisabled: Colors.PURPLE_DISABLED,
+        secondary: Colors.LIME_GREEN,
+        tertiary: Colors.LIME_GREEN,
+        disabled: Colors.WHITE_DISABLED,
+        danger: Colors.DARK_RED,
+        success: Colors.DARK_GREEN,
+        text: Colors.DARK_PURPLE,
+        background: Colors.GRAY,
+        backgroundReversed: Colors.DARK_PURPLE,
+        card: Colors.WHITE,
+        border: Colors.DARK_PURPLE,
+        notification: Colors.DARK_PURPLE,
+    },
 }
 
-const light: ColorTheme = {
-    primary: Colors.LIME_GREEN,
-    secondary: Colors.DARK_PURPLE,
-    secondaryDisabled: Colors.PURPLE_DISABLED,
-    tertiary: Colors.LIME_GREEN,
-    disabled: Colors.WHITE_DISABLED,
-    danger: Colors.DARK_RED,
-    success: Colors.DARK_GREEN,
-    text: Colors.DARK_PURPLE,
-    background: Colors.GRAY,
-    box: Colors.WHITE,
+const dark: ThemeVariant = {
+    isDark: true,
+    colors: {
+        primary: Colors.LIME_GREEN,
+        primaryDisabled: Colors.LIME_GREEN_DISABLED,
+        secondary: Colors.LIME_GREEN,
+        tertiary: Colors.DARK_PURPLE,
+        disabled: Colors.WHITE_DISABLED,
+        danger: Colors.LIGHT_RED,
+        success: Colors.LIGHT_GREEN,
+        text: Colors.WHITE,
+        background: Colors.DARK_PURPLE,
+        backgroundReversed: Colors.GRAY,
+        card: Colors.PURPLE,
+        border: Colors.WHITE,
+        notification: Colors.WHITE,
+    },
 }
 
-const dark: ColorTheme = {
-    primary: Colors.LIME_GREEN,
-    secondary: Colors.LIME_GREEN,
-    secondaryDisabled: Colors.LIME_GREEN_DISABLED,
-    tertiary: Colors.DARK_PURPLE,
-    disabled: Colors.WHITE_DISABLED,
-    danger: Colors.LIGHT_RED,
-    success: Colors.LIGHT_GREEN,
-    text: Colors.WHITE,
-    background: Colors.DARK_PURPLE,
-    box: Colors.PURPLE,
-}
-
-export { Colors, light, dark }
+export const colors = { light, dark }

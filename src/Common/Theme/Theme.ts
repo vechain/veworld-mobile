@@ -1,4 +1,5 @@
 import { ThemeType } from "~Model"
+import { colors } from "./Colors"
 
 export const Theme: ThemeType = {
     constants: {
@@ -62,28 +63,6 @@ export const Theme: ThemeType = {
         },
     },
 
-    dark: {
-        isDark: true,
-
-        colors: {
-            background: "black",
-            reversed_bg: "white",
-            text: "white",
-            tabicon: "#b1b1b1",
-            tabiconInactive: "#595959",
-            button: "#270089",
-        },
-    },
-    light: {
-        isDark: false,
-
-        colors: {
-            background: "white",
-            reversed_bg: "black",
-            text: "black",
-            tabicon: "black",
-            tabiconInactive: "#595959",
-            button: "#270089",
-        },
-    },
+    light: colors.light,
+    dark: colors.dark,
 }
