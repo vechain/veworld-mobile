@@ -1,8 +1,10 @@
-import { Pressable, StyleSheet } from "react-native"
+import { Dimensions, Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
-import { Fonts } from "~Model"
+import { Fonts, ThemeType } from "~Model"
 import * as Haptics from "expo-haptics"
+import { useTheme, useThemedStyles } from "~Common"
+import DropShadow from "react-native-drop-shadow"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
 
@@ -11,6 +13,8 @@ type Props = {
 }
 
 export const NumPad = ({ onDigitPress }: Props) => {
+    const theme = useTheme()
+    const themedStyles = useThemedStyles(baseStyles)
     const onPress = useCallback(
         (digit: string) => () => {
             onDigitPress(digit)
@@ -22,17 +26,19 @@ export const NumPad = ({ onDigitPress }: Props) => {
     return (
         <BaseView orientation="row" wrap w={100}>
             {numPad.map((digit, index) => (
-                <BaseView style={baseStyles.width} key={index}>
+                <BaseView style={themedStyles.width} key={index}>
                     {digit !== "blank" ? (
-                        <Pressable
-                            onPress={onPress(digit)}
-                            style={baseStyles.paddingH}>
-                            <BaseText
-                                font={Fonts.large_title_accent}
-                                alignContainer="center">
-                                {digit}
-                            </BaseText>
-                        </Pressable>
+                        <DropShadow style={theme.shadows.card}>
+                            <Pressable
+                                onPress={onPress(digit)}
+                                style={themedStyles.pressable}>
+                                <BaseText
+                                    font={Fonts.large_title_accent}
+                                    alignContainer="center">
+                                    {digit}
+                                </BaseText>
+                            </Pressable>
+                        </DropShadow>
                     ) : null}
                 </BaseView>
             ))}
@@ -40,14 +46,18 @@ export const NumPad = ({ onDigitPress }: Props) => {
     )
 }
 
-const baseStyles = StyleSheet.create({
-    width: {
-        width: "33%",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingVertical: 22,
-    },
-    paddingH: {
-        paddingHorizontal: 10,
-    },
-})
+const baseStyles = (theme: ThemeType) =>
+    StyleSheet.create({
+        width: {
+            width: "33%",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: 22,
+        },
+        pressable: {
+            paddingVertical: 12,
+            paddingHorizontal: 24,
+            backgroundColor: theme.colors.card,
+            borderRadius: Dimensions.get("window").width * 0.5,
+        },
+    })
