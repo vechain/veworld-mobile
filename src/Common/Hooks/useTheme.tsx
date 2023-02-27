@@ -6,10 +6,10 @@ import { useColorScheme } from "./useColorScheme"
 type useThemeType = Omit<ThemeType, "dark" | "light"> & ThemeVariant
 export const useTheme = (): useThemeType => {
     const colorScheme = useColorScheme()
-    const theme = Theme[colorScheme]
+    const colorsTheme = Theme[colorScheme]
     const constants = Theme.constants
     const typography = Theme.typography
-    return { ...theme, constants, typography }
+    return { ...colorsTheme, constants, typography }
 }
 
 export const useThemedStyles = <T,>(

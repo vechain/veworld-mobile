@@ -26,19 +26,16 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 // immer setup
 enableAllPlugins()
 
-const getTheme = (scheme, colorTheme) => {
-    const theme = {
-        colors: {
-            background: colorTheme,
-            border: colorTheme,
-        },
-    }
-    return theme
-}
-
 const Main = () => {
-    const scheme = useColorScheme()
     const theme = useTheme()
+
+    const navigationTheme = useMemo(
+        () => ({
+            dark: theme.isDark,
+            colors: theme.colors,
+        }),
+        [theme],
+    )
 
     const [fontsLoaded] = useFonts({
         "Inter-Bold": Inter_Bold,
@@ -51,17 +48,12 @@ const Main = () => {
         "Mono-Light": Mono_Light,
     })
 
-    const colorScheme = useMemo(
-        () => getTheme(scheme, theme.colors.background),
-        [scheme, theme],
-    )
-
     return (
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RealmContextProvider>
                 <BottomSheetModalProvider>
-                    <NavigationContainer theme={colorScheme}>
+                    <NavigationContainer theme={navigationTheme}>
                         <SafeAreaProvider>
                             <TranslationProvider>
                                 {fontsLoaded && <EntryPoint />}

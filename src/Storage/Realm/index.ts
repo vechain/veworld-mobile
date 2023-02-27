@@ -6,6 +6,7 @@ import {
     Account,
     ActiveWalletCard,
     AppLock,
+    UserPreferences,
 } from "./Model"
 
 import { RealmContextProvider, useRealm } from "./RealmContext"
@@ -25,4 +26,5 @@ export {
     Account,
     ActiveWalletCard,
     AppLock,
+    UserPreferences,
 }

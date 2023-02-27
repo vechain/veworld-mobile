@@ -8,10 +8,12 @@ import {
     Account,
     ActiveWalletCard,
     AppLock,
+    UserPreferences,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
 import { WALLET_STATUS } from "~Model"
 import crypto from "react-native-quick-crypto"
+import { ColorSchemeName, useColorScheme } from "react-native"
 
 type State = {
     store: Realm
@@ -23,6 +25,8 @@ type RealmContextProviderProps = { children: React.ReactNode }
 const RealmContext = React.createContext<State | undefined>(undefined)
 
 const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
+    const colorScheme = useColorScheme()
+
     const [store, setStore] = useState<Realm>()
     const [cache, setCache] = useState<Realm>()
 
@@ -49,11 +53,11 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
         if (_isKey && _buffKey) {
             const cacheInstance = initCacheRealm()
             const storeInstance = initStoreRealm(_buffKey)
-            initRealmClasses(cacheInstance, storeInstance)
+            initRealmClasses(cacheInstance, storeInstance, colorScheme)
             setStore(storeInstance)
             setCache(cacheInstance)
         }
-    }, [])
+    }, [colorScheme])
 
     useEffect(() => {
         initRealm()
@@ -70,7 +74,7 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
 
 const initStoreRealm = (buffKey: ArrayBuffer) => {
     const instance = new Realm({
-        schema: [Device, XPub, Config, Account],
+        schema: [Device, XPub, Config, Account, UserPreferences],
         path: "persisted.realm",
         encryptionKey: buffKey,
         deleteRealmIfMigrationNeeded:
@@ -102,7 +106,11 @@ const useRealm = () => {
     return context
 }
 
-const initRealmClasses = (cache: Realm, store: Realm) => {
+const initRealmClasses = (
+    cache: Realm,
+    store: Realm,
+    colorScheme: ColorSchemeName,
+) => {
     cache.write(() => {
         cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
         cache.create(ActiveWalletCard.getName(), {})
@@ -117,6 +125,7 @@ const initRealmClasses = (cache: Realm, store: Realm) => {
     if (!config) {
         store.write(() => {
             store.create(Config.getName(), {})
+            store.create(UserPreferences.getName(), { theme: colorScheme })
         })
     }
 }

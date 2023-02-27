@@ -34,7 +34,7 @@ export const WelcomeScreen = () => {
                     </BaseText>
                     <BaseText
                         font={Fonts.large_title}
-                        color={theme.colors.button}>
+                        color={theme.colors.primary}>
                         VeWorld
                     </BaseText>
                 </BaseView>
