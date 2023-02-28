@@ -1,17 +1,17 @@
 const size = {
-    XS: 12,
-    S: 14,
-    M: 16,
-    L: 18,
-    XL: 20,
-    XXL: 28,
+    12: 12,
+    14: 14,
+    16: 16,
+    18: 18,
+    20: 20,
+    28: 28,
 }
 
 const weight = {
-    light: 300,
-    regular: 400,
-    medium: 500,
-    bold: 700,
+    300: 300,
+    400: 400,
+    500: 500,
+    700: 700,
 }
 
 export const typography = { size, weight }

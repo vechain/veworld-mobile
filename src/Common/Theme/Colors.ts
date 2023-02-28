@@ -1,6 +1,7 @@
 import { Colors } from "~Model"
 
 enum COLORS {
+    TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
     WHITE_DISABLED = "#E5E5E5",
     GRAY = "#A6A6A6",
@@ -30,6 +31,7 @@ const light: Colors = {
     card: COLORS.WHITE,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
+    transparent: COLORS.TRANSPARENT,
 }
 
 const dark: Colors = {
@@ -46,6 +48,7 @@ const dark: Colors = {
     card: COLORS.PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
+    transparent: COLORS.TRANSPARENT,
 }
 
 export const colors = { light, dark }

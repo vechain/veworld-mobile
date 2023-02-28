@@ -31,6 +31,7 @@ export type Colors = {
     card: string
     border: string
     notification: string
+    transparent: string
 }
 
 export type Shadows = {
@@ -38,12 +39,9 @@ export type Shadows = {
     bottom: Object
 }
 
-export type Constants = {
-    transparent: "transparent"
-    bgDark: string
-    bgLght: string
-    lightGrey: string
-}
+export type Radius = { [key: number]: number }
+
+export type Spacing = { [key: number]: number }
 
 export type Typography = {
     large_title: TBaseFontStyle
@@ -62,8 +60,9 @@ export type Typography = {
 
 export type ThemeType = {
     isDark: boolean
-    constants: Constants
     typography: Typography
     colors: Colors
     shadows: Shadows
+    radius: Radius
+    spacing: Spacing
 }

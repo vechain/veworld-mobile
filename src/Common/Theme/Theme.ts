@@ -1,15 +1,11 @@
 import { ThemeType } from "~Model"
 import { colors } from "./Colors"
 import { shadows } from "./Shadows"
+import { spacing } from "./Spacing"
+import { radius } from "./Radius"
 
 export const Theme = (type: "light" | "dark"): ThemeType => ({
     isDark: type === "dark",
-    constants: {
-        transparent: "transparent",
-        bgDark: "black",
-        bgLght: "white",
-        lightGrey: "#D3D3D3",
-    },
 
     typography: {
         // INTER
@@ -66,4 +62,6 @@ export const Theme = (type: "light" | "dark"): ThemeType => ({
     },
     shadows: shadows[type],
     colors: colors[type],
+    spacing,
+    radius,
 })

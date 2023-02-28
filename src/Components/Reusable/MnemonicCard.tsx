@@ -22,7 +22,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
             <BaseView
                 orientation="row"
                 align="center"
-                background={theme.constants.lightGrey}>
+                background={theme.colors.card}>
                 <BaseView
                     orientation="row"
                     wrap
@@ -49,7 +49,11 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                     <Icon
                         name={Show ? "eye-off-outline" : "eye-outline"}
                         size={18}
-                        color={theme.colors.button}
+                        color={
+                            theme.isDark
+                                ? theme.colors.tertiary
+                                : theme.colors.card
+                        }
                     />
                 </BaseView>
             </BaseView>

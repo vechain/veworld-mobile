@@ -67,10 +67,10 @@ export const BaseButton = (props: Props) => {
                 {
                     backgroundColor: props.filled
                         ? theme.colors.primary
-                        : theme.constants.transparent,
+                        : theme.colors.transparent,
                     borderColor: props.bordered
                         ? theme.colors.primary
-                        : theme.constants.transparent,
+                        : theme.colors.transparent,
                     width: props.w && `${props.w}%`,
                     height: props.h && `${props.h}%`,
                     margin: props.m,

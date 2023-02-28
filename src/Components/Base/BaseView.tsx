@@ -48,7 +48,7 @@ export const BaseView = memo((props: Props) => {
                     alignSelf: props.selfAlign,
                     backgroundColor: props.background
                         ? props.background
-                        : theme.constants.transparent,
+                        : theme.colors.transparent,
                     width: props.w && `${props.w}%`,
                     height: props.h && `${props.h}%`,
                     margin: props.m,

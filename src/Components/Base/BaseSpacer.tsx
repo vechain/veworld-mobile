@@ -15,9 +15,7 @@ export const BaseSpacer: FC<Props> = (props: Props) => {
         <BaseView
             style={[{ height: props.height }, style]}
             background={
-                props.background
-                    ? props.background
-                    : theme.constants.transparent
+                props.background ? props.background : theme.colors.transparent
             }
             {...otherProps}
         />
