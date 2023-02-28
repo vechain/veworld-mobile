@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native"
 import { ThemeType } from "~Model"
 import { Theme } from "../Theme/Theme"
 import { useUserPreferencesEntity } from "./Entities"
@@ -8,7 +9,9 @@ export const useTheme = (): ThemeType => {
     return theme
 }
 
-export const useThemedStyles = (styles: (theme: ThemeType) => any) => {
+export const useThemedStyles = <T,>(
+    styles: (theme: ThemeType) => StyleSheet.NamedStyles<T>,
+) => {
     const theme = useTheme()
     return styles(theme)
 }
