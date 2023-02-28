@@ -3,7 +3,7 @@ import React, { useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
 import { Fonts, ThemeType } from "~Model"
 import * as Haptics from "expo-haptics"
-import { useTheme, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Common"
 import DropShadow from "react-native-drop-shadow"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
@@ -13,8 +13,7 @@ type Props = {
 }
 
 export const NumPad = ({ onDigitPress }: Props) => {
-    const theme = useTheme()
-    const themedStyles = useThemedStyles(baseStyles)
+    const { theme, styles } = useThemedStyles(baseStyles)
     const onPress = useCallback(
         (digit: string) => () => {
             onDigitPress(digit)
@@ -26,12 +25,12 @@ export const NumPad = ({ onDigitPress }: Props) => {
     return (
         <BaseView orientation="row" wrap w={100}>
             {numPad.map((digit, index) => (
-                <BaseView style={themedStyles.width} key={index}>
+                <BaseView style={styles.width} key={index}>
                     {digit !== "blank" ? (
                         <DropShadow style={theme.shadows.card}>
                             <Pressable
                                 style={({ pressed }) => [
-                                    themedStyles.pressable,
+                                    styles.pressable,
                                     { opacity: pressed ? 0.5 : 1.0 },
                                 ]}
                                 onPress={onPress(digit)}>

@@ -13,5 +13,5 @@ export const useThemedStyles = <T,>(
     styles: (theme: ThemeType) => StyleSheet.NamedStyles<T>,
 ) => {
     const theme = useTheme()
-    return styles(theme)
+    return { styles: styles(theme), theme }
 }

@@ -11,13 +11,10 @@ type Props = {
 }
 
 export const TabIcon: FC<Props> = memo(({ focused, title }) => {
-    const themedStyles = useThemedStyles(baseStyles(focused))
+    const { styles } = useThemedStyles(baseStyles(focused))
 
     return (
-        <BaseView
-            justify="center"
-            align="center"
-            style={themedStyles.container}>
+        <BaseView justify="center" align="center" style={styles.container}>
             <Icon
                 name={
                     focused
@@ -25,10 +22,10 @@ export const TabIcon: FC<Props> = memo(({ focused, title }) => {
                         : `${title.toLocaleLowerCase()}-outline`
                 }
                 size={24}
-                color={themedStyles.icon.color}
+                color={styles.icon.color}
             />
 
-            <View style={themedStyles.dot} />
+            <View style={styles.dot} />
         </BaseView>
     )
 })

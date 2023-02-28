@@ -1,23 +1,21 @@
 import React, { memo, useState } from "react"
 import { FlatList, StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
-import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
-import { Fonts } from "~Model"
+import { BaseSpacer } from "~Components"
+import { TokenCard } from "./TokenCard"
 
 interface Props extends AnimateProps<ViewProps> {}
 
-export const CoinList = memo(({ ...animatedViewProps }: Props) => {
+export const TokenList = memo(({ ...animatedViewProps }: Props) => {
     const [data] = useState([...new Array(80).keys()])
 
     return (
         <Animated.View style={baseStyles.view} {...animatedViewProps}>
             <FlatList
                 data={data}
-                renderItem={({ item }) => (
-                    <BaseTouchableBox action={() => console.log(item)}>
-                        <BaseText font={Fonts.sub_title}>{item}</BaseText>
-                    </BaseTouchableBox>
-                )}
+                renderItem={({ item }) => <TokenCard value={item} />}
+                nestedScrollEnabled={false}
+                showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={() => <BaseSpacer height={10} />}
                 keyExtractor={item => `${item}`}
             />

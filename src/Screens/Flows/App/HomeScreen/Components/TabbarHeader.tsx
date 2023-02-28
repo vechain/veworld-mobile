@@ -13,7 +13,7 @@ const LONG_WIDTH = 20
 
 export const TabbarHeader = memo(
     ({ action }: { action: (activeScreen: number) => void }) => {
-        const themedStyles = useThemedStyles(baseStyles)
+        const { styles } = useThemedStyles(baseStyles)
         const progressValue = useSharedValue<number>(0)
 
         const onTokensPress = () => {
@@ -46,19 +46,17 @@ export const TabbarHeader = memo(
                     orientation="row"
                     justify="space-between"
                     align="center">
-                    <Pressable
-                        onPress={onTokensPress}
-                        style={themedStyles.button}>
+                    <Pressable onPress={onTokensPress} style={styles.button}>
                         <BaseText font={Fonts.body_accent}>{"Token"}</BaseText>
                         <Animated.View
-                            style={[themedStyles.underline, animatedWidthToken]}
+                            style={[styles.underline, animatedWidthToken]}
                         />
                     </Pressable>
 
-                    <Pressable onPress={onNftPress} style={themedStyles.button}>
+                    <Pressable onPress={onNftPress} style={styles.button}>
                         <BaseText font={Fonts.body_accent}>{"NFT"}</BaseText>
                         <Animated.View
-                            style={[themedStyles.underline, animatedWidthNft]}
+                            style={[styles.underline, animatedWidthNft]}
                         />
                     </Pressable>
                 </BaseView>

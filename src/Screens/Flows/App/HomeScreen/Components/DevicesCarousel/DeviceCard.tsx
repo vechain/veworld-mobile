@@ -2,7 +2,7 @@ import React, { memo } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
-import { useTheme, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Common"
 import { BaseText, BaseView } from "~Components"
 import { ThemeType } from "~Model"
 import { Device } from "~Storage"
@@ -14,10 +14,9 @@ interface Props extends AnimateProps<ViewProps> {
 
 export const DeviceCard: React.FC<Props> = memo(props => {
     const { style, device, ...animatedViewProps } = props
-    const theme = useTheme()
-    const themedStyle = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     return (
-        <Animated.View style={themedStyle.container} {...animatedViewProps}>
+        <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
                 background={theme.colors.primary}
                 isFlex

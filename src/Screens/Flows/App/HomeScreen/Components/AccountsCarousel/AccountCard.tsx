@@ -15,9 +15,9 @@ interface Props extends AnimateProps<ViewProps> {
 export const AccountCard: React.FC<Props> = memo(props => {
     const { style, account, ...animatedViewProps } = props
     const theme = useTheme()
-    const themedStyle = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     return (
-        <Animated.View style={themedStyle.container} {...animatedViewProps}>
+        <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
                 background={theme.colors.primary}
                 isFlex

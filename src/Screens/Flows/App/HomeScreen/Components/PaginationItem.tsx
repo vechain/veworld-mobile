@@ -19,7 +19,7 @@ interface Props extends AnimateProps<ViewProps> {
 
 export const PaginationItem: FC<Props> = memo(
     ({ animValue, index, length, ...animatedViewProps }) => {
-        const themedStyles = useThemedStyles(baseStyles)
+        const { styles } = useThemedStyles(baseStyles)
         const animatedWidth = useAnimatedStyle(() => {
             let dotWidth = withTiming(
                 Math.round(animValue.value) === index ? LONG_WIDTH : WIDTH,
@@ -36,7 +36,7 @@ export const PaginationItem: FC<Props> = memo(
             <Animated.View
                 {...animatedViewProps}
                 style={[
-                    themedStyles.container,
+                    styles.container,
                     {
                         width: WIDTH,
                         height: WIDTH,

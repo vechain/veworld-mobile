@@ -17,7 +17,7 @@ type Props = BottomSheetProps & {
 
 const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ children, ...props }, ref) => {
-        const themedStyles = useThemedStyles(styles)
+        const { styles } = useThemedStyles(baseStyles)
 
         const renderBackdrop = useCallback(
             (props_: BottomSheetBackdropProps) => (
@@ -36,7 +36,7 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 ref={ref}
                 enablePanDownToClose={true}
                 index={0}
-                backgroundStyle={[themedStyles.backgroundStyle]}
+                backgroundStyle={[styles.backgroundStyle]}
                 backdropComponent={renderBackdrop}
                 {...props}>
                 <BaseView w={100} p={24} align="flex-start">
@@ -47,7 +47,7 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     },
 )
 
-const styles = (theme: ThemeType) =>
+const baseStyles = (theme: ThemeType) =>
     StyleSheet.create({
         backgroundStyle: {
             backgroundColor: theme.colors.background,
