@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { Switch } from "react-native"
 import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 import { BaseText, BaseView } from "~Components"
@@ -9,14 +9,17 @@ export const ChangeTheme = () => {
 
     const userPreferences = useUserPreferencesEntity()
 
-    const isDark = useMemo(
+    const isRealmDark = useMemo(
         () => userPreferences?.theme === "dark",
         [userPreferences],
     )
 
+    const [isDark, setIsDark] = useState(isRealmDark)
+
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
             const mode = newValue ? "dark" : "light"
+            setIsDark(newValue)
             store.write(() => {
                 if (userPreferences) {
                     userPreferences.theme = mode

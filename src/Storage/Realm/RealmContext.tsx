@@ -13,7 +13,8 @@ import {
 import KeychainService from "~Services/KeychainService"
 import { WALLET_STATUS } from "~Model"
 import crypto from "react-native-quick-crypto"
-import { ColorSchemeName, useColorScheme } from "react-native"
+import { ColorSchemeName } from "react-native"
+import { useColorScheme } from "~Common"
 
 type State = {
     store: Realm
@@ -109,12 +110,27 @@ const useRealm = () => {
 const initRealmClasses = (
     cache: Realm,
     store: Realm,
-    colorScheme: ColorSchemeName,
+    colorScheme: NonNullable<ColorSchemeName>,
 ) => {
     cache.write(() => {
-        cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
-        cache.create(ActiveWalletCard.getName(), {})
-        cache.create(Mnemonic.getName(), {})
+        const appLock = cache.objectForPrimaryKey<AppLock>(
+            AppLock.getName(),
+            AppLock.getPrimaryKey(),
+        )
+        if (!appLock)
+            cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
+
+        const activeWalletCard = cache.objectForPrimaryKey<ActiveWalletCard>(
+            ActiveWalletCard.getName(),
+            ActiveWalletCard.getPrimaryKey(),
+        )
+        if (!activeWalletCard) cache.create(ActiveWalletCard.getName(), {})
+
+        const mnemonic = cache.objectForPrimaryKey<Mnemonic>(
+            Mnemonic.getName(),
+            Mnemonic.getPrimaryKey(),
+        )
+        if (!mnemonic) cache.create(Mnemonic.getName(), {})
     })
 
     const config = store.objectForPrimaryKey<Config>(
@@ -138,6 +154,10 @@ const initRealmClasses = (
     if (!userPreferences) {
         store.write(() => {
             store.create(UserPreferences.getName(), { theme: colorScheme })
+        })
+    } else {
+        store.write(() => {
+            userPreferences.theme = colorScheme
         })
     }
 }
