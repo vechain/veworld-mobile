@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from "react"
+import React, { useMemo } from "react"
 import {
     ViewProps,
     TouchableOpacity,
@@ -20,6 +20,11 @@ type Props = {
 export const BaseIcon = (props: Props) => {
     const { style, ...otherProps } = props
     const theme = useTheme()
+
+    const iconColor = useMemo(
+        () => (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
+        [theme],
+    )
     return (
         <TouchableOpacity
             onPress={props.action}
@@ -36,8 +41,8 @@ export const BaseIcon = (props: Props) => {
             ]}>
             <Icon
                 name={props.title}
-                size={props.size ?? 22}
-                color={theme.colors.tabicon}
+                size={props.size ?? 24}
+                color={iconColor}
                 {...otherProps}
             />
         </TouchableOpacity>
