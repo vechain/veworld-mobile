@@ -14,21 +14,20 @@ export const useCreateWalletWithPassword = () => {
 
     const [isComplete, setIsComplete] = useState(false)
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
-
-    const devices = store.objects<Device>(Device.getName())
-
-    const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-        Mnemonic.getName(),
-        Mnemonic.getPrimaryKey(),
-    )
-
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
         async (userPassword: string) => {
+            const config = store.objectForPrimaryKey<Config>(
+                Config.getName(),
+                Config.getPrimaryKey(),
+            )
+
+            const devices = store.objects<Device>(Device.getName())
+
+            const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
+                Mnemonic.getName(),
+                Mnemonic.getPrimaryKey(),
+            )
             let mnemonicPhrase = _mnemonic?.mnemonic
 
             try {
@@ -41,7 +40,9 @@ export const useCreateWalletWithPassword = () => {
                         aliasIndex,
                     )
 
-                    cache.write(() => cache.delete(_mnemonic))
+                    cache.write(() => {
+                        mnemonicPhrase = ""
+                    })
 
                     const hashedKey = PasswordUtils.hash(userPassword)
                     const accessControl = false
@@ -84,7 +85,7 @@ export const useCreateWalletWithPassword = () => {
                 console.log("CREATE WALLET ERROR : ", error)
             }
         },
-        [_mnemonic, cache, config, devices, store],
+        [cache, store],
     )
     //* [END] - Create Wallet
 

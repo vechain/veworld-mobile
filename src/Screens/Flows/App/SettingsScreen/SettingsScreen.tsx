@@ -4,8 +4,7 @@ import { EnableBiometrics, SecureApp } from "./Components"
 
 export const SettingsScreen = () => {
     return (
-        <>
-            <BaseSafeArea />
+        <BaseSafeArea>
             <BaseView align="center" justify="center" mx={20}>
                 <BaseText>Settings Screen</BaseText>
                 <BaseSpacer height={40} />
@@ -13,6 +12,6 @@ export const SettingsScreen = () => {
                 <BaseSpacer height={20} />
                 <EnableBiometrics />
             </BaseView>
-        </>
+        </BaseSafeArea>
     )
 }
