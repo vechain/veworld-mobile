@@ -10,3 +10,7 @@ export async function get(
 ): Promise<string | null> {
     return await SecureStore.getItemAsync(keychainKey, options)
 }
+
+export async function deleteItem(key: string, options: any) {
+    return await SecureStore.deleteItemAsync(key, options)
+}

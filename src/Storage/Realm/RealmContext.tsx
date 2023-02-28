@@ -102,7 +102,7 @@ const useRealm = () => {
     return context
 }
 
-const initRealmClasses = (cache: Realm, store: Realm) => {
+export const initRealmClasses = (cache: Realm, store: Realm) => {
     cache.write(() => {
         cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
         cache.create(ActiveWalletCard.getName(), {})

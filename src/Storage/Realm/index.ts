@@ -8,7 +8,11 @@ import {
     AppLock,
 } from "./Model"
 
-import { RealmContextProvider, useRealm } from "./RealmContext"
+import {
+    RealmContextProvider,
+    useRealm,
+    initRealmClasses,
+} from "./RealmContext"
 
 import { useObjectListener } from "./useObjectListener"
 import { useListListener } from "./useListListener"
@@ -16,6 +20,7 @@ import { useListListener } from "./useListListener"
 export {
     RealmContextProvider,
     useRealm,
+    initRealmClasses,
     useObjectListener,
     useListListener,
     Device,

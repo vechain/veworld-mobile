@@ -30,8 +30,7 @@ export const CheckBoxWithText: FC<Props> = ({
                 <BaseText
                     font={font ?? "footnote"}
                     color={fontColor}
-                    my={10}
-                    w={87}
+                    my={14}
                     mx={10}>
                     {text}
                 </BaseText>

@@ -9,15 +9,20 @@ export const useAppInitState = () => {
         [configEntity],
     )
 
+    const isResettingApp = useMemo(
+        () => configEntity?.isResettingApp,
+        [configEntity],
+    )
+
     const appStatus = useMemo(() => {
-        if (!isWalletCreated) {
-            return AppInitState.INIT_STATE
-        }
-    }, [isWalletCreated])
+        if (isResettingApp) return AppInitState.RESET_SATE
+        if (!isWalletCreated) return AppInitState.INIT_STATE
+    }, [isResettingApp, isWalletCreated])
 
     return appStatus
 }
 
 export enum AppInitState {
     INIT_STATE = "INIT_STATE",
+    RESET_SATE = "RESET_SATE",
 }

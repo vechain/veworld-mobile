@@ -3,10 +3,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Tabbar } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
+import { ResetAppScreen } from "~Screens"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
     Tabbar: undefined
+    ResetAppScreen: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -19,6 +21,14 @@ export const SwitchStack = () => {
                 <Switch.Screen
                     name="OnboardingStack"
                     component={OnboardingStack}
+                    options={{ headerShown: false }}
+                />
+            )
+        } else if (state === AppInitState.RESET_SATE) {
+            return (
+                <Switch.Screen
+                    name="ResetAppScreen"
+                    component={ResetAppScreen}
                     options={{ headerShown: false }}
                 />
             )
