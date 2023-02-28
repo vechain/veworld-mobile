@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react"
-import { FlatList, ViewProps } from "react-native"
+import { FlatList, StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
 import { Fonts } from "~Model"
@@ -10,12 +10,7 @@ export const CoinList = memo(({ ...animatedViewProps }: Props) => {
     const [data] = useState([...new Array(80).keys()])
 
     return (
-        <Animated.View
-            style={{
-                width: "100%",
-                paddingHorizontal: 20,
-            }}
-            {...animatedViewProps}>
+        <Animated.View style={baseStyles.view} {...animatedViewProps}>
             <FlatList
                 data={data}
                 renderItem={({ item }) => (
@@ -28,4 +23,11 @@ export const CoinList = memo(({ ...animatedViewProps }: Props) => {
             />
         </Animated.View>
     )
+})
+
+const baseStyles = StyleSheet.create({
+    view: {
+        width: "100%",
+        paddingHorizontal: 20,
+    },
 })

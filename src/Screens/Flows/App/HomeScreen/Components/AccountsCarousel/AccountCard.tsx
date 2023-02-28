@@ -24,6 +24,8 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 justify="center"
                 align="center"
                 radius={24}
+                px={16}
+                py={16}
                 style={style}>
                 <BaseText color={theme.colors.tertiary}>
                     {account.address}

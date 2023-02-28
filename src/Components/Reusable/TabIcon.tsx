@@ -1,8 +1,9 @@
 import React, { FC, memo } from "react"
 import { StyleSheet, View } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
-import { useTheme } from "~Common"
+import { useThemedStyles } from "~Common"
 import { BaseView } from "~Components/Base"
+import { ThemeType } from "~Model"
 
 type Props = {
     focused: boolean
@@ -10,36 +11,52 @@ type Props = {
 }
 
 export const TabIcon: FC<Props> = memo(({ focused, title }) => {
-    const theme = useTheme()
+    const themedStyles = useThemedStyles(baseStyles(focused))
 
     return (
         <BaseView
-            background={focused ? "#CDE599" : undefined}
             justify="center"
             align="center"
-            style={baseStyles.container}>
+            style={themedStyles.container}>
             <Icon
                 name={
                     focused
                         ? title.toLocaleLowerCase()
                         : `${title.toLocaleLowerCase()}-outline`
                 }
-                size={22}
-                color={focused ? theme.colors.text : theme.colors.primary}
+                size={24}
+                color={themedStyles.icon.color}
             />
 
-            {focused && <View style={baseStyles.dot} />}
+            <View style={themedStyles.dot} />
         </BaseView>
     )
 })
 
-const baseStyles = StyleSheet.create({
-    container: { borderRadius: 8, height: 44, width: 44 },
-    dot: {
-        height: 5,
-        width: 5,
-        backgroundColor: "black",
-        borderRadius: 5,
-        marginTop: 2,
-    },
-})
+const baseStyles = (isFocused: boolean) => (theme: ThemeType) => {
+    const iconColor = () => {
+        if (isFocused)
+            return theme.isDark ? theme.colors.tertiary : theme.colors.primary
+        return theme.colors.primary
+    }
+
+    const bgColor = isFocused ? theme.colors.secondary : "transparent"
+    return StyleSheet.create({
+        icon: {
+            color: iconColor(),
+        },
+        container: {
+            borderRadius: 10,
+            paddingHorizontal: 12,
+            paddingVertical: 8.5,
+            backgroundColor: bgColor,
+        },
+        dot: {
+            height: 4,
+            width: 4,
+            backgroundColor: isFocused ? iconColor() : "transparent",
+            borderRadius: 4,
+            marginTop: 1,
+        },
+    })
+}

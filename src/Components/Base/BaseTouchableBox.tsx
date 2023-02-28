@@ -1,20 +1,29 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, TouchableOpacityProps } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import DropShadow from "react-native-drop-shadow"
 import { useTheme, useThemedStyles } from "~Common"
 import { ThemeType } from "~Model"
 
 type Props = {
-    action: () => void
     children: React.ReactNode
-}
-export const BaseTouchableBox: React.FC<Props> = ({ action, children }) => {
+    action: () => void
+} & TouchableOpacityProps
+
+export const BaseTouchableBox: React.FC<Props> = ({
+    children,
+    action,
+    style,
+    ...props
+}) => {
     const theme = useTheme()
     const themedStyle = useThemedStyles(styles)
     return (
         <DropShadow style={theme.shadows.card}>
-            <TouchableOpacity onPress={action} style={themedStyle.container}>
+            <TouchableOpacity
+                onPress={action}
+                style={[themedStyle.container, style]}
+                {...props}>
                 {children}
             </TouchableOpacity>
         </DropShadow>
