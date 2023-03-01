@@ -65,11 +65,10 @@ export const HomeScreen = () => {
 
     const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
 
-    const getActiveScreen = useCallback(() => {
-        if (activeScreen === 0)
-            return <CoinList entering={coinListEnter} exiting={coinListExit} />
-
-        return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
+    const getActiveScreen = useMemo(() => {
+        if (activeScreen === 1)
+            return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
+        return <CoinList entering={coinListEnter} exiting={coinListExit} />
     }, [activeScreen, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
 
     return (
@@ -88,7 +87,7 @@ export const HomeScreen = () => {
                 <BaseSpacer height={20} />
 
                 <BaseView orientation="row" grow={1}>
-                    {getActiveScreen()}
+                    {getActiveScreen}
                 </BaseView>
             </PlatformScrollView>
 
@@ -120,53 +119,6 @@ useEffect(() => {
         }
     }
 
-    setTimeout(() => {
-        init()
-    }, 5000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [])
-
-!Sample decryption with biometrics
-useEffect(() => {
-    const init = async () => {
-        let wallet = devices[0].wallet
-        if (wallet) {
-            let encryptedKey = await KeychainService.getEncryptionKey(
-                devices[0].index,
-                true,
-            )
-            if (encryptedKey) {
-                let _wallet = CryptoUtils.decrypt<Wallet>(wallet, encryptedKey)
-                console.log(_wallet)
-            }
-        }
-    }
-
-    setTimeout(() => {
-        init()
-    }, 5000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [])
-
-!Sample decryption with password
-useEffect(() => {
-    const init = async () => {
-        let wallet = devices[0].wallet
-        if (wallet) {
-            let encryptedKey = await KeychainService.getEncryptionKey(
-                devices[0].index,
-            )
-            if (encryptedKey) {
-                const hashedKey = PasswordUtils.hash("000000") // user input password
-                let decryptedKey = CryptoUtils.decrypt<string>(
-                    encryptedKey,
-                    hashedKey,
-                )
-                let _wallet = CryptoUtils.decrypt<Wallet>(wallet, decryptedKey)
-                console.log("_wallet : ", _wallet)
-            }
-        }
-    }
     setTimeout(() => {
         init()
     }, 5000)
