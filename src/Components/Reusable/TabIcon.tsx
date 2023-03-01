@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react"
+import React, { FC, memo, useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useThemedStyles } from "~Common"
@@ -13,17 +13,17 @@ type Props = {
 export const TabIcon: FC<Props> = memo(({ focused, title }) => {
     const { styles } = useThemedStyles(baseStyles(focused))
 
+    const iconName = useMemo(
+        () =>
+            focused
+                ? title.toLocaleLowerCase()
+                : `${title.toLocaleLowerCase()}-outline`,
+        [focused, title],
+    )
+
     return (
         <BaseView justify="center" align="center" style={styles.container}>
-            <Icon
-                name={
-                    focused
-                        ? title.toLocaleLowerCase()
-                        : `${title.toLocaleLowerCase()}-outline`
-                }
-                size={24}
-                color={styles.icon.color}
-            />
+            <Icon name={iconName} size={24} color={styles.icon.color} />
 
             <View style={styles.dot} />
         </BaseView>
