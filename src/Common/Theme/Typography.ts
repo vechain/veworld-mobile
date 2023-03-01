@@ -3,6 +3,8 @@ export type TFonts =
     | "title"
     | "subTitle"
     | "body"
+    | "buttonPrimary"
+    | "buttonSecondary"
     | "footNote"
     | "caption"
     | "largeTitleAccent"
@@ -63,19 +65,29 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontWeight: fontWeight.normal,
     },
     title: {
-        fontFamily: fontFamily["Inter-Regular"],
-        fontSize: fontSize[28],
-        fontWeight: fontWeight.normal,
+        fontFamily: fontFamily["Inter-Bold"],
+        fontSize: fontSize[22],
+        fontWeight: fontWeight[700],
     },
     subTitle: {
         fontFamily: fontFamily["Inter-Bold"],
-        fontSize: 22,
-        fontWeight: fontWeight.normal,
+        fontSize: 18,
+        fontWeight: fontWeight[700],
     },
     body: {
         fontFamily: fontFamily["Inter-Regular"],
-        fontSize: 16,
-        fontWeight: fontWeight.normal,
+        fontSize: 14,
+        fontWeight: fontWeight[400],
+    },
+    buttonPrimary: {
+        fontFamily: fontFamily["Inter-Bold"],
+        fontSize: 14,
+        fontWeight: fontWeight[700],
+    },
+    buttonSecondary: {
+        fontFamily: fontFamily["Inter-Regular"],
+        fontSize: 14,
+        fontWeight: fontWeight[400],
     },
     footNote: {
         fontFamily: fontFamily["Inter-Light"],

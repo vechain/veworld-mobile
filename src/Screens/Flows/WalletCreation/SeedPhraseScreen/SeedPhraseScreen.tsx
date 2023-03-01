@@ -52,11 +52,11 @@ export const SeedPhraseScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText typographyFont="largeTitle" align="left">
+                    <BaseText typographyFont="title" align="left">
                         {LL.TITLE_MNEMONIC()}
                     </BaseText>
 
-                    <BaseText typographyFont="subTitle" my={10}>
+                    <BaseText typographyFont="body" my={10}>
                         {LL.BD_MNEMONIC_SUBTITLE()}
                     </BaseText>
 
@@ -71,7 +71,13 @@ export const SeedPhraseScreen = () => {
                         w={100}
                         title={LL.BTN_MNEMONIC_CLIPBOARD()}
                         disabled={!mnemonic}
-                        rightIcon={<BaseIcon name="copy-outline" size={10} />}
+                        rightIcon={
+                            <BaseIcon
+                                name="copy-outline"
+                                color={theme.colors.card}
+                                size={10}
+                            />
+                        }
                     />
                     <BaseSpacer height={28} />
 

@@ -16,6 +16,7 @@ import { Config, Mnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 import { useNavigation } from "@react-navigation/native"
+import DropShadow from "react-native-drop-shadow"
 
 export const ImportSeedPhraseScreen = () => {
     const { LL } = useI18nContext()
@@ -96,7 +97,7 @@ export const ImportSeedPhraseScreen = () => {
                     grow={1}
                     mx={20}>
                     <BaseView selfAlign="flex-start">
-                        <BaseText typographyFont="largeTitle">
+                        <BaseText typographyFont="title">
                             {LL.TITLE_WALLET_IMPORT_LOCAL()}
                         </BaseText>
                         <BaseText typographyFont="body" my={10}>
@@ -123,11 +124,13 @@ export const ImportSeedPhraseScreen = () => {
 
                         <BaseSpacer height={40} />
 
-                        <ImportMnemonicView
-                            seed={seed}
-                            onChangeText={onChangeText}
-                            isError={isError}
-                        />
+                        <DropShadow style={theme.shadows.card}>
+                            <ImportMnemonicView
+                                seed={seed}
+                                onChangeText={onChangeText}
+                                isError={isError}
+                            />
+                        </DropShadow>
                         {isError && (
                             <BaseText my={10} color={theme.colors.danger}>
                                 Incorrect mnemonic phrase

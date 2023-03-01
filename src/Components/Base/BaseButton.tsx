@@ -10,6 +10,7 @@ import { useTheme, Theme } from "~Common"
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
 import * as Haptics from "expo-haptics"
+import { TFonts } from "~Common/Theme"
 
 const {
     typography: { defaults: defaultTypography, ...otherTypography },
@@ -96,13 +97,11 @@ export const BaseButton = ({
         if (size === "lg") return 15
     }, [otherProps.py, size])
 
-    const computedFontSize = useMemo(() => {
-        if (fontSize) return fontSize
-        if (typographyFont)
-            return defaultTypography[typographyFont]
-                .fontSize as keyof typeof otherTypography.fontSize
-        if (size === "sm") return 10
-    }, [fontSize, size, typographyFont])
+    const computedTypographyFont: TFonts | undefined = useMemo(() => {
+        if (typographyFont) return typographyFont
+        if (size === "sm") return "buttonSecondary"
+        if (size === "lg") return "buttonPrimary"
+    }, [size, typographyFont])
 
     return (
         <TouchableOpacity
@@ -140,10 +139,10 @@ export const BaseButton = ({
                 color={
                     isSolidButton ? theme.colors.background : theme.colors.text
                 }
+                typographyFont={computedTypographyFont}
                 fontFamily={fontFamily}
                 fontWeight={fontWeight}
-                typographyFont={typographyFont}
-                fontSize={computedFontSize}>
+                fontSize={fontSize}>
                 {otherProps.title}
             </BaseText>
             {rightIcon}

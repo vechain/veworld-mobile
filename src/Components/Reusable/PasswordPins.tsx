@@ -19,6 +19,7 @@ export const PasswordPins: FC<Props> = ({
 
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
 
+    console.log(themedStyles)
     const getPinMessage = useCallback(() => {
         const message = isPINRetype
             ? LL.BD_USER_PASSWORD_CONFIRM()

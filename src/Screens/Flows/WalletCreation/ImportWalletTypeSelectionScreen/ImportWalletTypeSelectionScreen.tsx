@@ -25,7 +25,7 @@ export const ImportWalletTypeSelectionScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText typographyFont="largeTitle">
+                    <BaseText typographyFont="title">
                         {LL.TITLE_IMPORT_WALLET_TYPE()}
                     </BaseText>
 
