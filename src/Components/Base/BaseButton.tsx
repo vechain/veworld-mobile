@@ -6,12 +6,11 @@ import {
     FlexAlignType,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { useTheme } from "~Common"
+import { useTheme, Theme } from "~Common"
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
 import * as Haptics from "expo-haptics"
 
-import { Theme } from "~Common"
 const {
     typography: { defaults: defaultTypography, ...otherTypography },
 } = Theme

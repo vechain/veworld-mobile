@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react"
+import React, { memo, useCallback, useState } from "react"
 import { FlatList, StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
@@ -13,16 +13,21 @@ export const NFTList = memo(({ ...animatedViewProps }: Props) => {
     )
     const { styles } = useThemedStyles(baseStyles)
 
+    const renderItem = useCallback(
+        ({ item }: { item: string }) => <NftCard value={item} />,
+        [],
+    )
+    const renderSeparator = useCallback(() => <BaseSpacer height={10} />, [])
     return (
         <Animated.View style={styles.view} {...animatedViewProps}>
             <FlatList
                 data={data}
                 numColumns={1}
                 horizontal={false}
-                renderItem={({ item }) => <NftCard value={item} />}
+                renderItem={renderItem}
                 nestedScrollEnabled={false}
                 showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={() => <BaseSpacer height={10} />}
+                ItemSeparatorComponent={renderSeparator}
                 keyExtractor={item => item}
             />
         </Animated.View>
