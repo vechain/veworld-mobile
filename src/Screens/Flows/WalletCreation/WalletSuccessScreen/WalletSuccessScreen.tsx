@@ -178,7 +178,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
                         <BaseView align="center" w={100}>
                             <BaseButton
-                                filled
                                 action={onButtonPress}
                                 w={100}
                                 title={LL.BTN_WALLET_SUCCESS()}

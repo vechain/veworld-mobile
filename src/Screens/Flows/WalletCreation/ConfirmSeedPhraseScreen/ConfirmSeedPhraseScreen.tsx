@@ -36,7 +36,6 @@ export const ConfirmSeedPhraseScreen = () => {
                 </BaseText>
 
                 <BaseButton
-                    filled
                     action={onConfirmPress}
                     w={100}
                     px={20}

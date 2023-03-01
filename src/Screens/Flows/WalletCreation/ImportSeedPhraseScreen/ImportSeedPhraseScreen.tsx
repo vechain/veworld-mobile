@@ -138,7 +138,6 @@ export const ImportSeedPhraseScreen = () => {
                         />
 
                         <BaseButton
-                            filled
                             action={onVerify}
                             w={100}
                             title={LL.BTN_IMPORT_WALLET_VERIFY()}

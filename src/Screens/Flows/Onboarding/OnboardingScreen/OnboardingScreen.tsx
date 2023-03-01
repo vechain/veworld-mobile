@@ -99,7 +99,6 @@ export const OnboardingScreen = () => {
                     />
 
                     <BaseButton
-                        filled
                         action={onButtonPress}
                         w={100}
                         mx={20}

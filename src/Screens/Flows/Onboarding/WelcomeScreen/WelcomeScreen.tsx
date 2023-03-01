@@ -59,7 +59,6 @@ export const WelcomeScreen = () => {
                         </BaseText>
 
                         <BaseButton
-                            filled
                             action={onNavigate}
                             w={100}
                             title={LL.BTN_GET_STARTED()}

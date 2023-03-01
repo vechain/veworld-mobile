@@ -43,7 +43,6 @@ export const ImportWalletTypeSelectionScreen = () => {
                         {LL.BD_IMPORT_WALLET_TYPE_SEED()}
                     </BaseText>
                     <BaseButton
-                        filled
                         action={onImportWithMnemonic}
                         w={100}
                         my={20}
@@ -61,7 +60,7 @@ export const ImportWalletTypeSelectionScreen = () => {
 
                     <BaseSpacer height={20} />
                     <BaseButton
-                        bordered
+                        variant="outline"
                         action={onImportWithHardware}
                         w={100}
                         title={LL.BTN_CREATE_WALLET_TYPE_IMPORT()}

@@ -85,7 +85,6 @@ export const SeedPhraseScreen = () => {
                     />
 
                     <BaseButton
-                        filled
                         action={onBackupPress}
                         w={100}
                         px={20}

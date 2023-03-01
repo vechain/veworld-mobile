@@ -55,7 +55,6 @@ export const AppSecurityScreen = () => {
                 <BaseView align="center" w={100}>
                     {accessControl && (
                         <BaseButton
-                            filled
                             action={onBiometricsPress}
                             w={100}
                             mx={20}
@@ -67,7 +66,7 @@ export const AppSecurityScreen = () => {
                     )}
 
                     <BaseButton
-                        bordered
+                        variant="outline"
                         action={onPasswordPress}
                         w={100}
                         mx={20}

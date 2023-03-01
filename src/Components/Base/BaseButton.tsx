@@ -5,7 +5,7 @@ import {
     StyleSheet,
     FlexAlignType,
 } from "react-native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { useTheme } from "~Common"
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
@@ -15,8 +15,8 @@ import * as Haptics from "expo-haptics"
 type Props = {
     action: () => void
     disabled?: boolean
-    filled?: boolean
-    bordered?: boolean
+    variant?: "solid" | "outline"
+    bgColor?: string
     title: LocalizedString | string
     m?: number
     mx?: number
@@ -31,13 +31,17 @@ type Props = {
     haptics?: "light" | "medium" | "heavy"
 } & TouchableOpacityProps
 
-export const BaseButton = (props: Props) => {
-    const { style, disabled = false, ...otherProps } = props
+export const BaseButton = ({
+    style,
+    variant = "solid",
+    disabled = false,
+    ...otherProps
+}: Props) => {
     const theme = useTheme()
 
     const onButtonPress = useCallback(() => {
-        if (props.haptics) {
-            switch (props.haptics) {
+        if (otherProps.haptics) {
+            switch (otherProps.haptics) {
                 case Haptics.ImpactFeedbackStyle.Light:
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                     break
@@ -55,8 +59,16 @@ export const BaseButton = (props: Props) => {
             }
         }
 
-        props.action()
-    }, [props])
+        otherProps.action()
+    }, [otherProps])
+
+    const bgColor = useMemo(() => {
+        if (otherProps.bgColor) return otherProps.bgColor
+        return theme.colors.primary
+    }, [theme, otherProps.bgColor])
+
+    const isSolidButton = useMemo(() => variant === "solid", [variant])
+    const isOutlineButton = useMemo(() => variant === "solid", [variant])
 
     return (
         <TouchableOpacity
@@ -65,22 +77,22 @@ export const BaseButton = (props: Props) => {
             disabled={disabled}
             style={[
                 {
-                    backgroundColor: props.filled
-                        ? theme.colors.primary
+                    backgroundColor: isSolidButton
+                        ? bgColor
                         : theme.colors.transparent,
-                    borderColor: props.bordered
-                        ? theme.colors.primary
+                    borderColor: isOutlineButton
+                        ? bgColor
                         : theme.colors.transparent,
-                    width: props.w && `${props.w}%`,
-                    height: props.h && `${props.h}%`,
-                    margin: props.m,
-                    marginVertical: props.my,
-                    marginHorizontal: props.mx,
-                    padding: props.p,
-                    paddingVertical: props.py ? props.py : 14,
-                    paddingHorizontal: props.px,
+                    width: otherProps.w && `${otherProps.w}%`,
+                    height: otherProps.h && `${otherProps.h}%`,
+                    margin: otherProps.m,
+                    marginVertical: otherProps.my,
+                    marginHorizontal: otherProps.mx,
+                    padding: otherProps.p,
+                    paddingVertical: otherProps.py ? otherProps.py : 14,
+                    paddingHorizontal: otherProps.px,
                     opacity: disabled ? 0.5 : 1,
-                    alignSelf: props.selfAlign,
+                    alignSelf: otherProps.selfAlign,
                 },
                 style,
                 baseStyle.default,
@@ -88,10 +100,10 @@ export const BaseButton = (props: Props) => {
             {...otherProps}>
             <BaseText
                 color={
-                    props.filled ? theme.colors.background : theme.colors.text
+                    isSolidButton ? theme.colors.background : theme.colors.text
                 }
-                font={props.font ? props.font : "body_accent"}>
-                {props.title}
+                font={otherProps.font ? otherProps.font : "body_accent"}>
+                {otherProps.title}
             </BaseText>
         </TouchableOpacity>
     )

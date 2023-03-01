@@ -53,7 +53,6 @@ export const WalletTypeSelectionScreen = () => {
 
                 <BaseView align="center" w={100}>
                     <BaseButton
-                        filled
                         action={onCreateWallet}
                         w={100}
                         mx={20}
@@ -62,7 +61,7 @@ export const WalletTypeSelectionScreen = () => {
                     />
 
                     <BaseButton
-                        bordered
+                        variant="outline"
                         action={onImportWallet}
                         w={100}
                         mx={20}
