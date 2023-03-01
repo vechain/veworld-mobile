@@ -1,35 +1,28 @@
 import { useCallback } from "react"
-import { CryptoUtils, PasswordUtils } from "~Common/Utils"
-import KeychainService from "~Services/KeychainService"
-import { Device, useRealm } from "~Storage"
+import { SettingsConstants } from "~Common/Constant"
+import { CryptoUtils } from "~Common/Utils"
+import { Config, useRealm } from "~Storage"
 
 export const usePasswordValidation = () => {
     const { store } = useRealm()
-    const devices = store.objects<Device>(Device.getName())
 
     const validatePassword = useCallback(
         async (userPassword: string[]) => {
-            const accessControl = false
-
             try {
-                // Get key of first device - index of device not important -
-                let encryptedKey = await KeychainService.getEncryptionKey(
-                    devices[0].index,
-                    accessControl,
+                const config = store.objectForPrimaryKey<Config>(
+                    Config.getName(),
+                    Config.getPrimaryKey(),
                 )
 
-                // Confirm that user can decrypt encryption key with provided password
-                if (encryptedKey) {
-                    const hashedKey = PasswordUtils.hash(userPassword.join(""))
-                    let encKey = CryptoUtils.decrypt<string>(
-                        encryptedKey,
-                        hashedKey,
-                    )
+                const pinValidationString = config?.pinValidationString
+                let decryptedString = CryptoUtils.decrypt<string>(
+                    pinValidationString!,
+                    userPassword.join(""),
+                )
 
-                    if (encKey) {
-                        return true
-                    }
-
+                if (decryptedString === SettingsConstants.VALIDATION_STRING) {
+                    return true
+                } else {
                     return false
                 }
             } catch (error) {
@@ -37,8 +30,8 @@ export const usePasswordValidation = () => {
             }
         },
 
-        [devices],
+        [store],
     )
 
-    return { validatePassword }
+    return validatePassword
 }
