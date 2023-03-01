@@ -91,6 +91,14 @@ type RootTranslation = {
 	 */
 	BTN_WALLET_SUCCESS: string
 	/**
+	 * I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​ ​(​r​e​q​u​i​r​e​d​)
+	 */
+	BTN_RESET_APP_CHECKBOX: string
+	/**
+	 * R​E​S​E​T
+	 */
+	BTN_RESET_APP_RESET: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -167,6 +175,18 @@ type RootTranslation = {
 	 */
 	BD_WALLET_SUCCESS: string
 	/**
+	 * R​e​s​e​t​t​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​l​o​g​ ​y​o​u​ ​o​u​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​l​o​c​a​l​l​y​ ​(​a​c​c​o​u​n​t​s​,​ ​w​a​l​l​e​t​s​,​ ​t​r​a​n​s​a​c​t​i​o​n​ ​h​i​s​t​o​r​y​ ​e​t​c​.​)
+	 */
+	BD_RESET_APP_01: string
+	/**
+	 * R​e​s​e​t​t​i​n​g​ ​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​o​t​ ​c​h​a​n​g​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​'​ ​b​a​l​a​n​c​e​s​ ​b​u​t​ ​w​i​l​l​ ​r​e​q​u​i​r​e​ ​y​o​u​ ​t​o​ ​r​e​-​e​n​t​e​r​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​h​e​m​.
+	 */
+	BD_RESET_APP_02: string
+	/**
+	 * E​n​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​f​ ​a​l​l​ ​y​o​u​r​ ​w​a​l​l​e​t​s​,​ ​a​s​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​.
+	 */
+	BD_RESET_APP_DISCLAIMER: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -226,6 +246,10 @@ type RootTranslation = {
 	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
 	 */
 	TITLE_WALLET_SUCCESS: string
+	/**
+	 * C​o​n​f​i​r​m​ ​R​e​s​e​t
+	 */
+	TITLE_RESET_APP: string
 	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
@@ -346,6 +370,14 @@ export type TranslationFunctions = {
 	 */
 	BTN_WALLET_SUCCESS: () => LocalizedString
 	/**
+	 * I am aware that this action is irreversible (required)
+	 */
+	BTN_RESET_APP_CHECKBOX: () => LocalizedString
+	/**
+	 * RESET
+	 */
+	BTN_RESET_APP_RESET: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -422,6 +454,18 @@ export type TranslationFunctions = {
 	 */
 	BD_WALLET_SUCCESS: () => LocalizedString
 	/**
+	 * Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc.)
+	 */
+	BD_RESET_APP_01: () => LocalizedString
+	/**
+	 * Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.
+	 */
+	BD_RESET_APP_02: () => LocalizedString
+	/**
+	 * Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.
+	 */
+	BD_RESET_APP_DISCLAIMER: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -481,6 +525,10 @@ export type TranslationFunctions = {
 	 * You're finally one of us!
 	 */
 	TITLE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * Confirm Reset
+	 */
+	TITLE_RESET_APP: () => LocalizedString
 	/**
 	 * Local wallet
 	 */
