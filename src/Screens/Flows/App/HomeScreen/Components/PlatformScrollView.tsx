@@ -1,7 +1,7 @@
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import React from "react"
-import { isIOS } from "~Common/Utils/PlatformUtils/Platform"
 import { BaseScrollView } from "~Components"
+import { PlatformUtils } from "~Common"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -14,7 +14,7 @@ export const PlatformScrollView = ({
     children,
     handleScrollPosition,
 }: Props) => {
-    if (isIOS()) {
+    if (PlatformUtils.isIOS()) {
         return (
             <BaseScrollView
                 grow={1}
