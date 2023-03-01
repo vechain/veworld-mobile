@@ -73,7 +73,7 @@ export const HomeScreen = () => {
     }, [activeScreen, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
 
     return (
-        <BaseView>
+        <>
             <PlatformScrollView handleScrollPosition={handleScrollPosition}>
                 <BaseView align="center">
                     <Header action={openBottomSheetMenu} />
@@ -102,7 +102,7 @@ export const HomeScreen = () => {
                 onClose={closeBottomSheetMenu}
                 activeDevice={activeDevice}
             />
-        </BaseView>
+        </>
     )
 }
 
