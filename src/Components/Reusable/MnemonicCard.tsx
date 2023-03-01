@@ -44,9 +44,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                                 w={33}>{`${index + 1}. ${word}`}</BaseText>
                         ))}
 
-                        {!isShow && PlatformUtils.isIOS() && (
-                            <BlurView cornerRadius={16} />
-                        )}
+                        {!isShow && PlatformUtils.isIOS() && <BlurView />}
                         {!isShow && PlatformUtils.isAndroid() && (
                             <HideView background={theme.colors.background} />
                         )}
