@@ -58,7 +58,7 @@ export type TypographyObject = {
 export const defaults: Record<TFonts, TypographyObject> = {
     // INTER
     largeTitle: {
-        fontFamily: "Inter-Regular",
+        fontFamily: fontFamily["Inter-Regular"],
         fontSize: 32,
         fontWeight: fontWeight.normal,
     },
@@ -68,54 +68,54 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontWeight: fontWeight.normal,
     },
     subTitle: {
-        fontFamily: "Inter-Bold",
+        fontFamily: fontFamily["Inter-Bold"],
         fontSize: 22,
         fontWeight: fontWeight.normal,
     },
     body: {
-        fontFamily: "Inter-Regular",
+        fontFamily: fontFamily["Inter-Regular"],
         fontSize: 16,
         fontWeight: fontWeight.normal,
     },
     footNote: {
-        fontFamily: "Inter-Light",
+        fontFamily: fontFamily["Inter-Light"],
         fontSize: 13,
         fontWeight: fontWeight.normal,
     },
     caption: {
-        fontFamily: "Inter-Light",
+        fontFamily: fontFamily["Inter-Light"],
         fontSize: 11,
         fontWeight: fontWeight.normal,
     },
 
     // MONO
     largeTitleAccent: {
-        fontFamily: "Mono-Extra-Bold",
+        fontFamily: fontFamily["Mono-Extra-Bold"],
         fontSize: 32,
         fontWeight: fontWeight.normal,
     },
     titleAccent: {
-        fontFamily: "Mono_Bold",
+        fontFamily: fontFamily["Mono-Bold"],
         fontSize: 28,
         fontWeight: fontWeight.normal,
     },
     subTitleAccent: {
-        fontFamily: "Mono_Bold",
+        fontFamily: fontFamily["Mono-Bold"],
         fontSize: 22,
         fontWeight: fontWeight.normal,
     },
     bodyAccent: {
-        fontFamily: "Mono-Regular",
+        fontFamily: fontFamily["Mono-Regular"],
         fontSize: 16,
         fontWeight: fontWeight.normal,
     },
     footNoteAccent: {
-        fontFamily: "Mono-Light",
+        fontFamily: fontFamily["Mono-Light"],
         fontSize: 13,
         fontWeight: fontWeight.normal,
     },
     captionAccent: {
-        fontFamily: "Mono-Light",
+        fontFamily: fontFamily["Mono-Light"],
         fontSize: 11,
         fontWeight: fontWeight.normal,
     },
