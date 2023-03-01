@@ -25,6 +25,8 @@ const en: BaseTranslation = {
     BTN_IMPORT_WALLET_VERIFY: "Verify",
     BTN_WALLET_IMPORT_HELP: "Where can I find it?",
     BTN_WALLET_SUCCESS: "CREATE WALLET",
+    BTN_RESET_APP_CHECKBOX: "I am aware that this action is irreversible (required)",
+    BTN_RESET_APP_RESET: "RESET",
 
     // BODY
     BD_GDPR:
@@ -58,6 +60,9 @@ const en: BaseTranslation = {
     "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
+    BD_RESET_APP_01: "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc.)",
+    BD_RESET_APP_02: "Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.",
+    BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -75,6 +80,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_WALLET_SUCCESS: "You're finally one of us!",
+    TITLE_RESET_APP: "Confirm Reset",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",

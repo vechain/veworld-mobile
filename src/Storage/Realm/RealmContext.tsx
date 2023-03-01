@@ -107,7 +107,7 @@ const useRealm = () => {
     return context
 }
 
-const initRealmClasses = (
+export const initRealmClasses = (
     cache: Realm,
     store: Realm,
     colorScheme: NonNullable<ColorSchemeName>,
