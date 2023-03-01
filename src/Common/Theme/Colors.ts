@@ -12,6 +12,7 @@ export type Colors = {
     card: string
     border: string
     notification: string
+    darkPurpleDisabled: string
     transparent: string
 }
 
@@ -26,6 +27,7 @@ enum COLORS {
     DARK_PURPLE = "#0B0043",
     PURPLE = "#30265F",
     PURPLE_DISABLED = "#261E4C",
+    DARK_PURPLE_DISABLED = "#59527F",
     LIGHT_RED = "#FFC7B3",
     DARK_RED = "#931536",
     DARK_GREEN = "#325B00",
@@ -46,6 +48,7 @@ const light: Colors = {
     card: COLORS.WHITE,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
+    darkPurpleDisabled: COLORS.DARK_PURPLE_DISABLED,
     transparent: COLORS.TRANSPARENT,
 }
 
@@ -63,6 +66,7 @@ const dark: Colors = {
     card: COLORS.PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
+    darkPurpleDisabled: COLORS.DARK_PURPLE_DISABLED,
     transparent: COLORS.TRANSPARENT,
 }
 

@@ -28,7 +28,7 @@ export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="flex-start" grow={1} mx={20}>
+            <BaseView mx={20}>
                 <BaseView selfAlign="flex-start">
                     <BaseText typographyFont="largeTitle">
                         {LL.TITLE_USER_PASSWORD()}
@@ -38,7 +38,7 @@ export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     </BaseText>
                 </BaseView>
-                <BaseSpacer height={60} />
+                <BaseSpacer height={62} />
                 <PasswordPins
                     UserPinArray={userPinArray}
                     isPinError={isPinError}
