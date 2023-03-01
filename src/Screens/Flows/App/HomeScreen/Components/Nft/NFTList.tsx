@@ -4,7 +4,7 @@ import Animated, { AnimateProps } from "react-native-reanimated"
 import { useThemedStyles } from "~Common"
 import { BaseSpacer } from "~Components"
 import { ThemeType } from "~Model"
-import { NftCard } from "./NFTCard"
+import { NftCard } from "./temp"
 
 interface Props extends AnimateProps<ViewProps> {}
 
