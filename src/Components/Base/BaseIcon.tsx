@@ -1,29 +1,27 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
-import {
-    ViewProps,
-    TouchableOpacity,
-    TouchableOpacityProps,
-} from "react-native"
+import { TouchableOpacity, TouchableOpacityProps } from "react-native"
 import { useTheme } from "~Common"
 import Icon from "react-native-vector-icons/Ionicons"
+import { IconProps } from "react-native-vector-icons/Icon"
 
 type Props = {
-    title: string
     size?: number
     bg?: string
     isTouchable?: boolean
     action?: () => void
-} & ViewProps &
+} & IconProps &
     TouchableOpacityProps
 
 export const BaseIcon = (props: Props) => {
-    const { style, ...otherProps } = props
+    const { style, color, ...otherProps } = props
     const theme = useTheme()
 
     const iconColor = useMemo(
-        () => (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
-        [theme],
+        () =>
+            color ||
+            (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
+        [theme, color],
     )
     return (
         <TouchableOpacity
@@ -39,12 +37,7 @@ export const BaseIcon = (props: Props) => {
                 },
                 style,
             ]}>
-            <Icon
-                name={props.title}
-                size={props.size ?? 24}
-                color={iconColor}
-                {...otherProps}
-            />
+            <Icon size={props.size ?? 24} color={iconColor} {...otherProps} />
         </TouchableOpacity>
     )
 }

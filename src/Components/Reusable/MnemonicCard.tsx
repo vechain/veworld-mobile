@@ -1,9 +1,8 @@
-import React, { FC, useCallback, useState } from "react"
+import React, { FC, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
-import Icon from "react-native-vector-icons/Ionicons"
-import { BaseText, BaseView } from "~Components/Base"
+import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
-import { PlatformUtils, useTheme } from "~Common"
+import { PlatformUtils, useDisclosure, useTheme } from "~Common"
 import { HideView } from "./HideView.android"
 import { Fonts } from "~Model"
 import DropShadow from "react-native-drop-shadow"
@@ -15,18 +14,21 @@ type Props = {
 export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     const theme = useTheme()
 
-    const [Show, setShow] = useState(false)
-    const toggleShow = useCallback(() => setShow(prevState => !prevState), [])
+    const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
+    const iconColor = useMemo(
+        () => (theme.isDark ? theme.colors.tertiary : theme.colors.card),
+        [theme],
+    )
     return (
         <DropShadow style={[theme.shadows.card]}>
             <TouchableWithoutFeedback onPress={toggleShow}>
                 <BaseView
                     orientation="row"
-                    align="center"
+                    w={100}
+                    radius={16}
                     background={theme.colors.card}>
                     <BaseView
-                        radius={16}
                         px={16}
                         py={12}
                         style={baseStyles.box}
@@ -42,10 +44,10 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                                 w={33}>{`${index + 1}. ${word}`}</BaseText>
                         ))}
 
-                        {!Show && PlatformUtils.isIOS() && (
-                            <BlurView cornerRadius={12} />
+                        {!isShow && PlatformUtils.isIOS() && (
+                            <BlurView cornerRadius={16} />
                         )}
-                        {!Show && PlatformUtils.isAndroid() && (
+                        {!isShow && PlatformUtils.isAndroid() && (
                             <HideView background={theme.colors.background} />
                         )}
                     </BaseView>
@@ -58,14 +60,10 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                         justify="center"
                         align="center"
                         background={theme.colors.primary}>
-                        <Icon
-                            name={Show ? "eye-off-outline" : "eye-outline"}
+                        <BaseIcon
+                            name={isShow ? "eye-off-outline" : "eye-outline"}
                             size={18}
-                            color={
-                                theme.isDark
-                                    ? theme.colors.tertiary
-                                    : theme.colors.card
-                            }
+                            color={iconColor}
                         />
                     </BaseView>
                 </BaseView>
@@ -78,9 +76,10 @@ const baseStyles = StyleSheet.create({
     box: {
         borderTopLeftRadius: 16,
         borderBottomStartRadius: 16,
+        overflow: "hidden",
     },
     button: {
-        height: "100%",
+        flexGrow: 1,
         borderTopRightRadius: 16,
         borderBottomEndRadius: 16,
     },

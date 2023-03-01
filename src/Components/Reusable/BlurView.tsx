@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { BlurView as BV, BlurViewProps } from "@react-native-community/blur"
+import { useTheme } from "~Common"
 
 type Props = {
     cornerRadius?: number
@@ -8,6 +9,9 @@ type Props = {
     ViewProps
 
 export const BlurView = (props: Props) => {
+    const theme = useTheme()
+
+    const blurType = useMemo(() => (theme.isDark ? "dark" : "light"), [theme])
     return (
         <BV
             style={[
@@ -17,8 +21,8 @@ export const BlurView = (props: Props) => {
                     borderBottomLeftRadius: props.cornerRadius,
                 },
             ]}
-            blurType="light"
-            blurAmount={10}
+            blurType={blurType}
+            blurAmount={5}
             reducedTransparencyFallbackColor="white"
         />
     )

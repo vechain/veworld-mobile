@@ -22,7 +22,7 @@ export const Header = ({ action }: Props) => {
             </BaseView>
 
             <BaseIcon
-                title={"add-sharp"}
+                name={"add-sharp"}
                 size={32}
                 bg={theme.colors.secondary}
                 action={action}
