@@ -93,7 +93,7 @@ const setRealmKey = async (Enckey: string) => {
     }
 }
 
-const deleteAll = async (deviceIndex: number) => {
+const deleteItem = async (deviceIndex: number) => {
     const options = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         keychainService: `${WALLET_KEY}_${deviceIndex}`,
@@ -111,5 +111,5 @@ export default {
     setEncryptionKey,
     getRealmKey,
     setRealmKey,
-    deleteAll,
+    deleteItem,
 }

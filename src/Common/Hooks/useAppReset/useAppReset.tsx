@@ -39,7 +39,7 @@ const loopOverAndDeleteDevices = async (
 ) => {
     for (const device of devices) {
         try {
-            await KeychainService.deleteAll(device.index)
+            await KeychainService.deleteItem(device.index)
         } catch (error) {
             console.log("Error deleting Keychain Entries", error)
         }

@@ -16,30 +16,31 @@ export const SwitchStack = () => {
     const state = useAppInitState()
 
     const RenderStacks = useMemo(() => {
-        if (state === AppInitState.INIT_STATE) {
-            return (
-                <Switch.Screen
-                    name="OnboardingStack"
-                    component={OnboardingStack}
-                    options={{ headerShown: false }}
-                />
-            )
-        } else if (state === AppInitState.RESET_SATE) {
-            return (
-                <Switch.Screen
-                    name="ResetAppScreen"
-                    component={ResetAppScreen}
-                    options={{ headerShown: false }}
-                />
-            )
-        } else {
-            return (
-                <Switch.Screen
-                    name="Tabbar"
-                    component={Tabbar}
-                    options={{ headerShown: false }}
-                />
-            )
+        switch (state) {
+            case AppInitState.INIT_STATE:
+                return (
+                    <Switch.Screen
+                        name="OnboardingStack"
+                        component={OnboardingStack}
+                        options={{ headerShown: false }}
+                    />
+                )
+            case AppInitState.RESETTING_STATE:
+                return (
+                    <Switch.Screen
+                        name="ResetAppScreen"
+                        component={ResetAppScreen}
+                        options={{ headerShown: false }}
+                    />
+                )
+            default:
+                return (
+                    <Switch.Screen
+                        name="Tabbar"
+                        component={Tabbar}
+                        options={{ headerShown: false }}
+                    />
+                )
         }
     }, [state])
 
