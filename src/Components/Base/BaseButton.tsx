@@ -9,13 +9,17 @@ import React, { useCallback, useMemo } from "react"
 import { useTheme } from "~Common"
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
-import { TFonts } from "~Model"
 import * as Haptics from "expo-haptics"
+
+import { Theme } from "~Common"
+const {
+    typography: { defaults: defaultTypography, ...otherTypography },
+} = Theme
 
 type Props = {
     action: () => void
     disabled?: boolean
-    variant?: "solid" | "outline"
+    variant?: "solid" | "outline" | "ghost"
     bgColor?: string
     title: LocalizedString | string
     m?: number
@@ -26,17 +30,28 @@ type Props = {
     py?: number
     w?: number
     h?: number
-    font?: TFonts
+    size?: "sm" | "md" | "lg"
+    typographyFont?: keyof typeof defaultTypography
+    fontSize?: keyof typeof otherTypography.fontSize
+    fontWeight?: keyof typeof otherTypography.fontWeight
+    fontFamily?: keyof typeof otherTypography.fontFamily
     selfAlign?: "auto" | FlexAlignType
     haptics?: "light" | "medium" | "heavy"
+    leftIcon?: React.ReactNode
+    rightIcon?: React.ReactNode
 } & TouchableOpacityProps
 
 export const BaseButton = ({
     style,
     variant = "solid",
+    size = "lg",
     disabled = false,
+    leftIcon,
+    rightIcon,
     ...otherProps
 }: Props) => {
+    const { typographyFont, fontFamily, fontSize, fontWeight } = otherProps
+
     const theme = useTheme()
 
     const onButtonPress = useCallback(() => {
@@ -68,7 +83,27 @@ export const BaseButton = ({
     }, [theme, otherProps.bgColor])
 
     const isSolidButton = useMemo(() => variant === "solid", [variant])
-    const isOutlineButton = useMemo(() => variant === "solid", [variant])
+    const isOutlineButton = useMemo(() => variant === "outline", [variant])
+
+    const paddingX = useMemo(() => {
+        if (otherProps.px) return otherProps.px
+        if (size === "sm") return 8
+        if (size === "lg") return 16
+    }, [otherProps.px, size])
+
+    const paddingY = useMemo(() => {
+        if (otherProps.py) return otherProps.py
+        if (size === "sm") return 4
+        if (size === "lg") return 15
+    }, [otherProps.py, size])
+
+    const computedFontSize = useMemo(() => {
+        if (fontSize) return fontSize
+        if (typographyFont)
+            return defaultTypography[typographyFont]
+                .fontSize as keyof typeof otherTypography.fontSize
+        if (size === "sm") return 10
+    }, [fontSize, size, typographyFont])
 
     return (
         <TouchableOpacity
@@ -89,22 +124,30 @@ export const BaseButton = ({
                     marginVertical: otherProps.my,
                     marginHorizontal: otherProps.mx,
                     padding: otherProps.p,
-                    paddingVertical: otherProps.py ? otherProps.py : 14,
-                    paddingHorizontal: otherProps.px,
+                    paddingVertical: paddingY,
+                    paddingHorizontal: paddingX,
                     opacity: disabled ? 0.5 : 1,
                     alignSelf: otherProps.selfAlign,
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: leftIcon || rightIcon ? "row" : "column",
                 },
                 style,
                 baseStyle.default,
             ]}
             {...otherProps}>
+            {leftIcon}
             <BaseText
                 color={
                     isSolidButton ? theme.colors.background : theme.colors.text
                 }
-                font={otherProps.font ? otherProps.font : "body_accent"}>
+                fontFamily={fontFamily}
+                fontWeight={fontWeight}
+                typographyFont={typographyFont}
+                fontSize={computedFontSize}>
                 {otherProps.title}
             </BaseText>
+            {rightIcon}
         </TouchableOpacity>
     )
 }

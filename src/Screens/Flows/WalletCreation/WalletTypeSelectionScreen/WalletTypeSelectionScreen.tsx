@@ -7,7 +7,6 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
 import { Config, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
@@ -40,11 +39,11 @@ export const WalletTypeSelectionScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font={Fonts.large_title}>
+                    <BaseText typographyFont="title">
                         {LL.TITLE_CREATE_WALLET_TYPE()}
                     </BaseText>
 
-                    <BaseText font={Fonts.body} my={10}>
+                    <BaseText typographyFont="body" my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                         sed do eiusmod tempor incididunt ut labore et dolore
                         magna aliqua.

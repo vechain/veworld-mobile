@@ -6,8 +6,7 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from "react-native-reanimated"
-import { Fonts, ThemeType } from "~Model"
-import { useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 
 const LONG_WIDTH = 20
 
@@ -47,14 +46,16 @@ export const TabbarHeader = memo(
                     justify="space-between"
                     align="center">
                     <Pressable onPress={onTokensPress} style={styles.button}>
-                        <BaseText font={Fonts.body_accent}>{"Token"}</BaseText>
+                        <BaseText typographyFont="bodyAccent">
+                            {"Token"}
+                        </BaseText>
                         <Animated.View
                             style={[styles.underline, animatedWidthToken]}
                         />
                     </Pressable>
 
                     <Pressable onPress={onNftPress} style={styles.button}>
-                        <BaseText font={Fonts.body_accent}>{"NFT"}</BaseText>
+                        <BaseText typographyFont="bodyAccent">{"NFT"}</BaseText>
                         <Animated.View
                             style={[styles.underline, animatedWidthNft]}
                         />
@@ -65,7 +66,7 @@ export const TabbarHeader = memo(
     },
 )
 
-const baseStyles = (theme: ThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         underline: {
             height: 4,

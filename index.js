@@ -21,6 +21,8 @@ import {
     Mono_Light,
     Mono_Regular,
 } from "~Assets"
+import { typography } from "~Common/Theme/Typography"
+const { fontFamily } = typography
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 // immer setup
@@ -28,14 +30,14 @@ enableAllPlugins()
 
 const Main = () => {
     const [fontsLoaded] = useFonts({
-        "Inter-Bold": Inter_Bold,
-        "Inter-Regular": Inter_Regular,
-        "Inter-Light": Inter_Light,
-        "Inter-Medium": Inter_Medium,
-        "Mono-Extra-Bold": Mono_Extra_Bold,
-        "Mono-Bold": Mono_Bold,
-        "Mono-Regular": Mono_Regular,
-        "Mono-Light": Mono_Light,
+        [fontFamily["Inter-Bold"]]: Inter_Bold,
+        [fontFamily["Inter-Regular"]]: Inter_Regular,
+        [fontFamily["Inter-Light"]]: Inter_Light,
+        [fontFamily["Inter-Medium"]]: Inter_Medium,
+        [fontFamily["Mono-Extra-Bold"]]: Mono_Extra_Bold,
+        [fontFamily["Mono-Bold"]]: Mono_Bold,
+        [fontFamily["Mono-Regular"]]: Mono_Regular,
+        [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
     return (

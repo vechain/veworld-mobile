@@ -3,7 +3,6 @@ import React from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import VectorImage from "react-native-vector-image"
 import { Slide } from "../Types"
-import { Fonts } from "~Model"
 
 type Props = {
     item: Slide
@@ -21,11 +20,11 @@ export const ListSlide = ({ item }: Props) => {
             <BaseSpacer height={40} />
 
             <BaseView px={20}>
-                <BaseText align="center" font={Fonts.sub_title}>
+                <BaseText align="center" typographyFont="subTitle">
                     {item.title}
                 </BaseText>
                 <BaseSpacer height={20} />
-                <BaseText align="center" font={Fonts.body}>
+                <BaseText align="center" typographyFont="body">
                     {item.text}
                 </BaseText>
             </BaseView>

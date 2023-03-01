@@ -1,4 +1,19 @@
-import { Colors } from "~Model"
+export type Colors = {
+    primary: string
+    primaryDisabled: string
+    secondary: string
+    tertiary: string
+    disabled: string
+    danger: string
+    success: string
+    text: string
+    background: string
+    backgroundReversed: string
+    card: string
+    border: string
+    notification: string
+    transparent: string
+}
 
 enum COLORS {
     TRANSPARENT = "transparent",

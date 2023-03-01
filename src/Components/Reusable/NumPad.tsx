@@ -1,9 +1,8 @@
 import { Dimensions, Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
-import { Fonts, ThemeType } from "~Model"
 import * as Haptics from "expo-haptics"
-import { useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import DropShadow from "react-native-drop-shadow"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
@@ -35,7 +34,7 @@ export const NumPad = ({ onDigitPress }: Props) => {
                                 ]}
                                 onPress={onPress(digit)}>
                                 <BaseText
-                                    font={Fonts.large_title_accent}
+                                    typographyFont="largeTitleAccent"
                                     alignContainer="center">
                                     {digit}
                                 </BaseText>
@@ -48,7 +47,7 @@ export const NumPad = ({ onDigitPress }: Props) => {
     )
 }
 
-const baseStyles = (theme: ThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         width: {
             width: "33%",

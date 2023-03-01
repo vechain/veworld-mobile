@@ -35,4 +35,6 @@ const dark = {
     },
 }
 
+export type Shadow = typeof dark | typeof light
+
 export const shadows = { light, dark }

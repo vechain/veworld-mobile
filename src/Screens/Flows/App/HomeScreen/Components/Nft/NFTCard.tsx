@@ -2,7 +2,6 @@ import React, { useCallback } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseText, BaseTouchableBox } from "~Components"
-import { Fonts } from "~Model"
 import { useTheme } from "~Common"
 
 type Props = AnimateProps<ViewProps> & {
@@ -18,7 +17,7 @@ export const NftCard: React.FC<Props> = ({ value, ...animatedViewProps }) => {
             <BaseTouchableBox
                 action={onAction}
                 style={{ backgroundColor: theme.colors.primary }}>
-                <BaseText font={Fonts.sub_title}>{value}</BaseText>
+                <BaseText typographyFont="subTitle">{value}</BaseText>
             </BaseTouchableBox>
         </Animated.View>
     )

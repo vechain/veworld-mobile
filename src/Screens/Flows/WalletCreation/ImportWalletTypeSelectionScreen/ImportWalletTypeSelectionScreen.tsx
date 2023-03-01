@@ -7,7 +7,6 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 
@@ -26,20 +25,20 @@ export const ImportWalletTypeSelectionScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font={Fonts.large_title}>
+                    <BaseText typographyFont="largeTitle">
                         {LL.TITLE_IMPORT_WALLET_TYPE()}
                     </BaseText>
 
-                    <BaseText font={Fonts.body} my={10}>
+                    <BaseText typographyFont="body" my={10}>
                         {LL.BD_IMPORT_WALLET_TYPE()}
                     </BaseText>
                 </BaseView>
 
                 <BaseView w={100}>
-                    <BaseText font={Fonts.sub_title} my={10}>
+                    <BaseText typographyFont="subTitle" my={10}>
                         {LL.SB_IMPORT_WALLET_TYPE_SEED()}
                     </BaseText>
-                    <BaseText font={Fonts.body}>
+                    <BaseText typographyFont="body">
                         {LL.BD_IMPORT_WALLET_TYPE_SEED()}
                     </BaseText>
                     <BaseButton
@@ -51,10 +50,10 @@ export const ImportWalletTypeSelectionScreen = () => {
 
                     <BaseSpacer height={20} />
 
-                    <BaseText font={Fonts.sub_title} my={10}>
+                    <BaseText typographyFont="subTitle" my={10}>
                         {LL.SB_IMPORT_WALLET_TYPE_HARDWARE()}
                     </BaseText>
-                    <BaseText font={Fonts.body}>
+                    <BaseText typographyFont="body">
                         {LL.BD_IMPORT_WALLET_TYPE_HARDWARE()}
                     </BaseText>
 

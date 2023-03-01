@@ -14,7 +14,7 @@ export const SettingsScreen = () => {
                 <EnableBiometrics />
                 <BaseSpacer height={20} />
                 <ChangeTheme />
-                <BaseSpacer height={20} />
+                <BaseSpacer height={60} />
                 <Reset />
             </BaseView>
         </BaseSafeArea>

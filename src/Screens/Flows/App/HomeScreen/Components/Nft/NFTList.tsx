@@ -1,9 +1,8 @@
 import React, { memo, useState } from "react"
 import { FlatList, StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
-import { useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseSpacer } from "~Components"
-import { ThemeType } from "~Model"
 import { NftCard } from "./NFTCard"
 
 interface Props extends AnimateProps<ViewProps> {}
@@ -30,7 +29,7 @@ export const NFTList = memo(({ ...animatedViewProps }: Props) => {
     )
 })
 
-const baseStyles = (theme: ThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         view: {
             width: "100%",

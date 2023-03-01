@@ -5,8 +5,7 @@ import Animated, {
     useAnimatedStyle,
     withTiming,
 } from "react-native-reanimated"
-import { useThemedStyles } from "~Common"
-import { ThemeType } from "~Model"
+import { ColorThemeType, useThemedStyles } from "~Common"
 
 const LONG_WIDTH = 28
 const WIDTH = 10
@@ -48,7 +47,7 @@ export const PaginationItem: FC<Props> = memo(
     },
 )
 
-const baseStyles = (theme: ThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,

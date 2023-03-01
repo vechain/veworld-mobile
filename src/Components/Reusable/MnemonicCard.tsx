@@ -4,7 +4,6 @@ import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
 import { PlatformUtils, useDisclosure, useTheme } from "~Common"
 import { HideView } from "./HideView.android"
-import { Fonts } from "~Model"
 import DropShadow from "react-native-drop-shadow"
 
 type Props = {
@@ -38,7 +37,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                         justify="space-between">
                         {mnemonicArray.map((word, index) => (
                             <BaseText
-                                font={Fonts.footnote_accent}
+                                typographyFont="footNoteAccent"
                                 key={`word${index}`}
                                 my={8}
                                 w={33}>{`${index + 1}. ${word}`}</BaseText>

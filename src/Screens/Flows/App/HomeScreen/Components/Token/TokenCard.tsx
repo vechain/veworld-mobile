@@ -2,7 +2,6 @@ import React, { useCallback } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseText, BaseTouchableBox } from "~Components"
-import { Fonts } from "~Model"
 
 type Props = AnimateProps<ViewProps> & {
     value: number
@@ -13,7 +12,7 @@ export const TokenCard: React.FC<Props> = ({ value, ...animatedViewProps }) => {
     return (
         <Animated.View style={baseStyles.view} {...animatedViewProps}>
             <BaseTouchableBox action={onAction}>
-                <BaseText font={Fonts.sub_title}>{value}</BaseText>
+                <BaseText typographyFont="subTitle">{value}</BaseText>
             </BaseTouchableBox>
         </Animated.View>
     )
