@@ -20,7 +20,6 @@ export const EntryPoint = () => {
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
-    // TODO: #114
     useEffect(() => {
         const init = async () => {
             if (
@@ -35,7 +34,8 @@ export const EntryPoint = () => {
                 LockScreenUtils.isBiometricLockFlow(
                     appLockStatus,
                     walletSecurity,
-                )
+                ) &&
+                !isSecurityDowngrade
             ) {
                 await recursiveFaceId()
             }
