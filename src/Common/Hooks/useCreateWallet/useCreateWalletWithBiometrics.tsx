@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react"
-import { UserSelectedSecurityLevel } from "~Model"
+import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
@@ -81,6 +81,7 @@ export const useCreateWalletWithBiometrics = () => {
                     if (config) {
                         config.userSelectedSecurity =
                             UserSelectedSecurityLevel.BIOMETRIC
+                        config.lastSecurityLevel = SecurityLevelType.BIOMETRIC
                     }
                 })
 
