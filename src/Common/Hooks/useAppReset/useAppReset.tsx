@@ -11,6 +11,7 @@ import {
     useRealm,
 } from "~Storage"
 import Realm from "realm"
+import { SettingsConstants } from "~Common/Constant"
 
 export const useAppReset = () => {
     const { store, cache } = useRealm()
@@ -72,6 +73,7 @@ const resetRealm = async (store: Realm, cache: Realm) => {
         config!.isAppLockActive = true
         config!.lastSecurityLevel = "NONE"
         config!.isSecurityDowngrade = false
+        config!.pinValidationString = SettingsConstants.VALIDATION_STRING
 
         store.delete(store.objects(Device.getName()))
         store.delete(store.objects(Account.getName()))

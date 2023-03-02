@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from "react"
+import React, { FC, memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText, BaseView } from "~Components"
@@ -11,69 +11,67 @@ type Props = {
 }
 
 const MESSAGE_FAKE_PLACEHOLDER = "placeholder"
-export const PasswordPins: FC<Props> = ({
-    UserPinArray,
-    isPINRetype,
-    isPinError,
-}) => {
-    const { LL } = useI18nContext()
+export const PasswordPins: FC<Props> = memo(
+    ({ UserPinArray, isPINRetype, isPinError }) => {
+        const { LL } = useI18nContext()
 
-    const isMessageVisible = useMemo(
-        () => !!(isPinError || isPINRetype),
-        [isPinError, isPINRetype],
-    )
-    const { styles: themedStyles, theme } = useThemedStyles(
-        baseStyles(isMessageVisible),
-    )
-
-    const getMessageText = useMemo(() => {
-        if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
-        if (isPinError) return LL.BD_USER_PASSWORD_ERROR()
-        return MESSAGE_FAKE_PLACEHOLDER
-    }, [LL, isPINRetype, isPinError])
-
-    const getMessageTextColor = useMemo(() => {
-        if (isPINRetype) return theme.colors.primary
-        if (isPinError) return theme.colors.danger
-        return undefined
-    }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.primary])
-
-    const getPinMessage = useCallback(() => {
-        return (
-            <BaseText
-                style={themedStyles.messageTextStyle}
-                typographyFont="bodyAccent"
-                alignContainer="center"
-                color={getMessageTextColor}
-                my={16}>
-                {getMessageText}
-            </BaseText>
+        const isMessageVisible = useMemo(
+            () => !!(isPinError || isPINRetype),
+            [isPinError, isPINRetype],
         )
-    }, [themedStyles.messageTextStyle, getMessageTextColor, getMessageText])
+        const { styles: themedStyles, theme } = useThemedStyles(
+            baseStyles(isMessageVisible),
+        )
 
-    return (
-        <BaseView>
-            <BaseView orientation="row" justify="center">
-                {UserPinArray.map((digit, index) => {
-                    return (
-                        <BaseView
-                            key={`digit${index}`}
-                            mx={10}
-                            style={[
-                                themedStyles.pinBase,
-                                ...(digit
-                                    ? [themedStyles.pressed]
-                                    : [themedStyles.notPressed]),
-                            ]}
-                        />
-                    )
-                })}
+        const getMessageText = useMemo(() => {
+            if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
+            if (isPinError) return LL.BD_USER_PASSWORD_ERROR()
+            return MESSAGE_FAKE_PLACEHOLDER
+        }, [LL, isPINRetype, isPinError])
+
+        const getMessageTextColor = useMemo(() => {
+            if (isPINRetype) return theme.colors.primary
+            if (isPinError) return theme.colors.danger
+            return undefined
+        }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.primary])
+
+        const getPinMessage = useCallback(() => {
+            return (
+                <BaseText
+                    style={themedStyles.messageTextStyle}
+                    typographyFont="bodyAccent"
+                    alignContainer="center"
+                    color={getMessageTextColor}
+                    my={16}>
+                    {getMessageText}
+                </BaseText>
+            )
+        }, [themedStyles.messageTextStyle, getMessageTextColor, getMessageText])
+
+        return (
+            <BaseView>
+                <BaseView orientation="row" justify="center">
+                    {UserPinArray.map((digit, index) => {
+                        return (
+                            <BaseView
+                                key={`digit${index}`}
+                                mx={10}
+                                style={[
+                                    themedStyles.pinBase,
+                                    ...(digit
+                                        ? [themedStyles.pressed]
+                                        : [themedStyles.notPressed]),
+                                ]}
+                            />
+                        )
+                    })}
+                </BaseView>
+
+                {getPinMessage()}
             </BaseView>
-
-            {getPinMessage()}
-        </BaseView>
-    )
-}
+        )
+    },
+)
 
 const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
