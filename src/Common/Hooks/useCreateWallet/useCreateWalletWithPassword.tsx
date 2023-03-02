@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
-import { UserSelectedSecurityLevel } from "~Model"
+import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
@@ -76,6 +76,7 @@ export const useCreateWalletWithPassword = () => {
                         if (config) {
                             config.userSelectedSecurity =
                                 UserSelectedSecurityLevel.PASSWORD
+                            config.lastSecurityLevel = SecurityLevelType.SECRET
                         }
                     })
 
