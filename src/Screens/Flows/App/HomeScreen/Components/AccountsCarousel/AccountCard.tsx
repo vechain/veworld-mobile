@@ -3,7 +3,7 @@ import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
 import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
-import { BaseText, BaseView } from "~Components"
+import { AccountIcon, BaseText, BaseView } from "~Components"
 import { Account } from "~Storage"
 
 interface Props extends AnimateProps<ViewProps> {
@@ -26,6 +26,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 px={16}
                 py={16}
                 style={style}>
+                <AccountIcon account={account} />
                 <BaseText color={theme.colors.tertiary}>
                     {account.address}
                 </BaseText>

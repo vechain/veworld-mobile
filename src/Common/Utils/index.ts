@@ -15,6 +15,7 @@ import PlatformUtils from "./PlatformUtils"
 import SeedUtils from "./SeedUtils"
 import LockScreenUtils from "./LockScreenUtils"
 import AlertUtils from "./AlertUtils"
+import PicassoUtils from "./PicassoUtils"
 // import SignatureUtils from "./SignatureUtils"
 // import TokenUtils from "./TokenUtils"
 // import TransactionUtils from "./TransactionUtils"
@@ -38,6 +39,7 @@ export {
     SeedUtils,
     LockScreenUtils,
     AlertUtils,
+    PicassoUtils,
     // SignatureUtils,
     // TokenUtils,
     // TransactionUtils,
