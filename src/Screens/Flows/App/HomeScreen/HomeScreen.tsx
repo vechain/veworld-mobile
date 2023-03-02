@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { BaseScrollView, BaseSpacer, BaseView } from "~Components"
-import {
-    ActiveWalletCard,
-    Device,
-    useRealm,
-    useListListener,
-    useObjectListener,
-} from "~Storage"
+import { Device, useRealm, useListListener } from "~Storage"
 import {
     TokenList,
     NFTList,
@@ -21,6 +15,7 @@ import { useSharedValue } from "react-native-reanimated"
 import { useBottomSheetModal } from "~Common"
 import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
 import HomeScreenBottomSheet from "./Components/HomeScreenBottomSheet"
+import { useActiveWalletEntity } from "~Common/Hooks/Entities"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -28,7 +23,7 @@ type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
-    const { store, cache } = useRealm()
+    const { store } = useRealm()
     const {
         ref: bottomSheetRef,
         onOpen: openBottomSheetMenu,
@@ -56,11 +51,7 @@ export const HomeScreen = () => {
         [scrollValue],
     )
 
-    const activeCard = useObjectListener(
-        ActiveWalletCard.getName(),
-        ActiveWalletCard.getPrimaryKey(),
-        cache,
-    ) as ActiveWalletCard
+    const activeCard = useActiveWalletEntity()
 
     const activeCardIndex = useMemo(
         () => activeCard.activeIndex,
