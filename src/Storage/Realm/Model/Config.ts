@@ -8,6 +8,7 @@ export class Config extends Object {
     lastSecurityLevel!: string
     isSecurityDowngrade!: boolean
     isResettingApp!: boolean
+    pinValidationString!: string
 
     static getName(): string {
         return Config.schema.name
@@ -29,6 +30,10 @@ export class Config extends Object {
             lastSecurityLevel: { type: "string", default: "NONE" },
             isSecurityDowngrade: { type: "bool", default: false },
             isResettingApp: { type: "bool", default: false },
+            pinValidationString: {
+                type: "string",
+                default: "SUCCESS PASSWORD IS CORRECT",
+            },
         },
     }
 }
