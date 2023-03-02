@@ -2,7 +2,6 @@
 import {
     TouchableOpacity,
     TouchableOpacityProps,
-    StyleSheet,
     FlexAlignType,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
@@ -21,6 +20,7 @@ type Props = {
     disabled?: boolean
     variant?: "solid" | "outline" | "ghost"
     bgColor?: string
+    textColor?: string
     title: LocalizedString | string
     m?: number
     mx?: number
@@ -30,6 +30,7 @@ type Props = {
     py?: number
     w?: number
     h?: number
+    radius?: number
     size?: "sm" | "md" | "lg"
     typographyFont?: keyof typeof defaultTypography
     fontSize?: keyof typeof otherTypography.fontSize
@@ -43,8 +44,10 @@ type Props = {
 
 export const BaseButton = ({
     style,
+    textColor,
     variant = "solid",
     size = "lg",
+    radius,
     disabled = false,
     leftIcon,
     rightIcon,
@@ -129,15 +132,19 @@ export const BaseButton = ({
                     display: "flex",
                     alignItems: "center",
                     flexDirection: leftIcon || rightIcon ? "row" : "column",
+                    borderRadius: radius || 8,
+                    borderWidth: 1,
                 },
                 style,
-                baseStyle.default,
             ]}
             {...otherProps}>
             {leftIcon}
             <BaseText
                 color={
-                    isSolidButton ? theme.colors.background : theme.colors.text
+                    textColor ||
+                    (isSolidButton
+                        ? theme.colors.background
+                        : theme.colors.text)
                 }
                 typographyFont={computedTypographyFont}
                 fontFamily={fontFamily}
@@ -149,11 +156,3 @@ export const BaseButton = ({
         </TouchableOpacity>
     )
 }
-
-const baseStyle = StyleSheet.create({
-    default: {
-        borderRadius: 8,
-        borderWidth: 1,
-        alignItems: "center",
-    },
-})

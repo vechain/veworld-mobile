@@ -1,5 +1,6 @@
 export type Colors = {
     primary: string
+    primaryReversed: string
     primaryDisabled: string
     secondary: string
     tertiary: string
@@ -36,6 +37,7 @@ enum COLORS {
 
 const light: Colors = {
     primary: COLORS.DARK_PURPLE,
+    primaryReversed: COLORS.LIME_GREEN,
     primaryDisabled: COLORS.PURPLE_DISABLED,
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.LIME_GREEN,
@@ -54,6 +56,7 @@ const light: Colors = {
 
 const dark: Colors = {
     primary: COLORS.LIME_GREEN,
+    primaryReversed: COLORS.DARK_PURPLE,
     primaryDisabled: COLORS.LIME_GREEN_DISABLED,
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.DARK_PURPLE,
