@@ -11,13 +11,10 @@ import { Routes } from "~Navigation"
 import VectorImage from "react-native-vector-image"
 import { VeChainVetLogo } from "~Assets"
 import { useI18nContext } from "~i18n"
-import { useTheme } from "~Common"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-
-    const theme = useTheme()
 
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.ONBOARDING)
@@ -32,11 +29,7 @@ export const WelcomeScreen = () => {
                     <BaseText typographyFont="largeTitle">
                         {LL.TITLE_WELCOME_TO()}
                     </BaseText>
-                    <BaseText
-                        typographyFont="largeTitle"
-                        color={theme.colors.primary}>
-                        VeWorld
-                    </BaseText>
+                    <BaseText typographyFont="largeTitle">VeWorld</BaseText>
                 </BaseView>
 
                 <BaseSpacer height={120} />
