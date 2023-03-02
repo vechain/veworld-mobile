@@ -138,8 +138,6 @@ export const initRealmClasses = (
         Config.getPrimaryKey(),
     )
 
-    console.log({ config })
-
     if (!config) {
         store.write(() => {
             store.create(Config.getName(), {})

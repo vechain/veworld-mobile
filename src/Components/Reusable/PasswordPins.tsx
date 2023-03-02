@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react"
+import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText, BaseView } from "~Components"
@@ -10,6 +10,7 @@ type Props = {
     isPinError: boolean
 }
 
+const MESSAGE_FAKE_PLACEHOLDER = "placeholder"
 export const PasswordPins: FC<Props> = ({
     UserPinArray,
     isPINRetype,
@@ -17,33 +18,38 @@ export const PasswordPins: FC<Props> = ({
 }) => {
     const { LL } = useI18nContext()
 
-    const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
+    const isMessageVisible = useMemo(
+        () => !!(isPinError || isPINRetype),
+        [isPinError, isPINRetype],
+    )
+    const { styles: themedStyles, theme } = useThemedStyles(
+        baseStyles(isMessageVisible),
+    )
 
-    console.log(themedStyles)
     const getPinMessage = useCallback(() => {
-        const message = isPINRetype
-            ? LL.BD_USER_PASSWORD_CONFIRM()
-            : isPinError
-            ? LL.BD_USER_PASSWORD_ERROR()
-            : "a"
-        const color = isPINRetype
-            ? theme.colors.primary
-            : isPinError
-            ? theme.colors.danger
-            : undefined
+        const getText = () => {
+            if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
+            if (isPinError) return LL.BD_USER_PASSWORD_ERROR()
+            return MESSAGE_FAKE_PLACEHOLDER
+        }
 
-        const isVisible = isPinError || isPINRetype
+        const getTextColor = () => {
+            if (isPINRetype) return theme.colors.primary
+            if (isPinError) return theme.colors.danger
+            return undefined
+        }
+
         return (
             <BaseText
-                style={{ opacity: isVisible ? 1 : 0 }}
+                style={themedStyles.messageTextStyle}
                 typographyFont="bodyAccent"
                 alignContainer="center"
-                color={color}
+                color={getTextColor()}
                 my={16}>
-                {message}
+                {getText()}
             </BaseText>
         )
-    }, [isPINRetype, isPinError, theme, LL])
+    }, [themedStyles, theme, LL, isPINRetype, isPinError])
 
     return (
         <BaseView>
@@ -53,12 +59,11 @@ export const PasswordPins: FC<Props> = ({
                         <BaseView
                             key={`digit${index}`}
                             mx={10}
-                            background={theme.colors.text}
                             style={[
                                 themedStyles.pinBase,
                                 ...(digit
-                                    ? [themedStyles.digited]
-                                    : [themedStyles.notDigited]),
+                                    ? [themedStyles.pressed]
+                                    : [themedStyles.notPressed]),
                             ]}
                         />
                     )
@@ -70,17 +75,18 @@ export const PasswordPins: FC<Props> = ({
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         pinBase: {
             width: 12,
             height: 12,
             borderRadius: 6,
         },
-        digited: {
+        pressed: {
             backgroundColor: theme.colors.text,
         },
-        notDigited: {
+        notPressed: {
             backgroundColor: theme.colors.darkPurpleDisabled,
         },
+        messageTextStyle: { opacity: isMessageVisible ? 1 : 0 },
     })
