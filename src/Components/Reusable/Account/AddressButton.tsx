@@ -19,7 +19,6 @@ export const AddressButton: React.FC<Props> = ({ address }) => {
 
     return (
         <BaseButton
-            my={8}
             textColor={theme.isDark ? theme.colors.text : theme.colors.card}
             size="sm"
             fontSize={10}

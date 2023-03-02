@@ -37,7 +37,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 <BaseView
                     orientation="row"
                     justify="space-between"
-                    align="center"
+                    align="flex-start"
                     w={100}>
                     <BaseView orientation="row" align="center">
                         <AccountIcon account={account} />
@@ -47,6 +47,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                 color={theme.colors.tertiary}>
                                 {account.alias}
                             </BaseText>
+                            <BaseSpacer height={8} />
                             <AddressButton address={account.address} />
                         </BaseView>
                     </BaseView>
