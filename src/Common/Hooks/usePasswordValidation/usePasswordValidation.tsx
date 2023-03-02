@@ -20,11 +20,7 @@ export const usePasswordValidation = () => {
                     userPassword.join(""),
                 )
 
-                if (decryptedString === SettingsConstants.VALIDATION_STRING) {
-                    return true
-                } else {
-                    return false
-                }
+                return decryptedString === SettingsConstants.VALIDATION_STRING
             } catch (error) {
                 return false
             }
