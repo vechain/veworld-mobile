@@ -4,6 +4,7 @@ import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
 import {
     ColorThemeType,
+    CryptoUtils,
     FormattingUtils,
     useTheme,
     useThemedStyles,
@@ -17,6 +18,7 @@ import {
     BaseView,
 } from "~Components"
 import { Account } from "~Storage"
+import { Balance } from "./Balance"
 
 interface Props extends AnimateProps<ViewProps> {
     style?: StyleProp<ViewStyle>
@@ -87,36 +89,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     />
                 </BaseView>
                 <BaseSpacer height={18} />
-                <BaseView orientation="row" align="center">
-                    <BaseText
-                        color={theme.colors.tertiary}
-                        typographyFont="body">
-                        Your balance
-                    </BaseText>
-                    <BaseIcon
-                        name="eye-off-outline"
-                        color={theme.colors.tertiary}
-                        size={18}
-                    />
-                </BaseView>
-                <BaseView orientation="row" align="flex-end">
-                    <BaseText
-                        color={theme.colors.tertiary}
-                        typographyFont="hugeTitle">
-                        1.532,
-                    </BaseText>
-                    <BaseText
-                        color={theme.colors.tertiary}
-                        typographyFont="biggerTitle">
-                        32
-                    </BaseText>
-                    <BaseText
-                        mx={4}
-                        color={theme.colors.tertiary}
-                        typographyFont="body">
-                        USD
-                    </BaseText>
-                </BaseView>
+                <Balance balance={CryptoUtils.random(10000).toString()} />
             </BaseView>
         </Animated.View>
     )

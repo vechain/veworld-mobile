@@ -183,30 +183,30 @@ export type DateType = "short" | "full" | "long" | "medium" | undefined
  * @param symbol - (optional) symbol to append at end of number (with a space)
  * @returns the formatted number
  */
-// export const humanNumber = (
-//     formattedValue: BigNumber.Value,
-//     originalValue?: BigNumber.Value,
-//     symbol: string | null = null,
-// ) => {
-//     const suffix = symbol ? " " + symbol : ""
-//     let value = new Intl.NumberFormat(locale, {
-//         style: "decimal",
-//         minimumFractionDigits:
-//             Number.parseFloat(formattedValue.toString()) % 1 === 0 ? 0 : 2,
-//     }).format(Number.parseFloat(formattedValue.toString()))
+export const humanNumber = (
+    formattedValue: BigNumber.Value,
+    originalValue?: BigNumber.Value,
+    symbol: string | null = null,
+) => {
+    const suffix = symbol ? " " + symbol : ""
+    let value = new Intl.NumberFormat("en", {
+        style: "decimal",
+        minimumFractionDigits:
+            Number.parseFloat(formattedValue.toString()) % 1 === 0 ? 0 : 2,
+    }).format(Number.parseFloat(formattedValue.toString()))
 
-//     //If the original number got scaled down to 0
-//     if (!isZero(originalValue) && isZero(value)) {
-//         value = "< 0.01"
-//     }
+    //If the original number got scaled down to 0
+    if (!isZero(originalValue) && isZero(value)) {
+        value = "< 0.01"
+    }
 
-//     return value + suffix
-// }
+    return value + suffix
+}
 
-// const isZero = (value?: BigNumber.Value) => {
-//     if (!value) return false
-//     return new BigNumber(value).isZero()
-// }
+const isZero = (value?: BigNumber.Value) => {
+    if (!value) return false
+    return new BigNumber(value).isZero()
+}
 
 /**
  * Format address
