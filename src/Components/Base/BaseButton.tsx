@@ -96,7 +96,7 @@ export const BaseButton = ({
 
     const paddingY = useMemo(() => {
         if (otherProps.py) return otherProps.py
-        if (size === "sm") return 4
+        if (size === "sm") return 3.5
         if (size === "lg") return 15
     }, [otherProps.py, size])
 
