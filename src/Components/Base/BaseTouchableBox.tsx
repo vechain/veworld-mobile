@@ -1,39 +1,43 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, TouchableOpacityProps } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import DropShadow from "react-native-drop-shadow"
+import { ColorThemeType, useThemedStyles } from "~Common"
 
 type Props = {
-    action: () => void
     children: React.ReactNode
-}
-export const BaseTouchableBox: React.FC<Props> = ({ action, children }) => {
+    action: () => void
+} & TouchableOpacityProps
+
+export const BaseTouchableBox: React.FC<Props> = ({
+    children,
+    action,
+    style,
+    ...props
+}) => {
+    const { styles, theme } = useThemedStyles(baseStyles)
     return (
-        <DropShadow style={styles.shadow}>
-            <TouchableOpacity onPress={action} style={styles.container}>
+        <DropShadow style={theme.shadows.card}>
+            <TouchableOpacity
+                onPress={action}
+                style={[styles.container, style]}
+                {...props}>
                 {children}
             </TouchableOpacity>
         </DropShadow>
     )
 }
 
-const styles = StyleSheet.create({
-    shadow: {
-        shadowColor: "#0B004314",
-        shadowOffset: {
-            height: 0,
-            width: 0,
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        shadow: theme.shadows.card,
+        container: {
+            justifyContent: "center",
+            width: "100%",
+            alignItems: "stretch",
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            borderRadius: 16,
+            backgroundColor: theme.colors.card,
         },
-        shadowOpacity: 1,
-        shadowRadius: 16,
-    },
-    container: {
-        justifyContent: "center",
-        width: "100%",
-        alignItems: "stretch",
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        borderRadius: 16,
-        backgroundColor: "#FFFFFF",
-    },
-})
+    })

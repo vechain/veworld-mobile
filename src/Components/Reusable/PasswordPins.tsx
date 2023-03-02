@@ -1,8 +1,7 @@
-import React, { FC, memo } from "react"
+import React, { FC, memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText, BaseView } from "~Components"
-import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -11,76 +10,81 @@ type Props = {
     isPinError: boolean
 }
 
+const MESSAGE_FAKE_PLACEHOLDER = "placeholder"
 export const PasswordPins: FC<Props> = memo(
     ({ UserPinArray, isPINRetype, isPinError }) => {
-        const theme = useTheme()
         const { LL } = useI18nContext()
 
+        const isMessageVisible = useMemo(
+            () => !!(isPinError || isPINRetype),
+            [isPinError, isPINRetype],
+        )
+        const { styles: themedStyles, theme } = useThemedStyles(
+            baseStyles(isMessageVisible),
+        )
+
+        const getMessageText = useMemo(() => {
+            if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
+            if (isPinError) return LL.BD_USER_PASSWORD_ERROR()
+            return MESSAGE_FAKE_PLACEHOLDER
+        }, [LL, isPINRetype, isPinError])
+
+        const getMessageTextColor = useMemo(() => {
+            if (isPINRetype) return theme.colors.primary
+            if (isPinError) return theme.colors.danger
+            return undefined
+        }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.primary])
+
+        const getPinMessage = useCallback(() => {
+            return (
+                <BaseText
+                    style={themedStyles.messageTextStyle}
+                    typographyFont="bodyAccent"
+                    alignContainer="center"
+                    color={getMessageTextColor}
+                    my={16}>
+                    {getMessageText}
+                </BaseText>
+            )
+        }, [themedStyles.messageTextStyle, getMessageTextColor, getMessageText])
+
         return (
-            <BaseView h={10}>
+            <BaseView>
                 <BaseView orientation="row" justify="center">
                     {UserPinArray.map((digit, index) => {
-                        if (digit) {
-                            return (
-                                <BaseView
-                                    key={`digit${index}`}
-                                    mx={10}
-                                    background={theme.colors.reversed_bg}
-                                    style={[
-                                        baseStyle.pinBase,
-                                        {
-                                            borderColor:
-                                                theme.colors.reversed_bg,
-                                        },
-                                    ]}
-                                />
-                            )
-                        } else {
-                            return (
-                                <BaseView
-                                    key={`digit${index}`}
-                                    mx={10}
-                                    style={[
-                                        baseStyle.pinBase,
-                                        {
-                                            borderColor:
-                                                theme.colors.reversed_bg,
-                                        },
-                                    ]}
-                                />
-                            )
-                        }
+                        return (
+                            <BaseView
+                                key={`digit${index}`}
+                                mx={10}
+                                style={[
+                                    themedStyles.pinBase,
+                                    ...(digit
+                                        ? [themedStyles.pressed]
+                                        : [themedStyles.notPressed]),
+                                ]}
+                            />
+                        )
                     })}
                 </BaseView>
 
-                {isPINRetype && (
-                    <BaseText
-                        font={Fonts.body_accent}
-                        alignContainer="center"
-                        my={10}>
-                        {LL.BD_USER_PASSWORD_CONFIRM()}
-                    </BaseText>
-                )}
-
-                {isPinError && (
-                    <BaseText
-                        font={Fonts.body_accent}
-                        color="red"
-                        alignContainer="center"
-                        my={10}>
-                        {LL.BD_USER_PASSWORD_ERROR()}
-                    </BaseText>
-                )}
+                {getPinMessage()}
             </BaseView>
         )
     },
 )
 
-const baseStyle = StyleSheet.create({
-    pinBase: {
-        width: 16,
-        height: 16,
-        borderRadius: 8,
-        borderWidth: 1,
-    },
-})
+const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
+    StyleSheet.create({
+        pinBase: {
+            width: 12,
+            height: 12,
+            borderRadius: 6,
+        },
+        pressed: {
+            backgroundColor: theme.colors.text,
+        },
+        notPressed: {
+            backgroundColor: theme.colors.darkPurpleDisabled,
+        },
+        messageTextStyle: { opacity: isMessageVisible ? 1 : 0 },
+    })

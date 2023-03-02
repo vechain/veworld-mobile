@@ -6,12 +6,13 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from "react-native-reanimated"
-import { Fonts } from "~Model"
+import { ColorThemeType, useThemedStyles } from "~Common"
 
 const LONG_WIDTH = 20
 
 export const TabbarHeader = memo(
     ({ action }: { action: (activeScreen: number) => void }) => {
+        const { styles } = useThemedStyles(baseStyles)
         const progressValue = useSharedValue<number>(0)
 
         const onTokensPress = () => {
@@ -44,19 +45,19 @@ export const TabbarHeader = memo(
                     orientation="row"
                     justify="space-between"
                     align="center">
-                    <Pressable
-                        onPress={onTokensPress}
-                        style={baseStyles.button}>
-                        <BaseText font={Fonts.body_accent}>{"Token"}</BaseText>
+                    <Pressable onPress={onTokensPress} style={styles.button}>
+                        <BaseText typographyFont="bodyAccent">
+                            {"Token"}
+                        </BaseText>
                         <Animated.View
-                            style={[baseStyles.underline, animatedWidthToken]}
+                            style={[styles.underline, animatedWidthToken]}
                         />
                     </Pressable>
 
-                    <Pressable onPress={onNftPress} style={baseStyles.button}>
-                        <BaseText font={Fonts.body_accent}>{"NFT"}</BaseText>
+                    <Pressable onPress={onNftPress} style={styles.button}>
+                        <BaseText typographyFont="bodyAccent">{"NFT"}</BaseText>
                         <Animated.View
-                            style={[baseStyles.underline, animatedWidthNft]}
+                            style={[styles.underline, animatedWidthNft]}
                         />
                     </Pressable>
                 </BaseView>
@@ -65,17 +66,18 @@ export const TabbarHeader = memo(
     },
 )
 
-const baseStyles = StyleSheet.create({
-    underline: {
-        height: 4,
-        borderRadius: 10,
-        backgroundColor: "#28008C",
-        marginTop: 5,
-    },
-    button: {
-        paddingHorizontal: 10,
-        paddingTop: 10,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        underline: {
+            height: 4,
+            borderRadius: 10,
+            backgroundColor: theme.colors.text,
+            marginTop: 5,
+        },
+        button: {
+            paddingHorizontal: 10,
+            paddingTop: 10,
+            alignItems: "center",
+            justifyContent: "center",
+        },
+    })

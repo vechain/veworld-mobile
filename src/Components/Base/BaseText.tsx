@@ -1,11 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
 import { FlexAlignType, Text, TextProps } from "react-native"
-import { TFonts, useTheme } from "~Common"
+import { useTheme, Theme } from "~Common"
 import { BaseView } from "./BaseView"
 
+const {
+    typography: { defaults: defaultTypography, ...otherTypography },
+} = Theme
+
 type Props = {
-    font?: TFonts
+    typographyFont?: keyof typeof defaultTypography
+    fontSize?: keyof typeof otherTypography.fontSize
+    fontWeight?: keyof typeof otherTypography.fontWeight
+    fontFamily?: keyof typeof otherTypography.fontFamily
     align?: "left" | "center" | "right"
     italic?: boolean
     color?: string
@@ -29,17 +36,44 @@ type Props = {
 } & TextProps
 
 export const BaseText = (props: Props) => {
-    const { style, ...otherProps } = props
+    const {
+        style,
+        typographyFont,
+        fontSize,
+        fontWeight,
+        fontFamily,
+        ...otherProps
+    } = props
     const theme = useTheme()
 
-    const computeFont = useMemo(
-        () => theme.typography[props.font ?? "body"].fontSize,
-        [props.font, theme.typography],
+    const computedFontSize = useMemo(
+        () =>
+            fontSize ||
+            ((typographyFont &&
+                defaultTypography[typographyFont]
+                    .fontSize) as keyof typeof otherTypography.fontSize) ||
+            14,
+        [typographyFont, fontSize],
     )
 
-    const computeFamily = useMemo(
-        () => theme.typography[props.font ?? "body"].fontFamily,
-        [props.font, theme.typography],
+    const computedFontWeight = useMemo(
+        () =>
+            fontWeight ||
+            ((typographyFont &&
+                defaultTypography[typographyFont]
+                    .fontWeight) as keyof typeof otherTypography.fontWeight) ||
+            "500",
+        [typographyFont, fontWeight],
+    )
+
+    const computedFontFamily = useMemo(
+        () =>
+            fontFamily ||
+            ((typographyFont &&
+                defaultTypography[typographyFont]
+                    .fontFamily) as keyof typeof otherTypography.fontFamily) ||
+            "Inter-Regular",
+        [typographyFont, fontFamily],
     )
 
     return (
@@ -58,8 +92,9 @@ export const BaseText = (props: Props) => {
                 style={[
                     {
                         color: props.color ? props.color : theme.colors.text,
-                        fontSize: computeFont,
-                        fontFamily: computeFamily,
+                        fontSize: computedFontSize,
+                        fontFamily: computedFontFamily,
+                        fontWeight: computedFontWeight,
                         textAlign: props.align,
                         fontStyle: props.italic ? "italic" : "normal",
                     },

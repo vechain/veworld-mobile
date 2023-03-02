@@ -7,7 +7,6 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Fonts } from "~Model"
 import { Routes } from "~Navigation"
 import { Config, useRealm } from "~Storage"
 
@@ -30,13 +29,12 @@ export const ConfirmSeedPhraseScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseView align="center" justify="space-between" grow={1} mx={20}>
-                <BaseText font={Fonts.body} my={10}>
+            <BaseView justify="space-between" grow={1} mx={20}>
+                <BaseText typographyFont="title" my={10}>
                     Confirm Mnemonic
                 </BaseText>
 
                 <BaseButton
-                    filled
                     action={onConfirmPress}
                     w={100}
                     px={20}

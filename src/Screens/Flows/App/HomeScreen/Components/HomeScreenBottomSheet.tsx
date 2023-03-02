@@ -66,6 +66,7 @@ const HomeScreenBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     <BaseButton
                         action={onPressEncryptWallet}
                         title="Decrypt Wallet"
+                        variant="ghost"
                     />
                 </BaseView>
                 <BaseSpacer height={16} />

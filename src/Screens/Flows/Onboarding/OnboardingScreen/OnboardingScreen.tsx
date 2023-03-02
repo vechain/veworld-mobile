@@ -14,7 +14,6 @@ import {
 import { ListSlide } from "./Components/ListSlide"
 import { Slide } from "./Types"
 import { STEPS } from "./Enums"
-import { Fonts } from "~Model"
 
 export const OnboardingScreen = () => {
     const nav = useNavigation()
@@ -92,14 +91,14 @@ export const OnboardingScreen = () => {
                 <BaseView align="center" w={100} px={20}>
                     <BaseButton
                         action={onNavigate}
-                        font={Fonts.footnote_accent}
+                        typographyFont="footNoteAccent"
                         title={LL.BTN_ONBOARDING_SKIP()}
                         selfAlign="flex-start"
                         px={5}
+                        variant="ghost"
                     />
 
                     <BaseButton
-                        filled
                         action={onButtonPress}
                         w={100}
                         mx={20}

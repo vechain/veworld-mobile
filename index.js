@@ -6,7 +6,7 @@ import { name as appName } from "./app.json"
 
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { useColorScheme, useTheme } from "~Common"
+import { useTheme } from "~Common"
 import { TranslationProvider } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
@@ -21,56 +21,57 @@ import {
     Mono_Light,
     Mono_Regular,
 } from "~Assets"
+import { typography } from "~Common/Theme/Typography"
+const { fontFamily } = typography
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 // immer setup
 enableAllPlugins()
 
-const getTheme = (scheme, colorTheme) => {
-    const theme = {
-        colors: {
-            background: colorTheme,
-            border: colorTheme,
-        },
-    }
-    return theme
-}
-
 const Main = () => {
-    const scheme = useColorScheme()
-    const theme = useTheme()
-
     const [fontsLoaded] = useFonts({
-        "Inter-Bold": Inter_Bold,
-        "Inter-Regular": Inter_Regular,
-        "Inter-Light": Inter_Light,
-        "Inter-Medium": Inter_Medium,
-        "Mono-Extra-Bold": Mono_Extra_Bold,
-        "Mono-Bold": Mono_Bold,
-        "Mono-Regular": Mono_Regular,
-        "Mono-Light": Mono_Light,
+        [fontFamily["Inter-Bold"]]: Inter_Bold,
+        [fontFamily["Inter-Regular"]]: Inter_Regular,
+        [fontFamily["Inter-Light"]]: Inter_Light,
+        [fontFamily["Inter-Medium"]]: Inter_Medium,
+        [fontFamily["Mono-Extra-Bold"]]: Mono_Extra_Bold,
+        [fontFamily["Mono-Bold"]]: Mono_Bold,
+        [fontFamily["Mono-Regular"]]: Mono_Regular,
+        [fontFamily["Mono-Light"]]: Mono_Light,
     })
-
-    const colorScheme = useMemo(
-        () => getTheme(scheme, theme.colors.background),
-        [scheme, theme],
-    )
 
     return (
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RealmContextProvider>
                 <BottomSheetModalProvider>
-                    <NavigationContainer theme={colorScheme}>
+                    <NavigationProvider>
                         <SafeAreaProvider>
                             <TranslationProvider>
                                 {fontsLoaded && <EntryPoint />}
                             </TranslationProvider>
                         </SafeAreaProvider>
-                    </NavigationContainer>
+                    </NavigationProvider>
                 </BottomSheetModalProvider>
             </RealmContextProvider>
         </GestureHandlerRootView>
+    )
+}
+
+const NavigationProvider = ({ children }) => {
+    const theme = useTheme()
+
+    const navigationTheme = useMemo(
+        () => ({
+            dark: theme.isDark,
+            colors: theme.colors,
+        }),
+        [theme],
+    )
+    return (
+        <NavigationContainer theme={navigationTheme}>
+            {children}
+        </NavigationContainer>
     )
 }
 

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { BaseSpacer, BaseView } from "~Components"
+import { BaseScrollView, BaseSpacer, BaseView } from "~Components"
 import { Device, useRealm, useListListener } from "~Storage"
 import {
-    CoinList,
+    TokenList,
     NFTList,
     TabbarHeader,
     PlatformScrollView,
@@ -24,7 +24,6 @@ const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
     const { store } = useRealm()
-    const activeWalletEntity = useActiveWalletEntity()
     const {
         ref: bottomSheetRef,
         onOpen: openBottomSheetMenu,
@@ -52,9 +51,11 @@ export const HomeScreen = () => {
         [scrollValue],
     )
 
+    const activeCard = useActiveWalletEntity()
+
     const activeCardIndex = useMemo(
-        () => activeWalletEntity.activeIndex,
-        [activeWalletEntity.activeIndex],
+        () => activeCard.activeIndex,
+        [activeCard.activeIndex],
     )
 
     const devices = useListListener(Device.getName(), store) as Device[]
@@ -65,10 +66,11 @@ export const HomeScreen = () => {
 
     const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
 
-    const getActiveScreen = useMemo(() => {
-        if (activeScreen === 1)
-            return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
-        return <CoinList entering={coinListEnter} exiting={coinListExit} />
+    const getActiveScreen = useCallback(() => {
+        if (activeScreen === 0)
+            return <TokenList entering={coinListEnter} exiting={coinListExit} />
+
+        return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
     }, [activeScreen, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
 
     return (
@@ -86,9 +88,9 @@ export const HomeScreen = () => {
                 <TabbarHeader action={setActiveScreen} />
                 <BaseSpacer height={20} />
 
-                <BaseView orientation="row" grow={1}>
-                    {getActiveScreen}
-                </BaseView>
+                <BaseScrollView horizontal={true} grow={100}>
+                    {getActiveScreen()}
+                </BaseScrollView>
             </PlatformScrollView>
 
             {/* this is placed at the bottom of the component in order to be on top of everything in the view stack */}

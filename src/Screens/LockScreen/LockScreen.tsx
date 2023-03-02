@@ -7,7 +7,6 @@ import {
     NumPad,
     PasswordPins,
 } from "~Components"
-import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
 
@@ -29,17 +28,17 @@ export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="flex-start" grow={1} mx={20}>
+            <BaseView mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font={Fonts.large_title}>
+                    <BaseText typographyFont="largeTitle">
                         {LL.TITLE_USER_PASSWORD()}
                     </BaseText>
 
-                    <BaseText font={Fonts.body} my={10}>
+                    <BaseText typographyFont="body" my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     </BaseText>
                 </BaseView>
-                <BaseSpacer height={60} />
+                <BaseSpacer height={62} />
                 <PasswordPins
                     UserPinArray={userPinArray}
                     isPinError={isPinError}

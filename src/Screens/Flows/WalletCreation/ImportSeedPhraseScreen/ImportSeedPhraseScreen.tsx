@@ -1,22 +1,22 @@
 import React, { useState } from "react"
 import {
     BaseButton,
+    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     DismissKeyboardView,
-    PressableIcon,
 } from "~Components"
-import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import { CryptoUtils, SeedUtils } from "~Common"
+import { CryptoUtils, SeedUtils, useTheme } from "~Common"
 import { Keyboard } from "react-native"
 import { Config, Mnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 import { useNavigation } from "@react-navigation/native"
+import DropShadow from "react-native-drop-shadow"
 
 export const ImportSeedPhraseScreen = () => {
     const { LL } = useI18nContext()
@@ -28,6 +28,7 @@ export const ImportSeedPhraseScreen = () => {
     const [isDisabled, setIsDisabled] = useState(true)
 
     const { store, cache } = useRealm()
+    const theme = useTheme()
 
     const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
@@ -96,49 +97,58 @@ export const ImportSeedPhraseScreen = () => {
                     grow={1}
                     mx={20}>
                     <BaseView selfAlign="flex-start">
-                        <BaseText font={Fonts.large_title}>
+                        <BaseText typographyFont="title">
                             {LL.TITLE_WALLET_IMPORT_LOCAL()}
                         </BaseText>
-                        <BaseText font={Fonts.body} my={10}>
+                        <BaseText typographyFont="body" my={10}>
                             {LL.BD_WALLET_IMPORT_LOCAL()}
                         </BaseText>
 
                         <BaseSpacer height={20} />
 
                         <BaseView orientation="row" selfAlign="flex-end">
-                            <PressableIcon
-                                title="clipboard-outline"
+                            <BaseIcon
+                                name={"clipboard-outline"}
+                                size={32}
+                                style={{ marginHorizontal: 20 }}
+                                bg={theme.colors.secondary}
                                 action={onPasteFronClipboard}
-                                mx={20}
-                                size={26}
                             />
-                            <PressableIcon
-                                title="trash-outline"
+                            <BaseIcon
+                                name={"trash-outline"}
+                                size={32}
+                                bg={theme.colors.secondary}
                                 action={onClearSeed}
-                                size={26}
                             />
                         </BaseView>
 
                         <BaseSpacer height={40} />
 
-                        <ImportMnemonicView
-                            seed={seed}
-                            onChangeText={onChangeText}
-                            isError={isError}
-                        />
+                        <DropShadow style={theme.shadows.card}>
+                            <ImportMnemonicView
+                                seed={seed}
+                                onChangeText={onChangeText}
+                                isError={isError}
+                            />
+                        </DropShadow>
+                        {isError && (
+                            <BaseText my={10} color={theme.colors.danger}>
+                                Incorrect mnemonic phrase
+                            </BaseText>
+                        )}
                     </BaseView>
 
                     <BaseView w={100}>
                         <BaseButton
+                            variant="ghost"
                             action={() => {}}
-                            font={Fonts.footnote_accent}
+                            typographyFont="footNoteAccent"
                             title={LL.BTN_WALLET_IMPORT_HELP()}
-                            selfAlign="flex-start"
+                            selfAlign="center"
                             px={5}
                         />
 
                         <BaseButton
-                            filled
                             action={onVerify}
                             w={100}
                             title={LL.BTN_IMPORT_WALLET_VERIFY()}

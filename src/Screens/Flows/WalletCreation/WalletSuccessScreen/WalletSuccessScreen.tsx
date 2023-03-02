@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native"
 import VectorImage from "react-native-vector-image"
 import { VeChainVetLogo } from "~Assets"
 import { useI18nContext } from "~i18n"
-import { Fonts, SecurityLevelType, WALLET_STATUS } from "~Model"
+import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { AppLock, Config, useRealm } from "~Storage"
 import {
     BiometricsUtils,
@@ -157,7 +157,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
                 <BaseView align="center" mx={20} grow={1}>
                     <BaseView orientation="row" wrap>
-                        <BaseText font={Fonts.title}>
+                        <BaseText typographyFont="title">
                             {LL.TITLE_WALLET_SUCCESS()}
                         </BaseText>
                     </BaseView>
@@ -178,7 +178,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
                         <BaseView align="center" w={100}>
                             <BaseButton
-                                filled
                                 action={onButtonPress}
                                 w={100}
                                 title={LL.BTN_WALLET_SUCCESS()}

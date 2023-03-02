@@ -5,6 +5,7 @@ import Animated, {
     useAnimatedStyle,
     withTiming,
 } from "react-native-reanimated"
+import { ColorThemeType, useThemedStyles } from "~Common"
 
 const LONG_WIDTH = 28
 const WIDTH = 10
@@ -17,6 +18,7 @@ interface Props extends AnimateProps<ViewProps> {
 
 export const PaginationItem: FC<Props> = memo(
     ({ animValue, index, length, ...animatedViewProps }) => {
+        const { styles } = useThemedStyles(baseStyles)
         const animatedWidth = useAnimatedStyle(() => {
             let dotWidth = withTiming(
                 Math.round(animValue.value) === index ? LONG_WIDTH : WIDTH,
@@ -33,7 +35,7 @@ export const PaginationItem: FC<Props> = memo(
             <Animated.View
                 {...animatedViewProps}
                 style={[
-                    baseStyles.container,
+                    styles.container,
                     {
                         width: WIDTH,
                         height: WIDTH,
@@ -45,11 +47,12 @@ export const PaginationItem: FC<Props> = memo(
     },
 )
 
-const baseStyles = StyleSheet.create({
-    container: {
-        backgroundColor: "#28008C",
-        borderRadius: 50,
-        overflow: "hidden",
-        marginHorizontal: 2,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            backgroundColor: theme.colors.primary,
+            borderRadius: 50,
+            overflow: "hidden",
+            marginHorizontal: 2,
+        },
+    })

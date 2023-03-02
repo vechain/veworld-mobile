@@ -8,10 +8,13 @@ import {
     Account,
     ActiveWalletCard,
     AppLock,
+    UserPreferences,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
 import { WALLET_STATUS } from "~Model"
 import crypto from "react-native-quick-crypto"
+import { ColorSchemeName } from "react-native"
+import { useColorScheme } from "~Common"
 
 type State = {
     store: Realm
@@ -23,6 +26,8 @@ type RealmContextProviderProps = { children: React.ReactNode }
 const RealmContext = React.createContext<State | undefined>(undefined)
 
 const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
+    const colorScheme = useColorScheme()
+
     const [store, setStore] = useState<Realm>()
     const [cache, setCache] = useState<Realm>()
 
@@ -49,11 +54,11 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
         if (_isKey && _buffKey) {
             const cacheInstance = initCacheRealm()
             const storeInstance = initStoreRealm(_buffKey)
-            initRealmClasses(cacheInstance, storeInstance)
+            initRealmClasses(cacheInstance, storeInstance, colorScheme)
             setStore(storeInstance)
             setCache(cacheInstance)
         }
-    }, [])
+    }, [colorScheme])
 
     useEffect(() => {
         initRealm()
@@ -70,7 +75,7 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
 
 const initStoreRealm = (buffKey: ArrayBuffer) => {
     const instance = new Realm({
-        schema: [Device, XPub, Config, Account],
+        schema: [Device, XPub, Config, Account, UserPreferences],
         path: "persisted.realm",
         encryptionKey: buffKey,
         deleteRealmIfMigrationNeeded:
@@ -102,14 +107,33 @@ const useRealm = () => {
     return context
 }
 
-export const initRealmClasses = (cache: Realm, store: Realm) => {
+export const initRealmClasses = (
+    cache: Realm,
+    store: Realm,
+    colorScheme: NonNullable<ColorSchemeName>,
+) => {
     cache.write(() => {
-        cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
-        cache.create(ActiveWalletCard.getName(), {})
-        cache.create(Mnemonic.getName(), {})
+        const appLock = cache.objectForPrimaryKey<AppLock>(
+            AppLock.getName(),
+            AppLock.getPrimaryKey(),
+        )
+        if (!appLock)
+            cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
+
+        const activeWalletCard = cache.objectForPrimaryKey<ActiveWalletCard>(
+            ActiveWalletCard.getName(),
+            ActiveWalletCard.getPrimaryKey(),
+        )
+        if (!activeWalletCard) cache.create(ActiveWalletCard.getName(), {})
+
+        const mnemonic = cache.objectForPrimaryKey<Mnemonic>(
+            Mnemonic.getName(),
+            Mnemonic.getPrimaryKey(),
+        )
+        if (!mnemonic) cache.create(Mnemonic.getName(), {})
     })
 
-    let config = store.objectForPrimaryKey<Config>(
+    const config = store.objectForPrimaryKey<Config>(
         Config.getName(),
         Config.getPrimaryKey(),
     )
@@ -117,6 +141,21 @@ export const initRealmClasses = (cache: Realm, store: Realm) => {
     if (!config) {
         store.write(() => {
             store.create(Config.getName(), {})
+        })
+    }
+
+    const userPreferences = store.objectForPrimaryKey<UserPreferences>(
+        UserPreferences.getName(),
+        UserPreferences.getPrimaryKey(),
+    )
+
+    if (!userPreferences) {
+        store.write(() => {
+            store.create(UserPreferences.getName(), { theme: colorScheme })
+        })
+    } else {
+        store.write(() => {
+            userPreferences.theme = colorScheme
         })
     }
 }

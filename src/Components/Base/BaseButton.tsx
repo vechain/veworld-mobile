@@ -5,18 +5,22 @@ import {
     StyleSheet,
     FlexAlignType,
 } from "react-native"
-import React, { useCallback } from "react"
-import { useTheme } from "~Common"
+import React, { useCallback, useMemo } from "react"
+import { useTheme, Theme } from "~Common"
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
-import { TFonts } from "~Model"
 import * as Haptics from "expo-haptics"
+import { TFonts } from "~Common/Theme"
+
+const {
+    typography: { defaults: defaultTypography, ...otherTypography },
+} = Theme
 
 type Props = {
     action: () => void
     disabled?: boolean
-    filled?: boolean
-    bordered?: boolean
+    variant?: "solid" | "outline" | "ghost"
+    bgColor?: string
     title: LocalizedString | string
     m?: number
     mx?: number
@@ -26,18 +30,33 @@ type Props = {
     py?: number
     w?: number
     h?: number
-    font?: TFonts
+    size?: "sm" | "md" | "lg"
+    typographyFont?: keyof typeof defaultTypography
+    fontSize?: keyof typeof otherTypography.fontSize
+    fontWeight?: keyof typeof otherTypography.fontWeight
+    fontFamily?: keyof typeof otherTypography.fontFamily
     selfAlign?: "auto" | FlexAlignType
     haptics?: "light" | "medium" | "heavy"
+    leftIcon?: React.ReactNode
+    rightIcon?: React.ReactNode
 } & TouchableOpacityProps
 
-export const BaseButton = (props: Props) => {
-    const { style, disabled = false, ...otherProps } = props
+export const BaseButton = ({
+    style,
+    variant = "solid",
+    size = "lg",
+    disabled = false,
+    leftIcon,
+    rightIcon,
+    ...otherProps
+}: Props) => {
+    const { typographyFont, fontFamily, fontSize, fontWeight } = otherProps
+
     const theme = useTheme()
 
     const onButtonPress = useCallback(() => {
-        if (props.haptics) {
-            switch (props.haptics) {
+        if (otherProps.haptics) {
+            switch (otherProps.haptics) {
                 case Haptics.ImpactFeedbackStyle.Light:
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                     break
@@ -55,8 +74,34 @@ export const BaseButton = (props: Props) => {
             }
         }
 
-        props.action()
-    }, [props])
+        otherProps.action()
+    }, [otherProps])
+
+    const bgColor = useMemo(() => {
+        if (otherProps.bgColor) return otherProps.bgColor
+        return theme.colors.primary
+    }, [theme, otherProps.bgColor])
+
+    const isSolidButton = useMemo(() => variant === "solid", [variant])
+    const isOutlineButton = useMemo(() => variant === "outline", [variant])
+
+    const paddingX = useMemo(() => {
+        if (otherProps.px) return otherProps.px
+        if (size === "sm") return 8
+        if (size === "lg") return 16
+    }, [otherProps.px, size])
+
+    const paddingY = useMemo(() => {
+        if (otherProps.py) return otherProps.py
+        if (size === "sm") return 4
+        if (size === "lg") return 15
+    }, [otherProps.py, size])
+
+    const computedTypographyFont: TFonts | undefined = useMemo(() => {
+        if (typographyFont) return typographyFont
+        if (size === "sm") return "buttonSecondary"
+        if (size === "lg") return "buttonPrimary"
+    }, [size, typographyFont])
 
     return (
         <TouchableOpacity
@@ -65,34 +110,42 @@ export const BaseButton = (props: Props) => {
             disabled={disabled}
             style={[
                 {
-                    backgroundColor: props.filled
-                        ? theme.colors.button
-                        : theme.constants.transparent,
-                    borderColor: props.bordered
-                        ? theme.colors.button
-                        : theme.constants.transparent,
-                    width: props.w && `${props.w}%`,
-                    height: props.h && `${props.h}%`,
-                    margin: props.m,
-                    marginVertical: props.my,
-                    marginHorizontal: props.mx,
-                    padding: props.p,
-                    paddingVertical: props.py ? props.py : 14,
-                    paddingHorizontal: props.px,
+                    backgroundColor: isSolidButton
+                        ? bgColor
+                        : theme.colors.transparent,
+                    borderColor: isOutlineButton
+                        ? bgColor
+                        : theme.colors.transparent,
+                    width: otherProps.w && `${otherProps.w}%`,
+                    height: otherProps.h && `${otherProps.h}%`,
+                    margin: otherProps.m,
+                    marginVertical: otherProps.my,
+                    marginHorizontal: otherProps.mx,
+                    padding: otherProps.p,
+                    paddingVertical: paddingY,
+                    paddingHorizontal: paddingX,
                     opacity: disabled ? 0.5 : 1,
-                    alignSelf: props.selfAlign,
+                    alignSelf: otherProps.selfAlign,
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: leftIcon || rightIcon ? "row" : "column",
                 },
                 style,
                 baseStyle.default,
             ]}
             {...otherProps}>
+            {leftIcon}
             <BaseText
                 color={
-                    props.filled ? theme.colors.background : theme.colors.button
+                    isSolidButton ? theme.colors.background : theme.colors.text
                 }
-                font={props.font ? props.font : "body_accent"}>
-                {props.title}
+                typographyFont={computedTypographyFont}
+                fontFamily={fontFamily}
+                fontWeight={fontWeight}
+                fontSize={fontSize}>
+                {otherProps.title}
             </BaseText>
+            {rightIcon}
         </TouchableOpacity>
     )
 }

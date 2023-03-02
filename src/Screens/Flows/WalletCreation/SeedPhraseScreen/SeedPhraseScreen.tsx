@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react"
 import {
     BaseButton,
+    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -13,9 +14,9 @@ import * as Clipboard from "expo-clipboard"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { Fonts } from "~Model"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
 import { Mnemonic, useRealm } from "~Storage"
+import { useTheme } from "~Common"
 
 export const SeedPhraseScreen = () => {
     const nav = useNavigation()
@@ -24,6 +25,8 @@ export const SeedPhraseScreen = () => {
 
     const [IsChecked, setIsChecked] = useState(false)
     const { mnemonic, mnemonicArray } = useGenerateMnemonic()
+
+    const theme = useTheme()
 
     const onCopyToClipboard = useCallback(async () => {
         await Clipboard.setStringAsync(mnemonic)
@@ -49,31 +52,43 @@ export const SeedPhraseScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font={Fonts.large_title} align="left">
+                    <BaseText typographyFont="title" align="left">
                         {LL.TITLE_MNEMONIC()}
                     </BaseText>
 
-                    <BaseText font={Fonts.body} my={10}>
+                    <BaseText typographyFont="body" my={10}>
                         {LL.BD_MNEMONIC_SUBTITLE()}
                     </BaseText>
 
-                    <BaseSpacer height={60} />
+                    <BaseSpacer height={24} />
 
+                    <MnemonicCard mnemonicArray={mnemonicArray} />
+                    <BaseSpacer height={20} />
                     <BaseButton
+                        size="sm"
                         selfAlign="flex-end"
                         action={onCopyToClipboard}
                         w={100}
                         title={LL.BTN_MNEMONIC_CLIPBOARD()}
                         disabled={!mnemonic}
+                        rightIcon={
+                            <BaseIcon
+                                name="copy-outline"
+                                color={theme.colors.card}
+                                size={10}
+                            />
+                        }
                     />
+                    <BaseSpacer height={28} />
 
-                    <MnemonicCard mnemonicArray={mnemonicArray} />
-
-                    <BaseText font={Fonts.footnote_accent} color="red" my={10}>
+                    <BaseText
+                        typographyFont="footNoteAccent"
+                        color={theme.colors.danger}
+                        my={10}>
                         {LL.BD_MNEMONIC_DISCLAIMER()}
                     </BaseText>
 
-                    <BaseText font={Fonts.footnote}>
+                    <BaseText typographyFont="footNote">
                         {LL.BD_MNEMONIC_BACKUP()}
                     </BaseText>
                 </BaseView>
@@ -85,7 +100,6 @@ export const SeedPhraseScreen = () => {
                     />
 
                     <BaseButton
-                        filled
                         action={onBackupPress}
                         w={100}
                         px={20}

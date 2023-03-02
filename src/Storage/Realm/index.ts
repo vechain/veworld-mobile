@@ -6,6 +6,7 @@ import {
     Account,
     ActiveWalletCard,
     AppLock,
+    UserPreferences,
 } from "./Model"
 
 import {
@@ -30,4 +31,5 @@ export {
     Account,
     ActiveWalletCard,
     AppLock,
+    UserPreferences,
 }

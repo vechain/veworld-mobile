@@ -9,7 +9,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
-import { Fonts, SecurityLevelType } from "~Model"
+import { SecurityLevelType } from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 
@@ -39,11 +39,11 @@ export const UserCreatePasswordScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="flex-start" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font={Fonts.large_title}>
+                    <BaseText typographyFont="largeTitle">
                         {LL.TITLE_USER_PASSWORD()}
                     </BaseText>
 
-                    <BaseText font={Fonts.body} my={10}>
+                    <BaseText typographyFont="body" my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     </BaseText>
                 </BaseView>
