@@ -2,16 +2,10 @@ import React, { memo } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
-import {
-    ColorThemeType,
-    CryptoUtils,
-    FormattingUtils,
-    useTheme,
-    useThemedStyles,
-} from "~Common"
+import { ColorThemeType, CryptoUtils, useTheme, useThemedStyles } from "~Common"
 import {
     AccountIcon,
-    BaseButton,
+    AddressButton,
     BaseIcon,
     BaseSpacer,
     BaseText,
@@ -53,33 +47,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                 color={theme.colors.tertiary}>
                                 {account.alias}
                             </BaseText>
-                            <BaseButton
-                                my={8}
-                                textColor={
-                                    theme.isDark
-                                        ? theme.colors.text
-                                        : theme.colors.card
-                                }
-                                size="sm"
-                                bgColor={theme.colors.primaryReversed}
-                                title={FormattingUtils.humanAddress(
-                                    account.address,
-                                    5,
-                                    4,
-                                )}
-                                action={() => {}}
-                                rightIcon={
-                                    <BaseIcon
-                                        name="copy-outline"
-                                        color={
-                                            theme.isDark
-                                                ? theme.colors.text
-                                                : theme.colors.card
-                                        }
-                                        size={12}
-                                    />
-                                }
-                            />
+                            <AddressButton address={account.address} />
                         </BaseView>
                     </BaseView>
                     <BaseIcon

@@ -133,7 +133,7 @@ export const BaseButton = ({
                     alignItems: "center",
                     flexDirection: leftIcon || rightIcon ? "row" : "column",
                     borderRadius: radius || 8,
-                    borderWidth: 1,
+                    borderWidth: isOutlineButton ? 1 : 0,
                 },
                 style,
             ]}
