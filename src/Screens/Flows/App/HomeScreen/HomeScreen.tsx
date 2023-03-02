@@ -85,7 +85,10 @@ export const HomeScreen = () => {
                 </BaseView>
 
                 <BaseSpacer height={10} />
-                <TabbarHeader action={setActiveScreen} />
+                <TabbarHeader
+                    activeScreen={activeScreen}
+                    action={setActiveScreen}
+                />
                 <BaseSpacer height={20} />
 
                 <BaseScrollView horizontal={true} grow={100}>

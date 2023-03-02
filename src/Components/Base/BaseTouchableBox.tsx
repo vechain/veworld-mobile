@@ -1,6 +1,9 @@
 import React from "react"
-import { StyleSheet, TouchableOpacityProps } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import {
+    StyleSheet,
+    TouchableOpacity,
+    TouchableOpacityProps,
+} from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
 
