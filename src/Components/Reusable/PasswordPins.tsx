@@ -26,30 +26,30 @@ export const PasswordPins: FC<Props> = ({
         baseStyles(isMessageVisible),
     )
 
+    const getMessageText = useMemo(() => {
+        if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
+        if (isPinError) return LL.BD_USER_PASSWORD_ERROR()
+        return MESSAGE_FAKE_PLACEHOLDER
+    }, [LL, isPINRetype, isPinError])
+
+    const getMessageTextColor = useMemo(() => {
+        if (isPINRetype) return theme.colors.primary
+        if (isPinError) return theme.colors.danger
+        return undefined
+    }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.primary])
+
     const getPinMessage = useCallback(() => {
-        const getText = () => {
-            if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
-            if (isPinError) return LL.BD_USER_PASSWORD_ERROR()
-            return MESSAGE_FAKE_PLACEHOLDER
-        }
-
-        const getTextColor = () => {
-            if (isPINRetype) return theme.colors.primary
-            if (isPinError) return theme.colors.danger
-            return undefined
-        }
-
         return (
             <BaseText
                 style={themedStyles.messageTextStyle}
                 typographyFont="bodyAccent"
                 alignContainer="center"
-                color={getTextColor()}
+                color={getMessageTextColor}
                 my={16}>
-                {getText()}
+                {getMessageText}
             </BaseText>
         )
-    }, [themedStyles, theme, LL, isPINRetype, isPinError])
+    }, [themedStyles.messageTextStyle, getMessageTextColor, getMessageText])
 
     return (
         <BaseView>
