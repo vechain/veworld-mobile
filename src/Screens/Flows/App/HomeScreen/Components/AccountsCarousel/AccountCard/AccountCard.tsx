@@ -44,7 +44,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                         <BaseView px={8}>
                             <BaseText
                                 typographyFont="buttonPrimary"
-                                color={theme.colors.tertiary}>
+                                color={theme.colors.textReversed}>
                                 {account.alias}
                             </BaseText>
                             <BaseSpacer height={8} />
@@ -53,7 +53,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     </BaseView>
                     <BaseIcon
                         name="settings-outline"
-                        color={theme.colors.tertiary}
+                        color={theme.colors.textReversed}
                         size={24}
                     />
                 </BaseView>

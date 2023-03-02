@@ -21,25 +21,27 @@ export const Balance: React.FC<Props> = ({ balance }) => {
     return (
         <>
             <BaseView orientation="row" align="center">
-                <BaseText color={theme.colors.tertiary} typographyFont="body">
+                <BaseText
+                    color={theme.colors.textReversed}
+                    typographyFont="body">
                     Your balance
                 </BaseText>
                 <BaseIcon
                     onPress={toggleVisible}
                     name={isVisible ? "eye-off-outline" : "eye-outline"}
-                    color={theme.colors.tertiary}
+                    color={theme.colors.textReversed}
                     size={18}
                 />
             </BaseView>
             <BaseView orientation="row" align="flex-end">
                 <BaseText
-                    color={theme.colors.tertiary}
+                    color={theme.colors.textReversed}
                     typographyFont="hugeTitle">
                     {balanceText}
                 </BaseText>
                 <BaseText
                     mx={4}
-                    color={theme.colors.tertiary}
+                    color={theme.colors.textReversed}
                     typographyFont="body">
                     USD
                 </BaseText>

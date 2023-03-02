@@ -8,6 +8,7 @@ export type Colors = {
     danger: string
     success: string
     text: string
+    textReversed: string
     background: string
     backgroundReversed: string
     card: string
@@ -45,6 +46,7 @@ const light: Colors = {
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
     text: COLORS.DARK_PURPLE,
+    textReversed: COLORS.WHITE,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
@@ -64,6 +66,7 @@ const dark: Colors = {
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
     text: COLORS.WHITE,
+    textReversed: COLORS.DARK_PURPLE,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     card: COLORS.PURPLE,
