@@ -35,6 +35,7 @@ export const DevicesList: React.FC<Props> = ({
                     : themedStyles.notSelected
                 return (
                     <BaseTouchableBox
+                        key={device.rootAddress}
                         style={style}
                         action={handleOnDevicePress(device)}>
                         <BaseText typographyFont="subTitle">
@@ -53,5 +54,8 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1.5,
             borderColor: theme.colors.text,
         },
-        notSelected: {},
+        notSelected: {
+            borderWidth: 1.5,
+            borderColor: theme.colors.card,
+        },
     })

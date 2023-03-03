@@ -76,7 +76,7 @@ const AccountManagementBottomSheet = React.forwardRef<
             <BaseSpacer height={16} />
             <BaseTouchableBox action={() => {}} disabled>
                 <BaseIcon
-                    name={"qr-outline"}
+                    name={"qr-code-outline"}
                     size={18}
                     color={theme.colors.text}
                 />
