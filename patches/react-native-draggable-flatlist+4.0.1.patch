@@ -1,0 +1,25 @@
+diff --git a/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx b/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
+index d7d98c2..1d979cc 100644
+--- a/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
++++ b/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
+@@ -312,7 +312,7 @@ function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
+       // Turning this into a worklet causes timing issues. We want it to run
+       // just after the finger lifts.
+       runOnJS(onContainerTouchEnd)();
+-    });
++    }).runOnJS(true);
+ 
+   if (dragHitSlop) panGesture.hitSlop(dragHitSlop);
+   if (activationDistanceProp) {
+diff --git a/node_modules/react-native-draggable-flatlist/src/components/NestableDraggableFlatList.tsx b/node_modules/react-native-draggable-flatlist/src/components/NestableDraggableFlatList.tsx
+index 1559352..6364152 100644
+--- a/node_modules/react-native-draggable-flatlist/src/components/NestableDraggableFlatList.tsx
++++ b/node_modules/react-native-draggable-flatlist/src/components/NestableDraggableFlatList.tsx
+@@ -45,6 +45,7 @@ function NestableDraggableFlatListInner<T>(
+   useNestedAutoScroll({
+     ...animVals,
+     hoverOffset,
++    autoscrollThreshold: props.autoscrollThreshold,
+   });
+ 
+   const onListContainerLayout = useStableCallback(async ({ containerRef }) => {

@@ -88,7 +88,7 @@ export const HomeScreen = () => {
                 <TabbarHeader action={setActiveScreen} />
                 <BaseSpacer height={20} />
 
-                <BaseScrollView horizontal={true} grow={100}>
+                <BaseScrollView horizontal={true} grow={1}>
                     {getActiveScreen()}
                 </BaseScrollView>
             </PlatformScrollView>

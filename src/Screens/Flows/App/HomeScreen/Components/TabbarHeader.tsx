@@ -26,15 +26,23 @@ export const TabbarHeader = memo(
 
         const animatedWidthToken = useAnimatedStyle(() => {
             return {
-                width: withTiming(progressValue.value === 0 ? LONG_WIDTH : 0),
-                opacity: withTiming(progressValue.value === 0 ? 1 : 0),
+                width: withTiming(progressValue.value === 0 ? LONG_WIDTH : 0, {
+                    duration: 200,
+                }),
+                opacity: withTiming(progressValue.value === 0 ? 1 : 0, {
+                    duration: 200,
+                }),
             }
         }, [])
 
         const animatedWidthNft = useAnimatedStyle(() => {
             return {
-                width: withTiming(progressValue.value === 1 ? LONG_WIDTH : 0),
-                opacity: withTiming(progressValue.value === 1 ? 1 : 0),
+                width: withTiming(progressValue.value === 1 ? LONG_WIDTH : 0, {
+                    duration: 200,
+                }),
+                opacity: withTiming(progressValue.value === 1 ? 1 : 0, {
+                    duration: 200,
+                }),
             }
         }, [])
 

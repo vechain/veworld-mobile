@@ -32,6 +32,6 @@ export const TokenList = memo(({ ...animatedViewProps }: Props) => {
 const baseStyles = StyleSheet.create({
     view: {
         width: "100%",
-        paddingHorizontal: 20,
+        // paddingHorizontal: 20,
     },
 })
