@@ -44,7 +44,13 @@ module.exports = {
                 adbName: ".*",
             },
         },
-        emulator: {
+        emulator_31: {
+            type: "android.emulator",
+            device: {
+                avdName: "Pixel_6_Pro_API_31",
+            },
+        },
+        emulator_33: {
             type: "android.emulator",
             device: {
                 avdName: "Pixel_6_Pro_API_33",
@@ -68,12 +74,20 @@ module.exports = {
             device: "attached",
             app: "android.release",
         },
-        "android.emu.debug": {
-            device: "emulator",
+        "android.emu.debug.31": {
+            device: "emulator_31",
             app: "android.debug",
         },
-        "android.emu.release": {
-            device: "emulator",
+        "android.emu.release.31": {
+            device: "emulator_31",
+            app: "android.release",
+        },
+        "android.emu.debug.33": {
+            device: "emulator_33",
+            app: "android.debug",
+        },
+        "android.emu.release.33": {
+            device: "emulator_33",
             app: "android.release",
         },
     },
