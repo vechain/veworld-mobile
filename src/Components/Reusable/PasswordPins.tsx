@@ -30,10 +30,10 @@ export const PasswordPins: FC<Props> = memo(
         }, [LL, isPINRetype, isPinError])
 
         const getMessageTextColor = useMemo(() => {
-            if (isPINRetype) return theme.colors.primary
+            if (isPINRetype) return theme.colors.text
             if (isPinError) return theme.colors.danger
             return undefined
-        }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.primary])
+        }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
 
         const getPinMessage = useCallback(() => {
             return (
