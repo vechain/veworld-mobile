@@ -63,6 +63,7 @@ const en: BaseTranslation = {
     BD_RESET_APP_01: "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc.)",
     BD_RESET_APP_02: "Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.",
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
+    BD_YOUR_BALANCE: "Your balance",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -100,16 +101,21 @@ const en: BaseTranslation = {
     COMMON_BTN_cancel: "Cancel",
 
     // Common Labels
+    COMMON_LBL_ADDRESS: "Address",
+    COMMON_LBL_SUCCESS: "Success",
+    COMMON_LBL_ERROR: "Error",
 
     // Common Titles
 
     // Errors
+    ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
 
     // Network
 
     // Network Labels
 
     // Notifications
+    NOTIFICATION_COPIED_CLIPBOARD: "{name} copied to clipboard!",
 
     // Accounts
 

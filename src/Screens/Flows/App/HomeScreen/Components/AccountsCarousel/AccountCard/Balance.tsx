@@ -1,6 +1,7 @@
 import React, { useMemo } from "react"
 import { FormattingUtils, useDisclosure, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
+import { useI18nContext } from "~i18n"
 
 const { humanNumber } = FormattingUtils
 
@@ -9,7 +10,7 @@ type Props = {
 }
 export const Balance: React.FC<Props> = ({ balance }) => {
     const theme = useTheme()
-
+    const { LL } = useI18nContext()
     const { isOpen: isVisible, onToggle: toggleVisible } = useDisclosure(true)
 
     const balanceText = useMemo(() => {
@@ -24,7 +25,7 @@ export const Balance: React.FC<Props> = ({ balance }) => {
                 <BaseText
                     color={theme.colors.textReversed}
                     typographyFont="body">
-                    Your balance
+                    {LL.BD_YOUR_BALANCE()}
                 </BaseText>
                 <BaseIcon
                     onPress={toggleVisible}

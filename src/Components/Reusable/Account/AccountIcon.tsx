@@ -6,12 +6,12 @@ import { BaseView } from "~Components/Base"
 import { Account } from "~Storage"
 const { getPicassoImgSrc } = PicassoUtils
 
-interface IAccountIcon {
+type AccountIconProps = {
     account: Account
     showDeviceIcon?: boolean
 }
 
-export const AccountIcon: React.FC<IAccountIcon> = ({ account }) => {
+export const AccountIcon: React.FC<AccountIconProps> = ({ account }) => {
     // const isLedger = accountDevice?.type === DEVICE_TYPE.LEDGER
 
     return (
@@ -26,16 +26,15 @@ export const AccountIcon: React.FC<IAccountIcon> = ({ account }) => {
     )
 }
 
-interface IPicassoAddressIcon {
+type PicassoAddressIconProps = {
     address: string
     size?: number
 }
-const PicassoAddressIcon: React.FC<IPicassoAddressIcon> = ({
+const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = ({
     address,
     size = 50,
 }) => {
     const uri = getPicassoImgSrc(address).toString()
-    console.log(uri)
 
     return (
         <BaseView radius={8} style={picassoIconStyles.view}>
