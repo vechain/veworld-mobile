@@ -25,6 +25,7 @@ export const AddressButton: React.FC<Props> = ({ address }) => {
         <BaseButton
             textColor={color}
             size="sm"
+            radius={1000}
             fontSize={10}
             bgColor={theme.colors.primaryReversed}
             title={humanAddress(address, 5, 4)}
