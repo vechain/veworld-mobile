@@ -14,8 +14,8 @@ import {
 import { useSharedValue } from "react-native-reanimated"
 import { useBottomSheetModal } from "~Common"
 import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
-import HomeScreenBottomSheet from "./Components/HomeScreenBottomSheet"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
+import AccountManagementBottomSheet from "./Components/BottomSheets/AccountManagementBottomSheet/AccountManagementBottomSheet"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -25,9 +25,15 @@ const ACTIVE_WALLET = 0
 export const HomeScreen = () => {
     const { store } = useRealm()
     const {
-        ref: bottomSheetRef,
-        onOpen: openBottomSheetMenu,
-        onClose: closeBottomSheetMenu,
+        ref: accountManagementBottomSheetRef,
+        onOpen: openAccountManagementSheet,
+        onClose: closeAccountManagementSheet,
+    } = useBottomSheetModal()
+
+    const {
+        // ref: addAccountBottomSheetRef,
+        onOpen: openAddAccountSheet,
+        // onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
     const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
@@ -77,7 +83,7 @@ export const HomeScreen = () => {
         <>
             <PlatformScrollView handleScrollPosition={handleScrollPosition}>
                 <BaseView align="center">
-                    <Header action={openBottomSheetMenu} />
+                    <Header action={openAccountManagementSheet} />
                     <BaseSpacer height={20} />
                     <AccountsCarousel
                         accounts={devices[ACTIVE_WALLET].accounts}
@@ -98,10 +104,16 @@ export const HomeScreen = () => {
                 statusBarContent={changeContent}
                 scrollValue={scrollValue}
             />
-            <HomeScreenBottomSheet
+            {/* <HomeScreenBottomSheet
                 ref={bottomSheetRef}
                 onClose={closeBottomSheetMenu}
                 activeDevice={activeDevice}
+            /> */}
+            <AccountManagementBottomSheet
+                ref={accountManagementBottomSheetRef}
+                onClose={closeAccountManagementSheet}
+                account={activeDevice.accounts[0]}
+                openAddAccountSheet={openAddAccountSheet}
             />
         </>
     )
