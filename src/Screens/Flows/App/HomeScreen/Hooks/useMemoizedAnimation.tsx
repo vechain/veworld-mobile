@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { FadeInRight, SlideInLeft, SlideInRight } from "react-native-reanimated"
 
-export const useMeoizedAnimation = () => {
+export const useMemoizedAnimation = () => {
     const [firstLoad, setFirstLoad] = useState(true)
 
     useEffect(() => {

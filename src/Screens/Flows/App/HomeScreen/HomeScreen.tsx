@@ -13,7 +13,7 @@ import {
 } from "./Components"
 import { useSharedValue } from "react-native-reanimated"
 import { useBottomSheetModal } from "~Common"
-import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
+import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
 import AccountManagementBottomSheet from "./Components/BottomSheets/AccountManagementBottomSheet/AccountManagementBottomSheet"
 import AddAccountBottomSheet from "./Components/BottomSheets/AddAccountBottomSheet/AddAccountBottomSheet"
@@ -38,9 +38,9 @@ export const HomeScreen = () => {
     } = useBottomSheetModal()
 
     const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
-        useMeoizedAnimation()
+        useMemoizedAnimation()
 
-    const [activeScreen, setActiveScreen] = useState(0)
+    const [activeTab, setActiveTab] = useState(0)
     const [changeContent, setChangeContent] = useState(false)
     const scrollValue = useSharedValue<number>(-59)
 
@@ -74,11 +74,11 @@ export const HomeScreen = () => {
     const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
 
     const getActiveScreen = useCallback(() => {
-        if (activeScreen === 0)
+        if (activeTab === 0)
             return <TokenList entering={coinListEnter} exiting={coinListExit} />
 
         return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
-    }, [activeScreen, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
+    }, [activeTab, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
 
     return (
         <>
@@ -92,7 +92,7 @@ export const HomeScreen = () => {
                 </BaseView>
 
                 <BaseSpacer height={10} />
-                <TabbarHeader action={setActiveScreen} />
+                <TabbarHeader activeTab={activeTab} changeTab={setActiveTab} />
                 <BaseSpacer height={20} />
 
                 <BaseScrollView horizontal={true} grow={100}>

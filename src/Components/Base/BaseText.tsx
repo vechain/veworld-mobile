@@ -91,7 +91,7 @@ export const BaseText = (props: Props) => {
             <Text
                 style={[
                     {
-                        color: props.color ? props.color : theme.colors.text,
+                        color: props.color || theme.colors.text,
                         fontSize: computedFontSize,
                         fontFamily: computedFontFamily,
                         fontWeight: computedFontWeight,
