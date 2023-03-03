@@ -26,7 +26,7 @@ const AddAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         }, [createAccountFor, onClose, selectedDevice])
 
         const handleSheetChanges = useCallback((index: number) => {
-            console.log("handleSheetChanges", index)
+            console.log("addAccountSheet position changed", index)
         }, [])
 
         return (

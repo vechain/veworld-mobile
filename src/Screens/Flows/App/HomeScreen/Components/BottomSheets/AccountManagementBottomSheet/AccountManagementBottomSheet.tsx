@@ -29,7 +29,7 @@ const AccountManagementBottomSheet = React.forwardRef<
     const snapPoints = useMemo(() => ["50%"], [])
 
     const handleSheetChanges = useCallback((index: number) => {
-        console.log("handleSheetChanges", index)
+        console.log("accountManagementSheet position changed", index)
     }, [])
 
     const onAddAccount = useCallback(() => {
