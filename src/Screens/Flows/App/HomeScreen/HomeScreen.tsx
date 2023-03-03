@@ -16,6 +16,7 @@ import { useBottomSheetModal } from "~Common"
 import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
 import AccountManagementBottomSheet from "./Components/BottomSheets/AccountManagementBottomSheet/AccountManagementBottomSheet"
+import AddAccountBottomSheet from "./Components/BottomSheets/AddAccountBottomSheet/AddAccountBottomSheet"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -31,9 +32,9 @@ export const HomeScreen = () => {
     } = useBottomSheetModal()
 
     const {
-        // ref: addAccountBottomSheetRef,
+        ref: addAccountBottomSheetRef,
         onOpen: openAddAccountSheet,
-        // onClose: closeAddAccountSheet,
+        onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
     const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
@@ -104,16 +105,15 @@ export const HomeScreen = () => {
                 statusBarContent={changeContent}
                 scrollValue={scrollValue}
             />
-            {/* <HomeScreenBottomSheet
-                ref={bottomSheetRef}
-                onClose={closeBottomSheetMenu}
-                activeDevice={activeDevice}
-            /> */}
             <AccountManagementBottomSheet
                 ref={accountManagementBottomSheetRef}
                 onClose={closeAccountManagementSheet}
                 account={activeDevice.accounts[0]}
                 openAddAccountSheet={openAddAccountSheet}
+            />
+            <AddAccountBottomSheet
+                ref={addAccountBottomSheetRef}
+                onClose={closeAddAccountSheet}
             />
         </>
     )

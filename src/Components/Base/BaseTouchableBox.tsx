@@ -20,10 +20,10 @@ export const BaseTouchableBox: React.FC<Props> = ({
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles(direction, disabled))
     return (
-        <DropShadow style={[theme.shadows.card, styles.container]}>
+        <DropShadow style={[theme.shadows.card, styles.container, style]}>
             <TouchableOpacity
                 onPress={action}
-                style={[styles.innerContainer, style]}
+                style={[styles.innerContainer]}
                 {...props}>
                 {children}
             </TouchableOpacity>

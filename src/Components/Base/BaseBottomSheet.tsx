@@ -47,7 +47,7 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 backdropComponent={renderBackdrop}
                 handleComponent={renderHandle}
                 {...props}>
-                <BaseView w={100} px={24} py={32} align="flex-start">
+                <BaseView w={100} px={24} py={24} align="flex-start">
                     {children}
                 </BaseView>
             </BottomSheetModal>
