@@ -17,6 +17,8 @@ import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
 import AccountManagementBottomSheet from "./Components/BottomSheets/AccountManagementBottomSheet/AccountManagementBottomSheet"
 import AddAccountBottomSheet from "./Components/BottomSheets/AddAccountBottomSheet/AddAccountBottomSheet"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -25,6 +27,7 @@ const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
     const { store } = useRealm()
+    const nav = useNavigation()
     const {
         ref: accountManagementBottomSheetRef,
         onOpen: openAccountManagementSheet,
@@ -80,14 +83,19 @@ export const HomeScreen = () => {
         return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
     }, [activeTab, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
 
+    const navigateToCreateWallet = useCallback(() => {
+        nav.navigate(Routes.CREATE_WALLET_FLOW)
+    }, [nav])
+
     return (
         <>
             <PlatformScrollView handleScrollPosition={handleScrollPosition}>
                 <BaseView align="center">
-                    <Header action={openAccountManagementSheet} />
+                    <Header action={navigateToCreateWallet} />
                     <BaseSpacer height={20} />
                     <AccountsCarousel
                         accounts={devices[ACTIVE_WALLET].accounts}
+                        openAccountManagement={openAccountManagementSheet}
                     />
                 </BaseView>
 
