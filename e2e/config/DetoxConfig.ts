@@ -8,7 +8,12 @@ BeforeAll({ timeout: 120_000 }, async () => {
 })
 
 Before({ timeout: 120_000 }, async () => {
-    await detox.device.reloadReactNative()
+    if (detox.device.getPlatform() === "android") {
+        await detox.device.terminateApp()
+        await detox.device.launchApp()
+    } else {
+        await detox.device.reloadReactNative()
+    }
 })
 
 AfterAll({ timeout: 120_000 }, async () => {
