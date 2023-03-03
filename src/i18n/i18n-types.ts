@@ -187,6 +187,10 @@ type RootTranslation = {
 	 */
 	BD_RESET_APP_DISCLAIMER: string
 	/**
+	 * Y​o​u​r​ ​b​a​l​a​n​c​e
+	 */
+	BD_YOUR_BALANCE: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -290,6 +294,27 @@ type RootTranslation = {
 	 * C​a​n​c​e​l
 	 */
 	COMMON_BTN_cancel: string
+	/**
+	 * A​d​d​r​e​s​s
+	 */
+	COMMON_LBL_ADDRESS: string
+	/**
+	 * S​u​c​c​e​s​s
+	 */
+	COMMON_LBL_SUCCESS: string
+	/**
+	 * E​r​r​o​r
+	 */
+	COMMON_LBL_ERROR: string
+	/**
+	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
+	 */
+	ERROR_INCORRECT_MNEMONIC: string
+	/**
+	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
+	 * @param {unknown} name
+	 */
+	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
 }
 
 export type TranslationFunctions = {
@@ -466,6 +491,10 @@ export type TranslationFunctions = {
 	 */
 	BD_RESET_APP_DISCLAIMER: () => LocalizedString
 	/**
+	 * Your balance
+	 */
+	BD_YOUR_BALANCE: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -569,6 +598,26 @@ export type TranslationFunctions = {
 	 * Cancel
 	 */
 	COMMON_BTN_cancel: () => LocalizedString
+	/**
+	 * Address
+	 */
+	COMMON_LBL_ADDRESS: () => LocalizedString
+	/**
+	 * Success
+	 */
+	COMMON_LBL_SUCCESS: () => LocalizedString
+	/**
+	 * Error
+	 */
+	COMMON_LBL_ERROR: () => LocalizedString
+	/**
+	 * Incorrect mnemonic phrase
+	 */
+	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
+	/**
+	 * {name} copied to clipboard!
+	 */
+	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
 }
 
 export type Formatters = {}

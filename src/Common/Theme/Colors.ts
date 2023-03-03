@@ -1,5 +1,6 @@
 export type Colors = {
     primary: string
+    primaryReversed: string
     primaryDisabled: string
     secondary: string
     tertiary: string
@@ -7,6 +8,7 @@ export type Colors = {
     danger: string
     success: string
     text: string
+    textReversed: string
     background: string
     backgroundReversed: string
     card: string
@@ -36,6 +38,7 @@ enum COLORS {
 
 const light: Colors = {
     primary: COLORS.DARK_PURPLE,
+    primaryReversed: COLORS.LIME_GREEN,
     primaryDisabled: COLORS.PURPLE_DISABLED,
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.LIME_GREEN,
@@ -43,6 +46,7 @@ const light: Colors = {
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
     text: COLORS.DARK_PURPLE,
+    textReversed: COLORS.WHITE,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
@@ -54,6 +58,7 @@ const light: Colors = {
 
 const dark: Colors = {
     primary: COLORS.LIME_GREEN,
+    primaryReversed: COLORS.DARK_PURPLE,
     primaryDisabled: COLORS.LIME_GREEN_DISABLED,
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.DARK_PURPLE,
@@ -61,6 +66,7 @@ const dark: Colors = {
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
     text: COLORS.WHITE,
+    textReversed: COLORS.DARK_PURPLE,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     card: COLORS.PURPLE,
