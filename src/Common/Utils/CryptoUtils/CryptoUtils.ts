@@ -21,8 +21,8 @@ const hdNodeFromXPub = (xPub: XPub) => {
 }
 
 //Alternative to `Math.random()` that returns a cryptographically secure random number
-const random = (max: number = 1) => {
-    const arr = new Uint32Array(max)
+const random = () => {
+    const arr = new Uint32Array(1)
     crypto.getRandomValues(arr)
     return arr[0] * Math.pow(2, -32)
 }

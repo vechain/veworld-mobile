@@ -58,7 +58,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     />
                 </BaseView>
                 <BaseSpacer height={18} />
-                <Balance balance={CryptoUtils.random(10000).toString()} />
+                <Balance balance={CryptoUtils.random().toString()} />
             </BaseView>
         </Animated.View>
     )

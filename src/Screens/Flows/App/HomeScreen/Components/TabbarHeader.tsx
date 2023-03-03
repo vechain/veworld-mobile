@@ -5,8 +5,8 @@ import Animated, { FadeIn } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
 
 type Props = {
-    action: (activeScreen: number) => void
-    activeScreen: number
+    changeTab: (tab: number) => void
+    activeTab: number
 }
 
 const entries = [
@@ -20,12 +20,12 @@ const entries = [
     },
 ]
 export const TabbarHeader: React.FC<Props> = memo(
-    ({ action, activeScreen }) => {
+    ({ activeTab, changeTab }) => {
         const { styles } = useThemedStyles(baseStyles)
 
-        const onScreenChange = useCallback(
-            (value: number) => () => action(value),
-            [action],
+        const onTabChange = useCallback(
+            (value: number) => () => changeTab(value),
+            [changeTab],
         )
 
         return (
@@ -36,11 +36,11 @@ export const TabbarHeader: React.FC<Props> = memo(
                     justify="space-between"
                     align="center">
                     {entries.map(entry => {
-                        const isSelected = activeScreen === entry.value
+                        const isSelected = activeTab === entry.value
                         return (
                             <Pressable
                                 key={entry.value}
-                                onPress={onScreenChange(entry.value)}
+                                onPress={onTabChange(entry.value)}
                                 style={styles.button}>
                                 <BaseText
                                     typographyFont={
