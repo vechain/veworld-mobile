@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { FlatList, Pressable, View } from "react-native"
@@ -39,7 +40,7 @@ if (__DEV__) {
     }
 }
 
-const NUM_ITEMS = 10
+const NUM_ITEMS = 20
 function getColor(i: number) {
     const multiplier = 255 / (NUM_ITEMS - 1)
     const colorVal = i * multiplier
@@ -175,12 +176,11 @@ export function DraggableTest() {
                                 ]}>
                                 <Animated.View
                                     style={{
-                                        backgroundColor: isActive
-                                            ? "red"
-                                            : item.backgroundColor,
+                                        backgroundColor: item.backgroundColor,
                                         flexDirection: "row",
                                         alignItems: "center",
                                         borderRadius: 10,
+                                        opacity: isActive ? 0.6 : 1,
                                     }}>
                                     <Animated.View
                                         style={[
@@ -208,16 +208,14 @@ export function DraggableTest() {
                                                 paddingVertical: 12,
                                                 height: "100%",
                                                 width: "100%",
-                                                // backgroundColor: "teal",
                                             },
                                         ]}>
                                         <View
                                             style={{
                                                 flexDirection: "row",
-                                                justifyContent: "flex-start",
+                                                justifyContent: "space-between",
                                                 alignItems: "center",
                                                 width: "100%",
-                                                // backgroundColor: "yellow",
                                             }}>
                                             <View
                                                 style={{
@@ -226,10 +224,11 @@ export function DraggableTest() {
                                                     backgroundColor: "red",
                                                     borderRadius: 20,
                                                     marginRight: 10,
+                                                    position: "absolute",
                                                 }}
                                             />
 
-                                            <View>
+                                            <View style={{ marginLeft: 50 }}>
                                                 <BaseText typographyFont="subTitle">
                                                     Coin Name
                                                 </BaseText>
@@ -336,10 +335,10 @@ export function DraggableTest() {
                     <Animated.View
                         entering={coinListEnter}
                         exiting={coinListExit}>
-                        {/* <FlatList
+                        <FlatList
                             data={[
-                                { key: "1", label: "1" },
-                                { key: "2", label: "2" },
+                                { key: "1", label: "VET" },
+                                { key: "2", label: "VTHO" },
                             ]}
                             keyExtractor={item => item.key}
                             renderItem={({ item }) => {
@@ -357,12 +356,12 @@ export function DraggableTest() {
                             }}
                             showsVerticalScrollIndicator={false}
                             ItemSeparatorComponent={renderSeparator}
-                        /> */}
+                        />
 
                         <NestableDraggableFlatList
                             data={data}
                             extraData={isEdit}
-                            onDragEnd={({ _data }) => setData(_data)}
+                            onDragEnd={({ data }) => setData(data)}
                             keyExtractor={item => item.key}
                             renderItem={renderItem}
                             activationDistance={40}
