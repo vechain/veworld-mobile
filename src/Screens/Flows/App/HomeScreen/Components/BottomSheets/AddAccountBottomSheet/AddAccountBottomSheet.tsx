@@ -5,6 +5,8 @@ import { useCreateAccount } from "~Common"
 import { BaseSpacer, BaseText, BaseView, BaseButton } from "~Components"
 import { Device } from "~Storage"
 import { DevicesList } from "./DevicesList"
+import { BottomSheetFooter, BottomSheetFooterProps } from "@gorhom/bottom-sheet"
+import { StyleSheet } from "react-native"
 
 type Props = {
     onClose: () => void
@@ -29,11 +31,28 @@ const AddAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             console.log("addAccountSheet position changed", index)
         }, [])
 
+        const renderItem = useCallback(
+            (props: BottomSheetFooterProps) => (
+                <BottomSheetFooter
+                    {...props}
+                    style={baseStyles.bottomSheetFooter}
+                    bottomInset={24}>
+                    <BaseButton
+                        disabled={!selectedDevice}
+                        action={onCreateAccount}
+                        w={100}
+                        title={"Add Account"}
+                    />
+                </BottomSheetFooter>
+            ),
+            [selectedDevice, onCreateAccount],
+        )
         return (
             <BaseBottomSheet
                 snapPoints={snapPoints}
                 onChange={handleSheetChanges}
-                ref={ref}>
+                ref={ref}
+                footerComponent={renderItem}>
                 <BaseText typographyFont="subTitle">Choose a wallet</BaseText>
                 <BaseView
                     orientation="row"
@@ -45,19 +64,24 @@ const AddAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 <DevicesList
                     selectedDevice={selectedDevice}
                     onDevicePress={setSelectedDevice}
+                    inBottomSheet={true}
                 />
 
-                <BaseSpacer height={16} />
+                {/* <BaseSpacer height={16} />
                 <BaseButton
                     disabled={!selectedDevice}
                     action={onCreateAccount}
                     w={100}
                     title={"Add Account"}
                 />
-                <BaseSpacer height={16} />
+                <BaseSpacer height={16} /> */}
             </BaseBottomSheet>
         )
     },
 )
 
 export default AddAccountBottomSheet
+
+const baseStyles = StyleSheet.create({
+    bottomSheetFooter: { paddingHorizontal: 24, paddingVertical: 24 },
+})

@@ -1,3 +1,4 @@
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
@@ -9,12 +10,12 @@ import { Device, useListListener, useRealm } from "~Storage"
 type Props = {
     selectedDevice?: Device
     onDevicePress: (device: Device) => void
-    footerComponent?: React.ReactNode
+    inBottomSheet?: boolean
 }
 export const DevicesList: React.FC<Props> = ({
     selectedDevice,
     onDevicePress,
-    footerComponent,
+    inBottomSheet = false,
 }) => {
     const { store } = useRealm()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
@@ -48,6 +49,21 @@ export const DevicesList: React.FC<Props> = ({
     )
 
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
+
+    if (inBottomSheet)
+        return (
+            <BottomSheetFlatList
+                // style={themedStyles.container}
+                contentContainerStyle={themedStyles.container}
+                data={devices}
+                // numColumns={1}
+                renderItem={renderItem}
+                // showsVerticalScrollIndicator={false}
+                // ItemSeparatorComponent={renderSeparator}
+                keyExtractor={item => item.rootAddress}
+            />
+        )
+
     return (
         <FlatList
             style={themedStyles.container}
@@ -59,7 +75,6 @@ export const DevicesList: React.FC<Props> = ({
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={renderSeparator}
             keyExtractor={item => item.rootAddress}
-            ListFooterComponent={() => footerComponent}
         />
     )
 }
@@ -68,6 +83,7 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             width: "100%",
+            backgroundColor: "white ",
         },
         selected: {
             borderWidth: 1.5,
