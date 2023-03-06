@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { BaseButton, BaseSafeArea, BaseText, BaseView } from "~Components"
+import { BaseSafeArea } from "~Components"
 import { Device, useRealm, useListListener } from "~Storage"
 import {
     TokenList,
     NFTList,
     HeaaderView,
     HomeScreenBottomSheet,
+    EditTokens,
 } from "./Components"
 import { useBottomSheetModal } from "~Common"
 import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
@@ -51,8 +52,7 @@ export const HomeScreen = () => {
     const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
 
     return (
-        <>
-            <BaseSafeArea />
+        <BaseSafeArea>
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom }}
@@ -65,31 +65,7 @@ export const HomeScreen = () => {
                     setActiveScreen={setActiveScreen}
                 />
 
-                <BaseView
-                    orientation="row"
-                    justify="space-evenly"
-                    align="center"
-                    px={20}
-                    py={30}>
-                    <BaseText>Buy</BaseText>
-                    <BaseText>Send</BaseText>
-                    <BaseText>Swap</BaseText>
-                    <BaseText>History</BaseText>
-                </BaseView>
-
-                <BaseView
-                    orientation="row"
-                    justify="space-between"
-                    align="center"
-                    px={20}
-                    my={20}>
-                    <BaseText typographyFont="subTitle">Your Tokens</BaseText>
-                    <BaseButton
-                        bgColor={isEdit ? "red" : "green"}
-                        title="Edit"
-                        action={() => setIsEdit(prevState => !prevState)}
-                    />
-                </BaseView>
+                <EditTokens isEdit={isEdit} action={setIsEdit} />
 
                 {activeScreen === 0 ? (
                     <TokenList
@@ -108,7 +84,7 @@ export const HomeScreen = () => {
                 onClose={closeBottomSheetMenu}
                 activeDevice={activeDevice}
             />
-        </>
+        </BaseSafeArea>
     )
 }
 

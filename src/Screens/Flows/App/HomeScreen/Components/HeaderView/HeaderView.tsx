@@ -4,6 +4,7 @@ import { Device } from "~Storage"
 import { Header } from "./Header"
 import { AccountsCarousel } from "./AccountsCarousel"
 import { TabbarHeader } from "./TabbarHeader"
+import { ActionsList } from "./ActionsList"
 
 type Props = {
     activeDevice: Device
@@ -24,6 +25,7 @@ export const HeaaderView = memo(
                 <BaseSpacer height={10} />
                 <TabbarHeader action={setActiveScreen} />
                 <BaseSpacer height={20} />
+                <ActionsList />
             </>
         )
     },

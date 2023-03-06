@@ -7,6 +7,7 @@ import {
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { ColorThemeType, Token, useThemedStyles } from "~Common"
+import DropShadow from "react-native-drop-shadow"
 
 interface IAnimatedTokenCard extends RenderItemParams<Token> {
     isEdit: boolean
@@ -76,50 +77,54 @@ export const AnimatedTokenCard = memo(
             <ShadowDecorator>
                 <View style={styles.outerContainer}>
                     <Animated.View style={animatedWidthRow}>
-                        <Pressable
-                            onLongPress={() => onDrag(drag)}
-                            disabled={isActive}
-                            style={styles.pressable}>
-                            <Animated.View
-                                style={styles.animatedOuterContainer}>
+                        <DropShadow style={styles.cardDhadow}>
+                            <Pressable
+                                onLongPress={() => onDrag(drag)}
+                                disabled={isActive}
+                                style={styles.pressable}>
                                 <Animated.View
-                                    style={[
-                                        animatedOpacity,
-                                        styles.animatedInnerContainer,
-                                    ]}>
-                                    <BaseIcon
-                                        name={"apps-outline"}
-                                        size={28}
-                                        action={() => onDeleteItem(item)}
-                                    />
-                                </Animated.View>
+                                    style={styles.animatedOuterContainer}>
+                                    <Animated.View
+                                        style={[
+                                            animatedOpacity,
+                                            styles.animatedInnerContainer,
+                                        ]}>
+                                        <BaseIcon
+                                            name={"apps-outline"}
+                                            size={28}
+                                            action={() => onDeleteItem(item)}
+                                        />
+                                    </Animated.View>
 
-                                <Animated.View
-                                    style={[
-                                        animatedPositionInnerRow,
-                                        styles.aniamtedInnerRow,
-                                    ]}>
-                                    <View style={styles.innerRow}>
-                                        <View style={styles.tokenIcon} />
+                                    <Animated.View
+                                        style={[
+                                            animatedPositionInnerRow,
+                                            styles.aniamtedInnerRow,
+                                        ]}>
+                                        <View style={styles.innerRow}>
+                                            <View style={styles.tokenIcon} />
 
-                                        <View style={styles.textMargin}>
-                                            <BaseText typographyFont="subTitle">
-                                                {item.name}
-                                            </BaseText>
-                                            <BaseText>{item.symbol}</BaseText>
+                                            <View style={styles.textMargin}>
+                                                <BaseText typographyFont="subTitle">
+                                                    {item.name}
+                                                </BaseText>
+                                                <BaseText>
+                                                    {item.symbol}
+                                                </BaseText>
+                                            </View>
+
+                                            <Animated.View
+                                                style={animatedOpacityReverse}>
+                                                <BaseText typographyFont="title">
+                                                    0.2202$
+                                                </BaseText>
+                                                <BaseText>0.36</BaseText>
+                                            </Animated.View>
                                         </View>
-
-                                        <Animated.View
-                                            style={animatedOpacityReverse}>
-                                            <BaseText typographyFont="title">
-                                                0.2202$
-                                            </BaseText>
-                                            <BaseText>0.36</BaseText>
-                                        </Animated.View>
-                                    </View>
+                                    </Animated.View>
                                 </Animated.View>
-                            </Animated.View>
-                        </Pressable>
+                            </Pressable>
+                        </DropShadow>
                     </Animated.View>
 
                     <Animated.View style={animatedDeleteIcon}>
@@ -188,4 +193,5 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         deleteIconColor: {
             backgroundColor: theme.colors.secondary,
         },
+        cardDhadow: theme.shadows.card,
     })

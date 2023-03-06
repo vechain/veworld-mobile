@@ -5,7 +5,11 @@ import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { AnimatedTokenCard } from "./TokenCard"
 import { ColorThemeType, Tokens_mock, useThemedStyles, Token } from "~Common"
-import { FlashList } from "@shopify/flash-list"
+
+const NATIVE_TOKENS = [
+    { key: "1", label: "VET" },
+    { key: "2", label: "VTHO" },
+]
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -19,7 +23,7 @@ export const TokenList = memo(
         const { styles } = useThemedStyles(baseStyles)
 
         const renderSeparator = useCallback(
-            () => <BaseSpacer height={10} />,
+            () => <BaseSpacer height={16} />,
             [],
         )
 
@@ -29,23 +33,14 @@ export const TokenList = memo(
 
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
-                <FlashList
-                    data={[
-                        { key: "1", label: "VET" },
-                        { key: "2", label: "VTHO" },
-                    ]}
-                    keyExtractor={item => item.key}
-                    renderItem={({ item }) => {
-                        return (
-                            <BaseView style={styles.nativeTokenContainer}>
-                                <BaseText>{item.label}</BaseText>
-                            </BaseView>
-                        )
-                    }}
-                    estimatedItemSize={162}
-                    showsVerticalScrollIndicator={false}
-                    ItemSeparatorComponent={renderSeparator}
-                />
+                {NATIVE_TOKENS.map(token => (
+                    <BaseView
+                        my={10}
+                        key={token.key}
+                        style={styles.nativeTokenContainer}>
+                        <BaseText>{token.label}</BaseText>
+                    </BaseView>
+                ))}
 
                 <NestableDraggableFlatList
                     data={data}
@@ -64,6 +59,7 @@ export const TokenList = memo(
                     showsVerticalScrollIndicator={false}
                     autoscrollThreshold={visibleHeightRef}
                     ItemSeparatorComponent={renderSeparator}
+                    contentContainerStyle={styles.paddingTop}
                 />
             </Animated.View>
         )
@@ -84,5 +80,10 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             borderRadius: 10,
             marginHorizontal: 20,
+        },
+
+        // this is used because the drop.shadow library is getting cut on the first card of the list
+        paddingTop: {
+            paddingTop: 20,
         },
     })

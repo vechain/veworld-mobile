@@ -1,9 +1,9 @@
-import React, { memo, useState } from "react"
+import React, { memo, useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList, ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
-import { BaseText, BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 
 const NUM_ITEMS = 20
 function getColor(i: number) {
@@ -38,20 +38,27 @@ export const NFTList = memo(({ ...animatedViewProps }: Props) => {
 
     const { styles } = useThemedStyles(baseStyles)
 
+    const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
+
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <FlatList
                 data={data}
+                numColumns={2}
                 keyExtractor={item => item.key}
+                columnWrapperStyle={{
+                    justifyContent: "space-evenly",
+                }}
+                ItemSeparatorComponent={renderSeparator}
                 renderItem={({ item }) => {
                     return (
                         <BaseView
-                            style={{
-                                width: 100,
-                                height: 100,
-                                backgroundColor: "pink",
-                                margin: 10,
-                            }}>
+                            style={[
+                                styles.nftCard,
+                                {
+                                    backgroundColor: item.backgroundColor,
+                                },
+                            ]}>
                             <BaseText>{item.label}</BaseText>
                         </BaseView>
                     )
@@ -67,5 +74,10 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             width: "100%",
             backgroundColor: theme.colors.background,
+        },
+        nftCard: {
+            width: 152,
+            height: 152,
+            backgroundColor: theme.colors.card,
         },
     })

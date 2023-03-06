@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import { useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 
@@ -6,7 +6,7 @@ type Props = {
     action: () => void
 }
 
-export const Header = ({ action }: Props) => {
+export const Header = memo(({ action }: Props) => {
     const theme = useTheme()
     return (
         <BaseView
@@ -28,4 +28,4 @@ export const Header = ({ action }: Props) => {
             />
         </BaseView>
     )
-}
+})
