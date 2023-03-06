@@ -23,10 +23,10 @@ export const BaseTouchableBox: React.FC<Props> = ({
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles(direction, disabled))
     return (
-        <DropShadow style={[theme.shadows.card, styles.container, style]}>
+        <DropShadow style={[theme.shadows.card, styles.container]}>
             <TouchableOpacity
                 onPress={action}
-                style={[styles.innerContainer]}
+                style={[styles.innerContainer, style]}
                 {...props}>
                 {children}
             </TouchableOpacity>
@@ -40,10 +40,7 @@ const baseStyles =
         StyleSheet.create({
             shadow: theme.shadows.card,
             container: {
-                borderRadius: 16,
                 width: "100%",
-                backgroundColor: theme.colors.card,
-                opacity: disabled ? 0.5 : 1,
             },
             innerContainer: {
                 justifyContent: "flex-start",
@@ -51,5 +48,9 @@ const baseStyles =
                 flexDirection: direction,
                 paddingHorizontal: 16,
                 paddingVertical: 12,
+                backgroundColor: theme.colors.card,
+                opacity: disabled ? 0.5 : 1,
+                borderRadius: 16,
+                overflow: "hidden",
             },
         })
