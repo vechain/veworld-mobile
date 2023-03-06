@@ -16,7 +16,7 @@ const AddAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
         const [selectedDevice, setSelectedDevice] = useState<Device>()
 
-        const snapPoints = useMemo(() => ["50%"], [])
+        const snapPoints = useMemo(() => ["50%", "75%"], [])
 
         const onCreateAccount = useCallback(() => {
             if (selectedDevice) {

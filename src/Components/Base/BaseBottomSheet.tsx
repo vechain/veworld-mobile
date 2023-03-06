@@ -5,13 +5,14 @@ import {
     BottomSheetBackdropProps,
     BottomSheetHandleProps,
     BottomSheetModal,
-    BottomSheetProps,
+    BottomSheetModalProps,
 } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
 import { ColorThemeType, useThemedStyles } from "~Common"
+import { BaseSafeArea } from "./BaseSafeArea"
 
-type Props = BottomSheetProps & {
+type Props = BottomSheetModalProps & {
     children: React.ReactNode
 }
 
@@ -39,18 +40,21 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         )
 
         return (
-            <BottomSheetModal
-                ref={ref}
-                enablePanDownToClose={true}
-                index={0}
-                backgroundStyle={[styles.backgroundStyle]}
-                backdropComponent={renderBackdrop}
-                handleComponent={renderHandle}
-                {...props}>
-                <BaseView w={100} px={24} py={24} align="flex-start">
-                    {children}
-                </BaseView>
-            </BottomSheetModal>
+            <BaseSafeArea>
+                <BottomSheetModal
+                    stackBehavior="push"
+                    ref={ref}
+                    enablePanDownToClose={true}
+                    index={0}
+                    backgroundStyle={[styles.backgroundStyle]}
+                    backdropComponent={renderBackdrop}
+                    handleComponent={renderHandle}
+                    {...props}>
+                    <BaseView w={100} px={24} py={24} align="flex-start">
+                        {children}
+                    </BaseView>
+                </BottomSheetModal>
+            </BaseSafeArea>
         )
     },
 )
