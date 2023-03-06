@@ -40,8 +40,6 @@ const baseStyles =
         StyleSheet.create({
             shadow: theme.shadows.card,
             container: {
-                paddingHorizontal: 16,
-                paddingVertical: 12,
                 borderRadius: 16,
                 width: "100%",
                 backgroundColor: theme.colors.card,
@@ -51,5 +49,7 @@ const baseStyles =
                 justifyContent: "flex-start",
                 alignItems: "center",
                 flexDirection: direction,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
             },
         })

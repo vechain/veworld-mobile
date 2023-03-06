@@ -1,4 +1,3 @@
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
@@ -15,7 +14,6 @@ type Props = {
 export const DevicesList: React.FC<Props> = ({
     selectedDevice,
     onDevicePress,
-    inBottomSheet = false,
 }) => {
     const { store } = useRealm()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
@@ -41,7 +39,9 @@ export const DevicesList: React.FC<Props> = ({
                     key={item.rootAddress}
                     style={style}
                     action={handleOnDevicePress(item)}>
-                    <BaseText typographyFont="subTitle">{item.alias}</BaseText>
+                    <BaseText typographyFont="subSubTitle">
+                        {item.alias}
+                    </BaseText>
                 </BaseTouchableBox>
             )
         },
@@ -49,20 +49,6 @@ export const DevicesList: React.FC<Props> = ({
     )
 
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
-
-    if (inBottomSheet)
-        return (
-            <BottomSheetFlatList
-                // style={themedStyles.container}
-                contentContainerStyle={themedStyles.container}
-                data={devices}
-                // numColumns={1}
-                renderItem={renderItem}
-                // showsVerticalScrollIndicator={false}
-                // ItemSeparatorComponent={renderSeparator}
-                keyExtractor={item => item.rootAddress}
-            />
-        )
 
     return (
         <FlatList
