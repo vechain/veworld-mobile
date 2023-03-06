@@ -8,17 +8,18 @@ import {
     HomeScreenBottomSheet,
     EditTokens,
 } from "./Components"
-import { useBottomSheetModal } from "~Common"
-import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
+import { useBottomSheetModal, useRenderCounter } from "~Common"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 
 //todo: get currently active wallet
 const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
     const { store } = useRealm()
+
     const {
         ref: bottomSheetRef,
         onOpen: openBottomSheetMenu,
@@ -26,9 +27,9 @@ export const HomeScreen = () => {
     } = useBottomSheetModal()
 
     const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
-        useMeoizedAnimation()
+        useMemoizedAnimation()
 
-    const [activeScreen, setActiveScreen] = useState(0)
+    const [activeTab, setActiveTab] = useState(0)
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -42,6 +43,8 @@ export const HomeScreen = () => {
         () => activeCard.activeIndex,
         [activeCard.activeIndex],
     )
+
+    useRenderCounter("HomeScreen")
 
     const devices = useListListener(Device.getName(), store) as Device[]
 
@@ -60,14 +63,14 @@ export const HomeScreen = () => {
                     visibleHeightRef.current = visibleHeight
                 }}>
                 <HeaaderView
-                    activeDevice={activeDevice}
                     openBottomSheetMenu={openBottomSheetMenu}
-                    setActiveScreen={setActiveScreen}
+                    setActiveTab={setActiveTab}
+                    activeTab={activeTab}
                 />
 
                 <EditTokens isEdit={isEdit} action={setIsEdit} />
 
-                {activeScreen === 0 ? (
+                {activeTab === 0 ? (
                     <TokenList
                         isEdit={isEdit}
                         visibleHeightRef={visibleHeightRef.current}

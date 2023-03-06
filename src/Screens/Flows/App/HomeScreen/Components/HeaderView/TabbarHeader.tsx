@@ -1,50 +1,32 @@
 import { Pressable, StyleSheet } from "react-native"
-import React, { memo } from "react"
+import React, { memo, useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-} from "react-native-reanimated"
+import Animated, { FadeIn } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
 
-const LONG_WIDTH = 20
+type Props = {
+    setActiveTab: React.Dispatch<React.SetStateAction<number>>
+    activeTab: number
+}
 
-export const TabbarHeader = memo(
-    ({ action }: { action: (activeScreen: number) => void }) => {
+const entries = [
+    {
+        label: "Token",
+        value: 0,
+    },
+    {
+        label: "NFT",
+        value: 1,
+    },
+]
+export const TabbarHeader: React.FC<Props> = memo(
+    ({ activeTab, setActiveTab }) => {
         const { styles } = useThemedStyles(baseStyles)
-        const progressValue = useSharedValue<number>(0)
 
-        const onTokensPress = () => {
-            action(0)
-            progressValue.value = 0
-        }
-        const onNftPress = () => {
-            action(1)
-            progressValue.value = 1
-        }
-
-        const animatedWidthToken = useAnimatedStyle(() => {
-            return {
-                width: withTiming(progressValue.value === 0 ? LONG_WIDTH : 0, {
-                    duration: 200,
-                }),
-                opacity: withTiming(progressValue.value === 0 ? 1 : 0, {
-                    duration: 200,
-                }),
-            }
-        }, [])
-
-        const animatedWidthNft = useAnimatedStyle(() => {
-            return {
-                width: withTiming(progressValue.value === 1 ? LONG_WIDTH : 0, {
-                    duration: 200,
-                }),
-                opacity: withTiming(progressValue.value === 1 ? 1 : 0, {
-                    duration: 200,
-                }),
-            }
-        }, [])
+        const onTabChange = useCallback(
+            (value: number) => () => setActiveTab(value),
+            [setActiveTab],
+        )
 
         return (
             <BaseView align="center">
@@ -53,21 +35,30 @@ export const TabbarHeader = memo(
                     orientation="row"
                     justify="space-between"
                     align="center">
-                    <Pressable onPress={onTokensPress} style={styles.button}>
-                        <BaseText typographyFont="bodyAccent">
-                            {"Token"}
-                        </BaseText>
-                        <Animated.View
-                            style={[styles.underline, animatedWidthToken]}
-                        />
-                    </Pressable>
-
-                    <Pressable onPress={onNftPress} style={styles.button}>
-                        <BaseText typographyFont="bodyAccent">{"NFT"}</BaseText>
-                        <Animated.View
-                            style={[styles.underline, animatedWidthNft]}
-                        />
-                    </Pressable>
+                    {entries.map(entry => {
+                        const isSelected = activeTab === entry.value
+                        return (
+                            <Pressable
+                                key={entry.value}
+                                onPress={onTabChange(entry.value)}
+                                style={styles.button}>
+                                <BaseText
+                                    typographyFont={
+                                        isSelected
+                                            ? "subTitle"
+                                            : "subTitleLight"
+                                    }>
+                                    {entry.label}
+                                </BaseText>
+                                {isSelected && (
+                                    <Animated.View
+                                        style={styles.underline}
+                                        entering={FadeIn.duration(400)}
+                                    />
+                                )}
+                            </Pressable>
+                        )
+                    })}
                 </BaseView>
             </BaseView>
         )
@@ -81,6 +72,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 10,
             backgroundColor: theme.colors.text,
             marginTop: 5,
+            width: 20,
         },
         button: {
             paddingHorizontal: 10,

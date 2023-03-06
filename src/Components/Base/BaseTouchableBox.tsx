@@ -1,8 +1,8 @@
 import React from "react"
 import {
     StyleSheet,
-    TouchableOpacityProps,
     TouchableOpacity,
+    TouchableOpacityProps,
 } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"

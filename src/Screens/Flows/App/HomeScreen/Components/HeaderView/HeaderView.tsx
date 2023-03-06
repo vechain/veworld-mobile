@@ -1,29 +1,31 @@
 import React, { memo } from "react"
 import { BaseSpacer, BaseView } from "~Components"
-import { Device } from "~Storage"
 import { Header } from "./Header"
 import { AccountsCarousel } from "./AccountsCarousel"
 import { TabbarHeader } from "./TabbarHeader"
 import { ActionsList } from "./ActionsList"
 
 type Props = {
-    activeDevice: Device
     openBottomSheetMenu: () => void
-    setActiveScreen: (activeScreen: number) => void
+    setActiveTab: React.Dispatch<React.SetStateAction<number>>
+    activeTab: number
 }
 
 export const HeaaderView = memo(
-    ({ activeDevice, openBottomSheetMenu, setActiveScreen }: Props) => {
+    ({ openBottomSheetMenu, setActiveTab, activeTab }: Props) => {
         return (
             <>
                 <BaseView align="center">
                     <Header action={openBottomSheetMenu} />
                     <BaseSpacer height={20} />
-                    <AccountsCarousel accounts={activeDevice.accounts} />
+                    <AccountsCarousel />
                 </BaseView>
 
                 <BaseSpacer height={10} />
-                <TabbarHeader action={setActiveScreen} />
+                <TabbarHeader
+                    setActiveTab={setActiveTab}
+                    activeTab={activeTab}
+                />
                 <BaseSpacer height={20} />
                 <ActionsList />
             </>

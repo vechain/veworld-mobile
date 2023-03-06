@@ -17,7 +17,11 @@ export const NftCard: React.FC<Props> = ({ value, ...animatedViewProps }) => {
             <BaseTouchableBox
                 action={onAction}
                 style={{ backgroundColor: theme.colors.primary }}>
-                <BaseText typographyFont="subTitle">{value}</BaseText>
+                <BaseText
+                    color={theme.colors.primaryReversed}
+                    typographyFont="subTitle">
+                    {value}
+                </BaseText>
             </BaseTouchableBox>
         </Animated.View>
     )

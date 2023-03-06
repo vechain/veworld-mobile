@@ -7,7 +7,7 @@ import {
     SlideInRight,
 } from "react-native-reanimated"
 
-export const useMeoizedAnimation = () => {
+export const useMemoizedAnimation = () => {
     const [firstLoad, setFirstLoad] = useState(true)
 
     useEffect(() => {

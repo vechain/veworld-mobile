@@ -133,7 +133,7 @@ export const ImportSeedPhraseScreen = () => {
                         </DropShadow>
                         {isError && (
                             <BaseText my={10} color={theme.colors.danger}>
-                                Incorrect mnemonic phrase
+                                {LL.ERROR_INCORRECT_MNEMONIC()}
                             </BaseText>
                         )}
                     </BaseView>
