@@ -1,5 +1,6 @@
 import React from "react"
 import { Modal } from "react-native"
+import { PlatformUtils } from "~Common"
 import { BaseSafeArea } from "./BaseSafeArea"
 import { BaseSpacer } from "./BaseSpacer"
 import { BaseView } from "./BaseView"
@@ -24,11 +25,19 @@ export const BaseModal: React.FC<IBaseModal> = ({
             onDismiss={onClose}
             onRequestClose={onClose}>
             <BaseSafeArea grow={1}>
-                <BaseSpacer height={20} />
-                <BaseView align="center" justify="flex-start" grow={1} mx={20}>
+                {PlatformUtils.isIOS() && <BaseSpacer height={60} />}
+                <BaseView align="center" justify="flex-start" grow={1}>
                     {children}
                 </BaseView>
             </BaseSafeArea>
         </Modal>
     )
 }
+
+// const BaseModalContext = React.createContext<boolean>(false)
+
+// export const useInModal = () => {
+//     const context = React.useContext(BaseModalContext)
+
+//     return context
+// }
