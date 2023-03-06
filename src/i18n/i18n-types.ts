@@ -239,6 +239,10 @@ type RootTranslation = {
 	 */
 	TITLE_USER_PASSWORD: string
 	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
+	 */
+	TITLE_USER_PIN: string
+	/**
 	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
@@ -542,6 +546,10 @@ export type TranslationFunctions = {
 	 * Choose your 6-digit PIN
 	 */
 	TITLE_USER_PASSWORD: () => LocalizedString
+	/**
+	 * Insert your 6-digit PIN
+	 */
+	TITLE_USER_PIN: () => LocalizedString
 	/**
 	 * Import Local Wallet
 	 */
