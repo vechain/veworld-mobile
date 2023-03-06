@@ -1,5 +1,5 @@
 diff --git a/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx b/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
-index d7d98c2..1d979cc 100644
+index d7d98c2..005a882 100644
 --- a/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
 +++ b/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
 @@ -312,7 +312,7 @@ function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
@@ -7,7 +7,7 @@ index d7d98c2..1d979cc 100644
        // just after the finger lifts.
        runOnJS(onContainerTouchEnd)();
 -    });
-+    }).runOnJS(true);
++    }).runOnJS(true)
  
    if (dragHitSlop) panGesture.hitSlop(dragHitSlop);
    if (activationDistanceProp) {
@@ -23,3 +23,16 @@ index 1559352..6364152 100644
    });
  
    const onListContainerLayout = useStableCallback(async ({ containerRef }) => {
+diff --git a/node_modules/react-native-draggable-flatlist/src/hooks/useNestedAutoScroll.tsx b/node_modules/react-native-draggable-flatlist/src/hooks/useNestedAutoScroll.tsx
+index ee098ec..4a6f439 100644
+--- a/node_modules/react-native-draggable-flatlist/src/hooks/useNestedAutoScroll.tsx
++++ b/node_modules/react-native-draggable-flatlist/src/hooks/useNestedAutoScroll.tsx
+@@ -71,7 +71,7 @@ export function useNestedAutoScroll(params: {
+   }, []);
+ 
+   const isAtBottomEdge = useDerivedValue(() => {
+-    return distToBottomEdge.value <= autoscrollThreshold;
++    return distToBottomEdge.value <= autoscrollThreshold / 2;
+   });
+ 
+   const scrollTarget = useSharedValue(0);

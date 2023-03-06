@@ -1,23 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { BaseScrollView, BaseSpacer, BaseView } from "~Components"
+import React, { useEffect, useMemo, useRef, useState } from "react"
+import { BaseButton, BaseSafeArea, BaseText, BaseView } from "~Components"
 import { Device, useRealm, useListListener } from "~Storage"
 import {
     TokenList,
     NFTList,
-    TabbarHeader,
-    PlatformScrollView,
-    SafeAreaAndStatusBar,
-    Header,
-    AccountsCarousel,
+    HeaaderView,
+    HomeScreenBottomSheet,
 } from "./Components"
-import { useSharedValue } from "react-native-reanimated"
 import { useBottomSheetModal } from "~Common"
 import { useMeoizedAnimation } from "./Hooks/useMeoizedAnimation"
-import HomeScreenBottomSheet from "./Components/HomeScreenBottomSheet"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
-
-type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 //todo: get currently active wallet
 const ACTIVE_WALLET = 0
@@ -34,22 +28,12 @@ export const HomeScreen = () => {
         useMeoizedAnimation()
 
     const [activeScreen, setActiveScreen] = useState(0)
-    const [changeContent, setChangeContent] = useState(false)
-    const scrollValue = useSharedValue<number>(-59)
 
-    const handleScrollPosition = useCallback(
-        (event: ScrollEvent) => {
-            //TODO: iphone 14 pro -59 / iphone 11 -48
-            // inconsistemcy in values creates probelms to animation
-            // console.log(event.nativeEvent.contentOffset.y)
+    const [isEdit, setIsEdit] = useState(false)
 
-            scrollValue.value = event.nativeEvent.contentOffset.y
-            event.nativeEvent.contentOffset.y > -20
-                ? setChangeContent(true)
-                : setChangeContent(false)
-        },
-        [scrollValue],
-    )
+    const paddingBottom = useBottomTabBarHeight()
+
+    const visibleHeightRef = useRef<number>(0)
 
     const activeCard = useActiveWalletEntity()
 
@@ -66,38 +50,59 @@ export const HomeScreen = () => {
 
     const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
 
-    const getActiveScreen = useCallback(() => {
-        if (activeScreen === 0)
-            return <TokenList entering={coinListEnter} exiting={coinListExit} />
-
-        return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
-    }, [activeScreen, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
-
     return (
         <>
-            <PlatformScrollView handleScrollPosition={handleScrollPosition}>
-                <BaseView align="center">
-                    <Header action={openBottomSheetMenu} />
-                    <BaseSpacer height={20} />
-                    <AccountsCarousel
-                        accounts={devices[ACTIVE_WALLET].accounts}
+            <BaseSafeArea />
+            <NestableScrollContainer
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom }}
+                onContentSizeChange={visibleHeight => {
+                    visibleHeightRef.current = visibleHeight
+                }}>
+                <HeaaderView
+                    activeDevice={activeDevice}
+                    openBottomSheetMenu={openBottomSheetMenu}
+                    setActiveScreen={setActiveScreen}
+                />
+
+                <BaseView
+                    orientation="row"
+                    justify="space-evenly"
+                    align="center"
+                    px={20}
+                    py={30}>
+                    <BaseText>Buy</BaseText>
+                    <BaseText>Send</BaseText>
+                    <BaseText>Swap</BaseText>
+                    <BaseText>History</BaseText>
+                </BaseView>
+
+                <BaseView
+                    orientation="row"
+                    justify="space-between"
+                    align="center"
+                    px={20}
+                    my={20}>
+                    <BaseText typographyFont="subTitle">Your Tokens</BaseText>
+                    <BaseButton
+                        bgColor={isEdit ? "red" : "green"}
+                        title="Edit"
+                        action={() => setIsEdit(prevState => !prevState)}
                     />
                 </BaseView>
 
-                <BaseSpacer height={10} />
-                <TabbarHeader action={setActiveScreen} />
-                <BaseSpacer height={20} />
+                {activeScreen === 0 ? (
+                    <TokenList
+                        isEdit={isEdit}
+                        visibleHeightRef={visibleHeightRef.current}
+                        entering={coinListEnter}
+                        exiting={coinListExit}
+                    />
+                ) : (
+                    <NFTList entering={NFTListEnter} exiting={NFTListExit} />
+                )}
+            </NestableScrollContainer>
 
-                <BaseScrollView horizontal={true} grow={1}>
-                    {getActiveScreen()}
-                </BaseScrollView>
-            </PlatformScrollView>
-
-            {/* this is placed at the bottom of the component in order to be on top of everything in the view stack */}
-            <SafeAreaAndStatusBar
-                statusBarContent={changeContent}
-                scrollValue={scrollValue}
-            />
             <HomeScreenBottomSheet
                 ref={bottomSheetRef}
                 onClose={closeBottomSheetMenu}

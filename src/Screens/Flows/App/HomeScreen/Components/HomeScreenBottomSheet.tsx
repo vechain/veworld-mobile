@@ -19,66 +19,65 @@ type Props = {
     onClose: () => void
 }
 
-const HomeScreenBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ activeDevice, onClose }, ref) => {
-        const createAccountFor = useCreateAccount()
-        const nav = useNavigation()
-        const { store } = useRealm()
-        const devices = useListListener(Device.getName(), store) as Device[]
+export const HomeScreenBottomSheet = React.forwardRef<
+    BottomSheetModalMethods,
+    Props
+>(({ activeDevice, onClose }, ref) => {
+    const createAccountFor = useCreateAccount()
+    const nav = useNavigation()
+    const { store } = useRealm()
+    const devices = useListListener(Device.getName(), store) as Device[]
 
-        const { decryptWithBiometrics } = useDecryptWallet()
+    const { decryptWithBiometrics } = useDecryptWallet()
 
-        const snapPoints = useMemo(() => ["50%"], [])
+    const snapPoints = useMemo(() => ["50%"], [])
 
-        const navigateToCreateWallet = useCallback(() => {
-            nav.navigate(Routes.CREATE_WALLET_FLOW)
-        }, [nav])
+    const navigateToCreateWallet = useCallback(() => {
+        nav.navigate(Routes.CREATE_WALLET_FLOW)
+    }, [nav])
 
-        const onCreateAccount = useCallback(() => {
-            createAccountFor(activeDevice)
-            onClose()
-        }, [createAccountFor, onClose, activeDevice])
+    const onCreateAccount = useCallback(() => {
+        createAccountFor(activeDevice)
+        onClose()
+    }, [createAccountFor, onClose, activeDevice])
 
-        const handleSheetChanges = useCallback((index: number) => {
-            console.log("handleSheetChanges", index)
-        }, [])
+    const handleSheetChanges = useCallback((index: number) => {
+        console.log("handleSheetChanges", index)
+    }, [])
 
-        const onPressEncryptWallet = useCallback(async () => {
-            let decryptedWallet = await decryptWithBiometrics(devices[0])
-            console.log("decryptedWallet", decryptedWallet)
-        }, [decryptWithBiometrics, devices])
+    const onPressEncryptWallet = useCallback(async () => {
+        let decryptedWallet = await decryptWithBiometrics(devices[0])
+        console.log("decryptedWallet", decryptedWallet)
+    }, [decryptWithBiometrics, devices])
 
-        return (
-            <BaseBottomSheet
-                snapPoints={snapPoints}
-                onChange={handleSheetChanges}
-                ref={ref}>
-                <BaseText>Devices</BaseText>
-                <BaseView
-                    orientation="row"
-                    justify="space-between"
-                    w={100}
-                    align="center">
-                    <BaseTouchableBox action={navigateToCreateWallet}>
-                        <BaseText>Add Wallet</BaseText>
-                    </BaseTouchableBox>
-
-                    <BaseButton
-                        action={onPressEncryptWallet}
-                        title="Decrypt Wallet"
-                        variant="ghost"
-                    />
-                </BaseView>
-                <BaseSpacer height={16} />
-                <DevicesCarousel devices={devices} />
-                <BaseSpacer height={16} />
-                <BaseTouchableBox action={onCreateAccount}>
-                    <BaseText>Add Account</BaseText>
+    return (
+        <BaseBottomSheet
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+            ref={ref}>
+            <BaseText>Devices</BaseText>
+            <BaseView
+                orientation="row"
+                justify="space-between"
+                w={100}
+                align="center">
+                <BaseTouchableBox action={navigateToCreateWallet}>
+                    <BaseText>Add Wallet</BaseText>
                 </BaseTouchableBox>
-                <BaseSpacer height={16} />
-            </BaseBottomSheet>
-        )
-    },
-)
 
-export default HomeScreenBottomSheet
+                <BaseButton
+                    action={onPressEncryptWallet}
+                    title="Decrypt Wallet"
+                    variant="ghost"
+                />
+            </BaseView>
+            <BaseSpacer height={16} />
+            <DevicesCarousel devices={devices} />
+            <BaseSpacer height={16} />
+            <BaseTouchableBox action={onCreateAccount}>
+                <BaseText>Add Account</BaseText>
+            </BaseTouchableBox>
+            <BaseSpacer height={16} />
+        </BaseBottomSheet>
+    )
+})
