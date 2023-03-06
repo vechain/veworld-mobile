@@ -267,6 +267,10 @@ type RootTranslation = {
 	 */
 	SB_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
+	 * L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y
+	 */
+	SB_SECOND_ACCESS_PIN: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -574,6 +578,10 @@ export type TranslationFunctions = {
 	 * Hardware Wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
+	/**
+	 * Lorem Ipsum is simply dummy text of the printing and typesetting industry
+	 */
+	SB_SECOND_ACCESS_PIN: () => LocalizedString
 	/**
 	 * Face ID
 	 */
