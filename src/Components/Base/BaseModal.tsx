@@ -33,11 +33,3 @@ export const BaseModal: React.FC<IBaseModal> = ({
         </Modal>
     )
 }
-
-// const BaseModalContext = React.createContext<boolean>(false)
-
-// export const useInModal = () => {
-//     const context = React.useContext(BaseModalContext)
-
-//     return context
-// }
