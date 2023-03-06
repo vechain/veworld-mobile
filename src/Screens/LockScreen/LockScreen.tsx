@@ -7,14 +7,16 @@ import {
     NumPad,
     PasswordPins,
 } from "~Components"
-import { useI18nContext } from "~i18n"
 import { useOnDigitPress } from "./useOnDigitPress"
 
 type Props = {
     onSuccess: (password: string) => void
+    title: string
+    subTitle: string
 }
-export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
-    const { LL } = useI18nContext()
+
+export const LockScreen: React.FC<Props> = (props: Props) => {
+    const { onSuccess, title, subTitle } = props
 
     const { isPinError, onDigitPress, userPinArray, isSuccess } =
         useOnDigitPress()
@@ -30,12 +32,10 @@ export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
             <BaseSpacer height={20} />
             <BaseView mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText typographyFont="largeTitle">
-                        {LL.TITLE_USER_PIN()}
-                    </BaseText>
+                    <BaseText typographyFont="largeTitle">{title}</BaseText>
 
                     <BaseText typographyFont="body" my={10}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        {subTitle}
                     </BaseText>
                 </BaseView>
                 <BaseSpacer height={62} />
