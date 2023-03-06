@@ -31,7 +31,7 @@ export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
             <BaseView mx={20}>
                 <BaseView selfAlign="flex-start">
                     <BaseText typographyFont="largeTitle">
-                        {LL.TITLE_USER_PASSWORD()}
+                        {LL.TITLE_USER_PIN()}
                     </BaseText>
 
                     <BaseText typographyFont="body" my={10}>
