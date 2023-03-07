@@ -2,11 +2,11 @@ import React, { memo, useCallback } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
-import { PaginationItem } from "../PaginationItem"
+import { PaginationItem } from "./PaginationItem"
 import { AccountCard } from "./AccountCard"
 import { BaseSpacer, BaseView } from "~Components"
-import { useActiveCard } from "../../Hooks/useActiveCard"
-import { Account } from "~Storage"
+import { useActiveCard } from "../../../Hooks/useActiveCard"
+import { Account, useListListener, useRealm } from "~Storage"
 
 const width = Dimensions.get("window").width - 40
 
@@ -18,12 +18,15 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-type Props = { accounts: Account[]; openAccountManagement: () => void }
+type Props = { openAccountManagementSheet: () => void }
 
 export const AccountsCarousel: React.FC<Props> = memo(
-    ({ accounts, openAccountManagement }) => {
+    ({ openAccountManagementSheet }) => {
         const progressValue = useSharedValue<number>(0)
         const onScrollEnd = useActiveCard()
+
+        const { store } = useRealm()
+        const accounts = useListListener(Account.getName(), store) as Account[]
 
         const onProgressChange = useCallback(
             (_: number, absoluteProgress: number) => {
@@ -36,7 +39,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
             ({ index }: { index: number }) => {
                 return (
                     <AccountCard
-                        openAccountManagement={openAccountManagement}
+                        openAccountManagement={openAccountManagementSheet}
                         account={accounts[index]}
                         key={index}
                         entering={FadeInRight.delay(
@@ -45,7 +48,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     />
                 )
             },
-            [accounts, openAccountManagement],
+            [accounts, openAccountManagementSheet],
         )
 
         return (

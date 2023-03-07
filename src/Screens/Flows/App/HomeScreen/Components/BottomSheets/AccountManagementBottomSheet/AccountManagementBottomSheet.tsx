@@ -11,22 +11,25 @@ import {
 } from "~Components"
 
 import * as Clipboard from "expo-clipboard"
-import { Account } from "~Storage"
+import { Device, useRealm } from "~Storage"
 import { Alert } from "react-native"
 import { useI18nContext } from "~i18n"
 
 type Props = {
-    account: Account
     onClose: () => void
     openAddAccountSheet: () => void
 }
 
-const AccountManagementBottomSheet = React.forwardRef<
+export const AccountManagementBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ account, onClose, openAddAccountSheet }, ref) => {
+>(({ onClose, openAddAccountSheet }, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const { store } = useRealm()
+    const devices = store.objects<Device>(Device.getName())
+    const account = devices[0].accounts[0]
 
     const snapPoints = useMemo(() => ["50%"], [])
 
@@ -108,5 +111,3 @@ const AccountManagementBottomSheet = React.forwardRef<
         </BaseBottomSheet>
     )
 })
-
-export default AccountManagementBottomSheet

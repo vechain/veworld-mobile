@@ -12,70 +12,69 @@ type Props = {
     onClose: () => void
 }
 
-const AddAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onClose }, ref) => {
-        const createAccountFor = useCreateAccount()
+export const AddAccountBottomSheet = React.forwardRef<
+    BottomSheetModalMethods,
+    Props
+>(({ onClose }, ref) => {
+    const createAccountFor = useCreateAccount()
 
-        const [selectedDevice, setSelectedDevice] = useState<Device>()
+    const [selectedDevice, setSelectedDevice] = useState<Device>()
 
-        const snapPoints = useMemo(() => ["75%"], [])
+    const snapPoints = useMemo(() => ["75%"], [])
 
-        const onCreateAccount = useCallback(() => {
-            if (selectedDevice) {
-                createAccountFor(selectedDevice)
-                onClose()
-            }
-        }, [createAccountFor, onClose, selectedDevice])
+    const onCreateAccount = useCallback(() => {
+        if (selectedDevice) {
+            createAccountFor(selectedDevice)
+            onClose()
+        }
+    }, [createAccountFor, onClose, selectedDevice])
 
-        const handleSheetChanges = useCallback((index: number) => {
-            console.log("addAccountSheet position changed", index)
-        }, [])
+    const handleSheetChanges = useCallback((index: number) => {
+        console.log("addAccountSheet position changed", index)
+    }, [])
 
-        // const renderFooter = useCallback(
-        //     (props: BottomSheetFooterProps) => (
-        //         <BottomSheetFooter
-        //             {...props}
-        //             style={baseStyles.bottomSheetFooter}
-        //             bottomInset={24}>
-        //             <BaseButton
-        //                 disabled={!selectedDevice}
-        //                 action={onCreateAccount}
-        //                 w={100}
-        //                 title={"Add Account"}
-        //             />
-        //         </BottomSheetFooter>
-        //     ),
-        //     [selectedDevice, onCreateAccount],
-        // )
+    // const renderFooter = useCallback(
+    //     (props: BottomSheetFooterProps) => (
+    //         <BottomSheetFooter
+    //             {...props}
+    //             style={baseStyles.bottomSheetFooter}
+    //             bottomInset={24}>
+    //             <BaseButton
+    //                 disabled={!selectedDevice}
+    //                 action={onCreateAccount}
+    //                 w={100}
+    //                 title={"Add Account"}
+    //             />
+    //         </BottomSheetFooter>
+    //     ),
+    //     [selectedDevice, onCreateAccount],
+    // )
 
-        return (
-            <BaseBottomSheet
-                snapPoints={snapPoints}
-                onChange={handleSheetChanges}
-                ref={ref}
-                contentStyle={baseStyles.contentStyle}
-                footerStyle={baseStyles.footerStyle}
-                footer={
-                    <BaseButton
-                        disabled={!selectedDevice}
-                        action={onCreateAccount}
-                        w={100}
-                        title={"Add Account"}
-                    />
-                }>
-                <BaseText typographyFont="subTitle">Choose a wallet</BaseText>
-                <BaseSpacer height={16} />
-                <DevicesList
-                    selectedDevice={selectedDevice}
-                    onDevicePress={setSelectedDevice}
-                    inBottomSheet={false}
+    return (
+        <BaseBottomSheet
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+            ref={ref}
+            contentStyle={baseStyles.contentStyle}
+            footerStyle={baseStyles.footerStyle}
+            footer={
+                <BaseButton
+                    disabled={!selectedDevice}
+                    action={onCreateAccount}
+                    w={100}
+                    title={"Add Account"}
                 />
-            </BaseBottomSheet>
-        )
-    },
-)
-
-export default AddAccountBottomSheet
+            }>
+            <BaseText typographyFont="subTitle">Choose a wallet</BaseText>
+            <BaseSpacer height={16} />
+            <DevicesList
+                selectedDevice={selectedDevice}
+                onDevicePress={setSelectedDevice}
+                inBottomSheet={false}
+            />
+        </BaseBottomSheet>
+    )
+})
 
 const baseStyles = StyleSheet.create({
     // bottomSheetFooter: { paddingHorizontal: 24, paddingVertical: 24 },

@@ -10,7 +10,6 @@ import {
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
 import { ColorThemeType, useThemedStyles } from "~Common"
-import { BaseSafeArea } from "./BaseSafeArea"
 
 type Props = BottomSheetModalProps & {
     children: React.ReactNode
@@ -43,36 +42,34 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         )
 
         return (
-            <BaseSafeArea>
-                <BottomSheetModal
-                    stackBehavior="push"
-                    ref={ref}
-                    enablePanDownToClose={true}
-                    index={0}
-                    backgroundStyle={[styles.backgroundStyle]}
-                    backdropComponent={renderBackdrop}
-                    handleComponent={renderHandle}
-                    {...props}>
+            <BottomSheetModal
+                stackBehavior="push"
+                ref={ref}
+                enablePanDownToClose={true}
+                index={0}
+                backgroundStyle={[styles.backgroundStyle]}
+                backdropComponent={renderBackdrop}
+                handleComponent={renderHandle}
+                {...props}>
+                <BaseView
+                    w={100}
+                    px={24}
+                    py={24}
+                    align="flex-start"
+                    style={contentStyle}>
+                    {children}
+                </BaseView>
+                {footer && (
                     <BaseView
                         w={100}
                         px={24}
-                        py={24}
-                        align="flex-start"
-                        style={contentStyle}>
-                        {children}
+                        align="center"
+                        justify="center"
+                        style={footerStyle}>
+                        {footer}
                     </BaseView>
-                    {footer && (
-                        <BaseView
-                            w={100}
-                            px={24}
-                            align="center"
-                            justify="center"
-                            style={footerStyle}>
-                            {footer}
-                        </BaseView>
-                    )}
-                </BottomSheetModal>
-            </BaseSafeArea>
+                )}
+            </BottomSheetModal>
         )
     },
 )

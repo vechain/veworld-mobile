@@ -1,32 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { BaseScrollView, BaseSpacer, BaseView } from "~Components"
-import { Device, useRealm, useListListener } from "~Storage"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
+    AddAccountBottomSheet,
     TokenList,
     NFTList,
-    TabbarHeader,
-    PlatformScrollView,
-    SafeAreaAndStatusBar,
-    Header,
-    AccountsCarousel,
+    HeaderView,
+    EditTokens,
+    AccountManagementBottomSheet,
 } from "./Components"
-import { useSharedValue } from "react-native-reanimated"
 import { useBottomSheetModal } from "~Common"
-import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
-import AccountManagementBottomSheet from "./Components/BottomSheets/AccountManagementBottomSheet/AccountManagementBottomSheet"
-import AddAccountBottomSheet from "./Components/BottomSheets/AddAccountBottomSheet/AddAccountBottomSheet"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
+import { SafeAreaView } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 
-type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
-
-//todo: get currently active wallet
-const ACTIVE_WALLET = 0
-
 export const HomeScreen = () => {
-    const { store } = useRealm()
     const nav = useNavigation()
     const {
         ref: accountManagementBottomSheetRef,
@@ -44,22 +34,12 @@ export const HomeScreen = () => {
         useMemoizedAnimation()
 
     const [activeTab, setActiveTab] = useState(0)
-    const [changeContent, setChangeContent] = useState(false)
-    const scrollValue = useSharedValue<number>(-59)
 
-    const handleScrollPosition = useCallback(
-        (event: ScrollEvent) => {
-            //TODO: iphone 14 pro -59 / iphone 11 -48
-            // inconsistemcy in values creates probelms to animation
-            // console.log(event.nativeEvent.contentOffset.y)
+    const [isEdit, setIsEdit] = useState(false)
 
-            scrollValue.value = event.nativeEvent.contentOffset.y
-            event.nativeEvent.contentOffset.y > -20
-                ? setChangeContent(true)
-                : setChangeContent(false)
-        },
-        [scrollValue],
-    )
+    const paddingBottom = useBottomTabBarHeight()
+
+    const visibleHeightRef = useRef<number>(0)
 
     const activeCard = useActiveWalletEntity()
 
@@ -68,20 +48,9 @@ export const HomeScreen = () => {
         [activeCard.activeIndex],
     )
 
-    const devices = useListListener(Device.getName(), store) as Device[]
-
     useEffect(() => {
         console.log("activeCardIndex", activeCardIndex)
     }, [activeCardIndex])
-
-    const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
-
-    const getActiveScreen = useCallback(() => {
-        if (activeTab === 0)
-            return <TokenList entering={coinListEnter} exiting={coinListExit} />
-
-        return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
-    }, [activeTab, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
 
     const navigateToCreateWallet = useCallback(() => {
         nav.navigate(Routes.CREATE_WALLET_FLOW)
@@ -89,34 +58,37 @@ export const HomeScreen = () => {
 
     return (
         <>
-            <PlatformScrollView handleScrollPosition={handleScrollPosition}>
-                <BaseView align="center">
-                    <Header action={navigateToCreateWallet} />
-                    <BaseSpacer height={20} />
-                    <AccountsCarousel
-                        accounts={devices[ACTIVE_WALLET].accounts}
-                        openAccountManagement={openAccountManagementSheet}
+            <SafeAreaView />
+            <NestableScrollContainer
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom }}
+                onContentSizeChange={visibleHeight => {
+                    visibleHeightRef.current = visibleHeight
+                }}>
+                <HeaderView
+                    navigateToCreateWallet={navigateToCreateWallet}
+                    openAccountManagementSheet={openAccountManagementSheet}
+                    setActiveTab={setActiveTab}
+                    activeTab={activeTab}
+                />
+
+                <EditTokens isEdit={isEdit} action={setIsEdit} />
+
+                {activeTab === 0 ? (
+                    <TokenList
+                        isEdit={isEdit}
+                        visibleHeightRef={visibleHeightRef.current}
+                        entering={coinListEnter}
+                        exiting={coinListExit}
                     />
-                </BaseView>
+                ) : (
+                    <NFTList entering={NFTListEnter} exiting={NFTListExit} />
+                )}
+            </NestableScrollContainer>
 
-                <BaseSpacer height={10} />
-                <TabbarHeader activeTab={activeTab} changeTab={setActiveTab} />
-                <BaseSpacer height={20} />
-
-                <BaseScrollView horizontal={true} grow={100}>
-                    {getActiveScreen()}
-                </BaseScrollView>
-            </PlatformScrollView>
-
-            {/* this is placed at the bottom of the component in order to be on top of everything in the view stack */}
-            <SafeAreaAndStatusBar
-                statusBarContent={changeContent}
-                scrollValue={scrollValue}
-            />
             <AccountManagementBottomSheet
                 ref={accountManagementBottomSheetRef}
                 onClose={closeAccountManagementSheet}
-                account={activeDevice.accounts[0]}
                 openAddAccountSheet={openAddAccountSheet}
             />
             <AddAccountBottomSheet
@@ -128,7 +100,6 @@ export const HomeScreen = () => {
 }
 
 /*
-!Sample get inverse relationship
 useEffect(() => {
     const init = async () => {
         let accounts = devices[0].accounts
