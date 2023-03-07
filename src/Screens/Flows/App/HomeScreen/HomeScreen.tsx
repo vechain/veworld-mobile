@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { BaseSafeArea } from "~Components"
 import { Device, useRealm, useListListener } from "~Storage"
 import {
     TokenList,
@@ -8,11 +7,12 @@ import {
     HomeScreenBottomSheet,
     EditTokens,
 } from "./Components"
-import { useBottomSheetModal, useRenderCounter } from "~Common"
+import { useBottomSheetModal } from "~Common"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
+import { SafeAreaView } from "react-native"
 
 //todo: get currently active wallet
 const ACTIVE_WALLET = 0
@@ -44,8 +44,6 @@ export const HomeScreen = () => {
         [activeCard.activeIndex],
     )
 
-    useRenderCounter("HomeScreen")
-
     const devices = useListListener(Device.getName(), store) as Device[]
 
     useEffect(() => {
@@ -55,7 +53,8 @@ export const HomeScreen = () => {
     const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
 
     return (
-        <BaseSafeArea>
+        <>
+            <SafeAreaView />
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom }}
@@ -87,7 +86,7 @@ export const HomeScreen = () => {
                 onClose={closeBottomSheetMenu}
                 activeDevice={activeDevice}
             />
-        </BaseSafeArea>
+        </>
     )
 }
 
