@@ -14,8 +14,8 @@ export const WalletManagementScreen = () => {
         <>
             <SafeAreaView />
             <BaseIcon
-                style={{ paddingHorizontal: 20 }}
-                name="arrow-back-outline"
+                style={{ paddingHorizontal: 20, alignSelf: "flex-start" }}
+                name="chevron-left"
                 color={theme.colors.text}
                 action={goBack}
             />

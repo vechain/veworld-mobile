@@ -27,12 +27,13 @@ export const WalletManagementHeader = () => {
             <BaseView align="center" orientation="row">
                 <BaseIcon
                     size={24}
-                    name="play-back-outline"
+                    name="priority-low"
+                    style={{ marginHorizontal: 16 }}
                     color={theme.colors.text}
                 />
                 <BaseIcon
                     size={24}
-                    name="add-sharp"
+                    name="plus"
                     bg={theme.colors.secondary}
                     action={goToCreateWalletFlow}
                 />
