@@ -13,15 +13,13 @@ import {
     useWalletSecurity,
 } from "~Common"
 import { WALLET_STATUS } from "~Model"
-import { useI18nContext } from "~i18n"
+import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
 export const EntryPoint = () => {
     const { store, cache } = useRealm()
 
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
-
-    const { LL } = useI18nContext()
 
     useEffect(() => {
         const init = async () => {
@@ -51,8 +49,7 @@ export const EntryPoint = () => {
         return (
             <LockScreen
                 onSuccess={unlockApp}
-                title={LL.TITLE_USER_PIN()}
-                subTitle={LL.SB_SECOND_ACCESS_PIN()}
+                scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
             />
         )
     }
