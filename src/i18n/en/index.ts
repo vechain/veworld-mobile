@@ -87,7 +87,8 @@ const en: BaseTranslation = {
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
     SB_IMPORT_WALLET_TYPE_HARDWARE: "Hardware Wallet",
-    SB_SECOND_ACCESS_PIN: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+    SB_UNLOCK_WALLET_PIN: "Insert the pin you created in order to unlock your wallet.",
+    SB_CONFIRM_PIN: "Insert the pin you created in order to perform the requested operation.",
 
     // ELEMENTS
     FACE_ID: "Face ID",

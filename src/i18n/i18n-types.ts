@@ -267,9 +267,13 @@ type RootTranslation = {
 	 */
 	SB_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
-	 * L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y
+	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
-	SB_SECOND_ACCESS_PIN: string
+	SB_UNLOCK_WALLET_PIN: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​e​ ​r​e​q​u​e​s​t​e​d​ ​o​p​e​r​a​t​i​o​n​.
+	 */
+	SB_CONFIRM_PIN: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -579,9 +583,13 @@ export type TranslationFunctions = {
 	 */
 	SB_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
-	 * Lorem Ipsum is simply dummy text of the printing and typesetting industry
+	 * Insert the pin you created in order to unlock your wallet.
 	 */
-	SB_SECOND_ACCESS_PIN: () => LocalizedString
+	SB_UNLOCK_WALLET_PIN: () => LocalizedString
+	/**
+	 * Insert the pin you created in order to perform the requested operation.
+	 */
+	SB_CONFIRM_PIN: () => LocalizedString
 	/**
 	 * Face ID
 	 */
