@@ -1,7 +1,7 @@
 import React from "react"
 import { BaseModal, IBaseModal } from "~Components"
-import { useI18nContext } from "~i18n"
 import { LockScreen } from "~Screens"
+import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
 interface IRequireUserPassword extends Omit<IBaseModal, "children"> {
     onSuccess: (password: string) => void
@@ -11,14 +11,11 @@ export const RequireUserPassword: React.FC<IRequireUserPassword> = ({
     onClose,
     onSuccess,
 }) => {
-    const { LL } = useI18nContext()
-
     return (
         <BaseModal isOpen={isOpen} onClose={onClose}>
             <LockScreen
                 onSuccess={onSuccess}
-                title={LL.TITLE_USER_PIN()}
-                subTitle={LL.SB_SECOND_ACCESS_PIN()}
+                scenario={LOCKSCREEN_SCENARIO.WALLET_CREATION}
             />
         </BaseModal>
     )
