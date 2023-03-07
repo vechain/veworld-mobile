@@ -85,6 +85,7 @@ const en: BaseTranslation = {
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_WALLET_SUCCESS: "You're finally one of us!",
     TITLE_RESET_APP: "Confirm Reset",
+    TITLE_WALLET_MANAGEMENT: "Wallet management",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
