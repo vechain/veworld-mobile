@@ -6,7 +6,8 @@ Given("The user has installed the app", { timeout: -1 }, async () => {
     await detox.device.launchApp({ delete: true })
 })
 
-Given("The user opens the app", async () => {
+// Default cucumber timeout has to be deactivated for this step
+Given("The user opens the app", { timeout: -1 }, async () => {
     // Terminates and launches a new instance of the app
     await detox.device.launchApp({ newInstance: true })
 })
