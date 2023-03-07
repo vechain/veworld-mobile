@@ -17,10 +17,12 @@ import { Balance } from "./Balance"
 interface Props extends AnimateProps<ViewProps> {
     style?: StyleProp<ViewStyle>
     account: Account
+    openAccountManagement: () => void
 }
 
 export const AccountCard: React.FC<Props> = memo(props => {
-    const { style, account, ...animatedViewProps } = props
+    const { style, account, openAccountManagement, ...animatedViewProps } =
+        props
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     return (
@@ -55,6 +57,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                         name="settings-outline"
                         color={theme.colors.textReversed}
                         size={24}
+                        action={openAccountManagement}
                     />
                 </BaseView>
                 <BaseSpacer height={18} />
