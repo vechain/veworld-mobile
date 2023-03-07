@@ -10,20 +10,23 @@ import { ColorThemeType, useThemedStyles } from "~Common"
 type Props = {
     children: React.ReactNode
     action: () => void
+    direction?: "row" | "column"
 } & TouchableOpacityProps
 
 export const BaseTouchableBox: React.FC<Props> = ({
     children,
     action,
     style,
+    disabled = false,
+    direction = "row",
     ...props
 }) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles(direction, disabled))
     return (
-        <DropShadow style={theme.shadows.card}>
+        <DropShadow style={[theme.shadows.card, styles.container]}>
             <TouchableOpacity
                 onPress={action}
-                style={[styles.container, style]}
+                style={[styles.innerContainer, style]}
                 {...props}>
                 {children}
             </TouchableOpacity>
@@ -31,16 +34,23 @@ export const BaseTouchableBox: React.FC<Props> = ({
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        shadow: theme.shadows.card,
-        container: {
-            justifyContent: "center",
-            width: "100%",
-            alignItems: "stretch",
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            borderRadius: 16,
-            backgroundColor: theme.colors.card,
-        },
-    })
+const baseStyles =
+    (direction: "row" | "column", disabled: boolean) =>
+    (theme: ColorThemeType) =>
+        StyleSheet.create({
+            shadow: theme.shadows.card,
+            container: {
+                width: "100%",
+            },
+            innerContainer: {
+                justifyContent: "flex-start",
+                alignItems: "center",
+                flexDirection: direction,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
+                backgroundColor: theme.colors.card,
+                opacity: disabled ? 0.5 : 1,
+                borderRadius: 16,
+                overflow: "hidden",
+            },
+        })

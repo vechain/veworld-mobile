@@ -95,9 +95,21 @@ type RootTranslation = {
 	 */
 	BTN_RESET_APP_CHECKBOX: string
 	/**
-	 * R​E​S​E​T
+	 * C​o​p​y​ ​p​u​b​l​i​c​ ​a​d​d​r​e​s​s
 	 */
-	BTN_RESET_APP_RESET: string
+	BTN_COPY_PUBLIC_ADDRESS: string
+	/**
+	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
+	 */
+	BTN_SHOW_QR_CODE: string
+	/**
+	 * R​e​n​a​m​e​ ​a​c​c​o​u​n​t
+	 */
+	BTN_RENAME_ACCOUNT: string
+	/**
+	 * R​e​m​o​v​e​ ​a​c​c​o​u​n​t
+	 */
+	BTN_REMOVE_ACCOUNT: string
 	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
@@ -411,9 +423,21 @@ export type TranslationFunctions = {
 	 */
 	BTN_RESET_APP_CHECKBOX: () => LocalizedString
 	/**
-	 * RESET
+	 * Copy public address
 	 */
-	BTN_RESET_APP_RESET: () => LocalizedString
+	BTN_COPY_PUBLIC_ADDRESS: () => LocalizedString
+	/**
+	 * Show QR code
+	 */
+	BTN_SHOW_QR_CODE: () => LocalizedString
+	/**
+	 * Rename account
+	 */
+	BTN_RENAME_ACCOUNT: () => LocalizedString
+	/**
+	 * Remove account
+	 */
+	BTN_REMOVE_ACCOUNT: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */

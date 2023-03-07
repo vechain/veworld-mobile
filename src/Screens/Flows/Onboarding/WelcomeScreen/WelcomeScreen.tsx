@@ -26,7 +26,9 @@ export const WelcomeScreen = () => {
 
             <BaseView align="center" mx={20} grow={1}>
                 <BaseView orientation="row">
-                    <BaseText typographyFont="largeTitle">
+                    <BaseText
+                        typographyFont="largeTitle"
+                        testID="welcome-title-id">
                         {LL.TITLE_WELCOME_TO()}
                     </BaseText>
                     <BaseText typographyFont="largeTitle">VeWorld</BaseText>

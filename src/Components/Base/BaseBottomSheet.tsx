@@ -1,22 +1,25 @@
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import {
     BottomSheetBackdrop,
     BottomSheetBackdropProps,
     BottomSheetHandleProps,
     BottomSheetModal,
-    BottomSheetProps,
+    BottomSheetModalProps,
 } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
 import { ColorThemeType, useThemedStyles } from "~Common"
 
-type Props = BottomSheetProps & {
+type Props = BottomSheetModalProps & {
     children: React.ReactNode
+    contentStyle?: StyleProp<ViewStyle>
+    footerStyle?: StyleProp<ViewStyle>
+    footer?: React.ReactNode
 }
 
 const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ children, ...props }, ref) => {
+    ({ contentStyle, footerStyle, footer, children, ...props }, ref) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const renderBackdrop = useCallback(
@@ -40,6 +43,7 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
         return (
             <BottomSheetModal
+                stackBehavior="push"
                 ref={ref}
                 enablePanDownToClose={true}
                 index={0}
@@ -47,9 +51,24 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 backdropComponent={renderBackdrop}
                 handleComponent={renderHandle}
                 {...props}>
-                <BaseView w={100} p={24} align="flex-start">
+                <BaseView
+                    w={100}
+                    px={24}
+                    py={24}
+                    align="flex-start"
+                    style={contentStyle}>
                     {children}
                 </BaseView>
+                {footer && (
+                    <BaseView
+                        w={100}
+                        px={24}
+                        align="center"
+                        justify="center"
+                        style={footerStyle}>
+                        {footer}
+                    </BaseView>
+                )}
             </BottomSheetModal>
         )
     },

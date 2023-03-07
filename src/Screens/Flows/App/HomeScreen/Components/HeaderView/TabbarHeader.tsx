@@ -5,7 +5,7 @@ import Animated, { FadeIn } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
 
 type Props = {
-    changeTab: (tab: number) => void
+    setActiveTab: React.Dispatch<React.SetStateAction<number>>
     activeTab: number
 }
 
@@ -20,12 +20,12 @@ const entries = [
     },
 ]
 export const TabbarHeader: React.FC<Props> = memo(
-    ({ activeTab, changeTab }) => {
+    ({ activeTab, setActiveTab }) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const onTabChange = useCallback(
-            (value: number) => () => changeTab(value),
-            [changeTab],
+            (value: number) => () => setActiveTab(value),
+            [setActiveTab],
         )
 
         return (

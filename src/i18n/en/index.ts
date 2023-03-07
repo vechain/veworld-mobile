@@ -26,7 +26,10 @@ const en: BaseTranslation = {
     BTN_WALLET_IMPORT_HELP: "Where can I find it?",
     BTN_WALLET_SUCCESS: "CREATE WALLET",
     BTN_RESET_APP_CHECKBOX: "I am aware that this action is irreversible (required)",
-    BTN_RESET_APP_RESET: "RESET",
+    BTN_COPY_PUBLIC_ADDRESS: "Copy public address",
+    BTN_SHOW_QR_CODE: "Show QR code",
+    BTN_RENAME_ACCOUNT: "Rename account",
+    BTN_REMOVE_ACCOUNT: "Remove account",
 
     // BODY
     BD_GDPR:
@@ -89,6 +92,7 @@ const en: BaseTranslation = {
     SB_IMPORT_WALLET_TYPE_HARDWARE: "Hardware Wallet",
     SB_UNLOCK_WALLET_PIN: "Insert the pin you created in order to unlock your wallet.",
     SB_CONFIRM_PIN: "Insert the pin you created in order to perform the requested operation.",
+    SB_ACCOUNT_MANAGEMENT: "Account management",
 
     // ELEMENTS
     FACE_ID: "Face ID",
