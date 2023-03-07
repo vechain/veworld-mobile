@@ -13,6 +13,7 @@ import {
 import * as Clipboard from "expo-clipboard"
 import { Account } from "~Storage"
 import { Alert } from "react-native"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     account: Account
@@ -25,6 +26,7 @@ const AccountManagementBottomSheet = React.forwardRef<
     Props
 >(({ account, onClose, openAddAccountSheet }, ref) => {
     const theme = useTheme()
+    const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => ["50%"], [])
 
@@ -39,8 +41,11 @@ const AccountManagementBottomSheet = React.forwardRef<
 
     const onCopyToClipboard = useCallback(async () => {
         await Clipboard.setStringAsync(account.address)
-        Alert.alert("Success!", "Mnemonic copied to clipboard")
-    }, [account])
+        Alert.alert(
+            LL.COMMON_LBL_SUCCESS(),
+            LL.NOTIFICATION_COPIED_CLIPBOARD({ name: LL.COMMON_LBL_ADDRESS() }),
+        )
+    }, [account, LL])
 
     return (
         <BaseBottomSheet
@@ -53,7 +58,7 @@ const AccountManagementBottomSheet = React.forwardRef<
                 w={100}
                 align="center">
                 <BaseText typographyFont="subTitle">
-                    Account management
+                    {LL.SB_ACCOUNT_MANAGEMENT()}
                 </BaseText>
 
                 <BaseIcon
@@ -71,7 +76,7 @@ const AccountManagementBottomSheet = React.forwardRef<
                     color={theme.colors.text}
                     action={onAddAccount}
                 />
-                <BaseText mx={8}>Copy Public address</BaseText>
+                <BaseText mx={8}>{LL.BTN_COPY_PUBLIC_ADDRESS()}</BaseText>
             </BaseTouchableBox>
             <BaseSpacer height={16} />
             <BaseTouchableBox action={() => {}} disabled>
@@ -80,7 +85,7 @@ const AccountManagementBottomSheet = React.forwardRef<
                     size={18}
                     color={theme.colors.text}
                 />
-                <BaseText mx={8}>Show QR code</BaseText>
+                <BaseText mx={8}>{LL.BTN_SHOW_QR_CODE()}</BaseText>
             </BaseTouchableBox>
             <BaseSpacer height={16} />
             <BaseTouchableBox action={() => {}} disabled>
@@ -89,7 +94,7 @@ const AccountManagementBottomSheet = React.forwardRef<
                     size={18}
                     color={theme.colors.text}
                 />
-                <BaseText mx={8}>Rename account</BaseText>
+                <BaseText mx={8}>{LL.BTN_RENAME_ACCOUNT()}</BaseText>
             </BaseTouchableBox>
             <BaseSpacer height={16} />
             <BaseTouchableBox action={() => {}} disabled>
@@ -98,7 +103,7 @@ const AccountManagementBottomSheet = React.forwardRef<
                     size={18}
                     color={theme.colors.text}
                 />
-                <BaseText mx={8}>Remove account</BaseText>
+                <BaseText mx={8}>{LL.BTN_REMOVE_ACCOUNT()}</BaseText>
             </BaseTouchableBox>
         </BaseBottomSheet>
     )
