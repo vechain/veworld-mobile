@@ -91,18 +91,21 @@ export const BaseButton = ({
     const paddingX = useMemo(() => {
         if (otherProps.px) return otherProps.px
         if (size === "sm") return 8
+        if (size === "md") return 8
         if (size === "lg") return 16
     }, [otherProps.px, size])
 
     const paddingY = useMemo(() => {
         if (otherProps.py) return otherProps.py
         if (size === "sm") return 3.5
+        if (size === "md") return 9.5
         if (size === "lg") return 15
     }, [otherProps.py, size])
 
     const computedTypographyFont: TFonts | undefined = useMemo(() => {
         if (typographyFont) return typographyFont
         if (size === "sm") return "buttonSecondary"
+        if (size === "md") return "button"
         if (size === "lg") return "buttonPrimary"
     }, [size, typographyFont])
 

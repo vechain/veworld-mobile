@@ -13,6 +13,7 @@ import {
     useWalletSecurity,
 } from "~Common"
 import { WALLET_STATUS } from "~Model"
+import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
 export const EntryPoint = () => {
     const { store, cache } = useRealm()
@@ -45,7 +46,12 @@ export const EntryPoint = () => {
     }, [appLockStatus, walletSecurity, isSecurityDowngrade])
 
     if (LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)) {
-        return <LockScreen onSuccess={unlockApp} />
+        return (
+            <LockScreen
+                onSuccess={unlockApp}
+                scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
+            />
+        )
     }
 
     return (

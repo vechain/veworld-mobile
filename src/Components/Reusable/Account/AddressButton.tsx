@@ -35,7 +35,7 @@ export const AddressButton: React.FC<Props> = ({ address }) => {
             bgColor={theme.colors.primaryReversed}
             title={humanAddress(address, 5, 4)}
             action={onCopyToClipboard}
-            rightIcon={<BaseIcon name="copy-outline" color={color} size={12} />}
+            rightIcon={<BaseIcon name="content-copy" color={color} size={12} />}
         />
     )
 }
