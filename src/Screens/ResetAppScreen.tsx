@@ -32,7 +32,7 @@ export const ResetAppScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseIcon name="arrow-back-outline" action={onBackPress} />
+            <BaseIcon name="chevron-left" action={onBackPress} />
 
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>

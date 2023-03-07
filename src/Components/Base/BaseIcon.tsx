@@ -7,7 +7,7 @@ import {
     ViewProps,
 } from "react-native"
 import { useTheme } from "~Common"
-import Icon from "react-native-vector-icons/Ionicons"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
 
 type Props =
@@ -20,7 +20,7 @@ type Props =
           ViewProps
 
 export const BaseIcon: React.FC<Props> = props => {
-    const { color, ...otherProps } = props
+    const { color, style, ...otherProps } = props
     const theme = useTheme()
 
     const iconColor = useMemo(
@@ -30,7 +30,7 @@ export const BaseIcon: React.FC<Props> = props => {
         [theme, color],
     )
     return (
-        <BaseIconWrapper {...props}>
+        <BaseIconWrapper style={style} {...props}>
             <Icon size={props.size ?? 24} color={iconColor} {...otherProps} />
         </BaseIconWrapper>
     )
@@ -43,6 +43,7 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = ({
     size,
     children,
     action,
+    ...props
 }) => {
     if (action)
         return (
@@ -53,12 +54,13 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = ({
                         justifyContent: "center",
                         alignItems: "center",
                         backgroundColor: bg,
-                        width: size ? size + 10 : 32,
-                        height: size ? size + 10 : 32,
+                        padding: 8,
                         borderRadius: size ? size + 10 / 2 : 50,
+                        opacity: props.disabled ? 0.5 : 1,
                     },
                     style,
-                ]}>
+                ]}
+                {...props}>
                 {children}
             </TouchableOpacity>
         )
@@ -69,12 +71,13 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = ({
                     justifyContent: "center",
                     alignItems: "center",
                     backgroundColor: bg,
-                    width: size ? size + 10 : 32,
-                    height: size ? size + 10 : 32,
+                    padding: 8,
                     borderRadius: size ? size + 10 / 2 : 50,
+                    opacity: props.disabled ? 0.5 : 1,
                 },
                 style,
-            ]}>
+            ]}
+            {...props}>
             {children}
         </View>
     )

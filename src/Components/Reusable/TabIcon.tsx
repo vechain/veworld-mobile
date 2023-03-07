@@ -1,9 +1,8 @@
-import React, { FC, memo, useMemo } from "react"
+import React, { FC, memo } from "react"
 import { StyleSheet, View } from "react-native"
-import Icon from "react-native-vector-icons/Ionicons"
-import { useThemedStyles } from "~Common"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseView } from "~Components/Base"
-import { ThemeType } from "~Model"
 
 type Props = {
     focused: boolean
@@ -13,24 +12,20 @@ type Props = {
 export const TabIcon: FC<Props> = memo(({ focused, title }) => {
     const { styles } = useThemedStyles(baseStyles(focused))
 
-    const iconName = useMemo(
-        () =>
-            focused
-                ? title.toLocaleLowerCase()
-                : `${title.toLocaleLowerCase()}-outline`,
-        [focused, title],
-    )
-
     return (
         <BaseView justify="center" align="center" style={styles.container}>
-            <Icon name={iconName} size={24} color={styles.icon.color} />
+            <Icon
+                name={title.toLowerCase()}
+                size={24}
+                color={styles.icon.color}
+            />
 
             <View style={styles.dot} />
         </BaseView>
     )
 })
 
-const baseStyles = (isFocused: boolean) => (theme: ThemeType) => {
+const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
     const iconColor = () => {
         if (isFocused)
             return theme.isDark ? theme.colors.tertiary : theme.colors.primary

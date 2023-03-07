@@ -1,15 +1,47 @@
 import React, { memo, useCallback } from "react"
-import { BaseButton, BaseText, BaseView } from "~Components"
+import { useTheme } from "~Common"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 
 type Props = {
     isEdit: boolean
-    action: React.Dispatch<React.SetStateAction<boolean>>
+    setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const EditTokens = memo(({ isEdit, action }: Props) => {
+export const EditTokens = memo(({ isEdit, setIsEdit }: Props) => {
+    const theme = useTheme()
     const onButtonPress = useCallback(() => {
-        action(prevState => !prevState)
-    }, [action])
+        setIsEdit(prevState => !prevState)
+    }, [setIsEdit])
+
+    const getActionsButtons = useCallback(() => {
+        if (!isEdit)
+            return (
+                <BaseIcon
+                    name="pencil-outline"
+                    bg={theme.colors.secondary}
+                    action={onButtonPress}
+                    size={24}
+                />
+            )
+        return (
+            <BaseView align="center" orientation="row">
+                <BaseIcon
+                    name="plus"
+                    bg={theme.colors.secondary}
+                    action={() => console.log("TODO")}
+                    size={24}
+                    disabled
+                    style={{ marginHorizontal: 16 }}
+                />
+                <BaseIcon
+                    name="check"
+                    bg={theme.colors.secondary}
+                    action={onButtonPress}
+                    size={24}
+                />
+            </BaseView>
+        )
+    }, [isEdit, theme, onButtonPress])
 
     return (
         <BaseView
@@ -19,11 +51,8 @@ export const EditTokens = memo(({ isEdit, action }: Props) => {
             px={20}
             my={20}>
             <BaseText typographyFont="subTitle">Your Tokens</BaseText>
-            <BaseButton
-                bgColor={isEdit ? "red" : "green"}
-                title="Edit"
-                action={onButtonPress}
-            />
+
+            {getActionsButtons()}
         </BaseView>
     )
 })

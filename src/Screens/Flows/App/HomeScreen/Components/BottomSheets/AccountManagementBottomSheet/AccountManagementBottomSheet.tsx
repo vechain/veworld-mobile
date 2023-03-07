@@ -65,7 +65,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
                 </BaseText>
 
                 <BaseIcon
-                    name={"add-sharp"}
+                    name={"plus"}
                     size={32}
                     bg={theme.colors.secondary}
                     action={onAddAccount}
@@ -74,7 +74,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
             <BaseSpacer height={24} />
             <BaseTouchableBox action={onCopyToClipboard}>
                 <BaseIcon
-                    name={"copy-outline"}
+                    name={"content-copy"}
                     size={18}
                     color={theme.colors.text}
                     action={onAddAccount}
@@ -83,17 +83,13 @@ export const AccountManagementBottomSheet = React.forwardRef<
             </BaseTouchableBox>
             <BaseSpacer height={16} />
             <BaseTouchableBox action={() => {}} disabled>
-                <BaseIcon
-                    name={"qr-code-outline"}
-                    size={18}
-                    color={theme.colors.text}
-                />
+                <BaseIcon name={"qrcode"} size={18} color={theme.colors.text} />
                 <BaseText mx={8}>{LL.BTN_SHOW_QR_CODE()}</BaseText>
             </BaseTouchableBox>
             <BaseSpacer height={16} />
             <BaseTouchableBox action={() => {}} disabled>
                 <BaseIcon
-                    name={"pencil-outline"}
+                    name={"account-edit"}
                     size={18}
                     color={theme.colors.text}
                 />
@@ -102,7 +98,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
             <BaseSpacer height={16} />
             <BaseTouchableBox action={() => {}} disabled>
                 <BaseIcon
-                    name={"trash-outline"}
+                    name={"trash-can-outline"}
                     size={18}
                     color={theme.colors.text}
                 />

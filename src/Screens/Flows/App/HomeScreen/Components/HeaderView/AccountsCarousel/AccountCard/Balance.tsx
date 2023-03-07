@@ -29,7 +29,7 @@ export const Balance: React.FC<Props> = ({ balance }) => {
                 </BaseText>
                 <BaseIcon
                     onPress={toggleVisible}
-                    name={isVisible ? "eye-off-outline" : "eye-outline"}
+                    name={isVisible ? "eye-off" : "eye"}
                     color={theme.colors.textReversed}
                     size={18}
                 />
