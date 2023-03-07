@@ -267,6 +267,10 @@ type RootTranslation = {
 	 */
 	TITLE_RESET_APP: string
 	/**
+	 * W​a​l​l​e​t​ ​m​a​n​a​g​e​m​e​n​t
+	 */
+	TITLE_WALLET_MANAGEMENT: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -586,6 +590,10 @@ export type TranslationFunctions = {
 	 * Confirm Reset
 	 */
 	TITLE_RESET_APP: () => LocalizedString
+	/**
+	 * Wallet management
+	 */
+	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**
 	 * Local wallet
 	 */
