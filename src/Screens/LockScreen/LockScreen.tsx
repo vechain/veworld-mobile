@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -17,7 +17,7 @@ type Props = {
 }
 
 type Titles = {
-    primary: string
+    title: string
     subtitle: string
 }
 
@@ -36,40 +36,32 @@ export const LockScreen: React.FC<Props> = (props: Props) => {
     }, [isSuccess, onSuccess, userPinArray])
 
     /**
-     *
-     * @returns Titles object based on the `scenario` prop
+     * Sets `title` and `subtitle` based on the `scenario` prop
      */
-    const getTitles = (): Titles => {
+    const { title, subtitle }: Titles = useMemo(() => {
         switch (scenario) {
             case LOCKSCREEN_SCENARIO.UNLOCK_WALLET:
                 return {
-                    primary: LL.TITLE_USER_PIN(),
+                    title: LL.TITLE_USER_PIN(),
                     subtitle: LL.SB_UNLOCK_WALLET_PIN(),
                 }
             case LOCKSCREEN_SCENARIO.WALLET_CREATION:
                 return {
-                    primary: LL.TITLE_USER_PIN(),
-                    subtitle: LL.SB_CONFIRM_PIN(),
-                }
-            default:
-                return {
-                    primary: LL.TITLE_USER_PIN(),
+                    title: LL.TITLE_USER_PIN(),
                     subtitle: LL.SB_CONFIRM_PIN(),
                 }
         }
-    }
+    }, [LL, scenario])
 
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
             <BaseView mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText typographyFont="largeTitle">
-                        {getTitles().primary}
-                    </BaseText>
+                    <BaseText typographyFont="largeTitle">{title}</BaseText>
 
                     <BaseText typographyFont="body" my={10}>
-                        {getTitles().subtitle}
+                        {subtitle}
                     </BaseText>
                 </BaseView>
                 <BaseSpacer height={62} />
