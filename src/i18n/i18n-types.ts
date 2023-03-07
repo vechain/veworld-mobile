@@ -287,6 +287,10 @@ type RootTranslation = {
 	 */
 	SB_CONFIRM_PIN: string
 	/**
+	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
+	 */
+	SB_ACCOUNT_MANAGEMENT: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -614,6 +618,10 @@ export type TranslationFunctions = {
 	 * Insert the pin you created in order to perform the requested operation.
 	 */
 	SB_CONFIRM_PIN: () => LocalizedString
+	/**
+	 * Account management
+	 */
+	SB_ACCOUNT_MANAGEMENT: () => LocalizedString
 	/**
 	 * Face ID
 	 */
