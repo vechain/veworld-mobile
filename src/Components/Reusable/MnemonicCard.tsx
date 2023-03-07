@@ -61,6 +61,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                             name={isShow ? "eye-off-outline" : "eye-outline"}
                             size={18}
                             color={iconColor}
+                            style={{ width: 100, height: 100 }}
                         />
                     </BaseView>
                 </BaseView>

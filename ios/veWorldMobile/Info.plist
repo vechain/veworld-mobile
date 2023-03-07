@@ -41,7 +41,8 @@
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Ionicons.ttf</string>
+		<string>fonts/MaterialIcons.ttf</string>
+		<string>fonts/MaterialCommunityIcons.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>BootSplash.storyboard</string>

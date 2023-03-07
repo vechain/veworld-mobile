@@ -16,7 +16,7 @@ interface IAnimatedTokenCard extends RenderItemParams<Token> {
 
 export const AnimatedTokenCard = memo(
     ({ item, drag, isActive, isEdit, onDeleteItem }: IAnimatedTokenCard) => {
-        const { styles } = useThemedStyles(baseStyles(isActive))
+        const { styles, theme } = useThemedStyles(baseStyles(isActive))
 
         const onDrag = useCallback(
             (_drag: any) => {
@@ -90,7 +90,8 @@ export const AnimatedTokenCard = memo(
                                             styles.animatedInnerContainer,
                                         ]}>
                                         <BaseIcon
-                                            name={"apps-outline"}
+                                            name="drag"
+                                            color={theme.colors.secondary}
                                             size={28}
                                             action={() => onDeleteItem(item)}
                                         />
@@ -129,7 +130,7 @@ export const AnimatedTokenCard = memo(
 
                     <Animated.View style={animatedDeleteIcon}>
                         <BaseIcon
-                            name={"trash-outline"}
+                            name={"trash-can-outline"}
                             size={32}
                             action={() => onDeleteItem(item)}
                             style={styles.deleteIconColor}

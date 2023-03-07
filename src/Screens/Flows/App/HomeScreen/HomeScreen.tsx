@@ -72,7 +72,7 @@ export const HomeScreen = () => {
                     activeTab={activeTab}
                 />
 
-                <EditTokens isEdit={isEdit} action={setIsEdit} />
+                <EditTokens isEdit={isEdit} setIsEdit={setIsEdit} />
 
                 {activeTab === 0 ? (
                     <TokenList
