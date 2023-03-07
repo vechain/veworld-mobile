@@ -82,8 +82,8 @@ const baseStyles = (theme: ColorThemeType) =>
             marginHorizontal: 20,
         },
 
-        // this is used because the drop.shadow library is getting cut on the first card of the list
         paddingTop: {
-            paddingTop: 20,
+            marginBottom: 24,
+            paddingTop: 16,
         },
     })
