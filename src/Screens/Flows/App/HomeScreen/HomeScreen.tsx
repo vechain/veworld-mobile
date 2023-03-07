@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
-import { Device, useRealm, useListListener } from "~Storage"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
+    AddAccountBottomSheet,
     TokenList,
     NFTList,
     HeaderView,
-    HomeScreenBottomSheet,
     EditTokens,
+    AccountManagementBottomSheet,
 } from "./Components"
 import { useBottomSheetModal } from "~Common"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
@@ -13,17 +13,21 @@ import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
-
-//todo: get currently active wallet
-const ACTIVE_WALLET = 0
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 export const HomeScreen = () => {
-    const { store } = useRealm()
+    const nav = useNavigation()
+    const {
+        ref: accountManagementBottomSheetRef,
+        onOpen: openAccountManagementSheet,
+        onClose: closeAccountManagementSheet,
+    } = useBottomSheetModal()
 
     const {
-        ref: bottomSheetRef,
-        onOpen: openBottomSheetMenu,
-        onClose: closeBottomSheetMenu,
+        ref: addAccountBottomSheetRef,
+        onOpen: openAddAccountSheet,
+        onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
     const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
@@ -44,13 +48,13 @@ export const HomeScreen = () => {
         [activeCard.activeIndex],
     )
 
-    const devices = useListListener(Device.getName(), store) as Device[]
-
     useEffect(() => {
         console.log("activeCardIndex", activeCardIndex)
     }, [activeCardIndex])
 
-    const activeDevice = useMemo(() => devices[ACTIVE_WALLET], [devices])
+    const navigateToCreateWallet = useCallback(() => {
+        nav.navigate(Routes.CREATE_WALLET_FLOW)
+    }, [nav])
 
     return (
         <>
@@ -62,7 +66,8 @@ export const HomeScreen = () => {
                     visibleHeightRef.current = visibleHeight
                 }}>
                 <HeaderView
-                    openBottomSheetMenu={openBottomSheetMenu}
+                    navigateToCreateWallet={navigateToCreateWallet}
+                    openAccountManagementSheet={openAccountManagementSheet}
                     setActiveTab={setActiveTab}
                     activeTab={activeTab}
                 />
@@ -81,17 +86,20 @@ export const HomeScreen = () => {
                 )}
             </NestableScrollContainer>
 
-            <HomeScreenBottomSheet
-                ref={bottomSheetRef}
-                onClose={closeBottomSheetMenu}
-                activeDevice={activeDevice}
+            <AccountManagementBottomSheet
+                ref={accountManagementBottomSheetRef}
+                onClose={closeAccountManagementSheet}
+                openAddAccountSheet={openAddAccountSheet}
+            />
+            <AddAccountBottomSheet
+                ref={addAccountBottomSheetRef}
+                onClose={closeAddAccountSheet}
             />
         </>
     )
 }
 
 /*
-!Sample get inverse relationship
 useEffect(() => {
     const init = async () => {
         let accounts = devices[0].accounts

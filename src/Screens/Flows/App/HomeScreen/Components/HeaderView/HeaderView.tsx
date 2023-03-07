@@ -6,19 +6,27 @@ import { TabbarHeader } from "./TabbarHeader"
 import { ActionsList } from "./ActionsList"
 
 type Props = {
-    openBottomSheetMenu: () => void
     setActiveTab: React.Dispatch<React.SetStateAction<number>>
     activeTab: number
+    openAccountManagementSheet: () => void
+    navigateToCreateWallet: () => void
 }
 
 export const HeaderView = memo(
-    ({ openBottomSheetMenu, setActiveTab, activeTab }: Props) => {
+    ({
+        setActiveTab,
+        activeTab,
+        openAccountManagementSheet,
+        navigateToCreateWallet,
+    }: Props) => {
         return (
             <>
                 <BaseView align="center">
-                    <Header action={openBottomSheetMenu} />
+                    <Header action={navigateToCreateWallet} />
                     <BaseSpacer height={20} />
-                    <AccountsCarousel />
+                    <AccountsCarousel
+                        openAccountManagementSheet={openAccountManagementSheet}
+                    />
                 </BaseView>
 
                 <BaseSpacer height={10} />

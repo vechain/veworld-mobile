@@ -6,7 +6,6 @@ import { PaginationItem } from "./PaginationItem"
 import { AccountCard } from "./AccountCard"
 import { BaseSpacer, BaseView } from "~Components"
 import { useActiveCard } from "../../../Hooks/useActiveCard"
-import { useRenderCounter } from "~Common"
 import { Account, useListListener, useRealm } from "~Storage"
 
 const width = Dimensions.get("window").width - 40
@@ -19,76 +18,79 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-export const AccountsCarousel: React.FC = memo(() => {
-    const progressValue = useSharedValue<number>(0)
-    const onScrollEnd = useActiveCard()
+type Props = { openAccountManagementSheet: () => void }
 
-    const { store } = useRealm()
-    const accounts = useListListener(Account.getName(), store) as Account[]
+export const AccountsCarousel: React.FC<Props> = memo(
+    ({ openAccountManagementSheet }) => {
+        const progressValue = useSharedValue<number>(0)
+        const onScrollEnd = useActiveCard()
 
-    const onProgressChange = useCallback(
-        (_: number, absoluteProgress: number) => {
-            progressValue.value = absoluteProgress
-        },
-        [progressValue],
-    )
+        const { store } = useRealm()
+        const accounts = useListListener(Account.getName(), store) as Account[]
 
-    const renderItem = useCallback(
-        ({ index }: { index: number }) => {
-            return (
-                <AccountCard
-                    account={accounts[index]}
-                    key={index}
-                    entering={FadeInRight.delay(
-                        (accounts.length - index) * 50,
-                    ).duration(200)}
+        const onProgressChange = useCallback(
+            (_: number, absoluteProgress: number) => {
+                progressValue.value = absoluteProgress
+            },
+            [progressValue],
+        )
+
+        const renderItem = useCallback(
+            ({ index }: { index: number }) => {
+                return (
+                    <AccountCard
+                        openAccountManagement={openAccountManagementSheet}
+                        account={accounts[index]}
+                        key={index}
+                        entering={FadeInRight.delay(
+                            (accounts.length - index) * 50,
+                        ).duration(200)}
+                    />
+                )
+            },
+            [accounts, openAccountManagementSheet],
+        )
+
+        return (
+            <>
+                <Carousel
+                    loop={false}
+                    style={baseStyles.carouselContainer}
+                    width={width}
+                    height={180}
+                    pagingEnabled={true}
+                    snapEnabled={true}
+                    scrollAnimationDuration={1000}
+                    mode="horizontal-stack"
+                    data={accounts}
+                    modeConfig={StackConfig}
+                    onProgressChange={onProgressChange}
+                    renderItem={renderItem}
+                    onSnapToItem={onScrollEnd}
                 />
-            )
-        },
-        [accounts],
-    )
 
-    useRenderCounter("AccountsCarousel")
+                <BaseSpacer height={10} />
 
-    return (
-        <>
-            <Carousel
-                loop={false}
-                style={baseStyles.carouselContainer}
-                width={width}
-                height={180}
-                pagingEnabled={true}
-                snapEnabled={true}
-                scrollAnimationDuration={1000}
-                mode="horizontal-stack"
-                data={accounts}
-                modeConfig={StackConfig}
-                onProgressChange={onProgressChange}
-                renderItem={renderItem}
-                onSnapToItem={onScrollEnd}
-            />
-
-            <BaseSpacer height={10} />
-
-            {!!progressValue && (
-                <BaseView
-                    orientation="row"
-                    justify="space-between"
-                    selfAlign="center">
-                    {accounts.map((account, index) => (
-                        <PaginationItem
-                            animValue={progressValue}
-                            index={index}
-                            key={account.address}
-                            length={accounts.length}
-                            entering={FadeIn.delay(220).duration(250)}
-                        />
-                    ))}
-                </BaseView>
-            )}
-        </>
-    )
-})
+                {!!progressValue && (
+                    <BaseView
+                        orientation="row"
+                        justify="space-between"
+                        selfAlign="center">
+                        {accounts.map((account, index) => (
+                            <PaginationItem
+                                animValue={progressValue}
+                                index={index}
+                                key={account.address}
+                                length={accounts.length}
+                                entering={FadeIn.delay(220).duration(250)}
+                            />
+                        ))}
+                    </BaseView>
+                )}
+            </>
+        )
+    },
+)
 
 const baseStyles = StyleSheet.create({
     carouselContainer: {
