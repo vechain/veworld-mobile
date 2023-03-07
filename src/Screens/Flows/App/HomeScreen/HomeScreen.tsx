@@ -14,8 +14,11 @@ import {
 import { useSharedValue } from "react-native-reanimated"
 import { useBottomSheetModal } from "~Common"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
-import HomeScreenBottomSheet from "./Components/HomeScreenBottomSheet"
 import { useActiveWalletEntity } from "~Common/Hooks/Entities"
+import AccountManagementBottomSheet from "./Components/BottomSheets/AccountManagementBottomSheet/AccountManagementBottomSheet"
+import AddAccountBottomSheet from "./Components/BottomSheets/AddAccountBottomSheet/AddAccountBottomSheet"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>
 
@@ -24,10 +27,17 @@ const ACTIVE_WALLET = 0
 
 export const HomeScreen = () => {
     const { store } = useRealm()
+    const nav = useNavigation()
     const {
-        ref: bottomSheetRef,
-        onOpen: openBottomSheetMenu,
-        onClose: closeBottomSheetMenu,
+        ref: accountManagementBottomSheetRef,
+        onOpen: openAccountManagementSheet,
+        onClose: closeAccountManagementSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: addAccountBottomSheetRef,
+        onOpen: openAddAccountSheet,
+        onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
     const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
@@ -73,14 +83,19 @@ export const HomeScreen = () => {
         return <NFTList entering={NFTListEnter} exiting={NFTListExit} />
     }, [activeTab, coinListEnter, coinListExit, NFTListEnter, NFTListExit])
 
+    const navigateToCreateWallet = useCallback(() => {
+        nav.navigate(Routes.CREATE_WALLET_FLOW)
+    }, [nav])
+
     return (
         <>
             <PlatformScrollView handleScrollPosition={handleScrollPosition}>
                 <BaseView align="center">
-                    <Header action={openBottomSheetMenu} />
+                    <Header action={navigateToCreateWallet} />
                     <BaseSpacer height={20} />
                     <AccountsCarousel
                         accounts={devices[ACTIVE_WALLET].accounts}
+                        openAccountManagement={openAccountManagementSheet}
                     />
                 </BaseView>
 
@@ -98,10 +113,15 @@ export const HomeScreen = () => {
                 statusBarContent={changeContent}
                 scrollValue={scrollValue}
             />
-            <HomeScreenBottomSheet
-                ref={bottomSheetRef}
-                onClose={closeBottomSheetMenu}
-                activeDevice={activeDevice}
+            <AccountManagementBottomSheet
+                ref={accountManagementBottomSheetRef}
+                onClose={closeAccountManagementSheet}
+                account={activeDevice.accounts[0]}
+                openAddAccountSheet={openAddAccountSheet}
+            />
+            <AddAccountBottomSheet
+                ref={addAccountBottomSheetRef}
+                onClose={closeAddAccountSheet}
             />
         </>
     )
