@@ -11,7 +11,7 @@ type Props = {
     activeTab: number
 }
 
-export const HeaaderView = memo(
+export const HeaderView = memo(
     ({ openBottomSheetMenu, setActiveTab, activeTab }: Props) => {
         return (
             <>

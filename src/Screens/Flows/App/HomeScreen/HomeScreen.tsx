@@ -3,7 +3,7 @@ import { Device, useRealm, useListListener } from "~Storage"
 import {
     TokenList,
     NFTList,
-    HeaaderView,
+    HeaderView,
     HomeScreenBottomSheet,
     EditTokens,
 } from "./Components"
@@ -61,7 +61,7 @@ export const HomeScreen = () => {
                 onContentSizeChange={visibleHeight => {
                     visibleHeightRef.current = visibleHeight
                 }}>
-                <HeaaderView
+                <HeaderView
                     openBottomSheetMenu={openBottomSheetMenu}
                     setActiveTab={setActiveTab}
                     activeTab={activeTab}
