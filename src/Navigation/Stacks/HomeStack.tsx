@@ -35,10 +35,7 @@ export const HomeStack = () => {
                 />
             </Home.Group>
 
-            <Home.Group
-                screenOptions={{
-                    presentation: "fullScreenModal",
-                }}>
+            <Home.Group>
                 <Home.Screen
                     name={Routes.CREATE_WALLET_FLOW}
                     component={CreateWalletAppStack}
