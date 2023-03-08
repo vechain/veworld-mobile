@@ -7,6 +7,7 @@ import {
     ActiveWalletCard,
     AppLock,
     UserPreferences,
+    ActiveHomePageTab,
 } from "./Model"
 
 import {
@@ -32,4 +33,5 @@ export {
     ActiveWalletCard,
     AppLock,
     UserPreferences,
+    ActiveHomePageTab,
 }

@@ -1,13 +1,9 @@
 import { Pressable, StyleSheet } from "react-native"
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { BaseText, BaseView } from "~Components"
 import Animated, { FadeIn } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
-
-type Props = {
-    setActiveTab: React.Dispatch<React.SetStateAction<number>>
-    activeTab: number
-}
+import { ActiveHomePageTab, useRealm } from "~Storage"
 
 const entries = [
     {
@@ -19,51 +15,65 @@ const entries = [
         value: 1,
     },
 ]
-export const TabbarHeader: React.FC<Props> = memo(
-    ({ activeTab, setActiveTab }) => {
-        const { styles } = useThemedStyles(baseStyles)
 
-        const onTabChange = useCallback(
-            (value: number) => () => setActiveTab(value),
-            [setActiveTab],
-        )
+export const TabbarHeader = memo(() => {
+    const { styles } = useThemedStyles(baseStyles)
+    const [activeTab, setActiveTab] = useState(0)
+    const { cache } = useRealm()
 
-        return (
-            <BaseView align="center">
-                <BaseView
-                    w={50}
-                    orientation="row"
-                    justify="space-between"
-                    align="center">
-                    {entries.map(entry => {
-                        const isSelected = activeTab === entry.value
-                        return (
-                            <Pressable
-                                key={entry.value}
-                                onPress={onTabChange(entry.value)}
-                                style={styles.button}>
-                                <BaseText
-                                    typographyFont={
-                                        isSelected
-                                            ? "subTitle"
-                                            : "subTitleLight"
-                                    }>
-                                    {entry.label}
-                                </BaseText>
-                                {isSelected && (
-                                    <Animated.View
-                                        style={styles.underline}
-                                        entering={FadeIn.duration(400)}
-                                    />
-                                )}
-                            </Pressable>
-                        )
-                    })}
-                </BaseView>
+    const onTabChange = useCallback(
+        (value: number) => () => {
+            setActiveTab(value)
+            cache.write(() => {
+                const activeHomePageTab =
+                    cache.objectForPrimaryKey<ActiveHomePageTab>(
+                        ActiveHomePageTab.getName(),
+                        ActiveHomePageTab.getPrimaryKey(),
+                    )
+
+                if (activeHomePageTab) activeHomePageTab.activeIndex = value
+            })
+        },
+        [cache],
+    )
+
+    const _renderItems = useMemo(() => {
+        return entries.map(entry => {
+            const isSelected = activeTab === entry.value
+            return (
+                <Pressable
+                    key={entry.value}
+                    onPress={onTabChange(entry.value)}
+                    style={styles.button}>
+                    <BaseText
+                        typographyFont={
+                            isSelected ? "subTitle" : "subTitleLight"
+                        }>
+                        {entry.label}
+                    </BaseText>
+                    {isSelected && (
+                        <Animated.View
+                            style={styles.underline}
+                            entering={FadeIn.duration(200)}
+                        />
+                    )}
+                </Pressable>
+            )
+        })
+    }, [activeTab, onTabChange, styles.button, styles.underline])
+
+    return (
+        <BaseView align="center">
+            <BaseView
+                w={50}
+                orientation="row"
+                justify="space-between"
+                align="center">
+                {_renderItems}
             </BaseView>
-        )
-    },
-)
+        </BaseView>
+    )
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

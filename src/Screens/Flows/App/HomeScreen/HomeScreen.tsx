@@ -8,7 +8,10 @@ import {
     AccountManagementBottomSheet,
 } from "./Components"
 import { useBottomSheetModal } from "~Common"
-import { useActiveWalletEntity } from "~Common/Hooks/Entities"
+import {
+    useActiveListTabEntity,
+    useActiveWalletEntity,
+} from "~Common/Hooks/Entities"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
@@ -33,8 +36,6 @@ export const HomeScreen = () => {
     const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
         useMemoizedAnimation()
 
-    const [activeTab, setActiveTab] = useState(0)
-
     const [isEdit, setIsEdit] = useState(false)
 
     const paddingBottom = useBottomTabBarHeight()
@@ -42,10 +43,16 @@ export const HomeScreen = () => {
     const visibleHeightRef = useRef<number>(0)
 
     const activeCard = useActiveWalletEntity()
+    const activeListTab = useActiveListTabEntity()
 
     const activeCardIndex = useMemo(
         () => activeCard.activeIndex,
         [activeCard.activeIndex],
+    )
+
+    const activeTabIndex = useMemo(
+        () => activeListTab.activeIndex,
+        [activeListTab.activeIndex],
     )
 
     useEffect(() => {
@@ -68,13 +75,11 @@ export const HomeScreen = () => {
                 <HeaderView
                     navigateToCreateWallet={navigateToCreateWallet}
                     openAccountManagementSheet={openAccountManagementSheet}
-                    setActiveTab={setActiveTab}
-                    activeTab={activeTab}
                 />
 
                 <EditTokens isEdit={isEdit} setIsEdit={setIsEdit} />
 
-                {activeTab === 0 ? (
+                {activeTabIndex === 0 ? (
                     <TokenList
                         isEdit={isEdit}
                         visibleHeightRef={visibleHeightRef.current}

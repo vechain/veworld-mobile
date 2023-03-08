@@ -3,6 +3,7 @@ import { WALLET_STATUS } from "~Model"
 import KeychainService from "~Services/KeychainService"
 import {
     Account,
+    ActiveHomePageTab,
     ActiveWalletCard,
     AppLock,
     Config,
@@ -58,9 +59,15 @@ const resetRealm = async (store: Realm, cache: Realm) => {
         ActiveWalletCard.getPrimaryKey(),
     )
 
+    const activeHomePageTab = cache.objectForPrimaryKey<ActiveHomePageTab>(
+        ActiveHomePageTab.getName(),
+        ActiveHomePageTab.getPrimaryKey(),
+    )
+
     cache.write(() => {
         appLock!.status = WALLET_STATUS.LOCKED
         activeWalletCard!.activeIndex = 0
+        activeHomePageTab!.activeIndex = 0
     })
 
     let config = store.objectForPrimaryKey<Config>(

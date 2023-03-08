@@ -9,6 +9,7 @@ import {
     ActiveWalletCard,
     AppLock,
     UserPreferences,
+    ActiveHomePageTab,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
 import { WALLET_STATUS } from "~Model"
@@ -86,7 +87,7 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
 
 const initCacheRealm = () => {
     const instance = new Realm({
-        schema: [Mnemonic, ActiveWalletCard, AppLock],
+        schema: [Mnemonic, ActiveWalletCard, AppLock, ActiveHomePageTab],
         path: "inMemory.realm",
         inMemory: true,
         deleteRealmIfMigrationNeeded:
@@ -131,6 +132,13 @@ export const initRealmClasses = (
             Mnemonic.getPrimaryKey(),
         )
         if (!mnemonic) cache.create(Mnemonic.getName(), {})
+
+        const activeHomePageTab = cache.objectForPrimaryKey<ActiveHomePageTab>(
+            ActiveHomePageTab.getName(),
+            ActiveHomePageTab.getPrimaryKey(),
+        )
+
+        if (!activeHomePageTab) cache.create(ActiveHomePageTab.getName(), {})
     })
 
     const config = store.objectForPrimaryKey<Config>(

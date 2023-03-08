@@ -6,19 +6,12 @@ import { TabbarHeader } from "./TabbarHeader"
 import { ActionsList } from "./ActionsList"
 
 type Props = {
-    setActiveTab: React.Dispatch<React.SetStateAction<number>>
-    activeTab: number
     openAccountManagementSheet: () => void
     navigateToCreateWallet: () => void
 }
 
 export const HeaderView = memo(
-    ({
-        setActiveTab,
-        activeTab,
-        openAccountManagementSheet,
-        navigateToCreateWallet,
-    }: Props) => {
+    ({ openAccountManagementSheet, navigateToCreateWallet }: Props) => {
         return (
             <>
                 <BaseView align="center">
@@ -30,10 +23,7 @@ export const HeaderView = memo(
                 </BaseView>
 
                 <BaseSpacer height={10} />
-                <TabbarHeader
-                    setActiveTab={setActiveTab}
-                    activeTab={activeTab}
-                />
+                <TabbarHeader />
                 <BaseSpacer height={20} />
                 <ActionsList />
             </>
