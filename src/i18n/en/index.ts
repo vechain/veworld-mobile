@@ -67,6 +67,7 @@ const en: BaseTranslation = {
     BD_RESET_APP_02: "Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.",
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
     BD_YOUR_BALANCE: "Your balance",
+    BD_SELECT_WORD: "Select word {number}",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -80,6 +81,7 @@ const en: BaseTranslation = {
     TITLE_CREATE_WALLET_TYPE: "Create Wallet",
     TITLE_IMPORT_WALLET_TYPE: "Import Wallet",
     TITLE_MNEMONIC: "Your Mnemonic",
+    TITLE_CONFIRM_MNEMONIC: "Create your wallet",
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_USER_PIN: "Insert your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
@@ -116,6 +118,7 @@ const en: BaseTranslation = {
 
     // Errors
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
+    ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
 
     // Network
 

@@ -203,6 +203,11 @@ type RootTranslation = {
 	 */
 	BD_YOUR_BALANCE: string
 	/**
+	 * S​e​l​e​c​t​ ​w​o​r​d​ ​{​n​u​m​b​e​r​}
+	 * @param {unknown} number
+	 */
+	BD_SELECT_WORD: RequiredParams<'number'>
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -246,6 +251,10 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​M​n​e​m​o​n​i​c
 	 */
 	TITLE_MNEMONIC: string
+	/**
+	 * C​r​e​a​t​e​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	TITLE_CONFIRM_MNEMONIC: string
 	/**
 	 * C​h​o​o​s​e​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
 	 */
@@ -338,6 +347,10 @@ type RootTranslation = {
 	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
 	ERROR_INCORRECT_MNEMONIC: string
+	/**
+	 * E​r​r​o​r​!​ ​T​h​e​ ​w​o​r​d​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_WRONG_MNEMONIC_WORDS: string
 	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
@@ -535,6 +548,10 @@ export type TranslationFunctions = {
 	 */
 	BD_YOUR_BALANCE: () => LocalizedString
 	/**
+	 * Select word {number}
+	 */
+	BD_SELECT_WORD: (arg: { number: unknown }) => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -578,6 +595,10 @@ export type TranslationFunctions = {
 	 * Your Mnemonic
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
+	/**
+	 * Create your wallet
+	 */
+	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
 	/**
 	 * Choose your 6-digit PIN
 	 */
@@ -670,6 +691,10 @@ export type TranslationFunctions = {
 	 * Incorrect mnemonic phrase
 	 */
 	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
+	/**
+	 * Error! The word combination is wrong, Please, try again.
+	 */
+	ERROR_WRONG_MNEMONIC_WORDS: () => LocalizedString
 	/**
 	 * {name} copied to clipboard!
 	 */
