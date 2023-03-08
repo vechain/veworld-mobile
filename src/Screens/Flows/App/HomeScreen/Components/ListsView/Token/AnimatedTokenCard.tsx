@@ -90,10 +90,10 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         outerContainer: {
             flexDirection: "row",
             alignItems: "center",
+            height: 62,
         },
         pressable: {
             borderRadius: 10,
-            height: 62,
             marginHorizontal: 20,
         },
         animatedOuterContainer: {
@@ -102,10 +102,10 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
             alignItems: "center",
             borderRadius: 10,
             opacity: isActive ? 0.6 : 1,
+            height: 62,
         },
         animatedInnerContainer: {
             position: "absolute",
-            marginLeft: 12,
         },
         animatedInnerRow: {
             flexDirection: "row",
@@ -114,7 +114,6 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
             paddingHorizontal: 14,
             paddingVertical: 12,
             height: "100%",
-            width: "100%",
         },
 
         deleteIconColor: {
