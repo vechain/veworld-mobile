@@ -1,3 +1,3 @@
-export * from "./Translation"
+export * from "./TranslationProvider"
 export * from "./WrappedTranslation"
 export * from "./Security"

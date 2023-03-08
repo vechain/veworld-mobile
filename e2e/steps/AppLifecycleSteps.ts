@@ -1,0 +1,25 @@
+import { Given, Then } from "@cucumber/cucumber"
+import detox, { expect } from "detox"
+
+// Default cucumber timeout has to be deactivated for this step
+Given("The user has installed the app", { timeout: -1 }, async () => {
+    await detox.device.launchApp({ delete: true })
+})
+
+Given("The user opens the app", async () => {
+    // Terminates and launches a new instance of the app
+    await detox.device.launchApp({ newInstance: true })
+})
+
+Given("The user brings the app from background", async () => {
+    // Brings the app from the background
+    await detox.device.launchApp({ newInstance: false })
+})
+
+Given("The user closes the app", async () => {
+    await detox.device.terminateApp()
+})
+
+Then("The app is started successfully", async () => {
+    await expect(element(by.id("welcome-title-id"))).toExist()
+})

@@ -1,3 +1,3 @@
-// import * as FormattingUtils from "./FormattingUtils"
+import * as FormattingUtils from "./FormattingUtils"
 
-// export default FormattingUtils
+export default FormattingUtils

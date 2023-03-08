@@ -13,6 +13,7 @@ import {
     useWalletSecurity,
 } from "~Common"
 import { WALLET_STATUS } from "~Model"
+import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
 export const EntryPoint = () => {
     const { store, cache } = useRealm()
@@ -20,7 +21,6 @@ export const EntryPoint = () => {
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
-    // TODO: Going form SecurityDowngrade to normal this is called twice and enters twice in "isBiometricLockFlow" causing the biometric prompt to be called twice
     useEffect(() => {
         const init = async () => {
             if (
@@ -35,7 +35,8 @@ export const EntryPoint = () => {
                 LockScreenUtils.isBiometricLockFlow(
                     appLockStatus,
                     walletSecurity,
-                )
+                ) &&
+                !isSecurityDowngrade
             ) {
                 await recursiveFaceId()
             }
@@ -45,7 +46,12 @@ export const EntryPoint = () => {
     }, [appLockStatus, walletSecurity, isSecurityDowngrade])
 
     if (LockScreenUtils.isLockScreenFlow(appLockStatus, walletSecurity)) {
-        return <LockScreen onSuccess={unlockApp} />
+        return (
+            <LockScreen
+                onSuccess={unlockApp}
+                scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
+            />
+        )
     }
 
     return (
@@ -54,7 +60,7 @@ export const EntryPoint = () => {
                 <RealmPlugin realms={[store, cache]} />
             )}
 
-            <Security />
+            <Security appLockStatus={appLockStatus} />
 
             {isSecurityDowngrade ? (
                 <SecurityDowngradeScreen />

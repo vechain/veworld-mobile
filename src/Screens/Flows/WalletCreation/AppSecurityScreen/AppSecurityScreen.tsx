@@ -14,7 +14,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { Fonts, SecurityLevelType } from "~Model"
+import { SecurityLevelType } from "~Model"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
@@ -41,11 +41,11 @@ export const AppSecurityScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font={Fonts.large_title}>
+                    <BaseText typographyFont="largeTitle">
                         {LL.TITLE_SECURITY()}
                     </BaseText>
 
-                    <BaseText font={Fonts.body} my={10}>
+                    <BaseText typographyFont="body" my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                         sed do eiusmod tempor incididunt ut labore et dolore
                         magna aliqua.
@@ -55,7 +55,6 @@ export const AppSecurityScreen = () => {
                 <BaseView align="center" w={100}>
                     {accessControl && (
                         <BaseButton
-                            filled
                             action={onBiometricsPress}
                             w={100}
                             mx={20}
@@ -67,7 +66,7 @@ export const AppSecurityScreen = () => {
                     )}
 
                     <BaseButton
-                        bordered
+                        variant="outline"
                         action={onPasswordPress}
                         w={100}
                         mx={20}

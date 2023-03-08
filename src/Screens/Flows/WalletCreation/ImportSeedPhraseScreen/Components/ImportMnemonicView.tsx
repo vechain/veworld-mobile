@@ -1,7 +1,11 @@
 import { StyleSheet, TextInput } from "react-native"
 import React from "react"
-import { useTheme } from "~Common"
 
+import { ColorThemeType, Theme, useThemedStyles } from "~Common"
+
+const {
+    typography: { defaults: defaultTypography },
+} = Theme
 type Props = {
     seed: string
     onChangeText: (text: string) => void
@@ -9,19 +13,10 @@ type Props = {
 }
 
 export const ImportMnemonicView = ({ seed, onChangeText, isError }: Props) => {
-    const theme = useTheme()
-
+    const { styles: themedStyles } = useThemedStyles(baseStyles(isError))
     return (
         <TextInput
-            style={[
-                baseStyles.container,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {
-                    borderColor: isError ? "red" : "black",
-                    fontSize: theme.typography.body_accent.fontSize,
-                    fontFamily: theme.typography.body_accent.fontFamily,
-                },
-            ]}
+            style={themedStyles.container}
             autoCapitalize="none"
             autoComplete="off"
             multiline={true}
@@ -32,13 +27,21 @@ export const ImportMnemonicView = ({ seed, onChangeText, isError }: Props) => {
     )
 }
 
-const baseStyles = StyleSheet.create({
-    container: {
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingVertical: 20,
-        paddingHorizontal: 10,
-        height: 140,
-        lineHeight: 28,
-    },
-})
+const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            color: theme.colors.text,
+            backgroundColor: theme.colors.card,
+            borderColor: isError
+                ? theme.colors.danger
+                : theme.colors.transparent,
+            borderWidth: 1,
+            borderRadius: 8,
+            paddingVertical: 20,
+            paddingHorizontal: 10,
+            height: 140,
+            lineHeight: 28,
+            fontSize: defaultTypography.bodyAccent.fontSize,
+            fontFamily: defaultTypography.bodyAccent.fontFamily,
+        },
+    })

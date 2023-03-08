@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -7,14 +7,23 @@ import {
     NumPad,
     PasswordPins,
 } from "~Components"
-import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
+import { LOCKSCREEN_SCENARIO } from "./Enums"
 import { useOnDigitPress } from "./useOnDigitPress"
 
 type Props = {
     onSuccess: (password: string) => void
+    scenario: LOCKSCREEN_SCENARIO
 }
-export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
+
+type Titles = {
+    title: string
+    subtitle: string
+}
+
+export const LockScreen: React.FC<Props> = (props: Props) => {
+    const { onSuccess, scenario } = props
+
     const { LL } = useI18nContext()
 
     const { isPinError, onDigitPress, userPinArray, isSuccess } =
@@ -26,20 +35,36 @@ export const LockScreen: React.FC<Props> = ({ onSuccess }) => {
         }
     }, [isSuccess, onSuccess, userPinArray])
 
+    /**
+     * Sets `title` and `subtitle` based on the `scenario` prop
+     */
+    const { title, subtitle }: Titles = useMemo(() => {
+        switch (scenario) {
+            case LOCKSCREEN_SCENARIO.UNLOCK_WALLET:
+                return {
+                    title: LL.TITLE_USER_PIN(),
+                    subtitle: LL.SB_UNLOCK_WALLET_PIN(),
+                }
+            case LOCKSCREEN_SCENARIO.WALLET_CREATION:
+                return {
+                    title: LL.TITLE_USER_PIN(),
+                    subtitle: LL.SB_CONFIRM_PIN(),
+                }
+        }
+    }, [LL, scenario])
+
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="flex-start" grow={1} mx={20}>
+            <BaseView mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText font={Fonts.large_title}>
-                        {LL.TITLE_USER_PASSWORD()}
-                    </BaseText>
+                    <BaseText typographyFont="largeTitle">{title}</BaseText>
 
-                    <BaseText font={Fonts.body} my={10}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    <BaseText typographyFont="body" my={10}>
+                        {subtitle}
                     </BaseText>
                 </BaseView>
-                <BaseSpacer height={60} />
+                <BaseSpacer height={62} />
                 <PasswordPins
                     UserPinArray={userPinArray}
                     isPinError={isPinError}

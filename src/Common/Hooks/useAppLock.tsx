@@ -1,47 +1,52 @@
 import { useCallback, useMemo } from "react"
 import { WALLET_STATUS } from "~Model"
-import { AppLock, Config, useObjectListener, useRealm } from "~Storage"
+import { useRealm } from "~Storage"
+import { useAppLockEntity, useConfigEntity } from "./Entities"
 
 export const useAppLock = () => {
-    const { store, cache } = useRealm()
+    const { cache } = useRealm()
+    const appLockEntity = useAppLockEntity()
+    const configEntity = useConfigEntity()
 
-    const config = useObjectListener(
-        Config.getName(),
-        Config.getPrimaryKey(),
-        store,
-    ) as Config
+    const isWalletCreated = useMemo(
+        () => configEntity?.isWalletCreated,
+        [configEntity],
+    )
+    const isAppLockActive = useMemo(
+        () => configEntity?.isAppLockActive,
+        [configEntity],
+    )
 
-    const appLock = useObjectListener(
-        AppLock.getName(),
-        AppLock.getPrimaryKey(),
-        cache,
-    ) as AppLock
+    const _appLockStatus = useMemo(
+        () => appLockEntity?.status,
+        [appLockEntity?.status],
+    )
 
     const appLockStatus = useMemo(() => {
-        if (!config?.isWalletCreated || !config?.isAppLockActive) {
+        if (!isWalletCreated || !isAppLockActive) {
             return WALLET_STATUS.NOT_INITIALISED
         }
 
-        if (config?.isAppLockActive && appLock?.status === "LOCKED") {
+        if (isAppLockActive && _appLockStatus === "LOCKED") {
             return WALLET_STATUS.LOCKED
         }
-    }, [appLock, config])
+    }, [_appLockStatus, isAppLockActive, isWalletCreated])
 
     const unlockApp = useCallback(() => {
-        if (appLock) {
+        if (appLockEntity) {
             cache.write(() => {
-                appLock.status = WALLET_STATUS.UNLOCKED
+                appLockEntity.status = WALLET_STATUS.UNLOCKED
             })
         }
-    }, [cache, appLock])
+    }, [cache, appLockEntity])
 
     const lockApp = useCallback(() => {
-        if (appLock) {
+        if (appLockEntity) {
             cache.write(() => {
-                appLock.status = WALLET_STATUS.LOCKED
+                appLockEntity.status = WALLET_STATUS.LOCKED
             })
         }
-    }, [cache, appLock])
+    }, [cache, appLockEntity])
 
     return { appLockStatus, lockApp, unlockApp }
 }

@@ -1,24 +1,28 @@
 import { useMemo } from "react"
-import { Config, useObjectListener, useRealm } from "~Storage"
+import { useConfigEntity } from "./Entities"
 
 export const useAppInitState = () => {
-    const { store } = useRealm()
+    const configEntity = useConfigEntity()
 
-    const config = useObjectListener(
-        Config.getName(),
-        Config.getPrimaryKey(),
-        store,
-    ) as Config
+    const isWalletCreated = useMemo(
+        () => configEntity?.isWalletCreated,
+        [configEntity],
+    )
+
+    const isResettingApp = useMemo(
+        () => configEntity?.isResettingApp,
+        [configEntity],
+    )
 
     const appStatus = useMemo(() => {
-        if (!config?.isWalletCreated) {
-            return AppInitState.INIT_STATE
-        }
-    }, [config])
+        if (isResettingApp) return AppInitState.RESETTING_STATE
+        if (!isWalletCreated) return AppInitState.INIT_STATE
+    }, [isResettingApp, isWalletCreated])
 
     return appStatus
 }
 
 export enum AppInitState {
     INIT_STATE = "INIT_STATE",
+    RESETTING_STATE = "RESETTING_STATE",
 }

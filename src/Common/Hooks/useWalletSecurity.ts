@@ -1,16 +1,20 @@
 import { useMemo } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
-import { Config, useObjectListener, useRealm } from "~Storage"
+import { useConfigEntity } from "./Entities"
 import { useBiometrics } from "./useBiometrics"
 
 export const useWalletSecurity = () => {
-    const { store } = useRealm()
+    const configEntity = useConfigEntity()
 
-    const config = useObjectListener(
-        Config.getName(),
-        Config.getPrimaryKey(),
-        store,
-    ) as Config
+    const userSelectedSecurity = useMemo(
+        () => configEntity?.userSelectedSecurity,
+        [configEntity?.userSelectedSecurity],
+    )
+
+    const isSecurityDowngrade = useMemo(
+        () => configEntity?.isSecurityDowngrade,
+        [configEntity],
+    )
 
     const biometrics = useBiometrics()
 
@@ -22,36 +26,31 @@ export const useWalletSecurity = () => {
     const walletSecurity = useMemo(() => {
         if (
             isBiometricsEnabled &&
-            config?.userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC
+            userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC
         ) {
             return WalletSecurity.BIO_UNLOCK
         }
 
-        if (
-            config?.userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD
-        ) {
+        if (userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD) {
             return WalletSecurity.PASS_UNLOCK
         }
 
         return WalletSecurity.NONE
-    }, [config, isBiometricsEnabled])
+    }, [isBiometricsEnabled, userSelectedSecurity])
 
     const isWalletSecurityBiometrics = useMemo(
         () => walletSecurity === WalletSecurity.BIO_UNLOCK,
         [walletSecurity],
     )
+
     const isWalletSecurityPassword = useMemo(
         () => walletSecurity === WalletSecurity.PASS_UNLOCK,
         [walletSecurity],
     )
+
     const isWalletSecurityNone = useMemo(
         () => walletSecurity === WalletSecurity.NONE,
         [walletSecurity],
-    )
-
-    const isSecurityDowngrade = useMemo(
-        () => config?.isSecurityDowngrade,
-        [config],
     )
 
     return {

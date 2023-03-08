@@ -14,7 +14,6 @@ import { ListSlide } from "../Components/ListSlide"
 import { Slide } from "../Types"
 import { STEPS } from "../Enums"
 import { ChessIcon, KeyIcon, ShieldIcon } from "~Assets"
-import { Fonts } from "~Model"
 
 export const TutorialScreen = () => {
     const nav = useNavigation()
@@ -73,7 +72,9 @@ export const TutorialScreen = () => {
             <BaseSpacer height={20} />
             <BaseView align="center" grow={1}>
                 <BaseView selfAlign="flex-start" mx={20}>
-                    <BaseText font={Fonts.large_title}>Create Wallet</BaseText>
+                    <BaseText typographyFont="largeTitle">
+                        Create Wallet
+                    </BaseText>
                 </BaseView>
 
                 <FlatList
@@ -94,14 +95,14 @@ export const TutorialScreen = () => {
                 <BaseView align="center" w={100} px={20}>
                     <BaseButton
                         action={onNavigate}
-                        font={Fonts.footnote_accent}
+                        typographyFont="footNoteAccent"
                         title={LL.BTN_WALLET_TUTORIAL_SKIP()}
                         selfAlign="flex-start"
                         px={5}
+                        variant="ghost"
                     />
 
                     <BaseButton
-                        filled
                         action={onButtonPress}
                         w={100}
                         mx={20}

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import produce from "immer"
+import { CryptoUtils, SettingsConstants } from "~Common"
+import { Config, useRealm } from "~Storage"
 
 export const useOnDigitPress = () => {
     const [isPinError, setIsPinError] = useState(false)
@@ -11,6 +13,8 @@ export const useOnDigitPress = () => {
     const [userPinArray, setUserPinArray] = useState<Array<string | undefined>>(
         Array.from({ length: 6 }),
     )
+
+    const { store } = useRealm()
 
     const onDigitPress = (digit: string) => {
         // protect for ui overflow
@@ -80,9 +84,23 @@ export const useOnDigitPress = () => {
     // set success
     useEffect(() => {
         if (pinTypedCounter === 2 && pinMatch) {
+            const config = store.objectForPrimaryKey<Config>(
+                Config.getName(),
+                Config.getPrimaryKey(),
+            )
+
+            const pinValidationString = CryptoUtils.encrypt<string>(
+                SettingsConstants.VALIDATION_STRING,
+                userPin,
+            )
+
+            store.write(() => {
+                config!.pinValidationString = pinValidationString
+            })
+
             setIsSuccess(true)
         }
-    }, [pinMatch, pinTypedCounter])
+    }, [pinMatch, pinTypedCounter, store, userPin])
 
     return {
         onDigitPress,

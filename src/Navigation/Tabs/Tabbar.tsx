@@ -17,7 +17,7 @@ export const Tabbar = () => {
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
-                    backgroundColor: theme.colors.background,
+                    backgroundColor: theme.colors.card,
                     ...baseStyles.tabbar,
                     ...baseStyles.shadow,
                 },
@@ -28,7 +28,7 @@ export const Tabbar = () => {
                 options={{
                     tabBarLabel: "Wallet",
                     tabBarIcon: ({ focused }) => (
-                        <TabIcon focused={focused} title={"Wallet"} />
+                        <TabIcon focused={focused} title={"home"} />
                     ),
                 }}
             />
@@ -39,7 +39,7 @@ export const Tabbar = () => {
                 options={{
                     tabBarLabel: "Settings",
                     tabBarIcon: ({ focused }) => (
-                        <TabIcon focused={focused} title={"Settings"} />
+                        <TabIcon focused={focused} title={"cog"} />
                     ),
                 }}
             />

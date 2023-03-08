@@ -11,5 +11,4 @@ export { TypesafeI18n }
 export * from "./i18n-types"
 export * from "./i18n-util"
 export * from "./formatters"
-export * from "./i18n-util.async"
 export * from "./i18n-react"

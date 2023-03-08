@@ -1,19 +1,18 @@
 import React, { useCallback, useMemo } from "react"
 import { Switch } from "react-native"
+import { useConfigEntity } from "~Common/Hooks/Entities"
 import { BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
-import { AppLock, Config, useRealm, useObjectListener } from "~Storage"
+import { AppLock, useRealm } from "~Storage"
 
 export const SecureApp = () => {
     const { store, cache } = useRealm()
+    const configEntity = useConfigEntity()
 
-    const config = useObjectListener(
-        Config.getName(),
-        Config.getPrimaryKey(),
-        store,
-    ) as Config
-
-    const isEnabled = useMemo(() => config?.isAppLockActive, [config])
+    const isEnabled = useMemo(
+        () => configEntity?.isAppLockActive,
+        [configEntity],
+    )
 
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
@@ -29,12 +28,10 @@ export const SecureApp = () => {
             })
 
             store.write(() => {
-                if (config) {
-                    config.isAppLockActive = newValue
-                }
+                configEntity.isAppLockActive = newValue
             })
         },
-        [cache, config, store],
+        [cache, configEntity, store],
     )
 
     return (

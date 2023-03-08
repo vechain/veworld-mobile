@@ -26,7 +26,7 @@ export const BaseStatusBar = memo((props: Props) => {
             barStyle={barStyle}
             backgroundColor={
                 props.transparent
-                    ? theme.constants.transparent
+                    ? theme.colors.transparent
                     : theme.colors.background
             }
             {...props}

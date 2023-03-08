@@ -1,45 +1,84 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from "react"
+import React, { useMemo } from "react"
 import {
-    ViewProps,
     TouchableOpacity,
     TouchableOpacityProps,
+    View,
+    ViewProps,
 } from "react-native"
 import { useTheme } from "~Common"
-import Icon from "react-native-vector-icons/Ionicons"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { IconProps } from "react-native-vector-icons/Icon"
 
-type Props = {
-    title: string
-    size?: number
-    bg?: string
-    isTouchable?: boolean
-    action?: () => void
-} & ViewProps &
-    TouchableOpacityProps
+type Props =
+    | {
+          size?: number
+          bg?: string
+          action?: () => void
+      } & IconProps &
+          TouchableOpacityProps &
+          ViewProps
 
-export const BaseIcon = (props: Props) => {
-    const { style, ...otherProps } = props
+export const BaseIcon: React.FC<Props> = props => {
+    const { color, style, ...otherProps } = props
     const theme = useTheme()
+
+    const iconColor = useMemo(
+        () =>
+            color ||
+            (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
+        [theme, color],
+    )
     return (
-        <TouchableOpacity
-            onPress={props.action}
+        <BaseIconWrapper style={style} {...props}>
+            <Icon size={props.size ?? 24} color={iconColor} {...otherProps} />
+        </BaseIconWrapper>
+    )
+}
+
+type BaseIconWrapperProps = Props & { children: React.ReactNode }
+const BaseIconWrapper: React.FC<BaseIconWrapperProps> = ({
+    style,
+    bg,
+    size,
+    children,
+    action,
+    ...props
+}) => {
+    if (action)
+        return (
+            <TouchableOpacity
+                onPress={action}
+                style={[
+                    {
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: bg,
+                        padding: 8,
+                        borderRadius: size ? size + 10 / 2 : 50,
+                        opacity: props.disabled ? 0.5 : 1,
+                    },
+                    style,
+                ]}
+                {...props}>
+                {children}
+            </TouchableOpacity>
+        )
+    return (
+        <View
             style={[
                 {
                     justifyContent: "center",
                     alignItems: "center",
-                    backgroundColor: props.bg,
-                    width: props.size ? props.size + 10 : 32,
-                    height: props.size ? props.size + 10 : 32,
-                    borderRadius: props.size ? props.size + 10 / 2 : 50,
+                    backgroundColor: bg,
+                    padding: 8,
+                    borderRadius: size ? size + 10 / 2 : 50,
+                    opacity: props.disabled ? 0.5 : 1,
                 },
                 style,
-            ]}>
-            <Icon
-                name={props.title}
-                size={props.size ?? 22}
-                color={theme.colors.tabicon}
-                {...otherProps}
-            />
-        </TouchableOpacity>
+            ]}
+            {...props}>
+            {children}
+        </View>
     )
 }

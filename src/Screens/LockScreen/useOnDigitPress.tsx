@@ -9,7 +9,7 @@ export const useOnDigitPress = () => {
         Array.from({ length: 6 }),
     )
 
-    const { validatePassword } = usePasswordValidation()
+    const validatePassword = usePasswordValidation()
 
     const onDigitPress = (digit: string) => {
         // protect for ui overflow
@@ -38,9 +38,9 @@ export const useOnDigitPress = () => {
         async (_userPinArray: string[]) => {
             let isValid = await validatePassword(_userPinArray)
             if (isValid) {
-                setIsSuccess(!!isValid)
+                setIsSuccess(isValid)
             } else {
-                setIsPinError(true)
+                setIsPinError(!isValid)
                 setUserPinArray(Array.from({ length: 6 }))
             }
         },

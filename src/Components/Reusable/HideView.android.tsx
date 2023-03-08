@@ -1,7 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseText, BaseView } from "~Components/Base"
-import { Fonts } from "~Model"
 import { useI18nContext } from "~i18n"
 
 export const HideView = ({ background }: { background: string }) => {
@@ -13,7 +12,7 @@ export const HideView = ({ background }: { background: string }) => {
             background={background}
             justify="center"
             align="center">
-            <BaseText font={Fonts.body_accent}>{LL.TAP_TO_VIEW()}</BaseText>
+            <BaseText typographyFont="bodyAccent">{LL.TAP_TO_VIEW()}</BaseText>
         </BaseView>
     )
 }
