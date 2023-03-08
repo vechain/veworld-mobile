@@ -21,8 +21,6 @@ import PicassoUtils from "./PicassoUtils"
 // import TransactionUtils from "./TransactionUtils"
 // import URLUtils from "./URLUtils"
 
-export * from "./PlatformUtils"
-
 export {
     // AliasUtils,
     // AsyncUtils,
