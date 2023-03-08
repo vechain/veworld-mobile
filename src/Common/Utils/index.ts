@@ -11,7 +11,6 @@ import FormattingUtils from "./FormattingUtils"
 import HexUtils from "./HexUtils"
 // import MappingUtils from "./MappingUtils"
 import PasswordUtils from "./PasswordUtils"
-import PlatformUtils from "./PlatformUtils"
 import SeedUtils from "./SeedUtils"
 import LockScreenUtils from "./LockScreenUtils"
 import AlertUtils from "./AlertUtils"
@@ -20,6 +19,8 @@ import PicassoUtils from "./PicassoUtils"
 // import TokenUtils from "./TokenUtils"
 // import TransactionUtils from "./TransactionUtils"
 // import URLUtils from "./URLUtils"
+
+export * from "./PlatformUtils"
 
 export {
     // AliasUtils,
@@ -35,7 +36,6 @@ export {
     HexUtils,
     // MappingUtils,
     PasswordUtils,
-    PlatformUtils,
     SeedUtils,
     LockScreenUtils,
     AlertUtils,
