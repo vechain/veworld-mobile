@@ -2,9 +2,8 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
-import { useTheme } from "~Common"
+import { useTheme, PlatformUtils } from "~Common"
 import { HomeStack, SettingsStack } from "~Navigation/Stacks"
-import { isIOS } from "~Common/Utils/PlatformUtils/Platform"
 
 const Tab = createBottomTabNavigator()
 
@@ -56,7 +55,7 @@ const baseStyles = StyleSheet.create({
         borderTopWidth: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        height: isIOS() ? 86 : 68,
+        height: PlatformUtils.isIOS() ? 86 : 68,
     },
     shadow: {
         shadowColor: "#000",
