@@ -73,7 +73,7 @@ export const SeedPhraseScreen = () => {
                         disabled={!mnemonic}
                         rightIcon={
                             <BaseIcon
-                                name="copy-outline"
+                                name="content-copy"
                                 color={theme.colors.card}
                                 size={10}
                             />

@@ -251,6 +251,10 @@ type RootTranslation = {
 	 */
 	TITLE_USER_PASSWORD: string
 	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
+	 */
+	TITLE_USER_PIN: string
+	/**
 	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
@@ -274,6 +278,14 @@ type RootTranslation = {
 	 * H​a​r​d​w​a​r​e​ ​W​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_HARDWARE: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SB_UNLOCK_WALLET_PIN: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​e​ ​r​e​q​u​e​s​t​e​d​ ​o​p​e​r​a​t​i​o​n​.
+	 */
+	SB_CONFIRM_PIN: string
 	/**
 	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
 	 */
@@ -571,6 +583,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_USER_PASSWORD: () => LocalizedString
 	/**
+	 * Insert your 6-digit PIN
+	 */
+	TITLE_USER_PIN: () => LocalizedString
+	/**
 	 * Import Local Wallet
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
@@ -594,6 +610,14 @@ export type TranslationFunctions = {
 	 * Hardware Wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
+	/**
+	 * Insert the pin you created in order to unlock your wallet.
+	 */
+	SB_UNLOCK_WALLET_PIN: () => LocalizedString
+	/**
+	 * Insert the pin you created in order to perform the requested operation.
+	 */
+	SB_CONFIRM_PIN: () => LocalizedString
 	/**
 	 * Account management
 	 */

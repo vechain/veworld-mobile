@@ -133,7 +133,7 @@ def reactNativeArchitectures() {
 apply from: "../../node_modules/react-native-vector-image/strip_svgs.gradle"
 
 project.ext.vectoricons = [
-    iconFontNames: [ 'Ionicons.ttf' ]
+    iconFontNames: [ 'MaterialIcons.ttf', 'MaterialCommunityIcons.ttf' ]
 ]
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
