@@ -44,6 +44,7 @@ const baseStyles = StyleSheet.create({
         width: "100%",
         flexGrow: 1,
         paddingLeft: 12,
+
     },
     tokenIcon: {
         width: 40,
