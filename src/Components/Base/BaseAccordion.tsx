@@ -15,8 +15,8 @@ import { BaseIcon, BaseSpacer } from "~Components"
 type Props = {
     headerComponent: React.ReactNode
     headerStyle?: StyleProp<ViewStyle>
-    headerOpenedStyle?: StyleProp<ViewStyle>
-    headerClosedStyle?: StyleProp<ViewStyle>
+    headerOpenedStyle?: ViewStyle
+    headerClosedStyle?: ViewStyle
     chevronContainerStyle?: StyleProp<
         Animated.AnimateStyle<StyleProp<ViewStyle>>
     >
@@ -41,10 +41,14 @@ export const BaseAccordion = ({
 
     const isOpen = useDerivedValue(() => open.value)
 
-    // const computedHeaderStyle = useDerivedValue(() => {
-    //     if (open.value) return headerOpenedStyle
-    //     return headerClosedStyle
-    // })
+    const computedHeaderStyle = useAnimatedStyle(() => {
+        if (open.value) return headerOpenedStyle || {}
+        return headerClosedStyle || {}
+    })
+
+    console.log(computedHeaderStyle)
+
+    console.log(open)
 
     console.log(isOpen)
     const bodyContainerDynamicStyle = useAnimatedStyle(() => {
@@ -90,7 +94,7 @@ export const BaseAccordion = ({
                 style={[
                     styles.headerContainer,
                     headerStyle,
-                    isOpen.value ? headerOpenedStyle : headerClosedStyle,
+                    computedHeaderStyle,
                 ]}>
                 {headerComponent}
                 {renderCollapseIcon}
@@ -114,5 +118,5 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     bodyContainer: { width: "100%", overflow: "hidden" },
-    bodyContent: { width: "100%", height: 10000 },
+    bodyContent: { width: "100%" },
 })
