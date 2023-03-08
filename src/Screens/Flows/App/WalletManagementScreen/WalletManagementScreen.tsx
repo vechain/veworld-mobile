@@ -1,18 +1,45 @@
 import { useNavigation, useTheme } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import { FlashList } from "@shopify/flash-list"
+import React, { useCallback, useState } from "react"
 
 import { SafeAreaView, StyleSheet } from "react-native"
+import { useBottomSheetModal } from "~Common"
 import { useDevicesList } from "~Common/Hooks/Entities"
 import { BaseIcon, BaseSpacer, BaseView } from "~Components"
-import { DeviceAccordion, WalletManagementHeader } from "./components"
+import { Device } from "~Storage"
+import {
+    DeviceBox,
+    WalletManagementBottomSheet,
+    WalletManagementHeader,
+} from "./components"
 
 export const WalletManagementScreen = () => {
     const nav = useNavigation()
     const theme = useTheme()
 
+    const devices = useDevicesList()
+    const [selectedDevice, setSelectedDevice] = useState<Device>()
+
+    const {
+        ref: walletManagementBottomSheetRef,
+        onOpen: openWalletManagementSheet,
+        onClose: closeWalletManagementSheet,
+    } = useBottomSheetModal()
+
     const goBack = useCallback(() => nav.goBack(), [nav])
 
-    const devices = useDevicesList()
+    const devicesListSeparator = useCallback(
+        () => <BaseSpacer height={16} />,
+        [],
+    )
+
+    const onDeviceClick = useCallback(
+        (device: Device) => () => {
+            setSelectedDevice(device)
+            openWalletManagementSheet()
+        },
+        [openWalletManagementSheet],
+    )
 
     return (
         <>
@@ -25,15 +52,49 @@ export const WalletManagementScreen = () => {
                 action={goBack}
             />
             <BaseSpacer height={20} />
-            <WalletManagementHeader />
-            <BaseSpacer height={24} />
-            <BaseView px={20}>
-                {devices.map(device => (
+
+            <BaseView px={20} style={{ height: "100%" }}>
+                <FlashList
+                    data={devices}
+                    keyExtractor={device => device.rootAddress}
+                    ListHeaderComponent={
+                        <>
+                            <WalletManagementHeader />
+                            <BaseSpacer height={24} />
+                        </>
+                    }
+                    ItemSeparatorComponent={devicesListSeparator}
+                    // contentContainerStyle={styles.listContainer}
+                    renderItem={({ item }) => {
+                        return (
+                            <DeviceBox
+                                device={item}
+                                onDeviceClick={onDeviceClick(item)}
+                            />
+                        )
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    estimatedItemSize={devices.length}
+                    estimatedListSize={{
+                        height: 184,
+                        width: 152 * devices.length + (devices.length - 1) * 16,
+                    }}
+                />
+
+                {selectedDevice && (
+                    <WalletManagementBottomSheet
+                        ref={walletManagementBottomSheetRef}
+                        onClose={closeWalletManagementSheet}
+                        device={selectedDevice}
+                    />
+                )}
+                {/* {devices.map(device => (
                     <BaseView key={device.rootAddress}>
                         <DeviceAccordion device={device} />
                         <BaseSpacer height={16} />
                     </BaseView>
-                ))}
+                ))} */}
             </BaseView>
         </>
     )

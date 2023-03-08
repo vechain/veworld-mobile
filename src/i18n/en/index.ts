@@ -30,6 +30,7 @@ const en: BaseTranslation = {
     BTN_SHOW_QR_CODE: "Show QR code",
     BTN_RENAME_ACCOUNT: "Rename account",
     BTN_REMOVE_ACCOUNT: "Remove account",
+    BTN_ADD_ACCOUNT: "Add account",
 
     // BODY
     BD_GDPR:
@@ -94,6 +95,10 @@ const en: BaseTranslation = {
     SB_UNLOCK_WALLET_PIN: "Insert the pin you created in order to unlock your wallet.",
     SB_CONFIRM_PIN: "Insert the pin you created in order to perform the requested operation.",
     SB_ACCOUNT_MANAGEMENT: "Account management",
+    SB_CHOOSE_A_WALLET: "Choose a wallet",
+    SB_EDIT_WALLET: "Edit wallet {name}",
+    SB_RENAME_WALLET: "Rename wallet",
+    SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
 
     // ELEMENTS
     FACE_ID: "Face ID",

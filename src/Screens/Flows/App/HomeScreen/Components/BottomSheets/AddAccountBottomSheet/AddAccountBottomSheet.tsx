@@ -7,6 +7,7 @@ import { Device } from "~Storage"
 import { DevicesList } from "./DevicesList"
 // import { BottomSheetFooter, BottomSheetFooterProps } from "@gorhom/bottom-sheet"
 import { StyleSheet } from "react-native"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     onClose: () => void
@@ -16,6 +17,7 @@ export const AddAccountBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose }, ref) => {
+    const { LL } = useI18nContext()
     const createAccountFor = useCreateAccount()
 
     const [selectedDevice, setSelectedDevice] = useState<Device>()
@@ -62,10 +64,12 @@ export const AddAccountBottomSheet = React.forwardRef<
                     disabled={!selectedDevice}
                     action={onCreateAccount}
                     w={100}
-                    title={"Add Account"}
+                    title={LL.BTN_ADD_ACCOUNT()}
                 />
             }>
-            <BaseText typographyFont="subTitle">Choose a wallet</BaseText>
+            <BaseText typographyFont="subTitle">
+                {LL.SB_CHOOSE_A_WALLET()}
+            </BaseText>
             <BaseSpacer height={16} />
             <DevicesList
                 selectedDevice={selectedDevice}

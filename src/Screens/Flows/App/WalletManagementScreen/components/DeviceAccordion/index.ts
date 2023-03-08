@@ -1,1 +1,1 @@
-export * from "./DeviceAccordion"
+export * from "./DeviceBox"
