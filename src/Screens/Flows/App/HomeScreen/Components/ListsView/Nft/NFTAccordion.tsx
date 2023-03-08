@@ -55,7 +55,7 @@ export const NFTAccordion = ({ headerComponent, bodyComponent }: Props) => {
                     style={styles.chevronIcon}
                     onPress={onChevronPress}>
                     <Animated.View style={dynamicStyle}>
-                        <BaseIcon name={"chevron-down-outline"} />
+                        <BaseIcon name={"chevron-down"} />
                     </Animated.View>
                 </TouchableOpacity>
             </>
