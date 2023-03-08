@@ -50,7 +50,7 @@ export const AnimatedTokenCard = memo(
                                             styles.animatedInnerContainer,
                                         ]}>
                                         <BaseIcon
-                                            name={"apps-outline"}
+                                            name={"drag"}
                                             size={28}
                                             action={() => onDeleteItem(item)}
                                         />
@@ -59,7 +59,7 @@ export const AnimatedTokenCard = memo(
                                     <Animated.View
                                         style={[
                                             animatedPositionInnerRow,
-                                            styles.aniamtedInnerRow,
+                                            styles.animatedInnerRow,
                                         ]}>
                                         <TokenCard
                                             token={item}
@@ -73,7 +73,7 @@ export const AnimatedTokenCard = memo(
 
                     <Animated.View style={animatedDeleteIcon}>
                         <BaseIcon
-                            name={"trash-outline"}
+                            name={"trash-can-outline"}
                             size={28}
                             action={() => onDeleteItem(item)}
                             style={styles.deleteIconColor}
@@ -107,7 +107,7 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
             position: "absolute",
             marginLeft: 12,
         },
-        aniamtedInnerRow: {
+        animatedInnerRow: {
             flexDirection: "row",
             justifyContent: "flex-start",
             borderRadius: 10,
