@@ -2,14 +2,19 @@ import React, { memo, useCallback, useState } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { AnimatedTokenCard } from "./TokenCard"
-import { ColorThemeType, Tokens_mock, useThemedStyles, Token } from "~Common"
+import { BaseSpacer } from "~Components"
+import { AnimatedTokenCard } from "./AnimatedTokenCard"
+import {
+    ColorThemeType,
+    Tokens_mock,
+    useThemedStyles,
+    Token,
+    PlatformUtils,
+} from "~Common"
+import { FungibleToken, VET, VTHO } from "~Common/Constant/Token/TokenConstants"
+import { AnimatedChartCard } from "./AnimatedChartCard"
 
-const NATIVE_TOKENS = [
-    { key: "1", label: "VET" },
-    { key: "2", label: "VTHO" },
-]
+const NATIVE_TOKENS: FungibleToken[] = [VET, VTHO]
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -23,7 +28,7 @@ export const TokenList = memo(
         const { styles } = useThemedStyles(baseStyles)
 
         const renderSeparator = useCallback(
-            () => <BaseSpacer height={16} />,
+            () => <BaseSpacer height={PlatformUtils.isAndroid() ? 26 : 16} />,
             [],
         )
 
@@ -34,12 +39,11 @@ export const TokenList = memo(
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
                 {NATIVE_TOKENS.map(token => (
-                    <BaseView
-                        my={10}
-                        key={token.key}
-                        style={styles.nativeTokenContainer}>
-                        <BaseText>{token.label}</BaseText>
-                    </BaseView>
+                    <AnimatedChartCard
+                        token={token}
+                        key={token.address}
+                        isEdit={isEdit}
+                    />
                 ))}
 
                 <NestableDraggableFlatList
@@ -71,19 +75,9 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             backgroundColor: theme.colors.background,
         },
-        nativeTokenContainer: {
-            height: 162,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: theme.colors.background,
-            marginBottom: 10,
-            borderWidth: 1,
-            borderRadius: 10,
-            marginHorizontal: 20,
-        },
 
         paddingTop: {
-            marginBottom: 24,
+            paddingBottom: 24,
             paddingTop: 16,
         },
     })
