@@ -38,7 +38,7 @@ export const AnimatedTokenCard = memo(
             <ShadowDecorator>
                 <View style={styles.outerContainer}>
                     <Animated.View style={animatedWidthRow}>
-                        <DropShadow style={styles.cardDhadow}>
+                        <DropShadow style={styles.cardShadow}>
                             <Pressable
                                 onLongPress={() => onDrag(drag)}
                                 disabled={isActive}
@@ -120,5 +120,5 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         deleteIconColor: {
             backgroundColor: theme.colors.secondary,
         },
-        cardDhadow: theme.shadows.card,
+        cardShadow: theme.shadows.card,
     })

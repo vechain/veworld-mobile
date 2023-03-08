@@ -62,7 +62,7 @@ export const AnimatedChartCard = ({ token, isEdit }: Props) => {
     }, [isEdit])
 
     return (
-        <DropShadow style={styles.cardDhadow}>
+        <DropShadow style={styles.cardShadow}>
             <Animated.View
                 style={[styles.nativeTokenContainer, animatedOuterCard]}>
                 <BaseView w={100} grow={1} px={12}>
@@ -120,5 +120,5 @@ const baseStyles = (theme: ColorThemeType) =>
         },
 
         fullWidth: { width: "100%" },
-        cardDhadow: theme.shadows.card,
+        cardShadow: theme.shadows.card,
     })
