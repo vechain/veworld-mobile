@@ -2,9 +2,8 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
-import { useTheme } from "~Common"
+import { useTheme, isIOS } from "~Common"
 import { HomeStack, SettingsStack } from "~Navigation/Stacks"
-import { isIOS } from "~Common"
 
 const Tab = createBottomTabNavigator()
 

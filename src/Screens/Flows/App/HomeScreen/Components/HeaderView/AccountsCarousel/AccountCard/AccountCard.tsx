@@ -2,8 +2,13 @@ import React, { memo } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
-import { ColorThemeType, CryptoUtils, useTheme, useThemedStyles } from "~Common"
-import { isIOS } from "~Common"
+import {
+    ColorThemeType,
+    CryptoUtils,
+    useTheme,
+    useThemedStyles,
+    isIOS,
+} from "~Common"
 import {
     AccountIcon,
     AddressButton,
