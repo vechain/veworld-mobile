@@ -4,7 +4,7 @@ import { ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseView } from "~Components"
-import { NFTCollectionAccordion, NFTItem } from "./NFTAccordion"
+import { NFTCollectionAccordion, NFTItem } from "./NFTCollectionAccordion"
 
 const NUM_ITEMS = 20
 function getColor(i: number) {
