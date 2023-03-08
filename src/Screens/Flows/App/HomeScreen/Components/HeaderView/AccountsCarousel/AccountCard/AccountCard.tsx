@@ -7,7 +7,7 @@ import {
     CryptoUtils,
     useTheme,
     useThemedStyles,
-    isIOS,
+    PlatformUtils,
 } from "~Common"
 import {
     AccountIcon,
@@ -66,7 +66,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                         action={openAccountManagement}
                     />
                 </BaseView>
-                <BaseSpacer height={isIOS() ? 18 : 10} />
+                <BaseSpacer height={PlatformUtils.isIOS() ? 18 : 10} />
                 <Balance balance={CryptoUtils.random().toString()} />
             </BaseView>
         </Animated.View>
