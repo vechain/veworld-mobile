@@ -74,7 +74,7 @@ export const NFTList = memo(({ ...animatedViewProps }: Props) => {
                                     renderItem={({ item }) => {
                                         return (
                                             <DropShadow
-                                                style={styles.cardDhadow}>
+                                                style={styles.cardShadow}>
                                                 <BaseView
                                                     style={[
                                                         styles.nftCard,
@@ -138,5 +138,5 @@ const baseStyles = (theme: ColorThemeType) =>
             marginRight: 10,
         },
 
-        cardDhadow: theme.shadows.nftCard,
+        cardShadow: theme.shadows.nftCard,
     })

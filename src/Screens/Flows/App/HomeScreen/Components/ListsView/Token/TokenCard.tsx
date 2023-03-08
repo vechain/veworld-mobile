@@ -1,198 +1,59 @@
-import React, { memo, useCallback } from "react"
-import { Pressable, View, StyleSheet } from "react-native"
-import {
-    RenderItemParams,
-    ShadowDecorator,
-} from "react-native-draggable-flatlist"
+import { StyleSheet, View } from "react-native"
+import React from "react"
+import { BaseText } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseText } from "~Components"
-import { ColorThemeType, Token, useThemedStyles } from "~Common"
-import DropShadow from "react-native-drop-shadow"
+import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
+import { Token } from "~Common"
 
-interface IAnimatedTokenCard extends RenderItemParams<Token> {
-    isEdit: boolean
-    onDeleteItem: (item: Token) => void
+type Props = {
+    token: FungibleToken | Token
+    isAnimation: boolean
 }
 
-export const AnimatedTokenCard = memo(
-    ({ item, drag, isActive, isEdit, onDeleteItem }: IAnimatedTokenCard) => {
-        const { styles, theme } = useThemedStyles(baseStyles(isActive))
+export function TokenCard({ token, isAnimation }: Props) {
+    const animatedOpacityReverse = useAnimatedStyle(() => {
+        return {
+            opacity: withTiming(isAnimation ? 0 : 1, {
+                duration: 200,
+            }),
+        }
+    }, [isAnimation])
 
-        const onDrag = useCallback(
-            (_drag: any) => {
-                return isEdit ? _drag() : undefined
-            },
-            [isEdit],
-        )
+    return (
+        <Animated.View style={[baseStyles.innerRow]}>
+            <View style={baseStyles.tokenIcon} />
 
-        const animatedWidthRow = useAnimatedStyle(() => {
-            return {
-                width: withTiming(isEdit ? "88%" : "100%", {
-                    duration: 200,
-                }),
-            }
-        }, [isEdit])
+            <View style={baseStyles.textMargin}>
+                <BaseText typographyFont="subTitle">{token.name}</BaseText>
+                <BaseText>{token.symbol}</BaseText>
+            </View>
 
-        const animatedPositionInnerRow = useAnimatedStyle(() => {
-            return {
-                transform: [
-                    {
-                        translateX: withTiming(isEdit ? 40 : 0, {
-                            duration: 200,
-                        }),
-                    },
-                ],
-            }
-        }, [isEdit])
+            <Animated.View style={animatedOpacityReverse}>
+                <BaseText typographyFont="title">0.2202$</BaseText>
+                <BaseText>0.36</BaseText>
+            </Animated.View>
+        </Animated.View>
+    )
+}
 
-        const animatedOpacity = useAnimatedStyle(() => {
-            return {
-                opacity: withTiming(isEdit ? 1 : 0, {
-                    duration: 200,
-                }),
-            }
-        }, [isEdit])
-
-        const animatedOpacityReverse = useAnimatedStyle(() => {
-            return {
-                opacity: withTiming(isEdit ? 0 : 1, {
-                    duration: 200,
-                }),
-            }
-        }, [isEdit])
-
-        const animatedDeleteIcon = useAnimatedStyle(() => {
-            return {
-                transform: [
-                    {
-                        translateX: withTiming(isEdit ? -10 : 0, {
-                            duration: 200,
-                        }),
-                    },
-                ],
-            }
-        }, [isEdit])
-
-        return (
-            <ShadowDecorator>
-                <View style={styles.outerContainer}>
-                    <Animated.View style={animatedWidthRow}>
-                        <DropShadow style={styles.cardDhadow}>
-                            <Pressable
-                                onLongPress={() => onDrag(drag)}
-                                disabled={isActive}
-                                style={styles.pressable}>
-                                <Animated.View
-                                    style={styles.animatedOuterContainer}>
-                                    <Animated.View
-                                        style={[
-                                            animatedOpacity,
-                                            styles.animatedInnerContainer,
-                                        ]}>
-                                        <BaseIcon
-                                            name="drag"
-                                            color={theme.colors.secondary}
-                                            size={28}
-                                            action={() => onDeleteItem(item)}
-                                        />
-                                    </Animated.View>
-
-                                    <Animated.View
-                                        style={[
-                                            animatedPositionInnerRow,
-                                            styles.aniamtedInnerRow,
-                                        ]}>
-                                        <View style={styles.innerRow}>
-                                            <View style={styles.tokenIcon} />
-
-                                            <View style={styles.textMargin}>
-                                                <BaseText typographyFont="subTitle">
-                                                    {item.name}
-                                                </BaseText>
-                                                <BaseText>
-                                                    {item.symbol}
-                                                </BaseText>
-                                            </View>
-
-                                            <Animated.View
-                                                style={animatedOpacityReverse}>
-                                                <BaseText typographyFont="title">
-                                                    0.2202$
-                                                </BaseText>
-                                                <BaseText>0.36</BaseText>
-                                            </Animated.View>
-                                        </View>
-                                    </Animated.View>
-                                </Animated.View>
-                            </Pressable>
-                        </DropShadow>
-                    </Animated.View>
-
-                    <Animated.View style={animatedDeleteIcon}>
-                        <BaseIcon
-                            name={"trash-can-outline"}
-                            size={32}
-                            action={() => onDeleteItem(item)}
-                            style={styles.deleteIconColor}
-                        />
-                    </Animated.View>
-                </View>
-            </ShadowDecorator>
-        )
+const baseStyles = StyleSheet.create({
+    innerRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        flexGrow: 1,
+        paddingLeft: 12,
     },
-)
-
-const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
-    StyleSheet.create({
-        outerContainer: {
-            flexDirection: "row",
-            alignItems: "center",
-        },
-        pressable: {
-            borderRadius: 10,
-            height: 62,
-            marginHorizontal: 20,
-        },
-        animatedOuterContainer: {
-            backgroundColor: theme.colors.card,
-            flexDirection: "row",
-            alignItems: "center",
-            borderRadius: 10,
-            opacity: isActive ? 0.6 : 1,
-        },
-        animatedInnerContainer: {
-            position: "absolute",
-            marginLeft: 12,
-        },
-
-        aniamtedInnerRow: {
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            borderRadius: 10,
-            paddingHorizontal: 14,
-            paddingVertical: 12,
-            height: "100%",
-            width: "100%",
-        },
-        innerRow: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-        },
-        tokenIcon: {
-            width: 40,
-            height: 40,
-            backgroundColor: "red",
-            borderRadius: 20,
-            marginRight: 10,
-            position: "absolute",
-        },
-        textMargin: {
-            marginLeft: 50,
-        },
-        deleteIconColor: {
-            backgroundColor: theme.colors.secondary,
-        },
-        cardDhadow: theme.shadows.card,
-    })
+    tokenIcon: {
+        width: 40,
+        height: 40,
+        backgroundColor: "red",
+        borderRadius: 20,
+        marginRight: 10,
+        position: "absolute",
+    },
+    textMargin: {
+        marginLeft: 38,
+    },
+})
