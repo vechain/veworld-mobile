@@ -1,0 +1,43 @@
+name: Build / Test
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  # on push to ALL branches
+  push:
+    branches:
+      - '*'
+
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }}-build-test
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build / Test
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mobile: [ "ios", "android" ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Use Node v18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn e2e.${{ matrix.mobile }}.build.d
+
+      - name: Test
+        run: yarn e2e.${{ matrix.mobile }}.test.d
+
