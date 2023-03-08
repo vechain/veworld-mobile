@@ -21,8 +21,8 @@ export const Header = memo(({ action }: Props) => {
             </BaseView>
 
             <BaseIcon
-                name={"add-sharp"}
-                size={32}
+                name={"wallet-outline"}
+                size={24}
                 bg={theme.colors.secondary}
                 action={action}
             />

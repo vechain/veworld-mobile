@@ -108,14 +108,14 @@ export const ImportSeedPhraseScreen = () => {
 
                         <BaseView orientation="row" selfAlign="flex-end">
                             <BaseIcon
-                                name={"clipboard-outline"}
+                                name={"content-paste"}
                                 size={32}
                                 style={{ marginHorizontal: 20 }}
                                 bg={theme.colors.secondary}
                                 action={onPasteFronClipboard}
                             />
                             <BaseIcon
-                                name={"trash-outline"}
+                                name={"trash-can-outline"}
                                 size={32}
                                 bg={theme.colors.secondary}
                                 action={onClearSeed}

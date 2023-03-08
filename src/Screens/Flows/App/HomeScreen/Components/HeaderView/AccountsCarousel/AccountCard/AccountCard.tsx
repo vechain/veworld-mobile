@@ -54,9 +54,9 @@ export const AccountCard: React.FC<Props> = memo(props => {
                         </BaseView>
                     </BaseView>
                     <BaseIcon
-                        name="settings-outline"
+                        name="account-cog-outline"
                         color={theme.colors.textReversed}
-                        size={24}
+                        size={28}
                         action={openAccountManagement}
                     />
                 </BaseView>
