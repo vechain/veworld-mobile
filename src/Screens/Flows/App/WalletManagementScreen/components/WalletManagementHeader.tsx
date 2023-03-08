@@ -30,6 +30,7 @@ export const WalletManagementHeader = () => {
                     name="priority-low"
                     style={{ marginHorizontal: 16 }}
                     color={theme.colors.text}
+                    disabled={true}
                 />
                 <BaseIcon
                     size={24}
