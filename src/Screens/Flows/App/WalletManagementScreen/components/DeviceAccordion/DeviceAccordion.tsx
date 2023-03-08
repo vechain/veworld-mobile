@@ -1,109 +1,100 @@
-import React, { useCallback, useMemo } from "react"
-import { Animated, StyleSheet, View } from "react-native"
+import { FlashList } from "@shopify/flash-list"
+import React, { useMemo } from "react"
+import { StyleSheet } from "react-native"
+
+import { ColorThemeType, useThemedStyles } from "~Common"
+import { useAccountsList } from "~Common/Hooks/Entities"
 import {
-    measure,
-    runOnUI,
-    useAnimatedRef,
-    useAnimatedStyle,
-    useDerivedValue,
-    useSharedValue,
-    withTiming,
-} from "react-native-reanimated"
-import { useTheme } from "~Common"
-import { BaseIcon, BaseText } from "~Components"
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    BaseAccordion,
+} from "~Components"
 import { Device } from "~Storage"
+import { AccountWithBalanceBox } from "./AccountWithBalanceBox"
 
 type Props = {
     device: Device
 }
 
 export const DeviceAccordion: React.FC<Props> = ({ device }) => {
-    const theme = useTheme()
-    const aref = useAnimatedRef<View>()
-    const open = useSharedValue(false)
-    const height = useSharedValue(0)
-    const progress = useDerivedValue(() =>
-        open.value ? withTiming(1) : withTiming(0),
-    )
+    const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
 
-    const bodyContainerDynamicStyle = useAnimatedStyle(() => {
-        return {
-            height: height.value * progress.value + 0.1,
-            opacity: progress.value === 0 ? 0 : 1,
-        }
-    })
-
-    const dynamicStyle = useAnimatedStyle(() => {
-        return {
-            transform: [{ rotate: `${progress.value * 180}deg` }],
-        }
-    })
-
-    const onChevronPress = useCallback(() => {
-        if (height.value === 0) {
-            runOnUI(() => {
-                "worklet"
-
-                height.value = measure(aref)!.height
-            })()
-        }
-        open.value = !open.value
-    }, [aref, height, open])
-
-    const renderCollapseIcon = useMemo(() => {
+    const accounts = useAccountsList()
+    const headerComponent = useMemo(() => {
         return (
-            <Animated.View style={[dynamicStyle, styles.chevronIcon]}>
+            <BaseView style={themedStyles.headerComponent}>
+                <BaseText typographyFont="subTitle">{device.alias}</BaseText>
                 <BaseIcon
-                    name={"chevron-down"}
+                    name={"pencil-outline"}
                     color={theme.colors.text}
-                    size={36}
-                    action={onChevronPress}
+                    size={24}
+                    action={() => {}}
+                    disabled
                 />
-            </Animated.View>
+            </BaseView>
         )
-    }, [dynamicStyle, onChevronPress, theme])
+    }, [themedStyles, theme, device])
+
+    console.log(accounts.length)
+
+    const bodyComponent = useMemo(() => {
+        const renderSeparator = () => <BaseSpacer height={2} />
+        return (
+            <FlashList
+                data={accounts}
+                keyExtractor={account => account.address}
+                ItemSeparatorComponent={renderSeparator}
+                // contentContainerStyle={styles.listContainer}
+                renderItem={({ item }) => {
+                    return <AccountWithBalanceBox account={item} />
+                }}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                estimatedItemSize={accounts.length}
+                // estimatedListSize={{
+                //     height: 184,
+                //     width: 152 * accounts.length + (accounts.length - 1) * 16,
+                // }}
+            />
+        )
+    }, [accounts])
 
     return (
-        <>
-            <View style={styles.headerContainer}>
-                <View style={styles.headerContent}>
-                    <BaseText typographyFont="subTitle">
-                        {device.alias}
-                    </BaseText>
-                    <BaseIcon
-                        name={"edit"}
-                        color={theme.colors.text}
-                        size={24}
-                        action={() => {}}
-                        disabled
-                    />
-                    {renderCollapseIcon}
-                </View>
-            </View>
-            <Animated.View
-                style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
-                <View ref={aref} style={styles.bodyContent}>
-                    {/* {bodyComponent} */}
-                </View>
-            </Animated.View>
-        </>
+        <BaseAccordion
+            headerComponent={headerComponent}
+            headerStyle={themedStyles.headerContainer}
+            headerOpenedStyle={themedStyles.openedHeaderContainer}
+            headerClosedStyle={themedStyles.closedHeaderContainer}
+            bodyComponent={bodyComponent}
+        />
     )
 }
 
-const styles = StyleSheet.create({
-    headerContainer: {
-        width: "100%",
-        flexDirection: "row",
-    },
-    headerContent: {
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    bodyContainer: { width: "100%", overflow: "hidden" },
-    bodyContent: { width: "100%" },
-    chevronIcon: {
-        marginRight: 20,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        headerContainer: {
+            width: "100%",
+            flexDirection: "row",
+            paddingHorizontal: 16,
+            paddingVertical: 13,
+            backgroundColor: theme.colors.card,
+        },
+        openedHeaderContainer: {
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+        },
+        closedHeaderContainer: {
+            borderRadius: 16,
+        },
+        headerComponent: {
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flex: 0.95,
+        },
+        bodyContainer: { width: "100%", overflow: "hidden" },
+        bodyContent: { width: "100%" },
+    })

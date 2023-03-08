@@ -3,7 +3,7 @@ import React, { useCallback } from "react"
 
 import { SafeAreaView, StyleSheet } from "react-native"
 import { useDevicesList } from "~Common/Hooks/Entities"
-import { BaseIcon, BaseSpacer } from "~Components"
+import { BaseIcon, BaseSpacer, BaseView } from "~Components"
 import { DeviceAccordion, WalletManagementHeader } from "./components"
 
 export const WalletManagementScreen = () => {
@@ -27,9 +27,14 @@ export const WalletManagementScreen = () => {
             <BaseSpacer height={20} />
             <WalletManagementHeader />
             <BaseSpacer height={24} />
-            {devices.map(device => (
-                <DeviceAccordion key={device.rootAddress} device={device} />
-            ))}
+            <BaseView px={20}>
+                {devices.map(device => (
+                    <BaseView key={device.rootAddress}>
+                        <DeviceAccordion device={device} />
+                        <BaseSpacer height={16} />
+                    </BaseView>
+                ))}
+            </BaseView>
         </>
     )
 }

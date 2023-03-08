@@ -6,7 +6,7 @@ import { PaginationItem } from "./PaginationItem"
 import { AccountCard } from "./AccountCard"
 import { BaseSpacer, BaseView } from "~Components"
 import { useActiveCard } from "../../../Hooks/useActiveCard"
-import { Account, useListListener, useRealm } from "~Storage"
+import { useAccountsList } from "~Common/Hooks/Entities"
 
 const width = Dimensions.get("window").width - 40
 
@@ -25,8 +25,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
         const progressValue = useSharedValue<number>(0)
         const onScrollEnd = useActiveCard()
 
-        const { store } = useRealm()
-        const accounts = useListListener(Account.getName(), store) as Account[]
+        const accounts = useAccountsList()
 
         const onProgressChange = useCallback(
             (_: number, absoluteProgress: number) => {
