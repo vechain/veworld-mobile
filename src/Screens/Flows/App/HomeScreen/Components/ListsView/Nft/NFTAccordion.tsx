@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet, TouchableOpacity, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import Animated, {
     measure,
     runOnUI,
@@ -9,6 +9,7 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from "react-native-reanimated"
+import { useTheme } from "~Common"
 import { BaseIcon } from "~Components"
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 }
 
 export const NFTAccordion = ({ headerComponent, bodyComponent }: Props) => {
+    const theme = useTheme()
     const aref = useAnimatedRef<View>()
     const open = useSharedValue(false)
     const height = useSharedValue(0)
@@ -50,17 +52,16 @@ export const NFTAccordion = ({ headerComponent, bodyComponent }: Props) => {
 
     const renderCollapseIcon = useMemo(() => {
         return (
-            <>
-                <TouchableOpacity
-                    style={styles.chevronIcon}
-                    onPress={onChevronPress}>
-                    <Animated.View style={dynamicStyle}>
-                        <BaseIcon name={"chevron-down-outline"} />
-                    </Animated.View>
-                </TouchableOpacity>
-            </>
+            <Animated.View style={[dynamicStyle, styles.chevronIcon]}>
+                <BaseIcon
+                    name={"chevron-down"}
+                    color={theme.colors.text}
+                    size={36}
+                    action={onChevronPress}
+                />
+            </Animated.View>
         )
-    }, [dynamicStyle, onChevronPress])
+    }, [dynamicStyle, onChevronPress, theme])
 
     return (
         <>
