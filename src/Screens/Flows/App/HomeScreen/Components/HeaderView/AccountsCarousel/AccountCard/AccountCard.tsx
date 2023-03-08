@@ -3,6 +3,7 @@ import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
 import { ColorThemeType, CryptoUtils, useTheme, useThemedStyles } from "~Common"
+import { isIOS } from "~Common/Utils/PlatformUtils/Platform"
 import {
     AccountIcon,
     AddressButton,
@@ -60,7 +61,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                         action={openAccountManagement}
                     />
                 </BaseView>
-                <BaseSpacer height={18} />
+                <BaseSpacer height={isIOS() ? 18 : 10} />
                 <Balance balance={CryptoUtils.random().toString()} />
             </BaseView>
         </Animated.View>
