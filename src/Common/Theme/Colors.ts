@@ -2,6 +2,7 @@ export type Colors = {
     primary: string
     primaryReversed: string
     primaryDisabled: string
+    neutralDisabled: string
     secondary: string
     tertiary: string
     disabled: string
@@ -40,6 +41,7 @@ const light: Colors = {
     primary: COLORS.DARK_PURPLE,
     primaryReversed: COLORS.LIME_GREEN,
     primaryDisabled: COLORS.PURPLE_DISABLED,
+    neutralDisabled: COLORS.WHITE_DISABLED,
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
@@ -60,6 +62,7 @@ const dark: Colors = {
     primary: COLORS.LIME_GREEN,
     primaryReversed: COLORS.DARK_PURPLE,
     primaryDisabled: COLORS.LIME_GREEN_DISABLED,
+    neutralDisabled: COLORS.PURPLE_DISABLED,
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
