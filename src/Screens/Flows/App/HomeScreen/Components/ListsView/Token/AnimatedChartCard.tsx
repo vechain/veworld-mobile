@@ -47,7 +47,7 @@ export const AnimatedChartCard = ({ token, isEdit }: Props) => {
                 },
             ),
         }
-    }, [isEdit])
+    }, [isEdit, theme.isDark])
 
     const animatedInnerCard = useAnimatedStyle(() => {
         return {
