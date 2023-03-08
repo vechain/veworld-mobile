@@ -11,6 +11,7 @@ import FormattingUtils from "./FormattingUtils"
 import HexUtils from "./HexUtils"
 // import MappingUtils from "./MappingUtils"
 import PasswordUtils from "./PasswordUtils"
+import PlatformUtils from "./PlatformUtils"
 import SeedUtils from "./SeedUtils"
 import LockScreenUtils from "./LockScreenUtils"
 import AlertUtils from "./AlertUtils"
@@ -36,6 +37,7 @@ export {
     HexUtils,
     // MappingUtils,
     PasswordUtils,
+    PlatformUtils,
     SeedUtils,
     LockScreenUtils,
     AlertUtils,
