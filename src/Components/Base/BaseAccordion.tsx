@@ -39,18 +39,11 @@ export const BaseAccordion = ({
         open.value ? withTiming(1) : withTiming(0),
     )
 
-    const isOpen = useDerivedValue(() => open.value)
-
     const computedHeaderStyle = useAnimatedStyle(() => {
         if (open.value) return headerOpenedStyle || {}
         return headerClosedStyle || {}
     })
 
-    console.log(computedHeaderStyle)
-
-    console.log(open)
-
-    console.log(isOpen)
     const bodyContainerDynamicStyle = useAnimatedStyle(() => {
         return {
             height: height.value * progress.value + 0.1,

@@ -34,7 +34,6 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
                 action={() => {}}
                 justifyContent="space-between"
                 bg={!account.visible ? theme.colors.neutralDisabled : undefined}
-                // disabled={!account.visible}
                 containerStyle={baseStyles.container}>
                 <BaseText style={baseStyles.alias}>{account.alias}</BaseText>
                 <BaseView style={baseStyles.rightSubContainer}>

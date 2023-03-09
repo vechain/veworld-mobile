@@ -73,14 +73,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
                     <FlashList
                         data={device.accounts}
                         keyExtractor={account => account.address}
-                        // ListHeaderComponent={
-                        //     <>
-                        //         <WalletManagementHeader />
-                        //         <BaseSpacer height={24} />
-                        //     </>
-                        // }
                         ItemSeparatorComponent={accountsListSeparator}
-                        // contentContainerStyle={styles.listContainer}
                         renderItem={({ item }) => {
                             return <AccountDetailBox account={item} />
                         }}

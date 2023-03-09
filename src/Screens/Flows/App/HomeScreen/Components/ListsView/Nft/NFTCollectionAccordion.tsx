@@ -107,21 +107,3 @@ const baseStyles = (theme: ColorThemeType) =>
 
         cardShadow: theme.shadows.nftCard,
     })
-
-// const styles = StyleSheet.create({
-//     headerContainer: {
-//         width: "100%",
-//         flexDirection: "row",
-//     },
-//     headerContent: {
-//         width: "100%",
-//         flexDirection: "row",
-//         justifyContent: "space-between",
-//         alignItems: "center",
-//     },
-//     bodyContainer: { width: "100%", overflow: "hidden" },
-//     bodyContent: { width: "100%" },
-//     chevronIcon: {
-//         marginRight: 20,
-//     },
-// })
