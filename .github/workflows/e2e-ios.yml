@@ -16,7 +16,8 @@ on:
 jobs:
   build-run-ios-e2e:
     name: Build & Run iOS E2E
-    runs-on: macos-latest
+    #runs-on: macos-latest
+    runs-on: ARM64
     #timeout-minutes: 15
 
     env:
@@ -59,15 +60,13 @@ jobs:
           gem update cocoapods xcodeproj
           cd ios && pod install && cd ..
       
-      - name: Brew
-        run: brew tap wix/brew
+      - name: Install Applesimutils
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
       
-      - name: Install Apple simulator
-        run: brew install applesimutils
-      
-      - name: Build iOS release
+      - name: Detox build iOS
         run: yarn detox build --configuration ios.sim.debug
       
-      - name: Run Detox tests
-        #run: yarn detox test --configuration ios.sim.debug --cleanup --debug-synchronization 200
-        run: yarn detox test --configuration ios.sim.debug
+      - name: Detox test iOS
+        run: yarn detox test --configuration ios.sim.debug --cleanup

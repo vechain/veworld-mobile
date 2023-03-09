@@ -1,5 +1,5 @@
 import { Given, Then } from "@cucumber/cucumber"
-import detox, { expect } from "detox"
+import detox from "detox"
 
 // Default cucumber timeout has to be deactivated for this step
 Given("The user has installed the app", { timeout: -1 }, async () => {
@@ -22,5 +22,9 @@ Given("The user closes the app", async () => {
 })
 
 Then("The app is started successfully", async () => {
-    await expect(element(by.id("welcome-title-id"))).toExist()
+    //await expect(element(by.id("welcome-title-id"))).toExist()
+
+    await waitFor(element(by.id("welcome-title-id")))
+        .toBeVisible()
+        .withTimeout(5_000)
 })
