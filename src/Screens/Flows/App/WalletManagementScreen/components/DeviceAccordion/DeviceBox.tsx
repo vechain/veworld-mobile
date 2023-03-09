@@ -1,7 +1,6 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { useTheme } from "~Common"
 
-import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseIcon, BaseText, BaseTouchableBox } from "~Components"
 import { Device } from "~Storage"
 
@@ -11,10 +10,10 @@ type Props = {
 }
 
 export const DeviceBox: React.FC<Props> = ({ device, onDeviceClick }) => {
-    const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
+    const theme = useTheme()
 
     return (
-        <BaseTouchableBox action={onDeviceClick} style={themedStyles.box}>
+        <BaseTouchableBox action={onDeviceClick} justifyContent="space-between">
             <BaseText typographyFont="subTitle">{device.alias}</BaseText>
             <BaseIcon
                 name={"pencil-outline"}
@@ -24,14 +23,3 @@ export const DeviceBox: React.FC<Props> = ({ device, onDeviceClick }) => {
         </BaseTouchableBox>
     )
 }
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        box: {
-            width: "100%",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            backgroundColor: theme.colors.card,
-        },
-    })

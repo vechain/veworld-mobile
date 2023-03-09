@@ -1,6 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, FormattingUtils, useThemedStyles } from "~Common"
+import { FormattingUtils, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSpacer,
@@ -14,17 +14,21 @@ type Props = {
     account: Account
 }
 export const AccountDetailBox: React.FC<Props> = ({ account }) => {
-    const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
+    const theme = useTheme()
+
     return (
         <BaseView
             w={100}
             orientation="row"
             align="center"
             justify="space-between">
-            <BaseTouchableBox action={() => {}} style={themedStyles.container}>
-                <BaseText style={themedStyles.alias}>{account.alias}</BaseText>
-                <BaseView style={themedStyles.rightSubContainer}>
-                    <BaseText style={themedStyles.address} fontSize={10}>
+            <BaseTouchableBox
+                action={() => {}}
+                justifyContent="space-between"
+                containerStyle={baseStyles.container}>
+                <BaseText style={baseStyles.alias}>{account.alias}</BaseText>
+                <BaseView style={baseStyles.rightSubContainer}>
+                    <BaseText style={baseStyles.address} fontSize={10}>
                         {FormattingUtils.humanAddress(account.address, 4, 6)}
                     </BaseText>
                     <BaseSpacer height={4} />
@@ -33,7 +37,7 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
             </BaseTouchableBox>
             <BaseIcon
                 size={24}
-                style={{ marginLeft: 16 }}
+                style={baseStyles.eyeIcon}
                 name="eye-outline"
                 bg={theme.colors.secondary}
             />
@@ -41,25 +45,19 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        alias: {
-            opacity: 0.7,
-        },
-        address: {
-            opacity: 0.7,
-        },
-        container: {
-            backgroundColor: theme.colors.card,
-            width: "70%",
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-        },
-        rightSubContainer: {
-            flexDirection: "column",
-            alignItems: "flex-end",
-        },
-    })
+const baseStyles = StyleSheet.create({
+    alias: {
+        opacity: 0.7,
+    },
+    address: {
+        opacity: 0.7,
+    },
+    container: {
+        flex: 1,
+    },
+    rightSubContainer: {
+        flexDirection: "column",
+        alignItems: "flex-end",
+    },
+    eyeIcon: { marginLeft: 16, flex: 0.1 },
+})

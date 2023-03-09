@@ -16,11 +16,7 @@ export const WalletManagementHeader = () => {
     }, [nav])
 
     return (
-        <BaseView
-            align="center"
-            justify="space-between"
-            orientation="row"
-            px={20}>
+        <BaseView align="center" justify="space-between" orientation="row">
             <BaseText typographyFont="title">
                 {LL.TITLE_WALLET_MANAGEMENT()}
             </BaseText>
@@ -28,7 +24,7 @@ export const WalletManagementHeader = () => {
                 <BaseIcon
                     size={24}
                     name="priority-low"
-                    style={{ marginHorizontal: 16 }}
+                    style={{ marginRight: 16 }}
                     color={theme.colors.text}
                     disabled={true}
                 />

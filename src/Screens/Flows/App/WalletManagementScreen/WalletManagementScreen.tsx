@@ -38,7 +38,7 @@ export const WalletManagementScreen = () => {
             setSelectedDevice(device)
             openWalletManagementSheet()
         },
-        [openWalletManagementSheet],
+        [openWalletManagementSheet, setSelectedDevice],
     )
 
     return (
@@ -89,12 +89,6 @@ export const WalletManagementScreen = () => {
                         device={selectedDevice}
                     />
                 )}
-                {/* {devices.map(device => (
-                    <BaseView key={device.rootAddress}>
-                        <DeviceAccordion device={device} />
-                        <BaseSpacer height={16} />
-                    </BaseView>
-                ))} */}
             </BaseView>
         </>
     )
