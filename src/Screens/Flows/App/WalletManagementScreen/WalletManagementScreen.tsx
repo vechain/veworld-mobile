@@ -41,6 +41,8 @@ export const WalletManagementScreen = () => {
         [openWalletManagementSheet, setSelectedDevice],
     )
 
+    console.log(selectedDevice, walletManagementBottomSheetRef)
+
     return (
         <>
             <SafeAreaView />
@@ -82,13 +84,11 @@ export const WalletManagementScreen = () => {
                     }}
                 />
 
-                {selectedDevice && (
-                    <WalletManagementBottomSheet
-                        ref={walletManagementBottomSheetRef}
-                        onClose={closeWalletManagementSheet}
-                        device={selectedDevice}
-                    />
-                )}
+                <WalletManagementBottomSheet
+                    ref={walletManagementBottomSheetRef}
+                    onClose={closeWalletManagementSheet}
+                    device={selectedDevice}
+                />
             </BaseView>
         </>
     )

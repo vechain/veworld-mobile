@@ -12,12 +12,11 @@ import {
 
 import { Device } from "~Storage"
 import { useI18nContext } from "~i18n"
-import { useAccountsList } from "~Common/Hooks/Entities"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { FlashList } from "@shopify/flash-list"
 
 type Props = {
-    device: Device
+    device?: Device
     onClose: () => void
 }
 
@@ -26,7 +25,6 @@ export const WalletManagementBottomSheet = React.forwardRef<
     Props
 >(({ device }, ref) => {
     const theme = useTheme()
-    const accounts = useAccountsList()
     const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
@@ -51,7 +49,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
                 w={100}
                 align="center">
                 <BaseText typographyFont="subTitle">
-                    {LL.SB_EDIT_WALLET({ name: device.alias })}
+                    {LL.SB_EDIT_WALLET({ name: device?.alias })}
                 </BaseText>
 
                 <BaseIcon
@@ -63,7 +61,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
             </BaseView>
             <BaseSpacer height={16} />
             <BaseTouchableBox action={() => {}}>
-                <BaseText>{device.alias}</BaseText>
+                <BaseText>{device?.alias}</BaseText>
             </BaseTouchableBox>
             <BaseSpacer height={16} />
             <BaseText typographyFont="button">
@@ -71,29 +69,32 @@ export const WalletManagementBottomSheet = React.forwardRef<
             </BaseText>
             <BaseSpacer height={16} />
             <BaseView h={100} w={100}>
-                <FlashList
-                    data={accounts}
-                    keyExtractor={account => account.address}
-                    // ListHeaderComponent={
-                    //     <>
-                    //         <WalletManagementHeader />
-                    //         <BaseSpacer height={24} />
-                    //     </>
-                    // }
-                    ItemSeparatorComponent={accountsListSeparator}
-                    // contentContainerStyle={styles.listContainer}
-                    renderItem={({ item }) => {
-                        return <AccountDetailBox account={item} />
-                    }}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    estimatedItemSize={accounts.length}
-                    estimatedListSize={{
-                        height: 184,
-                        width:
-                            152 * accounts.length + (accounts.length - 1) * 16,
-                    }}
-                />
+                {device && (
+                    <FlashList
+                        data={device.accounts}
+                        keyExtractor={account => account.address}
+                        // ListHeaderComponent={
+                        //     <>
+                        //         <WalletManagementHeader />
+                        //         <BaseSpacer height={24} />
+                        //     </>
+                        // }
+                        ItemSeparatorComponent={accountsListSeparator}
+                        // contentContainerStyle={styles.listContainer}
+                        renderItem={({ item }) => {
+                            return <AccountDetailBox account={item} />
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        estimatedItemSize={device.accounts.length}
+                        estimatedListSize={{
+                            height: 184,
+                            width:
+                                152 * device.accounts.length +
+                                (device.accounts.length - 1) * 16,
+                        }}
+                    />
+                )}
             </BaseView>
         </BaseBottomSheet>
     )
