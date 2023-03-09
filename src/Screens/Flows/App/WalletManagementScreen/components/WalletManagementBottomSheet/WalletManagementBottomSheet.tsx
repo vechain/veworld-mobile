@@ -70,7 +70,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
                 {LL.SB_RENAME_REORDER_ACCOUNTS()}
             </BaseText>
             <BaseSpacer height={16} />
-            <BaseView h={100}>
+            <BaseView h={100} w={100}>
                 <FlashList
                     data={accounts}
                     keyExtractor={account => account.address}

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { FormattingUtils, useTheme } from "~Common"
 import {
@@ -8,13 +8,21 @@ import {
     BaseTouchableBox,
     BaseView,
 } from "~Components"
-import { Account } from "~Storage"
+import { Account, useRealm } from "~Storage"
 
 type Props = {
     account: Account
 }
 export const AccountDetailBox: React.FC<Props> = ({ account }) => {
     const theme = useTheme()
+
+    const { store } = useRealm()
+
+    const toggleVisibility = useCallback(() => {
+        store.write(() => {
+            account.visible = !account.visible
+        })
+    }, [account, store])
 
     return (
         <BaseView
@@ -25,6 +33,8 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
             <BaseTouchableBox
                 action={() => {}}
                 justifyContent="space-between"
+                bg={!account.visible ? theme.colors.neutralDisabled : undefined}
+                // disabled={!account.visible}
                 containerStyle={baseStyles.container}>
                 <BaseText style={baseStyles.alias}>{account.alias}</BaseText>
                 <BaseView style={baseStyles.rightSubContainer}>
@@ -38,8 +48,9 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
             <BaseIcon
                 size={24}
                 style={baseStyles.eyeIcon}
-                name="eye-outline"
+                name={account.visible ? "eye-off-outline" : "eye-outline"}
                 bg={theme.colors.secondary}
+                action={toggleVisibility}
             />
         </BaseView>
     )
