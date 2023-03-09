@@ -56,7 +56,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
 
                 <BaseIcon
                     name={"pencil"}
-                    size={32}
+                    size={24}
                     bg={theme.colors.secondary}
                     // action={()}
                 />

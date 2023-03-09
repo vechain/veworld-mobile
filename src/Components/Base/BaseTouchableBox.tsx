@@ -7,19 +7,13 @@ import {
     ViewStyle,
 } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useThemedStyles } from "~Common"
-
-type JustifyContent =
-    | "flex-start"
-    | "flex-end"
-    | "center"
-    | "space-between"
-    | "space-around"
-    | "space-evenly"
-
-type AlignItems = "flex-start" | "flex-end" | "center" | "stretch" | "baseline"
-
-type FlexDirection = "row" | "column" | "row-reverse" | "column-reverse"
+import {
+    AlignItems,
+    ColorThemeType,
+    FlexDirection,
+    JustifyContent,
+    useThemedStyles,
+} from "~Common"
 
 type Props = {
     children: React.ReactNode
