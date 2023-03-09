@@ -28,10 +28,10 @@ jobs:
           fetch-depth: 1
 
       - name: Use Node v18
-          uses: actions/setup-node@v3
-          with:
-            node-version: 18
-            cache: "yarn"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
 
       - name: Cache node modules
         uses: actions/cache@v3
