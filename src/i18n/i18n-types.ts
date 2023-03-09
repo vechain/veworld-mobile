@@ -291,9 +291,9 @@ type RootTranslation = {
 	 */
 	SB_ACCOUNT_MANAGEMENT: string
 	/**
-	 * C​r​e​a​t​e​ ​a​ ​n​e​w​ ​w​a​l​l​e​t
+	 * C​h​o​o​s​e​ ​a​ ​w​a​l​l​e​t
 	 */
-	SB_CREATE_WALLET: string
+	SB_CHOOSE_A_WALLET: string
 	/**
 	 * {​a​l​i​a​s​}​ ​(​{​a​c​c​o​u​n​t​s​}​ ​a​c​c​o​u​n​t​s​)
 	 * @param {unknown} accounts
@@ -633,9 +633,9 @@ export type TranslationFunctions = {
 	 */
 	SB_ACCOUNT_MANAGEMENT: () => LocalizedString
 	/**
-	 * Create a new wallet
+	 * Choose a wallet
 	 */
-	SB_CREATE_WALLET: () => LocalizedString
+	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
 	 * {alias} ({accounts} accounts)
 	 */

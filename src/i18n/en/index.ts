@@ -93,7 +93,7 @@ const en: BaseTranslation = {
     SB_UNLOCK_WALLET_PIN: "Insert the pin you created in order to unlock your wallet.",
     SB_CONFIRM_PIN: "Insert the pin you created in order to perform the requested operation.",
     SB_ACCOUNT_MANAGEMENT: "Account management",
-    SB_CREATE_WALLET: "Create a new wallet",
+    SB_CHOOSE_A_WALLET: "Choose a wallet",
     SB_DEVICE_CARD : "{alias} ({accounts} accounts)",
 
     // ELEMENTS

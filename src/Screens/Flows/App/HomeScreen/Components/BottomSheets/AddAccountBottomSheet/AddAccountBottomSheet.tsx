@@ -69,7 +69,7 @@ export const AddAccountBottomSheet = React.forwardRef<
                 />
             }>
             <BaseText typographyFont="subTitle">
-                {LL.SB_CREATE_WALLET()}
+                {LL.SB_CHOOSE_A_WALLET()}
             </BaseText>
             <BaseSpacer height={16} />
             <DevicesList
