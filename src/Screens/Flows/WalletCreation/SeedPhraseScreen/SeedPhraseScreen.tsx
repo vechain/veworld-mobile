@@ -75,7 +75,8 @@ export const SeedPhraseScreen = () => {
                             <BaseIcon
                                 name="content-copy"
                                 color={theme.colors.card}
-                                size={10}
+                                size={12}
+                                style={{ marginLeft: 6 }}
                             />
                         }
                     />

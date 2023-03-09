@@ -1,2 +1,2 @@
-export * from "./NFTList"
+export * from "./NFTCollectionsList"
 export * from "./NFTCard"

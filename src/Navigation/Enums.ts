@@ -12,4 +12,6 @@ export enum Routes {
     SETTINGS = "Settings",
     CREATE_WALLET_FLOW = "Create_Wallet_Flow",
     WALLET_SUCCESS = "Wallet_Success",
+    HOME = "Home",
+    WALLET_MANAGEMENT = "Wallet_Management",
 }

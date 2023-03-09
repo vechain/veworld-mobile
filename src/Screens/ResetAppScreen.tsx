@@ -32,7 +32,13 @@ export const ResetAppScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseIcon name="chevron-left" action={onBackPress} />
+            <BaseIcon
+                name="chevron-left"
+                style={{ alignSelf: "flex-start" }}
+                size={24}
+                color={theme.colors.text}
+                action={onBackPress}
+            />
 
             <BaseSpacer height={20} />
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
@@ -68,7 +74,7 @@ export const ResetAppScreen = () => {
                         action={appReset}
                         w={100}
                         px={20}
-                        title={LL.BTN_RESET_APP_RESET()}
+                        title={LL.TITLE_RESET_APP()}
                         disabled={!IsChecked}
                         bgColor={theme.colors.danger}
                     />

@@ -111,6 +111,10 @@ type RootTranslation = {
 	 */
 	BTN_REMOVE_ACCOUNT: string
 	/**
+	 * A​d​d​ ​a​c​c​o​u​n​t
+	 */
+	BTN_ADD_ACCOUNT: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -271,6 +275,10 @@ type RootTranslation = {
 	 */
 	TITLE_RESET_APP: string
 	/**
+	 * W​a​l​l​e​t​ ​m​a​n​a​g​e​m​e​n​t
+	 */
+	TITLE_WALLET_MANAGEMENT: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -294,6 +302,19 @@ type RootTranslation = {
 	 * C​h​o​o​s​e​ ​a​ ​w​a​l​l​e​t
 	 */
 	SB_CHOOSE_A_WALLET: string
+	/**
+	 * E​d​i​t​ ​w​a​l​l​e​t​ ​{​n​a​m​e​}
+	 * @param {unknown} name
+	 */
+	SB_EDIT_WALLET: RequiredParams<'name'>
+	/**
+	 * R​e​n​a​m​e​ ​w​a​l​l​e​t
+	 */
+	SB_RENAME_WALLET: string
+	/**
+	 * R​e​n​a​m​e​ ​o​r​ ​r​e​o​r​d​e​r​ ​a​c​c​o​u​n​t​s​ 
+	 */
+	SB_RENAME_REORDER_ACCOUNTS: string
 	/**
 	 * {​a​l​i​a​s​}​ ​(​{​a​c​c​o​u​n​t​s​}​ ​a​c​c​o​u​n​t​s​)
 	 * @param {unknown} accounts
@@ -452,6 +473,10 @@ export type TranslationFunctions = {
 	 * Remove account
 	 */
 	BTN_REMOVE_ACCOUNT: () => LocalizedString
+	/**
+	 * Add account
+	 */
+	BTN_ADD_ACCOUNT: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -613,6 +638,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_RESET_APP: () => LocalizedString
 	/**
+	 * Wallet management
+	 */
+	TITLE_WALLET_MANAGEMENT: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -636,6 +665,18 @@ export type TranslationFunctions = {
 	 * Choose a wallet
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
+	/**
+	 * Edit wallet {name}
+	 */
+	SB_EDIT_WALLET: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Rename wallet
+	 */
+	SB_RENAME_WALLET: () => LocalizedString
+	/**
+	 * Rename or reorder accounts 
+	 */
+	SB_RENAME_REORDER_ACCOUNTS: () => LocalizedString
 	/**
 	 * {alias} ({accounts} accounts)
 	 */

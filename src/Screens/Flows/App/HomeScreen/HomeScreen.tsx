@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
@@ -13,11 +13,8 @@ import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
 
 export const HomeScreen = () => {
-    const nav = useNavigation()
     const {
         ref: accountManagementBottomSheetRef,
         onOpen: openAccountManagementSheet,
@@ -52,10 +49,6 @@ export const HomeScreen = () => {
         console.log("activeCardIndex", activeCardIndex)
     }, [activeCardIndex])
 
-    const navigateToCreateWallet = useCallback(() => {
-        nav.navigate(Routes.CREATE_WALLET_FLOW)
-    }, [nav])
-
     return (
         <>
             <SafeAreaView />
@@ -66,7 +59,6 @@ export const HomeScreen = () => {
                     visibleHeightRef.current = visibleHeight
                 }}>
                 <HeaderView
-                    navigateToCreateWallet={navigateToCreateWallet}
                     openAccountManagementSheet={openAccountManagementSheet}
                     setActiveTab={setActiveTab}
                     activeTab={activeTab}

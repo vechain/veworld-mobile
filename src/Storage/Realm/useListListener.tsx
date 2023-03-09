@@ -6,10 +6,16 @@ type ListenerCallback = Realm.CollectionChangeCallback<
     Realm.Object<unknown, never>
 >
 
-export function useListListener(className: string, database: Realm) {
-    const initialList = database.objects(className)
+export function useListListener(
+    className: string,
+    database: Realm,
+    query?: string,
+) {
+    const initialList = query
+        ? database.objects(className).filtered(query)
+        : database.objects(className)
+
     const [data, setData] = useState([...initialList])
-    // const memoizedData = useMemo(() => data, [data])
 
     useEffect(() => {
         try {

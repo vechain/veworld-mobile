@@ -17,9 +17,8 @@ export const AddAccountBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose }, ref) => {
-    const createAccountFor = useCreateAccount()
-
     const { LL } = useI18nContext()
+    const createAccountFor = useCreateAccount()
 
     const [selectedDevice, setSelectedDevice] = useState<Device>()
 
@@ -65,7 +64,7 @@ export const AddAccountBottomSheet = React.forwardRef<
                     disabled={!selectedDevice}
                     action={onCreateAccount}
                     w={100}
-                    title={"Add Account"}
+                    title={LL.BTN_ADD_ACCOUNT()}
                 />
             }>
             <BaseText typographyFont="subTitle">
