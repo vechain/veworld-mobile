@@ -1,0 +1,73 @@
+name: Cucumber testing iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }}-cucumber-testing
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 15
+
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_14.2.app
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
+    - name: Use Node v18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
+
+    - name: Cache node modules
+      uses: actions/cache@v3
+      id: cache
+      with:
+        path: node_modules
+        key: node-modules-${{ hashFiles('**/yarn.lock') }}
+
+    - name: Rebuild detox
+      if: steps.cache.outputs.cache-hit == 'true'
+      run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+
+    - name: Install Dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: yarn install
+
+    - name: Cache Pods
+      uses: actions/cache@v3
+      id: podcache
+      with:
+        path: ios/Pods
+        key: pods-${{ hashFiles('**/Podfile.lock') }}
+
+    - name: Update Pods
+      run: |
+        gem update cocoapods xcodeproj
+        cd ios && pod install && cd ..
+    
+    - name: Brew
+      run: brew tap wix/brew
+    
+    - name: Install Apple simulator
+      run: brew install applesimutils
+    
+    - name: Build iOS release
+      run: yarn detox build e2e --configuration ios.sim.release
+    
+    - name: Run Detox tests
+      run: yarn detox test e2e --configuration ios.sim.release --cleanup --debug-synchronization 200
