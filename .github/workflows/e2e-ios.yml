@@ -9,12 +9,13 @@ on:
     branches:
       - main
 
-concurrency:
-  group: ${{ github.head_ref || github.ref_name }}-cucumber-testing
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.head_ref || github.ref_name }}-cucumber-testing
+#   cancel-in-progress: true
 
 jobs:
-  build:
+  build-run-ios-e2e:
+    name: Build & Run iOS E2E
     runs-on: macos-latest
     timeout-minutes: 15
 
@@ -24,14 +25,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Use Node v18
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "yarn"
+          #cache: "yarn"
 
       - name: Cache node modules
         uses: actions/cache@v3
