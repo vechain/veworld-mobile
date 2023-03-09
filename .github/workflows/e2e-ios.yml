@@ -47,7 +47,7 @@ jobs:
 
       - name: Install Yarn dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --prefer-offline
+        run: yarn install
 
       - name: Install macOS dependencies
         run: |
