@@ -99,6 +99,7 @@ const en: BaseTranslation = {
     SB_EDIT_WALLET: "Edit wallet {name}",
     SB_RENAME_WALLET: "Rename wallet",
     SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
+    SB_DEVICE_CARD : "{alias} ({accounts} accounts)",
 
     // ELEMENTS
     FACE_ID: "Face ID",

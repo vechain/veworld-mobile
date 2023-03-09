@@ -316,6 +316,12 @@ type RootTranslation = {
 	 */
 	SB_RENAME_REORDER_ACCOUNTS: string
 	/**
+	 * {​a​l​i​a​s​}​ ​(​{​a​c​c​o​u​n​t​s​}​ ​a​c​c​o​u​n​t​s​)
+	 * @param {unknown} accounts
+	 * @param {unknown} alias
+	 */
+	SB_DEVICE_CARD: RequiredParams<'accounts' | 'alias'>
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -671,6 +677,10 @@ export type TranslationFunctions = {
 	 * Rename or reorder accounts 
 	 */
 	SB_RENAME_REORDER_ACCOUNTS: () => LocalizedString
+	/**
+	 * {alias} ({accounts} accounts)
+	 */
+	SB_DEVICE_CARD: (arg: { accounts: unknown, alias: unknown }) => LocalizedString
 	/**
 	 * Face ID
 	 */
