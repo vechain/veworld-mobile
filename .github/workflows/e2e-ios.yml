@@ -69,4 +69,5 @@ jobs:
         run: yarn detox build --configuration ios.sim.debug
       
       - name: Run Detox tests
-        run: yarn detox test --configuration ios.sim.debug --cleanup --debug-synchronization 200
+        #run: yarn detox test --configuration ios.sim.debug --cleanup --debug-synchronization 200
+        run: yarn detox test --configuration ios.sim.debug
