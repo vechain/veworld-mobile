@@ -291,6 +291,16 @@ type RootTranslation = {
 	 */
 	SB_ACCOUNT_MANAGEMENT: string
 	/**
+	 * C​h​o​o​s​e​ ​a​ ​w​a​l​l​e​t
+	 */
+	SB_CHOOSE_A_WALLET: string
+	/**
+	 * {​a​l​i​a​s​}​ ​(​{​a​c​c​o​u​n​t​s​}​ ​a​c​c​o​u​n​t​s​)
+	 * @param {unknown} accounts
+	 * @param {unknown} alias
+	 */
+	SB_DEVICE_CARD: RequiredParams<'accounts' | 'alias'>
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -622,6 +632,14 @@ export type TranslationFunctions = {
 	 * Account management
 	 */
 	SB_ACCOUNT_MANAGEMENT: () => LocalizedString
+	/**
+	 * Choose a wallet
+	 */
+	SB_CHOOSE_A_WALLET: () => LocalizedString
+	/**
+	 * {alias} ({accounts} accounts)
+	 */
+	SB_DEVICE_CARD: (arg: { accounts: unknown, alias: unknown }) => LocalizedString
 	/**
 	 * Face ID
 	 */
