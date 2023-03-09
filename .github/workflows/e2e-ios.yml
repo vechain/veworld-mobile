@@ -45,7 +45,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Cache Pods
         uses: actions/cache@v3
@@ -68,4 +68,4 @@ jobs:
         run: yarn detox build --configuration ios.sim.debug
       
       - name: Detox test iOS
-        run: yarn detox test --configuration ios.sim.debug --cleanup
+        run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --debug-synchronization 500
