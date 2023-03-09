@@ -61,7 +61,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                             name={isShow ? "eye-off-outline" : "eye-outline"}
                             size={18}
                             color={iconColor}
-                            style={{ width: 100, height: 100 }}
+                            style={baseStyles.icon}
                         />
                     </BaseView>
                 </BaseView>
@@ -81,4 +81,5 @@ const baseStyles = StyleSheet.create({
         borderTopRightRadius: 16,
         borderBottomEndRadius: 16,
     },
+    icon: { flex: 1, width: 100 },
 })
