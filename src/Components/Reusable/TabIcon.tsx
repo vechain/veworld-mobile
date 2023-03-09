@@ -13,7 +13,10 @@ export const TabIcon: FC<Props> = memo(({ focused, title }) => {
     const { styles } = useThemedStyles(baseStyles(focused))
 
     return (
-        <BaseView justify="center" align="center" style={styles.container}>
+        <BaseView
+            justifyContent="center"
+            alignItems="center"
+            style={styles.container}>
             <Icon
                 name={title.toLowerCase()}
                 size={24}

@@ -29,12 +29,12 @@ export const TabbarHeader: React.FC<Props> = memo(
         )
 
         return (
-            <BaseView align="center">
+            <BaseView alignItems="center">
                 <BaseView
                     w={50}
-                    orientation="row"
-                    justify="space-between"
-                    align="center">
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center">
                     {entries.map(entry => {
                         const isSelected = activeTab === entry.value
                         return (

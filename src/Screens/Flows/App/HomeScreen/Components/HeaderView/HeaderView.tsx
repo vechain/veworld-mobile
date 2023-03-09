@@ -21,7 +21,7 @@ export const HeaderView = memo(
     }: Props) => {
         return (
             <>
-                <BaseView align="center">
+                <BaseView alignItems="center">
                     <Header action={navigateToCreateWallet} />
                     <BaseSpacer height={20} />
                     <AccountsCarousel

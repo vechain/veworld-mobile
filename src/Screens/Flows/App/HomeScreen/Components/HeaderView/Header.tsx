@@ -12,10 +12,10 @@ export const Header = memo(({ action }: Props) => {
         <BaseView
             w={100}
             px={20}
-            orientation="row"
-            align="center"
-            justify="space-between">
-            <BaseView align="flex-start" selfAlign="flex-start">
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between">
+            <BaseView alignItems="flex-start" alignSelf="flex-start">
                 <BaseText typographyFont="body">Welcome to</BaseText>
                 <BaseText typographyFont="largeTitle">VeWorld</BaseText>
             </BaseView>

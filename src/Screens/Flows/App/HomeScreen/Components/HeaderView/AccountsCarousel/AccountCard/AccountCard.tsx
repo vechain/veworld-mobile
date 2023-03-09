@@ -34,22 +34,22 @@ export const AccountCard: React.FC<Props> = memo(props => {
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
-                background={theme.colors.primary}
-                isFlex
-                justify="flex-start"
-                align="flex-start"
-                radius={24}
+                bg={theme.colors.primary}
+                flex={1}
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                borderRadius={24}
                 px={16}
                 py={16}
                 style={style}>
                 <BaseView
-                    orientation="row"
-                    justify="space-between"
-                    align="flex-start"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
                     w={100}>
-                    <BaseView orientation="row" align="center">
+                    <BaseView flexDirection="row" alignItems="center">
                         <AccountIcon account={account} />
-                        <BaseView px={8}>
+                        <BaseView px={8} alignItems="flex-start">
                             <BaseText
                                 typographyFont="buttonPrimary"
                                 color={theme.colors.textReversed}>

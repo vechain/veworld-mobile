@@ -2,9 +2,8 @@ import React, { memo } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
-import { useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText, BaseView } from "~Components"
-import { ThemeType } from "~Model"
 import { Device } from "~Storage"
 
 interface Props extends AnimateProps<ViewProps> {
@@ -18,11 +17,11 @@ export const DeviceCard: React.FC<Props> = memo(props => {
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
-                background={theme.colors.primary}
-                isFlex
-                justify="center"
-                align="center"
-                radius={24}
+                bg={theme.colors.primary}
+                flex={1}
+                justifyContent="center"
+                alignItems="center"
+                borderRadius={24}
                 px={16}
                 py={16}
                 style={style}>
@@ -34,7 +33,7 @@ export const DeviceCard: React.FC<Props> = memo(props => {
     )
 })
 
-const baseStyles = (theme: ThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             flex: 1,

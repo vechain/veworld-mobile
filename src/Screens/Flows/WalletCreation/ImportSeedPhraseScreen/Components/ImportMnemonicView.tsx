@@ -30,6 +30,7 @@ export const ImportMnemonicView = ({ seed, onChangeText, isError }: Props) => {
 const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
+            flex: 1,
             color: theme.colors.text,
             backgroundColor: theme.colors.card,
             borderColor: isError

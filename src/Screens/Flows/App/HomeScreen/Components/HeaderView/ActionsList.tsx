@@ -4,9 +4,9 @@ import { BaseText, BaseView } from "~Components"
 export const ActionsList = memo(() => {
     return (
         <BaseView
-            orientation="row"
-            justify="space-evenly"
-            align="center"
+            flexDirection="row"
+            justifyContent="space-evenly"
+            alignItems="center"
             px={20}
             py={30}>
             <BaseText>Buy</BaseText>

@@ -11,8 +11,8 @@ type Props = {
 export const ListSlide = ({ item }: Props) => {
     return (
         <BaseView
-            align="center"
-            justify="flex-start"
+            alignItems="center"
+            justifyContent="flex-start"
             py={80}
             style={{ width: Dimensions.get("window").width }}>
             <VectorImage source={item.icon} />

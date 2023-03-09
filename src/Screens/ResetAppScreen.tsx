@@ -35,8 +35,12 @@ export const ResetAppScreen = () => {
             <BaseIcon name="chevron-left" action={onBackPress} />
 
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="space-between" grow={1} mx={20}>
-                <BaseView selfAlign="flex-start">
+            <BaseView
+                alignItems="flex-start"
+                justifyContent="space-between"
+                flexGrow={1}
+                mx={20}>
+                <BaseView alignItems="flex-start">
                     <BaseText typographyFont="largeTitle">
                         {LL.TITLE_RESET_APP()}
                     </BaseText>
@@ -52,7 +56,7 @@ export const ResetAppScreen = () => {
                     </BaseText>
                 </BaseView>
 
-                <BaseView align="center" w={100}>
+                <BaseView alignItems="flex-start" w={100}>
                     <BaseText
                         typographyFont="footNoteAccent"
                         color="red"
@@ -68,7 +72,7 @@ export const ResetAppScreen = () => {
                         action={appReset}
                         w={100}
                         px={20}
-                        title={LL.BTN_RESET_APP_RESET()}
+                        title={LL.TITLE_RESET_APP()}
                         disabled={!IsChecked}
                         bgColor={theme.colors.danger}
                     />

@@ -24,8 +24,8 @@ export const WelcomeScreen = () => {
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
 
-            <BaseView align="center" mx={20} grow={1}>
-                <BaseView orientation="row">
+            <BaseView alignItems="center" mx={20} flexGrow={1}>
+                <BaseView flexDirection="row">
                     <BaseText
                         typographyFont="largeTitle"
                         testID="welcome-title-id">
@@ -37,18 +37,18 @@ export const WelcomeScreen = () => {
                 <BaseSpacer height={120} />
 
                 <BaseView
-                    align="center"
-                    justify="space-between"
+                    alignItems="center"
+                    justifyContent="space-between"
                     w={100}
-                    grow={1}>
-                    <BaseView align="center">
+                    flexGrow={1}>
+                    <BaseView alignItems="center">
                         <VectorImage source={VeChainVetLogo} />
                         <BaseText align="center" py={20}>
                             {LL.BD_WELCOME_SCREEN()}
                         </BaseText>
                     </BaseView>
 
-                    <BaseView align="center" w={100}>
+                    <BaseView alignItems="center" w={100}>
                         <BaseText typographyFont="caption" py={10}>
                             {LL.BD_GDPR()}
                         </BaseText>

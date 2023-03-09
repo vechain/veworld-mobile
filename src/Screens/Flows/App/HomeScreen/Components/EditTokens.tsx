@@ -24,7 +24,7 @@ export const EditTokens = memo(({ isEdit, setIsEdit }: Props) => {
                 />
             )
         return (
-            <BaseView align="center" orientation="row">
+            <BaseView alignItems="center" flexDirection="row">
                 <BaseIcon
                     name="plus"
                     bg={theme.colors.secondary}
@@ -45,9 +45,9 @@ export const EditTokens = memo(({ isEdit, setIsEdit }: Props) => {
 
     return (
         <BaseView
-            orientation="row"
-            justify="space-between"
-            align="center"
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
             px={20}
             my={20}>
             <BaseText typographyFont="subTitle">Your Tokens</BaseText>

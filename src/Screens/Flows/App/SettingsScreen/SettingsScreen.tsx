@@ -6,7 +6,7 @@ import { ChangeTheme } from "./Components/ChangeTheme"
 export const SettingsScreen = () => {
     return (
         <BaseSafeArea>
-            <BaseView align="center" justify="center" mx={20}>
+            <BaseView alignItems="center" justifyContent="center" mx={20}>
                 <BaseText>Settings Screen</BaseText>
                 <BaseSpacer height={40} />
                 <SecureApp />

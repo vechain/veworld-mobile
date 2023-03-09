@@ -73,9 +73,9 @@ export const AccountsCarousel: React.FC<Props> = memo(
 
                 {!!progressValue && (
                     <BaseView
-                        orientation="row"
-                        justify="space-between"
-                        selfAlign="center">
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        alignSelf="center">
                         {accounts.map((account, index) => (
                             <PaginationItem
                                 animValue={progressValue}

@@ -26,3 +26,5 @@ export const Theme: ThemeType = {
     radius,
     spacing,
 }
+
+export * from "./StylesProps"

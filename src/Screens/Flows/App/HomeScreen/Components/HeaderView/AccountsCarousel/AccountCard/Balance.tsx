@@ -21,7 +21,7 @@ export const Balance: React.FC<Props> = ({ balance }) => {
     }, [balance, isVisible])
     return (
         <>
-            <BaseView orientation="row" align="center">
+            <BaseView flexDirection="row" alignItems="center">
                 <BaseText
                     color={theme.colors.textReversed}
                     typographyFont="body">
@@ -34,7 +34,7 @@ export const Balance: React.FC<Props> = ({ balance }) => {
                     size={18}
                 />
             </BaseView>
-            <BaseView orientation="row" align="flex-end">
+            <BaseView flexDirection="row" alignItems="flex-end">
                 <BaseText
                     color={theme.colors.textReversed}
                     typographyFont="hugeTitle">

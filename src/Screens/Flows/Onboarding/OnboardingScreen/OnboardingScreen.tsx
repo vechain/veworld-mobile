@@ -70,7 +70,7 @@ export const OnboardingScreen = () => {
     return (
         <BaseSafeArea grow={1} testID="ONBOARDING_SCREEN">
             <BaseSpacer height={20} />
-            <BaseView align="center" grow={1}>
+            <BaseView alignItems="center" flexGrow={1}>
                 <VectorImage source={VeChainVetLogoWithTitle} />
 
                 <FlatList
@@ -88,7 +88,7 @@ export const OnboardingScreen = () => {
                     keyExtractor={item => item.title}
                 />
 
-                <BaseView align="center" w={100} px={20}>
+                <BaseView alignItems="center" w={100} px={20}>
                     <BaseButton
                         action={onNavigate}
                         typographyFont="footNoteAccent"

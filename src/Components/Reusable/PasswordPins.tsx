@@ -50,7 +50,7 @@ export const PasswordPins: FC<Props> = memo(
 
         return (
             <BaseView>
-                <BaseView orientation="row" justify="center">
+                <BaseView flexDirection="row" justifyContent="center">
                     {UserPinArray.map((digit, index) => {
                         return (
                             <BaseView

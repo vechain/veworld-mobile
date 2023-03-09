@@ -70,8 +70,8 @@ export const TutorialScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" grow={1}>
-                <BaseView selfAlign="flex-start" mx={20}>
+            <BaseView alignItems="center" flexGrow={1}>
+                <BaseView alignSelf="flex-start" mx={20}>
                     <BaseText typographyFont="largeTitle">
                         Create Wallet
                     </BaseText>
@@ -92,7 +92,7 @@ export const TutorialScreen = () => {
                     keyExtractor={item => item.title}
                 />
 
-                <BaseView align="center" w={100} px={20}>
+                <BaseView alignItems="center" w={100} px={20}>
                     <BaseButton
                         action={onNavigate}
                         typographyFont="footNoteAccent"

@@ -92,11 +92,11 @@ export const ImportSeedPhraseScreen = () => {
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
                 <BaseView
-                    align="center"
-                    justify="space-between"
-                    grow={1}
+                    alignItems="flex-start"
+                    justifyContent="space-between"
+                    flexGrow={1}
                     mx={20}>
-                    <BaseView selfAlign="flex-start">
+                    <BaseView alignItems="flex-start">
                         <BaseText typographyFont="title">
                             {LL.TITLE_WALLET_IMPORT_LOCAL()}
                         </BaseText>
@@ -106,11 +106,11 @@ export const ImportSeedPhraseScreen = () => {
 
                         <BaseSpacer height={20} />
 
-                        <BaseView orientation="row" selfAlign="flex-end">
+                        <BaseView flexDirection="row" alignSelf="flex-end">
                             <BaseIcon
                                 name={"content-paste"}
                                 size={32}
-                                style={{ marginHorizontal: 20 }}
+                                style={{ marginRight: 20 }}
                                 bg={theme.colors.secondary}
                                 action={onPasteFronClipboard}
                             />
@@ -123,8 +123,11 @@ export const ImportSeedPhraseScreen = () => {
                         </BaseView>
 
                         <BaseSpacer height={40} />
-
-                        <DropShadow style={theme.shadows.card}>
+                        <DropShadow
+                            style={[
+                                theme.shadows.card,
+                                { flexDirection: "row" },
+                            ]}>
                             <ImportMnemonicView
                                 seed={seed}
                                 onChangeText={onChangeText}

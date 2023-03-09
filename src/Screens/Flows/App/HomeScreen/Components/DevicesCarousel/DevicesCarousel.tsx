@@ -68,9 +68,9 @@ export const DevicesCarousel: React.FC<Props> = memo(({ devices }) => {
 
             {!!progressValue && (
                 <BaseView
-                    orientation="row"
-                    justify="space-between"
-                    selfAlign="center">
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignSelf="center">
                     {devices.map((device, index) => (
                         <PaginationItem
                             animValue={progressValue}

@@ -15,7 +15,7 @@ export type JustifyContent =
     | "space-evenly"
 export type FlexWrap = "wrap" | "nowrap" | "wrap-reverse"
 
-export type AlignSelf = "auto" & FlexAlignType
+export type AlignSelf = FlexAlignType | "auto"
 
 export type AlignContent =
     | "flex-start"

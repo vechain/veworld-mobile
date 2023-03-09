@@ -23,18 +23,18 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
         <DropShadow style={[theme.shadows.card]}>
             <TouchableWithoutFeedback onPress={toggleShow}>
                 <BaseView
-                    orientation="row"
+                    flexDirection="row"
                     w={100}
-                    radius={16}
-                    background={theme.colors.card}>
+                    borderRadius={16}
+                    bg={theme.colors.card}>
                     <BaseView
                         px={16}
                         py={12}
                         style={baseStyles.box}
-                        orientation="row"
-                        wrap
+                        flexDirection="row"
+                        flexWrap="wrap"
                         w={92}
-                        justify="space-between">
+                        justifyContent="space-between">
                         {mnemonicArray.map((word, index) => (
                             <BaseText
                                 typographyFont="footNoteAccent"
@@ -54,9 +54,9 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                         px={16}
                         py={12}
                         style={baseStyles.button}
-                        justify="center"
-                        align="center"
-                        background={theme.colors.primary}>
+                        justifyContent="center"
+                        alignItems="center"
+                        bg={theme.colors.primary}>
                         <BaseIcon
                             name={isShow ? "eye-off-outline" : "eye-outline"}
                             size={18}

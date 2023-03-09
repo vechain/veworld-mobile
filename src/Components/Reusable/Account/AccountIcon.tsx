@@ -37,7 +37,7 @@ const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = ({
     const uri = getPicassoImgSrc(address).toString()
 
     return (
-        <BaseView radius={8} style={picassoIconStyles.view}>
+        <BaseView borderRadius={8} style={picassoIconStyles.view}>
             <SvgXml xml={uri} width={size} height={size} />
         </BaseView>
     )

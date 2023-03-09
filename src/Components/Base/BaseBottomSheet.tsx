@@ -55,7 +55,7 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     w={100}
                     px={24}
                     py={24}
-                    align="flex-start"
+                    alignItems="flex-start"
                     style={contentStyle}>
                     {children}
                 </BaseView>
@@ -63,8 +63,8 @@ const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     <BaseView
                         w={100}
                         px={24}
-                        align="center"
-                        justify="center"
+                        alignItems="center"
+                        justifyContent="center"
                         style={footerStyle}>
                         {footer}
                     </BaseView>

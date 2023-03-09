@@ -54,10 +54,13 @@ export const NFTList = memo(({ ...animatedViewProps }: Props) => {
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             {ARRAY_LIST.map((data, index) => (
-                <BaseView key={index} style={{ paddingVertical: 12 }}>
+                <BaseView key={index} py={12}>
                     <NFTAccordion
                         headerComponent={
-                            <BaseView orientation="row" align="center" px={20}>
+                            <BaseView
+                                flexDirection="row"
+                                alignItems="center"
+                                px={20}>
                                 <BaseView style={styles.nftPreviewImage} />
                                 <BaseText typographyFont="subTitle">
                                     {data.title}

@@ -29,7 +29,7 @@ export const ConfirmSeedPhraseScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseView justify="space-between" grow={1} mx={20}>
+            <BaseView justifyContent="space-between" flexGrow={1} mx={20}>
                 <BaseText typographyFont="title" my={10}>
                     Confirm Mnemonic
                 </BaseText>

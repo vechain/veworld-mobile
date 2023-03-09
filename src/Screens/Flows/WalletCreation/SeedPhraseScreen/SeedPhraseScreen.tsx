@@ -50,8 +50,12 @@ export const SeedPhraseScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="space-between" grow={1} mx={20}>
-                <BaseView selfAlign="flex-start">
+            <BaseView
+                alignItems="flex-start"
+                justifyContent="space-between"
+                flexGrow={1}
+                mx={20}>
+                <BaseView alignItems="flex-start">
                     <BaseText typographyFont="title" align="left">
                         {LL.TITLE_MNEMONIC()}
                     </BaseText>
@@ -93,7 +97,7 @@ export const SeedPhraseScreen = () => {
                     </BaseText>
                 </BaseView>
 
-                <BaseView align="center" w={100}>
+                <BaseView alignItems="center" w={100}>
                     <CheckBoxWithText
                         text={LL.BTN_MNEMONIC_CHECKBOX()}
                         checkAction={setIsChecked}
