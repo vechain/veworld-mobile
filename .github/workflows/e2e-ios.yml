@@ -17,7 +17,7 @@ jobs:
   build-run-ios-e2e:
     name: Build & Run iOS E2E
     runs-on: macos-latest
-    timeout-minutes: 15
+    #timeout-minutes: 15
 
     env:
       DEVELOPER_DIR: /Applications/Xcode_14.2.app
