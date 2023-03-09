@@ -20,8 +20,6 @@ export const AddAccountBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
     const createAccountFor = useCreateAccount()
 
-    const { LL } = useI18nContext()
-
     const [selectedDevice, setSelectedDevice] = useState<Device>()
 
     const snapPoints = useMemo(() => ["75%"], [])
