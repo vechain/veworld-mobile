@@ -58,7 +58,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
                     name={"pencil"}
                     size={24}
                     bg={theme.colors.secondary}
-                    // action={()}
+                    disabled
                 />
             </BaseView>
             <BaseSpacer height={16} />
