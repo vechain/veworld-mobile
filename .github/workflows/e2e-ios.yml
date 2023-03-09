@@ -19,53 +19,83 @@ jobs:
     runs-on: macos-latest
     #timeout-minutes: 15
 
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_14.2.app
+    # env:
+    #   DEVELOPER_DIR: /Applications/Xcode_14.2.app
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Use Node v18
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: "yarn"
+          node-version-file: .nvmrc
+          cache: yarn
 
-      - name: Cache node modules
+      - name: Get Yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Yarn
         uses: actions/cache@v3
-        id: cache
+        id: yarn-cache
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-      - name: Rebuild detox
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+      - name: Install Yarn dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --prefer-offline
 
-      - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
-
-      - name: Cache Pods
-        uses: actions/cache@v3
-        id: podcache
-        with:
-          path: ios/Pods
-          key: pods-${{ hashFiles('**/Podfile.lock') }}
-
-      - name: Update Pods
-        run: |
-          gem update cocoapods xcodeproj
-          cd ios && pod install && cd ..
-      
-      - name: Install Applesimutils
+      - name: Install macOS dependencies
         run: |
           brew tap wix/brew
           brew install applesimutils
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Cache CocoaPods
+        id: cache-cocoaPods
+        uses: actions/cache@v3
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install CocoaPods
+        if: steps.cache-cocoapods.outputs.cache-hit != 'true'
+        run: cd ios ; pod install ; cd -
+
+      - name: Detox rebuild framework cache
+        run: yarn detox rebuild-framework-cache
+
+      - name: Cache Detox build
+        id: cache-detox-build
+        uses: actions/cache@v3
+        with:
+          path: ios/build
+          key: ${{ runner.os }}-detox-build
+          restore-keys: |
+            ${{ runner.os }}-detox-build
       
       - name: Detox build iOS
         run: yarn detox build --configuration ios.sim.debug
       
       - name: Detox test iOS
-        run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --debug-synchronization 500
+        run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
+
+      - name: Upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-artifacts
+          path: artifacts
