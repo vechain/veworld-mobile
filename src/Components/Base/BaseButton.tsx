@@ -104,7 +104,7 @@ export const BaseButton = ({
 
     const computedTypographyFont: TFonts | undefined = useMemo(() => {
         if (typographyFont) return typographyFont
-        if (size === "sm") return "buttonSecondary"
+        if (size === "sm") return "smallButtonPrimary"
         if (size === "md") return "button"
         if (size === "lg") return "buttonPrimary"
     }, [size, typographyFont])
