@@ -39,7 +39,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
     innerContainerStyle,
     disabled = false,
     flexDirection = "row",
-    justifyContent = "center",
+    justifyContent = "flex-start",
     alignItems = "center",
     bg,
     ...props
