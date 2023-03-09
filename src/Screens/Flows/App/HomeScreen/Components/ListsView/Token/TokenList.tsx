@@ -4,13 +4,7 @@ import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import {
-    ColorThemeType,
-    Tokens_mock,
-    useThemedStyles,
-    Token,
-    PlatformUtils,
-} from "~Common"
+import { ColorThemeType, Tokens_mock, useThemedStyles, Token } from "~Common"
 import { FungibleToken, VET, VTHO } from "~Common/Constant/Token/TokenConstants"
 import { AnimatedChartCard } from "./AnimatedChartCard"
 
@@ -28,7 +22,7 @@ export const TokenList = memo(
         const { styles } = useThemedStyles(baseStyles)
 
         const renderSeparator = useCallback(
-            () => <BaseSpacer height={PlatformUtils.isAndroid() ? 26 : 16} />,
+            () => <BaseSpacer height={16} />,
             [],
         )
 

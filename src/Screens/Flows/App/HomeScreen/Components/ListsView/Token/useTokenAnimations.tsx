@@ -13,11 +13,14 @@ export const useTokenAnimations = (isEdit: boolean) => {
         return {
             transform: [
                 {
-                    translateX: withTiming(isEdit ? 40 : 0, {
+                    translateX: withTiming(isEdit ? 30 : 0, {
                         duration: 200,
                     }),
                 },
             ],
+            width: withTiming(isEdit ? "90%" : "100%", {
+                duration: 200,
+            }),
         }
     }, [isEdit])
 
