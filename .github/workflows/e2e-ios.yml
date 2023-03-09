@@ -16,8 +16,7 @@ on:
 jobs:
   build-run-ios-e2e:
     name: Build & Run iOS E2E
-    #runs-on: macos-latest
-    runs-on: ARM64
+    runs-on: macos-latest-xl
     #timeout-minutes: 15
 
     env:
