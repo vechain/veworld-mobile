@@ -1,7 +1,6 @@
 import { Dimensions } from "react-native"
 import React from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
-import VectorImage from "react-native-vector-image"
 import { Slide } from "../Types"
 
 type Props = {
@@ -15,7 +14,7 @@ export const ListSlide = ({ item }: Props) => {
             justify="flex-start"
             py={80}
             style={{ width: Dimensions.get("window").width }}>
-            <VectorImage source={item.icon} />
+            {item.icon}
 
             <BaseSpacer height={40} />
 
