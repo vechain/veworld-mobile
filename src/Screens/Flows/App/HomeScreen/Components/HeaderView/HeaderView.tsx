@@ -16,7 +16,7 @@ type Props = {
 export const HeaderView = memo(
     ({ setActiveTab, activeTab, openAccountManagementSheet }: Props) => {
         const { store } = useRealm()
-        const accounts = useAccountsList()
+        const accounts = useAccountsList("visible == true")
 
         const onAccountChange = useCallback(
             (account: Account) => {
