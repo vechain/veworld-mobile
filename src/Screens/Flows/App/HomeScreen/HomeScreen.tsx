@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
@@ -8,7 +8,6 @@ import {
     AccountManagementBottomSheet,
 } from "./Components"
 import { useBottomSheetModal } from "~Common"
-import { useActiveWalletEntity } from "~Common/Hooks/Entities"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
@@ -37,17 +36,6 @@ export const HomeScreen = () => {
     const paddingBottom = useBottomTabBarHeight()
 
     const visibleHeightRef = useRef<number>(0)
-
-    const activeCard = useActiveWalletEntity()
-
-    const activeCardIndex = useMemo(
-        () => activeCard.activeIndex,
-        [activeCard.activeIndex],
-    )
-
-    useEffect(() => {
-        console.log("activeCardIndex", activeCardIndex)
-    }, [activeCardIndex])
 
     return (
         <>

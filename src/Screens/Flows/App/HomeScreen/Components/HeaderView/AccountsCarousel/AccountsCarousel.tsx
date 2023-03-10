@@ -5,7 +5,6 @@ import { StyleSheet, Dimensions } from "react-native"
 import { PaginationItem } from "./PaginationItem"
 import { AccountCard } from "./AccountCard"
 import { BaseSpacer, BaseView } from "~Components"
-import { useActiveCard } from "../../../Hooks/useActiveCard"
 import { Account } from "~Storage"
 
 const width = Dimensions.get("window").width - 40
@@ -20,17 +19,23 @@ const StackConfig = {
 
 type Props = {
     accounts: Account[]
+    selectedAccountIndex: number
     onAccountChange: (account: Account) => void
     openAccountManagementSheet: () => void
 }
 
 export const AccountsCarousel: React.FC<Props> = memo(
-    ({ accounts, onAccountChange, openAccountManagementSheet }) => {
-        const progressValue = useSharedValue<number>(0)
-        const onScrollEnd = useActiveCard()
+    ({
+        accounts,
+        selectedAccountIndex,
+        onAccountChange,
+        openAccountManagementSheet,
+    }) => {
+        const progressValue = useSharedValue<number>(selectedAccountIndex)
 
+        console.log(progressValue.value)
         const onProgressChange = useCallback(
-            (_: number, absoluteProgress: number) => {
+            (absoluteProgress: number) => {
                 progressValue.value = absoluteProgress
                 onAccountChange(accounts[absoluteProgress])
             },
@@ -66,9 +71,10 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     mode="horizontal-stack"
                     data={accounts}
                     modeConfig={StackConfig}
-                    onProgressChange={onProgressChange}
+                    defaultIndex={selectedAccountIndex}
+                    // onProgressChange={onProgressChange}
                     renderItem={renderItem}
-                    onSnapToItem={onScrollEnd}
+                    onSnapToItem={onProgressChange}
                 />
 
                 <BaseSpacer height={10} />

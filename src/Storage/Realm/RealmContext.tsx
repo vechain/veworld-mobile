@@ -6,7 +6,7 @@ import {
     Config,
     Mnemonic,
     Account,
-    ActiveWalletCard,
+    SelectedAccount,
     AppLock,
     UserPreferences,
 } from "./Model"
@@ -75,7 +75,14 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
 
 const initStoreRealm = (buffKey: ArrayBuffer) => {
     const instance = new Realm({
-        schema: [Device, XPub, Config, Account, UserPreferences],
+        schema: [
+            Device,
+            XPub,
+            Config,
+            Account,
+            SelectedAccount,
+            UserPreferences,
+        ],
         path: "persisted.realm",
         encryptionKey: buffKey,
         deleteRealmIfMigrationNeeded:
@@ -86,7 +93,7 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
 
 const initCacheRealm = () => {
     const instance = new Realm({
-        schema: [Mnemonic, ActiveWalletCard, AppLock],
+        schema: [Mnemonic, AppLock],
         path: "inMemory.realm",
         inMemory: true,
         deleteRealmIfMigrationNeeded:
@@ -120,12 +127,6 @@ export const initRealmClasses = (
         if (!appLock)
             cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
 
-        const activeWalletCard = cache.objectForPrimaryKey<ActiveWalletCard>(
-            ActiveWalletCard.getName(),
-            ActiveWalletCard.getPrimaryKey(),
-        )
-        if (!activeWalletCard) cache.create(ActiveWalletCard.getName(), {})
-
         const mnemonic = cache.objectForPrimaryKey<Mnemonic>(
             Mnemonic.getName(),
             Mnemonic.getPrimaryKey(),
@@ -141,6 +142,17 @@ export const initRealmClasses = (
     if (!config) {
         store.write(() => {
             store.create(Config.getName(), {})
+        })
+    }
+
+    const selectedAccount = store.objectForPrimaryKey<SelectedAccount>(
+        SelectedAccount.getName(),
+        SelectedAccount.getPrimaryKey(),
+    )
+
+    if (!selectedAccount) {
+        store.write(() => {
+            store.create(SelectedAccount.getName(), {})
         })
     }
 

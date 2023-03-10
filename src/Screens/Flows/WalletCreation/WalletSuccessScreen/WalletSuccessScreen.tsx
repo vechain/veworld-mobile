@@ -97,7 +97,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             const config = store.objectForPrimaryKey<Config>(
                 Config.getName(),
                 Config.getPrimaryKey(),
-            )
+            ) as Config
 
             if (config?.isWalletCreated) {
                 closePasswordPrompt()

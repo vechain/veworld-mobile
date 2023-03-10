@@ -1,7 +1,15 @@
 import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
+import {
+    Account,
+    Config,
+    Device,
+    Mnemonic,
+    XPub,
+    useRealm,
+    SelectedAccount,
+} from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 
@@ -13,6 +21,19 @@ export const useCreateWalletWithPassword = () => {
     const { store, cache } = useRealm()
 
     const [isComplete, setIsComplete] = useState(false)
+
+    const setSelectedAccountIfNotSetted = useCallback(
+        (account: Account) => {
+            const selectedAccount = store.objectForPrimaryKey<SelectedAccount>(
+                SelectedAccount.getName(),
+                SelectedAccount.getPrimaryKey(),
+            )
+            if (selectedAccount && !selectedAccount.address) {
+                selectedAccount.address = account.address
+            }
+        },
+        [store],
+    )
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
@@ -73,6 +94,8 @@ export const useCreateWalletWithPassword = () => {
 
                         _device.accounts.push(account)
 
+                        setSelectedAccountIfNotSetted(account)
+
                         if (config) {
                             config.userSelectedSecurity =
                                 UserSelectedSecurityLevel.PASSWORD
@@ -86,7 +109,7 @@ export const useCreateWalletWithPassword = () => {
                 console.log("CREATE WALLET ERROR : ", error)
             }
         },
-        [cache, store],
+        [cache, store, setSelectedAccountIfNotSetted],
     )
     //* [END] - Create Wallet
 

@@ -1,6 +1,8 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { FormattingUtils, useTheme } from "~Common"
+import { useSelectedAccountEntity } from "~Common/Hooks/Entities"
+import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
 import {
     BaseIcon,
     BaseSpacer,
@@ -18,11 +20,19 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
 
     const { store } = useRealm()
 
+    const selectedAccount = useSelectedAccountEntity()
+
+    const isSelected = useMemo(
+        () => compareAddresses(selectedAccount.address, account.address),
+        [selectedAccount, account],
+    )
+
     const toggleVisibility = useCallback(() => {
-        store.write(() => {
-            account.visible = !account.visible
-        })
-    }, [account, store])
+        if (!isSelected)
+            store.write(() => {
+                account.visible = !account.visible
+            })
+    }, [account, store, isSelected])
 
     return (
         <BaseView
@@ -49,12 +59,12 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
                 style={baseStyles.eyeIcon}
                 name={account.visible ? "eye-off-outline" : "eye-outline"}
                 bg={theme.colors.secondary}
+                disabled={isSelected}
                 action={toggleVisibility}
             />
         </BaseView>
     )
 }
-
 const baseStyles = StyleSheet.create({
     alias: {
         opacity: 0.7,

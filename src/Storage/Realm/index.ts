@@ -4,7 +4,7 @@ import {
     Config,
     Mnemonic,
     Account,
-    ActiveWalletCard,
+    SelectedAccount,
     AppLock,
     UserPreferences,
 } from "./Model"
@@ -29,7 +29,7 @@ export {
     Config,
     Mnemonic,
     Account,
-    ActiveWalletCard,
+    SelectedAccount,
     AppLock,
     UserPreferences,
 }
