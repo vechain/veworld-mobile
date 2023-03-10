@@ -45,9 +45,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Cache CocoaPods
+        id: cache-cocoaPods
+        uses: actions/cache@v3
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
       - name: Install Yarn dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
+        if: steps.cache-cocoaPods.outputs.cache-hit != 'true'
+        run: npx pod-install
 
       - name: Install macOS dependencies
         run: |
@@ -62,19 +73,10 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Cache CocoaPods
-        id: cache-cocoaPods
-        uses: actions/cache@v3
-        with:
-          path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-
-      - name: Install CocoaPods
-        if: steps.cache-cocoapods.outputs.cache-hit != 'true'
-        #run: cd ios ; pod install ; cd -
-        run: npx pod-install
+      # - name: Install CocoaPods
+      #   if: steps.cache-cocoapods.outputs.cache-hit != 'true'
+      #   #run: cd ios ; pod install ; cd -
+      #   run: npx pod-install
 
   run-detox:
     name: Build & Test Detox tests
