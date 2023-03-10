@@ -56,7 +56,7 @@ jobs:
 
     steps:
       - run: |
-          echo pwd
+          echo "pwd"
           cd
 
       - name: Install macOS dependencies
