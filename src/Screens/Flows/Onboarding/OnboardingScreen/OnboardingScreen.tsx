@@ -1,15 +1,14 @@
 import React, { useCallback, useRef, useState } from "react"
 import { FlatList } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import VectorImage from "react-native-vector-image"
 import { BaseButton, BaseSafeArea, BaseSpacer, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import {
-    BuyInfoIcon,
-    CustomizationIcon,
-    SustainableIcon,
-    VeChainVetLogoWithTitle,
+    BuyInfoIconSVG,
+    SustainableIconSVG,
+    VeChainVetLogoWithTitleSVG,
+    CustomizationIconSVG,
 } from "~Assets"
 import { ListSlide } from "./Components/ListSlide"
 import { Slide } from "./Types"
@@ -27,19 +26,19 @@ export const OnboardingScreen = () => {
         {
             title: LL.TITLE_ONBARDING_SLIDE_01(),
             text: LL.BD_ONBOARDING_SLIDE_01(),
-            icon: BuyInfoIcon,
+            icon: <BuyInfoIconSVG />,
             button: LL.BTN_ONBOARDING_SLIDE_01(),
         },
         {
             title: LL.TITLE_ONBARDING_SLIDE_02(),
             text: LL.BD_ONBOARDING_SLIDE_02(),
-            icon: SustainableIcon,
+            icon: <SustainableIconSVG />,
             button: LL.BTN_ONBOARDING_SLIDE_02(),
         },
         {
             title: LL.TITLE_ONBARDING_SLIDE_03(),
             text: LL.BD_ONBOARDING_SLIDE_03(),
-            icon: CustomizationIcon,
+            icon: <CustomizationIconSVG />,
             button: LL.BTN_ONBOARDING_SLIDE_03(),
         },
     ]
@@ -71,8 +70,7 @@ export const OnboardingScreen = () => {
         <BaseSafeArea grow={1} testID="ONBOARDING_SCREEN">
             <BaseSpacer height={20} />
             <BaseView align="center" grow={1}>
-                <VectorImage source={VeChainVetLogoWithTitle} />
-
+                <VeChainVetLogoWithTitleSVG />
                 <FlatList
                     ref={flatListRef}
                     data={slides}
