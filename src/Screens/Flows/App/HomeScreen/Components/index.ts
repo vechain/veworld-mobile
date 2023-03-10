@@ -1,5 +1,5 @@
 export * from "./ListsView/Token/TokenList"
-export * from "./ListsView/Nft/NFTList"
+export * from "./ListsView/Nft/NFTCollectionsList"
 export * from "./DevicesCarousel"
 export * from "./HeaderView"
 export * from "./EditTokens"

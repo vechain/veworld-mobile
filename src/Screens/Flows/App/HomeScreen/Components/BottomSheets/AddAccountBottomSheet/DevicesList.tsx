@@ -37,7 +37,7 @@ export const DevicesList: React.FC<Props> = ({
             return (
                 <BaseTouchableBox
                     key={item.rootAddress}
-                    style={style}
+                    innerContainerStyle={style}
                     action={handleOnDevicePress(item)}>
                     <BaseText typographyFont="subSubTitle">
                         {item.alias}
