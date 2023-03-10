@@ -333,6 +333,8 @@ PODS:
     - React-Core
   - react-native-flipper (0.177.0):
     - React-Core
+  - react-native-get-random-values (1.8.0):
+    - React-Core
   - react-native-pager-view (6.1.4):
     - React-Core
   - react-native-quick-crypto (0.5.0):
@@ -519,6 +521,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-flipper (from `../node_modules/react-native-flipper`)
+  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -634,6 +637,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/blur"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
+  react-native-get-random-values:
+    :path: "../node_modules/react-native-get-random-values"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-quick-crypto:
@@ -731,6 +736,7 @@ SPEC CHECKSUMS:
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-blur: 50c9feabacbc5f49b61337ebc32192c6be7ec3c3
   react-native-flipper: ccf9059793e4b36cb4e6e5e54208a5e01acba248
+  react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-pager-view: b58cb9e9f42f64e50cab3040815772c1d119a2e2
   react-native-quick-crypto: a903ff39ac8fea78bb9d37cccc5cc0596afc9670
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
