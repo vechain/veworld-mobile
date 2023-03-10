@@ -66,3 +66,7 @@ buck-out/
 
 #Yarn
 yarn.lock
+
+
+# vscode
+.vscode/settings.json
