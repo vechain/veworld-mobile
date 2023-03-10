@@ -13,7 +13,7 @@ import { Routes } from "~Navigation"
 import { ListSlide } from "../Components/ListSlide"
 import { Slide } from "../Types"
 import { STEPS } from "../Enums"
-import { ChessIcon, KeyIcon, ShieldIcon } from "~Assets"
+import { ShieldIconSVG, KeyIconSVG, ChessIconSVG } from "~Assets"
 
 export const TutorialScreen = () => {
     const nav = useNavigation()
@@ -27,19 +27,19 @@ export const TutorialScreen = () => {
         {
             title: LL.TITLE_WALLET_TUTORIAL_SLIDE_01(),
             text: LL.BD_WALLET_TUTORIAL_SLIDE_01(),
-            icon: ShieldIcon,
+            icon: <ShieldIconSVG />,
             button: LL.BTN_WALLET_TUTORIAL_SLIDE_01(),
         },
         {
             title: LL.TITLE_WALLET_TUTORIAL_SLIDE_02(),
             text: LL.BD_WALLET_TUTORIAL_SLIDE_02(),
-            icon: KeyIcon,
+            icon: <KeyIconSVG />,
             button: LL.BTN_WALLET_TUTORIAL_SLIDE_02(),
         },
         {
             title: LL.TITLE_WALLET_TUTORIAL_SLIDE_03(),
             text: LL.BD_WALLET_TUTORIAL_SLIDE_03(),
-            icon: ChessIcon,
+            icon: <ChessIconSVG />,
             button: LL.BTN_WALLET_TUTORIAL_SLIDE_03(),
         },
     ]

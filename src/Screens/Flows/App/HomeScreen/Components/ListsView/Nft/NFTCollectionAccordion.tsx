@@ -17,6 +17,10 @@ type Props = {
     collection: { title: string; list: NFTItem[] }
 }
 
+const ITEM_SIZE: number = 152
+const ITEM_SPACING: number = 16
+const LIST_HEIGHT: number = 184
+
 export const NFTCollectionAccordion = ({ collection }: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const headerComponent = useMemo(() => {
@@ -31,10 +35,12 @@ export const NFTCollectionAccordion = ({ collection }: Props) => {
     }, [collection, themedStyles])
 
     const bodyComponent = useMemo(() => {
-        const renderSeparator = () => <BaseView style={{ width: 16 }} />
+        const renderSeparator = () => (
+            <BaseView style={{ width: ITEM_SPACING }} />
+        )
 
         return (
-            <BaseView w={100} style={{ height: 184 }}>
+            <BaseView w={100} style={{ height: LIST_HEIGHT }}>
                 <FlashList
                     data={collection.list}
                     keyExtractor={item => item.key}
@@ -59,12 +65,12 @@ export const NFTCollectionAccordion = ({ collection }: Props) => {
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     horizontal
-                    estimatedItemSize={collection.list.length}
+                    estimatedItemSize={ITEM_SIZE}
                     estimatedListSize={{
-                        height: 184,
+                        height: LIST_HEIGHT,
                         width:
-                            152 * collection.list.length +
-                            (collection.list.length - 1) * 16,
+                            ITEM_SIZE * collection.list.length +
+                            (collection.list.length - 1) * ITEM_SPACING,
                     }}
                 />
             </BaseView>
@@ -84,13 +90,13 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         headerStyle: { paddingHorizontal: 20 },
         listContainer: {
-            paddingVertical: 16,
+            paddingVertical: ITEM_SPACING,
             paddingHorizontal: 20,
         },
         nftCard: {
-            width: 152,
-            height: 152,
-            borderRadius: 16,
+            width: ITEM_SIZE,
+            height: ITEM_SIZE,
+            borderRadius: ITEM_SPACING,
             backgroundColor: theme.colors.card,
             overflow: "hidden",
             justifyContent: "center",
