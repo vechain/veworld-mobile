@@ -78,6 +78,9 @@ jobs:
       - name: Detox rebuild framework cache
         run: yarn detox rebuild-framework-cache
 
+      - name: Yarn start
+        run: yarn start
+
       - name: Cache Detox build
         id: cache-detox-build
         uses: actions/cache@v3
