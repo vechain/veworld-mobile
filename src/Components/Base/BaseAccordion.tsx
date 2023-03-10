@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet, TouchableOpacity, View } from "react-native"
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Animated, {
     measure,
     runOnUI,
@@ -9,20 +9,40 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from "react-native-reanimated"
-import { BaseIcon } from "~Components"
+import { useTheme } from "~Common"
+import { BaseIcon, BaseSpacer } from "~Components"
 
 type Props = {
     headerComponent: React.ReactNode
+    headerStyle?: StyleProp<ViewStyle>
+    headerOpenedStyle?: ViewStyle
+    headerClosedStyle?: ViewStyle
+    chevronContainerStyle?: StyleProp<
+        Animated.AnimateStyle<StyleProp<ViewStyle>>
+    >
     bodyComponent: React.ReactNode
 }
 
-export const NFTAccordion = ({ headerComponent, bodyComponent }: Props) => {
+export const BaseAccordion = ({
+    headerComponent,
+    headerStyle,
+    headerOpenedStyle,
+    headerClosedStyle,
+    chevronContainerStyle,
+    bodyComponent,
+}: Props) => {
+    const theme = useTheme()
     const aref = useAnimatedRef<View>()
     const open = useSharedValue(false)
     const height = useSharedValue(0)
     const progress = useDerivedValue(() =>
         open.value ? withTiming(1) : withTiming(0),
     )
+
+    const computedHeaderStyle = useAnimatedStyle(() => {
+        if (open.value) return headerOpenedStyle || {}
+        return headerClosedStyle || {}
+    })
 
     const bodyContainerDynamicStyle = useAnimatedStyle(() => {
         return {
@@ -50,29 +70,32 @@ export const NFTAccordion = ({ headerComponent, bodyComponent }: Props) => {
 
     const renderCollapseIcon = useMemo(() => {
         return (
-            <>
-                <TouchableOpacity
-                    style={styles.chevronIcon}
-                    onPress={onChevronPress}>
-                    <Animated.View style={dynamicStyle}>
-                        <BaseIcon name={"chevron-down"} />
-                    </Animated.View>
-                </TouchableOpacity>
-            </>
+            <Animated.View style={[dynamicStyle, chevronContainerStyle]}>
+                <BaseIcon
+                    name={"chevron-down"}
+                    color={theme.colors.text}
+                    size={36}
+                    action={onChevronPress}
+                />
+            </Animated.View>
         )
-    }, [dynamicStyle, onChevronPress])
+    }, [dynamicStyle, chevronContainerStyle, onChevronPress, theme])
 
     return (
         <>
-            <View style={styles.headerContainer}>
-                <View style={styles.headerContent}>
-                    {headerComponent}
-                    {renderCollapseIcon}
-                </View>
-            </View>
+            <Animated.View
+                style={[
+                    styles.headerContainer,
+                    headerStyle,
+                    computedHeaderStyle,
+                ]}>
+                {headerComponent}
+                {renderCollapseIcon}
+            </Animated.View>
             <Animated.View
                 style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
                 <View ref={aref} style={styles.bodyContent}>
+                    <BaseSpacer height={2} />
                     {bodyComponent}
                 </View>
             </Animated.View>
@@ -84,16 +107,9 @@ const styles = StyleSheet.create({
     headerContainer: {
         width: "100%",
         flexDirection: "row",
-    },
-    headerContent: {
-        width: "100%",
-        flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
     },
     bodyContainer: { width: "100%", overflow: "hidden" },
     bodyContent: { width: "100%" },
-    chevronIcon: {
-        marginRight: 20,
-    },
 })

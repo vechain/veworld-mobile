@@ -32,6 +32,7 @@ export const Balance: React.FC<Props> = ({ balance }) => {
                     name={isVisible ? "eye-off" : "eye"}
                     color={theme.colors.textReversed}
                     size={18}
+                    style={{ marginLeft: 8 }}
                 />
             </BaseView>
             <BaseView orientation="row" align="flex-end">

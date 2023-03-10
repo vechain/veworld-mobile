@@ -9,20 +9,14 @@ type Props = {
     setActiveTab: React.Dispatch<React.SetStateAction<number>>
     activeTab: number
     openAccountManagementSheet: () => void
-    navigateToCreateWallet: () => void
 }
 
 export const HeaderView = memo(
-    ({
-        setActiveTab,
-        activeTab,
-        openAccountManagementSheet,
-        navigateToCreateWallet,
-    }: Props) => {
+    ({ setActiveTab, activeTab, openAccountManagementSheet }: Props) => {
         return (
             <>
                 <BaseView align="center">
-                    <Header action={navigateToCreateWallet} />
+                    <Header />
                     <BaseSpacer height={20} />
                     <AccountsCarousel
                         openAccountManagementSheet={openAccountManagementSheet}

@@ -1,11 +1,12 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { HomeScreen } from "~Screens"
+import { HomeScreen, WalletManagementScreen } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { CreateWalletAppStack } from "./CreateWalletAppStack"
 
 export type RootStackParamListHome = {
-    Home: undefined
+    [Routes.HOME]: undefined
+    [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
 }
 
@@ -16,8 +17,18 @@ export const HomeStack = () => {
         <Home.Navigator screenOptions={{ headerShown: false }}>
             <Home.Group>
                 <Home.Screen
-                    name="Home"
+                    name={Routes.HOME}
                     component={HomeScreen}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+            </Home.Group>
+
+            <Home.Group>
+                <Home.Screen
+                    name={Routes.WALLET_MANAGEMENT}
+                    component={WalletManagementScreen}
                     options={{
                         headerShown: false,
                     }}
