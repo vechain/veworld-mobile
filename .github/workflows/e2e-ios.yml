@@ -72,7 +72,7 @@ jobs:
             ${{ runner.os }}-pods-
 
       - name: Install CocoaPods
-        if: steps.cache-cocoapods.outputs.cache-hit != 'true'
+        if: steps.cache-cocoaPods.outputs.cache-hit != 'true'
         run: cd ios ; pod install ; cd -
         #run: npx pod-install
 
