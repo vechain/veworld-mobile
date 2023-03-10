@@ -26,10 +26,9 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
 
     return (
         <BaseView
-            w={100}
-            orientation="row"
-            align="center"
-            justify="space-between">
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between">
             <BaseTouchableBox
                 action={() => {}}
                 justifyContent="space-between"

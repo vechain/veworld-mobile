@@ -16,11 +16,14 @@ export const WalletManagementHeader = () => {
     }, [nav])
 
     return (
-        <BaseView align="center" justify="space-between" orientation="row">
+        <BaseView
+            alignItems="center"
+            justifyContent="space-between"
+            flexDirection="row">
             <BaseText typographyFont="title">
                 {LL.TITLE_WALLET_MANAGEMENT()}
             </BaseText>
-            <BaseView align="center" orientation="row">
+            <BaseView alignItems="center" flexDirection="row">
                 <BaseIcon
                     size={24}
                     name="priority-low"
