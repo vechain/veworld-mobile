@@ -1,7 +1,7 @@
 name: Cucumber testing iOS
 
 on:
-  #workflow_dispatch:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -63,7 +63,7 @@ jobs:
           bundler-cache: true
 
       - name: Cache CocoaPods
-        id: cache-cocoaPods
+        id: pods-cache
         uses: actions/cache@v3
         with:
           path: ios/Pods
@@ -72,9 +72,9 @@ jobs:
             ${{ runner.os }}-pods-
 
       - name: Install CocoaPods
-        if: steps.cache-cocoaPods.outputs.cache-hit != 'true'
-        run: cd ios ; pod install ; cd -
-        #run: npx pod-install
+        if: steps.pods-cache.outputs.cache-hit != 'true'
+        #run: cd ios ; pod install ; cd -
+        run: npx pod-install
 
   run-detox:
     name: Build & Test Detox tests
