@@ -1,3 +1,5 @@
+import { CryptoUtils } from "~Common"
+
 const TOTAL_WORDS = 12
 
 export const getThreeRandomIndexes = (): number[] => {
@@ -5,16 +7,18 @@ export const getThreeRandomIndexes = (): number[] => {
     const result: number[] = []
 
     // generate first number
-    const maxIndexForFirstNumber = maxIndex - 2
-    const firstNumber = Math.floor(Math.random() * maxIndexForFirstNumber + 1)
+    const maxIndexForFirstNumber = 4 // it should be 'maxIndex - 2' but let's keep it under 6, so it generates more separated numbers
+    const firstNumber = Math.floor(
+        CryptoUtils.random() * maxIndexForFirstNumber + 1,
+    )
     result.push(firstNumber)
 
     // generate second number
     const minIndexForSecondNumber = firstNumber + 1
-    const maxIndexForSecondNumber = maxIndex - 1
+    const maxIndexForSecondNumber = 8 // it should be 'maxIndex - 1' but let's keep it under 9, so it generates more separated numbers
     const getSecondNumber = () =>
         Math.floor(
-            Math.random() *
+            CryptoUtils.random() *
                 (maxIndexForSecondNumber - minIndexForSecondNumber + 1),
         ) + minIndexForSecondNumber
     let secondNumber = getSecondNumber()
@@ -30,7 +34,7 @@ export const getThreeRandomIndexes = (): number[] => {
     const maxIndexForThirdNumber = maxIndex
     const getThirdNumber = () =>
         Math.floor(
-            Math.random() *
+            CryptoUtils.random() *
                 (maxIndexForThirdNumber - minIndexForThirdNumber + 1),
         ) + minIndexForThirdNumber
     let thirdNumber = getThirdNumber()

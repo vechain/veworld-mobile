@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { useTheme } from "~Common"
+import { useTheme, CryptoUtils } from "~Common"
 import {
     BaseButton,
     BaseIcon,
@@ -13,7 +13,6 @@ import { BaseButtonGroup, Button } from "~Components/Base/BaseButtonGroup"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { Config, Mnemonic, useRealm } from "~Storage"
-import { shuffle } from "lodash"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 
 export const ConfirmSeedPhraseScreen = () => {
@@ -79,7 +78,7 @@ export const ConfirmSeedPhraseScreen = () => {
      */
     const buttonsFirstWord = useMemo(
         () =>
-            shuffle([
+            CryptoUtils.shuffleArray([
                 {
                     id: mnemonicArray[firstIndex],
                     label: mnemonicArray[firstIndex],
@@ -97,7 +96,7 @@ export const ConfirmSeedPhraseScreen = () => {
     )
     const buttonsSecondWord = useMemo(
         () =>
-            shuffle([
+            CryptoUtils.shuffleArray([
                 {
                     id: mnemonicArray[secondIndex - 1],
                     label: mnemonicArray[secondIndex - 1],
@@ -115,7 +114,7 @@ export const ConfirmSeedPhraseScreen = () => {
     )
     const buttonsThirdWord = useMemo(
         () =>
-            shuffle([
+            CryptoUtils.shuffleArray([
                 {
                     id: mnemonicArray[thirdIndex - 2],
                     label: mnemonicArray[thirdIndex - 2],
@@ -198,6 +197,7 @@ export const ConfirmSeedPhraseScreen = () => {
                                     size={20}
                                     color={theme.colors.danger}
                                 />
+                                <BaseSpacer width={8} />
                                 <BaseText
                                     typographyFont="body"
                                     fontSize={12}
