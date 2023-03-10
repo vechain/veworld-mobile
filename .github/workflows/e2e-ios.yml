@@ -55,7 +55,9 @@ jobs:
     needs: yarn-requirements
 
     steps:
-      - run: cd -
+      - run: |
+          echo pwd
+          cd
 
       - name: Install macOS dependencies
         run: |
