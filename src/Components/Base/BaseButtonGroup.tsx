@@ -54,7 +54,7 @@ export const BaseButtonGroup = ({
                                 ? theme.colors.textReversed
                                 : theme.colors.text
                         }
-                        typographyFont="buttonGroup"
+                        typographyFont="bodyMedium"
                         style={{
                             borderTopLeftRadius: borderTopRadius,
                             borderTopRightRadius: borderTopRadius,
