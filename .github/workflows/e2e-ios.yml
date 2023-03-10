@@ -19,8 +19,8 @@ jobs:
     runs-on: macos-latest
     #timeout-minutes: 15
 
-    # env:
-    #   DEVELOPER_DIR: /Applications/Xcode_14.2.app
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_14.2.app
 
     steps:
       - name: Checkout repository
