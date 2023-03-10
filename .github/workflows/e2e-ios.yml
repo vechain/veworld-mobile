@@ -15,7 +15,7 @@ on:
 
 jobs:
   install-dependencies:
-    name: Build Yarn Dependencies
+    name: Install Dependencies
     runs-on: macos-latest
     #timeout-minutes: 15
 
@@ -73,7 +73,8 @@ jobs:
 
       - name: Install CocoaPods
         if: steps.cache-cocoapods.outputs.cache-hit != 'true'
-        run: cd ios ; pod install ; cd -
+        #run: cd ios ; pod install ; cd -
+        run: npx pod-install
 
   run-detox:
     name: Build & Test Detox tests
