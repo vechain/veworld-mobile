@@ -14,8 +14,8 @@ on:
 #   cancel-in-progress: true
 
 jobs:
-  build-run-ios-e2e:
-    name: Build & Run iOS E2E
+  yarn-requirements:
+    name: Build Yarn Dependencies
     runs-on: macos-latest
     #timeout-minutes: 15
 
@@ -29,8 +29,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: .nvmrc
           cache: yarn
+          node-version-file: .nvmrc
 
       - name: Get Yarn cache directory path
         id: yarn-cache-dir-path
@@ -49,6 +49,12 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
 
+  macos-requirements:
+    name: Build macOS Dependencies
+    runs-on: macos-latest
+    needs: yarn-requirements
+
+    steps:
       - name: Install macOS dependencies
         run: |
           brew tap wix/brew
@@ -75,12 +81,12 @@ jobs:
         if: steps.cache-cocoapods.outputs.cache-hit != 'true'
         run: cd ios ; pod install ; cd -
 
-      - name: Detox rebuild framework cache
-        run: yarn detox rebuild-framework-cache
-
-      - name: Yarn start
-        run: yarn start
-
+  run-detox:
+    name: Build & Test Detox tests
+    runs-on: macos-latest
+    needs: macos-requirements
+      
+    steps:
       - name: Cache Detox build
         id: cache-detox-build
         uses: actions/cache@v3
