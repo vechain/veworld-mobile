@@ -21,8 +21,7 @@
         "e2e.android.build.r": "detox build --configuration android.emu.release",
         "e2e.android.test.d": "detox test --configuration android.emu.debug",
         "e2e.android.test.r": "detox test --configuration android.emu.release",
-        "typesafe-i18n": "typesafe-i18n",
-        "gen-svg": "react-native-vector-image generate"
+        "typesafe-i18n": "typesafe-i18n"
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
@@ -70,7 +69,6 @@
         "react-native-svg": "13.4.0",
         "react-native-tab-view": "^3.3.4",
         "react-native-vector-icons": "^9.2.0",
-        "react-native-vector-image": "^0.3.3",
         "realm": "11.3.1",
         "realm-flipper-plugin-device": "^1.1.0",
         "stream-browserify": "^3.0.0",
