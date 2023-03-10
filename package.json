@@ -59,6 +59,7 @@
         "react-native-drop-shadow": "^0.0.6",
         "react-native-flipper": "^0.177.0",
         "react-native-gesture-handler": "^2.9.0",
+        "react-native-get-random-values": "^1.8.0",
         "react-native-pager-view": "^6.1.2",
         "react-native-quick-crypto": "^0.5.0",
         "react-native-reanimated": "^2.14.4",

@@ -1,3 +1,4 @@
+import "react-native-get-random-values" // relma dependency for uuid - DO NOT REMOVE
 import Realm from "realm"
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
@@ -9,12 +10,13 @@ import {
     ActiveWalletCard,
     AppLock,
     UserPreferences,
+    Network,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
-import { WALLET_STATUS } from "~Model"
+import { NETWORK_TYPE, WALLET_STATUS } from "~Model"
 import crypto from "react-native-quick-crypto"
 import { ColorSchemeName } from "react-native"
-import { useColorScheme } from "~Common"
+import { ThorConstants, useColorScheme } from "~Common"
 
 type State = {
     store: Realm
@@ -75,7 +77,7 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
 
 const initStoreRealm = (buffKey: ArrayBuffer) => {
     const instance = new Realm({
-        schema: [Device, XPub, Config, Account, UserPreferences],
+        schema: [Device, XPub, Config, Account, UserPreferences, Network],
         path: "persisted.realm",
         encryptionKey: buffKey,
         deleteRealmIfMigrationNeeded:
@@ -112,6 +114,7 @@ export const initRealmClasses = (
     store: Realm,
     colorScheme: NonNullable<ColorSchemeName>,
 ) => {
+    // [ START ] - CACHE
     cache.write(() => {
         const appLock = cache.objectForPrimaryKey<AppLock>(
             AppLock.getName(),
@@ -132,32 +135,39 @@ export const initRealmClasses = (
         )
         if (!mnemonic) cache.create(Mnemonic.getName(), {})
     })
+    // [ END ] - CACHE
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
+    // [ START ] - STORE
+    store.write(() => {
+        const networks = store.objects<Network>(Network.getName())
+        if (networks.length === 0) {
+            store.create(Network.getName(), {
+                ...ThorConstants.makeNatework(NETWORK_TYPE.MAIN),
+            })
+            store.create(Network.getName(), {
+                ...ThorConstants.makeNatework(NETWORK_TYPE.TEST),
+            })
+        }
 
-    if (!config) {
-        store.write(() => {
-            store.create(Config.getName(), {})
-        })
-    }
+        const config = store.objectForPrimaryKey<Config>(
+            Config.getName(),
+            Config.getPrimaryKey(),
+        )
+        if (!config) {
+            store.create(Config.getName(), { currentNetwork: networks[0] }) // main network is default
+        }
 
-    const userPreferences = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
-
-    if (!userPreferences) {
-        store.write(() => {
+        const userPreferences = store.objectForPrimaryKey<UserPreferences>(
+            UserPreferences.getName(),
+            UserPreferences.getPrimaryKey(),
+        )
+        if (!userPreferences) {
             store.create(UserPreferences.getName(), { theme: colorScheme })
-        })
-    } else {
-        store.write(() => {
+        } else {
             userPreferences.theme = colorScheme
-        })
-    }
+        }
+    })
+    // [ END ] - STORE
 }
 
 const getKey = (encKey: string) => {
