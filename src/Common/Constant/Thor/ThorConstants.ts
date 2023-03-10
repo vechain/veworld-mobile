@@ -3,14 +3,14 @@ import vip180 from "./abis/VIP180.abi"
 import { NETWORK_TYPE } from "~Model"
 
 const THOR_MAIN_URLS = [
-    "https://mainnet.node.dev-vechain.org",
+    "https://mainnet.vechain.org",
     "https://vethor-node.vechain.com",
     "https://mainnet.veblocks.net",
     "https://mainnet.vecha.in",
 ]
 
 const THOR_TESTNET_URLS = [
-    "https://testnet.node.dev-vechain.org",
+    "https://testnet.vechain.org",
     "https://vethor-node-test.vechaindev.com",
     "https://sync-testnet.veblocks.net",
     "https://testnet.vecha.in",
@@ -45,7 +45,7 @@ export const DEFAULT_GAS_COEFFICIENT = 0
 export const BASE_GAS_PRICE =
     "0x000000000000000000000000000000000000626173652d6761732d7072696365"
 
-export const makeNatework = (type: NETWORK_TYPE) => {
+export const makeNetwork = (type: NETWORK_TYPE) => {
     switch (type) {
         case NETWORK_TYPE.MAIN:
             return {

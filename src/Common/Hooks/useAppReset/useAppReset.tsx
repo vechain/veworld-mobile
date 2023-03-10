@@ -7,6 +7,8 @@ import {
     AppLock,
     Config,
     Device,
+    Network,
+    UserPreferences,
     XPub,
     useRealm,
 } from "~Storage"
@@ -68,12 +70,22 @@ const resetRealm = async (store: Realm, cache: Realm) => {
         Config.getPrimaryKey(),
     )
 
+    const networks = store.objects<Network>(Network.getName())
+    const userPreferences = store.objectForPrimaryKey<UserPreferences>(
+        UserPreferences.getName(),
+        UserPreferences.getPrimaryKey(),
+    )
+
     store.write(() => {
         config!.userSelectedSecurity = "NONE"
-        config!.isAppLockActive = true
         config!.lastSecurityLevel = "NONE"
         config!.isSecurityDowngrade = false
         config!.pinValidationString = SettingsConstants.VALIDATION_STRING
+
+        userPreferences!.currentNetwork = networks[0]
+        userPreferences!.showTestNetTag = true
+        userPreferences!.showConversionOtherNets = true
+        userPreferences!.isAppLockActive = true
 
         store.delete(store.objects(Device.getName()))
         store.delete(store.objects(Account.getName()))

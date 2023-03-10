@@ -10,10 +10,3 @@ export const useThor = () => {
 
     return driver
 }
-
-/*
-    Example Use : 
-
-    const main = store.objectForPrimaryKey<Config>(Config.getName(), Config.getPrimaryKey())?.currentNetwork
-    let mode = await driver(main!.currentUrl)
-*/

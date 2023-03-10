@@ -1,21 +1,24 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { Switch } from "react-native"
-import { useConfigEntity } from "~Common/Hooks/Entities"
 import { BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
-import { AppLock, useRealm } from "~Storage"
+import { AppLock, UserPreferences, useRealm } from "~Storage"
 
 export const SecureApp = () => {
     const { store, cache } = useRealm()
-    const configEntity = useConfigEntity()
 
-    const isEnabled = useMemo(
-        () => configEntity?.isAppLockActive,
-        [configEntity],
+    const userPref = store.objectForPrimaryKey<UserPreferences>(
+        UserPreferences.getName(),
+        UserPreferences.getPrimaryKey(),
     )
+
+    const isEnabled = useMemo(() => userPref!.isAppLockActive, [userPref])
+    const [isAppLock, setIsAppLock] = useState(isEnabled)
 
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
+            setIsAppLock(newValue)
+
             let appLock = cache.objectForPrimaryKey<AppLock>(
                 AppLock.getName(),
                 AppLock.getPrimaryKey(),
@@ -28,10 +31,10 @@ export const SecureApp = () => {
             })
 
             store.write(() => {
-                configEntity.isAppLockActive = newValue
+                userPref!.isAppLockActive = newValue
             })
         },
-        [cache, configEntity, store],
+        [cache, userPref, store],
     )
 
     return (
@@ -41,7 +44,7 @@ export const SecureApp = () => {
             align="center"
             orientation="row">
             <BaseText>Secure App</BaseText>
-            <Switch onValueChange={toggleSwitch} value={isEnabled} />
+            <Switch onValueChange={toggleSwitch} value={isAppLock} />
         </BaseView>
     )
 }

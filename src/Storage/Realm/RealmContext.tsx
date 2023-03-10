@@ -142,10 +142,10 @@ export const initRealmClasses = (
         const networks = store.objects<Network>(Network.getName())
         if (networks.length === 0) {
             store.create(Network.getName(), {
-                ...ThorConstants.makeNatework(NETWORK_TYPE.MAIN),
+                ...ThorConstants.makeNetwork(NETWORK_TYPE.MAIN),
             })
             store.create(Network.getName(), {
-                ...ThorConstants.makeNatework(NETWORK_TYPE.TEST),
+                ...ThorConstants.makeNetwork(NETWORK_TYPE.TEST),
             })
         }
 
@@ -154,15 +154,19 @@ export const initRealmClasses = (
             Config.getPrimaryKey(),
         )
         if (!config) {
-            store.create(Config.getName(), { currentNetwork: networks[0] }) // main network is default
+            store.create(Config.getName(), {})
         }
 
         const userPreferences = store.objectForPrimaryKey<UserPreferences>(
             UserPreferences.getName(),
             UserPreferences.getPrimaryKey(),
         )
+
         if (!userPreferences) {
-            store.create(UserPreferences.getName(), { theme: colorScheme })
+            store.create(UserPreferences.getName(), {
+                theme: colorScheme,
+                currentNetwork: networks[0], // main network is default
+            })
         } else {
             userPreferences.theme = colorScheme
         }
