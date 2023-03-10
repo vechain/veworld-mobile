@@ -82,7 +82,7 @@ const en: BaseTranslation = {
     TITLE_CREATE_WALLET_TYPE: "Create Wallet",
     TITLE_IMPORT_WALLET_TYPE: "Import Wallet",
     TITLE_MNEMONIC: "Your Mnemonic",
-    TITLE_CONFIRM_MNEMONIC: "Create your wallet",
+    TITLE_CONFIRM_MNEMONIC: "Confirm your mnemonic",
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_USER_PIN: "Insert your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",

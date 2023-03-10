@@ -149,13 +149,20 @@ export const ConfirmSeedPhraseScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseView justifyContent="space-between" flexGrow={1} mx={20}>
-                <BaseView justifyContent="space-between">
-                    <BaseText typographyFont="title">
+            <BaseView
+                justifyContent="space-between"
+                alignItems="flex-start"
+                flexGrow={1}
+                mx={20}>
+                <BaseView
+                    justifyContent="space-between"
+                    alignItems="stretch"
+                    w={100}>
+                    <BaseText align="left" typographyFont="title">
                         {LL.TITLE_CONFIRM_MNEMONIC()}
                     </BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="body">
+                    <BaseText align="left" typographyFont="body">
                         {LL.BD_SELECT_WORD({ number: firstIndex + 1 })}
                     </BaseText>
                     <BaseSpacer height={16} />
