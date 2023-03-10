@@ -55,6 +55,8 @@ jobs:
     needs: yarn-requirements
 
     steps:
+      - run: cd -
+
       - name: Install macOS dependencies
         run: |
           brew tap wix/brew
