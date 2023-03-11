@@ -102,9 +102,7 @@ jobs:
       
       - name: Detox build iOS
         if: steps.cache-detox-build.outputs.cache-hit != 'true'
-        run: |
-          echo "$(pwd)"
-          yarn e2e.ios.build.d
+        run: yarn detox build --configuration ios.sim.debug
       
       - name: Detox test iOS
         run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
