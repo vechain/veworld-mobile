@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import { useObjectListener, useRealm, UserPreferences } from "~Storage"
 
 export const useUserPreferencesEntity = () => {
@@ -9,5 +10,20 @@ export const useUserPreferencesEntity = () => {
         store,
     ) as UserPreferences
 
-    return userPreferencesEntity
+    const currentNetwork = useMemo(
+        () => userPreferencesEntity?.currentNetwork,
+        [userPreferencesEntity?.currentNetwork],
+    )
+
+    const isAppLockActive = useMemo(
+        () => userPreferencesEntity?.isAppLockActive,
+        [userPreferencesEntity?.isAppLockActive],
+    )
+
+    const theme = useMemo(
+        () => userPreferencesEntity?.theme,
+        [userPreferencesEntity?.theme],
+    )
+
+    return { isAppLockActive, currentNetwork, theme }
 }

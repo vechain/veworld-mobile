@@ -3,8 +3,8 @@ import { ColorThemeType, ColorTheme } from "../Theme/Theme"
 import { useUserPreferencesEntity } from "./Entities"
 
 export const useTheme = (): ColorThemeType => {
-    const userPreferences = useUserPreferencesEntity()
-    const theme = ColorTheme(userPreferences.theme)
+    const { theme: _theme } = useUserPreferencesEntity()
+    const theme = ColorTheme(_theme)
     return theme
 }
 
