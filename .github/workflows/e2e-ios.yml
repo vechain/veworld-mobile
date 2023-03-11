@@ -93,7 +93,7 @@ jobs:
 
       - name: Rebuild detox
         run: |
-          yarn install -g detox-cli
+          yarn global add detox-cli
           yarn detox clean-framework-cache && yarn detox build-framework-cache
 
       - name: Cache Detox build
