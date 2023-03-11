@@ -94,7 +94,7 @@ jobs:
       - name: Detox build iOS
         if: steps.cache-detox-build.outputs.cache-hit != 'true'
         run: |
-          cd ..
+          echo "$(pwd)"
           yarn detox build --configuration ios.sim.debug
       
       - name: Detox test iOS
