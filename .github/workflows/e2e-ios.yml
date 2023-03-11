@@ -92,7 +92,9 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Rebuild detox
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+        run: |
+          yarn install -g detox-cli
+          yarn detox clean-framework-cache && yarn detox build-framework-cache
 
       - name: Cache Detox build
         id: cache-detox-build
