@@ -117,7 +117,9 @@ jobs:
       
       - name: Detox build iOS
         if: steps.cache-detox-build.outputs.cache-hit != 'true'
-        run: yarn detox build --configuration ios.sim.debug
+        run: |
+          echo "$(ls -l)"
+          yarn detox build --configuration ios.sim.debug
       
       - name: Detox test iOS
         run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
