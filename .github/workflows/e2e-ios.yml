@@ -91,6 +91,9 @@ jobs:
           cache: yarn
           node-version-file: .nvmrc
 
+      - name: Rebuild detox
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+
       - name: Cache Detox build
         id: cache-detox-build
         uses: actions/cache@v3
