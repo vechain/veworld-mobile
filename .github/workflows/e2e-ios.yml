@@ -38,6 +38,9 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - name: List directory
+        run: echo "$(ls -l)"
+
       - name: Install Yarn dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: yarn install
@@ -90,12 +93,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -104,6 +101,15 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'yarn'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: List directory
+        run: echo "$(ls -l)"
 
       # - name: Rebuild detox
       #   run: yarn detox clean-framework-cache && yarn detox build-framework-cache
