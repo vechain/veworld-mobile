@@ -112,8 +112,8 @@ jobs:
       - name: List directory
         run: echo "$(ls -l)"
 
-      # - name: Rebuild detox
-      #   run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+      - name: Rebuild detox
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
       - name: Cache Detox build
         id: cache-detox-build
