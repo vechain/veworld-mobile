@@ -43,7 +43,7 @@ jobs:
 
       - name: Install Yarn dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
-        run: yarn install
+        run: yarn install && yarn patch-package
 
       - name: List directory
         run: echo "$(ls -l)"
@@ -74,9 +74,7 @@ jobs:
         if: steps.pods-cache.outputs.cache-hit != 'true'
         #run: cd ios ; pod install ; cd -
         #run: echo "$(pwd)"
-        run: |
-          npx pod-install
-          patch-package
+        run: npx pod-install
 
   run-detox:
     name: Build & Test Detox tests
