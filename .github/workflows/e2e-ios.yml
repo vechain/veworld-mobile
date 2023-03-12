@@ -72,8 +72,11 @@ jobs:
 
       - name: Install CocoaPods
         if: steps.pods-cache.outputs.cache-hit != 'true'
-        run: cd ios ; pod install ; cd -
+        #run: cd ios ; pod install ; cd -
         #run: echo "$(pwd)"
+        run: |
+          npx pod-install
+          patch-package
 
   run-detox:
     name: Build & Test Detox tests
