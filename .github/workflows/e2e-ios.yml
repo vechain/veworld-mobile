@@ -32,21 +32,18 @@ jobs:
           node-version-file: .nvmrc
           cache: 'yarn'
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
+      - name: Cache CocoaPods
+        id: pods-cache
+        uses: actions/cache/save@v3
+        if: always()
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: List directory
-        run: echo "$(ls -l)"
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
       - name: Install Yarn dependencies
-        if: steps.node-cache.outputs.cache-hit != 'true'
         run: yarn install && yarn patch-package
-
-      - name: List directory
-        run: echo "$(ls -l)"
 
       - name: Install macOS dependencies
         run: |
@@ -61,63 +58,19 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Cache CocoaPods
-        id: pods-cache
-        uses: actions/cache@v3
-        with:
-          path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-
       - name: Install CocoaPods
         if: steps.pods-cache.outputs.cache-hit != 'true'
         #run: cd ios ; pod install ; cd -
         #run: echo "$(pwd)"
         run: npx pod-install
 
-  run-detox:
-    name: Build & Test Detox tests
-    runs-on: macos-latest
-    needs: install-dependencies
-      
-    steps:
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-          cache: 'yarn'
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: List directory
-        run: echo "$(ls -l)"
-
       - name: Rebuild detox
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
       - name: Cache Detox build
-        id: cache-detox-build
-        uses: actions/cache@v3
+        id: detox-cache
+        uses: actions/cache/save@v3
+        if: always()
         with:
           path: ios/build
           key: ${{ runner.os }}-detox-build
@@ -125,10 +78,8 @@ jobs:
             ${{ runner.os }}-detox-build
       
       - name: Detox build iOS
-        if: steps.cache-detox-build.outputs.cache-hit != 'true'
-        run: |
-          echo "$(ls -l)"
-          yarn detox build --configuration ios.sim.debug
+        if: steps.detox-cache.outputs.cache-hit != 'true'
+        run: yarn detox build --configuration ios.sim.debug
       
       - name: Detox test iOS
         run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
@@ -137,5 +88,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: detox-artifacts
+          name: detox-fail-artifacts
           path: artifacts
+
