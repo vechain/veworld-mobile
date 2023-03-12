@@ -32,6 +32,9 @@ jobs:
           node-version-file: .nvmrc
           cache: 'yarn'
 
+      - name: Install Yarn dependencies
+        run: yarn install && yarn patch-package
+
       - name: Cache CocoaPods
         id: pods-cache
         uses: actions/cache/save@v3
@@ -39,11 +42,8 @@ jobs:
         with:
           path: ios/Pods
           key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-
-      - name: Install Yarn dependencies
-        run: yarn install && yarn patch-package
+          # restore-keys: |
+          #   ${{ runner.os }}-pods-
 
       - name: Install macOS dependencies
         run: |
@@ -74,8 +74,8 @@ jobs:
         with:
           path: ios/build
           key: ${{ runner.os }}-detox-build
-          restore-keys: |
-            ${{ runner.os }}-detox-build
+          # restore-keys: |
+          #   ${{ runner.os }}-detox-build
       
       - name: Detox build iOS
         if: steps.detox-cache.outputs.cache-hit != 'true'
