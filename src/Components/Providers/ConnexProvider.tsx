@@ -6,7 +6,7 @@ import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 type ConnexContextProviderProps = { children: React.ReactNode }
 const ConnexConext = React.createContext<Connex.Thor | undefined>(undefined)
 
-const ConnexConextProvider = ({ children }: ConnexContextProviderProps) => {
+const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     const [connex, setConnex] = useState<Connex.Thor>()
     const value = useMemo(() => (connex ? connex : undefined), [connex])
 
@@ -47,4 +47,4 @@ const useThor = () => {
     return context
 }
 
-export { ConnexConextProvider, useThor }
+export { ConnexContextProvider, useThor }
