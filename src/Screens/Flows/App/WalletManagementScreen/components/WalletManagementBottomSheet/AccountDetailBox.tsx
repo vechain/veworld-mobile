@@ -23,7 +23,7 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
     const { selectedAccount } = useUserPreferencesEntity()
 
     const isSelected = useMemo(
-        () => compareAddresses(selectedAccount, account.address),
+        () => compareAddresses(selectedAccount?.address, account.address),
         [selectedAccount, account],
     )
 
