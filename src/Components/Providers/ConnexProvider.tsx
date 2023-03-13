@@ -6,7 +6,7 @@ import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 type ConnexContextProviderProps = { children: React.ReactNode }
 const ConnexConext = React.createContext<Connex.Thor | undefined>(undefined)
 
-const ConneexConextProvider = ({ children }: ConnexContextProviderProps) => {
+const ConnexConextProvider = ({ children }: ConnexContextProviderProps) => {
     const [connex, setConnex] = useState<Connex.Thor>()
     const value = useMemo(() => (connex ? connex : undefined), [connex])
 
@@ -40,11 +40,11 @@ const useThor = () => {
     const context = React.useContext(ConnexConext)
     if (!context) {
         throw new Error(
-            "useRealmContext must be used within a UserContextProvider",
+            "useThorContext must be used within a UserContextProvider",
         )
     }
 
     return context
 }
 
-export { ConneexConextProvider, useThor }
+export { ConnexConextProvider, useThor }
