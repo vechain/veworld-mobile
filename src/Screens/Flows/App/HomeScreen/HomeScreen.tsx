@@ -13,6 +13,8 @@ import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
+import { useIsFocused } from "@react-navigation/native"
+import { useThor } from "~Components"
 
 export const HomeScreen = () => {
     const {
@@ -44,6 +46,17 @@ export const HomeScreen = () => {
         () => activeCard.activeIndex,
         [activeCard.activeIndex],
     )
+
+    const isFocused = useIsFocused()
+    const thor = useThor()
+
+    useEffect(() => {
+        async function init() {
+            const block = await thor.block().get()
+            console.log("block number", block?.number)
+        }
+        init()
+    }, [isFocused, thor])
 
     useEffect(() => {
         console.log("activeCardIndex", activeCardIndex)

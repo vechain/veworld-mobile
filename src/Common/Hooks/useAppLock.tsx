@@ -11,15 +11,11 @@ export const useAppLock = () => {
     const { cache } = useRealm()
     const appLockEntity = useAppLockEntity()
     const configEntity = useConfigEntity()
-    const userPrefEntity = useUserPreferencesEntity()
+    const { isAppLockActive } = useUserPreferencesEntity()
 
     const isWalletCreated = useMemo(
         () => configEntity?.isWalletCreated,
         [configEntity],
-    )
-    const isAppLockActive = useMemo(
-        () => userPrefEntity?.isAppLockActive,
-        [userPrefEntity],
     )
 
     const _appLockStatus = useMemo(
