@@ -35,15 +35,12 @@ jobs:
       - name: Install Yarn dependencies
         run: yarn install && yarn patch-package
 
-      - name: Cache CocoaPods
+      - name: Restore Pods cache
+        uses: actions/cache/restore@v3
         id: pods-cache
-        uses: actions/cache/save@v3
-        if: always()
         with:
           path: ios/Pods
           key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-          # restore-keys: |
-          #   ${{ runner.os }}-pods-
 
       - name: Install macOS dependencies
         run: |
@@ -60,29 +57,40 @@ jobs:
 
       - name: Install CocoaPods
         if: steps.pods-cache.outputs.cache-hit != 'true'
-        #run: cd ios ; pod install ; cd -
-        #run: echo "$(pwd)"
         run: npx pod-install
+
+      - name: Save Pods cache
+        uses: actions/cache/save@v3
+        id: pods-cache
+        if: always()
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
       - name: Rebuild detox
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
-      - name: Cache Detox build
+      - name: Restore Detox build
+        id: detox-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: ios/build
+          key: ${{ runner.os }}-detox-build
+      
+      - name: Detox build iOS
+        if: steps.detox-cache.outputs.cache-hit != 'true'
+        run: yarn detox build --configuration ios.sim.debug
+
+      - name: Save Detox build
         id: detox-cache
         uses: actions/cache/save@v3
         if: always()
         with:
           path: ios/build
           key: ${{ runner.os }}-detox-build
-          # restore-keys: |
-          #   ${{ runner.os }}-detox-build
-      
-      - name: Detox build iOS
-        if: steps.detox-cache.outputs.cache-hit != 'true'
-        run: yarn detox build --configuration ios.sim.debug
       
       - name: Detox test iOS
-        run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
+        run: yarn start && yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
 
       - name: Upload artifacts
         if: failure()
