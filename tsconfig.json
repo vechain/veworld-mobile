@@ -8,6 +8,7 @@
         "types": ["node", "jest"],
         "paths": {
             "~*": ["./src/*"],
+            "~app/*": ["./src/app/*"],
             "~Storage/*": ["./src/Storage/*"],
             "~Model/*": ["./src/Model/*"],
             "~Services/*": ["./src/Services/*"],
@@ -17,6 +18,7 @@
             "~Components/*": ["./src/Components/*"],
             "~i18n/*": ["./src/i18n/*"],
             "~Assets/*": ["./src/Assets/*"]
+
         }
     },
     "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx"]

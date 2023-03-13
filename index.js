@@ -24,6 +24,8 @@ import {
 import { typography } from "~Common/Theme/Typography"
 const { fontFamily } = typography
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import { Provider } from "react-redux"
+import store from "~app/store"
 
 // immer setup
 enableAllPlugins()
@@ -43,19 +45,21 @@ const Main = () => {
     return (
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <RealmContextProvider>
-                <ConnexContextProvider>
-                    <BottomSheetModalProvider>
-                        <NavigationProvider>
-                            <SafeAreaProvider>
-                                <TranslationProvider>
-                                    {fontsLoaded && <EntryPoint />}
-                                </TranslationProvider>
-                            </SafeAreaProvider>
-                        </NavigationProvider>
-                    </BottomSheetModalProvider>
-                </ConnexContextProvider>
-            </RealmContextProvider>
+            <Provider store={store}>
+                <RealmContextProvider>
+                    <ConnexContextProvider>
+                        <BottomSheetModalProvider>
+                            <NavigationProvider>
+                                <SafeAreaProvider>
+                                    <TranslationProvider>
+                                        {fontsLoaded && <EntryPoint />}
+                                    </TranslationProvider>
+                                </SafeAreaProvider>
+                            </NavigationProvider>
+                        </BottomSheetModalProvider>
+                    </ConnexContextProvider>
+                </RealmContextProvider>
+            </Provider>
         </GestureHandlerRootView>
     )
 }
