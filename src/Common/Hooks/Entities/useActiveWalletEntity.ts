@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import { ActiveWalletCard, useObjectListener, useRealm } from "~Storage"
 
 export const useActiveWalletEntity = () => {
@@ -9,5 +10,10 @@ export const useActiveWalletEntity = () => {
         cache,
     ) as ActiveWalletCard
 
-    return activeWalletEntity
+    const activeCardIndex = useMemo(
+        () => activeWalletEntity.activeIndex,
+        [activeWalletEntity.activeIndex],
+    )
+
+    return { activeCardIndex }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
@@ -40,12 +40,7 @@ export const HomeScreen = () => {
 
     const visibleHeightRef = useRef<number>(0)
 
-    const activeCard = useActiveWalletEntity()
-
-    const activeCardIndex = useMemo(
-        () => activeCard.activeIndex,
-        [activeCard.activeIndex],
-    )
+    const { activeCardIndex } = useActiveWalletEntity()
 
     const isFocused = useIsFocused()
     const thor = useThor()

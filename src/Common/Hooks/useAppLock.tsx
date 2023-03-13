@@ -9,19 +9,9 @@ import {
 
 export const useAppLock = () => {
     const { cache } = useRealm()
-    const appLockEntity = useAppLockEntity()
-    const configEntity = useConfigEntity()
+    const { appLockEntity, appLockStatus: _appLockStatus } = useAppLockEntity()
+    const { isWalletCreated } = useConfigEntity()
     const { isAppLockActive } = useUserPreferencesEntity()
-
-    const isWalletCreated = useMemo(
-        () => configEntity?.isWalletCreated,
-        [configEntity],
-    )
-
-    const _appLockStatus = useMemo(
-        () => appLockEntity?.status,
-        [appLockEntity?.status],
-    )
 
     const appLockStatus = useMemo(() => {
         if (!isWalletCreated || !isAppLockActive) {
