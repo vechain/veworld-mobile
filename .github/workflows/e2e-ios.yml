@@ -90,7 +90,7 @@ jobs:
           key: ${{ runner.os }}-detox-build
       
       - name: Detox test iOS
-        run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
+        run: yarn start & yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
 
       - name: Upload artifacts
         if: failure()
