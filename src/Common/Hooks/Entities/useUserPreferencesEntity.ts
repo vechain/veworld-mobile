@@ -15,15 +15,7 @@ export const useUserPreferencesEntity = () => {
         [userPreferencesEntity?.currentNetwork],
     )
 
-    const isAppLockActive = useMemo(
-        () => userPreferencesEntity?.isAppLockActive,
-        [userPreferencesEntity?.isAppLockActive],
-    )
-
-    const theme = useMemo(
-        () => userPreferencesEntity?.theme,
-        [userPreferencesEntity?.theme],
-    )
+    const { isAppLockActive, theme } = userPreferencesEntity
 
     return { isAppLockActive, currentNetwork, theme }
 }

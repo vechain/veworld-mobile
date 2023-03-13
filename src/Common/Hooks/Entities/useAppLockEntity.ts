@@ -1,4 +1,3 @@
-import { useMemo } from "react"
 import { AppLock, useObjectListener, useRealm } from "~Storage"
 
 export const useAppLockEntity = () => {
@@ -10,10 +9,7 @@ export const useAppLockEntity = () => {
         cache,
     ) as AppLock
 
-    const appLockStatus = useMemo(
-        () => appLockEntity?.status,
-        [appLockEntity?.status],
-    )
+    const { status: appLockStatus } = appLockEntity
 
     return { appLockStatus, appLockEntity }
 }
