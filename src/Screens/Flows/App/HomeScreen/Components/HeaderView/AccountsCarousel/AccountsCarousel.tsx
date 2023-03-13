@@ -33,7 +33,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
     }) => {
         const progressValue = useSharedValue<number>(selectedAccountIndex)
 
-        console.log(progressValue.value)
+        console.log({ progressValueCarousel: progressValue.value })
         const onProgressChange = useCallback(
             (absoluteProgress: number) => {
                 progressValue.value = absoluteProgress
