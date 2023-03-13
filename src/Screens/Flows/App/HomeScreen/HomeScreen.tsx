@@ -14,6 +14,7 @@ import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
 import { useIsFocused } from "@react-navigation/native"
 import { useThor } from "~Components"
+import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 
 export const HomeScreen = () => {
     const {
@@ -41,6 +42,8 @@ export const HomeScreen = () => {
 
     const isFocused = useIsFocused()
     const thor = useThor()
+
+    const { selectedAccount } = useUserPreferencesEntity()
 
     useEffect(() => {
         async function init() {
@@ -79,11 +82,14 @@ export const HomeScreen = () => {
                 )}
             </NestableScrollContainer>
 
-            <AccountManagementBottomSheet
-                ref={accountManagementBottomSheetRef}
-                onClose={closeAccountManagementSheet}
-                openAddAccountSheet={openAddAccountSheet}
-            />
+            {selectedAccount && (
+                <AccountManagementBottomSheet
+                    ref={accountManagementBottomSheetRef}
+                    onClose={closeAccountManagementSheet}
+                    openAddAccountSheet={openAddAccountSheet}
+                    account={selectedAccount}
+                />
+            )}
             <AddAccountBottomSheet
                 ref={addAccountBottomSheetRef}
                 onClose={closeAddAccountSheet}
