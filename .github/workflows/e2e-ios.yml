@@ -35,12 +35,12 @@ jobs:
       - name: Install Yarn dependencies
         run: yarn install && yarn patch-package
 
-      # - name: Restore Pods cache
-      #   uses: actions/cache/restore@v3
-      #   id: pods-cache
-      #   with:
-      #     path: ios/Pods
-      #     key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+      - name: Restore Pods cache
+        uses: actions/cache/restore@v3
+        id: pods-cache-restore
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
       - name: Install macOS dependencies
         run: |
@@ -56,7 +56,7 @@ jobs:
           bundler-cache: true
 
       - name: Install CocoaPods
-        if: steps.pods-cache.outputs.cache-hit != 'true'
+        if: steps.pods-cache-restore.outputs.cache-hit != 'true'
         run: npx pod-install
 
       - name: Save Pods cache
@@ -70,15 +70,15 @@ jobs:
       - name: Rebuild detox
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
-      # - name: Restore Detox build
-      #   id: detox-cache
-      #   uses: actions/cache/restore@v3
-      #   with:
-      #     path: ios/build
-      #     key: ${{ runner.os }}-detox-build
+      - name: Restore Detox build
+        id: detox-cache-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: ios/build
+          key: ${{ runner.os }}-detox-build
       
       - name: Detox build iOS
-        if: steps.detox-cache.outputs.cache-hit != 'true'
+        if: steps.detox-cache-restore.outputs.cache-hit != 'true'
         run: yarn detox build --configuration ios.sim.debug
 
       - name: Save Detox build
