@@ -7,7 +7,7 @@ import { name as appName } from "./app.json"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Common"
-import { TranslationProvider } from "~Components"
+import { ConnexContextProvider, TranslationProvider } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import { RealmContextProvider } from "~Storage"
@@ -44,15 +44,17 @@ const Main = () => {
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RealmContextProvider>
-                <BottomSheetModalProvider>
-                    <NavigationProvider>
-                        <SafeAreaProvider>
-                            <TranslationProvider>
-                                {fontsLoaded && <EntryPoint />}
-                            </TranslationProvider>
-                        </SafeAreaProvider>
-                    </NavigationProvider>
-                </BottomSheetModalProvider>
+                <ConnexContextProvider>
+                    <BottomSheetModalProvider>
+                        <NavigationProvider>
+                            <SafeAreaProvider>
+                                <TranslationProvider>
+                                    {fontsLoaded && <EntryPoint />}
+                                </TranslationProvider>
+                            </SafeAreaProvider>
+                        </NavigationProvider>
+                    </BottomSheetModalProvider>
+                </ConnexContextProvider>
             </RealmContextProvider>
         </GestureHandlerRootView>
     )
