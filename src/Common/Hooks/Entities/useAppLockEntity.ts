@@ -11,5 +11,5 @@ export const useAppLockEntity = () => {
 
     const { status: appLockStatus } = appLockEntity
 
-    return { appLockStatus, appLockEntity }
+    return { appLockStatus }
 }
