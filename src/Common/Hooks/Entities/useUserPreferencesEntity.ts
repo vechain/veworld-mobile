@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from "react"
-import { Account, useObjectListener, useRealm, UserPreferences } from "~Storage"
+import { useMemo } from "react"
+import { useObjectListener, useRealm, UserPreferences } from "~Storage"
 
 export const useUserPreferencesEntity = () => {
     const { store } = useRealm()
@@ -35,25 +35,12 @@ export const useUserPreferencesEntity = () => {
         [userPreferencesEntity?.balanceVisible],
     )
 
-    const setSelectedAccount = useCallback(
-        ({
-            account,
-            onlyIfNotSetted = false,
-            alreadyInWriteTransaction = false,
-        }: {
-            account: Account
-            onlyIfNotSetted?: boolean
-            alreadyInWriteTransaction?: boolean
-        }) => {
-            if (onlyIfNotSetted && userPreferencesEntity.selectedAccount) return
-            if (!alreadyInWriteTransaction)
-                store.write(() => {
-                    userPreferencesEntity.selectedAccount = account
-                })
-            else userPreferencesEntity.selectedAccount = account
-        },
-        [userPreferencesEntity, store],
-    )
+    /**
+     * Sets the selected account in the user preferences entity
+     * @param account
+     * @param accountNotInitiated Perform the write transaction only if the account is not initiated
+     * @param alreadyInWriteTransaction
+     */
 
     return {
         isAppLockActive,
@@ -62,6 +49,5 @@ export const useUserPreferencesEntity = () => {
         selectedAccount,
         balanceVisible,
         userPreferencesEntity,
-        setSelectedAccount,
     }
 }

@@ -24,7 +24,6 @@ export const HeaderView = memo(
         const { selectedAccount, userPreferencesEntity } =
             useUserPreferencesEntity()
 
-        console.log(selectedAccount)
         const selectedAccountIndex = useMemo(
             () =>
                 accounts.findIndex(account =>
@@ -36,11 +35,8 @@ export const HeaderView = memo(
             [selectedAccount, accounts],
         )
 
-        console.log(selectedAccountIndex)
-
         const onAccountChange = useCallback(
             (account: Account) => {
-                console.log(account)
                 store.write(() => {
                     userPreferencesEntity.selectedAccount = account
                 })

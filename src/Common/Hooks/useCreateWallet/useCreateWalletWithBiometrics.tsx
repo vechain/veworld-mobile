@@ -5,7 +5,7 @@ import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 import { useBiometrics } from "../useBiometrics"
-import { useUserPreferencesEntity } from "../Entities"
+import { setSelectedAccount } from "~Services"
 
 /**
  * useCreateWalletWithBiometrics
@@ -16,7 +16,6 @@ export const useCreateWalletWithBiometrics = () => {
 
     const [isComplete, setIsComplete] = useState(false)
 
-    const { setSelectedAccount } = useUserPreferencesEntity()
     const biometrics = useBiometrics()
     const accessControl = useMemo(
         () => biometrics?.accessControl,
@@ -80,9 +79,9 @@ export const useCreateWalletWithBiometrics = () => {
 
                     _device.accounts.push(account)
 
-                    setSelectedAccount({
+                    setSelectedAccount(store)({
                         account,
-                        onlyIfNotSetted: true,
+                        accountNotInitiated: true,
                         alreadyInWriteTransaction: true,
                     })
 
@@ -98,7 +97,7 @@ export const useCreateWalletWithBiometrics = () => {
         } catch (error) {
             console.log("CREATE WALLET ERROR : ", error)
         }
-    }, [accessControl, cache, setSelectedAccount, store])
+    }, [accessControl, cache, store])
     //* [END] - Create Wallet
 
     return {

@@ -15,6 +15,8 @@ import {
     initRealmClasses,
 } from "./RealmContext"
 
+import { getUserPreferences } from "./Model"
+
 import { useObjectListener } from "./useObjectListener"
 import { useListListener } from "./useListListener"
 
@@ -32,4 +34,5 @@ export {
     AppLock,
     UserPreferences,
     Network,
+    getUserPreferences,
 }

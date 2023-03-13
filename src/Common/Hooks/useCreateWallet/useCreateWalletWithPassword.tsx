@@ -4,7 +4,7 @@ import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
-import { useUserPreferencesEntity } from "../Entities"
+import { setSelectedAccount } from "~/Services"
 
 /**
  * useCreateWalletWithPassword
@@ -14,7 +14,6 @@ export const useCreateWalletWithPassword = () => {
     const { store, cache } = useRealm()
 
     const [isComplete, setIsComplete] = useState(false)
-    const { setSelectedAccount } = useUserPreferencesEntity()
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
@@ -75,9 +74,9 @@ export const useCreateWalletWithPassword = () => {
 
                         _device.accounts.push(account)
 
-                        setSelectedAccount({
+                        setSelectedAccount(store)({
                             account,
-                            onlyIfNotSetted: true,
+                            accountNotInitiated: true,
                             alreadyInWriteTransaction: true,
                         })
 
@@ -94,7 +93,7 @@ export const useCreateWalletWithPassword = () => {
                 console.log("CREATE WALLET ERROR : ", error)
             }
         },
-        [cache, store, setSelectedAccount],
+        [cache, store],
     )
     //* [END] - Create Wallet
 
