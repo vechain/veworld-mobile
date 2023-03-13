@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { FormattingUtils, useTheme } from "~Common"
-import { useSelectedAccountEntity } from "~Common/Hooks/Entities"
+import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
 import {
     BaseIcon,
@@ -20,10 +20,10 @@ export const AccountDetailBox: React.FC<Props> = ({ account }) => {
 
     const { store } = useRealm()
 
-    const selectedAccount = useSelectedAccountEntity()
+    const { selectedAccount } = useUserPreferencesEntity()
 
     const isSelected = useMemo(
-        () => compareAddresses(selectedAccount.address, account.address),
+        () => compareAddresses(selectedAccount, account.address),
         [selectedAccount, account],
     )
 

@@ -1,5 +1,5 @@
-import { useMemo } from "react"
-import { useObjectListener, useRealm, UserPreferences } from "~Storage"
+import { useCallback, useMemo } from "react"
+import { Account, useObjectListener, useRealm, UserPreferences } from "~Storage"
 
 export const useUserPreferencesEntity = () => {
     const { store } = useRealm()
@@ -25,5 +25,43 @@ export const useUserPreferencesEntity = () => {
         [userPreferencesEntity?.theme],
     )
 
-    return { isAppLockActive, currentNetwork, theme }
+    const selectedAccount = useMemo(
+        () => userPreferencesEntity?.selectedAccount,
+        [userPreferencesEntity?.selectedAccount],
+    )
+
+    const balanceVisible = useMemo(
+        () => userPreferencesEntity?.balanceVisible,
+        [userPreferencesEntity?.balanceVisible],
+    )
+
+    const setSelectedAccount = useCallback(
+        ({
+            account,
+            onlyIfNotSetted = false,
+            alreadyInWriteTransaction = false,
+        }: {
+            account: Account
+            onlyIfNotSetted?: boolean
+            alreadyInWriteTransaction?: boolean
+        }) => {
+            if (onlyIfNotSetted && userPreferencesEntity.selectedAccount) return
+            if (!alreadyInWriteTransaction)
+                store.write(() => {
+                    userPreferencesEntity.selectedAccount = account
+                })
+            else userPreferencesEntity.selectedAccount = account
+        },
+        [userPreferencesEntity, store],
+    )
+
+    return {
+        isAppLockActive,
+        currentNetwork,
+        theme,
+        selectedAccount,
+        balanceVisible,
+        userPreferencesEntity,
+        setSelectedAccount,
+    }
 }

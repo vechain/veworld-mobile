@@ -1,18 +1,11 @@
 import { useCallback, useMemo, useState } from "react"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import {
-    Account,
-    Config,
-    Device,
-    Mnemonic,
-    XPub,
-    useRealm,
-    SelectedAccount,
-} from "~Storage"
+import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 import { useBiometrics } from "../useBiometrics"
+import { useUserPreferencesEntity } from "../Entities"
 
 /**
  * useCreateWalletWithBiometrics
@@ -23,23 +16,11 @@ export const useCreateWalletWithBiometrics = () => {
 
     const [isComplete, setIsComplete] = useState(false)
 
+    const { setSelectedAccount } = useUserPreferencesEntity()
     const biometrics = useBiometrics()
     const accessControl = useMemo(
         () => biometrics?.accessControl,
         [biometrics?.accessControl],
-    )
-
-    const setSelectedAccountIfNotSetted = useCallback(
-        (account: Account) => {
-            const selectedAccount = store.objectForPrimaryKey<SelectedAccount>(
-                SelectedAccount.getName(),
-                SelectedAccount.getPrimaryKey(),
-            )
-            if (selectedAccount && !selectedAccount.address) {
-                selectedAccount.address = account.address
-            }
-        },
-        [store],
     )
 
     //* [START] - Create Wallet
@@ -99,7 +80,11 @@ export const useCreateWalletWithBiometrics = () => {
 
                     _device.accounts.push(account)
 
-                    setSelectedAccountIfNotSetted(account)
+                    setSelectedAccount({
+                        account,
+                        onlyIfNotSetted: true,
+                        alreadyInWriteTransaction: true,
+                    })
 
                     if (config) {
                         config.userSelectedSecurity =
@@ -113,7 +98,7 @@ export const useCreateWalletWithBiometrics = () => {
         } catch (error) {
             console.log("CREATE WALLET ERROR : ", error)
         }
-    }, [accessControl, cache, store, setSelectedAccountIfNotSetted])
+    }, [accessControl, cache, setSelectedAccount, store])
     //* [END] - Create Wallet
 
     return {

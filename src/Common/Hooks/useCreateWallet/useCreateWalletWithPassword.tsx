@@ -1,17 +1,10 @@
 import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import {
-    Account,
-    Config,
-    Device,
-    Mnemonic,
-    XPub,
-    useRealm,
-    SelectedAccount,
-} from "~Storage"
+import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
+import { useUserPreferencesEntity } from "../Entities"
 
 /**
  * useCreateWalletWithPassword
@@ -21,19 +14,7 @@ export const useCreateWalletWithPassword = () => {
     const { store, cache } = useRealm()
 
     const [isComplete, setIsComplete] = useState(false)
-
-    const setSelectedAccountIfNotSetted = useCallback(
-        (account: Account) => {
-            const selectedAccount = store.objectForPrimaryKey<SelectedAccount>(
-                SelectedAccount.getName(),
-                SelectedAccount.getPrimaryKey(),
-            )
-            if (selectedAccount && !selectedAccount.address) {
-                selectedAccount.address = account.address
-            }
-        },
-        [store],
-    )
+    const { setSelectedAccount } = useUserPreferencesEntity()
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
@@ -94,7 +75,11 @@ export const useCreateWalletWithPassword = () => {
 
                         _device.accounts.push(account)
 
-                        setSelectedAccountIfNotSetted(account)
+                        setSelectedAccount({
+                            account,
+                            onlyIfNotSetted: true,
+                            alreadyInWriteTransaction: true,
+                        })
 
                         if (config) {
                             config.userSelectedSecurity =
@@ -109,7 +94,7 @@ export const useCreateWalletWithPassword = () => {
                 console.log("CREATE WALLET ERROR : ", error)
             }
         },
-        [cache, store, setSelectedAccountIfNotSetted],
+        [cache, store, setSelectedAccount],
     )
     //* [END] - Create Wallet
 

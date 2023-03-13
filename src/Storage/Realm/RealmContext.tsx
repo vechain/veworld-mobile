@@ -7,7 +7,6 @@ import {
     Config,
     Mnemonic,
     Account,
-    SelectedAccount,
     AppLock,
     UserPreferences,
     Network,
@@ -77,15 +76,7 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
 
 const initStoreRealm = (buffKey: ArrayBuffer) => {
     const instance = new Realm({
-        schema: [
-            Device,
-            XPub,
-            Config,
-            Account,
-            SelectedAccount,
-            UserPreferences,
-            Network,
-        ],
+        schema: [Device, XPub, Config, Account, UserPreferences, Network],
         path: "persisted.realm",
         encryptionKey: buffKey,
         deleteRealmIfMigrationNeeded:
@@ -157,15 +148,6 @@ export const initRealmClasses = (
         )
         if (!config) {
             store.create(Config.getName(), {})
-        }
-
-        const selectedAccount = store.objectForPrimaryKey<SelectedAccount>(
-            SelectedAccount.getName(),
-            SelectedAccount.getPrimaryKey(),
-        )
-
-        if (!selectedAccount) {
-            store.create(SelectedAccount.getName(), {})
         }
 
         const userPreferences = store.objectForPrimaryKey<UserPreferences>(
