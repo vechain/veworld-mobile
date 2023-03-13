@@ -4,7 +4,7 @@ import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
-import { setSelectedAccount } from "~/Services"
+import { setSelectedAccount } from "~Services"
 
 /**
  * useCreateWalletWithPassword
