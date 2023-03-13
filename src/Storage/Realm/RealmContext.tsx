@@ -1,3 +1,4 @@
+import "react-native-get-random-values" // relma dependency for uuid - DO NOT REMOVE
 import Realm from "realm"
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
@@ -9,12 +10,13 @@ import {
     SelectedAccount,
     AppLock,
     UserPreferences,
+    Network,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
-import { WALLET_STATUS } from "~Model"
+import { NETWORK_TYPE, WALLET_STATUS } from "~Model"
 import crypto from "react-native-quick-crypto"
 import { ColorSchemeName } from "react-native"
-import { useColorScheme } from "~Common"
+import { ThorConstants, useColorScheme } from "~Common"
 
 type State = {
     store: Realm
@@ -82,6 +84,7 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
             Account,
             SelectedAccount,
             UserPreferences,
+            Network,
         ],
         path: "persisted.realm",
         encryptionKey: buffKey,
@@ -119,6 +122,7 @@ export const initRealmClasses = (
     store: Realm,
     colorScheme: NonNullable<ColorSchemeName>,
 ) => {
+    // [ START ] - CACHE
     cache.write(() => {
         const appLock = cache.objectForPrimaryKey<AppLock>(
             AppLock.getName(),
@@ -133,43 +137,52 @@ export const initRealmClasses = (
         )
         if (!mnemonic) cache.create(Mnemonic.getName(), {})
     })
+    // [ END ] - CACHE
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
+    // [ START ] - STORE
+    store.write(() => {
+        const networks = store.objects<Network>(Network.getName())
+        if (networks.length === 0) {
+            store.create(Network.getName(), {
+                ...ThorConstants.makeNetwork(NETWORK_TYPE.MAIN),
+            })
+            store.create(Network.getName(), {
+                ...ThorConstants.makeNetwork(NETWORK_TYPE.TEST),
+            })
+        }
 
-    if (!config) {
-        store.write(() => {
+        const config = store.objectForPrimaryKey<Config>(
+            Config.getName(),
+            Config.getPrimaryKey(),
+        )
+        if (!config) {
             store.create(Config.getName(), {})
-        })
-    }
+        }
 
-    const selectedAccount = store.objectForPrimaryKey<SelectedAccount>(
-        SelectedAccount.getName(),
-        SelectedAccount.getPrimaryKey(),
-    )
+        const selectedAccount = store.objectForPrimaryKey<SelectedAccount>(
+            SelectedAccount.getName(),
+            SelectedAccount.getPrimaryKey(),
+        )
 
-    if (!selectedAccount) {
-        store.write(() => {
+        if (!selectedAccount) {
             store.create(SelectedAccount.getName(), {})
-        })
-    }
+        }
 
-    const userPreferences = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
+        const userPreferences = store.objectForPrimaryKey<UserPreferences>(
+            UserPreferences.getName(),
+            UserPreferences.getPrimaryKey(),
+        )
 
-    if (!userPreferences) {
-        store.write(() => {
-            store.create(UserPreferences.getName(), { theme: colorScheme })
-        })
-    } else {
-        store.write(() => {
+        if (!userPreferences) {
+            store.create(UserPreferences.getName(), {
+                theme: colorScheme,
+                currentNetwork: networks[0], // main network is default
+            })
+        } else {
             userPreferences.theme = colorScheme
-        })
-    }
+        }
+    })
+    // [ END ] - STORE
 }
 
 const getKey = (encKey: string) => {

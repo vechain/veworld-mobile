@@ -1,19 +1,20 @@
 import { useCallback, useMemo } from "react"
 import { WALLET_STATUS } from "~Model"
 import { useRealm } from "~Storage"
-import { useAppLockEntity, useConfigEntity } from "./Entities"
+import {
+    useAppLockEntity,
+    useConfigEntity,
+    useUserPreferencesEntity,
+} from "./Entities"
 
 export const useAppLock = () => {
     const { cache } = useRealm()
     const appLockEntity = useAppLockEntity()
     const configEntity = useConfigEntity()
+    const { isAppLockActive } = useUserPreferencesEntity()
 
     const isWalletCreated = useMemo(
         () => configEntity?.isWalletCreated,
-        [configEntity],
-    )
-    const isAppLockActive = useMemo(
-        () => configEntity?.isAppLockActive,
         [configEntity],
     )
 

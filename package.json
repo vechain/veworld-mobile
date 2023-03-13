@@ -21,8 +21,7 @@
         "e2e.android.build.r": "detox build --configuration android.emu.release",
         "e2e.android.test.d": "detox test --configuration android.emu.debug",
         "e2e.android.test.r": "detox test --configuration android.emu.release",
-        "typesafe-i18n": "typesafe-i18n",
-        "gen-svg": "react-native-vector-image generate"
+        "typesafe-i18n": "typesafe-i18n"
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
@@ -57,8 +56,9 @@
         "react-native-bouncy-checkbox": "^3.0.6",
         "react-native-draggable-flatlist": "4.0.1",
         "react-native-drop-shadow": "^0.0.6",
-        "react-native-flipper": "^0.177.0",
+        "react-native-flipper": "0.163.0",
         "react-native-gesture-handler": "^2.9.0",
+        "react-native-get-random-values": "^1.8.0",
         "react-native-pager-view": "^6.1.2",
         "react-native-quick-crypto": "^0.5.0",
         "react-native-reanimated": "^2.14.4",
@@ -69,7 +69,6 @@
         "react-native-svg": "13.4.0",
         "react-native-tab-view": "^3.3.4",
         "react-native-vector-icons": "^9.2.0",
-        "react-native-vector-image": "^0.3.3",
         "realm": "11.3.1",
         "realm-flipper-plugin-device": "^1.1.0",
         "stream-browserify": "^3.0.0",

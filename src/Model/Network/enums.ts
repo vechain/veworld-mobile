@@ -1,6 +1,5 @@
-// export enum NETWORK_TYPE {
-//     MAIN = "mainnet",
-//     TEST = "testnet",
-//     SOLO = "solo",
-//     OTHER = "other",
-// }
+export enum NETWORK_TYPE {
+    MAIN = "mainnet",
+    TEST = "testnet",
+    OTHER = "other",
+}

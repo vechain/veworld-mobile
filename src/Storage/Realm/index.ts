@@ -7,6 +7,7 @@ import {
     SelectedAccount,
     AppLock,
     UserPreferences,
+    Network,
 } from "./Model"
 
 import {
@@ -32,4 +33,5 @@ export {
     SelectedAccount,
     AppLock,
     UserPreferences,
+    Network,
 }

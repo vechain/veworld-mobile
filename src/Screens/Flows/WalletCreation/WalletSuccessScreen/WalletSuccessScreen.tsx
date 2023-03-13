@@ -8,8 +8,7 @@ import {
     RequireUserPassword,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import VectorImage from "react-native-vector-image"
-import { VeChainVetLogo } from "~Assets"
+import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { AppLock, Config, useRealm } from "~Storage"
@@ -170,7 +169,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         w={100}
                         grow={1}>
                         <BaseView align="center">
-                            <VectorImage source={VeChainVetLogo} />
+                            <VeChainVetLogoSVG />
                             <BaseText align="center" py={20}>
                                 {LL.BD_WALLET_SUCCESS()}
                             </BaseText>

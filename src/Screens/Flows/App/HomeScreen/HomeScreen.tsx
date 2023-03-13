@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
@@ -12,6 +12,8 @@ import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
+import { useIsFocused } from "@react-navigation/native"
+import { useThor } from "~Components"
 
 export const HomeScreen = () => {
     const {
@@ -36,6 +38,17 @@ export const HomeScreen = () => {
     const paddingBottom = useBottomTabBarHeight()
 
     const visibleHeightRef = useRef<number>(0)
+
+    const isFocused = useIsFocused()
+    const thor = useThor()
+
+    useEffect(() => {
+        async function init() {
+            const block = await thor.block().get()
+            console.log("block number", block?.number)
+        }
+        init()
+    }, [isFocused, thor])
 
     return (
         <>
