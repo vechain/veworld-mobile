@@ -1,10 +1,11 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { SettingsScreen } from "~Screens"
+import { ChangeNetworkScreen, SettingsScreen } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
+    [Routes.SETTINGS_NETWORK]: undefined
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -16,6 +17,11 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.SETTINGS}
                     component={SettingsScreen}
+                    options={{ headerShown: false }}
+                />
+                <Settings.Screen
+                    name={Routes.SETTINGS_NETWORK}
+                    component={ChangeNetworkScreen}
                     options={{ headerShown: false }}
                 />
             </Settings.Group>
