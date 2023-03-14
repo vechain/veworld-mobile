@@ -7,7 +7,6 @@ import {
     Config,
     Mnemonic,
     Account,
-    ActiveWalletCard,
     AppLock,
     UserPreferences,
     Network,
@@ -88,7 +87,7 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
 
 const initCacheRealm = () => {
     const instance = new Realm({
-        schema: [Mnemonic, ActiveWalletCard, AppLock],
+        schema: [Mnemonic, AppLock],
         path: "inMemory.realm",
         inMemory: true,
         deleteRealmIfMigrationNeeded:
@@ -122,12 +121,6 @@ export const initRealmClasses = (
         )
         if (!appLock)
             cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
-
-        const activeWalletCard = cache.objectForPrimaryKey<ActiveWalletCard>(
-            ActiveWalletCard.getName(),
-            ActiveWalletCard.getPrimaryKey(),
-        )
-        if (!activeWalletCard) cache.create(ActiveWalletCard.getName(), {})
 
         const mnemonic = cache.objectForPrimaryKey<Mnemonic>(
             Mnemonic.getName(),

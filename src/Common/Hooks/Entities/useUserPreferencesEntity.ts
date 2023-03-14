@@ -25,5 +25,29 @@ export const useUserPreferencesEntity = () => {
         [userPreferencesEntity?.theme],
     )
 
-    return { isAppLockActive, currentNetwork, theme }
+    const selectedAccount = useMemo(
+        () => userPreferencesEntity?.selectedAccount,
+        [userPreferencesEntity?.selectedAccount],
+    )
+
+    const balanceVisible = useMemo(
+        () => userPreferencesEntity?.balanceVisible,
+        [userPreferencesEntity?.balanceVisible],
+    )
+
+    /**
+     * Sets the selected account in the user preferences entity
+     * @param account
+     * @param accountNotInitiated Perform the write transaction only if the account is not initiated
+     * @param alreadyInWriteTransaction
+     */
+
+    return {
+        isAppLockActive,
+        currentNetwork,
+        theme,
+        selectedAccount,
+        balanceVisible,
+        userPreferencesEntity,
+    }
 }
