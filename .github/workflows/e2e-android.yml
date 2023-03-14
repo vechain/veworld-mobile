@@ -74,13 +74,48 @@ jobs:
       # - name: Detox test Android release
       #   run: yarn start & yarn detox test --configuration android.emu.debug.31 --cleanup --loglevel trace --headless --record-logs all
 
+      - name: Cache AVD snapshot
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-31-aosp-atd
+      
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          # Use the slimmer aosp_atd images for working
+          # around "System UI isn't responding" ANR
+          # (Application Not Responding) error
+          #
+          # https://android-developers.googleblog.com/2021/10/whats-new-in-scalable-automated-testing.html#:~:text=Slimmer%20Emulator%20System%20Images
+          # https://github.com/ReactiveCircus/android-emulator-runner/issues/129
+          # https://github.com/upleveled/hotline-bling-codealong/pull/26#issuecomment-1094659722
+          target: aosp_atd
+          api-level: 31
+          arch: x86
+          channel: canary
+          profile: pixel
+          avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching"
+      
       - name: Detox test Android release
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          target: aosp_atd
           api-level: 31
-          arch: x86_64
+          arch: x86
+          channel: canary
+          profile: pixel
           avd-name: ${{ steps.device.outputs.AVD_NAME }}
-          script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
+          #script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
+          script: yarn detox test --configuration android.emu.debug.31 --record-logs all
 
       - name: Upload artifacts
         if: failure()
