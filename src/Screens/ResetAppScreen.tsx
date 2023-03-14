@@ -9,7 +9,7 @@ import {
     BaseView,
     CheckBoxWithText,
 } from "~Components"
-import { Config, useRealm } from "~Storage"
+import { getConfig, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const ResetAppScreen = () => {
@@ -22,10 +22,7 @@ export const ResetAppScreen = () => {
 
     const onBackPress = useCallback(() => {
         store.write(() => {
-            const config = store.objectForPrimaryKey<Config>(
-                Config.getName(),
-                Config.getPrimaryKey(),
-            )
+            const config = getConfig(store)
             if (config) config.isResettingApp = false
         })
     }, [store])

@@ -25,7 +25,7 @@ export const useAppReset = () => {
             await loopOverAndDeleteDevices(devices)
         } catch (error) {
             console.log("Error deleting Keychain Entries", error)
-            const _devices = store.objects<Device>(Device.getName())
+            const _devices = getDevices(store)
             if (_devices.length > 0) {
                 loopOverAndDeleteDevices(_devices)
             }

@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native"
 import { StringUtils, useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
-import { Network, UserPreferences, useRealm } from "~Storage"
+import { useRealm, getNetworks, getUserPreferences } from "~Storage"
 import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 import { EnableFeature } from "./Components/EnableFeature"
 import { Routes } from "~Navigation"
@@ -30,7 +30,7 @@ export const ChangeNetworkScreen = () => {
         onClose: closeBottonSheet,
     } = useBottomSheetModal()
 
-    const networks = store.objects<Network>(Network.getName())
+    const networks = getNetworks(store)
     const { currentNetwork } = useUserPreferencesEntity()
     const goBack = useCallback(() => nav.goBack(), [nav])
     const onPressInput = useCallback(() => openBottomSheet(), [openBottomSheet])
@@ -39,10 +39,7 @@ export const ChangeNetworkScreen = () => {
         [nav],
     )
 
-    const userPref = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
+    const userPref = getUserPreferences(store)
 
     const isShowConversion = useMemo(
         () => userPref!.showConversionOtherNets,

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { useTheme } from "~Common"
 import { BaseButton } from "~Components"
-import { Config, useRealm } from "~Storage"
+import { getConfig, useRealm } from "~Storage"
 
 export const Reset: React.FC = () => {
     const { store } = useRealm()
@@ -9,10 +9,7 @@ export const Reset: React.FC = () => {
 
     const onReset = useCallback(() => {
         store.write(() => {
-            const config = store.objectForPrimaryKey<Config>(
-                Config.getName(),
-                Config.getPrimaryKey(),
-            )
+            const config = getConfig(store)
             if (config) config.isResettingApp = true
         })
     }, [store])

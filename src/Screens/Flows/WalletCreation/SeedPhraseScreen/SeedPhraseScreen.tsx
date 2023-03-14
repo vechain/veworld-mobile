@@ -15,7 +15,7 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
-import { Mnemonic, useRealm } from "~Storage"
+import { getMnemonic, useRealm } from "~Storage"
 import { useTheme } from "~Common"
 
 export const SeedPhraseScreen = () => {
@@ -35,10 +35,7 @@ export const SeedPhraseScreen = () => {
 
     const onBackupPress = useCallback(() => {
         cache.write(() => {
-            let _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-                Mnemonic.getName(),
-                Mnemonic.getPrimaryKey(),
-            )
+            let _mnemonic = getMnemonic(cache)
 
             if (_mnemonic) {
                 _mnemonic.mnemonic = mnemonic

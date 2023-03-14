@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { SettingsConstants } from "~Common/Constant"
 import { CryptoUtils } from "~Common/Utils"
-import { Config, useRealm } from "~Storage"
+import { getConfig, useRealm } from "~Storage"
 
 export const usePasswordValidation = () => {
     const { store } = useRealm()
@@ -9,10 +9,7 @@ export const usePasswordValidation = () => {
     const validatePassword = useCallback(
         async (userPassword: string[]) => {
             try {
-                const config = store.objectForPrimaryKey<Config>(
-                    Config.getName(),
-                    Config.getPrimaryKey(),
-                )
+                const config = getConfig(store)
 
                 const pinValidationString = config?.pinValidationString
                 let decryptedString = CryptoUtils.decrypt<string>(

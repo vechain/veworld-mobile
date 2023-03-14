@@ -2,15 +2,12 @@ import React, { useCallback, useMemo, useState } from "react"
 import { Switch } from "react-native"
 import { BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
-import { AppLock, UserPreferences, useRealm } from "~Storage"
+import { useRealm, getUserPreferences, getAppLock } from "~Storage"
 
 export const SecureApp = () => {
     const { store, cache } = useRealm()
 
-    const userPref = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
+    const userPref = getUserPreferences(store)
 
     const isEnabled = useMemo(() => userPref!.isAppLockActive, [userPref])
     const [isAppLock, setIsAppLock] = useState(isEnabled)
@@ -19,10 +16,7 @@ export const SecureApp = () => {
         (newValue: boolean) => {
             setIsAppLock(newValue)
 
-            let appLock = cache.objectForPrimaryKey<AppLock>(
-                AppLock.getName(),
-                AppLock.getPrimaryKey(),
-            )
+            const appLock = getAppLock(cache)
 
             cache.write(() => {
                 if (appLock) {

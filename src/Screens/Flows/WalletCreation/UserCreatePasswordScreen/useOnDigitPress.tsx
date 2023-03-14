@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import produce from "immer"
 import { CryptoUtils, SettingsConstants } from "~Common"
-import { Config, useRealm } from "~Storage"
+import { getConfig, useRealm } from "~Storage"
 
 export const useOnDigitPress = () => {
     const [isPinError, setIsPinError] = useState(false)
@@ -84,10 +84,7 @@ export const useOnDigitPress = () => {
     // set success
     useEffect(() => {
         if (pinTypedCounter === 2 && pinMatch) {
-            const config = store.objectForPrimaryKey<Config>(
-                Config.getName(),
-                Config.getPrimaryKey(),
-            )
+            const config = getConfig(store)
 
             const pinValidationString = CryptoUtils.encrypt<string>(
                 SettingsConstants.VALIDATION_STRING,
