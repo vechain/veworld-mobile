@@ -115,6 +115,10 @@ type RootTranslation = {
 	 */
 	BTN_ADD_ACCOUNT: string
 	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	BTN_ADD_CUSTOM_NODE: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -219,6 +223,10 @@ type RootTranslation = {
 	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​c​o​n​v​e​r​s​i​o​n
 	 */
 	BD_OTHER_NETWORKS: string
+	/**
+	 * D​i​s​p​l​a​y​ ​a​n​ ​i​n​d​i​c​a​t​o​r​ ​w​h​e​n​ ​t​r​a​n​s​a​c​t​i​n​g​ ​o​n​ ​a​n​o​t​h​e​r​ ​n​e​t​w​o​r​k
+	 */
+	BD_NETWORK_INDICATOR: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -543,6 +551,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
 	/**
+	 * Add a custom node
+	 */
+	BTN_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -646,6 +658,10 @@ export type TranslationFunctions = {
 	 * Other networks - show conversion
 	 */
 	BD_OTHER_NETWORKS: () => LocalizedString
+	/**
+	 * Display an indicator when transacting on another network
+	 */
+	BD_NETWORK_INDICATOR: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */

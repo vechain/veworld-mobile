@@ -1,19 +1,22 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import {
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
+    BaseTouchable,
     BaseTouchableBox,
     BaseView,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import { useBottomSheetModal, useTheme } from "~Common"
+import { StringUtils, useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
-import { Network, useRealm } from "~Storage"
+import { Network, UserPreferences, useRealm } from "~Storage"
 import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
+import { EnableFeature } from "./Components/EnableFeature"
+import { Routes } from "~Navigation"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
@@ -31,6 +34,46 @@ export const ChangeNetworkScreen = () => {
     const { currentNetwork } = useUserPreferencesEntity()
     const goBack = useCallback(() => nav.goBack(), [nav])
     const onPressInput = useCallback(() => openBottomSheet(), [openBottomSheet])
+    const onAddCustomPress = useCallback(
+        () => nav.navigate(Routes.SETTINGS_CUSTOM_NET),
+        [nav],
+    )
+
+    const userPref = store.objectForPrimaryKey<UserPreferences>(
+        UserPreferences.getName(),
+        UserPreferences.getPrimaryKey(),
+    )
+
+    const isShowConversion = useMemo(
+        () => userPref!.showConversionOtherNets,
+        [userPref],
+    )
+    const [isConversionEnabled, setIsConversionEnabled] =
+        useState(isShowConversion)
+
+    const toggleConverionSwitch = useCallback(
+        (newValue: boolean) => {
+            setIsConversionEnabled(newValue)
+
+            store.write(() => {
+                userPref!.showConversionOtherNets = newValue
+            })
+        },
+        [userPref, store],
+    )
+
+    const isShowTestTag = useMemo(() => userPref!.showTestNetTag, [userPref])
+    const [isTag, setIsTag] = useState(isShowTestTag)
+    const toggleTagSwitch = useCallback(
+        (newValue: boolean) => {
+            setIsTag(newValue)
+
+            store.write(() => {
+                userPref!.showTestNetTag = newValue
+            })
+        },
+        [userPref, store],
+    )
 
     return (
         <BaseSafeArea grow={1}>
@@ -49,7 +92,7 @@ export const ChangeNetworkScreen = () => {
                 <BaseText typographyFont="bodyMedium">
                     {LL.BD_SELECT_NETWORK()}
                 </BaseText>
-                <BaseSpacer height={12} />
+
                 <BaseText typographyFont="caption">
                     {LL.TITLE_NETWORK()}
                 </BaseText>
@@ -59,15 +102,37 @@ export const ChangeNetworkScreen = () => {
                 <BaseTouchableBox
                     action={onPressInput}
                     justifyContent="space-between">
-                    <BaseText>{capitalize(currentNetwork.type)}</BaseText>
+                    <BaseText>
+                        {StringUtils.capitalize(currentNetwork.type)}
+                    </BaseText>
                     <BaseIcon name="magnify" />
                 </BaseTouchableBox>
 
                 <BaseSpacer height={20} />
 
-                <BaseText typographyFont="bodyMedium">
-                    {LL.BD_OTHER_NETWORKS()}
-                </BaseText>
+                <BaseTouchable
+                    action={onAddCustomPress}
+                    title={LL.BTN_ADD_CUSTOM_NODE()}
+                    underlined
+                />
+
+                <BaseSpacer height={20} />
+
+                <EnableFeature
+                    title={LL.BD_OTHER_NETWORKS()}
+                    subtitle={LL.BD_NETWORK_INDICATOR()}
+                    onValueChange={toggleConverionSwitch}
+                    value={isConversionEnabled}
+                />
+
+                <BaseSpacer height={20} />
+
+                <EnableFeature
+                    title={LL.BD_OTHER_NETWORKS()}
+                    subtitle={LL.BD_NETWORK_INDICATOR()}
+                    onValueChange={toggleTagSwitch}
+                    value={isTag}
+                />
             </BaseView>
 
             <ChangeNetworkBottomSheet
@@ -85,7 +150,3 @@ const baseStyles = StyleSheet.create({
         alignSelf: "flex-start",
     },
 })
-
-const capitalize = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1)
-}

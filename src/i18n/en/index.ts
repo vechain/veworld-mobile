@@ -31,6 +31,7 @@ const en: BaseTranslation = {
     BTN_RENAME_ACCOUNT: "Rename account",
     BTN_REMOVE_ACCOUNT: "Remove account",
     BTN_ADD_ACCOUNT: "Add account",
+    BTN_ADD_CUSTOM_NODE: "Add a custom node",
 
     // BODY
     BD_GDPR:
@@ -71,6 +72,7 @@ const en: BaseTranslation = {
     BD_SELECT_WORD: "Select word {number}",
     BD_SELECT_NETWORK: "Select your network",
     BD_OTHER_NETWORKS: "Other networks - show conversion",
+    BD_NETWORK_INDICATOR: "Display an indicator when transacting on another network",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",

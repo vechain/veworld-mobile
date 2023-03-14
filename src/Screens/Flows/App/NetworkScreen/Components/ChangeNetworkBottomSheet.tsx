@@ -4,6 +4,7 @@ import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { Network, UserPreferences, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
+import { StringUtils } from "~Common"
 
 type Props = {
     networks: Realm.Results<Network & Realm.Object<unknown, never>>
@@ -49,14 +50,12 @@ export const ChangeNetworkBottomSheet = React.forwardRef<
             {networks.map(network => (
                 <BaseView my={10} w={100} key={network.type}>
                     <BaseTouchableBox action={() => onPress(network)}>
-                        <BaseText>{capitalize(network.type)}</BaseText>
+                        <BaseText>
+                            {StringUtils.capitalize(network.type)}
+                        </BaseText>
                     </BaseTouchableBox>
                 </BaseView>
             ))}
         </BaseBottomSheet>
     )
 })
-
-const capitalize = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1)
-}

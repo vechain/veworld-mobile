@@ -3,7 +3,7 @@ import { BaseSafeArea, BaseSpacer, BaseText } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { FlashList } from "@shopify/flash-list"
-import { View, ViewToken } from "react-native"
+import { StyleSheet, View, ViewToken } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 
 export const SettingsScreen = () => {
@@ -14,14 +14,7 @@ export const SettingsScreen = () => {
     const [isScrollable, setIsScrollable] = useState(false)
 
     const Seperator = useCallback(
-        () => (
-            <View
-                style={{
-                    borderBottomColor: "rgba(0,0,0,0.1)",
-                    borderBottomWidth: 1,
-                }}
-            />
-        ),
+        () => <View style={baseStyles.seperator} />,
         [],
     )
 
@@ -48,21 +41,6 @@ export const SettingsScreen = () => {
     )
 
     return (
-        // <BaseSafeArea>
-        //     <BaseView align="center" justify="center" mx={20}>
-        //         <BaseText>Settings Screen</BaseText>
-        //         <BaseSpacer height={40} />
-        //         <SecureApp />
-        //         <BaseSpacer height={20} />
-        //         <EnableBiometrics />
-        //         <BaseSpacer height={20} />
-        //         <ChangeTheme />
-        //         <BaseSpacer height={50} />
-        //         <BaseSpacer height={60} />
-        //         <Reset />
-        //     </BaseView>
-        // </BaseSafeArea>
-
         <BaseSafeArea grow={1}>
             <BaseText typographyFont="largeTitle" mx={20}>
                 {LL.TITLE_SETTINGS()}
@@ -72,7 +50,7 @@ export const SettingsScreen = () => {
 
             <FlashList
                 data={SCREEN_LIST}
-                contentContainerStyle={{ paddingHorizontal: 20 }}
+                contentContainerStyle={baseStyles.contentContainerStyle}
                 ItemSeparatorComponent={Seperator}
                 estimatedItemSize={56}
                 scrollEnabled={isScrollable}
@@ -85,6 +63,16 @@ export const SettingsScreen = () => {
         </BaseSafeArea>
     )
 }
+
+const baseStyles = StyleSheet.create({
+    contentContainerStyle: {
+        paddingHorizontal: 20,
+    },
+    seperator: {
+        borderBottomColor: "rgba(0,0,0,0.1)",
+        borderBottomWidth: 1,
+    },
+})
 
 const getList = (LL: TranslationFunctions) => [
     {
