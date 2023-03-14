@@ -1,10 +1,17 @@
 import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
+import {
+    Account,
+    Config,
+    Device,
+    Mnemonic,
+    XPub,
+    useRealm,
+    getUserPreferences,
+} from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
-import { setSelectedAccount } from "~Services"
 
 /**
  * useCreateWalletWithPassword
@@ -74,11 +81,9 @@ export const useCreateWalletWithPassword = () => {
 
                         _device.accounts.push(account)
 
-                        setSelectedAccount(store)({
-                            account,
-                            accountNotInitiated: true,
-                            alreadyInWriteTransaction: true,
-                        })
+                        const userPreferences = getUserPreferences(store)
+                        if (!userPreferences.selectedAccount)
+                            userPreferences.selectedAccount = account
 
                         if (config) {
                             config.userSelectedSecurity =

@@ -1,11 +1,18 @@
 import { useCallback, useMemo, useState } from "react"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
+import {
+    Account,
+    Config,
+    Device,
+    Mnemonic,
+    XPub,
+    useRealm,
+    getUserPreferences,
+} from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 import { useBiometrics } from "../useBiometrics"
-import { setSelectedAccount } from "~Services"
 
 /**
  * useCreateWalletWithBiometrics
@@ -79,11 +86,9 @@ export const useCreateWalletWithBiometrics = () => {
 
                     _device.accounts.push(account)
 
-                    setSelectedAccount(store)({
-                        account,
-                        accountNotInitiated: true,
-                        alreadyInWriteTransaction: true,
-                    })
+                    const userPreferences = getUserPreferences(store)
+                    if (!userPreferences.selectedAccount)
+                        userPreferences.selectedAccount = account
 
                     if (config) {
                         config.userSelectedSecurity =
