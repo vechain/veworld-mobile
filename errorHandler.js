@@ -6,8 +6,6 @@ import {
 import RNRestart from "react-native-restart"
 
 const allowInDevMode = true // is an optional parameter is a boolean.
-//   If set to true the handler to be called in place of RED screen
-//   in development mode also.
 
 // unhandled JS errors
 // in this case is just possible to display an alert to the user and log the error to sentry
