@@ -5,8 +5,7 @@ import { StyleSheet, Dimensions } from "react-native"
 import { PaginationItem } from "./PaginationItem"
 import { AccountCard } from "./AccountCard"
 import { BaseSpacer, BaseView } from "~Components"
-import { useActiveCard } from "../../../Hooks/useActiveCard"
-import { useAccountsList } from "~Common/Hooks/Entities"
+import { Account } from "~Storage"
 
 const width = Dimensions.get("window").width - 40
 
@@ -18,20 +17,28 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-type Props = { openAccountManagementSheet: () => void }
+type Props = {
+    accounts: Account[]
+    selectedAccountIndex: number
+    onAccountChange: (account: Account) => void
+    openAccountManagementSheet: () => void
+}
 
 export const AccountsCarousel: React.FC<Props> = memo(
-    ({ openAccountManagementSheet }) => {
-        const progressValue = useSharedValue<number>(0)
-        const onScrollEnd = useActiveCard()
-
-        const accounts = useAccountsList()
+    ({
+        accounts,
+        selectedAccountIndex,
+        onAccountChange,
+        openAccountManagementSheet,
+    }) => {
+        const progressValue = useSharedValue<number>(selectedAccountIndex)
 
         const onProgressChange = useCallback(
-            (_: number, absoluteProgress: number) => {
+            (absoluteProgress: number) => {
                 progressValue.value = absoluteProgress
+                onAccountChange(accounts[absoluteProgress])
             },
-            [progressValue],
+            [progressValue, onAccountChange, accounts],
         )
 
         const renderItem = useCallback(
@@ -63,9 +70,10 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     mode="horizontal-stack"
                     data={accounts}
                     modeConfig={StackConfig}
-                    onProgressChange={onProgressChange}
+                    defaultIndex={selectedAccountIndex}
+                    // onProgressChange={onProgressChange}
                     renderItem={renderItem}
-                    onSnapToItem={onScrollEnd}
+                    onSnapToItem={onProgressChange}
                 />
 
                 <BaseSpacer height={10} />
