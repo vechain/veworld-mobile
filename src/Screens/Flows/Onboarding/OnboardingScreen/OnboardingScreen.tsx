@@ -20,8 +20,8 @@ export const OnboardingScreen = () => {
     const { LL } = useI18nContext()
 
     const flatListRef = useRef<FlatList | null>(null)
-    const [ListIndex, setListIndex] = useState(1)
-    const [BtnIndex, setBtnIndex] = useState(0)
+    const [listIndex, setListIndex] = useState(1)
+    const [btnIndex, setBtnIndex] = useState(0)
 
     // Progress value for the stage of onboarding
     const progressValue = useSharedValue<number>(0)
@@ -69,10 +69,10 @@ export const OnboardingScreen = () => {
 
     const onButtonPress = () => {
         if (flatListRef.current) {
-            flatListRef.current.scrollToIndex({ index: ListIndex })
+            flatListRef.current.scrollToIndex({ index: listIndex })
         }
 
-        if (BtnIndex === STEPS.SAFE_AND_FAST) {
+        if (btnIndex === STEPS.SAFE_AND_FAST) {
             nav.navigate(Routes.WALLET_TYPE_CREATION)
         }
     }
@@ -130,7 +130,7 @@ export const OnboardingScreen = () => {
                             action={onButtonPress}
                             w={100}
                             mx={20}
-                            title={slides[BtnIndex].button}
+                            title={slides[btnIndex].button}
                         />
                     </BaseView>
                 </BaseView>
