@@ -115,6 +115,10 @@ type RootTranslation = {
 	 */
 	BTN_ADD_ACCOUNT: string
 	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	BTN_ADD_CUSTOM_NODE: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -212,6 +216,18 @@ type RootTranslation = {
 	 */
 	BD_SELECT_WORD: RequiredParams<'number'>
 	/**
+	 * S​e​l​e​c​t​ ​y​o​u​r​ ​n​e​t​w​o​r​k
+	 */
+	BD_SELECT_NETWORK: string
+	/**
+	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​c​o​n​v​e​r​s​i​o​n
+	 */
+	BD_OTHER_NETWORKS: string
+	/**
+	 * D​i​s​p​l​a​y​ ​a​n​ ​i​n​d​i​c​a​t​o​r​ ​w​h​e​n​ ​t​r​a​n​s​a​c​t​i​n​g​ ​o​n​ ​a​n​o​t​h​e​r​ ​n​e​t​w​o​r​k
+	 */
+	BD_NETWORK_INDICATOR: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -287,6 +303,50 @@ type RootTranslation = {
 	 * W​a​l​l​e​t​ ​m​a​n​a​g​e​m​e​n​t
 	 */
 	TITLE_WALLET_MANAGEMENT: string
+	/**
+	 * S​e​t​t​i​n​g​s
+	 */
+	TITLE_SETTINGS: string
+	/**
+	 * G​e​n​e​r​a​l
+	 */
+	TITLE_GENERAL: string
+	/**
+	 * A​d​v​a​n​c​e​d
+	 */
+	TITLE_ADVANCED: string
+	/**
+	 * M​a​n​a​g​e​ ​W​a​l​l​e​t
+	 */
+	TITLE_MANAGE_WALLET: string
+	/**
+	 * N​F​T
+	 */
+	TITLE_NFT: string
+	/**
+	 * N​e​t​w​o​r​k
+	 */
+	TITLE_NETWORK: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	TITLE_CONTACTS: string
+	/**
+	 * P​r​i​v​a​c​y​ ​a​n​d​ ​S​e​c​u​r​i​t​y
+	 */
+	TITLE_PRIVACY: string
+	/**
+	 * A​l​e​r​t​s
+	 */
+	TITLE_ALERTS: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​A​p​p​s
+	 */
+	TITLE_CONNECTED_APPS: string
+	/**
+	 * A​b​o​u​t
+	 */
+	TITLE_ABOUT: string
 	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
@@ -491,6 +551,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
 	/**
+	 * Add a custom node
+	 */
+	BTN_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -587,6 +651,18 @@ export type TranslationFunctions = {
 	 */
 	BD_SELECT_WORD: (arg: { number: unknown }) => LocalizedString
 	/**
+	 * Select your network
+	 */
+	BD_SELECT_NETWORK: () => LocalizedString
+	/**
+	 * Other networks - show conversion
+	 */
+	BD_OTHER_NETWORKS: () => LocalizedString
+	/**
+	 * Display an indicator when transacting on another network
+	 */
+	BD_NETWORK_INDICATOR: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -662,6 +738,50 @@ export type TranslationFunctions = {
 	 * Wallet management
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
+	/**
+	 * Settings
+	 */
+	TITLE_SETTINGS: () => LocalizedString
+	/**
+	 * General
+	 */
+	TITLE_GENERAL: () => LocalizedString
+	/**
+	 * Advanced
+	 */
+	TITLE_ADVANCED: () => LocalizedString
+	/**
+	 * Manage Wallet
+	 */
+	TITLE_MANAGE_WALLET: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	TITLE_NFT: () => LocalizedString
+	/**
+	 * Network
+	 */
+	TITLE_NETWORK: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	TITLE_CONTACTS: () => LocalizedString
+	/**
+	 * Privacy and Security
+	 */
+	TITLE_PRIVACY: () => LocalizedString
+	/**
+	 * Alerts
+	 */
+	TITLE_ALERTS: () => LocalizedString
+	/**
+	 * Connected Apps
+	 */
+	TITLE_CONNECTED_APPS: () => LocalizedString
+	/**
+	 * About
+	 */
+	TITLE_ABOUT: () => LocalizedString
 	/**
 	 * Local wallet
 	 */

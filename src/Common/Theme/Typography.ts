@@ -58,10 +58,17 @@ const fontSize = {
     28: 28,
 }
 
+const lineHeight = {
+    title: 28,
+    bodyMedium: 20,
+    caption: 16,
+}
+
 export type TypographyObject = {
     fontFamily: (typeof fontFamily)[keyof typeof fontFamily]
     fontSize: (typeof fontSize)[keyof typeof fontSize]
     fontWeight: (typeof fontWeight)[keyof typeof fontWeight]
+    lineHeight?: (typeof lineHeight)[keyof typeof lineHeight]
 }
 
 export const defaults: Record<TFonts, TypographyObject> = {
@@ -85,6 +92,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Bold"],
         fontSize: fontSize[22],
         fontWeight: fontWeight[700],
+        lineHeight: lineHeight.title,
     },
     subTitle: {
         fontFamily: fontFamily["Inter-Bold"],
@@ -115,6 +123,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Medium"],
         fontSize: 14,
         fontWeight: fontWeight[500],
+        lineHeight: lineHeight.bodyMedium,
     },
     buttonPrimary: {
         fontFamily: fontFamily["Inter-Bold"],
@@ -138,8 +147,9 @@ export const defaults: Record<TFonts, TypographyObject> = {
     },
     caption: {
         fontFamily: fontFamily["Inter-Light"],
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: fontWeight.normal,
+        lineHeight: lineHeight.caption,
     },
 
     // MONO
@@ -175,4 +185,10 @@ export const defaults: Record<TFonts, TypographyObject> = {
     },
 }
 
-export const typography = { defaults, fontSize, fontWeight, fontFamily }
+export const typography = {
+    defaults,
+    fontSize,
+    fontWeight,
+    fontFamily,
+    lineHeight,
+}
