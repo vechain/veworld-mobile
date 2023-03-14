@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useCallback } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
@@ -9,6 +9,7 @@ import {
     useThemedStyles,
     PlatformUtils,
 } from "~Common"
+import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 import {
     AccountIcon,
     AddressButton,
@@ -17,7 +18,7 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Account } from "~Storage"
+import { Account, useRealm } from "~Storage"
 import { Balance } from "./Balance"
 
 interface Props extends AnimateProps<ViewProps> {
@@ -31,6 +32,18 @@ export const AccountCard: React.FC<Props> = memo(props => {
         props
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
+
+    const { store } = useRealm()
+    const { balanceVisible, userPreferencesEntity } = useUserPreferencesEntity()
+
+    const toggleBalanceVisibility = useCallback(() => {
+        if (userPreferencesEntity)
+            store.write(() => {
+                userPreferencesEntity.balanceVisible =
+                    !userPreferencesEntity.balanceVisible
+            })
+    }, [userPreferencesEntity, store])
+
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
@@ -67,7 +80,11 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     />
                 </BaseView>
                 <BaseSpacer height={PlatformUtils.isIOS() ? 18 : 10} />
-                <Balance balance={CryptoUtils.random().toString()} />
+                <Balance
+                    isVisible={balanceVisible}
+                    toggleVisible={toggleBalanceVisibility}
+                    balance={CryptoUtils.random().toString()}
+                />
             </BaseView>
         </Animated.View>
     )
