@@ -2,9 +2,8 @@ import React, { memo, useCallback } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
-import { PaginationItem } from "./PaginationItem"
+import { PaginationItem, BaseSpacer, BaseView } from "~Components"
 import { AccountCard } from "./AccountCard"
-import { BaseSpacer, BaseView } from "~Components"
 import { Account } from "~Storage"
 
 const width = Dimensions.get("window").width - 40
@@ -33,12 +32,18 @@ export const AccountsCarousel: React.FC<Props> = memo(
     }) => {
         const progressValue = useSharedValue<number>(selectedAccountIndex)
 
-        const onProgressChange = useCallback(
+        const onSnapToItem = useCallback(
             (absoluteProgress: number) => {
-                progressValue.value = absoluteProgress
                 onAccountChange(accounts[absoluteProgress])
             },
-            [progressValue, onAccountChange, accounts],
+            [onAccountChange, accounts],
+        )
+
+        const onProgressChange = useCallback(
+            (_: number, absoluteProgress: number) => {
+                progressValue.value = absoluteProgress
+            },
+            [progressValue],
         )
 
         const renderItem = useCallback(
@@ -71,9 +76,9 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     data={accounts}
                     modeConfig={StackConfig}
                     defaultIndex={selectedAccountIndex}
-                    // onProgressChange={onProgressChange}
+                    onProgressChange={onProgressChange}
                     renderItem={renderItem}
-                    onSnapToItem={onProgressChange}
+                    onSnapToItem={onSnapToItem}
                 />
 
                 <BaseSpacer height={10} />
