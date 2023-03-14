@@ -31,3 +31,9 @@ export class UserPreferences extends Object {
         },
     }
 }
+
+export const getUserPreferences = (store: Realm) =>
+    store.objectForPrimaryKey<UserPreferences>(
+        UserPreferences.getName(),
+        UserPreferences.getPrimaryKey(),
+    )
