@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
-        "postinstall": "npx pod-install && yarn husky install && patch-package",
+        "install:all": "yarn install && npx pod-install && yarn husky install && patch-package",
         "doctor": "react-native doctor",
         "android": "react-native run-android",
         "ios": "react-native run-ios --simulator 'iPhone 14 Pro'",
