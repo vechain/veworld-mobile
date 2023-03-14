@@ -2,15 +2,15 @@ import { useCallback } from "react"
 import { WALLET_STATUS } from "~Model"
 import KeychainService from "~Services/KeychainService"
 import {
-    Account,
-    ActiveWalletCard,
-    AppLock,
-    Config,
     Device,
-    Network,
-    UserPreferences,
-    XPub,
     useRealm,
+    getAppLock,
+    getConfig,
+    getNetworks,
+    getUserPreferences,
+    getAccounts,
+    getDevices,
+    getXPub,
 } from "~Storage"
 import Realm from "realm"
 import { SettingsConstants } from "~Common/Constant"
@@ -19,7 +19,7 @@ export const useAppReset = () => {
     const { store, cache } = useRealm()
 
     const appReset = useCallback(async () => {
-        const devices = store.objects<Device>(Device.getName())
+        const devices = getDevices(store)
 
         try {
             await loopOverAndDeleteDevices(devices)
@@ -50,31 +50,17 @@ const loopOverAndDeleteDevices = async (
 }
 
 const resetRealm = async (store: Realm, cache: Realm) => {
-    const appLock = cache.objectForPrimaryKey<AppLock>(
-        AppLock.getName(),
-        AppLock.getPrimaryKey(),
-    )
-
-    const activeWalletCard = cache.objectForPrimaryKey<ActiveWalletCard>(
-        ActiveWalletCard.getName(),
-        ActiveWalletCard.getPrimaryKey(),
-    )
+    const appLock = getAppLock(cache)
 
     cache.write(() => {
         appLock!.status = WALLET_STATUS.LOCKED
         activeWalletCard!.activeIndex = 0
     })
 
-    let config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
+    const config = getConfig(store)
 
-    const networks = store.objects<Network>(Network.getName())
-    const userPreferences = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
+    const networks = getNetworks(store)
+    const userPreferences = getUserPreferences(store)
 
     store.write(() => {
         config!.userSelectedSecurity = "NONE"
@@ -87,9 +73,9 @@ const resetRealm = async (store: Realm, cache: Realm) => {
         userPreferences!.showConversionOtherNets = true
         userPreferences!.isAppLockActive = true
 
-        store.delete(store.objects(Device.getName()))
-        store.delete(store.objects(Account.getName()))
-        store.delete(store.objects(XPub.getName()))
+        store.delete(getDevices(store))
+        store.delete(getAccounts(store))
+        store.delete(getXPub(store))
 
         config!.isWalletCreated = false
         config!.isResettingApp = false

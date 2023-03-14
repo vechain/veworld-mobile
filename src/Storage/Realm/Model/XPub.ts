@@ -17,3 +17,8 @@ export class XPub extends Object {
         },
     }
 }
+
+export const getXPub = (store: Realm, query?: string) =>
+    query
+        ? store.objects<XPub>(XPub.getName())
+        : store.objects<XPub>(XPub.getName())
