@@ -27,38 +27,60 @@ jobs:
       - name: Install & Patch packages
         run: yarn install && yarn patch-package
 
-      - name: Install Java
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
+          cache: gradle
           distribution: 'zulu'
-          architecture: 'x64'
+          #architecture: 'x64'
           java-version: '11'
 
-      - name: Download Android Emulator
-        run: |
-          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-31;google_apis;x86"
-          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Pixel 6 Pro API 31" -k 'system-images;android-31;google_apis;x86'
-          $ANDROID_HOME/emulator/emulator -list-avds
+      # - name: Download Android Emulator
+      #   run: |
+      #     echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-31;google_apis;x86"
+      #     echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Pixel 6 Pro API 31" -k 'system-images;android-31;google_apis;x86'
+      #     $ANDROID_HOME/emulator/emulator -list-avds
 
-      - name: Start Android Emulator
-        #timeout-minutes: 10
-        #continue-on-error: true
-        run: |
-          echo "Starting emulator"
-          nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
-          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
-          $ANDROID_HOME/platform-tools/adb devices
-          echo "Emulator started"
+      # - name: Start Android Emulator
+      #   #timeout-minutes: 10
+      #   #continue-on-error: true
+      #   run: |
+      #     echo "Starting emulator"
+      #     nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
+      #     $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+      #     $ANDROID_HOME/platform-tools/adb devices
+      #     echo "Emulator started"
 
       - name: Rebuild Detox Framework
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+
+      - name: Cache Detox build
+        id: cache-detox-build
+        uses: actions/cache@v3
+        with:
+          path: android/app/build
+          key: ${{ runner.os }}-detox-build
+          restore-keys: |
+            ${{ runner.os }}-detox-build
       
       - name: Detox build Android release
-        #if: steps.detox-cache-restore.outputs.cache-hit != 'true'
+        if: steps.cache-detox-build.outputs.cache-hit != 'true'
         run: yarn detox build --configuration android.emu.debug.31
+
+      - name: Get device name
+        id: device
+        run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
       
+      # - name: Detox test Android release
+      #   run: yarn start & yarn detox test --configuration android.emu.debug.31 --cleanup --loglevel trace --headless --record-logs all
+
       - name: Detox test Android release
-        run: yarn start & yarn detox test --configuration android.emu.debug.31 --cleanup --loglevel trace --headless --record-logs all
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
 
       - name: Upload artifacts
         if: failure()
