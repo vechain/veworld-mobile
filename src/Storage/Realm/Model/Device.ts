@@ -40,3 +40,8 @@ export class Device extends Object {
         },
     }
 }
+
+export const getDevices = (store: Realm, query?: string) =>
+    query
+        ? store.objects<Device>(Device.getName()).filtered(query)
+        : store.objects<Device>(Device.getName())

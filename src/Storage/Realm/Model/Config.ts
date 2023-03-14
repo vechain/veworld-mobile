@@ -35,3 +35,6 @@ export class Config extends Object {
         },
     }
 }
+
+export const getConfig = (store: Realm) =>
+    store.objectForPrimaryKey<Config>(Config.getName(), Config.getPrimaryKey())
