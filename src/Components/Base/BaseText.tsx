@@ -97,6 +97,9 @@ export const BaseText = (props: Props) => {
                         fontWeight: computedFontWeight,
                         textAlign: props.align,
                         fontStyle: props.italic ? "italic" : "normal",
+                        lineHeight: typographyFont
+                            ? defaultTypography[typographyFont].lineHeight
+                            : undefined,
                     },
                     style,
                 ]}
