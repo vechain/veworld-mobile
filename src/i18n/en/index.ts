@@ -31,6 +31,7 @@ const en: BaseTranslation = {
     BTN_RENAME_ACCOUNT: "Rename account",
     BTN_REMOVE_ACCOUNT: "Remove account",
     BTN_ADD_ACCOUNT: "Add account",
+    BTN_ADD_CUSTOM_NODE: "Add a custom node",
 
     // BODY
     BD_GDPR:
@@ -69,6 +70,9 @@ const en: BaseTranslation = {
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
     BD_YOUR_BALANCE: "Your balance",
     BD_SELECT_WORD: "Select word {number}",
+    BD_SELECT_NETWORK: "Select your network",
+    BD_OTHER_NETWORKS: "Other networks - show conversion",
+    BD_NETWORK_INDICATOR: "Display an indicator when transacting on another network",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -90,6 +94,17 @@ const en: BaseTranslation = {
     TITLE_WALLET_SUCCESS: "You're finally one of us!",
     TITLE_RESET_APP: "Confirm Reset",
     TITLE_WALLET_MANAGEMENT: "Wallet management",
+    TITLE_SETTINGS: "Settings",
+    TITLE_GENERAL: "General",
+    TITLE_ADVANCED: "Advanced",
+    TITLE_MANAGE_WALLET: "Manage Wallet",
+    TITLE_NFT: "NFT",
+    TITLE_NETWORK: "Network",
+    TITLE_CONTACTS: "Contacts",
+    TITLE_PRIVACY: "Privacy and Security",
+    TITLE_ALERTS: "Alerts",
+    TITLE_CONNECTED_APPS: "Connected Apps",
+    TITLE_ABOUT: "About",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
