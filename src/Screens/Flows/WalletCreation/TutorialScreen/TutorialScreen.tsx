@@ -7,10 +7,11 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    ListSlide,
+    PaginationItem,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { ListSlide, PaginationItem } from "~Components"
 import { Slide } from "~Model"
 import { STEPS } from "../Enums"
 import { ShieldIconSVG, KeyIconSVG, ChessIconSVG } from "~Assets"

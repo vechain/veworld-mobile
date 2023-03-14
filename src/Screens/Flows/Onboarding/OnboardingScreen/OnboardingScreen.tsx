@@ -1,7 +1,14 @@
 import React, { useCallback, useRef, useState } from "react"
 import { FlatList } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { BaseButton, BaseSafeArea, BaseSpacer, BaseView } from "~Components"
+import {
+    BaseButton,
+    BaseSafeArea,
+    BaseSpacer,
+    BaseView,
+    ListSlide,
+    PaginationItem,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import {
@@ -10,7 +17,6 @@ import {
     VeChainVetLogoWithTitleSVG,
     CustomizationIconSVG,
 } from "~Assets"
-import { ListSlide, PaginationItem } from "~Components"
 import { Slide } from "~Model"
 import { STEPS } from "./Enums"
 import { useSharedValue } from "react-native-reanimated"
