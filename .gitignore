@@ -63,10 +63,5 @@ buck-out/
 /ios/Pods/
 /vendor/bundle/
 
-
-#Yarn
-yarn.lock
-
-
 # vscode
 .vscode/settings.json
