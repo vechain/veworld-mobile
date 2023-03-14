@@ -54,7 +54,6 @@ const resetRealm = async (store: Realm, cache: Realm) => {
 
     cache.write(() => {
         appLock!.status = WALLET_STATUS.LOCKED
-        activeWalletCard!.activeIndex = 0
     })
 
     const config = getConfig(store)
@@ -72,6 +71,8 @@ const resetRealm = async (store: Realm, cache: Realm) => {
         userPreferences!.showTestNetTag = true
         userPreferences!.showConversionOtherNets = true
         userPreferences!.isAppLockActive = true
+        userPreferences!.selectedAccount = undefined
+        userPreferences!.balanceVisible = true
 
         store.delete(getDevices(store))
         store.delete(getAccounts(store))

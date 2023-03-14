@@ -7,7 +7,6 @@ import {
     Config,
     Mnemonic,
     Account,
-    ActiveWalletCard,
     AppLock,
     UserPreferences,
     Network,
@@ -93,7 +92,7 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
 
 const initCacheRealm = () => {
     const instance = new Realm({
-        schema: [Mnemonic, ActiveWalletCard, AppLock],
+        schema: [Mnemonic, AppLock],
         path: "inMemory.realm",
         inMemory: true,
         deleteRealmIfMigrationNeeded:

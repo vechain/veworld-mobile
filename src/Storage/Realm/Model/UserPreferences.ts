@@ -1,4 +1,5 @@
 import { Object } from "realm"
+import { Account } from "./Account"
 import { Network } from "./Network"
 
 export class UserPreferences extends Object {
@@ -8,6 +9,8 @@ export class UserPreferences extends Object {
     showTestNetTag!: boolean
     showConversionOtherNets!: boolean
     isAppLockActive!: boolean
+    selectedAccount?: Account
+    balanceVisible!: boolean
 
     static getName(): string {
         return UserPreferences.schema.name
@@ -28,12 +31,15 @@ export class UserPreferences extends Object {
             showTestNetTag: { type: "bool", default: true },
             showConversionOtherNets: { type: "bool", default: true },
             isAppLockActive: { type: "bool", default: true },
+            selectedAccount: "Account?",
+            balanceVisible: { type: "bool", default: true },
         },
     }
 }
 
-export const getUserPreferences = (store: Realm) =>
-    store.objectForPrimaryKey<UserPreferences>(
+export const getUserPreferences = (store: Realm): UserPreferences => {
+    return store.objectForPrimaryKey<UserPreferences>(
         UserPreferences.getName(),
         UserPreferences.getPrimaryKey(),
-    )
+    ) as UserPreferences
+}
