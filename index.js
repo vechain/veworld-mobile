@@ -24,6 +24,7 @@ import {
 import { typography } from "~Common/Theme/Typography"
 const { fontFamily } = typography
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import "./errorHandler"
 
 // immer setup
 enableAllPlugins()
