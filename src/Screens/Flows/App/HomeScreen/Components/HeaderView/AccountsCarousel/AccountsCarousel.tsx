@@ -2,9 +2,8 @@ import React, { memo, useCallback } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
-import { PaginationItem } from "~Components"
+import { PaginationItem, BaseSpacer, BaseView } from "~Components"
 import { AccountCard } from "./AccountCard"
-import { BaseSpacer, BaseView } from "~Components"
 import { Account } from "~Storage"
 
 const width = Dimensions.get("window").width - 40

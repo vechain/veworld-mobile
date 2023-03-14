@@ -10,12 +10,11 @@ import {
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { ListSlide } from "~Components"
-import { Slide } from "../Types"
+import { ListSlide, PaginationItem } from "~Components"
+import { Slide } from "~Model"
 import { STEPS } from "../Enums"
 import { ShieldIconSVG, KeyIconSVG, ChessIconSVG } from "~Assets"
 import { useSharedValue } from "react-native-reanimated"
-import { PaginationItem } from "~Components"
 
 export const TutorialScreen = () => {
     const nav = useNavigation()

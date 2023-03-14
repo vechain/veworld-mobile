@@ -10,11 +10,10 @@ import {
     VeChainVetLogoWithTitleSVG,
     CustomizationIconSVG,
 } from "~Assets"
-import { ListSlide } from "~Components"
-import { Slide } from "./Types"
+import { ListSlide, PaginationItem } from "~Components"
+import { Slide } from "~Model"
 import { STEPS } from "./Enums"
 import { useSharedValue } from "react-native-reanimated"
-import { PaginationItem } from "~Components"
 
 export const OnboardingScreen = () => {
     const nav = useNavigation()

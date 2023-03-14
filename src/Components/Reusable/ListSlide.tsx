@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native"
 import React from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { Slide } from "../../Screens/Flows/Onboarding/OnboardingScreen/Types"
+import { Slide } from "~Model"
 
 type Props = {
     item: Slide
