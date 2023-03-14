@@ -1,7 +1,7 @@
-import { Dimensions } from "react-native"
+import { Dimensions, StyleSheet } from "react-native"
 import React from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { Slide } from "../Types"
+import { Slide } from "../../Screens/Flows/Onboarding/OnboardingScreen/Types"
 
 type Props = {
     item: Slide
@@ -9,11 +9,7 @@ type Props = {
 
 export const ListSlide = ({ item }: Props) => {
     return (
-        <BaseView
-            align="center"
-            justify="flex-start"
-            py={80}
-            style={{ width: Dimensions.get("window").width }}>
+        <BaseView align="center" justify="flex-start" style={baseStyles.view}>
             {item.icon}
 
             <BaseSpacer height={40} />
@@ -30,3 +26,10 @@ export const ListSlide = ({ item }: Props) => {
         </BaseView>
     )
 }
+
+const baseStyles = StyleSheet.create({
+    view: {
+        width: Dimensions.get("window").width,
+        paddingTop: 80,
+    },
+})
