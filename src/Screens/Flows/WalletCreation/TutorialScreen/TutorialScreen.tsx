@@ -10,10 +10,12 @@ import {
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { ListSlide } from "../Components/ListSlide"
+import { ListSlide } from "~Components"
 import { Slide } from "../Types"
 import { STEPS } from "../Enums"
 import { ShieldIconSVG, KeyIconSVG, ChessIconSVG } from "~Assets"
+import { useSharedValue } from "react-native-reanimated"
+import { PaginationItem } from "~Components"
 
 export const TutorialScreen = () => {
     const nav = useNavigation()
@@ -22,6 +24,9 @@ export const TutorialScreen = () => {
     const flatListRef = useRef<FlatList | null>(null)
     const [ListIndex, setListIndex] = useState(1)
     const [BtnIndex, setBtnIndex] = useState(0)
+
+    // Progress value for the stage of tutorial screen
+    const progressValue = useSharedValue<number>(0)
 
     const slides = [
         {
@@ -44,14 +49,25 @@ export const TutorialScreen = () => {
         },
     ]
 
-    const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
-        let activeIndex = viewableItems[0].index
-        setBtnIndex(activeIndex)
+    const onViewableItemsChanged = useCallback(
+        ({ viewableItems }: any) => {
+            let activeIndex = viewableItems[0].index
+            setBtnIndex(activeIndex)
 
-        if (activeIndex < STEPS.SAFETY) {
-            setListIndex(activeIndex + 1)
-        }
-    }, [])
+            //Quickly switch PaginatedItem to the next or previous slide when visible on screen
+            if (
+                viewableItems[1] &&
+                viewableItems[1].index !== progressValue.value
+            )
+                progressValue.value = viewableItems[1].index
+            else progressValue.value = viewableItems[0].index
+
+            if (activeIndex < STEPS.SAFETY) {
+                setListIndex(activeIndex + 1)
+            }
+        },
+        [progressValue],
+    )
 
     const onButtonPress = () => {
         if (flatListRef.current) {
@@ -70,7 +86,7 @@ export const TutorialScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" grow={1}>
+            <BaseView align="center">
                 <BaseView selfAlign="flex-start" mx={20}>
                     <BaseText typographyFont="largeTitle">
                         Create Wallet
@@ -91,6 +107,20 @@ export const TutorialScreen = () => {
                     onViewableItemsChanged={onViewableItemsChanged}
                     keyExtractor={item => item.title}
                 />
+            </BaseView>
+            <BaseView align="center" grow={1} justify="space-between">
+                {!!progressValue && (
+                    <BaseView orientation="row" selfAlign="center" py={20}>
+                        {slides.map((slide, index) => (
+                            <PaginationItem
+                                animValue={progressValue}
+                                index={index}
+                                key={slide.title}
+                                length={slides.length}
+                            />
+                        ))}
+                    </BaseView>
+                )}
 
                 <BaseView align="center" w={100} px={20}>
                     <BaseButton
