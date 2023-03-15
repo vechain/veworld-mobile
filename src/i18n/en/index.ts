@@ -139,6 +139,8 @@ const en: BaseTranslation = {
     // Common Titles
 
     // Errors
+    ERROR_GENERIC_SUBTITLE: "Something went wrong!",
+    ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
 
