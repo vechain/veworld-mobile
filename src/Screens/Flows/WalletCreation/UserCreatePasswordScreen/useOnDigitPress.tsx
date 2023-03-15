@@ -92,7 +92,7 @@ export const useOnDigitPress = () => {
             )
 
             store.write(() => {
-                config!.pinValidationString = pinValidationString
+                config.pinValidationString = pinValidationString
             })
 
             setIsSuccess(true)

@@ -7,9 +7,12 @@ import { useRealm, getUserPreferences, getAppLock } from "~Storage"
 export const SecureApp = () => {
     const { store, cache } = useRealm()
 
-    const userPref = getUserPreferences(store)
+    const userPreferences = getUserPreferences(store)
 
-    const isEnabled = useMemo(() => userPref!.isAppLockActive, [userPref])
+    const isEnabled = useMemo(
+        () => userPreferences.isAppLockActive,
+        [userPreferences],
+    )
     const [isAppLock, setIsAppLock] = useState(isEnabled)
 
     const toggleSwitch = useCallback(
@@ -25,10 +28,10 @@ export const SecureApp = () => {
             })
 
             store.write(() => {
-                userPref!.isAppLockActive = newValue
+                userPreferences.isAppLockActive = newValue
             })
         },
-        [cache, userPref, store],
+        [cache, userPreferences, store],
     )
 
     return (

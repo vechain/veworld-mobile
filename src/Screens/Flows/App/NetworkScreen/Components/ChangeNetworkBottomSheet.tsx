@@ -20,14 +20,14 @@ export const ChangeNetworkBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
 
     const { store } = useRealm()
-    const userPref = getUserPreferences(store)
+    const userPreferences = getUserPreferences(store)
 
     const onPress = useCallback(
         (currentNetwork: Network) => {
-            store.write(() => (userPref!.currentNetwork = currentNetwork))
+            store.write(() => (userPreferences.currentNetwork = currentNetwork))
             onClose()
         },
-        [onClose, store, userPref],
+        [onClose, store, userPreferences],
     )
 
     return (

@@ -11,9 +11,9 @@ export const usePasswordValidation = () => {
             try {
                 const config = getConfig(store)
 
-                const pinValidationString = config?.pinValidationString
+                const pinValidationString = config.pinValidationString
                 let decryptedString = CryptoUtils.decrypt<string>(
-                    pinValidationString!,
+                    pinValidationString,
                     userPassword.join(""),
                 )
 
