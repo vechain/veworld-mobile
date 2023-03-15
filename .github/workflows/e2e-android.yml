@@ -89,10 +89,10 @@ jobs:
             ~/.android/adb*
           key: avd-31
 
-      # - name: Restart adb
-      #   run: |
-      #     adb kill-server
-      #     adb start-server
+      - name: Restart adb
+        run: |
+          adb kill-server
+          adb start-server
       
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -107,6 +107,7 @@ jobs:
           # https://github.com/upleveled/hotline-bling-codealong/pull/26#issuecomment-1094659722
           #target: aosp_atd
           api-level: 31
+          arch: x86_64
           force-avd-creation: false
           disable-animations: false
           #channel: canary
@@ -119,7 +120,7 @@ jobs:
         with:
           #target: aosp_atd
           api-level: 31
-          arch: x86
+          arch: x86_64
           # channel: canary
           profile: Pixel 6
           force-avd-creation: false
