@@ -143,7 +143,7 @@ jobs:
           avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           #script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
-          script: yarn start & yarn detox test --configuration android.emu.debug.31 --record-logs all
+          script: npx react-native start --reset-cache & yarn detox test --configuration android.emu.debug.31 --record-logs all
 
       - name: Upload artifacts
         if: failure()
