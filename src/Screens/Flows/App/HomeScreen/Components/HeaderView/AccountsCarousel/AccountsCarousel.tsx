@@ -1,10 +1,11 @@
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useState } from "react"
 import Carousel from "react-native-reanimated-carousel"
-import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
+import { FadeInRight } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
-import { PaginationItem, BaseSpacer, BaseView } from "~Components"
+import { BaseSpacer, PaginatedDot } from "~Components"
 import { AccountCard } from "./AccountCard"
 import { Account } from "~Storage"
+import { useTheme } from "~Common"
 
 const width = Dimensions.get("window").width - 40
 
@@ -30,7 +31,10 @@ export const AccountsCarousel: React.FC<Props> = memo(
         onAccountChange,
         openAccountManagementSheet,
     }) => {
-        const progressValue = useSharedValue<number>(selectedAccountIndex)
+        const theme = useTheme()
+
+        //Current index of the carousel (used for pagination, faster than using the selectedAccountIndex)
+        const [currentIndex, setCurrentIndex] = useState(selectedAccountIndex)
 
         const onSnapToItem = useCallback(
             (absoluteProgress: number) => {
@@ -41,9 +45,11 @@ export const AccountsCarousel: React.FC<Props> = memo(
 
         const onProgressChange = useCallback(
             (_: number, absoluteProgress: number) => {
-                progressValue.value = absoluteProgress
+                const integerProgress = Math.round(absoluteProgress)
+                if (currentIndex !== integerProgress)
+                    setCurrentIndex(integerProgress)
             },
-            [progressValue],
+            [currentIndex],
         )
 
         const renderItem = useCallback(
@@ -83,22 +89,11 @@ export const AccountsCarousel: React.FC<Props> = memo(
 
                 <BaseSpacer height={10} />
 
-                {!!progressValue && (
-                    <BaseView
-                        orientation="row"
-                        justify="space-between"
-                        selfAlign="center">
-                        {accounts.map((account, index) => (
-                            <PaginationItem
-                                animValue={progressValue}
-                                index={index}
-                                key={account.address}
-                                length={accounts.length}
-                                entering={FadeIn.delay(220).duration(250)}
-                            />
-                        ))}
-                    </BaseView>
-                )}
+                <PaginatedDot
+                    activeDotColor={theme.colors.primary}
+                    curPage={currentIndex}
+                    maxPage={accounts.length}
+                />
             </>
         )
     },
