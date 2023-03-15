@@ -8,6 +8,7 @@ import {
     BaseTouchable,
     BaseTouchableBox,
     BaseView,
+    EnableFeature,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { StringUtils, useBottomSheetModal, useTheme } from "~Common"
@@ -15,7 +16,6 @@ import { useI18nContext } from "~i18n"
 import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
 import { useRealm, getNetworks, getUserPreferences } from "~Storage"
 import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
-import { EnableFeature } from "./Components/EnableFeature"
 import { Routes } from "~Navigation"
 
 export const ChangeNetworkScreen = () => {

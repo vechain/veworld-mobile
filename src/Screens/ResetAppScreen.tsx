@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react"
+import { StyleSheet } from "react-native"
 import { useAppReset, useTheme } from "~Common"
 import {
     BaseButton,
@@ -30,38 +31,42 @@ export const ResetAppScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseIcon
+                style={baseStyles.backIcon}
+                size={36}
                 name="chevron-left"
-                style={{ alignSelf: "flex-start" }}
-                size={24}
                 color={theme.colors.text}
                 action={onBackPress}
             />
 
-            <BaseSpacer height={20} />
+            <BaseSpacer height={12} />
+
             <BaseView align="center" justify="space-between" grow={1} mx={20}>
                 <BaseView selfAlign="flex-start">
-                    <BaseText typographyFont="largeTitle">
+                    <BaseText typographyFont="title">
                         {LL.TITLE_RESET_APP()}
+                    </BaseText>
+
+                    <BaseText typographyFont="bodyMedium" my={10}>
+                        {LL.BD_CONFIRM_RESET()}
                     </BaseText>
 
                     <BaseText typographyFont="body" my={10}>
                         {LL.BD_RESET_APP_01()}
                     </BaseText>
 
-                    <BaseSpacer height={20} />
-
                     <BaseText typographyFont="body" my={10}>
                         {LL.BD_RESET_APP_02()}
+                    </BaseText>
+
+                    <BaseText
+                        typographyFont="body"
+                        my={10}
+                        color={theme.colors.danger}>
+                        {LL.BD_RESET_APP_DISCLAIMER()}
                     </BaseText>
                 </BaseView>
 
                 <BaseView align="center" w={100}>
-                    <BaseText
-                        typographyFont="footNoteAccent"
-                        color="red"
-                        my={10}>
-                        {LL.BD_RESET_APP_DISCLAIMER()}
-                    </BaseText>
                     <CheckBoxWithText
                         text={LL.BTN_RESET_APP_CHECKBOX()}
                         checkAction={setIsChecked}
@@ -71,9 +76,9 @@ export const ResetAppScreen = () => {
                         action={appReset}
                         w={100}
                         px={20}
-                        title={LL.TITLE_RESET_APP()}
+                        title={LL.BTN_RESET_APP().toUpperCase()}
                         disabled={!IsChecked}
-                        bgColor={theme.colors.danger}
+                        bgColor={theme.colors.primary}
                     />
                 </BaseView>
             </BaseView>
@@ -82,3 +87,18 @@ export const ResetAppScreen = () => {
         </BaseSafeArea>
     )
 }
+
+const baseStyles = StyleSheet.create({
+    backIcon: {
+        marginHorizontal: 8,
+        alignSelf: "flex-start",
+    },
+
+    btnWidth: {
+        width: 172,
+    },
+
+    iconMargin: {
+        marginHorizontal: 12,
+    },
+})
