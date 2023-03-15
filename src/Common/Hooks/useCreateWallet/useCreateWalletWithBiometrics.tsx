@@ -2,12 +2,13 @@ import { useCallback, useMemo, useState } from "react"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import {
     Account,
-    Config,
     Device,
-    Mnemonic,
     XPub,
     useRealm,
     getUserPreferences,
+    getDevices,
+    getConfig,
+    getMnemonic,
 } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
@@ -31,17 +32,11 @@ export const useCreateWalletWithBiometrics = () => {
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(async () => {
-        const config = store.objectForPrimaryKey<Config>(
-            Config.getName(),
-            Config.getPrimaryKey(),
-        )
+        const config = getConfig(store)
 
-        const devices = store.objects<Device>(Device.getName())
+        const devices = getDevices(store)
 
-        const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-            Mnemonic.getName(),
-            Mnemonic.getPrimaryKey(),
-        )
+        const _mnemonic = getMnemonic(cache)
 
         let mnemonicPhrase = _mnemonic?.mnemonic
 
@@ -57,7 +52,7 @@ export const useCreateWalletWithBiometrics = () => {
                 )
 
                 cache.write(() => {
-                    mnemonicPhrase = ""
+                    _mnemonic!.mnemonic = ""
                 })
 
                 const { encryptedWallet } = await CryptoUtils.encryptWallet(

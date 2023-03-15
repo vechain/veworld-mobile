@@ -10,6 +10,11 @@ import {
     AppLock,
     UserPreferences,
     Network,
+    getAppLock,
+    getMnemonic,
+    getNetworks,
+    getConfig,
+    getUserPreferences,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
 import { NETWORK_TYPE, WALLET_STATUS } from "~Model"
@@ -115,24 +120,18 @@ export const initRealmClasses = (
 ) => {
     // [ START ] - CACHE
     cache.write(() => {
-        const appLock = cache.objectForPrimaryKey<AppLock>(
-            AppLock.getName(),
-            AppLock.getPrimaryKey(),
-        )
+        const appLock = getAppLock(cache)
         if (!appLock)
             cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
 
-        const mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-            Mnemonic.getName(),
-            Mnemonic.getPrimaryKey(),
-        )
+        const mnemonic = getMnemonic(cache)
         if (!mnemonic) cache.create(Mnemonic.getName(), {})
     })
     // [ END ] - CACHE
 
     // [ START ] - STORE
     store.write(() => {
-        const networks = store.objects<Network>(Network.getName())
+        const networks = getNetworks(store)
         if (networks.length === 0) {
             store.create(Network.getName(), {
                 ...ThorConstants.makeNetwork(NETWORK_TYPE.MAIN),
@@ -142,18 +141,12 @@ export const initRealmClasses = (
             })
         }
 
-        const config = store.objectForPrimaryKey<Config>(
-            Config.getName(),
-            Config.getPrimaryKey(),
-        )
+        const config = getConfig(store)
         if (!config) {
             store.create(Config.getName(), {})
         }
 
-        const userPreferences = store.objectForPrimaryKey<UserPreferences>(
-            UserPreferences.getName(),
-            UserPreferences.getPrimaryKey(),
-        )
+        const userPreferences = getUserPreferences(store)
 
         if (!userPreferences) {
             store.create(UserPreferences.getName(), {

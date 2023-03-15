@@ -7,19 +7,16 @@ import {
 } from "~Common"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
-import { Config, Device, useRealm } from "~Storage"
+import { getConfig, getDevices, useRealm } from "~Storage"
 
 export const useSecurityUpgrade = () => {
     const { walletSecurity } = useWalletSecurity()
 
     const { store } = useRealm()
 
-    const devices = store.objects<Device>(Device.getName())
+    const devices = getDevices(store)
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
+    const config = getConfig(store)
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {

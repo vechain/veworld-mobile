@@ -14,7 +14,7 @@ import { useNavigation } from "@react-navigation/native"
 import { StringUtils, useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
-import { Network, UserPreferences, useRealm } from "~Storage"
+import { useRealm, getNetworks, getUserPreferences } from "~Storage"
 import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 import { Routes } from "~Navigation"
 
@@ -30,7 +30,7 @@ export const ChangeNetworkScreen = () => {
         onClose: closeBottonSheet,
     } = useBottomSheetModal()
 
-    const networks = store.objects<Network>(Network.getName())
+    const networks = getNetworks(store)
     const { currentNetwork } = useUserPreferencesEntity()
     const goBack = useCallback(() => nav.goBack(), [nav])
     const onPressInput = useCallback(() => openBottomSheet(), [openBottomSheet])
@@ -39,40 +39,40 @@ export const ChangeNetworkScreen = () => {
         [nav],
     )
 
-    const userPref = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
+    const userPreferences = getUserPreferences(store)
 
     const isShowConversion = useMemo(
-        () => userPref!.showConversionOtherNets,
-        [userPref],
+        () => userPreferences.showConversionOtherNets,
+        [userPreferences],
     )
     const [isConversionEnabled, setIsConversionEnabled] =
         useState(isShowConversion)
 
-    const toggleConverionSwitch = useCallback(
+    const toggleConversionSwitch = useCallback(
         (newValue: boolean) => {
             setIsConversionEnabled(newValue)
 
             store.write(() => {
-                userPref!.showConversionOtherNets = newValue
+                userPreferences.showConversionOtherNets = newValue
             })
         },
-        [userPref, store],
+        [userPreferences, store],
     )
 
-    const isShowTestTag = useMemo(() => userPref!.showTestNetTag, [userPref])
+    const isShowTestTag = useMemo(
+        () => userPreferences.showTestNetTag,
+        [userPreferences],
+    )
     const [isTag, setIsTag] = useState(isShowTestTag)
     const toggleTagSwitch = useCallback(
         (newValue: boolean) => {
             setIsTag(newValue)
 
             store.write(() => {
-                userPref!.showTestNetTag = newValue
+                userPreferences.showTestNetTag = newValue
             })
         },
-        [userPref, store],
+        [userPreferences, store],
     )
 
     return (
@@ -121,7 +121,7 @@ export const ChangeNetworkScreen = () => {
                 <EnableFeature
                     title={LL.BD_OTHER_NETWORKS()}
                     subtitle={LL.BD_NETWORK_INDICATOR()}
-                    onValueChange={toggleConverionSwitch}
+                    onValueChange={toggleConversionSwitch}
                     value={isConversionEnabled}
                 />
 

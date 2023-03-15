@@ -15,7 +15,17 @@ import {
     initRealmClasses,
 } from "./RealmContext"
 
-import { getUserPreferences } from "./Model"
+import {
+    getUserPreferences,
+    getConfig,
+    getAppLock,
+    getMnemonic,
+    getAccounts,
+    getVisibleAccounts,
+    getDevices,
+    getNetworks,
+    getXPub,
+} from "./Model"
 
 import { useObjectListener } from "./useObjectListener"
 import { useListListener } from "./useListListener"
@@ -35,4 +45,12 @@ export {
     UserPreferences,
     Network,
     getUserPreferences,
+    getConfig,
+    getAppLock,
+    getMnemonic,
+    getAccounts,
+    getVisibleAccounts,
+    getDevices,
+    getNetworks,
+    getXPub,
 }

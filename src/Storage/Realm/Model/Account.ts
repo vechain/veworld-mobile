@@ -37,3 +37,11 @@ export class Account extends Object {
         },
     }
 }
+
+export const getAccounts = (store: Realm, query?: string) =>
+    query
+        ? store.objects<Account>(Account.getName()).filtered(query)
+        : store.objects<Account>(Account.getName())
+
+export const getVisibleAccounts = (store: Realm) =>
+    store.objects<Account>(Account.getName()).filtered("visible == true")
