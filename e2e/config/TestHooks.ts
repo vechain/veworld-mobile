@@ -4,7 +4,13 @@ import * as detoxConfig from "detox/internals"
 const DEFAULT_TIMEOUT = 120_1000
 
 BeforeAll({ timeout: DEFAULT_TIMEOUT }, async () => {
+    console.log("Starting a new Detox test session...")
     await detoxConfig.init()
+    console.log("Detox test session started!")
+
+    console.log("Launching app...")
+    await detox.device.launchApp()
+    console.log("App launched!")
 })
 
 Before({ timeout: DEFAULT_TIMEOUT }, async function (feature) {
