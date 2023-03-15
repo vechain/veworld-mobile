@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native"
-import React from "react"
+import React, { memo } from "react"
 import { BaseText } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
@@ -10,7 +10,7 @@ type Props = {
     isAnimation: boolean
 }
 
-export function TokenCard({ token, isAnimation }: Props) {
+export const TokenCard = memo(({ token, isAnimation }: Props) => {
     const animatedOpacityReverse = useAnimatedStyle(() => {
         return {
             opacity: withTiming(isAnimation ? 0 : 1, {
@@ -34,7 +34,7 @@ export function TokenCard({ token, isAnimation }: Props) {
             </Animated.View>
         </Animated.View>
     )
-}
+})
 
 const baseStyles = StyleSheet.create({
     innerRow: {

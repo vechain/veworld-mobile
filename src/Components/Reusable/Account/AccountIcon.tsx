@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import { SvgXml } from "react-native-svg"
 import { PicassoUtils } from "~Common"
@@ -11,7 +11,7 @@ type AccountIconProps = {
     showDeviceIcon?: boolean
 }
 
-export const AccountIcon: React.FC<AccountIconProps> = ({ account }) => {
+export const AccountIcon: React.FC<AccountIconProps> = memo(({ account }) => {
     // const isLedger = accountDevice?.type === DEVICE_TYPE.LEDGER
 
     return (
@@ -24,7 +24,7 @@ export const AccountIcon: React.FC<AccountIconProps> = ({ account }) => {
             )} */}
         </BaseView>
     )
-}
+})
 
 type PicassoAddressIconProps = {
     address: string

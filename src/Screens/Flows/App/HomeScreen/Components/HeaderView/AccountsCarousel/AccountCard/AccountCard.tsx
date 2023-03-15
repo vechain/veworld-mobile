@@ -1,15 +1,8 @@
-import React, { memo, useCallback } from "react"
-import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
+import React, { memo, useCallback, useMemo } from "react"
+import { ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
-import {
-    ColorThemeType,
-    CryptoUtils,
-    useTheme,
-    useThemedStyles,
-    PlatformUtils,
-} from "~Common"
-import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
+import { CryptoUtils, useTheme, PlatformUtils } from "~Common"
 import {
     AccountIcon,
     AddressButton,
@@ -18,88 +11,83 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Account, useRealm } from "~Storage"
+import { Account, UserPreferences, useRealm } from "~Storage"
 import { Balance } from "./Balance"
 
 interface Props extends AnimateProps<ViewProps> {
-    style?: StyleProp<ViewStyle>
     account: Account
+    userPreferencesEntity: UserPreferences
     openAccountManagement: () => void
 }
 
-export const AccountCard: React.FC<Props> = memo(props => {
-    const { style, account, openAccountManagement, ...animatedViewProps } =
-        props
-    const theme = useTheme()
-    const { styles } = useThemedStyles(baseStyles)
+export const AccountCard: React.FC<Props> = memo(
+    ({
+        account,
+        openAccountManagement,
+        userPreferencesEntity,
+        ...animatedViewProps
+    }) => {
+        const theme = useTheme()
+        const { store } = useRealm()
 
-    const { store } = useRealm()
-    const { balanceVisible, userPreferencesEntity } = useUserPreferencesEntity()
+        const randomBalance = useMemo(() => CryptoUtils.random().toString(), [])
 
-    const toggleBalanceVisibility = useCallback(() => {
-        if (userPreferencesEntity)
-            store.write(() => {
-                userPreferencesEntity.balanceVisible =
-                    !userPreferencesEntity.balanceVisible
-            })
-    }, [userPreferencesEntity, store])
+        const toggleBalanceVisibility = useCallback(() => {
+            if (userPreferencesEntity)
+                store.write(() => {
+                    userPreferencesEntity.balanceVisible =
+                        !userPreferencesEntity.balanceVisible
+                })
+        }, [store, userPreferencesEntity])
 
-    return (
-        <Animated.View style={styles.container} {...animatedViewProps}>
-            <BaseView
-                background={theme.colors.primary}
-                isFlex
-                justify="flex-start"
-                align="flex-start"
-                radius={24}
-                px={16}
-                py={16}
-                style={style}>
+        return (
+            <Animated.View style={baseStyles.container} {...animatedViewProps}>
                 <BaseView
-                    orientation="row"
-                    justify="space-between"
+                    background={theme.colors.primary}
+                    isFlex
+                    justify="flex-start"
                     align="flex-start"
-                    w={100}>
-                    <BaseView orientation="row" align="center">
-                        <AccountIcon account={account} />
-                        <BaseView px={8}>
-                            <BaseText
-                                typographyFont="buttonPrimary"
-                                color={theme.colors.textReversed}>
-                                {account.alias}
-                            </BaseText>
-                            <BaseSpacer height={8} />
-                            <AddressButton address={account.address} />
+                    radius={24}
+                    px={16}
+                    py={16}>
+                    <BaseView
+                        orientation="row"
+                        justify="space-between"
+                        align="flex-start"
+                        w={100}>
+                        <BaseView orientation="row" align="center">
+                            <AccountIcon account={account} />
+                            <BaseView px={8}>
+                                <BaseText
+                                    typographyFont="buttonPrimary"
+                                    color={theme.colors.textReversed}>
+                                    {account.alias}
+                                </BaseText>
+                                <BaseSpacer height={8} />
+                                <AddressButton address={account.address} />
+                            </BaseView>
                         </BaseView>
+                        <BaseIcon
+                            name="account-cog-outline"
+                            color={theme.colors.textReversed}
+                            size={28}
+                            action={openAccountManagement}
+                        />
                     </BaseView>
-                    <BaseIcon
-                        name="account-cog-outline"
-                        color={theme.colors.textReversed}
-                        size={28}
-                        action={openAccountManagement}
+                    <BaseSpacer height={PlatformUtils.isIOS() ? 18 : 10} />
+                    <Balance
+                        isVisible={userPreferencesEntity.balanceVisible}
+                        toggleVisible={toggleBalanceVisibility}
+                        balance={randomBalance}
                     />
                 </BaseView>
-                <BaseSpacer height={PlatformUtils.isIOS() ? 18 : 10} />
-                <Balance
-                    isVisible={balanceVisible}
-                    toggleVisible={toggleBalanceVisibility}
-                    balance={CryptoUtils.random().toString()}
-                />
-            </BaseView>
-        </Animated.View>
-    )
-})
+            </Animated.View>
+        )
+    },
+)
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        container: {
-            flex: 1,
-        },
-        itemContainer: {
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: theme.colors.primary,
-            borderRadius: 24,
-        },
-    })
+const baseStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+})

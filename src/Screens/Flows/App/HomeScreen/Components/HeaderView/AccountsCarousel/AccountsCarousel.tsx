@@ -1,10 +1,11 @@
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
 import { PaginationItem, BaseSpacer, BaseView } from "~Components"
 import { AccountCard } from "./AccountCard"
 import { Account } from "~Storage"
+import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 
 const width = Dimensions.get("window").width - 40
 
@@ -31,6 +32,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
         openAccountManagementSheet,
     }) => {
         const progressValue = useSharedValue<number>(selectedAccountIndex)
+        const { userPreferencesEntity } = useUserPreferencesEntity()
 
         const onSnapToItem = useCallback(
             (absoluteProgress: number) => {
@@ -51,6 +53,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
                 return (
                     <AccountCard
                         openAccountManagement={openAccountManagementSheet}
+                        userPreferencesEntity={userPreferencesEntity}
                         account={accounts[index]}
                         key={index}
                         entering={FadeInRight.delay(
@@ -59,8 +62,10 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     />
                 )
             },
-            [accounts, openAccountManagementSheet],
+            [accounts, openAccountManagementSheet, userPreferencesEntity],
         )
+
+        const paginationAnim = useMemo(() => FadeIn.delay(200), [])
 
         return (
             <>
@@ -94,7 +99,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
                                 index={index}
                                 key={account.address}
                                 length={accounts.length}
-                                entering={FadeIn.delay(220).duration(250)}
+                                entering={paginationAnim}
                             />
                         ))}
                     </BaseView>

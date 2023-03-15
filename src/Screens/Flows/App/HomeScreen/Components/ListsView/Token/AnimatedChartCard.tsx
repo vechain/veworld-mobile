@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
@@ -32,7 +32,7 @@ const CHART_DATA = [
     { timestamp: 12, value: 13.5 },
 ]
 
-export const AnimatedChartCard = ({ token, isEdit }: NativeTokenProps) => {
+export const AnimatedChartCard = memo(({ token, isEdit }: NativeTokenProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const animatedOuterCard = useAnimatedStyle(() => {
@@ -82,7 +82,7 @@ export const AnimatedChartCard = ({ token, isEdit }: NativeTokenProps) => {
             </Animated.View>
         </DropShadow>
     )
-}
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

@@ -1,7 +1,8 @@
-import React, { FC, memo } from "react"
+/* eslint-disable react-native/no-inline-styles */
+import React, { FC, memo, useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useTheme } from "~Common"
 import { BaseView } from "~Components/Base"
 
 type Props = {
@@ -10,45 +11,47 @@ type Props = {
 }
 
 export const TabIcon: FC<Props> = memo(({ focused, title }) => {
-    const { styles } = useThemedStyles(baseStyles(focused))
+    const theme = useTheme()
+
+    const iconColor = useMemo(() => {
+        if (focused) {
+            return theme.isDark ? theme.colors.tertiary : theme.colors.primary
+        }
+        return theme.colors.primary
+    }, [focused, theme.colors.primary, theme.colors.tertiary, theme.isDark])
+
+    const bgColor = useMemo(
+        () => (focused ? theme.colors.secondary : "transparent"),
+        [focused, theme.colors.secondary],
+    )
 
     return (
-        <BaseView justify="center" align="center" style={styles.container}>
-            <Icon
-                name={title.toLowerCase()}
-                size={24}
-                color={styles.icon.color}
-            />
+        <BaseView
+            justify="center"
+            align="center"
+            style={[baseStyles.container, { backgroundColor: bgColor }]}>
+            <Icon name={title.toLowerCase()} size={24} color={iconColor} />
 
-            <View style={styles.dot} />
+            <View
+                style={[
+                    baseStyles.dot,
+                    { backgroundColor: focused ? iconColor : "transparent" },
+                ]}
+            />
         </BaseView>
     )
 })
 
-const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
-    const iconColor = () => {
-        if (isFocused)
-            return theme.isDark ? theme.colors.tertiary : theme.colors.primary
-        return theme.colors.primary
-    }
-
-    const bgColor = isFocused ? theme.colors.secondary : "transparent"
-    return StyleSheet.create({
-        icon: {
-            color: iconColor(),
-        },
-        container: {
-            borderRadius: 10,
-            paddingHorizontal: 12,
-            paddingVertical: 8.5,
-            backgroundColor: bgColor,
-        },
-        dot: {
-            height: 4,
-            width: 4,
-            backgroundColor: isFocused ? iconColor() : "transparent",
-            borderRadius: 4,
-            marginTop: 1,
-        },
-    })
-}
+const baseStyles = StyleSheet.create({
+    container: {
+        borderRadius: 10,
+        paddingHorizontal: 12,
+        paddingVertical: 8.5,
+    },
+    dot: {
+        height: 4,
+        width: 4,
+        borderRadius: 4,
+        marginTop: 1,
+    },
+})

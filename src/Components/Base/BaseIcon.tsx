@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useMemo } from "react"
+import React, { memo, useMemo } from "react"
 import {
     TouchableOpacity,
     TouchableOpacityProps,
@@ -19,7 +19,7 @@ type Props =
           TouchableOpacityProps &
           ViewProps
 
-export const BaseIcon: React.FC<Props> = props => {
+export const BaseIcon: React.FC<Props> = memo(props => {
     const { color, style, ...otherProps } = props
     const theme = useTheme()
 
@@ -34,21 +34,32 @@ export const BaseIcon: React.FC<Props> = props => {
             <Icon size={props.size ?? 24} color={iconColor} {...otherProps} />
         </BaseIconWrapper>
     )
-}
+})
 
 type BaseIconWrapperProps = Props & { children: React.ReactNode }
-const BaseIconWrapper: React.FC<BaseIconWrapperProps> = ({
-    style,
-    bg,
-    size,
-    children,
-    action,
-    ...props
-}) => {
-    if (action)
+const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
+    ({ style, bg, size, children, action, ...props }) => {
+        if (action)
+            return (
+                <TouchableOpacity
+                    onPress={action}
+                    style={[
+                        {
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: bg,
+                            padding: bg ? 8 : 0,
+                            borderRadius: size ? size + 10 / 2 : 50,
+                            opacity: props.disabled ? 0.5 : 1,
+                        },
+                        style,
+                    ]}
+                    {...props}>
+                    {children}
+                </TouchableOpacity>
+            )
         return (
-            <TouchableOpacity
-                onPress={action}
+            <View
                 style={[
                     {
                         justifyContent: "center",
@@ -62,23 +73,7 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = ({
                 ]}
                 {...props}>
                 {children}
-            </TouchableOpacity>
+            </View>
         )
-    return (
-        <View
-            style={[
-                {
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: bg,
-                    padding: bg ? 8 : 0,
-                    borderRadius: size ? size + 10 / 2 : 50,
-                    opacity: props.disabled ? 0.5 : 1,
-                },
-                style,
-            ]}
-            {...props}>
-            {children}
-        </View>
-    )
-}
+    },
+)

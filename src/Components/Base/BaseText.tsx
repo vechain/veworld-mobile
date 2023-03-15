@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useMemo } from "react"
+import React, { memo, useMemo } from "react"
 import { FlexAlignType, Text, TextProps } from "react-native"
 import { useTheme, Theme } from "~Common"
 import { BaseView } from "./BaseView"
@@ -35,7 +35,7 @@ type Props = {
         | "space-evenly"
 } & TextProps
 
-export const BaseText = (props: Props) => {
+export const BaseText = memo((props: Props) => {
     const {
         style,
         typographyFont,
@@ -107,4 +107,4 @@ export const BaseText = (props: Props) => {
             />
         </BaseView>
     )
-}
+})
