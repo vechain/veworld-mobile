@@ -1,3 +1,4 @@
+import "~Test"
 import HexUtils from "./HexUtils"
 
 const hexLowercaseHasPrefix = "0x38983243287eef8773264910fe003"

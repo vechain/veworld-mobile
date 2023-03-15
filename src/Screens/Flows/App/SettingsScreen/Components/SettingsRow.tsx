@@ -16,7 +16,7 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
 
     const onPress = useCallback(
         // Todo: types
-        () => nav.navigate(screenName),
+        () => nav.navigate(screenName as any),
         [screenName, nav],
     )
 

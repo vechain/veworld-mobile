@@ -24,7 +24,7 @@ export const BaseSwitch = (props: Props) => {
                 false: props.trackColors ? props.trackColors[0] : "#767577",
                 true: props.trackColors
                     ? props.trackColors[1]
-                    : theme.colors.button,
+                    : theme.colors.primary,
             }}
             thumbColor={theme.colors.background}
             ios_backgroundColor="#3e3e3e"
