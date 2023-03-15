@@ -435,6 +435,15 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_ERROR: string
 	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
+	 */
+	ERROR_GENERIC_SUBTITLE: string
+	/**
+	 * W​e​ ​a​p​o​l​o​g​i​s​e​ ​f​o​r​ ​t​h​e​ ​i​n​c​o​n​v​e​n​i​e​n​c​e​.​
+​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r​.
+	 */
+	ERROR_GENERIC_BODY: string
+	/**
 	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
 	ERROR_INCORRECT_MNEMONIC: string
@@ -866,6 +875,15 @@ export type TranslationFunctions = {
 	 * Error
 	 */
 	COMMON_LBL_ERROR: () => LocalizedString
+	/**
+	 * Something went wrong!
+	 */
+	ERROR_GENERIC_SUBTITLE: () => LocalizedString
+	/**
+	 * We apologise for the inconvenience.
+Please, try again later.
+	 */
+	ERROR_GENERIC_BODY: () => LocalizedString
 	/**
 	 * Incorrect mnemonic phrase
 	 */
