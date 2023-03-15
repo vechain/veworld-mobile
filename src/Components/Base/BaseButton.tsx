@@ -47,7 +47,7 @@ export const BaseButton = ({
     textColor,
     variant = "solid",
     size = "lg",
-    radius = 8,
+    radius = 16,
     disabled = false,
     leftIcon,
     rightIcon,

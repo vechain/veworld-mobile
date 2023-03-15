@@ -3,12 +3,13 @@ import { PasswordUtils, CryptoUtils } from "~Common/Utils"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import {
     Account,
-    Config,
     Device,
-    Mnemonic,
     XPub,
     useRealm,
     getUserPreferences,
+    getConfig,
+    getMnemonic,
+    getDevices,
 } from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
@@ -25,17 +26,11 @@ export const useCreateWalletWithPassword = () => {
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
         async (userPassword: string) => {
-            const config = store.objectForPrimaryKey<Config>(
-                Config.getName(),
-                Config.getPrimaryKey(),
-            )
+            const config = getConfig(store)
 
-            const devices = store.objects<Device>(Device.getName())
+            const devices = getDevices(store)
 
-            const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-                Mnemonic.getName(),
-                Mnemonic.getPrimaryKey(),
-            )
+            const _mnemonic = getMnemonic(cache)
             let mnemonicPhrase = _mnemonic?.mnemonic
 
             try {

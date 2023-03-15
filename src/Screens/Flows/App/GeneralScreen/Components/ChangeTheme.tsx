@@ -1,15 +1,12 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { Switch } from "react-native"
 import { BaseText, BaseView } from "~Components"
-import { UserPreferences, useRealm } from "~Storage"
+import { useRealm, getUserPreferences } from "~Storage"
 
 export const ChangeTheme = () => {
     const { store } = useRealm()
 
-    const userPref = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
+    const userPref = getUserPreferences(store)
 
     const isRealmDark = useMemo(() => userPref?.theme === "dark", [userPref])
     const [isDark, setIsDark] = useState(isRealmDark)

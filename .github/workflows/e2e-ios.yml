@@ -71,6 +71,7 @@ jobs:
       
       - name: Detox build iOS release
         if: steps.detox-cache-restore.outputs.cache-hit != 'true'
+        timeout-minutes: 60
         run: yarn detox build --configuration ios.sim.debug
 
       - name: Save Detox build
@@ -82,6 +83,7 @@ jobs:
           key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
       
       - name: Detox test iOS release
+        timeout-minutes: 20
         run: yarn start & yarn detox test --configuration ios.sim.debug --cleanup --loglevel trace --headless --record-logs all
 
       - name: Upload artifacts

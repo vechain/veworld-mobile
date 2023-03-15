@@ -12,7 +12,7 @@ import {
 import { BaseButtonGroup, Button } from "~Components/Base/BaseButtonGroup"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { Config, Mnemonic, useRealm } from "~Storage"
+import { getConfig, getMnemonic, useRealm } from "~Storage"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 
 export const ConfirmSeedPhraseScreen = () => {
@@ -32,14 +32,8 @@ export const ConfirmSeedPhraseScreen = () => {
     )
     const [isError, setIsError] = useState(false)
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
-    const mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-        Mnemonic.getName(),
-        Mnemonic.getPrimaryKey(),
-    )?.mnemonic
+    const config = getConfig(store)
+    const mnemonic = getMnemonic(cache)?.mnemonic
 
     /**
      * if mnemonic is not available something strange is happening, better to throw an error and crash the app
