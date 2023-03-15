@@ -80,19 +80,28 @@ jobs:
       # - name: Detox test Android release
       #   run: yarn start & yarn detox test --configuration android.emu.debug.31 --cleanup --loglevel trace --headless --record-logs all
 
-      - name: Cache AVD snapshot
-        uses: actions/cache@v3
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-31
+      # - name: Cache AVD snapshot
+      #   uses: actions/cache@v3
+      #   id: avd-cache
+      #   with:
+      #     path: |
+      #       ~/.android/avd/*
+      #       ~/.android/adb*
+      #     key: avd-31
 
       - name: Restart adb
         run: |
           adb kill-server
           adb start-server
+
+      - name: Restore AVD Snapshot Cache
+        id: avd-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-31
       
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -110,19 +119,24 @@ jobs:
           arch: x86_64
           force-avd-creation: false
           disable-animations: false
-          #channel: canary
           avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          #script: adb kill-server && adb start-server && echo "Generated AVD snapshot for caching"
           script: echo "Generated AVD snapshot for caching"
+
+      - name: Save AVD Snapshot Cache
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-31
       
       - name: Detox test Android release
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          #target: aosp_atd
           api-level: 31
           arch: x86_64
-          # channel: canary
           profile: Pixel 6
           force-avd-creation: false
           disable-animations: true
