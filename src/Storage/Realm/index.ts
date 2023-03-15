@@ -4,7 +4,6 @@ import {
     Config,
     Mnemonic,
     Account,
-    ActiveWalletCard,
     AppLock,
     UserPreferences,
     Network,
@@ -15,6 +14,8 @@ import {
     useRealm,
     initRealmClasses,
 } from "./RealmContext"
+
+import { getUserPreferences } from "./Model"
 
 import { useObjectListener } from "./useObjectListener"
 import { useListListener } from "./useListListener"
@@ -30,8 +31,8 @@ export {
     Config,
     Mnemonic,
     Account,
-    ActiveWalletCard,
     AppLock,
     UserPreferences,
     Network,
+    getUserPreferences,
 }

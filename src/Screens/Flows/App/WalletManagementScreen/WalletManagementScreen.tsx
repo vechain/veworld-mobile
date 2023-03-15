@@ -41,8 +41,6 @@ export const WalletManagementScreen = () => {
         [openWalletManagementSheet, setSelectedDevice],
     )
 
-    console.log(selectedDevice, walletManagementBottomSheetRef)
-
     return (
         <>
             <SafeAreaView />

@@ -1,5 +1,5 @@
-import React, { useMemo } from "react"
-import { FormattingUtils, useDisclosure, useTheme } from "~Common"
+import React from "react"
+import { FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
@@ -7,18 +7,24 @@ const { humanNumber } = FormattingUtils
 
 type Props = {
     balance: string
+    isVisible: boolean
+    toggleVisible: () => void
 }
-export const Balance: React.FC<Props> = ({ balance }) => {
+
+const getBalanceText = (balance: string, isVisible: boolean) => {
+    if (isVisible) return humanNumber(balance)
+    return Array.from(Array(humanNumber(balance).length).keys()).map(
+        _value => "*",
+    )
+}
+export const Balance: React.FC<Props> = ({
+    balance,
+    isVisible,
+    toggleVisible,
+}) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const { isOpen: isVisible, onToggle: toggleVisible } = useDisclosure(true)
 
-    const balanceText = useMemo(() => {
-        if (isVisible) return humanNumber(balance)
-        return Array.from(Array(humanNumber(balance).length).keys()).map(
-            _value => "*",
-        )
-    }, [balance, isVisible])
     return (
         <>
             <BaseView orientation="row" align="center">
@@ -39,7 +45,7 @@ export const Balance: React.FC<Props> = ({ balance }) => {
                 <BaseText
                     color={theme.colors.textReversed}
                     typographyFont="hugeTitle">
-                    {balanceText}
+                    {getBalanceText(balance, isVisible)}
                 </BaseText>
                 <BaseText
                     mx={4}

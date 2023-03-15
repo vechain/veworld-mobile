@@ -1,0 +1,19 @@
+diff --git a/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx b/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
+index eca4232..d95e48b 100644
+--- a/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
++++ b/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
+@@ -64,9 +64,11 @@ export function LineChartGradient({
+             y1="0"
+             y2="100%"
+           >
+-            <Stop offset="20%" stopColor={color} stopOpacity={0.15} />
+-            <Stop offset="40%" stopColor={color} stopOpacity={0.05} />
+-            <Stop offset="100%" stopColor={color} stopOpacity={0} />
++            <Stop offset="10%" stopColor={color} stopOpacity={0.8} />
++            <Stop offset="20%" stopColor={color} stopOpacity={0.7} />
++            <Stop offset="40%" stopColor={color} stopOpacity={0.5} />
++            <Stop offset="70%" stopColor={color} stopOpacity={0.3} />
++            <Stop offset="100%" stopColor={color} stopOpacity={0.1} />
+           </LinearGradient>
+         </Defs>
+       )}
