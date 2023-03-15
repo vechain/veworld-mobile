@@ -8,7 +8,7 @@ import { BaseIcon, BaseText, BaseView } from "~Components"
 
 export type RowProps = {
     title: LocalizedString
-    screenName: string
+    screenName: keyof ReactNavigation.RootParamList
     icon: string
 }
 
@@ -18,7 +18,6 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
     const theme = useTheme()
 
     const onPress = useCallback(
-        // Todo: types
         () => nav.navigate(screenName),
         [screenName, nav],
     )
