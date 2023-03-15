@@ -111,9 +111,10 @@ jobs:
           force-avd-creation: false
           disable-animations: false
           #channel: canary
-          #avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
+          avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: adb kill-server && adb start-server && echo "Generated AVD snapshot for caching"
+          #script: adb kill-server && adb start-server && echo "Generated AVD snapshot for caching"
+          script: echo "Generated AVD snapshot for caching"
       
       - name: Detox test Android release
         uses: reactivecircus/android-emulator-runner@v2
@@ -125,7 +126,7 @@ jobs:
           profile: Pixel 6
           force-avd-creation: false
           disable-animations: true
-          #avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           #script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
           script: yarn detox test --configuration android.emu.debug.31 --record-logs all
