@@ -8,7 +8,7 @@ import { BaseIcon, BaseText, BaseView } from "~Components"
 
 export type RowProps = {
     title: LocalizedString
-    screenName: keyof ReactNavigation.RootParamList
+    screenName: string
     icon: string
 }
 
