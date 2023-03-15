@@ -74,7 +74,7 @@ jobs:
           key: ${{ runner.os }}-detox-android-build
 
       - name: Get device name
-        id: device
+        id: device-name
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
       
       # - name: Detox test Android release
@@ -87,7 +87,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-31-aosp-atd
+          key: avd-31
       
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -100,26 +100,28 @@ jobs:
           # https://android-developers.googleblog.com/2021/10/whats-new-in-scalable-automated-testing.html#:~:text=Slimmer%20Emulator%20System%20Images
           # https://github.com/ReactiveCircus/android-emulator-runner/issues/129
           # https://github.com/upleveled/hotline-bling-codealong/pull/26#issuecomment-1094659722
-          target: aosp_atd
+          #target: aosp_atd
           api-level: 31
-          arch: x86
-          channel: canary
-          profile: pixel
-          avd-name: ${{ steps.device.outputs.AVD_NAME }}
           force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
+
+          #channel: canary
+          avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: echo "Generated AVD snapshot for caching"
       
       - name: Detox test Android release
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          target: aosp_atd
+          #target: aosp_atd
           api-level: 31
           arch: x86
-          channel: canary
-          profile: pixel
+          # channel: canary
+          # profile: pixel
+          force-avd-creation: false
+          disable-animations: true
           avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           #script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
           script: yarn detox test --configuration android.emu.debug.31 --record-logs all
 
