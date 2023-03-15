@@ -21,7 +21,9 @@ export const EnableFeature = ({
 
     return (
         <>
-            <BaseText typographyFont="bodyMedium">{title}</BaseText>
+            <BaseText typographyFont="bodyMedium" my={8}>
+                {title}
+            </BaseText>
             <BaseText typographyFont="caption">{subtitle}</BaseText>
             <BaseSpacer height={20} />
             <Switch
