@@ -53,7 +53,7 @@ const resetRealm = async (store: Realm, cache: Realm) => {
     const appLock = getAppLock(cache)
 
     cache.write(() => {
-        appLock!.status = WALLET_STATUS.LOCKED
+        appLock.status = WALLET_STATUS.LOCKED
     })
 
     const config = getConfig(store)
@@ -62,24 +62,24 @@ const resetRealm = async (store: Realm, cache: Realm) => {
     const userPreferences = getUserPreferences(store)
 
     store.write(() => {
-        config!.userSelectedSecurity = "NONE"
-        config!.lastSecurityLevel = "NONE"
-        config!.isSecurityDowngrade = false
-        config!.pinValidationString = SettingsConstants.VALIDATION_STRING
+        config.userSelectedSecurity = "NONE"
+        config.lastSecurityLevel = "NONE"
+        config.isSecurityDowngrade = false
+        config.pinValidationString = SettingsConstants.VALIDATION_STRING
 
-        userPreferences!.currentNetwork = networks[0]
-        userPreferences!.showTestNetTag = true
-        userPreferences!.showConversionOtherNets = true
-        userPreferences!.isAppLockActive = true
-        userPreferences!.selectedAccount = undefined
-        userPreferences!.balanceVisible = true
+        userPreferences.currentNetwork = networks[0]
+        userPreferences.showTestNetTag = true
+        userPreferences.showConversionOtherNets = true
+        userPreferences.isAppLockActive = true
+        userPreferences.selectedAccount = undefined
+        userPreferences.balanceVisible = true
 
         store.delete(getDevices(store))
         store.delete(getAccounts(store))
         store.delete(getXPub(store))
 
-        config!.isWalletCreated = false
-        config!.isResettingApp = false
+        config.isWalletCreated = false
+        config.isResettingApp = false
 
         console.log("App Reset Finished")
     })
