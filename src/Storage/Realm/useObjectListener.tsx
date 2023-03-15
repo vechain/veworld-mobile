@@ -35,6 +35,7 @@ export const useObjectListener = (
     const onChange: ListenerCallback = useCallback((list, changes) => {
         try {
             changes.deletions.forEach(index => {
+                console.log("delete")
                 setData(
                     produce(draft => {
                         draft.splice(index, 1)
@@ -43,6 +44,7 @@ export const useObjectListener = (
             })
 
             changes.insertions.forEach(index => {
+                console.log("insert")
                 const newItem = list[index]
                 setData(
                     produce(draft => {
@@ -52,6 +54,7 @@ export const useObjectListener = (
             })
 
             changes.newModifications.forEach(index => {
+                console.log("delete")
                 const modifiedItem = list[index]
                 setData(
                     produce(draft => {
