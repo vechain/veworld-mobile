@@ -91,7 +91,7 @@ const getList = (LL: TranslationFunctions) => [
     },
     {
         title: LL.TITLE_MANAGE_WALLET(),
-        screenName: Routes.SETTINGS_MANAGE_WALLET,
+        screenName: Routes.WALLET_MANAGEMENT,
         icon: "wallet-outline",
     },
     {
