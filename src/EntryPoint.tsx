@@ -14,6 +14,7 @@ import {
 } from "~Common"
 import { WALLET_STATUS } from "~Model"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
+import ErrorBoundary from "~Components/Providers/ErrorBoundary"
 
 export const EntryPoint = () => {
     const { store, cache } = useRealm()
@@ -55,7 +56,7 @@ export const EntryPoint = () => {
     }
 
     return (
-        <>
+        <ErrorBoundary>
             {process.env.NODE_ENV === "development" && (
                 <RealmPlugin realms={[store, cache]} />
             )}
@@ -70,7 +71,7 @@ export const EntryPoint = () => {
                     <SwitchStack />
                 </>
             )}
-        </>
+        </ErrorBoundary>
     )
 }
 

@@ -32,6 +32,8 @@ const en: BaseTranslation = {
     BTN_REMOVE_ACCOUNT: "Remove account",
     BTN_ADD_ACCOUNT: "Add account",
     BTN_ADD_CUSTOM_NODE: "Add a custom node",
+    BTN_DOWNLOAD_LOGS: "Download logs",
+    BTN_RESET_APP: "Reset App",
 
     // BODY
     BD_GDPR:
@@ -65,7 +67,8 @@ const en: BaseTranslation = {
     "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
-    BD_RESET_APP_01: "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc.)",
+    BD_CONFIRM_RESET: "Confirm reset",
+    BD_RESET_APP_01: "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).",
     BD_RESET_APP_02: "Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.",
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
     BD_YOUR_BALANCE: "Your balance",
@@ -73,6 +76,12 @@ const en: BaseTranslation = {
     BD_SELECT_NETWORK: "Select your network",
     BD_OTHER_NETWORKS: "Other networks - show conversion",
     BD_NETWORK_INDICATOR: "Display an indicator when transacting on another network",
+    BD_STATE_LOGS: "State Logs",
+    BD_STATE_LOGS_DISCLAIMER: "State logs contain your public account addresses and sent transactions",
+    BD_RESET: "VeWorld reset",
+    BD_RESET_DISCLAIMER: "Click to reset VeVault and erase all your data stored on it",
+    BD_HELP_IMPROVE: "Help us improve",
+    BD_HELP_IMPROVE_DISCLAIMER: "Enable this setting to help us improve and always provide the best experience for you",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -92,7 +101,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_WALLET_SUCCESS: "You're finally one of us!",
-    TITLE_RESET_APP: "Confirm Reset",
+    TITLE_RESET_APP: "VeWorld reset",
     TITLE_WALLET_MANAGEMENT: "Wallet management",
     TITLE_SETTINGS: "Settings",
     TITLE_GENERAL: "General",
@@ -139,6 +148,8 @@ const en: BaseTranslation = {
     // Common Titles
 
     // Errors
+    ERROR_GENERIC_SUBTITLE: "Something went wrong!",
+    ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
 

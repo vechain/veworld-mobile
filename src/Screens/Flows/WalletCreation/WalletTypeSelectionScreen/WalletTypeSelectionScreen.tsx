@@ -8,7 +8,7 @@ import {
     BaseView,
 } from "~Components"
 import { Routes } from "~Navigation"
-import { Config, useRealm } from "~Storage"
+import { getConfig, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const WalletTypeSelectionScreen = () => {
@@ -17,10 +17,7 @@ export const WalletTypeSelectionScreen = () => {
 
     const { store } = useRealm()
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
+    const config = getConfig(store)
 
     const onCreateWallet = () => {
         if (config?.isWalletCreated) {

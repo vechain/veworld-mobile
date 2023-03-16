@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
-import { AppLock, Config, useRealm } from "~Storage"
+import { getAppLock, getConfig, useRealm } from "~Storage"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -54,10 +54,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const onButtonPress = useCallback(async () => {
         let params = route.params
 
-        const config = store.objectForPrimaryKey<Config>(
-            Config.getName(),
-            Config.getPrimaryKey(),
-        ) as Config
+        const config = getConfig(store)
 
         if (config?.isWalletCreated) {
             if (config.userSelectedSecurity === SecurityLevelType.BIOMETRIC) {
@@ -93,10 +90,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     useEffect(() => {
         if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
-            const config = store.objectForPrimaryKey<Config>(
-                Config.getName(),
-                Config.getPrimaryKey(),
-            ) as Config
+            const config = getConfig(store)
 
             if (config?.isWalletCreated) {
                 closePasswordPrompt()
@@ -115,11 +109,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     }
                 }
             } else {
-                let appLock = cache.objectForPrimaryKey<AppLock>(
-                    AppLock.getName(),
-                    AppLock.getPrimaryKey(),
-                )
-
+                let appLock = getAppLock(cache)
                 cache.write(() => {
                     if (appLock) {
                         appLock.status = WALLET_STATUS.UNLOCKED
