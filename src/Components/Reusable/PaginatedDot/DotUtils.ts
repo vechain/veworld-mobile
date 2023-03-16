@@ -48,60 +48,101 @@ export const getDotStyle = ({
 }: getDotStylePayload): IDotStyle => {
     let type = EnumDotType.SMALL
 
-    if (maxPage < 5) {
+    const lessThan5Pages: boolean = maxPage < 5
+    const firstThreePages: boolean = pageIdx < 3
+    const fourthPage: boolean = pageIdx === 3
+    const indexGreaterThanCurrentPage: boolean = idx > pageIdx
+    const indexLessThanCurrentPage: boolean = idx < pageIdx
+
+    if (lessThan5Pages) {
         return DotStyle[
             idx === pageIdx ? EnumDotType.ACTIVE : EnumDotType.INACTIVE
         ]
     }
 
-    if (pageIdx < 3) {
-        if (idx < 3) {
+    if (firstThreePages) {
+        type = handleFirstThreePages(idx, pageIdx)
+        return DotStyle[type]
+    }
+
+    if (fourthPage) {
+        type = handleFourthPage(idx, pageIdx)
+        return DotStyle[type]
+    }
+
+    if (indexGreaterThanCurrentPage) {
+        type = handleIndexGreaterThanCurrentPage(idx, pageIdx)
+        return DotStyle[type]
+    }
+
+    if (indexLessThanCurrentPage) {
+        type = handleIndexLessThanCurrentPage(idx, pageIdx)
+        return DotStyle[type]
+    }
+
+    return DotStyle[EnumDotType.ACTIVE]
+}
+
+const handleFirstThreePages = (idx: number, pageIdx: number): EnumDotType => {
+    let type: EnumDotType
+    if (idx < 3) {
+        type = EnumDotType.INACTIVE
+        if (pageIdx === idx) {
+            type = EnumDotType.ACTIVE
+        }
+    } else if (idx < 4) {
+        type = EnumDotType.MEDIUM
+    } else {
+        type = EnumDotType.SMALL
+    }
+
+    return type
+}
+
+const handleFourthPage = (idx: number, pageIdx: number): EnumDotType => {
+    let type: EnumDotType
+
+    if (idx < 4) {
+        if (idx === 0) {
+            type = EnumDotType.MEDIUM
+        } else {
             type = EnumDotType.INACTIVE
+
             if (pageIdx === idx) {
                 type = EnumDotType.ACTIVE
             }
-        } else if (idx < 4) {
-            type = EnumDotType.MEDIUM
-        } else {
-            type = EnumDotType.SMALL
         }
-
-        return DotStyle[type]
-    }
-
-    if (pageIdx === 3) {
-        if (idx < 4) {
-            if (idx === 0) {
-                type = EnumDotType.MEDIUM
-            } else {
-                type = EnumDotType.INACTIVE
-
-                if (pageIdx === idx) {
-                    type = EnumDotType.ACTIVE
-                }
-            }
-        } else if (pageIdx + 1 === idx) {
-            type = EnumDotType.MEDIUM
-        } else {
-            type = EnumDotType.SMALL
-        }
-
-        return DotStyle[type]
-    }
-
-    if (idx > pageIdx) {
-        if (idx === pageIdx + 1) {
-            type = EnumDotType.MEDIUM
-        }
-    } else if (idx < pageIdx) {
-        if (idx >= pageIdx - 2) {
-            type = EnumDotType.INACTIVE
-        } else if (idx === pageIdx - 3) {
-            type = EnumDotType.MEDIUM
-        }
+    } else if (pageIdx + 1 === idx) {
+        type = EnumDotType.MEDIUM
     } else {
-        type = EnumDotType.ACTIVE
+        type = EnumDotType.SMALL
     }
 
-    return DotStyle[type]
+    return type
+}
+
+const handleIndexGreaterThanCurrentPage = (
+    idx: number,
+    pageIdx: number,
+): EnumDotType => {
+    let type = EnumDotType.SMALL
+    if (idx === pageIdx + 1) {
+        type = EnumDotType.MEDIUM
+    }
+
+    return type
+}
+
+const handleIndexLessThanCurrentPage = (
+    idx: number,
+    pageIdx: number,
+): EnumDotType => {
+    let type = EnumDotType.SMALL
+    if (idx >= pageIdx - 2) {
+        type = EnumDotType.INACTIVE
+    } else if (idx === pageIdx - 3) {
+        type = EnumDotType.MEDIUM
+    }
+
+    return type
 }
