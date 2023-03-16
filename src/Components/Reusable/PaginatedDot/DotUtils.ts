@@ -35,6 +35,12 @@ export type getDotStylePayload = {
     maxPage: number
 }
 
+/**
+ *
+ * Returns the style object for a dot in a pagination component based on its position and the current page.
+ * @param {Object} getDotStylePayload - Object containing the current dot index, current page number, maximum page number, and an enum for different types of dots.
+ * @returns {Object} - The style object for the dot.
+ */
 export const getDotStyle = ({
     idx,
     curPage,

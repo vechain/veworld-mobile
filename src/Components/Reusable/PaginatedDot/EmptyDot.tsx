@@ -7,6 +7,7 @@ import { StyleSheet, View } from "react-native"
 
 export const defaultEmptyDotSize = 3
 
+//Empty dot for spacing on extremities of the pagination dots
 const EmptyDot: React.FC<{
     sizeRatio: number
 }> = props => {
