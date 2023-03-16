@@ -103,7 +103,7 @@ export const PaginatedDot: React.FC<Props> = (props: Props) => {
                             curPage={normalizedPage}
                             maxPage={maxPage}
                             activeColor={activeDotColor}
-                            inactiveColor={inactiveDotColor}
+                            inactiveDotColor={inactiveDotColor}
                         />
                     )
                 })}
@@ -139,7 +139,7 @@ export const PaginatedDot: React.FC<Props> = (props: Props) => {
                             curPage={normalizedPage}
                             maxPage={maxPage}
                             activeColor={activeDotColor}
-                            inactiveColor={inactiveDotColor}
+                            inactiveDotColor={inactiveDotColor}
                         />
                     )
                 })}
