@@ -9,26 +9,29 @@ const Dot: React.FC<{
     curPage: number
     maxPage: number
     activeColor: string
-    inactiveColor?: string
+    inactiveDotColor?: string
     sizeRatio: number
 }> = props => {
+    const { idx, curPage, maxPage, activeColor, inactiveDotColor, sizeRatio } =
+        props
+
     const [animVal] = useState(new Animated.Value(0))
     const [animate, setAnimate] = useState(false)
     const [type, setType] = useState(() =>
         getDotStyle({
-            idx: props.idx,
-            curPage: props.curPage,
-            maxPage: props.maxPage,
+            idx: idx,
+            curPage: curPage,
+            maxPage: maxPage,
         }),
     )
 
     const [dotColor, setDotColor] = useState<string>(() => {
         //Dot is the current selected
-        if (props.curPage === props.idx) {
-            return props.activeColor
+        if (curPage === idx) {
+            return activeColor
         }
 
-        return props.inactiveColor ?? props.activeColor
+        return inactiveDotColor ?? activeColor
     })
 
     //Get the previous values
@@ -38,22 +41,22 @@ const Dot: React.FC<{
     /*
      - Checks whether the dot should animate its appearance changes based on changes to its type state and sets the animate state accordingly.
      - Updates the dotColor state based on whether the dot is currently the active page or not. Finally,
-     - it updates the type state to the next appearance based on the current props.
+     - it updates the type state to the next appearance based on the current
     */
     useEffect(() => {
         const nextType = getDotStyle({
-            idx: props.idx,
-            curPage: props.curPage,
-            maxPage: props.maxPage,
+            idx: idx,
+            curPage: curPage,
+            maxPage: maxPage,
         })
 
         const nextAnimate =
             nextType.size !== (prevType?.size || 3) ||
             nextType.opacity !== (prevType?.opacity || 0.2)
-        if (props.curPage === props.idx) {
-            setDotColor(props.activeColor)
+        if (curPage === idx) {
+            setDotColor(activeColor)
         } else {
-            setDotColor(props.inactiveColor ?? props.activeColor)
+            setDotColor(inactiveDotColor ?? activeColor)
         }
 
         setType(nextType)
@@ -61,11 +64,11 @@ const Dot: React.FC<{
     }, [
         prevType?.opacity,
         prevType?.size,
-        props.activeColor,
-        props.curPage,
-        props.idx,
-        props.inactiveColor,
-        props.maxPage,
+        activeColor,
+        curPage,
+        idx,
+        inactiveDotColor,
+        maxPage,
     ])
 
     useEffect(() => {
@@ -83,26 +86,26 @@ const Dot: React.FC<{
         const sizeHeight = animVal.interpolate({
             inputRange: [0, 1],
             outputRange: [
-                (prevType?.size || 3) * props.sizeRatio,
-                type.size * props.sizeRatio,
+                (prevType?.size || 3) * sizeRatio,
+                type.size * sizeRatio,
             ],
         })
 
         const sizeWidth = animVal.interpolate({
             inputRange: [0, 1],
             outputRange: [
-                props.curPage === props.idx
-                    ? (prevType?.size || 3) * props.sizeRatio * 2.5
-                    : (prevType?.size || 3) * props.sizeRatio,
-                props.curPage === props.idx
-                    ? type.size * props.sizeRatio * 2.5
-                    : type.size * props.sizeRatio,
+                curPage === idx
+                    ? (prevType?.size || 3) * sizeRatio * 2.5
+                    : (prevType?.size || 3) * sizeRatio,
+                curPage === idx
+                    ? type.size * sizeRatio * 2.5
+                    : type.size * sizeRatio,
             ],
         })
 
         const backgroundColor = animVal.interpolate({
             inputRange: [0, 1],
-            outputRange: [prevDotColor ?? props.activeColor, dotColor],
+            outputRange: [prevDotColor ?? activeColor, dotColor],
         })
 
         return {
@@ -112,8 +115,8 @@ const Dot: React.FC<{
             borderRadius: animVal.interpolate({
                 inputRange: [0, 1],
                 outputRange: [
-                    (prevType?.size || 3) * props.sizeRatio * 0.5,
-                    type.size * props.sizeRatio * 0.5,
+                    (prevType?.size || 3) * sizeRatio * 0.5,
+                    type.size * sizeRatio * 0.5,
                 ],
             }),
             opacity: animVal.interpolate({
@@ -127,25 +130,25 @@ const Dot: React.FC<{
         prevDotColor,
         prevType?.opacity,
         prevType?.size,
-        props.activeColor,
-        props.curPage,
-        props.idx,
-        props.sizeRatio,
+        activeColor,
+        curPage,
+        idx,
+        sizeRatio,
         type.opacity,
         type.size,
     ])
 
-    if (props.curPage < 3) {
-        if (props.idx >= 5) return <EmptyDot sizeRatio={props.sizeRatio} />
-    } else if (props.curPage < 4) {
-        if (props.idx > 5) return <EmptyDot sizeRatio={props.sizeRatio} />
+    if (curPage < 3) {
+        if (idx >= 5) return <EmptyDot sizeRatio={sizeRatio} />
+    } else if (curPage < 4) {
+        if (idx > 5) return <EmptyDot sizeRatio={sizeRatio} />
     }
 
     return (
         <Animated.View
             style={[
                 {
-                    margin: 3 * props.sizeRatio,
+                    margin: 3 * sizeRatio,
                 },
                 animStyle,
             ]}
