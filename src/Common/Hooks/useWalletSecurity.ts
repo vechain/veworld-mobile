@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
-import { useConfigEntity } from "./Entities"
 import { useBiometrics } from "./useBiometrics"
+import { useConfigEntity } from "~Components"
 
 export const useWalletSecurity = () => {
     const configEntity = useConfigEntity()

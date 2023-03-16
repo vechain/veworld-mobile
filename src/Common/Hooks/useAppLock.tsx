@@ -1,17 +1,18 @@
 import { useCallback, useMemo } from "react"
 import { WALLET_STATUS } from "~Model"
-import { useRealm } from "~Storage"
-import {
-    useAppLockEntity,
-    useConfigEntity,
-    useUserPreferencesEntity,
-} from "./Entities"
+import { UserPreferences, useRealm } from "~Storage"
+import { useAppLockEntity } from "./Entities"
+import { useConfigEntity } from "~Components"
 
 export const useAppLock = () => {
-    const { cache } = useRealm()
+    const { cache, store } = useRealm()
     const appLockEntity = useAppLockEntity()
     const configEntity = useConfigEntity()
-    const { isAppLockActive } = useUserPreferencesEntity()
+
+    const usePref = store.objectForPrimaryKey<UserPreferences>(
+        UserPreferences.getName(),
+        UserPreferences.getPrimaryKey(),
+    )
 
     const isWalletCreated = useMemo(
         () => configEntity?.isWalletCreated,
@@ -24,14 +25,14 @@ export const useAppLock = () => {
     )
 
     const appLockStatus = useMemo(() => {
-        if (!isWalletCreated || !isAppLockActive) {
+        if (!isWalletCreated || !usePref?.isAppLockActive) {
             return WALLET_STATUS.NOT_INITIALISED
         }
 
-        if (isAppLockActive && _appLockStatus === "LOCKED") {
+        if (usePref.isAppLockActive && _appLockStatus === "LOCKED") {
             return WALLET_STATUS.LOCKED
         }
-    }, [_appLockStatus, isAppLockActive, isWalletCreated])
+    }, [_appLockStatus, isWalletCreated, usePref?.isAppLockActive])
 
     const unlockApp = useCallback(() => {
         if (appLockEntity) {

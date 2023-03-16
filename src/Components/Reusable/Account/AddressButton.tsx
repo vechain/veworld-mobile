@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { FormattingUtils, useTheme } from "~Common"
 import { BaseButton, BaseIcon } from "~Components/Base"
 import { Alert } from "react-native"
@@ -10,7 +10,7 @@ const { humanAddress } = FormattingUtils
 type Props = {
     address: string
 }
-export const AddressButton: React.FC<Props> = ({ address }) => {
+export const AddressButton: React.FC<Props> = memo(({ address }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
@@ -45,4 +45,4 @@ export const AddressButton: React.FC<Props> = ({ address }) => {
             }
         />
     )
-}
+})

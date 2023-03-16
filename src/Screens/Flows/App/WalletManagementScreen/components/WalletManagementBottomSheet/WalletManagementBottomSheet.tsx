@@ -10,7 +10,7 @@ import {
     BaseView,
 } from "~Components"
 
-import { Device } from "~Storage"
+import { Device, UserPreferences, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { FlashList } from "@shopify/flash-list"
@@ -26,6 +26,12 @@ export const WalletManagementBottomSheet = React.forwardRef<
 >(({ device }, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const { store } = useRealm()
+    const userPref = store.objectForPrimaryKey<UserPreferences>(
+        UserPreferences.getName(),
+        UserPreferences.getPrimaryKey(),
+    )
 
     const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
 
@@ -75,7 +81,12 @@ export const WalletManagementBottomSheet = React.forwardRef<
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
                         renderItem={({ item }) => {
-                            return <AccountDetailBox account={item} />
+                            return (
+                                <AccountDetailBox
+                                    account={item}
+                                    selectedAccount={userPref?.selectedAccount!}
+                                />
+                            )
                         }}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}

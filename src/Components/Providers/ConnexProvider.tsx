@@ -1,25 +1,32 @@
 import { Driver, SimpleNet } from "@vechain/connex-driver"
 import { newThor } from "@vechain/connex-framework/dist/thor"
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
+import { useUserPreferencesEntity } from "./UserPreferenceProvider"
 
 type ConnexContextProviderProps = { children: React.ReactNode }
 const ConnexConext = React.createContext<Connex.Thor | undefined>(undefined)
 
 const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     const [connex, setConnex] = useState<Connex.Thor>()
+    const [driver, setDriver] = useState<Driver | null>(null)
     const value = useMemo(() => (connex ? connex : undefined), [connex])
-
     const { currentNetwork } = useUserPreferencesEntity()
 
     const initConnex = useCallback(async () => {
-        const connexInstance = await _initConnex(currentNetwork.currentUrl)
-        setConnex(connexInstance)
-    }, [currentNetwork.currentUrl])
+        if (currentNetwork) {
+            const driverInstance = await initDriver(currentNetwork.currentUrl)
+            const thorInstance = initThor(driverInstance)
+            setDriver(driverInstance)
+            setConnex(thorInstance)
+        }
+    }, [currentNetwork])
 
     useEffect(() => {
-        initConnex()
-    }, [initConnex])
+        if (connex?.genesis.id !== currentNetwork?.genesisId) {
+            driver?.close()
+            initConnex()
+        }
+    }, [initConnex, connex, currentNetwork?.genesisId, driver])
 
     if (!value) {
         return <></>
@@ -30,8 +37,11 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     )
 }
 
-const _initConnex = async (url: string) => {
-    const currentDriver = await Driver.connect(new SimpleNet(url))
+const initDriver = async (url: string) => {
+    return await Driver.connect(new SimpleNet(url))
+}
+
+const initThor = (currentDriver: Driver) => {
     const driver = newThor(currentDriver)
     return driver
 }
