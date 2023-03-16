@@ -2,13 +2,7 @@ import { Switch, SwitchProps } from "react-native"
 import React, { useMemo } from "react"
 import { useTheme } from "~Common"
 
-type Props = {
-    trackColors?: string[]
-    thumbColor?: string
-    disabled?: boolean
-    ios_bg?: string
-    onValueChange: (value: boolean) => void
-} & Omit<SwitchProps, "onValueChange">
+type Props = SwitchProps
 
 export const BaseSwitch = ({ onValueChange, value, ...props }: Props) => {
     const theme = useTheme()
