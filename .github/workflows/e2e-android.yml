@@ -100,7 +100,7 @@ jobs:
         with:
           api-level: 31
           arch: x86_64
-          profile: Pixel 6
+          #profile: Pixel 6
           force-avd-creation: false
           disable-animations: true
           avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
