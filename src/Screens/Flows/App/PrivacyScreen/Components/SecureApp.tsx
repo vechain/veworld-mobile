@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { Switch } from "react-native"
-import { BaseText, BaseView } from "~Components"
+import { BaseSwitch, BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
 import { useRealm, getUserPreferences, getAppLock } from "~Storage"
 
@@ -41,7 +40,7 @@ export const SecureApp = () => {
             align="center"
             orientation="row">
             <BaseText>Secure App</BaseText>
-            <Switch onValueChange={toggleSwitch} value={isAppLock} />
+            <BaseSwitch onValueChange={toggleSwitch} value={isAppLock} />
         </BaseView>
     )
 }
