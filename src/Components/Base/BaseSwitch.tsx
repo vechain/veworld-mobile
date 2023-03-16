@@ -1,35 +1,29 @@
-import { Switch, ViewProps } from "react-native"
-import React, { useState } from "react"
+import { Switch, SwitchProps } from "react-native"
+import React, { useMemo } from "react"
 import { useTheme } from "~Common"
 
-type Props = {
-    trackColors?: string[]
-    thumbColor?: string
-    disabled?: boolean
-    ios_bg?: string
-    toggleAction: (isOn: boolean) => void
-} & ViewProps
+type Props = SwitchProps
 
-export const BaseSwitch = (props: Props) => {
+export const BaseSwitch = ({ onValueChange, value, ...props }: Props) => {
     const theme = useTheme()
-    const [isEnabled, setIsEnabled] = useState(false)
-    const toggleSwitch = () => {
-        props.toggleAction(!isEnabled)
-        setIsEnabled(previousState => !previousState)
-    }
+
+    const thumbColor = useMemo(() => {
+        if (!value)
+            return theme.isDark ? theme.colors.text : theme.colors.textReversed
+        return theme.colors.textReversed
+    }, [theme, value])
 
     return (
         <Switch
             trackColor={{
-                false: props.trackColors ? props.trackColors[0] : "#767577",
-                true: props.trackColors
-                    ? props.trackColors[1]
-                    : theme.colors.button,
+                false: theme.colors.primaryDisabled,
+                true: theme.colors.primary,
             }}
-            thumbColor={theme.colors.background}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+            thumbColor={thumbColor}
+            ios_backgroundColor={theme.colors.primaryDisabled}
+            onValueChange={onValueChange}
+            value={value}
+            {...props}
         />
     )
 }
