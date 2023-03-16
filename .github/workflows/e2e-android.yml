@@ -32,24 +32,7 @@ jobs:
         with:
           cache: gradle
           distribution: 'zulu'
-          #architecture: 'x64'
           java-version: '11'
-
-      # - name: Download Android Emulator
-      #   run: |
-      #     echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-31;google_apis;x86"
-      #     echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Pixel 6 Pro API 31" -k 'system-images;android-31;google_apis;x86'
-      #     $ANDROID_HOME/emulator/emulator -list-avds
-
-      # - name: Start Android Emulator
-      #   #timeout-minutes: 10
-      #   #continue-on-error: true
-      #   run: |
-      #     echo "Starting emulator"
-      #     nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
-      #     $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
-      #     $ANDROID_HOME/platform-tools/adb devices
-      #     echo "Emulator started"
 
       - name: Rebuild Detox Framework
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
@@ -76,18 +59,6 @@ jobs:
       - name: Get device name
         id: device-name
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
-      
-      # - name: Detox test Android release
-      #   run: yarn start & yarn detox test --configuration android.emu.debug.31 --cleanup --loglevel trace --headless --record-logs all
-
-      # - name: Cache AVD snapshot
-      #   uses: actions/cache@v3
-      #   id: avd-cache
-      #   with:
-      #     path: |
-      #       ~/.android/avd/*
-      #       ~/.android/adb*
-      #     key: avd-31
 
       - name: Restart adb
         run: |
@@ -107,14 +78,6 @@ jobs:
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          # Use the slimmer aosp_atd images for working
-          # around "System UI isn't responding" ANR
-          # (Application Not Responding) error
-          #
-          # https://android-developers.googleblog.com/2021/10/whats-new-in-scalable-automated-testing.html#:~:text=Slimmer%20Emulator%20System%20Images
-          # https://github.com/ReactiveCircus/android-emulator-runner/issues/129
-          # https://github.com/upleveled/hotline-bling-codealong/pull/26#issuecomment-1094659722
-          #target: aosp_atd
           api-level: 31
           arch: x86_64
           force-avd-creation: false
