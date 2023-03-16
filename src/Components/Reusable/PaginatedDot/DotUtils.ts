@@ -31,7 +31,7 @@ const DotStyle = {
 
 export type getDotStylePayload = {
     idx: number
-    curPage: number
+    pageIdx: number
     maxPage: number
 }
 
@@ -43,21 +43,21 @@ export type getDotStylePayload = {
  */
 export const getDotStyle = ({
     idx,
-    curPage,
+    pageIdx,
     maxPage,
 }: getDotStylePayload): IDotStyle => {
     let type = EnumDotType.SMALL
 
     if (maxPage < 5) {
         return DotStyle[
-            idx === curPage ? EnumDotType.ACTIVE : EnumDotType.INACTIVE
+            idx === pageIdx ? EnumDotType.ACTIVE : EnumDotType.INACTIVE
         ]
     }
 
-    if (curPage < 3) {
+    if (pageIdx < 3) {
         if (idx < 3) {
             type = EnumDotType.INACTIVE
-            if (curPage === idx) {
+            if (pageIdx === idx) {
                 type = EnumDotType.ACTIVE
             }
         } else if (idx < 4) {
@@ -69,18 +69,18 @@ export const getDotStyle = ({
         return DotStyle[type]
     }
 
-    if (curPage === 3) {
+    if (pageIdx === 3) {
         if (idx < 4) {
             if (idx === 0) {
                 type = EnumDotType.MEDIUM
             } else {
                 type = EnumDotType.INACTIVE
 
-                if (curPage === idx) {
+                if (pageIdx === idx) {
                     type = EnumDotType.ACTIVE
                 }
             }
-        } else if (curPage + 1 === idx) {
+        } else if (pageIdx + 1 === idx) {
             type = EnumDotType.MEDIUM
         } else {
             type = EnumDotType.SMALL
@@ -89,14 +89,14 @@ export const getDotStyle = ({
         return DotStyle[type]
     }
 
-    if (idx > curPage) {
-        if (idx === curPage + 1) {
+    if (idx > pageIdx) {
+        if (idx === pageIdx + 1) {
             type = EnumDotType.MEDIUM
         }
-    } else if (idx < curPage) {
-        if (idx >= curPage - 2) {
+    } else if (idx < pageIdx) {
+        if (idx >= pageIdx - 2) {
             type = EnumDotType.INACTIVE
-        } else if (idx === curPage - 3) {
+        } else if (idx === pageIdx - 3) {
             type = EnumDotType.MEDIUM
         }
     } else {

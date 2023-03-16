@@ -92,7 +92,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
                 <PaginatedDot
                     activeDotColor={theme.colors.primary}
                     inactiveDotColor={theme.colors.primary}
-                    curPage={currentIndex}
+                    pageIdx={currentIndex}
                     maxPage={accounts.length}
                 />
             </>

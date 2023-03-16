@@ -6,13 +6,13 @@ import { getDotStyle } from "./DotUtils"
 
 const Dot: React.FC<{
     idx: number
-    curPage: number
+    pageIdx: number
     maxPage: number
     activeColor: string
     inactiveDotColor?: string
     sizeRatio: number
 }> = props => {
-    const { idx, curPage, maxPage, activeColor, inactiveDotColor, sizeRatio } =
+    const { idx, pageIdx, maxPage, activeColor, inactiveDotColor, sizeRatio } =
         props
 
     const [animVal] = useState(new Animated.Value(0))
@@ -20,14 +20,14 @@ const Dot: React.FC<{
     const [type, setType] = useState(() =>
         getDotStyle({
             idx: idx,
-            curPage: curPage,
+            pageIdx: pageIdx,
             maxPage: maxPage,
         }),
     )
 
     const [dotColor, setDotColor] = useState<string>(() => {
         //Dot is the current selected
-        if (curPage === idx) {
+        if (pageIdx === idx) {
             return activeColor
         }
 
@@ -46,14 +46,15 @@ const Dot: React.FC<{
     useEffect(() => {
         const nextType = getDotStyle({
             idx: idx,
-            curPage: curPage,
+            pageIdx: pageIdx,
             maxPage: maxPage,
         })
 
         const nextAnimate =
             nextType.size !== (prevType?.size || 3) ||
             nextType.opacity !== (prevType?.opacity || 0.2)
-        if (curPage === idx) {
+
+        if (pageIdx === idx) {
             setDotColor(activeColor)
         } else {
             setDotColor(inactiveDotColor ?? activeColor)
@@ -65,7 +66,7 @@ const Dot: React.FC<{
         prevType?.opacity,
         prevType?.size,
         activeColor,
-        curPage,
+        pageIdx,
         idx,
         inactiveDotColor,
         maxPage,
@@ -94,10 +95,10 @@ const Dot: React.FC<{
         const sizeWidth = animVal.interpolate({
             inputRange: [0, 1],
             outputRange: [
-                curPage === idx
+                pageIdx === idx
                     ? (prevType?.size || 3) * sizeRatio * 2.5
                     : (prevType?.size || 3) * sizeRatio,
-                curPage === idx
+                pageIdx === idx
                     ? type.size * sizeRatio * 2.5
                     : type.size * sizeRatio,
             ],
@@ -131,16 +132,16 @@ const Dot: React.FC<{
         prevType?.opacity,
         prevType?.size,
         activeColor,
-        curPage,
+        pageIdx,
         idx,
         sizeRatio,
         type.opacity,
         type.size,
     ])
 
-    if (curPage < 3) {
+    if (pageIdx < 3) {
         if (idx >= 5) return <EmptyDot sizeRatio={sizeRatio} />
-    } else if (curPage < 4) {
+    } else if (pageIdx < 4) {
         if (idx > 5) return <EmptyDot sizeRatio={sizeRatio} />
     }
 

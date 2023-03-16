@@ -12,7 +12,7 @@ import { usePrevious } from "~Common"
 import { BaseView } from "~Components"
 
 type Props = {
-    curPage: number
+    pageIdx: number
     maxPage: number
     sizeRatio?: number
     activeDotColor: string
@@ -22,10 +22,10 @@ type Props = {
 const ONE_EMPTY_DOT_SIZE = defaultEmptyDotSize * defaultEmptyDotSize
 
 export const PaginatedDot: React.FC<Props> = (props: Props) => {
-    const { curPage, maxPage, activeDotColor, inactiveDotColor } = props
+    const { pageIdx, maxPage, activeDotColor, inactiveDotColor } = props
 
     const refScrollView = useRef<ScrollView>(null)
-    const prevPage = usePrevious(curPage)
+    const prevPage = usePrevious(pageIdx)
 
     //Size of the dots are calculated based on the sizeRatio
     const getSizeRatio = useCallback<() => number>(() => {
@@ -72,18 +72,18 @@ export const PaginatedDot: React.FC<Props> = (props: Props) => {
     }, [getSizeRatio])
 
     useEffect(() => {
-        if (maxPage > 4 && prevPage !== curPage) scrollTo(curPage)
-    }, [prevPage, curPage, maxPage, scrollTo])
+        if (maxPage > 4 && prevPage !== pageIdx) scrollTo(pageIdx)
+    }, [prevPage, pageIdx, maxPage, scrollTo])
 
     const list = useMemo(() => [...Array(maxPage).keys()], [maxPage])
 
     //Normalization of the current page to be between [0, maxPage - 1]
-    let normalizedPage = curPage
-    if (curPage < 0) {
+    let normalizedPage = pageIdx
+    if (pageIdx < 0) {
         normalizedPage = 0
     }
 
-    if (curPage > maxPage - 1) {
+    if (pageIdx > maxPage - 1) {
         normalizedPage = maxPage - 1
     }
 
@@ -100,7 +100,7 @@ export const PaginatedDot: React.FC<Props> = (props: Props) => {
                             key={i}
                             idx={i}
                             sizeRatio={sizeRatio}
-                            curPage={normalizedPage}
+                            pageIdx={normalizedPage}
                             maxPage={maxPage}
                             activeColor={activeDotColor}
                             inactiveDotColor={inactiveDotColor}
@@ -116,7 +116,7 @@ export const PaginatedDot: React.FC<Props> = (props: Props) => {
             style={container}
             onLayout={() => {
                 // scroll to correct index on initial render
-                scrollTo(curPage, false)
+                scrollTo(pageIdx, false)
             }}>
             <ScrollView
                 ref={refScrollView}
@@ -136,7 +136,7 @@ export const PaginatedDot: React.FC<Props> = (props: Props) => {
                             sizeRatio={sizeRatio}
                             key={i}
                             idx={i}
-                            curPage={normalizedPage}
+                            pageIdx={normalizedPage}
                             maxPage={maxPage}
                             activeColor={activeDotColor}
                             inactiveDotColor={inactiveDotColor}
