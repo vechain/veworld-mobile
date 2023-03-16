@@ -79,7 +79,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
-          arch: x86_64
+          arch: arm64-v8a
           force-avd-creation: false
           disable-animations: false
           avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
@@ -99,7 +99,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
-          arch: x86_64
+          arch: arm64-v8a
           #profile: Pixel 6
           force-avd-creation: false
           disable-animations: true
