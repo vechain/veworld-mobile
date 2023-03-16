@@ -65,7 +65,11 @@ export const getDotStyle = ({
         } else {
             type = EnumDotType.SMALL
         }
-    } else if (curPage === 3) {
+
+        return DotStyle[type]
+    }
+
+    if (curPage === 3) {
         if (idx < 4) {
             if (idx === 0) {
                 type = EnumDotType.MEDIUM
@@ -81,20 +85,22 @@ export const getDotStyle = ({
         } else {
             type = EnumDotType.SMALL
         }
-    } else {
-        if (idx > curPage) {
-            if (idx === curPage + 1) {
-                type = EnumDotType.MEDIUM
-            }
-        } else if (idx < curPage) {
-            if (idx >= curPage - 2) {
-                type = EnumDotType.INACTIVE
-            } else if (idx === curPage - 3) {
-                type = EnumDotType.MEDIUM
-            }
-        } else {
-            type = EnumDotType.ACTIVE
+
+        return DotStyle[type]
+    }
+
+    if (idx > curPage) {
+        if (idx === curPage + 1) {
+            type = EnumDotType.MEDIUM
         }
+    } else if (idx < curPage) {
+        if (idx >= curPage - 2) {
+            type = EnumDotType.INACTIVE
+        } else if (idx === curPage - 3) {
+            type = EnumDotType.MEDIUM
+        }
+    } else {
+        type = EnumDotType.ACTIVE
     }
 
     return DotStyle[type]
