@@ -12,12 +12,12 @@ Given("The user opens the app", { timeout: -1 }, async () => {
     await detox.device.launchApp({ newInstance: true })
 })
 
-Given("The user brings the app from background", async () => {
+Given("The user brings the app from background", { timeout: -1 }, async () => {
     // Brings the app from the background
     await detox.device.launchApp({ newInstance: false })
 })
 
-Given("The user closes the app", async () => {
+Given("The user closes the app", { timeout: -1 }, async () => {
     await detox.device.terminateApp()
 })
 
