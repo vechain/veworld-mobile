@@ -44,7 +44,7 @@ export const PressableIcon = ({
             <Icon
                 name={title}
                 size={size}
-                color={color ? color : theme.colors.button}
+                color={color ? color : theme.colors.primary}
             />
         </TouchableOpacity>
     )

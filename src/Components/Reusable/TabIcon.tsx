@@ -1,5 +1,5 @@
 import React, { FC, memo } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, TextStyle, View } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseView } from "~Components/Base"
@@ -17,7 +17,7 @@ export const TabIcon: FC<Props> = memo(({ focused, title }) => {
             <Icon
                 name={title.toLowerCase()}
                 size={24}
-                color={styles.icon.color}
+                color={(styles.icon as TextStyle).color}
             />
 
             <View style={styles.dot} />
