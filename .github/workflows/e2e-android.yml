@@ -60,10 +60,10 @@ jobs:
         id: device-name
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
 
-      - name: Restart adb
-        run: |
-          adb kill-server
-          adb start-server
+      # - name: Restart adb
+      #   run: |
+      #     adb kill-server
+      #     adb start-server
 
       # - name: Restore AVD Snapshot Cache
       #   id: avd-cache
