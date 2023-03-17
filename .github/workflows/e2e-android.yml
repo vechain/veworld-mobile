@@ -105,7 +105,7 @@ jobs:
           disable-animations: true
           avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
           #emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: npx react-native start --reset-cache & yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
+          script: npx react-native start --reset-cache & yarn detox test --configuration android.emu.debug.31 --headless --record-logs all && killall -9 node
 
       - name: Upload artifacts
         if: failure() || cancelled()
