@@ -150,8 +150,7 @@ export const initRealmClasses = (
 
         if (!userPreferences) {
             store.create(UserPreferences.getName(), {
-                isAppLockActive:
-                    process.env.NODE_ENV === "development" ? false : true,
+                isAppLockActive: process.env.NODE_ENV !== "development",
                 theme: colorScheme,
                 currentNetwork: networks[0], // main network is default
             })

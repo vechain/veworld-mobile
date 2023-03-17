@@ -1,4 +1,5 @@
 import React, { memo, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -40,7 +41,7 @@ export const Balance: React.FC<Props> = memo(
                         name={isVisible ? "eye-off" : "eye"}
                         color={theme.colors.textReversed}
                         size={18}
-                        style={{ marginLeft: 8 }}
+                        style={baseStyles.marginLeft}
                     />
                 </BaseView>
                 <BaseView orientation="row" align="flex-end">
@@ -60,3 +61,9 @@ export const Balance: React.FC<Props> = memo(
         )
     },
 )
+
+const baseStyles = StyleSheet.create({
+    marginLeft: {
+        marginLeft: 8,
+    },
+})

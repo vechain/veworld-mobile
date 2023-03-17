@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo } from "react"
 import { FormattingUtils, useTheme } from "~Common"
 import { BaseButton, BaseIcon } from "~Components/Base"
-import { Alert } from "react-native"
+import { Alert, StyleSheet } from "react-native"
 import * as Clipboard from "expo-clipboard"
 import { useI18nContext } from "~i18n"
 
@@ -40,9 +40,15 @@ export const AddressButton: React.FC<Props> = memo(({ address }) => {
                     name="content-copy"
                     color={color}
                     size={12}
-                    style={{ marginLeft: 8 }}
+                    style={baseStyles.marginLeft}
                 />
             }
         />
     )
+})
+
+const baseStyles = StyleSheet.create({
+    marginLeft: {
+        marginLeft: 8,
+    },
 })

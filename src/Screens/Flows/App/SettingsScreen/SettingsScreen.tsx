@@ -23,11 +23,7 @@ export const SettingsScreen = () => {
 
     const checkViewableItems = useCallback(
         ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            if (viewableItems.length < SCREEN_LIST.length) {
-                setIsScrollable(true)
-            } else {
-                setIsScrollable(false)
-            }
+            setIsScrollable(viewableItems.length < SCREEN_LIST.length)
         },
         [SCREEN_LIST.length],
     )

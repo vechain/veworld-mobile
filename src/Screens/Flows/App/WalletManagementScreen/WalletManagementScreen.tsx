@@ -44,11 +44,7 @@ export const WalletManagementScreen = () => {
 
     const checkViewableItems = useCallback(
         ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            if (viewableItems.length < devices.length) {
-                setIsScrollable(true)
-            } else {
-                setIsScrollable(false)
-            }
+            setIsScrollable(viewableItems.length < devices.length)
         },
         [devices.length],
     )
@@ -89,7 +85,7 @@ export const WalletManagementScreen = () => {
                     }}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
-                    estimatedItemSize={152} // erik this one is item width not list length
+                    estimatedItemSize={152}
                     estimatedListSize={{
                         height: 184,
                         width: 152 * devices.length + (devices.length - 1) * 16,
