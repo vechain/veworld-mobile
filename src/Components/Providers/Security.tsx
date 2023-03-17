@@ -8,8 +8,6 @@ import {
 } from "~Model"
 import { getConfig, useRealm } from "~Storage"
 
-const { isSecurityDowngrade, isSecurityUpgrade } = BiometricsUtils
-
 type Props = { appLockStatus: WALLET_STATUS | undefined }
 
 export const Security = ({ appLockStatus }: Props) => {
@@ -32,13 +30,23 @@ export const Security = ({ appLockStatus }: Props) => {
             return
 
         if (lastSecurityLevel !== "NONE" && level) {
-            if (isSecurityDowngrade(lastSecurityLevel, level, appLockStatus!)) {
+            if (
+                BiometricsUtils.isSecurityDowngrade(
+                    lastSecurityLevel,
+                    level,
+                    appLockStatus!,
+                )
+            ) {
                 store.write(() => {
                     config.isSecurityDowngrade = true
                     config.lastSecurityLevel = level
                 })
             } else if (
-                isSecurityUpgrade(lastSecurityLevel, level, appLockStatus!)
+                BiometricsUtils.isSecurityUpgrade(
+                    lastSecurityLevel,
+                    level,
+                    appLockStatus!,
+                )
             ) {
                 store.write(() => {
                     config.isSecurityDowngrade = false
