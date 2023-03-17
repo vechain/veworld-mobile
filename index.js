@@ -7,7 +7,12 @@ import { name as appName } from "./app.json"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Common"
-import { ConnexContextProvider, TranslationProvider } from "~Components"
+import {
+    ConfigContextProvider,
+    ConnexContextProvider,
+    TranslationProvider,
+    UserPreferencesContextProvider,
+} from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import { RealmContextProvider } from "~Storage"
@@ -45,17 +50,21 @@ const Main = () => {
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RealmContextProvider>
-                <ConnexContextProvider>
-                    <BottomSheetModalProvider>
-                        <NavigationProvider>
+                <ConfigContextProvider>
+                    <UserPreferencesContextProvider>
+                        <ConnexContextProvider>
                             <SafeAreaProvider>
-                                <TranslationProvider>
-                                    {fontsLoaded && <EntryPoint />}
-                                </TranslationProvider>
+                                <BottomSheetModalProvider>
+                                    <NavigationProvider>
+                                        <TranslationProvider>
+                                            {fontsLoaded && <EntryPoint />}
+                                        </TranslationProvider>
+                                    </NavigationProvider>
+                                </BottomSheetModalProvider>
                             </SafeAreaProvider>
-                        </NavigationProvider>
-                    </BottomSheetModalProvider>
-                </ConnexContextProvider>
+                        </ConnexContextProvider>
+                    </UserPreferencesContextProvider>
+                </ConfigContextProvider>
             </RealmContextProvider>
         </GestureHandlerRootView>
     )

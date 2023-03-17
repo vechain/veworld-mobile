@@ -2,7 +2,7 @@ import { useNavigation, useTheme } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useState } from "react"
 
-import { SafeAreaView, StyleSheet } from "react-native"
+import { SafeAreaView, StyleSheet, ViewToken } from "react-native"
 import { useBottomSheetModal } from "~Common"
 import { useDevicesList } from "~Common/Hooks/Entities"
 import { BaseIcon, BaseSpacer, BaseView } from "~Components"
@@ -17,6 +17,7 @@ export const WalletManagementScreen = () => {
     const nav = useNavigation()
     const theme = useTheme()
 
+    const [isScrollable, setIsScrollable] = useState(false)
     const devices = useDevicesList()
     const [selectedDevice, setSelectedDevice] = useState<Device>()
 
@@ -41,6 +42,13 @@ export const WalletManagementScreen = () => {
         [openWalletManagementSheet, setSelectedDevice],
     )
 
+    const checkViewableItems = useCallback(
+        ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+            setIsScrollable(viewableItems.length < devices.length)
+        },
+        [devices.length],
+    )
+
     return (
         <>
             <SafeAreaView />
@@ -56,6 +64,8 @@ export const WalletManagementScreen = () => {
             <BaseView px={20} style={{ height: "100%" }}>
                 <FlashList
                     data={devices}
+                    scrollEnabled={isScrollable}
+                    onViewableItemsChanged={checkViewableItems}
                     keyExtractor={device => device.rootAddress}
                     ListHeaderComponent={
                         <>
@@ -75,7 +85,7 @@ export const WalletManagementScreen = () => {
                     }}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
-                    estimatedItemSize={devices.length}
+                    estimatedItemSize={152}
                     estimatedListSize={{
                         height: 184,
                         width: 152 * devices.length + (devices.length - 1) * 16,
