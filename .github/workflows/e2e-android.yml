@@ -108,7 +108,7 @@ jobs:
           script: npx react-native start --reset-cache & yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
 
       - name: Upload artifacts
-        if: failure()
+        if: failure() || cancelled()
         uses: actions/upload-artifact@v3
         with:
           name: detox-fail-artifacts
