@@ -12,6 +12,7 @@
         "ios:old-device": "react-native run-ios --simulator 'iPhone SE (3rd generation)'",
         "start": "react-native start",
         "test": "jest",
+        "test:coverage": "jest --coverage",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "format": "yarn prettier --write src",
         "format:check": "yarn prettier --check src",

@@ -1,0 +1,63 @@
+name: Unit test coverage
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    run-test-coverage:
+        runs-on: macos-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version-file: .nvmrc
+                  cache: "yarn"
+
+            - name: Install & Patch packages
+              run: yarn install && yarn patch-package
+
+            - name: Run test coverage
+              run: yarn test:coverage
+
+            # TODO: understand if we need this stuff
+            # - name: Restore Pods cache
+            #   uses: actions/cache/restore@v3
+            #   id: pods-cache-restore
+            #   with:
+            #     path: ios/Pods
+            #     key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+
+            # - name: Install macOS dependencies
+            #   run: |
+            #     brew tap wix/brew
+            #     brew install applesimutils
+            #   env:
+            #     HOMEBREW_NO_AUTO_UPDATE: 1
+            #     HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+            # - name: Setup Ruby
+            #   uses: ruby/setup-ruby@v1
+            #   with:
+            #     bundler-cache: true
+
+            # - name: Install CocoaPods
+            #   if: steps.pods-cache-restore.outputs.cache-hit != 'true'
+            #   run: npx pod-install
+
+            # - name: Save Pods cache
+            #   uses: actions/cache/save@v3
+            #   id: pods-cache
+            #   if: always()
+            #   with:
+            #     path: ios/Pods
+            #     key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
