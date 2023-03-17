@@ -65,35 +65,35 @@ jobs:
           adb kill-server
           adb start-server
 
-      - name: Restore AVD Snapshot Cache
-        id: avd-cache
-        uses: actions/cache/restore@v3
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-31
+      # - name: Restore AVD Snapshot Cache
+      #   id: avd-cache
+      #   uses: actions/cache/restore@v3
+      #   with:
+      #     path: |
+      #       ~/.android/avd/*
+      #       ~/.android/adb*
+      #     key: avd-31
       
-      - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 31
-          arch: arm64-v8a
-          force-avd-creation: false
-          disable-animations: false
-          avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
-          #emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "Generated AVD snapshot for caching"
+      # - name: Create AVD and generate snapshot for caching
+      #   if: steps.avd-cache.outputs.cache-hit != 'true'
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     api-level: 31
+      #     arch: arm64-v8a
+      #     force-avd-creation: false
+      #     disable-animations: false
+      #     avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
+      #     #emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+      #     script: echo "Generated AVD snapshot for caching"
 
-      - name: Save AVD Snapshot Cache
-        uses: actions/cache/save@v3
-        if: always()
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-31
+      # - name: Save AVD Snapshot Cache
+      #   uses: actions/cache/save@v3
+      #   if: always()
+      #   with:
+      #     path: |
+      #       ~/.android/avd/*
+      #       ~/.android/adb*
+      #     key: avd-31
       
       - name: Detox test Android release
         uses: reactivecircus/android-emulator-runner@v2
@@ -104,7 +104,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
-          #emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: npx react-native start --reset-cache & yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
 
       - name: Upload artifacts
