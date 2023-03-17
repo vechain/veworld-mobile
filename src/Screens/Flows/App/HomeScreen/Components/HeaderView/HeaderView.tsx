@@ -5,7 +5,7 @@ import { AccountsCarousel } from "./AccountsCarousel"
 import { TabbarHeader } from "./TabbarHeader"
 import { ActionsList } from "./ActionsList"
 import { useAccountsList } from "~Common/Hooks/Entities"
-import { Account, getUserPreferences, useRealm } from "~Storage"
+import { Account, useRealm } from "~Storage"
 import { AddressUtils } from "~Common"
 
 type Props = {
@@ -18,18 +18,17 @@ export const HeaderView = memo(
     ({ setActiveTab, activeTab, openAccountManagementSheet }: Props) => {
         const { store } = useRealm()
         const accounts = useAccountsList("visible == true")
-        const { selectedAccount, balanceVisible } = useUserPreferencesEntity()
-        const userPref = getUserPreferences(store)
+        const userPref = useUserPreferencesEntity()
 
         const selectedAccountIndex = useMemo(
             () =>
                 accounts.findIndex(account =>
                     AddressUtils.compareAddresses(
-                        selectedAccount?.address,
+                        userPref.selectedAccount?.address,
                         account.address,
                     ),
                 ),
-            [selectedAccount, accounts],
+            [userPref.selectedAccount, accounts],
         )
 
         const onAccountChange = useCallback(
@@ -47,7 +46,7 @@ export const HeaderView = memo(
                     <Header />
                     <BaseSpacer height={20} />
                     <AccountsCarousel
-                        balanceVisible={balanceVisible!}
+                        balanceVisible={userPref.balanceVisible}
                         openAccountManagementSheet={openAccountManagementSheet}
                         accounts={accounts}
                         onAccountChange={onAccountChange}

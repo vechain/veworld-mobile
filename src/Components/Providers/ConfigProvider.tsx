@@ -2,7 +2,7 @@ import React from "react"
 import { Config, useObjectListener, useRealm } from "~Storage"
 
 type ConfigContextProviderProps = { children: React.ReactNode }
-const ConfigConext = React.createContext<Config | null>(null)
+const ConfigContext = React.createContext<Config | null>(null)
 
 const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
     const { store } = useRealm()
@@ -18,15 +18,17 @@ const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
     }
 
     return (
-        <ConfigConext.Provider value={config}>{children}</ConfigConext.Provider>
+        <ConfigContext.Provider value={config}>
+            {children}
+        </ConfigContext.Provider>
     )
 }
 
 const useConfigEntity = () => {
-    const context = React.useContext(ConfigConext)
+    const context = React.useContext(ConfigContext)
     if (!context) {
         throw new Error(
-            "useConfigContext must be used within a UserContextProvider",
+            "useConfigContext must be used within a ConfigContextProvider",
         )
     }
 

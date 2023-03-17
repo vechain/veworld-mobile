@@ -2,7 +2,7 @@ import React from "react"
 import { UserPreferences, useObjectListener, useRealm } from "~Storage"
 
 type UserPreferencesContextProviderProps = { children: React.ReactNode }
-const UserPreferencesConext = React.createContext<UserPreferences | null>(null)
+const UserPreferencesContext = React.createContext<UserPreferences | null>(null)
 
 const UserPreferencesContextProvider = ({
     children,
@@ -20,17 +20,17 @@ const UserPreferencesContextProvider = ({
     }
 
     return (
-        <UserPreferencesConext.Provider value={userPref}>
+        <UserPreferencesContext.Provider value={userPref}>
             {children}
-        </UserPreferencesConext.Provider>
+        </UserPreferencesContext.Provider>
     )
 }
 
 const useUserPreferencesEntity = () => {
-    const context = React.useContext(UserPreferencesConext)
+    const context = React.useContext(UserPreferencesContext)
     if (!context) {
         throw new Error(
-            "useUserPreferencesContext must be used within a UserContextProvider",
+            "useUserPreferencesContext must be used within a UserPreferencesContextProvider",
         )
     }
 
