@@ -13,7 +13,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     console.log("App launched!")
 })
 
-Before({ timeout: 180 * 1000 }, async function (feature) {
+Before({ timeout: 300 * 1000 }, async function (feature) {
     // Do not reload app for the "app-lifecycle" tagged tests
     // as reloading is part of the test itself and is handled manually
     if (feature.pickle.tags.some(tag => tag.name !== "@app-lifecycle")) {
@@ -26,6 +26,8 @@ Before({ timeout: 180 * 1000 }, async function (feature) {
     }
 })
 
-AfterAll({ timeout: 180 * 1000 }, async () => {
+AfterAll({ timeout: 300 * 1000 }, async () => {
+    console.log("Starting cleanup Detox test session...")
     await detoxConfig.cleanup()
+    console.log("Detox test session cleaned up!")
 })
