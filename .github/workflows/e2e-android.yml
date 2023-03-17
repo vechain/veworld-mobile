@@ -10,9 +10,9 @@ on:
       - main
 
 jobs:
-  build-test-ios:
+  build-test-android:
     name: Detox Build & Test Android Release
-    runs-on: self-hosted
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
@@ -36,25 +36,9 @@ jobs:
 
       - name: Rebuild Detox Framework
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
-
-      # - name: Restore Detox build
-      #   id: detox-cache-restore
-      #   uses: actions/cache/restore@v3
-      #   with:
-      #     path: android/app/build
-      #     key: ${{ runner.os }}-detox-android-build
       
       - name: Detox build Android release
-        # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
         run: yarn detox build --configuration android.emu.debug.31
-
-      # - name: Save Detox build
-      #   id: detox-cache
-      #   uses: actions/cache/save@v3
-      #   if: always()
-      #   with:
-      #     path: android/app/build
-      #     key: ${{ runner.os }}-detox-android-build
 
       - name: Get device name
         id: device-name
@@ -72,8 +56,6 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
-          #emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          #script: yarn start --reset-cache & yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
           script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all
 
       - name: Upload artifacts
