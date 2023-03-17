@@ -139,6 +139,8 @@ const en: BaseTranslation = {
 
     // Common Buttons
     COMMON_BTN_cancel: "Cancel",
+    COMMON_BTN_RETRY: "Retry",
+    COMMON_BTN_SIGN_OUT: "Sign out",
 
     // Common Labels
     COMMON_LBL_ADDRESS: "Address",
@@ -175,6 +177,8 @@ const en: BaseTranslation = {
     // Settings Languages
 
     // Wallets New Local
+    WALLET_LABEL_ACCOUNT: "Account",
+    WALLET_LABEL_WALLET: "Wallet",
 
     // Wallets Import
 
