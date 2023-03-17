@@ -22,6 +22,7 @@ type Props = {
     selectedAccountIndex: number
     onAccountChange: (account: Account) => void
     openAccountManagementSheet: () => void
+    balanceVisible: boolean
 }
 
 export const AccountsCarousel: React.FC<Props> = memo(
@@ -30,6 +31,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
         selectedAccountIndex,
         onAccountChange,
         openAccountManagementSheet,
+        balanceVisible,
     }) => {
         const theme = useTheme()
 
@@ -56,6 +58,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
             ({ index }: { index: number }) => {
                 return (
                     <AccountCard
+                        balanceVisible={balanceVisible}
                         openAccountManagement={openAccountManagementSheet}
                         account={accounts[index]}
                         key={index}
@@ -65,7 +68,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     />
                 )
             },
-            [accounts, openAccountManagementSheet],
+            [accounts, balanceVisible, openAccountManagementSheet],
         )
 
         return (

@@ -1,13 +1,10 @@
 import React, { memo, useCallback, useMemo } from "react"
-import { BaseSpacer, BaseView } from "~Components"
+import { BaseSpacer, BaseView, useUserPreferencesEntity } from "~Components"
 import { Header } from "./Header"
 import { AccountsCarousel } from "./AccountsCarousel"
 import { TabbarHeader } from "./TabbarHeader"
 import { ActionsList } from "./ActionsList"
-import {
-    useAccountsList,
-    useUserPreferencesEntity,
-} from "~Common/Hooks/Entities"
+import { useAccountsList } from "~Common/Hooks/Entities"
 import { Account, useRealm } from "~Storage"
 import { AddressUtils } from "~Common"
 
@@ -21,34 +18,35 @@ export const HeaderView = memo(
     ({ setActiveTab, activeTab, openAccountManagementSheet }: Props) => {
         const { store } = useRealm()
         const accounts = useAccountsList("visible == true")
-        const { selectedAccount, userPreferencesEntity } =
-            useUserPreferencesEntity()
+        const userPref = useUserPreferencesEntity()
 
         const selectedAccountIndex = useMemo(
             () =>
                 accounts.findIndex(account =>
                     AddressUtils.compareAddresses(
-                        selectedAccount?.address,
+                        userPref.selectedAccount?.address,
                         account.address,
                     ),
                 ),
-            [selectedAccount, accounts],
+            [userPref.selectedAccount, accounts],
         )
 
         const onAccountChange = useCallback(
             (account: Account) => {
                 store.write(() => {
-                    userPreferencesEntity.selectedAccount = account
+                    userPref.selectedAccount = account
                 })
             },
-            [store, userPreferencesEntity],
+            [store, userPref],
         )
+
         return (
             <>
                 <BaseView align="center">
                     <Header />
                     <BaseSpacer height={20} />
                     <AccountsCarousel
+                        balanceVisible={userPref.balanceVisible}
                         openAccountManagementSheet={openAccountManagementSheet}
                         accounts={accounts}
                         onAccountChange={onAccountChange}

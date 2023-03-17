@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
 import { ColorThemeType, ColorTheme } from "../Theme/Theme"
-import { useUserPreferencesEntity } from "./Entities"
+import { useUserPreferencesEntity } from "~Components"
 
 export const useTheme = (): ColorThemeType => {
     const { theme } = useUserPreferencesEntity()

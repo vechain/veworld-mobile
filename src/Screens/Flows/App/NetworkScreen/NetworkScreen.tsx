@@ -9,13 +9,13 @@ import {
     BaseTouchableBox,
     BaseView,
     EnableFeature,
+    useUserPreferencesEntity,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { StringUtils, useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
 import { useRealm, getNetworks, getUserPreferences } from "~Storage"
-import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 import { Routes } from "~Navigation"
 
 export const ChangeNetworkScreen = () => {
@@ -103,7 +103,7 @@ export const ChangeNetworkScreen = () => {
                     action={onPressInput}
                     justifyContent="space-between">
                     <BaseText>
-                        {StringUtils.capitalize(currentNetwork.type)}
+                        {StringUtils.capitalize(currentNetwork?.type!)}
                     </BaseText>
                     <BaseIcon name="magnify" />
                 </BaseTouchableBox>

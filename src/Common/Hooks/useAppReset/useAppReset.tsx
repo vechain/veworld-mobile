@@ -70,7 +70,8 @@ const resetRealm = async (store: Realm, cache: Realm) => {
         userPreferences.currentNetwork = networks[0]
         userPreferences.showTestNetTag = true
         userPreferences.showConversionOtherNets = true
-        userPreferences.isAppLockActive = true
+        userPreferences.isAppLockActive =
+            process.env.NODE_ENV === "development" ? false : true
         userPreferences.selectedAccount = undefined
         userPreferences.balanceVisible = true
 
