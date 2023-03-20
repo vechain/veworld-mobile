@@ -1,6 +1,8 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import { Linking } from "react-native"
 import { Camera } from "react-native-vision-camera"
+import { AlertUtils } from "~Common/Utils"
+import * as i18n from "~i18n"
 
 enum CameraPermissionStatusValues {
     authorized = "authorized", // Your app is authorized to use said permission.
@@ -14,17 +16,12 @@ enum CameraPermissionRequestValues {
 }
 
 export const useCameraPermissions = () => {
-    const [isOpenCamera, setIsOpenCamera] = useState(false)
-    const [isError, setIsError] = useState(false)
-
     const requestPermissions = useCallback(async () => {
         const perms = await Camera.requestCameraPermission()
         switch (perms) {
             case CameraPermissionRequestValues.authorized:
-                setIsOpenCamera(true)
-                return
+                return true
             case CameraPermissionRequestValues.denied:
-                await Linking.openSettings()
                 return
             default:
                 break
@@ -36,25 +33,32 @@ export const useCameraPermissions = () => {
 
         switch (perms) {
             case CameraPermissionStatusValues.authorized:
-                setIsOpenCamera(true)
-                return
+                return true
             case CameraPermissionStatusValues.denied:
-                await Linking.openSettings()
+                AlertUtils.showGoToSettingsCameraAlert(
+                    () => {
+                        //  onCancell
+                        return
+                    },
+                    async () => {
+                        await Linking.openSettings()
+                    },
+                )
                 return
             case CameraPermissionStatusValues.notDetermined:
                 await requestPermissions()
                 return
             case CameraPermissionStatusValues.restricted:
-                setIsError(true)
+                const locale = i18n.detectLocale()
+                let title = i18n.i18n()[locale].TITLE_ALERT_CAMERA_UNAVAILABLE()
+                let msg = i18n.i18n()[locale].SB_CAMERA_ANAVAILABILITY()
+                let buttonTitle = i18n.i18n()[locale].COMMON_BTN_OK()
+                AlertUtils.showDefaultAlert(title, msg, buttonTitle)
                 return
             default:
                 break
         }
     }, [requestPermissions])
 
-    return {
-        checkPermissions,
-        isOpenCamera,
-        isError,
-    }
+    return { checkPermissions }
 }

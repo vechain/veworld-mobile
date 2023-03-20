@@ -27,6 +27,12 @@ module.exports = {
                 },
             },
         ],
-        "react-native-reanimated/plugin", // should always come last
+        [
+            // should always come last
+            "react-native-reanimated/plugin",
+            {
+                globals: ["__scanCodes"],
+            },
+        ],
     ],
 }

@@ -32,7 +32,7 @@ export const getBiometricTypeAvailable = async () => {
 export const authenticateWithBiometric = async () => {
     const locale = i18n.detectLocale()
     const promptMessage = i18n.i18n()[locale].BIOMETRICS_PROMPT()
-    const cancelLabel = i18n.i18n()[locale].COMMON_BTN_cancel()
+    const cancelLabel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
 
     let isAuth: LocalAuthentication.LocalAuthenticationResult
     // if statement used this way because passing undefiend on iOS is breaking the authentication prompt

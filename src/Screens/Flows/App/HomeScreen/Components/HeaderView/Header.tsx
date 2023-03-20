@@ -1,15 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-// import { useCameraPermissions, useTheme } from "~Common"
-import { useTheme } from "~Common"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { useCameraPermissions, useDisclosure, useTheme } from "~Common"
+import { BaseIcon, BaseText, BaseView, QRCodeReader } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-// import { Camera } from "react-native-vision-camera"
 
 export const Header = memo(() => {
     const theme = useTheme()
-    // const { checkPermissions, isOpenCamera, isError } = useCameraPermissions()
+    const { checkPermissions } = useCameraPermissions()
+    const { isOpen, shouldOpen, onClose } = useDisclosure()
 
     const nav = useNavigation()
     const { LL } = useI18nContext()
@@ -19,8 +18,9 @@ export const Header = memo(() => {
     }, [nav])
 
     const openCamera = useCallback(async () => {
-        console.log("open camera")
-    }, [])
+        let result = await checkPermissions()
+        shouldOpen(!!result)
+    }, [checkPermissions, shouldOpen])
 
     return (
         <BaseView
@@ -33,7 +33,7 @@ export const Header = memo(() => {
                 <BaseText typographyFont="body">
                     {LL.TITLE_WELCOME_TO()}
                 </BaseText>
-                <BaseText typographyFont="largeTitle">VeWorld</BaseText>
+                <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>
             </BaseView>
 
             <BaseView orientation="row">
@@ -51,6 +51,8 @@ export const Header = memo(() => {
                     action={goToWalletManagement}
                 />
             </BaseView>
+
+            <QRCodeReader onClose={onClose} isOpen={isOpen} />
         </BaseView>
     )
 })

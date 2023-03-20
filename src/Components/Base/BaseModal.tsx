@@ -6,26 +6,33 @@ export interface IBaseModal {
     isOpen: boolean
     onClose: () => void
     children: React.ReactNode
+    hasSafeArea?: boolean
 }
 export const BaseModal: React.FC<IBaseModal> = ({
     isOpen,
     onClose,
     children,
+    hasSafeArea = true,
 }) => {
     return (
         <Modal
             animationType="slide"
-            transparent={false}
             visible={isOpen}
             hardwareAccelerated
             presentationStyle="fullScreen"
             onDismiss={onClose}
             onRequestClose={onClose}>
-            <SafeAreaView style={safeAreaViewStyles.flex}>
+            {hasSafeArea ? (
+                <SafeAreaView style={safeAreaViewStyles.flex}>
+                    <BaseView align="center" justify="flex-start" grow={1}>
+                        {children}
+                    </BaseView>
+                </SafeAreaView>
+            ) : (
                 <BaseView align="center" justify="flex-start" grow={1}>
                     {children}
                 </BaseView>
-            </SafeAreaView>
+            )}
         </Modal>
     )
 }
