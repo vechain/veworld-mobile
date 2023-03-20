@@ -153,7 +153,7 @@ export const ImportMnemonicScreen = () => {
                                 isError={!!isError}
                             />
                         </DropShadow>
-                        {isError && (
+                        {!!isError && (
                             <BaseText my={10} color={theme.colors.danger}>
                                 {isError}
                             </BaseText>

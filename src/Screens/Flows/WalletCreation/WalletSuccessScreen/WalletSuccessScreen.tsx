@@ -182,7 +182,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         </BaseView>
 
                         <BaseView align="center" w={100}>
-                            {isError && (
+                            {!!isError && (
                                 <BaseText my={10} color={theme.colors.danger}>
                                     {isError}
                                 </BaseText>
