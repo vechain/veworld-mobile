@@ -49,7 +49,7 @@ export const PasswordPins: FC<Props> = memo(
         }, [themedStyles.messageTextStyle, getMessageTextColor, getMessageText])
 
         return (
-            <BaseView>
+            <BaseView alignItems="center">
                 <BaseView flexDirection="row" justifyContent="center">
                     {UserPinArray.map((digit, index) => {
                         return (

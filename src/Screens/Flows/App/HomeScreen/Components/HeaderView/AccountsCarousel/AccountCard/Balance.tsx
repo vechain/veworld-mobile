@@ -30,7 +30,7 @@ export const Balance: React.FC<Props> = memo(
 
         return (
             <>
-                <BaseView flexDirection="row" alignItems="center">
+                <BaseView flexDirection="row">
                     <BaseText
                         color={theme.colors.textReversed}
                         typographyFont="body">

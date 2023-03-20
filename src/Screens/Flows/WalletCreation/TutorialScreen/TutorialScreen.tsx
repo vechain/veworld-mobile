@@ -87,7 +87,7 @@ export const TutorialScreen = () => {
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
             <BaseView alignItems="center">
-                <BaseView selfAlign="flex-start" mx={20}>
+                <BaseView alignSelf="flex-start" mx={20}>
                     <BaseText typographyFont="largeTitle">
                         Create Wallet
                     </BaseText>
@@ -108,9 +108,12 @@ export const TutorialScreen = () => {
                     keyExtractor={item => item.title}
                 />
             </BaseView>
-            <BaseView align="center" grow={1} justify="space-between">
+            <BaseView
+                alignItems="center"
+                flexGrow={1}
+                justifyContent="space-between">
                 {!!progressValue && (
-                    <BaseView orientation="row" selfAlign="center" py={20}>
+                    <BaseView flexDirection="row" alignSelf="center" py={24}>
                         {slides.map((slide, index) => (
                             <PaginationItem
                                 animValue={progressValue}

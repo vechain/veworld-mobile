@@ -34,11 +34,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
         }, [account, store, isSelected])
 
         return (
-            <BaseView
-                w={100}
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="space-between">
+            <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
                     action={() => {}}
                     justifyContent="space-between"

@@ -25,7 +25,7 @@ export const NFTCollectionAccordion = ({ collection }: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const headerComponent = useMemo(() => {
         return (
-            <BaseView orientation="row" align="center">
+            <BaseView flexDirection="row">
                 <BaseView style={themedStyles.nftPreviewImage} />
                 <BaseText typographyFont="subTitle">
                     {collection.title}

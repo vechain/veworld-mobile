@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo, useState } from "react"
-import { Pressable, Text } from "react-native"
+import { useCallback, useMemo, useState } from "react"
 import { useTheme, CryptoUtils } from "~Common"
 import {
     BaseButton,
@@ -156,26 +155,25 @@ export const ConfirmSeedPhraseScreen = () => {
                     justifyContent="space-between"
                     alignItems="stretch"
                     w={100}>
-                    <BaseText align="left" typographyFont="title">
-                        {LL.TITLE_CONFIRM_MNEMONIC()}
-                    </BaseText>
-                    {__DEV__ && (
-                        <Pressable
-                            // eslint-disable-next-line react-native/no-inline-styles
-                            style={{
-                                position: "absolute",
-                                right: 0,
-                                padding: 10,
-                            }}
-                            onPress={() =>
-                                config?.isWalletCreated
-                                    ? nav.navigate(Routes.WALLET_SUCCESS)
-                                    : nav.navigate(Routes.APP_SECURITY)
-                            }>
-                            {/* eslint-disable-next-line i18next/no-literal-string */}
-                            <Text>__DEV__: skip</Text>
-                        </Pressable>
-                    )}
+                    <BaseView
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        w={100}>
+                        <BaseText align="left" typographyFont="title">
+                            {LL.TITLE_CONFIRM_MNEMONIC()}
+                        </BaseText>
+                        {__DEV__ && (
+                            <BaseButton
+                                variant="link"
+                                action={() =>
+                                    config?.isWalletCreated
+                                        ? nav.navigate(Routes.WALLET_SUCCESS)
+                                        : nav.navigate(Routes.APP_SECURITY)
+                                }
+                                title="DEV:SKIP"
+                            />
+                        )}
+                    </BaseView>
                     <BaseSpacer height={16} />
                     <BaseText align="left" typographyFont="body">
                         {LL.BD_SELECT_WORD({ number: firstIndex + 1 })}
@@ -211,7 +209,6 @@ export const ConfirmSeedPhraseScreen = () => {
                             <BaseSpacer height={16} />
                             <BaseView
                                 flexDirection="row"
-                                alignItems="center"
                                 mx={50}
                                 justifyContent="center">
                                 <BaseIcon

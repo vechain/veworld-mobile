@@ -157,7 +157,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         alignItems="center"
                         justifyContent="space-between"
                         w={100}
-                        grow={1}>
+                        flexGrow={1}>
                         <BaseView alignItems="center">
                             <VeChainVetLogoSVG />
                             <BaseText align="center" py={20}>

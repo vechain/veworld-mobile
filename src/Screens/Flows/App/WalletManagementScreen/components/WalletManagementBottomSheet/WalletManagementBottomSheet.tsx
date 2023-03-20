@@ -46,11 +46,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
             snapPoints={snapPoints}
             onChange={handleSheetChanges}
             ref={ref}>
-            <BaseView
-                flexDirection="row"
-                justifyContent="space-between"
-                w={100}
-                alignItems="center">
+            <BaseView flexDirection="row" w={100}>
                 <BaseText typographyFont="subTitle">
                     {LL.SB_EDIT_WALLET({ name: device?.alias })}
                 </BaseText>

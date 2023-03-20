@@ -21,7 +21,7 @@ const Error = (): ReactElement => {
     }, [])
     return (
         <BaseSafeArea grow={1}>
-            <BaseView grow={1} px={24} justify="space-between">
+            <BaseView flexGrow={1} px={24} justifyContent="space-between">
                 <BaseView>
                     <BaseSpacer height={90} />
                     <BaseText typographyFont="title">

@@ -65,7 +65,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     justifyContent="space-between"
                     alignItems="flex-start"
                     w={100}>
-                    <BaseView flexDirection="row" alignItems="center">
+                    <BaseView flexDirection="row">
                         <AccountIcon account={account} />
                         <BaseView px={8} alignItems="flex-start">
                             <BaseText

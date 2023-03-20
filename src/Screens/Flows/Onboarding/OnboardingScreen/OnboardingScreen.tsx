@@ -90,65 +90,60 @@ export const OnboardingScreen = () => {
     return (
         <BaseSafeArea grow={1} testID="ONBOARDING_SCREEN">
             <BaseSpacer height={20} />
-            <BaseView grow={1}>
-                <BaseView alignItems="center">
-                    <VeChainVetLogoWithTitleSVG />
-                    <FlatList
-                        ref={flatListRef}
-                        data={slides}
-                        renderItem={({ item }: { item: Slide }) => (
-                            <ListSlide item={item} />
-                        )}
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                        horizontal
-                        pagingEnabled={true}
-                        snapToAlignment="start"
-                        onViewableItemsChanged={onViewableItemsChanged}
-                        keyExtractor={item => item.title}
+            <BaseView alignItems="center">
+                <VeChainVetLogoWithTitleSVG />
+
+                <FlatList
+                    ref={flatListRef}
+                    data={slides}
+                    renderItem={({ item }: { item: Slide }) => (
+                        <ListSlide item={item} />
+                    )}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    horizontal
+                    pagingEnabled={true}
+                    snapToAlignment="start"
+                    onViewableItemsChanged={onViewableItemsChanged}
+                    keyExtractor={item => item.title}
+                />
+            </BaseView>
+
+            <BaseView
+                alignItems="center"
+                flexGrow={1}
+                justifyContent="space-between">
+                {!!progressValue && (
+                    <BaseView flexDirection="row" py={24}>
+                        {slides.map((slide, index) => (
+                            <PaginationItem
+                                animValue={progressValue}
+                                index={index}
+                                key={slide.title}
+                                length={slides.length}
+                            />
+                        ))}
+                    </BaseView>
+                )}
+                <BaseView alignItems="center" w={100} px={20}>
+                    <BaseButton
+                        action={onNavigate}
+                        typographyFont="bodyMedium"
+                        title={LL.BTN_ONBOARDING_SKIP()}
+                        px={5}
+                        variant="link"
+                    />
+
+                    <BaseButton
+                        action={onButtonPress}
+                        w={100}
+                        mx={20}
+                        title={slides[btnIndex].button}
                     />
                 </BaseView>
-                <BaseView
-                    alignItems="center"
-                    flexGrow={1}
-                    justifyContent="space-between">
-                    {!!progressValue && (
-                        <BaseView
-                            flexDirection="row"
-                            selfAlign="center"
-                            py={20}>
-                            {slides.map((slide, index) => (
-                                <PaginationItem
-                                    animValue={progressValue}
-                                    index={index}
-                                    key={slide.title}
-                                    length={slides.length}
-                                />
-                            ))}
-                        </BaseView>
-                    )}
-
-                    <BaseView alignItems="center" w={100} px={20}>
-                        <BaseButton
-                            action={onNavigate}
-                            typographyFont="footNoteAccent"
-                            title={LL.BTN_ONBOARDING_SKIP()}
-                            selfAlign="flex-start"
-                            px={5}
-                            variant="ghost"
-                        />
-
-                        <BaseButton
-                            action={onButtonPress}
-                            w={100}
-                            mx={20}
-                            title={slides[btnIndex].button}
-                        />
-                    </BaseView>
-                </BaseView>
-
-                <BaseSpacer height={40} />
             </BaseView>
+
+            <BaseSpacer height={40} />
         </BaseSafeArea>
     )
 }

@@ -24,7 +24,7 @@ export const EditTokens = memo(({ isEdit, setIsEdit }: Props) => {
                 />
             )
         return (
-            <BaseView alignItems="center" flexDirection="row">
+            <BaseView flexDirection="row">
                 <BaseIcon
                     name="plus"
                     bg={theme.colors.secondary}

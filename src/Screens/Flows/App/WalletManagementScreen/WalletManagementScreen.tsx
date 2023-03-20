@@ -5,7 +5,7 @@ import React, { useCallback, useState } from "react"
 import { SafeAreaView, StyleSheet, ViewToken } from "react-native"
 import { useBottomSheetModal } from "~Common"
 import { useDevicesList } from "~Common/Hooks/Entities"
-import { BaseIcon, BaseSpacer, BaseView } from "~Components"
+import { BaseIcon, BaseSafeArea, BaseSpacer, BaseView } from "~Components"
 import { Device } from "~Storage"
 import {
     DeviceBox,
@@ -50,7 +50,7 @@ export const WalletManagementScreen = () => {
     )
 
     return (
-        <>
+        <BaseSafeArea grow={1}>
             <SafeAreaView />
             <BaseIcon
                 style={baseStyles.backIcon}
@@ -61,7 +61,7 @@ export const WalletManagementScreen = () => {
             />
             <BaseSpacer height={20} />
 
-            <BaseView px={20} style={{ height: "100%" }}>
+            <BaseView px={20} style={{ height: "100%", width: "100%" }}>
                 <FlashList
                     data={devices}
                     scrollEnabled={isScrollable}
@@ -98,7 +98,7 @@ export const WalletManagementScreen = () => {
                     device={selectedDevice}
                 />
             </BaseView>
-        </>
+        </BaseSafeArea>
     )
 }
 

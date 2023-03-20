@@ -45,7 +45,7 @@ export const ResetAppScreen = () => {
                 justifyContent="space-between"
                 flexGrow={1}
                 mx={20}>
-                <BaseView selfAlign="flex-start">
+                <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="title">
                         {LL.TITLE_RESET_APP()}
                     </BaseText>

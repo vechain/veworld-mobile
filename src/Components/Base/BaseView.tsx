@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
 import {
     AlignItems,
@@ -43,8 +43,8 @@ export const BaseView = memo(
         style,
         flex = 0,
         flexDirection = "column",
-        justifyContent = "flex-start",
-        alignItems = "center",
+        justifyContent,
+        alignItems,
         flexWrap,
         flexGrow,
         alignSelf,
@@ -68,14 +68,26 @@ export const BaseView = memo(
         mt,
         ...otherProps
     }: Props) => {
+        const computedAlignItems = useMemo(() => {
+            if (alignItems) return alignItems
+            if (flexDirection === "row") return "center"
+            return "flex-start"
+        }, [flexDirection, alignItems])
+
+        const computedJustifyContent = useMemo(() => {
+            if (justifyContent) return justifyContent
+            if (flexDirection === "row") return "space-between"
+            return "flex-start"
+        }, [flexDirection, justifyContent])
+
         const { styles: themedStyles } = useThemedStyles(
             baseStyles({
                 flex,
                 flexGrow,
                 alignSelf,
                 flexDirection,
-                justifyContent,
-                alignItems,
+                justifyContent: computedJustifyContent,
+                alignItems: computedAlignItems,
                 flexWrap,
                 bg,
                 borderRadius,
