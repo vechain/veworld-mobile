@@ -8,15 +8,9 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     await detoxConfig.init()
     console.log("Detox test session started!")
 
-    console.log("Disabling synchronization...")
-    await detox.device.disableSynchronization()
-
     console.log("Launching app...")
     await detox.device.launchApp()
     console.log("App launched!")
-
-    console.log("Enabling synchronization...")
-    await detox.device.enableSynchronization()
 })
 
 Before({ timeout: 300 * 1000 }, async function (feature) {
