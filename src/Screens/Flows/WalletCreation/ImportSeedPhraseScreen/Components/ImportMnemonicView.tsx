@@ -1,11 +1,10 @@
 import { StyleSheet, TextInput } from "react-native"
 import React from "react"
 
-import { ColorThemeType, Theme, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
+import { typography } from "~Common/Theme"
 
-const {
-    typography: { defaults: defaultTypography },
-} = Theme
+const { defaults: defaultTypography } = typography
 type Props = {
     seed: string
     onChangeText: (text: string) => void

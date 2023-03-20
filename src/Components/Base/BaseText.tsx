@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
 import { FlexAlignType, Text, TextProps } from "react-native"
-import { useTheme, Theme } from "~Common"
+import { useTheme } from "~Common"
+import { typography } from "~Common/Theme"
 import { BaseView } from "./BaseView"
 
-const {
-    typography: { defaults: defaultTypography, ...otherTypography },
-} = Theme
+const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     typographyFont?: keyof typeof defaultTypography

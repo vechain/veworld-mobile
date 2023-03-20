@@ -4,7 +4,6 @@ import { SvgXml } from "react-native-svg"
 import { PicassoUtils } from "~Common"
 import { BaseView } from "~Components/Base"
 import { Account } from "~Storage"
-const { getPicassoImgSrc } = PicassoUtils
 
 type AccountIconProps = {
     account: Account
@@ -25,7 +24,7 @@ type PicassoAddressIconProps = {
 }
 const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
     ({ address, size = 50 }) => {
-        const uri = getPicassoImgSrc(address).toString()
+        const uri = PicassoUtils.getPicassoImgSrc(address).toString()
 
         return (
             <BaseView radius={8} style={picassoIconStyles.view}>
