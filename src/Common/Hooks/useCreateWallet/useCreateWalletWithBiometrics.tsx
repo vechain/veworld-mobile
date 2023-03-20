@@ -6,14 +6,13 @@ import {
     XPub,
     useRealm,
     getUserPreferences,
-    getDevices,
     getConfig,
     getMnemonic,
 } from "~Storage"
-import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 import { useBiometrics } from "../useBiometrics"
+import { useDeviceUtils } from "../useDeviceUtils"
 
 /**
  * useCreateWalletWithBiometrics
@@ -22,6 +21,7 @@ import { useBiometrics } from "../useBiometrics"
 export const useCreateWalletWithBiometrics = () => {
     const { store, cache } = useRealm()
 
+    const { getDeviceFromMnemonic } = useDeviceUtils()
     const [isComplete, setIsComplete] = useState(false)
 
     const biometrics = useBiometrics()
@@ -31,73 +31,73 @@ export const useCreateWalletWithBiometrics = () => {
     )
 
     //* [START] - Create Wallet
-    const onCreateWallet = useCallback(async () => {
-        const config = getConfig(store)
+    const onCreateWallet = useCallback(
+        async (onError?: (error: unknown) => void) => {
+            const config = getConfig(store)
 
-        const devices = getDevices(store)
+            const _mnemonic = getMnemonic(cache)
 
-        const _mnemonic = getMnemonic(cache)
+            let mnemonicPhrase = _mnemonic?.mnemonic
 
-        let mnemonicPhrase = _mnemonic?.mnemonic
+            try {
+                if (mnemonicPhrase && accessControl) {
+                    const { device, wallet } =
+                        getDeviceFromMnemonic(mnemonicPhrase)
 
-        try {
-            if (mnemonicPhrase && accessControl) {
-                const { deviceIndex, aliasIndex } =
-                    getDeviceAndAliasIndex(devices)
-
-                const { wallet, device } = getNodes(
-                    mnemonicPhrase.split(" "),
-                    deviceIndex,
-                    aliasIndex,
-                )
-
-                cache.write(() => {
-                    _mnemonic!.mnemonic = ""
-                })
-
-                const { encryptedWallet } = await CryptoUtils.encryptWallet(
-                    wallet,
-                    device.index,
-                    accessControl,
-                )
-
-                store.write(() => {
-                    const xPub = store.create<XPub>(XPub.getName(), {
-                        ...device.xPub,
+                    cache.write(() => {
+                        _mnemonic!.mnemonic = ""
                     })
 
-                    const _device = store.create<Device>(Device.getName(), {
-                        ...device,
-                        xPub,
-                        wallet: encryptedWallet,
+                    const { encryptedWallet } = await CryptoUtils.encryptWallet(
+                        wallet,
+                        device.index,
+                        accessControl,
+                    )
+
+                    store.write(() => {
+                        const xPub = store.create<XPub>(XPub.getName(), {
+                            ...device.xPub,
+                        })
+
+                        const _device = store.create<Device>(Device.getName(), {
+                            ...device,
+                            xPub,
+                            wallet: encryptedWallet,
+                        })
+
+                        const account = store.create<Account>(
+                            Account.getName(),
+                            {
+                                address: device.rootAddress,
+                                index: 0,
+                                visible: true,
+                                alias: `${getAliasName} ${1}`,
+                            },
+                        )
+
+                        _device.accounts.push(account)
+
+                        const userPreferences = getUserPreferences(store)
+                        if (!userPreferences.selectedAccount)
+                            userPreferences.selectedAccount = account
+
+                        if (config) {
+                            config.userSelectedSecurity =
+                                UserSelectedSecurityLevel.BIOMETRIC
+                            config.lastSecurityLevel =
+                                SecurityLevelType.BIOMETRIC
+                        }
                     })
 
-                    const account = store.create<Account>(Account.getName(), {
-                        address: device.rootAddress,
-                        index: 0,
-                        visible: true,
-                        alias: `${getAliasName} ${1}`,
-                    })
-
-                    _device.accounts.push(account)
-
-                    const userPreferences = getUserPreferences(store)
-                    if (!userPreferences.selectedAccount)
-                        userPreferences.selectedAccount = account
-
-                    if (config) {
-                        config.userSelectedSecurity =
-                            UserSelectedSecurityLevel.BIOMETRIC
-                        config.lastSecurityLevel = SecurityLevelType.BIOMETRIC
-                    }
-                })
-
-                setIsComplete(true)
+                    setIsComplete(true)
+                }
+            } catch (error) {
+                console.log("CREATE WALLET ERROR : ", error)
+                onError && onError(error)
             }
-        } catch (error) {
-            console.log("CREATE WALLET ERROR : ", error)
-        }
-    }, [accessControl, cache, store])
+        },
+        [accessControl, cache, store, getDeviceFromMnemonic],
+    )
     //* [END] - Create Wallet
 
     return {
