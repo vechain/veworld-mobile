@@ -3,14 +3,20 @@ import * as detoxConfig from "detox/internals"
 
 //const DEFAULT_TIMEOUT = 300 * 1000
 
-BeforeAll({ timeout: 300 * 1000 }, async () => {
+BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")
     await detoxConfig.init()
     console.log("Detox test session started!")
 
+    console.log("Disabling synchronization...")
+    await detox.device.disableSynchronization()
+
     console.log("Launching app...")
     await detox.device.launchApp()
     console.log("App launched!")
+
+    console.log("Enabling synchronization...")
+    await detox.device.enableSynchronization()
 })
 
 Before({ timeout: 300 * 1000 }, async function (feature) {
