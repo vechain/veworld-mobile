@@ -19,7 +19,7 @@ import { Routes } from "~Navigation"
 import { getConfig, getMnemonic, useRealm } from "~Storage"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 
-export const ConfirmSeedPhraseScreen = () => {
+export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
     const { store, cache } = useRealm()
     const { LL } = useI18nContext()
@@ -43,7 +43,7 @@ export const ConfirmSeedPhraseScreen = () => {
      * if mnemonic is not available something strange is happening, better to throw an error and crash the app
      */
     if (!mnemonic) {
-        throw new Error("ConfirmSeedPhraseScreen: Mnemonic is not available")
+        throw new Error("ConfirmMnemonicScreen: Mnemonic is not available")
     }
 
     const mnemonicArray = useMemo(() => mnemonic.split(" "), [mnemonic])

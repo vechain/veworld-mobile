@@ -3,14 +3,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     OnboardingScreen,
     WelcomeScreen,
-    SeedPhraseScreen,
+    NewMnemonicScreen,
     TutorialScreen,
     WalletTypeSelectionScreen,
-    ConfirmSeedPhraseScreen,
+    ConfirmMnemonicScreen,
     AppSecurityScreen,
     UserCreatePasswordScreen,
     ImportWalletTypeSelectionScreen,
-    ImportSeedPhraseScreen,
+    ImportMnemonicScreen,
     WalletSuccessScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
@@ -22,9 +22,9 @@ export type RootStackParamListOnboarding = {
     [Routes.WALLET_TUTORIAL]: undefined
     [Routes.WALLET_TYPE_CREATION]: undefined
     [Routes.WALLET_TYPE_IMPORT]: undefined
-    [Routes.SEED_PHRASE]: undefined
-    [Routes.CONFIRM_SEED_PHRASE]: undefined
-    [Routes.IMPORT_SEED_PHRASE]: undefined
+    [Routes.NEW_MNEMONIC]: undefined
+    [Routes.CONFIRM_MNEMONIC]: undefined
+    [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
     [Routes.APP_SECURITY]: undefined
     [Routes.WALLET_SUCCESS]:
@@ -72,20 +72,20 @@ export const OnboardingStack = () => {
                 />
 
                 <Onboarding.Screen
-                    name={Routes.SEED_PHRASE}
-                    component={SeedPhraseScreen}
+                    name={Routes.NEW_MNEMONIC}
+                    component={NewMnemonicScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name={Routes.CONFIRM_SEED_PHRASE}
-                    component={ConfirmSeedPhraseScreen}
+                    name={Routes.CONFIRM_MNEMONIC}
+                    component={ConfirmMnemonicScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name={Routes.IMPORT_SEED_PHRASE}
-                    component={ImportSeedPhraseScreen}
+                    name={Routes.IMPORT_MNEMONIC}
+                    component={ImportMnemonicScreen}
                     options={{ headerShown: false }}
                 />
 

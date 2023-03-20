@@ -15,7 +15,7 @@ export const ImportWalletTypeSelectionScreen = () => {
     const { LL } = useI18nContext()
 
     const onImportWithMnemonic = () => {
-        nav.navigate(Routes.IMPORT_SEED_PHRASE)
+        nav.navigate(Routes.IMPORT_MNEMONIC)
     }
 
     const onImportWithHardware = () => {}

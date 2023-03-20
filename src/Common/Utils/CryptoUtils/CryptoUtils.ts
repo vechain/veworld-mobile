@@ -55,7 +55,7 @@ function decrypt<T>(data: string, encryptionKey: string): T {
     return parsed
 }
 
-const verifySeedPhrase = (seed: string) => {
+const verifyMnemonic = (seed: string) => {
     let hdNode
     try {
         hdNode = HDNode.fromMnemonic(seed.split(" "))
@@ -101,6 +101,6 @@ export default {
     shuffleArray,
     encrypt,
     decrypt,
-    verifySeedPhrase,
+    verifyMnemonic,
     encryptWallet,
 }
