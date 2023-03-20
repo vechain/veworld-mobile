@@ -7,7 +7,9 @@ const deviceWidth = Dimensions.get("window").width
 const deviceHeight = Dimensions.get("window").height
 const QR_SCAN_SQUARE_SIZE = Dimensions.get("window").width - 40
 
-export const QrScannerLayout = () => (
+type Props = { color: string }
+
+export const QrScannerLayout = ({ color }: Props) => (
     <View style={baseStyles.container}>
         <Svg height="100%" width="100%">
             <Defs>
@@ -29,7 +31,7 @@ export const QrScannerLayout = () => (
             <Rect
                 height="100%"
                 width="100%"
-                fill="rgba(0, 0, 0, 0.7)"
+                fill={color}
                 mask="url(#mask)"
                 fill-opacity="0"
             />

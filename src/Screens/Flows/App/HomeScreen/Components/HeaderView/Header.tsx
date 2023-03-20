@@ -1,15 +1,13 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useCameraPermissions, useDisclosure, useTheme } from "~Common"
-import { BaseIcon, BaseText, BaseView, QRCodeReader } from "~Components"
+import { useCameraPermissions, useTheme } from "~Common"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 
 export const Header = memo(() => {
     const theme = useTheme()
     const { checkPermissions } = useCameraPermissions()
-    const { isOpen, shouldOpen, onClose } = useDisclosure()
-
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
@@ -19,8 +17,8 @@ export const Header = memo(() => {
 
     const openCamera = useCallback(async () => {
         let result = await checkPermissions()
-        shouldOpen(!!result)
-    }, [checkPermissions, shouldOpen])
+        if (result) nav.navigate(Routes.CAMERA, { showSendFlow: true })
+    }, [checkPermissions, nav])
 
     return (
         <BaseView
@@ -51,8 +49,6 @@ export const Header = memo(() => {
                     action={goToWalletManagement}
                 />
             </BaseView>
-
-            <QRCodeReader onClose={onClose} isOpen={isOpen} />
         </BaseView>
     )
 })

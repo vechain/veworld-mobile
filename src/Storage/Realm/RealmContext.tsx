@@ -15,6 +15,8 @@ import {
     getNetworks,
     getConfig,
     getUserPreferences,
+    getScannedAddress,
+    ScannedAddress,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
 import { NETWORK_TYPE, WALLET_STATUS } from "~Model"
@@ -92,7 +94,7 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
 
 const initCacheRealm = () => {
     const instance = new Realm({
-        schema: [Mnemonic, AppLock],
+        schema: [Mnemonic, AppLock, ScannedAddress],
         path: "inMemory.realm",
         inMemory: true,
         deleteRealmIfMigrationNeeded:
@@ -126,6 +128,9 @@ export const initRealmClasses = (
 
         const mnemonic = getMnemonic(cache)
         if (!mnemonic) cache.create(Mnemonic.getName(), {})
+
+        const scannedAddress = getScannedAddress(cache)
+        if (!scannedAddress) cache.create(ScannedAddress.getName(), {})
     })
     // [ END ] - CACHE
 

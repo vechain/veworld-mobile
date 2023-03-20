@@ -268,6 +268,10 @@ type RootTranslation = {
 	 */
 	BD_HELP_IMPROVE_DISCLAIMER: string
 	/**
+	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
+	 */
+	BD_SCANED_ADDRESS_COPPIED: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -400,6 +404,10 @@ type RootTranslation = {
 	 */
 	TITLE_SCAN_QRCODE: string
 	/**
+	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
+	 */
+	TITLE_SCANED_ADDRESS_COPPIED: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -502,6 +510,10 @@ type RootTranslation = {
 	 * L​o​a​d​i​n​g
 	 */
 	COMMON_BTN_LOADING: string
+	/**
+	 * D​o​n​e
+	 */
+	COMMON_BTN_DONE: string
 	/**
 	 * A​d​d​r​e​s​s
 	 */
@@ -792,6 +804,10 @@ export type TranslationFunctions = {
 	 */
 	BD_HELP_IMPROVE_DISCLAIMER: () => LocalizedString
 	/**
+	 * Address Copied to Clipboard
+	 */
+	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -924,6 +940,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SCAN_QRCODE: () => LocalizedString
 	/**
+	 * Address Copied to Clipboard
+	 */
+	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -1023,6 +1043,10 @@ export type TranslationFunctions = {
 	 * Loading
 	 */
 	COMMON_BTN_LOADING: () => LocalizedString
+	/**
+	 * Done
+	 */
+	COMMON_BTN_DONE: () => LocalizedString
 	/**
 	 * Address
 	 */

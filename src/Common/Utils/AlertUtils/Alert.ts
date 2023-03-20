@@ -60,9 +60,10 @@ const showDefaultAlert = (
     title: LocalizedString,
     msg: LocalizedString,
     button: LocalizedString,
+    buttonAction?: () => void,
 ) => {
-    const buttonAction = () => {}
-    Alert(title, msg, button, buttonAction)
+    let action = buttonAction ? buttonAction : () => {}
+    Alert(title, msg, button, action)
 }
 
 export {

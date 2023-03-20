@@ -7,6 +7,7 @@ import {
     AppLock,
     UserPreferences,
     Network,
+    ScannedAddress,
 } from "./Model"
 
 import {
@@ -25,6 +26,7 @@ import {
     getDevices,
     getNetworks,
     getXPub,
+    getScannedAddress,
 } from "./Model"
 
 import { useObjectListener } from "./useObjectListener"
@@ -42,6 +44,7 @@ export {
     Mnemonic,
     Account,
     AppLock,
+    ScannedAddress,
     UserPreferences,
     Network,
     getUserPreferences,
@@ -53,4 +56,5 @@ export {
     getDevices,
     getNetworks,
     getXPub,
+    getScannedAddress,
 }

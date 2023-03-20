@@ -83,6 +83,7 @@ const en: BaseTranslation = {
     BD_RESET_DISCLAIMER: "Click to reset VeVault and erase all your data stored on it",
     BD_HELP_IMPROVE: "Help us improve",
     BD_HELP_IMPROVE_DISCLAIMER: "Enable this setting to help us improve and always provide the best experience for you",
+    BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -118,6 +119,7 @@ const en: BaseTranslation = {
     TITLE_CONNECTED_APPS: "Connected Apps",
     TITLE_ABOUT: "About",
     TITLE_SCAN_QRCODE: "Scan QR Code",
+    TITLE_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
@@ -150,6 +152,7 @@ const en: BaseTranslation = {
     COMMON_BTN_SIGN_OUT: "Sign out",
     COMMON_BTN_OK: "OK",
     COMMON_BTN_LOADING: "Loading",
+    COMMON_BTN_DONE: "Done",
 
     // Common Labels
     COMMON_LBL_ADDRESS: "Address",
