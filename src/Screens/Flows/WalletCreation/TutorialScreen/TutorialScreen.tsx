@@ -128,11 +128,10 @@ export const TutorialScreen = () => {
                 <BaseView alignItems="center" w={100} px={20}>
                     <BaseButton
                         action={onNavigate}
-                        typographyFont="footNoteAccent"
+                        typographyFont="bodyMedium"
                         title={LL.BTN_WALLET_TUTORIAL_SKIP()}
-                        selfAlign="flex-start"
                         px={5}
-                        variant="ghost"
+                        variant="link"
                     />
 
                     <BaseButton
