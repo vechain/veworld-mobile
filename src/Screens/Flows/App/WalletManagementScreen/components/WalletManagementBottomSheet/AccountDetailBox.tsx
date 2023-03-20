@@ -1,6 +1,7 @@
-import React, { useCallback } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { FormattingUtils, useTheme } from "~Common"
+import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
 import {
     BaseIcon,
     BaseSpacer,
@@ -12,47 +13,68 @@ import { Account, useRealm } from "~Storage"
 
 type Props = {
     account: Account
+    selectedAccount: Account
 }
-export const AccountDetailBox: React.FC<Props> = ({ account }) => {
-    const theme = useTheme()
+export const AccountDetailBox: React.FC<Props> = memo(
+    ({ account, selectedAccount }) => {
+        const theme = useTheme()
 
-    const { store } = useRealm()
+        const { store } = useRealm()
 
-    const toggleVisibility = useCallback(() => {
-        store.write(() => {
-            account.visible = !account.visible
-        })
-    }, [account, store])
+        const isSelected = useMemo(
+            () => compareAddresses(selectedAccount?.address, account.address),
+            [account.address, selectedAccount?.address],
+        )
 
-    return (
-        <BaseView
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between">
-            <BaseTouchableBox
-                action={() => {}}
-                justifyContent="space-between"
-                bg={!account.visible ? theme.colors.neutralDisabled : undefined}
-                containerStyle={baseStyles.container}>
-                <BaseText style={baseStyles.alias}>{account.alias}</BaseText>
-                <BaseView style={baseStyles.rightSubContainer}>
-                    <BaseText style={baseStyles.address} fontSize={10}>
-                        {FormattingUtils.humanAddress(account.address, 4, 6)}
+        const toggleVisibility = useCallback(() => {
+            if (!isSelected)
+                store.write(() => {
+                    account.visible = !account.visible
+                })
+        }, [account, store, isSelected])
+
+        return (
+            <BaseView
+                w={100}
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between">
+                <BaseTouchableBox
+                    action={() => {}}
+                    justifyContent="space-between"
+                    bg={
+                        !account.visible
+                            ? theme.colors.neutralDisabled
+                            : undefined
+                    }
+                    containerStyle={baseStyles.container}>
+                    <BaseText style={baseStyles.alias}>
+                        {account.alias}
                     </BaseText>
-                    <BaseSpacer height={4} />
-                    <BaseText fontSize={10}>1.2235 VET</BaseText>
-                </BaseView>
-            </BaseTouchableBox>
-            <BaseIcon
-                size={24}
-                style={baseStyles.eyeIcon}
-                name={account.visible ? "eye-off-outline" : "eye-outline"}
-                bg={theme.colors.secondary}
-                action={toggleVisibility}
-            />
-        </BaseView>
-    )
-}
+                    <BaseView style={baseStyles.rightSubContainer}>
+                        <BaseText style={baseStyles.address} fontSize={10}>
+                            {FormattingUtils.humanAddress(
+                                account.address,
+                                4,
+                                6,
+                            )}
+                        </BaseText>
+                        <BaseSpacer height={4} />
+                        <BaseText fontSize={10}>1.2235 VET</BaseText>
+                    </BaseView>
+                </BaseTouchableBox>
+                <BaseIcon
+                    size={24}
+                    style={baseStyles.eyeIcon}
+                    name={account.visible ? "eye-off-outline" : "eye-outline"}
+                    bg={theme.colors.secondary}
+                    disabled={isSelected}
+                    action={toggleVisibility}
+                />
+            </BaseView>
+        )
+    },
+)
 
 const baseStyles = StyleSheet.create({
     alias: {

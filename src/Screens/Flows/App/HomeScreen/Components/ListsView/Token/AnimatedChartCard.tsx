@@ -1,6 +1,5 @@
-import React from "react"
+import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { Chart, Line, Area } from "react-native-responsive-linechart"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
@@ -8,30 +7,32 @@ import { TokenCard } from "./TokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseView } from "~Components"
 
+import { LineChart } from "react-native-wagmi-charts"
+
 const HEIGHT = 100
 
-type Props = {
+export type NativeTokenProps = {
     token: FungibleToken
     isEdit: boolean
 }
 
 const CHART_DATA = [
-    { x: 0, y: 12 },
-    { x: 1, y: 8 },
-    { x: 2, y: 6 },
-    { x: 3, y: 9 },
-    { x: 4, y: 11 },
-    { x: 5, y: 10 },
-    { x: 6, y: 10.4 },
-    { x: 7, y: 7 },
-    { x: 8, y: 8 },
-    { x: 9, y: 12 },
-    { x: 10, y: 14 },
-    { x: 11, y: 12 },
-    { x: 12, y: 13.5 },
+    { timestamp: 0, value: 12 },
+    { timestamp: 1, value: 8 },
+    { timestamp: 2, value: 6 },
+    { timestamp: 3, value: 9 },
+    { timestamp: 4, value: 11 },
+    { timestamp: 5, value: 10 },
+    { timestamp: 6, value: 10.4 },
+    { timestamp: 7, value: 7 },
+    { timestamp: 8, value: 8 },
+    { timestamp: 9, value: 12 },
+    { timestamp: 10, value: 14 },
+    { timestamp: 11, value: 12 },
+    { timestamp: 12, value: 13.5 },
 ]
 
-export const AnimatedChartCard = ({ token, isEdit }: Props) => {
+export const AnimatedChartCard = memo(({ token, isEdit }: NativeTokenProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const animatedOuterCard = useAnimatedStyle(() => {
@@ -70,43 +71,18 @@ export const AnimatedChartCard = ({ token, isEdit }: Props) => {
                 </BaseView>
 
                 <Animated.View style={[styles.fullWidth, animatedInnerCard]}>
-                    {/* https://github.com/bluephoton/react-native-responsive-linechart/commit/f5257ce0c982d4918b93e1542c5ab52917808bac */}
-                    {/*
-                    // @ts-ignore */}
-                    <Chart
-                        disableGestures
-                        disableTouch
-                        style={{ height: HEIGHT }}
-                        data={CHART_DATA}
-                        xDomain={{ min: 0, max: 12 }}
-                        yDomain={{ min: 0, max: 15 }}>
-                        <Area
-                            theme={{
-                                gradient: {
-                                    from: {
-                                        color: theme.colors.primary,
-                                    },
-                                    to: {
-                                        color: theme.colors.primary,
-                                        opacity: 0.1,
-                                    },
-                                },
-                            }}
-                        />
-                        <Line
-                            theme={{
-                                stroke: {
-                                    color: theme.colors.primary,
-                                    width: 3,
-                                },
-                            }}
-                        />
-                    </Chart>
+                    <LineChart.Provider data={CHART_DATA}>
+                        <LineChart height={HEIGHT}>
+                            <LineChart.Path color={theme.colors.primary}>
+                                <LineChart.Gradient />
+                            </LineChart.Path>
+                        </LineChart>
+                    </LineChart.Provider>
                 </Animated.View>
             </Animated.View>
         </DropShadow>
     )
-}
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

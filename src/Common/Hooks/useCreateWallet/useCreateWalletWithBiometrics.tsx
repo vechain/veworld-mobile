@@ -1,6 +1,15 @@
 import { useCallback, useMemo, useState } from "react"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import { Account, Config, Device, Mnemonic, XPub, useRealm } from "~Storage"
+import {
+    Account,
+    Device,
+    XPub,
+    useRealm,
+    getUserPreferences,
+    getDevices,
+    getConfig,
+    getMnemonic,
+} from "~Storage"
 import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { CryptoUtils } from "~Common/Utils"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
@@ -23,17 +32,11 @@ export const useCreateWalletWithBiometrics = () => {
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(async () => {
-        const config = store.objectForPrimaryKey<Config>(
-            Config.getName(),
-            Config.getPrimaryKey(),
-        )
+        const config = getConfig(store)
 
-        const devices = store.objects<Device>(Device.getName())
+        const devices = getDevices(store)
 
-        const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-            Mnemonic.getName(),
-            Mnemonic.getPrimaryKey(),
-        )
+        const _mnemonic = getMnemonic(cache)
 
         let mnemonicPhrase = _mnemonic?.mnemonic
 
@@ -49,7 +52,7 @@ export const useCreateWalletWithBiometrics = () => {
                 )
 
                 cache.write(() => {
-                    mnemonicPhrase = ""
+                    _mnemonic!.mnemonic = ""
                 })
 
                 const { encryptedWallet } = await CryptoUtils.encryptWallet(
@@ -63,13 +66,13 @@ export const useCreateWalletWithBiometrics = () => {
                         ...device.xPub,
                     })
 
-                    let _device = store.create<Device>(Device.getName(), {
+                    const _device = store.create<Device>(Device.getName(), {
                         ...device,
                         xPub,
                         wallet: encryptedWallet,
                     })
 
-                    let account = store.create<Account>(Account.getName(), {
+                    const account = store.create<Account>(Account.getName(), {
                         address: device.rootAddress,
                         index: 0,
                         visible: true,
@@ -77,6 +80,10 @@ export const useCreateWalletWithBiometrics = () => {
                     })
 
                     _device.accounts.push(account)
+
+                    const userPreferences = getUserPreferences(store)
+                    if (!userPreferences.selectedAccount)
+                        userPreferences.selectedAccount = account
 
                     if (config) {
                         config.userSelectedSecurity =

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
@@ -8,11 +8,12 @@ import {
     AccountManagementBottomSheet,
 } from "./Components"
 import { useBottomSheetModal } from "~Common"
-import { useActiveWalletEntity } from "~Common/Hooks/Entities"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
+import { useIsFocused } from "@react-navigation/native"
+import { useThor } from "~Components"
 
 export const HomeScreen = () => {
     const {
@@ -38,16 +39,16 @@ export const HomeScreen = () => {
 
     const visibleHeightRef = useRef<number>(0)
 
-    const activeCard = useActiveWalletEntity()
-
-    const activeCardIndex = useMemo(
-        () => activeCard.activeIndex,
-        [activeCard.activeIndex],
-    )
+    const isFocused = useIsFocused()
+    const thor = useThor()
 
     useEffect(() => {
-        console.log("activeCardIndex", activeCardIndex)
-    }, [activeCardIndex])
+        async function init() {
+            const genesis = thor.genesis.id
+            console.log("genesis number", genesis)
+        }
+        init()
+    }, [isFocused, thor])
 
     return (
         <>

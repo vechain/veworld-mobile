@@ -11,9 +11,9 @@ import {
 } from "~Components"
 
 import * as Clipboard from "expo-clipboard"
-import { Device, useRealm } from "~Storage"
 import { Alert } from "react-native"
 import { useI18nContext } from "~i18n"
+import { getUserPreferences, useRealm } from "~Storage"
 
 type Props = {
     onClose: () => void
@@ -27,11 +27,8 @@ export const AccountManagementBottomSheet = React.forwardRef<
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const { store } = useRealm()
-    const devices = store.objects<Device>(Device.getName())
-    const account = devices[0].accounts[0]
-
     const snapPoints = useMemo(() => ["50%"], [])
+    const { store } = useRealm()
 
     const handleSheetChanges = useCallback((index: number) => {
         console.log("accountManagementSheet position changed", index)
@@ -43,12 +40,14 @@ export const AccountManagementBottomSheet = React.forwardRef<
     }, [onClose, openAddAccountSheet])
 
     const onCopyToClipboard = useCallback(async () => {
-        await Clipboard.setStringAsync(account.address)
+        const selectedAccount = getUserPreferences(store).selectedAccount
+        if (!selectedAccount) return
+        await Clipboard.setStringAsync(selectedAccount.address)
         Alert.alert(
             LL.COMMON_LBL_SUCCESS(),
             LL.NOTIFICATION_COPIED_CLIPBOARD({ name: LL.COMMON_LBL_ADDRESS() }),
         )
-    }, [account, LL])
+    }, [store, LL])
 
     return (
         <BaseBottomSheet

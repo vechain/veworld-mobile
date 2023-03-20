@@ -7,7 +7,12 @@ import { name as appName } from "./app.json"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Common"
-import { TranslationProvider } from "~Components"
+import {
+    ConfigContextProvider,
+    ConnexContextProvider,
+    TranslationProvider,
+    UserPreferencesContextProvider,
+} from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import { RealmContextProvider } from "~Storage"
@@ -24,6 +29,7 @@ import {
 import { typography } from "~Common/Theme/Typography"
 const { fontFamily } = typography
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import "./errorHandler"
 
 // immer setup
 enableAllPlugins()
@@ -44,15 +50,21 @@ const Main = () => {
         // eslint-disable-next-line react-native/no-inline-styles
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RealmContextProvider>
-                <BottomSheetModalProvider>
-                    <NavigationProvider>
-                        <SafeAreaProvider>
-                            <TranslationProvider>
-                                {fontsLoaded && <EntryPoint />}
-                            </TranslationProvider>
-                        </SafeAreaProvider>
-                    </NavigationProvider>
-                </BottomSheetModalProvider>
+                <ConfigContextProvider>
+                    <UserPreferencesContextProvider>
+                        <ConnexContextProvider>
+                            <SafeAreaProvider>
+                                <BottomSheetModalProvider>
+                                    <NavigationProvider>
+                                        <TranslationProvider>
+                                            {fontsLoaded && <EntryPoint />}
+                                        </TranslationProvider>
+                                    </NavigationProvider>
+                                </BottomSheetModalProvider>
+                            </SafeAreaProvider>
+                        </ConnexContextProvider>
+                    </UserPreferencesContextProvider>
+                </ConfigContextProvider>
             </RealmContextProvider>
         </GestureHandlerRootView>
     )

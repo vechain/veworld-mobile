@@ -115,6 +115,18 @@ type RootTranslation = {
 	 */
 	BTN_ADD_ACCOUNT: string
 	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	BTN_ADD_CUSTOM_NODE: string
+	/**
+	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
+	 */
+	BTN_DOWNLOAD_LOGS: string
+	/**
+	 * R​e​s​e​t​ ​A​p​p
+	 */
+	BTN_RESET_APP: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -191,7 +203,11 @@ type RootTranslation = {
 	 */
 	BD_WALLET_SUCCESS: string
 	/**
-	 * R​e​s​e​t​t​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​l​o​g​ ​y​o​u​ ​o​u​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​l​o​c​a​l​l​y​ ​(​a​c​c​o​u​n​t​s​,​ ​w​a​l​l​e​t​s​,​ ​t​r​a​n​s​a​c​t​i​o​n​ ​h​i​s​t​o​r​y​ ​e​t​c​.​)
+	 * C​o​n​f​i​r​m​ ​r​e​s​e​t
+	 */
+	BD_CONFIRM_RESET: string
+	/**
+	 * R​e​s​e​t​t​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​l​o​g​ ​y​o​u​ ​o​u​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​l​o​c​a​l​l​y​ ​(​a​c​c​o​u​n​t​s​,​ ​w​a​l​l​e​t​s​,​ ​t​r​a​n​s​a​c​t​i​o​n​ ​h​i​s​t​o​r​y​ ​e​t​c​)​.
 	 */
 	BD_RESET_APP_01: string
 	/**
@@ -211,6 +227,42 @@ type RootTranslation = {
 	 * @param {unknown} number
 	 */
 	BD_SELECT_WORD: RequiredParams<'number'>
+	/**
+	 * S​e​l​e​c​t​ ​y​o​u​r​ ​n​e​t​w​o​r​k
+	 */
+	BD_SELECT_NETWORK: string
+	/**
+	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​c​o​n​v​e​r​s​i​o​n
+	 */
+	BD_OTHER_NETWORKS: string
+	/**
+	 * D​i​s​p​l​a​y​ ​a​n​ ​i​n​d​i​c​a​t​o​r​ ​w​h​e​n​ ​t​r​a​n​s​a​c​t​i​n​g​ ​o​n​ ​a​n​o​t​h​e​r​ ​n​e​t​w​o​r​k
+	 */
+	BD_NETWORK_INDICATOR: string
+	/**
+	 * S​t​a​t​e​ ​L​o​g​s
+	 */
+	BD_STATE_LOGS: string
+	/**
+	 * S​t​a​t​e​ ​l​o​g​s​ ​c​o​n​t​a​i​n​ ​y​o​u​r​ ​p​u​b​l​i​c​ ​a​c​c​o​u​n​t​ ​a​d​d​r​e​s​s​e​s​ ​a​n​d​ ​s​e​n​t​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	BD_STATE_LOGS_DISCLAIMER: string
+	/**
+	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
+	 */
+	BD_RESET: string
+	/**
+	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​V​a​u​l​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 */
+	BD_RESET_DISCLAIMER: string
+	/**
+	 * H​e​l​p​ ​u​s​ ​i​m​p​r​o​v​e
+	 */
+	BD_HELP_IMPROVE: string
+	/**
+	 * E​n​a​b​l​e​ ​t​h​i​s​ ​s​e​t​t​i​n​g​ ​t​o​ ​h​e​l​p​ ​u​s​ ​i​m​p​r​o​v​e​ ​a​n​d​ ​a​l​w​a​y​s​ ​p​r​o​v​i​d​e​ ​t​h​e​ ​b​e​s​t​ ​e​x​p​e​r​i​e​n​c​e​ ​f​o​r​ ​y​o​u
+	 */
+	BD_HELP_IMPROVE_DISCLAIMER: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -280,13 +332,57 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_SUCCESS: string
 	/**
-	 * C​o​n​f​i​r​m​ ​R​e​s​e​t
+	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
 	 */
 	TITLE_RESET_APP: string
 	/**
 	 * W​a​l​l​e​t​ ​m​a​n​a​g​e​m​e​n​t
 	 */
 	TITLE_WALLET_MANAGEMENT: string
+	/**
+	 * S​e​t​t​i​n​g​s
+	 */
+	TITLE_SETTINGS: string
+	/**
+	 * G​e​n​e​r​a​l
+	 */
+	TITLE_GENERAL: string
+	/**
+	 * A​d​v​a​n​c​e​d
+	 */
+	TITLE_ADVANCED: string
+	/**
+	 * M​a​n​a​g​e​ ​W​a​l​l​e​t
+	 */
+	TITLE_MANAGE_WALLET: string
+	/**
+	 * N​F​T
+	 */
+	TITLE_NFT: string
+	/**
+	 * N​e​t​w​o​r​k
+	 */
+	TITLE_NETWORK: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	TITLE_CONTACTS: string
+	/**
+	 * P​r​i​v​a​c​y​ ​a​n​d​ ​S​e​c​u​r​i​t​y
+	 */
+	TITLE_PRIVACY: string
+	/**
+	 * A​l​e​r​t​s
+	 */
+	TITLE_ALERTS: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​A​p​p​s
+	 */
+	TITLE_CONNECTED_APPS: string
+	/**
+	 * A​b​o​u​t
+	 */
+	TITLE_ABOUT: string
 	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
@@ -363,6 +459,18 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_cancel: string
 	/**
+	 * C​o​n​f​i​r​m
+	 */
+	COMMON_BTN_CONFIRM: string
+	/**
+	 * R​e​t​r​y
+	 */
+	COMMON_BTN_RETRY: string
+	/**
+	 * S​i​g​n​ ​o​u​t
+	 */
+	COMMON_BTN_SIGN_OUT: string
+	/**
 	 * A​d​d​r​e​s​s
 	 */
 	COMMON_LBL_ADDRESS: string
@@ -374,6 +482,15 @@ type RootTranslation = {
 	 * E​r​r​o​r
 	 */
 	COMMON_LBL_ERROR: string
+	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
+	 */
+	ERROR_GENERIC_SUBTITLE: string
+	/**
+	 * W​e​ ​a​p​o​l​o​g​i​s​e​ ​f​o​r​ ​t​h​e​ ​i​n​c​o​n​v​e​n​i​e​n​c​e​.​
+​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r​.
+	 */
+	ERROR_GENERIC_BODY: string
 	/**
 	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
@@ -387,6 +504,14 @@ type RootTranslation = {
 	 * @param {unknown} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	WALLET_LABEL_ACCOUNT: string
+	/**
+	 * W​a​l​l​e​t
+	 */
+	WALLET_LABEL_WALLET: string
 }
 
 export type TranslationFunctions = {
@@ -491,6 +616,18 @@ export type TranslationFunctions = {
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
 	/**
+	 * Add a custom node
+	 */
+	BTN_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Download logs
+	 */
+	BTN_DOWNLOAD_LOGS: () => LocalizedString
+	/**
+	 * Reset App
+	 */
+	BTN_RESET_APP: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -567,7 +704,11 @@ export type TranslationFunctions = {
 	 */
 	BD_WALLET_SUCCESS: () => LocalizedString
 	/**
-	 * Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc.)
+	 * Confirm reset
+	 */
+	BD_CONFIRM_RESET: () => LocalizedString
+	/**
+	 * Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).
 	 */
 	BD_RESET_APP_01: () => LocalizedString
 	/**
@@ -586,6 +727,42 @@ export type TranslationFunctions = {
 	 * Select word {number}
 	 */
 	BD_SELECT_WORD: (arg: { number: unknown }) => LocalizedString
+	/**
+	 * Select your network
+	 */
+	BD_SELECT_NETWORK: () => LocalizedString
+	/**
+	 * Other networks - show conversion
+	 */
+	BD_OTHER_NETWORKS: () => LocalizedString
+	/**
+	 * Display an indicator when transacting on another network
+	 */
+	BD_NETWORK_INDICATOR: () => LocalizedString
+	/**
+	 * State Logs
+	 */
+	BD_STATE_LOGS: () => LocalizedString
+	/**
+	 * State logs contain your public account addresses and sent transactions
+	 */
+	BD_STATE_LOGS_DISCLAIMER: () => LocalizedString
+	/**
+	 * VeWorld reset
+	 */
+	BD_RESET: () => LocalizedString
+	/**
+	 * Click to reset VeVault and erase all your data stored on it
+	 */
+	BD_RESET_DISCLAIMER: () => LocalizedString
+	/**
+	 * Help us improve
+	 */
+	BD_HELP_IMPROVE: () => LocalizedString
+	/**
+	 * Enable this setting to help us improve and always provide the best experience for you
+	 */
+	BD_HELP_IMPROVE_DISCLAIMER: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
@@ -655,13 +832,57 @@ export type TranslationFunctions = {
 	 */
 	TITLE_WALLET_SUCCESS: () => LocalizedString
 	/**
-	 * Confirm Reset
+	 * VeWorld reset
 	 */
 	TITLE_RESET_APP: () => LocalizedString
 	/**
 	 * Wallet management
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
+	/**
+	 * Settings
+	 */
+	TITLE_SETTINGS: () => LocalizedString
+	/**
+	 * General
+	 */
+	TITLE_GENERAL: () => LocalizedString
+	/**
+	 * Advanced
+	 */
+	TITLE_ADVANCED: () => LocalizedString
+	/**
+	 * Manage Wallet
+	 */
+	TITLE_MANAGE_WALLET: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	TITLE_NFT: () => LocalizedString
+	/**
+	 * Network
+	 */
+	TITLE_NETWORK: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	TITLE_CONTACTS: () => LocalizedString
+	/**
+	 * Privacy and Security
+	 */
+	TITLE_PRIVACY: () => LocalizedString
+	/**
+	 * Alerts
+	 */
+	TITLE_ALERTS: () => LocalizedString
+	/**
+	 * Connected Apps
+	 */
+	TITLE_CONNECTED_APPS: () => LocalizedString
+	/**
+	 * About
+	 */
+	TITLE_ABOUT: () => LocalizedString
 	/**
 	 * Local wallet
 	 */
@@ -735,6 +956,18 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_cancel: () => LocalizedString
 	/**
+	 * Confirm
+	 */
+	COMMON_BTN_CONFIRM: () => LocalizedString
+	/**
+	 * Retry
+	 */
+	COMMON_BTN_RETRY: () => LocalizedString
+	/**
+	 * Sign out
+	 */
+	COMMON_BTN_SIGN_OUT: () => LocalizedString
+	/**
 	 * Address
 	 */
 	COMMON_LBL_ADDRESS: () => LocalizedString
@@ -747,6 +980,15 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_ERROR: () => LocalizedString
 	/**
+	 * Something went wrong!
+	 */
+	ERROR_GENERIC_SUBTITLE: () => LocalizedString
+	/**
+	 * We apologise for the inconvenience.
+Please, try again later.
+	 */
+	ERROR_GENERIC_BODY: () => LocalizedString
+	/**
 	 * Incorrect mnemonic phrase
 	 */
 	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
@@ -758,6 +1000,14 @@ export type TranslationFunctions = {
 	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Account
+	 */
+	WALLET_LABEL_ACCOUNT: () => LocalizedString
+	/**
+	 * Wallet
+	 */
+	WALLET_LABEL_WALLET: () => LocalizedString
 }
 
 export type Formatters = {}

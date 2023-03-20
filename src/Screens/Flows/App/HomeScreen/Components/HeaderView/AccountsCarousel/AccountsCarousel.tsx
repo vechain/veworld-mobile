@@ -1,12 +1,11 @@
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useState } from "react"
 import Carousel from "react-native-reanimated-carousel"
-import { FadeIn, FadeInRight, useSharedValue } from "react-native-reanimated"
+import { FadeInRight } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
-import { PaginationItem } from "./PaginationItem"
+import { BaseSpacer, PaginatedDot } from "~Components"
 import { AccountCard } from "./AccountCard"
-import { BaseSpacer, BaseView } from "~Components"
-import { useActiveCard } from "../../../Hooks/useActiveCard"
-import { useAccountsList } from "~Common/Hooks/Entities"
+import { Account } from "~Storage"
+import { useTheme } from "~Common"
 
 const width = Dimensions.get("window").width - 40
 
@@ -18,26 +17,48 @@ const StackConfig = {
     opacityInterval: 0.5,
 }
 
-type Props = { openAccountManagementSheet: () => void }
+type Props = {
+    accounts: Account[]
+    selectedAccountIndex: number
+    onAccountChange: (account: Account) => void
+    openAccountManagementSheet: () => void
+    balanceVisible: boolean
+}
 
 export const AccountsCarousel: React.FC<Props> = memo(
-    ({ openAccountManagementSheet }) => {
-        const progressValue = useSharedValue<number>(0)
-        const onScrollEnd = useActiveCard()
+    ({
+        accounts,
+        selectedAccountIndex,
+        onAccountChange,
+        openAccountManagementSheet,
+        balanceVisible,
+    }) => {
+        const theme = useTheme()
 
-        const accounts = useAccountsList()
+        //Current index of the carousel (used for pagination, faster than using the selectedAccountIndex)
+        const [currentIndex, setCurrentIndex] = useState(selectedAccountIndex)
+
+        const onSnapToItem = useCallback(
+            (absoluteProgress: number) => {
+                onAccountChange(accounts[absoluteProgress])
+            },
+            [onAccountChange, accounts],
+        )
 
         const onProgressChange = useCallback(
             (_: number, absoluteProgress: number) => {
-                progressValue.value = absoluteProgress
+                const integerProgress = Math.round(absoluteProgress)
+                if (currentIndex !== integerProgress)
+                    setCurrentIndex(integerProgress)
             },
-            [progressValue],
+            [currentIndex],
         )
 
         const renderItem = useCallback(
             ({ index }: { index: number }) => {
                 return (
                     <AccountCard
+                        balanceVisible={balanceVisible}
                         openAccountManagement={openAccountManagementSheet}
                         account={accounts[index]}
                         key={index}
@@ -47,7 +68,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     />
                 )
             },
-            [accounts, openAccountManagementSheet],
+            [accounts, balanceVisible, openAccountManagementSheet],
         )
 
         return (
@@ -63,29 +84,20 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     mode="horizontal-stack"
                     data={accounts}
                     modeConfig={StackConfig}
+                    defaultIndex={selectedAccountIndex}
                     onProgressChange={onProgressChange}
                     renderItem={renderItem}
-                    onSnapToItem={onScrollEnd}
+                    onSnapToItem={onSnapToItem}
                 />
 
                 <BaseSpacer height={10} />
 
-                {!!progressValue && (
-                    <BaseView
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        alignSelf="center">
-                        {accounts.map((account, index) => (
-                            <PaginationItem
-                                animValue={progressValue}
-                                index={index}
-                                key={account.address}
-                                length={accounts.length}
-                                entering={FadeIn.delay(220).duration(250)}
-                            />
-                        ))}
-                    </BaseView>
-                )}
+                <PaginatedDot
+                    activeDotColor={theme.colors.primary}
+                    inactiveDotColor={theme.colors.primary}
+                    pageIdx={currentIndex}
+                    maxPage={accounts.length}
+                />
             </>
         )
     },

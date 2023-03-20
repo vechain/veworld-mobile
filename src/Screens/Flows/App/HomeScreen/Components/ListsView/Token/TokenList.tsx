@@ -7,6 +7,7 @@ import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { ColorThemeType, Tokens_mock, useThemedStyles, Token } from "~Common"
 import { FungibleToken, VET, VTHO } from "~Common/Constant/Token/TokenConstants"
 import { AnimatedChartCard } from "./AnimatedChartCard"
+import { AnimatedVTHOCard } from "./AnimatedVTHOCard"
 
 const NATIVE_TOKENS: FungibleToken[] = [VET, VTHO]
 
@@ -32,13 +33,8 @@ export const TokenList = memo(
 
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
-                {NATIVE_TOKENS.map(token => (
-                    <AnimatedChartCard
-                        token={token}
-                        key={token.address}
-                        isEdit={isEdit}
-                    />
-                ))}
+                <AnimatedChartCard token={NATIVE_TOKENS[0]} isEdit={isEdit} />
+                <AnimatedVTHOCard token={NATIVE_TOKENS[1]} isEdit={isEdit} />
 
                 <NestableDraggableFlatList
                     data={data}

@@ -20,12 +20,14 @@ export const useObjectListener = (
         }
 
         try {
+            console.log("NEW LISTENER")
             initialList.addListener(onChange)
         } catch (error) {
             console.error(
                 `An exception was thrown within the change listener: ${error}`,
             )
         }
+
         return () => {
             initialList.removeListener(onChange)
         }
@@ -38,15 +40,6 @@ export const useObjectListener = (
                 setData(
                     produce(draft => {
                         draft.splice(index, 1)
-                    }),
-                )
-            })
-
-            changes.insertions.forEach(index => {
-                const newItem = list[index]
-                setData(
-                    produce(draft => {
-                        draft.push(newItem)
                     }),
                 )
             })

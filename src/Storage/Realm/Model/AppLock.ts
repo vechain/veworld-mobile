@@ -22,3 +22,9 @@ export class AppLock extends Object {
         },
     }
 }
+
+export const getAppLock = (cache: Realm) =>
+    cache.objectForPrimaryKey<AppLock>(
+        AppLock.getName(),
+        AppLock.getPrimaryKey(),
+    ) as AppLock

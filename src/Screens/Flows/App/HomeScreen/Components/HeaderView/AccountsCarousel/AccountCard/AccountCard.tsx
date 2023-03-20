@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
@@ -17,20 +17,38 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Account } from "~Storage"
+import { Account, getUserPreferences, useRealm } from "~Storage"
 import { Balance } from "./Balance"
 
 interface Props extends AnimateProps<ViewProps> {
     style?: StyleProp<ViewStyle>
     account: Account
     openAccountManagement: () => void
+    balanceVisible: boolean
 }
 
 export const AccountCard: React.FC<Props> = memo(props => {
-    const { style, account, openAccountManagement, ...animatedViewProps } =
-        props
+    const {
+        style,
+        account,
+        openAccountManagement,
+        balanceVisible,
+        ...animatedViewProps
+    } = props
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
+
+    const { store } = useRealm()
+    const userPref = getUserPreferences(store)
+
+    const toggleBalanceVisibility = useCallback(() => {
+        store.write(() => {
+            userPref.balanceVisible = !userPref.balanceVisible
+        })
+    }, [userPref, store])
+
+    const randomBalance = useMemo(() => CryptoUtils.random().toString(), [])
+
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
@@ -67,7 +85,11 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     />
                 </BaseView>
                 <BaseSpacer height={PlatformUtils.isIOS() ? 18 : 10} />
-                <Balance balance={CryptoUtils.random().toString()} />
+                <Balance
+                    isVisible={balanceVisible}
+                    toggleVisible={toggleBalanceVisibility}
+                    balance={randomBalance}
+                />
             </BaseView>
         </Animated.View>
     )

@@ -4,7 +4,6 @@ export class Config extends Object {
     _id!: string
     isWalletCreated!: boolean
     userSelectedSecurity!: string
-    isAppLockActive!: boolean
     lastSecurityLevel!: string
     isSecurityDowngrade!: boolean
     isResettingApp!: boolean
@@ -26,7 +25,6 @@ export class Config extends Object {
             _id: { type: "string", default: "Config" },
             isWalletCreated: { type: "bool", default: false },
             userSelectedSecurity: { type: "string", default: "NONE" },
-            isAppLockActive: { type: "bool", default: true },
             lastSecurityLevel: { type: "string", default: "NONE" },
             isSecurityDowngrade: { type: "bool", default: false },
             isResettingApp: { type: "bool", default: false },
@@ -37,3 +35,9 @@ export class Config extends Object {
         },
     }
 }
+
+export const getConfig = (store: Realm): Config =>
+    store.objectForPrimaryKey<Config>(
+        Config.getName(),
+        Config.getPrimaryKey(),
+    ) as Config

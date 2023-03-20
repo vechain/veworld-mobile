@@ -8,8 +8,7 @@ import {
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import VectorImage from "react-native-vector-image"
-import { VeChainVetLogo } from "~Assets"
+import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 
 export const WelcomeScreen = () => {
@@ -40,9 +39,9 @@ export const WelcomeScreen = () => {
                     alignItems="center"
                     justifyContent="space-between"
                     w={100}
-                    flexGrow={1}>
+                    grow={1}>
                     <BaseView alignItems="center">
-                        <VectorImage source={VeChainVetLogo} />
+                        <VeChainVetLogoSVG />
                         <BaseText align="center" py={20}>
                             {LL.BD_WELCOME_SCREEN()}
                         </BaseText>
