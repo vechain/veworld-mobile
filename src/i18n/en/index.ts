@@ -139,6 +139,7 @@ const en: BaseTranslation = {
 
     // Common Buttons
     COMMON_BTN_cancel: "Cancel",
+    COMMON_BTN_CONFIRM: "Confirm",
     COMMON_BTN_RETRY: "Retry",
     COMMON_BTN_SIGN_OUT: "Sign out",
 

@@ -459,6 +459,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_cancel: string
 	/**
+	 * C​o​n​f​i​r​m
+	 */
+	COMMON_BTN_CONFIRM: string
+	/**
 	 * R​e​t​r​y
 	 */
 	COMMON_BTN_RETRY: string
@@ -951,6 +955,10 @@ export type TranslationFunctions = {
 	 * Cancel
 	 */
 	COMMON_BTN_cancel: () => LocalizedString
+	/**
+	 * Confirm
+	 */
+	COMMON_BTN_CONFIRM: () => LocalizedString
 	/**
 	 * Retry
 	 */
