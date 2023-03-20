@@ -10,7 +10,7 @@
         "android": "react-native run-android",
         "ios": "react-native run-ios --simulator 'iPhone 14 Pro'",
         "ios:old-device": "react-native run-ios --simulator 'iPhone SE (3rd generation)'",
-        "start": "react-native start",
+        "start": "yarn i18n & react-native start & wait",
         "test": "jest",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "format": "yarn prettier --write src",
@@ -23,7 +23,7 @@
         "e2e.android.build.r": "detox build --configuration android.emu.release",
         "e2e.android.test.d": "detox test --configuration android.emu.debug",
         "e2e.android.test.r": "detox test --configuration android.emu.release",
-        "typesafe-i18n": "typesafe-i18n"
+        "i18n": "typesafe-i18n"
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
