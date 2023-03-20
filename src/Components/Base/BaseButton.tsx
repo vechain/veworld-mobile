@@ -5,15 +5,15 @@ import {
     FlexAlignType,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { useTheme, Theme } from "~Common"
+import { useTheme } from "~Common"
+import { typography } from "~Common/Theme"
+
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
 import * as Haptics from "expo-haptics"
 import { TFonts } from "~Common/Theme"
 
-const {
-    typography: { defaults: defaultTypography, ...otherTypography },
-} = Theme
+const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     action: () => void
