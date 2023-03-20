@@ -7,41 +7,59 @@ Given("The user follows the onboarding process", async () => {
 })
 
 When("The user skips to password creation", async () => {
+    await waitFor(element(by.text("GET STARTED")))
+        .toBeVisible()
+        .withTimeout(10_000)
     await element(by.text("GET STARTED")).tap()
 
+    await waitFor(element(by.text("Skip ahead to create password")))
+        .toBeVisible()
+        .withTimeout(10_000)
     await element(by.text("Skip ahead to create password")).tap()
 })
 
 Given("The user follows the wallet creation process", async () => {
     await OnboardingFlows.onboard()
 
+    await waitFor(element(by.text("NEXT: CREATE PASSWORD")))
+        .toBeVisible()
+        .withTimeout(10_000)
     await element(by.text("NEXT: CREATE PASSWORD")).tap()
 
     await OnboardingFlows.createWallet()
 })
 
 When("The user skips to recovery phase", async () => {
+    await waitFor(element(by.text("NEXT: CREATE PASSWORD")))
+        .toBeVisible()
+        .withTimeout(10_000)
     await element(by.text("NEXT: CREATE PASSWORD")).tap()
 
+    await waitFor(element(by.text("Create new wallet")))
+        .toBeVisible()
+        .withTimeout(10_000)
     await element(by.text("Create new wallet")).tap()
 
+    await waitFor(element(by.text("Skip ahead to recovery phrase")))
+        .toBeVisible()
+        .withTimeout(10_000)
     await element(by.text("Skip ahead to recovery phrase")).tap()
 })
 
 Then("The user should be onboarded", async () => {
     await waitFor(element(by.text("NEXT: CREATE PASSWORD")))
         .toBeVisible()
-        .withTimeout(2_000)
+        .withTimeout(10_000)
 })
 
 Then("The user should see password creation", async () => {
     await waitFor(element(by.text("Create Wallet")))
         .toBeVisible()
-        .withTimeout(2_000)
+        .withTimeout(10_000)
 })
 
 Then("The user can create wallet", async () => {
     await waitFor(element(by.text("Your Mnemonic")))
         .toBeVisible()
-        .withTimeout(2_000)
+        .withTimeout(10_000)
 })

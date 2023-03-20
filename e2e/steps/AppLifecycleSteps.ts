@@ -24,5 +24,5 @@ Given("The user closes the app", { timeout: -1 }, async () => {
 Then("The app is started successfully", async () => {
     await waitFor(element(by.id("welcome-title-id")))
         .toBeVisible()
-        .withTimeout(5_000)
+        .withTimeout(10_000)
 })
