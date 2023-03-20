@@ -1,10 +1,10 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
-    ConfirmSeedPhraseScreen,
-    ImportSeedPhraseScreen,
+    ConfirmMnemonicScreen,
+    ImportMnemonicScreen,
     ImportWalletTypeSelectionScreen,
-    SeedPhraseScreen,
+    NewMnemonicScreen,
     TutorialScreen,
     UserCreatePasswordScreen,
     WalletSuccessScreen,
@@ -15,12 +15,12 @@ import { SecurityLevelType } from "~Model"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
-    [Routes.SEED_PHRASE]: undefined
+    [Routes.NEW_MNEMONIC]: undefined
     [Routes.WALLET_TYPE_CREATION]: undefined
     [Routes.WALLET_TYPE_IMPORT]: undefined
     [Routes.WALLET_TUTORIAL]: undefined
-    [Routes.CONFIRM_SEED_PHRASE]: undefined
-    [Routes.IMPORT_SEED_PHRASE]: undefined
+    [Routes.CONFIRM_MNEMONIC]: undefined
+    [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.WALLET_SUCCESS]:
         | {
               securityLevelSelected?: SecurityLevelType
@@ -55,14 +55,14 @@ export const CreateWalletAppStack = () => {
             />
 
             <CreateWalletApp.Screen
-                name={Routes.SEED_PHRASE}
-                component={SeedPhraseScreen}
+                name={Routes.NEW_MNEMONIC}
+                component={NewMnemonicScreen}
                 options={{ headerShown: false }}
             />
 
             <CreateWalletApp.Screen
-                name={Routes.CONFIRM_SEED_PHRASE}
-                component={ConfirmSeedPhraseScreen}
+                name={Routes.CONFIRM_MNEMONIC}
+                component={ConfirmMnemonicScreen}
                 options={{ headerShown: false }}
             />
 
@@ -73,8 +73,8 @@ export const CreateWalletAppStack = () => {
             />
 
             <CreateWalletApp.Screen
-                name={Routes.IMPORT_SEED_PHRASE}
-                component={ImportSeedPhraseScreen}
+                name={Routes.IMPORT_MNEMONIC}
+                component={ImportMnemonicScreen}
                 options={{ headerShown: false }}
             />
 

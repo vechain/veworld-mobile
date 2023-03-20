@@ -7,12 +7,16 @@ const {
     typography: { defaults: defaultTypography },
 } = Theme
 type Props = {
-    seed: string
+    mnemonic: string
     onChangeText: (text: string) => void
     isError: boolean
 }
 
-export const ImportMnemonicView = ({ seed, onChangeText, isError }: Props) => {
+export const ImportMnemonicView = ({
+    mnemonic,
+    onChangeText,
+    isError,
+}: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles(isError))
     return (
         <TextInput
@@ -22,7 +26,7 @@ export const ImportMnemonicView = ({ seed, onChangeText, isError }: Props) => {
             multiline={true}
             numberOfLines={4}
             onChangeText={onChangeText}
-            value={seed}
+            value={mnemonic}
         />
     )
 }
