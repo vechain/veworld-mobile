@@ -21,7 +21,7 @@ export const WalletTypeSelectionScreen = () => {
 
     const onCreateWallet = () => {
         if (config?.isWalletCreated) {
-            nav.navigate(Routes.SEED_PHRASE)
+            nav.navigate(Routes.NEW_MNEMONIC)
         } else {
             nav.navigate(Routes.WALLET_TUTORIAL)
         }

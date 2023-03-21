@@ -65,3 +65,6 @@ buck-out/
 
 # vscode
 .vscode/settings.json
+
+# jest
+coverage

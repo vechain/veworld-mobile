@@ -17,7 +17,7 @@ export const getNodes = (
 ) => {
     const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
     const locale = i18n.detectLocale()
-    let alias = i18n.i18n()[locale].WALLET_LABEL_wallet()
+    let alias = i18n.i18n()[locale].WALLET_LABEL_WALLET()
 
     const wallet = {
         mnemonic: mnemonicPhrase,

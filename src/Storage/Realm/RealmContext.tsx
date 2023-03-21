@@ -31,7 +31,7 @@ type State = {
 
 type RealmContextProviderProps = { children: React.ReactNode }
 
-const RealmContext = React.createContext<State | undefined>(undefined)
+export const RealmContext = React.createContext<State | undefined>(undefined)
 
 const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
     const colorScheme = useColorScheme()
