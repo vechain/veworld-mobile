@@ -1,6 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
+import { BaseIcon, BaseSpacer } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "~Common"
 
@@ -9,15 +9,14 @@ const backButtonHeaderStyle = StyleSheet.create({
 })
 
 type Props = {
-    testID?: string
     iconTestID?: string
 }
 
-export const BackButtonHeader = ({ testID, iconTestID }: Props) => {
+export const BackButtonHeader = ({ iconTestID }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
     return (
-        <BaseView testID={testID}>
+        <>
             <BaseIcon
                 style={backButtonHeaderStyle.backButton}
                 size={36}
@@ -27,6 +26,6 @@ export const BackButtonHeader = ({ testID, iconTestID }: Props) => {
                 testID={iconTestID}
             />
             <BaseSpacer height={16} />
-        </BaseView>
+        </>
     )
 }

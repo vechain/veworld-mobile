@@ -16,18 +16,14 @@ import { BackButtonHeader } from "./BackButtonHeader"
 
 describe("BackButtonHeader", () => {
     it("should render correctly and go back", async () => {
-        render(
-            <BackButtonHeader
-                testID="BackButtonHeader"
-                iconTestID="BackButtonHeader-BaseIcon"
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<BackButtonHeader iconTestID="BackButtonHeader-BaseIcon" />, {
+            wrapper: TestWrapper,
+        })
         // wait for useEffects
         await waitFor(() =>
-            expect(screen.getByTestId("BackButtonHeader")).toBeTruthy(),
+            expect(
+                screen.getByTestId("BackButtonHeader-BaseIcon"),
+            ).toBeTruthy(),
         )
 
         const icon = screen.getByTestId("BackButtonHeader-BaseIcon")
