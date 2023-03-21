@@ -516,6 +516,10 @@ type RootTranslation = {
 	 */
 	ERROR_WRONG_MNEMONIC_WORDS: string
 	/**
+	 * W​a​l​l​e​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
+	 */
+	ERROR_WALLET_ALREADY_EXISTS: string
+	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
@@ -1028,6 +1032,10 @@ Please, try again later.
 	 * Error! The word combination is wrong, Please, try again.
 	 */
 	ERROR_WRONG_MNEMONIC_WORDS: () => LocalizedString
+	/**
+	 * Wallet already exists
+	 */
+	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
 	/**
 	 * {name} copied to clipboard!
 	 */
