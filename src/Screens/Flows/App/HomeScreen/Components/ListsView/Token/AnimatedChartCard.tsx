@@ -66,7 +66,7 @@ export const AnimatedChartCard = memo(({ token, isEdit }: NativeTokenProps) => {
         <DropShadow style={styles.cardShadow}>
             <Animated.View
                 style={[styles.nativeTokenContainer, animatedOuterCard]}>
-                <BaseView w={100} grow={1} px={12}>
+                <BaseView w={100} flexGrow={1} px={12}>
                     <TokenCard token={token} isAnimation={isEdit} />
                 </BaseView>
 

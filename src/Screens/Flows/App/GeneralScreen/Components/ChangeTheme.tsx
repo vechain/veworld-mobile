@@ -25,10 +25,10 @@ export const ChangeTheme = () => {
 
     return (
         <BaseView
-            justify="space-between"
+            justifyContent="space-between"
             w={100}
-            align="center"
-            orientation="row">
+            alignItems="center"
+            flexDirection="row">
             <BaseText>Dark Mode</BaseText>
             <BaseSwitch onValueChange={toggleSwitch} value={isDark} />
         </BaseView>

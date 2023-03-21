@@ -42,7 +42,7 @@ export const HeaderView = memo(
 
         return (
             <>
-                <BaseView align="center">
+                <BaseView alignItems="center">
                     <Header />
                     <BaseSpacer height={20} />
                     <AccountsCarousel

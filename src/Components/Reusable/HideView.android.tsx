@@ -9,9 +9,9 @@ export const HideView = ({ background }: { background: string }) => {
     return (
         <BaseView
             style={[StyleSheet.absoluteFill, baseStyle.container]}
-            background={background}
-            justify="center"
-            align="center">
+            bg={background}
+            justifyContent="center"
+            alignItems="center">
             <BaseText typographyFont="bodyAccent">{LL.TAP_TO_VIEW()}</BaseText>
         </BaseView>
     )

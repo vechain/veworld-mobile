@@ -4,7 +4,12 @@ import React, { useCallback, useState } from "react"
 import { SafeAreaView, ViewToken } from "react-native"
 import { useBottomSheetModal } from "~Common"
 import { useDevicesList } from "~Common/Hooks/Entities"
-import { BackButtonHeader, BaseSpacer, BaseView } from "~Components"
+import {
+    BackButtonHeader,
+    BaseSpacer,
+    BaseView,
+    BaseSafeArea,
+} from "~Components"
 import { Device } from "~Storage"
 import {
     DeviceBox,
@@ -44,11 +49,11 @@ export const WalletManagementScreen = () => {
     )
 
     return (
-        <>
+        <BaseSafeArea grow={1}>
             <SafeAreaView />
             <BackButtonHeader />
 
-            <BaseView px={20} style={{ height: "100%" }}>
+            <BaseView px={20} style={{ height: "100%", width: "100%" }}>
                 <FlashList
                     data={devices}
                     scrollEnabled={isScrollable}
@@ -85,6 +90,6 @@ export const WalletManagementScreen = () => {
                     device={selectedDevice}
                 />
             </BaseView>
-        </>
+        </BaseSafeArea>
     )
 }

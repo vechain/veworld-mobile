@@ -28,7 +28,7 @@ export const Balance: React.FC<Props> = memo(
 
         return (
             <>
-                <BaseView orientation="row" align="center">
+                <BaseView flexDirection="row">
                     <BaseText
                         color={theme.colors.textReversed}
                         typographyFont="body">
@@ -42,7 +42,7 @@ export const Balance: React.FC<Props> = memo(
                         style={baseStyles.marginLeft}
                     />
                 </BaseView>
-                <BaseView orientation="row" align="flex-end">
+                <BaseView flexDirection="row" alignItems="flex-end">
                     <BaseText
                         color={theme.colors.textReversed}
                         typographyFont="hugeTitle">

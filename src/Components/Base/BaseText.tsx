@@ -77,8 +77,8 @@ export const BaseText = (props: Props) => {
 
     return (
         <BaseView
-            align={props.alignContainer}
-            justify={props.justifyContainer}
+            alignItems={props.alignContainer}
+            justifyContent={props.justifyContainer}
             m={props.m}
             mx={props.mx}
             my={props.my}

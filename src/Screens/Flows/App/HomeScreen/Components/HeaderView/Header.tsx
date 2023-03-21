@@ -18,10 +18,10 @@ export const Header = () => {
         <BaseView
             w={100}
             px={20}
-            orientation="row"
-            align="center"
-            justify="space-between">
-            <BaseView align="flex-start" selfAlign="flex-start">
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between">
+            <BaseView alignItems="flex-start" alignSelf="flex-start">
                 <BaseText typographyFont="body">
                     {LL.TITLE_WELCOME_TO()}
                 </BaseText>

@@ -22,7 +22,10 @@ export const BaseModal: React.FC<IBaseModal> = ({
             onDismiss={onClose}
             onRequestClose={onClose}>
             <SafeAreaView style={safeAreaViewStyles.flex}>
-                <BaseView align="center" justify="flex-start" grow={1}>
+                <BaseView
+                    alignItems="center"
+                    justifyContent="flex-start"
+                    flexGrow={1}>
                     {children}
                 </BaseView>
             </SafeAreaView>

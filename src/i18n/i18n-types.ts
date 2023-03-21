@@ -324,7 +324,7 @@ type RootTranslation = {
 	 */
 	TITLE_MNEMONIC: string
 	/**
-	 * C​r​e​a​t​e​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	TITLE_CONFIRM_MNEMONIC: string
 	/**
@@ -844,7 +844,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
 	/**
-	 * Create your wallet
+	 * Confirm your mnemonic
 	 */
 	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
 	/**
