@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
@@ -15,8 +15,9 @@ import { Routes } from "~Navigation"
 
 type Action = {
     name: string
-    icon: React.ReactNode
     action: () => void
+    icon: React.ReactNode
+    testID: string
 }
 
 export const HomeScreenActions = memo(() => {
@@ -25,45 +26,51 @@ export const HomeScreenActions = memo(() => {
 
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
 
-    const navigateToBuy = useCallback(() => {
-        nav.navigate(Routes.BUY)
-    }, [nav])
-    const navigateToSend = useCallback(() => {
-        nav.navigate(Routes.SEND)
-    }, [nav])
-    const navigateToSwap = useCallback(() => {
-        nav.navigate(Routes.SWAP)
-    }, [nav])
-    const navigateToHistory = useCallback(() => {
-        nav.navigate(Routes.HISTORY)
-    }, [nav])
-
-    const Actions: Action[] = [
-        {
-            name: LL.BTN_BUY(),
-            action: navigateToBuy,
-            icon: <BaseIcon color={theme.colors.text} name="cart-outline" />,
-        },
-        {
-            name: LL.BTN_SEND(),
-            action: navigateToSend,
-            icon: <BaseIcon color={theme.colors.text} name="send-outline" />,
-        },
-        {
-            name: LL.BTN_SWAP(),
-            action: navigateToSwap,
-            icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
-        },
-        {
-            name: LL.BTN_HISTORY(),
-            action: navigateToHistory,
-            icon: <BaseIcon color={theme.colors.text} name="history" />,
-        },
-    ]
+    const Actions: Action[] = useMemo(
+        () => [
+            {
+                name: LL.BTN_BUY(),
+                action: () => nav.navigate(Routes.BUY),
+                icon: (
+                    <BaseIcon color={theme.colors.text} name="cart-outline" />
+                ),
+                testID: "buyButton",
+            },
+            {
+                name: LL.BTN_SEND(),
+                action: () => nav.navigate(Routes.SEND),
+                icon: (
+                    <BaseIcon color={theme.colors.text} name="send-outline" />
+                ),
+                testID: "sendButton",
+            },
+            {
+                name: LL.BTN_SWAP(),
+                action: () => nav.navigate(Routes.SWAP),
+                icon: (
+                    <BaseIcon
+                        color={theme.colors.text}
+                        name="swap-horizontal"
+                    />
+                ),
+                testID: "swapButton",
+            },
+            {
+                name: LL.BTN_HISTORY(),
+                action: () => nav.navigate(Routes.HISTORY),
+                icon: <BaseIcon color={theme.colors.text} name="history" />,
+                testID: "historyButton",
+            },
+        ],
+        [LL, nav, theme.colors.text],
+    )
 
     const renderAction = useCallback((action: Action) => {
         return (
-            <BaseTouchable action={action.action}>
+            <BaseTouchable
+                key={action.name}
+                action={action.action}
+                testID={action.testID}>
                 <BaseView flexDirection="column" alignItems="center">
                     {action.icon}
                     <BaseSpacer height={6} />
@@ -79,11 +86,11 @@ export const HomeScreenActions = memo(() => {
         <DropShadow style={themedStyles.shadowContainer}>
             <BaseView
                 flexDirection="row"
-                justifyContent="space-around"
+                justifyContent="space-between"
                 alignItems="center"
                 bg={theme.colors.card}
                 borderRadius={34}
-                px={24}
+                px={38}
                 py={12}>
                 {Actions.map(action => renderAction(action))}
             </BaseView>
