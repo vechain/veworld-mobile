@@ -7,6 +7,8 @@ export type BaseLocale = 'en'
 
 export type Locales =
 	| 'en'
+	| 'es'
+	| 'it'
 
 export type Translation = RootTranslation
 
@@ -264,6 +266,46 @@ type RootTranslation = {
 	 */
 	BD_HELP_IMPROVE_DISCLAIMER: string
 	/**
+	 * C​o​n​v​e​r​s​i​o​n​ ​c​u​r​r​e​n​c​y
+	 */
+	BD_CONVERSION_CURRENCY: string
+	/**
+	 * A​p​p​ ​t​h​e​m​e
+	 */
+	BD_APP_THEME: string
+	/**
+	 * A​p​p​ ​l​a​n​g​u​a​g​e
+	 */
+	BD_APP_LANGUAGE: string
+	/**
+	 * H​i​d​e​ ​t​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e
+	 */
+	BD_HIDE_TOKENS: string
+	/**
+	 * P​i​c​k​ ​t​h​e​ ​c​u​r​r​e​n​c​y​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​t​o​ ​b​e​ ​s​h​o​w​n​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​s
+	 */
+	BD_CONVERSION_CURRENCY_DISCLAIMER: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​t​h​e​m​e
+	 */
+	BD_APP_THEME_DISCLAIMER: string
+	/**
+	 * T​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e​ ​w​o​n​'​t​ ​b​e​ ​s​h​o​w​n​ ​i​n​ ​t​h​e​ ​a​s​s​e​t​s​ ​l​i​s​t
+	 */
+	BD_HIDE_TOKENS_DISCLAIMER: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​l​a​n​g​u​a​g​e
+	 */
+	BD_APP_LANGUAGE_DISCLAIMER: string
+	/**
+	 * U​S​D
+	 */
+	BD_USD: string
+	/**
+	 * E​U​R
+	 */
+	BD_EUR: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -426,6 +468,14 @@ type RootTranslation = {
 	 * @param {unknown} alias
 	 */
 	SB_DEVICE_CARD: RequiredParams<'accounts' | 'alias'>
+	/**
+	 * E​n​t​e​r​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
+	 */
+	SB_ENTER_LANGUAGE: string
+	/**
+	 * S​e​l​e​c​t​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
+	 */
+	SB_SELECT_LANGUAGE: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -744,6 +794,46 @@ export type TranslationFunctions = {
 	 */
 	BD_HELP_IMPROVE_DISCLAIMER: () => LocalizedString
 	/**
+	 * Conversion currency
+	 */
+	BD_CONVERSION_CURRENCY: () => LocalizedString
+	/**
+	 * App theme
+	 */
+	BD_APP_THEME: () => LocalizedString
+	/**
+	 * App language
+	 */
+	BD_APP_LANGUAGE: () => LocalizedString
+	/**
+	 * Hide tokens without balance
+	 */
+	BD_HIDE_TOKENS: () => LocalizedString
+	/**
+	 * Pick the currency that you prefer to be shown for conversions
+	 */
+	BD_CONVERSION_CURRENCY_DISCLAIMER: () => LocalizedString
+	/**
+	 * Select the general app theme
+	 */
+	BD_APP_THEME_DISCLAIMER: () => LocalizedString
+	/**
+	 * Tokens without balance won't be shown in the assets list
+	 */
+	BD_HIDE_TOKENS_DISCLAIMER: () => LocalizedString
+	/**
+	 * Select the general app language
+	 */
+	BD_APP_LANGUAGE_DISCLAIMER: () => LocalizedString
+	/**
+	 * USD
+	 */
+	BD_USD: () => LocalizedString
+	/**
+	 * EUR
+	 */
+	BD_EUR: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -903,6 +993,14 @@ export type TranslationFunctions = {
 	 * {alias} ({accounts} accounts)
 	 */
 	SB_DEVICE_CARD: (arg: { accounts: unknown, alias: unknown }) => LocalizedString
+	/**
+	 * Enter your language
+	 */
+	SB_ENTER_LANGUAGE: () => LocalizedString
+	/**
+	 * Select your language
+	 */
+	SB_SELECT_LANGUAGE: () => LocalizedString
 	/**
 	 * Face ID
 	 */
