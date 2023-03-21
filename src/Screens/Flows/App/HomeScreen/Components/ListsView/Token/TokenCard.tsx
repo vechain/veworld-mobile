@@ -1,10 +1,9 @@
 import { StyleSheet, View } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText } from "~Components"
+import { BaseText, useUserPreferencesEntity } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
 import { Token } from "~Common"
-import { getUserPreferences, useRealm } from "~Storage"
 
 type Props = {
     token: FungibleToken | Token
@@ -12,9 +11,7 @@ type Props = {
 }
 
 export const TokenCard = memo(({ token, isAnimation }: Props) => {
-    const { store } = useRealm()
-
-    const userPref = getUserPreferences(store)
+    const userPref = useUserPreferencesEntity()
 
     const currencyPref = useMemo(() => userPref?.currency, [userPref])
 
