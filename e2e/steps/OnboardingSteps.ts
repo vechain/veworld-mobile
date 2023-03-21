@@ -2,6 +2,10 @@ import { Given, Then, When } from "@cucumber/cucumber"
 import { waitFor, element } from "detox"
 import OnboardingFlows from "../helpers/flows/OnboardingFlows"
 
+Given("The app is opened", { timeout: -1 }, async () => {
+    await detox.device.launchApp({ newInstance: true })
+})
+
 Given("The user follows the onboarding process", { timeout: -1 }, async () => {
     await OnboardingFlows.onboard()
 })
