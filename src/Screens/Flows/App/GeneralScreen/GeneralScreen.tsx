@@ -35,6 +35,7 @@ export const GeneralScreen = () => {
     const languagePref = useMemo(() => userPref?.language, [userPref])
 
     // Checks if the user wants to hide tokens with small balances
+    // TODO realm user preference to save the choice, update TokenList tokens for small balances & update the switch with the saved preference
     const [isTokensHidden, setIsTokensHidden] = useState(false)
 
     // Toggles the switch to hide tokens with small balances
