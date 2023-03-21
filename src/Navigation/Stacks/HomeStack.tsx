@@ -1,50 +1,78 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { HomeScreen, WalletManagementScreen } from "~Screens"
+import {
+    BuyScreen,
+    HistoryScreen,
+    HomeScreen,
+    SendScreen,
+    SwapScreen,
+    WalletManagementScreen,
+} from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { CreateWalletAppStack } from "./CreateWalletAppStack"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
+    [Routes.BUY]: undefined
+    [Routes.SEND]: undefined
+    [Routes.SWAP]: undefined
+    [Routes.HISTORY]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
 }
 
-const Home = createNativeStackNavigator<RootStackParamListHome>()
+const { Navigator, Group, Screen } =
+    createNativeStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
     return (
-        <Home.Navigator screenOptions={{ headerShown: false }}>
-            <Home.Group>
-                <Home.Screen
+        <Navigator>
+            <Group>
+                <Screen
                     name={Routes.HOME}
                     component={HomeScreen}
-                    options={{
-                        headerShown: false,
-                    }}
+                    options={{ headerShown: false }}
                 />
-            </Home.Group>
+                <Screen
+                    name={Routes.BUY}
+                    component={BuyScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.SEND}
+                    component={SendScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.SWAP}
+                    component={SwapScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.HISTORY}
+                    component={HistoryScreen}
+                    options={{ headerShown: false }}
+                />
+            </Group>
 
-            <Home.Group>
-                <Home.Screen
+            <Group>
+                <Screen
                     name={Routes.WALLET_MANAGEMENT}
                     component={WalletManagementScreen}
-                    options={{
-                        headerShown: false,
-                    }}
+                    options={{ headerShown: false }}
                 />
-            </Home.Group>
+            </Group>
 
-            <Home.Group
+            <Group
                 screenOptions={{
                     presentation: "fullScreenModal",
                 }}>
-                <Home.Screen
+                <Screen
                     name={Routes.CREATE_WALLET_FLOW}
                     component={CreateWalletAppStack}
                     options={{ headerShown: false }}
                 />
-            </Home.Group>
-        </Home.Navigator>
+            </Group>
+        </Navigator>
     )
 }
