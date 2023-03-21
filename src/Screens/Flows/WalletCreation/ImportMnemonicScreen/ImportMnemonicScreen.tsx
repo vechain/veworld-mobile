@@ -16,7 +16,6 @@ import { getConfig, getMnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 import { useNavigation } from "@react-navigation/native"
-import DropShadow from "react-native-drop-shadow"
 
 const DEMO_MNEMONIC =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
@@ -106,14 +105,15 @@ export const ImportMnemonicScreen = () => {
                     justifyContent="space-between"
                     flexGrow={1}
                     mx={20}>
-                    <BaseView alignSelf="flex-start">
-                        <BaseView flexDirection="row">
+                    <BaseView alignSelf="flex-start" w={100}>
+                        <BaseView flexDirection="row" w={100}>
                             <BaseText typographyFont="title">
                                 {LL.TITLE_WALLET_IMPORT_LOCAL()}
                             </BaseText>
                             {__DEV__ && (
                                 <BaseButton
                                     size="md"
+                                    variant="link"
                                     action={onDemoMnemonicClick}
                                     title="DEV:DEMO"
                                 />
@@ -143,13 +143,11 @@ export const ImportMnemonicScreen = () => {
 
                         <BaseSpacer height={40} />
 
-                        <DropShadow style={theme.shadows.card}>
-                            <ImportMnemonicView
-                                mnemonic={mnemonic}
-                                onChangeText={onChangeText}
-                                isError={!!isError}
-                            />
-                        </DropShadow>
+                        <ImportMnemonicView
+                            mnemonic={mnemonic}
+                            onChangeText={onChangeText}
+                            isError={!!isError}
+                        />
                         {!!isError && (
                             <BaseText my={10} color={theme.colors.danger}>
                                 {isError}
