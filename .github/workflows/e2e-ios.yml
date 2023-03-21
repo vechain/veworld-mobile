@@ -12,7 +12,7 @@ on:
 jobs:
   build-test-ios:
     name: Detox Build & Test iOS Release
-    runs-on: self-hosted
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
