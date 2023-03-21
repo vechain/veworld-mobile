@@ -21,7 +21,7 @@ type Props = {
     variant?: "solid" | "outline" | "ghost"
     bgColor?: string
     textColor?: string
-    title: LocalizedString | string
+    title: LocalizedString | string | React.ReactNode
     m?: number
     mx?: number
     my?: number
