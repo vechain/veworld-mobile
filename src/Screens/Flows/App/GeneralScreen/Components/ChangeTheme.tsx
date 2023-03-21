@@ -33,12 +33,10 @@ export const ChangeTheme: React.FC = () => {
 
     const handleSelectTheme = useCallback(
         (button: Button) => {
-            const mode =
-                button.id === "dark"
-                    ? "dark"
-                    : button.id === "light"
-                    ? "light"
-                    : systemColorScheme
+            let mode: "dark" | "light"
+
+            if (button.id === "system") mode = systemColorScheme
+            else mode = button.id === "light" ? "light" : "dark"
 
             setSelectedTheme(mode)
 
