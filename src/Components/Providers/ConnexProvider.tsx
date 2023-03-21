@@ -14,10 +14,16 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
 
     const initConnex = useCallback(async () => {
         if (currentNetwork) {
-            const driverInstance = await initDriver(currentNetwork.currentUrl)
-            const thorInstance = initThor(driverInstance)
-            setDriver(driverInstance)
-            setConnex(thorInstance)
+            try {
+                const driverInstance = await initDriver(
+                    currentNetwork.currentUrl,
+                )
+                const thorInstance = initThor(driverInstance)
+                setDriver(driverInstance)
+                setConnex(thorInstance)
+            } catch (error) {
+                console.log(`Error initializing Thor Driver - !! ${error} !!`)
+            }
         }
     }, [currentNetwork])
 

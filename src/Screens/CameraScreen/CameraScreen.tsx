@@ -7,7 +7,7 @@ import { useI18nContext } from "~i18n"
 import { QrScannerLayout } from "./Components/QrScannerLayout"
 import { CameraHeader } from "./Components/CameraHeader"
 import { useCamDisclosure } from "./hooks/useCamDisclosure"
-import { useCameraPermissions, useTheme } from "~Common"
+import { PlatformUtils, useCameraPermissions, useTheme } from "~Common"
 import { useConfirmAddress } from "./hooks/useConfirmAddress"
 import { getScannedAddress, useRealm } from "~Storage"
 
@@ -75,7 +75,7 @@ export const CameraScreen = () => {
             background={theme.colors.darkPurple}>
             <CameraHeader onClose={onClose} />
 
-            {isShowUI && (
+            {isShowUI && PlatformUtils.isIOS() && (
                 <QrScannerLayout color={theme.colors.darkPurpleRGBA} />
             )}
 
