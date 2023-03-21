@@ -96,10 +96,10 @@ const Dot: React.FC<{
             inputRange: [0, 1],
             outputRange: [
                 pageIdx === idx
-                    ? (prevType?.size || 3) * sizeRatio * 2.5
+                    ? (prevType?.size || 3) * sizeRatio * 1
                     : (prevType?.size || 3) * sizeRatio,
                 pageIdx === idx
-                    ? type.size * sizeRatio * 2.5
+                    ? type.size * sizeRatio * 1
                     : type.size * sizeRatio,
             ],
         })

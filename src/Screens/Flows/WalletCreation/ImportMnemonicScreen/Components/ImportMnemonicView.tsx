@@ -1,18 +1,21 @@
 import { StyleSheet, TextInput } from "react-native"
 import React from "react"
 
-import { ColorThemeType, Theme, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
+import { typography } from "~Common/Theme"
 
-const {
-    typography: { defaults: defaultTypography },
-} = Theme
+const { defaults: defaultTypography } = typography
 type Props = {
-    seed: string
+    mnemonic: string
     onChangeText: (text: string) => void
     isError: boolean
 }
 
-export const ImportMnemonicView = ({ seed, onChangeText, isError }: Props) => {
+export const ImportMnemonicView = ({
+    mnemonic,
+    onChangeText,
+    isError,
+}: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles(isError))
     return (
         <TextInput
@@ -22,7 +25,7 @@ export const ImportMnemonicView = ({ seed, onChangeText, isError }: Props) => {
             multiline={true}
             numberOfLines={4}
             onChangeText={onChangeText}
-            value={seed}
+            value={mnemonic}
         />
     )
 }

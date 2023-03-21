@@ -44,8 +44,8 @@ export const HomeScreen = () => {
 
     useEffect(() => {
         async function init() {
-            const block = await thor.block().get()
-            console.log("block number", block?.number)
+            const genesis = thor.genesis.id
+            console.log("genesis number", genesis)
         }
         init()
     }, [isFocused, thor])

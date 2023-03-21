@@ -139,6 +139,9 @@ const en: BaseTranslation = {
 
     // Common Buttons
     COMMON_BTN_cancel: "Cancel",
+    COMMON_BTN_CONFIRM: "Confirm",
+    COMMON_BTN_RETRY: "Retry",
+    COMMON_BTN_SIGN_OUT: "Sign out",
 
     // Common Labels
     COMMON_LBL_ADDRESS: "Address",
@@ -152,6 +155,7 @@ const en: BaseTranslation = {
     ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
+    ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
 
     // Network
 
@@ -175,6 +179,8 @@ const en: BaseTranslation = {
     // Settings Languages
 
     // Wallets New Local
+    WALLET_LABEL_ACCOUNT: "Account",
+    WALLET_LABEL_WALLET: "Wallet",
 
     // Wallets Import
 

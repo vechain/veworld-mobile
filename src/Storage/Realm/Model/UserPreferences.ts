@@ -30,7 +30,7 @@ export class UserPreferences extends Object {
             currentNetwork: "Network",
             showTestNetTag: { type: "bool", default: true },
             showConversionOtherNets: { type: "bool", default: true },
-            isAppLockActive: { type: "bool", default: true },
+            isAppLockActive: { type: "bool" },
             selectedAccount: "Account?",
             balanceVisible: { type: "bool", default: true },
         },

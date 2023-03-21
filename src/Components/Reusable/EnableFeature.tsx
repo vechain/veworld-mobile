@@ -1,8 +1,6 @@
-import { Switch } from "react-native"
 import React from "react"
-import { BaseSpacer, BaseText } from "~Components"
+import { BaseSpacer, BaseSwitch, BaseText } from "~Components"
 import { LocalizedString } from "typesafe-i18n"
-import { useTheme } from "~Common"
 
 type Props = {
     title: LocalizedString
@@ -17,8 +15,6 @@ export const EnableFeature = ({
     onValueChange,
     value,
 }: Props) => {
-    const theme = useTheme()
-
     return (
         <>
             <BaseText typographyFont="bodyMedium" my={8}>
@@ -26,14 +22,7 @@ export const EnableFeature = ({
             </BaseText>
             <BaseText typographyFont="caption">{subtitle}</BaseText>
             <BaseSpacer height={20} />
-            <Switch
-                onValueChange={onValueChange}
-                value={value}
-                trackColor={{
-                    false: theme.colors.disabled,
-                    true: theme.colors.primary,
-                }}
-            />
+            <BaseSwitch onValueChange={onValueChange} value={value} />
         </>
     )
 }

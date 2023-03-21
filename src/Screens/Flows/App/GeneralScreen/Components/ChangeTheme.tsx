@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { Switch } from "react-native"
-import { BaseText, BaseView } from "~Components"
+import { BaseSwitch, BaseText, BaseView } from "~Components"
 import { useRealm, getUserPreferences } from "~Storage"
 
 export const ChangeTheme = () => {
@@ -31,7 +30,7 @@ export const ChangeTheme = () => {
             align="center"
             orientation="row">
             <BaseText>Dark Mode</BaseText>
-            <Switch onValueChange={toggleSwitch} value={isDark} />
+            <BaseSwitch onValueChange={toggleSwitch} value={isDark} />
         </BaseView>
     )
 }

@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
+import { Pressable, Text } from "react-native"
 import { useTheme, CryptoUtils } from "~Common"
 import {
     BaseButton,
@@ -9,13 +10,16 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { BaseButtonGroup, Button } from "~Components/Base/BaseButtonGroup"
+import {
+    BaseButtonGroup,
+    Button as ButtonType,
+} from "~Components/Base/BaseButtonGroup"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { getConfig, getMnemonic, useRealm } from "~Storage"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 
-export const ConfirmSeedPhraseScreen = () => {
+export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
     const { store, cache } = useRealm()
     const { LL } = useI18nContext()
@@ -39,7 +43,7 @@ export const ConfirmSeedPhraseScreen = () => {
      * if mnemonic is not available something strange is happening, better to throw an error and crash the app
      */
     if (!mnemonic) {
-        throw new Error("ConfirmSeedPhraseScreen: Mnemonic is not available")
+        throw new Error("ConfirmMnemonicScreen: Mnemonic is not available")
     }
 
     const mnemonicArray = useMemo(() => mnemonic.split(" "), [mnemonic])
@@ -125,15 +129,15 @@ export const ConfirmSeedPhraseScreen = () => {
         [mnemonicArray, thirdIndex],
     )
 
-    const handleSelectFirstWord = useCallback((button: Button) => {
+    const handleSelectFirstWord = useCallback((button: ButtonType) => {
         setSelectedFirstWord(button.id)
         setIsError(false)
     }, [])
-    const handleSelectSecondWord = useCallback((button: Button) => {
+    const handleSelectSecondWord = useCallback((button: ButtonType) => {
         setSelectedSecondWord(button.id)
         setIsError(false)
     }, [])
-    const handleSelectThirdWord = useCallback((button: Button) => {
+    const handleSelectThirdWord = useCallback((button: ButtonType) => {
         setSelectedThirdWord(button.id)
         setIsError(false)
     }, [])
@@ -148,6 +152,23 @@ export const ConfirmSeedPhraseScreen = () => {
                     <BaseText typographyFont="title">
                         {LL.TITLE_CONFIRM_MNEMONIC()}
                     </BaseText>
+                    {__DEV__ && (
+                        <Pressable
+                            // eslint-disable-next-line react-native/no-inline-styles
+                            style={{
+                                position: "absolute",
+                                right: 0,
+                                padding: 10,
+                            }}
+                            onPress={() =>
+                                config?.isWalletCreated
+                                    ? nav.navigate(Routes.WALLET_SUCCESS)
+                                    : nav.navigate(Routes.APP_SECURITY)
+                            }>
+                            {/* eslint-disable-next-line i18next/no-literal-string */}
+                            <Text>__DEV__: skip</Text>
+                        </Pressable>
+                    )}
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="body">
                         {LL.BD_SELECT_WORD({ number: firstIndex + 1 })}
@@ -198,6 +219,7 @@ export const ConfirmSeedPhraseScreen = () => {
                                     color={theme.colors.danger}>
                                     {LL.ERROR_WRONG_MNEMONIC_WORDS()}
                                 </BaseText>
+                                <BaseSpacer height={24} />
                             </BaseView>
                         </BaseView>
                     )}
@@ -206,7 +228,7 @@ export const ConfirmSeedPhraseScreen = () => {
                     action={onConfirmPress}
                     w={100}
                     px={20}
-                    title={"Confirm"}
+                    title={LL.COMMON_BTN_CONFIRM()}
                     disabled={isSubmitDisabled}
                     radius={16}
                 />

@@ -459,6 +459,18 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_cancel: string
 	/**
+	 * C​o​n​f​i​r​m
+	 */
+	COMMON_BTN_CONFIRM: string
+	/**
+	 * R​e​t​r​y
+	 */
+	COMMON_BTN_RETRY: string
+	/**
+	 * S​i​g​n​ ​o​u​t
+	 */
+	COMMON_BTN_SIGN_OUT: string
+	/**
 	 * A​d​d​r​e​s​s
 	 */
 	COMMON_LBL_ADDRESS: string
@@ -488,10 +500,22 @@ type RootTranslation = {
 	 */
 	ERROR_WRONG_MNEMONIC_WORDS: string
 	/**
+	 * W​a​l​l​e​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
+	 */
+	ERROR_WALLET_ALREADY_EXISTS: string
+	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	WALLET_LABEL_ACCOUNT: string
+	/**
+	 * W​a​l​l​e​t
+	 */
+	WALLET_LABEL_WALLET: string
 }
 
 export type TranslationFunctions = {
@@ -936,6 +960,18 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_cancel: () => LocalizedString
 	/**
+	 * Confirm
+	 */
+	COMMON_BTN_CONFIRM: () => LocalizedString
+	/**
+	 * Retry
+	 */
+	COMMON_BTN_RETRY: () => LocalizedString
+	/**
+	 * Sign out
+	 */
+	COMMON_BTN_SIGN_OUT: () => LocalizedString
+	/**
 	 * Address
 	 */
 	COMMON_LBL_ADDRESS: () => LocalizedString
@@ -965,9 +1001,21 @@ Please, try again later.
 	 */
 	ERROR_WRONG_MNEMONIC_WORDS: () => LocalizedString
 	/**
+	 * Wallet already exists
+	 */
+	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
+	/**
 	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Account
+	 */
+	WALLET_LABEL_ACCOUNT: () => LocalizedString
+	/**
+	 * Wallet
+	 */
+	WALLET_LABEL_WALLET: () => LocalizedString
 }
 
 export type Formatters = {}
