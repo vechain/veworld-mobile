@@ -10,7 +10,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import { CryptoUtils, SeedUtils, useTheme } from "~Common"
+import { CryptoUtils, SeedUtils, useDeviceUtils, useTheme } from "~Common"
 import { Keyboard } from "react-native"
 import { getConfig, getMnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
@@ -26,7 +26,7 @@ export const ImportMnemonicScreen = () => {
     const nav = useNavigation()
 
     const [mnemonic, setMnemonic] = useState<string>("")
-    const [isError, setIsError] = useState(false)
+    const [isError, setIsError] = useState<string>("")
     const [isDisabled, setIsDisabled] = useState(true)
 
     const { store, cache } = useRealm()
@@ -34,11 +34,21 @@ export const ImportMnemonicScreen = () => {
 
     const config = getConfig(store)
 
+    const { getDeviceFromMnemonic } = useDeviceUtils()
+
     const onVerify = (_mnemonic: string) => {
-        if (CryptoUtils.verifyMnemonic(_mnemonic)) {
+        const sanitisedMnemonic = SeedUtils.sanifySeed(_mnemonic).join(" ")
+        if (CryptoUtils.verifyMnemonic(sanitisedMnemonic)) {
+            try {
+                getDeviceFromMnemonic(sanitisedMnemonic)
+            } catch (e) {
+                setIsError(LL.ERROR_WALLET_ALREADY_EXISTS())
+                return
+            }
+
             cache.write(() => {
                 let cacheMnemonic = getMnemonic(cache)
-                cacheMnemonic.mnemonic = _mnemonic
+                cacheMnemonic.mnemonic = sanitisedMnemonic
             })
 
             if (config?.isWalletCreated) {
@@ -47,7 +57,7 @@ export const ImportMnemonicScreen = () => {
                 nav.navigate(Routes.APP_SECURITY)
             }
         } else {
-            setIsError(true)
+            setIsError(LL.ERROR_INCORRECT_MNEMONIC())
         }
     }
 
@@ -56,22 +66,20 @@ export const ImportMnemonicScreen = () => {
         if (isString) {
             let _seed = await Clipboard.getStringAsync()
             let sanified = SeedUtils.sanifySeed(_seed)
+            setMnemonic(sanified.join(" "))
             if (sanified.length === 12) {
-                setMnemonic(sanified.join(" "))
                 setIsDisabled(false)
                 Keyboard.dismiss()
             } else {
                 setIsDisabled(true)
-                setIsError(true)
-                setMnemonic(sanified.join(" "))
+                setIsError(LL.ERROR_INCORRECT_MNEMONIC())
             }
         }
     }
 
     const onDemoMnemonicClick = () => {
-        const sanitisedDemoMnemonic =
-            SeedUtils.sanifySeed(DEMO_MNEMONIC).join(" ")
-        onVerify(sanitisedDemoMnemonic)
+        setMnemonic(DEMO_MNEMONIC)
+        onVerify(DEMO_MNEMONIC)
     }
 
     const onChangeText = (text: string) => {
@@ -86,7 +94,7 @@ export const ImportMnemonicScreen = () => {
 
     const onClearSeed = () => {
         setMnemonic("")
-        setIsError(false)
+        setIsError("")
     }
 
     return (
@@ -142,12 +150,12 @@ export const ImportMnemonicScreen = () => {
                             <ImportMnemonicView
                                 mnemonic={mnemonic}
                                 onChangeText={onChangeText}
-                                isError={isError}
+                                isError={!!isError}
                             />
                         </DropShadow>
-                        {isError && (
+                        {!!isError && (
                             <BaseText my={10} color={theme.colors.danger}>
-                                {LL.ERROR_INCORRECT_MNEMONIC()}
+                                {isError}
                             </BaseText>
                         )}
                     </BaseView>
