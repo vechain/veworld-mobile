@@ -1,6 +1,6 @@
-import { Object } from "realm"
+import Realm from "realm"
 
-export class Network extends Object {
+export class Network extends Realm.Object {
     defaultNet!: boolean
     nodeId!: Realm.BSON.ObjectId
     tag!: string
@@ -36,3 +36,8 @@ export class Network extends Object {
         },
     }
 }
+
+export const getNetworks = (store: Realm, query?: string) =>
+    query
+        ? store.objects<Network>(Network.getName()).filtered(query)
+        : store.objects<Network>(Network.getName())

@@ -5,6 +5,7 @@ import { Routes } from "~Navigation"
 import { FlashList } from "@shopify/flash-list"
 import { StyleSheet, View, ViewToken } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
+import { ColorThemeType, useThemedStyles } from "~Common"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
@@ -13,23 +14,21 @@ export const SettingsScreen = () => {
 
     const [isScrollable, setIsScrollable] = useState(false)
 
-    const Seperator = useCallback(
-        () => <View style={baseStyles.seperator} />,
-        [],
+    const { styles: themedStyles } = useThemedStyles(baseStyles)
+
+    const renderSeparator = useCallback(
+        () => <View style={themedStyles.separator} />,
+        [themedStyles],
     )
 
     const checkViewableItems = useCallback(
         ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            if (viewableItems.length < SCREEN_LIST.length) {
-                setIsScrollable(true)
-            } else {
-                setIsScrollable(false)
-            }
+            setIsScrollable(viewableItems.length < SCREEN_LIST.length)
         },
         [SCREEN_LIST.length],
     )
 
-    const _renderItem = useCallback(
+    const renderItem = useCallback(
         ({ item }: { item: RowProps }) => (
             <SettingsRow
                 title={item.title}
@@ -50,13 +49,13 @@ export const SettingsScreen = () => {
 
             <FlashList
                 data={SCREEN_LIST}
-                contentContainerStyle={baseStyles.contentContainerStyle}
-                ItemSeparatorComponent={Seperator}
+                contentContainerStyle={themedStyles.contentContainerStyle}
+                ItemSeparatorComponent={renderSeparator}
                 estimatedItemSize={56}
                 scrollEnabled={isScrollable}
                 keyExtractor={item => item.screenName}
                 onViewableItemsChanged={checkViewableItems}
-                renderItem={_renderItem}
+                renderItem={renderItem}
             />
 
             <BaseSpacer height={40} />
@@ -64,15 +63,16 @@ export const SettingsScreen = () => {
     )
 }
 
-const baseStyles = StyleSheet.create({
-    contentContainerStyle: {
-        paddingHorizontal: 20,
-    },
-    seperator: {
-        borderBottomColor: "rgba(0,0,0,0.1)",
-        borderBottomWidth: 1,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        contentContainerStyle: {
+            paddingHorizontal: 20,
+        },
+        separator: {
+            borderBottomColor: theme.colors.text,
+            borderBottomWidth: 0.5,
+        },
+    })
 
 const getList = (LL: TranslationFunctions) => [
     {
@@ -87,7 +87,7 @@ const getList = (LL: TranslationFunctions) => [
     },
     {
         title: LL.TITLE_MANAGE_WALLET(),
-        screenName: Routes.SETTINGS_MANAGE_WALLET,
+        screenName: Routes.WALLET_MANAGEMENT,
         icon: "wallet-outline",
     },
     {

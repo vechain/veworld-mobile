@@ -1,16 +1,14 @@
-import React, { useCallback, useMemo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { FormattingUtils, useTheme } from "~Common"
 import { BaseButton, BaseIcon } from "~Components/Base"
-import { Alert } from "react-native"
+import { Alert, StyleSheet } from "react-native"
 import * as Clipboard from "expo-clipboard"
 import { useI18nContext } from "~i18n"
-
-const { humanAddress } = FormattingUtils
 
 type Props = {
     address: string
 }
-export const AddressButton: React.FC<Props> = ({ address }) => {
+export const AddressButton: React.FC<Props> = memo(({ address }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
@@ -33,16 +31,22 @@ export const AddressButton: React.FC<Props> = ({ address }) => {
             radius={1000}
             fontSize={10}
             bgColor={theme.colors.primaryReversed}
-            title={humanAddress(address, 5, 4)}
+            title={FormattingUtils.humanAddress(address, 5, 4)}
             action={onCopyToClipboard}
             rightIcon={
                 <BaseIcon
                     name="content-copy"
                     color={color}
                     size={12}
-                    style={{ marginLeft: 8 }}
+                    style={baseStyles.marginLeft}
                 />
             }
         />
     )
-}
+})
+
+const baseStyles = StyleSheet.create({
+    marginLeft: {
+        marginLeft: 8,
+    },
+})

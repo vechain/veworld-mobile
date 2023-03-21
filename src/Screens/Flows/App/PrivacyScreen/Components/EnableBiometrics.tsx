@@ -1,7 +1,11 @@
 import React, { useCallback } from "react"
-import { Switch } from "react-native"
 import { BiometricsUtils, useDisclosure, useWalletSecurity } from "~Common"
-import { BaseText, BaseView, RequireUserPassword } from "~Components"
+import {
+    BaseSwitch,
+    BaseText,
+    BaseView,
+    RequireUserPassword,
+} from "~Components"
 import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
 
 export const EnableBiometrics = () => {
@@ -33,12 +37,12 @@ export const EnableBiometrics = () => {
                     onSuccess={onPasswordSuccess}
                 />
                 <BaseView
-                    justify="space-between"
+                    justifyContent="space-between"
                     w={100}
-                    align="center"
-                    orientation="row">
+                    alignItems="center"
+                    flexDirection="row">
                     <BaseText>Enable Biometrics</BaseText>
-                    <Switch
+                    <BaseSwitch
                         disabled={isWalletSecurityBiometrics}
                         onValueChange={requireBiometricsAndEnableIt}
                         value={isWalletSecurityBiometrics}

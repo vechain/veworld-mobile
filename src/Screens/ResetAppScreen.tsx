@@ -10,7 +10,7 @@ import {
     BaseView,
     CheckBoxWithText,
 } from "~Components"
-import { Config, useRealm } from "~Storage"
+import { getConfig, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const ResetAppScreen = () => {
@@ -23,10 +23,7 @@ export const ResetAppScreen = () => {
 
     const onBackPress = useCallback(() => {
         store.write(() => {
-            const config = store.objectForPrimaryKey<Config>(
-                Config.getName(),
-                Config.getPrimaryKey(),
-            )
+            const config = getConfig(store)
             if (config) config.isResettingApp = false
         })
     }, [store])
@@ -43,8 +40,12 @@ export const ResetAppScreen = () => {
 
             <BaseSpacer height={12} />
 
-            <BaseView align="center" justify="space-between" grow={1} mx={20}>
-                <BaseView selfAlign="flex-start">
+            <BaseView
+                alignItems="center"
+                justifyContent="space-between"
+                flexGrow={1}
+                mx={20}>
+                <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="title">
                         {LL.TITLE_RESET_APP()}
                     </BaseText>
@@ -69,7 +70,7 @@ export const ResetAppScreen = () => {
                     </BaseText>
                 </BaseView>
 
-                <BaseView align="center" w={100}>
+                <BaseView alignItems="center" w={100}>
                     <CheckBoxWithText
                         text={LL.BTN_RESET_APP_CHECKBOX()}
                         checkAction={setIsChecked}

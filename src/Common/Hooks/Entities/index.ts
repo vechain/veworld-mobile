@@ -1,5 +1,3 @@
 export * from "./useAppLockEntity"
-export * from "./useConfigEntity"
-export * from "./useUserPreferencesEntity"
 export * from "./useAccountsList"
 export * from "./useDevicesList"

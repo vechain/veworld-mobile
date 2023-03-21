@@ -1,28 +1,24 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { Switch } from "react-native"
-import { BaseText, BaseView } from "~Components"
+import { BaseSwitch, BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
-import { AppLock, UserPreferences, useRealm } from "~Storage"
+import { useRealm, getUserPreferences, getAppLock } from "~Storage"
 
 export const SecureApp = () => {
     const { store, cache } = useRealm()
 
-    const userPref = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
+    const userPreferences = getUserPreferences(store)
 
-    const isEnabled = useMemo(() => userPref!.isAppLockActive, [userPref])
+    const isEnabled = useMemo(
+        () => userPreferences.isAppLockActive,
+        [userPreferences],
+    )
     const [isAppLock, setIsAppLock] = useState(isEnabled)
 
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
             setIsAppLock(newValue)
 
-            let appLock = cache.objectForPrimaryKey<AppLock>(
-                AppLock.getName(),
-                AppLock.getPrimaryKey(),
-            )
+            const appLock = getAppLock(cache)
 
             cache.write(() => {
                 if (appLock) {
@@ -31,20 +27,16 @@ export const SecureApp = () => {
             })
 
             store.write(() => {
-                userPref!.isAppLockActive = newValue
+                userPreferences.isAppLockActive = newValue
             })
         },
-        [cache, userPref, store],
+        [cache, userPreferences, store],
     )
 
     return (
-        <BaseView
-            justify="space-between"
-            w={100}
-            align="center"
-            orientation="row">
+        <BaseView w={100} flexDirection="row">
             <BaseText>Secure App</BaseText>
-            <Switch onValueChange={toggleSwitch} value={isAppLock} />
+            <BaseSwitch onValueChange={toggleSwitch} value={isAppLock} />
         </BaseView>
     )
 }

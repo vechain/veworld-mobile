@@ -18,13 +18,13 @@ export const useMemoizedAnimation = () => {
         () =>
             firstLoad
                 ? FadeInRight.delay(220).duration(250)
-                : SlideInLeft.delay(50).duration(200),
+                : SlideInLeft.duration(200),
         [firstLoad],
     )
-    const coinListExit = useMemo(() => FadeOutLeft.delay(50).duration(200), [])
+    const coinListExit = useMemo(() => FadeOutLeft.duration(200), [])
 
-    const NFTListEnter = useMemo(() => SlideInRight.delay(50).duration(200), [])
-    const NFTListExit = useMemo(() => FadeOutRight.delay(50).duration(200), [])
+    const NFTListEnter = useMemo(() => SlideInRight.duration(200), [])
+    const NFTListExit = useMemo(() => FadeOutRight.duration(200), [])
 
     return { coinListEnter, coinListExit, NFTListEnter, NFTListExit }
 }

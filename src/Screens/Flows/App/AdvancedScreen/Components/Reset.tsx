@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { BaseTouchable } from "~Components"
-import { Config, useRealm } from "~Storage"
+import { getConfig, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const Reset: React.FC = () => {
@@ -9,10 +9,7 @@ export const Reset: React.FC = () => {
 
     const onReset = useCallback(() => {
         store.write(() => {
-            const config = store.objectForPrimaryKey<Config>(
-                Config.getName(),
-                Config.getPrimaryKey(),
-            )
+            const config = getConfig(store)
             if (config) config.isResettingApp = true
         })
     }, [store])

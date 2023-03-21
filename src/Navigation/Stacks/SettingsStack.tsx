@@ -7,6 +7,7 @@ import {
     GeneralScreen,
     PrivacyScreen,
     SettingsScreen,
+    WalletManagementScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
@@ -17,6 +18,7 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_PRIVACY]: undefined
     [Routes.SETTINGS_ADVANCED]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
+    [Routes.WALLET_MANAGEMENT]: undefined
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -51,6 +53,11 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.SETTINGS_ADVANCED}
                     component={AdvancedScreen}
+                    options={{ headerShown: false }}
+                />
+                <Settings.Screen
+                    name={Routes.WALLET_MANAGEMENT}
+                    component={WalletManagementScreen}
                     options={{ headerShown: false }}
                 />
 

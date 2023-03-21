@@ -22,3 +22,9 @@ export class Mnemonic extends Object {
         },
     }
 }
+
+export const getMnemonic = (cache: Realm) =>
+    cache.objectForPrimaryKey<Mnemonic>(
+        Mnemonic.getName(),
+        Mnemonic.getPrimaryKey(),
+    ) as Mnemonic

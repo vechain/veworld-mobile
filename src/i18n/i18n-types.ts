@@ -127,6 +127,22 @@ type RootTranslation = {
 	 */
 	BTN_RESET_APP: string
 	/**
+	 * B​u​y
+	 */
+	BTN_BUY: string
+	/**
+	 * S​e​n​d
+	 */
+	BTN_SEND: string
+	/**
+	 * S​w​a​p
+	 */
+	BTN_SWAP: string
+	/**
+	 * H​i​s​t​o​r​y
+	 */
+	BTN_HISTORY: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -308,7 +324,7 @@ type RootTranslation = {
 	 */
 	TITLE_MNEMONIC: string
 	/**
-	 * C​r​e​a​t​e​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	TITLE_CONFIRM_MNEMONIC: string
 	/**
@@ -459,6 +475,18 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_cancel: string
 	/**
+	 * C​o​n​f​i​r​m
+	 */
+	COMMON_BTN_CONFIRM: string
+	/**
+	 * R​e​t​r​y
+	 */
+	COMMON_BTN_RETRY: string
+	/**
+	 * S​i​g​n​ ​o​u​t
+	 */
+	COMMON_BTN_SIGN_OUT: string
+	/**
 	 * A​d​d​r​e​s​s
 	 */
 	COMMON_LBL_ADDRESS: string
@@ -488,10 +516,22 @@ type RootTranslation = {
 	 */
 	ERROR_WRONG_MNEMONIC_WORDS: string
 	/**
+	 * W​a​l​l​e​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
+	 */
+	ERROR_WALLET_ALREADY_EXISTS: string
+	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	WALLET_LABEL_ACCOUNT: string
+	/**
+	 * W​a​l​l​e​t
+	 */
+	WALLET_LABEL_WALLET: string
 }
 
 export type TranslationFunctions = {
@@ -607,6 +647,22 @@ export type TranslationFunctions = {
 	 * Reset App
 	 */
 	BTN_RESET_APP: () => LocalizedString
+	/**
+	 * Buy
+	 */
+	BTN_BUY: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BTN_SEND: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	BTN_SWAP: () => LocalizedString
+	/**
+	 * History
+	 */
+	BTN_HISTORY: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -788,7 +844,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
 	/**
-	 * Create your wallet
+	 * Confirm your mnemonic
 	 */
 	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
 	/**
@@ -936,6 +992,18 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_cancel: () => LocalizedString
 	/**
+	 * Confirm
+	 */
+	COMMON_BTN_CONFIRM: () => LocalizedString
+	/**
+	 * Retry
+	 */
+	COMMON_BTN_RETRY: () => LocalizedString
+	/**
+	 * Sign out
+	 */
+	COMMON_BTN_SIGN_OUT: () => LocalizedString
+	/**
 	 * Address
 	 */
 	COMMON_LBL_ADDRESS: () => LocalizedString
@@ -965,9 +1033,21 @@ Please, try again later.
 	 */
 	ERROR_WRONG_MNEMONIC_WORDS: () => LocalizedString
 	/**
+	 * Wallet already exists
+	 */
+	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
+	/**
 	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Account
+	 */
+	WALLET_LABEL_ACCOUNT: () => LocalizedString
+	/**
+	 * Wallet
+	 */
+	WALLET_LABEL_WALLET: () => LocalizedString
 }
 
 export type Formatters = {}

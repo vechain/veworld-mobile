@@ -3,15 +3,15 @@ import { PasswordUtils, CryptoUtils } from "~Common/Utils"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import {
     Account,
-    Config,
     Device,
-    Mnemonic,
     XPub,
     useRealm,
     getUserPreferences,
+    getConfig,
+    getMnemonic,
 } from "~Storage"
-import { getDeviceAndAliasIndex, getNodes } from "./Helpers"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
+import { useDeviceUtils } from "../useDeviceUtils"
 
 /**
  * useCreateWalletWithPassword
@@ -19,34 +19,22 @@ import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
  */
 export const useCreateWalletWithPassword = () => {
     const { store, cache } = useRealm()
+    const { getDeviceFromMnemonic } = useDeviceUtils()
 
     const [isComplete, setIsComplete] = useState(false)
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
-        async (userPassword: string) => {
-            const config = store.objectForPrimaryKey<Config>(
-                Config.getName(),
-                Config.getPrimaryKey(),
-            )
+        async (userPassword: string, onError?: (error: unknown) => void) => {
+            const config = getConfig(store)
 
-            const devices = store.objects<Device>(Device.getName())
-
-            const _mnemonic = cache.objectForPrimaryKey<Mnemonic>(
-                Mnemonic.getName(),
-                Mnemonic.getPrimaryKey(),
-            )
+            const _mnemonic = getMnemonic(cache)
             let mnemonicPhrase = _mnemonic?.mnemonic
 
             try {
                 if (mnemonicPhrase) {
-                    const { deviceIndex, aliasIndex } =
-                        getDeviceAndAliasIndex(devices)
-                    const { wallet, device } = getNodes(
-                        mnemonicPhrase.split(" "),
-                        deviceIndex,
-                        aliasIndex,
-                    )
+                    const { device, wallet, deviceIndex } =
+                        getDeviceFromMnemonic(mnemonicPhrase)
 
                     cache.write(() => {
                         mnemonicPhrase = ""
@@ -96,9 +84,10 @@ export const useCreateWalletWithPassword = () => {
                 }
             } catch (error) {
                 console.log("CREATE WALLET ERROR : ", error)
+                onError && onError(error)
             }
         },
-        [cache, store],
+        [cache, store, getDeviceFromMnemonic],
     )
     //* [END] - Create Wallet
 

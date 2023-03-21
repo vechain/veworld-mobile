@@ -8,7 +8,7 @@ import {
     BaseView,
 } from "~Components"
 import { Routes } from "~Navigation"
-import { Config, useRealm } from "~Storage"
+import { getConfig, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 
 export const WalletTypeSelectionScreen = () => {
@@ -17,14 +17,11 @@ export const WalletTypeSelectionScreen = () => {
 
     const { store } = useRealm()
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
+    const config = getConfig(store)
 
     const onCreateWallet = () => {
         if (config?.isWalletCreated) {
-            nav.navigate(Routes.SEED_PHRASE)
+            nav.navigate(Routes.NEW_MNEMONIC)
         } else {
             nav.navigate(Routes.WALLET_TUTORIAL)
         }
@@ -37,8 +34,12 @@ export const WalletTypeSelectionScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="space-between" grow={1} mx={20}>
-                <BaseView selfAlign="flex-start">
+            <BaseView
+                alignItems="center"
+                justifyContent="space-between"
+                flexGrow={1}
+                mx={20}>
+                <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="title">
                         {LL.TITLE_CREATE_WALLET_TYPE()}
                     </BaseText>
@@ -50,7 +51,7 @@ export const WalletTypeSelectionScreen = () => {
                     </BaseText>
                 </BaseView>
 
-                <BaseView align="center" w={100}>
+                <BaseView alignItems="center" w={100}>
                     <BaseButton
                         action={onCreateWallet}
                         w={100}

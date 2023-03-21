@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { useConfigEntity } from "./Entities"
+import { useConfigEntity } from "~Components"
 
 export const useAppInitState = () => {
     const configEntity = useConfigEntity()

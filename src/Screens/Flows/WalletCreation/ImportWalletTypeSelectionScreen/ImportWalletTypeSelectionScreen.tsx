@@ -15,7 +15,7 @@ export const ImportWalletTypeSelectionScreen = () => {
     const { LL } = useI18nContext()
 
     const onImportWithMnemonic = () => {
-        nav.navigate(Routes.IMPORT_SEED_PHRASE)
+        nav.navigate(Routes.IMPORT_MNEMONIC)
     }
 
     const onImportWithHardware = () => {}
@@ -23,8 +23,12 @@ export const ImportWalletTypeSelectionScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="space-between" grow={1} mx={20}>
-                <BaseView selfAlign="flex-start">
+            <BaseView
+                alignItems="flex-start"
+                justifyContent="space-between"
+                flexGrow={1}
+                mx={20}>
+                <BaseView alignItems="flex-start">
                     <BaseText typographyFont="title">
                         {LL.TITLE_IMPORT_WALLET_TYPE()}
                     </BaseText>
@@ -34,7 +38,7 @@ export const ImportWalletTypeSelectionScreen = () => {
                     </BaseText>
                 </BaseView>
 
-                <BaseView w={100}>
+                <BaseView w={100} alignItems="flex-start">
                     <BaseText typographyFont="subTitle" my={10}>
                         {LL.SB_IMPORT_WALLET_TYPE_SEED()}
                     </BaseText>

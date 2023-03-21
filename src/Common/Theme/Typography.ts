@@ -14,6 +14,7 @@ export type TFonts =
     | "smallButtonPrimary"
     | "footNote"
     | "caption"
+    | "smallCaption"
     | "largeTitleAccent"
     | "titleAccent"
     | "subTitleAccent"
@@ -148,6 +149,12 @@ export const defaults: Record<TFonts, TypographyObject> = {
     caption: {
         fontFamily: fontFamily["Inter-Light"],
         fontSize: 12,
+        fontWeight: fontWeight.normal,
+        lineHeight: lineHeight.caption,
+    },
+    smallCaption: {
+        fontFamily: fontFamily["Inter-Light"],
+        fontSize: 10,
         fontWeight: fontWeight.normal,
         lineHeight: lineHeight.caption,
     },

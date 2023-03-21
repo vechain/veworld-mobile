@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
-import { Network, UserPreferences, useRealm } from "~Storage"
+import { Network, useRealm, getUserPreferences } from "~Storage"
 import { useI18nContext } from "~i18n"
 import { StringUtils } from "~Common"
 
@@ -20,26 +20,19 @@ export const ChangeNetworkBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
 
     const { store } = useRealm()
-    const userPref = store.objectForPrimaryKey<UserPreferences>(
-        UserPreferences.getName(),
-        UserPreferences.getPrimaryKey(),
-    )
+    const userPreferences = getUserPreferences(store)
 
     const onPress = useCallback(
         (currentNetwork: Network) => {
-            store.write(() => (userPref!.currentNetwork = currentNetwork))
+            store.write(() => (userPreferences.currentNetwork = currentNetwork))
             onClose()
         },
-        [onClose, store, userPref],
+        [onClose, store, userPreferences],
     )
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-            <BaseView
-                orientation="row"
-                justify="space-between"
-                w={100}
-                align="center">
+            <BaseView flexDirection="row" w={100}>
                 <BaseText typographyFont="subTitle">
                     {LL.BD_SELECT_NETWORK()}
                 </BaseText>
