@@ -1,36 +1,61 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { BaseSwitch, BaseText, BaseView } from "~Components"
+import { useColorScheme } from "~Common"
+import { BaseButtonGroupHorizontal } from "~Components"
+import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
 import { useRealm, getUserPreferences } from "~Storage"
 
-export const ChangeTheme = () => {
+const currencies: Array<Button> = [
+    {
+        id: "light",
+        label: "Light",
+    },
+    {
+        id: "dark",
+        label: "Dark",
+    },
+    {
+        id: "system",
+        label: "System",
+    },
+]
+
+export const ChangeTheme: React.FC = () => {
     const { store } = useRealm()
 
     const userPref = getUserPreferences(store)
 
-    const isRealmDark = useMemo(() => userPref?.theme === "dark", [userPref])
-    const [isDark, setIsDark] = useState(isRealmDark)
+    const themePref = useMemo(() => userPref?.theme, [userPref])
 
-    const toggleSwitch = useCallback(
-        (newValue: boolean) => {
-            const mode = newValue ? "dark" : "light"
-            setIsDark(newValue)
+    const [selectedTheme, setSelectedTheme] = useState(themePref)
+
+    //Check system color scheme
+    const systemColorScheme = useColorScheme()
+
+    const handleSelectTheme = useCallback(
+        (button: Button) => {
+            const mode =
+                button.id === "dark"
+                    ? "dark"
+                    : button.id === "light"
+                    ? "light"
+                    : systemColorScheme
+
+            setSelectedTheme(mode)
+
             store.write(() => {
                 if (userPref) {
                     userPref.theme = mode
                 }
             })
         },
-        [store, userPref],
+        [store, systemColorScheme, userPref],
     )
 
     return (
-        <BaseView
-            justify="space-between"
-            w={100}
-            align="center"
-            orientation="row">
-            <BaseText>Dark Mode</BaseText>
-            <BaseSwitch onValueChange={toggleSwitch} value={isDark} />
-        </BaseView>
+        <BaseButtonGroupHorizontal
+            selectedButtonIds={[selectedTheme || ""]}
+            buttons={currencies}
+            action={handleSelectTheme}
+        />
     )
 }
