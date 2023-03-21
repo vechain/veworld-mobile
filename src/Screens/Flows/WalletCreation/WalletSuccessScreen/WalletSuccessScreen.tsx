@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from "react"
+import React, { FC, useCallback, useEffect, useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -17,6 +17,7 @@ import {
     useCreateWalletWithBiometrics,
     useCreateWalletWithPassword,
     useDisclosure,
+    useTheme,
 } from "~Common"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
@@ -35,6 +36,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
 
     const { store, cache } = useRealm()
+    const theme = useTheme()
+    const [isError, setIsError] = useState("")
 
     const {
         onCreateWallet: createWalletWithBiometrics,
@@ -51,6 +54,14 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onClose: closePasswordPrompt,
     } = useDisclosure()
 
+    const onWalletCreationError = useCallback(
+        (_error: unknown) => {
+            setIsError("Error creating wallet")
+            closePasswordPrompt()
+        },
+        [setIsError, closePasswordPrompt],
+    )
+
     const onButtonPress = useCallback(async () => {
         let params = route.params
 
@@ -61,7 +72,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
                 if (success) {
-                    createWalletWithBiometrics()
+                    createWalletWithBiometrics(onWalletCreationError)
                 }
             } else {
                 openPasswordPrompt()
@@ -72,7 +83,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             } else if (
                 params?.securityLevelSelected === SecurityLevelType.SECRET
             ) {
-                createWalletWithPassword(params?.userPin!)
+                createWalletWithPassword(
+                    params?.userPin!,
+                    onWalletCreationError,
+                )
             }
         }
     }, [
@@ -81,11 +95,13 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         createWalletWithBiometrics,
         openPasswordPrompt,
         createWalletWithPassword,
+        onWalletCreationError,
     ])
 
     const onPasswordSuccess = useCallback(
-        (password: string) => createWalletWithPassword(password),
-        [createWalletWithPassword],
+        (password: string) =>
+            createWalletWithPassword(password, onWalletCreationError),
+        [createWalletWithPassword, onWalletCreationError],
     )
 
     useEffect(() => {
@@ -166,6 +182,11 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         </BaseView>
 
                         <BaseView alignItems="center" w={100}>
+                            {!!isError && (
+                                <BaseText my={10} color={theme.colors.danger}>
+                                    {isError}
+                                </BaseText>
+                            )}
                             <BaseButton
                                 action={onButtonPress}
                                 w={100}
