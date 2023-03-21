@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { useTheme, CryptoUtils } from "~Common"
 import {
     BaseButton,
