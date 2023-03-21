@@ -61,7 +61,7 @@ jobs:
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
 
       - name: Yarn start
-        run: yarn start &
+        run: yarn react-native start &
       
       - name: Detox test Android release
         uses: reactivecircus/android-emulator-runner@v2
