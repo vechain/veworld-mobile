@@ -27,6 +27,7 @@ type Props = {
     grow?: number
     wrap?: boolean
     radius?: number
+    testID?: string
 } & ViewProps
 
 export const BaseView = memo((props: Props) => {

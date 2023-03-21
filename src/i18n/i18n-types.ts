@@ -127,6 +127,22 @@ type RootTranslation = {
 	 */
 	BTN_RESET_APP: string
 	/**
+	 * B​u​y
+	 */
+	BTN_BUY: string
+	/**
+	 * S​e​n​d
+	 */
+	BTN_SEND: string
+	/**
+	 * S​w​a​p
+	 */
+	BTN_SWAP: string
+	/**
+	 * H​i​s​t​o​r​y
+	 */
+	BTN_HISTORY: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -627,6 +643,22 @@ export type TranslationFunctions = {
 	 * Reset App
 	 */
 	BTN_RESET_APP: () => LocalizedString
+	/**
+	 * Buy
+	 */
+	BTN_BUY: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BTN_SEND: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	BTN_SWAP: () => LocalizedString
+	/**
+	 * History
+	 */
+	BTN_HISTORY: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
