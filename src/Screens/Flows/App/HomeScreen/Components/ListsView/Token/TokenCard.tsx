@@ -1,9 +1,10 @@
 import { StyleSheet, View } from "react-native"
-import React from "react"
+import React, { useMemo } from "react"
 import { BaseText } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
 import { Token } from "~Common"
+import { getUserPreferences, useRealm } from "~Storage"
 
 type Props = {
     token: FungibleToken | Token
@@ -11,6 +12,12 @@ type Props = {
 }
 
 export function TokenCard({ token, isAnimation }: Props) {
+    const { store } = useRealm()
+
+    const userPref = getUserPreferences(store)
+
+    const currencyPref = useMemo(() => userPref?.currency, [userPref])
+
     const animatedOpacityReverse = useAnimatedStyle(() => {
         return {
             opacity: withTiming(isAnimation ? 0 : 1, {
@@ -29,7 +36,9 @@ export function TokenCard({ token, isAnimation }: Props) {
             </View>
 
             <Animated.View style={animatedOpacityReverse}>
-                <BaseText typographyFont="title">0.2202$</BaseText>
+                <BaseText typographyFont="title">
+                    0.2202{currencyPref === "euro" ? "€" : "$"}
+                </BaseText>
                 <BaseText>0.36</BaseText>
             </Animated.View>
         </Animated.View>

@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
+import { getUserPreferences, useRealm } from "~Storage"
 
 const { humanNumber } = FormattingUtils
 
@@ -24,6 +25,12 @@ export const Balance: React.FC<Props> = ({
 }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const { store } = useRealm()
+
+    const userPref = getUserPreferences(store)
+
+    const currencyPref = useMemo(() => userPref?.currency, [userPref])
 
     return (
         <>
@@ -51,7 +58,7 @@ export const Balance: React.FC<Props> = ({
                     mx={4}
                     color={theme.colors.textReversed}
                     typographyFont="body">
-                    USD
+                    {currencyPref === "euro" ? LL.BD_EUR() : LL.BD_USD()}
                 </BaseText>
             </BaseView>
         </>
