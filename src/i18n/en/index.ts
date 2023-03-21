@@ -82,6 +82,16 @@ const en: BaseTranslation = {
     BD_RESET_DISCLAIMER: "Click to reset VeVault and erase all your data stored on it",
     BD_HELP_IMPROVE: "Help us improve",
     BD_HELP_IMPROVE_DISCLAIMER: "Enable this setting to help us improve and always provide the best experience for you",
+    BD_CONVERSION_CURRENCY: "Conversion currency",
+    BD_APP_THEME: "App theme",
+    BD_APP_LANGUAGE: "App language",
+    BD_HIDE_TOKENS: "Hide tokens without balance",
+    BD_CONVERSION_CURRENCY_DISCLAIMER: "Pick the currency that you prefer to be shown for conversions",
+    BD_APP_THEME_DISCLAIMER: "Select the general app theme",
+    BD_HIDE_TOKENS_DISCLAIMER: "Tokens without balance won't be shown in the assets list",
+    BD_APP_LANGUAGE_DISCLAIMER: "Select the general app language",
+    BD_USD : "USD",
+    BD_EUR : "EUR",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -126,6 +136,8 @@ const en: BaseTranslation = {
     SB_RENAME_WALLET: "Rename wallet",
     SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
     SB_DEVICE_CARD : "{alias} ({accounts} accounts)",
+    SB_ENTER_LANGUAGE: "Enter your language",
+    SB_SELECT_LANGUAGE: "Select your language",
 
     // ELEMENTS
     FACE_ID: "Face ID",
