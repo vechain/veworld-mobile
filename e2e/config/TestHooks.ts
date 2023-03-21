@@ -8,9 +8,9 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     await detoxConfig.init()
     console.log("Detox test session started!")
 
-    // console.log("Launching app...")
-    // await detox.device.launchApp()
-    // console.log("App launched!")
+    console.log("Launching app...")
+    await detox.device.launchApp({ newInstance: true })
+    console.log("App launched!")
 })
 
 Before({ timeout: 600 * 1000 }, async function (feature) {
