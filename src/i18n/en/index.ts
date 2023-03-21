@@ -34,6 +34,10 @@ const en: BaseTranslation = {
     BTN_ADD_CUSTOM_NODE: "Add a custom node",
     BTN_DOWNLOAD_LOGS: "Download logs",
     BTN_RESET_APP: "Reset App",
+    BTN_BUY: "Buy",
+    BTN_SEND: "Send",
+    BTN_SWAP: "Swap",
+    BTN_HISTORY: "History",
 
     // BODY
     BD_GDPR:
