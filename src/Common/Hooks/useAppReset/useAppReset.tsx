@@ -73,6 +73,7 @@ const resetRealm = async (store: Realm, cache: Realm) => {
         userPreferences.isAppLockActive = true
         userPreferences.selectedAccount = undefined
         userPreferences.balanceVisible = true
+        userPreferences.currency = "usd"
 
         store.delete(getDevices(store))
         store.delete(getAccounts(store))
