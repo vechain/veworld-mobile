@@ -36,9 +36,25 @@ jobs:
 
       - name: Rebuild Detox Framework
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+
+      - name: Restore Detox build
+        id: detox-cache-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: android/app/build
+          key: ${{ runner.os }}-detox-android-build
       
       - name: Detox build Android release
+        if: steps.detox-cache-restore.outputs.cache-hit != 'true'
         run: yarn detox build --configuration android.emu.debug.31
+
+      - name: Save Detox build
+        id: detox-cache
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: android/app/build
+          key: ${{ runner.os }}-detox-android-build
 
       - name: Get device name
         id: device-name
@@ -49,7 +65,7 @@ jobs:
       
       - name: Detox test Android release
         uses: reactivecircus/android-emulator-runner@v2
-        timeout-minutes: 20
+        timeout-minutes: 30
         with:
           api-level: 31
           arch: x86_64
