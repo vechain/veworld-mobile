@@ -20,13 +20,13 @@ Before({ timeout: 600 * 1000 }, async function (feature) {
     // as reloading is part of the test itself and is handled manually
     if (feature.pickle.tags.some(tag => tag.name !== "@app-lifecycle")) {
         // On android, reloading RN bundle closes realms, causing the tests to crash
-        if (detox.device.getPlatform() === "android") {
-            console.log("Relaunching app before test...")
-            await detox.device.launchApp({ newInstance: true })
-            console.log("App relaunched!")
-        } else {
-            await detox.device.reloadReactNative()
-        }
+    }
+    if (detox.device.getPlatform() === "android") {
+        console.log("Relaunching app before test...")
+        await detox.device.launchApp({ newInstance: true })
+        console.log("App relaunched!")
+    } else {
+        await detox.device.reloadReactNative()
     }
 })
 
