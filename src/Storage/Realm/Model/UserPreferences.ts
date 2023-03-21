@@ -11,6 +11,8 @@ export class UserPreferences extends Object {
     isAppLockActive!: boolean
     selectedAccount?: Account
     balanceVisible!: boolean
+    currency!: string
+    language!: string
 
     static getName(): string {
         return UserPreferences.schema.name
@@ -33,6 +35,8 @@ export class UserPreferences extends Object {
             isAppLockActive: { type: "bool", default: true },
             selectedAccount: "Account?",
             balanceVisible: { type: "bool", default: true },
+            currency: { type: "string", default: "euro" },
+            language: { type: "string", default: "English" },
         },
     }
 }
