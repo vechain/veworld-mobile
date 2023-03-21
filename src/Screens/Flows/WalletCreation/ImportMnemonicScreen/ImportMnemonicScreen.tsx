@@ -14,7 +14,7 @@ import { CryptoUtils, SeedUtils, useDeviceUtils, useTheme } from "~Common"
 import { Keyboard } from "react-native"
 import { getConfig, getMnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
-import { ImportMnemonicView } from "./Components/ImportMnemonicInput"
+import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
 import { useNavigation } from "@react-navigation/native"
 
 const DEMO_MNEMONIC =
@@ -143,7 +143,7 @@ export const ImportMnemonicScreen = () => {
 
                         <BaseSpacer height={40} />
 
-                        <ImportMnemonicView
+                        <ImportMnemonicInput
                             mnemonic={mnemonic}
                             onChangeText={onChangeText}
                             isError={!!isError}

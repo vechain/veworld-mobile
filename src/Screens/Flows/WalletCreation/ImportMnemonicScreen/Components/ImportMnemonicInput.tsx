@@ -12,7 +12,7 @@ type Props = {
     isError: boolean
 }
 
-export const ImportMnemonicView = ({
+export const ImportMnemonicInput = ({
     mnemonic,
     onChangeText,
     isError,
