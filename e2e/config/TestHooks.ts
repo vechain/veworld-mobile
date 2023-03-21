@@ -21,6 +21,16 @@ Before({ timeout: 300 * 1000 }, async () => {
     }
 })
 
+// After({ timeout: 300 * 1000 }, async function (feature) {
+//     if (
+//         detox.device.getPlatform() === "android" &&
+//         feature.pickle.tags.some(tag => tag.name !== "@app-lifecycle")
+//     ) {
+//         await detox.device.sendToHome()
+//         await detox.device.launchApp({ newInstance: false })
+//     }
+// })
+
 AfterAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting cleanup Detox test session...")
     await detoxConfig.cleanup()

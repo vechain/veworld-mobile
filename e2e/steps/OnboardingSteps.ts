@@ -3,7 +3,8 @@ import { waitFor, element } from "detox"
 import OnboardingFlows from "../helpers/flows/OnboardingFlows"
 
 Given("The app is opened", { timeout: -1 }, async () => {
-    await detox.device.launchApp({ newInstance: true })
+    await detox.device.terminateApp()
+    await detox.device.launchApp({ newInstance: false })
 })
 
 Given("The user follows the onboarding process", { timeout: -1 }, async () => {
