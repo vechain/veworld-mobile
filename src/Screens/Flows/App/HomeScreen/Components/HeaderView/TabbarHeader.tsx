@@ -1,7 +1,6 @@
-import { Pressable, StyleSheet } from "react-native"
+import { Pressable, StyleSheet, View } from "react-native"
 import React, { memo, useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
-import Animated, { FadeIn } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
 
 type Props = {
@@ -29,12 +28,12 @@ export const TabbarHeader: React.FC<Props> = memo(
         )
 
         return (
-            <BaseView align="center">
+            <BaseView alignItems="center">
                 <BaseView
                     w={50}
-                    orientation="row"
-                    justify="space-between"
-                    align="center">
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center">
                     {entries.map(entry => {
                         const isSelected = activeTab === entry.value
                         return (
@@ -51,10 +50,7 @@ export const TabbarHeader: React.FC<Props> = memo(
                                     {entry.label}
                                 </BaseText>
                                 {isSelected && (
-                                    <Animated.View
-                                        style={styles.underline}
-                                        entering={FadeIn.duration(400)}
-                                    />
+                                    <View style={styles.underline} />
                                 )}
                             </Pressable>
                         )

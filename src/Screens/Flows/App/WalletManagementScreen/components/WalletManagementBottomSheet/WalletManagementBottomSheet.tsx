@@ -10,7 +10,7 @@ import {
     BaseView,
 } from "~Components"
 
-import { Device } from "~Storage"
+import { Device, getUserPreferences, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { FlashList } from "@shopify/flash-list"
@@ -26,6 +26,9 @@ export const WalletManagementBottomSheet = React.forwardRef<
 >(({ device }, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const { store } = useRealm()
+    const userPreferences = getUserPreferences(store)
 
     const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
 
@@ -43,11 +46,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
             snapPoints={snapPoints}
             onChange={handleSheetChanges}
             ref={ref}>
-            <BaseView
-                orientation="row"
-                justify="space-between"
-                w={100}
-                align="center">
+            <BaseView flexDirection="row" w={100}>
                 <BaseText typographyFont="subTitle">
                     {LL.SB_EDIT_WALLET({ name: device?.alias })}
                 </BaseText>
@@ -68,14 +67,21 @@ export const WalletManagementBottomSheet = React.forwardRef<
                 {LL.SB_RENAME_REORDER_ACCOUNTS()}
             </BaseText>
             <BaseSpacer height={16} />
-            <BaseView h={100} w={100}>
+            <BaseView h={100} flexDirection="row">
                 {device && (
                     <FlashList
                         data={device.accounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
                         renderItem={({ item }) => {
-                            return <AccountDetailBox account={item} />
+                            return (
+                                <AccountDetailBox
+                                    account={item}
+                                    selectedAccount={
+                                        userPreferences.selectedAccount!
+                                    }
+                                />
+                            )
                         }}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}

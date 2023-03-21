@@ -28,7 +28,7 @@ export const BaseButtonGroup = ({
     const theme = useTheme()
 
     const onPress = useCallback(
-        (button: Button) => () => action?.(button),
+        (button: Button) => () => action(button),
         [action],
     )
 

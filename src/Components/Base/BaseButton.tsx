@@ -3,22 +3,23 @@ import {
     TouchableOpacity,
     TouchableOpacityProps,
     FlexAlignType,
+    StyleSheet,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { useTheme, Theme } from "~Common"
+import { typography } from "~Common/Theme"
+
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
 import * as Haptics from "expo-haptics"
 import { TFonts } from "~Common/Theme"
 
-const {
-    typography: { defaults: defaultTypography, ...otherTypography },
-} = Theme
+const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     action: () => void
     disabled?: boolean
-    variant?: "solid" | "outline" | "ghost"
+    variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
     textColor?: string
     title: LocalizedString | string | React.ReactNode
@@ -55,7 +56,9 @@ export const BaseButton = ({
 }: Props) => {
     const { typographyFont, fontFamily, fontSize, fontWeight } = otherProps
 
-    const theme = useTheme()
+    const { styles: themedStyles, theme } = useThemedStyles(
+        baseStyles(variant === "link"),
+    )
 
     const onButtonPress = useCallback(() => {
         if (otherProps.haptics) {
@@ -152,10 +155,19 @@ export const BaseButton = ({
                 typographyFont={computedTypographyFont}
                 fontFamily={fontFamily}
                 fontWeight={fontWeight}
-                fontSize={fontSize}>
+                fontSize={fontSize}
+                style={themedStyles.text}>
                 {otherProps.title}
             </BaseText>
             {rightIcon}
         </TouchableOpacity>
     )
 }
+
+const baseStyles = (isLink: boolean) => (theme: ColorThemeType) =>
+    StyleSheet.create({
+        text: {
+            textDecorationLine: isLink ? "underline" : "none",
+            textDecorationColor: theme.colors.text,
+        },
+    })

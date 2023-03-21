@@ -74,8 +74,6 @@ This project uses [Detox](https://wix.github.io/Detox/docs/introduction/getting-
 
 -   To add a new language add a new directory in `src/i18n` and name the folder with the desired language code i.e. `src/i18n/es` for spanish.
 
-To configure all changes after you finish just run `yarn typesafe-i18n` to auto generate new types.
-
 # Archive the Project
 
 There is a workaround that needs to be done in order to archive a project.

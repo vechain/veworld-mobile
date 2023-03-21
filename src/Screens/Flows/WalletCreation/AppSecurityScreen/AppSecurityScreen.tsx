@@ -39,8 +39,12 @@ export const AppSecurityScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="space-between" grow={1} mx={20}>
-                <BaseView selfAlign="flex-start">
+            <BaseView
+                alignItems="center"
+                justifyContent="space-between"
+                flexGrow={1}
+                mx={20}>
+                <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="largeTitle">
                         {LL.TITLE_SECURITY()}
                     </BaseText>
@@ -52,7 +56,7 @@ export const AppSecurityScreen = () => {
                     </BaseText>
                 </BaseView>
 
-                <BaseView align="center" w={100}>
+                <BaseView alignItems="center" w={100}>
                     {accessControl && (
                         <BaseButton
                             action={onBiometricsPress}

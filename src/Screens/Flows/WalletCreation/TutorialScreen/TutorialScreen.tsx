@@ -75,19 +75,19 @@ export const TutorialScreen = () => {
         }
 
         if (btnIndex === STEPS.SAFETY) {
-            nav.navigate(Routes.SEED_PHRASE)
+            nav.navigate(Routes.NEW_MNEMONIC)
         }
     }
 
     const onNavigate = () => {
-        nav.navigate(Routes.SEED_PHRASE)
+        nav.navigate(Routes.NEW_MNEMONIC)
     }
 
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center">
-                <BaseView selfAlign="flex-start" mx={20}>
+            <BaseView alignItems="center">
+                <BaseView alignSelf="flex-start" mx={20}>
                     <BaseText typographyFont="largeTitle">
                         Create Wallet
                     </BaseText>
@@ -108,9 +108,12 @@ export const TutorialScreen = () => {
                     keyExtractor={item => item.title}
                 />
             </BaseView>
-            <BaseView align="center" grow={1} justify="space-between">
+            <BaseView
+                alignItems="center"
+                flexGrow={1}
+                justifyContent="space-between">
                 {!!progressValue && (
-                    <BaseView orientation="row" selfAlign="center" py={20}>
+                    <BaseView flexDirection="row" alignSelf="center" py={24}>
                         {slides.map((slide, index) => (
                             <PaginationItem
                                 animValue={progressValue}
@@ -122,14 +125,13 @@ export const TutorialScreen = () => {
                     </BaseView>
                 )}
 
-                <BaseView align="center" w={100} px={20}>
+                <BaseView alignItems="center" w={100} px={20}>
                     <BaseButton
                         action={onNavigate}
-                        typographyFont="footNoteAccent"
+                        typographyFont="bodyMedium"
                         title={LL.BTN_WALLET_TUTORIAL_SKIP()}
-                        selfAlign="flex-start"
                         px={5}
-                        variant="ghost"
+                        variant="link"
                     />
 
                     <BaseButton

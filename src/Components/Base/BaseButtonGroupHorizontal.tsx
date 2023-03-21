@@ -43,9 +43,9 @@ export const BaseButtonGroupHorizontal = ({
     return (
         <DropShadow style={theme.shadows.card}>
             <BaseView
-                justify="center"
-                align="center"
-                orientation="row"
+                justifyContent="center"
+                alignItems="center"
+                flexDirection="row"
                 style={styles.backgroundStyle}>
                 {buttons.map((button, _) => {
                     const { id, label, disabled, icon } = button
@@ -58,9 +58,9 @@ export const BaseButtonGroupHorizontal = ({
                             disabled={disabled}
                             title={
                                 <BaseView
-                                    justify="center"
-                                    align="center"
-                                    orientation="row"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    flexDirection="row"
                                     style={{
                                         marginBottom: -5,
                                     }}>

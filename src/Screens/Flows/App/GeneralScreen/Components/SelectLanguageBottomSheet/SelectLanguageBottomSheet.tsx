@@ -34,10 +34,10 @@ export const SelectLanguageBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
             <BaseView
-                orientation="row"
-                justify="space-between"
+                flexDirection="row"
+                justifyContent="space-between"
                 w={100}
-                align="center">
+                alignItems="center">
                 <BaseText typographyFont="subTitle">
                     {LL.SB_SELECT_LANGUAGE()}
                 </BaseText>

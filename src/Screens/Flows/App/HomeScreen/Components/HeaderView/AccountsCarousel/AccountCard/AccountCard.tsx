@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
@@ -9,7 +9,6 @@ import {
     useThemedStyles,
     PlatformUtils,
 } from "~Common"
-import { useUserPreferencesEntity } from "~Common/Hooks/Entities"
 import {
     AccountIcon,
     AddressButton,
@@ -18,51 +17,57 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { Account, useRealm } from "~Storage"
+import { Account, getUserPreferences, useRealm } from "~Storage"
 import { Balance } from "./Balance"
 
 interface Props extends AnimateProps<ViewProps> {
     style?: StyleProp<ViewStyle>
     account: Account
     openAccountManagement: () => void
+    balanceVisible: boolean
 }
 
 export const AccountCard: React.FC<Props> = memo(props => {
-    const { style, account, openAccountManagement, ...animatedViewProps } =
-        props
+    const {
+        style,
+        account,
+        openAccountManagement,
+        balanceVisible,
+        ...animatedViewProps
+    } = props
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
 
     const { store } = useRealm()
-    const { balanceVisible, userPreferencesEntity } = useUserPreferencesEntity()
+    const userPref = getUserPreferences(store)
 
     const toggleBalanceVisibility = useCallback(() => {
-        if (userPreferencesEntity)
-            store.write(() => {
-                userPreferencesEntity.balanceVisible =
-                    !userPreferencesEntity.balanceVisible
-            })
-    }, [userPreferencesEntity, store])
+        store.write(() => {
+            userPref.balanceVisible = !userPref.balanceVisible
+        })
+    }, [userPref, store])
+
+    const randomBalance = useMemo(() => CryptoUtils.random().toString(), [])
 
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
-                background={theme.colors.primary}
-                isFlex
-                justify="flex-start"
-                align="flex-start"
-                radius={24}
+                bg={theme.colors.primary}
+                flex={1}
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                borderRadius={24}
                 px={16}
                 py={16}
                 style={style}>
                 <BaseView
-                    orientation="row"
-                    justify="space-between"
-                    align="flex-start"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
                     w={100}>
-                    <BaseView orientation="row" align="center">
+                    <BaseView flexDirection="row">
                         <AccountIcon account={account} />
-                        <BaseView px={8}>
+                        <BaseView px={8} alignItems="flex-start">
                             <BaseText
                                 typographyFont="buttonPrimary"
                                 color={theme.colors.textReversed}>
@@ -83,7 +88,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 <Balance
                     isVisible={balanceVisible}
                     toggleVisible={toggleBalanceVisibility}
-                    balance={CryptoUtils.random().toString()}
+                    balance={randomBalance}
                 />
             </BaseView>
         </Animated.View>

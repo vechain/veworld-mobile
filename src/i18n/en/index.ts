@@ -34,6 +34,10 @@ const en: BaseTranslation = {
     BTN_ADD_CUSTOM_NODE: "Add a custom node",
     BTN_DOWNLOAD_LOGS: "Download logs",
     BTN_RESET_APP: "Reset App",
+    BTN_BUY: "Buy",
+    BTN_SEND: "Send",
+    BTN_SWAP: "Swap",
+    BTN_HISTORY: "History",
 
     // BODY
     BD_GDPR:
@@ -105,7 +109,7 @@ const en: BaseTranslation = {
     TITLE_CREATE_WALLET_TYPE: "Create Wallet",
     TITLE_IMPORT_WALLET_TYPE: "Import Wallet",
     TITLE_MNEMONIC: "Your Mnemonic",
-    TITLE_CONFIRM_MNEMONIC: "Create your wallet",
+    TITLE_CONFIRM_MNEMONIC: "Confirm your mnemonic",
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_USER_PIN: "Insert your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
@@ -151,6 +155,9 @@ const en: BaseTranslation = {
 
     // Common Buttons
     COMMON_BTN_cancel: "Cancel",
+    COMMON_BTN_CONFIRM: "Confirm",
+    COMMON_BTN_RETRY: "Retry",
+    COMMON_BTN_SIGN_OUT: "Sign out",
 
     // Common Labels
     COMMON_LBL_ADDRESS: "Address",
@@ -164,6 +171,7 @@ const en: BaseTranslation = {
     ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
+    ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
 
     // Network
 
@@ -187,6 +195,8 @@ const en: BaseTranslation = {
     // Settings Languages
 
     // Wallets New Local
+    WALLET_LABEL_ACCOUNT: "Account",
+    WALLET_LABEL_WALLET: "Wallet",
 
     // Wallets Import
 

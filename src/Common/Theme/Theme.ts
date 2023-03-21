@@ -4,7 +4,6 @@ import { shadows } from "./Shadows"
 import { spacing } from "./Spacing"
 import { typography } from "./Typography"
 
-export * from "./StyleProps"
 export type ColorThemeType = {
     isDark: boolean
     colors: Colors
@@ -27,3 +26,5 @@ export const Theme: ThemeType = {
     radius,
     spacing,
 }
+
+export * from "./StylesProps"

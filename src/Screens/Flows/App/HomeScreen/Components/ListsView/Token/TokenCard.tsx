@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native"
-import React, { useMemo } from "react"
+import React, { memo, useMemo } from "react"
 import { BaseText } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
@@ -11,7 +11,7 @@ type Props = {
     isAnimation: boolean
 }
 
-export function TokenCard({ token, isAnimation }: Props) {
+export const TokenCard = memo(({ token, isAnimation }: Props) => {
     const { store } = useRealm()
 
     const userPref = getUserPreferences(store)
@@ -43,7 +43,7 @@ export function TokenCard({ token, isAnimation }: Props) {
             </Animated.View>
         </Animated.View>
     )
-}
+})
 
 const baseStyles = StyleSheet.create({
     innerRow: {

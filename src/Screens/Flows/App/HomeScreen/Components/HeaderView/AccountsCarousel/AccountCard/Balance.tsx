@@ -1,10 +1,9 @@
-import React, { useMemo } from "react"
+import React, { memo, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { getUserPreferences, useRealm } from "~Storage"
-
-const { humanNumber } = FormattingUtils
 
 type Props = {
     balance: string
@@ -13,54 +12,63 @@ type Props = {
 }
 
 const getBalanceText = (balance: string, isVisible: boolean) => {
-    if (isVisible) return humanNumber(balance)
-    return Array.from(Array(humanNumber(balance).length).keys()).map(
-        _value => "*",
-    )
+    if (isVisible) return FormattingUtils.humanNumber(balance)
+    return Array.from(
+        Array(FormattingUtils.humanNumber(balance).length).keys(),
+    ).map(_value => "*")
 }
-export const Balance: React.FC<Props> = ({
-    balance,
-    isVisible,
-    toggleVisible,
-}) => {
-    const theme = useTheme()
-    const { LL } = useI18nContext()
+export const Balance: React.FC<Props> = memo(
+    ({ balance, isVisible, toggleVisible }) => {
+        const theme = useTheme()
+        const { LL } = useI18nContext()
 
-    const { store } = useRealm()
+        const { store } = useRealm()
 
-    const userPref = getUserPreferences(store)
+        const userPref = getUserPreferences(store)
 
-    const currencyPref = useMemo(() => userPref?.currency, [userPref])
+        const currencyPref = useMemo(() => userPref?.currency, [userPref])
 
-    return (
-        <>
-            <BaseView orientation="row" align="center">
-                <BaseText
-                    color={theme.colors.textReversed}
-                    typographyFont="body">
-                    {LL.BD_YOUR_BALANCE()}
-                </BaseText>
-                <BaseIcon
-                    onPress={toggleVisible}
-                    name={isVisible ? "eye-off" : "eye"}
-                    color={theme.colors.textReversed}
-                    size={18}
-                    style={{ marginLeft: 8 }}
-                />
-            </BaseView>
-            <BaseView orientation="row" align="flex-end">
-                <BaseText
-                    color={theme.colors.textReversed}
-                    typographyFont="hugeTitle">
-                    {getBalanceText(balance, isVisible)}
-                </BaseText>
-                <BaseText
-                    mx={4}
-                    color={theme.colors.textReversed}
-                    typographyFont="body">
-                    {currencyPref === "euro" ? LL.BD_EUR() : LL.BD_USD()}
-                </BaseText>
-            </BaseView>
-        </>
-    )
-}
+        const renderBalance = useMemo(
+            () => getBalanceText(balance, isVisible),
+            [balance, isVisible],
+        )
+
+        return (
+            <>
+                <BaseView flexDirection="row">
+                    <BaseText
+                        color={theme.colors.textReversed}
+                        typographyFont="body">
+                        {LL.BD_YOUR_BALANCE()}
+                    </BaseText>
+                    <BaseIcon
+                        onPress={toggleVisible}
+                        name={isVisible ? "eye-off" : "eye"}
+                        color={theme.colors.textReversed}
+                        size={18}
+                        style={baseStyles.marginLeft}
+                    />
+                </BaseView>
+                <BaseView flexDirection="row" alignItems="flex-end">
+                    <BaseText
+                        color={theme.colors.textReversed}
+                        typographyFont="hugeTitle">
+                        {renderBalance}
+                    </BaseText>
+                    <BaseText
+                        mx={4}
+                        color={theme.colors.textReversed}
+                        typographyFont="body">
+                        {currencyPref === "euro" ? LL.BD_EUR() : LL.BD_USD()}
+                    </BaseText>
+                </BaseView>
+            </>
+        )
+    },
+)
+
+const baseStyles = StyleSheet.create({
+    marginLeft: {
+        marginLeft: 8,
+    },
+})

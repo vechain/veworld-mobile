@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React from "react"
+import React, { memo } from "react"
 import { NativeTokenProps } from "./AnimatedChartCard"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
@@ -7,7 +7,7 @@ import DropShadow from "react-native-drop-shadow"
 import { BaseView } from "~Components"
 import { TokenCard } from "./TokenCard"
 
-export const AnimatedVTHOCard = ({ token, isEdit }: NativeTokenProps) => {
+export const AnimatedVTHOCard = memo(({ token, isEdit }: NativeTokenProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const animatedOuterCard = useAnimatedStyle(() => {
@@ -25,13 +25,13 @@ export const AnimatedVTHOCard = ({ token, isEdit }: NativeTokenProps) => {
         <DropShadow style={styles.cardShadow}>
             <Animated.View
                 style={[styles.nativeTokenContainer, animatedOuterCard]}>
-                <BaseView w={100} grow={1} px={12}>
+                <BaseView w={100} flexGrow={1} px={12}>
                     <TokenCard token={token} isAnimation={isEdit} />
                 </BaseView>
             </Animated.View>
         </DropShadow>
     )
-}
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

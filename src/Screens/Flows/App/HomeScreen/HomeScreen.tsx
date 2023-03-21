@@ -44,8 +44,8 @@ export const HomeScreen = () => {
 
     useEffect(() => {
         async function init() {
-            const block = await thor.block().get()
-            console.log("block number", block?.number)
+            const genesis = thor.genesis.id
+            console.log("genesis number", genesis)
         }
         init()
     }, [isFocused, thor])
@@ -91,23 +91,3 @@ export const HomeScreen = () => {
         </>
     )
 }
-
-/*
-useEffect(() => {
-    const init = async () => {
-        let accounts = devices[0].accounts
-        if (accounts) {
-            console.log(accounts)
-            let parent = accounts[0].linkingObjects("Device", "accounts")
-            if (parent) {
-                console.log("parent", parent)
-            }
-        }
-    }
-
-    setTimeout(() => {
-        init()
-    }, 5000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [])
-*/
