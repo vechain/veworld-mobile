@@ -1,14 +1,15 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { CameraScreen, HomeScreen, WalletManagementScreen } from "~Screens"
+import { HomeScreen, WalletManagementScreen } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { CreateWalletAppStack } from "./CreateWalletAppStack"
+import { CameraStack } from "./CameraStack"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.CAMERA]: { showSendFlow: boolean }
+    [Routes.CAMERA_STACK]: undefined
 }
 
 const Home = createNativeStackNavigator<RootStackParamListHome>()
@@ -47,8 +48,8 @@ export const HomeStack = () => {
                 />
 
                 <Home.Screen
-                    name={Routes.CAMERA}
-                    component={CameraScreen}
+                    name={Routes.CAMERA_STACK}
+                    component={CameraStack}
                     options={{ headerShown: false }}
                 />
             </Home.Group>

@@ -1,24 +1,26 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useCameraPermissions, useTheme } from "~Common"
+import { useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { getScannedAddress, useRealm } from "~Storage"
 
 export const Header = memo(() => {
     const theme = useTheme()
-    const { checkPermissions } = useCameraPermissions()
     const nav = useNavigation()
     const { LL } = useI18nContext()
+    const { cache } = useRealm()
 
     const goToWalletManagement = useCallback(() => {
         nav.navigate(Routes.WALLET_MANAGEMENT)
     }, [nav])
 
     const openCamera = useCallback(async () => {
-        let result = await checkPermissions()
-        if (result) nav.navigate(Routes.CAMERA, { showSendFlow: true })
-    }, [checkPermissions, nav])
+        const scannedAddress = getScannedAddress(cache)
+        cache.write(() => (scannedAddress.isShowSend = true))
+        nav.navigate(Routes.CAMERA_STACK)
+    }, [cache, nav])
 
     return (
         <BaseView
@@ -38,6 +40,7 @@ export const Header = memo(() => {
                 <BaseIcon
                     name={"flip-horizontal"}
                     size={24}
+                    color={theme.colors.primary}
                     action={openCamera}
                     mx={12}
                 />
