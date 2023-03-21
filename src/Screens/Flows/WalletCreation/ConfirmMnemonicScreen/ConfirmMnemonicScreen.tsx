@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { Pressable, Text } from "react-native"
 import { useTheme, CryptoUtils } from "~Common"
 import {
     BaseButton,
@@ -147,30 +146,36 @@ export const ConfirmMnemonicScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseView justify="space-between" grow={1} mx={20}>
-                <BaseView justify="space-between">
-                    <BaseText typographyFont="title">
-                        {LL.TITLE_CONFIRM_MNEMONIC()}
-                    </BaseText>
-                    {__DEV__ && (
-                        <Pressable
-                            // eslint-disable-next-line react-native/no-inline-styles
-                            style={{
-                                position: "absolute",
-                                right: 0,
-                                padding: 10,
-                            }}
-                            onPress={() =>
-                                config?.isWalletCreated
-                                    ? nav.navigate(Routes.WALLET_SUCCESS)
-                                    : nav.navigate(Routes.APP_SECURITY)
-                            }>
-                            {/* eslint-disable-next-line i18next/no-literal-string */}
-                            <Text>__DEV__: skip</Text>
-                        </Pressable>
-                    )}
+            <BaseView
+                justifyContent="space-between"
+                alignItems="flex-start"
+                flexGrow={1}
+                mx={20}>
+                <BaseView
+                    justifyContent="space-between"
+                    alignItems="stretch"
+                    w={100}>
+                    <BaseView
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        w={100}>
+                        <BaseText align="left" typographyFont="title">
+                            {LL.TITLE_CONFIRM_MNEMONIC()}
+                        </BaseText>
+                        {__DEV__ && (
+                            <BaseButton
+                                variant="link"
+                                action={() =>
+                                    config?.isWalletCreated
+                                        ? nav.navigate(Routes.WALLET_SUCCESS)
+                                        : nav.navigate(Routes.APP_SECURITY)
+                                }
+                                title="DEV:SKIP"
+                            />
+                        )}
+                    </BaseView>
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="body">
+                    <BaseText align="left" typographyFont="body">
                         {LL.BD_SELECT_WORD({ number: firstIndex + 1 })}
                     </BaseText>
                     <BaseSpacer height={16} />
@@ -203,10 +208,9 @@ export const ConfirmMnemonicScreen = () => {
                         <BaseView>
                             <BaseSpacer height={16} />
                             <BaseView
-                                orientation="row"
-                                align="center"
+                                flexDirection="row"
                                 mx={50}
-                                justify="center">
+                                justifyContent="center">
                                 <BaseIcon
                                     name={"alert-circle-outline"}
                                     size={20}

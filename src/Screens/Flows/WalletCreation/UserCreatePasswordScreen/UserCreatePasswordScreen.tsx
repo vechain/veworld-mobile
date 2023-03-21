@@ -37,8 +37,12 @@ export const UserCreatePasswordScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="flex-start" grow={1} mx={20}>
-                <BaseView selfAlign="flex-start">
+            <BaseView
+                alignItems="center"
+                justifyContent="flex-start"
+                flexGrow={1}
+                mx={20}>
+                <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="largeTitle">
                         {LL.TITLE_USER_PASSWORD()}
                     </BaseText>

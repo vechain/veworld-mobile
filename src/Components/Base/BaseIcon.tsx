@@ -26,7 +26,7 @@ type Props =
           ViewProps
 
 export const BaseIcon: React.FC<Props> = memo(props => {
-    const { color, style, ...otherProps } = props
+    const { color, style, testID, ...otherProps } = props
     const theme = useTheme()
 
     const iconColor = useMemo(
@@ -36,8 +36,13 @@ export const BaseIcon: React.FC<Props> = memo(props => {
         [theme, color],
     )
     return (
-        <BaseIconWrapper style={style} {...props}>
-            <Icon size={props.size ?? 24} color={iconColor} {...otherProps} />
+        <BaseIconWrapper style={style} color={color} {...otherProps}>
+            <Icon
+                size={props.size ?? 24}
+                testID={testID}
+                color={iconColor}
+                {...otherProps}
+            />
         </BaseIconWrapper>
     )
 })

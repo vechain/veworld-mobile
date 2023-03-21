@@ -2,17 +2,18 @@ import React from "react"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
+import { PlatformUtils } from "~Common"
 
 export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
     const { LL } = useI18nContext()
 
     return (
         <BaseView
-            orientation="row"
+            flexDirection="row"
             style={baseStyles.container}
-            justify="center"
+            justifyContent="center"
             w={100}
-            align="center">
+            alignItems="center">
             <BaseIcon
                 name={"chevron-left"}
                 color={"white"}
@@ -31,10 +32,10 @@ export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
 const baseStyles = StyleSheet.create({
     container: {
         zIndex: 3,
-        marginTop: 60,
+        marginTop: PlatformUtils.isIOS() ? 60 : 20,
     },
     icon: {
         position: "absolute",
-        left: 20,
+        left: PlatformUtils.isIOS() ? 20 : 8,
     },
 })

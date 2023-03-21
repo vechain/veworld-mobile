@@ -10,6 +10,7 @@ import { useCamDisclosure } from "./hooks/useCamDisclosure"
 import { PlatformUtils, useCameraPermissions, useTheme } from "~Common"
 import { useConfirmAddress } from "./hooks/useConfirmAddress"
 import { getScannedAddress, useRealm } from "~Storage"
+import { useNavigation } from "@react-navigation/native"
 
 const deviceWidth = Dimensions.get("window").width
 const deviceHeight = Dimensions.get("window").height
@@ -19,6 +20,7 @@ export const CameraScreen = () => {
     const { checkPermissions, hasPerms, isCanceled } = useCameraPermissions()
     const devices = useCameraDevices()
     const theme = useTheme()
+    const nav = useNavigation()
     const device = devices.back
     const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE])
     const [isShowUI, setIsShowUI] = useState(false)
@@ -30,14 +32,16 @@ export const CameraScreen = () => {
         if (isConfirmed && address) {
             const scannedAddress = getScannedAddress(cache)
             if (scannedAddress.isShowSend) {
-                cache.write(() => (scannedAddress.address = address))
-                // navigate to send flow on same stack
+                cache.write(() => {
+                    scannedAddress.address = address
+                    scannedAddress.isShowSend = true
+                })
             } else {
                 cache.write(() => (scannedAddress.address = address))
-                onClose()
             }
+            onClose()
         }
-    }, [address, cache, isConfirmed, onClose])
+    }, [address, cache, isConfirmed, nav, onClose])
 
     useEffect(() => {
         isCanceled && onClose()
@@ -58,21 +62,21 @@ export const CameraScreen = () => {
         return (
             <BaseView
                 style={StyleSheet.absoluteFill}
-                background={theme.colors.darkPurple}
-                justify="center"
-                grow={1}
-                align="center">
+                bg={theme.colors.darkPurple}
+                justifyContent="center"
+                flexGrow={1}
+                alignItems="center">
                 <BaseText color="white">{LL.COMMON_BTN_LOADING()}</BaseText>
             </BaseView>
         )
 
     return (
         <BaseView
-            grow={1}
+            flexGrow={1}
             w={100}
-            justify="flex-start"
-            align="center"
-            background={theme.colors.darkPurple}>
+            justifyContent="flex-start"
+            alignItems="center"
+            bg={theme.colors.darkPurple}>
             <CameraHeader onClose={onClose} />
 
             {isShowUI && PlatformUtils.isIOS() && (

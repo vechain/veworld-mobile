@@ -160,8 +160,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
 
-                <BaseView align="center" mx={20} grow={1}>
-                    <BaseView orientation="row" wrap>
+                <BaseView alignItems="center" mx={20} flexGrow={1}>
+                    <BaseView flexDirection="row" flexWrap="wrap">
                         <BaseText typographyFont="title">
                             {LL.TITLE_WALLET_SUCCESS()}
                         </BaseText>
@@ -170,18 +170,18 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     <BaseSpacer height={120} />
 
                     <BaseView
-                        align="center"
-                        justify="space-between"
+                        alignItems="center"
+                        justifyContent="space-between"
                         w={100}
-                        grow={1}>
-                        <BaseView align="center">
+                        flexGrow={1}>
+                        <BaseView alignItems="center">
                             <VeChainVetLogoSVG />
                             <BaseText align="center" py={20}>
                                 {LL.BD_WALLET_SUCCESS()}
                             </BaseText>
                         </BaseView>
 
-                        <BaseView align="center" w={100}>
+                        <BaseView alignItems="center" w={100}>
                             {!!isError && (
                                 <BaseText my={10} color={theme.colors.danger}>
                                     {isError}

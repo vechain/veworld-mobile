@@ -22,7 +22,7 @@ export const NumPad = ({ onDigitPress }: Props) => {
     )
 
     return (
-        <BaseView orientation="row" wrap w={100}>
+        <BaseView flexDirection="row" flexWrap="wrap" w={100}>
             {numPad.map((digit, index) => (
                 <BaseView style={styles.width} key={index}>
                     {digit !== "blank" ? (

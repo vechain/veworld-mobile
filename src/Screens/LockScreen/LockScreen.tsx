@@ -56,8 +56,8 @@ export const LockScreen: React.FC<Props> = (props: Props) => {
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView mx={20}>
-                <BaseView selfAlign="flex-start">
+            <BaseView mx={20} alignItems="center">
+                <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="largeTitle">{title}</BaseText>
 
                     <BaseText typographyFont="body" my={10}>

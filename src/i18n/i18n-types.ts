@@ -127,6 +127,22 @@ type RootTranslation = {
 	 */
 	BTN_RESET_APP: string
 	/**
+	 * B​u​y
+	 */
+	BTN_BUY: string
+	/**
+	 * S​e​n​d
+	 */
+	BTN_SEND: string
+	/**
+	 * S​w​a​p
+	 */
+	BTN_SWAP: string
+	/**
+	 * H​i​s​t​o​r​y
+	 */
+	BTN_HISTORY: string
+	/**
 	 * G​o​ ​t​o​ ​s​e​t​t​i​n​g​s
 	 */
 	BTN_GO_TO_SETTINGS: string
@@ -316,7 +332,7 @@ type RootTranslation = {
 	 */
 	TITLE_MNEMONIC: string
 	/**
-	 * C​r​e​a​t​e​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	TITLE_CONFIRM_MNEMONIC: string
 	/**
@@ -680,6 +696,22 @@ export type TranslationFunctions = {
 	 */
 	BTN_RESET_APP: () => LocalizedString
 	/**
+	 * Buy
+	 */
+	BTN_BUY: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BTN_SEND: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	BTN_SWAP: () => LocalizedString
+	/**
+	 * History
+	 */
+	BTN_HISTORY: () => LocalizedString
+	/**
 	 * Go to settings
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
@@ -868,7 +900,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
 	/**
-	 * Create your wallet
+	 * Confirm your mnemonic
 	 */
 	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
 	/**

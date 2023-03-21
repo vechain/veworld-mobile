@@ -25,7 +25,7 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
 
     return (
         <Pressable onPress={onPress} style={baseStyles.container}>
-            <BaseView orientation="row" align="center">
+            <BaseView flexDirection="row">
                 <BaseIcon color={theme.colors.text} name={icon} size={24} />
                 <BaseText
                     mx={14}

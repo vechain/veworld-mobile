@@ -34,11 +34,7 @@ export const SecureApp = () => {
     )
 
     return (
-        <BaseView
-            justify="space-between"
-            w={100}
-            align="center"
-            orientation="row">
+        <BaseView w={100} flexDirection="row">
             <BaseText>Secure App</BaseText>
             <BaseSwitch onValueChange={toggleSwitch} value={isAppLock} />
         </BaseView>
