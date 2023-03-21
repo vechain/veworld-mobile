@@ -75,12 +75,12 @@ export const TutorialScreen = () => {
         }
 
         if (btnIndex === STEPS.SAFETY) {
-            nav.navigate(Routes.SEED_PHRASE)
+            nav.navigate(Routes.NEW_MNEMONIC)
         }
     }
 
     const onNavigate = () => {
-        nav.navigate(Routes.SEED_PHRASE)
+        nav.navigate(Routes.NEW_MNEMONIC)
     }
 
     return (

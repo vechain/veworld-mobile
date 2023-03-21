@@ -30,7 +30,11 @@ import {
     UserPreferences,
     XPub,
 } from "~Storage"
-import { ConnexContextProvider } from "~Components"
+import {
+    ConfigContextProvider,
+    ConnexContextProvider,
+    UserPreferencesContextProvider,
+} from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Common"
@@ -112,15 +116,19 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
     const value = useMemo(() => ({ cache: realmCache, store: realmStore }), [])
     return (
         <RealmContext.Provider value={value}>
-            <ConnexContextProvider>
-                <BottomSheetModalProvider>
-                    <NavigationProvider>
-                        <TestTranslationProvider>
-                            {children}
-                        </TestTranslationProvider>
-                    </NavigationProvider>
-                </BottomSheetModalProvider>
-            </ConnexContextProvider>
+            <ConfigContextProvider>
+                <UserPreferencesContextProvider>
+                    <ConnexContextProvider>
+                        <BottomSheetModalProvider>
+                            <NavigationProvider>
+                                <TestTranslationProvider>
+                                    {children}
+                                </TestTranslationProvider>
+                            </NavigationProvider>
+                        </BottomSheetModalProvider>
+                    </ConnexContextProvider>
+                </UserPreferencesContextProvider>
+            </ConfigContextProvider>
         </RealmContext.Provider>
     )
 }

@@ -18,7 +18,7 @@ import { useGenerateMnemonic } from "./useGenerateMnemonic"
 import { getMnemonic, useRealm } from "~Storage"
 import { useTheme } from "~Common"
 
-export const SeedPhraseScreen = () => {
+export const NewMnemonicScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const { cache } = useRealm()
@@ -41,7 +41,7 @@ export const SeedPhraseScreen = () => {
                 _mnemonic.mnemonic = mnemonic
             }
         })
-        nav.navigate(Routes.CONFIRM_SEED_PHRASE)
+        nav.navigate(Routes.CONFIRM_MNEMONIC)
     }, [cache, mnemonic, nav])
 
     return (

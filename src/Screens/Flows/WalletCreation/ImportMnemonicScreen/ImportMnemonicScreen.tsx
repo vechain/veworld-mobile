@@ -12,34 +12,33 @@ import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { CryptoUtils, SeedUtils, useTheme } from "~Common"
 import { Keyboard } from "react-native"
-import { Config, Mnemonic, useRealm } from "~Storage"
+import { getConfig, getMnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicView } from "./Components/ImportMnemonicView"
 import { useNavigation } from "@react-navigation/native"
 import DropShadow from "react-native-drop-shadow"
 
-export const ImportSeedPhraseScreen = () => {
+const DEMO_MNEMONIC =
+    "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+
+export const ImportMnemonicScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
-    const [, setPasteSeed] = useState<string[]>()
-    const [seed, setSeed] = useState<string>("")
+    const [mnemonic, setMnemonic] = useState<string>("")
     const [isError, setIsError] = useState(false)
     const [isDisabled, setIsDisabled] = useState(true)
 
     const { store, cache } = useRealm()
     const theme = useTheme()
 
-    const config = store.objectForPrimaryKey<Config>(
-        Config.getName(),
-        Config.getPrimaryKey(),
-    )
+    const config = getConfig(store)
 
-    const onVerify = () => {
-        if (CryptoUtils.verifySeedPhrase(seed)) {
+    const onVerify = (_mnemonic: string) => {
+        if (CryptoUtils.verifyMnemonic(_mnemonic)) {
             cache.write(() => {
-                let _mnemonic = cache.objects<Mnemonic>(Mnemonic.getName())
-                _mnemonic[0].mnemonic = seed
+                let cacheMnemonic = getMnemonic(cache)
+                cacheMnemonic.mnemonic = _mnemonic
             })
 
             if (config?.isWalletCreated) {
@@ -52,28 +51,32 @@ export const ImportSeedPhraseScreen = () => {
         }
     }
 
-    const onPasteFronClipboard = async () => {
+    const onPasteFromClipboard = async () => {
         let isString = await Clipboard.hasStringAsync()
         if (isString) {
             let _seed = await Clipboard.getStringAsync()
             let sanified = SeedUtils.sanifySeed(_seed)
             if (sanified.length === 12) {
-                setPasteSeed(sanified)
-                setSeed(sanified.join(" "))
+                setMnemonic(sanified.join(" "))
                 setIsDisabled(false)
                 Keyboard.dismiss()
             } else {
                 setIsDisabled(true)
                 setIsError(true)
-                setPasteSeed(sanified)
-                setSeed(sanified.join(" "))
+                setMnemonic(sanified.join(" "))
             }
         }
     }
 
+    const onDemoMnemonicClick = () => {
+        const sanitisedDemoMnemonic =
+            SeedUtils.sanifySeed(DEMO_MNEMONIC).join(" ")
+        onVerify(sanitisedDemoMnemonic)
+    }
+
     const onChangeText = (text: string) => {
         let wordCounter = text.split(" ").filter(str => str !== "").length
-        setSeed(text)
+        setMnemonic(text)
         if (wordCounter === 12) {
             setIsDisabled(false)
         } else {
@@ -82,8 +85,7 @@ export const ImportSeedPhraseScreen = () => {
     }
 
     const onClearSeed = () => {
-        setSeed("")
-        setPasteSeed([])
+        setMnemonic("")
         setIsError(false)
     }
 
@@ -92,14 +94,23 @@ export const ImportSeedPhraseScreen = () => {
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
                 <BaseView
-                    alignItems="flex-start"
+                    alignItems="center"
                     justifyContent="space-between"
                     flexGrow={1}
                     mx={20}>
-                    <BaseView alignItems="flex-start">
-                        <BaseText typographyFont="title">
-                            {LL.TITLE_WALLET_IMPORT_LOCAL()}
-                        </BaseText>
+                    <BaseView alignSelf="flex-start">
+                        <BaseView flexDirection="row">
+                            <BaseText typographyFont="title">
+                                {LL.TITLE_WALLET_IMPORT_LOCAL()}
+                            </BaseText>
+                            {__DEV__ && (
+                                <BaseButton
+                                    size="md"
+                                    action={onDemoMnemonicClick}
+                                    title="DEV:DEMO"
+                                />
+                            )}
+                        </BaseView>
                         <BaseText typographyFont="body" my={10}>
                             {LL.BD_WALLET_IMPORT_LOCAL()}
                         </BaseText>
@@ -110,9 +121,9 @@ export const ImportSeedPhraseScreen = () => {
                             <BaseIcon
                                 name={"content-paste"}
                                 size={32}
-                                style={{ marginRight: 20 }}
+                                style={{ marginHorizontal: 20 }}
                                 bg={theme.colors.secondary}
-                                action={onPasteFronClipboard}
+                                action={onPasteFromClipboard}
                             />
                             <BaseIcon
                                 name={"trash-can-outline"}
@@ -123,13 +134,10 @@ export const ImportSeedPhraseScreen = () => {
                         </BaseView>
 
                         <BaseSpacer height={40} />
-                        <DropShadow
-                            style={[
-                                theme.shadows.card,
-                                { flexDirection: "row" },
-                            ]}>
+
+                        <DropShadow style={theme.shadows.card}>
                             <ImportMnemonicView
-                                seed={seed}
+                                mnemonic={mnemonic}
                                 onChangeText={onChangeText}
                                 isError={isError}
                             />
@@ -147,12 +155,11 @@ export const ImportSeedPhraseScreen = () => {
                             action={() => {}}
                             typographyFont="footNoteAccent"
                             title={LL.BTN_WALLET_IMPORT_HELP()}
-                            selfAlign="center"
                             px={5}
                         />
 
                         <BaseButton
-                            action={onVerify}
+                            action={() => onVerify(mnemonic)}
                             w={100}
                             title={LL.BTN_IMPORT_WALLET_VERIFY()}
                             disabled={isDisabled}

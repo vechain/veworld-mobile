@@ -6,15 +6,15 @@ import {
     StyleSheet,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { Theme, ColorThemeType, useThemedStyles } from "~Common"
+import { typography } from "~Common/Theme"
+
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText } from "./BaseText"
 import { LocalizedString } from "typesafe-i18n"
 import * as Haptics from "expo-haptics"
 import { TFonts } from "~Common/Theme"
 
-const {
-    typography: { defaults: defaultTypography, ...otherTypography },
-} = Theme
+const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     action: () => void

@@ -4,8 +4,6 @@ import { FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
-const { humanNumber } = FormattingUtils
-
 type Props = {
     balance: string
     isVisible: boolean
@@ -13,10 +11,10 @@ type Props = {
 }
 
 const getBalanceText = (balance: string, isVisible: boolean) => {
-    if (isVisible) return humanNumber(balance)
-    return Array.from(Array(humanNumber(balance).length).keys()).map(
-        _value => "*",
-    )
+    if (isVisible) return FormattingUtils.humanNumber(balance)
+    return Array.from(
+        Array(FormattingUtils.humanNumber(balance).length).keys(),
+    ).map(_value => "*")
 }
 export const Balance: React.FC<Props> = memo(
     ({ balance, isVisible, toggleVisible }) => {
