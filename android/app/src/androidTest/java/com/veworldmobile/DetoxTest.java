@@ -18,9 +18,7 @@ public class DetoxTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Test
-    public void runDetoxTests() {
-        Detox.launchMainActivity();
-        
+    public void runDetoxTests() {        
         DetoxConfig detoxConfig = new DetoxConfig();
         detoxConfig.idlePolicyConfig.masterTimeoutSec = 600;
         detoxConfig.idlePolicyConfig.idleResourceTimeoutSec = 600;

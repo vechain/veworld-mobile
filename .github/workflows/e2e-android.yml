@@ -12,7 +12,7 @@ on:
 jobs:
   build-test-android:
     name: Detox Build & Test Android Release
-    runs-on: self-hosted
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
