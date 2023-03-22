@@ -39,7 +39,9 @@ export const CollectionsList = memo(({ ...animatedViewProps }: Props) => {
     return (
         <Animated.View style={themedStyles.container} {...animatedViewProps}>
             {ARRAY_LIST.map((data, index) => (
-                <BaseView key={index} style={themedStyles.innerContainer}>
+                <BaseView
+                    key={`${index}-${data.title}`}
+                    style={themedStyles.innerContainer}>
                     <CollectionAccordion collection={data} />
                 </BaseView>
             ))}
