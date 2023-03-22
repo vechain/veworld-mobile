@@ -6,13 +6,13 @@ import {
     EditTokensBar,
     AccountManagementBottomSheet,
 } from "./Components"
-import { useBottomSheetModal } from "~Common"
+import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
 import { useIsFocused } from "@react-navigation/native"
 import { BaseSpacer, useThor } from "~Components"
+import { SlideInLeft } from "react-native-reanimated"
 
 export const HomeScreen = () => {
     const {
@@ -27,7 +27,14 @@ export const HomeScreen = () => {
         onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
-    const { coinListEnter, coinListExit } = useMemoizedAnimation()
+    const { animateEntering, animateExiting } = useMemoizedAnimation({
+        enteringAnimation: new SlideInLeft(),
+        enteringDelay: 200,
+        enteringDuration: 200,
+        exitingAnimation: new SlideInLeft(),
+        exitingDelay: 0,
+        exitingDuration: 200,
+    })
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -64,8 +71,8 @@ export const HomeScreen = () => {
                 <TokenList
                     isEdit={isEdit}
                     visibleHeightRef={visibleHeightRef.current}
-                    entering={coinListEnter}
-                    exiting={coinListExit}
+                    entering={animateEntering}
+                    exiting={animateExiting}
                 />
             </NestableScrollContainer>
 

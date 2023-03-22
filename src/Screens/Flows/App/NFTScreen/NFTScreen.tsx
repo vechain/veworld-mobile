@@ -1,12 +1,20 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import React, { useRef } from "react"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { SlideInLeft } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { useMemoizedAnimation } from "../HomeScreen/Hooks/useMemoizedAnimation"
+import { useMemoizedAnimation } from "~Common"
 import { CollectionsList, ImportNftBar } from "./components"
 
 export const NFTScreen = () => {
-    const { NFTListEnter, NFTListExit } = useMemoizedAnimation()
+    const { animateEntering, animateExiting } = useMemoizedAnimation({
+        enteringAnimation: new SlideInLeft(),
+        enteringDelay: 200,
+        enteringDuration: 200,
+        exitingAnimation: new SlideInLeft(),
+        exitingDelay: 0,
+        exitingDuration: 200,
+    })
 
     const paddingBottom = useBottomTabBarHeight()
 
@@ -23,8 +31,8 @@ export const NFTScreen = () => {
                 }}>
                 <ImportNftBar />
                 <CollectionsList
-                    entering={NFTListEnter}
-                    exiting={NFTListExit}
+                    entering={animateEntering}
+                    exiting={animateExiting}
                 />
             </NestableScrollContainer>
         </>
