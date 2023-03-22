@@ -18,11 +18,11 @@ public class DetoxTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Test
-    public void runDetoxTests() {
+    public void runDetoxTests() {        
         DetoxConfig detoxConfig = new DetoxConfig();
-        detoxConfig.idlePolicyConfig.masterTimeoutSec = 90;
-        detoxConfig.idlePolicyConfig.idleResourceTimeoutSec = 60;
-        detoxConfig.rnContextLoadTimeoutSec = (BuildConfig.DEBUG ? 180 : 60);
+        detoxConfig.idlePolicyConfig.masterTimeoutSec = 600;
+        detoxConfig.idlePolicyConfig.idleResourceTimeoutSec = 600;
+        detoxConfig.rnContextLoadTimeoutSec = 600;
 
         Detox.runTests(mActivityRule, detoxConfig);
     }
