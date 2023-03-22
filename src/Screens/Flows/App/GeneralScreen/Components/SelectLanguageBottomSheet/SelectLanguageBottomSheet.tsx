@@ -79,9 +79,7 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                     estimatedItemSize={ITEM_SIZE}
                     estimatedListSize={{
                         height: 184,
-                        width:
-                            152 * supportedLanguages.length +
-                            (supportedLanguages.length - 1) * 16,
+                        width: 400,
                     }}
                 />
             </BaseView>
