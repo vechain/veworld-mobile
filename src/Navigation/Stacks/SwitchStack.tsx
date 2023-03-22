@@ -1,13 +1,13 @@
 import React, { useMemo } from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { Tabbar } from "~Navigation/Tabs"
+import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
 import { ResetAppScreen } from "~Screens"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
-    Tabbar: undefined
+    TabStack: undefined
     ResetAppScreen: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
@@ -36,8 +36,8 @@ export const SwitchStack = () => {
             default:
                 return (
                     <Switch.Screen
-                        name="Tabbar"
-                        component={Tabbar}
+                        name="TabStack"
+                        component={TabStack}
                         options={{ headerShown: false }}
                     />
                 )

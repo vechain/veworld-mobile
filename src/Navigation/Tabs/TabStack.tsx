@@ -9,7 +9,7 @@ import { NFTStack } from "~Navigation/Stacks/NFTStack"
 
 const Tab = createBottomTabNavigator()
 
-export const Tabbar = () => {
+export const TabStack = () => {
     const theme = useTheme()
 
     const renderTabBarIcon = useCallback(
