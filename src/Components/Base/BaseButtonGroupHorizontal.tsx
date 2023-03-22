@@ -32,7 +32,7 @@ export const BaseButtonGroupHorizontal = ({
     const theme = useTheme()
 
     const onPress = useCallback(
-        (button: Button) => () => action?.(button),
+        (button: Button) => () => action(button),
         [action],
     )
 
@@ -99,10 +99,7 @@ export const BaseButtonGroupHorizontal = ({
                             }
                             typographyFont="bodyMedium"
                             w={buttonWidth}
-                            style={{
-                                borderRadius: 16,
-                                borderBottomColor: theme.colors.background,
-                            }}
+                            style={styles.buttonStyle}
                         />
                     )
                 })}
@@ -116,5 +113,9 @@ const baseStyles = (theme: ColorThemeType) =>
         backgroundStyle: {
             backgroundColor: theme.colors.card,
             borderRadius: 16,
+        },
+        buttonStyle: {
+            borderRadius: 16,
+            borderBottomColor: theme.colors.background,
         },
     })
