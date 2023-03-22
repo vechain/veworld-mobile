@@ -573,6 +573,18 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
 	/**
+	 * L​i​g​h​t
+	 */
+	LIGHT_THEME: string
+	/**
+	 * D​a​r​k
+	 */
+	DARK_THEME: string
+	/**
+	 * S​y​s​t​e​m
+	 */
+	SYSTEM_THEME: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -1136,6 +1148,18 @@ Please, try again later.
 	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Light
+	 */
+	LIGHT_THEME: () => LocalizedString
+	/**
+	 * Dark
+	 */
+	DARK_THEME: () => LocalizedString
+	/**
+	 * System
+	 */
+	SYSTEM_THEME: () => LocalizedString
 	/**
 	 * Account
 	 */

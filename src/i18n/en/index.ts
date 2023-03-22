@@ -189,6 +189,9 @@ const en: BaseTranslation = {
     // Settings Connected Apps
 
     // Settings Labels
+    LIGHT_THEME: "Light",
+    DARK_THEME: "Dark",
+    SYSTEM_THEME: "System",
 
     // Settings Currencies
 
