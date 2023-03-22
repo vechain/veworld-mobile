@@ -4,14 +4,14 @@ import { BaseIcon, BaseText, BaseTouchableBox } from "~Components"
 
 type Props = {
     placeholder: string
-    onClick: () => void
+    onPress: () => void
 }
 
-export const ChangeLanguage: React.FC<Props> = ({ placeholder, onClick }) => {
+export const ChangeLanguage: React.FC<Props> = ({ placeholder, onPress }) => {
     const theme = useTheme()
 
     return (
-        <BaseTouchableBox action={onClick} justifyContent="space-between">
+        <BaseTouchableBox action={onPress} justifyContent="space-between">
             <BaseText typographyFont="smallButtonPrimary">
                 {placeholder}
             </BaseText>

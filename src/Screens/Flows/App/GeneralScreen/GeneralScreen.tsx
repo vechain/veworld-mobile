@@ -133,7 +133,7 @@ export const GeneralScreen = () => {
 
                 <ChangeLanguage
                     placeholder={selectedLanguage}
-                    onClick={onSelectLanguageClick}
+                    onPress={onSelectLanguageClick}
                 />
 
                 <SelectLanguageBottomSheet
