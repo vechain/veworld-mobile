@@ -6,13 +6,10 @@ import {
     StyleSheet,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { typography } from "~Common/Theme"
-
+import { typography, TFonts } from "~Common/Theme"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText } from "./BaseText"
-import { LocalizedString } from "typesafe-i18n"
 import * as Haptics from "expo-haptics"
-import { TFonts } from "~Common/Theme"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -22,7 +19,7 @@ type Props = {
     variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
     textColor?: string
-    title: LocalizedString | string | React.ReactNode
+    title: string | React.ReactNode
     m?: number
     mx?: number
     my?: number
