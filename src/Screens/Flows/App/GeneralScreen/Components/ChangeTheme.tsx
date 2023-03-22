@@ -10,12 +10,16 @@ export const ChangeTheme: React.FC = () => {
 
     const userPref = getUserPreferences(store)
 
-    const themePref = useMemo(() => userPref?.theme, [userPref])
-
-    const [selectedTheme, setSelectedTheme] = useState(themePref)
-
     //Check system color scheme
     const systemColorScheme = useColorScheme()
+
+    const themePref = useMemo(
+        () =>
+            userPref?.theme === "system" ? systemColorScheme : userPref.theme,
+        [userPref, systemColorScheme],
+    )
+
+    const [selectedTheme, setSelectedTheme] = useState(themePref)
 
     const { LL } = useI18nContext()
 
@@ -39,17 +43,16 @@ export const ChangeTheme: React.FC = () => {
     const handleSelectTheme = useCallback(
         (button: Button) => {
             let mode: "dark" | "light"
-
             if (button.id === "system") mode = systemColorScheme
             else mode = button.id === "light" ? "light" : "dark"
-
-            setSelectedTheme(mode)
 
             store.write(() => {
                 if (userPref) {
                     userPref.theme = mode
                 }
             })
+
+            setSelectedTheme(button.id)
         },
         [store, systemColorScheme, userPref],
     )
