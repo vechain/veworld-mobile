@@ -13,6 +13,8 @@ type Props = {
     handleSelectLanguage: (language: string) => void
 }
 
+const ITEM_SIZE = 80
+
 export const SelectLanguageBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
@@ -74,7 +76,7 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                     }}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
-                    estimatedItemSize={supportedLanguages.length}
+                    estimatedItemSize={ITEM_SIZE}
                     estimatedListSize={{
                         height: 184,
                         width:
