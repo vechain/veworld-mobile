@@ -1,6 +1,5 @@
 import React, { memo } from "react"
-import { StyleSheet } from "react-native"
-import { ViewProps } from "react-native"
+import { StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseView } from "~Components"
