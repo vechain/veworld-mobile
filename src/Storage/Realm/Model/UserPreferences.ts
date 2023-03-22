@@ -4,7 +4,7 @@ import { Network } from "./Network"
 
 export class UserPreferences extends Object {
     _id!: string
-    theme!: string
+    theme!: "light" | "dark"
     currentNetwork!: Network
     showTestNetTag!: boolean
     showConversionOtherNets!: boolean
