@@ -25,7 +25,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install & Patch packages
-        run: yarn install && yarn patch-package
+        run: yarn install
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -60,7 +60,7 @@ jobs:
         id: device-name
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
 
-      - name: Yarn start
+      - name: Start Metro Bundler
         run: yarn react-native start &
       
       - name: Detox test Android release

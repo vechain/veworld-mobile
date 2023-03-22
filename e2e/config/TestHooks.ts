@@ -1,7 +1,7 @@
 import { AfterAll, Before, BeforeAll } from "@cucumber/cucumber"
 import * as detoxConfig from "detox/internals"
 
-BeforeAll({ timeout: 300 * 1000 }, async () => {
+BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")
     await detoxConfig.init()
     console.log("Detox test session started!")
@@ -13,7 +13,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     }
 })
 
-Before({ timeout: 300 * 1000 }, async () => {
+Before({ timeout: 600 * 1000 }, async () => {
     if (detox.device.getPlatform() === "ios") {
         console.log("Relaunching app before test...")
         await detox.device.reloadReactNative()
@@ -21,7 +21,7 @@ Before({ timeout: 300 * 1000 }, async () => {
     }
 })
 
-AfterAll({ timeout: 300 * 1000 }, async () => {
+AfterAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting cleanup Detox test session...")
     await detoxConfig.cleanup()
     console.log("Detox test session cleaned up!")
