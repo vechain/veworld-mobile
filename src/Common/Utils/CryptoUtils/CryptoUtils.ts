@@ -5,6 +5,7 @@ import PasswordUtils from "../PasswordUtils"
 import HexUtils from "../HexUtils"
 import { Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
+import stringify from "json-stringify-safe"
 
 const xPubFromHdNode = (hdNode: HDNode): XPub => {
     return {
@@ -55,6 +56,21 @@ function decrypt<T>(data: string, encryptionKey: string): T {
     return parsed
 }
 
+function encryptState<T>(data: T, key: string): string {
+    const cipher = crypto.createCipheriv("aes256", key, null)
+    let ciph = cipher.update(stringify(data), "utf-8", "hex")
+    ciph += cipher.final("hex")
+    return ciph as string
+}
+
+function decryptState(data: string, key: string) {
+    const decipher = crypto.createDecipheriv("aes256", key, null)
+    let txt = decipher.update(data, "hex", "utf-8")
+    txt += decipher.final("utf-8")
+    let txtToString = txt.toString()
+    return txtToString as string
+}
+
 const verifyMnemonic = (seed: string) => {
     let hdNode
     try {
@@ -101,6 +117,8 @@ export default {
     shuffleArray,
     encrypt,
     decrypt,
+    decryptState,
+    encryptState,
     verifyMnemonic,
     encryptWallet,
 }

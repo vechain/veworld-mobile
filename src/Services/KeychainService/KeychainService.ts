@@ -5,6 +5,7 @@ import * as i18n from "~i18n"
 
 const WALLET_KEY = "VeWorld_Wallet_key"
 const REALM_KEY = "VeWorld_Realm_key"
+const REDUX_KEY = "VeWorld_Redux_key"
 
 const getEncryptionKey = async (
     deviceIndex: number,
@@ -106,10 +107,38 @@ const deleteItem = async (deviceIndex: number) => {
     }
 }
 
+const getReduxmKey = async () => {
+    const options = {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        keychainService: REDUX_KEY,
+    }
+
+    try {
+        return await Keychain.get(options, REDUX_KEY)
+    } catch (err) {
+        error(err)
+    }
+}
+
+const setReduxKey = async (Enckey: string) => {
+    const options = {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        keychainService: REDUX_KEY,
+    }
+
+    try {
+        await Keychain.set(Enckey, options, REDUX_KEY)
+    } catch (err) {
+        error(err)
+    }
+}
+
 export default {
     getEncryptionKey,
     setEncryptionKey,
     getRealmKey,
     setRealmKey,
     deleteItem,
+    getReduxmKey,
+    setReduxKey,
 }

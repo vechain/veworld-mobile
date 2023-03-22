@@ -14,6 +14,8 @@ import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
 import { useIsFocused } from "@react-navigation/native"
 import { useThor } from "~Components"
+import { useAppSelector } from "~Storage/Redux"
+import { selectTheme } from "~Storage/Redux/Selectors"
 
 export const HomeScreen = () => {
     const {
@@ -41,6 +43,10 @@ export const HomeScreen = () => {
 
     const isFocused = useIsFocused()
     const thor = useThor()
+
+    const theme = useAppSelector(selectTheme)
+
+    console.log("theme -------> ", theme)
 
     useEffect(() => {
         async function init() {

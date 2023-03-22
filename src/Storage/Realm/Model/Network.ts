@@ -2,7 +2,7 @@ import Realm from "realm"
 
 export class Network extends Realm.Object {
     defaultNet!: boolean
-    nodeId!: Realm.BSON.ObjectId
+    nodeId!: string
     tag!: string
     type!: string
     urls!: string[]
@@ -23,11 +23,7 @@ export class Network extends Realm.Object {
 
         properties: {
             defaultNet: { type: "bool", default: true },
-            nodeId: {
-                type: "objectId",
-                default: () => new Realm.BSON.ObjectId(),
-                indexed: true,
-            },
+            nodeId: { type: "string", indexed: true },
             tag: "string",
             type: "string",
             currentUrl: "string",
