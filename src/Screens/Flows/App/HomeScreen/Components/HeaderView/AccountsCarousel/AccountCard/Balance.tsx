@@ -26,7 +26,10 @@ export const Balance: React.FC<Props> = memo(
 
         const userPref = getUserPreferences(store)
 
-        const currencyPref = useMemo(() => userPref?.currency, [userPref])
+        const currencyPref = useMemo(
+            () => (userPref?.currency === "euro" ? LL.BD_EUR() : LL.BD_USD()),
+            [LL, userPref?.currency],
+        )
 
         const renderBalance = useMemo(
             () => getBalanceText(balance, isVisible),
@@ -59,7 +62,7 @@ export const Balance: React.FC<Props> = memo(
                         mx={4}
                         color={theme.colors.textReversed}
                         typographyFont="body">
-                        {currencyPref === "euro" ? LL.BD_EUR() : LL.BD_USD()}
+                        {currencyPref}
                     </BaseText>
                 </BaseView>
             </>
