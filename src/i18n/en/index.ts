@@ -130,6 +130,8 @@ const en: BaseTranslation = {
     SB_RENAME_WALLET: "Rename wallet",
     SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
     SB_DEVICE_CARD : "{alias} ({accounts} accounts)",
+    SB_YOUR_TOKENS : "Your tokens",
+    SB_YOUR_NFTS : "Your NFTs",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -151,6 +153,7 @@ const en: BaseTranslation = {
     COMMON_LBL_ADDRESS: "Address",
     COMMON_LBL_SUCCESS: "Success",
     COMMON_LBL_ERROR: "Error",
+    COMMON_LBL_IMPORT: "Import",
 
     // Common Titles
 

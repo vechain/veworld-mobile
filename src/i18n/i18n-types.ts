@@ -443,6 +443,14 @@ type RootTranslation = {
 	 */
 	SB_DEVICE_CARD: RequiredParams<'accounts' | 'alias'>
 	/**
+	 * Y​o​u​r​ ​t​o​k​e​n​s
+	 */
+	SB_YOUR_TOKENS: string
+	/**
+	 * Y​o​u​r​ ​N​F​T​s
+	 */
+	SB_YOUR_NFTS: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -498,6 +506,10 @@ type RootTranslation = {
 	 * E​r​r​o​r
 	 */
 	COMMON_LBL_ERROR: string
+	/**
+	 * I​m​p​o​r​t
+	 */
+	COMMON_LBL_IMPORT: string
 	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
@@ -960,6 +972,14 @@ export type TranslationFunctions = {
 	 */
 	SB_DEVICE_CARD: (arg: { accounts: unknown, alias: unknown }) => LocalizedString
 	/**
+	 * Your tokens
+	 */
+	SB_YOUR_TOKENS: () => LocalizedString
+	/**
+	 * Your NFTs
+	 */
+	SB_YOUR_NFTS: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -1015,6 +1035,10 @@ export type TranslationFunctions = {
 	 * Error
 	 */
 	COMMON_LBL_ERROR: () => LocalizedString
+	/**
+	 * Import
+	 */
+	COMMON_LBL_IMPORT: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */
