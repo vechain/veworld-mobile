@@ -4,7 +4,7 @@ import { ViewProps } from "react-native"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseView } from "~Components"
-import { NFTCollectionAccordion, NFTItem } from "./NFTCollectionAccordion"
+import { CollectionAccordion, NFTItem } from "./CollectionAccordion"
 
 const NUM_ITEMS = 20
 function getColor(i: number) {
@@ -33,14 +33,14 @@ const ARRAY_LIST = [
 
 interface Props extends AnimateProps<ViewProps> {}
 
-export const NFTList = memo(({ ...animatedViewProps }: Props) => {
+export const CollectionsList = memo(({ ...animatedViewProps }: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
     return (
         <Animated.View style={themedStyles.container} {...animatedViewProps}>
             {ARRAY_LIST.map((data, index) => (
                 <BaseView key={index} style={themedStyles.innerContainer}>
-                    <NFTCollectionAccordion collection={data} />
+                    <CollectionAccordion collection={data} />
                 </BaseView>
             ))}
         </Animated.View>

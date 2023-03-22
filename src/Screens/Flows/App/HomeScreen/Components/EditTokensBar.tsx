@@ -1,13 +1,15 @@
 import React, { memo, useCallback } from "react"
 import { useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     isEdit: boolean
     setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const EditTokens = memo(({ isEdit, setIsEdit }: Props) => {
+export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
+    const { LL } = useI18nContext()
     const theme = useTheme()
     const onButtonPress = useCallback(() => {
         setIsEdit(prevState => !prevState)
@@ -48,9 +50,8 @@ export const EditTokens = memo(({ isEdit, setIsEdit }: Props) => {
             flexDirection="row"
             justifyContent="space-between"
             alignItems="center"
-            px={20}
-            my={20}>
-            <BaseText typographyFont="subTitle">Your Tokens</BaseText>
+            px={20}>
+            <BaseText typographyFont="subTitle">{LL.SB_YOUR_TOKENS()}</BaseText>
 
             {getActionsButtons()}
         </BaseView>

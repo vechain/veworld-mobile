@@ -21,7 +21,7 @@ const ITEM_SIZE: number = 152
 const ITEM_SPACING: number = 16
 const LIST_HEIGHT: number = 184
 
-export const NFTCollectionAccordion = ({ collection }: Props) => {
+export const CollectionAccordion = ({ collection }: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const headerComponent = useMemo(() => {
         return (

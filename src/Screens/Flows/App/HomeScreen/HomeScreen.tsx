@@ -2,9 +2,8 @@ import React, { useRef, useState, useEffect } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
-    NFTList,
     HeaderView,
-    EditTokens,
+    EditTokensBar,
     AccountManagementBottomSheet,
 } from "./Components"
 import { useBottomSheetModal } from "~Common"
@@ -13,7 +12,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { SafeAreaView } from "react-native"
 import { useIsFocused } from "@react-navigation/native"
-import { useThor } from "~Components"
+import { BaseSpacer, useThor } from "~Components"
 
 export const HomeScreen = () => {
     const {
@@ -28,10 +27,7 @@ export const HomeScreen = () => {
         onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
-    const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
-        useMemoizedAnimation()
-
-    const [activeTab, setActiveTab] = useState(0)
+    const { coinListEnter, coinListExit } = useMemoizedAnimation()
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -61,22 +57,16 @@ export const HomeScreen = () => {
                 }}>
                 <HeaderView
                     openAccountManagementSheet={openAccountManagementSheet}
-                    setActiveTab={setActiveTab}
-                    activeTab={activeTab}
                 />
-
-                <EditTokens isEdit={isEdit} setIsEdit={setIsEdit} />
-
-                {activeTab === 0 ? (
-                    <TokenList
-                        isEdit={isEdit}
-                        visibleHeightRef={visibleHeightRef.current}
-                        entering={coinListEnter}
-                        exiting={coinListExit}
-                    />
-                ) : (
-                    <NFTList entering={NFTListEnter} exiting={NFTListExit} />
-                )}
+                <BaseSpacer height={24} />
+                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                <BaseSpacer height={24} />
+                <TokenList
+                    isEdit={isEdit}
+                    visibleHeightRef={visibleHeightRef.current}
+                    entering={coinListEnter}
+                    exiting={coinListExit}
+                />
             </NestableScrollContainer>
 
             <AccountManagementBottomSheet
