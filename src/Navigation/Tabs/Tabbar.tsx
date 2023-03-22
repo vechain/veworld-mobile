@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
@@ -12,6 +12,12 @@ const Tab = createBottomTabNavigator()
 export const Tabbar = () => {
     const theme = useTheme()
 
+    const renderTabBarIcon = useCallback(
+        (focused: boolean, iconName: string) => (
+            <TabIcon focused={focused} title={iconName} />
+        ),
+        [],
+    )
     return (
         <Tab.Navigator
             screenOptions={{
@@ -28,9 +34,8 @@ export const Tabbar = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: "Wallet",
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon focused={focused} title={"home"} />
-                    ),
+                    tabBarIcon: ({ focused }) =>
+                        renderTabBarIcon(focused, "home"),
                 }}
             />
 
@@ -39,12 +44,8 @@ export const Tabbar = () => {
                 component={NFTStack}
                 options={{
                     tabBarLabel: "NFT",
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon
-                            focused={focused}
-                            title={"image-multiple-outline"}
-                        />
-                    ),
+                    tabBarIcon: ({ focused }) =>
+                        renderTabBarIcon(focused, "image-multiple-outline"),
                 }}
             />
 
@@ -53,9 +54,8 @@ export const Tabbar = () => {
                 component={SettingsStack}
                 options={{
                     tabBarLabel: "Settings",
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon focused={focused} title={"cog"} />
-                    ),
+                    tabBarIcon: ({ focused }) =>
+                        renderTabBarIcon(focused, "cog"),
                 }}
             />
         </Tab.Navigator>
