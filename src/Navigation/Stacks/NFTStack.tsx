@@ -3,12 +3,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { NFTScreen } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
-export type RootStackParamListHome = {
+export type RootStackParamListNFT = {
     [Routes.NFTS]: undefined
 }
 
 const { Navigator, Group, Screen } =
-    createNativeStackNavigator<RootStackParamListHome>()
+    createNativeStackNavigator<RootStackParamListNFT>()
 
 export const NFTStack = () => {
     return (
