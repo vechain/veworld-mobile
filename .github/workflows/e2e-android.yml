@@ -1,0 +1,83 @@
+name: E2E Testing - Android
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test-android:
+    name: Detox Build & Test Android Release
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: 'yarn'
+
+      - name: Install & Patch packages
+        run: yarn install && yarn patch-package
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          cache: gradle
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Rebuild Detox Framework
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+
+      - name: Restore Detox build
+        id: detox-cache-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: android/app/build
+          key: ${{ runner.os }}-detox-android-build
+      
+      - name: Detox build Android release
+        if: steps.detox-cache-restore.outputs.cache-hit != 'true'
+        run: yarn detox build --configuration android.emu.debug.31
+
+      - name: Save Detox build
+        id: detox-cache
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: android/app/build
+          key: ${{ runner.os }}-detox-android-build
+
+      - name: Get device name
+        id: device-name
+        run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
+
+      - name: Yarn start
+        run: yarn react-native start &
+      
+      - name: Detox test Android release
+        uses: reactivecircus/android-emulator-runner@v2
+        timeout-minutes: 30
+        with:
+          api-level: 31
+          arch: x86_64
+          force-avd-creation: false
+          disable-animations: true
+          avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
+          script: yarn detox test --configuration android.emu.debug.31 --loglevel debug --headless --record-logs all
+
+      - name: Upload artifacts
+        if: failure() || cancelled()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-fail-artifacts
+          path: artifacts
+
