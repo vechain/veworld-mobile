@@ -2,22 +2,8 @@ import React, { useCallback, useMemo, useState } from "react"
 import { useColorScheme } from "~Common"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
+import { useI18nContext } from "~i18n"
 import { useRealm, getUserPreferences } from "~Storage"
-
-const currencies: Array<Button> = [
-    {
-        id: "light",
-        label: "Light",
-    },
-    {
-        id: "dark",
-        label: "Dark",
-    },
-    {
-        id: "system",
-        label: "System",
-    },
-]
 
 export const ChangeTheme: React.FC = () => {
     const { store } = useRealm()
@@ -30,6 +16,25 @@ export const ChangeTheme: React.FC = () => {
 
     //Check system color scheme
     const systemColorScheme = useColorScheme()
+
+    const { LL } = useI18nContext()
+
+    const themes: Array<Button> = useMemo(() => {
+        return [
+            {
+                id: "light",
+                label: LL.LIGHT_THEME(),
+            },
+            {
+                id: "dark",
+                label: LL.DARK_THEME(),
+            },
+            {
+                id: "system",
+                label: LL.SYSTEM_THEME(),
+            },
+        ]
+    }, [LL])
 
     const handleSelectTheme = useCallback(
         (button: Button) => {
@@ -52,7 +57,7 @@ export const ChangeTheme: React.FC = () => {
     return (
         <BaseButtonGroupHorizontal
             selectedButtonIds={[selectedTheme || ""]}
-            buttons={currencies}
+            buttons={themes}
             action={handleSelectTheme}
         />
     )
