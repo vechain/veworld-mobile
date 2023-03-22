@@ -14,6 +14,10 @@ export const Header = memo(() => {
         nav.navigate(Routes.WALLET_MANAGEMENT)
     }, [nav])
 
+    const onOpenCamera = useCallback(() => {
+        nav.navigate(Routes.CAMERA)
+    }, [nav])
+
     return (
         <BaseView
             w={100}
@@ -33,6 +37,7 @@ export const Header = memo(() => {
                     name={"flip-horizontal"}
                     size={24}
                     color={theme.colors.primary}
+                    action={onOpenCamera}
                     mx={12}
                 />
 
