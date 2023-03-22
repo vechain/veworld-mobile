@@ -13,11 +13,7 @@ export const ChangeTheme: React.FC = () => {
     //Check system color scheme
     const systemColorScheme = useColorScheme()
 
-    const themePref = useMemo(
-        () =>
-            userPref?.theme === "system" ? systemColorScheme : userPref.theme,
-        [userPref, systemColorScheme],
-    )
+    const themePref = useMemo(() => userPref?.theme, [userPref])
 
     const [selectedTheme, setSelectedTheme] = useState(themePref)
 
