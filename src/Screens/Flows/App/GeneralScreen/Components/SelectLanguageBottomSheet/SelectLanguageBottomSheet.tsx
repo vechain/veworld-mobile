@@ -3,7 +3,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useSupportedLanguages, useTheme } from "~Common"
+import { LanguageUtils, useTheme } from "~Common"
 import { FlashList } from "@shopify/flash-list"
 import { StyleSheet } from "react-native"
 
@@ -29,7 +29,7 @@ export const SelectLanguageBottomSheet = React.forwardRef<
     )
 
     // Retrieve the list of supported languages in human readable format (e.g. "English", "Spanish"...)
-    const supportedLanguages = useSupportedLanguages()
+    const supportedLanguages = LanguageUtils.getSupportedLanguages()
 
     const theme = useTheme()
 
