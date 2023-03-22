@@ -3,7 +3,7 @@ import { BaseSpacer, BaseView, useUserPreferencesEntity } from "~Components"
 import { Header } from "./Header"
 import { AccountsCarousel } from "./AccountsCarousel"
 import { TabbarHeader } from "./TabbarHeader"
-import { ActionsList } from "./ActionsList"
+import { HomeScreenActions } from "./HomeScreenActions"
 import { useAccountsList } from "~Common/Hooks/Entities"
 import { Account, useRealm } from "~Storage"
 import { AddressUtils } from "~Common"
@@ -60,7 +60,7 @@ export const HeaderView = memo(
                     activeTab={activeTab}
                 />
                 <BaseSpacer height={20} />
-                <ActionsList />
+                <HomeScreenActions />
             </>
         )
     },
