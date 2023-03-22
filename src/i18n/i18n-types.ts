@@ -372,6 +372,10 @@ type RootTranslation = {
 	 */
 	TITLE_MANAGE_WALLET: string
 	/**
+	 * N​F​T
+	 */
+	TITLE_NFT: string
+	/**
 	 * N​F​T​s
 	 */
 	TITLE_NFTS: string
@@ -911,6 +915,10 @@ export type TranslationFunctions = {
 	 * Manage Wallet
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	TITLE_NFT: () => LocalizedString
 	/**
 	 * NFTs
 	 */

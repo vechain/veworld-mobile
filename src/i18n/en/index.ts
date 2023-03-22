@@ -111,6 +111,7 @@ const en: BaseTranslation = {
     TITLE_GENERAL: "General",
     TITLE_ADVANCED: "Advanced",
     TITLE_MANAGE_WALLET: "Manage Wallet",
+    TITLE_NFT: "NFT",
     TITLE_NFTS: "NFTs",
     TITLE_NETWORK: "Network",
     TITLE_CONTACTS: "Contacts",
