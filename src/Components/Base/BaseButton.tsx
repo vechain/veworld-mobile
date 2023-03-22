@@ -19,7 +19,7 @@ type Props = {
     variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
     textColor?: string
-    title: string | React.ReactNode
+    title?: string
     m?: number
     mx?: number
     my?: number
@@ -51,7 +51,8 @@ export const BaseButton = ({
     rightIcon,
     ...otherProps
 }: Props) => {
-    const { typographyFont, fontFamily, fontSize, fontWeight } = otherProps
+    const { typographyFont, fontFamily, fontSize, fontWeight, children } =
+        otherProps
 
     const { styles: themedStyles, theme } = useThemedStyles(
         baseStyles(variant === "link"),
@@ -155,6 +156,7 @@ export const BaseButton = ({
                 fontSize={fontSize}
                 style={themedStyles.text}>
                 {otherProps.title}
+                {children}
             </BaseText>
             {rightIcon}
         </TouchableOpacity>
