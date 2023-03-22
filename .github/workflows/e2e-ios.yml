@@ -82,7 +82,7 @@ jobs:
           path: ios/build
           key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
 
-      - name: Yarn start
+      - name: Start Metro Bundler
         run: yarn react-native start &
       
       - name: Detox test iOS release
