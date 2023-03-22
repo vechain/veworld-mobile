@@ -5,6 +5,7 @@ import { TabIcon } from "~Components"
 import { useTheme } from "~Common"
 import PlatformUtils from "~Common/Utils/PlatformUtils"
 import { HomeStack, SettingsStack } from "~Navigation/Stacks"
+import { NFTStack } from "~Navigation/Stacks/NFTStack"
 
 const Tab = createBottomTabNavigator()
 
@@ -29,6 +30,20 @@ export const Tabbar = () => {
                     tabBarLabel: "Wallet",
                     tabBarIcon: ({ focused }) => (
                         <TabIcon focused={focused} title={"home"} />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="NFTStack"
+                component={NFTStack}
+                options={{
+                    tabBarLabel: "NFT",
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon
+                            focused={focused}
+                            title={"image-multiple-outline"}
+                        />
                     ),
                 }}
             />
