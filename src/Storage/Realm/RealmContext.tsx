@@ -155,7 +155,7 @@ export const initRealmClasses = (
                 currentNetwork: networks[0], // main network is default
             })
         } else {
-            userPreferences.theme = colorScheme
+            if (!userPreferences.theme) userPreferences.theme = colorScheme
         }
     })
     // [ END ] - STORE
