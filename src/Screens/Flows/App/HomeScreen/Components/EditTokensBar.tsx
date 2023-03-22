@@ -51,7 +51,9 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
             justifyContent="space-between"
             alignItems="center"
             px={20}>
-            <BaseText typographyFont="subTitle">{LL.SB_YOUR_TOKENS()}</BaseText>
+            <BaseText typographyFont="subTitleBold">
+                {LL.SB_YOUR_TOKENS()}
+            </BaseText>
 
             {getActionsButtons()}
         </BaseView>

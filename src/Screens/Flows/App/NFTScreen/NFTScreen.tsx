@@ -4,9 +4,20 @@ import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { SlideInLeft } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useMemoizedAnimation } from "~Common"
-import { CollectionsList, ImportNftBar } from "./components"
+import { BaseSpacer, BaseText } from "~Components"
+import { useI18nContext } from "~i18n"
+import { CollectionsList, FavouriteNfts, ImportNftBar } from "./components"
+
+export type NFTItem = {
+    key: string
+    label: string
+    height: number
+    width: number
+    backgroundColor: string
+}
 
 export const NFTScreen = () => {
+    const { LL } = useI18nContext()
     const { animateEntering, animateExiting } = useMemoizedAnimation({
         enteringAnimation: new SlideInLeft(),
         enteringDelay: 200,
@@ -29,6 +40,12 @@ export const NFTScreen = () => {
                 onContentSizeChange={visibleHeight => {
                     visibleHeightRef.current = visibleHeight
                 }}>
+                <BaseText typographyFont="largeTitle" mx={20}>
+                    {LL.TITLE_NFTS()}
+                </BaseText>
+
+                <BaseSpacer height={24} />
+                <FavouriteNfts />
                 <ImportNftBar />
                 <CollectionsList
                     entering={animateEntering}

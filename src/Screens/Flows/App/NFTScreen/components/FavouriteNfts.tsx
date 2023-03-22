@@ -3,31 +3,38 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
-import { BaseAccordion, BaseText, BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
+import { useI18nContext } from "~i18n"
 import { NFTItem } from "../NFTScreen"
-
-type Props = {
-    collection: { title: string; list: NFTItem[] }
-}
 
 const ITEM_SIZE: number = 152
 const ITEM_SPACING: number = 16
 const LIST_HEIGHT: number = 184
 
-export const CollectionAccordion = ({ collection }: Props) => {
-    const { styles: themedStyles } = useThemedStyles(baseStyles)
-    const headerComponent = useMemo(() => {
-        return (
-            <BaseView flexDirection="row">
-                <BaseView style={themedStyles.nftPreviewImage} />
-                <BaseText typographyFont="subTitleBold">
-                    {collection.title}
-                </BaseText>
-            </BaseView>
-        )
-    }, [collection, themedStyles])
+const NUM_ITEMS = 20
+function getColor(i: number) {
+    const multiplier = 255 / (NUM_ITEMS - 1)
+    const colorVal = i * multiplier
+    return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
+}
 
-    const bodyComponent = useMemo(() => {
+const initialData: NFTItem[] = [...Array(NUM_ITEMS)].map((d, index) => {
+    const backgroundColor = getColor(index)
+    return {
+        key: `item-${index}`,
+        label: String(index) + "",
+        height: 100,
+        width: 60 + Math.random() * 40,
+        backgroundColor,
+    }
+})
+
+export const FavouriteNfts = () => {
+    const { LL } = useI18nContext()
+
+    const { styles: themedStyles } = useThemedStyles(baseStyles)
+
+    const favouriteList = useMemo(() => {
         const renderSeparator = () => (
             <BaseView style={{ width: ITEM_SPACING }} />
         )
@@ -35,7 +42,7 @@ export const CollectionAccordion = ({ collection }: Props) => {
         return (
             <BaseView w={100} style={{ height: LIST_HEIGHT }}>
                 <FlashList
-                    data={collection.list}
+                    data={initialData}
                     keyExtractor={item => item.key}
                     ItemSeparatorComponent={renderSeparator}
                     contentContainerStyle={themedStyles.listContainer}
@@ -62,20 +69,22 @@ export const CollectionAccordion = ({ collection }: Props) => {
                     estimatedListSize={{
                         height: LIST_HEIGHT,
                         width:
-                            ITEM_SIZE * collection.list.length +
-                            (collection.list.length - 1) * ITEM_SPACING,
+                            ITEM_SIZE * initialData.length +
+                            (initialData.length - 1) * ITEM_SPACING,
                     }}
                 />
             </BaseView>
         )
-    }, [collection, themedStyles])
+    }, [themedStyles])
 
     return (
-        <BaseAccordion
-            headerComponent={headerComponent}
-            headerStyle={themedStyles.headerStyle}
-            bodyComponent={bodyComponent}
-        />
+        <BaseView mx={20}>
+            <BaseText typographyFont="subTitle">
+                {LL.COMMON_LBL_FAVOURITES()}
+            </BaseText>
+            <BaseSpacer height={24} />
+            {favouriteList}
+        </BaseView>
     )
 }
 

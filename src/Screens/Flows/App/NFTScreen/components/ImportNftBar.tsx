@@ -13,7 +13,9 @@ export const ImportNftBar = memo(() => {
             alignItems="center"
             px={20}
             my={20}>
-            <BaseText typographyFont="subTitle">{LL.SB_YOUR_NFTS()}</BaseText>
+            <BaseText typographyFont="subTitleBold">
+                {LL.SB_YOUR_NFTS()}
+            </BaseText>
 
             <BaseButton
                 size="md"

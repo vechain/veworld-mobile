@@ -372,9 +372,9 @@ type RootTranslation = {
 	 */
 	TITLE_MANAGE_WALLET: string
 	/**
-	 * N​F​T
+	 * N​F​T​s
 	 */
-	TITLE_NFT: string
+	TITLE_NFTS: string
 	/**
 	 * N​e​t​w​o​r​k
 	 */
@@ -447,7 +447,7 @@ type RootTranslation = {
 	 */
 	SB_YOUR_TOKENS: string
 	/**
-	 * Y​o​u​r​ ​N​F​T​s
+	 * Y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n​s
 	 */
 	SB_YOUR_NFTS: string
 	/**
@@ -510,6 +510,14 @@ type RootTranslation = {
 	 * I​m​p​o​r​t
 	 */
 	COMMON_LBL_IMPORT: string
+	/**
+	 * F​a​v​o​u​r​i​t​e
+	 */
+	COMMON_LBL_FAVOURITE: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	COMMON_LBL_FAVOURITES: string
 	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
@@ -904,9 +912,9 @@ export type TranslationFunctions = {
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
 	/**
-	 * NFT
+	 * NFTs
 	 */
-	TITLE_NFT: () => LocalizedString
+	TITLE_NFTS: () => LocalizedString
 	/**
 	 * Network
 	 */
@@ -976,7 +984,7 @@ export type TranslationFunctions = {
 	 */
 	SB_YOUR_TOKENS: () => LocalizedString
 	/**
-	 * Your NFTs
+	 * Your collections
 	 */
 	SB_YOUR_NFTS: () => LocalizedString
 	/**
@@ -1039,6 +1047,14 @@ export type TranslationFunctions = {
 	 * Import
 	 */
 	COMMON_LBL_IMPORT: () => LocalizedString
+	/**
+	 * Favourite
+	 */
+	COMMON_LBL_FAVOURITE: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	COMMON_LBL_FAVOURITES: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */

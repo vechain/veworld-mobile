@@ -24,7 +24,7 @@ export const TokenCard = memo(({ token, isAnimation }: Props) => {
             <View style={baseStyles.tokenIcon} />
 
             <View style={baseStyles.textMargin}>
-                <BaseText typographyFont="subTitle">{token.name}</BaseText>
+                <BaseText typographyFont="subTitleBold">{token.name}</BaseText>
                 <BaseText>{token.symbol}</BaseText>
             </View>
 

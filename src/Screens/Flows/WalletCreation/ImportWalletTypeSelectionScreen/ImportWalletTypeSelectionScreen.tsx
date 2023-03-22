@@ -39,7 +39,7 @@ export const ImportWalletTypeSelectionScreen = () => {
                 </BaseView>
 
                 <BaseView w={100} alignItems="flex-start">
-                    <BaseText typographyFont="subTitle" my={10}>
+                    <BaseText typographyFont="subTitleBold" my={10}>
                         {LL.SB_IMPORT_WALLET_TYPE_SEED()}
                     </BaseText>
                     <BaseText typographyFont="body">
@@ -54,7 +54,7 @@ export const ImportWalletTypeSelectionScreen = () => {
 
                     <BaseSpacer height={20} />
 
-                    <BaseText typographyFont="subTitle" my={10}>
+                    <BaseText typographyFont="subTitleBold" my={10}>
                         {LL.SB_IMPORT_WALLET_TYPE_HARDWARE()}
                     </BaseText>
                     <BaseText typographyFont="body">

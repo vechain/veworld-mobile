@@ -111,7 +111,7 @@ const en: BaseTranslation = {
     TITLE_GENERAL: "General",
     TITLE_ADVANCED: "Advanced",
     TITLE_MANAGE_WALLET: "Manage Wallet",
-    TITLE_NFT: "NFT",
+    TITLE_NFTS: "NFTs",
     TITLE_NETWORK: "Network",
     TITLE_CONTACTS: "Contacts",
     TITLE_PRIVACY: "Privacy and Security",
@@ -131,7 +131,7 @@ const en: BaseTranslation = {
     SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
     SB_DEVICE_CARD : "{alias} ({accounts} accounts)",
     SB_YOUR_TOKENS : "Your tokens",
-    SB_YOUR_NFTS : "Your NFTs",
+    SB_YOUR_NFTS : "Your collections",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -154,6 +154,8 @@ const en: BaseTranslation = {
     COMMON_LBL_SUCCESS: "Success",
     COMMON_LBL_ERROR: "Error",
     COMMON_LBL_IMPORT: "Import",
+    COMMON_LBL_FAVOURITE: "Favourite",
+    COMMON_LBL_FAVOURITES: "Favourites",
 
     // Common Titles
 
