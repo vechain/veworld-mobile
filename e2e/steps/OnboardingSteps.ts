@@ -3,7 +3,7 @@ import { waitFor, element } from "detox"
 import OnboardingFlows from "../helpers/flows/OnboardingFlows"
 
 Given("The app is opened", { timeout: -1 }, async () => {
-    var retries = 3
+    var retries = 5
     while (retries-- > 0) {
         try {
             await detox.device.launchApp({ newInstance: true })
