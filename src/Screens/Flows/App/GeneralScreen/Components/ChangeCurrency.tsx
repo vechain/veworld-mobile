@@ -1,7 +1,9 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
-import { getUserPreferences, useRealm } from "~Storage"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectCurrency } from "~Storage/Redux/Selectors"
+import { setCurrency } from "~Storage/Redux/Slices/UserPreferences"
 
 const currencies: Array<Button> = [
     {
@@ -17,27 +19,21 @@ const currencies: Array<Button> = [
 ]
 
 export const ChangeCurrency: React.FC = () => {
-    const { store } = useRealm()
-
-    const userPref = getUserPreferences(store)
-
-    const currencyPref = useMemo(() => userPref?.currency, [userPref])
+    const currencyPref = useAppSelector(selectCurrency)
 
     const [selectedCurrency, setSelectedCurrency] =
         useState<string>(currencyPref)
+
+    const dispatch = useAppDispatch()
 
     const handleSelectCurrency = useCallback(
         (button: Button) => {
             setSelectedCurrency(button.id)
 
-            // update realm userPref currency
-            store.write(() => {
-                if (userPref) {
-                    userPref.currency = button.id
-                }
-            })
+            // update redux store
+            dispatch(setCurrency(button.id))
         },
-        [store, userPref],
+        [dispatch],
     )
 
     return (

@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native"
 import { FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { getUserPreferences, useRealm } from "~Storage"
+import { useAppSelector } from "~Storage/Redux"
+import { selectCurrency } from "~Storage/Redux/Selectors"
 
 type Props = {
     balance: string
@@ -22,13 +23,11 @@ export const Balance: React.FC<Props> = memo(
         const theme = useTheme()
         const { LL } = useI18nContext()
 
-        const { store } = useRealm()
-
-        const userPref = getUserPreferences(store)
+        const currencyState = useAppSelector(selectCurrency)
 
         const currencyPref = useMemo(
-            () => (userPref?.currency === "euro" ? LL.BD_EUR() : LL.BD_USD()),
-            [LL, userPref?.currency],
+            () => (currencyState === "euro" ? LL.BD_EUR() : LL.BD_USD()),
+            [LL, currencyState],
         )
 
         const renderBalance = useMemo(

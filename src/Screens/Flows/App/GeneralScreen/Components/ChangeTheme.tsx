@@ -3,17 +3,17 @@ import { useColorScheme } from "~Common"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
 import { useI18nContext } from "~i18n"
-import { useRealm, getUserPreferences } from "~Storage"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setTheme } from "~Storage/Redux/Actions"
+import { selectTheme } from "~Storage/Redux/Selectors"
 
 export const ChangeTheme: React.FC = () => {
-    const { store } = useRealm()
+    const dispatch = useAppDispatch()
 
-    const userPref = getUserPreferences(store)
+    const themePref: string = useAppSelector(selectTheme)
 
     //Check system color scheme
     const systemColorScheme = useColorScheme()
-
-    const themePref: string = useMemo(() => userPref?.theme, [userPref])
 
     const [selectedTheme, setSelectedTheme] = useState(themePref)
 
@@ -42,15 +42,11 @@ export const ChangeTheme: React.FC = () => {
             if (button.id === "system") mode = systemColorScheme
             else mode = button.id === "light" ? "light" : "dark"
 
-            store.write(() => {
-                if (userPref) {
-                    userPref.theme = mode
-                }
-            })
+            dispatch(setTheme(mode))
 
             setSelectedTheme(button.id)
         },
-        [store, systemColorScheme, userPref],
+        [dispatch, systemColorScheme],
     )
 
     return (

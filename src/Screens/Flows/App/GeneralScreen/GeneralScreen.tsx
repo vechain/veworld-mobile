@@ -1,5 +1,5 @@
 import { useNavigation, useTheme } from "@react-navigation/native"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
     BaseIcon,
@@ -17,7 +17,9 @@ import {
     SelectLanguageBottomSheet,
 } from "./Components"
 import { useBottomSheetModal } from "~Common"
-import { getUserPreferences, useRealm } from "~Storage"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectLangauge } from "~Storage/Redux/Selectors"
+import { setLanguage } from "~Storage/Redux/Slices/UserPreferences"
 
 export const GeneralScreen = () => {
     const nav = useNavigation()
@@ -28,11 +30,9 @@ export const GeneralScreen = () => {
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
-    const { store } = useRealm()
+    const dispatch = useAppDispatch()
 
-    const userPref = getUserPreferences(store)
-
-    const languagePref = useMemo(() => userPref?.language, [userPref])
+    const languagePref = useAppSelector(selectLangauge)
 
     // Checks if the user wants to hide tokens with small balances
     // TODO realm user preference to save the choice, update TokenList tokens for small balances & update the switch with the saved preference
@@ -56,16 +56,13 @@ export const GeneralScreen = () => {
         (language: string) => {
             setSelectedLanguage(language)
 
-            store.write(() => {
-                if (userPref) {
-                    userPref.language = language
-                }
-            })
+            // Dispatch the selected language to redux store
+            dispatch(setLanguage(language))
 
             // Closes the bottom sheet
             closeSelectLanguageSheet()
         },
-        [closeSelectLanguageSheet, store, userPref],
+        [closeSelectLanguageSheet, dispatch],
     )
 
     // Opens the bottom sheet to select the language
