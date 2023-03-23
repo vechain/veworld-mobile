@@ -14,7 +14,6 @@ import {
 } from "~Storage"
 import Realm from "realm"
 import { SettingsConstants } from "~Common/Constant"
-import { getScannedAddress } from "~Storage/Realm/Model"
 
 export const useAppReset = () => {
     const { store, cache } = useRealm()
@@ -52,12 +51,9 @@ const loopOverAndDeleteDevices = async (
 
 const resetRealm = async (store: Realm, cache: Realm) => {
     const appLock = getAppLock(cache)
-    const scannedAddress = getScannedAddress(cache)
 
     cache.write(() => {
         appLock.status = WALLET_STATUS.LOCKED
-        scannedAddress.address = ""
-        scannedAddress.isShowSend = false
     })
 
     const config = getConfig(store)
