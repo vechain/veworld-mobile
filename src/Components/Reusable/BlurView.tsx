@@ -3,17 +3,18 @@ import { StyleSheet } from "react-native"
 import { BlurView as BV, BlurViewProps } from "@react-native-community/blur"
 import { useTheme } from "~Common"
 
-type Props = BlurViewProps
+type Props = { blurAmount?: number } & BlurViewProps
 
 export const BlurView = (props: Props) => {
+    const { blurAmount = 5 } = props
     const theme = useTheme()
 
     const blurType = useMemo(() => (theme.isDark ? "dark" : "light"), [theme])
     return (
         <BV
-            style={[StyleSheet.absoluteFill]}
+            style={[StyleSheet.absoluteFill, props.style]}
             blurType={blurType}
-            blurAmount={5}
+            blurAmount={blurAmount}
             reducedTransparencyFallbackColor="white"
             {...props}
         />

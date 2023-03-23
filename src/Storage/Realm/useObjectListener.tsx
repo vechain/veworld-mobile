@@ -13,6 +13,8 @@ export const useObjectListener = (
     const initialList = database.objects(className).filtered("_id == $0", id)
     const [data, setData] = useState([...initialList])
 
+    console.log("useObjectListener hook is called")
+
     useEffect(() => {
         if (!initialList.isValid()) {
             initialList.removeListener(onChange)
@@ -20,7 +22,7 @@ export const useObjectListener = (
         }
 
         try {
-            console.log("NEW LISTENER")
+            console.log("NEW LISTENER ADDED")
             initialList.addListener(onChange)
         } catch (error) {
             console.error(
