@@ -1461,9 +1461,9 @@
     eslint-visitor-keys "^3.3.0"
 
 "@eslint-community/regexpp@^4.4.0":
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/@eslint-community/regexpp/-/regexpp-4.4.0.tgz#3e61c564fcd6b921cb789838631c5ee44df09403"
-  integrity sha512-A9983Q0LnDGdLPjxyXQ00sbV+K+O+ko2Dr+CZigbHWtX9pNfxlaBkMR8X1CztI73zuEyEBXTVjx7CE+/VSwDiQ==
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/@eslint-community/regexpp/-/regexpp-4.4.1.tgz#087cb8d9d757bb22e9c9946c9c0c2bf8806830f1"
+  integrity sha512-BISJ6ZE4xQsuL/FmsyRaiffpq977bMlsKfGHTQrOGFErfByxIe6iZTxPf/00Zon9b9a7iUykfQwejN3s2ZW/Bw==
 
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
@@ -2648,9 +2648,9 @@
     redent "^3.0.0"
 
 "@testing-library/react-native@^12.0.0":
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.0.0.tgz#6604b9daa9a32b1a4287c3b501658768adaf11c3"
-  integrity sha512-Wa7TsEbsduLaLNK9sycgIpSqC4v3tt0zzH5BIDqqNEVN+LQqeX9UdWxD6JFcKgbXJVqWvPq5Y3fzQbYqOaf9zw==
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.0.1.tgz#ae7df2f80c40447f88c25be68ec5ef4bf8992f8f"
+  integrity sha512-IPyKF/WsxfpABf4VJUNgerLDoac/KusgZbLSkfbHCXboNBVKQZjdXGfp8C30Ih6xHnhjJAwO/Ff3dJGGGyXDkA==
   dependencies:
     pretty-format "^29.0.0"
 
@@ -2887,9 +2887,9 @@
     csstype "^3.0.2"
 
 "@types/scheduler@*":
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
-  integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
+  version "0.16.3"
+  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.3.tgz#cef09e3ec9af1d63d2a6cc5b383a737e24e6dcf5"
+  integrity sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==
 
 "@types/semver@^7.3.12":
   version "7.3.13"
@@ -4794,11 +4794,6 @@ crypto-browserify@^3.12.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
-crypto-js@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
-  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
-
 crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-1.0.0.tgz#a230f64f568310e1498009940790ec99545bca7e"
@@ -5148,9 +5143,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 detox@*, detox@^20.1.0:
-  version "20.5.0"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-20.5.0.tgz#70f1aa7ed4a2b652b5787a806e680fafaab2fcb3"
-  integrity sha512-iFDqU5UZ5f1usgRowyiauO83ffMqvN7qFdF5+TVJelfcHTIVHRbZwI/D4MjtAnpuowljfwBhN0tYhTSEOMjCmg==
+  version "20.6.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-20.6.0.tgz#9aef5d7d17c5a0e8a96592570a510881ac59c249"
+  integrity sha512-89YxptnkvyQazN2I8EDRkH8tWqiOvqsGXZCZwUKP5lsulBSTJka7SS5Fd8AnQGUd5vPs+tTqO+zb0FgCRcV/Tg==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
@@ -5309,9 +5304,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.284:
-  version "1.4.335"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.335.tgz#69c08baa608bbb58e290d83320190fa82c835efe"
-  integrity sha512-l/eowQqTnrq3gu+WSrdfkhfNHnPgYqlKAwxz7MTOj6mom19vpEDHNXl6dxDxyTiYuhemydprKr/HCrHfgk+OfQ==
+  version "1.4.337"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.337.tgz#710168240b2dc5fe5eb5f8e4ef9c16d70aedc0ba"
+  integrity sha512-W8gdzXG86mVPoc56eM8YA+QiLxaAxJ8cmDjxZgfhLLWVvZQxyA918w5tX2JEWApZta45T1/sYcmFHTsTOUE3nw==
 
 elliptic@6.5.4, elliptic@^6.5.3:
   version "6.5.4"
@@ -5540,9 +5535,9 @@ eslint-plugin-flowtype@2.50.3:
     lodash "^4.17.10"
 
 eslint-plugin-i18next@^6.0.0-2:
-  version "6.0.0-7"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-i18next/-/eslint-plugin-i18next-6.0.0-7.tgz#dd83bc5842b88568826e4f94b33cad9edec9c3a3"
-  integrity sha512-V8mr6WCJQRvKoD+EehHrzvDOtfEPI9H5/eaZrO6TFTgZY5+p19aPIzMlAcp1OOTHm9rrSQw71RGcGxEDLBKO5w==
+  version "6.0.0-8"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-i18next/-/eslint-plugin-i18next-6.0.0-8.tgz#3dbe9191d6a1746dabc4540d4f1d67301d40d379"
+  integrity sha512-TMOeq/tcovFnDCxObJsEWm2/pnVAaOPkvvFKfjHrmGQ5oPGa+OmnBGDbTIU2GjVmejlUSBA4R897Y+jQJPmrWQ==
   dependencies:
     lodash "^4.17.21"
     requireindex "~1.1.0"
@@ -10666,14 +10661,6 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redux-persist-transform-encrypt@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/redux-persist-transform-encrypt/-/redux-persist-transform-encrypt-4.0.0.tgz#f635268667b5a047930e48a9fe52a9207a2eef75"
-  integrity sha512-F+ynB4v8rgipI7xJyXo6b/dSWDydIAz56AyvCJH+K1LWHQzlwV6/i/mU9XrKxyog9qY56C+1Rizmk9ztw9ailA==
-  dependencies:
-    crypto-js "^4.1.1"
-    json-stringify-safe "^5.0.1"
-
 redux-persist@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
@@ -12340,9 +12327,9 @@ type-fest@^0.8.1:
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
 type-fest@^3.0.0:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-3.6.1.tgz#cf8025edeebfd6cf48de73573a5e1423350b9993"
-  integrity sha512-htXWckxlT6U4+ilVgweNliPqlsVSSucbxVexRYllyMVJDtf5rTjv6kF/s+qAd4QSL1BZcnJPEJavYBPQiWuZDA==
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-3.7.0.tgz#32a38fb199857df6e92af5fbe3c804c314f9a901"
+  integrity sha512-A2qUJ/j8vkKIT+UorxayZjFJoEdNkIPZkjOJSWezoAbRQd7QEhnz2iJlfVy4Or0GuEnCXts5cNorQNUvdLkaSQ==
 
 type-is@~1.6.18:
   version "1.6.18"

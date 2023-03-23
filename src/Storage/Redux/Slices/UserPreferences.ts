@@ -7,6 +7,7 @@ export interface UserPreferenceState {
     currentNetwork: INetwork
     showTestNetTag: boolean
     showConversionOtherNets: boolean
+    hideTokensWithNoBalance: boolean
     isAppLockActive: boolean
     selectedAccount?: IAccount
     balanceVisible: boolean
@@ -19,6 +20,7 @@ const initialState: UserPreferenceState = {
     currentNetwork: { ...ThorConstants.makeNetwork(NETWORK_TYPE.MAIN) },
     showTestNetTag: true,
     showConversionOtherNets: true,
+    hideTokensWithNoBalance: false,
     isAppLockActive: process.env.NODE_ENV !== "development",
     selectedAccount: undefined,
     balanceVisible: true,
@@ -44,6 +46,9 @@ export const UserPreferencesSlice = createSlice({
 
         setShowConversionOtherNets: (state, action: PayloadAction<boolean>) => {
             state.showConversionOtherNets = action.payload
+        },
+        setHideTokensWithNoBalance: (state, action: PayloadAction<boolean>) => {
+            state.hideTokensWithNoBalance = action.payload
         },
 
         setIsAppLockActive: (state, action: PayloadAction<boolean>) => {
@@ -73,6 +78,7 @@ export const {
     setCurrentNetwork,
     setShowTestNetTag,
     setShowConversionOtherNets,
+    setHideTokensWithNoBalance,
     setIsAppLockActive,
     setSelectedAccount,
     setBalanceVisible,

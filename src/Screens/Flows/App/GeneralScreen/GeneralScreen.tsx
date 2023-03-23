@@ -1,5 +1,5 @@
 import { useNavigation, useTheme } from "@react-navigation/native"
-import React, { useCallback, useState } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import {
     BaseIcon,
@@ -18,8 +18,14 @@ import {
 } from "./Components"
 import { useBottomSheetModal } from "~Common"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectLangauge } from "~Storage/Redux/Selectors"
-import { setLanguage } from "~Storage/Redux/Slices/UserPreferences"
+import {
+    selectHideTokensWithNoBalance,
+    selectLangauge,
+} from "~Storage/Redux/Selectors"
+import {
+    setHideTokensWithNoBalance,
+    setLanguage,
+} from "~Storage/Redux/Slices/UserPreferences"
 
 export const GeneralScreen = () => {
     const nav = useNavigation()
@@ -28,38 +34,31 @@ export const GeneralScreen = () => {
 
     const { LL } = useI18nContext()
 
-    const goBack = useCallback(() => nav.goBack(), [nav])
-
-    const dispatch = useAppDispatch()
-
-    const languagePref = useAppSelector(selectLangauge)
-
-    // Checks if the user wants to hide tokens with small balances
-    // TODO realm user preference to save the choice, update TokenList tokens for small balances & update the switch with the saved preference
-    const [isTokensHidden, setIsTokensHidden] = useState(false)
-
-    // Toggles the switch to hide tokens with small balances
-    const toggleTokensHiddenSwitch = useCallback((newValue: boolean) => {
-        setIsTokensHidden(newValue)
-    }, [])
-
     const {
-        ref: walletManagementBottomSheetRef,
+        ref: selectLanguageSheetRef,
         onOpen: openSelectLanguageSheet,
         onClose: closeSelectLanguageSheet,
     } = useBottomSheetModal()
 
-    const [selectedLanguage, setSelectedLanguage] =
-        useState<string>(languagePref)
+    const dispatch = useAppDispatch()
+
+    const selectedLanguage = useAppSelector(selectLangauge)
+    const hideTokensWithNoBalance = useAppSelector(
+        selectHideTokensWithNoBalance,
+    )
+
+    const goBack = useCallback(() => nav.goBack(), [nav])
+    const toggleTokensHiddenSwitch = useCallback(
+        (newValue: boolean) => {
+            dispatch(setHideTokensWithNoBalance(newValue))
+        },
+        [dispatch],
+    )
 
     const handleSelectLanguage = useCallback(
         (language: string) => {
-            setSelectedLanguage(language)
-
-            // Dispatch the selected language to redux store
             dispatch(setLanguage(language))
 
-            // Closes the bottom sheet
             closeSelectLanguageSheet()
         },
         [closeSelectLanguageSheet, dispatch],
@@ -114,7 +113,7 @@ export const GeneralScreen = () => {
                     title={LL.BD_HIDE_TOKENS()}
                     subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
                     onValueChange={toggleTokensHiddenSwitch}
-                    value={isTokensHidden}
+                    value={hideTokensWithNoBalance}
                 />
 
                 <BaseSpacer height={20} />
@@ -134,7 +133,7 @@ export const GeneralScreen = () => {
                 />
 
                 <SelectLanguageBottomSheet
-                    ref={walletManagementBottomSheetRef}
+                    ref={selectLanguageSheetRef}
                     onClose={closeSelectLanguageSheet}
                     selectedLanguage={selectedLanguage}
                     handleSelectLanguage={handleSelectLanguage}
