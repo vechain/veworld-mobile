@@ -2,7 +2,7 @@ import React from "react"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
-import { PlatformUtils } from "~Common"
+import { isIOS } from "~Common/Utils/PlatformUtils/Platform"
 
 export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
     const { LL } = useI18nContext()
@@ -31,10 +31,10 @@ export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
 
 const baseStyles = StyleSheet.create({
     container: {
-        marginTop: PlatformUtils.isIOS() ? 60 : 20,
+        marginTop: isIOS() ? 60 : 20,
     },
     icon: {
         position: "absolute",
-        left: PlatformUtils.isIOS() ? 20 : 8,
+        left: isIOS() ? 20 : 8,
     },
 })
