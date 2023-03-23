@@ -11,9 +11,8 @@ import { useBottomSheetModal } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
-import { SafeAreaView } from "react-native"
 import { useIsFocused } from "@react-navigation/native"
-import { useThor } from "~Components"
+import { BaseSafeArea, useThor } from "~Components"
 
 export const HomeScreen = () => {
     const {
@@ -51,8 +50,7 @@ export const HomeScreen = () => {
     }, [isFocused, thor])
 
     return (
-        <>
-            <SafeAreaView />
+        <BaseSafeArea grow={1}>
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom }}
@@ -88,6 +86,6 @@ export const HomeScreen = () => {
                 ref={addAccountBottomSheetRef}
                 onClose={closeAddAccountSheet}
             />
-        </>
+        </BaseSafeArea>
     )
 }

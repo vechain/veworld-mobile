@@ -1,4 +1,4 @@
-// export * from "./Account"
+export * from "./Account"
 // export * from "./Activity"
 // export * from "./Backup"
 // export * from "./Balance"

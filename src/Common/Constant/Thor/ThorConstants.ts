@@ -1,6 +1,7 @@
 import type { abi } from "thor-devkit"
 import vip180 from "./abis/VIP180.abi"
 import { NETWORK_TYPE } from "~Model"
+import uuid from "react-native-uuid"
 
 const THOR_MAIN_URLS = [
     "https://mainnet.vechain.org",
@@ -49,6 +50,8 @@ export const makeNetwork = (type: NETWORK_TYPE) => {
     switch (type) {
         case NETWORK_TYPE.MAIN:
             return {
+                defaultNet: true,
+                id: uuid.v4().toString(),
                 tag: NETWORK_TYPE.MAIN,
                 type: NETWORK_TYPE.MAIN,
                 urls: THOR_MAIN_URLS,
@@ -58,6 +61,8 @@ export const makeNetwork = (type: NETWORK_TYPE) => {
 
         case NETWORK_TYPE.TEST:
             return {
+                defaultNet: true,
+                id: uuid.v4().toString(),
                 tag: NETWORK_TYPE.TEST,
                 type: NETWORK_TYPE.TEST,
                 urls: THOR_TESTNET_URLS,
@@ -66,6 +71,14 @@ export const makeNetwork = (type: NETWORK_TYPE) => {
             }
 
         default:
-            break
+            return {
+                defaultNet: true,
+                id: uuid.v4().toString(),
+                tag: NETWORK_TYPE.MAIN,
+                type: NETWORK_TYPE.MAIN,
+                urls: THOR_MAIN_URLS,
+                currentUrl: THOR_MAIN_URLS[0],
+                genesisId: genesisesId.main,
+            }
     }
 }
