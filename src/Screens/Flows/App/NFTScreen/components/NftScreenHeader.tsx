@@ -18,19 +18,17 @@ export const NftScreenHeader = () => {
                 />
 
                 <BaseIcon
-                    // color={theme.colors.text}
                     action={() => {}}
                     style={baseStyles.sendIcon}
-                    bg={theme.colors.primary}
+                    bg={theme.colors.secondary}
                     name="send-outline"
                     size={24}
                 />
 
                 <BaseIcon
-                    // color={theme.colors.text}
                     action={() => {}}
                     style={baseStyles.receiveIcon}
-                    bg={theme.colors.primary}
+                    bg={theme.colors.secondary}
                     name="arrow-down"
                     size={24}
                 />
