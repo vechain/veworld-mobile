@@ -36,11 +36,8 @@ export const HomeScreen = () => {
     })
 
     const [isEdit, setIsEdit] = useState(false)
-
     const paddingBottom = useBottomTabBarHeight()
-
     const visibleHeightRef = useRef<number>(0)
-
     const isFocused = useIsFocused()
     const thor = useThor()
 

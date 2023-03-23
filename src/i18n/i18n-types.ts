@@ -143,6 +143,10 @@ type RootTranslation = {
 	 */
 	BTN_HISTORY: string
 	/**
+	 * G​o​ ​t​o​ ​s​e​t​t​i​n​g​s
+	 */
+	BTN_GO_TO_SETTINGS: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -280,6 +284,10 @@ type RootTranslation = {
 	 */
 	BD_HELP_IMPROVE_DISCLAIMER: string
 	/**
+	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
+	 */
+	BD_SCANED_ADDRESS_COPPIED: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -344,6 +352,14 @@ type RootTranslation = {
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: string
 	/**
+	 * C​a​m​e​r​a​ ​P​e​r​m​i​s​s​i​o​n​s
+	 */
+	TITLE_ALERT_CAMERA_PERMISSION: string
+	/**
+	 * C​a​m​e​r​a​ ​U​n​a​v​a​i​l​a​b​l​e
+	 */
+	TITLE_ALERT_CAMERA_UNAVAILABLE: string
+	/**
 	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
 	 */
 	TITLE_WALLET_SUCCESS: string
@@ -404,6 +420,14 @@ type RootTranslation = {
 	 */
 	TITLE_ABOUT: string
 	/**
+	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
+	 */
+	TITLE_SCAN_QRCODE: string
+	/**
+	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
+	 */
+	TITLE_SCANED_ADDRESS_COPPIED: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -447,6 +471,14 @@ type RootTranslation = {
 	 */
 	SB_DEVICE_CARD: RequiredParams<'accounts' | 'alias'>
 	/**
+	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​c​a​m​e​r​a​ ​a​c​c​e​s​s​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
+	 */
+	SB_ALERT_CAMERA_PERMISSION: string
+	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​t​h​i​s​ ​o​p​e​r​a​t​i​o​n​.
+	 */
+	SB_CAMERA_ANAVAILABILITY: string
+	/**
 	 * Y​o​u​r​ ​t​o​k​e​n​s
 	 */
 	SB_YOUR_TOKENS: string
@@ -483,13 +515,13 @@ type RootTranslation = {
 	 */
 	BIOMETRICS_PROMPT: string
 	/**
+	 * V​e​W​o​r​l​d
+	 */
+	VEWORLD: string
+	/**
 	 * C​a​n​c​e​l
 	 */
-	COMMON_BTN_cancel: string
-	/**
-	 * C​o​n​f​i​r​m
-	 */
-	COMMON_BTN_CONFIRM: string
+	COMMON_BTN_CANCEL: string
 	/**
 	 * R​e​t​r​y
 	 */
@@ -498,6 +530,22 @@ type RootTranslation = {
 	 * S​i​g​n​ ​o​u​t
 	 */
 	COMMON_BTN_SIGN_OUT: string
+	/**
+	 * O​K
+	 */
+	COMMON_BTN_OK: string
+	/**
+	 * L​o​a​d​i​n​g
+	 */
+	COMMON_BTN_LOADING: string
+	/**
+	 * D​o​n​e
+	 */
+	COMMON_BTN_DONE: string
+	/**
+	 * C​o​n​f​i​r​m
+	 */
+	COMMON_BTN_CONFIRM: string
 	/**
 	 * A​d​d​r​e​s​s
 	 */
@@ -688,6 +736,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_HISTORY: () => LocalizedString
 	/**
+	 * Go to settings
+	 */
+	BTN_GO_TO_SETTINGS: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -824,6 +876,10 @@ export type TranslationFunctions = {
 	 */
 	BD_HELP_IMPROVE_DISCLAIMER: () => LocalizedString
 	/**
+	 * Address Copied to Clipboard
+	 */
+	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -888,6 +944,14 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
 	/**
+	 * Camera Permissions
+	 */
+	TITLE_ALERT_CAMERA_PERMISSION: () => LocalizedString
+	/**
+	 * Camera Unavailable
+	 */
+	TITLE_ALERT_CAMERA_UNAVAILABLE: () => LocalizedString
+	/**
 	 * You're finally one of us!
 	 */
 	TITLE_WALLET_SUCCESS: () => LocalizedString
@@ -948,6 +1012,14 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ABOUT: () => LocalizedString
 	/**
+	 * Scan QR Code
+	 */
+	TITLE_SCAN_QRCODE: () => LocalizedString
+	/**
+	 * Address Copied to Clipboard
+	 */
+	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -988,6 +1060,14 @@ export type TranslationFunctions = {
 	 */
 	SB_DEVICE_CARD: (arg: { accounts: unknown, alias: unknown }) => LocalizedString
 	/**
+	 * You have previously denied camera access to VeWorld. Please enable it in your device settings.
+	 */
+	SB_ALERT_CAMERA_PERMISSION: () => LocalizedString
+	/**
+	 * Your device does not support this operation.
+	 */
+	SB_CAMERA_ANAVAILABILITY: () => LocalizedString
+	/**
 	 * Your tokens
 	 */
 	SB_YOUR_TOKENS: () => LocalizedString
@@ -1024,13 +1104,13 @@ export type TranslationFunctions = {
 	 */
 	BIOMETRICS_PROMPT: () => LocalizedString
 	/**
+	 * VeWorld
+	 */
+	VEWORLD: () => LocalizedString
+	/**
 	 * Cancel
 	 */
-	COMMON_BTN_cancel: () => LocalizedString
-	/**
-	 * Confirm
-	 */
-	COMMON_BTN_CONFIRM: () => LocalizedString
+	COMMON_BTN_CANCEL: () => LocalizedString
 	/**
 	 * Retry
 	 */
@@ -1039,6 +1119,22 @@ export type TranslationFunctions = {
 	 * Sign out
 	 */
 	COMMON_BTN_SIGN_OUT: () => LocalizedString
+	/**
+	 * OK
+	 */
+	COMMON_BTN_OK: () => LocalizedString
+	/**
+	 * Loading
+	 */
+	COMMON_BTN_LOADING: () => LocalizedString
+	/**
+	 * Done
+	 */
+	COMMON_BTN_DONE: () => LocalizedString
+	/**
+	 * Confirm
+	 */
+	COMMON_BTN_CONFIRM: () => LocalizedString
 	/**
 	 * Address
 	 */

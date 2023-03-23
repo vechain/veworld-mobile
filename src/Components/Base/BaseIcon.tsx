@@ -15,6 +15,12 @@ type Props =
           size?: number
           bg?: string
           action?: () => void
+          m?: number
+          mx?: number
+          my?: number
+          p?: number
+          px?: number
+          py?: number
       } & IconProps &
           TouchableOpacityProps &
           ViewProps
@@ -53,9 +59,14 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
                             justifyContent: "center",
                             alignItems: "center",
                             backgroundColor: bg,
-                            padding: bg ? 8 : 0,
                             borderRadius: size ? size + 10 / 2 : 50,
                             opacity: props.disabled ? 0.5 : 1,
+                            margin: props.m,
+                            marginVertical: props.my,
+                            marginHorizontal: props.mx,
+                            padding: bg ? 8 : 0 ? props.p : undefined,
+                            paddingVertical: props.py,
+                            paddingHorizontal: props.px,
                         },
                         style,
                     ]}

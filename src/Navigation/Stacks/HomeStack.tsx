@@ -2,6 +2,7 @@ import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     BuyScreen,
+    CameraScreen,
     HistoryScreen,
     HomeScreen,
     SendScreen,
@@ -19,6 +20,7 @@ export type RootStackParamListHome = {
     [Routes.HISTORY]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
+    [Routes.CAMERA]: undefined
 }
 
 const { Navigator, Group, Screen } =
@@ -70,6 +72,12 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.CREATE_WALLET_FLOW}
                     component={CreateWalletAppStack}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.CAMERA}
+                    component={CameraScreen}
                     options={{ headerShown: false }}
                 />
             </Group>
