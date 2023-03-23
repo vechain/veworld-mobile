@@ -83,5 +83,3 @@ const createKey = () => {
     const keyBuff = crypto.getRandomValues(arr) as ArrayBuffer
     return Buffer.from(keyBuff).toString("hex")
 }
-
-// export const getEncryptionKey = await initEncryption()

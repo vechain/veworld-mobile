@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { RootState } from "../Store"
+import { RootState } from "../Types"
 
 const reducer = (state: RootState) => state.userPreferences
 

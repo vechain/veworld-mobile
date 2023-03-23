@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native"
 import { ColorThemeType, ColorTheme } from "../Theme/Theme"
-import { useUserPreferencesEntity } from "~Components"
+import { useAppSelector } from "~Storage/Redux"
+import { selectTheme } from "~Storage/Redux/Selectors"
 
 export const useTheme = (): ColorThemeType => {
-    const { theme } = useUserPreferencesEntity()
+    const theme = useAppSelector(selectTheme)
     return ColorTheme(theme)
 }
 

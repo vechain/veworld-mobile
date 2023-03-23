@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { ThorConstants } from "~Common"
+import { ThorConstants } from "~Common/Constant"
 import { IAccount, INetwork, NETWORK_TYPE } from "~Model"
 
 export interface UserPreferenceState {
