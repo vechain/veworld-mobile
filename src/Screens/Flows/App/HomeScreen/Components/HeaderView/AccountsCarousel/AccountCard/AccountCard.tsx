@@ -8,6 +8,7 @@ import {
     useTheme,
     useThemedStyles,
     PlatformUtils,
+    CURRENCY,
 } from "~Common"
 import {
     AccountIcon,
@@ -26,6 +27,7 @@ interface Props extends AnimateProps<ViewProps> {
     account: Account
     openAccountManagement: () => void
     balanceVisible: boolean
+    selectedCurrency: CURRENCY
 }
 
 export const AccountCard: React.FC<Props> = memo(props => {
@@ -34,6 +36,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
         account,
         openAccountManagement,
         balanceVisible,
+        selectedCurrency,
         ...animatedViewProps
     } = props
     const theme = useTheme()
@@ -90,6 +93,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     isVisible={balanceVisible}
                     toggleVisible={toggleBalanceVisibility}
                     balance={randomBalance}
+                    selectedCurrency={selectedCurrency}
                 />
             </BaseView>
         </Animated.View>

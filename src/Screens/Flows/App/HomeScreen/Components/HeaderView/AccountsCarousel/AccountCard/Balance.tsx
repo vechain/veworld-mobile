@@ -3,13 +3,12 @@ import { StyleSheet } from "react-native"
 import { CURRENCY, FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useAppSelector } from "~Storage/Redux"
-import { selectCurrency } from "~Storage/Redux/Selectors"
 
 type Props = {
     balance: string
     isVisible: boolean
     toggleVisible: () => void
+    selectedCurrency: CURRENCY
 }
 
 const getBalanceText = (balance: string, isVisible: boolean) => {
@@ -19,11 +18,9 @@ const getBalanceText = (balance: string, isVisible: boolean) => {
     ).map(_value => "*")
 }
 export const Balance: React.FC<Props> = memo(
-    ({ balance, isVisible, toggleVisible }) => {
+    ({ balance, isVisible, toggleVisible, selectedCurrency }) => {
         const theme = useTheme()
         const { LL } = useI18nContext()
-
-        const selectedCurrency = useAppSelector(selectCurrency)
 
         const selectedCurrencyText = useMemo(
             () =>
