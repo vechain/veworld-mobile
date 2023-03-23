@@ -16,7 +16,7 @@ import {
     ChangeLanguage,
     SelectLanguageBottomSheet,
 } from "./Components"
-import { useBottomSheetModal } from "~Common"
+import { LANGUAGE, useBottomSheetModal } from "~Common"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectHideTokensWithNoBalance,
@@ -43,6 +43,7 @@ export const GeneralScreen = () => {
     const dispatch = useAppDispatch()
 
     const selectedLanguage = useAppSelector(selectLangauge)
+
     const hideTokensWithNoBalance = useAppSelector(
         selectHideTokensWithNoBalance,
     )
@@ -57,7 +58,7 @@ export const GeneralScreen = () => {
 
     const handleSelectLanguage = useCallback(
         (language: string) => {
-            dispatch(setLanguage(language))
+            dispatch(setLanguage(language as LANGUAGE))
 
             closeSelectLanguageSheet()
         },

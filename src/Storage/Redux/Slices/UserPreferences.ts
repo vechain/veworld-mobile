@@ -1,3 +1,4 @@
+import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { ThorConstants } from "~Common/Constant"
 import { CURRENCY, ThemeEnum } from "~Common/Enums"
@@ -13,7 +14,7 @@ export interface UserPreferenceState {
     selectedAccount?: IAccount
     balanceVisible: boolean
     currency: CURRENCY
-    language: string
+    language: LANGUAGE
     isSystemTheme: boolean
 }
 
@@ -27,7 +28,7 @@ const initialState: UserPreferenceState = {
     selectedAccount: undefined,
     balanceVisible: true,
     currency: CURRENCY.USD,
-    language: "English",
+    language: LANGUAGE.ENGLISH,
     isSystemTheme: true,
 }
 
@@ -70,7 +71,7 @@ export const UserPreferencesSlice = createSlice({
             state.currency = action.payload
         },
 
-        setLanguage: (state, action: PayloadAction<string>) => {
+        setLanguage: (state, action: PayloadAction<LANGUAGE>) => {
             state.language = action.payload
         },
 
