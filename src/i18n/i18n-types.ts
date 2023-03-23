@@ -471,22 +471,6 @@ type RootTranslation = {
 	 */
 	SB_DEVICE_CARD: RequiredParams<'accounts' | 'alias'>
 	/**
-	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​c​a​m​e​r​a​ ​a​c​c​e​s​s​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
-	 */
-	SB_ALERT_CAMERA_PERMISSION: string
-	/**
-	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​t​h​i​s​ ​o​p​e​r​a​t​i​o​n​.
-	 */
-	SB_CAMERA_ANAVAILABILITY: string
-	/**
-	 * Y​o​u​r​ ​t​o​k​e​n​s
-	 */
-	SB_YOUR_TOKENS: string
-	/**
-	 * Y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n​s
-	 */
-	SB_YOUR_NFTS: string
-	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -1059,22 +1043,6 @@ export type TranslationFunctions = {
 	 * {alias} ({accounts} accounts)
 	 */
 	SB_DEVICE_CARD: (arg: { accounts: unknown, alias: unknown }) => LocalizedString
-	/**
-	 * You have previously denied camera access to VeWorld. Please enable it in your device settings.
-	 */
-	SB_ALERT_CAMERA_PERMISSION: () => LocalizedString
-	/**
-	 * Your device does not support this operation.
-	 */
-	SB_CAMERA_ANAVAILABILITY: () => LocalizedString
-	/**
-	 * Your tokens
-	 */
-	SB_YOUR_TOKENS: () => LocalizedString
-	/**
-	 * Your collections
-	 */
-	SB_YOUR_NFTS: () => LocalizedString
 	/**
 	 * Face ID
 	 */
