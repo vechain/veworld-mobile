@@ -107,7 +107,7 @@ const deleteItem = async (deviceIndex: number) => {
     }
 }
 
-const getReduxmKey = async () => {
+const getReduxKey = async () => {
     const options = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         keychainService: REDUX_KEY,
@@ -139,6 +139,6 @@ export default {
     getRealmKey,
     setRealmKey,
     deleteItem,
-    getReduxmKey,
+    getReduxKey,
     setReduxKey,
 }

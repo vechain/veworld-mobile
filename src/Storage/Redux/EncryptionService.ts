@@ -68,7 +68,7 @@ export const encryptTransform = <HSS, S = any, RS = any>(
 }
 
 export const initEncryption = async () => {
-    const encKey = await KeychainService.getReduxmKey()
+    const encKey = await KeychainService.getReduxKey()
     if (encKey) {
         return encKey
     } else {
