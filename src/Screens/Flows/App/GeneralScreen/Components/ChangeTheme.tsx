@@ -6,7 +6,7 @@ import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setTheme } from "~Storage/Redux/Actions"
 import { selectIsSystemTheme, selectTheme } from "~Storage/Redux/Selectors"
-import { setSystemTheme } from "~Storage/Redux/Slices/UserPreferences"
+import { setSystemTheme } from "~Storage/Redux/Actions"
 
 export const ChangeTheme: React.FC = () => {
     const dispatch = useAppDispatch()

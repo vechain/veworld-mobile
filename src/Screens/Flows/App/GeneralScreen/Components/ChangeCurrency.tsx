@@ -5,7 +5,7 @@ import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"
-import { setCurrency } from "~Storage/Redux/Slices/UserPreferences"
+import { setCurrency } from "~Storage/Redux/Actions"
 
 const currencies: Array<Button> = CurrencyConfig.map(currency => ({
     id: currency.currency,

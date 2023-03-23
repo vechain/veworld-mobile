@@ -22,10 +22,7 @@ import {
     selectHideTokensWithNoBalance,
     selectLangauge,
 } from "~Storage/Redux/Selectors"
-import {
-    setHideTokensWithNoBalance,
-    setLanguage,
-} from "~Storage/Redux/Slices/UserPreferences"
+import { setHideTokensWithNoBalance, setLanguage } from "~Storage/Redux/Actions"
 
 export const GeneralScreen = () => {
     const nav = useNavigation()
