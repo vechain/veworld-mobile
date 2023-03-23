@@ -6,19 +6,15 @@ import { computeBarStyle } from "./Helpers/ComputeBarStyle"
 type Props = {
     hero?: boolean
     transparent?: boolean
-    contentBasedOnScroll?: boolean
 } & StatusBarProps
 
 export const BaseStatusBar = memo((props: Props) => {
     const theme = useTheme()
 
-    const barStyle = useMemo(() => {
-        if (props.contentBasedOnScroll) {
-            return "light-content"
-        } else {
-            return computeBarStyle(props.hero, theme.isDark)
-        }
-    }, [props.hero, theme.isDark, props.contentBasedOnScroll])
+    const barStyle = useMemo(
+        () => computeBarStyle(props.hero, theme.isDark),
+        [props.hero, theme.isDark],
+    )
 
     return (
         <StatusBar

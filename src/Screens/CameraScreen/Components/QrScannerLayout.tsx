@@ -44,6 +44,5 @@ const baseStyles = StyleSheet.create({
         position: "absolute",
         width: deviceWidth,
         height: deviceHeight,
-        zIndex: 2,
     },
 })

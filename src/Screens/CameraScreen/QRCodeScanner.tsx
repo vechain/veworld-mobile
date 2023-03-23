@@ -1,107 +1,112 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { BaseModal, IBaseModal } from "~Components"
-import { BaseText, BaseView } from "~Components"
-import { Camera, useCameraDevices } from "react-native-vision-camera"
-import { useScanBarcodes, BarcodeFormat } from "vision-camera-code-scanner"
-import { Dimensions, StyleSheet } from "react-native"
-import { useI18nContext } from "~i18n"
-import { QrScannerLayout } from "./Components/QrScannerLayout"
-import { CameraHeader } from "./Components/CameraHeader"
-import { PlatformUtils, useCameraPermissions, useTheme } from "~Common"
-import { useConfirmAddress } from "./hooks/useConfirmAddress"
-import { getScannedAddress, useRealm } from "~Storage"
+// import React, { useCallback, useEffect, useState } from "react"
+// import { BaseModal, IBaseModal } from "~Components"
+// import { BaseText, BaseView } from "~Components"
+// import { Dimensions, StyleSheet, View } from "react-native"
+// import { useI18nContext } from "~i18n"
+// import { QrScannerLayout } from "./Components/QrScannerLayout"
+// import { CameraHeader } from "./Components/CameraHeader"
+// import { useCameraPermissions, useTheme } from "~Common"
+// import { useConfirmAddress } from "./hooks/useConfirmAddress"
+// import { Camera, CameraType } from "expo-camera"
+// import { BarCodeScanner } from "expo-barcode-scanner"
 
-const deviceWidth = Dimensions.get("window").width
-const deviceHeight = Dimensions.get("window").height
+// const deviceWidth = Dimensions.get("window").width
 
-interface IQRCodeScanner extends Omit<IBaseModal, "children"> {
-    onCameraSuccess?: (isShowSend: boolean) => void
-    isShowSend?: boolean
-}
-export const QRCodeScanner: React.FC<IQRCodeScanner> = ({
-    isOpen,
-    isShowSend,
-    onClose,
-}) => {
-    const { LL } = useI18nContext()
-    const devices = useCameraDevices()
-    const theme = useTheme()
-    const { checkPermissions, hasPerms, isCanceled } = useCameraPermissions()
-    const device = devices.back
-    const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE])
-    const [isShowUI, setIsShowUI] = useState(false)
-    const { isConfirmed, address } = useConfirmAddress(barcodes)
-    const { cache } = useRealm()
+// interface IQRCodeScanner extends Omit<IBaseModal, "children"> {
+//     onCameraSuccess?: (isShowSend: boolean) => void
+//     isShowSend?: boolean
+// }
 
-    useEffect(() => {
-        if (isConfirmed && address) {
-            const scannedAddress = getScannedAddress(cache)
-            cache.write(() => (scannedAddress.address = address))
-            onClose()
-        }
-    }, [address, cache, isConfirmed, isShowSend, onClose])
+// export const QRCodeScanner: React.FC<IQRCodeScanner> = ({
+//     isOpen,
+//     isShowSend,
+//     onClose,
+// }) => {
+//     const { LL } = useI18nContext()
+//     const theme = useTheme()
+//     const { checkPermissions, hasPerms, isCanceled } = useCameraPermissions()
+//     const [isCameraReady, setIsCameraReady] = useState(false)
+//     const [randomId, setRandomId] = useState(Math.random().toString())
+//     const { isConfirmed, confirmAddress, address } = useConfirmAddress()
 
-    useEffect(() => {
-        isCanceled && onClose()
-    }, [isCanceled, onClose])
+//     useEffect(() => {
+//         if (isConfirmed && address) {
+//             setRandomId(Math.random().toString())
+//             onClose()
+//         }
+//     }, [address, isConfirmed, isShowSend, onClose])
 
-    useEffect(() => {
-        async function init() {
-            await checkPermissions()
-        }
-        init()
-    }, [checkPermissions])
+//     useEffect(() => {
+//         if (isCanceled) {
+//             setRandomId(Math.random().toString())
+//             onClose()
+//         }
+//     }, [isCanceled, onClose])
 
-    const onInitialized = useCallback(() => {
-        setIsShowUI(prev => !prev)
-    }, [])
+//     useEffect(() => {
+//         async function init() {
+//             await checkPermissions()
+//         }
+//         isOpen && init()
+//     }, [checkPermissions, isOpen])
 
-    return (
-        <BaseModal isOpen={isOpen} onClose={onClose}>
-            {!device ? (
-                <BaseView
-                    style={StyleSheet.absoluteFill}
-                    bg={theme.colors.darkPurple}
-                    justifyContent="center"
-                    flexGrow={1}
-                    alignItems="center">
-                    <BaseText color="white">{LL.COMMON_BTN_LOADING()}</BaseText>
-                </BaseView>
-            ) : (
-                <BaseView
-                    flexGrow={1}
-                    w={100}
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    bg={theme.colors.darkPurple}>
-                    <CameraHeader onClose={onClose} />
+//     if (isOpen)
+//         return (
+//             <BaseModal isOpen={isOpen} onClose={onClose} isSafeArea={false}>
+//                 {!hasPerms ? (
+//                     <BaseView
+//                         style={StyleSheet.absoluteFill}
+//                         bg={theme.colors.darkPurple}
+//                         justifyContent="center"
+//                         flexGrow={1}
+//                         alignItems="center">
+//                         <BaseText color="white">
+//                             {LL.COMMON_BTN_LOADING()}
+//                         </BaseText>
+//                     </BaseView>
+//                 ) : (
+//                     <View
+//                         style={[
+//                             baseStyles.container,
+//                             { backgroundColor: theme.colors.darkPurple },
+//                         ]}>
+//                         <Camera
+//                             key={randomId}
+//                             style={baseStyles.camera}
+//                             type={CameraType.back}
+//                             onCameraReady={() =>
+//                                 setIsCameraReady(prev => !prev)
+//                             }
+//                             barCodeScannerSettings={{
+//                                 barCodeTypes: [
+//                                     BarCodeScanner.Constants.BarCodeType.qr,
+//                                 ],
+//                             }}
+//                             onBarCodeScanned={confirmAddress}
+//                             onMountError={error => console.log(error)}
+//                             ratio={"16.9"}>
+//                             {isCameraReady && (
+//                                 <QrScannerLayout
+//                                     color={theme.colors.darkPurpleRGBA}
+//                                 />
+//                             )}
+//                             <CameraHeader onClose={onClose} />
+//                         </Camera>
+//                     </View>
+//                 )}
+//             </BaseModal>
+//         )
 
-                    {isShowUI && PlatformUtils.isIOS() && (
-                        <QrScannerLayout color={theme.colors.darkPurpleRGBA} />
-                    )}
+//     return <></>
+// }
 
-                    {hasPerms && (
-                        <Camera
-                            style={baseStyles.camera}
-                            device={device}
-                            isActive={true}
-                            onInitialized={onInitialized}
-                            frameProcessor={frameProcessor}
-                            frameProcessorFps={1}
-                            lowLightBoost
-                        />
-                    )}
-                </BaseView>
-            )}
-        </BaseModal>
-    )
-}
-
-const baseStyles = StyleSheet.create({
-    camera: {
-        position: "absolute",
-        width: deviceWidth,
-        height: deviceHeight,
-        zIndex: 1,
-    },
-})
+// const baseStyles = StyleSheet.create({
+//     container: {
+//         flex: 1,
+//         justifyContent: "center",
+//         width: deviceWidth,
+//     },
+//     camera: {
+//         flex: 1,
+//     },
+// })

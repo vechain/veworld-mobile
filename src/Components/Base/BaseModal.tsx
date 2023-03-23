@@ -15,23 +15,25 @@ export const BaseModal: React.FC<IBaseModal> = ({
     children,
 }) => {
     return (
-        <Modal
-            visible={isOpen}
-            animationType="slide"
-            transparent={false}
-            hardwareAccelerated
-            presentationStyle="fullScreen"
-            onDismiss={onClose}
-            onRequestClose={onClose}>
-            <BaseSafeArea grow={1}>
-                <SafeAreaView style={{ flex: 1 }} />
-                <BaseView
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    flexGrow={1}>
-                    {children}
-                </BaseView>
-            </BaseSafeArea>
-        </Modal>
+        <>
+            <Modal
+                visible={isOpen}
+                animationType="slide"
+                transparent={false}
+                hardwareAccelerated
+                presentationStyle="fullScreen"
+                onDismiss={onClose}
+                onRequestClose={onClose}>
+                <BaseSafeArea grow={1}>
+                    <SafeAreaView style={{ flex: 1 }} />
+                    <BaseView
+                        alignItems="center"
+                        justifyContent="flex-start"
+                        flexGrow={1}>
+                        {children}
+                    </BaseView>
+                </BaseSafeArea>
+            </Modal>
+        </>
     )
 }

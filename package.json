@@ -44,6 +44,8 @@
         "babel-plugin-module-resolver": "^4.1.0",
         "eth-rpc-errors": "^4.0.3",
         "expo": "^47.0.9",
+        "expo-barcode-scanner": "~12.1.0",
+        "expo-camera": "~13.1.0",
         "expo-clipboard": "~4.0.1",
         "expo-font": "~11.0.1",
         "expo-haptics": "~12.0.1",
@@ -69,7 +71,7 @@
         "react-native-gesture-handler": "^2.9.0",
         "react-native-get-random-values": "^1.8.0",
         "react-native-haptic-feedback": "^1.14.0",
-        "react-native-mmkv": "^2.6.3",
+        "react-native-mmkv": "2.5.1",
         "react-native-pager-view": "^6.1.2",
         "react-native-quick-crypto": "^0.5.0",
         "react-native-reanimated": "^2.14.4",
@@ -81,7 +83,6 @@
         "react-native-tab-view": "^3.3.4",
         "react-native-uuid": "^2.0.1",
         "react-native-vector-icons": "^9.2.0",
-        "react-native-vision-camera": "^2.15.4",
         "react-native-wagmi-charts": "^2.3.0",
         "react-redux": "^8.0.5",
         "react-test-renderer": "18.2.0",
@@ -91,8 +92,7 @@
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
         "thor-devkit": "https://github.com/vechainfoundation/thor-devkit.js",
-        "url": "^0.11.0",
-        "vision-camera-code-scanner": "0.1.6"
+        "url": "^0.11.0"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",

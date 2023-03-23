@@ -1,2 +1,2 @@
-export * from "./QRCodeScanner"
+// export * from "./QRCodeScanner"
 export * from "./CameraScreen"

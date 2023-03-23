@@ -43,6 +43,9 @@ allprojects {
         maven {
             url("$rootDir/../node_modules/detox/Detox-android")
         }
+        maven {
+            url("$rootDir/../node_modules/expo-camera/android/maven")
+        }
         mavenCentral {
             // We don't want to fetch react-native from Maven Central as there are
             // older versions over there.

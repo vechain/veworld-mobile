@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react"
-import { Barcode } from "vision-camera-code-scanner"
+import { useCallback, useState } from "react"
 import { AddressUtils } from "~Common"
+import { BarCodeScanningResult } from "expo-camera"
 
-export const useConfirmAddress = (barcodes: Barcode[]) => {
+export const useConfirmAddress = () => {
     const [isConfirmed, setIsConfirmed] = useState(false)
     const [address, setAddress] = useState("")
 
-    useEffect(() => {
-        if (
-            (barcodes.length && barcodes[0]?.displayValue) ||
-            barcodes[0]?.rawValue
-        ) {
-            const _address = barcodes[0].displayValue! || barcodes[0].rawValue!
-            const isValidAddress = AddressUtils.isValid(address)
-            setAddress(_address)
-            setIsConfirmed(isValidAddress)
-        }
-    }, [address, barcodes])
+    const confirmAddress = useCallback((result: BarCodeScanningResult) => {
+        const isValidAddress = AddressUtils.isValid(result.data)
+        setAddress(result.data)
+        setIsConfirmed(isValidAddress)
+    }, [])
 
-    return { isConfirmed, address }
+    return { isConfirmed, confirmAddress, address }
 }

@@ -1,55 +1,32 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { BaseText, BaseView } from "~Components"
-import { Camera, useCameraDevices } from "react-native-vision-camera"
-import { useScanBarcodes, BarcodeFormat } from "vision-camera-code-scanner"
-import { Dimensions, StyleSheet } from "react-native"
+import { Dimensions, StyleSheet, View } from "react-native"
 import { useI18nContext } from "~i18n"
 import { QrScannerLayout } from "./Components/QrScannerLayout"
 import { CameraHeader } from "./Components/CameraHeader"
-import { useCamDisclosure } from "./hooks/useCamDisclosure"
-import { PlatformUtils, useCameraPermissions, useTheme } from "~Common"
+import { useCameraPermissions, useTheme } from "~Common"
 import { useConfirmAddress } from "./hooks/useConfirmAddress"
-import { getScannedAddress, useRealm } from "~Storage"
-import { useNavigation } from "@react-navigation/native"
+import { Camera, CameraType } from "expo-camera"
+import { BarCodeScanner } from "expo-barcode-scanner"
+import { useCamDisclosure } from "./hooks/useCamDisclosure"
 
 const deviceWidth = Dimensions.get("window").width
-const deviceHeight = Dimensions.get("window").height
 
 export const CameraScreen = () => {
     const { LL } = useI18nContext()
-    const { checkPermissions, hasPerms, isCanceled } = useCameraPermissions()
-    const devices = useCameraDevices()
     const theme = useTheme()
-    const nav = useNavigation()
-    const device = devices.back
-    const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE])
-    const [isShowUI, setIsShowUI] = useState(false)
+    const { checkPermissions, hasPerms, isCanceled } = useCameraPermissions()
+    const [isCameraReady, setIsCameraReady] = useState(false)
+    const { isConfirmed, confirmAddress, address } = useConfirmAddress()
     const { onClose, isActive } = useCamDisclosure()
-    const { isConfirmed, address } = useConfirmAddress(barcodes)
-    const { cache } = useRealm()
 
     useEffect(() => {
-        if (isConfirmed && address) {
-            const scannedAddress = getScannedAddress(cache)
-            if (scannedAddress.isShowSend) {
-                cache.write(() => {
-                    scannedAddress.address = address
-                    scannedAddress.isShowSend = true
-                })
-            } else {
-                cache.write(() => (scannedAddress.address = address))
-            }
-            onClose()
-        }
-    }, [address, cache, isConfirmed, nav, onClose])
+        if (isConfirmed && address) onClose()
+    }, [address, isConfirmed, onClose])
 
     useEffect(() => {
-        isCanceled && onClose()
+        if (isCanceled) onClose()
     }, [isCanceled, onClose])
-
-    const onInitialized = useCallback(() => {
-        setIsShowUI(prev => !prev)
-    }, [])
 
     useEffect(() => {
         async function init() {
@@ -58,7 +35,7 @@ export const CameraScreen = () => {
         init()
     }, [checkPermissions])
 
-    if (!device)
+    if (!hasPerms)
         return (
             <BaseView
                 style={StyleSheet.absoluteFill}
@@ -71,38 +48,39 @@ export const CameraScreen = () => {
         )
 
     return (
-        <BaseView
-            flexGrow={1}
-            w={100}
-            justifyContent="flex-start"
-            alignItems="center"
-            bg={theme.colors.darkPurple}>
-            <CameraHeader onClose={onClose} />
-
-            {isShowUI && PlatformUtils.isIOS() && (
-                <QrScannerLayout color={theme.colors.darkPurpleRGBA} />
-            )}
-
-            {hasPerms && (
+        <View
+            style={[
+                baseStyles.container,
+                { backgroundColor: theme.colors.darkPurple },
+            ]}>
+            {isActive && (
                 <Camera
                     style={baseStyles.camera}
-                    device={device}
-                    isActive={isActive}
-                    onInitialized={onInitialized}
-                    frameProcessor={frameProcessor}
-                    frameProcessorFps={1}
-                    lowLightBoost
-                />
+                    type={CameraType.back}
+                    onCameraReady={() => setIsCameraReady(prev => !prev)}
+                    barCodeScannerSettings={{
+                        barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+                    }}
+                    onBarCodeScanned={confirmAddress}
+                    onMountError={onClose}
+                    ratio={"16:9"}>
+                    {isCameraReady && (
+                        <QrScannerLayout color={theme.colors.darkPurpleRGBA} />
+                    )}
+                    <CameraHeader onClose={onClose} />
+                </Camera>
             )}
-        </BaseView>
+        </View>
     )
 }
 
 const baseStyles = StyleSheet.create({
-    camera: {
-        position: "absolute",
+    container: {
+        flex: 1,
+        justifyContent: "center",
         width: deviceWidth,
-        height: deviceHeight,
-        zIndex: 1,
+    },
+    camera: {
+        flex: 1,
     },
 })
