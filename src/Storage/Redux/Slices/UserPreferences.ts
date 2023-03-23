@@ -10,6 +10,8 @@ export interface UserPreferenceState {
     isAppLockActive: boolean
     selectedAccount?: IAccount
     balanceVisible: boolean
+    currency: string
+    language: string
 }
 
 const initialState: UserPreferenceState = {
@@ -20,6 +22,8 @@ const initialState: UserPreferenceState = {
     isAppLockActive: process.env.NODE_ENV !== "development",
     selectedAccount: undefined,
     balanceVisible: true,
+    currency: "usd",
+    language: "English",
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -53,6 +57,14 @@ export const UserPreferencesSlice = createSlice({
         setBalanceVisible: (state, action: PayloadAction<boolean>) => {
             state.balanceVisible = action.payload
         },
+
+        setCurrency: (state, action: PayloadAction<string>) => {
+            state.currency = action.payload
+        },
+
+        setLanguage: (state, action: PayloadAction<string>) => {
+            state.language = action.payload
+        },
     },
 })
 
@@ -64,4 +76,6 @@ export const {
     setIsAppLockActive,
     setSelectedAccount,
     setBalanceVisible,
+    setCurrency,
+    setLanguage,
 } = UserPreferencesSlice.actions
