@@ -18,3 +18,7 @@ export const selectLangauge = createSelector(reducer, state => {
 export const selectIsSystemTheme = createSelector(reducer, state => {
     return state.isSystemTheme
 })
+
+export const selectHideTokensWithNoBalance = createSelector(reducer, state => {
+    return state.hideTokensWithNoBalance
+})

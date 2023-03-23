@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, useTheme } from "~Common"
+import { CURRENCY, FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useAppSelector } from "~Storage/Redux"
@@ -23,11 +23,12 @@ export const Balance: React.FC<Props> = memo(
         const theme = useTheme()
         const { LL } = useI18nContext()
 
-        const currencyState = useAppSelector(selectCurrency)
+        const selectedCurrency = useAppSelector(selectCurrency)
 
-        const currencyPref = useMemo(
-            () => (currencyState === "euro" ? LL.BD_EUR() : LL.BD_USD()),
-            [LL, currencyState],
+        const selectedCurrencyText = useMemo(
+            () =>
+                selectedCurrency === CURRENCY.EUR ? LL.BD_EUR() : LL.BD_USD(),
+            [LL, selectedCurrency],
         )
 
         const renderBalance = useMemo(
@@ -61,7 +62,7 @@ export const Balance: React.FC<Props> = memo(
                         mx={4}
                         color={theme.colors.textReversed}
                         typographyFont="body">
-                        {currencyPref}
+                        {selectedCurrencyText}
                     </BaseText>
                 </BaseView>
             </>

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { useColorScheme } from "~Common"
+import { ThemeEnum, useColorScheme } from "~Common"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
 import { useI18nContext } from "~i18n"
@@ -27,15 +27,15 @@ export const ChangeTheme: React.FC = () => {
     const themes: Array<Button> = useMemo(() => {
         return [
             {
-                id: "light",
+                id: ThemeEnum.LIGHT,
                 label: LL.LIGHT_THEME(),
             },
             {
-                id: "dark",
+                id: ThemeEnum.DARK,
                 label: LL.DARK_THEME(),
             },
             {
-                id: "system",
+                id: ThemeEnum.SYSTEM,
                 label: LL.SYSTEM_THEME(),
             },
         ]
@@ -43,12 +43,12 @@ export const ChangeTheme: React.FC = () => {
 
     const handleSelectTheme = useCallback(
         (button: Button) => {
-            if (button.id === "system") {
+            if (button.id === ThemeEnum.SYSTEM) {
                 dispatch(setSystemTheme(true))
-                dispatch(setTheme(systemColorScheme))
+                dispatch(setTheme(systemColorScheme as ThemeEnum))
             } else {
                 dispatch(setSystemTheme(false))
-                dispatch(setTheme(button.id as "light" | "dark"))
+                dispatch(setTheme(button.id as ThemeEnum))
             }
         },
         [dispatch, systemColorScheme],

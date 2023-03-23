@@ -1,29 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { ThorConstants } from "~Common/Constant"
+import { CURRENCY, ThemeEnum } from "~Common/Enums"
 import { IAccount, INetwork, NETWORK_TYPE } from "~Model"
 
 export interface UserPreferenceState {
-    theme: "dark" | "light"
+    theme: ThemeEnum
     currentNetwork: INetwork
     showTestNetTag: boolean
     showConversionOtherNets: boolean
+    hideTokensWithNoBalance: boolean
     isAppLockActive: boolean
     selectedAccount?: IAccount
     balanceVisible: boolean
-    currency: string
+    currency: CURRENCY
     language: string
     isSystemTheme: boolean
 }
 
 const initialState: UserPreferenceState = {
-    theme: "light",
+    theme: ThemeEnum.SYSTEM,
     currentNetwork: { ...ThorConstants.makeNetwork(NETWORK_TYPE.MAIN) },
     showTestNetTag: true,
     showConversionOtherNets: true,
+    hideTokensWithNoBalance: false,
     isAppLockActive: process.env.NODE_ENV !== "development",
     selectedAccount: undefined,
     balanceVisible: true,
-    currency: "usd",
+    currency: CURRENCY.USD,
     language: "English",
     isSystemTheme: true,
 }
@@ -32,7 +35,7 @@ export const UserPreferencesSlice = createSlice({
     name: "UserPreferences",
     initialState,
     reducers: {
-        setTheme: (state, action: PayloadAction<"dark" | "light">) => {
+        setTheme: (state, action: PayloadAction<ThemeEnum>) => {
             state.theme = action.payload
         },
 
@@ -47,6 +50,9 @@ export const UserPreferencesSlice = createSlice({
         setShowConversionOtherNets: (state, action: PayloadAction<boolean>) => {
             state.showConversionOtherNets = action.payload
         },
+        setHideTokensWithNoBalance: (state, action: PayloadAction<boolean>) => {
+            state.hideTokensWithNoBalance = action.payload
+        },
 
         setIsAppLockActive: (state, action: PayloadAction<boolean>) => {
             state.isAppLockActive = action.payload
@@ -60,7 +66,7 @@ export const UserPreferencesSlice = createSlice({
             state.balanceVisible = action.payload
         },
 
-        setCurrency: (state, action: PayloadAction<string>) => {
+        setCurrency: (state, action: PayloadAction<CURRENCY>) => {
             state.currency = action.payload
         },
 
@@ -79,6 +85,7 @@ export const {
     setCurrentNetwork,
     setShowTestNetTag,
     setShowConversionOtherNets,
+    setHideTokensWithNoBalance,
     setIsAppLockActive,
     setSelectedAccount,
     setBalanceVisible,
