@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { ThorConstants } from "~Common/Constant"
-import { ThemeEnum } from "~Common/Enums"
+import { CURRENCY, ThemeEnum } from "~Common/Enums"
 import { IAccount, INetwork, NETWORK_TYPE } from "~Model"
 
 export interface UserPreferenceState {
@@ -12,7 +12,7 @@ export interface UserPreferenceState {
     isAppLockActive: boolean
     selectedAccount?: IAccount
     balanceVisible: boolean
-    currency: string
+    currency: CURRENCY
     language: string
 }
 
@@ -25,7 +25,7 @@ const initialState: UserPreferenceState = {
     isAppLockActive: process.env.NODE_ENV !== "development",
     selectedAccount: undefined,
     balanceVisible: true,
-    currency: "usd",
+    currency: CURRENCY.USD,
     language: "English",
 }
 
@@ -64,7 +64,7 @@ export const UserPreferencesSlice = createSlice({
             state.balanceVisible = action.payload
         },
 
-        setCurrency: (state, action: PayloadAction<string>) => {
+        setCurrency: (state, action: PayloadAction<CURRENCY>) => {
             state.currency = action.payload
         },
 

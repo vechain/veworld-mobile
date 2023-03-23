@@ -1,37 +1,26 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback } from "react"
+import { CURRENCY } from "~Common"
+import CurrencyConfig from "~Common/Constant/CurrencyConfig/CurrencyConfig"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { setCurrency } from "~Storage/Redux/Slices/UserPreferences"
 
-const currencies: Array<Button> = [
-    {
-        id: "euro",
-        label: "EUR",
-        icon: "currency-eur",
-    },
-    {
-        id: "usd",
-        label: "USD",
-        icon: "currency-usd",
-    },
-]
+const currencies: Array<Button> = CurrencyConfig.map(currency => ({
+    id: currency.currency,
+    label: currency.currency,
+    icon: currency.iconName,
+}))
 
 export const ChangeCurrency: React.FC = () => {
-    const currencyPref = useAppSelector(selectCurrency)
-
-    const [selectedCurrency, setSelectedCurrency] =
-        useState<string>(currencyPref)
+    const selectedCurrency = useAppSelector(selectCurrency)
 
     const dispatch = useAppDispatch()
 
     const handleSelectCurrency = useCallback(
         (button: Button) => {
-            setSelectedCurrency(button.id)
-
-            // update redux store
-            dispatch(setCurrency(button.id))
+            dispatch(setCurrency(button.id as CURRENCY))
         },
         [dispatch],
     )
