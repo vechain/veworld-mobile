@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from "react"
-import { useColorScheme } from "~Common"
+import React, { useCallback, useMemo } from "react"
+import { ThemeEnum } from "~Common/Enums"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
 import { useI18nContext } from "~i18n"
@@ -10,27 +10,22 @@ import { selectTheme } from "~Storage/Redux/Selectors"
 export const ChangeTheme: React.FC = () => {
     const dispatch = useAppDispatch()
 
-    const themePref: string = useAppSelector(selectTheme)
-
-    //Check system color scheme
-    const systemColorScheme = useColorScheme()
-
-    const [selectedTheme, setSelectedTheme] = useState(themePref)
+    const selectedTheme = useAppSelector(selectTheme)
 
     const { LL } = useI18nContext()
 
     const themes: Array<Button> = useMemo(() => {
         return [
             {
-                id: "light",
+                id: ThemeEnum.LIGHT,
                 label: LL.LIGHT_THEME(),
             },
             {
-                id: "dark",
+                id: ThemeEnum.DARK,
                 label: LL.DARK_THEME(),
             },
             {
-                id: "system",
+                id: ThemeEnum.SYSTEM,
                 label: LL.SYSTEM_THEME(),
             },
         ]
@@ -38,15 +33,25 @@ export const ChangeTheme: React.FC = () => {
 
     const handleSelectTheme = useCallback(
         (button: Button) => {
-            let mode: "dark" | "light"
-            if (button.id === "system") mode = systemColorScheme
-            else mode = button.id === "light" ? "light" : "dark"
+            let mode: ThemeEnum
+            switch (button.id) {
+                case "system":
+                    mode = ThemeEnum.SYSTEM
+                    break
+                case "light":
+                    mode = ThemeEnum.LIGHT
+                    break
+                case "dark":
+                    mode = ThemeEnum.DARK
+                    break
+                default:
+                    mode = ThemeEnum.SYSTEM
+                    break
+            }
 
             dispatch(setTheme(mode))
-
-            setSelectedTheme(button.id)
         },
-        [dispatch, systemColorScheme],
+        [dispatch],
     )
 
     return (

@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { ThorConstants } from "~Common/Constant"
+import { ThemeEnum } from "~Common/Enums"
 import { IAccount, INetwork, NETWORK_TYPE } from "~Model"
 
 export interface UserPreferenceState {
-    theme: "dark" | "light"
+    theme: ThemeEnum
     currentNetwork: INetwork
     showTestNetTag: boolean
     showConversionOtherNets: boolean
@@ -16,7 +17,7 @@ export interface UserPreferenceState {
 }
 
 const initialState: UserPreferenceState = {
-    theme: "light",
+    theme: ThemeEnum.SYSTEM,
     currentNetwork: { ...ThorConstants.makeNetwork(NETWORK_TYPE.MAIN) },
     showTestNetTag: true,
     showConversionOtherNets: true,
@@ -32,7 +33,7 @@ export const UserPreferencesSlice = createSlice({
     name: "UserPreferences",
     initialState,
     reducers: {
-        setTheme: (state, action: PayloadAction<"dark" | "light">) => {
+        setTheme: (state, action: PayloadAction<ThemeEnum>) => {
             state.theme = action.payload
         },
 
