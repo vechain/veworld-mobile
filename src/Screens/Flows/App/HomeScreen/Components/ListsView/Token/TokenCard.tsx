@@ -6,6 +6,7 @@ import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
 import { Token } from "~Common"
 import { useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"
+import CurrencyConfig from "~Common/Constant/CurrencyConfig/CurrencyConfig"
 
 type Props = {
     token: FungibleToken | Token
@@ -13,13 +14,12 @@ type Props = {
 }
 
 export const TokenCard = memo(({ token, isAnimation }: Props) => {
-    const currencyState = useAppSelector(selectCurrency)
+    const selectedCurrency = useAppSelector(selectCurrency)
 
-    const currencyPref = useMemo(
-        () => (currencyState === "euro" ? "€" : "$"),
-        [currencyState],
+    const selectedCurrencyConfig = useMemo(
+        () => CurrencyConfig.find(curr => curr.currency === selectedCurrency),
+        [selectedCurrency],
     )
-
     const animatedOpacityReverse = useAnimatedStyle(() => {
         return {
             opacity: withTiming(isAnimation ? 0 : 1, {
@@ -38,7 +38,9 @@ export const TokenCard = memo(({ token, isAnimation }: Props) => {
             </View>
 
             <Animated.View style={animatedOpacityReverse}>
-                <BaseText typographyFont="title">0.2202{currencyPref}</BaseText>
+                <BaseText typographyFont="title">
+                    0.2202{selectedCurrencyConfig?.symbol}
+                </BaseText>
                 <BaseText>0.36</BaseText>
             </Animated.View>
         </Animated.View>
