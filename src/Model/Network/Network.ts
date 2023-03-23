@@ -2,7 +2,7 @@ import { NETWORK_TYPE } from "./enums"
 
 export interface INetwork {
     defaultNet: boolean
-    nodeId: string
+    id: string
     tag: string
     type: NETWORK_TYPE
     currentUrl: string

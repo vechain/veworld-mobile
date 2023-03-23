@@ -51,7 +51,7 @@ export const makeNetwork = (type: NETWORK_TYPE) => {
         case NETWORK_TYPE.MAIN:
             return {
                 defaultNet: true,
-                nodeId: uuid.v4().toString(),
+                id: uuid.v4().toString(),
                 tag: NETWORK_TYPE.MAIN,
                 type: NETWORK_TYPE.MAIN,
                 urls: THOR_MAIN_URLS,
@@ -62,7 +62,7 @@ export const makeNetwork = (type: NETWORK_TYPE) => {
         case NETWORK_TYPE.TEST:
             return {
                 defaultNet: true,
-                nodeId: uuid.v4().toString(),
+                id: uuid.v4().toString(),
                 tag: NETWORK_TYPE.TEST,
                 type: NETWORK_TYPE.TEST,
                 urls: THOR_TESTNET_URLS,
@@ -73,7 +73,7 @@ export const makeNetwork = (type: NETWORK_TYPE) => {
         default:
             return {
                 defaultNet: true,
-                nodeId: uuid.v4().toString(),
+                id: uuid.v4().toString(),
                 tag: NETWORK_TYPE.MAIN,
                 type: NETWORK_TYPE.MAIN,
                 urls: THOR_MAIN_URLS,
