@@ -25,7 +25,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install & Patch packages
-        run: yarn install && yarn patch-package
+        run: yarn install
 
       - name: Restore Pods cache
         uses: actions/cache/restore@v3
@@ -81,10 +81,13 @@ jobs:
         with:
           path: ios/build
           key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
+
+      - name: Start Metro Bundler
+        run: yarn react-native start &
       
       - name: Detox test iOS release
         timeout-minutes: 20
-        run: yarn start & yarn detox test --configuration ios.sim.debug --cleanup --loglevel debug --headless --record-logs all
+        run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel debug --headless --record-logs all
 
       - name: Upload artifacts
         if: failure()

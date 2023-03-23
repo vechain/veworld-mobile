@@ -57,7 +57,7 @@ export const QRCodeScanner: React.FC<IQRCodeScanner> = ({
     }, [])
 
     return (
-        <BaseModal isOpen={isOpen} onClose={onClose} hasSafeArea={false}>
+        <BaseModal isOpen={isOpen} onClose={onClose}>
             {!device ? (
                 <BaseView
                     style={StyleSheet.absoluteFill}

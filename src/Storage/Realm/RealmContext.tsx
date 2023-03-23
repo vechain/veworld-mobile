@@ -1,4 +1,3 @@
-import "react-native-get-random-values" // relma dependency for uuid - DO NOT REMOVE
 import Realm from "realm"
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
