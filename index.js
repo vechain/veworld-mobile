@@ -1,8 +1,14 @@
-import React, { useMemo } from "react"
+import "react-native-get-random-values" // relma dependency for uuid - DO NOT REMOVE
+import React, { useEffect, useMemo } from "react"
 import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
+
+import { PersistGate } from "redux-persist/integration/react"
+import { Provider } from "react-redux"
+// import { persistor, store } from "~Storage/Redux"
+import { storage, useInitStore } from "~Storage/Redux"
 
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
@@ -46,27 +52,35 @@ const Main = () => {
         [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
+    const [store, persistor] = useInitStore()
+    if (!store || !persistor) return
+
     return (
-        // eslint-disable-next-line react-native/no-inline-styles
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <RealmContextProvider>
-                <ConfigContextProvider>
-                    <UserPreferencesContextProvider>
-                        <ConnexContextProvider>
-                            <SafeAreaProvider>
-                                <BottomSheetModalProvider>
-                                    <NavigationProvider>
-                                        <TranslationProvider>
-                                            {fontsLoaded && <EntryPoint />}
-                                        </TranslationProvider>
-                                    </NavigationProvider>
-                                </BottomSheetModalProvider>
-                            </SafeAreaProvider>
-                        </ConnexContextProvider>
-                    </UserPreferencesContextProvider>
-                </ConfigContextProvider>
-            </RealmContextProvider>
-        </GestureHandlerRootView>
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                    <RealmContextProvider>
+                        <ConfigContextProvider>
+                            <UserPreferencesContextProvider>
+                                <ConnexContextProvider>
+                                    <SafeAreaProvider>
+                                        <BottomSheetModalProvider>
+                                            <NavigationProvider>
+                                                <TranslationProvider>
+                                                    {fontsLoaded && (
+                                                        <EntryPoint />
+                                                    )}
+                                                </TranslationProvider>
+                                            </NavigationProvider>
+                                        </BottomSheetModalProvider>
+                                    </SafeAreaProvider>
+                                </ConnexContextProvider>
+                            </UserPreferencesContextProvider>
+                        </ConfigContextProvider>
+                    </RealmContextProvider>
+                </GestureHandlerRootView>
+            </PersistGate>
+        </Provider>
     )
 }
 

@@ -5,7 +5,16 @@
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),
+    createCipheriv: jest.fn(() => ({
+        update: (first: string) => first,
+        final: () => "",
+    })),
+    createDecipheriv: jest.fn(() => ({
+        update: (first: string) => first,
+        final: () => "",
+    })),
 }))
+
 jest.mock("expo-secure-store", () => ({
     getItemAsync: jest.fn(),
     setItemAsync: jest.fn(),
@@ -40,6 +49,8 @@ import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Common"
 import { initRealmClasses, RealmContext } from "~Storage/Realm/RealmContext"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
+import { Provider } from "react-redux"
+import { useInitStore } from "~Storage/Redux"
 
 const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
@@ -114,21 +125,27 @@ export const TestTranslationProvider = ({
 
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
     const value = useMemo(() => ({ cache: realmCache, store: realmStore }), [])
+    const [store, persist] = useInitStore()
+
+    if (!store || !persist) return null
+
     return (
-        <RealmContext.Provider value={value}>
-            <ConfigContextProvider>
-                <UserPreferencesContextProvider>
-                    <ConnexContextProvider>
-                        <BottomSheetModalProvider>
-                            <NavigationProvider>
-                                <TestTranslationProvider>
-                                    {children}
-                                </TestTranslationProvider>
-                            </NavigationProvider>
-                        </BottomSheetModalProvider>
-                    </ConnexContextProvider>
-                </UserPreferencesContextProvider>
-            </ConfigContextProvider>
-        </RealmContext.Provider>
+        <Provider store={store as any}>
+            <RealmContext.Provider value={value}>
+                <ConfigContextProvider>
+                    <UserPreferencesContextProvider>
+                        <ConnexContextProvider>
+                            <BottomSheetModalProvider>
+                                <NavigationProvider>
+                                    <TestTranslationProvider>
+                                        {children}
+                                    </TestTranslationProvider>
+                                </NavigationProvider>
+                            </BottomSheetModalProvider>
+                        </ConnexContextProvider>
+                    </UserPreferencesContextProvider>
+                </ConfigContextProvider>
+            </RealmContext.Provider>
+        </Provider>
     )
 }
