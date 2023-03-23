@@ -87,7 +87,6 @@
         "realm": "11.3.1",
         "realm-flipper-plugin-device": "^1.1.0",
         "redux-persist": "^6.0.0",
-        "redux-persist-transform-encrypt": "^4.0.0",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
         "thor-devkit": "https://github.com/vechainfoundation/thor-devkit.js",
