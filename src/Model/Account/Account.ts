@@ -4,5 +4,5 @@ export interface IAccount {
     alias: string
     visible: boolean
     createdAt: string
-    parentDevice: string
+    rootAddress: string
 }
