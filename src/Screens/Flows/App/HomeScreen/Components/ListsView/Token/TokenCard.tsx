@@ -1,13 +1,13 @@
-import { StyleSheet, View } from "react-native"
+import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText } from "~Components"
+import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
-import { CURRENCY, Token } from "~Common"
+import { CURRENCY } from "~Common"
 import CurrencyConfig from "~Common/Constant/CurrencyConfig/CurrencyConfig"
+import { AccountTokenBalance } from "~Storage/Redux/Slices"
 
 type Props = {
-    token: FungibleToken | Token
+    token: AccountTokenBalance
     isAnimation: boolean
     selectedCurrency: CURRENCY
 }
@@ -29,18 +29,31 @@ export const TokenCard = memo(
 
         return (
             <Animated.View style={[baseStyles.innerRow]}>
-                <View style={baseStyles.tokenIcon} />
-
-                <View style={baseStyles.textMargin}>
-                    <BaseText typographyFont="subTitle">{token.name}</BaseText>
-                    <BaseText>{token.symbol}</BaseText>
-                </View>
-
+                <BaseView flexDirection="row">
+                    <BaseCard
+                        style={{
+                            borderRadius: 30,
+                            padding: 10,
+                        }}>
+                        <Image
+                            source={{ uri: token.icon }}
+                            style={{ width: 20, height: 20 }}
+                        />
+                    </BaseCard>
+                    <BaseSpacer width={16} />
+                    <BaseView>
+                        <BaseText typographyFont="subTitle">
+                            {token.name}
+                        </BaseText>
+                        <BaseText>{token.symbol}</BaseText>
+                    </BaseView>
+                </BaseView>
                 <Animated.View style={animatedOpacityReverse}>
+                    {/* TODO: add correct currency conversion */}
                     <BaseText typographyFont="title">
                         0.2202{selectedCurrencyConfig?.symbol}
                     </BaseText>
-                    <BaseText>0.36</BaseText>
+                    <BaseText>{token.balance}</BaseText>
                 </Animated.View>
             </Animated.View>
         )
@@ -63,8 +76,5 @@ const baseStyles = StyleSheet.create({
         borderRadius: 20,
         marginRight: 10,
         position: "absolute",
-    },
-    textMargin: {
-        marginLeft: 38,
     },
 })

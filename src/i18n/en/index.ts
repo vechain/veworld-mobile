@@ -39,6 +39,9 @@ const en: BaseTranslation = {
     BTN_SWAP: "Swap",
     BTN_HISTORY: "History",
     BTN_GO_TO_SETTINGS: "Go to settings",
+    BTN_PASTE_ADDRESS: "Paste Address",
+    BTN_SCAN_QR_CODE: "Scan QR Code",
+    BD_NO_TOKEN_FOUND: "No token found",
 
     // BODY
     BD_GDPR:
@@ -134,6 +137,7 @@ const en: BaseTranslation = {
     TITLE_ABOUT: "About",
     TITLE_SCAN_QRCODE: "Scan QR Code",
     TITLE_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
+    TITLE_ADD_TOKEN: "Add Token",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
@@ -170,6 +174,7 @@ const en: BaseTranslation = {
     COMMON_BTN_LOADING: "Loading",
     COMMON_BTN_DONE: "Done",
     COMMON_BTN_CONFIRM: "Confirm",
+    COMMON_BTN_ADD: "Add",
 
     // Common Labels
     COMMON_LBL_ADDRESS: "Address",
@@ -184,6 +189,9 @@ const en: BaseTranslation = {
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
+
+
+    INPUT_PLACEHOLDER_SEARCH_TOKEN: "Search a token",
 
     // Network
 
@@ -208,6 +216,10 @@ const en: BaseTranslation = {
     // Settings Currencies
 
     // Settings Languages
+
+    // Add Token
+    ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: "Select your token",
+    ADD_TOKEN_SELECT_YOUR_TOKEN_body: "Select the asset that you want to add from the list",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

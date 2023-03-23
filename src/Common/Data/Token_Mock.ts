@@ -49,11 +49,3 @@ export const Tokens_mock = [
         custom: true,
     },
 ]
-
-export interface Token {
-    name: string
-    symbol: string
-    address: string
-    icon: string
-    custom: boolean
-}

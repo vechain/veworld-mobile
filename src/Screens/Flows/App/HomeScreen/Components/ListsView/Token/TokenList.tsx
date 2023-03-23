@@ -1,17 +1,18 @@
-import React, { memo, useCallback, useState } from "react"
+import React, { memo, useCallback, useEffect, useState } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { ColorThemeType, Tokens_mock, useThemedStyles, Token } from "~Common"
-import { FungibleToken, VET, VTHO } from "~Common/Constant/Token/TokenConstants"
-import { AnimatedChartCard } from "./AnimatedChartCard"
-import { AnimatedVTHOCard } from "./AnimatedVTHOCard"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"
-
-const NATIVE_TOKENS: FungibleToken[] = [VET, VTHO]
+import { Token } from "~Model"
+import { useSelector } from "react-redux"
+import {
+    AccountTokenBalance,
+    getAccountTokenBalances,
+} from "~Storage/Redux/Slices"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -20,7 +21,16 @@ interface Props extends AnimateProps<ViewProps> {
 
 export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
-        const [data, setData] = useState<Token[]>(Tokens_mock)
+        const tokenBalances: AccountTokenBalance[] = useSelector(
+            getAccountTokenBalances,
+        )
+        const [data, setData] = useState<AccountTokenBalance[]>([])
+        console.log("tokenBalances", tokenBalances)
+        console.log("ddata", data)
+
+        useEffect(() => {
+            setData(tokenBalances)
+        }, [tokenBalances])
 
         const { styles } = useThemedStyles(baseStyles)
 
@@ -37,6 +47,7 @@ export const TokenList = memo(
 
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
+                {/* TODO: reintroduce default native tokens
                 <AnimatedChartCard
                     token={NATIVE_TOKENS[0]}
                     isEdit={isEdit}
@@ -46,7 +57,7 @@ export const TokenList = memo(
                     token={NATIVE_TOKENS[1]}
                     isEdit={isEdit}
                     selectedCurrency={selectedCurrency}
-                />
+                /> */}
 
                 <NestableDraggableFlatList
                     data={data}
