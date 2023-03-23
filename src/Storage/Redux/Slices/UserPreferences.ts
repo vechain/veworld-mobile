@@ -12,6 +12,7 @@ export interface UserPreferenceState {
     balanceVisible: boolean
     currency: string
     language: string
+    isSystemTheme: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -24,6 +25,7 @@ const initialState: UserPreferenceState = {
     balanceVisible: true,
     currency: "usd",
     language: "English",
+    isSystemTheme: true,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -65,6 +67,10 @@ export const UserPreferencesSlice = createSlice({
         setLanguage: (state, action: PayloadAction<string>) => {
             state.language = action.payload
         },
+
+        setSystemTheme: (state, action: PayloadAction<boolean>) => {
+            state.isSystemTheme = action.payload
+        },
     },
 })
 
@@ -78,4 +84,5 @@ export const {
     setBalanceVisible,
     setCurrency,
     setLanguage,
+    setSystemTheme,
 } = UserPreferencesSlice.actions

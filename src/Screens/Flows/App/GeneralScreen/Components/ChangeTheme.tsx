@@ -1,21 +1,26 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { useColorScheme } from "~Common"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setTheme } from "~Storage/Redux/Actions"
-import { selectTheme } from "~Storage/Redux/Selectors"
+import { selectIsSystemTheme, selectTheme } from "~Storage/Redux/Selectors"
+import { setSystemTheme } from "~Storage/Redux/Slices/UserPreferences"
 
 export const ChangeTheme: React.FC = () => {
     const dispatch = useAppDispatch()
 
-    const themePref: string = useAppSelector(selectTheme)
+    const themePref = useAppSelector(selectTheme)
+    const isSystemThemePref = useAppSelector(selectIsSystemTheme)
+
+    const activeButtonId = useMemo(
+        () => (isSystemThemePref ? "system" : themePref),
+        [isSystemThemePref, themePref],
+    )
 
     //Check system color scheme
     const systemColorScheme = useColorScheme()
-
-    const [selectedTheme, setSelectedTheme] = useState(themePref)
 
     const { LL } = useI18nContext()
 
@@ -38,20 +43,20 @@ export const ChangeTheme: React.FC = () => {
 
     const handleSelectTheme = useCallback(
         (button: Button) => {
-            let mode: "dark" | "light"
-            if (button.id === "system") mode = systemColorScheme
-            else mode = button.id === "light" ? "light" : "dark"
-
-            dispatch(setTheme(mode))
-
-            setSelectedTheme(button.id)
+            if (button.id === "system") {
+                dispatch(setSystemTheme(true))
+                dispatch(setTheme(systemColorScheme))
+            } else {
+                dispatch(setSystemTheme(false))
+                dispatch(setTheme(button.id as "light" | "dark"))
+            }
         },
         [dispatch, systemColorScheme],
     )
 
     return (
         <BaseButtonGroupHorizontal
-            selectedButtonIds={[selectedTheme || ""]}
+            selectedButtonIds={[activeButtonId]}
             buttons={themes}
             action={handleSelectTheme}
         />

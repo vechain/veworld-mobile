@@ -14,3 +14,7 @@ export const selectCurrency = createSelector(reducer, state => {
 export const selectLangauge = createSelector(reducer, state => {
     return state.language
 })
+
+export const selectIsSystemTheme = createSelector(reducer, state => {
+    return state.isSystemTheme
+})
