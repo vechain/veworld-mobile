@@ -57,7 +57,6 @@ const resetRealm = async (store: Realm, cache: Realm) => {
     })
 
     const config = getConfig(store)
-
     const networks = getNetworks(store)
     const userPreferences = getUserPreferences(store)
 

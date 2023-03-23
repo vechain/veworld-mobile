@@ -38,6 +38,7 @@ const en: BaseTranslation = {
     BTN_SEND: "Send",
     BTN_SWAP: "Swap",
     BTN_HISTORY: "History",
+    BTN_GO_TO_SETTINGS: "Go to settings",
 
     // BODY
     BD_GDPR:
@@ -96,6 +97,7 @@ const en: BaseTranslation = {
     BD_APP_LANGUAGE_DISCLAIMER: "Select the general app language",
     BD_USD : "USD",
     BD_EUR : "EUR",
+    BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -114,6 +116,8 @@ const en: BaseTranslation = {
     TITLE_USER_PIN: "Insert your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
+    TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
+    TITLE_ALERT_CAMERA_UNAVAILABLE: "Camera Unavailable",
     TITLE_WALLET_SUCCESS: "You're finally one of us!",
     TITLE_RESET_APP: "VeWorld reset",
     TITLE_WALLET_MANAGEMENT: "Wallet management",
@@ -128,6 +132,8 @@ const en: BaseTranslation = {
     TITLE_ALERTS: "Alerts",
     TITLE_CONNECTED_APPS: "Connected Apps",
     TITLE_ABOUT: "About",
+    TITLE_SCAN_QRCODE: "Scan QR Code",
+    TITLE_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
@@ -142,6 +148,8 @@ const en: BaseTranslation = {
     SB_DEVICE_CARD : "{alias} ({accounts} accounts)",
     SB_ENTER_LANGUAGE: "Enter your language",
     SB_SELECT_LANGUAGE: "Select your language",
+    SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
+    SB_CAMERA_ANAVAILABILITY: "Your device does not support this operation.",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -151,13 +159,17 @@ const en: BaseTranslation = {
     DEVICE_PIN: "Device Pin",
     TAP_TO_VIEW: "Tap to view",
     BIOMETRICS_PROMPT: "Please use Biometrics to secure your wallet.",
+    VEWORLD: "VeWorld",
 
 
     // Common Buttons
-    COMMON_BTN_cancel: "Cancel",
-    COMMON_BTN_CONFIRM: "Confirm",
+    COMMON_BTN_CANCEL: "Cancel",
     COMMON_BTN_RETRY: "Retry",
     COMMON_BTN_SIGN_OUT: "Sign out",
+    COMMON_BTN_OK: "OK",
+    COMMON_BTN_LOADING: "Loading",
+    COMMON_BTN_DONE: "Done",
+    COMMON_BTN_CONFIRM: "Confirm",
 
     // Common Labels
     COMMON_LBL_ADDRESS: "Address",

@@ -26,6 +26,8 @@ jest.mock("expo-clipboard", () => {})
 jest.mock("react-native-wagmi-charts", () => {})
 jest.mock("react-native-draggable-flatlist", () => {})
 jest.mock("react-native-gesture-handler", () => {})
+jest.mock("expo-camera", () => {})
+jest.mock("expo-barcode-scanner", () => {})
 
 import React, { useEffect, useMemo, useState } from "react"
 import Realm from "realm"
