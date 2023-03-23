@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useState } from "react"
 
-import { SafeAreaView, ViewToken } from "react-native"
+import { ViewToken } from "react-native"
 import { useBottomSheetModal } from "~Common"
 import { useDevicesList } from "~Common/Hooks/Entities"
 import {
@@ -50,9 +50,7 @@ export const WalletManagementScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <SafeAreaView />
             <BackButtonHeader />
-
             <BaseView px={20} style={{ height: "100%", width: "100%" }}>
                 <FlashList
                     data={devices}

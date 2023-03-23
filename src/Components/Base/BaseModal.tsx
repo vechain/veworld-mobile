@@ -1,5 +1,7 @@
 import React from "react"
-import { Modal, SafeAreaView, StyleSheet } from "react-native"
+import { Modal } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { BaseSafeArea } from "./BaseSafeArea"
 import { BaseView } from "./BaseView"
 
 export interface IBaseModal {
@@ -14,25 +16,22 @@ export const BaseModal: React.FC<IBaseModal> = ({
 }) => {
     return (
         <Modal
+            visible={isOpen}
             animationType="slide"
             transparent={false}
-            visible={isOpen}
             hardwareAccelerated
             presentationStyle="fullScreen"
             onDismiss={onClose}
             onRequestClose={onClose}>
-            <SafeAreaView style={safeAreaViewStyles.flex}>
+            <BaseSafeArea grow={1}>
+                <SafeAreaView style={{ flex: 1 }} />
                 <BaseView
                     alignItems="center"
                     justifyContent="flex-start"
                     flexGrow={1}>
                     {children}
                 </BaseView>
-            </SafeAreaView>
+            </BaseSafeArea>
         </Modal>
     )
 }
-
-const safeAreaViewStyles = StyleSheet.create({
-    flex: { flex: 1 },
-})
