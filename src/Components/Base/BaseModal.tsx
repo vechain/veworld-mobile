@@ -1,5 +1,5 @@
 import React from "react"
-import { Modal, SafeAreaView } from "react-native"
+import { Modal } from "react-native"
 import { BaseSafeArea } from "./BaseSafeArea"
 import { BaseView } from "./BaseView"
 
@@ -23,7 +23,6 @@ export const BaseModal: React.FC<IBaseModal> = ({
             onDismiss={onClose}
             onRequestClose={onClose}>
             <BaseSafeArea grow={1}>
-                <SafeAreaView />
                 <BaseView
                     alignItems="center"
                     justifyContent="flex-start"
