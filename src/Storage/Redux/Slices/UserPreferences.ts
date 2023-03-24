@@ -2,7 +2,7 @@ import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { ThorConstants } from "~Common/Constant"
 import { CURRENCY, ThemeEnum } from "~Common/Enums"
-import { IAccount, INetwork, NETWORK_TYPE } from "~Model"
+import { INetwork, NETWORK_TYPE } from "~Model"
 
 export interface UserPreferenceState {
     theme: ThemeEnum
@@ -11,7 +11,6 @@ export interface UserPreferenceState {
     showConversionOtherNets: boolean
     hideTokensWithNoBalance: boolean
     isAppLockActive: boolean
-    selectedAccount?: IAccount
     balanceVisible: boolean
     currency: CURRENCY
     language: LANGUAGE
@@ -24,7 +23,6 @@ const initialState: UserPreferenceState = {
     showConversionOtherNets: true,
     hideTokensWithNoBalance: false,
     isAppLockActive: process.env.NODE_ENV !== "development",
-    selectedAccount: undefined,
     balanceVisible: true,
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,
@@ -57,10 +55,6 @@ export const UserPreferencesSlice = createSlice({
             state.isAppLockActive = action.payload
         },
 
-        setSelectedAccount: (state, action: PayloadAction<IAccount>) => {
-            state.selectedAccount = action.payload
-        },
-
         setBalanceVisible: (state, action: PayloadAction<boolean>) => {
             state.balanceVisible = action.payload
         },
@@ -82,7 +76,6 @@ export const {
     setShowConversionOtherNets,
     setHideTokensWithNoBalance,
     setIsAppLockActive,
-    setSelectedAccount,
     setBalanceVisible,
     setCurrency,
     setLanguage,
