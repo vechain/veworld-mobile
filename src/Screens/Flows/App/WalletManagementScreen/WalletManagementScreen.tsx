@@ -3,14 +3,15 @@ import React, { useCallback, useState } from "react"
 
 import { ViewToken } from "react-native"
 import { useBottomSheetModal } from "~Common"
-import { useDevicesList } from "~Common/Hooks/Entities"
 import {
     BackButtonHeader,
     BaseSpacer,
     BaseView,
     BaseSafeArea,
 } from "~Components"
-import { Device } from "~Storage"
+import { Device } from "~Model"
+import { useAppSelector } from "~Storage/Redux"
+import { getDevices } from "~Storage/Redux/Selectors"
 import {
     DeviceBox,
     WalletManagementBottomSheet,
@@ -19,7 +20,8 @@ import {
 
 export const WalletManagementScreen = () => {
     const [isScrollable, setIsScrollable] = useState(false)
-    const devices = useDevicesList()
+
+    const devices = useAppSelector(getDevices)
     const [selectedDevice, setSelectedDevice] = useState<Device>()
 
     const {

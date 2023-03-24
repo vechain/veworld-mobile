@@ -17,14 +17,15 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    useUserPreferencesEntity,
 } from "~Components"
-import { Account, useRealm } from "~Storage"
+import { WalletAccount } from "~Model"
+import { useAppDispatch } from "~Storage/Redux"
+import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
 
 interface Props extends AnimateProps<ViewProps> {
     style?: StyleProp<ViewStyle>
-    account: Account
+    account: WalletAccount
     openAccountManagement: () => void
     balanceVisible: boolean
     selectedCurrency: CURRENCY
@@ -42,14 +43,11 @@ export const AccountCard: React.FC<Props> = memo(props => {
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
 
-    const { store } = useRealm()
-    const userPref = useUserPreferencesEntity()
+    const dispatch = useAppDispatch()
 
     const toggleBalanceVisibility = useCallback(() => {
-        store.write(() => {
-            userPref.balanceVisible = !userPref.balanceVisible
-        })
-    }, [userPref, store])
+        dispatch(setBalanceVisible(!balanceVisible))
+    }, [balanceVisible, dispatch])
 
     const randomBalance = useMemo(() => CryptoUtils.random().toString(), [])
 

@@ -4,10 +4,10 @@ import { FadeInRight } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
 import { BaseSpacer, PaginatedDot } from "~Components"
 import { AccountCard } from "./AccountCard"
-import { Account } from "~Storage"
 import { useTheme } from "~Common"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
+import { WalletAccount } from "~Model"
 
 const width = Dimensions.get("window").width - 40
 
@@ -20,9 +20,9 @@ const StackConfig = {
 }
 
 type Props = {
-    accounts: Account[]
+    accounts: WalletAccount[]
     selectedAccountIndex: number
-    onAccountChange: (account: Account) => void
+    onAccountChange: (account: WalletAccount) => void
     openAccountManagementSheet: () => void
     balanceVisible: boolean
 }

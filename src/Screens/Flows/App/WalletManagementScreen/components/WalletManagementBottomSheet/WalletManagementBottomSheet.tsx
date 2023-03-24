@@ -10,10 +10,15 @@ import {
     BaseView,
 } from "~Components"
 
-import { Device, getUserPreferences, useRealm } from "~Storage"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { FlashList } from "@shopify/flash-list"
+import { Device } from "~Model"
+import { useAppSelector } from "~Storage/Redux"
+import {
+    getAccountsByDevice,
+    getSelectedAccount,
+} from "~Storage/Redux/Selectors"
 
 type Props = {
     device?: Device
@@ -27,10 +32,13 @@ export const WalletManagementBottomSheet = React.forwardRef<
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const { store } = useRealm()
-    const userPreferences = getUserPreferences(store)
-
     const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
+
+    const deviceAccounts = useAppSelector(
+        getAccountsByDevice(device.rootAddress),
+    )
+
+    const selectedAccount = useAppSelector(getSelectedAccount)
 
     const handleSheetChanges = useCallback((index: number) => {
         console.log("walletManagementSheet position changed", index)
@@ -70,16 +78,14 @@ export const WalletManagementBottomSheet = React.forwardRef<
             <BaseView h={100} flexDirection="row">
                 {device && (
                     <FlashList
-                        data={device.accounts}
+                        data={deviceAccounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
                         renderItem={({ item }) => {
                             return (
                                 <AccountDetailBox
                                     account={item}
-                                    selectedAccount={
-                                        userPreferences.selectedAccount!
-                                    }
+                                    selectedAccount={selectedAccount}
                                 />
                             )
                         }}

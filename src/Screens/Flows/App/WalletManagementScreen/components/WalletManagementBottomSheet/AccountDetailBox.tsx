@@ -9,29 +9,26 @@ import {
     BaseTouchableBox,
     BaseView,
 } from "~Components"
-import { Account, useRealm } from "~Storage"
+import { WalletAccount } from "~Model"
+import { useAppDispatch } from "~Storage/Redux"
+import { toggleAccountVisibility } from "~Storage/Redux/Actions"
 
 type Props = {
-    account: Account
-    selectedAccount: Account
+    account: WalletAccount
+    selectedAccount: WalletAccount
 }
 export const AccountDetailBox: React.FC<Props> = memo(
     ({ account, selectedAccount }) => {
         const theme = useTheme()
-
-        const { store } = useRealm()
-
+        const dispatch = useAppDispatch()
         const isSelected = useMemo(
             () => compareAddresses(selectedAccount?.address, account.address),
             [account.address, selectedAccount?.address],
         )
 
         const toggleVisibility = useCallback(() => {
-            if (!isSelected)
-                store.write(() => {
-                    account.visible = !account.visible
-                })
-        }, [account, store, isSelected])
+            dispatch(toggleAccountVisibility({ address: account.address }))
+        }, [dispatch, account])
 
         return (
             <BaseView w={100} flexDirection="row">
