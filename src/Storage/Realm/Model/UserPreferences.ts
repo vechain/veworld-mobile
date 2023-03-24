@@ -4,13 +4,15 @@ import { Network } from "./Network"
 
 export class UserPreferences extends Object {
     _id!: string
-    theme!: "dark" | "light"
+    theme!: "light" | "dark"
     currentNetwork!: Network
     showTestNetTag!: boolean
     showConversionOtherNets!: boolean
     isAppLockActive!: boolean
     selectedAccount?: Account
     balanceVisible!: boolean
+    currency!: string
+    language!: string
 
     static getName(): string {
         return UserPreferences.schema.name
@@ -33,6 +35,8 @@ export class UserPreferences extends Object {
             isAppLockActive: { type: "bool" },
             selectedAccount: "Account?",
             balanceVisible: { type: "bool", default: true },
+            currency: { type: "string", default: "euro" },
+            language: { type: "string", default: "English" },
         },
     }
 }

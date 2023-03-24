@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, useTheme } from "~Common"
+import { CURRENCY, FormattingUtils, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
@@ -8,6 +8,7 @@ type Props = {
     balance: string
     isVisible: boolean
     toggleVisible: () => void
+    selectedCurrency: CURRENCY
 }
 
 const getBalanceText = (balance: string, isVisible: boolean) => {
@@ -17,9 +18,15 @@ const getBalanceText = (balance: string, isVisible: boolean) => {
     ).map(_value => "*")
 }
 export const Balance: React.FC<Props> = memo(
-    ({ balance, isVisible, toggleVisible }) => {
+    ({ balance, isVisible, toggleVisible, selectedCurrency }) => {
         const theme = useTheme()
         const { LL } = useI18nContext()
+
+        const selectedCurrencyText = useMemo(
+            () =>
+                selectedCurrency === CURRENCY.EUR ? LL.BD_EUR() : LL.BD_USD(),
+            [LL, selectedCurrency],
+        )
 
         const renderBalance = useMemo(
             () => getBalanceText(balance, isVisible),
@@ -52,7 +59,7 @@ export const Balance: React.FC<Props> = memo(
                         mx={4}
                         color={theme.colors.textReversed}
                         typographyFont="body">
-                        USD
+                        {selectedCurrencyText}
                     </BaseText>
                 </BaseView>
             </>

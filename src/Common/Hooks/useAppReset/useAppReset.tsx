@@ -73,6 +73,8 @@ const resetRealm = async (store: Realm, cache: Realm) => {
             process.env.NODE_ENV === "development" ? false : true
         userPreferences.selectedAccount = undefined
         userPreferences.balanceVisible = true
+        userPreferences.currency = "usd"
+        userPreferences.language = "English"
 
         store.delete(getDevices(store))
         store.delete(getAccounts(store))
