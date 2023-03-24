@@ -10,8 +10,12 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
-import { SecurityLevelType, WALLET_STATUS } from "~Model"
-import { getAppLock, getConfig, useRealm } from "~Storage"
+import {
+    SecurityLevelType,
+    UserSelectedSecurityLevel,
+    WALLET_STATUS,
+} from "~Model"
+import { getAppLock, useRealm } from "~Storage"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -25,6 +29,12 @@ import {
     RootStackParamListOnboarding,
     Routes,
 } from "~Navigation"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectIsWalletCreated,
+    selectUserSelectedSecurity,
+} from "~Storage/Redux/Selectors"
+import { setIsWalletCreated } from "~Storage/Redux/Actions"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -35,9 +45,13 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const { store, cache } = useRealm()
+    const { cache } = useRealm()
     const theme = useTheme()
     const [isError, setIsError] = useState("")
+
+    const dispatch = useAppDispatch()
+    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+    const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
 
     const {
         onCreateWallet: createWalletWithBiometrics,
@@ -65,10 +79,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const onButtonPress = useCallback(async () => {
         let params = route.params
 
-        const config = getConfig(store)
-
-        if (config?.isWalletCreated) {
-            if (config.userSelectedSecurity === SecurityLevelType.BIOMETRIC) {
+        if (isWalletCreated) {
+            if (userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC) {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
                 if (success) {
@@ -91,11 +103,12 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         }
     }, [
         route.params,
-        store,
+        isWalletCreated,
+        userSelectedSecurity,
         createWalletWithBiometrics,
+        onWalletCreationError,
         openPasswordPrompt,
         createWalletWithPassword,
-        onWalletCreationError,
     ])
 
     const onPasswordSuccess = useCallback(
@@ -106,9 +119,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     useEffect(() => {
         if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
-            const config = getConfig(store)
-
-            if (config?.isWalletCreated) {
+            if (isWalletCreated) {
                 closePasswordPrompt()
 
                 if (!isPasswordPromptOpen) {
@@ -132,21 +143,18 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     }
                 })
 
-                store.write(() => {
-                    if (config) {
-                        config.isWalletCreated = true
-                    }
-                })
+                dispatch(setIsWalletCreated(true))
             }
         }
     }, [
         cache,
         closePasswordPrompt,
+        dispatch,
         isPasswordPromptOpen,
+        isWalletCreated,
         isWalletCreatedWithBiometrics,
         isWalletCreatedWithPassword,
         nav,
-        store,
     ])
 
     return (

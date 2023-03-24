@@ -15,12 +15,14 @@ import {
 } from "~Components/Base/BaseButtonGroup"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { getConfig, getMnemonic, useRealm } from "~Storage"
+import { getMnemonic, useRealm } from "~Storage"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
+import { useAppSelector } from "~Storage/Redux"
+import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
-    const { store, cache } = useRealm()
+    const { cache } = useRealm()
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -35,8 +37,9 @@ export const ConfirmMnemonicScreen = () => {
     )
     const [isError, setIsError] = useState(false)
 
-    const config = getConfig(store)
     const mnemonic = getMnemonic(cache)?.mnemonic
+
+    const isWalletCreated = useAppSelector(selectIsWalletCreated)
 
     /**
      * if mnemonic is not available something strange is happening, better to throw an error and crash the app
@@ -57,7 +60,7 @@ export const ConfirmMnemonicScreen = () => {
             selectedSecondWord === mnemonicArray[secondIndex] &&
             selectedThirdWord === mnemonicArray[thirdIndex]
         ) {
-            if (config?.isWalletCreated) {
+            if (isWalletCreated) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
@@ -91,6 +94,7 @@ export const ConfirmMnemonicScreen = () => {
             ]),
         [firstIndex, mnemonicArray],
     )
+
     const buttonsSecondWord = useMemo(
         () =>
             CryptoUtils.shuffleArray([
@@ -166,7 +170,7 @@ export const ConfirmMnemonicScreen = () => {
                             <BaseButton
                                 variant="link"
                                 action={() =>
-                                    config?.isWalletCreated
+                                    isWalletCreated
                                         ? nav.navigate(Routes.WALLET_SUCCESS)
                                         : nav.navigate(Routes.APP_SECURITY)
                                 }

@@ -6,13 +6,17 @@ import {
     XPub,
     useRealm,
     getUserPreferences,
-    getConfig,
     getMnemonic,
 } from "~Storage"
 import { CryptoUtils } from "~Common/Utils"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 import { useBiometrics } from "../useBiometrics"
 import { useDeviceUtils } from "../useDeviceUtils"
+import { useAppDispatch } from "~Storage/Redux"
+import {
+    setLastSecurityLevel,
+    setUserSelectedSecurity,
+} from "~Storage/Redux/Actions"
 
 /**
  * useCreateWalletWithBiometrics
@@ -30,11 +34,11 @@ export const useCreateWalletWithBiometrics = () => {
         [biometrics?.accessControl],
     )
 
+    const dispatch = useAppDispatch()
+
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
         async (onError?: (error: unknown) => void) => {
-            const config = getConfig(store)
-
             const _mnemonic = getMnemonic(cache)
 
             let mnemonicPhrase = _mnemonic?.mnemonic
@@ -81,12 +85,15 @@ export const useCreateWalletWithBiometrics = () => {
                         if (!userPreferences.selectedAccount)
                             userPreferences.selectedAccount = account
 
-                        if (config) {
-                            config.userSelectedSecurity =
-                                UserSelectedSecurityLevel.BIOMETRIC
-                            config.lastSecurityLevel =
-                                SecurityLevelType.BIOMETRIC
-                        }
+                        dispatch(
+                            setUserSelectedSecurity(
+                                UserSelectedSecurityLevel.BIOMETRIC,
+                            ),
+                        )
+
+                        dispatch(
+                            setLastSecurityLevel(SecurityLevelType.BIOMETRIC),
+                        )
                     })
 
                     setIsComplete(true)
@@ -96,7 +103,7 @@ export const useCreateWalletWithBiometrics = () => {
                 onError && onError(error)
             }
         },
-        [accessControl, cache, store, getDeviceFromMnemonic],
+        [cache, accessControl, getDeviceFromMnemonic, store, dispatch],
     )
     //* [END] - Create Wallet
 

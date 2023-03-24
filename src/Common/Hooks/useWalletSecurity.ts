@@ -1,20 +1,15 @@
 import { useMemo } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
 import { useBiometrics } from "./useBiometrics"
-import { useConfigEntity } from "~Components"
+import { useAppSelector } from "~Storage/Redux"
+import {
+    selectIsSecurityDowngrade,
+    selectUserSelectedSecurity,
+} from "~Storage/Redux/Selectors"
 
 export const useWalletSecurity = () => {
-    const configEntity = useConfigEntity()
-
-    const userSelectedSecurity = useMemo(
-        () => configEntity?.userSelectedSecurity,
-        [configEntity?.userSelectedSecurity],
-    )
-
-    const isSecurityDowngrade = useMemo(
-        () => configEntity?.isSecurityDowngrade,
-        [configEntity],
-    )
+    const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
+    const isSecurityDowngrade = useAppSelector(selectIsSecurityDowngrade)
 
     const biometrics = useBiometrics()
 
