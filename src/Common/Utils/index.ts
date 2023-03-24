@@ -21,6 +21,7 @@ import StringUtils from "./StringUtils"
 // import TokenUtils from "./TokenUtils"
 // import TransactionUtils from "./TransactionUtils"
 // import URLUtils from "./URLUtils"
+import LanguageUtils from "./LanguageUtils"
 
 export {
     // AliasUtils,
@@ -46,4 +47,5 @@ export {
     // TokenUtils,
     // TransactionUtils,
     // URLUtils,
+    LanguageUtils,
 }

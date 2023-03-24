@@ -8,6 +8,7 @@ import {
     useTheme,
     useThemedStyles,
     PlatformUtils,
+    CURRENCY,
 } from "~Common"
 import {
     AccountIcon,
@@ -16,8 +17,9 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    useUserPreferencesEntity,
 } from "~Components"
-import { Account, getUserPreferences, useRealm } from "~Storage"
+import { Account, useRealm } from "~Storage"
 import { Balance } from "./Balance"
 
 interface Props extends AnimateProps<ViewProps> {
@@ -25,6 +27,7 @@ interface Props extends AnimateProps<ViewProps> {
     account: Account
     openAccountManagement: () => void
     balanceVisible: boolean
+    selectedCurrency: CURRENCY
 }
 
 export const AccountCard: React.FC<Props> = memo(props => {
@@ -33,13 +36,14 @@ export const AccountCard: React.FC<Props> = memo(props => {
         account,
         openAccountManagement,
         balanceVisible,
+        selectedCurrency,
         ...animatedViewProps
     } = props
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
 
     const { store } = useRealm()
-    const userPref = getUserPreferences(store)
+    const userPref = useUserPreferencesEntity()
 
     const toggleBalanceVisibility = useCallback(() => {
         store.write(() => {
@@ -89,6 +93,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     isVisible={balanceVisible}
                     toggleVisible={toggleBalanceVisibility}
                     balance={randomBalance}
+                    selectedCurrency={selectedCurrency}
                 />
             </BaseView>
         </Animated.View>

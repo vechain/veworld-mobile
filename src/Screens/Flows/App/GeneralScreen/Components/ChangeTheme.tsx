@@ -1,43 +1,64 @@
-import React, { useCallback, useMemo, useState } from "react"
-import { BaseSwitch, BaseText, BaseView } from "~Components"
-import { useRealm, getUserPreferences } from "~Storage"
-import { useAppDispatch } from "~Storage/Redux"
+import React, { useCallback, useMemo } from "react"
+import { ThemeEnum } from "~Common"
+import { BaseButtonGroupHorizontal } from "~Components"
+import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
+import { useI18nContext } from "~i18n"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setTheme } from "~Storage/Redux/Actions"
+import { selectTheme } from "~Storage/Redux/Selectors"
 
-export const ChangeTheme = () => {
-    const { store } = useRealm()
-
-    const userPref = getUserPreferences(store)
-
-    const isRealmDark = useMemo(() => userPref?.theme === "dark", [userPref])
-    const [isDark, setIsDark] = useState(isRealmDark)
-
+export const ChangeTheme: React.FC = () => {
     const dispatch = useAppDispatch()
 
-    const toggleSwitch = useCallback(
-        (newValue: boolean) => {
-            const mode = newValue ? "dark" : "light"
-            setIsDark(newValue)
+    const themePref = useAppSelector(selectTheme)
+
+    const { LL } = useI18nContext()
+
+    const themes: Array<Button> = useMemo(() => {
+        return [
+            {
+                id: ThemeEnum.LIGHT,
+                label: LL.LIGHT_THEME(),
+            },
+            {
+                id: ThemeEnum.DARK,
+                label: LL.DARK_THEME(),
+            },
+            {
+                id: ThemeEnum.SYSTEM,
+                label: LL.SYSTEM_THEME(),
+            },
+        ]
+    }, [LL])
+
+    const handleSelectTheme = useCallback(
+        (button: Button) => {
+            let mode: ThemeEnum
+            switch (button.id) {
+                case "light":
+                    mode = ThemeEnum.LIGHT
+                    break
+                case "dark":
+                    mode = ThemeEnum.DARK
+                    break
+                case "system":
+                    mode = ThemeEnum.SYSTEM
+                    break
+                default:
+                    mode = ThemeEnum.SYSTEM
+                    break
+            }
 
             dispatch(setTheme(mode))
-
-            store.write(() => {
-                if (userPref) {
-                    userPref.theme = mode
-                }
-            })
         },
-        [dispatch, store, userPref],
+        [dispatch],
     )
 
     return (
-        <BaseView
-            justifyContent="space-between"
-            w={100}
-            alignItems="center"
-            flexDirection="row">
-            <BaseText>Dark Mode</BaseText>
-            <BaseSwitch onValueChange={toggleSwitch} value={isDark} />
-        </BaseView>
+        <BaseButtonGroupHorizontal
+            selectedButtonIds={[themePref]}
+            buttons={themes}
+            action={handleSelectTheme}
+        />
     )
 }
