@@ -1,20 +1,18 @@
 import React from "react"
-import { useTheme } from "~Common"
+import { LANGUAGE, useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseTouchableBox } from "~Components"
 
 type Props = {
-    placeholder: string
+    language: LANGUAGE
     onPress: () => void
 }
 
-export const ChangeLanguage: React.FC<Props> = ({ placeholder, onPress }) => {
+export const ChangeLanguage: React.FC<Props> = ({ language, onPress }) => {
     const theme = useTheme()
 
     return (
         <BaseTouchableBox action={onPress} justifyContent="space-between">
-            <BaseText typographyFont="smallButtonPrimary">
-                {placeholder}
-            </BaseText>
+            <BaseText typographyFont="smallButtonPrimary">{language}</BaseText>
             <BaseIcon name={"web"} color={theme.colors.text} size={24} />
         </BaseTouchableBox>
     )

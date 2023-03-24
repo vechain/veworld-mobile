@@ -9,7 +9,6 @@ import {
     setHideTokensWithNoBalance,
     setLanguage,
     setCurrency,
-    setSystemTheme,
 } from "../Slices/UserPreferences"
 
 export {
@@ -23,5 +22,4 @@ export {
     setHideTokensWithNoBalance,
     setLanguage,
     setCurrency,
-    setSystemTheme,
 }
