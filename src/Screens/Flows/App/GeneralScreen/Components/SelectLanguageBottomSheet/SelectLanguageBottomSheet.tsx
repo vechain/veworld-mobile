@@ -3,14 +3,14 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { LanguageUtils, useTheme } from "~Common"
+import { LANGUAGE, LanguageUtils, useTheme } from "~Common"
 import { FlashList } from "@shopify/flash-list"
 import { StyleSheet } from "react-native"
 
 type Props = {
-    selectedLanguage: string
+    selectedLanguage: LANGUAGE
     onClose: () => void
-    handleSelectLanguage: (language: string) => void
+    handleSelectLanguage: (language: LANGUAGE) => void
 }
 
 const ITEM_SIZE = 80
@@ -54,7 +54,7 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                         return (
                             <BaseTouchableBox
                                 action={() => {
-                                    handleSelectLanguage(item)
+                                    handleSelectLanguage(item as LANGUAGE)
                                 }}
                                 containerStyle={baseStyles.languageContainer}
                                 innerContainerStyle={{
