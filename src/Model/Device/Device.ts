@@ -1,6 +1,5 @@
 import { XPub } from "../Crypto"
 import { DEVICE_TYPE } from "../Wallet"
-import { StorageData } from "../StorageData"
 
 /** A model for storing data about any connected devices such as hardware wallets
  * @field `xPub` - used to generate new address without accessing the device directly
@@ -13,16 +12,4 @@ export interface Device {
     rootAddress: string
     type: DEVICE_TYPE
     alias: string
-}
-
-/**
- * The model for all devices in chrome storage
- * @field `devices` - An array of devices
- */
-export interface DeviceStorageData extends StorageData {
-    devices: Device[]
-}
-
-export type DeviceState = {
-    devices: Device[]
 }
