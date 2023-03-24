@@ -343,7 +343,7 @@ PODS:
     - glog
   - react-native-blur (4.3.0):
     - React-Core
-  - react-native-flipper (0.184.0):
+  - react-native-flipper (0.163.0):
     - React-Core
   - react-native-get-random-values (1.8.0):
     - React-Core
@@ -790,7 +790,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-blur: 50c9feabacbc5f49b61337ebc32192c6be7ec3c3
-  react-native-flipper: f5b2b27bfbbf64ffbf8d1e7030905e43a22144c1
+  react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-pager-view: b58cb9e9f42f64e50cab3040815772c1d119a2e2

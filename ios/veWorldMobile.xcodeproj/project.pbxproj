@@ -21,7 +21,6 @@
 		EAFBEA572955DEFF0036BC15 /* SampleNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA562955DEFF0036BC15 /* SampleNativeModule.m */; };
 		F1282828ADD7BFC1D3A1A0F2 /* libPods-veWorldMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D219085A47BC057858BF87E4 /* libPods-veWorldMobile.a */; };
 		F12EE6F0073A253A9D1C8167 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F33240CF19E97FC49A2DC2 /* ExpoModulesProvider.swift */; };
-		FB8F80E246F617AF450B22E8 /* libPods-veWorldMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB6455B87A3A79F216D5DA9 /* libPods-veWorldMobile.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +37,6 @@
 		00E356EE1AD99517003FC87E /* veWorldMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = veWorldMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* veWorldMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = veWorldMobileTests.m; sourceTree = "<group>"; };
-		136F018A032E78B0217B1B4A /* Pods-veWorldMobile-veWorldMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile-veWorldMobileTests.release.xcconfig"; path = "Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* veWorldMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = veWorldMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = veWorldMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = veWorldMobile/AppDelegate.mm; sourceTree = "<group>"; };
