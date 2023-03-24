@@ -24,7 +24,7 @@ export const NewMnemonicScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
 
-    const [IsChecked, setIsChecked] = useState(false)
+    const [isChecked, setIsChecked] = useState(false)
     const { mnemonic, mnemonicArray } = useGenerateMnemonic()
 
     const theme = useTheme()
@@ -101,7 +101,7 @@ export const NewMnemonicScreen = () => {
                         w={100}
                         px={20}
                         title={LL.BTN_MNEMONIC_BACKUP()}
-                        disabled={!IsChecked}
+                        disabled={!isChecked}
                     />
                 </BaseView>
             </BaseView>

@@ -35,8 +35,10 @@ export const useCreateWalletWithBiometrics = () => {
     const onCreateWallet = useCallback(
         async (onError?: (error: unknown) => void) => {
             try {
-                if (mnemonic && accessControl) {
-                    const { device, wallet } = getDeviceFromMnemonic(mnemonic)
+                if (mnemonic.value && accessControl) {
+                    const { device, wallet } = getDeviceFromMnemonic(
+                        mnemonic.value,
+                    )
 
                     dispatch(setMnemonic(undefined))
 
@@ -64,7 +66,7 @@ export const useCreateWalletWithBiometrics = () => {
                     dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
 
                     setIsComplete(true)
-                }
+                } else throw new Error("Mnemonic is not defined")
             } catch (error) {
                 console.log("CREATE WALLET ERROR : ", error)
                 onError && onError(error)

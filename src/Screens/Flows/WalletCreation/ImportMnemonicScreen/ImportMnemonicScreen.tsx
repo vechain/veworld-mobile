@@ -35,6 +35,7 @@ export const ImportMnemonicScreen = () => {
     const isWalletCreated = useAppSelector(selectIsWalletCreated)
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
+
     const dispatch = useAppDispatch()
 
     const onVerify = (_mnemonic: string) => {
@@ -47,7 +48,7 @@ export const ImportMnemonicScreen = () => {
                 return
             }
 
-            dispatch(setMnemonic(localMnemonic))
+            dispatch(setMnemonic(sanitisedMnemonic))
 
             if (isWalletCreated) {
                 nav.navigate(Routes.WALLET_SUCCESS)

@@ -29,9 +29,9 @@ export const useCreateWalletWithPassword = () => {
     const onCreateWallet = useCallback(
         async (userPassword: string, onError?: (error: unknown) => void) => {
             try {
-                if (mnemonic) {
+                if (mnemonic.value) {
                     const { device, wallet, deviceIndex } =
-                        getDeviceFromMnemonic(mnemonic)
+                        getDeviceFromMnemonic(mnemonic.value)
 
                     dispatch(setMnemonic(undefined))
 
@@ -64,6 +64,7 @@ export const useCreateWalletWithPassword = () => {
 
                     setIsComplete(true)
                 }
+                throw new Error("Mnemonic is not defined")
             } catch (error) {
                 console.log("CREATE WALLET ERROR : ", error)
                 onError && onError(error)

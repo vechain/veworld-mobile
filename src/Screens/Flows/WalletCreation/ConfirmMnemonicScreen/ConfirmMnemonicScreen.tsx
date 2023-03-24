@@ -15,14 +15,12 @@ import {
 } from "~Components/Base/BaseButtonGroup"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { getMnemonic, useRealm } from "~Storage"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
-import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
+import { getMnemonic, selectIsWalletCreated } from "~Storage/Redux/Selectors"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
-    const { cache } = useRealm()
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -37,7 +35,7 @@ export const ConfirmMnemonicScreen = () => {
     )
     const [isError, setIsError] = useState(false)
 
-    const mnemonic = getMnemonic(cache)?.mnemonic
+    const mnemonic = useAppSelector(getMnemonic)
 
     const isWalletCreated = useAppSelector(selectIsWalletCreated)
 
@@ -48,7 +46,10 @@ export const ConfirmMnemonicScreen = () => {
         throw new Error("ConfirmMnemonicScreen: Mnemonic is not available")
     }
 
-    const mnemonicArray = useMemo(() => mnemonic.split(" "), [mnemonic])
+    const mnemonicArray = useMemo(
+        () => mnemonic.value?.split(" ") || [],
+        [mnemonic],
+    )
     const [firstIndex, secondIndex, thirdIndex] = useMemo(
         () => getThreeRandomIndexes(),
         [],

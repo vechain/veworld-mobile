@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-type InitialMnemonicState = string | undefined
-export const initialMnemonicState: InitialMnemonicState = undefined
+type InitialMnemonicState = { value?: string }
+export const initialMnemonicState: InitialMnemonicState = { value: undefined }
 
 export const MnemonicSlice = createSlice({
     name: "mnemonic",
     initialState: initialMnemonicState as InitialMnemonicState,
     reducers: {
         setMnemonic: (state, action: PayloadAction<string | undefined>) => {
-            state = action.payload
+            state.value = action.payload
         },
     },
 })
