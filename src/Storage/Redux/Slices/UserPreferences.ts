@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PURGE } from "redux-persist"
 import { ThorConstants } from "~Common/Constant"
 import { IAccount, INetwork, NETWORK_TYPE } from "~Model"
 
@@ -53,6 +54,9 @@ export const UserPreferencesSlice = createSlice({
         setBalanceVisible: (state, action: PayloadAction<boolean>) => {
             state.balanceVisible = action.payload
         },
+    },
+    extraReducers: builder => {
+        builder.addCase(PURGE, () => initialState)
     },
 })
 

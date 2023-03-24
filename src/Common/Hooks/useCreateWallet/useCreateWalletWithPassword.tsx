@@ -7,11 +7,15 @@ import {
     XPub,
     useRealm,
     getUserPreferences,
-    getConfig,
     getMnemonic,
 } from "~Storage"
 import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 import { useDeviceUtils } from "../useDeviceUtils"
+import { useAppDispatch } from "~Storage/Redux"
+import {
+    setLastSecurityLevel,
+    setUserSelectedSecurity,
+} from "~Storage/Redux/Actions"
 
 /**
  * useCreateWalletWithPassword
@@ -23,11 +27,11 @@ export const useCreateWalletWithPassword = () => {
 
     const [isComplete, setIsComplete] = useState(false)
 
+    const dispatch = useAppDispatch()
+
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
         async (userPassword: string, onError?: (error: unknown) => void) => {
-            const config = getConfig(store)
-
             const _mnemonic = getMnemonic(cache)
             let mnemonicPhrase = _mnemonic?.mnemonic
 
@@ -73,11 +77,13 @@ export const useCreateWalletWithPassword = () => {
                         if (!userPreferences.selectedAccount)
                             userPreferences.selectedAccount = account
 
-                        if (config) {
-                            config.userSelectedSecurity =
-                                UserSelectedSecurityLevel.PASSWORD
-                            config.lastSecurityLevel = SecurityLevelType.SECRET
-                        }
+                        dispatch(
+                            setUserSelectedSecurity(
+                                UserSelectedSecurityLevel.PASSWORD,
+                            ),
+                        )
+
+                        dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
                     })
 
                     setIsComplete(true)
@@ -87,7 +93,7 @@ export const useCreateWalletWithPassword = () => {
                 onError && onError(error)
             }
         },
-        [cache, store, getDeviceFromMnemonic],
+        [cache, getDeviceFromMnemonic, store, dispatch],
     )
     //* [END] - Create Wallet
 

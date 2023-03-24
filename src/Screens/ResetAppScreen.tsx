@@ -10,23 +10,22 @@ import {
     BaseView,
     CheckBoxWithText,
 } from "~Components"
-import { getConfig, useRealm } from "~Storage"
+import { useAppDispatch } from "~Storage/Redux"
+import { setIsResettingApp } from "~Storage/Redux/Actions"
 import { useI18nContext } from "~i18n"
 
 export const ResetAppScreen = () => {
     const appReset = useAppReset()
     const { LL } = useI18nContext()
-    const { store } = useRealm()
     const theme = useTheme()
+    const disptach = useAppDispatch()
 
     const [IsChecked, setIsChecked] = useState(false)
 
-    const onBackPress = useCallback(() => {
-        store.write(() => {
-            const config = getConfig(store)
-            if (config) config.isResettingApp = false
-        })
-    }, [store])
+    const onBackPress = useCallback(
+        () => disptach(setIsResettingApp(false)),
+        [disptach],
+    )
 
     return (
         <BaseSafeArea grow={1}>

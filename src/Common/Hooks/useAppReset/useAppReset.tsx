@@ -5,7 +5,6 @@ import {
     Device,
     useRealm,
     getAppLock,
-    getConfig,
     getNetworks,
     getUserPreferences,
     getAccounts,
@@ -13,10 +12,13 @@ import {
     getXPub,
 } from "~Storage"
 import Realm from "realm"
-import { SettingsConstants } from "~Common/Constant"
+import { purgeStoredState } from "redux-persist"
+import { getPersistorConfig, useAppDispatch } from "~Storage/Redux"
+import { AppDispatch } from "~Storage/Redux/Types"
 
 export const useAppReset = () => {
     const { store, cache } = useRealm()
+    const dispatch = useAppDispatch()
 
     const appReset = useCallback(async () => {
         const devices = getDevices(store)
@@ -31,8 +33,8 @@ export const useAppReset = () => {
             }
         }
 
-        resetRealm(store, cache)
-    }, [cache, store])
+        resetRealm(store, cache, dispatch)
+    }, [cache, dispatch, store])
 
     return appReset
 }
@@ -49,23 +51,21 @@ const loopOverAndDeleteDevices = async (
     }
 }
 
-const resetRealm = async (store: Realm, cache: Realm) => {
+const resetRealm = async (
+    store: Realm,
+    cache: Realm,
+    dispatch: AppDispatch,
+) => {
     const appLock = getAppLock(cache)
 
     cache.write(() => {
         appLock.status = WALLET_STATUS.LOCKED
     })
 
-    const config = getConfig(store)
     const networks = getNetworks(store)
     const userPreferences = getUserPreferences(store)
 
     store.write(() => {
-        config.userSelectedSecurity = "NONE"
-        config.lastSecurityLevel = "NONE"
-        config.isSecurityDowngrade = false
-        config.pinValidationString = SettingsConstants.VALIDATION_STRING
-
         userPreferences.currentNetwork = networks[0]
         userPreferences.showTestNetTag = true
         userPreferences.showConversionOtherNets = true
@@ -77,10 +77,10 @@ const resetRealm = async (store: Realm, cache: Realm) => {
         store.delete(getDevices(store))
         store.delete(getAccounts(store))
         store.delete(getXPub(store))
-
-        config.isWalletCreated = false
-        config.isResettingApp = false
-
-        console.log("App Reset Finished")
     })
+
+    const persistConfig = await getPersistorConfig()
+    purgeStoredState(persistConfig)
+    dispatch({ type: "RESET" })
+    console.log("App Reset Finished")
 }

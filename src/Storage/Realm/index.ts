@@ -1,7 +1,6 @@
 import {
     Device,
     XPub,
-    Config,
     Mnemonic,
     Account,
     AppLock,
@@ -17,7 +16,6 @@ import {
 
 import {
     getUserPreferences,
-    getConfig,
     getAppLock,
     getMnemonic,
     getAccounts,
@@ -38,14 +36,12 @@ export {
     useListListener,
     Device,
     XPub,
-    Config,
     Mnemonic,
     Account,
     AppLock,
     UserPreferences,
     Network,
     getUserPreferences,
-    getConfig,
     getAppLock,
     getMnemonic,
     getAccounts,

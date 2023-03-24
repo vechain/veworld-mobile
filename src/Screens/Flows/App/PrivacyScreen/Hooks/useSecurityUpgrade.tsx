@@ -7,7 +7,9 @@ import {
 } from "~Common"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
-import { getConfig, getDevices, useRealm } from "~Storage"
+import { getDevices, useRealm } from "~Storage"
+import { useAppDispatch } from "~Storage/Redux"
+import { setUserSelectedSecurity } from "~Storage/Redux/Actions"
 
 export const useSecurityUpgrade = () => {
     const { walletSecurity } = useWalletSecurity()
@@ -16,7 +18,7 @@ export const useSecurityUpgrade = () => {
 
     const devices = getDevices(store)
 
-    const config = getConfig(store)
+    const dispatch = useAppDispatch()
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
@@ -52,14 +54,15 @@ export const useSecurityUpgrade = () => {
                 }
             }
 
-            if (config) {
-                config.userSelectedSecurity =
-                    UserSelectedSecurityLevel.BIOMETRIC
-                store.commitTransaction()
-                onSuccessCallback && onSuccessCallback()
-            }
+            store.commitTransaction()
+
+            dispatch(
+                setUserSelectedSecurity(UserSelectedSecurityLevel.BIOMETRIC),
+            )
+
+            onSuccessCallback && onSuccessCallback()
         },
-        [store, config, devices, walletSecurity],
+        [walletSecurity, store, dispatch, devices],
     )
 
     return runSecurityUpgrade

@@ -12,10 +12,12 @@ import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { CryptoUtils, SeedUtils, useDeviceUtils, useTheme } from "~Common"
 import { Keyboard } from "react-native"
-import { getConfig, getMnemonic, useRealm } from "~Storage"
+import { getMnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
 import { useNavigation } from "@react-navigation/native"
+import { useAppSelector } from "~Storage/Redux"
+import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
 
 const DEMO_MNEMONIC =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
@@ -28,10 +30,10 @@ export const ImportMnemonicScreen = () => {
     const [isError, setIsError] = useState<string>("")
     const [isDisabled, setIsDisabled] = useState(true)
 
-    const { store, cache } = useRealm()
+    const { cache } = useRealm()
     const theme = useTheme()
 
-    const config = getConfig(store)
+    const isWalletCreated = useAppSelector(selectIsWalletCreated)
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
@@ -50,7 +52,7 @@ export const ImportMnemonicScreen = () => {
                 cacheMnemonic.mnemonic = sanitisedMnemonic
             })
 
-            if (config?.isWalletCreated) {
+            if (isWalletCreated) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
