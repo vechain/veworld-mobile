@@ -12,4 +12,5 @@ export interface Device {
     rootAddress: string
     type: DEVICE_TYPE
     alias: string
+    wallet: string
 }

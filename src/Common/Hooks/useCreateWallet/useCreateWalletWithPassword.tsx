@@ -38,14 +38,19 @@ export const useCreateWalletWithPassword = () => {
                     const hashedKey = PasswordUtils.hash(userPassword)
                     const accessControl = false
 
-                    await CryptoUtils.encryptWallet(
+                    const { encryptedWallet } = await CryptoUtils.encryptWallet(
                         wallet,
                         deviceIndex,
                         accessControl,
                         hashedKey,
                     )
 
-                    const newAccount = dispatch(addDeviceAndAccounts(device))
+                    const newAccount = dispatch(
+                        addDeviceAndAccounts({
+                            ...device,
+                            wallet: encryptedWallet,
+                        }),
+                    )
                     if (!selectedAccount)
                         dispatch(selectAccount({ address: newAccount.address }))
 

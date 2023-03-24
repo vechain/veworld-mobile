@@ -40,13 +40,18 @@ export const useCreateWalletWithBiometrics = () => {
 
                     dispatch(setMnemonic(undefined))
 
-                    await CryptoUtils.encryptWallet(
+                    const { encryptedWallet } = await CryptoUtils.encryptWallet(
                         wallet,
                         device.index,
                         accessControl,
                     )
 
-                    const newAccount = dispatch(addDeviceAndAccounts(device))
+                    const newAccount = dispatch(
+                        addDeviceAndAccounts({
+                            ...device,
+                            wallet: encryptedWallet,
+                        }),
+                    )
                     if (!selectedAccount)
                         dispatch(selectAccount({ address: newAccount.address }))
 
