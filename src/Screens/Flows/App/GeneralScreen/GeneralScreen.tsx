@@ -62,11 +62,6 @@ export const GeneralScreen = () => {
         [closeSelectLanguageSheet, dispatch],
     )
 
-    // Opens the bottom sheet to select the language
-    const onSelectLanguageClick = useCallback(() => {
-        openSelectLanguageSheet()
-    }, [openSelectLanguageSheet])
-
     return (
         <BaseSafeArea grow={1}>
             <BaseIcon
@@ -126,8 +121,8 @@ export const GeneralScreen = () => {
                 <BaseSpacer height={20} />
 
                 <ChangeLanguage
-                    placeholder={selectedLanguage}
-                    onPress={onSelectLanguageClick}
+                    language={selectedLanguage}
+                    onPress={openSelectLanguageSheet}
                 />
 
                 <SelectLanguageBottomSheet
