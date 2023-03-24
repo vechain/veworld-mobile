@@ -15,7 +15,7 @@ export const useOnDigitPress = () => {
         Array.from({ length: 6 }),
     )
 
-    const disptach = useAppDispatch()
+    const dispatch = useAppDispatch()
 
     const onDigitPress = (digit: string) => {
         // protect for ui overflow
@@ -89,10 +89,10 @@ export const useOnDigitPress = () => {
                 SettingsConstants.VALIDATION_STRING,
                 userPin,
             )
-            disptach(setPinValidationString(pinValidationString))
+            dispatch(setPinValidationString(pinValidationString))
             setIsSuccess(true)
         }
-    }, [disptach, pinMatch, pinTypedCounter, userPin])
+    }, [dispatch, pinMatch, pinTypedCounter, userPin])
 
     return {
         onDigitPress,

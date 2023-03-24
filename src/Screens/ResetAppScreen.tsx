@@ -18,13 +18,13 @@ export const ResetAppScreen = () => {
     const appReset = useAppReset()
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const disptach = useAppDispatch()
+    const dispatch = useAppDispatch()
 
     const [IsChecked, setIsChecked] = useState(false)
 
     const onBackPress = useCallback(
-        () => disptach(setIsResettingApp(false)),
-        [disptach],
+        () => dispatch(setIsResettingApp(false)),
+        [dispatch],
     )
 
     return (
