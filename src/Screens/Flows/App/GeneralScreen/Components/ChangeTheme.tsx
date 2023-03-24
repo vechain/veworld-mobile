@@ -1,26 +1,16 @@
 import React, { useCallback, useMemo } from "react"
-import { ThemeEnum, useColorScheme } from "~Common"
+import { ThemeEnum } from "~Common"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { Button } from "~Components/Base/BaseButtonGroupHorizontal"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setTheme } from "~Storage/Redux/Actions"
-import { selectIsSystemTheme, selectTheme } from "~Storage/Redux/Selectors"
-import { setSystemTheme } from "~Storage/Redux/Actions"
+import { selectTheme } from "~Storage/Redux/Selectors"
 
 export const ChangeTheme: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const themePref = useAppSelector(selectTheme)
-    const isSystemThemePref = useAppSelector(selectIsSystemTheme)
-
-    const activeButtonId = useMemo(
-        () => (isSystemThemePref ? "system" : themePref),
-        [isSystemThemePref, themePref],
-    )
-
-    //Check system color scheme
-    const systemColorScheme = useColorScheme()
 
     const { LL } = useI18nContext()
 
@@ -43,20 +33,30 @@ export const ChangeTheme: React.FC = () => {
 
     const handleSelectTheme = useCallback(
         (button: Button) => {
-            if (button.id === ThemeEnum.SYSTEM) {
-                dispatch(setSystemTheme(true))
-                dispatch(setTheme(systemColorScheme as ThemeEnum))
-            } else {
-                dispatch(setSystemTheme(false))
-                dispatch(setTheme(button.id as ThemeEnum))
+            let mode: ThemeEnum
+            switch (button.id) {
+                case "light":
+                    mode = ThemeEnum.LIGHT
+                    break
+                case "dark":
+                    mode = ThemeEnum.DARK
+                    break
+                case "system":
+                    mode = ThemeEnum.SYSTEM
+                    break
+                default:
+                    mode = ThemeEnum.SYSTEM
+                    break
             }
+
+            dispatch(setTheme(mode))
         },
-        [dispatch, systemColorScheme],
+        [dispatch],
     )
 
     return (
         <BaseButtonGroupHorizontal
-            selectedButtonIds={[activeButtonId]}
+            selectedButtonIds={[themePref]}
             buttons={themes}
             action={handleSelectTheme}
         />
