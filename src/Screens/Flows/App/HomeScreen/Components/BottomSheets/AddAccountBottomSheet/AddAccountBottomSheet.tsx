@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
-import { useCreateAccount } from "~Common"
 import { BaseSpacer, BaseText, BaseButton } from "~Components"
-import { Device } from "~Storage"
 import { DevicesList } from "./DevicesList"
 // import { BottomSheetFooter, BottomSheetFooterProps } from "@gorhom/bottom-sheet"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
+import { useAppDispatch } from "~Storage/Redux"
+import { addAccountForDevice } from "~Storage/Redux/Actions"
+import { Device } from "~Model"
 
 type Props = {
     onClose: () => void
@@ -18,7 +19,7 @@ export const AddAccountBottomSheet = React.forwardRef<
     Props
 >(({ onClose }, ref) => {
     const { LL } = useI18nContext()
-    const createAccountFor = useCreateAccount()
+    const dispatch = useAppDispatch()
 
     const [selectedDevice, setSelectedDevice] = useState<Device>()
 
@@ -26,10 +27,10 @@ export const AddAccountBottomSheet = React.forwardRef<
 
     const onCreateAccount = useCallback(() => {
         if (selectedDevice) {
-            createAccountFor(selectedDevice)
+            dispatch(addAccountForDevice(selectedDevice))
             onClose()
         }
-    }, [createAccountFor, onClose, selectedDevice])
+    }, [dispatch, onClose, selectedDevice])
 
     const handleSheetChanges = useCallback((index: number) => {
         console.log("addAccountSheet position changed", index)

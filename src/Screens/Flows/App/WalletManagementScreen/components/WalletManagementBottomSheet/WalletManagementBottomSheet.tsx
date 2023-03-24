@@ -38,6 +38,8 @@ export const WalletManagementBottomSheet = React.forwardRef<
         getAccountsByDevice(device?.rootAddress),
     )
 
+    console.log(deviceAccounts)
+
     const selectedAccount = useAppSelector(getSelectedAccount)
 
     const handleSheetChanges = useCallback((index: number) => {
@@ -76,7 +78,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
             </BaseText>
             <BaseSpacer height={16} />
             <BaseView h={100} flexDirection="row">
-                {device && (
+                {device && deviceAccounts.length && (
                     <FlashList
                         data={deviceAccounts}
                         keyExtractor={account => account.address}
@@ -91,12 +93,12 @@ export const WalletManagementBottomSheet = React.forwardRef<
                         }}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
-                        estimatedItemSize={device.accounts.length}
+                        estimatedItemSize={deviceAccounts.length}
                         estimatedListSize={{
                             height: 184,
                             width:
-                                152 * device.accounts.length +
-                                (device.accounts.length - 1) * 16,
+                                152 * deviceAccounts.length +
+                                (deviceAccounts.length - 1) * 16,
                         }}
                     />
                 )}

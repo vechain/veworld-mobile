@@ -4,7 +4,9 @@ import { FlatList } from "react-native-gesture-handler"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
 import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
-import { Device, useListListener, useRealm } from "~Storage"
+import { Device } from "~Model"
+import { useAppSelector } from "~Storage/Redux"
+import { getDevices } from "~Storage/Redux/Selectors"
 
 type Props = {
     selectedDevice?: Device
@@ -15,9 +17,8 @@ export const DevicesList: React.FC<Props> = ({
     selectedDevice,
     onDevicePress,
 }) => {
-    const { store } = useRealm()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-    const devices = useListListener(Device.getName(), store) as Device[]
+    const devices = useAppSelector(getDevices())
 
     const handleOnDevicePress = useCallback(
         (device: Device) => () => {
