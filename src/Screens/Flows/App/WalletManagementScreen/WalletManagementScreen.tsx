@@ -21,7 +21,7 @@ import {
 export const WalletManagementScreen = () => {
     const [isScrollable, setIsScrollable] = useState(false)
 
-    const devices = useAppSelector(getDevices)
+    const devices = useAppSelector(getDevices())
     const [selectedDevice, setSelectedDevice] = useState<Device>()
 
     const {
