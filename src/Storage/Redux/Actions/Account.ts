@@ -1,7 +1,13 @@
 import {
     renameAccount,
+    removeAccountsByDevice,
     setAccountVisibility,
     toggleAccountVisibility,
 } from "../Slices/Account"
 
-export { renameAccount, setAccountVisibility, toggleAccountVisibility }
+export {
+    renameAccount,
+    removeAccountsByDevice,
+    setAccountVisibility,
+    toggleAccountVisibility,
+}

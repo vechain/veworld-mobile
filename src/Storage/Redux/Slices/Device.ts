@@ -20,7 +20,20 @@ export const DeviceSlice = createSlice({
                 state[deviceExistsIndex].alias = alias
             }
         },
+        removeDeviceByIndex: (
+            state,
+            action: PayloadAction<{ index: number }>,
+        ) => {
+            const { index } = action.payload
+
+            if (index < 0) {
+                // No update required
+                return
+            }
+
+            state.splice(index, 1)
+        },
     },
 })
 
-export const { renameDevice } = DeviceSlice.actions
+export const { renameDevice, removeDeviceByIndex } = DeviceSlice.actions

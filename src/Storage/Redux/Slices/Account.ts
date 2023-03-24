@@ -21,6 +21,29 @@ export const AccountSlice = createSlice({
     name: "accounts",
     initialState: initialAccountState,
     reducers: {
+        removeAccountsByDevice: (
+            state,
+            action: PayloadAction<{ rootAddress: string }>,
+        ) => {
+            const { rootAddress } = action.payload
+            const updatedAccounts = state.accounts.filter(
+                account =>
+                    !AddressUtils.compareAddresses(
+                        rootAddress,
+                        account.rootAddress,
+                    ),
+            )
+            const selectedExists = updatedAccounts.find(account =>
+                AddressUtils.compareAddresses(
+                    state.selectedAccount,
+                    account.address,
+                ),
+            )
+            if (!selectedExists) {
+                throw new Error("Cannot delete the selected account!")
+            }
+            state.accounts = updatedAccounts
+        },
         renameAccount: (
             state,
             action: PayloadAction<{ address: string; alias: string }>,
@@ -61,5 +84,9 @@ export const AccountSlice = createSlice({
     },
 })
 
-export const { renameAccount, setAccountVisibility, toggleAccountVisibility } =
-    AccountSlice.actions
+export const {
+    renameAccount,
+    removeAccountsByDevice,
+    setAccountVisibility,
+    toggleAccountVisibility,
+} = AccountSlice.actions
