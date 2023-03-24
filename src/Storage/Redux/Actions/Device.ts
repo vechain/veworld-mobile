@@ -1,8 +1,9 @@
 import { AddressUtils } from "~Common"
+import { Device, WalletAccount } from "~Model"
 import { getSelectedAccount } from "../Selectors"
-import { removeDeviceByIndex, renameDevice } from "../Slices/Device"
+import { addDevice, removeDeviceByIndex, renameDevice } from "../Slices/Device"
 import { AppThunk } from "../Types"
-import { removeAccountsByDevice } from "./Account"
+import { addAccountForDevice, removeAccountsByDevice } from "./Account"
 
 /**
  * Remove the specified device and its accounts
@@ -31,4 +32,19 @@ const removeDevice =
         }
     }
 
-export { renameDevice, removeDevice }
+/**
+ *  Add a device and its first account
+ * @param device  the device to add
+ * @returns the added account
+ */
+const addDeviceAndAccounts =
+    (device: Device): AppThunk<WalletAccount> =>
+    dispatch => {
+        dispatch(addDevice(device))
+        //todo: here should add until i found an account with no balance
+        const account = dispatch(addAccountForDevice(device))
+
+        return account
+    }
+
+export { renameDevice, removeDevice, addDeviceAndAccounts }

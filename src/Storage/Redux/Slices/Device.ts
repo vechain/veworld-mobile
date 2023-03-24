@@ -20,6 +20,9 @@ export const DeviceSlice = createSlice({
                 state[deviceExistsIndex].alias = alias
             }
         },
+        addDevice: (state, action: PayloadAction<Device>) => {
+            state.push(action.payload)
+        },
         removeDeviceByIndex: (
             state,
             action: PayloadAction<{ index: number }>,
@@ -36,4 +39,5 @@ export const DeviceSlice = createSlice({
     },
 })
 
-export const { renameDevice, removeDeviceByIndex } = DeviceSlice.actions
+export const { renameDevice, addDevice, removeDeviceByIndex } =
+    DeviceSlice.actions

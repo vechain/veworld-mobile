@@ -21,6 +21,26 @@ export const AccountSlice = createSlice({
     name: "accounts",
     initialState: initialAccountState,
     reducers: {
+        selectAccount: (state, action: PayloadAction<{ address: string }>) => {
+            const { address } = action.payload
+            const accountExists = state.accounts.find(account =>
+                AddressUtils.compareAddresses(account.address, address),
+            )
+            if (accountExists) {
+                state.selectedAccount = address
+            }
+        },
+        addAccount: (state, action: PayloadAction<WalletAccount>) => {
+            const accountExists = state.accounts.find(account =>
+                AddressUtils.compareAddresses(
+                    account.address,
+                    action.payload.address,
+                ),
+            )
+            if (!accountExists) {
+                state.accounts.push(action.payload)
+            }
+        },
         removeAccountsByDevice: (
             state,
             action: PayloadAction<{ rootAddress: string }>,
@@ -85,6 +105,8 @@ export const AccountSlice = createSlice({
 })
 
 export const {
+    selectAccount,
+    addAccount,
     renameAccount,
     removeAccountsByDevice,
     setAccountVisibility,

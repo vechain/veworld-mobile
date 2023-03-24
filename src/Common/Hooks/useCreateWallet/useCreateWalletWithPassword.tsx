@@ -1,90 +1,61 @@
 import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import {
-    Account,
-    Device,
-    XPub,
-    useRealm,
-    getUserPreferences,
-    getMnemonic,
-} from "~Storage"
-import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 import { useDeviceUtils } from "../useDeviceUtils"
-import { useAppDispatch } from "~Storage/Redux"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    addDeviceAndAccounts,
+    selectAccount,
     setLastSecurityLevel,
     setUserSelectedSecurity,
+    setMnemonic,
 } from "~Storage/Redux/Actions"
+import { getMnemonic, getSelectedAccount } from "~Storage/Redux/Selectors"
 
 /**
  * useCreateWalletWithPassword
  * @returns
  */
 export const useCreateWalletWithPassword = () => {
-    const { store, cache } = useRealm()
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
     const [isComplete, setIsComplete] = useState(false)
 
     const dispatch = useAppDispatch()
+    const mnemonic = useAppSelector(getMnemonic)
+    const selectedAccount = useAppSelector(getSelectedAccount)
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
         async (userPassword: string, onError?: (error: unknown) => void) => {
-            const _mnemonic = getMnemonic(cache)
-            let mnemonicPhrase = _mnemonic?.mnemonic
-
             try {
-                if (mnemonicPhrase) {
+                if (mnemonic) {
                     const { device, wallet, deviceIndex } =
-                        getDeviceFromMnemonic(mnemonicPhrase)
+                        getDeviceFromMnemonic(mnemonic)
 
-                    cache.write(() => {
-                        mnemonicPhrase = ""
-                    })
+                    dispatch(setMnemonic(undefined))
 
                     const hashedKey = PasswordUtils.hash(userPassword)
                     const accessControl = false
-                    const { encryptedWallet } = await CryptoUtils.encryptWallet(
+
+                    await CryptoUtils.encryptWallet(
                         wallet,
                         deviceIndex,
                         accessControl,
                         hashedKey,
                     )
 
-                    store.write(() => {
-                        const xPub = store.create<XPub>(XPub.getName(), {
-                            ...device.xPub,
-                        })
+                    const newAccount = dispatch(addDeviceAndAccounts(device))
+                    if (!selectedAccount)
+                        dispatch(selectAccount({ address: newAccount.address }))
 
-                        let _device = store.create<Device>(Device.getName(), {
-                            ...device,
-                            xPub,
-                            wallet: encryptedWallet,
-                        })
+                    dispatch(
+                        setUserSelectedSecurity(
+                            UserSelectedSecurityLevel.PASSWORD,
+                        ),
+                    )
 
-                        let account = store.create<Account>(Account.getName(), {
-                            address: device.rootAddress,
-                            index: 0,
-                            visible: true,
-                            alias: `${getAliasName} ${1}`,
-                        })
-
-                        _device.accounts.push(account)
-
-                        const userPreferences = getUserPreferences(store)
-                        if (!userPreferences.selectedAccount)
-                            userPreferences.selectedAccount = account
-
-                        dispatch(
-                            setUserSelectedSecurity(
-                                UserSelectedSecurityLevel.PASSWORD,
-                            ),
-                        )
-
-                        dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
-                    })
+                    dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
 
                     setIsComplete(true)
                 }
@@ -93,7 +64,7 @@ export const useCreateWalletWithPassword = () => {
                 onError && onError(error)
             }
         },
-        [cache, getDeviceFromMnemonic, store, dispatch],
+        [dispatch, mnemonic, getDeviceFromMnemonic, selectedAccount],
     )
     //* [END] - Create Wallet
 

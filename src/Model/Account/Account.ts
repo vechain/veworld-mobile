@@ -2,7 +2,6 @@ import { Device } from "~Model/Device"
 
 /**
  * The model for an Account in the wallet
- * @field `id` - The ID of the account - used to create aliases
  * @field `alias` - A name for this account
  * @field `address` - The address of the account
  * @field `rootAddress` - The root address of the wallet device
@@ -16,7 +15,6 @@ export interface Account {
     address: string
 }
 export interface WalletAccount extends Account {
-    id: number
     rootAddress: string
     index: number
     path?: string

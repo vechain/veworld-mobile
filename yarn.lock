@@ -2833,9 +2833,9 @@
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
 "@types/node@*":
-  version "18.15.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.6.tgz#af98ef4a36e7ac5f2d03040f3109fcce972bf6cb"
-  integrity sha512-YErOafCZpK4g+Rp3Q/PBgZNAsWKGunQTm9FA3/Pbcm0VCriTEzcrutQ/SxSc0rytAp0NoFWue669jmKhEtd0sA==
+  version "18.15.7"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.7.tgz#33514fca9bdf136f77027358850c0fb9cd93c669"
+  integrity sha512-LFmUbFunqmBn26wJZgZPYZPrDR1RwGOu2v79Mgcka1ndO6V0/cwjivPTc4yoK6n9kmw4/ls1r8cLrvh2iMibFA==
 
 "@types/node@^10.3.2":
   version "10.17.60"
@@ -2871,9 +2871,9 @@
     "@types/react-native" "^0.70"
 
 "@types/react-native@^0.70", "@types/react-native@^0.70.6":
-  version "0.70.12"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.70.12.tgz#48030950e3a00ba46844b78249b0eeb13cb86d91"
-  integrity sha512-pDGw5THszoFVCO7KdVKV9zltjY9VUwQTavEGQyUbLKhHxoWuOV56Ts8AxGAvWyflujWqfp1lBpwvpjcmjbM7wQ==
+  version "0.70.13"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.70.13.tgz#a38a1378e68dc25fe5911b09c49b8afffe191316"
+  integrity sha512-VnC/ny8Eynk3fvY4cnNKXpo/0zUhA2gO64RX51yzVofblOP6TR6jciga0kIjI4c+2eUyWNGrahmiolNm+QU6Cw==
   dependencies:
     "@types/react" "*"
 
@@ -10052,9 +10052,9 @@ prettier-linter-helpers@^1.0.0:
     fast-diff "^1.1.2"
 
 prettier@^2.0.2:
-  version "2.8.6"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.6.tgz#5c174b29befd507f14b83e3c19f83fdc0e974b71"
-  integrity sha512-mtuzdiBbHwPEgl7NxWlqOkithPyp4VN93V7VeHVWBF+ad3I5avc0RVDT4oImXQy9H/AqxA2NSQH8pSxHW6FYbQ==
+  version "2.8.7"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.7.tgz#bb79fc8729308549d28fe3a98fce73d2c0656450"
+  integrity sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==
 
 pretty-bytes@5.6.0:
   version "5.6.0"
@@ -10367,10 +10367,10 @@ react-native-exception-handler@^2.10.10:
   resolved "https://registry.yarnpkg.com/react-native-exception-handler/-/react-native-exception-handler-2.10.10.tgz#b6bfe2b7e6ea4a4deb1f518f48ce2ee1d4843497"
   integrity sha512-otAXGoZDl1689OoUJWN/rXxVbdoZ3xcmyF1uq/CsizdLwwyZqVGd6d+p/vbYvnF996FfEyAEBnHrdFxulTn51w==
 
-react-native-flipper@^0.184.0:
-  version "0.184.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.184.0.tgz#90ebc82370a691142860a270e46e06e538041963"
-  integrity sha512-hbvHNBRIue0zBvB62VCtwoTdWCRUG+ECRtxb0rQi7b4oqjBHRZqzrvCWBPLdrJne67tV7OjwbvTTjYu25POarg==
+react-native-flipper@0.163.0:
+  version "0.163.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.163.0.tgz#3ede9fed252555d0ac3c6212e7ed6e5af3c85604"
+  integrity sha512-RG0yMlEMe/fYqaoUkhvW2HrqBuRYtq1K3me9y52RBFwPWooZTmUlWjIWGKT9VYVS9T2GGrUV9tpBA8pY9g7CSg==
 
 react-native-gesture-handler@^2.9.0:
   version "2.9.0"
@@ -10406,9 +10406,9 @@ react-native-mmkv@2.5.1:
   integrity sha512-5eQu25z3H6zf6w0NkJoTuFEFrbOu6luZxZ6+rK1W+XwY/rjPSFZFQPVtMaz3im90RbILFXXM/KrFGZrpaJJRoQ==
 
 react-native-pager-view@^6.1.2:
-  version "6.1.4"
-  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.1.4.tgz#3a63ebd1b72f81991157ea552bb9c887e529bc8c"
-  integrity sha512-fmTwgGwPxGCBusKAq7gHzm+s1Yp0qh5rKPoQszaCuxrb+76KgK4Qe82jJNPUp2xTZOKSw+FbJU2QahF8ncTl+w==
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.2.0.tgz#51380d93fbe47f6380dc71d613a787bf27a4ca37"
+  integrity sha512-pf9OnL/Tkr+5s4Gjmsn7xh91PtJLDa6qxYa/bmtUhd/+s4cQdWQ8DIFoOFghwZIHHHwVdWtoXkp6HtpjN+r20g==
 
 react-native-quick-base64@^2.0.2, react-native-quick-base64@^2.0.5:
   version "2.0.5"
