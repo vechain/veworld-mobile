@@ -1,5 +1,6 @@
 import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PURGE } from "redux-persist"
 import { ThorConstants } from "~Common/Constant"
 import { CURRENCY, ThemeEnum } from "~Common/Enums"
 import { IAccount, INetwork, NETWORK_TYPE } from "~Model"
@@ -72,6 +73,9 @@ export const UserPreferencesSlice = createSlice({
         setLanguage: (state, action: PayloadAction<LANGUAGE>) => {
             state.language = action.payload
         },
+    },
+    extraReducers: builder => {
+        builder.addCase(PURGE, () => initialState)
     },
 })
 

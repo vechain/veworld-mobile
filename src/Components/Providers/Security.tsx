@@ -2,19 +2,30 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { BiometricsUtils, useAppState, useBiometrics } from "~Common"
 import {
     AppStateType,
+    SecurityLevelType,
     TSecurityLevel,
     UserSelectedSecurityLevel,
     WALLET_STATUS,
 } from "~Model"
-import { getConfig, useRealm } from "~Storage"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    setIsSecurityDowngrade,
+    setLastSecurityLevel,
+} from "~Storage/Redux/Actions"
+import {
+    selectLastSecuritylevel,
+    selectUserSelectedSecurity,
+} from "~Storage/Redux/Selectors"
 
 type Props = { appLockStatus: WALLET_STATUS | undefined }
 
 export const Security = ({ appLockStatus }: Props) => {
-    const { store } = useRealm()
     const [previousState, currentState] = useAppState()
-
     const biometrics = useBiometrics()
+
+    const dispatch = useAppDispatch()
+    const lastSecurityLevel = useAppSelector(selectLastSecuritylevel)
+    const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
 
     const level = useMemo(
         () => biometrics?.currentSecurityLevel as TSecurityLevel,
@@ -22,14 +33,9 @@ export const Security = ({ appLockStatus }: Props) => {
     )
 
     const checkSecurityDowngrade = useCallback(async () => {
-        const config = getConfig(store)
+        if (userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD) return
 
-        const lastSecurityLevel = config.lastSecurityLevel
-
-        if (config.userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD)
-            return
-
-        if (lastSecurityLevel !== "NONE" && level) {
+        if (lastSecurityLevel !== SecurityLevelType.NONE && level) {
             if (
                 BiometricsUtils.isSecurityDowngrade(
                     lastSecurityLevel,
@@ -37,10 +43,8 @@ export const Security = ({ appLockStatus }: Props) => {
                     appLockStatus!,
                 )
             ) {
-                store.write(() => {
-                    config.isSecurityDowngrade = true
-                    config.lastSecurityLevel = level
-                })
+                dispatch(setIsSecurityDowngrade(true))
+                dispatch(setLastSecurityLevel(level))
             } else if (
                 BiometricsUtils.isSecurityUpgrade(
                     lastSecurityLevel,
@@ -48,18 +52,19 @@ export const Security = ({ appLockStatus }: Props) => {
                     appLockStatus!,
                 )
             ) {
-                store.write(() => {
-                    config.isSecurityDowngrade = false
-                    config.lastSecurityLevel = level
-                })
+                dispatch(setIsSecurityDowngrade(false))
+                dispatch(setLastSecurityLevel(level))
             }
         } else {
-            if (level)
-                store.write(() => {
-                    config.lastSecurityLevel = level
-                })
+            if (level) dispatch(setLastSecurityLevel(level))
         }
-    }, [appLockStatus, level, store])
+    }, [
+        appLockStatus,
+        dispatch,
+        lastSecurityLevel,
+        level,
+        userSelectedSecurity,
+    ])
 
     const init = useCallback(async () => {
         checkSecurityDowngrade()

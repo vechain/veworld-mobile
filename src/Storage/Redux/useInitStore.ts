@@ -11,11 +11,11 @@ import {
     REGISTER,
     Persistor,
 } from "redux-persist"
+import reduxReset from "redux-reset"
 
-import { storage } from "./Storage"
-import { encryptTransform, initEncryption } from "./EncryptionService"
 import { reducer } from "./Store"
 import { RootState, Store } from "./Types"
+import { getPersistorConfig } from "./Helpers"
 
 export const useInitStore = () => {
     const [store, setStore] = useState<Store | undefined>()
@@ -23,28 +23,17 @@ export const useInitStore = () => {
 
     useEffect(() => {
         async function init() {
-            const key = await initEncryption()
-
-            const encryptor = encryptTransform({
-                secretKey: key,
-                onError: function (error) {
-                    console.warn(error)
-                },
-            })
-
-            const persistConfig = {
-                key: "root",
-                storage,
-                version: 1,
-                blacklist: [],
-                whitelist: ["userPreferences"],
-                transforms: [encryptor],
-            }
+            const persistConfig = await getPersistorConfig()
 
             const persistedReducer = persistReducer<RootState>(
                 persistConfig,
                 reducer,
             )
+
+            let createDebugger: any
+            if (__DEV__) {
+                createDebugger = require("redux-flipper").default
+            }
 
             const _store = configureStore({
                 reducer: persistedReducer,
@@ -60,7 +49,8 @@ export const useInitStore = () => {
                                 REGISTER,
                             ],
                         },
-                    }),
+                    }).concat(createDebugger()),
+                enhancers: [reduxReset()],
                 devTools: process.env.NODE_ENV !== "production",
             })
 

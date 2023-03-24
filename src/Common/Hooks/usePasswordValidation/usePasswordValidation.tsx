@@ -1,17 +1,15 @@
 import { useCallback } from "react"
 import { SettingsConstants } from "~Common/Constant"
 import { CryptoUtils } from "~Common/Utils"
-import { getConfig, useRealm } from "~Storage"
+import { useAppSelector } from "~Storage/Redux"
+import { selectPinValidationString } from "~Storage/Redux/Selectors"
 
 export const usePasswordValidation = () => {
-    const { store } = useRealm()
+    const pinValidationString = useAppSelector(selectPinValidationString)
 
     const validatePassword = useCallback(
         async (userPassword: string[]) => {
             try {
-                const config = getConfig(store)
-
-                const pinValidationString = config.pinValidationString
                 let decryptedString = CryptoUtils.decrypt<string>(
                     pinValidationString,
                     userPassword.join(""),
@@ -23,7 +21,7 @@ export const usePasswordValidation = () => {
             }
         },
 
-        [store],
+        [pinValidationString],
     )
 
     return validatePassword

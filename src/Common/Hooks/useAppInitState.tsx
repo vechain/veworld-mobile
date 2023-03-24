@@ -1,18 +1,13 @@
 import { useMemo } from "react"
-import { useConfigEntity } from "~Components"
+import { useAppSelector } from "~Storage/Redux"
+import {
+    selectIsResettingApp,
+    selectIsWalletCreated,
+} from "~Storage/Redux/Selectors"
 
 export const useAppInitState = () => {
-    const configEntity = useConfigEntity()
-
-    const isWalletCreated = useMemo(
-        () => configEntity?.isWalletCreated,
-        [configEntity],
-    )
-
-    const isResettingApp = useMemo(
-        () => configEntity?.isResettingApp,
-        [configEntity],
-    )
+    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+    const isResettingApp = useAppSelector(selectIsResettingApp)
 
     const appStatus = useMemo(() => {
         if (isResettingApp) return AppInitState.RESETTING_STATE

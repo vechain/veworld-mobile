@@ -11,4 +11,5 @@ export enum SecurityLevelType {
 export enum UserSelectedSecurityLevel {
     BIOMETRIC = "BIOMETRIC",
     PASSWORD = "PASSWORD",
+    NONE = "NONE",
 }
