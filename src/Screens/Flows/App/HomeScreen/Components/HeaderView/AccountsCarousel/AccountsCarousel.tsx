@@ -6,6 +6,8 @@ import { BaseSpacer, PaginatedDot } from "~Components"
 import { AccountCard } from "./AccountCard"
 import { Account } from "~Storage"
 import { useTheme } from "~Common"
+import { selectCurrency } from "~Storage/Redux/Selectors"
+import { useAppSelector } from "~Storage/Redux"
 
 const width = Dimensions.get("window").width - 40
 
@@ -54,6 +56,8 @@ export const AccountsCarousel: React.FC<Props> = memo(
             [currentIndex],
         )
 
+        const selectedCurrency = useAppSelector(selectCurrency)
+
         const renderItem = useCallback(
             ({ index }: { index: number }) => {
                 return (
@@ -65,10 +69,16 @@ export const AccountsCarousel: React.FC<Props> = memo(
                         entering={FadeInRight.delay(
                             (accounts.length - index) * 50,
                         ).duration(200)}
+                        selectedCurrency={selectedCurrency}
                     />
                 )
             },
-            [accounts, balanceVisible, openAccountManagementSheet],
+            [
+                accounts,
+                balanceVisible,
+                openAccountManagementSheet,
+                selectedCurrency,
+            ],
         )
 
         return (

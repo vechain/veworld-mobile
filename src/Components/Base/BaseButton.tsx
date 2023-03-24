@@ -6,13 +6,10 @@ import {
     StyleSheet,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { typography } from "~Common/Theme"
-
+import { typography, TFonts } from "~Common/Theme"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText } from "./BaseText"
-import { LocalizedString } from "typesafe-i18n"
 import * as Haptics from "expo-haptics"
-import { TFonts } from "~Common/Theme"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -22,7 +19,7 @@ type Props = {
     variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
     textColor?: string
-    title: LocalizedString | string
+    title?: string
     m?: number
     mx?: number
     my?: number
@@ -54,7 +51,8 @@ export const BaseButton = ({
     rightIcon,
     ...otherProps
 }: Props) => {
-    const { typographyFont, fontFamily, fontSize, fontWeight } = otherProps
+    const { typographyFont, fontFamily, fontSize, fontWeight, children } =
+        otherProps
 
     const { styles: themedStyles, theme } = useThemedStyles(
         baseStyles(variant === "link"),
@@ -158,6 +156,7 @@ export const BaseButton = ({
                 fontSize={fontSize}
                 style={themedStyles.text}>
                 {otherProps.title}
+                {children}
             </BaseText>
             {rightIcon}
         </TouchableOpacity>

@@ -7,16 +7,61 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    EnableFeature,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { ChangeTheme } from "./Components/ChangeTheme"
+import {
+    ChangeTheme,
+    ChangeCurrency,
+    ChangeLanguage,
+    SelectLanguageBottomSheet,
+} from "./Components"
+import { LANGUAGE, useBottomSheetModal } from "~Common"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectHideTokensWithNoBalance,
+    selectLangauge,
+} from "~Storage/Redux/Selectors"
+import { setHideTokensWithNoBalance, setLanguage } from "~Storage/Redux/Actions"
 
 export const GeneralScreen = () => {
     const nav = useNavigation()
+
     const theme = useTheme()
+
     const { LL } = useI18nContext()
 
+    const {
+        ref: selectLanguageSheetRef,
+        onOpen: openSelectLanguageSheet,
+        onClose: closeSelectLanguageSheet,
+    } = useBottomSheetModal()
+
+    const dispatch = useAppDispatch()
+
+    const selectedLanguage = useAppSelector(selectLangauge)
+
+    const hideTokensWithNoBalance = useAppSelector(
+        selectHideTokensWithNoBalance,
+    )
+
     const goBack = useCallback(() => nav.goBack(), [nav])
+    const toggleTokensHiddenSwitch = useCallback(
+        (newValue: boolean) => {
+            dispatch(setHideTokensWithNoBalance(newValue))
+        },
+        [dispatch],
+    )
+
+    const handleSelectLanguage = useCallback(
+        (language: string) => {
+            dispatch(setLanguage(language as LANGUAGE))
+
+            closeSelectLanguageSheet()
+        },
+        [closeSelectLanguageSheet, dispatch],
+    )
+
     return (
         <BaseSafeArea grow={1}>
             <BaseIcon
@@ -29,8 +74,63 @@ export const GeneralScreen = () => {
             <BaseSpacer height={12} />
             <BaseView mx={20}>
                 <BaseText typographyFont="title">{LL.TITLE_GENERAL()}</BaseText>
-                <BaseSpacer height={24} />
+                <BaseSpacer height={20} />
+
+                <BaseText typographyFont="bodyMedium" my={8}>
+                    {LL.BD_CONVERSION_CURRENCY()}
+                </BaseText>
+                <BaseText typographyFont="caption">
+                    {LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}
+                </BaseText>
+
+                <BaseSpacer height={20} />
+
+                <ChangeCurrency />
+
+                <BaseSpacer height={20} />
+
+                <BaseText typographyFont="bodyMedium" my={8}>
+                    {LL.BD_APP_THEME()}
+                </BaseText>
+                <BaseText typographyFont="caption">
+                    {LL.BD_APP_THEME_DISCLAIMER()}
+                </BaseText>
+
+                <BaseSpacer height={20} />
+
                 <ChangeTheme />
+
+                <BaseSpacer height={20} />
+
+                <EnableFeature
+                    title={LL.BD_HIDE_TOKENS()}
+                    subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
+                    onValueChange={toggleTokensHiddenSwitch}
+                    value={hideTokensWithNoBalance}
+                />
+
+                <BaseSpacer height={20} />
+
+                <BaseText typographyFont="bodyMedium" my={8}>
+                    {LL.BD_APP_LANGUAGE()}
+                </BaseText>
+                <BaseText typographyFont="caption">
+                    {LL.BD_APP_LANGUAGE_DISCLAIMER()}
+                </BaseText>
+
+                <BaseSpacer height={20} />
+
+                <ChangeLanguage
+                    language={selectedLanguage}
+                    onPress={openSelectLanguageSheet}
+                />
+
+                <SelectLanguageBottomSheet
+                    ref={selectLanguageSheetRef}
+                    onClose={closeSelectLanguageSheet}
+                    selectedLanguage={selectedLanguage}
+                    handleSelectLanguage={handleSelectLanguage}
+                />
             </BaseView>
         </BaseSafeArea>
     )

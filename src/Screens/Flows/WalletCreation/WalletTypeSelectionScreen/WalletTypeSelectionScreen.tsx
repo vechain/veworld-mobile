@@ -8,19 +8,17 @@ import {
     BaseView,
 } from "~Components"
 import { Routes } from "~Navigation"
-import { getConfig, useRealm } from "~Storage"
+import { useAppSelector } from "~Storage/Redux"
+import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
 import { useI18nContext } from "~i18n"
 
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-
-    const { store } = useRealm()
-
-    const config = getConfig(store)
+    const isWalletCreated = useAppSelector(selectIsWalletCreated)
 
     const onCreateWallet = () => {
-        if (config?.isWalletCreated) {
+        if (isWalletCreated) {
             nav.navigate(Routes.NEW_MNEMONIC)
         } else {
             nav.navigate(Routes.WALLET_TUTORIAL)

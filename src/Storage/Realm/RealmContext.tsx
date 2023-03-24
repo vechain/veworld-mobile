@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
     Device,
     XPub,
-    Config,
     Mnemonic,
     Account,
     AppLock,
@@ -12,7 +11,6 @@ import {
     getAppLock,
     getMnemonic,
     getNetworks,
-    getConfig,
     getUserPreferences,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
@@ -80,7 +78,7 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
 
 const initStoreRealm = (buffKey: ArrayBuffer) => {
     const instance = new Realm({
-        schema: [Device, XPub, Config, Account, UserPreferences, Network],
+        schema: [Device, XPub, Account, UserPreferences, Network],
         path: "persisted.realm",
         encryptionKey: buffKey,
         deleteRealmIfMigrationNeeded:
@@ -140,11 +138,6 @@ export const initRealmClasses = (
             })
         }
 
-        const config = getConfig(store)
-        if (!config) {
-            store.create(Config.getName(), {})
-        }
-
         const userPreferences = getUserPreferences(store)
 
         if (!userPreferences) {
@@ -154,7 +147,7 @@ export const initRealmClasses = (
                 currentNetwork: networks[0], // main network is default
             })
         } else {
-            userPreferences.theme = colorScheme
+            if (!userPreferences.theme) userPreferences.theme = colorScheme
         }
     })
     // [ END ] - STORE

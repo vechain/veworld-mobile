@@ -28,12 +28,14 @@ jest.mock("react-native-draggable-flatlist", () => {})
 jest.mock("react-native-gesture-handler", () => {})
 jest.mock("expo-camera", () => {})
 jest.mock("expo-barcode-scanner", () => {})
+jest.mock("react-native-flipper", () => ({
+    addPlugin: jest.fn(),
+}))
 
 import React, { useEffect, useMemo, useState } from "react"
 import Realm from "realm"
 import {
     Account,
-    Config,
     Device,
     Network,
     Mnemonic,
@@ -42,7 +44,6 @@ import {
     XPub,
 } from "~Storage"
 import {
-    ConfigContextProvider,
     ConnexContextProvider,
     UserPreferencesContextProvider,
 } from "~Components"
@@ -78,7 +79,7 @@ const configCache = {
     path: "test-cache",
 }
 const configStore = {
-    schema: [Device, XPub, Config, Account, UserPreferences, Network],
+    schema: [Device, XPub, Account, UserPreferences, Network],
     path: "test-store",
 }
 beforeAll(async () => {
@@ -134,19 +135,17 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider store={store as any}>
             <RealmContext.Provider value={value}>
-                <ConfigContextProvider>
-                    <UserPreferencesContextProvider>
-                        <ConnexContextProvider>
-                            <BottomSheetModalProvider>
-                                <NavigationProvider>
-                                    <TestTranslationProvider>
-                                        {children}
-                                    </TestTranslationProvider>
-                                </NavigationProvider>
-                            </BottomSheetModalProvider>
-                        </ConnexContextProvider>
-                    </UserPreferencesContextProvider>
-                </ConfigContextProvider>
+                <UserPreferencesContextProvider>
+                    <ConnexContextProvider>
+                        <BottomSheetModalProvider>
+                            <NavigationProvider>
+                                <TestTranslationProvider>
+                                    {children}
+                                </TestTranslationProvider>
+                            </NavigationProvider>
+                        </BottomSheetModalProvider>
+                    </ConnexContextProvider>
+                </UserPreferencesContextProvider>
             </RealmContext.Provider>
         </Provider>
     )

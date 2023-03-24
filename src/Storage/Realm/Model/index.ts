@@ -1,7 +1,6 @@
 export * from "./Device"
 export * from "./Account"
 export * from "./XPub"
-export * from "./Config"
 export * from "./Mnemonic"
 export * from "./AppLock"
 export * from "./UserPreferences"

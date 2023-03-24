@@ -8,6 +8,8 @@ import { ColorThemeType, Tokens_mock, useThemedStyles, Token } from "~Common"
 import { FungibleToken, VET, VTHO } from "~Common/Constant/Token/TokenConstants"
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { AnimatedVTHOCard } from "./AnimatedVTHOCard"
+import { useAppSelector } from "~Storage/Redux"
+import { selectCurrency } from "~Storage/Redux/Selectors"
 
 const NATIVE_TOKENS: FungibleToken[] = [VET, VTHO]
 
@@ -31,10 +33,20 @@ export const TokenList = memo(
             console.log("onDeleteItem", _item)
         }, [])
 
+        const selectedCurrency = useAppSelector(selectCurrency)
+
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
-                <AnimatedChartCard token={NATIVE_TOKENS[0]} isEdit={isEdit} />
-                <AnimatedVTHOCard token={NATIVE_TOKENS[1]} isEdit={isEdit} />
+                <AnimatedChartCard
+                    token={NATIVE_TOKENS[0]}
+                    isEdit={isEdit}
+                    selectedCurrency={selectedCurrency}
+                />
+                <AnimatedVTHOCard
+                    token={NATIVE_TOKENS[1]}
+                    isEdit={isEdit}
+                    selectedCurrency={selectedCurrency}
+                />
 
                 <NestableDraggableFlatList
                     data={data}
@@ -47,6 +59,7 @@ export const TokenList = memo(
                             {...itemParams}
                             isEdit={isEdit}
                             onDeleteItem={onDeleteItem}
+                            selectedCurrency={selectedCurrency}
                         />
                     )}
                     activationDistance={40}

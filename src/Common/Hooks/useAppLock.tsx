@@ -2,19 +2,16 @@ import { useCallback, useMemo } from "react"
 import { WALLET_STATUS } from "~Model"
 import { getUserPreferences, useRealm } from "~Storage"
 import { useAppLockEntity } from "./Entities"
-import { useConfigEntity } from "~Components"
+import { useAppSelector } from "~Storage/Redux"
+import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
 
 export const useAppLock = () => {
     const { cache, store } = useRealm()
     const appLockEntity = useAppLockEntity()
-    const configEntity = useConfigEntity()
 
     const userPreferences = getUserPreferences(store)
 
-    const isWalletCreated = useMemo(
-        () => configEntity?.isWalletCreated,
-        [configEntity],
-    )
+    const isWalletCreated = useAppSelector(selectIsWalletCreated)
 
     const _appLockStatus = useMemo(
         () => appLockEntity?.status,

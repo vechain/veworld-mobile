@@ -284,6 +284,46 @@ type RootTranslation = {
 	 */
 	BD_HELP_IMPROVE_DISCLAIMER: string
 	/**
+	 * C​o​n​v​e​r​s​i​o​n​ ​c​u​r​r​e​n​c​y
+	 */
+	BD_CONVERSION_CURRENCY: string
+	/**
+	 * A​p​p​ ​t​h​e​m​e
+	 */
+	BD_APP_THEME: string
+	/**
+	 * A​p​p​ ​l​a​n​g​u​a​g​e
+	 */
+	BD_APP_LANGUAGE: string
+	/**
+	 * H​i​d​e​ ​t​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e
+	 */
+	BD_HIDE_TOKENS: string
+	/**
+	 * P​i​c​k​ ​t​h​e​ ​c​u​r​r​e​n​c​y​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​t​o​ ​b​e​ ​s​h​o​w​n​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​s
+	 */
+	BD_CONVERSION_CURRENCY_DISCLAIMER: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​t​h​e​m​e
+	 */
+	BD_APP_THEME_DISCLAIMER: string
+	/**
+	 * T​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e​ ​w​o​n​'​t​ ​b​e​ ​s​h​o​w​n​ ​i​n​ ​t​h​e​ ​a​s​s​e​t​s​ ​l​i​s​t
+	 */
+	BD_HIDE_TOKENS_DISCLAIMER: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​l​a​n​g​u​a​g​e
+	 */
+	BD_APP_LANGUAGE_DISCLAIMER: string
+	/**
+	 * U​S​D
+	 */
+	BD_USD: string
+	/**
+	 * E​U​R
+	 */
+	BD_EUR: string
+	/**
 	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
 	 */
 	BD_SCANED_ADDRESS_COPPIED: string
@@ -471,6 +511,14 @@ type RootTranslation = {
 	 */
 	SB_DEVICE_CARD: RequiredParams<'accounts' | 'alias'>
 	/**
+	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​c​a​m​e​r​a​ ​a​c​c​e​s​s​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
+	 */
+	SB_ALERT_CAMERA_PERMISSION: string
+	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​t​h​i​s​ ​o​p​e​r​a​t​i​o​n​.
+	 */
+	SB_CAMERA_ANAVAILABILITY: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -580,6 +628,18 @@ type RootTranslation = {
 	 * @param {unknown} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
+	/**
+	 * L​i​g​h​t
+	 */
+	LIGHT_THEME: string
+	/**
+	 * D​a​r​k
+	 */
+	DARK_THEME: string
+	/**
+	 * S​y​s​t​e​m
+	 */
+	SYSTEM_THEME: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -860,6 +920,46 @@ export type TranslationFunctions = {
 	 */
 	BD_HELP_IMPROVE_DISCLAIMER: () => LocalizedString
 	/**
+	 * Conversion currency
+	 */
+	BD_CONVERSION_CURRENCY: () => LocalizedString
+	/**
+	 * App theme
+	 */
+	BD_APP_THEME: () => LocalizedString
+	/**
+	 * App language
+	 */
+	BD_APP_LANGUAGE: () => LocalizedString
+	/**
+	 * Hide tokens without balance
+	 */
+	BD_HIDE_TOKENS: () => LocalizedString
+	/**
+	 * Pick the currency that you prefer to be shown for conversions
+	 */
+	BD_CONVERSION_CURRENCY_DISCLAIMER: () => LocalizedString
+	/**
+	 * Select the general app theme
+	 */
+	BD_APP_THEME_DISCLAIMER: () => LocalizedString
+	/**
+	 * Tokens without balance won't be shown in the assets list
+	 */
+	BD_HIDE_TOKENS_DISCLAIMER: () => LocalizedString
+	/**
+	 * Select the general app language
+	 */
+	BD_APP_LANGUAGE_DISCLAIMER: () => LocalizedString
+	/**
+	 * USD
+	 */
+	BD_USD: () => LocalizedString
+	/**
+	 * EUR
+	 */
+	BD_EUR: () => LocalizedString
+	/**
 	 * Address Copied to Clipboard
 	 */
 	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
@@ -1044,6 +1144,14 @@ export type TranslationFunctions = {
 	 */
 	SB_DEVICE_CARD: (arg: { accounts: unknown, alias: unknown }) => LocalizedString
 	/**
+	 * You have previously denied camera access to VeWorld. Please enable it in your device settings.
+	 */
+	SB_ALERT_CAMERA_PERMISSION: () => LocalizedString
+	/**
+	 * Your device does not support this operation.
+	 */
+	SB_CAMERA_ANAVAILABILITY: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -1152,6 +1260,18 @@ Please, try again later.
 	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Light
+	 */
+	LIGHT_THEME: () => LocalizedString
+	/**
+	 * Dark
+	 */
+	DARK_THEME: () => LocalizedString
+	/**
+	 * System
+	 */
+	SYSTEM_THEME: () => LocalizedString
 	/**
 	 * Account
 	 */

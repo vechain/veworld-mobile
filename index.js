@@ -1,5 +1,5 @@
 import "react-native-get-random-values" // relma dependency for uuid - DO NOT REMOVE
-import React, { useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
@@ -8,13 +8,12 @@ import { name as appName } from "./app.json"
 import { PersistGate } from "redux-persist/integration/react"
 import { Provider } from "react-redux"
 // import { persistor, store } from "~Storage/Redux"
-import { storage, useInitStore } from "~Storage/Redux"
+import { useInitStore } from "~Storage/Redux"
 
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Common"
 import {
-    ConfigContextProvider,
     ConnexContextProvider,
     TranslationProvider,
     UserPreferencesContextProvider,
@@ -60,23 +59,19 @@ const Main = () => {
             <PersistGate loading={null} persistor={persistor}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
                     <RealmContextProvider>
-                        <ConfigContextProvider>
-                            <UserPreferencesContextProvider>
-                                <ConnexContextProvider>
-                                    <SafeAreaProvider>
-                                        <BottomSheetModalProvider>
-                                            <NavigationProvider>
-                                                <TranslationProvider>
-                                                    {fontsLoaded && (
-                                                        <EntryPoint />
-                                                    )}
-                                                </TranslationProvider>
-                                            </NavigationProvider>
-                                        </BottomSheetModalProvider>
-                                    </SafeAreaProvider>
-                                </ConnexContextProvider>
-                            </UserPreferencesContextProvider>
-                        </ConfigContextProvider>
+                        <UserPreferencesContextProvider>
+                            <ConnexContextProvider>
+                                <SafeAreaProvider>
+                                    <BottomSheetModalProvider>
+                                        <NavigationProvider>
+                                            <TranslationProvider>
+                                                {fontsLoaded && <EntryPoint />}
+                                            </TranslationProvider>
+                                        </NavigationProvider>
+                                    </BottomSheetModalProvider>
+                                </SafeAreaProvider>
+                            </ConnexContextProvider>
+                        </UserPreferencesContextProvider>
                     </RealmContextProvider>
                 </GestureHandlerRootView>
             </PersistGate>

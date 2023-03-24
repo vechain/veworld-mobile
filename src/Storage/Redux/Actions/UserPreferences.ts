@@ -6,6 +6,9 @@ import {
     setIsAppLockActive,
     setSelectedAccount,
     setBalanceVisible,
+    setHideTokensWithNoBalance,
+    setLanguage,
+    setCurrency,
 } from "../Slices/UserPreferences"
 
 export {
@@ -16,4 +19,7 @@ export {
     setIsAppLockActive,
     setSelectedAccount,
     setBalanceVisible,
+    setHideTokensWithNoBalance,
+    setLanguage,
+    setCurrency,
 }
