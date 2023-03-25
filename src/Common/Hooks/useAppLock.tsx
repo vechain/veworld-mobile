@@ -3,7 +3,7 @@ import { WALLET_STATUS } from "~Model"
 import { getUserPreferences, useRealm } from "~Storage"
 import { useAppLockEntity } from "./Entities"
 import { useAppSelector } from "~Storage/Redux"
-import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
+import { hasOnboarded } from "~Storage/Redux/Selectors"
 
 export const useAppLock = () => {
     const { cache, store } = useRealm()
@@ -11,7 +11,7 @@ export const useAppLock = () => {
 
     const userPreferences = getUserPreferences(store)
 
-    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+    const userHasOnboarded = useAppSelector(hasOnboarded)
 
     const _appLockStatus = useMemo(
         () => appLockEntity?.status,
@@ -19,14 +19,14 @@ export const useAppLock = () => {
     )
 
     const appLockStatus = useMemo(() => {
-        if (!isWalletCreated || !userPreferences.isAppLockActive) {
+        if (!userHasOnboarded || !userPreferences.isAppLockActive) {
             return WALLET_STATUS.NOT_INITIALISED
         }
 
         if (userPreferences.isAppLockActive && _appLockStatus === "LOCKED") {
             return WALLET_STATUS.LOCKED
         }
-    }, [_appLockStatus, isWalletCreated, userPreferences.isAppLockActive])
+    }, [_appLockStatus, userHasOnboarded, userPreferences.isAppLockActive])
 
     const unlockApp = useCallback(() => {
         if (appLockEntity) {

@@ -1,5 +1,4 @@
 import {
-    setIsWalletCreated,
     setUserSelectedSecurity,
     setLastSecurityLevel,
     setIsSecurityDowngrade,
@@ -8,7 +7,6 @@ import {
 } from "../Slices/Config"
 
 export {
-    setIsWalletCreated,
     setUserSelectedSecurity,
     setLastSecurityLevel,
     setIsSecurityDowngrade,

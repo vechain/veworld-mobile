@@ -16,7 +16,7 @@ import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
 import { useNavigation } from "@react-navigation/native"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
+import { hasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic } from "~Storage/Redux/Actions"
 
 const DEMO_MNEMONIC =
@@ -32,7 +32,7 @@ export const ImportMnemonicScreen = () => {
 
     const theme = useTheme()
 
-    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+    const userHasOnboarded = useAppSelector(hasOnboarded)
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
@@ -50,7 +50,7 @@ export const ImportMnemonicScreen = () => {
 
             dispatch(setMnemonic(sanitisedMnemonic))
 
-            if (isWalletCreated) {
+            if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)

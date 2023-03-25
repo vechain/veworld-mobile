@@ -31,10 +31,9 @@ import {
 } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    selectIsWalletCreated,
+    hasOnboarded,
     selectUserSelectedSecurity,
 } from "~Storage/Redux/Selectors"
-import { setIsWalletCreated } from "~Storage/Redux/Actions"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -50,7 +49,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const [isError, setIsError] = useState("")
 
     const dispatch = useAppDispatch()
-    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+
+    //we have a device and a selected account
+    const userHasOnboarded = useAppSelector(hasOnboarded)
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
 
     const {
@@ -79,7 +80,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const onButtonPress = useCallback(async () => {
         let params = route.params
 
-        if (isWalletCreated) {
+        if (userHasOnboarded) {
             if (userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC) {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
@@ -103,7 +104,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         }
     }, [
         route.params,
-        isWalletCreated,
+        userHasOnboarded,
         userSelectedSecurity,
         createWalletWithBiometrics,
         onWalletCreationError,
@@ -119,7 +120,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     useEffect(() => {
         if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
-            if (isWalletCreated) {
+            if (userHasOnboarded) {
                 closePasswordPrompt()
 
                 if (!isPasswordPromptOpen) {
@@ -142,8 +143,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         appLock.status = WALLET_STATUS.UNLOCKED
                     }
                 })
-
-                dispatch(setIsWalletCreated(true))
             }
         }
     }, [
@@ -151,7 +150,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         closePasswordPrompt,
         dispatch,
         isPasswordPromptOpen,
-        isWalletCreated,
+        userHasOnboarded,
         isWalletCreatedWithBiometrics,
         isWalletCreatedWithPassword,
         nav,

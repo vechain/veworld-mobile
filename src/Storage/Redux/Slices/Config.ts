@@ -8,7 +8,6 @@ import {
 import { SettingsConstants } from "~Common/Constant"
 
 export interface ConfigState {
-    isWalletCreated: boolean
     userSelectedSecurity: UserSelectedSecurityLevel
     lastSecurityLevel: TSecurityLevel
     isSecurityDowngrade: boolean
@@ -17,7 +16,6 @@ export interface ConfigState {
 }
 
 const initialState: ConfigState = {
-    isWalletCreated: false,
     userSelectedSecurity: UserSelectedSecurityLevel.NONE,
     lastSecurityLevel: SecurityLevelType.NONE,
     isSecurityDowngrade: false,
@@ -29,10 +27,6 @@ export const ConfigSlice = createSlice({
     name: "Config",
     initialState,
     reducers: {
-        setIsWalletCreated: (state, action: PayloadAction<boolean>) => {
-            state.isWalletCreated = action.payload
-        },
-
         setUserSelectedSecurity: (
             state,
             action: PayloadAction<UserSelectedSecurityLevel>,
@@ -65,7 +59,6 @@ export const ConfigSlice = createSlice({
 })
 
 export const {
-    setIsWalletCreated,
     setUserSelectedSecurity,
     setLastSecurityLevel,
     setIsSecurityDowngrade,

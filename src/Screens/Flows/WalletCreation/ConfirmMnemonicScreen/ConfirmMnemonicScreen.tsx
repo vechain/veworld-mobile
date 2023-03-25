@@ -17,7 +17,7 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
-import { getMnemonic, selectIsWalletCreated } from "~Storage/Redux/Selectors"
+import { getMnemonic, hasOnboarded } from "~Storage/Redux/Selectors"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
@@ -37,7 +37,7 @@ export const ConfirmMnemonicScreen = () => {
 
     const mnemonic = useAppSelector(getMnemonic)
 
-    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+    const userHasOnboarded = useAppSelector(hasOnboarded)
 
     /**
      * if mnemonic is not available something strange is happening, better to throw an error and crash the app
@@ -61,7 +61,7 @@ export const ConfirmMnemonicScreen = () => {
             selectedSecondWord === mnemonicArray[secondIndex] &&
             selectedThirdWord === mnemonicArray[thirdIndex]
         ) {
-            if (isWalletCreated) {
+            if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
@@ -171,7 +171,7 @@ export const ConfirmMnemonicScreen = () => {
                             <BaseButton
                                 variant="link"
                                 action={() =>
-                                    isWalletCreated
+                                    userHasOnboarded
                                         ? nav.navigate(Routes.WALLET_SUCCESS)
                                         : nav.navigate(Routes.APP_SECURITY)
                                 }

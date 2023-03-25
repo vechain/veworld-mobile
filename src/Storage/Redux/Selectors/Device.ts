@@ -2,7 +2,17 @@ import { createSelector } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "../Types"
 
-const reducer = (state: RootState) => state.devices
+const selectAll = (state: RootState) => state
+const selectDevices = (state: RootState) => state.devices
+
+/**
+ *
+ * @returns true if the user has onboarded, false otherwise
+ *  a user has onboarded if they have at least one device and have selected an account
+ */
+export const hasOnboarded = createSelector(selectAll, state => {
+    return state.devices.length > 0 && state.accounts.selectedAccount
+})
 
 /**
  *
@@ -10,7 +20,7 @@ const reducer = (state: RootState) => state.devices
  * @returns the device with the given rootAddress
  */
 export const getDevice = (rootAddress: string) =>
-    createSelector(reducer, state => {
+    createSelector(selectDevices, state => {
         return state.find(device => device.rootAddress === rootAddress)
     })
 
@@ -20,7 +30,7 @@ export const getDevice = (rootAddress: string) =>
  * @returns all devices of the given type or all devices if no type is given
  */
 export const getDevices = (type?: DEVICE_TYPE) =>
-    createSelector(reducer, state => {
+    createSelector(selectDevices, state => {
         if (!type) return state
         return state.filter(device => device.type === type)
     })

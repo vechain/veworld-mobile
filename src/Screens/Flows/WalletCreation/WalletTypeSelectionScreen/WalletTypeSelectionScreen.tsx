@@ -9,16 +9,16 @@ import {
 } from "~Components"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux"
-import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
 import { useI18nContext } from "~i18n"
+import { hasOnboarded } from "~Storage/Redux/Selectors"
 
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+    const userHasOnboarded = useAppSelector(hasOnboarded)
 
     const onCreateWallet = () => {
-        if (isWalletCreated) {
+        if (userHasOnboarded) {
             nav.navigate(Routes.NEW_MNEMONIC)
         } else {
             nav.navigate(Routes.WALLET_TUTORIAL)
