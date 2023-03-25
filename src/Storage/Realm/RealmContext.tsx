@@ -1,15 +1,10 @@
 import Realm from "realm"
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
-    Device,
-    XPub,
-    Mnemonic,
-    Account,
     AppLock,
     UserPreferences,
     Network,
     getAppLock,
-    getMnemonic,
     getNetworks,
     getUserPreferences,
 } from "./Model"
@@ -78,7 +73,7 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
 
 const initStoreRealm = (buffKey: ArrayBuffer) => {
     const instance = new Realm({
-        schema: [Device, XPub, Account, UserPreferences, Network],
+        schema: [UserPreferences, Network],
         path: "persisted.realm",
         encryptionKey: buffKey,
         deleteRealmIfMigrationNeeded:
@@ -89,7 +84,7 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
 
 const initCacheRealm = () => {
     const instance = new Realm({
-        schema: [Mnemonic, AppLock],
+        schema: [AppLock],
         path: "inMemory.realm",
         inMemory: true,
         deleteRealmIfMigrationNeeded:
@@ -120,9 +115,6 @@ export const initRealmClasses = (
         const appLock = getAppLock(cache)
         if (!appLock)
             cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
-
-        const mnemonic = getMnemonic(cache)
-        if (!mnemonic) cache.create(Mnemonic.getName(), {})
     })
     // [ END ] - CACHE
 

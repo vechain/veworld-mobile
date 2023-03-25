@@ -1,5 +1,4 @@
 import { Object } from "realm"
-import { Account } from "./Account"
 import { Network } from "./Network"
 
 export class UserPreferences extends Object {
@@ -9,7 +8,6 @@ export class UserPreferences extends Object {
     showTestNetTag!: boolean
     showConversionOtherNets!: boolean
     isAppLockActive!: boolean
-    selectedAccount?: Account
     balanceVisible!: boolean
     currency!: string
     language!: string
@@ -33,7 +31,6 @@ export class UserPreferences extends Object {
             showTestNetTag: { type: "bool", default: true },
             showConversionOtherNets: { type: "bool", default: true },
             isAppLockActive: { type: "bool" },
-            selectedAccount: "Account?",
             balanceVisible: { type: "bool", default: true },
             currency: { type: "string", default: "euro" },
             language: { type: "string", default: "English" },
