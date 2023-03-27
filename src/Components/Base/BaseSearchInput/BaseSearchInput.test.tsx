@@ -1,8 +1,7 @@
-import "~Test"
+import { TestWrapper } from "~Test"
 import React from "react"
 import { render, waitFor } from "@testing-library/react-native"
 import { BaseSearchInput } from "./BaseSearchInput"
-import { TestWrapper } from "~Test"
 
 describe("BaseSearchInput", () => {
     it("renders correctly", async () => {
