@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { StyleSheet } from "react-native"
 import { useTheme } from "~Common"
 import {
     BackButtonHeader,
@@ -109,18 +110,12 @@ export const AddTokenScreen = () => {
                 <BaseSpacer height={16} />
             </BaseView>
             <BaseScrollView
-                containerStyle={{
-                    height: 400,
-                    width: "100%",
-                }}
-                style={{
-                    paddingHorizontal: 20,
-                    width: "100%",
-                }}>
+                containerStyle={styles.scrollViewContainer}
+                style={styles.scrollView}>
                 {filteredTokens.length ? (
-                    filteredTokens.map((token, index) => (
+                    filteredTokens.map(token => (
                         <OfficialTokenCard
-                            key={index}
+                            key={token.address}
                             token={token}
                             action={addToken(token)}
                         />
@@ -132,3 +127,14 @@ export const AddTokenScreen = () => {
         </BaseSafeArea>
     )
 }
+
+const styles = StyleSheet.create({
+    scrollViewContainer: {
+        height: 400,
+        width: "100%",
+    },
+    scrollView: {
+        paddingHorizontal: 20,
+        width: "100%",
+    },
+})
