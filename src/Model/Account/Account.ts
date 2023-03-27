@@ -1,4 +1,4 @@
-export interface IAccount {
+export interface Account {
     address: string
     index: number
     alias: string

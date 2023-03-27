@@ -13,6 +13,7 @@ export enum Routes {
     CREATE_WALLET_FLOW = "Create_Wallet_Flow",
     WALLET_SUCCESS = "Wallet_Success",
     HOME = "Home",
+    ADD_TOKEN = "Add_Token",
     BUY = "Buy",
     SEND = "Send",
     SWAP = "Swap",

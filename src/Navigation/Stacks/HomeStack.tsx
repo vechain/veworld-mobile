@@ -1,6 +1,7 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
+    AddTokenScreen,
     BuyScreen,
     CameraScreen,
     HistoryScreen,
@@ -18,6 +19,7 @@ export type RootStackParamListHome = {
     [Routes.SEND]: undefined
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined
+    [Routes.ADD_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.CAMERA]: undefined
@@ -53,6 +55,11 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.HISTORY}
                     component={HistoryScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.ADD_TOKEN}
+                    component={AddTokenScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

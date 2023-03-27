@@ -1,6 +1,16 @@
+import { genesises } from "~Common/Constant/Thor/ThorConstants"
 import { NETWORK_TYPE } from "./enums"
 
-export interface INetwork {
+/**
+ * A model for the VechainThor network that we are connected to
+ * @field `defaultNet` - If the network is a default network
+ * @field `id` - The unique ID for the network
+ * @field `name` - A name for this network
+ * @field `type` - What type of network is it? `main, test, solo or custom`
+ * @field `url` - Base URL for the VeThor node
+ * @field `genesis` - The genesis block for the Blockchain
+ */
+export type Network = {
     defaultNet: boolean
     id: string
     tag: string
@@ -8,4 +18,5 @@ export interface INetwork {
     currentUrl: string
     urls: string[]
     genesisId: string
+    genesis: typeof genesises.main
 }

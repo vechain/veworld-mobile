@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { useUserPreferencesEntity } from "./UserPreferenceProvider"
 
 type ConnexContextProviderProps = { children: React.ReactNode }
-const ConnexConext = React.createContext<Connex.Thor | undefined>(undefined)
+const ConnexContext = React.createContext<Connex.Thor | undefined>(undefined)
 
 const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     const [connex, setConnex] = useState<Connex.Thor>()
@@ -39,7 +39,9 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     }
 
     return (
-        <ConnexConext.Provider value={value}>{children}</ConnexConext.Provider>
+        <ConnexContext.Provider value={value}>
+            {children}
+        </ConnexContext.Provider>
     )
 }
 
@@ -53,7 +55,7 @@ const initThor = (currentDriver: Driver) => {
 }
 
 const useThor = () => {
-    const context = React.useContext(ConnexConext)
+    const context = React.useContext(ConnexContext)
     if (!context) {
         throw new Error(
             "useThorContext must be used within a UserContextProvider",

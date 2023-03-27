@@ -147,6 +147,18 @@ type RootTranslation = {
 	 */
 	BTN_GO_TO_SETTINGS: string
 	/**
+	 * P​a​s​t​e​ ​A​d​d​r​e​s​s
+	 */
+	BTN_PASTE_ADDRESS: string
+	/**
+	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
+	 */
+	BTN_SCAN_QR_CODE: string
+	/**
+	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
+	 */
+	BD_NO_TOKEN_FOUND: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -468,6 +480,10 @@ type RootTranslation = {
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: string
 	/**
+	 * A​d​d​ ​T​o​k​e​n
+	 */
+	TITLE_ADD_TOKEN: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -595,6 +611,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_CONFIRM: string
 	/**
+	 * A​d​d
+	 */
+	COMMON_BTN_ADD: string
+	/**
 	 * A​d​d​r​e​s​s
 	 */
 	COMMON_LBL_ADDRESS: string
@@ -640,6 +660,10 @@ type RootTranslation = {
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: string
 	/**
+	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
+	 */
+	INPUT_PLACEHOLDER_SEARCH_TOKEN: string
+	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
@@ -656,6 +680,14 @@ type RootTranslation = {
 	 * S​y​s​t​e​m
 	 */
 	SYSTEM_THEME: string
+	/**
+	 * S​e​l​e​c​t​ ​y​o​u​r​ ​t​o​k​e​n
+	 */
+	ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t
+	 */
+	ADD_TOKEN_SELECT_YOUR_TOKEN_body: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -799,6 +831,18 @@ export type TranslationFunctions = {
 	 * Go to settings
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
+	/**
+	 * Paste Address
+	 */
+	BTN_PASTE_ADDRESS: () => LocalizedString
+	/**
+	 * Scan QR Code
+	 */
+	BTN_SCAN_QR_CODE: () => LocalizedString
+	/**
+	 * No token found
+	 */
+	BD_NO_TOKEN_FOUND: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -1120,6 +1164,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
 	/**
+	 * Add Token
+	 */
+	TITLE_ADD_TOKEN: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -1244,6 +1292,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_CONFIRM: () => LocalizedString
 	/**
+	 * Add
+	 */
+	COMMON_BTN_ADD: () => LocalizedString
+	/**
 	 * Address
 	 */
 	COMMON_LBL_ADDRESS: () => LocalizedString
@@ -1289,6 +1341,10 @@ Please, try again later.
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
 	/**
+	 * Search a token
+	 */
+	INPUT_PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
+	/**
 	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
@@ -1304,6 +1360,14 @@ Please, try again later.
 	 * System
 	 */
 	SYSTEM_THEME: () => LocalizedString
+	/**
+	 * Select your token
+	 */
+	ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: () => LocalizedString
+	/**
+	 * Select the asset that you want to add from the list
+	 */
+	ADD_TOKEN_SELECT_YOUR_TOKEN_body: () => LocalizedString
 	/**
 	 * Account
 	 */

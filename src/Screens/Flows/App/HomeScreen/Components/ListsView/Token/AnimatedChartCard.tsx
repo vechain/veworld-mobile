@@ -2,17 +2,16 @@ import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, CURRENCY, useThemedStyles } from "~Common"
-import { FungibleToken } from "~Common/Constant/Token/TokenConstants"
 import { TokenCard } from "./TokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseView } from "~Components"
-
 import { LineChart } from "react-native-wagmi-charts"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
 
 const HEIGHT = 100
 
 export type NativeTokenProps = {
-    token: FungibleToken
+    token: DenormalizedAccountTokenBalance
     isEdit: boolean
     selectedCurrency: CURRENCY
 }

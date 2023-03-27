@@ -3,14 +3,25 @@ import {
     AddAccountBottomSheet,
     TokenList,
     HeaderView,
-    EditTokensBar,
     AccountManagementBottomSheet,
+    EditTokensBar,
 } from "./Components"
 import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useIsFocused } from "@react-navigation/native"
-import { BaseSpacer, BaseSafeArea, useThor } from "~Components"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
+import {
+    BaseSafeArea,
+    useThor,
+    useUserPreferencesEntity,
+    BaseSpacer,
+} from "~Components"
+import { Routes } from "~Navigation"
+import { getTokens } from "./Utils/getTokens"
+import { Network } from "~Model"
+import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
+import { setSelectedAccount } from "~Storage/Redux/Actions"
+import { useAppDispatch } from "~Storage/Redux"
 import { SlideInLeft } from "react-native-reanimated"
 
 export const HomeScreen = () => {
@@ -41,6 +52,10 @@ export const HomeScreen = () => {
     const isFocused = useIsFocused()
     const thor = useThor()
 
+    const nav = useNavigation()
+    const { currentNetwork, selectedAccount } = useUserPreferencesEntity()
+    const dispatch = useAppDispatch()
+
     useEffect(() => {
         async function init() {
             const genesis = thor.genesis.id
@@ -48,6 +63,34 @@ export const HomeScreen = () => {
         }
         init()
     }, [isFocused, thor])
+
+    useEffect(() => {
+        if (selectedAccount)
+            dispatch(
+                setSelectedAccount({
+                    // TODO: change to the real account
+                    address: selectedAccount.address,
+                    alias: selectedAccount.alias,
+                    createdAt: selectedAccount.createdAt,
+                    index: selectedAccount.index,
+                    visible: true,
+                    rootAddress: "0x0000000",
+                }),
+            )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedAccount?.address, dispatch])
+
+    /**
+     * init tokens cache
+     */
+    useEffect(() => {
+        getTokens({
+            genesis: { id: currentNetwork.genesisId },
+            type: currentNetwork.type,
+        } as Network).then(_tokens => {
+            dispatch(updateFungibleTokens(_tokens))
+        })
+    }, [currentNetwork.genesisId, currentNetwork.type, dispatch])
 
     return (
         <BaseSafeArea grow={1}>
@@ -61,7 +104,11 @@ export const HomeScreen = () => {
                     openAccountManagementSheet={openAccountManagementSheet}
                 />
                 <BaseSpacer height={24} />
-                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                <EditTokensBar
+                    isEdit={isEdit}
+                    setIsEdit={setIsEdit}
+                    handleAddToken={() => nav.navigate(Routes.ADD_TOKEN)}
+                />
                 <BaseSpacer height={24} />
                 <TokenList
                     isEdit={isEdit}
