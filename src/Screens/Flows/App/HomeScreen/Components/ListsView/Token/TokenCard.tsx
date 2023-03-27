@@ -32,7 +32,9 @@ export const TokenCard = memo(
                 <View style={baseStyles.tokenIcon} />
 
                 <View style={baseStyles.textMargin}>
-                    <BaseText typographyFont="subTitle">{token.name}</BaseText>
+                    <BaseText typographyFont="subTitleBold">
+                        {token.name}
+                    </BaseText>
                     <BaseText>{token.symbol}</BaseText>
                 </View>
 
