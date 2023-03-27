@@ -9,14 +9,13 @@ import { Dispatch } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
 import { VET, VTHO } from "~Common/Constant/Token/TokenConstants"
 import axios from "axios"
-import NetworkService from "~Services/NetworkService"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 
 /**
  * Updates all balances for an account
  * @param accountAddress - the acccount address for this balance
  */
-export const updateAccountBalances = (() =>
+export const updateAccountBalances = ((thorClient: Connex.Thor) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         const accountBalances = getAccountBalances(getState())
         const network = getCurrentNetwork(getState())
@@ -50,7 +49,6 @@ export const updateAccountBalances = (() =>
                         balance = accountResponse.data.energy
                     }
                 } else {
-                    const thorClient = NetworkService.getConnexThor(network)
                     const res = await thorClient
                         .account(accountBalance.tokenAddress)
                         .method(abis.vip180.balanceOf)

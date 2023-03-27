@@ -10,6 +10,7 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    useThor,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
@@ -30,6 +31,7 @@ export const AddTokenScreen = () => {
     const [tokenQuery, setTokenQuery] = useState<string>("")
     const tokens = useSelector(getNetworkFungibleTokens)
     const nav = useNavigation()
+    const thorClient = useThor()
     const filteredTokens = tokens.filter(
         token =>
             token.name
@@ -50,7 +52,7 @@ export const AddTokenScreen = () => {
                     timeUpdated: new Date().toISOString(),
                 }),
             )
-            dispatch(updateAccountBalances())
+            dispatch(updateAccountBalances(thorClient))
             nav.goBack()
         }
     }
