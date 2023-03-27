@@ -31,6 +31,4 @@ export const defaultTokens: FungibleToken[] = [
     { ...VTHO, genesisId: genesises.main.id },
     { ...VET, genesisId: genesises.test.id },
     { ...VTHO, genesisId: genesises.test.id },
-    { ...VET, genesisId: genesises.solo.id },
-    { ...VTHO, genesisId: genesises.solo.id },
 ]
