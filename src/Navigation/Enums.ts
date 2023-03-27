@@ -18,6 +18,7 @@ export enum Routes {
     SEND = "Send",
     SWAP = "Swap",
     HISTORY = "History",
+    NFTS = "NFTs",
     WALLET_MANAGEMENT = "Wallet_Management",
     SETTINGS_GENERAL = "Settings_General",
     SETTINGS_ADVANCED = "Settings_Advanced",

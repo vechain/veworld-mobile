@@ -2,23 +2,27 @@ import React, { useRef, useState, useEffect } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
-    NFTList,
     HeaderView,
-    EditTokens,
     AccountManagementBottomSheet,
+    EditTokens,
 } from "./Components"
-import { useBottomSheetModal } from "~Common"
+import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { useIsFocused, useNavigation } from "@react-navigation/native"
-import { BaseSafeArea, useThor, useUserPreferencesEntity } from "~Components"
+import {
+    BaseSafeArea,
+    useThor,
+    useUserPreferencesEntity,
+    BaseSpacer,
+} from "~Components"
 import { Routes } from "~Navigation"
 import { getTokens } from "./Utils/getTokens"
 import { Network } from "~Model"
 import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
 import { setSelectedAccount } from "~Storage/Redux/Actions"
 import { useAppDispatch } from "~Storage/Redux"
+import { SlideInLeft } from "react-native-reanimated"
 
 export const HomeScreen = () => {
     const {
@@ -33,10 +37,15 @@ export const HomeScreen = () => {
         onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
-    const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
-        useMemoizedAnimation()
+    const { animateEntering, animateExiting } = useMemoizedAnimation({
+        enteringAnimation: new SlideInLeft(),
+        enteringDelay: 200,
+        enteringDuration: 200,
+        exitingAnimation: new SlideInLeft(),
+        exitingDelay: 0,
+        exitingDuration: 200,
+    })
 
-    const [activeTab, setActiveTab] = useState(0)
     const [isEdit, setIsEdit] = useState(false)
     const paddingBottom = useBottomTabBarHeight()
     const visibleHeightRef = useRef<number>(0)
@@ -93,26 +102,20 @@ export const HomeScreen = () => {
                 }}>
                 <HeaderView
                     openAccountManagementSheet={openAccountManagementSheet}
-                    setActiveTab={setActiveTab}
-                    activeTab={activeTab}
                 />
-
+                <BaseSpacer height={24} />
                 <EditTokens
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
                     handleAddToken={() => nav.navigate(Routes.ADD_TOKEN)}
                 />
-
-                {activeTab === 0 ? (
-                    <TokenList
-                        isEdit={isEdit}
-                        visibleHeightRef={visibleHeightRef.current}
-                        entering={coinListEnter}
-                        exiting={coinListExit}
-                    />
-                ) : (
-                    <NFTList entering={NFTListEnter} exiting={NFTListExit} />
-                )}
+                <BaseSpacer height={24} />
+                <TokenList
+                    isEdit={isEdit}
+                    visibleHeightRef={visibleHeightRef.current}
+                    entering={animateEntering}
+                    exiting={animateExiting}
+                />
             </NestableScrollContainer>
 
             <AccountManagementBottomSheet

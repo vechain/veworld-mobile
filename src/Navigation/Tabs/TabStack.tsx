@@ -1,16 +1,23 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
 import { useTheme } from "~Common"
 import PlatformUtils from "~Common/Utils/PlatformUtils"
 import { HomeStack, SettingsStack } from "~Navigation/Stacks"
+import { NFTStack } from "~Navigation/Stacks/NFTStack"
 
 const Tab = createBottomTabNavigator()
 
-export const Tabbar = () => {
+export const TabStack = () => {
     const theme = useTheme()
 
+    const renderTabBarIcon = useCallback(
+        (focused: boolean, iconName: string) => (
+            <TabIcon focused={focused} title={iconName} />
+        ),
+        [],
+    )
     return (
         <Tab.Navigator
             screenOptions={{
@@ -27,9 +34,18 @@ export const Tabbar = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: "Wallet",
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon focused={focused} title={"home"} />
-                    ),
+                    tabBarIcon: ({ focused }) =>
+                        renderTabBarIcon(focused, "home"),
+                }}
+            />
+
+            <Tab.Screen
+                name="NFTStack"
+                component={NFTStack}
+                options={{
+                    tabBarLabel: "NFT",
+                    tabBarIcon: ({ focused }) =>
+                        renderTabBarIcon(focused, "image-multiple-outline"),
                 }}
             />
 
@@ -38,9 +54,8 @@ export const Tabbar = () => {
                 component={SettingsStack}
                 options={{
                     tabBarLabel: "Settings",
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon focused={focused} title={"cog"} />
-                    ),
+                    tabBarIcon: ({ focused }) =>
+                        renderTabBarIcon(focused, "cog"),
                 }}
             />
         </Tab.Navigator>

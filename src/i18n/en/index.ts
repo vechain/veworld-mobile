@@ -129,6 +129,7 @@ const en: BaseTranslation = {
     TITLE_ADVANCED: "Advanced",
     TITLE_MANAGE_WALLET: "Manage Wallet",
     TITLE_NFT: "NFT",
+    TITLE_NFTS: "NFTs",
     TITLE_NETWORK: "Network",
     TITLE_CONTACTS: "Contacts",
     TITLE_PRIVACY: "Privacy and Security",
@@ -154,6 +155,8 @@ const en: BaseTranslation = {
     SB_SELECT_LANGUAGE: "Select your language",
     SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
     SB_CAMERA_ANAVAILABILITY: "Your device does not support this operation.",
+    SB_YOUR_TOKENS : "Your tokens",
+    SB_YOUR_NFTS : "Your collections",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -180,6 +183,9 @@ const en: BaseTranslation = {
     COMMON_LBL_ADDRESS: "Address",
     COMMON_LBL_SUCCESS: "Success",
     COMMON_LBL_ERROR: "Error",
+    COMMON_LBL_IMPORT: "Import",
+    COMMON_LBL_FAVOURITE: "Favourite",
+    COMMON_LBL_FAVOURITES: "Favourites",
 
     // Common Titles
 

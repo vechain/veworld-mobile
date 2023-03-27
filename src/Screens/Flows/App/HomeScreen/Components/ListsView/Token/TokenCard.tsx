@@ -42,7 +42,7 @@ export const TokenCard = memo(
                     </BaseCard>
                     <BaseSpacer width={16} />
                     <BaseView>
-                        <BaseText typographyFont="subTitle">
+                        <BaseText typographyFont="subTitleBold">
                             {tokenBalance.token.name}
                         </BaseText>
                         <BaseText>{tokenBalance.token.symbol}</BaseText>

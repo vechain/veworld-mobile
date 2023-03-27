@@ -33,7 +33,7 @@ export const ChangeNetworkBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
             <BaseView flexDirection="row" w={100}>
-                <BaseText typographyFont="subTitle">
+                <BaseText typographyFont="subTitleBold">
                     {LL.BD_SELECT_NETWORK()}
                 </BaseText>
             </BaseView>

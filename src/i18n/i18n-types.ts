@@ -444,6 +444,10 @@ type RootTranslation = {
 	 */
 	TITLE_NFT: string
 	/**
+	 * N​F​T​s
+	 */
+	TITLE_NFTS: string
+	/**
 	 * N​e​t​w​o​r​k
 	 */
 	TITLE_NETWORK: string
@@ -539,6 +543,14 @@ type RootTranslation = {
 	 */
 	SB_CAMERA_ANAVAILABILITY: string
 	/**
+	 * Y​o​u​r​ ​t​o​k​e​n​s
+	 */
+	SB_YOUR_TOKENS: string
+	/**
+	 * Y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n​s
+	 */
+	SB_YOUR_NFTS: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -614,6 +626,18 @@ type RootTranslation = {
 	 * E​r​r​o​r
 	 */
 	COMMON_LBL_ERROR: string
+	/**
+	 * I​m​p​o​r​t
+	 */
+	COMMON_LBL_IMPORT: string
+	/**
+	 * F​a​v​o​u​r​i​t​e
+	 */
+	COMMON_LBL_FAVOURITE: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	COMMON_LBL_FAVOURITES: string
 	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
@@ -1104,6 +1128,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_NFT: () => LocalizedString
 	/**
+	 * NFTs
+	 */
+	TITLE_NFTS: () => LocalizedString
+	/**
 	 * Network
 	 */
 	TITLE_NETWORK: () => LocalizedString
@@ -1196,6 +1224,14 @@ export type TranslationFunctions = {
 	 */
 	SB_CAMERA_ANAVAILABILITY: () => LocalizedString
 	/**
+	 * Your tokens
+	 */
+	SB_YOUR_TOKENS: () => LocalizedString
+	/**
+	 * Your collections
+	 */
+	SB_YOUR_NFTS: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -1271,6 +1307,18 @@ export type TranslationFunctions = {
 	 * Error
 	 */
 	COMMON_LBL_ERROR: () => LocalizedString
+	/**
+	 * Import
+	 */
+	COMMON_LBL_IMPORT: () => LocalizedString
+	/**
+	 * Favourite
+	 */
+	COMMON_LBL_FAVOURITE: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	COMMON_LBL_FAVOURITES: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */
