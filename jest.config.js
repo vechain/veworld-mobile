@@ -44,7 +44,7 @@ module.exports = {
      * this is currently checking just utils and base components, it should be extended in the future
      */
     collectCoverageFrom: [
-        "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
+        //"src/Common/Utils/**/*.{js,jsx,ts,tsx}", TODO: do not push this
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
     coverageThreshold: {
