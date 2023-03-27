@@ -1,4 +1,3 @@
-import "~Test"
 import CryptoUtils from "./index"
 
 describe("random number tests", () => {

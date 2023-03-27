@@ -1,37 +1,3 @@
-/*
- * this file includes standard mocks for native modules to fix native Module not found errors in tests like:
- * "Failed to install react-native-quick-crypto: The native `QuickCrypto` Module could not be found."
- */
-jest.mock("react-native-quick-crypto", () => ({
-    getRandomValues: jest.fn(buffer => buffer),
-    randomFillSync: jest.fn(buffer => buffer),
-    createCipheriv: jest.fn(() => ({
-        update: (first: string) => first,
-        final: () => "",
-    })),
-    createDecipheriv: jest.fn(() => ({
-        update: (first: string) => first,
-        final: () => "",
-    })),
-}))
-
-jest.mock("expo-secure-store", () => ({
-    getItemAsync: jest.fn(),
-    setItemAsync: jest.fn(),
-}))
-jest.mock("expo-local-authentication", () => {})
-jest.mock("expo-haptics", () => {})
-jest.mock("expo-localization", () => {})
-jest.mock("expo-clipboard", () => {})
-jest.mock("react-native-wagmi-charts", () => {})
-jest.mock("react-native-draggable-flatlist", () => {})
-jest.mock("react-native-gesture-handler", () => {})
-jest.mock("expo-camera", () => {})
-jest.mock("expo-barcode-scanner", () => {})
-jest.mock("react-native-flipper", () => ({
-    addPlugin: jest.fn(),
-}))
-
 import React, { useEffect, useMemo, useState } from "react"
 import Realm from "realm"
 import {
@@ -54,6 +20,9 @@ import { initRealmClasses, RealmContext } from "~Storage/Realm/RealmContext"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
 import { useInitStore } from "~Storage/Redux"
+import { ColorSchemeName } from "react-native"
+
+export const getTheme = (): NonNullable<ColorSchemeName> => "light"
 
 const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
@@ -85,7 +54,7 @@ const configStore = {
 beforeAll(async () => {
     realmCache = await Realm.open(configCache)
     realmStore = await Realm.open(configStore)
-    initRealmClasses(realmCache, realmStore, "light")
+    initRealmClasses(realmCache, realmStore, getTheme())
 })
 afterAll(async () => {
     if (!realmCache.isClosed) {

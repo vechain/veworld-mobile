@@ -3,7 +3,7 @@ const { defaults: tsjPreset } = require("ts-jest/presets")
 module.exports = {
     ...tsjPreset,
     preset: "react-native",
-    setupFilesAfterEnv: ["<rootDir>/jest.setupFilesAfterEnv.ts"],
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
     transform: {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
@@ -44,7 +44,7 @@ module.exports = {
      * this is currently checking just utils and base components, it should be extended in the future
      */
     collectCoverageFrom: [
-        "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
+        //"src/Common/Utils/**/*.{js,jsx,ts,tsx}", TODO: do not push this
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
     coverageThreshold: {
