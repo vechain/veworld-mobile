@@ -4,7 +4,7 @@ import {
     TokenList,
     HeaderView,
     AccountManagementBottomSheet,
-    EditTokens,
+    EditTokensBar,
 } from "./Components"
 import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
@@ -104,7 +104,7 @@ export const HomeScreen = () => {
                     openAccountManagementSheet={openAccountManagementSheet}
                 />
                 <BaseSpacer height={24} />
-                <EditTokens
+                <EditTokensBar
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
                     handleAddToken={() => nav.navigate(Routes.ADD_TOKEN)}
