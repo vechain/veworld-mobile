@@ -38,8 +38,6 @@ export const WalletManagementBottomSheet = React.forwardRef<
         getAccountsByDevice(device?.rootAddress),
     )
 
-    console.log(deviceAccounts)
-
     const selectedAccount = useAppSelector(getSelectedAccount)
 
     const handleSheetChanges = useCallback((index: number) => {

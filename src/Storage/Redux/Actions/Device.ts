@@ -1,7 +1,12 @@
 import { AddressUtils } from "~Common"
 import { Device, WalletAccount } from "~Model"
 import { getSelectedAccount } from "../Selectors"
-import { addDevice, removeDeviceByIndex, renameDevice } from "../Slices/Device"
+import {
+    addDevice,
+    removeDeviceByIndex,
+    renameDevice,
+    updateDevice,
+} from "../Slices/Device"
 import { AppThunk } from "../Types"
 import { addAccountForDevice, removeAccountsByDevice } from "./Account"
 
@@ -47,4 +52,4 @@ const addDeviceAndAccounts =
         return account
     }
 
-export { renameDevice, removeDevice, addDeviceAndAccounts }
+export { renameDevice, removeDevice, addDeviceAndAccounts, updateDevice }

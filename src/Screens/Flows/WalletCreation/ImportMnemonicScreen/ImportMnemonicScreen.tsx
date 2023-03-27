@@ -24,19 +24,17 @@ const DEMO_MNEMONIC =
 
 export const ImportMnemonicScreen = () => {
     const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
     const nav = useNavigation()
-
-    const [localMnemonic, setLocalMnemonic] = useState<string>("")
-    const [isError, setIsError] = useState<string>("")
-    const [isDisabled, setIsDisabled] = useState(true)
-
     const theme = useTheme()
 
     const userHasOnboarded = useAppSelector(hasOnboarded)
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
-    const dispatch = useAppDispatch()
+    const [localMnemonic, setLocalMnemonic] = useState<string>("")
+    const [isError, setIsError] = useState<string>("")
+    const [isDisabled, setIsDisabled] = useState(true)
 
     const onVerify = (_mnemonic: string) => {
         const sanitisedMnemonic = SeedUtils.sanifySeed(_mnemonic).join(" ")

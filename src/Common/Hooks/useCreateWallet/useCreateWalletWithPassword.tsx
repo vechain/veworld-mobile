@@ -17,12 +17,11 @@ import { getSelectedAccount } from "~Storage/Redux/Selectors"
  * @returns
  */
 export const useCreateWalletWithPassword = () => {
+    const dispatch = useAppDispatch()
+    const selectedAccount = useAppSelector(getSelectedAccount)
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
     const [isComplete, setIsComplete] = useState(false)
-
-    const dispatch = useAppDispatch()
-    const selectedAccount = useAppSelector(getSelectedAccount)
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
@@ -36,8 +35,7 @@ export const useCreateWalletWithPassword = () => {
             onError?: (error: unknown) => void
         }) => {
             try {
-                const { device, wallet, deviceIndex } =
-                    getDeviceFromMnemonic(mnemonic)
+                const { device, wallet } = getDeviceFromMnemonic(mnemonic)
 
                 dispatch(setMnemonic(undefined))
 
@@ -46,7 +44,7 @@ export const useCreateWalletWithPassword = () => {
 
                 const { encryptedWallet } = await CryptoUtils.encryptWallet(
                     wallet,
-                    deviceIndex,
+                    device.rootAddress,
                     accessControl,
                     hashedKey,
                 )

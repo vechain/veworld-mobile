@@ -23,6 +23,21 @@ export const DeviceSlice = createSlice({
         addDevice: (state, action: PayloadAction<Device>) => {
             state.push(action.payload)
         },
+        updateDevice: (
+            state,
+            action: PayloadAction<{ rootAddress: string; device: Device }>,
+        ) => {
+            const { rootAddress, device: newDeviceData } = action.payload
+            const deviceExistsIndex = state.findIndex(device =>
+                AddressUtils.compareAddresses(device.rootAddress, rootAddress),
+            )
+            if (deviceExistsIndex === -1)
+                throw new Error(
+                    `Device with root address ${rootAddress} does not exist`,
+                )
+
+            state[deviceExistsIndex] = newDeviceData
+        },
         removeDeviceByIndex: (
             state,
             action: PayloadAction<{ index: number }>,
@@ -39,5 +54,5 @@ export const DeviceSlice = createSlice({
     },
 })
 
-export const { renameDevice, addDevice, removeDeviceByIndex } =
+export const { renameDevice, addDevice, updateDevice, removeDeviceByIndex } =
     DeviceSlice.actions

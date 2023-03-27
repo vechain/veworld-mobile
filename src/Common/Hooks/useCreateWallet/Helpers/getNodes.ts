@@ -1,8 +1,7 @@
 import { CryptoUtils, HexUtils } from "~Common/Utils"
-import { DEVICE_TYPE } from "~Model"
+import { DEVICE_TYPE, WalletAccount } from "~Model"
 import { HDNode } from "thor-devkit"
 import * as i18n from "~i18n"
-import { Account } from "~Storage"
 
 /**
  *
@@ -31,7 +30,7 @@ export const getNodes = (
         rootAddress: hdNode.address,
         type: DEVICE_TYPE.LOCAL_MNEMONIC,
         index: deviceIndex,
-        accounts: [] as Account[],
+        accounts: [] as WalletAccount[],
     }
 
     return { wallet, device }

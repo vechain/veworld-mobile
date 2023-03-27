@@ -6,6 +6,7 @@ import { DEVICE_TYPE } from "../Wallet"
  * @field `rootAddress` - The address of the first account in this wallet
  * @field `type` - The type of wallet - Ledger, Local, etc
  * @field `alias` - a name for this device
+ * @field `wallet` - the (encrypted) wallet this device belongs to
  */
 export interface Device {
     xPub?: XPub

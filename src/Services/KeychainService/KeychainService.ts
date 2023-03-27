@@ -7,7 +7,13 @@ const WALLET_KEY = "VeWorld_Wallet_key"
 const REALM_KEY = "VeWorld_Realm_key"
 const REDUX_KEY = "VeWorld_Redux_key"
 
-const getDeviceMnemonic = async (
+/**
+ * Get the encryption key for the device. Used to decrypt the wallet
+ * @param rootAddress  rootAddress of device
+ * @param accessControl  if true, the user will be prompted to authenticate with biometrics
+ * @returns
+ */
+const getDeviceEncryptionKey = async (
     rootAddress: string,
     accessControl?: boolean,
 ) => {
@@ -37,8 +43,14 @@ const getDeviceMnemonic = async (
     }
 }
 
-const setDeviceMnemonic = async (
-    Enckey: string,
+/**
+ *  Set the encryption key for the device. Used to decrypt the wallet
+ * @param encriptionKey  the encryption key to store
+ * @param rootAddress  rootAddress of device
+ * @param accessControl  if true, the user will be prompted to authenticate with biometrics
+ */
+const setDeviceEncryptionKey = async (
+    encriptionKey: string,
     rootAddress: string,
     accessControl?: boolean,
 ) => {
@@ -62,13 +74,21 @@ const setDeviceMnemonic = async (
     }
 
     try {
-        await Keychain.set(Enckey, options, `${WALLET_KEY}_${rootAddress}`)
+        await Keychain.set(
+            encriptionKey,
+            options,
+            `${WALLET_KEY}_${rootAddress}`,
+        )
     } catch (err) {
         error(err)
     }
 }
 
-const deleteDeviceMnemonic = async (rootAddress: string) => {
+/**
+ *  Delete the encryption key for the device. Used to decrypt the wallet
+ * @param rootAddress rootAddress of device
+ */
+const deleteDeviceEncryptionKey = async (rootAddress: string) => {
     const options = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         keychainService: `${WALLET_KEY}_${rootAddress}`,
@@ -134,9 +154,9 @@ const setReduxKey = async (Enckey: string) => {
 }
 
 export default {
-    getDeviceMnemonic,
-    setDeviceMnemonic,
-    deleteDeviceMnemonic,
+    getDeviceEncryptionKey,
+    setDeviceEncryptionKey,
+    deleteDeviceEncryptionKey,
     getRealmKey,
     setRealmKey,
     getReduxKey,

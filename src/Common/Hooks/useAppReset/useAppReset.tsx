@@ -16,16 +16,16 @@ export const useAppReset = () => {
     const dispatch = useAppDispatch()
     const devices = useAppSelector(getDevices())
 
-    const removeDevicesFromKeychain = useCallback(async () => {
+    const removeEncryptionKeysFromKeychain = useCallback(async () => {
         const promises = devices.map(device => {
-            return KeychainService.deleteDeviceMnemonic(device.rootAddress)
+            return KeychainService.deleteDeviceEncryptionKey(device.rootAddress)
         })
 
         await Promise.all(promises)
     }, [devices])
 
     const appReset = useCallback(async () => {
-        await removeDevicesFromKeychain()
+        await removeEncryptionKeysFromKeychain()
 
         resetRealm(store, cache)
 
@@ -33,7 +33,7 @@ export const useAppReset = () => {
         purgeStoredState(persistConfig)
         dispatch({ type: "RESET" })
         console.log("App Reset Finished")
-    }, [removeDevicesFromKeychain, cache, dispatch, store])
+    }, [removeEncryptionKeysFromKeychain, cache, dispatch, store])
 
     return appReset
 }

@@ -7,16 +7,13 @@ import {
 } from "~Common"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
-import { useRealm } from "~Storage"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { setUserSelectedSecurity } from "~Storage/Redux/Actions"
+import { setUserSelectedSecurity, updateDevice } from "~Storage/Redux/Actions"
 import { getDevices } from "~Storage/Redux/Selectors"
 
 export const useSecurityUpgrade = () => {
     const { walletSecurity } = useWalletSecurity()
     const devices = useAppSelector(getDevices())
-
-    const { store } = useRealm()
 
     const dispatch = useAppDispatch()
 
@@ -24,37 +21,39 @@ export const useSecurityUpgrade = () => {
         async (password: string, onSuccessCallback?: () => void) => {
             if (walletSecurity === WalletSecurity.BIO_UNLOCK) return
 
-            store.beginTransaction()
-
             for (const device of devices) {
-                let encryptedKey = await KeychainService.getDeviceMnemonic(
+                const deviceKey = await KeychainService.getDeviceEncryptionKey(
                     device.rootAddress,
                     false,
                 )
-                if (encryptedKey) {
-                    const decryptedKey = CryptoUtils.decrypt<string>(
-                        encryptedKey,
-                        PasswordUtils.hash(password),
-                    )
-                    let _wallet = CryptoUtils.decrypt<Wallet>(
-                        device.wallet,
-                        decryptedKey,
+                if (!deviceKey) throw new Error("No encryption key for device")
+
+                const decryptedKey = CryptoUtils.decrypt<string>(
+                    deviceKey,
+                    PasswordUtils.hash(password),
+                )
+                const decryptedWallet = CryptoUtils.decrypt<Wallet>(
+                    device.wallet,
+                    decryptedKey,
+                )
+
+                const { encryptedWallet: updatedEncryptedWallet } =
+                    await CryptoUtils.encryptWallet(
+                        decryptedWallet,
+                        device.rootAddress,
+                        true,
                     )
 
-                    const { encryptedWallet: updatedEncryptedWallet } =
-                        await CryptoUtils.encryptWallet(
-                            _wallet,
-                            device.rootAddress,
-                            true,
-                        )
-
-                    device.wallet = updatedEncryptedWallet
-                } else {
-                    console.log(`No key for ${device.alias}`)
-                }
+                dispatch(
+                    updateDevice({
+                        rootAddress: device.rootAddress,
+                        device: {
+                            ...device,
+                            wallet: updatedEncryptedWallet,
+                        },
+                    }),
+                )
             }
-
-            store.commitTransaction()
 
             dispatch(
                 setUserSelectedSecurity(UserSelectedSecurityLevel.BIOMETRIC),
@@ -62,7 +61,7 @@ export const useSecurityUpgrade = () => {
 
             onSuccessCallback && onSuccessCallback()
         },
-        [walletSecurity, store, dispatch, devices],
+        [walletSecurity, dispatch, devices],
     )
 
     return runSecurityUpgrade

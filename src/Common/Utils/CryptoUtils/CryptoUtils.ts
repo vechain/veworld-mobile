@@ -82,7 +82,7 @@ const verifyMnemonic = (seed: string) => {
 }
 
 /**
- * Encrypt new wallet and insert encryptionKey in keychain
+ * Encrypt new wallet and insert mnemonic in keychain
  * @param wallet
  * @param deviceIndex
  * @param accessControl
@@ -102,7 +102,7 @@ const encryptWallet = async (
     if (hashEncryptionKey)
         encryptionKey = encrypt<string>(encryptionKey, hashEncryptionKey)
 
-    await KeychainService.setDeviceMnemonic(
+    await KeychainService.setDeviceEncryptionKey(
         encryptionKey,
         rootAddress,
         accessControl,

@@ -47,7 +47,7 @@ export const useCreateWalletWithBiometrics = () => {
 
                     const { encryptedWallet } = await CryptoUtils.encryptWallet(
                         wallet,
-                        device.index,
+                        device.rootAddress,
                         accessControl,
                     )
 

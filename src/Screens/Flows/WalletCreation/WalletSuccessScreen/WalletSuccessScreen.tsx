@@ -57,6 +57,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     const mnemonic = useAppSelector(getMnemonic).value
 
+    console.log({ mnemonic })
+
     const {
         onCreateWallet: createWalletWithBiometrics,
         isComplete: isWalletCreatedWithBiometrics,
