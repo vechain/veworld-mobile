@@ -35,7 +35,7 @@ module.exports = {
         "^~Components(.*)": ["<rootDir>/src/Components$1"],
         "^~i18n(.*)": ["<rootDir>/src/i18n$1"],
         "^~Assets(.*)": ["<rootDir>/src/Assets$1"],
-        "^~Test$": ["<rootDir>/src/Common/Test/index.tsx"],
+        "^~Test$": ["<rootDir>/src/Test/index.tsx"],
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
@@ -49,10 +49,10 @@ module.exports = {
     ],
     coverageThreshold: {
         global: {
-            statements: 64,
-            branches: 29,
-            functions: 30,
-            lines: 62,
+            statements: 66,
+            branches: 33,
+            functions: 35,
+            lines: 65,
         },
     },
 }

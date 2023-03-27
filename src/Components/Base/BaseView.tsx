@@ -11,8 +11,8 @@ import {
 } from "~Common"
 
 type Props = {
-    w?: number
-    h?: number
+    w?: number | string
+    h?: number | string
     bg?: string
     flexDirection?: FlexDirection
     justifyContent?: JustifyContent
@@ -123,8 +123,8 @@ type BaseStyles = {
     flexWrap?: FlexWrap
     alignSelf?: AlignSelf
     bg?: string
-    w?: number
-    h?: number
+    w?: number | string
+    h?: number | string
     m?: number
     ml?: number
     mr?: number

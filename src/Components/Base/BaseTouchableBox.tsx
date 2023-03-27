@@ -24,6 +24,8 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>
     innerContainerStyle?: StyleProp<ViewStyle>
     bg?: string
+    w?: string | number
+    flex?: number
 } & Omit<TouchableOpacityProps, "style">
 
 export const BaseTouchableBox: React.FC<Props> = ({
@@ -36,10 +38,20 @@ export const BaseTouchableBox: React.FC<Props> = ({
     justifyContent = "flex-start",
     alignItems = "center",
     bg,
+    w,
+    flex,
     ...props
 }) => {
     const { styles, theme } = useThemedStyles(
-        baseStyles({ bg, flexDirection, justifyContent, alignItems, disabled }),
+        baseStyles({
+            bg,
+            flexDirection,
+            justifyContent,
+            alignItems,
+            disabled,
+            w,
+            flex,
+        }),
     )
     return (
         <DropShadow
@@ -56,18 +68,29 @@ export const BaseTouchableBox: React.FC<Props> = ({
 
 type BaseStyles = {
     bg?: string
+    w?: number | string
     flexDirection: FlexDirection
     justifyContent: JustifyContent
     alignItems: AlignItems
     disabled: boolean
+    flex?: number
 }
 const baseStyles =
-    ({ bg, flexDirection, justifyContent, alignItems, disabled }: BaseStyles) =>
+    ({
+        bg,
+        flexDirection,
+        justifyContent,
+        alignItems,
+        disabled,
+        w,
+        flex,
+    }: BaseStyles) =>
     (theme: ColorThemeType) =>
         StyleSheet.create({
             shadow: theme.shadows.card,
             container: {
-                width: "100%",
+                flex,
+                width: w || "100%",
             },
             innerContainer: {
                 justifyContent,

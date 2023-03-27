@@ -5,6 +5,8 @@ import {
     ConfigSlice,
     AccountSlice,
     MnemonicSlice,
+    TokenSlice,
+    BalanceSlice,
 } from "./Slices"
 
 export const reducer = combineReducers({
@@ -13,4 +15,6 @@ export const reducer = combineReducers({
     devices: DeviceSlice.reducer,
     accounts: AccountSlice.reducer,
     mnemonic: MnemonicSlice.reducer,
+    tokens: TokenSlice.reducer,
+    balances: BalanceSlice.reducer,
 })

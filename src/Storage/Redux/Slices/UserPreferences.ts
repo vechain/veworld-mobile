@@ -1,17 +1,17 @@
 import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PURGE } from "redux-persist"
-import { ThorConstants } from "~Common/Constant"
 import { CURRENCY, ThemeEnum } from "~Common/Enums"
-import { INetwork, NETWORK_TYPE } from "~Model"
-
+import { Account, Network, NETWORK_TYPE } from "~Model"
+import { makeNetwork } from "~Common/Constant/Thor/ThorConstants"
 export interface UserPreferenceState {
     theme: ThemeEnum
-    currentNetwork: INetwork
+    currentNetwork: Network
     showTestNetTag: boolean
     showConversionOtherNets: boolean
     hideTokensWithNoBalance: boolean
     isAppLockActive: boolean
+    selectedAccount?: Account
     balanceVisible: boolean
     currency: CURRENCY
     language: LANGUAGE
@@ -19,7 +19,7 @@ export interface UserPreferenceState {
 
 const initialState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
-    currentNetwork: { ...ThorConstants.makeNetwork(NETWORK_TYPE.MAIN) },
+    currentNetwork: makeNetwork(NETWORK_TYPE.MAIN),
     showTestNetTag: true,
     showConversionOtherNets: true,
     hideTokensWithNoBalance: false,
@@ -37,7 +37,7 @@ export const UserPreferencesSlice = createSlice({
             state.theme = action.payload
         },
 
-        setCurrentNetwork: (state, action: PayloadAction<INetwork>) => {
+        setCurrentNetwork: (state, action: PayloadAction<Network>) => {
             state.currentNetwork = action.payload
         },
 

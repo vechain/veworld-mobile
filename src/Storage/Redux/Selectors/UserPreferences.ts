@@ -22,3 +22,11 @@ export const getBalanceVisible = createSelector(reducer, state => {
 export const selectHideTokensWithNoBalance = createSelector(reducer, state => {
     return state.hideTokensWithNoBalance
 })
+
+export const getCurrentNetwork = createSelector(reducer, state => {
+    return state.currentNetwork
+})
+
+export const getSelectedAccount = createSelector(reducer, state => {
+    return state.selectedAccount
+})
