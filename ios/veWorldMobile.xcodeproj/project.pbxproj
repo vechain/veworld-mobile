@@ -21,6 +21,7 @@
 		EAFBEA572955DEFF0036BC15 /* SampleNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA562955DEFF0036BC15 /* SampleNativeModule.m */; };
 		F1282828ADD7BFC1D3A1A0F2 /* libPods-veWorldMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D219085A47BC057858BF87E4 /* libPods-veWorldMobile.a */; };
 		F12EE6F0073A253A9D1C8167 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F33240CF19E97FC49A2DC2 /* ExpoModulesProvider.swift */; };
+		FB8F80E246F617AF450B22E8 /* libPods-veWorldMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB6455B87A3A79F216D5DA9 /* libPods-veWorldMobile.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
