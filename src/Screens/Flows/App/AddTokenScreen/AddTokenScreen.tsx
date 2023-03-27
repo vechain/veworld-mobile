@@ -15,12 +15,12 @@ import {
 import { useI18nContext } from "~i18n"
 import { OfficialTokenCard } from "./Components/OfficialTokenCard"
 import { useDispatch, useSelector } from "react-redux"
-import { getNetworkFungibleTokens } from "~Storage/Redux/Slices/TokenCache"
-import { addAccountToken } from "~Storage/Redux/Slices"
+import { getNetworkFungibleTokens } from "~Storage/Redux/Slices/Token"
 import { FungibleToken } from "~Model"
 import { getSelectedAccount } from "~Storage/Redux/Selectors"
 import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
 import { useNavigation } from "@react-navigation/native"
+import { addTokenBalance } from "~Storage/Redux/Slices"
 
 export const AddTokenScreen = () => {
     const theme = useTheme()
@@ -41,13 +41,13 @@ export const AddTokenScreen = () => {
     )
 
     const addToken = (token: FungibleToken) => () => {
-        console.log("account", account)
         if (account?.address) {
             dispatch(
-                addAccountToken({
-                    ...token,
-                    id: `${token.address}-${account.address}`,
+                addTokenBalance({
+                    balance: "0",
                     accountAddress: account.address,
+                    tokenAddress: token.address,
+                    timeUpdated: new Date().toISOString(),
                 }),
             )
             dispatch(updateAccountBalances())

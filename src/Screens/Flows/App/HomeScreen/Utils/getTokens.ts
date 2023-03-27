@@ -12,24 +12,22 @@ import { FungibleToken, Network, NETWORK_TYPE } from "~Model"
 export const getTokensFromGithub = async (
     network: Network,
 ): Promise<FungibleToken[]> => {
-    let tokens: FungibleToken[] = []
-
     if (
         network.type === NETWORK_TYPE.MAIN ||
         network.type === NETWORK_TYPE.TEST
     ) {
-        const rawTokens = await axios.get(
+        const { data } = await axios.get(
             `https://vechain.github.io/token-registry/${
                 network.type === NETWORK_TYPE.MAIN ? "main" : "test"
             }.json`,
             {
-                transformResponse: data => data,
+                transformResponse: res => res,
                 timeout: 30 * 1000,
             },
         )
 
-        const tokensFromGithub = JSON.parse(rawTokens.data) as FungibleToken[]
-        tokens = tokensFromGithub.map(token => {
+        const tokensFromGithub = JSON.parse(data) as FungibleToken[]
+        return tokensFromGithub.map(token => {
             return {
                 ...token,
                 genesisId: network.genesis.id,
@@ -39,7 +37,7 @@ export const getTokensFromGithub = async (
         })
     }
 
-    return tokens
+    return []
 }
 
 // TODO: move to utils and test it

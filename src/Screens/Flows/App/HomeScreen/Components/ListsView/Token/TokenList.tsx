@@ -7,11 +7,10 @@ import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"
-import { Token } from "~Model"
 import { useSelector } from "react-redux"
 import {
-    AccountTokenBalance,
-    getAccountTokenBalances,
+    DenormalizedAccountTokenBalance,
+    getDenormalizedAccountTokenBalances,
 } from "~Storage/Redux/Slices"
 
 interface Props extends AnimateProps<ViewProps> {
@@ -21,12 +20,10 @@ interface Props extends AnimateProps<ViewProps> {
 
 export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
-        const tokenBalances: AccountTokenBalance[] = useSelector(
-            getAccountTokenBalances,
+        const tokenBalances: DenormalizedAccountTokenBalance[] = useSelector(
+            getDenormalizedAccountTokenBalances,
         )
-        const [data, setData] = useState<AccountTokenBalance[]>([])
-        console.log("tokenBalances", tokenBalances)
-        console.log("ddata", data)
+        const [data, setData] = useState<DenormalizedAccountTokenBalance[]>([])
 
         useEffect(() => {
             setData(tokenBalances)
@@ -39,9 +36,12 @@ export const TokenList = memo(
             [],
         )
 
-        const onDeleteItem = useCallback((_item: Token) => {
-            console.log("onDeleteItem", _item)
-        }, [])
+        const onDeleteItem = useCallback(
+            (_item: DenormalizedAccountTokenBalance) => {
+                console.log("onDeleteItem", _item)
+            },
+            [],
+        )
 
         const selectedCurrency = useAppSelector(selectCurrency)
 
@@ -64,7 +64,7 @@ export const TokenList = memo(
                     extraData={isEdit}
                     // eslint-disable-next-line @typescript-eslint/no-shadow
                     onDragEnd={({ data }) => setData(data)}
-                    keyExtractor={item => item.address}
+                    keyExtractor={item => item.tokenAddress}
                     renderItem={itemParams => (
                         <AnimatedTokenCard
                             {...itemParams}

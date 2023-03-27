@@ -1,15 +1,15 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { FungibleToken } from "~Model"
-import { TokenCacheState } from "./types"
+import { TokenState } from "./types"
 
-export const initialTokenState: TokenCacheState = { fungible: [] }
+export const initialTokenState: TokenState = { fungible: [] }
 
-export const TokenCacheSlice = createSlice({
-    name: "tokenCache",
+export const TokenSlice = createSlice({
+    name: "tokens",
     initialState: initialTokenState,
     reducers: {
         updateFungibleTokens: (
-            state: Draft<TokenCacheState>,
+            state: Draft<TokenState>,
             action: PayloadAction<FungibleToken[]>,
         ) => {
             state.fungible = action.payload
@@ -17,4 +17,4 @@ export const TokenCacheSlice = createSlice({
     },
 })
 
-export const { updateFungibleTokens } = TokenCacheSlice.actions
+export const { updateFungibleTokens } = TokenSlice.actions

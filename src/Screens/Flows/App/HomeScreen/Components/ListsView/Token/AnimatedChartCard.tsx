@@ -6,12 +6,12 @@ import { TokenCard } from "./TokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseView } from "~Components"
 import { LineChart } from "react-native-wagmi-charts"
-import { FungibleToken } from "~Model"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
 
 const HEIGHT = 100
 
 export type NativeTokenProps = {
-    token: FungibleToken
+    token: DenormalizedAccountTokenBalance
     isEdit: boolean
     selectedCurrency: CURRENCY
 }

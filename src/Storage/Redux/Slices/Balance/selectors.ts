@@ -1,34 +1,46 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
+import { getSelectedAccount } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
-import { getAccountFungibleTokens } from "../AccountToken"
+import { getAllFungibleTokens } from "../Token"
 
 export const getBalances = (state: RootState) => state.balances
 
 /**
- * Get all token balances for an account for the current network
+ * Get all account balances
  */
-export const getAccountTokenBalances = createSelector(
-    [getAccountFungibleTokens, getBalances],
-    (accountTokens, balances) => {
-        console.log("accountTokens", accountTokens)
-        console.log("balances", balances)
-        return accountTokens.map(accountToken => {
-            const tokenBalance = balances.find(balance =>
+export const getAccountBalances = createSelector(
+    [getBalances, getSelectedAccount],
+    (balances, account) =>
+        balances.filter(balance =>
+            AddressUtils.compareAddresses(
+                balance.accountAddress,
+                account?.address,
+            ),
+        ),
+)
+
+/**
+ * Get all account balances with denormalized token data
+ */
+export const getDenormalizedAccountTokenBalances = createSelector(
+    [getAccountBalances, getAllFungibleTokens],
+    (balances, tokens) =>
+        balances.map(balance => {
+            const balanceToken = tokens.find(token =>
                 AddressUtils.compareAddresses(
-                    balance.accountTokenId,
-                    accountToken.id,
+                    token.address,
+                    balance.tokenAddress,
                 ),
             )
-            return {
-                ...accountToken,
-                // TODO: fix the default value
-                ...(tokenBalance || {
-                    accountTokenId: accountToken.id,
-                    balance: "0x0",
-                    timeUpdated: new Date().toISOString(),
-                }),
+            if (!balanceToken) {
+                throw new Error(
+                    `Unable to find token with this address: ${balance.tokenAddress}`,
+                )
             }
-        })
-    },
+            return {
+                ...balance,
+                token: balanceToken,
+            }
+        }),
 )

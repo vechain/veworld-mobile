@@ -17,7 +17,7 @@ import { Routes } from "~Navigation"
 import { useDispatch } from "react-redux"
 import { getTokens } from "./Utils/getTokens"
 import { Network } from "~Model"
-import { updateFungibleTokens } from "~Storage/Redux/Slices/TokenCache"
+import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
 import { setSelectedAccount } from "~Storage/Redux/Actions"
 
 export const HomeScreen = () => {

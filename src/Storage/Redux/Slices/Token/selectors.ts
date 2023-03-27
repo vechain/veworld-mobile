@@ -3,7 +3,7 @@ import { FungibleToken } from "~Model"
 import { getCurrentNetwork } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
 
-export const getAllTokens = (state: RootState) => state.tokenCache
+export const getAllTokens = (state: RootState) => state.tokens
 
 export const getAllFungibleTokens = createSelector(
     getAllTokens,

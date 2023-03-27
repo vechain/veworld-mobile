@@ -1,5 +1,5 @@
 import { FungibleToken } from "~Model"
 
-export type TokenCacheState = {
+export type TokenState = {
     fungible: FungibleToken[]
 }

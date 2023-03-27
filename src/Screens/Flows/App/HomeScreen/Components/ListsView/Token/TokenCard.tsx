@@ -4,16 +4,16 @@ import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { CURRENCY } from "~Common"
 import CurrencyConfig from "~Common/Constant/CurrencyConfig/CurrencyConfig"
-import { AccountTokenBalance } from "~Storage/Redux/Slices"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
 
 type Props = {
-    token: AccountTokenBalance
+    token: DenormalizedAccountTokenBalance
     isAnimation: boolean
     selectedCurrency: CURRENCY
 }
 
 export const TokenCard = memo(
-    ({ token, isAnimation, selectedCurrency }: Props) => {
+    ({ token: tokenBalance, isAnimation, selectedCurrency }: Props) => {
         const selectedCurrencyConfig = useMemo(
             () =>
                 CurrencyConfig.find(curr => curr.currency === selectedCurrency),
@@ -36,16 +36,16 @@ export const TokenCard = memo(
                             padding: 10,
                         }}>
                         <Image
-                            source={{ uri: token.icon }}
+                            source={{ uri: tokenBalance.token.icon }}
                             style={{ width: 20, height: 20 }}
                         />
                     </BaseCard>
                     <BaseSpacer width={16} />
                     <BaseView>
                         <BaseText typographyFont="subTitle">
-                            {token.name}
+                            {tokenBalance.token.name}
                         </BaseText>
-                        <BaseText>{token.symbol}</BaseText>
+                        <BaseText>{tokenBalance.token.symbol}</BaseText>
                     </BaseView>
                 </BaseView>
                 <Animated.View style={animatedOpacityReverse}>
@@ -53,7 +53,7 @@ export const TokenCard = memo(
                     <BaseText typographyFont="title">
                         0.2202{selectedCurrencyConfig?.symbol}
                     </BaseText>
-                    <BaseText>{token.balance}</BaseText>
+                    <BaseText>{tokenBalance.balance}</BaseText>
                 </Animated.View>
             </Animated.View>
         )

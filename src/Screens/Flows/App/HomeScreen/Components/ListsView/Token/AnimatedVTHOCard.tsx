@@ -1,14 +1,20 @@
 import { StyleSheet } from "react-native"
 import React, { memo } from "react"
-import { NativeTokenProps } from "./AnimatedChartCard"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { ColorThemeType, CURRENCY, useThemedStyles } from "~Common"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import DropShadow from "react-native-drop-shadow"
 import { BaseView } from "~Components"
 import { TokenCard } from "./TokenCard"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
+
+type Props = {
+    token: DenormalizedAccountTokenBalance
+    isEdit: boolean
+    selectedCurrency: CURRENCY
+}
 
 export const AnimatedVTHOCard = memo(
-    ({ token, isEdit, selectedCurrency }: NativeTokenProps) => {
+    ({ token, isEdit, selectedCurrency }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         const animatedOuterCard = useAnimatedStyle(() => {

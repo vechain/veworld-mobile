@@ -10,11 +10,12 @@ import { ColorThemeType, CURRENCY, useThemedStyles } from "~Common"
 import DropShadow from "react-native-drop-shadow"
 import { TokenCard } from "./TokenCard"
 import { useTokenAnimations } from "./useTokenAnimations"
-import { AccountTokenBalance } from "~Storage/Redux/Slices"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
 
-interface IAnimatedTokenCard extends RenderItemParams<AccountTokenBalance> {
+interface IAnimatedTokenCard
+    extends RenderItemParams<DenormalizedAccountTokenBalance> {
     isEdit: boolean
-    onDeleteItem: (item: AccountTokenBalance) => void
+    onDeleteItem: (item: DenormalizedAccountTokenBalance) => void
     selectedCurrency: CURRENCY
 }
 

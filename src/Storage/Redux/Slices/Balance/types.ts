@@ -1,11 +1,14 @@
-import { AccountToken } from "../AccountToken/types"
+import { FungibleToken } from "~Model"
 
 export interface TokenBalance {
-    accountTokenId: string
+    accountAddress: string
+    tokenAddress: string
     balance: string
     timeUpdated: string
 }
 
 export type BalanceState = TokenBalance[]
 
-export type AccountTokenBalance = TokenBalance & AccountToken
+export type DenormalizedAccountTokenBalance = TokenBalance & {
+    token: FungibleToken
+}

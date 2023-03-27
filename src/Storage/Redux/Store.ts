@@ -1,16 +1,14 @@
 import { combineReducers } from "redux"
 import {
     UserPreferencesSlice,
-    TokenCacheSlice,
+    TokenSlice,
     BalanceSlice,
-    AccountTokenSlice,
     ConfigSlice,
 } from "./Slices"
 
 export const reducer = combineReducers({
     userPreferences: UserPreferencesSlice.reducer,
-    tokenCache: TokenCacheSlice.reducer,
+    tokens: TokenSlice.reducer,
     balances: BalanceSlice.reducer,
-    accountTokens: AccountTokenSlice.reducer,
     config: ConfigSlice.reducer,
 })
