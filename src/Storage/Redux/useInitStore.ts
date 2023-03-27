@@ -63,5 +63,5 @@ export const useInitStore = () => {
         init()
     }, [])
 
-    return [store, persistor]
+    return { store, persistor }
 }

@@ -7,9 +7,6 @@ import { name as appName } from "./app.json"
 
 import { PersistGate } from "redux-persist/integration/react"
 import { Provider } from "react-redux"
-// import { persistor, store } from "~Storage/Redux"
-import { useInitStore } from "~Storage/Redux"
-
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Common"
@@ -35,6 +32,7 @@ import { typography } from "~Common/Theme/Typography"
 const { fontFamily } = typography
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
+import { useInitStore } from "~Storage/Redux"
 
 // immer setup
 enableAllPlugins()
@@ -51,8 +49,9 @@ const Main = () => {
         [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
-    const [store, persistor] = useInitStore()
-    if (!store || !persistor) return
+    const { store, persistor } = useInitStore()
+
+    if (!store || !persistor) return <></>
 
     return (
         <Provider store={store}>
@@ -79,7 +78,7 @@ const Main = () => {
     )
 }
 
-const NavigationProvider = ({ children }) => {
+const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
 
     const navigationTheme = useMemo(

@@ -34,15 +34,7 @@ jest.mock("react-native-flipper", () => ({
 
 import React, { useEffect, useMemo, useState } from "react"
 import Realm from "realm"
-import {
-    Account,
-    Device,
-    Network,
-    Mnemonic,
-    AppLock,
-    UserPreferences,
-    XPub,
-} from "~Storage"
+import { Network, AppLock, UserPreferences } from "~Storage"
 import {
     ConnexContextProvider,
     UserPreferencesContextProvider,
@@ -74,12 +66,12 @@ const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
 let realmCache: Realm
 let realmStore: Realm
 const configCache = {
-    schema: [Mnemonic, AppLock],
+    schema: [AppLock],
     inMemory: true,
     path: "test-cache",
 }
 const configStore = {
-    schema: [Device, XPub, Account, UserPreferences, Network],
+    schema: [UserPreferences, Network],
     path: "test-store",
 }
 beforeAll(async () => {
@@ -128,12 +120,12 @@ export const TestTranslationProvider = ({
 
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
     const value = useMemo(() => ({ cache: realmCache, store: realmStore }), [])
-    const [store, persist] = useInitStore()
+    const { store, persistor } = useInitStore()
 
-    if (!store || !persist) return null
+    if (!store || !persistor) return <></>
 
     return (
-        <Provider store={store as any}>
+        <Provider store={store}>
             <RealmContext.Provider value={value}>
                 <UserPreferencesContextProvider>
                     <ConnexContextProvider>
