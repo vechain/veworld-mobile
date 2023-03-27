@@ -7,16 +7,16 @@ import {
 } from "~Common"
 import { UserSelectedSecurityLevel, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
-import { getDevices, useRealm } from "~Storage"
-import { useAppDispatch } from "~Storage/Redux"
+import { useRealm } from "~Storage"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setUserSelectedSecurity } from "~Storage/Redux/Actions"
+import { getDevices } from "~Storage/Redux/Selectors"
 
 export const useSecurityUpgrade = () => {
     const { walletSecurity } = useWalletSecurity()
+    const devices = useAppSelector(getDevices())
 
     const { store } = useRealm()
-
-    const devices = getDevices(store)
 
     const dispatch = useAppDispatch()
 
@@ -27,8 +27,8 @@ export const useSecurityUpgrade = () => {
             store.beginTransaction()
 
             for (const device of devices) {
-                let encryptedKey = await KeychainService.getEncryptionKey(
-                    device.index,
+                let encryptedKey = await KeychainService.getDeviceMnemonic(
+                    device.rootAddress,
                     false,
                 )
                 if (encryptedKey) {
@@ -44,7 +44,7 @@ export const useSecurityUpgrade = () => {
                     const { encryptedWallet: updatedEncryptedWallet } =
                         await CryptoUtils.encryptWallet(
                             _wallet,
-                            device.index,
+                            device.rootAddress,
                             true,
                         )
 

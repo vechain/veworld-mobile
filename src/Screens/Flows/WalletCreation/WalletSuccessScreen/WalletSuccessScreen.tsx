@@ -31,6 +31,7 @@ import {
 } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    getMnemonic,
     hasOnboarded,
     selectUserSelectedSecurity,
 } from "~Storage/Redux/Selectors"
@@ -53,6 +54,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     //we have a device and a selected account
     const userHasOnboarded = useAppSelector(hasOnboarded)
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
+
+    const mnemonic = useAppSelector(getMnemonic).value
 
     const {
         onCreateWallet: createWalletWithBiometrics,
@@ -80,26 +83,32 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const onButtonPress = useCallback(async () => {
         let params = route.params
 
+        if (!mnemonic) throw new Error("Mnemonic is not available")
+
         if (userHasOnboarded) {
             if (userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC) {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
                 if (success) {
-                    createWalletWithBiometrics(onWalletCreationError)
+                    createWalletWithBiometrics({
+                        mnemonic,
+                        onError: onWalletCreationError,
+                    })
                 }
             } else {
                 openPasswordPrompt()
             }
         } else {
             if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                createWalletWithBiometrics()
+                createWalletWithBiometrics({ mnemonic })
             } else if (
                 params?.securityLevelSelected === SecurityLevelType.SECRET
             ) {
-                createWalletWithPassword(
-                    params?.userPin!,
-                    onWalletCreationError,
-                )
+                createWalletWithPassword({
+                    userPassword: params?.userPin!,
+                    onError: onWalletCreationError,
+                    mnemonic,
+                })
             }
         }
     }, [
@@ -110,12 +119,20 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onWalletCreationError,
         openPasswordPrompt,
         createWalletWithPassword,
+        mnemonic,
     ])
 
     const onPasswordSuccess = useCallback(
-        (password: string) =>
-            createWalletWithPassword(password, onWalletCreationError),
-        [createWalletWithPassword, onWalletCreationError],
+        (password: string) => {
+            if (!mnemonic) throw new Error("Mnemonic is not available")
+
+            createWalletWithPassword({
+                userPassword: password,
+                mnemonic,
+                onError: onWalletCreationError,
+            })
+        },
+        [createWalletWithPassword, onWalletCreationError, mnemonic],
     )
 
     useEffect(() => {

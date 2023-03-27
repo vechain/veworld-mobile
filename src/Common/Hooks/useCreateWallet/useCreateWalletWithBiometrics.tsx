@@ -11,7 +11,7 @@ import {
     setUserSelectedSecurity,
     setMnemonic,
 } from "~Storage/Redux/Actions"
-import { getMnemonic, getSelectedAccount } from "~Storage/Redux/Selectors"
+import { getSelectedAccount } from "~Storage/Redux/Selectors"
 
 /**
  * useCreateWalletWithBiometrics
@@ -28,17 +28,20 @@ export const useCreateWalletWithBiometrics = () => {
     )
 
     const dispatch = useAppDispatch()
-    const mnemonic = useAppSelector(getMnemonic)
     const selectedAccount = useAppSelector(getSelectedAccount)
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
-        async (onError?: (error: unknown) => void) => {
+        async ({
+            mnemonic,
+            onError,
+        }: {
+            mnemonic: string
+            onError?: (error: unknown) => void
+        }) => {
             try {
-                if (mnemonic.value && accessControl) {
-                    const { device, wallet } = getDeviceFromMnemonic(
-                        mnemonic.value,
-                    )
+                if (accessControl) {
+                    const { device, wallet } = getDeviceFromMnemonic(mnemonic)
 
                     dispatch(setMnemonic(undefined))
 
@@ -72,13 +75,7 @@ export const useCreateWalletWithBiometrics = () => {
                 onError && onError(error)
             }
         },
-        [
-            accessControl,
-            getDeviceFromMnemonic,
-            dispatch,
-            selectedAccount,
-            mnemonic,
-        ],
+        [accessControl, getDeviceFromMnemonic, dispatch, selectedAccount],
     )
     //* [END] - Create Wallet
 

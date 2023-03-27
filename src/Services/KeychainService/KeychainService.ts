@@ -7,8 +7,8 @@ const WALLET_KEY = "VeWorld_Wallet_key"
 const REALM_KEY = "VeWorld_Realm_key"
 const REDUX_KEY = "VeWorld_Redux_key"
 
-const getEncryptionKey = async (
-    deviceIndex: number,
+const getDeviceMnemonic = async (
+    rootAddress: string,
     accessControl?: boolean,
 ) => {
     const locale = i18n.detectLocale()
@@ -20,26 +20,26 @@ const getEncryptionKey = async (
         options = {
             requireAuthentication: accessControl,
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${deviceIndex}`,
+            keychainService: `${WALLET_KEY}_${rootAddress}`,
             authenticationPrompt: promptTitle.toString(),
         }
     } else {
         options = {
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${deviceIndex}`,
+            keychainService: `${WALLET_KEY}_${rootAddress}`,
         }
     }
 
     try {
-        return await Keychain.get(options, `${WALLET_KEY}_${deviceIndex}`)
+        return await Keychain.get(options, `${WALLET_KEY}_${rootAddress}`)
     } catch (err) {
         error(err)
     }
 }
 
-const setEncryptionKey = async (
+const setDeviceMnemonic = async (
     Enckey: string,
-    deviceIndex: number,
+    rootAddress: string,
     accessControl?: boolean,
 ) => {
     const locale = i18n.detectLocale()
@@ -51,18 +51,31 @@ const setEncryptionKey = async (
         options = {
             requireAuthentication: accessControl,
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${deviceIndex}`,
+            keychainService: `${WALLET_KEY}_${rootAddress}`,
             authenticationPrompt: promptTitle.toString(),
         }
     } else {
         options = {
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${deviceIndex}`,
+            keychainService: `${WALLET_KEY}_${rootAddress}`,
         }
     }
 
     try {
-        await Keychain.set(Enckey, options, `${WALLET_KEY}_${deviceIndex}`)
+        await Keychain.set(Enckey, options, `${WALLET_KEY}_${rootAddress}`)
+    } catch (err) {
+        error(err)
+    }
+}
+
+const deleteDeviceMnemonic = async (rootAddress: string) => {
+    const options = {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        keychainService: `${WALLET_KEY}_${rootAddress}`,
+    }
+
+    try {
+        await Keychain.deleteItem(`${WALLET_KEY}_${rootAddress}`, options)
     } catch (err) {
         error(err)
     }
@@ -89,19 +102,6 @@ const setRealmKey = async (Enckey: string) => {
 
     try {
         await Keychain.set(Enckey, options, REALM_KEY)
-    } catch (err) {
-        error(err)
-    }
-}
-
-const deleteItem = async (deviceIndex: number) => {
-    const options = {
-        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: `${WALLET_KEY}_${deviceIndex}`,
-    }
-
-    try {
-        await Keychain.deleteItem(`${WALLET_KEY}_${deviceIndex}`, options)
     } catch (err) {
         error(err)
     }
@@ -134,11 +134,11 @@ const setReduxKey = async (Enckey: string) => {
 }
 
 export default {
-    getEncryptionKey,
-    setEncryptionKey,
+    getDeviceMnemonic,
+    setDeviceMnemonic,
+    deleteDeviceMnemonic,
     getRealmKey,
     setRealmKey,
-    deleteItem,
     getReduxKey,
     setReduxKey,
 }
