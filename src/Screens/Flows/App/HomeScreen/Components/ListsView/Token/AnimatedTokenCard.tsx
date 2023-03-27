@@ -6,14 +6,16 @@ import {
 } from "react-native-draggable-flatlist"
 import Animated from "react-native-reanimated"
 import { BaseIcon } from "~Components"
-import { ColorThemeType, CURRENCY, Token, useThemedStyles } from "~Common"
+import { ColorThemeType, CURRENCY, useThemedStyles } from "~Common"
 import DropShadow from "react-native-drop-shadow"
 import { TokenCard } from "./TokenCard"
 import { useTokenAnimations } from "./useTokenAnimations"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
 
-interface IAnimatedTokenCard extends RenderItemParams<Token> {
+interface IAnimatedTokenCard
+    extends RenderItemParams<DenormalizedAccountTokenBalance> {
     isEdit: boolean
-    onDeleteItem: (item: Token) => void
+    onDeleteItem: (item: DenormalizedAccountTokenBalance) => void
     selectedCurrency: CURRENCY
 }
 
