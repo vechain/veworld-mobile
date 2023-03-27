@@ -7,7 +7,6 @@ import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"
-import { useSelector } from "react-redux"
 import {
     DenormalizedAccountTokenBalance,
     getDenormalizedAccountTokenBalances,
@@ -20,7 +19,7 @@ interface Props extends AnimateProps<ViewProps> {
 
 export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
-        const tokenBalances: DenormalizedAccountTokenBalance[] = useSelector(
+        const tokenBalances: DenormalizedAccountTokenBalance[] = useAppSelector(
             getDenormalizedAccountTokenBalances,
         )
         const [data, setData] = useState<DenormalizedAccountTokenBalance[]>([])

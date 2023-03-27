@@ -15,21 +15,21 @@ import {
 
 import { useI18nContext } from "~i18n"
 import { OfficialTokenCard } from "./Components/OfficialTokenCard"
-import { useDispatch, useSelector } from "react-redux"
 import { getNetworkFungibleTokens } from "~Storage/Redux/Slices/Token"
 import { FungibleToken } from "~Model"
 import { getSelectedAccount } from "~Storage/Redux/Selectors"
 import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
 import { useNavigation } from "@react-navigation/native"
 import { addTokenBalance } from "~Storage/Redux/Slices"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 export const AddTokenScreen = () => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const dispatch = useDispatch()
-    const account = useSelector(getSelectedAccount)
+    const dispatch = useAppDispatch()
+    const account = useAppSelector(getSelectedAccount)
     const [tokenQuery, setTokenQuery] = useState<string>("")
-    const tokens = useSelector(getNetworkFungibleTokens)
+    const tokens = useAppSelector(getNetworkFungibleTokens)
     const nav = useNavigation()
     const thorClient = useThor()
     const filteredTokens = tokens.filter(

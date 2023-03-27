@@ -14,11 +14,11 @@ import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { useIsFocused, useNavigation } from "@react-navigation/native"
 import { BaseSafeArea, useThor, useUserPreferencesEntity } from "~Components"
 import { Routes } from "~Navigation"
-import { useDispatch } from "react-redux"
 import { getTokens } from "./Utils/getTokens"
 import { Network } from "~Model"
 import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
 import { setSelectedAccount } from "~Storage/Redux/Actions"
+import { useAppDispatch } from "~Storage/Redux"
 
 export const HomeScreen = () => {
     const {
@@ -45,7 +45,7 @@ export const HomeScreen = () => {
 
     const nav = useNavigation()
     const { currentNetwork, selectedAccount } = useUserPreferencesEntity()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         async function init() {

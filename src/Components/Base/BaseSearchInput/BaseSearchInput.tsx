@@ -19,8 +19,8 @@ export const BaseSearchInput = memo(
         const theme = useTheme()
 
         return (
-            <View style={styles.container}>
-                <DropShadow style={styles.container}>
+            <DropShadow>
+                <View style={styles.container}>
                     <TextInput
                         style={styles.input}
                         placeholder={placeholder}
@@ -35,8 +35,8 @@ export const BaseSearchInput = memo(
                         style={styles.icon}
                         testID="magnify"
                     />
-                </DropShadow>
-            </View>
+                </View>
+            </DropShadow>
         )
     },
 )
@@ -48,8 +48,10 @@ const baseStyles = (theme: ColorThemeType) =>
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: "#fff",
+            borderColor: theme.colors.transparent,
+            borderWidth: 1,
             borderRadius: 16,
+            backgroundColor: theme.colors.card,
         },
         input: {
             flex: 1,
