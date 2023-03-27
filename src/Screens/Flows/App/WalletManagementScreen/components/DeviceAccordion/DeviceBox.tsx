@@ -14,7 +14,7 @@ export const DeviceBox: React.FC<Props> = ({ device, onDeviceClick }) => {
 
     return (
         <BaseTouchableBox action={onDeviceClick} justifyContent="space-between">
-            <BaseText typographyFont="subTitle">{device.alias}</BaseText>
+            <BaseText typographyFont="subTitleBold">{device.alias}</BaseText>
             <BaseIcon
                 name={"pencil-outline"}
                 color={theme.colors.text}

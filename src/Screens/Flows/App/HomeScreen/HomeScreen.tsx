@@ -2,17 +2,16 @@ import React, { useRef, useState, useEffect } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
-    NFTList,
     HeaderView,
-    EditTokens,
+    EditTokensBar,
     AccountManagementBottomSheet,
 } from "./Components"
-import { useBottomSheetModal } from "~Common"
+import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useMemoizedAnimation } from "./Hooks/useMemoizedAnimation"
 import { useIsFocused } from "@react-navigation/native"
-import { BaseSafeArea, useThor } from "~Components"
+import { BaseSpacer, BaseSafeArea, useThor } from "~Components"
+import { SlideInLeft } from "react-native-reanimated"
 
 export const HomeScreen = () => {
     const {
@@ -27,10 +26,15 @@ export const HomeScreen = () => {
         onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
-    const { coinListEnter, coinListExit, NFTListEnter, NFTListExit } =
-        useMemoizedAnimation()
+    const { animateEntering, animateExiting } = useMemoizedAnimation({
+        enteringAnimation: new SlideInLeft(),
+        enteringDelay: 200,
+        enteringDuration: 200,
+        exitingAnimation: new SlideInLeft(),
+        exitingDelay: 0,
+        exitingDuration: 200,
+    })
 
-    const [activeTab, setActiveTab] = useState(0)
     const [isEdit, setIsEdit] = useState(false)
     const paddingBottom = useBottomTabBarHeight()
     const visibleHeightRef = useRef<number>(0)
@@ -55,22 +59,16 @@ export const HomeScreen = () => {
                 }}>
                 <HeaderView
                     openAccountManagementSheet={openAccountManagementSheet}
-                    setActiveTab={setActiveTab}
-                    activeTab={activeTab}
                 />
-
-                <EditTokens isEdit={isEdit} setIsEdit={setIsEdit} />
-
-                {activeTab === 0 ? (
-                    <TokenList
-                        isEdit={isEdit}
-                        visibleHeightRef={visibleHeightRef.current}
-                        entering={coinListEnter}
-                        exiting={coinListExit}
-                    />
-                ) : (
-                    <NFTList entering={NFTListEnter} exiting={NFTListExit} />
-                )}
+                <BaseSpacer height={24} />
+                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                <BaseSpacer height={24} />
+                <TokenList
+                    isEdit={isEdit}
+                    visibleHeightRef={visibleHeightRef.current}
+                    entering={animateEntering}
+                    exiting={animateExiting}
+                />
             </NestableScrollContainer>
 
             <AccountManagementBottomSheet

@@ -47,7 +47,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
             onChange={handleSheetChanges}
             ref={ref}>
             <BaseView flexDirection="row" w={100}>
-                <BaseText typographyFont="subTitle">
+                <BaseText typographyFont="subTitleBold">
                     {LL.SB_EDIT_WALLET({ name: device?.alias })}
                 </BaseText>
 

@@ -18,7 +18,7 @@ export const ListSlide = ({ item }: Props) => {
             <BaseSpacer height={24} />
 
             <BaseView px={20}>
-                <BaseText align="center" typographyFont="subTitle">
+                <BaseText align="center" typographyFont="subTitleBold">
                     {item.title}
                 </BaseText>
                 <BaseSpacer height={8} />

@@ -67,7 +67,7 @@ export const AddAccountBottomSheet = React.forwardRef<
                     title={LL.BTN_ADD_ACCOUNT()}
                 />
             }>
-            <BaseText typographyFont="subTitle">
+            <BaseText typographyFont="subTitleBold">
                 {LL.SB_CHOOSE_A_WALLET()}
             </BaseText>
             <BaseSpacer height={16} />
