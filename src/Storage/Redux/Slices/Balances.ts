@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { BalanceState, TokenBalance } from "./types"
+import { BalanceState, TokenBalance } from "../Types/Balances"
 
 export const initialState: BalanceState = []
 
