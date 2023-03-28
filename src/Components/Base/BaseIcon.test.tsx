@@ -4,7 +4,6 @@ import {
     render,
     fireEvent,
     screen,
-    act,
     waitFor,
 } from "@testing-library/react-native"
 import { BaseIcon } from "./BaseIcon"
