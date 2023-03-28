@@ -12,6 +12,7 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { SecurityLevelType } from "~Model"
+import { useAndroidModalHandler } from "~Common"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -34,6 +35,9 @@ const CreateWalletApp =
     createNativeStackNavigator<RootStackParamListCreateWalletApp>()
 
 export const CreateWalletAppStack = () => {
+    //Hides the Tabbar during the CreateWalletAppStack flow for Android. On iOS it is already hidden.
+    useAndroidModalHandler()
+
     return (
         <CreateWalletApp.Navigator screenOptions={{ headerShown: false }}>
             <CreateWalletApp.Screen
