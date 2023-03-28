@@ -2,7 +2,7 @@ import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PURGE } from "redux-persist"
 import { CURRENCY, ThemeEnum } from "~Common/Enums"
-import { Account, Network, NETWORK_TYPE } from "~Model"
+import { Network, NETWORK_TYPE } from "~Model"
 import { makeNetwork } from "~Common/Constant/Thor/ThorConstants"
 export interface UserPreferenceState {
     theme: ThemeEnum
@@ -11,7 +11,6 @@ export interface UserPreferenceState {
     showConversionOtherNets: boolean
     hideTokensWithNoBalance: boolean
     isAppLockActive: boolean
-    selectedAccount?: Account
     balanceVisible: boolean
     currency: CURRENCY
     language: LANGUAGE
