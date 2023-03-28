@@ -15,6 +15,9 @@
 		345FBAB16846978F3D287B74 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648782E6EE09DF1615096A3A /* ExpoModulesProvider.swift */; };
 		4A9ADA813C9025BCAB0AD420 /* libPods-veWorldMobile-veWorldMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A261B4A7D8865D023E086574 /* libPods-veWorldMobile-veWorldMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		BE7A3760CEBC556A6D3AB84C /* libPods-veWorldMobile-veWorldMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67C628C75EC1936304321DD9 /* libPods-veWorldMobile-veWorldMobileTests.a */; };
+		E91D096474D58485FF6E17FF /* libPods-veWorldMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F16854138AAE2AE89D29D02 /* libPods-veWorldMobile.a */; };
+		EA260E8E296491C900B81B4D /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA260E8D296491C900B81B4D /* Ionicons.ttf */; };
 		EA9F31F52991455200D288F5 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA9F31F42991455200D288F5 /* BootSplash.storyboard */; };
 		EAFBEA542955DED50036BC15 /* SampleNativeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA532955DED50036BC15 /* SampleNativeModule.swift */; };
 		EAFBEA572955DEFF0036BC15 /* SampleNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA562955DEFF0036BC15 /* SampleNativeModule.m */; };
@@ -43,12 +46,16 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = veWorldMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = veWorldMobile/main.m; sourceTree = "<group>"; };
 		2282337929B779F300A26507 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
-		3D21571E1687B6D7F316A5AB /* Pods-veWorldMobile-veWorldMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile-veWorldMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5F16854138AAE2AE89D29D02 /* libPods-veWorldMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-veWorldMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		648782E6EE09DF1615096A3A /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-veWorldMobile/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		66F33240CF19E97FC49A2DC2 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-veWorldMobile-veWorldMobileTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		67C628C75EC1936304321DD9 /* libPods-veWorldMobile-veWorldMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-veWorldMobile-veWorldMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BEC50C14AD300059F851237 /* Pods-veWorldMobile-veWorldMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile-veWorldMobileTests.release.xcconfig"; path = "Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		7CE3B165CED1C3912F47852D /* Pods-veWorldMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile.debug.xcconfig"; path = "Target Support Files/Pods-veWorldMobile/Pods-veWorldMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = veWorldMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9F5747197CB70E291456C7BB /* Pods-veWorldMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile.debug.xcconfig"; path = "Target Support Files/Pods-veWorldMobile/Pods-veWorldMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		C6B635B50C68D386743EBF71 /* Pods-veWorldMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile.release.xcconfig"; path = "Target Support Files/Pods-veWorldMobile/Pods-veWorldMobile.release.xcconfig"; sourceTree = "<group>"; };
+		EA260E8D296491C900B81B4D /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		9FA672B13EE2BCC007CF9B47 /* Pods-veWorldMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile.release.xcconfig"; path = "Target Support Files/Pods-veWorldMobile/Pods-veWorldMobile.release.xcconfig"; sourceTree = "<group>"; };
 		A261B4A7D8865D023E086574 /* libPods-veWorldMobile-veWorldMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-veWorldMobile-veWorldMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2CD886BA2A897B4F187024A /* libPods-veWorldMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-veWorldMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,7 +64,9 @@
 		EAFBEA522955DED50036BC15 /* veWorldMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "veWorldMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		EAFBEA532955DED50036BC15 /* SampleNativeModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleNativeModule.swift; sourceTree = "<group>"; };
 		EAFBEA562955DEFF0036BC15 /* SampleNativeModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleNativeModule.m; sourceTree = "<group>"; };
+		EB56B155941EBA4241F6D3CA /* Pods-veWorldMobile-veWorldMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile-veWorldMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F331A56C9146036DBF6DF5A4 /* Pods-veWorldMobile-veWorldMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veWorldMobile-veWorldMobileTests.release.xcconfig"; path = "Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A9ADA813C9025BCAB0AD420 /* libPods-veWorldMobile-veWorldMobileTests.a in Frameworks */,
+				BE7A3760CEBC556A6D3AB84C /* libPods-veWorldMobile-veWorldMobileTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0A5040CE37C131BA8519DB6 /* libPods-veWorldMobile.a in Frameworks */,
+				E91D096474D58485FF6E17FF /* libPods-veWorldMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,8 +127,8 @@
 			children = (
 				EAB8DD4729BE1B2200929DFC /* OpenSSL.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				C2CD886BA2A897B4F187024A /* libPods-veWorldMobile.a */,
-				A261B4A7D8865D023E086574 /* libPods-veWorldMobile-veWorldMobileTests.a */,
+				5F16854138AAE2AE89D29D02 /* libPods-veWorldMobile.a */,
+				67C628C75EC1936304321DD9 /* libPods-veWorldMobile-veWorldMobileTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -177,10 +186,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				7CE3B165CED1C3912F47852D /* Pods-veWorldMobile.debug.xcconfig */,
-				9FA672B13EE2BCC007CF9B47 /* Pods-veWorldMobile.release.xcconfig */,
-				3D21571E1687B6D7F316A5AB /* Pods-veWorldMobile-veWorldMobileTests.debug.xcconfig */,
-				7BEC50C14AD300059F851237 /* Pods-veWorldMobile-veWorldMobileTests.release.xcconfig */,
+				9F5747197CB70E291456C7BB /* Pods-veWorldMobile.debug.xcconfig */,
+				C6B635B50C68D386743EBF71 /* Pods-veWorldMobile.release.xcconfig */,
+				EB56B155941EBA4241F6D3CA /* Pods-veWorldMobile-veWorldMobileTests.debug.xcconfig */,
+				F331A56C9146036DBF6DF5A4 /* Pods-veWorldMobile-veWorldMobileTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -209,12 +218,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "veWorldMobileTests" */;
 			buildPhases = (
-				179D964D4F52C17B041112A5 /* [CP] Check Pods Manifest.lock */,
+				991B2EB175DD3764C37DD699 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				5A47D14663912B8D21AC4B87 /* [CP] Embed Pods Frameworks */,
-				D54E6B3B80142D3C51484026 /* [CP] Copy Pods Resources */,
+				41AC7453C40FA795CB69D854 /* [CP] Embed Pods Frameworks */,
+				AC44DC7978431CE749F36E0C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -230,14 +239,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "veWorldMobile" */;
 			buildPhases = (
-				65A590B5E9FC1D0554B720F0 /* [CP] Check Pods Manifest.lock */,
+				6D2C46FE6CFA717DD8921304 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				A2101956391DCF3DD06A6F98 /* [CP] Embed Pods Frameworks */,
-				B6CACFCB54EB93B25C1152FD /* [CP] Copy Pods Resources */,
+				843A292334B58872FA53B593 /* [CP] Embed Pods Frameworks */,
+				F6CDE41E85BF3541988973D1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -323,12 +332,13 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		179D964D4F52C17B041112A5 /* [CP] Check Pods Manifest.lock */ = {
+		41AC7453C40FA795CB69D854 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
@@ -336,16 +346,14 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-veWorldMobile-veWorldMobileTests-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5A47D14663912B8D21AC4B87 /* [CP] Embed Pods Frameworks */ = {
+		6D2C46FE6CFA717DD8921304 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -362,22 +370,17 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-veWorldMobile-veWorldMobileTests/Pods-veWorldMobile-veWorldMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		65A590B5E9FC1D0554B720F0 /* [CP] Check Pods Manifest.lock */ = {
+		843A292334B58872FA53B593 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veWorldMobile/Pods-veWorldMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-veWorldMobile-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-veWorldMobile/Pods-veWorldMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -591,7 +594,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9FA672B13EE2BCC007CF9B47 /* Pods-veWorldMobile.release.xcconfig */;
+			baseConfigurationReference = C6B635B50C68D386743EBF71 /* Pods-veWorldMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
