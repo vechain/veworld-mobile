@@ -58,14 +58,14 @@ export const ChangeNetworkScreen = () => {
 
     const toggleConversionSwitch = useCallback(
         (_newValue: boolean) => {
-            dispatch(toggleShowConversionOtherNetworks)
+            dispatch(toggleShowConversionOtherNetworks())
         },
         [dispatch],
     )
 
     const toggleTagSwitch = useCallback(
         (_newValue: boolean) => {
-            dispatch(toggleShowTestnetTag)
+            dispatch(toggleShowTestnetTag())
         },
         [dispatch],
     )
