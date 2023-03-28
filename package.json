@@ -26,7 +26,8 @@
         "e2e.android.build.r": "detox build --configuration android.emu.release",
         "e2e.android.test.d": "detox test --configuration android.emu.debug",
         "e2e.android.test.r": "detox test --configuration android.emu.release",
-        "i18n": "typesafe-i18n"
+        "i18n": "typesafe-i18n",
+        "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='./iOS'"
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
