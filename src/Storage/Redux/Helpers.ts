@@ -16,7 +16,15 @@ export const getPersistorConfig = async () => {
         storage,
         version: 1,
         blacklist: [],
-        whitelist: ["userPreferences", "config", "accounts", "devices"],
+        whitelist: [
+            "userPreferences",
+            "config",
+            "accounts",
+            "devices",
+            "networks",
+            "tokens",
+            "balances",
+        ],
         transforms: [encryptor],
     }
 

@@ -10,18 +10,14 @@ import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused, useNavigation } from "@react-navigation/native"
-import {
-    BaseSafeArea,
-    useThor,
-    useUserPreferencesEntity,
-    BaseSpacer,
-} from "~Components"
+import { BaseSafeArea, useThor, BaseSpacer } from "~Components"
 import { Routes } from "~Navigation"
 import { getTokens } from "./Utils/getTokens"
 import { Network } from "~Model"
 import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
-import { useAppDispatch } from "~Storage/Redux"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { SlideInLeft } from "react-native-reanimated"
+import { getSelectedNetwork } from "~Storage/Redux/Selectors"
 
 export const HomeScreen = () => {
     const {
@@ -52,8 +48,10 @@ export const HomeScreen = () => {
     const thor = useThor()
 
     const nav = useNavigation()
-    const { currentNetwork } = useUserPreferencesEntity()
+
     const dispatch = useAppDispatch()
+
+    const selectedNetwork = useAppSelector(getSelectedNetwork)
 
     useEffect(() => {
         async function init() {
@@ -68,12 +66,12 @@ export const HomeScreen = () => {
      */
     useEffect(() => {
         getTokens({
-            genesis: { id: currentNetwork.genesisId },
-            type: currentNetwork.type,
+            genesis: { id: selectedNetwork.genesisId },
+            type: selectedNetwork.type,
         } as Network).then(_tokens => {
             dispatch(updateFungibleTokens(_tokens))
         })
-    }, [currentNetwork.genesisId, currentNetwork.type, dispatch])
+    }, [selectedNetwork, dispatch])
 
     return (
         <BaseSafeArea grow={1}>

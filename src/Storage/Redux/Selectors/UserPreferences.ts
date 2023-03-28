@@ -26,14 +26,3 @@ export const selectHideTokensWithNoBalance = createSelector(reducer, state => {
 export const selectIsAppLockActive = createSelector(reducer, state => {
     return state.isAppLockActive
 })
-
-export const getCurrentNetwork = createSelector(reducer, state => {
-    return state.currentNetwork
-})
-export const getShowConversionOnOtherNets = createSelector(reducer, state => {
-    return state.showConversionOtherNets
-})
-
-export const getShowTestnetTag = createSelector(reducer, state => {
-    return state.showTestNetTag
-})

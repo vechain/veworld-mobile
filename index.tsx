@@ -10,14 +10,9 @@ import { Provider } from "react-redux"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Common"
-import {
-    ConnexContextProvider,
-    TranslationProvider,
-    UserPreferencesContextProvider,
-} from "~Components"
+import { ConnexContextProvider, TranslationProvider } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
-import { RealmContextProvider } from "~Storage"
 import {
     Inter_Bold,
     Inter_Light,
@@ -59,21 +54,17 @@ const Main = () => {
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
-                    <RealmContextProvider>
-                        <UserPreferencesContextProvider>
-                            <ConnexContextProvider>
-                                <SafeAreaProvider>
-                                    <BottomSheetModalProvider>
-                                        <NavigationProvider>
-                                            <TranslationProvider>
-                                                {fontsLoaded && <EntryPoint />}
-                                            </TranslationProvider>
-                                        </NavigationProvider>
-                                    </BottomSheetModalProvider>
-                                </SafeAreaProvider>
-                            </ConnexContextProvider>
-                        </UserPreferencesContextProvider>
-                    </RealmContextProvider>
+                    <ConnexContextProvider>
+                        <SafeAreaProvider>
+                            <BottomSheetModalProvider>
+                                <NavigationProvider>
+                                    <TranslationProvider>
+                                        {fontsLoaded && <EntryPoint />}
+                                    </TranslationProvider>
+                                </NavigationProvider>
+                            </BottomSheetModalProvider>
+                        </SafeAreaProvider>
+                    </ConnexContextProvider>
                 </GestureHandlerRootView>
             </PersistGate>
         </Provider>

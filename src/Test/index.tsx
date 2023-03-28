@@ -33,16 +33,10 @@ jest.mock("react-native-flipper", () => ({
 }))
 
 import React, { useEffect, useMemo, useState } from "react"
-import Realm from "realm"
-import { Network, UserPreferences } from "~Storage"
-import {
-    ConnexContextProvider,
-    UserPreferencesContextProvider,
-} from "~Components"
+import { ConnexContextProvider } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Common"
-import { initRealmClasses, RealmContext } from "~Storage/Realm/RealmContext"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
 import { useInitStore } from "~Storage/Redux"
@@ -63,28 +57,6 @@ const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
         </NavigationContainer>
     )
 }
-let realmCache: Realm
-let realmStore: Realm
-
-const configStore = {
-    schema: [UserPreferences, Network],
-    path: "test-store",
-}
-beforeAll(async () => {
-    realmStore = await Realm.open(configStore)
-    initRealmClasses(realmStore, "light")
-})
-afterAll(async () => {
-    if (!realmCache.isClosed) {
-        realmCache.close()
-    }
-    if (!realmStore.isClosed) {
-        realmStore.close()
-    }
-    if (configStore) {
-        Realm.deleteFile(configStore)
-    }
-})
 
 export const TestTranslationProvider = ({
     children,
@@ -111,26 +83,21 @@ export const TestTranslationProvider = ({
 }
 
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
-    const value = useMemo(() => ({ cache: realmCache, store: realmStore }), [])
     const { store, persistor } = useInitStore()
 
     if (!store || !persistor) return <></>
 
     return (
         <Provider store={store}>
-            <RealmContext.Provider value={value}>
-                <UserPreferencesContextProvider>
-                    <ConnexContextProvider>
-                        <BottomSheetModalProvider>
-                            <NavigationProvider>
-                                <TestTranslationProvider>
-                                    {children}
-                                </TestTranslationProvider>
-                            </NavigationProvider>
-                        </BottomSheetModalProvider>
-                    </ConnexContextProvider>
-                </UserPreferencesContextProvider>
-            </RealmContext.Provider>
+            <ConnexContextProvider>
+                <BottomSheetModalProvider>
+                    <NavigationProvider>
+                        <TestTranslationProvider>
+                            {children}
+                        </TestTranslationProvider>
+                    </NavigationProvider>
+                </BottomSheetModalProvider>
+            </ConnexContextProvider>
         </Provider>
     )
 }

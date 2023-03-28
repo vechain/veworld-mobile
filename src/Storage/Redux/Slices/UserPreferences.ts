@@ -2,13 +2,8 @@ import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PURGE } from "redux-persist"
 import { CURRENCY, ThemeEnum } from "~Common/Enums"
-import { Network, NETWORK_TYPE } from "~Model"
-import { makeNetwork } from "~Common/Constant/Thor/ThorConstants"
 export interface UserPreferenceState {
     theme: ThemeEnum
-    currentNetwork: Network
-    showTestNetTag: boolean
-    showConversionOtherNets: boolean
     hideTokensWithNoBalance: boolean
     isAppLockActive: boolean
     balanceVisible: boolean
@@ -18,9 +13,6 @@ export interface UserPreferenceState {
 
 const initialState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
-    currentNetwork: makeNetwork(NETWORK_TYPE.MAIN),
-    showTestNetTag: true,
-    showConversionOtherNets: true,
     hideTokensWithNoBalance: false,
     isAppLockActive: process.env.NODE_ENV !== "development",
     balanceVisible: true,
@@ -36,17 +28,6 @@ export const UserPreferencesSlice = createSlice({
             state.theme = action.payload
         },
 
-        setCurrentNetwork: (state, action: PayloadAction<Network>) => {
-            state.currentNetwork = action.payload
-        },
-
-        setShowTestNetTag: (state, action: PayloadAction<boolean>) => {
-            state.showTestNetTag = action.payload
-        },
-
-        setShowConversionOtherNets: (state, action: PayloadAction<boolean>) => {
-            state.showConversionOtherNets = action.payload
-        },
         setHideTokensWithNoBalance: (state, action: PayloadAction<boolean>) => {
             state.hideTokensWithNoBalance = action.payload
         },
@@ -74,9 +55,6 @@ export const UserPreferencesSlice = createSlice({
 
 export const {
     setTheme,
-    setCurrentNetwork,
-    setShowTestNetTag,
-    setShowConversionOtherNets,
     setHideTokensWithNoBalance,
     setIsAppLockActive,
     setBalanceVisible,

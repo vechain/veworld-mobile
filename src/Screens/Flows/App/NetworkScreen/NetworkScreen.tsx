@@ -9,29 +9,28 @@ import {
     BaseTouchableBox,
     BaseView,
     EnableFeature,
-    useUserPreferencesEntity,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { StringUtils, useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
-import { useRealm, getNetworks } from "~Storage"
 import { Routes } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    getNetworks,
+    getSelectedNetwork,
     getShowConversionOnOtherNets,
     getShowTestnetTag,
 } from "~Storage/Redux/Selectors"
 import {
-    setShowConversionOtherNets,
-    setShowTestNetTag,
+    toggleShowConversionOtherNetworks,
+    toggleShowTestnetTag,
 } from "~Storage/Redux/Actions"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const { store } = useRealm()
 
     const dispatch = useAppDispatch()
 
@@ -47,8 +46,9 @@ export const ChangeNetworkScreen = () => {
 
     const showTestNetTag = useAppSelector(getShowTestnetTag)
 
-    const networks = getNetworks(store)
-    const { currentNetwork } = useUserPreferencesEntity()
+    const selectedNetwork = useAppSelector(getSelectedNetwork)
+    const networks = useAppSelector(getNetworks)
+
     const goBack = useCallback(() => nav.goBack(), [nav])
     const onPressInput = useCallback(() => openBottomSheet(), [openBottomSheet])
     const onAddCustomPress = useCallback(
@@ -57,15 +57,15 @@ export const ChangeNetworkScreen = () => {
     )
 
     const toggleConversionSwitch = useCallback(
-        (newValue: boolean) => {
-            dispatch(setShowConversionOtherNets(newValue))
+        (_newValue: boolean) => {
+            dispatch(toggleShowConversionOtherNetworks)
         },
         [dispatch],
     )
 
     const toggleTagSwitch = useCallback(
-        (newValue: boolean) => {
-            dispatch(setShowTestNetTag(newValue))
+        (_newValue: boolean) => {
+            dispatch(toggleShowTestnetTag)
         },
         [dispatch],
     )
@@ -98,7 +98,7 @@ export const ChangeNetworkScreen = () => {
                     action={onPressInput}
                     justifyContent="space-between">
                     <BaseText>
-                        {StringUtils.capitalize(currentNetwork?.type!)}
+                        {StringUtils.capitalize(selectedNetwork.type)}
                     </BaseText>
                     <BaseIcon name="magnify" />
                 </BaseTouchableBox>

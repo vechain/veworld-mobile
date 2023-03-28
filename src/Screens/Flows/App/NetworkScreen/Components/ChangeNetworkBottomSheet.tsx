@@ -2,12 +2,14 @@ import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
-import { Network, useRealm, getUserPreferences } from "~Storage"
 import { useI18nContext } from "~i18n"
 import { StringUtils } from "~Common"
+import { useAppDispatch } from "~Storage/Redux"
+import { changeSelectedNetwork } from "~Storage/Redux/Actions"
+import { Network } from "~Model"
 
 type Props = {
-    networks: Realm.Results<Network & Realm.Object<unknown, never>>
+    networks: Network[]
     onClose: () => void
 }
 
@@ -18,16 +20,14 @@ export const ChangeNetworkBottomSheet = React.forwardRef<
     Props
 >(({ networks, onClose }, ref) => {
     const { LL } = useI18nContext()
-
-    const { store } = useRealm()
-    const userPreferences = getUserPreferences(store)
+    const dispatch = useAppDispatch()
 
     const onPress = useCallback(
-        (currentNetwork: Network) => {
-            store.write(() => (userPreferences.currentNetwork = currentNetwork))
+        (network: Network) => {
+            dispatch(changeSelectedNetwork(network))
             onClose()
         },
-        [onClose, store, userPreferences],
+        [onClose, dispatch],
     )
 
     return (

@@ -1,8 +1,5 @@
 import {
     setTheme,
-    setCurrentNetwork,
-    setShowTestNetTag,
-    setShowConversionOtherNets,
     setIsAppLockActive,
     setBalanceVisible,
     setHideTokensWithNoBalance,
@@ -12,9 +9,6 @@ import {
 
 export {
     setTheme,
-    setCurrentNetwork,
-    setShowTestNetTag,
-    setShowConversionOtherNets,
     setIsAppLockActive,
     setBalanceVisible,
     setHideTokensWithNoBalance,
