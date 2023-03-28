@@ -128,9 +128,10 @@ const decryptWallet = async ({
     device: Device
     userPassword?: string
 }) => {
+    const accessControl = !userPassword
     let encryptedEncryptionKey = await KeychainService.getDeviceEncryptionKey(
         device.rootAddress,
-        true,
+        accessControl,
     )
     if (!encryptedEncryptionKey)
         throw new Error(

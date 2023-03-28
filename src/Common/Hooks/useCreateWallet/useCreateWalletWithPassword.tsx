@@ -11,7 +11,7 @@ import {
     setMnemonic,
 } from "~Storage/Redux/Actions"
 import { getSelectedAccount } from "~Storage/Redux/Selectors"
-
+import { error } from "~Common/Logger"
 /**
  * useCreateWalletWithPassword
  * @returns
@@ -64,9 +64,9 @@ export const useCreateWalletWithPassword = () => {
                 dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
 
                 setIsComplete(true)
-            } catch (error) {
-                console.log("CREATE WALLET ERROR : ", error)
-                onError && onError(error)
+            } catch (e) {
+                error("CREATE WALLET ERROR : ", e)
+                onError && onError(e)
             }
         },
         [dispatch, getDeviceFromMnemonic, selectedAccount],

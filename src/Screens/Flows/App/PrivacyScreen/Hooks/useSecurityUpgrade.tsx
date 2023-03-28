@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { CryptoUtils, WalletSecurity, useWalletSecurity } from "~Common"
+import { CryptoUtils, WalletSecurity, useWalletSecurity, error } from "~Common"
 import { UserSelectedSecurityLevel } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setUserSelectedSecurity, updateDevice } from "~Storage/Redux/Actions"
@@ -15,35 +15,46 @@ export const useSecurityUpgrade = () => {
         async (password: string, onSuccessCallback?: () => void) => {
             if (walletSecurity === WalletSecurity.BIO_UNLOCK) return
 
-            for (const device of devices) {
-                const { decryptedWallet } = await CryptoUtils.decryptWallet({
-                    device,
-                    userPassword: password,
-                })
+            try {
+                for (const device of devices) {
+                    const { decryptedWallet } = await CryptoUtils.decryptWallet(
+                        {
+                            device,
+                            userPassword: password,
+                        },
+                    )
 
-                const { encryptedWallet: updatedEncryptedWallet } =
-                    await CryptoUtils.encryptWallet({
-                        wallet: decryptedWallet,
-                        rootAddress: device.rootAddress,
-                        accessControl: true,
-                    })
+                    const { encryptedWallet: updatedEncryptedWallet } =
+                        await CryptoUtils.encryptWallet({
+                            wallet: decryptedWallet,
+                            rootAddress: device.rootAddress,
+                            accessControl: true,
+                        })
+
+                    const updatedDevice = {
+                        ...device,
+                        wallet: updatedEncryptedWallet,
+                    }
+                    console.log(updatedDevice)
+
+                    dispatch(
+                        updateDevice({
+                            rootAddress: device.rootAddress,
+                            device: updatedDevice,
+                        }),
+                    )
+                }
 
                 dispatch(
-                    updateDevice({
-                        rootAddress: device.rootAddress,
-                        device: {
-                            ...device,
-                            wallet: updatedEncryptedWallet,
-                        },
-                    }),
+                    setUserSelectedSecurity(
+                        UserSelectedSecurityLevel.BIOMETRIC,
+                    ),
                 )
+
+                onSuccessCallback && onSuccessCallback()
+            } catch (e) {
+                error("SECURITY UPGRADE ERROR", e)
             }
-
-            dispatch(
-                setUserSelectedSecurity(UserSelectedSecurityLevel.BIOMETRIC),
-            )
-
-            onSuccessCallback && onSuccessCallback()
         },
         [walletSecurity, dispatch, devices],
     )

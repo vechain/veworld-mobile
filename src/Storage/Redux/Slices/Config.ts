@@ -13,6 +13,7 @@ export interface ConfigState {
     isSecurityDowngrade: boolean
     isResettingApp: boolean
     pinValidationString: string
+    mnemonic?: string
 }
 
 const initialState: ConfigState = {
@@ -21,6 +22,7 @@ const initialState: ConfigState = {
     isSecurityDowngrade: false,
     isResettingApp: false, // TODO - this will become obsolete once we have a fully implemented redux since we don't need a new stack anymore
     pinValidationString: SettingsConstants.VALIDATION_STRING,
+    mnemonic: undefined,
 }
 
 export const ConfigSlice = createSlice({
@@ -52,6 +54,9 @@ export const ConfigSlice = createSlice({
         setPinValidationString: (state, action: PayloadAction<string>) => {
             state.pinValidationString = action.payload
         },
+        setMnemonic: (state, action: PayloadAction<string | undefined>) => {
+            state.mnemonic = action.payload
+        },
     },
     extraReducers: builder => {
         builder.addCase(PURGE, () => initialState)
@@ -64,4 +69,5 @@ export const {
     setIsSecurityDowngrade,
     setIsResettingApp,
     setPinValidationString,
+    setMnemonic,
 } = ConfigSlice.actions

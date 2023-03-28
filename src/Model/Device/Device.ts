@@ -14,4 +14,5 @@ export interface Device {
     type: DEVICE_TYPE
     alias: string
     wallet: string
+    index: number
 }

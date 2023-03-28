@@ -46,10 +46,8 @@ export const ConfirmMnemonicScreen = () => {
         throw new Error("ConfirmMnemonicScreen: Mnemonic is not available")
     }
 
-    const mnemonicArray = useMemo(
-        () => mnemonic.value?.split(" ") || [],
-        [mnemonic],
-    )
+    const mnemonicArray = useMemo(() => mnemonic?.split(" ") || [], [mnemonic])
+
     const [firstIndex, secondIndex, thirdIndex] = useMemo(
         () => getThreeRandomIndexes(),
         [],

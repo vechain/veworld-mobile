@@ -22,3 +22,7 @@ export const selectIsResettingApp = createSelector(reducer, state => {
 export const selectPinValidationString = createSelector(reducer, state => {
     return state.pinValidationString
 })
+
+export const getMnemonic = createSelector(reducer, state => {
+    return state.mnemonic
+})

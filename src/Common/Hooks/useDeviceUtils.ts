@@ -24,7 +24,7 @@ export const useDeviceUtils = () => {
 
         if (deviceAlreadyExist) throw new Error("Device already exists")
 
-        return { device, wallet, deviceIndex, aliasIndex }
+        return { device, wallet }
     }
 
     return { getDeviceFromMnemonic }

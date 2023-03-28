@@ -42,7 +42,7 @@ export const BaseButtonGroup = ({
                 const borderBottomRadius = index === buttons.length - 1 ? 16 : 0
                 return (
                     <BaseButton
-                        key={label}
+                        key={`${index}-${label}`}
                         action={onPress(button)}
                         disabled={disabled}
                         title={label}

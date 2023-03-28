@@ -12,6 +12,7 @@ import {
     setMnemonic,
 } from "~Storage/Redux/Actions"
 import { getSelectedAccount } from "~Storage/Redux/Selectors"
+import { error } from "~Common/Logger"
 
 /**
  * useCreateWalletWithBiometrics
@@ -73,9 +74,9 @@ export const useCreateWalletWithBiometrics = () => {
                 dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
 
                 setIsComplete(true)
-            } catch (error) {
-                console.log("CREATE WALLET ERROR : ", error)
-                onError && onError(error)
+            } catch (e) {
+                error("CREATE WALLET ERROR : ", e)
+                onError && onError(e)
             }
         },
         [accessControl, getDeviceFromMnemonic, dispatch, selectedAccount],
