@@ -4,7 +4,7 @@ import { Dimensions, StyleSheet, View } from "react-native"
 import { useI18nContext } from "~i18n"
 import { QrScannerLayout } from "./Components/QrScannerLayout"
 import { CameraHeader } from "./Components/CameraHeader"
-import { useCameraPermissions, useTheme } from "~Common"
+import { useAndroidModalHandler, useCameraPermissions, useTheme } from "~Common"
 import { useConfirmAddress } from "./hooks/useConfirmAddress"
 import { Camera, CameraType } from "expo-camera"
 import { BarCodeScanner } from "expo-barcode-scanner"
@@ -19,6 +19,9 @@ export const CameraScreen = () => {
     const [isCameraReady, setIsCameraReady] = useState(false)
     const { isConfirmed, confirmAddress, address } = useConfirmAddress()
     const { onClose, isActive } = useCamDisclosure()
+
+    //Hide Tabbar on Android
+    useAndroidModalHandler()
 
     useEffect(() => {
         if (isConfirmed && address) onClose()
