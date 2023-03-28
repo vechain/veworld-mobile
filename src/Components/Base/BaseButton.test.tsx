@@ -9,7 +9,6 @@ import {
 } from "@testing-library/react-native"
 import { BaseButton } from "./BaseButton"
 import { BaseIcon } from "./BaseIcon"
-import { typography } from "~Common/Theme"
 
 describe("BaseButton", () => {
     const mockAction = jest.fn()
