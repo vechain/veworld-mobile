@@ -35,3 +35,10 @@ jest.mock("expo-barcode-scanner", () => {})
 jest.mock("react-native-flipper", () => ({
     addPlugin: jest.fn(),
 }))
+jest.mock("@react-navigation/bottom-tabs", () => ({
+    ...jest.requireActual("@react-navigation/bottom-tabs"),
+    useBottomTabBarHeight: jest.fn(() => 10),
+}))
+;(global as any).ReanimatedDataMock = {
+    now: () => 0,
+}

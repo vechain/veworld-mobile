@@ -6,7 +6,7 @@ import {
 
 type NavigationRoute = NavigationState["routes"][number]
 
-type NavProps = NavigationProp<
+export type NavProps = NavigationProp<
     ParamListBase,
     string,
     undefined,
