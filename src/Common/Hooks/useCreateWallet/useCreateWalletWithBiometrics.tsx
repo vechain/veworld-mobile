@@ -40,36 +40,39 @@ export const useCreateWalletWithBiometrics = () => {
             onError?: (error: unknown) => void
         }) => {
             try {
-                if (accessControl) {
-                    const { device, wallet } = getDeviceFromMnemonic(mnemonic)
-
-                    dispatch(setMnemonic(undefined))
-
-                    const { encryptedWallet } = await CryptoUtils.encryptWallet(
-                        wallet,
-                        device.rootAddress,
-                        accessControl,
+                if (!accessControl)
+                    throw new Error(
+                        "Biometrics is not supported: accessControl is !true ",
                     )
 
-                    const newAccount = dispatch(
-                        addDeviceAndAccounts({
-                            ...device,
-                            wallet: encryptedWallet,
-                        }),
-                    )
-                    if (!selectedAccount)
-                        dispatch(selectAccount({ address: newAccount.address }))
+                const { device, wallet } = getDeviceFromMnemonic(mnemonic)
 
-                    dispatch(
-                        setUserSelectedSecurity(
-                            UserSelectedSecurityLevel.BIOMETRIC,
-                        ),
-                    )
+                dispatch(setMnemonic(undefined))
 
-                    dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
+                const { encryptedWallet } = await CryptoUtils.encryptWallet({
+                    wallet,
+                    rootAddress: device.rootAddress,
+                    accessControl: true,
+                })
 
-                    setIsComplete(true)
-                } else throw new Error("Mnemonic is not defined")
+                const newAccount = dispatch(
+                    addDeviceAndAccounts({
+                        ...device,
+                        wallet: encryptedWallet,
+                    }),
+                )
+                if (!selectedAccount)
+                    dispatch(selectAccount({ address: newAccount.address }))
+
+                dispatch(
+                    setUserSelectedSecurity(
+                        UserSelectedSecurityLevel.BIOMETRIC,
+                    ),
+                )
+
+                dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
+
+                setIsComplete(true)
             } catch (error) {
                 console.log("CREATE WALLET ERROR : ", error)
                 onError && onError(error)

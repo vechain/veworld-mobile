@@ -40,14 +40,13 @@ export const useCreateWalletWithPassword = () => {
                 dispatch(setMnemonic(undefined))
 
                 const hashedKey = PasswordUtils.hash(userPassword)
-                const accessControl = false
 
-                const { encryptedWallet } = await CryptoUtils.encryptWallet(
+                const { encryptedWallet } = await CryptoUtils.encryptWallet({
                     wallet,
-                    device.rootAddress,
-                    accessControl,
-                    hashedKey,
-                )
+                    rootAddress: device.rootAddress,
+                    accessControl: false,
+                    hashEncryptionKey: hashedKey,
+                })
 
                 const newAccount = dispatch(
                     addDeviceAndAccounts({

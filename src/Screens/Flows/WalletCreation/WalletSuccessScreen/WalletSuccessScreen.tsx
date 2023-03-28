@@ -92,7 +92,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
                 if (success) {
-                    createWalletWithBiometrics({
+                    await createWalletWithBiometrics({
                         mnemonic,
                         onError: onWalletCreationError,
                     })
@@ -102,11 +102,11 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             }
         } else {
             if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                createWalletWithBiometrics({ mnemonic })
+                await createWalletWithBiometrics({ mnemonic })
             } else if (
                 params?.securityLevelSelected === SecurityLevelType.SECRET
             ) {
-                createWalletWithPassword({
+                await createWalletWithPassword({
                     userPassword: params?.userPin!,
                     onError: onWalletCreationError,
                     mnemonic,
@@ -125,10 +125,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     ])
 
     const onPasswordSuccess = useCallback(
-        (password: string) => {
+        async (password: string) => {
             if (!mnemonic) throw new Error("Mnemonic is not available")
 
-            createWalletWithPassword({
+            await createWalletWithPassword({
                 userPassword: password,
                 mnemonic,
                 onError: onWalletCreationError,

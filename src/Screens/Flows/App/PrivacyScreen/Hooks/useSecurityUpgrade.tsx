@@ -1,12 +1,6 @@
 import { useCallback } from "react"
-import {
-    CryptoUtils,
-    PasswordUtils,
-    WalletSecurity,
-    useWalletSecurity,
-} from "~Common"
-import { UserSelectedSecurityLevel, Wallet } from "~Model"
-import KeychainService from "~Services/KeychainService"
+import { CryptoUtils, WalletSecurity, useWalletSecurity } from "~Common"
+import { UserSelectedSecurityLevel } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setUserSelectedSecurity, updateDevice } from "~Storage/Redux/Actions"
 import { getDevices } from "~Storage/Redux/Selectors"
@@ -22,27 +16,17 @@ export const useSecurityUpgrade = () => {
             if (walletSecurity === WalletSecurity.BIO_UNLOCK) return
 
             for (const device of devices) {
-                const deviceKey = await KeychainService.getDeviceEncryptionKey(
-                    device.rootAddress,
-                    false,
-                )
-                if (!deviceKey) throw new Error("No encryption key for device")
-
-                const decryptedKey = CryptoUtils.decrypt<string>(
-                    deviceKey,
-                    PasswordUtils.hash(password),
-                )
-                const decryptedWallet = CryptoUtils.decrypt<Wallet>(
-                    device.wallet,
-                    decryptedKey,
-                )
+                const { decryptedWallet } = await CryptoUtils.decryptWallet({
+                    device,
+                    userPassword: password,
+                })
 
                 const { encryptedWallet: updatedEncryptedWallet } =
-                    await CryptoUtils.encryptWallet(
-                        decryptedWallet,
-                        device.rootAddress,
-                        true,
-                    )
+                    await CryptoUtils.encryptWallet({
+                        wallet: decryptedWallet,
+                        rootAddress: device.rootAddress,
+                        accessControl: true,
+                    })
 
                 dispatch(
                     updateDevice({
