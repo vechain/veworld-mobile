@@ -20,7 +20,6 @@ import { Routes } from "~Navigation"
 import { getTokens } from "./Utils/getTokens"
 import { Network } from "~Model"
 import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
-import { setSelectedAccount } from "~Storage/Redux/Actions"
 import { useAppDispatch } from "~Storage/Redux"
 import { SlideInLeft } from "react-native-reanimated"
 
@@ -53,7 +52,7 @@ export const HomeScreen = () => {
     const thor = useThor()
 
     const nav = useNavigation()
-    const { currentNetwork, selectedAccount } = useUserPreferencesEntity()
+    const { currentNetwork } = useUserPreferencesEntity()
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -63,22 +62,6 @@ export const HomeScreen = () => {
         }
         init()
     }, [isFocused, thor])
-
-    useEffect(() => {
-        if (selectedAccount)
-            dispatch(
-                setSelectedAccount({
-                    // TODO: change to the real account
-                    address: selectedAccount.address,
-                    alias: selectedAccount.alias,
-                    createdAt: selectedAccount.createdAt,
-                    index: selectedAccount.index,
-                    visible: true,
-                    rootAddress: "0x0000000",
-                }),
-            )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedAccount?.address, dispatch])
 
     /**
      * init tokens cache
