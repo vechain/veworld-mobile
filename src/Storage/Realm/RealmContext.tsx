@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import Realm from "realm"
 import {
-    AppLock,
     UserPreferences,
     Network,
-    getAppLock,
     getNetworks,
     getUserPreferences,
 } from "./Model"
 import KeychainService from "~Services/KeychainService"
-import { NETWORK_TYPE, WALLET_STATUS } from "~Model"
+import { NETWORK_TYPE } from "~Model"
 import crypto from "react-native-quick-crypto"
 import { ColorSchemeName } from "react-native"
 import { ThorConstants, useColorScheme } from "~Common"
 
 type State = {
     store: Realm
-    cache: Realm
 }
 
 type RealmContextProviderProps = { children: React.ReactNode }
@@ -27,12 +24,8 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
     const colorScheme = useColorScheme()
 
     const [store, setStore] = useState<Realm>()
-    const [cache, setCache] = useState<Realm>()
 
-    const value = useMemo(
-        () => (store && cache ? { store, cache } : undefined),
-        [cache, store],
-    )
+    const value = useMemo(() => (store ? { store } : undefined), [store])
 
     const initRealm = useCallback(async () => {
         const encKey = await KeychainService.getRealmKey()
@@ -50,11 +43,9 @@ const RealmContextProvider = ({ children }: RealmContextProviderProps) => {
         }
 
         if (_isKey && _buffKey) {
-            const cacheInstance = initCacheRealm()
             const storeInstance = initStoreRealm(_buffKey)
-            initRealmClasses(cacheInstance, storeInstance, colorScheme)
+            initRealmClasses(storeInstance, colorScheme)
             setStore(storeInstance)
-            setCache(cacheInstance)
         }
     }, [colorScheme])
 
@@ -82,18 +73,6 @@ const initStoreRealm = (buffKey: ArrayBuffer) => {
     return instance
 }
 
-const initCacheRealm = () => {
-    const instance = new Realm({
-        schema: [AppLock],
-        path: "inMemory.realm",
-        inMemory: true,
-        deleteRealmIfMigrationNeeded:
-            process.env.NODE_ENV === "development" ? true : false,
-    })
-
-    return instance
-}
-
 const useRealm = () => {
     const context = React.useContext(RealmContext)
     if (!context) {
@@ -106,18 +85,9 @@ const useRealm = () => {
 }
 
 export const initRealmClasses = (
-    cache: Realm,
     store: Realm,
     colorScheme: NonNullable<ColorSchemeName>,
 ) => {
-    // [ START ] - CACHE
-    cache.write(() => {
-        const appLock = getAppLock(cache)
-        if (!appLock)
-            cache.create(AppLock.getName(), { status: WALLET_STATUS.LOCKED })
-    })
-    // [ END ] - CACHE
-
     // [ START ] - STORE
     store.write(() => {
         const networks = getNetworks(store)

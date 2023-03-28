@@ -13,7 +13,8 @@ import {
 import * as Clipboard from "expo-clipboard"
 import { Alert } from "react-native"
 import { useI18nContext } from "~i18n"
-import { getUserPreferences, useRealm } from "~Storage"
+import { useAppSelector } from "~Storage/Redux"
+import { getSelectedAccount } from "~Storage/Redux/Selectors"
 
 type Props = {
     onClose: () => void
@@ -28,7 +29,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => ["50%"], [])
-    const { store } = useRealm()
+    const selectedAccount = useAppSelector(getSelectedAccount)
 
     const handleSheetChanges = useCallback((index: number) => {
         console.log("accountManagementSheet position changed", index)
@@ -40,14 +41,13 @@ export const AccountManagementBottomSheet = React.forwardRef<
     }, [onClose, openAddAccountSheet])
 
     const onCopyToClipboard = useCallback(async () => {
-        const selectedAccount = getUserPreferences(store).selectedAccount
         if (!selectedAccount) return
         await Clipboard.setStringAsync(selectedAccount.address)
         Alert.alert(
             LL.COMMON_LBL_SUCCESS(),
             LL.NOTIFICATION_COPIED_CLIPBOARD({ name: LL.COMMON_LBL_ADDRESS() }),
         )
-    }, [store, LL])
+    }, [selectedAccount, LL])
 
     return (
         <BaseBottomSheet

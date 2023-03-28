@@ -15,7 +15,6 @@ import {
     UserSelectedSecurityLevel,
     WALLET_STATUS,
 } from "~Model"
-import { getAppLock, useRealm } from "~Storage"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -35,6 +34,7 @@ import {
     hasOnboarded,
     selectUserSelectedSecurity,
 } from "~Storage/Redux/Selectors"
+import { setAppLockStatus } from "~Storage/Redux/Actions"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -45,7 +45,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const { cache } = useRealm()
     const theme = useTheme()
     const [isError, setIsError] = useState("")
 
@@ -100,7 +99,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     })
                 }
             } else {
-                openPasswordPrompt()
+                return openPasswordPrompt()
             }
         } else {
             if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
@@ -158,16 +157,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     }
                 }
             } else {
-                let appLock = getAppLock(cache)
-                cache.write(() => {
-                    if (appLock) {
-                        appLock.status = WALLET_STATUS.UNLOCKED
-                    }
-                })
+                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
             }
         }
     }, [
-        cache,
         closePasswordPrompt,
         dispatch,
         isPasswordPromptOpen,

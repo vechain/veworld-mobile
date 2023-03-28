@@ -26,3 +26,7 @@ export const selectPinValidationString = createSelector(reducer, state => {
 export const getMnemonic = createSelector(reducer, state => {
     return state.mnemonic
 })
+
+export const getAppLockStatus = createSelector(reducer, state => {
+    return state.appLockStatus
+})

@@ -37,15 +37,12 @@ export const useCreateWalletWithPassword = () => {
             try {
                 const { device, wallet } = getDeviceFromMnemonic(mnemonic)
 
-                dispatch(setMnemonic(undefined))
-
-                const hashedKey = PasswordUtils.hash(userPassword)
-
+                console.log({ device })
                 const { encryptedWallet } = await CryptoUtils.encryptWallet({
                     wallet,
                     rootAddress: device.rootAddress,
                     accessControl: false,
-                    hashEncryptionKey: hashedKey,
+                    hashEncryptionKey: PasswordUtils.hash(userPassword),
                 })
 
                 const newAccount = dispatch(
@@ -62,6 +59,7 @@ export const useCreateWalletWithPassword = () => {
                 )
 
                 dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
+                dispatch(setMnemonic(undefined))
 
                 setIsComplete(true)
             } catch (e) {

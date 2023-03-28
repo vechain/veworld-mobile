@@ -1,7 +1,6 @@
 import { useCallback } from "react"
-import { WALLET_STATUS } from "~Model"
 import KeychainService from "~Services/KeychainService"
-import { useRealm, getAppLock, getNetworks, getUserPreferences } from "~Storage"
+import { useRealm, getNetworks, getUserPreferences } from "~Storage"
 import Realm from "realm"
 import { purgeStoredState } from "redux-persist"
 import {
@@ -12,7 +11,7 @@ import {
 import { getDevices } from "~Storage/Redux/Selectors"
 
 export const useAppReset = () => {
-    const { store, cache } = useRealm()
+    const { store } = useRealm()
     const dispatch = useAppDispatch()
     const devices = useAppSelector(getDevices())
 
@@ -27,24 +26,18 @@ export const useAppReset = () => {
     const appReset = useCallback(async () => {
         await removeEncryptionKeysFromKeychain()
 
-        resetRealm(store, cache)
+        resetRealm(store)
 
         const persistConfig = await getPersistorConfig()
         purgeStoredState(persistConfig)
         dispatch({ type: "RESET" })
         console.log("App Reset Finished")
-    }, [removeEncryptionKeysFromKeychain, cache, dispatch, store])
+    }, [removeEncryptionKeysFromKeychain, dispatch, store])
 
     return appReset
 }
 
-const resetRealm = async (store: Realm, cache: Realm) => {
-    const appLock = getAppLock(cache)
-
-    cache.write(() => {
-        appLock.status = WALLET_STATUS.LOCKED
-    })
-
+const resetRealm = async (store: Realm) => {
     const networks = getNetworks(store)
     const userPreferences = getUserPreferences(store)
 

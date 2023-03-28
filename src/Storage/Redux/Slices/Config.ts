@@ -4,6 +4,7 @@ import {
     SecurityLevelType,
     TSecurityLevel,
     UserSelectedSecurityLevel,
+    WALLET_STATUS,
 } from "~Model"
 import { SettingsConstants } from "~Common/Constant"
 
@@ -14,6 +15,7 @@ export interface ConfigState {
     isResettingApp: boolean
     pinValidationString: string
     mnemonic?: string
+    appLockStatus: WALLET_STATUS
 }
 
 const initialState: ConfigState = {
@@ -23,6 +25,7 @@ const initialState: ConfigState = {
     isResettingApp: false, // TODO - this will become obsolete once we have a fully implemented redux since we don't need a new stack anymore
     pinValidationString: SettingsConstants.VALIDATION_STRING,
     mnemonic: undefined,
+    appLockStatus: WALLET_STATUS.LOCKED,
 }
 
 export const ConfigSlice = createSlice({
@@ -57,6 +60,9 @@ export const ConfigSlice = createSlice({
         setMnemonic: (state, action: PayloadAction<string | undefined>) => {
             state.mnemonic = action.payload
         },
+        setAppLockStatus: (state, action: PayloadAction<WALLET_STATUS>) => {
+            state.appLockStatus = action.payload
+        },
     },
     extraReducers: builder => {
         builder.addCase(PURGE, () => initialState)
@@ -70,4 +76,5 @@ export const {
     setIsResettingApp,
     setPinValidationString,
     setMnemonic,
+    setAppLockStatus,
 } = ConfigSlice.actions

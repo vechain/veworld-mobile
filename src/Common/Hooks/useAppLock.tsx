@@ -1,48 +1,37 @@
 import { useCallback, useMemo } from "react"
 import { WALLET_STATUS } from "~Model"
-import { getUserPreferences, useRealm } from "~Storage"
-import { useAppLockEntity } from "./Entities"
-import { useAppSelector } from "~Storage/Redux"
-import { hasOnboarded } from "~Storage/Redux/Selectors"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    getAppLockStatus,
+    hasOnboarded,
+    selectIsAppLockActive,
+} from "~Storage/Redux/Selectors"
+import { setAppLockStatus } from "~Storage/Redux/Actions"
 
 export const useAppLock = () => {
-    const { cache, store } = useRealm()
-    const appLockEntity = useAppLockEntity()
-
-    const userPreferences = getUserPreferences(store)
+    const dispatch = useAppDispatch()
 
     const userHasOnboarded = useAppSelector(hasOnboarded)
-
-    const _appLockStatus = useMemo(
-        () => appLockEntity?.status,
-        [appLockEntity?.status],
-    )
+    const _appLockStatus = useAppSelector(getAppLockStatus)
+    const isAppLockActive = useAppSelector(selectIsAppLockActive)
 
     const appLockStatus = useMemo(() => {
-        if (!userHasOnboarded || !userPreferences.isAppLockActive) {
+        if (!userHasOnboarded || !isAppLockActive) {
             return WALLET_STATUS.NOT_INITIALISED
         }
 
-        if (userPreferences.isAppLockActive && _appLockStatus === "LOCKED") {
+        if (isAppLockActive && _appLockStatus === WALLET_STATUS.LOCKED) {
             return WALLET_STATUS.LOCKED
         }
-    }, [_appLockStatus, userHasOnboarded, userPreferences.isAppLockActive])
+    }, [_appLockStatus, userHasOnboarded, isAppLockActive])
 
     const unlockApp = useCallback(() => {
-        if (appLockEntity) {
-            cache.write(() => {
-                appLockEntity.status = WALLET_STATUS.UNLOCKED
-            })
-        }
-    }, [cache, appLockEntity])
+        dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
+    }, [dispatch])
 
     const lockApp = useCallback(() => {
-        if (appLockEntity) {
-            cache.write(() => {
-                appLockEntity.status = WALLET_STATUS.LOCKED
-            })
-        }
-    }, [cache, appLockEntity])
+        dispatch(setAppLockStatus(WALLET_STATUS.LOCKED))
+    }, [dispatch])
 
     return { appLockStatus, lockApp, unlockApp }
 }

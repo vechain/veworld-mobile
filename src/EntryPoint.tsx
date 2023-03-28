@@ -17,7 +17,7 @@ import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 import ErrorBoundary from "~Components/Providers/ErrorBoundary"
 
 export const EntryPoint = () => {
-    const { store, cache } = useRealm()
+    const { store } = useRealm()
 
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
@@ -58,7 +58,7 @@ export const EntryPoint = () => {
     return (
         <ErrorBoundary>
             {process.env.NODE_ENV === "development" && (
-                <RealmPlugin realms={[store, cache]} />
+                <RealmPlugin realms={[store]} />
             )}
 
             <Security appLockStatus={appLockStatus} />

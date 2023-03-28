@@ -34,7 +34,7 @@ jest.mock("react-native-flipper", () => ({
 
 import React, { useEffect, useMemo, useState } from "react"
 import Realm from "realm"
-import { Network, AppLock, UserPreferences } from "~Storage"
+import { Network, UserPreferences } from "~Storage"
 import {
     ConnexContextProvider,
     UserPreferencesContextProvider,
@@ -65,19 +65,14 @@ const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
 }
 let realmCache: Realm
 let realmStore: Realm
-const configCache = {
-    schema: [AppLock],
-    inMemory: true,
-    path: "test-cache",
-}
+
 const configStore = {
     schema: [UserPreferences, Network],
     path: "test-store",
 }
 beforeAll(async () => {
-    realmCache = await Realm.open(configCache)
     realmStore = await Realm.open(configStore)
-    initRealmClasses(realmCache, realmStore, "light")
+    initRealmClasses(realmStore, "light")
 })
 afterAll(async () => {
     if (!realmCache.isClosed) {
@@ -85,9 +80,6 @@ afterAll(async () => {
     }
     if (!realmStore.isClosed) {
         realmStore.close()
-    }
-    if (configCache) {
-        Realm.deleteFile(configCache)
     }
     if (configStore) {
         Realm.deleteFile(configStore)

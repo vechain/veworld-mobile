@@ -1,4 +1,4 @@
-import { AppLock, UserPreferences, Network } from "./Model"
+import { UserPreferences, Network } from "./Model"
 
 import {
     RealmContextProvider,
@@ -6,7 +6,7 @@ import {
     initRealmClasses,
 } from "./RealmContext"
 
-import { getUserPreferences, getAppLock, getNetworks } from "./Model"
+import { getUserPreferences, getNetworks } from "./Model"
 
 import { useObjectListener } from "./useObjectListener"
 import { useListListener } from "./useListListener"
@@ -17,10 +17,8 @@ export {
     initRealmClasses,
     useObjectListener,
     useListListener,
-    AppLock,
     UserPreferences,
     Network,
     getUserPreferences,
-    getAppLock,
     getNetworks,
 }
