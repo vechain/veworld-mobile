@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { useTheme } from "~Common"
@@ -12,13 +12,14 @@ import {
 
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
-import { FlashList } from "@shopify/flash-list"
 import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import {
     getAccountsByDevice,
     getSelectedAccount,
 } from "~Storage/Redux/Selectors"
+import { StyleSheet } from "react-native"
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
     device?: Device
@@ -40,8 +41,17 @@ export const WalletManagementBottomSheet = React.forwardRef<
 
     const selectedAccount = useAppSelector(getSelectedAccount)
 
+    const [snapIndex, setSnapIndex] = useState<number>(0)
+
+    // The list is scrollable when the bottom sheet is fully expanded
+    const isListScrollable = useMemo(
+        () => snapIndex === snapPoints.length - 1,
+        [snapIndex, snapPoints],
+    )
+
     const handleSheetChanges = useCallback((index: number) => {
         console.log("walletManagementSheet position changed", index)
+        setSnapIndex(index)
     }, [])
 
     const accountsListSeparator = useCallback(
@@ -75,9 +85,9 @@ export const WalletManagementBottomSheet = React.forwardRef<
                 {LL.SB_RENAME_REORDER_ACCOUNTS()}
             </BaseText>
             <BaseSpacer height={16} />
-            <BaseView h={100} flexDirection="row">
+            <BaseView flexDirection="row" style={baseStyles.list}>
                 {device && deviceAccounts.length && (
-                    <FlashList
+                    <BottomSheetFlatList
                         data={deviceAccounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
@@ -89,18 +99,18 @@ export const WalletManagementBottomSheet = React.forwardRef<
                                 />
                             )
                         }}
+                        scrollEnabled={isListScrollable}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
-                        estimatedItemSize={deviceAccounts.length}
-                        estimatedListSize={{
-                            height: 184,
-                            width:
-                                152 * deviceAccounts.length +
-                                (deviceAccounts.length - 1) * 16,
-                        }}
                     />
                 )}
             </BaseView>
         </BaseBottomSheet>
     )
+})
+
+const baseStyles = StyleSheet.create({
+    list: {
+        height: "78%",
+    },
 })
