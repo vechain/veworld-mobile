@@ -29,10 +29,12 @@ import {
     Mono_Regular,
 } from "~Assets"
 import { typography } from "~Common/Theme/Typography"
-const { fontFamily } = typography
+
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { useInitStore } from "~Storage/Redux"
+
+const { fontFamily } = typography
 
 // immer setup
 enableAllPlugins()

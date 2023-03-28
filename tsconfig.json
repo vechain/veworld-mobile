@@ -1,6 +1,7 @@
 {
     "extends": "@tsconfig/react-native/tsconfig.json",
     "compilerOptions": {
+        "resolveJsonModule": true,
         "strict": true,
         "experimentalDecorators": true,
         "jsx": "react",
@@ -21,5 +22,4 @@
             "~Test": ["./src/Test/index.tsx"]
         }
     }
-    // "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx"]
 }
