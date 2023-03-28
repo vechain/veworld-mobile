@@ -89,8 +89,6 @@
         "react-native-wagmi-charts": "^2.3.0",
         "react-redux": "^8.0.5",
         "react-test-renderer": "18.2.0",
-        "realm": "11.3.1",
-        "realm-flipper-plugin-device": "^1.1.0",
         "redux-flipper": "^2.0.2",
         "redux-persist": "^6.0.0",
         "redux-reset": "^0.3.0",

@@ -2,7 +2,7 @@ import React from "react"
 import { useTheme } from "~Common"
 
 import { BaseIcon, BaseText, BaseTouchableBox } from "~Components"
-import { Device } from "~Storage"
+import { Device } from "~Model"
 
 type Props = {
     device: Device
