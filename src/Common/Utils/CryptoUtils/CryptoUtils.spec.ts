@@ -58,8 +58,8 @@ describe("these functions can't be really tested because based on mocked native 
         const encryptionKey = "secret key"
         const encrypted = encrypt(data, encryptionKey)
         decrypt(encrypted, encryptionKey)
-        const encripted = encryptState({ bar: "foo" }, "secret")
-        decryptState(encripted, "secret")
+        const encryptedState = encryptState({ bar: "foo" }, "secret")
+        decryptState(encryptedState, "secret")
         encryptWallet(
             {
                 rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
