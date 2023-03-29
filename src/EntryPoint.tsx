@@ -1,8 +1,6 @@
 import React, { useEffect } from "react"
 import { SecurityDowngradeScreen, LockScreen } from "~Screens"
-import { useRealm } from "~Storage"
 import { BaseStatusBar, Security } from "~Components"
-import RealmPlugin from "realm-flipper-plugin-device"
 import RNBootSplash from "react-native-bootsplash"
 import { SwitchStack } from "~Navigation"
 import {
@@ -17,8 +15,6 @@ import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 import ErrorBoundary from "~Components/Providers/ErrorBoundary"
 
 export const EntryPoint = () => {
-    const { store, cache } = useRealm()
-
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
@@ -57,10 +53,6 @@ export const EntryPoint = () => {
 
     return (
         <ErrorBoundary>
-            {process.env.NODE_ENV === "development" && (
-                <RealmPlugin realms={[store, cache]} />
-            )}
-
             <Security appLockStatus={appLockStatus} />
 
             {isSecurityDowngrade ? (
