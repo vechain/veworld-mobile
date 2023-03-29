@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
-import { IdConstants, useTheme } from "~Common"
+import { useTheme } from "~Common"
 import PlatformUtils from "~Common/Utils/PlatformUtils"
 import { HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
@@ -25,11 +25,10 @@ export const TabStack = () => {
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     backgroundColor: theme.colors.card,
-                    ...tabStackbaseStyles.tabbar,
-                    ...tabStackbaseStyles.shadow,
+                    ...baseStyles.tabbar,
+                    ...baseStyles.shadow,
                 },
-            }}
-            id={IdConstants.TABBAR_NAVIGATOR_ID}>
+            }}>
             <Tab.Screen
                 name="HomeStack"
                 component={HomeStack}
@@ -63,7 +62,7 @@ export const TabStack = () => {
     )
 }
 
-export const tabStackbaseStyles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
     tabbar: {
         position: "absolute",
         bottom: 0,
