@@ -1,7 +1,6 @@
 // TODO: when redux will be ready move it there to initialize the store
 
 import axios from "axios"
-import { TokenConstants } from "~Common"
 import { FungibleToken, Network, NETWORK_TYPE } from "~Model"
 
 /**
@@ -38,22 +37,4 @@ export const getTokensFromGithub = async (
     }
 
     return []
-}
-
-// TODO: move to utils and test it
-const mergeTokens = (a: FungibleToken[], b: FungibleToken[]) =>
-    a
-        .filter(
-            aa =>
-                !b.find(
-                    bb =>
-                        aa.symbol === bb.symbol &&
-                        aa.genesisId === bb.genesisId,
-                ),
-        )
-        .concat(b)
-
-export const getTokens = async (network: Network): Promise<FungibleToken[]> => {
-    const githubTokens = await getTokensFromGithub(network)
-    return mergeTokens(TokenConstants.defaultTokens, githubTokens)
 }

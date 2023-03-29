@@ -3,7 +3,7 @@ import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
 import PasswordUtils from "../PasswordUtils"
 import HexUtils from "../HexUtils"
-import { Wallet } from "~Model"
+import { FungibleToken, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
 import stringify from "json-stringify-safe"
 
@@ -109,6 +109,18 @@ export const encryptWallet = async (
     )
     return { encryptionKey, encryptedWallet }
 }
+
+export const mergeTokens = (a: FungibleToken[], b: FungibleToken[]) =>
+    a
+        .filter(
+            aa =>
+                !b.find(
+                    bb =>
+                        aa.symbol === bb.symbol &&
+                        aa.genesisId === bb.genesisId,
+                ),
+        )
+        .concat(b)
 
 export default {
     xPubFromHdNode,
