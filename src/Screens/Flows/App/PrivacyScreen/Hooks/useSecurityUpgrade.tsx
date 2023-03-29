@@ -22,6 +22,7 @@ export const useSecurityUpgrade = () => {
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
+            console.log(runSecurityUpgrade, { password })
             if (walletSecurity === WalletSecurity.BIO_UNLOCK) return
 
             store.beginTransaction()

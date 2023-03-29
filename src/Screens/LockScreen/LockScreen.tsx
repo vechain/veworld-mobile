@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
+import { usePasswordValidation } from "~Common"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -18,37 +19,62 @@ type Props = {
 
 type Titles = {
     title: string
-    subtitle: string
+    subTitle: string
 }
 
-export const LockScreen: React.FC<Props> = (props: Props) => {
-    const { onSuccess, scenario } = props
+const digitNumber = 6
 
+export const LockScreen: React.FC<Props> = ({ onSuccess, scenario }) => {
     const { LL } = useI18nContext()
 
-    const { isPinError, onDigitPress, userPinArray, isSuccess } =
-        useOnDigitPress()
+    const validatePassword = usePasswordValidation()
 
-    useEffect(() => {
-        if (isSuccess) {
-            onSuccess(userPinArray.join(""))
-        }
-    }, [isSuccess, onSuccess, userPinArray])
+    const [isError, setIsError] = useState<boolean>(false)
+
+    /**
+     * Called by `useOnDigitPress` when the user has finished typing the pin
+     * Validates the user pin and calls `onSuccess` if the pin is valid
+     * otherwise sets `isError` to true
+     *
+     */
+    const validateUserPin = useCallback(
+        async (userPin: string) => {
+            const isValid = await validatePassword(userPin)
+            if (isValid) onSuccess(userPin)
+            else {
+                setIsError(true)
+            }
+        },
+        [validatePassword, onSuccess],
+    )
+
+    const { pin, onDigitPress, onDigitDelete } = useOnDigitPress({
+        digitNumber,
+        onFinishCallback: validateUserPin,
+    })
+
+    const handleOnDigitPress = useCallback(
+        (digit: string) => {
+            setIsError(false)
+            onDigitPress(digit)
+        },
+        [onDigitPress],
+    )
 
     /**
      * Sets `title` and `subtitle` based on the `scenario` prop
      */
-    const { title, subtitle }: Titles = useMemo(() => {
+    const { title, subTitle }: Titles = useMemo(() => {
         switch (scenario) {
             case LOCKSCREEN_SCENARIO.UNLOCK_WALLET:
                 return {
                     title: LL.TITLE_USER_PIN(),
-                    subtitle: LL.SB_UNLOCK_WALLET_PIN(),
+                    subTitle: LL.SB_UNLOCK_WALLET_PIN(),
                 }
             case LOCKSCREEN_SCENARIO.WALLET_CREATION:
                 return {
                     title: LL.TITLE_USER_PIN(),
-                    subtitle: LL.SB_CONFIRM_PIN(),
+                    subTitle: LL.SB_CONFIRM_PIN(),
                 }
         }
     }, [LL, scenario])
@@ -61,15 +87,19 @@ export const LockScreen: React.FC<Props> = (props: Props) => {
                     <BaseText typographyFont="largeTitle">{title}</BaseText>
 
                     <BaseText typographyFont="body" my={10}>
-                        {subtitle}
+                        {subTitle}
                     </BaseText>
                 </BaseView>
                 <BaseSpacer height={62} />
                 <PasswordPins
-                    UserPinArray={userPinArray}
-                    isPinError={isPinError}
+                    digitNumber={digitNumber}
+                    pin={pin}
+                    isPinError={isError}
                 />
-                <NumPad onDigitPress={onDigitPress} />
+                <NumPad
+                    onDigitPress={handleOnDigitPress}
+                    onDigitDelete={onDigitDelete}
+                />
             </BaseView>
 
             <BaseSpacer height={40} />
