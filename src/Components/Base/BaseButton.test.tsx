@@ -51,4 +51,71 @@ describe("BaseButton", () => {
             color: "#FF0000",
         })
     })
+
+    it("renders correctly with corner case props and all haptics", async () => {
+        render(
+            <BaseButton
+                action={mockAction}
+                title="Button"
+                variant="outline"
+                haptics="light"
+                w={10}
+                h={10}
+                size={"sm"}
+            />,
+            { wrapper: TestWrapper },
+        )
+        // wait for useEffects
+        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+
+        let button = screen.getByText("Button")
+        act(() => {
+            fireEvent.press(button)
+        })
+
+        expect(mockAction).toHaveBeenCalled()
+
+        render(
+            <BaseButton
+                action={mockAction}
+                title="Button"
+                textColor="#FF0000"
+                variant="outline"
+                haptics="medium"
+                size={"md"}
+            />,
+            { wrapper: TestWrapper },
+        )
+        // wait for useEffects
+        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+
+        button = screen.getByText("Button")
+        act(() => {
+            fireEvent.press(button)
+        })
+
+        expect(mockAction).toHaveBeenCalled()
+        render(
+            <BaseButton
+                action={mockAction}
+                title="Button"
+                textColor="#FF0000"
+                variant="link"
+                haptics="heavy"
+                px={10}
+                py={10}
+                typographyFont={"body"}
+            />,
+            { wrapper: TestWrapper },
+        )
+        // wait for useEffects
+        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+
+        button = screen.getByText("Button")
+        act(() => {
+            fireEvent.press(button)
+        })
+
+        expect(mockAction).toHaveBeenCalled()
+    })
 })

@@ -1,8 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
-import { getSelectedAccount } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
-import { getAllFungibleTokens } from "../Token"
+import { getAllFungibleTokens } from "./Token"
+import { getSelectedAccount } from "./UserPreferences"
 
 export const getBalances = (state: RootState) => state.balances
 

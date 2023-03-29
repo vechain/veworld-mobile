@@ -18,12 +18,14 @@ type Props = {
      * array of selected button ids
      */
     selectedButtonIds: string[]
+    buttonTestID?: string
 }
 
 export const BaseButtonGroup = ({
     action,
     selectedButtonIds,
     buttons,
+    buttonTestID,
 }: Props) => {
     const theme = useTheme()
 
@@ -64,6 +66,7 @@ export const BaseButtonGroup = ({
                                 index === buttons.length - 1 ? 0 : 1,
                             borderBottomColor: theme.colors.background,
                         }}
+                        testID={`${buttonTestID}-${id}`}
                     />
                 )
             })}

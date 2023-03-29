@@ -4,7 +4,7 @@ import { ConfigSlice } from "./Config"
 import { AccountSlice } from "./Account"
 import { NetworkSlice } from "./Network"
 export * from "./Token"
-export * from "./Balance"
+export * from "./Balances"
 
 export {
     UserPreferencesSlice,

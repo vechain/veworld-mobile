@@ -1,4 +1,4 @@
-import { reducer } from "./Store"
+import { reducer } from "../Store"
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore"
 import { PersistPartial } from "redux-persist/es/persistReducer"
 

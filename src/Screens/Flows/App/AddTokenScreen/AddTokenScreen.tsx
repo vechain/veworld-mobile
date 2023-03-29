@@ -16,9 +16,11 @@ import {
 
 import { useI18nContext } from "~i18n"
 import { OfficialTokenCard } from "./Components/OfficialTokenCard"
-import { getNetworkFungibleTokens } from "~Storage/Redux/Slices/Token"
 import { FungibleToken } from "~Model"
-import { getSelectedAccount } from "~Storage/Redux/Selectors"
+import {
+    getNetworkFungibleTokens,
+    getSelectedAccount,
+} from "~Storage/Redux/Selectors"
 import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
 import { useNavigation } from "@react-navigation/native"
 import { addTokenBalance } from "~Storage/Redux/Slices"
