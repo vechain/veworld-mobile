@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     AddTokenScreen,
     BuyScreen,
-    CameraScreen,
     HistoryScreen,
     HomeScreen,
     SendScreen,
@@ -11,7 +10,6 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { CreateWalletAppStack } from "./CreateWalletAppStack"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -68,23 +66,6 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.WALLET_MANAGEMENT}
                     component={WalletManagementScreen}
-                    options={{ headerShown: false }}
-                />
-            </Group>
-
-            <Group
-                screenOptions={{
-                    presentation: "fullScreenModal",
-                }}>
-                <Screen
-                    name={Routes.CREATE_WALLET_FLOW}
-                    component={CreateWalletAppStack}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.CAMERA}
-                    component={CameraScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

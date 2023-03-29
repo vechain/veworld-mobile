@@ -3,12 +3,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
-import { ResetAppScreen } from "~Screens"
+import { CameraScreen, ResetAppScreen } from "~Screens"
+import { CreateWalletAppStack, Routes } from "~Navigation"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
     TabStack: undefined
     ResetAppScreen: undefined
+    Create_Wallet_Flow: undefined
+    Camera: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -35,11 +38,30 @@ export const SwitchStack = () => {
                 )
             default:
                 return (
-                    <Switch.Screen
-                        name="TabStack"
-                        component={TabStack}
-                        options={{ headerShown: false }}
-                    />
+                    <>
+                        <Switch.Screen
+                            name="TabStack"
+                            component={TabStack}
+                            options={{ headerShown: false }}
+                        />
+                        {/* Full screen modals */}
+                        <Switch.Group
+                            screenOptions={{
+                                presentation: "fullScreenModal",
+                            }}>
+                            <Switch.Screen
+                                name={Routes.CREATE_WALLET_FLOW}
+                                component={CreateWalletAppStack}
+                                options={{ headerShown: false }}
+                            />
+
+                            <Switch.Screen
+                                name={Routes.CAMERA}
+                                component={CameraScreen}
+                                options={{ headerShown: false }}
+                            />
+                        </Switch.Group>
+                    </>
                 )
         }
     }, [state])

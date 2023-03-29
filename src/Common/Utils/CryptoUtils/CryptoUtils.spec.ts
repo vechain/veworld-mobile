@@ -1,5 +1,8 @@
 import { HDNode } from "thor-devkit"
+<<<<<<< HEAD
 import { FungibleToken } from "~Model"
+=======
+>>>>>>> main
 import "~Test"
 import {
     decrypt,
@@ -8,7 +11,10 @@ import {
     encryptState,
     encryptWallet,
     hdNodeFromXPub,
+<<<<<<< HEAD
     mergeTokens,
+=======
+>>>>>>> main
     random,
     shuffleArray,
     verifyMnemonic,
@@ -60,8 +66,8 @@ describe("these functions can't be really tested because based on mocked native 
         const encryptionKey = "secret key"
         const encrypted = encrypt(data, encryptionKey)
         decrypt(encrypted, encryptionKey)
-        const encripted = encryptState({ bar: "foo" }, "secret")
-        decryptState(encripted, "secret")
+        const encryptedState = encryptState({ bar: "foo" }, "secret")
+        decryptState(encryptedState, "secret")
         encryptWallet(
             {
                 rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
@@ -88,6 +94,7 @@ describe("verifyMnemonic", () => {
             verifyMnemonic("agent resemble equip thought unfold bring"),
         ).toBe(true)
         expect(verifyMnemonic('!@#$@%^&$%#%#{}"')).toBe(false)
+<<<<<<< HEAD
     })
 })
 
@@ -115,5 +122,7 @@ describe("mergeTokens", () => {
         const output = mergeTokens(a as FungibleToken[], b as FungibleToken[])
 
         expect(output).toEqual(expectedOutput)
+=======
+>>>>>>> main
     })
 })
