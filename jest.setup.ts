@@ -10,13 +10,18 @@ jest.mock("react-native-quick-crypto", () => ({
         update: (first: string) => first,
         final: () => "",
     })),
+    createHash: jest.fn(() => ({
+        update: () => ({
+            digest: (first: string) => first,
+        }),
+    })),
 }))
 
 jest.mock("expo-secure-store", () => ({
     getItemAsync: jest.fn(),
     setItemAsync: jest.fn(),
 }))
-jest.mock("expo-local-authentication", () => {})
+jest.mock("expo-local-authentication")
 jest.mock("expo-haptics", () => ({
     ImpactFeedbackStyle: {
         Light: "light",
