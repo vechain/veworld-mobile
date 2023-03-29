@@ -1,5 +1,5 @@
 import { Alert as RNAlert } from "react-native"
-import { AlertButtonStyle, AlertContent } from "./enums"
+import { AlertButtonStyle } from "./enums"
 import {
     Alert,
     showCancelledFaceIdAlert,
@@ -7,7 +7,6 @@ import {
     showDefaultAlert,
 } from "./Alert"
 import { LocalizedString } from "typesafe-i18n"
-import * as i18n from "~i18n"
 
 jest.mock("react-native", () => ({
     Alert: {
