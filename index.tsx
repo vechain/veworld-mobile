@@ -1,4 +1,3 @@
-import "react-native-get-random-values" // relma dependency for uuid - DO NOT REMOVE
 import React, { useMemo } from "react"
 import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"

@@ -72,7 +72,6 @@
         "react-native-exception-handler": "^2.10.10",
         "react-native-flipper": "0.163.0",
         "react-native-gesture-handler": "^2.9.0",
-        "react-native-get-random-values": "^1.8.0",
         "react-native-haptic-feedback": "^1.14.0",
         "react-native-mmkv": "2.5.1",
         "react-native-pager-view": "^6.1.2",
