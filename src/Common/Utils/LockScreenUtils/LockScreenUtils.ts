@@ -1,7 +1,7 @@
 import { WalletSecurity } from "~Common/Hooks"
 import { WALLET_STATUS } from "~Model"
 
-const isLockScreenFlow = (
+export const isLockScreenFlow = (
     appLockStatus: WALLET_STATUS | undefined,
     walletSecurity: WalletSecurity,
 ) => {
@@ -10,7 +10,7 @@ const isLockScreenFlow = (
         walletSecurity === WalletSecurity.PASS_UNLOCK
     )
 }
-const isBiometricLockFlow = (
+export const isBiometricLockFlow = (
     appLockStatus: WALLET_STATUS | undefined,
     walletSecurity: WalletSecurity,
 ) => {
