@@ -38,6 +38,24 @@ export const DeviceSlice = createSlice({
 
             state[deviceExistsIndex] = newDeviceData
         },
+        bulkUpdateDevices: (state, action: PayloadAction<Device[]>) => {
+            const devicesToUpdate = action.payload
+
+            devicesToUpdate.forEach(device => {
+                const deviceExistsIndex = state.findIndex(existingDevice =>
+                    AddressUtils.compareAddresses(
+                        existingDevice.rootAddress,
+                        device.rootAddress,
+                    ),
+                )
+                if (deviceExistsIndex === -1)
+                    throw new Error(
+                        `Device with root address ${device.rootAddress} does not exist`,
+                    )
+
+                state[deviceExistsIndex] = device
+            })
+        },
         removeDeviceByIndex: (
             state,
             action: PayloadAction<{ index: number }>,
@@ -54,5 +72,10 @@ export const DeviceSlice = createSlice({
     },
 })
 
-export const { renameDevice, addDevice, updateDevice, removeDeviceByIndex } =
-    DeviceSlice.actions
+export const {
+    renameDevice,
+    addDevice,
+    updateDevice,
+    bulkUpdateDevices,
+    removeDeviceByIndex,
+} = DeviceSlice.actions

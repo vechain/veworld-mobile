@@ -1,8 +1,11 @@
 import { useCallback } from "react"
-import { CryptoUtils, WalletSecurity, useWalletSecurity, error } from "~Common"
-import { UserSelectedSecurityLevel } from "~Model"
+import { CryptoUtils, WalletSecurity, useWalletSecurity } from "~Common"
+import { Device, UserSelectedSecurityLevel } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { setUserSelectedSecurity, updateDevice } from "~Storage/Redux/Actions"
+import {
+    bulkUpdateDevices,
+    setUserSelectedSecurity,
+} from "~Storage/Redux/Actions"
 import { getDevices } from "~Storage/Redux/Selectors"
 
 export const useSecurityUpgrade = () => {
@@ -15,46 +18,41 @@ export const useSecurityUpgrade = () => {
         async (password: string, onSuccessCallback?: () => void) => {
             if (walletSecurity === WalletSecurity.BIO_UNLOCK) return
 
-            try {
-                for (const device of devices) {
-                    const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                        {
-                            device,
-                            userPassword: password,
-                        },
-                    )
+            const updatedDevices: Device[] = []
 
-                    const { encryptedWallet: updatedEncryptedWallet } =
-                        await CryptoUtils.encryptWallet({
-                            wallet: decryptedWallet,
-                            rootAddress: device.rootAddress,
-                            accessControl: true,
-                        })
+            // try {
+            for (const device of devices) {
+                const { decryptedWallet } = await CryptoUtils.decryptWallet({
+                    device,
+                    userPassword: password,
+                })
 
-                    const updatedDevice = {
-                        ...device,
-                        wallet: updatedEncryptedWallet,
-                    }
-                    console.log(updatedDevice)
+                const { encryptedWallet: updatedEncryptedWallet } =
+                    await CryptoUtils.encryptWallet({
+                        wallet: decryptedWallet,
+                        rootAddress: device.rootAddress,
+                        accessControl: true,
+                    })
 
-                    dispatch(
-                        updateDevice({
-                            rootAddress: device.rootAddress,
-                            device: updatedDevice,
-                        }),
-                    )
+                const updatedDevice = {
+                    ...device,
+                    wallet: updatedEncryptedWallet,
                 }
+                console.log(updatedDevice)
 
-                dispatch(
-                    setUserSelectedSecurity(
-                        UserSelectedSecurityLevel.BIOMETRIC,
-                    ),
-                )
-
-                onSuccessCallback && onSuccessCallback()
-            } catch (e) {
-                error("SECURITY UPGRADE ERROR", e)
+                updatedDevices.push(updatedDevice)
             }
+
+            dispatch(bulkUpdateDevices(updatedDevices))
+
+            dispatch(
+                setUserSelectedSecurity(UserSelectedSecurityLevel.BIOMETRIC),
+            )
+
+            onSuccessCallback && onSuccessCallback()
+            // } catch (e) {
+            //     error("SECURITY UPGRADE ERROR", e)
+            // }
         },
         [walletSecurity, dispatch, devices],
     )

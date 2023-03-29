@@ -6,6 +6,7 @@ import {
     removeDeviceByIndex,
     renameDevice,
     updateDevice,
+    bulkUpdateDevices,
 } from "../Slices/Device"
 import { AppThunk } from "../Types"
 import { addAccountForDevice, removeAccountsByDevice } from "./Account"
@@ -52,4 +53,10 @@ const addDeviceAndAccounts =
         return account
     }
 
-export { renameDevice, removeDevice, addDeviceAndAccounts, updateDevice }
+export {
+    renameDevice,
+    removeDevice,
+    addDeviceAndAccounts,
+    updateDevice,
+    bulkUpdateDevices,
+}
