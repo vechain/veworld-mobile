@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
-import { useTheme } from "~Common"
+import { AddressUtils, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSpacer,
@@ -92,10 +92,15 @@ export const WalletManagementBottomSheet = React.forwardRef<
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
                         renderItem={({ item }) => {
+                            const isSelected = AddressUtils.compareAddresses(
+                                selectedAccount?.address,
+                                item.address,
+                            )
+
                             return (
                                 <AccountDetailBox
                                     account={item}
-                                    selectedAccount={selectedAccount}
+                                    isSelected={isSelected}
                                 />
                             )
                         }}

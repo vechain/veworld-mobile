@@ -32,7 +32,7 @@ export const getVisibleAccounts = createSelector(reducer, state => {
  * @param rootAddress rootAddress of device to get accounts for
  * @returns  all accounts for the given device
  */
-export const getAccountsByDevice = (rootAddress: string) =>
+export const getAccountsByDevice = (rootAddress?: string) =>
     createSelector(reducer, state => {
         return state.accounts.filter(account =>
             AddressUtils.compareAddresses(rootAddress, account.rootAddress),

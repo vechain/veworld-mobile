@@ -1,7 +1,6 @@
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { FormattingUtils, useTheme } from "~Common"
-import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
 import {
     BaseIcon,
     BaseSpacer,
@@ -15,16 +14,12 @@ import { toggleAccountVisibility } from "~Storage/Redux/Actions"
 
 type Props = {
     account: WalletAccount
-    selectedAccount: WalletAccount
+    isSelected: boolean
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, selectedAccount }) => {
+    ({ account, isSelected }) => {
         const theme = useTheme()
         const dispatch = useAppDispatch()
-        const isSelected = useMemo(
-            () => compareAddresses(selectedAccount?.address, account.address),
-            [account.address, selectedAccount?.address],
-        )
 
         const toggleVisibility = useCallback(() => {
             dispatch(toggleAccountVisibility({ address: account.address }))
