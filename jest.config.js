@@ -3,7 +3,7 @@ const { defaults: tsjPreset } = require("ts-jest/presets")
 module.exports = {
     ...tsjPreset,
     preset: "react-native",
-    setupFilesAfterEnv: ["<rootDir>/jest.setupFilesAfterEnv.ts"],
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
     transform: {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
@@ -49,10 +49,10 @@ module.exports = {
     ],
     coverageThreshold: {
         global: {
-            statements: 66,
-            branches: 33,
-            functions: 35,
-            lines: 65,
+            statements: 81.03,
+            branches: 71.73,
+            functions: 62.8,
+            lines: 79.93,
         },
     },
 }

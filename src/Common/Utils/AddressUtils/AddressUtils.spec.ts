@@ -1,4 +1,3 @@
-import "~Test"
 import { HDNode, mnemonic } from "thor-devkit"
 import { XPub } from "~Model/Crypto"
 import {

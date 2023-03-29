@@ -4,16 +4,14 @@ import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { LANGUAGE, LanguageUtils, useTheme } from "~Common"
-import { FlashList } from "@shopify/flash-list"
 import { StyleSheet } from "react-native"
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
     selectedLanguage: LANGUAGE
     onClose: () => void
     handleSelectLanguage: (language: LANGUAGE) => void
 }
-
-const ITEM_SIZE = 80
 
 export const SelectLanguageBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -45,8 +43,8 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                 </BaseText>
             </BaseView>
             <BaseSpacer height={16} />
-            <BaseView h={100} w={100}>
-                <FlashList
+            <BaseView flexDirection="row" style={baseStyles.list}>
+                <BottomSheetFlatList
                     data={supportedLanguages}
                     keyExtractor={lang => lang}
                     ItemSeparatorComponent={languagesListSeparator}
@@ -76,15 +74,8 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                     }}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
-                    estimatedItemSize={ITEM_SIZE}
-                    estimatedListSize={{
-                        height: 184,
-                        width: 400,
-                    }}
                 />
             </BaseView>
-            <BaseSpacer height={16} />
-            <BaseView h={100} w={100} />
         </BaseBottomSheet>
     )
 })
@@ -92,5 +83,8 @@ export const SelectLanguageBottomSheet = React.forwardRef<
 const baseStyles = StyleSheet.create({
     languageContainer: {
         paddingHorizontal: 10,
+    },
+    list: {
+        height: "90%",
     },
 })

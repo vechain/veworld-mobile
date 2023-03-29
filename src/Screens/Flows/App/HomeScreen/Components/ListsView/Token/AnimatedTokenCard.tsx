@@ -10,7 +10,7 @@ import { ColorThemeType, CURRENCY, useThemedStyles } from "~Common"
 import DropShadow from "react-native-drop-shadow"
 import { TokenCard } from "./TokenCard"
 import { useTokenAnimations } from "./useTokenAnimations"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 
 interface IAnimatedTokenCard
     extends RenderItemParams<DenormalizedAccountTokenBalance> {
