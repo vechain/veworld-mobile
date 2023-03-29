@@ -203,7 +203,7 @@ export const humanNumber = (
     return value + suffix
 }
 
-const isZero = (value?: BigNumber.Value) => {
+export const isZero = (value?: BigNumber.Value) => {
     if (!value) return false
     return new BigNumber(value).isZero()
 }
@@ -271,7 +271,3 @@ export const removeUrlProtocolAndPath = (url: string) => {
 
 //     return `${currency} - ${name}`
 // }
-
-export const capitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1)
-}
