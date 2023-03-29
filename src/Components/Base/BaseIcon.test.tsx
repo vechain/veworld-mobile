@@ -8,6 +8,8 @@ import {
 } from "@testing-library/react-native"
 import { BaseIcon } from "./BaseIcon"
 
+const findIcon = async () => await screen.findByTestId("BaseIcon")
+
 describe("BaseIcon", () => {
     it("renders the icon with default values", async () => {
         render(<BaseIcon testID="BaseIcon" name="star" />, {
@@ -21,9 +23,11 @@ describe("BaseIcon", () => {
         render(<BaseIcon testID="BaseIcon" name="star" action={mockAction} />, {
             wrapper: TestWrapper,
         })
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
+        const icon = await findIcon()
 
-        fireEvent.press(screen.getByTestId("BaseIcon"))
+        expect(icon).toBeVisible()
+
+        fireEvent.press(icon)
         expect(mockAction).toHaveBeenCalled()
     })
 
@@ -45,9 +49,9 @@ describe("BaseIcon", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
+        let icon = await findIcon()
 
-        expect(screen.getByTestId("BaseIcon")).toBeVisible()
+        expect(icon).toBeVisible()
 
         render(
             <BaseIcon
@@ -60,15 +64,15 @@ describe("BaseIcon", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
+        icon = await findIcon()
 
-        expect(screen.getByTestId("BaseIcon")).toBeVisible()
+        expect(icon).toBeVisible()
 
         render(<BaseIcon testID="BaseIcon" name="star" bg="red" disabled />, {
             wrapper: TestWrapper,
         })
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
+        icon = await findIcon()
 
-        expect(screen.getByTestId("BaseIcon")).toBeVisible()
+        expect(icon).toBeVisible()
     })
 })

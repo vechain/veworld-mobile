@@ -1,15 +1,10 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import {
-    render,
-    fireEvent,
-    screen,
-    act,
-    waitFor,
-} from "@testing-library/react-native"
+import { render, fireEvent, screen, act } from "@testing-library/react-native"
 import { BaseButton } from "./BaseButton"
 import { BaseIcon } from "./BaseIcon"
 
+const findButton = async () => await screen.findByText("Button")
 describe("BaseButton", () => {
     const mockAction = jest.fn()
 
@@ -22,9 +17,9 @@ describe("BaseButton", () => {
             wrapper: TestWrapper,
         })
         // wait for useEffects
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+        const button = await findButton()
 
-        const button = screen.getByText("Button")
+        expect(button).toBeVisible()
         act(() => {
             fireEvent.press(button)
         })
@@ -33,7 +28,7 @@ describe("BaseButton", () => {
     })
 
     it("renders correctly with custom props", async () => {
-        const { getByText } = render(
+        render(
             <BaseButton
                 action={mockAction}
                 title="Button"
@@ -43,10 +38,11 @@ describe("BaseButton", () => {
             />,
             { wrapper: TestWrapper },
         )
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
 
-        const button = getByText("Button")
-        expect(button).toBeTruthy()
+        const button = await findButton()
+
+        expect(button).toBeVisible()
+
         expect(button).toHaveStyle({
             color: "#FF0000",
         })
@@ -66,9 +62,10 @@ describe("BaseButton", () => {
             { wrapper: TestWrapper },
         )
         // wait for useEffects
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+        let button = await findButton()
 
-        let button = screen.getByText("Button")
+        expect(button).toBeVisible()
+
         act(() => {
             fireEvent.press(button)
         })
@@ -87,9 +84,9 @@ describe("BaseButton", () => {
             { wrapper: TestWrapper },
         )
         // wait for useEffects
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+        button = await findButton()
 
-        button = screen.getByText("Button")
+        expect(button).toBeVisible()
         act(() => {
             fireEvent.press(button)
         })
@@ -109,9 +106,9 @@ describe("BaseButton", () => {
             { wrapper: TestWrapper },
         )
         // wait for useEffects
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+        button = await findButton()
 
-        button = screen.getByText("Button")
+        expect(button).toBeVisible()
         act(() => {
             fireEvent.press(button)
         })

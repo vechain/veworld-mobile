@@ -1,4 +1,7 @@
-import { getAccountBalances, getCurrentNetwork } from "~Storage/Redux/Selectors"
+import {
+    getAccountBalances,
+    getSelectedNetwork,
+} from "~Storage/Redux/Selectors"
 import { RootState, TokenBalance } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
@@ -14,7 +17,7 @@ import { setTokenBalances } from "~Storage/Redux/Slices"
 export const updateAccountBalances = ((thorClient: Connex.Thor) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         const accountBalances = getAccountBalances(getState())
-        const network = getCurrentNetwork(getState())
+        const network = getSelectedNetwork(getState())
         const balances: TokenBalance[] = []
 
         try {
