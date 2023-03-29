@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useOnDigitPress } from "~Screens/LockScreen/useOnDigitPress"
 
 export const useOnDigitPressWithConfirmation = ({
@@ -10,24 +10,14 @@ export const useOnDigitPressWithConfirmation = ({
     onFinishCallback: (password: string) => void
     onConfirmationError?: () => void
 }) => {
-    const { pin, onDigitDelete, onDigitPress } = useOnDigitPress({
+    const { pin, onDigitDelete, onDigitPress, setPin } = useOnDigitPress({
         digitNumber,
         resetPinOnFinish: false,
     })
 
-    const onConfirmationFinish = useCallback(
-        (finishedConfirmationPin: string) => {
-            if (finishedConfirmationPin === pin.join(""))
-                onFinishCallback(finishedConfirmationPin)
-            else {
-                onConfirmationError && onConfirmationError()
-            }
-        },
-        [pin, onFinishCallback, onConfirmationError],
-    )
-
     const {
         pin: confirmationPin,
+        setPin: setConfirmationPin,
         onDigitDelete: onConfirmationDigitDelete,
         onDigitPress: onConfirmationDigitPress,
     } = useOnDigitPress({
@@ -36,10 +26,29 @@ export const useOnDigitPressWithConfirmation = ({
         onFinishCallback: onConfirmationFinish,
     })
 
-    const isConfirmationPin = useMemo(
-        () => pin.length === digitNumber,
-        [pin, digitNumber],
-    )
+    function onConfirmationFinish(finishedConfirmationPin: string) {
+        if (finishedConfirmationPin === pin.join(""))
+            onFinishCallback(finishedConfirmationPin)
+        else {
+            onConfirmationError && onConfirmationError()
+            setPin([])
+            setConfirmationPin([])
+        }
+    }
+
+    const [isConfirmationPin, setIsConfirmationPin] = useState<boolean>(false)
+
+    /**
+     * Calculate if we have to show the confirmation pin or not based on the pin length
+     * This is delayed 300ms in order to avoid the flickering of the pin
+     */
+    useEffect(() => {
+        const isConfirmation = pin.length === digitNumber
+        const timeout = setTimeout(() => {
+            setIsConfirmationPin(isConfirmation)
+        }, 300)
+        return () => clearTimeout(timeout)
+    }, [pin, digitNumber])
 
     const isPinRetype = useMemo(() => {
         return pin.length === digitNumber && confirmationPin.length === 0
