@@ -72,9 +72,6 @@ export const BaseButton = ({
                 case Haptics.ImpactFeedbackStyle.Heavy:
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
                     break
-
-                default:
-                    break
             }
         }
 

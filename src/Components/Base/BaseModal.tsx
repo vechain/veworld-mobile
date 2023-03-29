@@ -1,10 +1,10 @@
 import React from "react"
-import { Modal } from "react-native"
+import { Modal, ModalProps } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { BaseSafeArea } from "./BaseSafeArea"
 import { BaseView } from "./BaseView"
 
-export interface IBaseModal {
+export interface IBaseModal extends ModalProps {
     isOpen: boolean
     onClose: () => void
     children: React.ReactNode
@@ -13,6 +13,7 @@ export const BaseModal: React.FC<IBaseModal> = ({
     isOpen,
     onClose,
     children,
+    ...otherProps
 }) => {
     return (
         <>
@@ -23,7 +24,8 @@ export const BaseModal: React.FC<IBaseModal> = ({
                 hardwareAccelerated
                 presentationStyle="fullScreen"
                 onDismiss={onClose}
-                onRequestClose={onClose}>
+                onRequestClose={onClose}
+                {...otherProps}>
                 <BaseSafeArea grow={1}>
                     <SafeAreaView style={{ flex: 1 }} />
                     <BaseView
