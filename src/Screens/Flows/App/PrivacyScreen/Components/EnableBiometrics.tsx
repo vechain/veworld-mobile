@@ -20,14 +20,12 @@ export const EnableBiometrics = () => {
     } = useDisclosure()
 
     const requireBiometricsAndEnableIt = useCallback(async () => {
-        console.log("requireBiometricsAndEnableIt")
         const { success } = await BiometricsUtils.authenticateWithBiometric()
         if (success) openPasswordPrompt()
     }, [openPasswordPrompt])
 
     const onPasswordSuccess = useCallback(
         async (password: string) => {
-            console.log("onPasswordSuccess")
             await runSecurityUpgrade(password, closePasswordPrompt)
         },
         [runSecurityUpgrade, closePasswordPrompt],

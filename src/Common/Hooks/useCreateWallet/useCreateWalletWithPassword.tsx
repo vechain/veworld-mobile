@@ -37,7 +37,6 @@ export const useCreateWalletWithPassword = () => {
             try {
                 const { device, wallet } = getDeviceFromMnemonic(mnemonic)
 
-                console.log({ device })
                 const { encryptedWallet } = await CryptoUtils.encryptWallet({
                     wallet,
                     rootAddress: device.rootAddress,
