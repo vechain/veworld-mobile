@@ -64,7 +64,7 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
                             margin: props.m,
                             marginVertical: props.my,
                             marginHorizontal: props.mx,
-                            padding: bg ? 8 : 0 ? props.p : undefined,
+                            padding: bg ? 8 : props.p,
                             paddingVertical: props.py,
                             paddingHorizontal: props.px,
                         },

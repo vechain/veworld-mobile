@@ -4,7 +4,7 @@ import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { CURRENCY } from "~Common"
 import CurrencyConfig from "~Common/Constant/CurrencyConfig/CurrencyConfig"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 
 type Props = {
     token: DenormalizedAccountTokenBalance
