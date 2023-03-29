@@ -15,7 +15,7 @@ export const RequireUserPassword: React.FC<IRequireUserPassword> = ({
         <BaseModal isOpen={isOpen} onClose={onClose}>
             <LockScreen
                 onSuccess={onSuccess}
-                scenario={LOCKSCREEN_SCENARIO.WALLET_CREATION}
+                scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
             />
         </BaseModal>
     )

@@ -8,11 +8,11 @@ export const usePasswordValidation = () => {
     const pinValidationString = useAppSelector(selectPinValidationString)
 
     const validatePassword = useCallback(
-        async (userPassword: string[]) => {
+        async (userPassword: string) => {
             try {
                 let decryptedString = CryptoUtils.decrypt<string>(
                     pinValidationString,
-                    userPassword.join(""),
+                    userPassword,
                 )
 
                 return decryptedString === SettingsConstants.VALIDATION_STRING

@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { FungibleToken } from "~Model"
-import { getSelectedNetwork } from "~Storage/Redux/Selectors"
+import { getSelectedNetwork } from "./Network"
 import { RootState } from "~Storage/Redux/Types"
 
 export const getAllTokens = (state: RootState) => state.tokens

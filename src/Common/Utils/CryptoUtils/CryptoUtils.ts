@@ -46,13 +46,16 @@ function encrypt<T>(data: T, encryptionKey: string): string {
 }
 
 function decrypt<T>(data: string, encryptionKey: string): T {
+    console.log({ data, encryptionKey })
     const key = PasswordUtils.hash(encryptionKey)
     const iv = PasswordUtils.getIV()
     const decipher = crypto.createDecipheriv("aes256", key, iv)
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
+    console.log({ txtToString })
     let parsed = JSON.parse(txtToString)
+    console.log({ parsed })
     return parsed
 }
 
