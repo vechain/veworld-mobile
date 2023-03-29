@@ -91,7 +91,7 @@ const verifyMnemonic = (seed: string) => {
  * @returns
  */
 
-export const encryptWallet = async ({
+const encryptWallet = async ({
     wallet,
     rootAddress,
     accessControl,
@@ -122,7 +122,7 @@ export const encryptWallet = async ({
  * @param  {string} password? if the authentication is password
  * @returns Wallet
  */
-export const decryptWallet = async ({
+const decryptWallet = async ({
     device,
     userPassword,
 }: {

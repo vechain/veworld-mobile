@@ -1,6 +1,8 @@
 import { HDNode } from "thor-devkit"
 import "~Test"
-import {
+
+import CryptoUtils from "./CryptoUtils"
+const {
     decrypt,
     decryptState,
     encrypt,
@@ -11,7 +13,7 @@ import {
     shuffleArray,
     verifyMnemonic,
     xPubFromHdNode,
-} from "./CryptoUtils"
+} = CryptoUtils
 
 // NOTE: snapshot testing
 describe("xPubFromHdNode", () => {
@@ -60,23 +62,24 @@ describe("these functions can't be really tested because based on mocked native 
         decrypt(encrypted, encryptionKey)
         const encryptedState = encryptState({ bar: "foo" }, "secret")
         decryptState(encryptedState, "secret")
-        encryptWallet(
-            {
+        encryptWallet({
+            wallet: {
                 rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
                 nonce: "000000",
             },
-            0,
-            true,
-        )
-        encryptWallet(
-            {
+            rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
+            accessControl: true,
+            hashEncryptionKey: "encryption key",
+        })
+        encryptWallet({
+            wallet: {
                 rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
                 nonce: "000000",
             },
-            0,
-            true,
-            "encryption key",
-        )
+            rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
+            accessControl: true,
+            hashEncryptionKey: "encryption key",
+        })
     })
 })
 
