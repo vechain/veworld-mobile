@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { FungibleToken } from "~Model"
-import { getCurrentNetwork } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
+import { getCurrentNetwork } from "./UserPreferences"
 
 export const getAllTokens = (state: RootState) => state.tokens
 

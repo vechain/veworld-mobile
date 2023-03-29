@@ -1,6 +1,6 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { FungibleToken } from "~Model"
-import { TokenState } from "./types"
+import { TokenState } from "../Types/Token"
 
 export const initialTokenState: TokenState = { fungible: [] }
 

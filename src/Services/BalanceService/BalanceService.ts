@@ -1,15 +1,11 @@
-import { getCurrentNetwork } from "~Storage/Redux/Selectors"
-import { RootState } from "~Storage/Redux/Types"
-import {
-    getAccountBalances,
-    setTokenBalances,
-    TokenBalance,
-} from "~Storage/Redux/Slices/Balance"
+import { getAccountBalances, getCurrentNetwork } from "~Storage/Redux/Selectors"
+import { RootState, TokenBalance } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
 import { VET, VTHO } from "~Common/Constant/Token/TokenConstants"
 import axios from "axios"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
+import { setTokenBalances } from "~Storage/Redux/Slices"
 
 /**
  * Updates all balances for an account

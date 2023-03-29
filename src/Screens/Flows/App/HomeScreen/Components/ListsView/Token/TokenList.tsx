@@ -6,11 +6,11 @@ import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { useAppSelector } from "~Storage/Redux"
-import { selectCurrency } from "~Storage/Redux/Selectors"
 import {
-    DenormalizedAccountTokenBalance,
+    selectCurrency,
     getDenormalizedAccountTokenBalances,
-} from "~Storage/Redux/Slices"
+} from "~Storage/Redux/Selectors"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
