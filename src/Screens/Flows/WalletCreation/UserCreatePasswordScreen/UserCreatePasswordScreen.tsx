@@ -53,6 +53,14 @@ export const UserCreatePasswordScreen = () => {
             onConfirmationError: () => setIsConfirmationError(true),
         })
 
+    const handleOnDigitPress = useCallback(
+        (digit: string) => {
+            setIsConfirmationError(false)
+            onDigitPress(digit)
+        },
+        [onDigitPress],
+    )
+
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
@@ -78,7 +86,7 @@ export const UserCreatePasswordScreen = () => {
                     isPinError={isConfirmationError}
                 />
                 <NumPad
-                    onDigitPress={onDigitPress}
+                    onDigitPress={handleOnDigitPress}
                     onDigitDelete={onDigitDelete}
                 />
             </BaseView>

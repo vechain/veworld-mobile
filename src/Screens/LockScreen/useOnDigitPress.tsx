@@ -31,8 +31,10 @@ export const useOnDigitPress = ({
         setPin(updatedPin)
 
         if (updatedPin.length === digitNumber) {
-            onFinishCallback && onFinishCallback(updatedPin.join(""))
-            resetPinOnFinish && setPin([])
+            setTimeout(() => {
+                onFinishCallback && onFinishCallback(updatedPin.join(""))
+                resetPinOnFinish && setPin([])
+            }, 100)
         }
     }
 
