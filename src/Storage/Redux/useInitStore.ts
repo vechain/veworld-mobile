@@ -30,11 +30,6 @@ export const useInitStore = () => {
                 reducer,
             )
 
-            let createDebugger: any
-            if (__DEV__) {
-                createDebugger = require("redux-flipper").default
-            }
-
             const _store = configureStore({
                 reducer: persistedReducer,
                 middleware: getDefaultMiddleware =>
@@ -49,7 +44,7 @@ export const useInitStore = () => {
                                 REGISTER,
                             ],
                         },
-                    }).concat(createDebugger()),
+                    }),
                 enhancers: [reduxReset()],
                 devTools: process.env.NODE_ENV !== "production",
             })
