@@ -1,31 +1,28 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, screen, waitFor } from "@testing-library/react-native"
+import { render, screen } from "@testing-library/react-native"
 import { BaseSpacer } from "./BaseSpacer"
+
+const baseSpacerTestId = "BaseSpacer"
+const findBaseSpacer = async () =>
+    screen.findByTestId(baseSpacerTestId, { timeout: 5000 })
 
 describe("BaseSpacer", () => {
     it("should render correctly with width prop", async () => {
-        const { getByTestId } = render(
-            <BaseSpacer testID="BaseSpacer" width={20} />,
-            { wrapper: TestWrapper },
-        )
-        await waitFor(() =>
-            expect(screen.getByTestId("BaseSpacer")).toBeTruthy(),
-        )
-        const view = getByTestId("BaseSpacer")
-        expect(view).toBeVisible()
+        render(<BaseSpacer testID={baseSpacerTestId} width={20} />, {
+            wrapper: TestWrapper,
+        })
+
+        const spacer = await findBaseSpacer()
+        expect(spacer).toBeVisible()
+        expect(spacer).toHaveStyle({ width: 20 })
     })
     it("should render correctly with height prop", async () => {
-        const { getByTestId } = render(
-            <BaseSpacer testID="BaseSpacer" height={20} />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
-        await waitFor(() =>
-            expect(screen.getByTestId("BaseSpacer")).toBeTruthy(),
-        )
-        const view = getByTestId("BaseSpacer")
-        expect(view).toBeVisible()
+        render(<BaseSpacer testID={baseSpacerTestId} height={20} />, {
+            wrapper: TestWrapper,
+        })
+        const spacer = await findBaseSpacer()
+        expect(spacer).toBeVisible()
+        expect(spacer).toHaveStyle({ height: 20 })
     })
 })

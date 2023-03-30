@@ -59,6 +59,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
             <TouchableOpacity
                 onPress={action}
                 style={[styles.innerContainer, innerContainerStyle]}
+                disabled={disabled}
                 {...props}>
                 {children}
             </TouchableOpacity>

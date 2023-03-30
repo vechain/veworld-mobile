@@ -1,27 +1,34 @@
 import React from "react"
 import { TestWrapper } from "~Test"
-import { render, fireEvent, waitFor } from "@testing-library/react-native"
+import { render, fireEvent, screen } from "@testing-library/react-native"
 import { BaseButtonGroupHorizontal } from "./BaseButtonGroupHorizontal"
+const buttons: {
+    id: string
+    label: string
+    icon?: string
+    disabled?: boolean
+}[] = [
+    {
+        id: "1",
+        label: "Button 1",
+    },
+    {
+        id: "2",
+        label: "Button 2",
+    },
+    {
+        id: "3",
+        label: "Button 3",
+        icon: "star",
+    },
+]
+
+const findGroupButton = async (id: string) =>
+    await screen.findByTestId(`button-${id}`, { timeout: 5000 })
 
 describe("BaseButtonGroupHorizontal", () => {
-    const buttons = [
-        {
-            id: "1",
-            label: "Button 1",
-        },
-        {
-            id: "2",
-            label: "Button 2",
-        },
-        {
-            id: "3",
-            label: "Button 3",
-            icon: "star",
-        },
-    ]
-
-    it("should render the correctly one button", async () => {
-        const { getByText } = render(
+    it("Should render all the buttons correctly", async () => {
+        render(
             <BaseButtonGroupHorizontal
                 action={() => {}}
                 buttons={buttons}
@@ -29,12 +36,16 @@ describe("BaseButtonGroupHorizontal", () => {
             />,
             { wrapper: TestWrapper },
         )
-        await waitFor(() => expect(getByText("Button 1")).toBeTruthy())
+
+        for (const button of buttons) {
+            const baseButton = await findGroupButton(button.id)
+            expect(baseButton).toBeVisible()
+        }
     })
 
-    it("should call the action function when a button is pressed", async () => {
+    it("Call the correct function for each button", async () => {
         const mockAction = jest.fn()
-        const { getByText } = render(
+        render(
             <BaseButtonGroupHorizontal
                 action={mockAction}
                 buttons={buttons}
@@ -42,10 +53,12 @@ describe("BaseButtonGroupHorizontal", () => {
             />,
             { wrapper: TestWrapper },
         )
-        await waitFor(() => expect(getByText("Button 1")).toBeTruthy())
-        const button = getByText("Button 1")
-        fireEvent.press(button)
-        expect(mockAction).toHaveBeenCalledWith(buttons[0])
+        for (const button of buttons) {
+            const baseButton = await findGroupButton(button.id)
+            expect(baseButton).toBeVisible()
+            fireEvent.press(baseButton)
+            expect(mockAction).toHaveBeenCalledWith(button)
+        }
     })
 
     it("should disable a disabled button", async () => {
@@ -56,17 +69,27 @@ describe("BaseButtonGroupHorizontal", () => {
             label: "Button 4",
             disabled: true,
         }
-        const { getByText } = render(
+
+        const buttonsAndDisabledButton = [...buttons, disabledButton]
+        render(
             <BaseButtonGroupHorizontal
                 action={mockAction}
-                buttons={[...buttons, disabledButton]}
+                buttons={buttonsAndDisabledButton}
                 selectedButtonIds={[]}
             />,
             { wrapper: TestWrapper },
         )
-        await waitFor(() => expect(getByText("Button 4")).toBeTruthy())
-        const button = getByText("Button 4")
-        fireEvent.press(button)
-        expect(mockAction).not.toBeCalled()
+        for (const button of buttonsAndDisabledButton) {
+            const baseButton = await findGroupButton(button.id)
+            expect(baseButton).toBeVisible()
+            if (button.disabled) {
+                expect(baseButton).toBeDisabled()
+                fireEvent.press(baseButton)
+                expect(mockAction).not.toHaveBeenCalledWith(button)
+            } else {
+                fireEvent.press(baseButton)
+                expect(mockAction).toHaveBeenCalledWith(button)
+            }
+        }
     })
 })

@@ -4,7 +4,10 @@ import { render, fireEvent, screen, act } from "@testing-library/react-native"
 import { BaseButton } from "./BaseButton"
 import { BaseIcon } from "./BaseIcon"
 
-const findButton = async () => await screen.findByText("Button")
+const buttonTitle = "Button"
+const findButton = async () =>
+    await screen.findByText(buttonTitle, { timeout: 5000 })
+
 describe("BaseButton", () => {
     const mockAction = jest.fn()
 
@@ -13,7 +16,7 @@ describe("BaseButton", () => {
     })
 
     it("renders correctly with default props", async () => {
-        render(<BaseButton action={mockAction} title="Button" />, {
+        render(<BaseButton action={mockAction} title={buttonTitle} />, {
             wrapper: TestWrapper,
         })
         // wait for useEffects
@@ -31,7 +34,7 @@ describe("BaseButton", () => {
         render(
             <BaseButton
                 action={mockAction}
-                title="Button"
+                title={buttonTitle}
                 textColor="#FF0000"
                 leftIcon={<BaseIcon name="ab-testing" />}
                 rightIcon={<BaseIcon name="abacus" />}
@@ -52,7 +55,7 @@ describe("BaseButton", () => {
         render(
             <BaseButton
                 action={mockAction}
-                title="Button"
+                title={buttonTitle}
                 variant="outline"
                 haptics="light"
                 w={10}
@@ -75,7 +78,7 @@ describe("BaseButton", () => {
         render(
             <BaseButton
                 action={mockAction}
-                title="Button"
+                title={buttonTitle}
                 textColor="#FF0000"
                 variant="outline"
                 haptics="medium"
@@ -95,7 +98,7 @@ describe("BaseButton", () => {
         render(
             <BaseButton
                 action={mockAction}
-                title="Button"
+                title={buttonTitle}
                 textColor="#FF0000"
                 variant="link"
                 haptics="heavy"

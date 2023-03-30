@@ -1,12 +1,13 @@
 import React from "react"
-import {
-    render,
-    fireEvent,
-    waitFor,
-    screen,
-} from "@testing-library/react-native"
+import { render, fireEvent, screen } from "@testing-library/react-native"
 import { BaseButtonGroup } from "./BaseButtonGroup"
 import { TestWrapper } from "~Test"
+
+const baseButtonGroupTestId = "BaseButtonGroup"
+const findBaseButtonInGroup = async (id: string) =>
+    await screen.findByTestId(`${baseButtonGroupTestId}-${id}`, {
+        timeout: 5000,
+    })
 
 describe("BaseButtonGroup", () => {
     const buttons = [
@@ -22,41 +23,42 @@ describe("BaseButtonGroup", () => {
                 action={() => {}}
                 buttons={buttons}
                 selectedButtonIds={selectedButtonIds}
-                buttonTestID={"base-button"}
+                buttonTestID={baseButtonGroupTestId}
             />,
             {
                 wrapper: TestWrapper,
             },
         )
-        // wait for useEffects
-        await waitFor(() =>
-            expect(screen.getByTestId("base-button-1")).toBeTruthy(),
-        )
-        expect(screen.getByTestId("base-button-1")).toBeVisible()
-        expect(screen.getByTestId("base-button-2")).toBeVisible()
-        expect(screen.getByTestId("base-button-3")).toBeVisible()
+
+        for (const button of buttons) {
+            const baseButton = await findBaseButtonInGroup(button.id)
+            expect(baseButton).toBeVisible()
+        }
     })
 
-    it("calls the action function when a button is pressed", async () => {
+    it("Each button click calls action function with the correct params if not disabled ", async () => {
         const mockAction = jest.fn()
-        const { getByTestId } = render(
+        render(
             <BaseButtonGroup
                 action={mockAction}
                 buttons={buttons}
                 selectedButtonIds={selectedButtonIds}
-                buttonTestID={"base-button"}
+                buttonTestID={baseButtonGroupTestId}
             />,
             {
                 wrapper: TestWrapper,
             },
         )
-        // wait for useEffects
-        await waitFor(() =>
-            expect(screen.getByTestId("base-button-1")).toBeTruthy(),
-        )
-        const button = getByTestId("base-button-1")
-        fireEvent.press(button)
-        expect(mockAction).toHaveBeenCalled()
-        expect(mockAction).toHaveBeenCalledWith(buttons[0])
+        for (const button of buttons) {
+            const baseButton = await findBaseButtonInGroup(button.id)
+            expect(baseButton).toBeVisible()
+            if (button.disabled) {
+                fireEvent.press(baseButton)
+                expect(mockAction).not.toHaveBeenCalledWith(button)
+            } else {
+                fireEvent.press(baseButton)
+                expect(mockAction).toHaveBeenCalledWith(button)
+            }
+        }
     })
 })

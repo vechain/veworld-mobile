@@ -36,7 +36,11 @@ export const BaseIcon: React.FC<Props> = memo(props => {
         [theme, color],
     )
     return (
-        <BaseIconWrapper style={style} color={color} {...otherProps}>
+        <BaseIconWrapper
+            testID={`${testID}-wrapper`}
+            style={style}
+            color={color}
+            {...otherProps}>
             <Icon
                 size={props.size ?? 24}
                 testID={testID}
@@ -64,7 +68,7 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
                             margin: props.m,
                             marginVertical: props.my,
                             marginHorizontal: props.mx,
-                            padding: bg ? 8 : props.p,
+                            padding: props.p ? props.p : bg ? 8 : 0,
                             paddingVertical: props.py,
                             paddingHorizontal: props.px,
                         },
