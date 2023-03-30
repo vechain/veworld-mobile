@@ -16,8 +16,6 @@
 		47C62F7E8669BC8C262144C7 /* libPods-veWorldMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 64FFB341ECDF18BABD4A5830 /* libPods-veWorldMobile.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B2A60EB1A3C81005866A68E4 /* libPods-veWorldMobile-veWorldMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A5C13C80DB020CE2786F9C9 /* libPods-veWorldMobile-veWorldMobileTests.a */; };
-		EA4AB58129D48314009916EE /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB8DD4729BE1B2200929DFC /* OpenSSL.xcframework */; };
-		EA4AB58229D48314009916EE /* OpenSSL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EAB8DD4729BE1B2200929DFC /* OpenSSL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA9F31F52991455200D288F5 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA9F31F42991455200D288F5 /* BootSplash.storyboard */; };
 		EAFBEA542955DED50036BC15 /* SampleNativeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA532955DED50036BC15 /* SampleNativeModule.swift */; };
 		EAFBEA572955DEFF0036BC15 /* SampleNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA562955DEFF0036BC15 /* SampleNativeModule.m */; };
@@ -33,20 +31,6 @@
 			remoteInfo = veWorldMobile;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		EA4AB58329D48314009916EE /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				EA4AB58229D48314009916EE /* OpenSSL.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* veWorldMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = veWorldMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,7 +73,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA4AB58129D48314009916EE /* OpenSSL.xcframework in Frameworks */,
 				47C62F7E8669BC8C262144C7 /* libPods-veWorldMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,7 +236,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				EA4AB58329D48314009916EE /* Embed Frameworks */,
 				EF31BE657E0CF014A088F358 /* [CP] Embed Pods Frameworks */,
 				6069A1A5601EDE5D59121916 /* [CP] Copy Pods Resources */,
 			);
