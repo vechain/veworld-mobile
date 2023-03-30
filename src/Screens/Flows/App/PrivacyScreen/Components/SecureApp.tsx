@@ -1,8 +1,9 @@
 import React, { useCallback } from "react"
 import { BaseSwitch, BaseText, BaseView } from "~Components"
+import { WALLET_STATUS } from "~Model"
 
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { setIsAppLockActive } from "~Storage/Redux/Actions"
+import { setAppLockStatus, setIsAppLockActive } from "~Storage/Redux/Actions"
 import { selectIsAppLockActive } from "~Storage/Redux/Selectors"
 
 export const SecureApp = () => {
@@ -12,7 +13,7 @@ export const SecureApp = () => {
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
             dispatch(setIsAppLockActive(newValue))
-            //todo: dispatch unlocked?
+            dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
         },
         [dispatch],
     )
