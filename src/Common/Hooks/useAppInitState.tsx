@@ -1,9 +1,12 @@
 import { useMemo } from "react"
 import { useAppSelector } from "~Storage/Redux"
-import { selectIsResettingApp, hasOnboarded } from "~Storage/Redux/Selectors"
+import {
+    selectIsResettingApp,
+    selectHasOnboarded,
+} from "~Storage/Redux/Selectors"
 
 export const useAppInitState = () => {
-    const userHasOnboarded = useAppSelector(hasOnboarded)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const isResettingApp = useAppSelector(selectIsResettingApp)
 
     const appStatus = useMemo(() => {

@@ -3,10 +3,10 @@ import { Alert } from "react-native"
 import { CryptoUtils, useDisclosure, useWalletSecurity } from "~Common"
 import { BaseButton, RequireUserPassword } from "~Components"
 import { useAppSelector } from "~Storage/Redux"
-import { getDevices } from "~Storage/Redux/Selectors"
+import { selectDevices } from "~Storage/Redux/Selectors"
 
 export const DecryptWallet: React.FC = () => {
-    const devices = useAppSelector(getDevices())
+    const devices = useAppSelector(selectDevices())
     const { isWalletSecurityBiometrics, isWalletSecurityPassword } =
         useWalletSecurity()
 

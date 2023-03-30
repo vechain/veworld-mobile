@@ -3,10 +3,10 @@ import { RootState } from "../Types"
 
 const reducer = (state: RootState) => state.cache
 
-export const getMnemonic = createSelector(reducer, state => {
+export const selectMnemonic = createSelector(reducer, state => {
     return state.mnemonic
 })
 
-export const getAppLockStatus = createSelector(reducer, state => {
+export const selectAppLockStatus = createSelector(reducer, state => {
     return state.appLockStatus
 })

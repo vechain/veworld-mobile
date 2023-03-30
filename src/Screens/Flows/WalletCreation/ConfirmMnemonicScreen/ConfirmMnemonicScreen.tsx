@@ -17,7 +17,7 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
-import { getMnemonic, hasOnboarded } from "~Storage/Redux/Selectors"
+import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
@@ -35,9 +35,9 @@ export const ConfirmMnemonicScreen = () => {
     )
     const [isError, setIsError] = useState(false)
 
-    const mnemonic = useAppSelector(getMnemonic)
+    const mnemonic = useAppSelector(selectMnemonic)
 
-    const userHasOnboarded = useAppSelector(hasOnboarded)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const mnemonicArray = useMemo(() => mnemonic?.split(" ") || [], [mnemonic])
 

@@ -2,8 +2,8 @@ import { useCallback, useMemo } from "react"
 import { WALLET_STATUS } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    getAppLockStatus,
-    hasOnboarded,
+    selectAppLockStatus,
+    selectHasOnboarded,
     selectIsAppLockActive,
 } from "~Storage/Redux/Selectors"
 import { setAppLockStatus } from "~Storage/Redux/Actions"
@@ -11,8 +11,8 @@ import { setAppLockStatus } from "~Storage/Redux/Actions"
 export const useAppLock = () => {
     const dispatch = useAppDispatch()
 
-    const userHasOnboarded = useAppSelector(hasOnboarded)
-    const _appLockStatus = useAppSelector(getAppLockStatus)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const _appLockStatus = useAppSelector(selectAppLockStatus)
     const isAppLockActive = useAppSelector(selectIsAppLockActive)
 
     const appLockStatus = useMemo(() => {

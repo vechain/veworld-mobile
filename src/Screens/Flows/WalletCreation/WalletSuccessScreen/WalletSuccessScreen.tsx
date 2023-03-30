@@ -30,8 +30,8 @@ import {
 } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    getMnemonic,
-    hasOnboarded,
+    selectMnemonic,
+    selectHasOnboarded,
     selectUserSelectedSecurity,
 } from "~Storage/Redux/Selectors"
 import { setAppLockStatus } from "~Storage/Redux/Actions"
@@ -51,10 +51,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const dispatch = useAppDispatch()
 
     //we have a device and a selected account
-    const userHasOnboarded = useAppSelector(hasOnboarded)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
 
-    const mnemonic = useAppSelector(getMnemonic)
+    const mnemonic = useAppSelector(selectMnemonic)
 
     const {
         onCreateWallet: createWalletWithBiometrics,

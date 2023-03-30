@@ -2,7 +2,7 @@ import { Driver, SimpleNet } from "@vechain/connex-driver"
 import { newThor } from "@vechain/connex-framework/dist/thor"
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { useAppSelector } from "~Storage/Redux"
-import { getSelectedNetwork } from "~Storage/Redux/Selectors"
+import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
 
 type ConnexContextProviderProps = { children: React.ReactNode }
 const ConnexContext = React.createContext<Connex.Thor | undefined>(undefined)
@@ -12,7 +12,7 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     const [driver, setDriver] = useState<Driver | null>(null)
     const value = useMemo(() => (connex ? connex : undefined), [connex])
 
-    const selectedNetwork = useAppSelector(getSelectedNetwork)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const initConnex = useCallback(async () => {
         if (selectedNetwork) {

@@ -15,8 +15,8 @@ import { AccountDetailBox } from "./AccountDetailBox"
 import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import {
-    getAccountsByDevice,
-    getSelectedAccount,
+    selectAccountsByDevice,
+    selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
@@ -36,10 +36,10 @@ export const WalletManagementBottomSheet = React.forwardRef<
     const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
 
     const deviceAccounts = useAppSelector(
-        getAccountsByDevice(device?.rootAddress),
+        selectAccountsByDevice(device?.rootAddress),
     )
 
-    const selectedAccount = useAppSelector(getSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [snapIndex, setSnapIndex] = useState<number>(0)
 

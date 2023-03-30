@@ -6,11 +6,11 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { getDevices } from "~Storage/Redux/Selectors"
+import { selectDevices } from "~Storage/Redux/Selectors"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
-    const devices = useAppSelector(getDevices())
+    const devices = useAppSelector(selectDevices())
 
     const removeEncryptionKeysFromKeychain = useCallback(async () => {
         const promises = devices.map(device => {

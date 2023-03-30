@@ -16,7 +16,7 @@ import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
 import { useNavigation } from "@react-navigation/native"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { hasOnboarded } from "~Storage/Redux/Selectors"
+import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic } from "~Storage/Redux/Actions"
 
 const DEMO_MNEMONIC =
@@ -28,7 +28,7 @@ export const ImportMnemonicScreen = () => {
     const nav = useNavigation()
     const theme = useTheme()
 
-    const userHasOnboarded = useAppSelector(hasOnboarded)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
 

@@ -11,7 +11,7 @@ import {
     setUserSelectedSecurity,
     setMnemonic,
 } from "~Storage/Redux/Actions"
-import { getSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
 
 /**
@@ -29,7 +29,7 @@ export const useCreateWalletWithBiometrics = () => {
     )
 
     const dispatch = useAppDispatch()
-    const selectedAccount = useAppSelector(getSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(

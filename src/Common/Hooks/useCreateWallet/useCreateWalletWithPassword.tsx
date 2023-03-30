@@ -10,7 +10,7 @@ import {
     setUserSelectedSecurity,
     setMnemonic,
 } from "~Storage/Redux/Actions"
-import { getSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
 /**
  * useCreateWalletWithPassword
@@ -18,7 +18,7 @@ import { error } from "~Common/Logger"
  */
 export const useCreateWalletWithPassword = () => {
     const dispatch = useAppDispatch()
-    const selectedAccount = useAppSelector(getSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
     const [isComplete, setIsComplete] = useState(false)

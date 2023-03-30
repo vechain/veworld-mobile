@@ -1,6 +1,6 @@
 import { AddressUtils } from "~Common"
 import { Device, WalletAccount } from "~Model"
-import { getSelectedAccount } from "../Selectors"
+import { selectSelectedAccount } from "../Selectors"
 import {
     addDevice,
     removeDeviceByIndex,
@@ -21,7 +21,7 @@ const removeDevice =
     (rootAddress: string): AppThunk =>
     (dispatch, getState) => {
         const { devices } = getState()
-        const selectedAccount = getSelectedAccount(getState())
+        const selectedAccount = selectSelectedAccount(getState())
         const isSelectedAccountInDevice = AddressUtils.compareAddresses(
             rootAddress,
             selectedAccount?.rootAddress,

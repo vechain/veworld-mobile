@@ -10,12 +10,12 @@ import {
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { hasOnboarded } from "~Storage/Redux/Selectors"
+import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const userHasOnboarded = useAppSelector(hasOnboarded)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const onCreateWallet = () => {
         if (userHasOnboarded) {

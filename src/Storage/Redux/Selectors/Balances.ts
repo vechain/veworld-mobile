@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
 import { RootState } from "~Storage/Redux/Types"
-import { getSelectedAccount } from "./Account"
+import { selectSelectedAccount } from "./Account"
 import { getAllFungibleTokens } from "./Token"
 
 export const getBalances = (state: RootState) => state.balances
@@ -10,7 +10,7 @@ export const getBalances = (state: RootState) => state.balances
  * Get all account balances
  */
 export const getAccountBalances = createSelector(
-    [getBalances, getSelectedAccount],
+    [getBalances, selectSelectedAccount],
     (balances, account) =>
         balances.filter(balance =>
             AddressUtils.compareAddresses(

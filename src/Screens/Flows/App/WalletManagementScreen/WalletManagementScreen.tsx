@@ -11,7 +11,7 @@ import {
 } from "~Components"
 import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
-import { getDevices } from "~Storage/Redux/Selectors"
+import { selectDevices } from "~Storage/Redux/Selectors"
 import {
     DeviceBox,
     WalletManagementBottomSheet,
@@ -21,7 +21,7 @@ import {
 export const WalletManagementScreen = () => {
     const [isScrollable, setIsScrollable] = useState(false)
 
-    const devices = useAppSelector(getDevices())
+    const devices = useAppSelector(selectDevices())
     const [selectedDevice, setSelectedDevice] = useState<Device>()
 
     const {

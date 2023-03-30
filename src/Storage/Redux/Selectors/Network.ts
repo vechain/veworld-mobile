@@ -4,30 +4,33 @@ import { RootState } from "../Types"
 
 const reducer = (state: RootState) => state.networks
 
-export const getSelectedNetwork = createSelector(reducer, state => {
+export const selectSelectedNetwork = createSelector(reducer, state => {
     return state.selectedNetwork
 })
 
-export const getDefaultNetworks = createSelector(reducer, _state => {
+export const selectDefaultNetworks = createSelector(reducer, _state => {
     return defaultNetworks
 })
 
-export const getNetworks = createSelector(
+export const selectNetworks = createSelector(
     reducer,
-    getDefaultNetworks,
+    selectDefaultNetworks,
     (state, defaultNets) => {
         return defaultNets.concat(state.customNetworks)
     },
 )
 
-export const getCustomNetworks = createSelector(reducer, state => {
+export const selectCustomNetworks = createSelector(reducer, state => {
     return state.customNetworks
 })
 
-export const getShowConversionOnOtherNets = createSelector(reducer, state => {
-    return state.showConversionOtherNets
-})
+export const selectShowConversionOnOtherNets = createSelector(
+    reducer,
+    state => {
+        return state.showConversionOtherNets
+    },
+)
 
-export const getShowTestnetTag = createSelector(reducer, state => {
+export const selectShowTestnetTag = createSelector(reducer, state => {
     return state.showTestNetTag
 })

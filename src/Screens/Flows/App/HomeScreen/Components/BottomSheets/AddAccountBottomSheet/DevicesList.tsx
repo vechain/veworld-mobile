@@ -6,7 +6,7 @@ import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
 import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
 import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
-import { getDevices } from "~Storage/Redux/Selectors"
+import { selectDevices } from "~Storage/Redux/Selectors"
 
 type Props = {
     selectedDevice?: Device
@@ -18,7 +18,7 @@ export const DevicesList: React.FC<Props> = ({
     onDevicePress,
 }) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-    const devices = useAppSelector(getDevices())
+    const devices = useAppSelector(selectDevices())
 
     const handleOnDevicePress = useCallback(
         (device: Device) => () => {

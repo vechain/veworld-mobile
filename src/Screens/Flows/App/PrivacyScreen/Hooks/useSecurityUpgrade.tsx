@@ -6,11 +6,11 @@ import {
     bulkUpdateDevices,
     setUserSelectedSecurity,
 } from "~Storage/Redux/Actions"
-import { getDevices } from "~Storage/Redux/Selectors"
+import { selectDevices } from "~Storage/Redux/Selectors"
 
 export const useSecurityUpgrade = () => {
     const { walletSecurity } = useWalletSecurity()
-    const devices = useAppSelector(getDevices())
+    const devices = useAppSelector(selectDevices())
 
     const dispatch = useAppDispatch()
 

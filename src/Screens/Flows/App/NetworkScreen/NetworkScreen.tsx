@@ -17,10 +17,10 @@ import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
 import { Routes } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    getNetworks,
-    getSelectedNetwork,
-    getShowConversionOnOtherNets,
-    getShowTestnetTag,
+    selectNetworks,
+    selectSelectedNetwork,
+    selectShowConversionOnOtherNets,
+    selectShowTestnetTag,
 } from "~Storage/Redux/Selectors"
 import {
     toggleShowConversionOtherNetworks,
@@ -41,13 +41,13 @@ export const ChangeNetworkScreen = () => {
     } = useBottomSheetModal()
 
     const showConversionOnOtherNets = useAppSelector(
-        getShowConversionOnOtherNets,
+        selectShowConversionOnOtherNets,
     )
 
-    const showTestNetTag = useAppSelector(getShowTestnetTag)
+    const showTestNetTag = useAppSelector(selectShowTestnetTag)
 
-    const selectedNetwork = useAppSelector(getSelectedNetwork)
-    const networks = useAppSelector(getNetworks)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const networks = useAppSelector(selectNetworks)
 
     const goBack = useCallback(() => nav.goBack(), [nav])
     const onPressInput = useCallback(() => openBottomSheet(), [openBottomSheet])

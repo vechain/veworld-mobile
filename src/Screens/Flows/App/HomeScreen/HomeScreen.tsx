@@ -24,8 +24,8 @@ import {
 import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
 import { setTokenBalances } from "~Storage/Redux/Slices"
 import { mergeTokens } from "~Common/Utils/TokenUtils"
-import { getSelectedNetwork } from "../../../../Storage/Redux/Selectors/Network"
-import { getSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectSelectedNetwork } from "../../../../Storage/Redux/Selectors/Network"
+import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 
 export const HomeScreen = () => {
     const {
@@ -59,8 +59,8 @@ export const HomeScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    const selectedNetwork = useAppSelector(getSelectedNetwork)
-    const selectedAccount = useAppSelector(getSelectedAccount)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     useEffect(() => {
         async function init() {

@@ -14,7 +14,7 @@ import * as Clipboard from "expo-clipboard"
 import { Alert } from "react-native"
 import { useI18nContext } from "~i18n"
 import { useAppSelector } from "~Storage/Redux"
-import { getSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 
 type Props = {
     onClose: () => void
@@ -29,7 +29,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => ["50%"], [])
-    const selectedAccount = useAppSelector(getSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const handleSheetChanges = useCallback((index: number) => {
         console.log("accountManagementSheet position changed", index)

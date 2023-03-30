@@ -7,8 +7,8 @@ import { AddressUtils } from "~Common"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     getBalanceVisible,
-    getSelectedAccount,
-    getVisibleAccounts,
+    selectSelectedAccount,
+    selectVisibleAccounts,
 } from "~Storage/Redux/Selectors"
 import { selectAccount } from "~Storage/Redux/Actions"
 import { WalletAccount } from "~Model"
@@ -18,8 +18,8 @@ type Props = {
 }
 
 export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
-    const accounts = useAppSelector(getVisibleAccounts)
-    const selectedAccount = useAppSelector(getSelectedAccount)
+    const accounts = useAppSelector(selectVisibleAccounts)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const balanceVisible = useAppSelector(getBalanceVisible)
 
     const dispatch = useAppDispatch()
