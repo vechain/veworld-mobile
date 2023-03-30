@@ -18,7 +18,7 @@ import { useI18nContext } from "~i18n"
 import { OfficialTokenCard } from "./Components/OfficialTokenCard"
 import { FungibleToken } from "~Model"
 import {
-    getNetworkFungibleTokens,
+    getFungibleTokensWithoutDefaults,
     getSelectedAccount,
 } from "~Storage/Redux/Selectors"
 import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
@@ -32,7 +32,7 @@ export const AddTokenScreen = () => {
     const dispatch = useAppDispatch()
     const account = useAppSelector(getSelectedAccount)
     const [tokenQuery, setTokenQuery] = useState<string>("")
-    const tokens = useAppSelector(getNetworkFungibleTokens)
+    const tokens = useAppSelector(getFungibleTokensWithoutDefaults)
     const nav = useNavigation()
     const thorClient = useThor()
     const filteredTokens = tokens.filter(

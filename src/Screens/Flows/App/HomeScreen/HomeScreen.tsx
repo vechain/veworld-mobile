@@ -12,12 +12,20 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused, useNavigation } from "@react-navigation/native"
 import { BaseSafeArea, useThor, BaseSpacer } from "~Components"
 import { Routes } from "~Navigation"
-import { getTokens } from "./Utils/getTokens"
-import { Network } from "~Model"
+import { getTokensFromGithub } from "./Utils/getTokensFromGithub"
+import { FungibleToken, Network, NETWORK_TYPE } from "~Model"
 import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { SlideInLeft } from "react-native-reanimated"
-import { getSelectedNetwork } from "~Storage/Redux/Selectors"
+import {
+    defaultTokensMain,
+    defaultTokensTest,
+} from "~Common/Constant/Token/TokenConstants"
+import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
+import { setTokenBalances } from "~Storage/Redux/Slices"
+import { mergeTokens } from "~Common/Utils/TokenUtils"
+import { getSelectedNetwork } from "../../../../Storage/Redux/Selectors/Network"
+import { getSelectedAccount } from "~Storage/Redux/Selectors"
 
 export const HomeScreen = () => {
     const {
@@ -45,33 +53,65 @@ export const HomeScreen = () => {
     const paddingBottom = useBottomTabBarHeight()
     const visibleHeightRef = useRef<number>(0)
     const isFocused = useIsFocused()
-    const thor = useThor()
+    const thorClient = useThor()
 
     const nav = useNavigation()
 
     const dispatch = useAppDispatch()
 
     const selectedNetwork = useAppSelector(getSelectedNetwork)
+    const selectedAccount = useAppSelector(getSelectedAccount)
 
     useEffect(() => {
         async function init() {
-            const genesis = thor.genesis.id
+            const genesis = thorClient.genesis.id
             console.log("genesis number", genesis)
         }
         init()
-    }, [isFocused, thor])
+    }, [isFocused, thorClient])
 
     /**
-     * init tokens cache
+     * init tokens and balances
      */
     useEffect(() => {
-        getTokens({
-            genesis: { id: selectedNetwork.genesisId },
-            type: selectedNetwork.type,
-        } as Network).then(_tokens => {
-            dispatch(updateFungibleTokens(_tokens))
-        })
-    }, [selectedNetwork, dispatch])
+        if (selectedAccount && selectedNetwork) {
+            getTokensFromGithub({
+                genesis: { id: selectedNetwork.genesisId },
+                type: selectedNetwork.type,
+            } as Network).then(_tokens => {
+                let defaultTokens: FungibleToken[] = []
+                if (selectedNetwork.type === NETWORK_TYPE.MAIN) {
+                    defaultTokens = defaultTokensMain
+                }
+                if (selectedNetwork.type === NETWORK_TYPE.TEST) {
+                    defaultTokens = defaultTokensTest
+                }
+
+                if (defaultTokens.length) {
+                    // set tokens
+                    dispatch(
+                        updateFungibleTokens(
+                            mergeTokens(defaultTokens, _tokens),
+                        ),
+                    )
+                    // set balances
+                    dispatch(
+                        setTokenBalances(
+                            defaultTokens.map(token => ({
+                                accountAddress: selectedAccount?.address,
+                                tokenAddress: token.address,
+                                balance: "0",
+                                timeUpdated: new Date().toISOString(),
+                            })),
+                        ),
+                    )
+                    dispatch(updateAccountBalances(thorClient))
+                } else {
+                    dispatch(updateFungibleTokens(_tokens))
+                }
+            })
+        }
+    }, [selectedNetwork, selectedAccount, dispatch, thorClient])
 
     return (
         <BaseSafeArea grow={1}>
