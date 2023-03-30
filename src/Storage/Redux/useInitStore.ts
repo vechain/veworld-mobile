@@ -16,6 +16,7 @@ import reduxReset from "redux-reset"
 import { reducer } from "./Store"
 import { RootState, Store } from "./Types"
 import { getPersistorConfig } from "./Helpers"
+import { TokenApi } from "./Api"
 
 export const useInitStore = () => {
     const [store, setStore] = useState<Store | undefined>()
@@ -44,7 +45,7 @@ export const useInitStore = () => {
                                 REGISTER,
                             ],
                         },
-                    }),
+                    }).concat(TokenApi.middleware),
                 enhancers: [reduxReset()],
                 devTools: process.env.NODE_ENV !== "production",
             })
