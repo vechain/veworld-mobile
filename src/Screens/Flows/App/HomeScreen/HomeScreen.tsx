@@ -23,13 +23,13 @@ import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
 import { setSelectedAccount } from "~Storage/Redux/Actions"
 import { useAppDispatch } from "~Storage/Redux"
 import { SlideInLeft } from "react-native-reanimated"
-import { mergeTokens } from "~Common/Utils/CryptoUtils/CryptoUtils"
 import {
     defaultTokensMain,
     defaultTokensTest,
 } from "~Common/Constant/Token/TokenConstants"
 import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
 import { setTokenBalances } from "~Storage/Redux/Slices"
+import { mergeTokens } from "~Common/Utils/TokenUtils"
 
 export const HomeScreen = () => {
     const {
