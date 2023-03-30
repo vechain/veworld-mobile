@@ -39,13 +39,6 @@ export const ConfirmMnemonicScreen = () => {
 
     const userHasOnboarded = useAppSelector(hasOnboarded)
 
-    /**
-     * if mnemonic is not available something strange is happening, better to throw an error and crash the app
-     */
-    // if (!mnemonic) {
-    //     throw new Error("ConfirmMnemonicScreen: Mnemonic is not available")
-    // }
-
     const mnemonicArray = useMemo(() => mnemonic?.split(" ") || [], [mnemonic])
 
     const [firstIndex, secondIndex, thirdIndex] = useMemo(

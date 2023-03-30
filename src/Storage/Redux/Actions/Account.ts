@@ -12,6 +12,19 @@ import { AppThunk } from "../Types"
 
 const nextAlias = (accountId: number) => `Account ${accountId}`
 
+/**
+ *  Fine the next index for a new account based on the current accounts
+ * @param accounts
+ * @returns
+ */
+const getNextIndex = (accounts: WalletAccount[]) => {
+    let index = 0
+    const accountsIndex = accounts.map(acc => acc.index)
+    while (accountsIndex.includes(index)) {
+        index++
+    }
+    return index
+}
 const addAccountForDevice =
     (device: Device): AppThunk<WalletAccount> =>
     (dispatch, getState) => {
@@ -25,10 +38,7 @@ const addAccountForDevice =
             ),
         )
 
-        const nextIndex =
-            deviceAccounts.length > 0
-                ? Math.max(...deviceAccounts.map(acc => acc.index)) + 1
-                : 0
+        const nextIndex = getNextIndex(deviceAccounts)
 
         const newAccountAddress = AddressUtils.getAddressFromXPub(
             device.xPub,

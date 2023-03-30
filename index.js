@@ -70,7 +70,7 @@ const Main = () => {
     )
 }
 
-const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
+const NavigationProvider = ({ children }) => {
     const theme = useTheme()
 
     const navigationTheme = useMemo(
