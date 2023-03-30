@@ -1,5 +1,5 @@
 import {
-    getAccountBalances,
+    selectAccountBalances,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
 import { RootState, TokenBalance } from "~Storage/Redux/Types"
@@ -16,7 +16,7 @@ import { setTokenBalances } from "~Storage/Redux/Slices"
  */
 export const updateAccountBalances = ((thorClient: Connex.Thor) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
-        const accountBalances = getAccountBalances(getState())
+        const accountBalances = selectAccountBalances(getState())
         const network = selectSelectedNetwork(getState())
         const balances: TokenBalance[] = []
 
