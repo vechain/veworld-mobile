@@ -12,22 +12,12 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused, useNavigation } from "@react-navigation/native"
 import { BaseSafeArea, useThor, BaseSpacer } from "~Components"
 import { Routes } from "~Navigation"
-import { getTokensFromGithub } from "./Utils/getTokensFromGithub"
-import { FungibleToken, Network, NETWORK_TYPE } from "~Model"
-import { updateFungibleTokens } from "~Storage/Redux/Slices/Token"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+
 import { SlideInLeft } from "react-native-reanimated"
-import {
-    defaultTokensMain,
-    defaultTokensTest,
-} from "~Common/Constant/Token/TokenConstants"
-import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
-import { setTokenBalances } from "~Storage/Redux/Slices"
-import { mergeTokens } from "~Common/Utils/TokenUtils"
-import { selectSelectedNetwork } from "../../../../Storage/Redux/Selectors/Network"
-import { selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { useTokenBalances } from "./Hooks/useTokenBalances"
 
 export const HomeScreen = () => {
+    useTokenBalances()
     const {
         ref: accountManagementBottomSheetRef,
         onOpen: openAccountManagementSheet,
@@ -57,11 +47,6 @@ export const HomeScreen = () => {
 
     const nav = useNavigation()
 
-    const dispatch = useAppDispatch()
-
-    const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-
     useEffect(() => {
         async function init() {
             const genesis = thorClient.genesis.id
@@ -69,49 +54,6 @@ export const HomeScreen = () => {
         }
         init()
     }, [isFocused, thorClient])
-
-    /**
-     * init tokens and balances
-     */
-    useEffect(() => {
-        if (selectedAccount && selectedNetwork) {
-            getTokensFromGithub({
-                genesis: { id: selectedNetwork.genesisId },
-                type: selectedNetwork.type,
-            } as Network).then(_tokens => {
-                let defaultTokens: FungibleToken[] = []
-                if (selectedNetwork.type === NETWORK_TYPE.MAIN) {
-                    defaultTokens = defaultTokensMain
-                }
-                if (selectedNetwork.type === NETWORK_TYPE.TEST) {
-                    defaultTokens = defaultTokensTest
-                }
-
-                if (defaultTokens.length) {
-                    // set tokens
-                    dispatch(
-                        updateFungibleTokens(
-                            mergeTokens(defaultTokens, _tokens),
-                        ),
-                    )
-                    // set balances
-                    dispatch(
-                        setTokenBalances(
-                            defaultTokens.map(token => ({
-                                accountAddress: selectedAccount?.address,
-                                tokenAddress: token.address,
-                                balance: "0",
-                                timeUpdated: new Date().toISOString(),
-                            })),
-                        ),
-                    )
-                    dispatch(updateAccountBalances(thorClient))
-                } else {
-                    dispatch(updateFungibleTokens(_tokens))
-                }
-            })
-        }
-    }, [selectedNetwork, selectedAccount, dispatch, thorClient])
 
     return (
         <BaseSafeArea grow={1}>
