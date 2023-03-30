@@ -1,27 +1,30 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, screen, waitFor } from "@testing-library/react-native"
+import { render, screen } from "@testing-library/react-native"
 import { BaseText } from "./BaseText"
+
+const baseTextTestId = "BaseText"
+const findBaseText = async () =>
+    await screen.findByTestId(baseTextTestId, { timeout: 5000 })
 
 describe("BaseText", () => {
     it("should render correctly with default props", async () => {
-        const { getByTestId } = render(<BaseText testID="BaseText" />, {
+        render(<BaseText testID={baseTextTestId} />, {
             wrapper: TestWrapper,
         })
-        await waitFor(() => expect(screen.getByTestId("BaseText")).toBeTruthy())
-        const button = getByTestId("BaseText")
-        expect(button).toBeTruthy()
+        const text = await findBaseText()
+        expect(text).toBeVisible()
     })
 
     it("should render correctly then italic", async () => {
-        const { getByTestId } = render(
-            <BaseText testID="BaseText" italic typographyFont="body" />,
+        render(
+            <BaseText testID={baseTextTestId} italic typographyFont="body" />,
             {
                 wrapper: TestWrapper,
             },
         )
-        await waitFor(() => expect(screen.getByTestId("BaseText")).toBeTruthy())
-        const button = getByTestId("BaseText")
-        expect(button).toBeTruthy()
+        const text = await findBaseText()
+        expect(text).toBeVisible()
+        expect(text).toHaveStyle({ fontStyle: "italic" })
     })
 })

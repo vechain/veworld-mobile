@@ -1,49 +1,56 @@
-/* eslint-disable i18next/no-literal-string */
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, fireEvent, waitFor, act } from "@testing-library/react-native"
+import { render, fireEvent, act, screen } from "@testing-library/react-native"
 import { BaseSwitch } from "./BaseSwitch"
+
+const baseSwitchTestId = "BaseSwitch"
+const findBaseSwitch = async () =>
+    screen.findByTestId(baseSwitchTestId, { timeout: 5000 })
 
 describe("BaseSwitch component", () => {
     it("renders switch component", async () => {
         const onValueChange = jest.fn()
-        const { getByTestId } = render(
+        render(
             <BaseSwitch
                 value={true}
                 onValueChange={onValueChange}
-                testID={"BaseSwitch"}
+                testID={baseSwitchTestId}
             />,
             { wrapper: TestWrapper },
         )
-        await waitFor(() => expect(getByTestId("BaseSwitch")).toBeTruthy())
-        const switchElement = getByTestId("BaseSwitch")
-        expect(switchElement).toBeVisible()
+        const baseSwitch = await findBaseSwitch()
+
+        expect(baseSwitch).toBeVisible()
     })
 
     it("renders switch without value", async () => {
         const onValueChange = jest.fn()
-        const { getByTestId } = render(
-            <BaseSwitch onValueChange={onValueChange} testID={"BaseSwitch"} />,
+        render(
+            <BaseSwitch
+                onValueChange={onValueChange}
+                testID={baseSwitchTestId}
+            />,
             { wrapper: TestWrapper },
         )
-        await waitFor(() => expect(getByTestId("BaseSwitch")).toBeTruthy())
-        const switchElement = getByTestId("BaseSwitch")
-        expect(switchElement).toBeVisible()
+        const baseSwitch = await findBaseSwitch()
+
+        expect(baseSwitch).toBeVisible()
     })
 
     it("handles onValueChange callback", async () => {
         const onValueChange = jest.fn()
-        const { getByTestId } = render(
+        render(
             <BaseSwitch
                 value={true}
                 onValueChange={onValueChange}
-                testID={"BaseSwitch"}
+                testID={baseSwitchTestId}
             />,
             { wrapper: TestWrapper },
         )
-        await waitFor(() => expect(getByTestId("BaseSwitch")).toBeTruthy())
-        const switchElement = getByTestId("BaseSwitch")
-        act(() => fireEvent(switchElement, "valueChange", false))
+        const baseSwitch = await findBaseSwitch()
+
+        expect(baseSwitch).toBeVisible()
+        act(() => fireEvent(baseSwitch, "valueChange", false))
         expect(onValueChange).toHaveBeenCalledWith(false)
     })
 })

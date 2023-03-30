@@ -1,14 +1,12 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import {
-    render,
-    fireEvent,
-    screen,
-    act,
-    waitFor,
-} from "@testing-library/react-native"
+import { render, fireEvent, screen, act } from "@testing-library/react-native"
 import { BaseButton } from "./BaseButton"
 import { BaseIcon } from "./BaseIcon"
+
+const buttonTitle = "Button"
+const findButton = async () =>
+    await screen.findByText(buttonTitle, { timeout: 5000 })
 
 describe("BaseButton", () => {
     const mockAction = jest.fn()
@@ -18,13 +16,13 @@ describe("BaseButton", () => {
     })
 
     it("renders correctly with default props", async () => {
-        render(<BaseButton action={mockAction} title="Button" />, {
+        render(<BaseButton action={mockAction} title={buttonTitle} />, {
             wrapper: TestWrapper,
         })
         // wait for useEffects
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+        const button = await findButton()
 
-        const button = screen.getByText("Button")
+        expect(button).toBeVisible()
         act(() => {
             fireEvent.press(button)
         })
@@ -33,20 +31,21 @@ describe("BaseButton", () => {
     })
 
     it("renders correctly with custom props", async () => {
-        const { getByText } = render(
+        render(
             <BaseButton
                 action={mockAction}
-                title="Button"
+                title={buttonTitle}
                 textColor="#FF0000"
                 leftIcon={<BaseIcon name="ab-testing" />}
                 rightIcon={<BaseIcon name="abacus" />}
             />,
             { wrapper: TestWrapper },
         )
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
 
-        const button = getByText("Button")
-        expect(button).toBeTruthy()
+        const button = await findButton()
+
+        expect(button).toBeVisible()
+
         expect(button).toHaveStyle({
             color: "#FF0000",
         })
@@ -56,7 +55,7 @@ describe("BaseButton", () => {
         render(
             <BaseButton
                 action={mockAction}
-                title="Button"
+                title={buttonTitle}
                 variant="outline"
                 haptics="light"
                 w={10}
@@ -66,9 +65,10 @@ describe("BaseButton", () => {
             { wrapper: TestWrapper },
         )
         // wait for useEffects
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+        let button = await findButton()
 
-        let button = screen.getByText("Button")
+        expect(button).toBeVisible()
+
         act(() => {
             fireEvent.press(button)
         })
@@ -78,7 +78,7 @@ describe("BaseButton", () => {
         render(
             <BaseButton
                 action={mockAction}
-                title="Button"
+                title={buttonTitle}
                 textColor="#FF0000"
                 variant="outline"
                 haptics="medium"
@@ -87,9 +87,9 @@ describe("BaseButton", () => {
             { wrapper: TestWrapper },
         )
         // wait for useEffects
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+        button = await findButton()
 
-        button = screen.getByText("Button")
+        expect(button).toBeVisible()
         act(() => {
             fireEvent.press(button)
         })
@@ -98,7 +98,7 @@ describe("BaseButton", () => {
         render(
             <BaseButton
                 action={mockAction}
-                title="Button"
+                title={buttonTitle}
                 textColor="#FF0000"
                 variant="link"
                 haptics="heavy"
@@ -109,9 +109,9 @@ describe("BaseButton", () => {
             { wrapper: TestWrapper },
         )
         // wait for useEffects
-        await waitFor(() => expect(screen.getByText("Button")).toBeTruthy())
+        button = await findButton()
 
-        button = screen.getByText("Button")
+        expect(button).toBeVisible()
         act(() => {
             fireEvent.press(button)
         })

@@ -1,32 +1,44 @@
 /* eslint-disable i18next/no-literal-string */
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, waitFor, screen } from "@testing-library/react-native"
+import { render, screen } from "@testing-library/react-native"
 import { BaseSafeArea } from "./BaseSafeArea"
 import { Text } from "react-native"
 
-describe("<BaseSafeArea />", () => {
-    it("renders without crashing", async () => {
-        render(
-            <BaseSafeArea bg="red">
-                <Text>Hello World!</Text>
-            </BaseSafeArea>,
-            { wrapper: TestWrapper },
-        )
-        await waitFor(() =>
-            expect(screen.getByText("Hello World!")).toBeTruthy(),
-        )
-        expect(screen.getByText("Hello World!")).toBeVisible()
+const baseSafeAreaTestId = "BaseSafeArea"
+const findBaseSafeArea = async () =>
+    screen.findByTestId(baseSafeAreaTestId, { timeout: 5000 })
 
+describe("BaseSafeArea", () => {
+    it("renders correctly along with its content", async () => {
         render(
-            <BaseSafeArea transparent>
+            <BaseSafeArea bg="red" testID={baseSafeAreaTestId}>
                 <Text>Hello World!</Text>
             </BaseSafeArea>,
             { wrapper: TestWrapper },
         )
-        await waitFor(() =>
-            expect(screen.getByText("Hello World!")).toBeTruthy(),
+
+        const baseSafeArea = await findBaseSafeArea()
+        expect(baseSafeArea).toBeVisible()
+        expect(baseSafeArea).toHaveStyle({ backgroundColor: "red" })
+
+        const content = await screen.findByText("Hello World!")
+        expect(content).toBeVisible()
+    })
+
+    it("transparent override bg", async () => {
+        render(
+            <BaseSafeArea transparent bg="red" testID={baseSafeAreaTestId}>
+                <Text>Hello World!</Text>
+            </BaseSafeArea>,
+            { wrapper: TestWrapper },
         )
-        expect(screen.getByText("Hello World!")).toBeDefined()
+
+        const baseSafeArea = await findBaseSafeArea()
+        expect(baseSafeArea).toBeVisible()
+        expect(baseSafeArea).toHaveStyle({ backgroundColor: "transparent" })
+
+        const content = await screen.findByText("Hello World!")
+        expect(content).toBeVisible()
     })
 })
