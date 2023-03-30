@@ -12,7 +12,7 @@ export const useOnDigitPressWithConfirmation = ({
 }) => {
     const { pin, onDigitDelete, onDigitPress, setPin } = useOnDigitPress({
         digitNumber,
-        resetPinOnFinish: false,
+        resetPinOnFinishTimer: undefined,
     })
 
     const {
@@ -22,7 +22,7 @@ export const useOnDigitPressWithConfirmation = ({
         onDigitPress: onConfirmationDigitPress,
     } = useOnDigitPress({
         digitNumber,
-        resetPinOnFinish: false,
+        resetPinOnFinishTimer: 300,
         onFinishCallback: onConfirmationFinish,
     })
 
@@ -31,8 +31,10 @@ export const useOnDigitPressWithConfirmation = ({
             onFinishCallback(finishedConfirmationPin)
         else {
             onConfirmationError && onConfirmationError()
-            setPin([])
-            setConfirmationPin([])
+            setTimeout(() => {
+                setPin([])
+                setConfirmationPin([])
+            }, 300)
         }
     }
 

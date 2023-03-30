@@ -3,11 +3,11 @@ import { useState } from "react"
 export const useOnDigitPress = ({
     digitNumber,
     onFinishCallback,
-    resetPinOnFinish = true,
+    resetPinOnFinishTimer,
 }: {
     digitNumber: number
     onFinishCallback?: (password: string) => void
-    resetPinOnFinish?: boolean
+    resetPinOnFinishTimer?: number
 }) => {
     const [pin, setPin] = useState<string[]>([])
 
@@ -31,10 +31,12 @@ export const useOnDigitPress = ({
         setPin(updatedPin)
 
         if (updatedPin.length === digitNumber) {
-            setTimeout(() => {
-                onFinishCallback && onFinishCallback(updatedPin.join(""))
-                resetPinOnFinish && setPin([])
-            }, 100)
+            onFinishCallback && onFinishCallback(updatedPin.join(""))
+            if (resetPinOnFinishTimer) {
+                setTimeout(() => {
+                    setPin([])
+                }, resetPinOnFinishTimer)
+            }
         }
     }
 

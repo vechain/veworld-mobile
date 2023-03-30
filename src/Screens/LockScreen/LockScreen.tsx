@@ -51,6 +51,7 @@ export const LockScreen: React.FC<Props> = ({ onSuccess, scenario }) => {
     const { pin, onDigitPress, onDigitDelete } = useOnDigitPress({
         digitNumber,
         onFinishCallback: validateUserPin,
+        resetPinOnFinishTimer: 300,
     })
 
     const handleOnDigitPress = useCallback(

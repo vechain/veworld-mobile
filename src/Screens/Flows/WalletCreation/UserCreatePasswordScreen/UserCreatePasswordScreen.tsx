@@ -13,7 +13,7 @@ import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
 import { CryptoUtils, SettingsConstants } from "~Common"
-import { useAppDispatch } from "~Storage"
+import { useAppDispatch } from "~Storage/Redux"
 import { setPinValidationString } from "~Storage/Redux/Actions"
 
 const digitNumber = 6
@@ -34,6 +34,7 @@ export const UserCreatePasswordScreen = () => {
                 SettingsConstants.VALIDATION_STRING,
                 insertedPin,
             )
+
             dispatch(setPinValidationString(pinValidationString))
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.SECRET,
