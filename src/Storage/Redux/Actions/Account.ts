@@ -13,7 +13,7 @@ import { AppThunk } from "../Types"
 const nextAlias = (accountId: number) => `Account ${accountId}`
 
 /**
- *  Fine the next index for a new account based on the current accounts
+ *  Find the next index for a new account based on the current accounts
  * @param accounts
  * @returns
  */
