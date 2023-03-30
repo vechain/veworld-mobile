@@ -1,4 +1,4 @@
 export * from "./UserPreferences"
 export * from "./Config"
-export * from "./Token"
+export * from "./TokenApi"
 export * from "./Balances"
