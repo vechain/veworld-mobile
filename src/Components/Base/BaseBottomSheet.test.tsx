@@ -7,8 +7,6 @@ import { View } from "react-native"
 import { BaseView } from "./BaseView"
 
 const baseBottomSheetContentTestId = "BaseBottomSheetContent"
-// const findBaseBottomSheetContent = async () =>
-//     screen.findByTestId(baseBottomSheetContentTestId, { timeout: 5000 })
 
 // NOTE: it's not possible to test more than that
 describe("BaseBottomSheet", () => {
