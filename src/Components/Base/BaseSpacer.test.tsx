@@ -5,7 +5,7 @@ import { BaseSpacer } from "./BaseSpacer"
 
 const baseSpacerTestId = "BaseSpacer"
 const findBaseSpacer = async () =>
-    screen.findByTestId(baseSpacerTestId, { timeout: 5000 })
+    screen.findByTestId(baseSpacerTestId, {}, { timeout: 5000 })
 
 describe("BaseSpacer", () => {
     it("should render correctly with width prop", async () => {

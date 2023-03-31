@@ -5,11 +5,11 @@ import { BaseTouchable } from "./BaseTouchable"
 
 const baseTouchableTestId = "BaseTouchable"
 const findBaseTouchable = async () =>
-    await screen.findByTestId(baseTouchableTestId, { timeout: 5000 })
+    await screen.findByTestId(baseTouchableTestId, {}, { timeout: 5000 })
 
 const title = "Touch me"
 const findBaseTouchableByTitle = async () =>
-    await screen.findByText(title, { timeout: 5000 })
+    await screen.findByText(title, {}, { timeout: 5000 })
 
 describe("BaseTouchable", () => {
     it("renders correctly with title", async () => {

@@ -7,7 +7,7 @@ import { Text } from "react-native"
 
 const baseSafeAreaTestId = "BaseSafeArea"
 const findBaseSafeArea = async () =>
-    screen.findByTestId(baseSafeAreaTestId, { timeout: 5000 })
+    screen.findByTestId(baseSafeAreaTestId, {}, { timeout: 5000 })
 
 describe("BaseSafeArea", () => {
     it("renders correctly along with its content", async () => {

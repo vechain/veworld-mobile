@@ -10,13 +10,13 @@ import { HomeScreenActions } from "./HomeScreenActions"
 import { Routes } from "~Navigation"
 
 const getBuyButton = async () =>
-    await screen.findByTestId("buyButton", { timeout: 5000 })
+    await screen.findByTestId("buyButton", {}, { timeout: 5000 })
 const getSendButton = async () =>
-    await screen.findByTestId("sendButton", { timeout: 5000 })
+    await screen.findByTestId("sendButton", {}, { timeout: 5000 })
 const getSwapButton = async () =>
-    await screen.findByTestId("swapButton", { timeout: 5000 })
+    await screen.findByTestId("swapButton", {}, { timeout: 5000 })
 const getHistoryButton = async () =>
-    await screen.findByTestId("historyButton", { timeout: 5000 })
+    await screen.findByTestId("historyButton", {}, { timeout: 5000 })
 
 describe("HomeScreenActions component", () => {
     it("renders buttons with correct navigation", async () => {

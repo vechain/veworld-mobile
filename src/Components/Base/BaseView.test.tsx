@@ -5,7 +5,7 @@ import { BaseView } from "./BaseView"
 
 const baseViewTestId = "BaseView"
 const findBaseView = async () =>
-    screen.findByTestId(baseViewTestId, { timeout: 5000 })
+    screen.findByTestId(baseViewTestId, {}, { timeout: 5000 })
 
 describe("BaseView component", () => {
     it("should render correctly with default props", async () => {
