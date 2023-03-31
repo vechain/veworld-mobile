@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    getSelectedAccount,
-    getCurrentNetwork,
-    getAccountBalances,
+    selectSelectedAccount,
+    selectAccountBalances,
+    selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
 import { FungibleToken, NETWORK_TYPE } from "~Model"
 import {
@@ -23,14 +23,14 @@ import { useEffect } from "react"
  */
 export const useTokenBalances = () => {
     const dispatch = useAppDispatch()
-    const currentAccount = useAppSelector(getSelectedAccount)
-    const currentNetwork = useAppSelector(getCurrentNetwork)
-    const balances = useAppSelector(getAccountBalances)
+    const currentAccount = useAppSelector(selectSelectedAccount)
+    const currentNetwork = useAppSelector(selectSelectedNetwork)
+    const balances = useAppSelector(selectAccountBalances)
     const thorClient = useThor()
 
     useGetTokensFromGithubQuery({
         networkGenesisId: currentNetwork.genesisId,
-        networkType: currentNetwork.type as NETWORK_TYPE,
+        networkType: currentNetwork.type,
     })
 
     /**

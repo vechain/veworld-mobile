@@ -10,7 +10,7 @@ import {
     BaseView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { EnableBiometrics, SecureApp } from "./Components"
+import { EnableBiometrics, SecureApp, DecryptWallet } from "./Components"
 
 export const PrivacyScreen = () => {
     const nav = useNavigation()
@@ -32,7 +32,10 @@ export const PrivacyScreen = () => {
                 <BaseText typographyFont="title">{LL.TITLE_PRIVACY()}</BaseText>
                 <BaseSpacer height={24} />
                 <SecureApp />
+                <BaseSpacer height={20} />
                 <EnableBiometrics />
+                <BaseSpacer height={20} />
+                {__DEV__ && <DecryptWallet />}
             </BaseView>
         </BaseSafeArea>
     )

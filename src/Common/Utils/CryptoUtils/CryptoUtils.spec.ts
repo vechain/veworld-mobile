@@ -1,6 +1,9 @@
 import { HDNode } from "thor-devkit"
+import { Wallet } from "~Model"
 import "~Test"
-import {
+
+import CryptoUtils from "./CryptoUtils"
+const {
     decrypt,
     decryptState,
     encrypt,
@@ -11,7 +14,37 @@ import {
     shuffleArray,
     verifyMnemonic,
     xPubFromHdNode,
-} from "./CryptoUtils"
+} = CryptoUtils
+
+const testWallet: Wallet = {
+    rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
+    nonce: "000000",
+}
+
+// const testDevice: Device = {
+//     index: 0,
+//     type: DEVICE_TYPE.LOCAL_MNEMONIC,
+//     alias: "test",
+//     rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
+//     wallet: "dfsfgsdgfs",
+// }
+
+const password = "password"
+const deviceEncryptionKey = "deviceEncryptionKey"
+
+jest.mock("~Services/KeychainService", () => {
+    return {
+        setDeviceEncryptionKey: (
+            _encryptionKey: string,
+            _rootAddress: string,
+            _accessControl?: boolean,
+        ) => "setDeviceEncryptionKey is being called",
+        getDeviceEncryptionKey: (
+            _rootAddress: string,
+            _accessControl?: boolean,
+        ) => deviceEncryptionKey,
+    }
+})
 
 // NOTE: snapshot testing
 describe("xPubFromHdNode", () => {
@@ -49,8 +82,8 @@ describe("hdNodeFromXPub", () => {
     })
 })
 
-describe("these functions can't be really tested because based on mocked native modules", () => {
-    it("should not throw", () => {
+describe("encryptWallet: not tested properly", () => {
+    it("should not throw execptions", () => {
         random()
         const arr = [1, 2, 3, 4, 5]
         shuffleArray(arr)
@@ -60,25 +93,36 @@ describe("these functions can't be really tested because based on mocked native 
         decrypt(encrypted, encryptionKey)
         const encryptedState = encryptState({ bar: "foo" }, "secret")
         decryptState(encryptedState, "secret")
-        encryptWallet(
-            {
-                rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
-                nonce: "000000",
-            },
-            0,
-            true,
-        )
-        encryptWallet(
-            {
-                rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
-                nonce: "000000",
-            },
-            0,
-            true,
-            "encryption key",
-        )
+        encryptWallet({
+            wallet: testWallet,
+            rootAddress: testWallet.rootAddress,
+            accessControl: true,
+            hashEncryptionKey: password,
+        })
+        encryptWallet({
+            wallet: testWallet,
+            rootAddress: testWallet.rootAddress,
+            accessControl: true,
+            hashEncryptionKey: password,
+        })
     })
 })
+
+// describe("decryptWallet: not tested properly", () => {
+//     it("should not throw errors", async () => {
+//         const { encryptionKey, encryptedWallet } = await encryptWallet({
+//             wallet: testWallet,
+//             rootAddress: testWallet.rootAddress,
+//             accessControl: false,
+//             hashEncryptionKey: password,
+//         })
+
+//         await decryptWallet({
+//             device: { ...testDevice, wallet: encryptedWallet },
+//             userPassword: encryptionKey,
+//         })
+//     })
+// })
 
 describe("verifyMnemonic", () => {
     it("should create hdNode from mnemonic", () => {

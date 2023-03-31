@@ -1,30 +1,24 @@
 import { useCallback, useMemo, useState } from "react"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import {
-    Account,
-    Device,
-    XPub,
-    useRealm,
-    getUserPreferences,
-    getMnemonic,
-} from "~Storage"
 import { CryptoUtils } from "~Common/Utils"
-import { getAliasName } from "../useCreateAccount/Helpers/getAliasName"
 import { useBiometrics } from "../useBiometrics"
 import { useDeviceUtils } from "../useDeviceUtils"
-import { useAppDispatch } from "~Storage/Redux"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    addDeviceAndAccounts,
+    selectAccount,
     setLastSecurityLevel,
     setUserSelectedSecurity,
+    setMnemonic,
 } from "~Storage/Redux/Actions"
+import { selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { error } from "~Common/Logger"
 
 /**
  * useCreateWalletWithBiometrics
  * @returns
  */
 export const useCreateWalletWithBiometrics = () => {
-    const { store, cache } = useRealm()
-
     const { getDeviceFromMnemonic } = useDeviceUtils()
     const [isComplete, setIsComplete] = useState(false)
 
@@ -35,75 +29,57 @@ export const useCreateWalletWithBiometrics = () => {
     )
 
     const dispatch = useAppDispatch()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
-        async (onError?: (error: unknown) => void) => {
-            const _mnemonic = getMnemonic(cache)
-
-            let mnemonicPhrase = _mnemonic?.mnemonic
-
+        async ({
+            mnemonic,
+            onError,
+        }: {
+            mnemonic: string
+            onError?: (error: unknown) => void
+        }) => {
             try {
-                if (mnemonicPhrase && accessControl) {
-                    const { device, wallet } =
-                        getDeviceFromMnemonic(mnemonicPhrase)
-
-                    cache.write(() => {
-                        _mnemonic!.mnemonic = ""
-                    })
-
-                    const { encryptedWallet } = await CryptoUtils.encryptWallet(
-                        wallet,
-                        device.index,
-                        accessControl,
+                if (!accessControl)
+                    throw new Error(
+                        "Biometrics is not supported: accessControl is !true ",
                     )
 
-                    store.write(() => {
-                        const xPub = store.create<XPub>(XPub.getName(), {
-                            ...device.xPub,
-                        })
+                const { device, wallet } = getDeviceFromMnemonic(mnemonic)
 
-                        const _device = store.create<Device>(Device.getName(), {
-                            ...device,
-                            xPub,
-                            wallet: encryptedWallet,
-                        })
+                dispatch(setMnemonic(undefined))
 
-                        const account = store.create<Account>(
-                            Account.getName(),
-                            {
-                                address: device.rootAddress,
-                                index: 0,
-                                visible: true,
-                                alias: `${getAliasName} ${1}`,
-                            },
-                        )
+                const { encryptedWallet } = await CryptoUtils.encryptWallet({
+                    wallet,
+                    rootAddress: device.rootAddress,
+                    accessControl: true,
+                })
 
-                        _device.accounts.push(account)
+                const newAccount = dispatch(
+                    addDeviceAndAccounts({
+                        ...device,
+                        wallet: encryptedWallet,
+                    }),
+                )
+                if (!selectedAccount)
+                    dispatch(selectAccount({ address: newAccount.address }))
 
-                        const userPreferences = getUserPreferences(store)
-                        if (!userPreferences.selectedAccount)
-                            userPreferences.selectedAccount = account
+                dispatch(
+                    setUserSelectedSecurity(
+                        UserSelectedSecurityLevel.BIOMETRIC,
+                    ),
+                )
 
-                        dispatch(
-                            setUserSelectedSecurity(
-                                UserSelectedSecurityLevel.BIOMETRIC,
-                            ),
-                        )
+                dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
 
-                        dispatch(
-                            setLastSecurityLevel(SecurityLevelType.BIOMETRIC),
-                        )
-                    })
-
-                    setIsComplete(true)
-                }
-            } catch (error) {
-                console.log("CREATE WALLET ERROR : ", error)
-                onError && onError(error)
+                setIsComplete(true)
+            } catch (e) {
+                error("CREATE WALLET ERROR : ", e)
+                onError && onError(e)
             }
         },
-        [cache, accessControl, getDeviceFromMnemonic, store, dispatch],
+        [accessControl, getDeviceFromMnemonic, dispatch, selectedAccount],
     )
     //* [END] - Create Wallet
 

@@ -7,6 +7,7 @@ import {
     MiddlewareArray,
     ThunkDispatch,
     Dispatch,
+    ThunkAction,
 } from "@reduxjs/toolkit"
 
 export type PersistedState = RootState & PersistPartial
@@ -22,3 +23,10 @@ export type RootState = ReturnType<typeof reducer>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = ThunkDispatch<any, undefined, AnyAction> &
     Dispatch<AnyAction>
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+    ReturnType,
+    RootState,
+    unknown,
+    AnyAction
+>

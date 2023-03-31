@@ -4,10 +4,10 @@ import { mergeTokens } from "~Common/Utils/TokenUtils"
 import { FungibleToken } from "~Model"
 import { TokenApi } from "../Api"
 import { RootState } from "../Types"
-import { getCurrentNetwork } from "./UserPreferences"
+import { selectSelectedNetwork } from "./Network"
 
 const getQueryArgs = (state: RootState) => {
-    const network = getCurrentNetwork(state)
+    const network = selectSelectedNetwork(state)
     return { networkGenesisId: network.genesisId, networkType: network.type }
 }
 
@@ -25,7 +25,7 @@ export const selectAllFungibleTokens = createSelector(
  */
 export const selectFungibleTokens = createSelector(
     selectAllFungibleTokens,
-    getCurrentNetwork,
+    selectSelectedNetwork,
     (tokens, network) =>
         tokens.filter(
             (token: FungibleToken) => token.genesisId === network.genesisId,

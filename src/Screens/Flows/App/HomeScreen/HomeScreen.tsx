@@ -10,15 +10,9 @@ import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useIsFocused, useNavigation } from "@react-navigation/native"
-import {
-    BaseSafeArea,
-    useThor,
-    useUserPreferencesEntity,
-    BaseSpacer,
-} from "~Components"
+import { BaseSafeArea, useThor, BaseSpacer } from "~Components"
 import { Routes } from "~Navigation"
-import { setSelectedAccount } from "~Storage/Redux/Actions"
-import { useAppDispatch } from "~Storage/Redux"
+
 import { SlideInLeft } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 
@@ -52,8 +46,6 @@ export const HomeScreen = () => {
     const thorClient = useThor()
 
     const nav = useNavigation()
-    const { selectedAccount } = useUserPreferencesEntity()
-    const dispatch = useAppDispatch()
 
     useEffect(() => {
         async function init() {
@@ -62,22 +54,6 @@ export const HomeScreen = () => {
         }
         init()
     }, [isFocused, thorClient])
-
-    useEffect(() => {
-        if (selectedAccount)
-            dispatch(
-                setSelectedAccount({
-                    // TODO: change to the real account
-                    address: selectedAccount.address,
-                    alias: selectedAccount.alias,
-                    createdAt: selectedAccount.createdAt,
-                    index: selectedAccount.index,
-                    visible: true,
-                    rootAddress: "0x0000000",
-                }),
-            )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedAccount?.address, dispatch])
 
     return (
         <BaseSafeArea grow={1}>

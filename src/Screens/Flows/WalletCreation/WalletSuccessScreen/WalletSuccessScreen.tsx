@@ -15,7 +15,6 @@ import {
     UserSelectedSecurityLevel,
     WALLET_STATUS,
 } from "~Model"
-import { getAppLock, useRealm } from "~Storage"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -31,10 +30,11 @@ import {
 } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    selectIsWalletCreated,
+    selectMnemonic,
+    selectHasOnboarded,
     selectUserSelectedSecurity,
 } from "~Storage/Redux/Selectors"
-import { setIsWalletCreated } from "~Storage/Redux/Actions"
+import { setAppLockStatus } from "~Storage/Redux/Actions"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -45,13 +45,16 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const { cache } = useRealm()
     const theme = useTheme()
     const [isError, setIsError] = useState("")
 
     const dispatch = useAppDispatch()
-    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+
+    //we have a device and a selected account
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
+
+    const mnemonic = useAppSelector(selectMnemonic)
 
     const {
         onCreateWallet: createWalletWithBiometrics,
@@ -79,47 +82,61 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const onButtonPress = useCallback(async () => {
         let params = route.params
 
-        if (isWalletCreated) {
+        if (!mnemonic) throw new Error("Mnemonic is not available")
+
+        if (userHasOnboarded) {
             if (userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC) {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
                 if (success) {
-                    createWalletWithBiometrics(onWalletCreationError)
+                    await createWalletWithBiometrics({
+                        mnemonic,
+                        onError: onWalletCreationError,
+                    })
                 }
             } else {
-                openPasswordPrompt()
+                return openPasswordPrompt()
             }
         } else {
             if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                createWalletWithBiometrics()
+                await createWalletWithBiometrics({ mnemonic })
             } else if (
                 params?.securityLevelSelected === SecurityLevelType.SECRET
             ) {
-                createWalletWithPassword(
-                    params?.userPin!,
-                    onWalletCreationError,
-                )
+                await createWalletWithPassword({
+                    userPassword: params?.userPin!,
+                    onError: onWalletCreationError,
+                    mnemonic,
+                })
             }
         }
     }, [
         route.params,
-        isWalletCreated,
+        userHasOnboarded,
         userSelectedSecurity,
         createWalletWithBiometrics,
         onWalletCreationError,
         openPasswordPrompt,
         createWalletWithPassword,
+        mnemonic,
     ])
 
     const onPasswordSuccess = useCallback(
-        (password: string) =>
-            createWalletWithPassword(password, onWalletCreationError),
-        [createWalletWithPassword, onWalletCreationError],
+        async (password: string) => {
+            if (!mnemonic) throw new Error("Mnemonic is not available")
+
+            await createWalletWithPassword({
+                userPassword: password,
+                mnemonic,
+                onError: onWalletCreationError,
+            })
+        },
+        [createWalletWithPassword, onWalletCreationError, mnemonic],
     )
 
     useEffect(() => {
         if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
-            if (isWalletCreated) {
+            if (userHasOnboarded) {
                 closePasswordPrompt()
 
                 if (!isPasswordPromptOpen) {
@@ -136,22 +153,14 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     }
                 }
             } else {
-                let appLock = getAppLock(cache)
-                cache.write(() => {
-                    if (appLock) {
-                        appLock.status = WALLET_STATUS.UNLOCKED
-                    }
-                })
-
-                dispatch(setIsWalletCreated(true))
+                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
             }
         }
     }, [
-        cache,
         closePasswordPrompt,
         dispatch,
         isPasswordPromptOpen,
-        isWalletCreated,
+        userHasOnboarded,
         isWalletCreatedWithBiometrics,
         isWalletCreatedWithPassword,
         nav,

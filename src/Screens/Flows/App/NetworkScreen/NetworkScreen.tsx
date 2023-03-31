@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback } from "react"
 import {
     BaseIcon,
     BaseSafeArea,
@@ -9,20 +9,30 @@ import {
     BaseTouchableBox,
     BaseView,
     EnableFeature,
-    useUserPreferencesEntity,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { StringUtils, useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
-import { useRealm, getNetworks, getUserPreferences } from "~Storage"
 import { Routes } from "~Navigation"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectNetworks,
+    selectSelectedNetwork,
+    selectShowConversionOnOtherNets,
+    selectShowTestnetTag,
+} from "~Storage/Redux/Selectors"
+import {
+    toggleShowConversionOtherNetworks,
+    toggleShowTestnetTag,
+} from "~Storage/Redux/Actions"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const { store } = useRealm()
+
+    const dispatch = useAppDispatch()
 
     const {
         ref: walletManagementBottomSheetRef,
@@ -30,8 +40,15 @@ export const ChangeNetworkScreen = () => {
         onClose: closeBottonSheet,
     } = useBottomSheetModal()
 
-    const networks = getNetworks(store)
-    const { currentNetwork } = useUserPreferencesEntity()
+    const showConversionOnOtherNets = useAppSelector(
+        selectShowConversionOnOtherNets,
+    )
+
+    const showTestNetTag = useAppSelector(selectShowTestnetTag)
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const networks = useAppSelector(selectNetworks)
+
     const goBack = useCallback(() => nav.goBack(), [nav])
     const onPressInput = useCallback(() => openBottomSheet(), [openBottomSheet])
     const onAddCustomPress = useCallback(
@@ -39,40 +56,18 @@ export const ChangeNetworkScreen = () => {
         [nav],
     )
 
-    const userPreferences = getUserPreferences(store)
-
-    const isShowConversion = useMemo(
-        () => userPreferences.showConversionOtherNets,
-        [userPreferences],
-    )
-    const [isConversionEnabled, setIsConversionEnabled] =
-        useState(isShowConversion)
-
     const toggleConversionSwitch = useCallback(
-        (newValue: boolean) => {
-            setIsConversionEnabled(newValue)
-
-            store.write(() => {
-                userPreferences.showConversionOtherNets = newValue
-            })
+        (_newValue: boolean) => {
+            dispatch(toggleShowConversionOtherNetworks())
         },
-        [userPreferences, store],
+        [dispatch],
     )
 
-    const isShowTestTag = useMemo(
-        () => userPreferences.showTestNetTag,
-        [userPreferences],
-    )
-    const [isTag, setIsTag] = useState(isShowTestTag)
     const toggleTagSwitch = useCallback(
-        (newValue: boolean) => {
-            setIsTag(newValue)
-
-            store.write(() => {
-                userPreferences.showTestNetTag = newValue
-            })
+        (_newValue: boolean) => {
+            dispatch(toggleShowTestnetTag())
         },
-        [userPreferences, store],
+        [dispatch],
     )
 
     return (
@@ -103,7 +98,7 @@ export const ChangeNetworkScreen = () => {
                     action={onPressInput}
                     justifyContent="space-between">
                     <BaseText>
-                        {StringUtils.capitalize(currentNetwork?.type!)}
+                        {StringUtils.capitalize(selectedNetwork.type)}
                     </BaseText>
                     <BaseIcon name="magnify" />
                 </BaseTouchableBox>
@@ -122,7 +117,7 @@ export const ChangeNetworkScreen = () => {
                     title={LL.BD_OTHER_NETWORKS()}
                     subtitle={LL.BD_NETWORK_INDICATOR()}
                     onValueChange={toggleConversionSwitch}
-                    value={isConversionEnabled}
+                    value={showConversionOnOtherNets}
                 />
 
                 <BaseSpacer height={20} />
@@ -131,7 +126,7 @@ export const ChangeNetworkScreen = () => {
                     title={LL.BD_OTHER_NETWORKS()}
                     subtitle={LL.BD_NETWORK_INDICATOR()}
                     onValueChange={toggleTagSwitch}
-                    value={isTag}
+                    value={showTestNetTag}
                 />
             </BaseView>
 

@@ -12,30 +12,29 @@ import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { CryptoUtils, SeedUtils, useDeviceUtils, useTheme } from "~Common"
 import { Keyboard } from "react-native"
-import { getMnemonic, useRealm } from "~Storage"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
 import { useNavigation } from "@react-navigation/native"
-import { useAppSelector } from "~Storage/Redux"
-import { selectIsWalletCreated } from "~Storage/Redux/Selectors"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectHasOnboarded } from "~Storage/Redux/Selectors"
+import { setMnemonic } from "~Storage/Redux/Actions"
 
 const DEMO_MNEMONIC =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
 export const ImportMnemonicScreen = () => {
     const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
     const nav = useNavigation()
-
-    const [mnemonic, setMnemonic] = useState<string>("")
-    const [isError, setIsError] = useState<string>("")
-    const [isDisabled, setIsDisabled] = useState(true)
-
-    const { cache } = useRealm()
     const theme = useTheme()
 
-    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
+
+    const [localMnemonic, setLocalMnemonic] = useState<string>("")
+    const [isError, setIsError] = useState<string>("")
+    const [isDisabled, setIsDisabled] = useState(true)
 
     const onVerify = (_mnemonic: string) => {
         const sanitisedMnemonic = SeedUtils.sanifySeed(_mnemonic).join(" ")
@@ -47,12 +46,9 @@ export const ImportMnemonicScreen = () => {
                 return
             }
 
-            cache.write(() => {
-                let cacheMnemonic = getMnemonic(cache)
-                cacheMnemonic.mnemonic = sanitisedMnemonic
-            })
+            dispatch(setMnemonic(sanitisedMnemonic))
 
-            if (isWalletCreated) {
+            if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
@@ -67,7 +63,7 @@ export const ImportMnemonicScreen = () => {
         if (isString) {
             let _seed = await Clipboard.getStringAsync()
             let sanified = SeedUtils.sanifySeed(_seed)
-            setMnemonic(sanified.join(" "))
+            setLocalMnemonic(sanified.join(" "))
             if (sanified.length === 12) {
                 setIsDisabled(false)
                 Keyboard.dismiss()
@@ -79,13 +75,13 @@ export const ImportMnemonicScreen = () => {
     }
 
     const onDemoMnemonicClick = () => {
-        setMnemonic(DEMO_MNEMONIC)
+        setLocalMnemonic(DEMO_MNEMONIC)
         onVerify(DEMO_MNEMONIC)
     }
 
     const onChangeText = (text: string) => {
         let wordCounter = text.split(" ").filter(str => str !== "").length
-        setMnemonic(text)
+        setLocalMnemonic(text)
         if (wordCounter === 12) {
             setIsDisabled(false)
         } else {
@@ -94,7 +90,7 @@ export const ImportMnemonicScreen = () => {
     }
 
     const onClearSeed = () => {
-        setMnemonic("")
+        setLocalMnemonic("")
         setIsError("")
     }
 
@@ -146,7 +142,7 @@ export const ImportMnemonicScreen = () => {
                         <BaseSpacer height={40} />
 
                         <ImportMnemonicInput
-                            mnemonic={mnemonic}
+                            mnemonic={localMnemonic}
                             onChangeText={onChangeText}
                             isError={!!isError}
                         />
@@ -167,7 +163,7 @@ export const ImportMnemonicScreen = () => {
                         />
 
                         <BaseButton
-                            action={() => onVerify(mnemonic)}
+                            action={() => onVerify(localMnemonic)}
                             w={100}
                             title={LL.BTN_IMPORT_WALLET_VERIFY()}
                             disabled={isDisabled}

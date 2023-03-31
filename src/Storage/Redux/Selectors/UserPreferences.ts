@@ -15,14 +15,14 @@ export const selectLangauge = createSelector(reducer, state => {
     return state.language
 })
 
+export const getBalanceVisible = createSelector(reducer, state => {
+    return state.balanceVisible
+})
+
 export const selectHideTokensWithNoBalance = createSelector(reducer, state => {
     return state.hideTokensWithNoBalance
 })
 
-export const getCurrentNetwork = createSelector(reducer, state => {
-    return state.currentNetwork
-})
-
-export const getSelectedAccount = createSelector(reducer, state => {
-    return state.selectedAccount
+export const selectIsAppLockActive = createSelector(reducer, state => {
+    return state.isAppLockActive
 })

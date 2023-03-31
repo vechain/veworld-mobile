@@ -8,7 +8,7 @@ import { ColorThemeType, useThemedStyles } from "~Common"
 import { useAppSelector } from "~Storage/Redux"
 import {
     selectCurrency,
-    getDenormalizedAccountTokenBalances,
+    selectDenormalizedAccountTokenBalances,
 } from "~Storage/Redux/Selectors"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 
@@ -20,7 +20,7 @@ interface Props extends AnimateProps<ViewProps> {
 export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
         const tokenBalances: DenormalizedAccountTokenBalance[] = useAppSelector(
-            getDenormalizedAccountTokenBalances,
+            selectDenormalizedAccountTokenBalances,
         )
         const [data, setData] = useState<DenormalizedAccountTokenBalance[]>([])
 

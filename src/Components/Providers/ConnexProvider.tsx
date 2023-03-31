@@ -1,7 +1,8 @@
 import { Driver, SimpleNet } from "@vechain/connex-driver"
 import { newThor } from "@vechain/connex-framework/dist/thor"
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { useUserPreferencesEntity } from "./UserPreferenceProvider"
+import { useAppSelector } from "~Storage/Redux"
+import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
 
 type ConnexContextProviderProps = { children: React.ReactNode }
 const ConnexContext = React.createContext<Connex.Thor | undefined>(undefined)
@@ -10,13 +11,14 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     const [connex, setConnex] = useState<Connex.Thor>()
     const [driver, setDriver] = useState<Driver | null>(null)
     const value = useMemo(() => (connex ? connex : undefined), [connex])
-    const { currentNetwork } = useUserPreferencesEntity()
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const initConnex = useCallback(async () => {
-        if (currentNetwork) {
+        if (selectedNetwork) {
             try {
                 const driverInstance = await initDriver(
-                    currentNetwork.currentUrl,
+                    selectedNetwork.currentUrl,
                 )
                 const thorInstance = initThor(driverInstance)
                 setDriver(driverInstance)
@@ -25,14 +27,14 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
                 console.log(`Error initializing Thor Driver - !! ${error} !!`)
             }
         }
-    }, [currentNetwork])
+    }, [selectedNetwork])
 
     useEffect(() => {
-        if (connex?.genesis.id !== currentNetwork?.genesisId) {
+        if (connex?.genesis.id !== selectedNetwork?.genesisId) {
             driver?.close()
             initConnex()
         }
-    }, [initConnex, connex, currentNetwork?.genesisId, driver])
+    }, [initConnex, connex, selectedNetwork?.genesisId, driver])
 
     if (!value) {
         return <></>

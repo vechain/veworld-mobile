@@ -25,7 +25,9 @@ export const EnableBiometrics = () => {
     }, [openPasswordPrompt])
 
     const onPasswordSuccess = useCallback(
-        (password: string) => runSecurityUpgrade(password, closePasswordPrompt),
+        async (password: string) => {
+            await runSecurityUpgrade(password, closePasswordPrompt)
+        },
         [runSecurityUpgrade, closePasswordPrompt],
     )
     if (isBiometricsEnabled)

@@ -5,7 +5,7 @@ import { BaseIcon } from "./BaseIcon"
 
 const testId = "BaseIcon"
 const findIcon = async () =>
-    await screen.findByTestId(testId, { timeout: 5000 })
+    await screen.findByTestId(testId, {}, { timeout: 5000 })
 const findIconWrapper = async () =>
     await screen.findByTestId(`${testId}-wrapper`, {}, { timeout: 5000 })
 
