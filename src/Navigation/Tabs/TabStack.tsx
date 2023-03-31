@@ -25,8 +25,8 @@ export const TabStack = () => {
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     backgroundColor: theme.colors.card,
-                    ...baseStyles.tabbar,
-                    ...baseStyles.shadow,
+                    ...tabbarBaseStyles.tabbar,
+                    ...tabbarBaseStyles.shadow,
                 },
             }}>
             <Tab.Screen
@@ -62,7 +62,7 @@ export const TabStack = () => {
     )
 }
 
-const baseStyles = StyleSheet.create({
+export const tabbarBaseStyles = StyleSheet.create({
     tabbar: {
         position: "absolute",
         bottom: 0,
@@ -79,8 +79,8 @@ const baseStyles = StyleSheet.create({
             width: 0,
             height: -1,
         },
-        shadowOpacity: 0.3,
-        shadowRadius: 20,
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
         elevation: 5,
     },
 })

@@ -107,7 +107,7 @@ export const AddTokenScreen = () => {
                 <BaseSearchInput
                     value={tokenQuery}
                     setValue={setTokenQuery}
-                    placeholder={LL.INPUT_PLACEHOLDER_SEARCH_TOKEN()}
+                    placeholder={LL.PLACEHOLDER_SEARCH_TOKEN()}
                 />
                 <BaseSpacer height={16} />
             </BaseView>
