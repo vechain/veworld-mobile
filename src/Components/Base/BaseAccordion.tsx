@@ -76,6 +76,7 @@ export const BaseAccordion = ({
                     color={theme.colors.text}
                     size={36}
                     action={onChevronPress}
+                    testID={"chevron"}
                 />
             </Animated.View>
         )

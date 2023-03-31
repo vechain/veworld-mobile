@@ -1,29 +1,34 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import {
-    render,
-    fireEvent,
-    screen,
-    waitFor,
-} from "@testing-library/react-native"
+import { render, fireEvent, screen } from "@testing-library/react-native"
 import { BaseIcon } from "./BaseIcon"
+
+const testId = "BaseIcon"
+const findIcon = async () =>
+    await screen.findByTestId(testId, { timeout: 5000 })
+const findIconWrapper = async () =>
+    await screen.findByTestId(`${testId}-wrapper`, {}, { timeout: 5000 })
 
 describe("BaseIcon", () => {
     it("renders the icon with default values", async () => {
-        render(<BaseIcon testID="BaseIcon" name="star" />, {
+        render(<BaseIcon testID={testId} name="star" />, {
             wrapper: TestWrapper,
         })
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
+        const icon = await findIcon()
+
+        expect(icon).toBeVisible()
     })
 
     it("calls the action prop when clicked", async () => {
         const mockAction = jest.fn()
-        render(<BaseIcon testID="BaseIcon" name="star" action={mockAction} />, {
+        render(<BaseIcon testID={testId} name="star" action={mockAction} />, {
             wrapper: TestWrapper,
         })
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
+        const icon = await findIcon()
 
-        fireEvent.press(screen.getByTestId("BaseIcon"))
+        expect(icon).toBeVisible()
+
+        fireEvent.press(icon)
         expect(mockAction).toHaveBeenCalled()
     })
 
@@ -32,7 +37,7 @@ describe("BaseIcon", () => {
 
         render(
             <BaseIcon
-                testID="BaseIcon"
+                testID={testId}
                 name="star"
                 bg="red"
                 size={32}
@@ -45,30 +50,42 @@ describe("BaseIcon", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
+        const iconWrapper = await findIconWrapper()
+        expect(iconWrapper).toBeVisible()
+        expect(iconWrapper).toHaveStyle({
+            backgroundColor: "red",
+            margin: 10,
+            padding: 10,
+        })
+        let icon = await findIcon()
 
-        expect(screen.getByTestId("BaseIcon")).toBeVisible()
+        expect(icon).toBeVisible()
+    })
+
+    it("renders correctly when disabled", async () => {
+        const mockAction = jest.fn()
 
         render(
             <BaseIcon
-                testID="BaseIcon"
+                testID={testId}
+                color="green"
                 name="star"
-                bg="red"
+                size={32}
                 action={mockAction}
+                disabled
             />,
             {
                 wrapper: TestWrapper,
             },
         )
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
 
-        expect(screen.getByTestId("BaseIcon")).toBeVisible()
+        const iconWrapper = await findIconWrapper()
+        expect(iconWrapper).toBeVisible()
 
-        render(<BaseIcon testID="BaseIcon" name="star" bg="red" disabled />, {
-            wrapper: TestWrapper,
-        })
-        await waitFor(() => expect(screen.getByTestId("BaseIcon")).toBeTruthy())
+        let icon = await findIcon()
 
-        expect(screen.getByTestId("BaseIcon")).toBeVisible()
+        expect(icon).toBeVisible()
+        fireEvent.press(icon)
+        expect(mockAction).not.toHaveBeenCalled()
     })
 })

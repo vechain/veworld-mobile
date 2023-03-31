@@ -2,30 +2,35 @@
 import { Text } from "react-native"
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, fireEvent, waitFor } from "@testing-library/react-native"
+import { render, fireEvent, screen } from "@testing-library/react-native"
 import { BaseTouchableBox } from "./BaseTouchableBox"
+
+const baseTouchableBoxTestId = "BaseTouchableBox"
+const findBaseTouchableBox = async () =>
+    screen.findByTestId(baseTouchableBoxTestId, {}, { timeout: 5000 })
 
 describe("BaseTouchableBox component", () => {
     it("should call action function when clicked", async () => {
         const mockAction = jest.fn()
-        const { getByTestId } = render(
-            <BaseTouchableBox testID="BaseTouchableBox" action={mockAction}>
+        render(
+            <BaseTouchableBox
+                testID={baseTouchableBoxTestId}
+                action={mockAction}>
                 <Text>Click me</Text>
             </BaseTouchableBox>,
             { wrapper: TestWrapper },
         )
-        await waitFor(() =>
-            expect(getByTestId("BaseTouchableBox")).toBeTruthy(),
-        )
-        const touchable = getByTestId("BaseTouchableBox")
-        fireEvent.press(touchable)
+        const baseTouchable = await findBaseTouchableBox()
+        expect(baseTouchable).toBeVisible()
+        fireEvent.press(baseTouchable)
+        expect(mockAction).toHaveBeenCalled()
     })
 
     it("should render with custom style props", async () => {
         const mockAction = jest.fn()
-        const { getByTestId } = render(
+        render(
             <BaseTouchableBox
-                testID="BaseTouchableBox"
+                testID={baseTouchableBoxTestId}
                 bg="red"
                 flexDirection="row"
                 justifyContent="center"
@@ -35,12 +40,9 @@ describe("BaseTouchableBox component", () => {
             </BaseTouchableBox>,
             { wrapper: TestWrapper },
         )
-        await waitFor(() =>
-            expect(getByTestId("BaseTouchableBox")).toBeTruthy(),
-        )
-
-        const touchable = getByTestId("BaseTouchableBox")
-        expect(touchable).toHaveStyle({
+        const baseTouchable = await findBaseTouchableBox()
+        expect(baseTouchable).toBeVisible()
+        expect(baseTouchable).toHaveStyle({
             backgroundColor: "red",
             flexDirection: "row",
             justifyContent: "center",
@@ -50,22 +52,22 @@ describe("BaseTouchableBox component", () => {
 
     it("should be disabled when 'disabled' prop is true", async () => {
         const mockAction = jest.fn()
-        const { getByTestId } = render(
+        render(
             <BaseTouchableBox
-                testID="BaseTouchableBox"
+                testID={baseTouchableBoxTestId}
                 action={mockAction}
                 disabled={true}>
                 <Text>Disabled</Text>
             </BaseTouchableBox>,
             { wrapper: TestWrapper },
         )
-        await waitFor(() =>
-            expect(getByTestId("BaseTouchableBox")).toBeTruthy(),
-        )
-        const touchable = getByTestId("BaseTouchableBox")
-        fireEvent.press(touchable)
-        expect(touchable).toHaveStyle({
+        const baseTouchable = await findBaseTouchableBox()
+        expect(baseTouchable).toBeVisible()
+
+        expect(baseTouchable).toHaveStyle({
             opacity: 0.5,
         })
+        fireEvent.press(baseTouchable)
+        expect(mockAction).not.toHaveBeenCalled()
     })
 })

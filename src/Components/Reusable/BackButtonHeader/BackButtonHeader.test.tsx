@@ -4,34 +4,23 @@ jest.mock("@react-navigation/native", () => ({
     useNavigation: jest.fn(() => ({ goBack: goBackMock })),
 }))
 import React from "react"
-import {
-    act,
-    fireEvent,
-    render,
-    screen,
-    waitFor,
-} from "@testing-library/react-native"
+import { act, fireEvent, render, screen } from "@testing-library/react-native"
 import { TestWrapper } from "~Test"
 import { BackButtonHeader } from "./BackButtonHeader"
 
+const backButtonTestId = "backButtontestId"
+const findBackButton = async () =>
+    await screen.findByTestId(backButtonTestId, {}, { timeout: 5000 })
+
 describe("BackButtonHeader", () => {
     it("should render correctly and go back", async () => {
-        render(<BackButtonHeader iconTestID="BackButtonHeader-BaseIcon" />, {
+        render(<BackButtonHeader iconTestID={backButtonTestId} />, {
             wrapper: TestWrapper,
         })
-        // wait for useEffects
-        await waitFor(() =>
-            expect(
-                screen.getByTestId("BackButtonHeader-BaseIcon"),
-            ).toBeTruthy(),
-        )
 
-        const icon = screen.getByTestId("BackButtonHeader-BaseIcon")
-
-        act(() => {
-            fireEvent.press(icon)
-        })
-
+        const backButton = await findBackButton()
+        expect(backButton).toBeVisible()
+        act(() => fireEvent(backButton, "press"))
         expect(goBackMock).toHaveBeenCalled()
     })
 })

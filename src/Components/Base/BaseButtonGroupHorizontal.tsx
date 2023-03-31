@@ -65,7 +65,8 @@ export const BaseButtonGroupHorizontal = ({
                             bgColor={bgColor}
                             typographyFont="bodyMedium"
                             w={buttonWidth}
-                            style={styles.buttonStyle}>
+                            style={styles.buttonStyle}
+                            testID={`button-${id}`}>
                             <BaseView
                                 justifyContent="center"
                                 alignItems="center"
