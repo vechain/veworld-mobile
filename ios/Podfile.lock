@@ -344,8 +344,6 @@ PODS:
     - glog
   - react-native-blur (4.3.0):
     - React-Core
-  - react-native-get-random-values (1.8.0):
-    - React-Core
   - react-native-mmkv (2.5.1):
     - MMKV (>= 1.2.13)
     - React-Core
@@ -432,8 +430,6 @@ PODS:
     - React-perflogger (= 0.70.6)
   - ReactNativeExceptionHandler (2.10.10):
     - React-Core
-  - RealmJS (11.3.1):
-    - React
   - RNBootSplash (4.5.3):
     - React-Core
   - RNFlashList (1.4.2):
@@ -548,7 +544,6 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
-  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
@@ -567,7 +562,6 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeExceptionHandler (from `../node_modules/react-native-exception-handler`)
-  - RealmJS (from `../node_modules/realm`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -675,8 +669,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-blur:
     :path: "../node_modules/@react-native-community/blur"
-  react-native-get-random-values:
-    :path: "../node_modules/react-native-get-random-values"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
   react-native-pager-view:
@@ -713,8 +705,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeExceptionHandler:
     :path: "../node_modules/react-native-exception-handler"
-  RealmJS:
-    :path: "../node_modules/realm"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNFlashList:
@@ -786,7 +776,6 @@ SPEC CHECKSUMS:
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-blur: 50c9feabacbc5f49b61337ebc32192c6be7ec3c3
-  react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df
   react-native-quick-crypto: a903ff39ac8fea78bb9d37cccc5cc0596afc9670
@@ -805,7 +794,6 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
-  RealmJS: 43fc7bfb83229c8a2755cb34f71f769c97b7b581
   RNBootSplash: 8fb33325dc3620a01984c6660c42cbd93fadcc80
   RNFlashList: 7fbca4fc075484a9426f1610d648dbea2de94eb0
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
@@ -818,6 +806,6 @@ SPEC CHECKSUMS:
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: f070932deb2a63ee1ce620fb9de04ae6e4e41b15
+PODFILE CHECKSUM: fb0257b682edba86ff59d8c0335a2e9837ee457b
 
 COCOAPODS: 1.12.0

@@ -18,7 +18,7 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    increment_build_number(xcodeproj: "veWorldMobile.xcodeproj")
+    increment_build_number(xcodeproj: "VeWorld.xcodeproj")
 
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
@@ -30,8 +30,8 @@ platform :ios do
     )
 
     update_project_provisioning( # Set the project provisioning profile (related in Xcode to the General > Signing Release section)
-      xcodeproj: "veWorldMobile.xcodeproj",
-      target_filter: "veWorldMobile", # Name of your project
+      xcodeproj: "VeWorld.xcodeproj",
+      target_filter: "VeWorld", # Name of your project
       profile: "./builds/provisioning.mobileprovision",
       build_configuration: "Release"
     )
@@ -40,7 +40,7 @@ platform :ios do
       teamid: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     )
 
-    build_app(workspace: "veWorldMobile.xcworkspace", scheme: "veWorldMobile", 
+    build_app(workspace: "VeWorld.xcworkspace", scheme: "VeWorld", 
       clean: true,
       export_method: "app-store",
       export_options: {

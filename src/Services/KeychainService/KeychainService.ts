@@ -4,11 +4,16 @@ import * as SecureStore from "expo-secure-store"
 import * as i18n from "~i18n"
 
 const WALLET_KEY = "VeWorld_Wallet_key"
-const REALM_KEY = "VeWorld_Realm_key"
 const REDUX_KEY = "VeWorld_Redux_key"
 
-const getEncryptionKey = async (
-    deviceIndex: number,
+/**
+ * Get the encryption key for the device. Used to decrypt the wallet
+ * @param rootAddress  rootAddress of device
+ * @param accessControl  if true, the user will be prompted to authenticate with biometrics
+ * @returns
+ */
+const getDeviceEncryptionKey = async (
+    rootAddress: string,
     accessControl?: boolean,
 ) => {
     const locale = i18n.detectLocale()
@@ -20,26 +25,32 @@ const getEncryptionKey = async (
         options = {
             requireAuthentication: accessControl,
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${deviceIndex}`,
+            keychainService: `${WALLET_KEY}_${rootAddress}`,
             authenticationPrompt: promptTitle.toString(),
         }
     } else {
         options = {
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${deviceIndex}`,
+            keychainService: `${WALLET_KEY}_${rootAddress}`,
         }
     }
 
     try {
-        return await Keychain.get(options, `${WALLET_KEY}_${deviceIndex}`)
+        return await Keychain.get(options, `${WALLET_KEY}_${rootAddress}`)
     } catch (err) {
         error(err)
     }
 }
 
-const setEncryptionKey = async (
-    Enckey: string,
-    deviceIndex: number,
+/**
+ *  Set the encryption key for the device. Used to decrypt the wallet
+ * @param encriptionKey  the encryption key to store
+ * @param rootAddress  rootAddress of device
+ * @param accessControl  if true, the user will be prompted to authenticate with biometrics
+ */
+const setDeviceEncryptionKey = async (
+    encriptionKey: string,
+    rootAddress: string,
     accessControl?: boolean,
 ) => {
     const locale = i18n.detectLocale()
@@ -51,57 +62,39 @@ const setEncryptionKey = async (
         options = {
             requireAuthentication: accessControl,
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${deviceIndex}`,
+            keychainService: `${WALLET_KEY}_${rootAddress}`,
             authenticationPrompt: promptTitle.toString(),
         }
     } else {
         options = {
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${deviceIndex}`,
+            keychainService: `${WALLET_KEY}_${rootAddress}`,
         }
     }
 
     try {
-        await Keychain.set(Enckey, options, `${WALLET_KEY}_${deviceIndex}`)
+        await Keychain.set(
+            encriptionKey,
+            options,
+            `${WALLET_KEY}_${rootAddress}`,
+        )
     } catch (err) {
         error(err)
     }
 }
 
-const getRealmKey = async () => {
+/**
+ *  Delete the encryption key for the device. Used to decrypt the wallet
+ * @param rootAddress rootAddress of device
+ */
+const deleteDeviceEncryptionKey = async (rootAddress: string) => {
     const options = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: REALM_KEY,
+        keychainService: `${WALLET_KEY}_${rootAddress}`,
     }
 
     try {
-        return await Keychain.get(options, REALM_KEY)
-    } catch (err) {
-        error(err)
-    }
-}
-
-const setRealmKey = async (Enckey: string) => {
-    const options = {
-        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: REALM_KEY,
-    }
-
-    try {
-        await Keychain.set(Enckey, options, REALM_KEY)
-    } catch (err) {
-        error(err)
-    }
-}
-
-const deleteItem = async (deviceIndex: number) => {
-    const options = {
-        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: `${WALLET_KEY}_${deviceIndex}`,
-    }
-
-    try {
-        await Keychain.deleteItem(`${WALLET_KEY}_${deviceIndex}`, options)
+        await Keychain.deleteItem(`${WALLET_KEY}_${rootAddress}`, options)
     } catch (err) {
         error(err)
     }
@@ -134,11 +127,9 @@ const setReduxKey = async (Enckey: string) => {
 }
 
 export default {
-    getEncryptionKey,
-    setEncryptionKey,
-    getRealmKey,
-    setRealmKey,
-    deleteItem,
+    getDeviceEncryptionKey,
+    setDeviceEncryptionKey,
+    deleteDeviceEncryptionKey,
     getReduxKey,
     setReduxKey,
 }

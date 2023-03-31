@@ -3,10 +3,6 @@ import { RootState } from "../Types"
 
 const reducer = (state: RootState) => state.config
 
-export const selectIsWalletCreated = createSelector(reducer, state => {
-    return state.isWalletCreated
-})
-
 export const selectUserSelectedSecurity = createSelector(reducer, state => {
     return state.userSelectedSecurity
 })

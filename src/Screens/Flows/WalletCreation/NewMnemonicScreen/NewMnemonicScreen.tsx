@@ -15,15 +15,16 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
-import { getMnemonic, useRealm } from "~Storage"
 import { useTheme } from "~Common"
+import { useAppDispatch } from "~Storage/Redux"
+import { setMnemonic } from "~Storage/Redux/Actions"
 
 export const NewMnemonicScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const { cache } = useRealm()
+    const dispatch = useAppDispatch()
 
-    const [IsChecked, setIsChecked] = useState(false)
+    const [isChecked, setIsChecked] = useState(false)
     const { mnemonic, mnemonicArray } = useGenerateMnemonic()
 
     const theme = useTheme()
@@ -34,15 +35,9 @@ export const NewMnemonicScreen = () => {
     }, [mnemonic])
 
     const onBackupPress = useCallback(() => {
-        cache.write(() => {
-            let _mnemonic = getMnemonic(cache)
-
-            if (_mnemonic) {
-                _mnemonic.mnemonic = mnemonic
-            }
-        })
+        dispatch(setMnemonic(mnemonic))
         nav.navigate(Routes.CONFIRM_MNEMONIC)
-    }, [cache, mnemonic, nav])
+    }, [dispatch, mnemonic, nav])
 
     return (
         <BaseSafeArea grow={1}>
@@ -106,7 +101,7 @@ export const NewMnemonicScreen = () => {
                         w={100}
                         px={20}
                         title={LL.BTN_MNEMONIC_BACKUP()}
-                        disabled={!IsChecked}
+                        disabled={!isChecked}
                     />
                 </BaseView>
             </BaseView>

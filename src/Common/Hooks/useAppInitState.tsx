@@ -2,17 +2,17 @@ import { useMemo } from "react"
 import { useAppSelector } from "~Storage/Redux"
 import {
     selectIsResettingApp,
-    selectIsWalletCreated,
+    selectHasOnboarded,
 } from "~Storage/Redux/Selectors"
 
 export const useAppInitState = () => {
-    const isWalletCreated = useAppSelector(selectIsWalletCreated)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const isResettingApp = useAppSelector(selectIsResettingApp)
 
     const appStatus = useMemo(() => {
         if (isResettingApp) return AppInitState.RESETTING_STATE
-        if (!isWalletCreated) return AppInitState.INIT_STATE
-    }, [isResettingApp, isWalletCreated])
+        if (!userHasOnboarded) return AppInitState.INIT_STATE
+    }, [isResettingApp, userHasOnboarded])
 
     return appStatus
 }

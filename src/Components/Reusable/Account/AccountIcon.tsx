@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { SvgXml } from "react-native-svg"
 import { PicassoUtils } from "~Common"
 import { BaseView } from "~Components/Base"
-import { Account } from "~Storage"
+import { Account } from "~Model"
 
 type AccountIconProps = {
     account: Account

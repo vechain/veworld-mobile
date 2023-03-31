@@ -1,39 +1,45 @@
 import React, { memo, useCallback, useMemo } from "react"
-import { BaseSpacer, BaseView, useUserPreferencesEntity } from "~Components"
+import { BaseSpacer, BaseView } from "~Components"
 import { Header } from "./Header"
 import { AccountsCarousel } from "./AccountsCarousel"
 import { HomeScreenActions } from "./HomeScreenActions"
-import { useAccountsList } from "~Common/Hooks/Entities"
-import { Account, useRealm } from "~Storage"
 import { AddressUtils } from "~Common"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    getBalanceVisible,
+    selectSelectedAccount,
+    selectVisibleAccounts,
+} from "~Storage/Redux/Selectors"
+import { selectAccount } from "~Storage/Redux/Actions"
+import { WalletAccount } from "~Model"
 
 type Props = {
     openAccountManagementSheet: () => void
 }
 
 export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
-    const { store } = useRealm()
-    const accounts = useAccountsList("visible == true")
-    const userPref = useUserPreferencesEntity()
+    const accounts = useAppSelector(selectVisibleAccounts)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const balanceVisible = useAppSelector(getBalanceVisible)
+
+    const dispatch = useAppDispatch()
 
     const selectedAccountIndex = useMemo(
         () =>
             accounts.findIndex(account =>
                 AddressUtils.compareAddresses(
-                    userPref.selectedAccount?.address,
+                    selectedAccount?.address,
                     account.address,
                 ),
             ),
-        [userPref.selectedAccount, accounts],
+        [selectedAccount, accounts],
     )
 
     const onAccountChange = useCallback(
-        (account: Account) => {
-            store.write(() => {
-                userPref.selectedAccount = account
-            })
+        (account: WalletAccount) => {
+            dispatch(selectAccount({ address: account.address }))
         },
-        [store, userPref],
+        [dispatch],
     )
 
     return (
@@ -42,7 +48,7 @@ export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
                 <Header />
                 <BaseSpacer height={20} />
                 <AccountsCarousel
-                    balanceVisible={userPref.balanceVisible}
+                    balanceVisible={balanceVisible}
                     openAccountManagementSheet={openAccountManagementSheet}
                     accounts={accounts}
                     onAccountChange={onAccountChange}

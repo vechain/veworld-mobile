@@ -9,11 +9,12 @@ const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
 
 type Props = {
     onDigitPress: (digit: string) => void
+    onDigitDelete: () => void
 }
 
-export const NumPad = ({ onDigitPress }: Props) => {
+export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
     const { theme, styles } = useThemedStyles(baseStyles)
-    const onPress = useCallback(
+    const handleOnDigitPress = useCallback(
         (digit: string) => () => {
             onDigitPress(digit)
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
@@ -23,26 +24,32 @@ export const NumPad = ({ onDigitPress }: Props) => {
 
     return (
         <BaseView flexDirection="row" flexWrap="wrap" w={100}>
-            {numPad.map((digit, index) => (
-                <BaseView style={styles.width} key={index}>
-                    {digit !== "blank" ? (
-                        <DropShadow style={theme.shadows.card}>
-                            <Pressable
-                                style={({ pressed }) => [
-                                    styles.pressable,
-                                    { opacity: pressed ? 0.5 : 1.0 },
-                                ]}
-                                onPress={onPress(digit)}>
-                                <BaseText
-                                    typographyFont="largeTitleAccent"
-                                    alignContainer="center">
-                                    {digit}
-                                </BaseText>
-                            </Pressable>
-                        </DropShadow>
-                    ) : null}
-                </BaseView>
-            ))}
+            {numPad.map((digit, index) => {
+                const isDeleteKey = digit === "*"
+                const onPress = isDeleteKey
+                    ? onDigitDelete
+                    : handleOnDigitPress(digit)
+                return (
+                    <BaseView style={styles.width} key={index}>
+                        {digit !== "blank" ? (
+                            <DropShadow style={theme.shadows.card}>
+                                <Pressable
+                                    style={({ pressed }) => [
+                                        styles.pressable,
+                                        { opacity: pressed ? 0.5 : 1.0 },
+                                    ]}
+                                    onPress={onPress}>
+                                    <BaseText
+                                        typographyFont="largeTitleAccent"
+                                        alignContainer="center">
+                                        {digit}
+                                    </BaseText>
+                                </Pressable>
+                            </DropShadow>
+                        ) : null}
+                    </BaseView>
+                )
+            })}
         </BaseView>
     )
 }

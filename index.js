@@ -1,4 +1,3 @@
-import "react-native-get-random-values" // relma dependency for uuid - DO NOT REMOVE
 import React, { useMemo } from "react"
 import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"
@@ -7,20 +6,12 @@ import { name as appName } from "./app.json"
 
 import { PersistGate } from "redux-persist/integration/react"
 import { Provider } from "react-redux"
-// import { persistor, store } from "~Storage/Redux"
-import { useInitStore } from "~Storage/Redux"
-
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Common"
-import {
-    ConnexContextProvider,
-    TranslationProvider,
-    UserPreferencesContextProvider,
-} from "~Components"
+import { ConnexContextProvider, TranslationProvider } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
-import { RealmContextProvider } from "~Storage"
 import {
     Inter_Bold,
     Inter_Light,
@@ -32,9 +23,12 @@ import {
     Mono_Regular,
 } from "~Assets"
 import { typography } from "~Common/Theme/Typography"
-const { fontFamily } = typography
+
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
+import { useInitStore } from "~Storage/Redux"
+
+const { fontFamily } = typography
 
 // immer setup
 enableAllPlugins()
@@ -51,28 +45,25 @@ const Main = () => {
         [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
-    const [store, persistor] = useInitStore()
-    if (!store || !persistor) return
+    const { store, persistor } = useInitStore()
+
+    if (!store || !persistor) return <></>
 
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
-                    <RealmContextProvider>
-                        <UserPreferencesContextProvider>
-                            <ConnexContextProvider>
-                                <SafeAreaProvider>
-                                    <BottomSheetModalProvider>
-                                        <NavigationProvider>
-                                            <TranslationProvider>
-                                                {fontsLoaded && <EntryPoint />}
-                                            </TranslationProvider>
-                                        </NavigationProvider>
-                                    </BottomSheetModalProvider>
-                                </SafeAreaProvider>
-                            </ConnexContextProvider>
-                        </UserPreferencesContextProvider>
-                    </RealmContextProvider>
+                    <ConnexContextProvider>
+                        <SafeAreaProvider>
+                            <BottomSheetModalProvider>
+                                <NavigationProvider>
+                                    <TranslationProvider>
+                                        {fontsLoaded && <EntryPoint />}
+                                    </TranslationProvider>
+                                </NavigationProvider>
+                            </BottomSheetModalProvider>
+                        </SafeAreaProvider>
+                    </ConnexContextProvider>
                 </GestureHandlerRootView>
             </PersistGate>
         </Provider>

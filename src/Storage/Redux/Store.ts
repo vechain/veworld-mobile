@@ -1,14 +1,22 @@
 import { combineReducers } from "redux"
+import { TokenApi } from "./Api"
 import {
+    DeviceSlice,
     UserPreferencesSlice,
-    TokenSlice,
-    BalanceSlice,
     ConfigSlice,
+    AccountSlice,
+    BalanceSlice,
+    NetworkSlice,
+    CacheSlice,
 } from "./Slices"
 
 export const reducer = combineReducers({
+    [TokenApi.reducerPath]: TokenApi.reducer,
     userPreferences: UserPreferencesSlice.reducer,
-    tokens: TokenSlice.reducer,
-    balances: BalanceSlice.reducer,
     config: ConfigSlice.reducer,
+    devices: DeviceSlice.reducer,
+    accounts: AccountSlice.reducer,
+    networks: NetworkSlice.reducer,
+    balances: BalanceSlice.reducer,
+    cache: CacheSlice.reducer,
 })

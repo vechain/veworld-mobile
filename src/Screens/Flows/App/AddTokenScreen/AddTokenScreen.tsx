@@ -18,8 +18,8 @@ import { useI18nContext } from "~i18n"
 import { OfficialTokenCard } from "./Components/OfficialTokenCard"
 import { FungibleToken } from "~Model"
 import {
-    getFungibleTokensWithoutDefaults,
-    getSelectedAccount,
+    selectNonVechainFungibleTokens,
+    selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
 import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
 import { useNavigation } from "@react-navigation/native"
@@ -30,9 +30,9 @@ export const AddTokenScreen = () => {
     const theme = useTheme()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const account = useAppSelector(getSelectedAccount)
+    const account = useAppSelector(selectSelectedAccount)
     const [tokenQuery, setTokenQuery] = useState<string>("")
-    const tokens = useAppSelector(getFungibleTokensWithoutDefaults)
+    const tokens = useAppSelector(selectNonVechainFungibleTokens)
     const nav = useNavigation()
     const thorClient = useThor()
     const filteredTokens = tokens.filter(

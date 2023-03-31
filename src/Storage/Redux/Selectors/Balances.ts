@@ -1,16 +1,16 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
 import { RootState } from "~Storage/Redux/Types"
-import { getAllFungibleTokens } from "./Token"
-import { getSelectedAccount } from "./UserPreferences"
+import { selectSelectedAccount } from "./Account"
+import { selectAllFungibleTokens } from "./TokenApi"
 
-export const getBalances = (state: RootState) => state.balances
+export const selectBalancesState = (state: RootState) => state.balances
 
 /**
  * Get all account balances
  */
-export const getAccountBalances = createSelector(
-    [getBalances, getSelectedAccount],
+export const selectAccountBalances = createSelector(
+    [selectBalancesState, selectSelectedAccount],
     (balances, account) =>
         balances.filter(balance =>
             AddressUtils.compareAddresses(
@@ -23,8 +23,8 @@ export const getAccountBalances = createSelector(
 /**
  * Get all account balances with denormalized token data
  */
-export const getDenormalizedAccountTokenBalances = createSelector(
-    [getAccountBalances, getAllFungibleTokens],
+export const selectDenormalizedAccountTokenBalances = createSelector(
+    [selectAccountBalances, selectAllFungibleTokens],
     (balances, tokens) =>
         balances.map(balance => {
             const balanceToken = tokens.find(token =>

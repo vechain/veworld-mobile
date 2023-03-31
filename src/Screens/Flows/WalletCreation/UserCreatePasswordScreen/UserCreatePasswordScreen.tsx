@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useCallback, useState } from "react"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -8,31 +8,58 @@ import {
     NumPad,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useOnDigitPress } from "./useOnDigitPress"
 import { SecurityLevelType } from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
+import { CryptoUtils, SettingsConstants } from "~Common"
+import { useAppDispatch } from "~Storage/Redux"
+import { setPinValidationString } from "~Storage/Redux/Actions"
 
+const digitNumber = 6
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
-    const {
-        isPinError,
-        isPinRetype,
-        onDigitPress,
-        userPinArray,
-        isSuccess,
-        userPin,
-    } = useOnDigitPress()
-    const nav = useNavigation()
 
-    useEffect(() => {
-        if (isSuccess) {
+    const nav = useNavigation()
+    const dispatch = useAppDispatch()
+
+    /**
+     * Called by `useOnDigitPressWithConfirmation` when the user has finished typing the pin
+     * Store the encrypted pin validation string in the redux store
+     * and navigate to the success screen
+     */
+    const onFinishCallback = useCallback(
+        (insertedPin: string) => {
+            const pinValidationString = CryptoUtils.encrypt<string>(
+                SettingsConstants.VALIDATION_STRING,
+                insertedPin,
+            )
+            dispatch(setPinValidationString(pinValidationString))
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.SECRET,
-                userPin,
+                userPin: insertedPin,
             })
-        }
-    }, [isSuccess, nav, userPin])
+        },
+        [nav, dispatch],
+    )
+
+    const [isConfirmationError, setIsConfirmationError] =
+        useState<boolean>(false)
+
+    const { pin, isPinRetype, onDigitPress, onDigitDelete } =
+        useOnDigitPressWithConfirmation({
+            digitNumber,
+            onFinishCallback,
+            onConfirmationError: () => setIsConfirmationError(true),
+        })
+
+    const handleOnDigitPress = useCallback(
+        (digit: string) => {
+            setIsConfirmationError(false)
+            onDigitPress(digit)
+        },
+        [onDigitPress],
+    )
 
     return (
         <BaseSafeArea grow={1}>
@@ -53,11 +80,15 @@ export const UserCreatePasswordScreen = () => {
                 </BaseView>
                 <BaseSpacer height={60} />
                 <PasswordPins
-                    UserPinArray={userPinArray}
+                    pin={pin}
+                    digitNumber={digitNumber}
                     isPINRetype={isPinRetype}
-                    isPinError={isPinError}
+                    isPinError={isConfirmationError}
                 />
-                <NumPad onDigitPress={onDigitPress} />
+                <NumPad
+                    onDigitPress={handleOnDigitPress}
+                    onDigitDelete={onDigitDelete}
+                />
             </BaseView>
 
             <BaseSpacer height={40} />

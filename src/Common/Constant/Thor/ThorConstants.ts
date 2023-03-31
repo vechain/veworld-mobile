@@ -146,3 +146,8 @@ export const makeNetwork = (type: NETWORK_TYPE): Network => {
             }
     }
 }
+
+export const defaultNetworks = [
+    makeNetwork(NETWORK_TYPE.MAIN),
+    makeNetwork(NETWORK_TYPE.TEST),
+]

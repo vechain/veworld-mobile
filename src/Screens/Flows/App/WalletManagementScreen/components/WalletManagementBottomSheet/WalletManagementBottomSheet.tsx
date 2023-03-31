@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
-import { useTheme } from "~Common"
+import { AddressUtils, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSpacer,
@@ -9,11 +9,17 @@ import {
     BaseTouchableBox,
     BaseView,
 } from "~Components"
-import { Device, getUserPreferences, useRealm } from "~Storage"
+
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { Device } from "~Model"
+import { useAppSelector } from "~Storage/Redux"
+import {
+    selectAccountsByDevice,
+    selectSelectedAccount,
+} from "~Storage/Redux/Selectors"
 import { StyleSheet } from "react-native"
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
     device?: Device
@@ -27,10 +33,13 @@ export const WalletManagementBottomSheet = React.forwardRef<
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const { store } = useRealm()
-    const userPreferences = getUserPreferences(store)
-
     const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
+
+    const deviceAccounts = useAppSelector(
+        selectAccountsByDevice(device?.rootAddress),
+    )
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
@@ -77,24 +86,27 @@ export const WalletManagementBottomSheet = React.forwardRef<
             </BaseText>
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={baseStyles.list}>
-                {device && (
+                {device && !!deviceAccounts.length && (
                     <BottomSheetFlatList
-                        data={device.accounts}
+                        data={deviceAccounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
                         renderItem={({ item }) => {
+                            const isSelected = AddressUtils.compareAddresses(
+                                selectedAccount?.address,
+                                item.address,
+                            )
+
                             return (
                                 <AccountDetailBox
                                     account={item}
-                                    selectedAccount={
-                                        userPreferences.selectedAccount!
-                                    }
+                                    isSelected={isSelected}
                                 />
                             )
                         }}
+                        scrollEnabled={isListScrollable}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
-                        scrollEnabled={isListScrollable}
                     />
                 )}
             </BaseView>

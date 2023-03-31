@@ -1,42 +1,27 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback } from "react"
 import { BaseSwitch, BaseText, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
-import { useRealm, getUserPreferences, getAppLock } from "~Storage"
+
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setAppLockStatus, setIsAppLockActive } from "~Storage/Redux/Actions"
+import { selectIsAppLockActive } from "~Storage/Redux/Selectors"
 
 export const SecureApp = () => {
-    const { store, cache } = useRealm()
-
-    const userPreferences = getUserPreferences(store)
-
-    const isEnabled = useMemo(
-        () => userPreferences.isAppLockActive,
-        [userPreferences],
-    )
-    const [isAppLock, setIsAppLock] = useState(isEnabled)
+    const dispatch = useAppDispatch()
+    const isAppLockActive = useAppSelector(selectIsAppLockActive)
 
     const toggleSwitch = useCallback(
         (newValue: boolean) => {
-            setIsAppLock(newValue)
-
-            const appLock = getAppLock(cache)
-
-            cache.write(() => {
-                if (appLock) {
-                    appLock.status = WALLET_STATUS.UNLOCKED
-                }
-            })
-
-            store.write(() => {
-                userPreferences.isAppLockActive = newValue
-            })
+            dispatch(setIsAppLockActive(newValue))
+            dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
         },
-        [cache, userPreferences, store],
+        [dispatch],
     )
 
     return (
         <BaseView w={100} flexDirection="row">
             <BaseText>Secure App</BaseText>
-            <BaseSwitch onValueChange={toggleSwitch} value={isAppLock} />
+            <BaseSwitch onValueChange={toggleSwitch} value={isAppLockActive} />
         </BaseView>
     )
 }
