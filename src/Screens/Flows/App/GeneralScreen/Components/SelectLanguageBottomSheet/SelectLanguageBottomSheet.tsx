@@ -1,7 +1,12 @@
 import React, { useCallback, useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
-import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+    BaseBottomSheet,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { LANGUAGE, LanguageUtils, useTheme } from "~Common"
 import { StyleSheet } from "react-native"

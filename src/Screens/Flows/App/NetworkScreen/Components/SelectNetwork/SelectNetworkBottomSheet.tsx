@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"

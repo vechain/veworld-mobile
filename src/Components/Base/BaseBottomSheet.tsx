@@ -18,7 +18,7 @@ type Props = BottomSheetModalProps & {
     footer?: React.ReactNode
 }
 
-const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ contentStyle, footerStyle, footer, children, ...props }, ref) => {
         const { styles } = useThemedStyles(baseStyles)
 
@@ -90,5 +90,3 @@ const baseStyles = (theme: ColorThemeType) =>
             marginTop: 24,
         },
     })
-
-export default BaseBottomSheet
