@@ -14,15 +14,16 @@ import { setTokenBalances } from "~Storage/Redux/Slices"
  * Updates all balances for an account
  * @param accountAddress - the acccount address for this balance
  */
-export const updateAccountBalances = ((thorClient: Connex.Thor) =>
+export const updateAccountBalances =
+    (thorClient: Connex.Thor) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         const accountBalances = selectAccountBalances(getState())
         const network = selectSelectedNetwork(getState())
         const balances: TokenBalance[] = []
-
         try {
             for (const accountBalance of accountBalances) {
                 let balance: string
+
                 if (
                     AddressUtils.compareAddresses(
                         accountBalance.tokenAddress,
@@ -55,6 +56,7 @@ export const updateAccountBalances = ((thorClient: Connex.Thor) =>
 
                     balance = res.decoded[0]
                 }
+
                 balances.push({
                     accountAddress: accountBalance.accountAddress,
                     tokenAddress: accountBalance.tokenAddress,
@@ -66,4 +68,4 @@ export const updateAccountBalances = ((thorClient: Connex.Thor) =>
         } catch (e) {
             throw new Error("Failed to get balance from external service")
         }
-    }) as any // TODO: remove as any
+    }

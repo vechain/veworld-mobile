@@ -3,17 +3,33 @@ import {
     selectSelectedAccount,
     selectAccountBalances,
     selectSelectedNetwork,
+    selectCurrency,
 } from "~Storage/Redux/Selectors"
 import { FungibleToken, NETWORK_TYPE } from "~Model"
 import {
     defaultTokensMain,
     defaultTokensTest,
 } from "~Common/Constant/Token/TokenConstants"
-import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
 import { setTokenBalances } from "~Storage/Redux/Slices"
 import { useThor } from "~Components"
 import { useGetTokensFromGithubQuery } from "~Storage/Redux/Api"
 import { useEffect } from "react"
+import BigNumber from "bignumber.js"
+import {
+    fetchVetExchangeRate,
+    fetchVthoExchangeRate,
+} from "~Storage/Redux/Actions"
+import { updateAccountBalances } from "~Storage/Redux/Actions/Token/updateAccountBalances"
+
+// If the env variable isn't set, use the default
+const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
+    process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD || "120000",
+).toNumber()
+
+// If the env variable isn't set, use the default
+const TOKEN_BALANCE_SYNC_PERIOD = new BigNumber(
+    process.env.REACT_APP_TOKEN_BALANCE_SYNC_PERIOD || "300000",
+).toNumber()
 
 /**
  * This component is responsible for keeping the available tokens, balances and currency data up to date.
@@ -26,6 +42,7 @@ export const useTokenBalances = () => {
     const currentAccount = useAppSelector(selectSelectedAccount)
     const currentNetwork = useAppSelector(selectSelectedNetwork)
     const balances = useAppSelector(selectAccountBalances)
+    const currency = useAppSelector(selectCurrency)
     const thorClient = useThor()
 
     useGetTokensFromGithubQuery({
@@ -69,4 +86,29 @@ export const useTokenBalances = () => {
         thorClient,
         balances,
     ])
+
+    useEffect(() => {
+        const updateBalances = () => {
+            // Update balances
+            dispatch(updateAccountBalances(thorClient))
+        }
+        updateBalances()
+        const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
+        return () => clearInterval(interval)
+    }, [dispatch, thorClient])
+
+    useEffect(() => {
+        const updateVechainExchangeRates = () => {
+            // Update VET exchange rate
+            dispatch(fetchVetExchangeRate(currency))
+            // Update VTHO exchange rate
+            dispatch(fetchVthoExchangeRate(currency))
+        }
+        updateVechainExchangeRates()
+        const interval = setInterval(
+            updateVechainExchangeRates,
+            EXCHANGE_RATE_SYNC_PERIOD,
+        )
+        return () => clearInterval(interval)
+    }, [dispatch, currency])
 }

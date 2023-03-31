@@ -1,0 +1,13 @@
+import { CurrencyExchangeRate } from "~Model/Currency/Currency"
+
+/**
+ * A model for storing exchange rates and other FIAT related info
+ * @field `vet` - the VET {@link CurrencyExchangeRate}
+ * @field `vtho` - the VTHO {@link CurrencyExchangeRate}
+ * @field `availableCurrencies` - All available FIAT currencies
+ */
+export interface CurrencyState {
+    vet?: CurrencyExchangeRate
+    vtho?: CurrencyExchangeRate
+    availableCurrencies: string[]
+}
