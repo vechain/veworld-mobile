@@ -133,6 +133,7 @@ const en: BaseTranslation = {
     TITLE_NFT: "NFT",
     TITLE_NFTS: "NFTs",
     TITLE_NETWORK: "Network",
+    TITLE_NETWORKS: "Networks",
     TITLE_CONTACTS: "Contacts",
     TITLE_PRIVACY: "Privacy and Security",
     TITLE_ALERTS: "Alerts",
@@ -204,6 +205,9 @@ const en: BaseTranslation = {
     // Network
 
     // Network Labels
+    NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",
+    NETWORK_LABEL_TEST_NETWORKS: "Test Networks",
+    NETWORK_LABEL_CUSTOM_NETWORKS: "Custom Networks",
 
     // Notifications
     NOTIFICATION_COPIED_CLIPBOARD: "{name} copied to clipboard!",

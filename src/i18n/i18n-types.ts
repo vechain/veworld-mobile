@@ -460,6 +460,10 @@ type RootTranslation = {
 	 */
 	TITLE_NETWORK: string
 	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	TITLE_NETWORKS: string
+	/**
 	 * C​o​n​t​a​c​t​s
 	 */
 	TITLE_CONTACTS: string
@@ -671,6 +675,18 @@ type RootTranslation = {
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	INPUT_PLACEHOLDER_SEARCH_TOKEN: string
+	/**
+	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_MAIN_NETWORKS: string
+	/**
+	 * T​e​s​t​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_TEST_NETWORKS: string
+	/**
+	 * C​u​s​t​o​m​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_CUSTOM_NETWORKS: string
 	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
@@ -1152,6 +1168,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_NETWORK: () => LocalizedString
 	/**
+	 * Networks
+	 */
+	TITLE_NETWORKS: () => LocalizedString
+	/**
 	 * Contacts
 	 */
 	TITLE_CONTACTS: () => LocalizedString
@@ -1360,6 +1380,18 @@ Please, try again later.
 	 * Search a token
 	 */
 	INPUT_PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Main Networks
+	 */
+	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
+	/**
+	 * Test Networks
+	 */
+	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
+	/**
+	 * Custom Networks
+	 */
+	NETWORK_LABEL_CUSTOM_NETWORKS: () => LocalizedString
 	/**
 	 * {name} copied to clipboard!
 	 */
