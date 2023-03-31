@@ -24,7 +24,7 @@ const buttons: {
 ]
 
 const findGroupButton = async (id: string) =>
-    await screen.findByTestId(`button-${id}`, { timeout: 5000 })
+    await screen.findByTestId(`button-${id}`, {}, { timeout: 5000 })
 
 describe("BaseButtonGroupHorizontal", () => {
     it("Should render all the buttons correctly", async () => {

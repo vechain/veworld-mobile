@@ -6,7 +6,7 @@ import { BaseIcon } from "./BaseIcon"
 
 const buttonTitle = "Button"
 const findButton = async () =>
-    await screen.findByText(buttonTitle, { timeout: 5000 })
+    await screen.findByText(buttonTitle, {}, { timeout: 5000 })
 
 describe("BaseButton", () => {
     const mockAction = jest.fn()

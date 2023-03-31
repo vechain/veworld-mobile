@@ -7,7 +7,7 @@ import { BaseTouchableBox } from "./BaseTouchableBox"
 
 const baseTouchableBoxTestId = "BaseTouchableBox"
 const findBaseTouchableBox = async () =>
-    screen.findByTestId(baseTouchableBoxTestId, { timeout: 5000 })
+    screen.findByTestId(baseTouchableBoxTestId, {}, { timeout: 5000 })
 
 describe("BaseTouchableBox component", () => {
     it("should call action function when clicked", async () => {

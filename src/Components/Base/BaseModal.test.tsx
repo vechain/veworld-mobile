@@ -7,7 +7,7 @@ import { Text } from "react-native"
 
 const baseModalTestId = "BaseModal"
 const findBaseModal = async () =>
-    await screen.findByTestId(baseModalTestId, { timeout: 5000 })
+    await screen.findByTestId(baseModalTestId, {}, { timeout: 5000 })
 
 describe("BaseModal", () => {
     it("renders the children when isOpen is true", async () => {

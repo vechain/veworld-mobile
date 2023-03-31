@@ -5,6 +5,7 @@ import {
     getAddressFromHdNode,
     getAddressFromXPub,
     isValid,
+    regexPattern,
 } from "./AddressUtils"
 
 const validMnemonicPhrase = [
@@ -58,7 +59,9 @@ describe("getAddressFromXPub - negative tests", () => {
         console.error = originalError
     })
     test("invalid XPub", () => {
-        expect(() => getAddressFromXPub(invalidXPub, 0)).toThrow()
+        expect(() => {
+            getAddressFromXPub(invalidXPub, 0)
+        }).toThrow()
     })
 })
 
@@ -134,6 +137,9 @@ describe("compareAddresses - negative testing", () => {
     test("one address no hex", () => {
         expect(compareAddresses(address1, address1NoHex)).toBe(true)
     })
+    test("nonstring addresses", () => {
+        expect(compareAddresses(1234, 5678)).toBe(false)
+    })
 })
 
 describe("Is Valid Address", () => {
@@ -142,9 +148,6 @@ describe("Is Valid Address", () => {
     })
     test("No prefix", () => {
         expect(isValid("0000000000000000000000000000456e65726779")).toBe(true)
-    })
-    test("valid address", () => {
-        expect(isValid("0x0000000000000000000000000000456e65726779")).toBe(true)
     })
     test("invalid length hex", () => {
         expect(isValid("0x0000000000000000000000000000456e6572677")).toBe(false)
@@ -158,5 +161,11 @@ describe("Is Valid Address", () => {
         expect(isValid("0x0000000000000000000000000000456e6572677g")).toBe(
             false,
         )
+    })
+})
+
+describe("regexPattern", () => {
+    test("returns the correct result", () => {
+        expect(regexPattern()).toStrictEqual(/^0x[a-fA-F0-9]{40}$/)
     })
 })

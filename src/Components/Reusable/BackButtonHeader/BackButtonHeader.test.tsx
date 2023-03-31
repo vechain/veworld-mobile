@@ -10,7 +10,7 @@ import { BackButtonHeader } from "./BackButtonHeader"
 
 const backButtonTestId = "backButtontestId"
 const findBackButton = async () =>
-    await screen.findByTestId(backButtonTestId, { timeout: 5000 })
+    await screen.findByTestId(backButtonTestId, {}, { timeout: 5000 })
 
 describe("BackButtonHeader", () => {
     it("should render correctly and go back", async () => {

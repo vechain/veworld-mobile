@@ -6,15 +6,15 @@ import { View } from "react-native"
 
 const headerTestId = "headerTestId"
 const findHeader = async () =>
-    await screen.findByTestId(headerTestId, { timeout: 5000 })
+    await screen.findByTestId(headerTestId, {}, { timeout: 5000 })
 const bodyTestId = "bodyTestId"
 const findBody = async () =>
-    await screen.findByTestId(bodyTestId, { timeout: 5000 })
+    await screen.findByTestId(bodyTestId, {}, { timeout: 5000 })
 
 const chevronTestId = "chevron"
 
 const findChevron = async () =>
-    await screen.findByTestId(chevronTestId, { timeout: 5000 })
+    await screen.findByTestId(chevronTestId, {}, { timeout: 5000 })
 
 describe("BaseAccordion", () => {
     it("renders correctly with default props", async () => {

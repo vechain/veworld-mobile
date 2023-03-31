@@ -5,9 +5,13 @@ import { TestWrapper } from "~Test"
 
 const baseButtonGroupTestId = "BaseButtonGroup"
 const findBaseButtonInGroup = async (id: string) =>
-    await screen.findByTestId(`${baseButtonGroupTestId}-${id}`, {
-        timeout: 5000,
-    })
+    await screen.findByTestId(
+        `${baseButtonGroupTestId}-${id}`,
+        {},
+        {
+            timeout: 5000,
+        },
+    )
 
 describe("BaseButtonGroup", () => {
     const buttons = [

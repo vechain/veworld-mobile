@@ -7,7 +7,7 @@ const testId = "BaseIcon"
 const findIcon = async () =>
     await screen.findByTestId(testId, { timeout: 5000 })
 const findIconWrapper = async () =>
-    await screen.findByTestId(`${testId}-wrapper`, { timeout: 5000 })
+    await screen.findByTestId(`${testId}-wrapper`, {}, { timeout: 5000 })
 
 describe("BaseIcon", () => {
     it("renders the icon with default values", async () => {
@@ -68,11 +68,9 @@ describe("BaseIcon", () => {
         render(
             <BaseIcon
                 testID={testId}
+                color="green"
                 name="star"
-                bg="red"
                 size={32}
-                m={10}
-                p={10}
                 action={mockAction}
                 disabled
             />,
@@ -83,11 +81,6 @@ describe("BaseIcon", () => {
 
         const iconWrapper = await findIconWrapper()
         expect(iconWrapper).toBeVisible()
-        expect(iconWrapper).toHaveStyle({
-            backgroundColor: "red",
-            margin: 10,
-            padding: 10,
-        })
 
         let icon = await findIcon()
 

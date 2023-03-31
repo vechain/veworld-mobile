@@ -5,7 +5,7 @@ import { BaseSpacer } from "./BaseSpacer"
 
 const baseSpacerTestId = "BaseSpacer"
 const findBaseSpacer = async () =>
-    screen.findByTestId(baseSpacerTestId, { timeout: 5000 })
+    screen.findByTestId(baseSpacerTestId, {}, { timeout: 5000 })
 
 describe("BaseSpacer", () => {
     it("should render correctly with width prop", async () => {
@@ -25,4 +25,12 @@ describe("BaseSpacer", () => {
         expect(spacer).toBeVisible()
         expect(spacer).toHaveStyle({ height: 20 })
     })
+
+    // it("should throw if width and height are not defined", async () => {
+    //     expect(() => {
+    //         render(<BaseSpacer testID={baseSpacerTestId} />, {
+    //             wrapper: TestWrapper,
+    //         })
+    //     }).toThrow("BaseSpacer: height and width are not provided")
+    // })
 })

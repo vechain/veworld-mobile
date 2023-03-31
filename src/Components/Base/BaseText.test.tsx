@@ -5,7 +5,7 @@ import { BaseText } from "./BaseText"
 
 const baseTextTestId = "BaseText"
 const findBaseText = async () =>
-    await screen.findByTestId(baseTextTestId, { timeout: 5000 })
+    await screen.findByTestId(baseTextTestId, {}, { timeout: 5000 })
 
 describe("BaseText", () => {
     it("should render correctly with default props", async () => {

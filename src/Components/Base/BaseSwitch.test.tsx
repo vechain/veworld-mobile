@@ -5,7 +5,7 @@ import { BaseSwitch } from "./BaseSwitch"
 
 const baseSwitchTestId = "BaseSwitch"
 const findBaseSwitch = async () =>
-    screen.findByTestId(baseSwitchTestId, { timeout: 5000 })
+    screen.findByTestId(baseSwitchTestId, {}, { timeout: 5000 })
 
 describe("BaseSwitch component", () => {
     it("renders switch component", async () => {
