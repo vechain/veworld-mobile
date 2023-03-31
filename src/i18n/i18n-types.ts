@@ -266,11 +266,19 @@ type RootTranslation = {
 	/**
 	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​c​o​n​v​e​r​s​i​o​n
 	 */
-	BD_OTHER_NETWORKS: string
+	BD_OTHER_NETWORKS_CONVERSION: string
+	/**
+	 * S​h​o​w​ ​f​i​a​t​ ​e​x​c​h​a​n​g​e​ ​r​a​t​e​s​ ​w​h​e​n​ ​o​n​ ​o​t​h​e​r​ ​n​e​t​w​o​r​k​s
+	 */
+	BD_OTHER_NETWORKS_CONVERSION_DESC: string
+	/**
+	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​i​n​d​i​c​a​t​o​r
+	 */
+	BD_OTHER_NETWORKS_INDICATOR: string
 	/**
 	 * D​i​s​p​l​a​y​ ​a​n​ ​i​n​d​i​c​a​t​o​r​ ​w​h​e​n​ ​t​r​a​n​s​a​c​t​i​n​g​ ​o​n​ ​a​n​o​t​h​e​r​ ​n​e​t​w​o​r​k
 	 */
-	BD_NETWORK_INDICATOR: string
+	BD_OTHER_NETWORKS_INDICATOR_DESC: string
 	/**
 	 * S​t​a​t​e​ ​L​o​g​s
 	 */
@@ -950,11 +958,19 @@ export type TranslationFunctions = {
 	/**
 	 * Other networks - show conversion
 	 */
-	BD_OTHER_NETWORKS: () => LocalizedString
+	BD_OTHER_NETWORKS_CONVERSION: () => LocalizedString
+	/**
+	 * Show fiat exchange rates when on other networks
+	 */
+	BD_OTHER_NETWORKS_CONVERSION_DESC: () => LocalizedString
+	/**
+	 * Other networks - show indicator
+	 */
+	BD_OTHER_NETWORKS_INDICATOR: () => LocalizedString
 	/**
 	 * Display an indicator when transacting on another network
 	 */
-	BD_NETWORK_INDICATOR: () => LocalizedString
+	BD_OTHER_NETWORKS_INDICATOR_DESC: () => LocalizedString
 	/**
 	 * State Logs
 	 */

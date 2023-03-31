@@ -114,19 +114,19 @@ export const ChangeNetworkScreen = () => {
                 <BaseSpacer height={20} />
 
                 <EnableFeature
-                    title={LL.BD_OTHER_NETWORKS()}
-                    subtitle={LL.BD_NETWORK_INDICATOR()}
-                    onValueChange={toggleConversionSwitch}
-                    value={showConversionOnOtherNets}
+                    title={LL.BD_OTHER_NETWORKS_INDICATOR()}
+                    subtitle={LL.BD_OTHER_NETWORKS_INDICATOR_DESC()}
+                    onValueChange={toggleTagSwitch}
+                    value={showTestNetTag}
                 />
 
                 <BaseSpacer height={20} />
 
                 <EnableFeature
-                    title={LL.BD_OTHER_NETWORKS()}
-                    subtitle={LL.BD_NETWORK_INDICATOR()}
-                    onValueChange={toggleTagSwitch}
-                    value={showTestNetTag}
+                    title={LL.BD_OTHER_NETWORKS_CONVERSION()}
+                    subtitle={LL.BD_OTHER_NETWORKS_CONVERSION_DESC()}
+                    onValueChange={toggleConversionSwitch}
+                    value={showConversionOnOtherNets}
                 />
             </BaseView>
 
