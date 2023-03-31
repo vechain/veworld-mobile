@@ -5,14 +5,15 @@ import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
 type Props = {
-    UserPinArray: (string | undefined)[]
+    pin: string[]
+    digitNumber: number
     isPINRetype?: boolean
     isPinError: boolean
 }
 
 const MESSAGE_FAKE_PLACEHOLDER = "placeholder"
 export const PasswordPins: FC<Props> = memo(
-    ({ UserPinArray, isPINRetype, isPinError }) => {
+    ({ pin, digitNumber, isPINRetype, isPinError }) => {
         const { LL } = useI18nContext()
 
         const isMessageVisible = useMemo(
@@ -51,14 +52,15 @@ export const PasswordPins: FC<Props> = memo(
         return (
             <BaseView alignItems="center">
                 <BaseView flexDirection="row" justifyContent="center">
-                    {UserPinArray.map((digit, index) => {
+                    {Array.from(Array(digitNumber).keys()).map((digit, idx) => {
+                        const digitExist = pin[idx]
                         return (
                             <BaseView
-                                key={`digit${index}`}
+                                key={digit}
                                 mx={10}
                                 style={[
                                     themedStyles.pinBase,
-                                    ...(digit
+                                    ...(digitExist
                                         ? [themedStyles.pressed]
                                         : [themedStyles.notPressed]),
                                 ]}
