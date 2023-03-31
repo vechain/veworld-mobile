@@ -86,7 +86,7 @@ export const WalletManagementBottomSheet = React.forwardRef<
             </BaseText>
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={baseStyles.list}>
-                {device && deviceAccounts.length && (
+                {device && !!deviceAccounts.length && (
                     <BottomSheetFlatList
                         data={deviceAccounts}
                         keyExtractor={account => account.address}
