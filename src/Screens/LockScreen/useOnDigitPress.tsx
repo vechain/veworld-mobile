@@ -1,62 +1,49 @@
-import { useCallback, useEffect, useState } from "react"
-import produce from "immer"
-import { usePasswordValidation } from "~Common"
+import { useState } from "react"
 
-export const useOnDigitPress = () => {
-    const [isPinError, setIsPinError] = useState(false)
-    const [isSuccess, setIsSuccess] = useState(false)
-    const [userPinArray, setUserPinArray] = useState<Array<string | undefined>>(
-        Array.from({ length: 6 }),
-    )
+export const useOnDigitPress = ({
+    digitNumber,
+    onFinishCallback,
+    resetPinOnFinishTimer,
+}: {
+    digitNumber: number
+    onFinishCallback?: (password: string) => void
+    resetPinOnFinishTimer?: number
+}) => {
+    const [pin, setPin] = useState<string[]>([])
 
-    const validatePassword = usePasswordValidation()
+    const onDigitDelete = () => {
+        setPin(prev => {
+            if (!prev.length) return prev
 
-    const onDigitPress = (digit: string) => {
-        // protect for ui overflow
-        if (!userPinArray.includes(undefined)) {
-            return
-        }
-        // remove error UI when user re-enters pin
-        setIsPinError(false)
-        // get index of array element to remove
-        const index = userPinArray.findIndex(pin => pin === undefined)
-
-        // set user PIN (UI)
-        setUserPinArray(
-            produce(draft => {
-                if (digit === "*") {
-                    const newIndex = index - 1
-                    draft[newIndex] = undefined
-                } else {
-                    draft[index] = digit
-                }
-            }),
-        )
+            const temp = [...prev]
+            temp.pop()
+            return temp
+        })
     }
 
-    const _validatePIN = useCallback(
-        async (_userPinArray: string[]) => {
-            let isValid = await validatePassword(_userPinArray)
-            if (isValid) {
-                setIsSuccess(isValid)
-            } else {
-                setIsPinError(!isValid)
-                setUserPinArray(Array.from({ length: 6 }))
-            }
-        },
-        [validatePassword],
-    )
+    const onDigitPress = (digit: string) => {
+        // remove error UI when user re-enters pin
 
-    useEffect(() => {
-        if (!userPinArray.includes(undefined)) {
-            _validatePIN(userPinArray as string[])
+        const updatedPin = [...pin, digit]
+
+        if (updatedPin.length > digitNumber) return
+
+        setPin(updatedPin)
+
+        if (updatedPin.length === digitNumber) {
+            onFinishCallback && onFinishCallback(updatedPin.join(""))
+            if (resetPinOnFinishTimer) {
+                setTimeout(() => {
+                    setPin([])
+                }, resetPinOnFinishTimer)
+            }
         }
-    }, [_validatePIN, userPinArray])
+    }
 
     return {
+        pin,
+        setPin,
         onDigitPress,
-        userPinArray,
-        isSuccess,
-        isPinError,
+        onDigitDelete,
     }
 }
