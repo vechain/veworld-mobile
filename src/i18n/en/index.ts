@@ -41,6 +41,7 @@ const en: BaseTranslation = {
     BTN_GO_TO_SETTINGS: "Go to settings",
     BTN_PASTE_ADDRESS: "Paste Address",
     BTN_SCAN_QR_CODE: "Scan QR Code",
+    BTN_ADD_CONTACT: "Add contact",
     BD_NO_TOKEN_FOUND: "No token found",
 
     // BODY
@@ -101,6 +102,12 @@ const en: BaseTranslation = {
     BD_USD : "USD",
     BD_EUR : "EUR",
     BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
+    BD_CONTACTS_LIST: "Your contact list", 
+    BD_CONTACTS_LIST_DISCLAIMER: "Add friends and addresses you trust", 
+    BD_ADD_CONTACT: "Add contact details",
+    BD_ADD_CONTACT_DISCLAIMER: "Insert the required data to add a new contact",
+    BD_CONTACT_NAME: "Contact name",
+    BD_CONTACT_ADDRESS: "Contact address",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -127,11 +134,12 @@ const en: BaseTranslation = {
     TITLE_SETTINGS: "Settings",
     TITLE_GENERAL: "General",
     TITLE_ADVANCED: "Advanced",
+    TITLE_CONTACTS: "Contacts",
+    TITLE_ADD_CONTACT: "Add Contact",
     TITLE_MANAGE_WALLET: "Manage Wallet",
     TITLE_NFT: "NFT",
     TITLE_NFTS: "NFTs",
     TITLE_NETWORK: "Network",
-    TITLE_CONTACTS: "Contacts",
     TITLE_PRIVACY: "Privacy and Security",
     TITLE_ALERTS: "Alerts",
     TITLE_CONNECTED_APPS: "Connected Apps",
@@ -195,9 +203,15 @@ const en: BaseTranslation = {
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
+    ERROR_REQUIRED_FIELD: "Required",
+    ERROR_MAX_INPUT_LENGTH: "Contact name too long",
+    ERROR_NAME_ALREADY_EXISTS: "Name already exists",
+    ERROR_ADDRESS_INVALID: "Please enter a valid Vechain address",
 
-
-    INPUT_PLACEHOLDER_SEARCH_TOKEN: "Search a token",
+    // Placeholders
+    PLACEHOLDER_SEARCH_TOKEN: "Search a token",
+    PLACEHOLDER_ENTER_NAME: "Enter the name",
+    PLACEHOLDER_ENTER_ADDRESS: "Enter the address",
 
     // Network
 

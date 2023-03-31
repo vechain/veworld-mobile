@@ -155,6 +155,10 @@ type RootTranslation = {
 	 */
 	BTN_SCAN_QR_CODE: string
 	/**
+	 * A​d​d​ ​c​o​n​t​a​c​t
+	 */
+	BTN_ADD_CONTACT: string
+	/**
 	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
 	 */
 	BD_NO_TOKEN_FOUND: string
@@ -340,6 +344,30 @@ type RootTranslation = {
 	 */
 	BD_SCANED_ADDRESS_COPPIED: string
 	/**
+	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t
+	 */
+	BD_CONTACTS_LIST: string
+	/**
+	 * A​d​d​ ​f​r​i​e​n​d​s​ ​a​n​d​ ​a​d​d​r​e​s​s​e​s​ ​y​o​u​ ​t​r​u​s​t
+	 */
+	BD_CONTACTS_LIST_DISCLAIMER: string
+	/**
+	 * A​d​d​ ​c​o​n​t​a​c​t​ ​d​e​t​a​i​l​s
+	 */
+	BD_ADD_CONTACT: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​d​a​t​a​ ​t​o​ ​a​d​d​ ​a​ ​n​e​w​ ​c​o​n​t​a​c​t
+	 */
+	BD_ADD_CONTACT_DISCLAIMER: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	BD_CONTACT_NAME: string
+	/**
+	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	BD_CONTACT_ADDRESS: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -436,6 +464,14 @@ type RootTranslation = {
 	 */
 	TITLE_ADVANCED: string
 	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	TITLE_CONTACTS: string
+	/**
+	 * A​d​d​ ​C​o​n​t​a​c​t
+	 */
+	TITLE_ADD_CONTACT: string
+	/**
 	 * M​a​n​a​g​e​ ​W​a​l​l​e​t
 	 */
 	TITLE_MANAGE_WALLET: string
@@ -451,10 +487,6 @@ type RootTranslation = {
 	 * N​e​t​w​o​r​k
 	 */
 	TITLE_NETWORK: string
-	/**
-	 * C​o​n​t​a​c​t​s
-	 */
-	TITLE_CONTACTS: string
 	/**
 	 * P​r​i​v​a​c​y​ ​a​n​d​ ​S​e​c​u​r​i​t​y
 	 */
@@ -660,9 +692,33 @@ type RootTranslation = {
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: string
 	/**
+	 * R​e​q​u​i​r​e​d
+	 */
+	ERROR_REQUIRED_FIELD: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e​ ​t​o​o​ ​l​o​n​g
+	 */
+	ERROR_MAX_INPUT_LENGTH: string
+	/**
+	 * N​a​m​e​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
+	 */
+	ERROR_NAME_ALREADY_EXISTS: string
+	/**
+	 * P​l​e​a​s​e​ ​e​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​V​e​c​h​a​i​n​ ​a​d​d​r​e​s​s
+	 */
+	ERROR_ADDRESS_INVALID: string
+	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
-	INPUT_PLACEHOLDER_SEARCH_TOKEN: string
+	PLACEHOLDER_SEARCH_TOKEN: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​n​a​m​e
+	 */
+	PLACEHOLDER_ENTER_NAME: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​a​d​d​r​e​s​s
+	 */
+	PLACEHOLDER_ENTER_ADDRESS: string
 	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
@@ -839,6 +895,10 @@ export type TranslationFunctions = {
 	 * Scan QR Code
 	 */
 	BTN_SCAN_QR_CODE: () => LocalizedString
+	/**
+	 * Add contact
+	 */
+	BTN_ADD_CONTACT: () => LocalizedString
 	/**
 	 * No token found
 	 */
@@ -1024,6 +1084,30 @@ export type TranslationFunctions = {
 	 */
 	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
 	/**
+	 * Your contact list
+	 */
+	BD_CONTACTS_LIST: () => LocalizedString
+	/**
+	 * Add friends and addresses you trust
+	 */
+	BD_CONTACTS_LIST_DISCLAIMER: () => LocalizedString
+	/**
+	 * Add contact details
+	 */
+	BD_ADD_CONTACT: () => LocalizedString
+	/**
+	 * Insert the required data to add a new contact
+	 */
+	BD_ADD_CONTACT_DISCLAIMER: () => LocalizedString
+	/**
+	 * Contact name
+	 */
+	BD_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Contact address
+	 */
+	BD_CONTACT_ADDRESS: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -1120,6 +1204,14 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ADVANCED: () => LocalizedString
 	/**
+	 * Contacts
+	 */
+	TITLE_CONTACTS: () => LocalizedString
+	/**
+	 * Add Contact
+	 */
+	TITLE_ADD_CONTACT: () => LocalizedString
+	/**
 	 * Manage Wallet
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
@@ -1135,10 +1227,6 @@ export type TranslationFunctions = {
 	 * Network
 	 */
 	TITLE_NETWORK: () => LocalizedString
-	/**
-	 * Contacts
-	 */
-	TITLE_CONTACTS: () => LocalizedString
 	/**
 	 * Privacy and Security
 	 */
@@ -1341,9 +1429,33 @@ Please, try again later.
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
 	/**
+	 * Required
+	 */
+	ERROR_REQUIRED_FIELD: () => LocalizedString
+	/**
+	 * Contact name too long
+	 */
+	ERROR_MAX_INPUT_LENGTH: () => LocalizedString
+	/**
+	 * Name already exists
+	 */
+	ERROR_NAME_ALREADY_EXISTS: () => LocalizedString
+	/**
+	 * Please enter a valid Vechain address
+	 */
+	ERROR_ADDRESS_INVALID: () => LocalizedString
+	/**
 	 * Search a token
 	 */
-	INPUT_PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
+	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Enter the name
+	 */
+	PLACEHOLDER_ENTER_NAME: () => LocalizedString
+	/**
+	 * Enter the address
+	 */
+	PLACEHOLDER_ENTER_ADDRESS: () => LocalizedString
 	/**
 	 * {name} copied to clipboard!
 	 */
