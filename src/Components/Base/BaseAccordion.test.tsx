@@ -14,7 +14,7 @@ const findBody = async () =>
 const chevronTestId = "chevron"
 
 const findChevron = async () =>
-    await screen.findByTestId(chevronTestId, { timeout: 5000 })
+    await screen.findByTestId(chevronTestId, {}, { timeout: 5000 })
 
 describe("BaseAccordion", () => {
     it("renders correctly with default props", async () => {

@@ -5,7 +5,7 @@ import { BaseCard } from "./BaseCard"
 
 const baseCardTestId = "BaseCard"
 const findBaseCard = async () =>
-    await screen.findByTestId(baseCardTestId, { timeout: 5000 })
+    await screen.findByTestId(baseCardTestId, {}, { timeout: 5000 })
 
 describe("BaseCard", () => {
     it("renders correctly", async () => {
