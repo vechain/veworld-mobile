@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, CURRENCY, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseView } from "~Components"
