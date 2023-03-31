@@ -260,9 +260,21 @@ type RootTranslation = {
 	 */
 	BD_SELECT_WORD: RequiredParams<'number'>
 	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​n​e​t​w​o​r​k
+	 * S​e​l​e​c​t​ ​a​ ​n​e​t​w​o​r​k
 	 */
 	BD_SELECT_NETWORK: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​n​e​t​w​o​r​k​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​a​c​t​ ​o​n
+	 */
+	BD_SELECT_NETWORK_DESC: string
+	/**
+	 * C​u​s​t​o​m​ ​n​o​d​e​s
+	 */
+	BD_CUSTOM_NODES: string
+	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​s
+	 */
+	BD_CUSTOM_NODES_DESC: string
 	/**
 	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​c​o​n​v​e​r​s​i​o​n
 	 */
@@ -676,6 +688,14 @@ type RootTranslation = {
 	 */
 	INPUT_PLACEHOLDER_SEARCH_TOKEN: string
 	/**
+	 * M​a​n​a​g​e​ ​n​o​d​e​s
+	 */
+	NETWORK_MANAGE_NODES: string
+	/**
+	 * A​d​d​ ​n​o​d​e
+	 */
+	NETWORK_ADD_NODE: string
+	/**
 	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: string
@@ -968,9 +988,21 @@ export type TranslationFunctions = {
 	 */
 	BD_SELECT_WORD: (arg: { number: unknown }) => LocalizedString
 	/**
-	 * Select your network
+	 * Select a network
 	 */
 	BD_SELECT_NETWORK: () => LocalizedString
+	/**
+	 * Select the network you want to transact on
+	 */
+	BD_SELECT_NETWORK_DESC: () => LocalizedString
+	/**
+	 * Custom nodes
+	 */
+	BD_CUSTOM_NODES: () => LocalizedString
+	/**
+	 * Manage your custom nodes
+	 */
+	BD_CUSTOM_NODES_DESC: () => LocalizedString
 	/**
 	 * Other networks - show conversion
 	 */
@@ -1380,6 +1412,14 @@ Please, try again later.
 	 * Search a token
 	 */
 	INPUT_PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Manage nodes
+	 */
+	NETWORK_MANAGE_NODES: () => LocalizedString
+	/**
+	 * Add node
+	 */
+	NETWORK_ADD_NODE: () => LocalizedString
 	/**
 	 * Main Networks
 	 */

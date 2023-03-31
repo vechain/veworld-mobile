@@ -4,20 +4,15 @@ import {
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
-    BaseText,
-    BaseTouchable,
-    BaseTouchableBox,
     BaseView,
     EnableFeature,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import { StringUtils, useBottomSheetModal, useTheme } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
-import { ChangeNetworkBottomSheet } from "./Components/ChangeNetworkBottomSheet"
-import { Routes } from "~Navigation"
+import { SelectNetworkBottomSheet } from "./Components/SelectNetwork/SelectNetworkBottomSheet"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    selectNetworks,
     selectSelectedNetwork,
     selectShowConversionOnOtherNets,
     selectShowTestnetTag,
@@ -26,6 +21,8 @@ import {
     toggleShowConversionOtherNetworks,
     toggleShowTestnetTag,
 } from "~Storage/Redux/Actions"
+import { SelectNetwork } from "./Components/SelectNetwork/SelectNetwork"
+import { CustomNodes, CustomNodesBottomSheet } from "./Components/CustomNodes"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
@@ -35,9 +32,15 @@ export const ChangeNetworkScreen = () => {
     const dispatch = useAppDispatch()
 
     const {
-        ref: walletManagementBottomSheetRef,
-        onOpen: openBottomSheet,
-        onClose: closeBottonSheet,
+        ref: selectNetworkBottomSheetRef,
+        onOpen: openSelectNetworkBottomSheet,
+        onClose: closeSelectNetworkBottonSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: customNodesBottomSheetRef,
+        onOpen: openCustomNodesBottomSheet,
+        onClose: closeCustomNodesBottonSheet,
     } = useBottomSheetModal()
 
     const showConversionOnOtherNets = useAppSelector(
@@ -47,14 +50,8 @@ export const ChangeNetworkScreen = () => {
     const showTestNetTag = useAppSelector(selectShowTestnetTag)
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const networks = useAppSelector(selectNetworks)
 
     const goBack = useCallback(() => nav.goBack(), [nav])
-    const onPressInput = useCallback(() => openBottomSheet(), [openBottomSheet])
-    const onAddCustomPress = useCallback(
-        () => nav.navigate(Routes.SETTINGS_CUSTOM_NET),
-        [nav],
-    )
 
     const toggleConversionSwitch = useCallback(
         (_newValue: boolean) => {
@@ -82,34 +79,14 @@ export const ChangeNetworkScreen = () => {
             <BaseSpacer height={12} />
 
             <BaseView mx={20}>
-                <BaseText typographyFont="title">{LL.TITLE_NETWORK()}</BaseText>
-                <BaseSpacer height={24} />
-                <BaseText typographyFont="bodyMedium">
-                    {LL.BD_SELECT_NETWORK()}
-                </BaseText>
-
-                <BaseText typographyFont="caption">
-                    {LL.TITLE_NETWORK()}
-                </BaseText>
-
-                <BaseSpacer height={20} />
-
-                <BaseTouchableBox
-                    action={onPressInput}
-                    justifyContent="space-between">
-                    <BaseText>
-                        {StringUtils.capitalize(selectedNetwork.type)}
-                    </BaseText>
-                    <BaseIcon name="magnify" />
-                </BaseTouchableBox>
-
-                <BaseSpacer height={20} />
-
-                <BaseTouchable
-                    action={onAddCustomPress}
-                    title={LL.BTN_ADD_CUSTOM_NODE()}
-                    underlined
+                <SelectNetwork
+                    openBottomSheet={openSelectNetworkBottomSheet}
+                    selectedNetwork={selectedNetwork}
                 />
+
+                <BaseSpacer height={20} />
+
+                <CustomNodes openBottomSheet={openCustomNodesBottomSheet} />
 
                 <BaseSpacer height={20} />
 
@@ -130,10 +107,13 @@ export const ChangeNetworkScreen = () => {
                 />
             </BaseView>
 
-            <ChangeNetworkBottomSheet
-                ref={walletManagementBottomSheetRef}
-                onClose={closeBottonSheet}
-                networks={networks}
+            <SelectNetworkBottomSheet
+                ref={selectNetworkBottomSheetRef}
+                onClose={closeSelectNetworkBottonSheet}
+            />
+            <CustomNodesBottomSheet
+                ref={customNodesBottomSheetRef}
+                onClose={closeCustomNodesBottonSheet}
             />
         </BaseSafeArea>
     )

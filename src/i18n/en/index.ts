@@ -81,7 +81,10 @@ const en: BaseTranslation = {
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
     BD_YOUR_BALANCE: "Your balance",
     BD_SELECT_WORD: "Select word {number}",
-    BD_SELECT_NETWORK: "Select your network",
+    BD_SELECT_NETWORK: "Select a network",
+    BD_SELECT_NETWORK_DESC: "Select the network you want to transact on",
+    BD_CUSTOM_NODES: "Custom nodes",
+    BD_CUSTOM_NODES_DESC: "Manage your custom nodes",
     BD_OTHER_NETWORKS_CONVERSION: "Other networks - show conversion",
     BD_OTHER_NETWORKS_CONVERSION_DESC: "Show fiat exchange rates when on other networks",
     BD_OTHER_NETWORKS_INDICATOR: "Other networks - show indicator",
@@ -203,6 +206,8 @@ const en: BaseTranslation = {
     INPUT_PLACEHOLDER_SEARCH_TOKEN: "Search a token",
 
     // Network
+    NETWORK_MANAGE_NODES: "Manage nodes",
+    NETWORK_ADD_NODE: "Add node",
 
     // Network Labels
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",
