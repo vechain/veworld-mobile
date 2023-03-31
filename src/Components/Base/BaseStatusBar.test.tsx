@@ -26,4 +26,18 @@ describe("BaseStatusBar", () => {
         const baseStatusBar = await findBaseStatusBar()
         expect(baseStatusBar).toBeVisible()
     })
+    it("renders trasnparent correctly", async () => {
+        render(
+            <>
+                <BaseStatusBar transparent />
+                <BaseView testID={baseStatusBarTestId} />
+            </>,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+        const baseStatusBar = await findBaseStatusBar()
+        expect(baseStatusBar).toBeVisible()
+        expect(baseStatusBar).toHaveStyle({ backgroundColor: "transparent" })
+    })
 })

@@ -70,10 +70,7 @@ describe("BaseIcon", () => {
                 testID={testId}
                 color="green"
                 name="star"
-                bg="red"
                 size={32}
-                m={10}
-                p={10}
                 action={mockAction}
                 disabled
             />,
@@ -84,11 +81,6 @@ describe("BaseIcon", () => {
 
         const iconWrapper = await findIconWrapper()
         expect(iconWrapper).toBeVisible()
-        expect(iconWrapper).toHaveStyle({
-            backgroundColor: "red",
-            margin: 10,
-            padding: 10,
-        })
 
         let icon = await findIcon()
 

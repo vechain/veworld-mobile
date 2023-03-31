@@ -25,4 +25,12 @@ describe("BaseSpacer", () => {
         expect(spacer).toBeVisible()
         expect(spacer).toHaveStyle({ height: 20 })
     })
+
+    // it("should throw if width and height are not defined", async () => {
+    //     expect(() => {
+    //         render(<BaseSpacer testID={baseSpacerTestId} />, {
+    //             wrapper: TestWrapper,
+    //         })
+    //     }).toThrow("BaseSpacer: height and width are not provided")
+    // })
 })
