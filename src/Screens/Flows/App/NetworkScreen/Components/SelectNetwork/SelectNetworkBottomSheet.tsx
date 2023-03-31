@@ -24,7 +24,7 @@ type Props = {
 
 const snapPoints = ["50%", "90%"]
 
-export const ChangeNetworkBottomSheet = React.forwardRef<
+export const SelectNetworkBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose }, ref) => {
@@ -110,7 +110,7 @@ export const ChangeNetworkBottomSheet = React.forwardRef<
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-            <BaseView flexDirection="row" w={100}>
+            <BaseView flexDirection="column" w={100}>
                 <BaseText typographyFont="subTitleBold">
                     {LL.BD_SELECT_NETWORK()}
                 </BaseText>
