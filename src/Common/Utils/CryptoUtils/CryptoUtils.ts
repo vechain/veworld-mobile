@@ -52,9 +52,7 @@ export function decrypt<T>(data: string, encryptionKey: string): T {
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
-    console.log({ txtToString })
     let parsed = JSON.parse(txtToString)
-    console.log({ parsed })
     return parsed
 }
 
