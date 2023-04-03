@@ -207,7 +207,7 @@ const en: BaseTranslation = {
 
     // Network
     NETWORK_MANAGE_NODES: "Manage nodes",
-    NETWORK_ADD_NODE: "Add node",
+    NETWORK_ADD_CUSTOM_NODE: "Add custom node",
 
     // Network Labels
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",

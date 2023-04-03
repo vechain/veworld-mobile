@@ -692,9 +692,9 @@ type RootTranslation = {
 	 */
 	NETWORK_MANAGE_NODES: string
 	/**
-	 * A​d​d​ ​n​o​d​e
+	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
-	NETWORK_ADD_NODE: string
+	NETWORK_ADD_CUSTOM_NODE: string
 	/**
 	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
 	 */
@@ -1417,9 +1417,9 @@ Please, try again later.
 	 */
 	NETWORK_MANAGE_NODES: () => LocalizedString
 	/**
-	 * Add node
+	 * Add custom node
 	 */
-	NETWORK_ADD_NODE: () => LocalizedString
+	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
 	/**
 	 * Main Networks
 	 */
