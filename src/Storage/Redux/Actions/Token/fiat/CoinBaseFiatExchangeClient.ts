@@ -1,6 +1,5 @@
 import axios from "axios"
-import { VeChainToken } from "~Model"
-import { CurrencyExchangeRate } from "~Model"
+import { VeChainToken, CurrencyExchangeRate } from "~Model"
 import { EXCHANGE_CLIENT_AXIOS_OPTS } from "./constants"
 
 const COINBASE_URL = process.env.REACT_APP_COINBASE_URL

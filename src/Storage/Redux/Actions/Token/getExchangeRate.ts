@@ -1,5 +1,4 @@
-import { VeChainToken } from "~Model"
-import { CurrencyExchangeRate } from "~Model"
+import { VeChainToken, CurrencyExchangeRate } from "~Model"
 import FiatExchangeClients from "./fiat"
 
 //ALWAYS put CoinGecko first
