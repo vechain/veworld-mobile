@@ -19,10 +19,7 @@ export const DecryptWallet: React.FC = () => {
     const onDecryptWallet = async (password?: string) => {
         for (const device of devices) {
             try {
-                await CryptoUtils.decryptWallet({
-                    device,
-                    userPassword: password,
-                })
+                await CryptoUtils.decryptWallet(device, password)
             } catch (e: any) {
                 Alert.alert(
                     "Error!",

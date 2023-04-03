@@ -9,6 +9,7 @@ export interface UserPreferenceState {
     balanceVisible: boolean
     currency: CURRENCY
     language: LANGUAGE
+    isAnalyticsTrackingEnabled: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -18,6 +19,7 @@ const initialState: UserPreferenceState = {
     balanceVisible: true,
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,
+    isAnalyticsTrackingEnabled: false,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -47,6 +49,12 @@ export const UserPreferencesSlice = createSlice({
         setLanguage: (state, action: PayloadAction<LANGUAGE>) => {
             state.language = action.payload
         },
+        setAnalyticsTrackingEnabled: (
+            state,
+            action: PayloadAction<boolean>,
+        ) => {
+            state.isAnalyticsTrackingEnabled = action.payload
+        },
     },
     extraReducers: builder => {
         builder.addCase(PURGE, () => initialState)
@@ -60,4 +68,5 @@ export const {
     setBalanceVisible,
     setCurrency,
     setLanguage,
+    setAnalyticsTrackingEnabled,
 } = UserPreferencesSlice.actions

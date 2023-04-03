@@ -5,6 +5,7 @@ import {
     setHideTokensWithNoBalance,
     setLanguage,
     setCurrency,
+    setAnalyticsTrackingEnabled,
 } from "../Slices/UserPreferences"
 
 export {
@@ -14,4 +15,5 @@ export {
     setHideTokensWithNoBalance,
     setLanguage,
     setCurrency,
+    setAnalyticsTrackingEnabled,
 }

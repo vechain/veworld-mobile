@@ -15,7 +15,16 @@ export const useBottomSheetModal = () => {
 
     const onOpen = useCallback(() => ref.current?.present(), [ref])
 
+    const openWithDelay = useCallback(
+        (delay: number) => {
+            setTimeout(() => {
+                ref.current?.present()
+            }, delay)
+        },
+        [ref],
+    )
+
     const onClose = useCallback(() => ref.current?.close(), [ref])
 
-    return { ref, onOpen, onClose }
+    return { ref, onOpen, onClose, openWithDelay }
 }

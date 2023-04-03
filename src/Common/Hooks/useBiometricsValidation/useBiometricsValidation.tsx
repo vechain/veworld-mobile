@@ -1,28 +1,34 @@
-import { useCallback, useEffect, useState } from "react"
-import { AlertUtils, BiometricsUtils } from "~Common/Utils"
+import { useCallback, useState } from "react"
+// import { Linking } from "react-native"
+import { BiometricsUtils } from "~Common/Utils"
+// import { useBiometrics } from "../useBiometrics/useBiometrics"
 
 export const useBiometricsValidation = () => {
-    const [isSuccess, setIsSuccess] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    // const biometrics = useBiometrics()
 
     const authenticateBiometrics = useCallback(async () => {
         let result = await BiometricsUtils.authenticateWithBiometric()
-        if (result.success) setIsSuccess(true)
-        else if (result.error) {
-            AlertUtils.showCancelledFaceIdAlert(
-                async () => {
-                    // TODO Handle user sign out
-                    return
-                },
-                async () => {
-                    await authenticateBiometrics()
-                },
-            )
+        // user_cancel
+        // not_available
+
+        if (result.success) {
+            console.log("success")
+
+            setIsAuthenticated(true)
+        } else if (result.error === "not_available") {
+            console.log("not_available")
+
+            // AlertUtils.showGoToSettingsBiometricsAlert(
+            //     async () => {},
+            //     async () => {
+            //         await Linking.openSettings()
+            //     },
+            // )
+        } else {
+            return
         }
     }, [])
 
-    useEffect(() => {
-        authenticateBiometrics()
-    }, [authenticateBiometrics])
-
-    return { isSuccess }
+    return { authenticateBiometrics, isAuthenticated }
 }
