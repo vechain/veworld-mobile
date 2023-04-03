@@ -22,6 +22,10 @@ type Props = {
     p?: number
     px?: number
     py?: number
+    pb?: number
+    pt?: number
+    pl?: number
+    pr?: number
     w?: number
     h?: number
     alignContainer?: FlexAlignType
@@ -85,6 +89,10 @@ export const BaseText = (props: Props) => {
             p={props.p}
             px={props.px}
             py={props.py}
+            pb={props.pb}
+            pt={props.pt}
+            pl={props.pl}
+            pr={props.pr}
             w={props.w}
             h={props.h}>
             <Text

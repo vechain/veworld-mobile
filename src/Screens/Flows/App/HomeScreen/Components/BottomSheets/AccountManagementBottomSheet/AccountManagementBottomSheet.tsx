@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import BaseBottomSheet from "~Components/Base/BaseBottomSheet"
 import { useTheme } from "~Common"
 import {
     BaseIcon,
@@ -8,6 +7,7 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    BaseBottomSheet,
 } from "~Components"
 
 import * as Clipboard from "expo-clipboard"
