@@ -7,6 +7,7 @@ import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { useSelector } from "react-redux"
 import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectCurrency } from "~Storage/Redux/Selectors"
+import { VeChainToken } from "~Model"
 
 type Props = {
     token: DenormalizedAccountTokenBalance
@@ -16,7 +17,10 @@ type Props = {
 export const VechainTokenCard = memo(
     ({ token: tokenBalance, isAnimation }: Props) => {
         const exchangeRate = useSelector(state =>
-            getCurrencyExchangeRate(state, tokenBalance.token.symbol),
+            getCurrencyExchangeRate(
+                state,
+                tokenBalance.token.symbol as VeChainToken,
+            ),
         )
         const currency = useSelector(selectCurrency)
         const change24h =
