@@ -19,6 +19,8 @@ type Props = {
     m?: number
     mx?: number
     my?: number
+    mb?: number
+    mt?: number
     p?: number
     px?: number
     py?: number
@@ -86,6 +88,8 @@ export const BaseText = (props: Props) => {
             m={props.m}
             mx={props.mx}
             my={props.my}
+            mt={props.mt}
+            mb={props.mb}
             p={props.p}
             px={props.px}
             py={props.py}
