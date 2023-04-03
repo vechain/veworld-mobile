@@ -1,3 +1,4 @@
+export type VeChainToken = "VET" | "VTHO"
 export interface Token {
     name: string
     symbol: string
