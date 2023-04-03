@@ -1,7 +1,7 @@
 import axios from "axios"
-import { VET } from "~Common/Constant/Token/TokenConstants"
+import { VET } from "~Common/Constant"
 import { VeChainToken } from "~Model"
-import { CurrencyExchangeRate } from "~Model/Currency/Currency"
+import { CurrencyExchangeRate } from "~Model"
 import { EXCHANGE_CLIENT_AXIOS_OPTS } from "./constants"
 
 const getCurrencies = async (): Promise<string[]> => {

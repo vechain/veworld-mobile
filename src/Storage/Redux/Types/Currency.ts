@@ -1,4 +1,4 @@
-import { CurrencyExchangeRate } from "~Model/Currency/Currency"
+import { CurrencyExchangeRate } from "~Model"
 
 /**
  * A model for storing exchange rates and other FIAT related info

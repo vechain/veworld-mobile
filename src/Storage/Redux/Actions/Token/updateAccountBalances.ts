@@ -5,7 +5,7 @@ import {
 import { RootState, TokenBalance } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
-import { VET, VTHO } from "~Common/Constant/Token/TokenConstants"
+import { VET, VTHO } from "~Common/Constant"
 import axios from "axios"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 import { setTokenBalances } from "~Storage/Redux/Slices"

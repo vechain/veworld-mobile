@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { CurrencyExchangeRate } from "~Model/Currency/Currency"
+import { CurrencyExchangeRate } from "~Model"
 import { CurrencyState } from "../Types/Currency"
 
 export const initialCurrencyState: CurrencyState = {

@@ -1,25 +1,21 @@
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    useAppDispatch,
+    useAppSelector,
     selectSelectedAccount,
     selectAccountBalances,
     selectSelectedNetwork,
     selectCurrency,
-} from "~Storage/Redux/Selectors"
-import { FungibleToken, NETWORK_TYPE } from "~Model"
-import {
-    defaultTokensMain,
-    defaultTokensTest,
-} from "~Common/Constant/Token/TokenConstants"
-import { setTokenBalances } from "~Storage/Redux/Slices"
-import { useThor } from "~Components"
-import { useGetTokensFromGithubQuery } from "~Storage/Redux/Api"
-import { useEffect } from "react"
-import BigNumber from "bignumber.js"
-import {
     fetchVetExchangeRate,
     fetchVthoExchangeRate,
-} from "~Storage/Redux/Actions"
-import { updateAccountBalances } from "~Storage/Redux/Actions/Token/updateAccountBalances"
+    updateAccountBalances,
+    setTokenBalances,
+    useGetTokensFromGithubQuery,
+} from "~Storage/Redux"
+import { FungibleToken, NETWORK_TYPE } from "~Model"
+import { VECHAIN_TOKEN_MAIN, VECHAIN_TOKEN_TEST } from "~Common/Constant"
+import { useThor } from "~Components"
+import { useEffect } from "react"
+import BigNumber from "bignumber.js"
 
 // If the env variable isn't set, use the default
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
@@ -59,16 +55,16 @@ export const useTokenBalances = () => {
             currentNetwork.genesisId &&
             balances?.length === 0
         ) {
-            let defaultTokens: FungibleToken[] = []
+            let VECHAIN_TOKENS: FungibleToken[] = []
             if (currentNetwork.type === NETWORK_TYPE.MAIN) {
-                defaultTokens = defaultTokensMain
+                VECHAIN_TOKENS = VECHAIN_TOKEN_MAIN
             }
             if (currentNetwork.type === NETWORK_TYPE.TEST) {
-                defaultTokens = defaultTokensTest
+                VECHAIN_TOKENS = VECHAIN_TOKEN_TEST
             }
             dispatch(
                 setTokenBalances(
-                    defaultTokens.map(token => ({
+                    VECHAIN_TOKENS.map(token => ({
                         accountAddress: currentAccount?.address,
                         tokenAddress: token.address,
                         balance: "0",

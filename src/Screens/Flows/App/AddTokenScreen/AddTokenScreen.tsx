@@ -24,7 +24,7 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { addTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { updateAccountBalances } from "~Storage/Redux/Actions/Token/updateAccountBalances"
+import { updateAccountBalances } from "~Storage/Redux/Actions"
 
 export const AddTokenScreen = () => {
     const theme = useTheme()
