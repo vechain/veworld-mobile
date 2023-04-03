@@ -696,6 +696,18 @@ type RootTranslation = {
 	 */
 	NETWORK_ADD_CUSTOM_NODE: string
 	/**
+	 * A​d​d​ ​n​e​t​w​o​r​k​ ​d​e​t​a​i​l​s
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB: string
+	/**
+	 * I​f​ ​y​o​u​ ​a​r​e​ ​h​a​v​i​n​g​ ​p​r​o​b​l​e​m​s​ ​a​d​d​i​n​g​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​,​ ​i​t​ ​u​s​u​a​l​l​y​ ​i​n​d​i​c​a​t​e​s​ ​a​ ​p​o​o​r​l​y​ ​f​o​r​m​a​t​t​e​d​ ​U​R​L​ ​o​r​ ​a​ ​p​r​o​b​l​e​m​ ​w​i​t​h​ ​t​h​e​ ​C​O​R​S​ ​c​o​n​f​i​g​u​r​a​t​i​o​n​ ​o​f​ ​t​h​e​ ​n​o​d​e​.
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB_DESC: string
+	/**
+	 * N​o​d​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NODE_NAME: string
+	/**
 	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: string
@@ -1420,6 +1432,18 @@ Please, try again later.
 	 * Add custom node
 	 */
 	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Add network details
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB: () => LocalizedString
+	/**
+	 * If you are having problems adding your custom node, it usually indicates a poorly formatted URL or a problem with the CORS configuration of the node.
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB_DESC: () => LocalizedString
+	/**
+	 * Node name
+	 */
+	NETWORK_ADD_CUSTOM_NODE_NAME: () => LocalizedString
 	/**
 	 * Main Networks
 	 */

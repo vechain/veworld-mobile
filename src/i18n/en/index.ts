@@ -72,7 +72,7 @@ const en: BaseTranslation = {
     BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12-word recovery phrase.",
     BD_IMPORT_WALLET_TYPE_HARDWARE: "You can connect a hardware wallet which will give you access to your new and existing accounts.",
     BD_WALLET_IMPORT_LOCAL:
-    "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
+        "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
     BD_CONFIRM_RESET: "Confirm reset",
@@ -103,8 +103,8 @@ const en: BaseTranslation = {
     BD_APP_THEME_DISCLAIMER: "Select the general app theme",
     BD_HIDE_TOKENS_DISCLAIMER: "Tokens without balance won't be shown in the assets list",
     BD_APP_LANGUAGE_DISCLAIMER: "Select the general app language",
-    BD_USD : "USD",
-    BD_EUR : "EUR",
+    BD_USD: "USD",
+    BD_EUR: "EUR",
     BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
 
     // TITLES
@@ -156,13 +156,13 @@ const en: BaseTranslation = {
     SB_EDIT_WALLET: "Edit wallet {name}",
     SB_RENAME_WALLET: "Rename wallet",
     SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
-    SB_DEVICE_CARD : "{alias} ({accounts} accounts)",
+    SB_DEVICE_CARD: "{alias} ({accounts} accounts)",
     SB_ENTER_LANGUAGE: "Enter your language",
     SB_SELECT_LANGUAGE: "Select your language",
     SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
     SB_CAMERA_ANAVAILABILITY: "Your device does not support this operation.",
-    SB_YOUR_TOKENS : "Your tokens",
-    SB_YOUR_NFTS : "Your collections",
+    SB_YOUR_TOKENS: "Your tokens",
+    SB_YOUR_NFTS: "Your collections",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -208,6 +208,9 @@ const en: BaseTranslation = {
     // Network
     NETWORK_MANAGE_NODES: "Manage nodes",
     NETWORK_ADD_CUSTOM_NODE: "Add custom node",
+    NETWORK_ADD_CUSTOM_NODE_SB: "Add network details",
+    NETWORK_ADD_CUSTOM_NODE_SB_DESC: "If you are having problems adding your custom node, it usually indicates a poorly formatted URL or a problem with the CORS configuration of the node.",
+    NETWORK_ADD_CUSTOM_NODE_NAME: "Node name",
 
     // Network Labels
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",

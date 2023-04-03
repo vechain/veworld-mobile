@@ -32,6 +32,14 @@ export const AddCustomNodeScreen = () => {
                 <BaseText typographyFont="title">
                     {LL.BTN_ADD_CUSTOM_NODE()}
                 </BaseText>
+                <BaseSpacer height={24} />
+                <BaseText typographyFont="button" pb={8}>
+                    {LL.NETWORK_ADD_CUSTOM_NODE_SB()}
+                </BaseText>
+                <BaseText typographyFont="captionRegular">
+                    {LL.NETWORK_ADD_CUSTOM_NODE_SB_DESC()}
+                </BaseText>
+                <BaseSpacer height={24} />
             </BaseView>
         </BaseSafeArea>
     )
