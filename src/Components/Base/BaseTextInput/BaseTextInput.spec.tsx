@@ -10,6 +10,7 @@ const mandatoryProps = {
 const customPlaceholder = "CustomPlaceholder"
 const customErrorMessage = "Custom error message"
 const customValue = "Custom value"
+const customLabel = "Custom label"
 
 const findTextInput = async (placeholder = mandatoryProps.placeholder) =>
     await screen.findByPlaceholderText(placeholder, {}, { timeout: 5000 })
@@ -75,5 +76,58 @@ describe("BaseTextInput", () => {
 
         const errorMessage = await screen.findByText(customErrorMessage)
         expect(errorMessage).toBeVisible()
+    })
+
+    it("renders the correct value prop", async () => {
+        const value = "Initial value"
+
+        render(
+            <BaseTextInput
+                {...mandatoryProps}
+                value={value}
+                setValue={() => {}}
+            />,
+            { wrapper: TestWrapper },
+        )
+
+        const textInput = await findTextInput()
+        expect(textInput.props.value).toEqual(value)
+    })
+
+    it("calls setValue prop on input change", async () => {
+        const mockSetValue = jest.fn()
+
+        render(<BaseTextInput {...mandatoryProps} setValue={mockSetValue} />, {
+            wrapper: TestWrapper,
+        })
+
+        const textInput = await findTextInput()
+        const newValue = "New value"
+        fireEvent.changeText(textInput, newValue)
+
+        expect(mockSetValue).toHaveBeenCalledTimes(1)
+        expect(mockSetValue).toHaveBeenCalledWith(newValue)
+    })
+
+    it("renders error message when errorMessage prop is provided", async () => {
+        render(
+            <BaseTextInput
+                {...mandatoryProps}
+                errorMessage={customErrorMessage}
+            />,
+            { wrapper: TestWrapper },
+        )
+
+        const errorMessage = await screen.findByText(customErrorMessage)
+        expect(errorMessage).toBeVisible()
+    })
+
+    it("renders label correctly when label prop is provided", async () => {
+        render(<BaseTextInput {...mandatoryProps} label={customLabel} />, {
+            wrapper: TestWrapper,
+        })
+
+        const label = await screen.findByText(customLabel)
+        expect(label).toBeVisible()
     })
 })
