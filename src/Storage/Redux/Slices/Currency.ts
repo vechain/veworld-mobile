@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { CurrencyExchangeRate } from "~Model"
+import { CurrencyExchangeRate, VeChainToken } from "~Model"
 import { CurrencyState } from "../Types/Currency"
 
 export const initialCurrencyState: CurrencyState = {
@@ -13,22 +13,20 @@ export const currencySlice = createSlice({
         updateCurrency: (_, action: PayloadAction<CurrencyState>) => {
             return action.payload
         },
-        updateVetExchangeRate: (
+        updateExchangeRate: (
             state,
-            action: PayloadAction<CurrencyExchangeRate>,
+            action: PayloadAction<{
+                token: VeChainToken
+                rate: CurrencyExchangeRate
+            }>,
         ) => {
-            state.vet = action.payload
-        },
-        updateVthoExchangeRate: (
-            state,
-            action: PayloadAction<CurrencyExchangeRate>,
-        ) => {
-            state.vtho = action.payload
+            const { token, rate } = action.payload
+            state[token] = rate
         },
         updateAvailableCurrencies: (state, action: PayloadAction<string[]>) => {
             state.availableCurrencies = action.payload
         },
-        clearExchangeRate: (state, action: PayloadAction<"vet" | "vtho">) => {
+        clearExchangeRate: (state, action: PayloadAction<VeChainToken>) => {
             delete state[action.payload]
         },
     },
@@ -36,8 +34,7 @@ export const currencySlice = createSlice({
 
 export const {
     updateCurrency,
-    updateVetExchangeRate,
+    updateExchangeRate,
     clearExchangeRate,
-    updateVthoExchangeRate,
     updateAvailableCurrencies,
 } = currencySlice.actions

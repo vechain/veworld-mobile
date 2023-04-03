@@ -5,8 +5,7 @@ import {
     selectAccountBalances,
     selectSelectedNetwork,
     selectCurrency,
-    fetchVetExchangeRate,
-    fetchVthoExchangeRate,
+    fetchExchangeRate,
     updateAccountBalances,
     setTokenBalances,
     useGetTokensFromGithubQuery,
@@ -92,9 +91,9 @@ export const useTokenBalances = () => {
     useEffect(() => {
         const updateVechainExchangeRates = () => {
             // Update VET exchange rate
-            dispatch(fetchVetExchangeRate(currency))
+            dispatch(fetchExchangeRate("VET", currency))
             // Update VTHO exchange rate
-            dispatch(fetchVthoExchangeRate(currency))
+            dispatch(fetchExchangeRate("VTHO", currency))
         }
         updateVechainExchangeRates()
         const interval = setInterval(

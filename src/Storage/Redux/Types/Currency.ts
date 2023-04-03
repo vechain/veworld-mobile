@@ -7,7 +7,7 @@ import { CurrencyExchangeRate } from "~Model"
  * @field `availableCurrencies` - All available FIAT currencies
  */
 export interface CurrencyState {
-    vet?: CurrencyExchangeRate
-    vtho?: CurrencyExchangeRate
+    VET?: CurrencyExchangeRate
+    VTHO?: CurrencyExchangeRate
     availableCurrencies: string[]
 }
