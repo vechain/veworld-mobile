@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { VECHAIN_TOKENS, VET, VTHO } from "~Common/Constant"
+import { DEFAULT_VECHAIN_TOKENS, VET, VTHO } from "~Common/Constant"
 import { mergeTokens } from "~Common/Utils/TokenUtils"
 import { FungibleToken } from "~Model"
 import { TokenApi } from "../Api"
@@ -17,7 +17,7 @@ export const selectTokensFromGithub = (state: RootState) =>
 
 export const selectAllFungibleTokens = createSelector(
     selectTokensFromGithub,
-    tokens => mergeTokens(VECHAIN_TOKENS, tokens),
+    tokens => mergeTokens(DEFAULT_VECHAIN_TOKENS, tokens),
 )
 
 /**

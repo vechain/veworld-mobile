@@ -19,20 +19,17 @@ export const currencySlice = createSlice({
         ) => {
             state.vet = action.payload
         },
-        clearVetExchangeRate: state => {
-            delete state.vet
-        },
         updateVthoExchangeRate: (
             state,
             action: PayloadAction<CurrencyExchangeRate>,
         ) => {
             state.vtho = action.payload
         },
-        clearVthoExchangeRate: state => {
-            delete state.vtho
-        },
         updateAvailableCurrencies: (state, action: PayloadAction<string[]>) => {
             state.availableCurrencies = action.payload
+        },
+        clearExchangeRate: (state, action: PayloadAction<"vet" | "vtho">) => {
+            delete state[action.payload]
         },
     },
 })
@@ -40,8 +37,7 @@ export const currencySlice = createSlice({
 export const {
     updateCurrency,
     updateVetExchangeRate,
-    clearVetExchangeRate,
+    clearExchangeRate,
     updateVthoExchangeRate,
-    clearVthoExchangeRate,
     updateAvailableCurrencies,
 } = currencySlice.actions

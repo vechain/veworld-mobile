@@ -1,6 +1,6 @@
 import { CURRENCY } from "~Common"
 import {
-    clearVthoExchangeRate,
+    clearExchangeRate,
     updateVthoExchangeRate,
 } from "~Storage/Redux/Slices"
 import { AppDispatch } from "~Storage/Redux/Types"
@@ -13,6 +13,6 @@ export const fetchVthoExchangeRate =
 
             dispatch(updateVthoExchangeRate(vthoExchangeRate))
         } catch (e) {
-            dispatch(clearVthoExchangeRate())
+            dispatch(clearExchangeRate("vtho"))
         }
     }

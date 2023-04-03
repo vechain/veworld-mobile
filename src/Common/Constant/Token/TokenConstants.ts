@@ -35,7 +35,15 @@ export const VECHAIN_TOKEN_TEST: FungibleToken[] = [
     { ...VTHO, genesisId: genesises.test.id },
 ]
 
-export const VECHAIN_TOKENS: FungibleToken[] = [
+export const DEFAULT_VECHAIN_TOKENS: FungibleToken[] = [
     ...VECHAIN_TOKEN_MAIN,
     ...VECHAIN_TOKEN_TEST,
 ]
+
+export const DEFAULT_VECHAIN_TOKENS_MAP = new Map<
+    NETWORK_TYPE,
+    FungibleToken[]
+>([
+    [NETWORK_TYPE.MAIN, VECHAIN_TOKEN_MAIN],
+    [NETWORK_TYPE.TEST, VECHAIN_TOKEN_TEST],
+])

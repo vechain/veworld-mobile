@@ -11,8 +11,7 @@ import {
     setTokenBalances,
     useGetTokensFromGithubQuery,
 } from "~Storage/Redux"
-import { FungibleToken, NETWORK_TYPE } from "~Model"
-import { VECHAIN_TOKEN_MAIN, VECHAIN_TOKEN_TEST } from "~Common/Constant"
+import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Common/Constant"
 import { useThor } from "~Components"
 import { useEffect } from "react"
 import BigNumber from "bignumber.js"
@@ -55,23 +54,20 @@ export const useTokenBalances = () => {
             currentNetwork.genesisId &&
             balances?.length === 0
         ) {
-            let VECHAIN_TOKENS: FungibleToken[] = []
-            if (currentNetwork.type === NETWORK_TYPE.MAIN) {
-                VECHAIN_TOKENS = VECHAIN_TOKEN_MAIN
-            }
-            if (currentNetwork.type === NETWORK_TYPE.TEST) {
-                VECHAIN_TOKENS = VECHAIN_TOKEN_TEST
-            }
-            dispatch(
-                setTokenBalances(
-                    VECHAIN_TOKENS.map(token => ({
-                        accountAddress: currentAccount?.address,
-                        tokenAddress: token.address,
-                        balance: "0",
-                        timeUpdated: new Date().toISOString(),
-                    })),
-                ),
+            const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(
+                currentNetwork.type,
             )
+            if (defaultTokens)
+                dispatch(
+                    setTokenBalances(
+                        defaultTokens.map(token => ({
+                            accountAddress: currentAccount?.address,
+                            tokenAddress: token.address,
+                            balance: "0",
+                            timeUpdated: new Date().toISOString(),
+                        })),
+                    ),
+                )
             dispatch(updateAccountBalances(thorClient))
         }
     }, [
