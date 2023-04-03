@@ -639,6 +639,14 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_ADD: string
 	/**
+	 * n​a​m​e
+	 */
+	COMMON_LBL_NAME: string
+	/**
+	 * U​R​L
+	 */
+	COMMON_LBL_URL: string
+	/**
 	 * A​d​d​r​e​s​s
 	 */
 	COMMON_LBL_ADDRESS: string
@@ -663,6 +671,11 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_FAVOURITES: string
 	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​{​n​a​m​e​}
+	 * @param {unknown} name
+	 */
+	COMMON_LBL_ENTER_THE: RequiredParams<'name'>
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
@@ -683,6 +696,18 @@ type RootTranslation = {
 	 * W​a​l​l​e​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: string
+	/**
+	 * E​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​U​R​L
+	 */
+	ERROR_ENTER_VALID_URL: string
+	/**
+	 * U​R​L​ ​m​u​s​t​ ​b​e​ ​h​t​t​p​s​ ​o​r​ ​l​o​c​a​l​h​o​s​t
+	 */
+	ERROR_URL_NOT_VALID: string
+	/**
+	 * N​e​t​w​o​r​k​ ​a​l​r​e​a​d​y​ ​i​n​ ​u​s​e
+	 */
+	ERROR_URL_ALREADY_USER: string
 	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
@@ -707,6 +732,10 @@ type RootTranslation = {
 	 * N​o​d​e​ ​n​a​m​e
 	 */
 	NETWORK_ADD_CUSTOM_NODE_NAME: string
+	/**
+	 * A​d​d​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
 	/**
 	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
 	 */
@@ -1376,6 +1405,14 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_ADD: () => LocalizedString
 	/**
+	 * name
+	 */
+	COMMON_LBL_NAME: () => LocalizedString
+	/**
+	 * URL
+	 */
+	COMMON_LBL_URL: () => LocalizedString
+	/**
 	 * Address
 	 */
 	COMMON_LBL_ADDRESS: () => LocalizedString
@@ -1400,6 +1437,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_FAVOURITES: () => LocalizedString
 	/**
+	 * Enter the {name}
+	 */
+	COMMON_LBL_ENTER_THE: (arg: { name: unknown }) => LocalizedString
+	/**
 	 * Something went wrong!
 	 */
 	ERROR_GENERIC_SUBTITLE: () => LocalizedString
@@ -1420,6 +1461,18 @@ Please, try again later.
 	 * Wallet already exists
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
+	/**
+	 * Enter a valid URL
+	 */
+	ERROR_ENTER_VALID_URL: () => LocalizedString
+	/**
+	 * URL must be https or localhost
+	 */
+	ERROR_URL_NOT_VALID: () => LocalizedString
+	/**
+	 * Network already in use
+	 */
+	ERROR_URL_ALREADY_USER: () => LocalizedString
 	/**
 	 * Search a token
 	 */
@@ -1444,6 +1497,10 @@ Please, try again later.
 	 * Node name
 	 */
 	NETWORK_ADD_CUSTOM_NODE_NAME: () => LocalizedString
+	/**
+	 * Add network
+	 */
+	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
 	/**
 	 * Main Networks
 	 */

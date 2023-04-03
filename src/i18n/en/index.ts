@@ -186,12 +186,16 @@ const en: BaseTranslation = {
     COMMON_BTN_ADD: "Add",
 
     // Common Labels
+    COMMON_LBL_NAME: "name",
+    COMMON_LBL_URL: "URL",
     COMMON_LBL_ADDRESS: "Address",
     COMMON_LBL_SUCCESS: "Success",
     COMMON_LBL_ERROR: "Error",
     COMMON_LBL_IMPORT: "Import",
     COMMON_LBL_FAVOURITE: "Favourite",
     COMMON_LBL_FAVOURITES: "Favourites",
+    COMMON_LBL_ENTER_THE: "Enter the {name}",
+
 
     // Common Titles
 
@@ -201,6 +205,10 @@ const en: BaseTranslation = {
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
+    ERROR_ENTER_VALID_URL: "Enter a valid URL",
+    ERROR_URL_NOT_VALID: "URL must be https or localhost",
+    ERROR_URL_ALREADY_USER: "Network already in use",
+
 
 
     INPUT_PLACEHOLDER_SEARCH_TOKEN: "Search a token",
@@ -211,6 +219,7 @@ const en: BaseTranslation = {
     NETWORK_ADD_CUSTOM_NODE_SB: "Add network details",
     NETWORK_ADD_CUSTOM_NODE_SB_DESC: "If you are having problems adding your custom node, it usually indicates a poorly formatted URL or a problem with the CORS configuration of the node.",
     NETWORK_ADD_CUSTOM_NODE_NAME: "Node name",
+    NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: "Add network",
 
     // Network Labels
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",
