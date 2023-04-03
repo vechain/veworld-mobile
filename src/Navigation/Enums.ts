@@ -29,6 +29,6 @@ export enum Routes {
     SETTINGS_ALERTS = "Settings_Alerts",
     SETTINGS_CONNECTED_APPS = "Settings_Connected_Apps",
     SETTINGS_ABOUT = "Settings_About",
-    SETTINGS_CUSTOM_NET = "Settings_Custom_Network",
+    SETTINGS_ADD_CUSTOM_NODE = "Settings_Add_Custom_Node",
     CAMERA = "Camera",
 }
