@@ -1,7 +1,7 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
-    AddTokenScreen,
+    ManageTokenScreen,
     BuyScreen,
     HistoryScreen,
     HomeScreen,
@@ -57,7 +57,7 @@ export const HomeStack = () => {
                 />
                 <Screen
                     name={Routes.ADD_TOKEN}
-                    component={AddTokenScreen}
+                    component={ManageTokenScreen}
                     options={{ headerShown: false }}
                 />
             </Group>
