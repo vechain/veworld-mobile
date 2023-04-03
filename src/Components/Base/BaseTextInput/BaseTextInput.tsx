@@ -24,7 +24,7 @@ export const BaseTextInput = memo(
         return (
             <DropShadow>
                 {label && (
-                    <BaseText typographyFont="bodyMedium" my={8}>
+                    <BaseText typographyFont="bodyMedium" mb={8}>
                         {label}
                     </BaseText>
                 )}
