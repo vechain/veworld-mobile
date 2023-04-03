@@ -1,7 +1,11 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
-import { RootState } from "~Storage/Redux/Types"
 import { selectSelectedAccount } from "./Account"
+import { VET, VTHO } from "~Common/Constant"
+import {
+    DenormalizedAccountTokenBalance,
+    RootState,
+} from "~Storage/Redux/Types"
 import { selectAllFungibleTokens } from "./TokenApi"
 
 export const selectBalancesState = (state: RootState) => state.balances
@@ -43,4 +47,41 @@ export const selectDenormalizedAccountTokenBalances = createSelector(
                 token: balanceToken,
             }
         }),
+)
+
+/**
+ * Get account token balances without vechain tokens
+ */
+export const selectNonVechainDenormalizedAccountTokenBalances = createSelector(
+    [selectDenormalizedAccountTokenBalances],
+    balances =>
+        balances.filter(
+            (balance: DenormalizedAccountTokenBalance) =>
+                balance.token.symbol !== VET.symbol &&
+                balance.token.symbol !== VTHO.symbol,
+        ),
+)
+
+/**
+ * Get just vet balance
+ */
+export const getVetDenormalizedAccountTokenBalances = createSelector(
+    [selectDenormalizedAccountTokenBalances],
+    balances =>
+        balances.find(
+            (balance: DenormalizedAccountTokenBalance) =>
+                balance.token.symbol === VET.symbol,
+        ),
+)
+
+/**
+ * Get just vtho balance
+ */
+export const getVthoDenormalizedAccountTokenBalances = createSelector(
+    [selectDenormalizedAccountTokenBalances],
+    balances =>
+        balances.find(
+            (balance: DenormalizedAccountTokenBalance) =>
+                balance.token.symbol === VTHO.symbol,
+        ),
 )

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from "react"
+import React, { memo, useCallback } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
@@ -7,10 +7,12 @@ import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { useAppSelector } from "~Storage/Redux"
 import {
-    selectCurrency,
-    selectDenormalizedAccountTokenBalances,
+    getVetDenormalizedAccountTokenBalances,
+    getVthoDenormalizedAccountTokenBalances,
+    selectNonVechainDenormalizedAccountTokenBalances,
 } from "~Storage/Redux/Selectors"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
+import { AnimatedChartCard } from "./AnimatedChartCard"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -20,13 +22,12 @@ interface Props extends AnimateProps<ViewProps> {
 export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
         const tokenBalances: DenormalizedAccountTokenBalance[] = useAppSelector(
-            selectDenormalizedAccountTokenBalances,
+            selectNonVechainDenormalizedAccountTokenBalances,
         )
-        const [data, setData] = useState<DenormalizedAccountTokenBalance[]>([])
-
-        useEffect(() => {
-            setData(tokenBalances)
-        }, [tokenBalances])
+        const vetBalance: DenormalizedAccountTokenBalance | undefined =
+            useAppSelector(getVetDenormalizedAccountTokenBalances)
+        const vthoBalance: DenormalizedAccountTokenBalance | undefined =
+            useAppSelector(getVthoDenormalizedAccountTokenBalances)
 
         const { styles } = useThemedStyles(baseStyles)
 
@@ -42,34 +43,25 @@ export const TokenList = memo(
             [],
         )
 
-        const selectedCurrency = useAppSelector(selectCurrency)
-
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
-                {/* TODO: reintroduce default native tokens
-                <AnimatedChartCard
-                    token={NATIVE_TOKENS[0]}
-                    isEdit={isEdit}
-                    selectedCurrency={selectedCurrency}
-                />
-                <AnimatedVTHOCard
-                    token={NATIVE_TOKENS[1]}
-                    isEdit={isEdit}
-                    selectedCurrency={selectedCurrency}
-                /> */}
+                {vetBalance && (
+                    <AnimatedChartCard token={vetBalance} isEdit={isEdit} />
+                )}
+                {vthoBalance && (
+                    <AnimatedChartCard token={vthoBalance} isEdit={isEdit} />
+                )}
 
                 <NestableDraggableFlatList
-                    data={data}
+                    data={tokenBalances}
                     extraData={isEdit}
-                    // eslint-disable-next-line @typescript-eslint/no-shadow
-                    onDragEnd={({ data }) => setData(data)}
+                    onDragEnd={() => {}}
                     keyExtractor={item => item.tokenAddress}
                     renderItem={itemParams => (
                         <AnimatedTokenCard
                             {...itemParams}
                             isEdit={isEdit}
                             onDeleteItem={onDeleteItem}
-                            selectedCurrency={selectedCurrency}
                         />
                     )}
                     activationDistance={40}
