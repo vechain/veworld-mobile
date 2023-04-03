@@ -10,7 +10,6 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
-import { SelectNetworkBottomSheet } from "./Components/SelectNetwork/SelectNetworkBottomSheet"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectSelectedNetwork,
@@ -21,8 +20,12 @@ import {
     toggleShowConversionOtherNetworks,
     toggleShowTestnetTag,
 } from "~Storage/Redux/Actions"
-import { SelectNetwork } from "./Components/SelectNetwork/SelectNetwork"
-import { CustomNodes, CustomNodesBottomSheet } from "./Components/CustomNodes"
+import {
+    CustomNodes,
+    CustomNodesBottomSheet,
+    SelectNetwork,
+    SelectNetworkBottomSheet,
+} from "./Components"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
