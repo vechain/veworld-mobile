@@ -9,19 +9,25 @@ const { defaults: defaultTypography } = typography
 
 type Props = {
     placeholder: string
+    label?: string
     value?: string
     setValue?: (s: string) => void
     errorMessage?: string
 }
 
 export const BaseTextInput = memo(
-    ({ placeholder, value, setValue, errorMessage }: Props) => {
+    ({ placeholder, label, value, setValue, errorMessage }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const theme = useTheme()
 
         return (
             <DropShadow>
+                {label && (
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {label}
+                    </BaseText>
+                )}
                 <BaseView style={styles.container}>
                     <TextInput
                         style={styles.input}
@@ -37,7 +43,6 @@ export const BaseTextInput = memo(
                             <BaseIcon
                                 name={"alert-circle-outline"}
                                 size={20}
-                                action={() => {}}
                                 color={theme.colors.danger}
                             />
                             <BaseText
