@@ -35,6 +35,7 @@ export const BaseTextInput = memo(
                         placeholderTextColor={theme.colors.text}
                         onChangeText={setValue}
                         value={value}
+                        autoCapitalize="none"
                     />
                 </BaseView>
                 {errorMessage && (

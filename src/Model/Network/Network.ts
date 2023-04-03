@@ -13,10 +13,9 @@ import { NETWORK_TYPE } from "./enums"
 export type Network = {
     defaultNet: boolean
     id: string
-    tag: string
+    name: string
     type: NETWORK_TYPE
     currentUrl: string
     urls: string[]
-    genesisId: string
     genesis: typeof genesises.main
 }
