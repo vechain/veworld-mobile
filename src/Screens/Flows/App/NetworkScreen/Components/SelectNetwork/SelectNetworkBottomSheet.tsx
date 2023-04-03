@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -107,8 +107,24 @@ export const SelectNetworkBottomSheet = React.forwardRef<
         [],
     )
 
+    const [snapIndex, setSnapIndex] = useState<number>(0)
+
+    // The list is scrollable when the bottom sheet is fully expanded
+    const isListScrollable = useMemo(
+        () => snapIndex === snapPoints.length - 1,
+        [snapIndex],
+    )
+
+    const handleSheetChanges = useCallback((index: number) => {
+        console.log("walletManagementSheet position changed", index)
+        setSnapIndex(index)
+    }, [])
+
     return (
-        <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
+        <BaseBottomSheet
+            snapPoints={snapPoints}
+            ref={ref}
+            onChange={handleSheetChanges}>
             <BaseView flexDirection="column" w={100}>
                 <BaseText typographyFont="subTitleBold">
                     {LL.BD_SELECT_NETWORK()}
@@ -124,7 +140,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
                     SectionSeparatorComponent={renderSectionSeparator}
                     renderSectionHeader={renderSectionHeader}
                     renderItem={renderItem}
-                    scrollEnabled={true}
+                    scrollEnabled={isListScrollable}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                 />
