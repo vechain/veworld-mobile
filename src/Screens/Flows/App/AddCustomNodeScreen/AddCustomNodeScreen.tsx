@@ -10,7 +10,7 @@ import {
     BaseTextInput,
     BaseView,
 } from "~Components"
-import { URLUtils, useTheme } from "~Common"
+import { error, URLUtils, useTheme } from "~Common"
 import { useNavigation } from "@react-navigation/native"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import {
@@ -19,6 +19,7 @@ import {
     useAppSelector,
     validateAndAddCustomNode,
 } from "~Storage"
+import * as Haptics from "expo-haptics"
 
 export const AddCustomNodeScreen = () => {
     const { LL } = useI18nContext()
@@ -45,11 +46,14 @@ export const AddCustomNodeScreen = () => {
             await dispatch(
                 validateAndAddCustomNode({ name: nodeName, url: nodeUrl }),
             )
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+            goBack()
         } catch (e) {
-            console.log("error", e)
+            error(e)
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         }
         setIsSubmitting(false)
-    }, [setIsSubmitting, dispatch, isSubmitDisabled, nodeName, nodeUrl])
+    }, [setIsSubmitting, dispatch, isSubmitDisabled, nodeName, nodeUrl, goBack])
 
     const validateUrlInput = useCallback(
         (value: string): string => {
@@ -69,8 +73,7 @@ export const AddCustomNodeScreen = () => {
 
     useEffect(() => {
         if (nodeUrl) {
-            const error = validateUrlInput(nodeUrl)
-            setNodeUrlError(error)
+            setNodeUrlError(validateUrlInput(nodeUrl))
         }
     }, [nodeUrl, validateUrlInput])
 
