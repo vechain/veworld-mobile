@@ -10,7 +10,6 @@ type Props = {
     closeWalletMgmtSheet: () => void
     devices: Device[]
     isWalletSecurityBiometrics: boolean
-    isBiometricsEnabled: boolean | undefined
 }
 
 export const useBackupMnemonic = ({
@@ -21,7 +20,6 @@ export const useBackupMnemonic = ({
     closeWalletMgmtSheet,
     devices,
     isWalletSecurityBiometrics,
-    isBiometricsEnabled,
 }: Props) => {
     const [userPin, setUserPin] = useState<string | undefined>(undefined)
     const [mnemonicArray, setMnemonicArray] = useState<string[]>([""])
@@ -36,7 +34,7 @@ export const useBackupMnemonic = ({
     * wallet management sheet.
     */
     const checkSecurityBeforeOpening = useCallback(async () => {
-        if (isWalletSecurityBiometrics && isBiometricsEnabled) {
+        if (isWalletSecurityBiometrics) {
             if (devices.length > 1) {
                 openWalletMgmtSheetWithDelay(300)
             } else {
@@ -53,7 +51,6 @@ export const useBackupMnemonic = ({
         }
     }, [
         devices,
-        isBiometricsEnabled,
         isWalletSecurityBiometrics,
         openBackupPhraseSheetWithDelay,
         openPasswordPrompt,
@@ -68,6 +65,8 @@ export const useBackupMnemonic = ({
      */
     const onPasswordSuccess = useCallback(
         async (password: string) => {
+            console.log("onPasswordSuccess", password)
+
             setUserPin(password)
             closePasswordPrompt()
 

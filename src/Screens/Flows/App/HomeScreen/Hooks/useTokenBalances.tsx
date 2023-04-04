@@ -1,19 +1,23 @@
 import {
     useAppDispatch,
     useAppSelector,
-    selectSelectedAccount,
-    selectAccountBalances,
-    selectSelectedNetwork,
-    selectCurrency,
-    fetchExchangeRate,
-    updateAccountBalances,
-    setTokenBalances,
     useGetTokensFromGithubQuery,
 } from "~Storage/Redux"
 import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Common/Constant"
 import { useThor } from "~Components"
 import { useEffect } from "react"
 import BigNumber from "bignumber.js"
+import {
+    selectAccountBalances,
+    selectCurrency,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+} from "~Storage/Redux/Selectors"
+import {
+    fetchExchangeRate,
+    setTokenBalances,
+    updateAccountBalances,
+} from "~Storage/Redux/Actions"
 
 // If the env variable isn't set, use the default
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
