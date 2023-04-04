@@ -185,7 +185,16 @@ describe("URLUtils", () => {
         })
     })
 
-    describe("isSecure", function () {
+    describe("isHttp", function () {
+        test("should return true for http", function () {
+            expect(URLUtils.isHttp("http://www.google.com")).toBe(true)
+        })
+        test("should return false for https", function () {
+            expect(URLUtils.isHttp("https://www.google.com")).toBe(false)
+        })
+    })
+
+    describe("isAllowed", function () {
         test("should return true for https", function () {
             expect(URLUtils.isAllowed("https://www.google.com")).toBe(true)
         })
