@@ -1,20 +1,19 @@
-// https://stackoverflow.com/questions/736513/how-do-i-parse-a-url-into-hostname-and-path-in-javascript
 function parseUrl(url?: string) {
     const trimmedUrl = url?.trim()
     const match = trimmedUrl?.match(
-        /^(https?\:)\/\/([\w.-]*)(?:\:([0-9]+))?\/?([^?#]*)(\?[^#]*)?(#.*)?$/,
+        /^(?<protocol>https?\:)\/\/(?<host>(?<hostname>[^:\/?#]*)(?:\:(?<port>[0-9]+))?)(?<pathname>[\/]{0,1}[^?#]*)(?<search>\?[^#]*|)(?<hash>#.*|)$/,
     )
-    if (!match) throw new Error("Invalid URL")
+    if (!match?.groups) throw new Error("Invalid URL")
     return {
         url: trimmedUrl,
-        origin: match[1] + "//" + match[2],
-        protocol: match[1],
-        host: match[2],
-        hostname: match[3],
-        port: match[4],
-        pathname: match[5],
-        search: match[6],
-        hash: match[7],
+        origin: match.groups.protocol + "//" + match.groups.host,
+        protocol: match.groups.protocol,
+        host: match.groups.host,
+        hostname: match.groups.hostname,
+        port: match.groups.port,
+        pathname: match.groups.pathname,
+        search: match.groups.search,
+        hash: match.groups.hash,
     }
 }
 
