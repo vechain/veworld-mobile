@@ -36,8 +36,8 @@ describe("URLUtils", () => {
                 protocol: "http:",
                 host: "www.google.com",
                 hostname: "www.google.com",
-                port: "",
-                pathname: "/",
+                port: undefined,
+                pathname: "",
                 search: "",
                 hash: "",
             })
