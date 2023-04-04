@@ -83,9 +83,14 @@ const en: BaseTranslation = {
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
     BD_YOUR_BALANCE: "Your balance",
     BD_SELECT_WORD: "Select word {number}",
-    BD_SELECT_NETWORK: "Select your network",
-    BD_OTHER_NETWORKS: "Other networks - show conversion",
-    BD_NETWORK_INDICATOR: "Display an indicator when transacting on another network",
+    BD_SELECT_NETWORK: "Select a network",
+    BD_SELECT_NETWORK_DESC: "Select the network you want to transact on",
+    BD_CUSTOM_NODES: "Custom nodes",
+    BD_CUSTOM_NODES_DESC: "Manage your custom nodes",
+    BD_OTHER_NETWORKS_CONVERSION: "Other networks - show conversion",
+    BD_OTHER_NETWORKS_CONVERSION_DESC: "Show fiat exchange rates when on other networks",
+    BD_OTHER_NETWORKS_INDICATOR: "Other networks - show indicator",
+    BD_OTHER_NETWORKS_INDICATOR_DESC: "Display an indicator when transacting on another network",
     BD_STATE_LOGS: "State Logs",
     BD_STATE_LOGS_DISCLAIMER: "State logs contain your public account addresses and sent transactions",
     BD_RESET: "VeWorld reset",
@@ -142,13 +147,13 @@ const en: BaseTranslation = {
     TITLE_NFT: "NFT",
     TITLE_NFTS: "NFTs",
     TITLE_NETWORK: "Network",
+    TITLE_NETWORKS: "Networks",
     TITLE_PRIVACY: "Privacy and Security",
     TITLE_ALERTS: "Alerts",
     TITLE_CONNECTED_APPS: "Connected Apps",
     TITLE_ABOUT: "About",
     TITLE_SCAN_QRCODE: "Scan QR Code",
     TITLE_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
-    TITLE_ADD_TOKEN: "Add Token",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
@@ -223,8 +228,13 @@ const en: BaseTranslation = {
     PLACEHOLDER_ENTER_ADDRESS: "Enter the address",
 
     // Network
+    NETWORK_MANAGE_NODES: "Manage nodes",
+    NETWORK_ADD_NODE: "Add node",
 
     // Network Labels
+    NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",
+    NETWORK_LABEL_TEST_NETWORKS: "Test Networks",
+    NETWORK_LABEL_CUSTOM_NETWORKS: "Custom Networks",
 
     // Notifications
     NOTIFICATION_COPIED_CLIPBOARD: "{name} copied to clipboard!",
@@ -246,9 +256,15 @@ const en: BaseTranslation = {
 
     // Settings Languages
 
-    // Add Token
-    ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: "Select your token",
-    ADD_TOKEN_SELECT_YOUR_TOKEN_body: "Select the asset that you want to add from the list",
+    // Manage Token
+    MANAGE_TOKEN_TITLE: "Manage Tokens",
+    MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
+    MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: "Select your official tokens or add a new custom one",
+    MANAGE_TOKEN_MANAGE_CUSTOM: "Manage custom tokens",
+    MANAGE_TOKEN_SELECTED: "Selected",
+    MANAGE_TOKEN_UNSELECTED: "Unselected",
+    MANAGE_TOKEN_SEARCH_TOKEN: "Search a token",
+
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

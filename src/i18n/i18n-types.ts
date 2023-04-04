@@ -268,17 +268,37 @@ type RootTranslation = {
 	 */
 	BD_SELECT_WORD: RequiredParams<'number'>
 	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​n​e​t​w​o​r​k
+	 * S​e​l​e​c​t​ ​a​ ​n​e​t​w​o​r​k
 	 */
 	BD_SELECT_NETWORK: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​n​e​t​w​o​r​k​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​a​c​t​ ​o​n
+	 */
+	BD_SELECT_NETWORK_DESC: string
+	/**
+	 * C​u​s​t​o​m​ ​n​o​d​e​s
+	 */
+	BD_CUSTOM_NODES: string
+	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​s
+	 */
+	BD_CUSTOM_NODES_DESC: string
+	/**
 	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​c​o​n​v​e​r​s​i​o​n
 	 */
-	BD_OTHER_NETWORKS: string
+	BD_OTHER_NETWORKS_CONVERSION: string
+	/**
+	 * S​h​o​w​ ​f​i​a​t​ ​e​x​c​h​a​n​g​e​ ​r​a​t​e​s​ ​w​h​e​n​ ​o​n​ ​o​t​h​e​r​ ​n​e​t​w​o​r​k​s
+	 */
+	BD_OTHER_NETWORKS_CONVERSION_DESC: string
+	/**
+	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​i​n​d​i​c​a​t​o​r
+	 */
+	BD_OTHER_NETWORKS_INDICATOR: string
 	/**
 	 * D​i​s​p​l​a​y​ ​a​n​ ​i​n​d​i​c​a​t​o​r​ ​w​h​e​n​ ​t​r​a​n​s​a​c​t​i​n​g​ ​o​n​ ​a​n​o​t​h​e​r​ ​n​e​t​w​o​r​k
 	 */
-	BD_NETWORK_INDICATOR: string
+	BD_OTHER_NETWORKS_INDICATOR_DESC: string
 	/**
 	 * S​t​a​t​e​ ​L​o​g​s
 	 */
@@ -496,6 +516,10 @@ type RootTranslation = {
 	 */
 	TITLE_NETWORK: string
 	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	TITLE_NETWORKS: string
+	/**
 	 * P​r​i​v​a​c​y​ ​a​n​d​ ​S​e​c​u​r​i​t​y
 	 */
 	TITLE_PRIVACY: string
@@ -519,10 +543,6 @@ type RootTranslation = {
 	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: string
-	/**
-	 * A​d​d​ ​T​o​k​e​n
-	 */
-	TITLE_ADD_TOKEN: string
 	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
@@ -756,6 +776,26 @@ type RootTranslation = {
 	 */
 	PLACEHOLDER_ENTER_ADDRESS: string
 	/**
+	 * M​a​n​a​g​e​ ​n​o​d​e​s
+	 */
+	NETWORK_MANAGE_NODES: string
+	/**
+	 * A​d​d​ ​n​o​d​e
+	 */
+	NETWORK_ADD_NODE: string
+	/**
+	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_MAIN_NETWORKS: string
+	/**
+	 * T​e​s​t​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_TEST_NETWORKS: string
+	/**
+	 * C​u​s​t​o​m​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_CUSTOM_NETWORKS: string
+	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
@@ -773,13 +813,33 @@ type RootTranslation = {
 	 */
 	SYSTEM_THEME: string
 	/**
+	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_TITLE: string
+	/**
 	 * S​e​l​e​c​t​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
-	ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: string
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t
+	 * S​e​l​e​c​t​ ​y​o​u​r​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​s​ ​o​r​ ​a​d​d​ ​a​ ​n​e​w​ ​c​u​s​t​o​m​ ​o​n​e
 	 */
-	ADD_TOKEN_SELECT_YOUR_TOKEN_body: string
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
+	/**
+	 * M​a​n​a​g​e​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_MANAGE_CUSTOM: string
+	/**
+	 * S​e​l​e​c​t​e​d
+	 */
+	MANAGE_TOKEN_SELECTED: string
+	/**
+	 * U​n​s​e​l​e​c​t​e​d
+	 */
+	MANAGE_TOKEN_UNSELECTED: string
+	/**
+	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_SEARCH_TOKEN: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -1044,17 +1104,37 @@ export type TranslationFunctions = {
 	 */
 	BD_SELECT_WORD: (arg: { number: unknown }) => LocalizedString
 	/**
-	 * Select your network
+	 * Select a network
 	 */
 	BD_SELECT_NETWORK: () => LocalizedString
 	/**
+	 * Select the network you want to transact on
+	 */
+	BD_SELECT_NETWORK_DESC: () => LocalizedString
+	/**
+	 * Custom nodes
+	 */
+	BD_CUSTOM_NODES: () => LocalizedString
+	/**
+	 * Manage your custom nodes
+	 */
+	BD_CUSTOM_NODES_DESC: () => LocalizedString
+	/**
 	 * Other networks - show conversion
 	 */
-	BD_OTHER_NETWORKS: () => LocalizedString
+	BD_OTHER_NETWORKS_CONVERSION: () => LocalizedString
+	/**
+	 * Show fiat exchange rates when on other networks
+	 */
+	BD_OTHER_NETWORKS_CONVERSION_DESC: () => LocalizedString
+	/**
+	 * Other networks - show indicator
+	 */
+	BD_OTHER_NETWORKS_INDICATOR: () => LocalizedString
 	/**
 	 * Display an indicator when transacting on another network
 	 */
-	BD_NETWORK_INDICATOR: () => LocalizedString
+	BD_OTHER_NETWORKS_INDICATOR_DESC: () => LocalizedString
 	/**
 	 * State Logs
 	 */
@@ -1272,6 +1352,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_NETWORK: () => LocalizedString
 	/**
+	 * Networks
+	 */
+	TITLE_NETWORKS: () => LocalizedString
+	/**
 	 * Privacy and Security
 	 */
 	TITLE_PRIVACY: () => LocalizedString
@@ -1295,10 +1379,6 @@ export type TranslationFunctions = {
 	 * Address Copied to Clipboard
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
-	/**
-	 * Add Token
-	 */
-	TITLE_ADD_TOKEN: () => LocalizedString
 	/**
 	 * Local wallet
 	 */
@@ -1529,6 +1609,26 @@ Please, try again later.
 	 */
 	PLACEHOLDER_ENTER_ADDRESS: () => LocalizedString
 	/**
+	 * Manage nodes
+	 */
+	NETWORK_MANAGE_NODES: () => LocalizedString
+	/**
+	 * Add node
+	 */
+	NETWORK_ADD_NODE: () => LocalizedString
+	/**
+	 * Main Networks
+	 */
+	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
+	/**
+	 * Test Networks
+	 */
+	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
+	/**
+	 * Custom Networks
+	 */
+	NETWORK_LABEL_CUSTOM_NETWORKS: () => LocalizedString
+	/**
 	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
@@ -1545,13 +1645,33 @@ Please, try again later.
 	 */
 	SYSTEM_THEME: () => LocalizedString
 	/**
+	 * Manage Tokens
+	 */
+	MANAGE_TOKEN_TITLE: () => LocalizedString
+	/**
 	 * Select your token
 	 */
-	ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: () => LocalizedString
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: () => LocalizedString
 	/**
-	 * Select the asset that you want to add from the list
+	 * Select your official tokens or add a new custom one
 	 */
-	ADD_TOKEN_SELECT_YOUR_TOKEN_body: () => LocalizedString
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
+	/**
+	 * Manage custom tokens
+	 */
+	MANAGE_TOKEN_MANAGE_CUSTOM: () => LocalizedString
+	/**
+	 * Selected
+	 */
+	MANAGE_TOKEN_SELECTED: () => LocalizedString
+	/**
+	 * Unselected
+	 */
+	MANAGE_TOKEN_UNSELECTED: () => LocalizedString
+	/**
+	 * Search a token
+	 */
+	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
 	/**
 	 * Account
 	 */

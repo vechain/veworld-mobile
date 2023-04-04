@@ -5,7 +5,7 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import DropShadow from "react-native-drop-shadow"
 import { BaseView } from "~Components"
 import { TokenCard } from "./TokenCard"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Slices"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 
 type Props = {
     token: DenormalizedAccountTokenBalance
