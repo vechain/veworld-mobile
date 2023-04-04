@@ -32,7 +32,7 @@ export const NetworkBox: React.FC<Props> = ({
             justifyContent="space-between">
             <BaseView flexDirection="column">
                 <BaseText typographyFont="button">
-                    {StringUtils.capitalize(network.tag)}
+                    {StringUtils.capitalize(network.name)}
                 </BaseText>
                 <BaseText pt={2} typographyFont="captionMedium">
                     {network.currentUrl}

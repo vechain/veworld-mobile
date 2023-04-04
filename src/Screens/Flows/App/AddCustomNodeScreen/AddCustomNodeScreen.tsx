@@ -53,7 +53,6 @@ export const AddCustomNodeScreen = () => {
 
     const validateUrlInput = useCallback(
         (value: string): string => {
-            console.log("value", value)
             if (!value) return LL.ERROR_ENTER_VALID_URL()
 
             if (!URLUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()

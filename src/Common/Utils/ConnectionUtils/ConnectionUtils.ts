@@ -19,10 +19,10 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
     debug("Verifying websocket connection")
 
     try {
-        await new Promise<void>(function (onSuccess, onFailure) {
+        await new Promise<void>(function (resolve, reject) {
             setTimeout(
                 () =>
-                    onFailure(
+                    reject(
                         veWorldErrors.provider.disconnected({
                             message: "Node timed out",
                         }),
@@ -32,13 +32,16 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
             const wsUrl = URLUtils.toWebsocketURL(url, "/subscriptions/beat2")
             const webSocket = new WebSocket(wsUrl)
 
+            console.log({ wsUrl })
+
             webSocket.onopen = () => {
-                onSuccess()
+                console.log("Websocket opened")
+                resolve()
                 webSocket.close()
             }
 
             webSocket.onerror = () => {
-                onFailure(
+                reject(
                     veWorldErrors.provider.disconnected({
                         message: "Failed to test WS connection",
                     }),

@@ -6,7 +6,7 @@ import { genesises } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
 import { selectNetworks } from "../Selectors"
 import { Network } from "~Model"
-import { randomUUID } from "react-native-quick-crypto/lib/typescript/random"
+import uuid from "react-native-uuid"
 
 export * from "../Slices/Network"
 
@@ -32,6 +32,7 @@ export const validateAndAddCustomNode = ({
             //Test the Websocket connection for the user's URL - throws an error if it fails
             await ConnectionUtils.verifyWebSocketConnection(url)
 
+            console.log("Websocket connection verified")
             //Get the genesis block
             const block = await axios.get<Connex.Thor.Block>(`${url}/blocks/0`)
 
@@ -47,10 +48,9 @@ export const validateAndAddCustomNode = ({
                         message: "Network already exists",
                     })
             })
-            const id = randomUUID()
             const network: Network = {
+                id: uuid.v4().toString(),
                 defaultNet: false,
-                id,
                 name,
                 type: type,
                 currentUrl: url,

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PURGE } from "redux-persist"
-import { Network, NETWORK_TYPE } from "~Model"
-import { makeNetwork } from "~Common/Constant/Thor/ThorConstants"
+import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
+import { Network } from "~Model"
 
 export interface NetworkState {
     selectedNetwork: Network
@@ -11,7 +11,7 @@ export interface NetworkState {
 }
 
 const initialState: NetworkState = {
-    selectedNetwork: makeNetwork(NETWORK_TYPE.MAIN),
+    selectedNetwork: defaultMainNetwork,
     customNetworks: [],
     showTestNetTag: true,
     showConversionOtherNets: true,
