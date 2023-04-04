@@ -4,34 +4,42 @@ describe("URLUtils", () => {
     describe("parseUrl", () => {
         test("should return parsed URL - https", () => {
             expect(URLUtils.parseUrl("https://www.google.com")).toEqual({
+                url: "https://www.google.com",
+                origin: "https://www.google.com",
                 protocol: "https:",
-                slashes: true,
-                auth: null,
                 host: "www.google.com",
-                port: null,
                 hostname: "www.google.com",
-                hash: null,
-                search: null,
-                query: null,
-                pathname: "/",
-                path: "/",
-                href: "https://www.google.com/",
+                port: undefined,
+                pathname: "",
+                search: "",
+                hash: "",
             })
         })
         test("should return parsed URL - http", () => {
             expect(URLUtils.parseUrl("http://www.google.com")).toEqual({
+                url: "http://www.google.com",
+                origin: "http://www.google.com",
                 protocol: "http:",
-                slashes: true,
-                auth: null,
                 host: "www.google.com",
-                port: null,
                 hostname: "www.google.com",
-                hash: null,
-                search: null,
-                query: null,
+                port: undefined,
+                pathname: "",
+                search: "",
+                hash: "",
+            })
+        })
+
+        test("should return parsed URL - http with trailing spaces", () => {
+            expect(URLUtils.parseUrl(" http://www.google.com ")).toEqual({
+                url: "http://www.google.com",
+                origin: "http://www.google.com",
+                protocol: "http:",
+                host: "www.google.com",
+                hostname: "www.google.com",
+                port: "",
                 pathname: "/",
-                path: "/",
-                href: "http://www.google.com/",
+                search: "",
+                hash: "",
             })
         })
 
