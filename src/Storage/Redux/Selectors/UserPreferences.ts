@@ -26,3 +26,7 @@ export const selectHideTokensWithNoBalance = createSelector(reducer, state => {
 export const selectIsAppLockActive = createSelector(reducer, state => {
     return state.isAppLockActive
 })
+
+export const selectAnalyticsTrackingEnabled = createSelector(reducer, state => {
+    return state.isAnalyticsTrackingEnabled
+})

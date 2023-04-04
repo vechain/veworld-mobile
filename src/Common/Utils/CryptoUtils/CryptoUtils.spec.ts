@@ -19,6 +19,20 @@ const {
 const testWallet: Wallet = {
     rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
     nonce: "000000",
+    mnemonic: [
+        "viable",
+        " view",
+        "neither",
+        " tree",
+        "peanut",
+        "angle",
+        " rail",
+        "wheat",
+        "skate",
+        "flush",
+        "solid",
+        "panda",
+    ],
 }
 
 // const testDevice: Device = {

@@ -41,7 +41,9 @@ const en: BaseTranslation = {
     BTN_GO_TO_SETTINGS: "Go to settings",
     BTN_PASTE_ADDRESS: "Paste Address",
     BTN_SCAN_QR_CODE: "Scan QR Code",
-    BD_NO_TOKEN_FOUND: "No token found",
+    BTN_EDIT_PIN: "Edit Pin",
+    BTN_BACKUP_MENMONIC: "Backup phrase",
+   
 
     // BODY
     BD_GDPR:
@@ -106,7 +108,13 @@ const en: BaseTranslation = {
     BD_USD : "USD",
     BD_EUR : "EUR",
     BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
-
+    BD_APP_LOCK: "Require the pin when performing transactions with local wallets",
+    BD_SECURITY_METHOD: "Click to reset VeVault and erase all your data stored on it",
+    BD_NO_TOKEN_FOUND: "No token found",
+    BD_BACKUP_MNEMONIC: "Backup your mnemonic phrase",
+    BD_ANALYTICS_TRACKING: "I accept to be tracked by Analytics and for research and service quality purposes",
+    BD_MNEMONIC_COPIED_TO_CLIPBOARD: "Mnemonic copied to clipboard",
+ 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
     TITLE_ONBARDING_SLIDE_01: "Seamlessly manage your crypto",
@@ -144,6 +152,8 @@ const en: BaseTranslation = {
     TITLE_ABOUT: "About",
     TITLE_SCAN_QRCODE: "Scan QR Code",
     TITLE_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
+    TITLE_ADD_TOKEN: "Add Token",
+    TITLE_EDIT_WALLET: "Edit wallet",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
@@ -162,6 +172,10 @@ const en: BaseTranslation = {
     SB_CAMERA_ANAVAILABILITY: "Your device does not support this operation.",
     SB_YOUR_TOKENS : "Your tokens",
     SB_YOUR_NFTS : "Your collections",
+    SB_PASSWORD_AUTH: "Password authorization",
+    SB_SECURITY_METHOD: "Security method",
+    SB_BACKUP_MNEMONIC: "Backup your mnemonic",
+    SB_ANALYTICS_TRACKING: "Analytics tracking",
 
     // ELEMENTS
     FACE_ID: "Face ID",

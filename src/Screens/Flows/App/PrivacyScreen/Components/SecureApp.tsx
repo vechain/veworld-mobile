@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { BaseSwitch, BaseText, BaseView } from "~Components"
+import { BaseSwitch, BaseView } from "~Components"
 import { WALLET_STATUS } from "~Model"
 
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -20,7 +20,6 @@ export const SecureApp = () => {
 
     return (
         <BaseView w={100} flexDirection="row">
-            <BaseText>Secure App</BaseText>
             <BaseSwitch onValueChange={toggleSwitch} value={isAppLockActive} />
         </BaseView>
     )

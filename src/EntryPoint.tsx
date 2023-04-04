@@ -18,7 +18,6 @@ export const EntryPoint = () => {
     const { appLockStatus, unlockApp } = useAppLock()
     const { walletSecurity, isSecurityDowngrade } = useWalletSecurity()
 
-    console.log({ walletSecurity, appLockStatus })
     useEffect(() => {
         const init = async () => {
             if (

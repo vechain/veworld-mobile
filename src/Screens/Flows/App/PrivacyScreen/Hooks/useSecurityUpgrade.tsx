@@ -24,10 +24,8 @@ export const useSecurityUpgrade = () => {
             try {
                 for (const device of devices) {
                     const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                        {
-                            device,
-                            userPassword: password,
-                        },
+                        device,
+                        password,
                     )
 
                     const { encryptedWallet: updatedEncryptedWallet } =
