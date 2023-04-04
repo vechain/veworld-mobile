@@ -42,6 +42,7 @@ const en: BaseTranslation = {
     BTN_PASTE_ADDRESS: "Paste Address",
     BTN_SCAN_QR_CODE: "Scan QR Code",
     BTN_ADD_CONTACT: "Add contact",
+    BTN_CREATE_CONTACT: "Create contact",
     BD_NO_TOKEN_FOUND: "No token found",
 
     // BODY
@@ -108,6 +109,7 @@ const en: BaseTranslation = {
     BD_ADD_CONTACT_DISCLAIMER: "Insert the required data to add a new contact",
     BD_CONTACT_NAME: "Contact name",
     BD_CONTACT_ADDRESS: "Contact address",
+    BD_CONFIRM_REMOVE_CONTACT: "Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -165,6 +167,10 @@ const en: BaseTranslation = {
     SB_CAMERA_ANAVAILABILITY: "Your device does not support this operation.",
     SB_YOUR_TOKENS : "Your tokens",
     SB_YOUR_NFTS : "Your collections",
+    SB_CONFIRM_OPERATION: "Confirm the operation?",
+    SB_CONTACT_LIST_EMPTY: "Your contact list is empty",
+    SB_CREATE_ONE: "Create one",
+    SB_EDIT_CONTACT: "Edit contact",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -179,6 +185,7 @@ const en: BaseTranslation = {
 
     // Common Buttons
     COMMON_BTN_CANCEL: "Cancel",
+    COMMON_BTN_REMOVE: "Remove",
     COMMON_BTN_RETRY: "Retry",
     COMMON_BTN_SIGN_OUT: "Sign out",
     COMMON_BTN_OK: "OK",
@@ -186,6 +193,7 @@ const en: BaseTranslation = {
     COMMON_BTN_DONE: "Done",
     COMMON_BTN_CONFIRM: "Confirm",
     COMMON_BTN_ADD: "Add",
+    COMMON_BTN_SAVE: "Save",
 
     // Common Labels
     COMMON_LBL_ADDRESS: "Address",
@@ -205,7 +213,8 @@ const en: BaseTranslation = {
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
     ERROR_REQUIRED_FIELD: "Required",
     ERROR_MAX_INPUT_LENGTH: "Contact name too long",
-    ERROR_NAME_ALREADY_EXISTS: "Name already exists",
+    ERROR_NAME_ALREADY_EXISTS: "Name already exists in contacts",
+    ERROR_ADDRESS_EXISTS: "Address already exists in contacts",
     ERROR_ADDRESS_INVALID: "Please enter a valid Vechain address",
 
     // Placeholders

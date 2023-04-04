@@ -159,6 +159,10 @@ type RootTranslation = {
 	 */
 	BTN_ADD_CONTACT: string
 	/**
+	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 */
+	BTN_CREATE_CONTACT: string
+	/**
 	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
 	 */
 	BD_NO_TOKEN_FOUND: string
@@ -367,6 +371,10 @@ type RootTranslation = {
 	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	BD_CONTACT_ADDRESS: string
+	/**
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​o​n​t​a​c​t​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 */
+	BD_CONFIRM_REMOVE_CONTACT: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -583,6 +591,22 @@ type RootTranslation = {
 	 */
 	SB_YOUR_NFTS: string
 	/**
+	 * C​o​n​f​i​r​m​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​?
+	 */
+	SB_CONFIRM_OPERATION: string
+	/**
+	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t​ ​i​s​ ​e​m​p​t​y
+	 */
+	SB_CONTACT_LIST_EMPTY: string
+	/**
+	 * C​r​e​a​t​e​ ​o​n​e
+	 */
+	SB_CREATE_ONE: string
+	/**
+	 * E​d​i​t​ ​c​o​n​t​a​c​t
+	 */
+	SB_EDIT_CONTACT: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -619,6 +643,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_CANCEL: string
 	/**
+	 * R​e​m​o​v​e
+	 */
+	COMMON_BTN_REMOVE: string
+	/**
 	 * R​e​t​r​y
 	 */
 	COMMON_BTN_RETRY: string
@@ -646,6 +674,10 @@ type RootTranslation = {
 	 * A​d​d
 	 */
 	COMMON_BTN_ADD: string
+	/**
+	 * S​a​v​e
+	 */
+	COMMON_BTN_SAVE: string
 	/**
 	 * A​d​d​r​e​s​s
 	 */
@@ -700,9 +732,13 @@ type RootTranslation = {
 	 */
 	ERROR_MAX_INPUT_LENGTH: string
 	/**
-	 * N​a​m​e​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
+	 * N​a​m​e​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​ ​i​n​ ​c​o​n​t​a​c​t​s
 	 */
 	ERROR_NAME_ALREADY_EXISTS: string
+	/**
+	 * A​d​d​r​e​s​s​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​ ​i​n​ ​c​o​n​t​a​c​t​s
+	 */
+	ERROR_ADDRESS_EXISTS: string
 	/**
 	 * P​l​e​a​s​e​ ​e​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​V​e​c​h​a​i​n​ ​a​d​d​r​e​s​s
 	 */
@@ -899,6 +935,10 @@ export type TranslationFunctions = {
 	 * Add contact
 	 */
 	BTN_ADD_CONTACT: () => LocalizedString
+	/**
+	 * Create contact
+	 */
+	BTN_CREATE_CONTACT: () => LocalizedString
 	/**
 	 * No token found
 	 */
@@ -1107,6 +1147,10 @@ export type TranslationFunctions = {
 	 * Contact address
 	 */
 	BD_CONTACT_ADDRESS: () => LocalizedString
+	/**
+	 * Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.
+	 */
+	BD_CONFIRM_REMOVE_CONTACT: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
@@ -1320,6 +1364,22 @@ export type TranslationFunctions = {
 	 */
 	SB_YOUR_NFTS: () => LocalizedString
 	/**
+	 * Confirm the operation?
+	 */
+	SB_CONFIRM_OPERATION: () => LocalizedString
+	/**
+	 * Your contact list is empty
+	 */
+	SB_CONTACT_LIST_EMPTY: () => LocalizedString
+	/**
+	 * Create one
+	 */
+	SB_CREATE_ONE: () => LocalizedString
+	/**
+	 * Edit contact
+	 */
+	SB_EDIT_CONTACT: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -1356,6 +1416,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_CANCEL: () => LocalizedString
 	/**
+	 * Remove
+	 */
+	COMMON_BTN_REMOVE: () => LocalizedString
+	/**
 	 * Retry
 	 */
 	COMMON_BTN_RETRY: () => LocalizedString
@@ -1383,6 +1447,10 @@ export type TranslationFunctions = {
 	 * Add
 	 */
 	COMMON_BTN_ADD: () => LocalizedString
+	/**
+	 * Save
+	 */
+	COMMON_BTN_SAVE: () => LocalizedString
 	/**
 	 * Address
 	 */
@@ -1437,9 +1505,13 @@ Please, try again later.
 	 */
 	ERROR_MAX_INPUT_LENGTH: () => LocalizedString
 	/**
-	 * Name already exists
+	 * Name already exists in contacts
 	 */
 	ERROR_NAME_ALREADY_EXISTS: () => LocalizedString
+	/**
+	 * Address already exists in contacts
+	 */
+	ERROR_ADDRESS_EXISTS: () => LocalizedString
 	/**
 	 * Please enter a valid Vechain address
 	 */
