@@ -35,7 +35,7 @@ export const WalletManagementScreen = () => {
         [],
     )
 
-    const onDeviceClick = useCallback(
+    const onDeviceSelected = useCallback(
         (device: Device) => () => {
             setSelectedDevice(device)
             openAccountMgmtSheet()
@@ -71,7 +71,7 @@ export const WalletManagementScreen = () => {
                         return (
                             <DeviceBox
                                 device={item}
-                                onDeviceClick={onDeviceClick(item)}
+                                onDeviceSelected={onDeviceSelected(item)}
                             />
                         )
                     }}

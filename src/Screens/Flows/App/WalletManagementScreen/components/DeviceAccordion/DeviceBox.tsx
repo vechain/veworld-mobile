@@ -6,19 +6,21 @@ import { Device } from "~Model"
 
 type Props = {
     device: Device
-    onDeviceClick: () => void
+    onDeviceSelected: () => void
     isIconVisible?: boolean
 }
 
 export const DeviceBox: React.FC<Props> = ({
     device,
-    onDeviceClick,
+    onDeviceSelected,
     isIconVisible = true,
 }) => {
     const theme = useTheme()
 
     return (
-        <BaseTouchableBox action={onDeviceClick} justifyContent="space-between">
+        <BaseTouchableBox
+            action={onDeviceSelected}
+            justifyContent="space-between">
             <BaseText typographyFont="subTitleBold">{device.alias}</BaseText>
             {isIconVisible && (
                 <BaseIcon

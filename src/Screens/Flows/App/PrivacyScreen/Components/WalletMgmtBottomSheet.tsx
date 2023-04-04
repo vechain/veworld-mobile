@@ -39,7 +39,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
         [],
     )
 
-    const onDeviceClick = useCallback(
+    const onDeviceSelected = useCallback(
         (device: Device) => () => {
             onClose(device)
         },
@@ -69,7 +69,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                             return (
                                 <DeviceBox
                                     device={item}
-                                    onDeviceClick={onDeviceClick(item)}
+                                    onDeviceSelected={onDeviceSelected(item)}
                                     isIconVisible={false}
                                 />
                             )
