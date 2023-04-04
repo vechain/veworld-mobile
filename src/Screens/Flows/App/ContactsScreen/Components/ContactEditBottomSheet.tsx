@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet } from "~Components"
 import {
+    BaseBottomSheet,
     BaseButton,
     BaseIcon,
     BaseSpacer,

@@ -1,7 +1,12 @@
 import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet } from "~Components"
-import { BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    BaseBottomSheet,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { useTheme } from "~Common"
 
