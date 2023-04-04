@@ -5,9 +5,9 @@ import { BaseButtonGroupHorizontal } from "~Components"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { setCurrency } from "~Storage/Redux/Actions"
-import { BaseButtonGroupHorizontalTpye } from "~Model"
+import { BaseButtonGroupHorizontalType } from "~Model"
 
-const currencies: Array<BaseButtonGroupHorizontalTpye> = CurrencyConfig.map(
+const currencies: Array<BaseButtonGroupHorizontalType> = CurrencyConfig.map(
     currency => ({
         id: currency.currency,
         label: currency.currency,
@@ -21,7 +21,7 @@ export const ChangeCurrency: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const handleSelectCurrency = useCallback(
-        (button: BaseButtonGroupHorizontalTpye) => {
+        (button: BaseButtonGroupHorizontalType) => {
             dispatch(setCurrency(button.id as CURRENCY))
         },
         [dispatch],

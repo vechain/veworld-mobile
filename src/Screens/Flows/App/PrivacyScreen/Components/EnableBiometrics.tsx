@@ -9,13 +9,13 @@ import {
 import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
 import { useI18nContext } from "~i18n"
 import {
-    BaseButtonGroupHorizontalTpye,
+    BaseButtonGroupHorizontalType,
     UserSelectedSecurityLevel,
 } from "~Model"
 
 const buttons = (
     isWalletSecurityBiometrics: boolean,
-): BaseButtonGroupHorizontalTpye[] => [
+): BaseButtonGroupHorizontalType[] => [
     {
         id: UserSelectedSecurityLevel.BIOMETRIC,
         label: "Face ID",
@@ -75,7 +75,7 @@ export const EnableBiometrics = ({ isWalletSecurityBiometrics }: Props) => {
     }, [isAuthenticated, openPasswordPrompt])
 
     const shouldCallRequireBiometricsAndEnableIt = useCallback(
-        (button: BaseButtonGroupHorizontalTpye) => {
+        (button: BaseButtonGroupHorizontalType) => {
             if (
                 button.id === UserSelectedSecurityLevel.BIOMETRIC &&
                 !isWalletSecurityBiometrics

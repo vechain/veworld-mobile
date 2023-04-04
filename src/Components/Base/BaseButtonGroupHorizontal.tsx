@@ -6,11 +6,11 @@ import DropShadow from "react-native-drop-shadow"
 import { BaseView } from "./BaseView"
 import { BaseIcon, BaseText } from "~Components"
 import { StyleSheet } from "react-native"
-import { BaseButtonGroupHorizontalTpye } from "~Model"
+import { BaseButtonGroupHorizontalType } from "~Model"
 
 type Props = {
-    action: (button: BaseButtonGroupHorizontalTpye) => void
-    buttons: BaseButtonGroupHorizontalTpye[]
+    action: (button: BaseButtonGroupHorizontalType) => void
+    buttons: BaseButtonGroupHorizontalType[]
     /**
      * array of selected button ids
      */
@@ -26,7 +26,7 @@ export const BaseButtonGroupHorizontal = ({
     const theme = useTheme()
 
     const onPress = useCallback(
-        (button: BaseButtonGroupHorizontalTpye) => () => action(button),
+        (button: BaseButtonGroupHorizontalType) => () => action(button),
         [action],
     )
 

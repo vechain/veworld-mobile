@@ -1,4 +1,4 @@
-export type BaseButtonGroupHorizontalTpye = {
+export type BaseButtonGroupHorizontalType = {
     id: string
     label: string
 

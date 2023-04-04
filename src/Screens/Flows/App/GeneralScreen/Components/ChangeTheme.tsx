@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { ThemeEnum } from "~Common"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { useI18nContext } from "~i18n"
-import { BaseButtonGroupHorizontalTpye } from "~Model"
+import { BaseButtonGroupHorizontalType } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setTheme } from "~Storage/Redux/Actions"
 import { selectTheme } from "~Storage/Redux/Selectors"
@@ -14,7 +14,7 @@ export const ChangeTheme: React.FC = () => {
 
     const { LL } = useI18nContext()
 
-    const themes: Array<BaseButtonGroupHorizontalTpye> = useMemo(() => {
+    const themes: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
         return [
             {
                 id: ThemeEnum.LIGHT,
@@ -32,7 +32,7 @@ export const ChangeTheme: React.FC = () => {
     }, [LL])
 
     const handleSelectTheme = useCallback(
-        (button: BaseButtonGroupHorizontalTpye) => {
+        (button: BaseButtonGroupHorizontalType) => {
             let mode: ThemeEnum
             switch (button.id) {
                 case "light":
