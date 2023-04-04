@@ -4,14 +4,14 @@ import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
 import { Network } from "~Model"
 
 export interface NetworkState {
-    selectedNetwork: Network
+    selectedNetwork: string
     customNetworks: Network[]
     showTestNetTag: boolean
     showConversionOtherNets: boolean
 }
 
 const initialState: NetworkState = {
-    selectedNetwork: defaultMainNetwork,
+    selectedNetwork: defaultMainNetwork.id,
     customNetworks: [],
     showTestNetTag: true,
     showConversionOtherNets: true,
@@ -22,7 +22,7 @@ export const NetworkSlice = createSlice({
     initialState,
     reducers: {
         changeSelectedNetwork: (state, action: PayloadAction<Network>) => {
-            state.selectedNetwork = action.payload
+            state.selectedNetwork = action.payload.id
         },
 
         addCustomNetwork: (state, action: PayloadAction<Network>) => {

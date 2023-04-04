@@ -40,7 +40,7 @@ export const useTokenBalances = () => {
     const thorClient = useThor()
 
     useGetTokensFromGithubQuery({
-        networkGenesisId: currentNetwork.genesisId,
+        networkGenesisId: currentNetwork.genesis.id,
         networkType: currentNetwork.type,
     })
 
@@ -50,7 +50,7 @@ export const useTokenBalances = () => {
     useEffect(() => {
         if (
             currentAccount?.address &&
-            currentNetwork.genesisId &&
+            currentNetwork.genesis.id &&
             balances?.length === 0
         ) {
             const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(
@@ -70,8 +70,7 @@ export const useTokenBalances = () => {
             dispatch(updateAccountBalances(thorClient))
         }
     }, [
-        currentNetwork.genesisId,
-        currentNetwork.type,
+        currentNetwork,
         currentAccount?.address,
         dispatch,
         thorClient,
