@@ -12,7 +12,7 @@ import {
     BaseSafeArea,
     BaseSpacer,
     BaseText,
-    BaseTouchable,
+    // BaseTouchable,
     BaseView,
     EnableFeature,
     RequireUserPassword,
@@ -20,7 +20,7 @@ import {
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
 import {
-    EnableBiometrics,
+    // EnableBiometrics,
     BackupMnemonicBottomSheet,
     WalletMgmtBottomSheet,
 } from "./Components"
@@ -73,7 +73,7 @@ export const PrivacyScreen = () => {
 
     const {
         onPasswordSuccess,
-        checkSecurityBeforeOpening,
+        // checkSecurityBeforeOpening,
         handleOnSelectedWallet,
         mnemonicArray,
     } = useBackupMnemonic({
@@ -128,22 +128,22 @@ export const PrivacyScreen = () => {
                     value={isAppLockActive}
                 />
 
-                <BaseSpacer height={24} />
-                <EnableBiometrics
+                {/* <BaseSpacer height={24} /> */}
+                {/* <EnableBiometrics
                     isWalletSecurityBiometrics={isWalletSecurityBiometrics}
-                />
+                /> */}
 
-                <BaseSpacer height={16} />
+                {/* <BaseSpacer height={16} /> */}
 
-                {!isWalletSecurityBiometrics && (
+                {/* {!isWalletSecurityBiometrics && (
                     <BaseTouchable
                         action={() => {}}
                         title={LL.BTN_EDIT_PIN()}
                         underlined
                     />
-                )}
+                )} */}
 
-                <BaseSpacer height={24} />
+                {/* <BaseSpacer height={24} />
 
                 <BaseText typographyFont="bodyMedium">
                     {LL.SB_BACKUP_MNEMONIC()}
@@ -160,7 +160,7 @@ export const PrivacyScreen = () => {
                     underlined
                 />
 
-                <BaseSpacer height={24} />
+                <BaseSpacer height={24} /> */}
 
                 <EnableFeature
                     title={LL.SB_ANALYTICS_TRACKING()}
