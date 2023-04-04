@@ -15,7 +15,7 @@ type Props = {
      * array of selected button ids
      */
     selectedButtonIds: string[]
-    dissabled?: boolean
+    disabled?: boolean
 }
 
 export const BaseButtonGroupHorizontal = ({

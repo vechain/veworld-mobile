@@ -1,6 +1,5 @@
 import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet } from "~Components"
 import {
     BaseButton,
     BaseIcon,
@@ -8,6 +7,7 @@ import {
     BaseText,
     BaseView,
     MnemonicCard,
+    BaseBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AlertUtils, useThemedStyles } from "~Common"

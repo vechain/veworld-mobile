@@ -23,7 +23,7 @@ export const useBackupMnemonic = ({
     isWalletSecurityBiometrics,
     isBiometricsEnabled,
 }: Props) => {
-    const [userPin, setuserPin] = useState<string | undefined>(undefined)
+    const [userPin, setUserPin] = useState<string | undefined>(undefined)
     const [mnemonicArray, setMnemonicArray] = useState<string[]>([""])
 
     /*
@@ -68,7 +68,7 @@ export const useBackupMnemonic = ({
      */
     const onPasswordSuccess = useCallback(
         async (password: string) => {
-            setuserPin(password)
+            setUserPin(password)
             closePasswordPrompt()
 
             if (devices.length > 1) {
@@ -118,7 +118,7 @@ export const useBackupMnemonic = ({
     useEffect(() => {
         return () => {
             setMnemonicArray([""])
-            setuserPin(undefined)
+            setUserPin(undefined)
         }
     }, [])
 
