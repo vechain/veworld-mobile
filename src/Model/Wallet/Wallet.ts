@@ -10,7 +10,7 @@ import { StorageData } from "../StorageData"
  */
 export interface Wallet {
     mnemonic: string[]
-    privateKey: string
+    privateKey?: string
     rootAddress: string
     nonce: string
 }

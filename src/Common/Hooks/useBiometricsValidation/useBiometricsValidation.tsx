@@ -18,13 +18,6 @@ export const useBiometricsValidation = () => {
             setIsAuthenticated(true)
         } else if (result.error === "not_available") {
             console.log("not_available")
-
-            // AlertUtils.showGoToSettingsBiometricsAlert(
-            //     async () => {},
-            //     async () => {
-            //         await Linking.openSettings()
-            //     },
-            // )
         } else {
             return
         }
