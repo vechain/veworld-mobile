@@ -70,7 +70,7 @@ export const HomeScreen = () => {
                 <EditTokensBar
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
-                    handleAddToken={() => nav.navigate(Routes.ADD_TOKEN)}
+                    handleAddToken={() => nav.navigate(Routes.MANAGE_TOKEN)}
                 />
                 <BaseSpacer height={24} />
                 <TokenList
