@@ -13,6 +13,14 @@ export const BalanceSlice = createSlice({
         ) => {
             state.push(action.payload)
         },
+        removeTokenBalance: (
+            state: Draft<BalanceState>,
+            action: PayloadAction<string>,
+        ) => {
+            return state.filter(
+                balance => balance.tokenAddress !== action.payload,
+            )
+        },
         addTokenBalances: (
             state: Draft<BalanceState>,
             action: PayloadAction<TokenBalance[]>,
@@ -28,5 +36,9 @@ export const BalanceSlice = createSlice({
     },
 })
 
-export const { addTokenBalance, addTokenBalances, setTokenBalances } =
-    BalanceSlice.actions
+export const {
+    addTokenBalance,
+    addTokenBalances,
+    setTokenBalances,
+    removeTokenBalance,
+} = BalanceSlice.actions
