@@ -504,10 +504,6 @@ type RootTranslation = {
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: string
 	/**
-	 * A​d​d​ ​T​o​k​e​n
-	 */
-	TITLE_ADD_TOKEN: string
-	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -684,10 +680,6 @@ type RootTranslation = {
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: string
 	/**
-	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
-	 */
-	INPUT_PLACEHOLDER_SEARCH_TOKEN: string
-	/**
 	 * M​a​n​a​g​e​ ​n​o​d​e​s
 	 */
 	NETWORK_MANAGE_NODES: string
@@ -725,13 +717,33 @@ type RootTranslation = {
 	 */
 	SYSTEM_THEME: string
 	/**
+	 * M​a​n​a​g​e​ ​T​o​k​e​n
+	 */
+	MANAGE_TOKEN_TITLE: string
+	/**
 	 * S​e​l​e​c​t​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
-	ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: string
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​ ​o​r​ ​a​d​d​/​r​e​m​o​v​e​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
-	ADD_TOKEN_SELECT_YOUR_TOKEN_body: string
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
+	/**
+	 * M​a​n​a​g​e​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_MANAGE_CUSTOM: string
+	/**
+	 * S​e​l​e​c​t​e​d
+	 */
+	MANAGE_TOKEN_SELECTED: string
+	/**
+	 * U​n​s​e​l​e​c​t​e​d
+	 */
+	MANAGE_TOKEN_UNSELECTED: string
+	/**
+	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_SEARCH_TOKEN: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -1232,10 +1244,6 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
 	/**
-	 * Add Token
-	 */
-	TITLE_ADD_TOKEN: () => LocalizedString
-	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -1409,10 +1417,6 @@ Please, try again later.
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
 	/**
-	 * Search a token
-	 */
-	INPUT_PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
-	/**
 	 * Manage nodes
 	 */
 	NETWORK_MANAGE_NODES: () => LocalizedString
@@ -1449,13 +1453,33 @@ Please, try again later.
 	 */
 	SYSTEM_THEME: () => LocalizedString
 	/**
+	 * Manage Token
+	 */
+	MANAGE_TOKEN_TITLE: () => LocalizedString
+	/**
 	 * Select your token
 	 */
-	ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: () => LocalizedString
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: () => LocalizedString
 	/**
-	 * Select the asset that you want to add from the list
+	 * Select the asset that you want to add from the list or add/remove a custom token
 	 */
-	ADD_TOKEN_SELECT_YOUR_TOKEN_body: () => LocalizedString
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
+	/**
+	 * Manage custom token
+	 */
+	MANAGE_TOKEN_MANAGE_CUSTOM: () => LocalizedString
+	/**
+	 * Selected
+	 */
+	MANAGE_TOKEN_SELECTED: () => LocalizedString
+	/**
+	 * Unselected
+	 */
+	MANAGE_TOKEN_UNSELECTED: () => LocalizedString
+	/**
+	 * Search a token
+	 */
+	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
 	/**
 	 * Account
 	 */
