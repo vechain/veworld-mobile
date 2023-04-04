@@ -8,8 +8,8 @@ type Props = {
 const dotsNumber = 4
 export const DotsLoader: React.FC<Props> = ({ color }) => {
     const colorFilters = color
-        ? Array.from(Array(dotsNumber).keys()).map(dot => ({
-              keypath: `Dot${dot}`,
+        ? Array.from(Array(dotsNumber).keys()).map((_, i) => ({
+              keypath: `Dot${i + 1}`,
               color,
           }))
         : undefined

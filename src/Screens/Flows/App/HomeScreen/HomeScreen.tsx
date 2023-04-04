@@ -66,7 +66,7 @@ export const HomeScreen = () => {
                 <HeaderView
                     openAccountManagementSheet={openAccountManagementSheet}
                 />
-                <BaseSpacer height={24} />
+
                 <EditTokensBar
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
