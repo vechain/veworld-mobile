@@ -9,9 +9,8 @@ import {
 import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useIsFocused, useNavigation } from "@react-navigation/native"
+import { useIsFocused } from "@react-navigation/native"
 import { BaseSafeArea, useThor, BaseSpacer } from "~Components"
-import { Routes } from "~Navigation"
 
 import { SlideInLeft } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
@@ -45,8 +44,6 @@ export const HomeScreen = () => {
     const isFocused = useIsFocused()
     const thorClient = useThor()
 
-    const nav = useNavigation()
-
     useEffect(() => {
         async function init() {
             const genesis = thorClient.genesis.id
@@ -67,11 +64,7 @@ export const HomeScreen = () => {
                     openAccountManagementSheet={openAccountManagementSheet}
                 />
                 <BaseSpacer height={24} />
-                <EditTokensBar
-                    isEdit={isEdit}
-                    setIsEdit={setIsEdit}
-                    handleAddToken={() => nav.navigate(Routes.MANAGE_TOKEN)}
-                />
+                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                 <BaseSpacer height={24} />
                 <TokenList
                     isEdit={isEdit}

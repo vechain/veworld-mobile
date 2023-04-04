@@ -5,6 +5,7 @@ export interface TokenBalance {
     tokenAddress: string
     balance: string
     timeUpdated: string
+    position?: number
 }
 
 export type BalanceState = TokenBalance[]
