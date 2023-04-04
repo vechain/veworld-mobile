@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react"
+import React, { memo } from "react"
 import { Pressable, View, StyleSheet } from "react-native"
 import {
     RenderItemParams,
