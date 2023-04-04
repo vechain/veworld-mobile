@@ -1,19 +1,29 @@
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    useAppDispatch,
+    useAppSelector,
     selectSelectedAccount,
     selectAccountBalances,
     selectSelectedNetwork,
-} from "~Storage/Redux/Selectors"
-import { FungibleToken, NETWORK_TYPE } from "~Model"
-import {
-    defaultTokensMain,
-    defaultTokensTest,
-} from "~Common/Constant/Token/TokenConstants"
-import { updateAccountBalances } from "~Services/BalanceService/BalanceService"
-import { setTokenBalances } from "~Storage/Redux/Slices"
+    selectCurrency,
+    fetchExchangeRate,
+    updateAccountBalances,
+    setTokenBalances,
+    useGetTokensFromGithubQuery,
+} from "~Storage/Redux"
+import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Common/Constant"
 import { useThor } from "~Components"
-import { useGetTokensFromGithubQuery } from "~Storage/Redux/Api"
 import { useEffect } from "react"
+import BigNumber from "bignumber.js"
+
+// If the env variable isn't set, use the default
+const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
+    process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD || "120000",
+).toNumber()
+
+// If the env variable isn't set, use the default
+const TOKEN_BALANCE_SYNC_PERIOD = new BigNumber(
+    process.env.REACT_APP_TOKEN_BALANCE_SYNC_PERIOD || "300000",
+).toNumber()
 
 /**
  * This component is responsible for keeping the available tokens, balances and currency data up to date.
@@ -26,6 +36,7 @@ export const useTokenBalances = () => {
     const currentAccount = useAppSelector(selectSelectedAccount)
     const currentNetwork = useAppSelector(selectSelectedNetwork)
     const balances = useAppSelector(selectAccountBalances)
+    const currency = useAppSelector(selectCurrency)
     const thorClient = useThor()
 
     useGetTokensFromGithubQuery({
@@ -42,23 +53,20 @@ export const useTokenBalances = () => {
             currentNetwork.genesisId &&
             balances?.length === 0
         ) {
-            let defaultTokens: FungibleToken[] = []
-            if (currentNetwork.type === NETWORK_TYPE.MAIN) {
-                defaultTokens = defaultTokensMain
-            }
-            if (currentNetwork.type === NETWORK_TYPE.TEST) {
-                defaultTokens = defaultTokensTest
-            }
-            dispatch(
-                setTokenBalances(
-                    defaultTokens.map(token => ({
-                        accountAddress: currentAccount?.address,
-                        tokenAddress: token.address,
-                        balance: "0",
-                        timeUpdated: new Date().toISOString(),
-                    })),
-                ),
+            const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(
+                currentNetwork.type,
             )
+            if (defaultTokens)
+                dispatch(
+                    setTokenBalances(
+                        defaultTokens.map(token => ({
+                            accountAddress: currentAccount?.address,
+                            tokenAddress: token.address,
+                            balance: "0",
+                            timeUpdated: new Date().toISOString(),
+                        })),
+                    ),
+                )
             dispatch(updateAccountBalances(thorClient))
         }
     }, [
@@ -69,4 +77,29 @@ export const useTokenBalances = () => {
         thorClient,
         balances,
     ])
+
+    useEffect(() => {
+        const updateBalances = () => {
+            // Update balances
+            dispatch(updateAccountBalances(thorClient))
+        }
+        updateBalances()
+        const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
+        return () => clearInterval(interval)
+    }, [dispatch, thorClient])
+
+    useEffect(() => {
+        const updateVechainExchangeRates = () => {
+            // Update VET exchange rate
+            dispatch(fetchExchangeRate("VET", currency))
+            // Update VTHO exchange rate
+            dispatch(fetchExchangeRate("VTHO", currency))
+        }
+        updateVechainExchangeRates()
+        const interval = setInterval(
+            updateVechainExchangeRates,
+            EXCHANGE_RATE_SYNC_PERIOD,
+        )
+        return () => clearInterval(interval)
+    }, [dispatch, currency])
 }

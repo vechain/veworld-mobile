@@ -2,7 +2,7 @@
 import { TestWrapper } from "~Test"
 import React from "react"
 import { render, screen } from "@testing-library/react-native"
-import BaseBottomSheet from "./BaseBottomSheet"
+import { BaseBottomSheet } from "./BaseBottomSheet"
 import { View } from "react-native"
 import { BaseView } from "./BaseView"
 

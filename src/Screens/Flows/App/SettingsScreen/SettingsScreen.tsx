@@ -96,7 +96,7 @@ const getList = (LL: TranslationFunctions) => [
         icon: "image-multiple-outline",
     },
     {
-        title: LL.TITLE_NETWORK(),
+        title: LL.TITLE_NETWORKS(),
         screenName: Routes.SETTINGS_NETWORK,
         icon: "web",
     },

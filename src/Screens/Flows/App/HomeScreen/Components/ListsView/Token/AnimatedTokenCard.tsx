@@ -6,7 +6,7 @@ import {
 } from "react-native-draggable-flatlist"
 import Animated from "react-native-reanimated"
 import { BaseIcon } from "~Components"
-import { ColorThemeType, CURRENCY, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import DropShadow from "react-native-drop-shadow"
 import { TokenCard } from "./TokenCard"
 import { useTokenAnimations } from "./useTokenAnimations"
@@ -16,18 +16,10 @@ interface IAnimatedTokenCard
     extends RenderItemParams<DenormalizedAccountTokenBalance> {
     isEdit: boolean
     onDeleteItem: (item: DenormalizedAccountTokenBalance) => void
-    selectedCurrency: CURRENCY
 }
 
 export const AnimatedTokenCard = memo(
-    ({
-        item,
-        drag,
-        isActive,
-        isEdit,
-        onDeleteItem,
-        selectedCurrency,
-    }: IAnimatedTokenCard) => {
+    ({ item, drag, isActive, isEdit, onDeleteItem }: IAnimatedTokenCard) => {
         const { styles } = useThemedStyles(baseStyles(isActive))
 
         const onDrag = useCallback(
@@ -74,7 +66,6 @@ export const AnimatedTokenCard = memo(
                                         <TokenCard
                                             token={item}
                                             isAnimation={isEdit}
-                                            selectedCurrency={selectedCurrency}
                                         />
                                     </Animated.View>
                                 </View>

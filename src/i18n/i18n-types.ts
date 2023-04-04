@@ -264,17 +264,37 @@ type RootTranslation = {
 	 */
 	BD_SELECT_WORD: RequiredParams<'number'>
 	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​n​e​t​w​o​r​k
+	 * S​e​l​e​c​t​ ​a​ ​n​e​t​w​o​r​k
 	 */
 	BD_SELECT_NETWORK: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​n​e​t​w​o​r​k​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​a​c​t​ ​o​n
+	 */
+	BD_SELECT_NETWORK_DESC: string
+	/**
+	 * C​u​s​t​o​m​ ​n​o​d​e​s
+	 */
+	BD_CUSTOM_NODES: string
+	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​s
+	 */
+	BD_CUSTOM_NODES_DESC: string
+	/**
 	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​c​o​n​v​e​r​s​i​o​n
 	 */
-	BD_OTHER_NETWORKS: string
+	BD_OTHER_NETWORKS_CONVERSION: string
+	/**
+	 * S​h​o​w​ ​f​i​a​t​ ​e​x​c​h​a​n​g​e​ ​r​a​t​e​s​ ​w​h​e​n​ ​o​n​ ​o​t​h​e​r​ ​n​e​t​w​o​r​k​s
+	 */
+	BD_OTHER_NETWORKS_CONVERSION_DESC: string
+	/**
+	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​i​n​d​i​c​a​t​o​r
+	 */
+	BD_OTHER_NETWORKS_INDICATOR: string
 	/**
 	 * D​i​s​p​l​a​y​ ​a​n​ ​i​n​d​i​c​a​t​o​r​ ​w​h​e​n​ ​t​r​a​n​s​a​c​t​i​n​g​ ​o​n​ ​a​n​o​t​h​e​r​ ​n​e​t​w​o​r​k
 	 */
-	BD_NETWORK_INDICATOR: string
+	BD_OTHER_NETWORKS_INDICATOR_DESC: string
 	/**
 	 * S​t​a​t​e​ ​L​o​g​s
 	 */
@@ -479,6 +499,10 @@ type RootTranslation = {
 	 * N​e​t​w​o​r​k
 	 */
 	TITLE_NETWORK: string
+	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	TITLE_NETWORKS: string
 	/**
 	 * C​o​n​t​a​c​t​s
 	 */
@@ -711,6 +735,26 @@ type RootTranslation = {
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	INPUT_PLACEHOLDER_SEARCH_TOKEN: string
+	/**
+	 * M​a​n​a​g​e​ ​n​o​d​e​s
+	 */
+	NETWORK_MANAGE_NODES: string
+	/**
+	 * A​d​d​ ​n​o​d​e
+	 */
+	NETWORK_ADD_NODE: string
+	/**
+	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_MAIN_NETWORKS: string
+	/**
+	 * T​e​s​t​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_TEST_NETWORKS: string
+	/**
+	 * C​u​s​t​o​m​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_CUSTOM_NETWORKS: string
 	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
@@ -996,17 +1040,37 @@ export type TranslationFunctions = {
 	 */
 	BD_SELECT_WORD: (arg: { number: unknown }) => LocalizedString
 	/**
-	 * Select your network
+	 * Select a network
 	 */
 	BD_SELECT_NETWORK: () => LocalizedString
 	/**
+	 * Select the network you want to transact on
+	 */
+	BD_SELECT_NETWORK_DESC: () => LocalizedString
+	/**
+	 * Custom nodes
+	 */
+	BD_CUSTOM_NODES: () => LocalizedString
+	/**
+	 * Manage your custom nodes
+	 */
+	BD_CUSTOM_NODES_DESC: () => LocalizedString
+	/**
 	 * Other networks - show conversion
 	 */
-	BD_OTHER_NETWORKS: () => LocalizedString
+	BD_OTHER_NETWORKS_CONVERSION: () => LocalizedString
+	/**
+	 * Show fiat exchange rates when on other networks
+	 */
+	BD_OTHER_NETWORKS_CONVERSION_DESC: () => LocalizedString
+	/**
+	 * Other networks - show indicator
+	 */
+	BD_OTHER_NETWORKS_INDICATOR: () => LocalizedString
 	/**
 	 * Display an indicator when transacting on another network
 	 */
-	BD_NETWORK_INDICATOR: () => LocalizedString
+	BD_OTHER_NETWORKS_INDICATOR_DESC: () => LocalizedString
 	/**
 	 * State Logs
 	 */
@@ -1211,6 +1275,10 @@ export type TranslationFunctions = {
 	 * Network
 	 */
 	TITLE_NETWORK: () => LocalizedString
+	/**
+	 * Networks
+	 */
+	TITLE_NETWORKS: () => LocalizedString
 	/**
 	 * Contacts
 	 */
@@ -1440,6 +1508,26 @@ Please, try again later.
 	 * Search a token
 	 */
 	INPUT_PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Manage nodes
+	 */
+	NETWORK_MANAGE_NODES: () => LocalizedString
+	/**
+	 * Add node
+	 */
+	NETWORK_ADD_NODE: () => LocalizedString
+	/**
+	 * Main Networks
+	 */
+	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
+	/**
+	 * Test Networks
+	 */
+	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
+	/**
+	 * Custom Networks
+	 */
+	NETWORK_LABEL_CUSTOM_NETWORKS: () => LocalizedString
 	/**
 	 * {name} copied to clipboard!
 	 */
