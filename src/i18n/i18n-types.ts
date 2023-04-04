@@ -155,9 +155,13 @@ type RootTranslation = {
 	 */
 	BTN_SCAN_QR_CODE: string
 	/**
-	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
+	 * E​d​i​t​ ​P​i​n
 	 */
-	BD_NO_TOKEN_FOUND: string
+	BTN_EDIT_PIN: string
+	/**
+	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
+	 */
+	BTN_BACKUP_MENMONIC: string
 	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
@@ -360,6 +364,30 @@ type RootTranslation = {
 	 */
 	BD_SCANED_ADDRESS_COPPIED: string
 	/**
+	 * R​e​q​u​i​r​e​ ​t​h​e​ ​p​i​n​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​w​i​t​h​ ​l​o​c​a​l​ ​w​a​l​l​e​t​s
+	 */
+	BD_APP_LOCK: string
+	/**
+	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​V​a​u​l​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 */
+	BD_SECURITY_METHOD: string
+	/**
+	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
+	 */
+	BD_NO_TOKEN_FOUND: string
+	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
+	 */
+	BD_BACKUP_MNEMONIC: string
+	/**
+	 * I​ ​a​c​c​e​p​t​ ​t​o​ ​b​e​ ​t​r​a​c​k​e​d​ ​b​y​ ​A​n​a​l​y​t​i​c​s​ ​a​n​d​ ​f​o​r​ ​r​e​s​e​a​r​c​h​ ​a​n​d​ ​s​e​r​v​i​c​e​ ​q​u​a​l​i​t​y​ ​p​u​r​p​o​s​e​s
+	 */
+	BD_ANALYTICS_TRACKING: string
+	/**
+	 * M​n​e​m​o​n​i​c​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BD_MNEMONIC_COPIED_TO_CLIPBOARD: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -504,6 +532,14 @@ type RootTranslation = {
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: string
 	/**
+	 * A​d​d​ ​T​o​k​e​n
+	 */
+	TITLE_ADD_TOKEN: string
+	/**
+	 * E​d​i​t​ ​w​a​l​l​e​t
+	 */
+	TITLE_EDIT_WALLET: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -570,6 +606,22 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n​s
 	 */
 	SB_YOUR_NFTS: string
+	/**
+	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
+	 */
+	SB_PASSWORD_AUTH: string
+	/**
+	 * S​e​c​u​r​i​t​y​ ​m​e​t​h​o​d
+	 */
+	SB_SECURITY_METHOD: string
+	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
+	 */
+	SB_BACKUP_MNEMONIC: string
+	/**
+	 * A​n​a​l​y​t​i​c​s​ ​t​r​a​c​k​i​n​g
+	 */
+	SB_ANALYTICS_TRACKING: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -900,9 +952,13 @@ export type TranslationFunctions = {
 	 */
 	BTN_SCAN_QR_CODE: () => LocalizedString
 	/**
-	 * No token found
+	 * Edit Pin
 	 */
-	BD_NO_TOKEN_FOUND: () => LocalizedString
+	BTN_EDIT_PIN: () => LocalizedString
+	/**
+	 * Backup phrase
+	 */
+	BTN_BACKUP_MENMONIC: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -1104,6 +1160,30 @@ export type TranslationFunctions = {
 	 */
 	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
 	/**
+	 * Require the pin when performing transactions with local wallets
+	 */
+	BD_APP_LOCK: () => LocalizedString
+	/**
+	 * Click to reset VeVault and erase all your data stored on it
+	 */
+	BD_SECURITY_METHOD: () => LocalizedString
+	/**
+	 * No token found
+	 */
+	BD_NO_TOKEN_FOUND: () => LocalizedString
+	/**
+	 * Backup your mnemonic phrase
+	 */
+	BD_BACKUP_MNEMONIC: () => LocalizedString
+	/**
+	 * I accept to be tracked by Analytics and for research and service quality purposes
+	 */
+	BD_ANALYTICS_TRACKING: () => LocalizedString
+	/**
+	 * Mnemonic copied to clipboard
+	 */
+	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -1248,6 +1328,14 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
 	/**
+	 * Add Token
+	 */
+	TITLE_ADD_TOKEN: () => LocalizedString
+	/**
+	 * Edit wallet
+	 */
+	TITLE_EDIT_WALLET: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -1311,6 +1399,22 @@ export type TranslationFunctions = {
 	 * Your collections
 	 */
 	SB_YOUR_NFTS: () => LocalizedString
+	/**
+	 * Password authorization
+	 */
+	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Security method
+	 */
+	SB_SECURITY_METHOD: () => LocalizedString
+	/**
+	 * Backup your mnemonic
+	 */
+	SB_BACKUP_MNEMONIC: () => LocalizedString
+	/**
+	 * Analytics tracking
+	 */
+	SB_ANALYTICS_TRACKING: () => LocalizedString
 	/**
 	 * Face ID
 	 */

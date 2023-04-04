@@ -1,3 +1,3 @@
 export * from "./WalletManagementHeader"
 export * from "./DeviceAccordion"
-export * from "./WalletManagementBottomSheet/WalletManagementBottomSheet"
+export * from "./AccountMgmtBottomSheet/AccountMgmtBottomSheet"
