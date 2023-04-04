@@ -215,9 +215,6 @@ const en: BaseTranslation = {
     ERROR_WRONG_MNEMONIC_WORDS: "Error! The word combination is wrong, Please, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
 
-
-    INPUT_PLACEHOLDER_SEARCH_TOKEN: "Search a token",
-
     // Network
     NETWORK_MANAGE_NODES: "Manage nodes",
     NETWORK_ADD_NODE: "Add node",
@@ -247,9 +244,15 @@ const en: BaseTranslation = {
 
     // Settings Languages
 
-    // Add Token
-    ADD_TOKEN_SELECT_YOUR_TOKEN_subtitle: "Select your token",
-    ADD_TOKEN_SELECT_YOUR_TOKEN_body: "Select the asset that you want to add from the list",
+    // Manage Token
+    MANAGE_TOKEN_TITLE: "Manage Tokens",
+    MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
+    MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: "Select your official tokens or add a new custom one",
+    MANAGE_TOKEN_MANAGE_CUSTOM: "Manage custom tokens",
+    MANAGE_TOKEN_SELECTED: "Selected",
+    MANAGE_TOKEN_UNSELECTED: "Unselected",
+    MANAGE_TOKEN_SEARCH_TOKEN: "Search a token",
+
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",
