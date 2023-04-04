@@ -2,7 +2,7 @@
 function parseUrl(url?: string) {
     const trimmedUrl = url?.trim()
     const match = trimmedUrl?.match(
-        /^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/,
+        /^(https?\:)\/\/([\w.-]*)(?:\:([0-9]+))?\/?([^?#]*)(\?[^#]*)?(#.*)?$/,
     )
     if (!match) throw new Error("Invalid URL")
     return {
