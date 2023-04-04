@@ -9,7 +9,7 @@ import { StorageData } from "../StorageData"
  * @field `nonce` - A random string to provide extra entropy
  */
 export interface Wallet {
-    mnemonic?: string[]
+    mnemonic: string[]
     privateKey?: string
     rootAddress: string
     nonce: string

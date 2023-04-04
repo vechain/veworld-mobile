@@ -122,13 +122,7 @@ const encryptWallet = async ({
  * @param  {string} password? if the authentication is password
  * @returns Wallet
  */
-const decryptWallet = async ({
-    device,
-    userPassword,
-}: {
-    device: Device
-    userPassword?: string
-}) => {
+const decryptWallet = async (device: Device, userPassword?: string) => {
     const accessControl = !userPassword
     let encryptedEncryptionKey = await KeychainService.getDeviceEncryptionKey(
         device.rootAddress,
