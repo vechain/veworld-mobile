@@ -1,9 +1,8 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { useTheme, CryptoUtils } from "~Common"
+import { CryptoUtils } from "~Common"
 import {
     BaseButton,
-    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -18,11 +17,12 @@ import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
 import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
+import { Toast } from "react-native-toast-message/lib/src/Toast"
+import * as Haptics from "expo-haptics"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const theme = useTheme()
 
     const [selectedFirstWord, setSelectedFirstWord] = useState<string | null>(
         null,
@@ -33,7 +33,6 @@ export const ConfirmMnemonicScreen = () => {
     const [selectedThirdWord, setSelectedThirdWord] = useState<string | null>(
         null,
     )
-    const [isError, setIsError] = useState(false)
 
     const mnemonic = useAppSelector(selectMnemonic)
 
@@ -46,19 +45,29 @@ export const ConfirmMnemonicScreen = () => {
         [],
     )
 
+    const showErrorToast = useCallback(() => {
+        Toast.show({
+            type: "error",
+            text1: LL.ERROR_WRONG_WORDS_COMBINATION(),
+            text2: LL.ERROR_WRONG_WORDS_COMBINATION_DESC(),
+        })
+    }, [LL])
+
     const onConfirmPress = () => {
         if (
             selectedFirstWord === mnemonicArray[firstIndex] &&
             selectedSecondWord === mnemonicArray[secondIndex] &&
             selectedThirdWord === mnemonicArray[thirdIndex]
         ) {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
             }
         } else {
-            setIsError(true)
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            showErrorToast()
             setSelectedFirstWord(null)
             setSelectedSecondWord(null)
             setSelectedThirdWord(null)
@@ -126,15 +135,12 @@ export const ConfirmMnemonicScreen = () => {
 
     const handleSelectFirstWord = useCallback((button: ButtonType) => {
         setSelectedFirstWord(button.id)
-        setIsError(false)
     }, [])
     const handleSelectSecondWord = useCallback((button: ButtonType) => {
         setSelectedSecondWord(button.id)
-        setIsError(false)
     }, [])
     const handleSelectThirdWord = useCallback((button: ButtonType) => {
         setSelectedThirdWord(button.id)
-        setIsError(false)
     }, [])
 
     const isSubmitDisabled =
@@ -200,29 +206,6 @@ export const ConfirmMnemonicScreen = () => {
                         buttons={buttonsThirdWord}
                         action={handleSelectThirdWord}
                     />
-                    {isError && (
-                        <BaseView>
-                            <BaseSpacer height={16} />
-                            <BaseView
-                                flexDirection="row"
-                                mx={50}
-                                justifyContent="center">
-                                <BaseIcon
-                                    name={"alert-circle-outline"}
-                                    size={20}
-                                    color={theme.colors.danger}
-                                />
-                                <BaseSpacer width={8} />
-                                <BaseText
-                                    typographyFont="body"
-                                    fontSize={12}
-                                    color={theme.colors.danger}>
-                                    {LL.ERROR_WRONG_MNEMONIC_WORDS()}
-                                </BaseText>
-                                <BaseSpacer height={24} />
-                            </BaseView>
-                        </BaseView>
-                    )}
                 </BaseView>
                 <BaseButton
                     action={onConfirmPress}

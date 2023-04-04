@@ -82,6 +82,7 @@
         "react-native-screens": "^3.18.2",
         "react-native-svg": "13.4.0",
         "react-native-tab-view": "^3.3.4",
+        "react-native-toast-message": "^2.1.6",
         "react-native-uuid": "^2.0.1",
         "react-native-vector-icons": "^9.2.0",
         "react-native-wagmi-charts": "^2.3.0",

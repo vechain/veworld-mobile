@@ -672,9 +672,13 @@ type RootTranslation = {
 	 */
 	ERROR_INCORRECT_MNEMONIC: string
 	/**
-	 * E​r​r​o​r​!​ ​T​h​e​ ​w​o​r​d​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 * W​r​o​n​g​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n
 	 */
-	ERROR_WRONG_MNEMONIC_WORDS: string
+	ERROR_WRONG_WORDS_COMBINATION: string
+	/**
+	 * T​h​e​ ​w​o​r​d​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_WRONG_WORDS_COMBINATION_DESC: string
 	/**
 	 * W​a​l​l​e​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
 	 */
@@ -717,7 +721,7 @@ type RootTranslation = {
 	 */
 	SYSTEM_THEME: string
 	/**
-	 * M​a​n​a​g​e​ ​T​o​k​e​n
+	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
 	 */
 	MANAGE_TOKEN_TITLE: string
 	/**
@@ -725,11 +729,11 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​ ​o​r​ ​a​d​d​/​r​e​m​o​v​e​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 * S​e​l​e​c​t​ ​y​o​u​r​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​s​ ​o​r​ ​a​d​d​ ​a​ ​n​e​w​ ​c​u​s​t​o​m​ ​o​n​e
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
 	/**
-	 * M​a​n​a​g​e​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 * M​a​n​a​g​e​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
 	 */
 	MANAGE_TOKEN_MANAGE_CUSTOM: string
 	/**
@@ -1409,9 +1413,13 @@ Please, try again later.
 	 */
 	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
 	/**
-	 * Error! The word combination is wrong, Please, try again.
+	 * Wrong words combination
 	 */
-	ERROR_WRONG_MNEMONIC_WORDS: () => LocalizedString
+	ERROR_WRONG_WORDS_COMBINATION: () => LocalizedString
+	/**
+	 * The word combination is wrong, Please, try again.
+	 */
+	ERROR_WRONG_WORDS_COMBINATION_DESC: () => LocalizedString
 	/**
 	 * Wallet already exists
 	 */
@@ -1453,7 +1461,7 @@ Please, try again later.
 	 */
 	SYSTEM_THEME: () => LocalizedString
 	/**
-	 * Manage Token
+	 * Manage Tokens
 	 */
 	MANAGE_TOKEN_TITLE: () => LocalizedString
 	/**
@@ -1461,11 +1469,11 @@ Please, try again later.
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: () => LocalizedString
 	/**
-	 * Select the asset that you want to add from the list or add/remove a custom token
+	 * Select your official tokens or add a new custom one
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
 	/**
-	 * Manage custom token
+	 * Manage custom tokens
 	 */
 	MANAGE_TOKEN_MANAGE_CUSTOM: () => LocalizedString
 	/**
