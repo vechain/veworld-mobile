@@ -43,13 +43,13 @@ const showCancelledFaceIdAlert = (
     Alert(title, msg, retry, buttonAction, signOut, cancelAction, "destructive")
 }
 
-const showGoToSettingsCameraAlert = (
+const showGoToSettingsAlert = (
+    title: LocalizedString,
+    msg: LocalizedString,
     cancelAction: () => void,
     buttonAction: () => void,
 ) => {
     const locale = i18n.detectLocale()
-    let title = i18n.i18n()[locale].TITLE_ALERT_CAMERA_PERMISSION()
-    let msg = i18n.i18n()[locale].SB_ALERT_CAMERA_PERMISSION()
     let cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
     let ok = i18n.i18n()[locale].BTN_GO_TO_SETTINGS()
 
@@ -69,6 +69,6 @@ const showDefaultAlert = (
 export {
     Alert,
     showCancelledFaceIdAlert,
-    showGoToSettingsCameraAlert,
+    showGoToSettingsAlert,
     showDefaultAlert,
 }

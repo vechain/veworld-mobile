@@ -181,6 +181,7 @@ const en: BaseTranslation = {
     FACE_ID: "Face ID",
     TOUCH_ID: "Touch ID",
     FINGERPRINT: "Fingerprint",
+    BIOMETRICS: "Biometrics",
     IRIS: "Iris",
     DEVICE_PIN: "Device Pin",
     TAP_TO_VIEW: "Tap to view",
@@ -208,6 +209,10 @@ const en: BaseTranslation = {
     COMMON_LBL_FAVOURITES: "Favourites",
 
     // Common Titles
+    ALERT_TITLE_NOT_ENROLLED: "Biometrics not available",
+    ALERT_MSG_NOT_ENROLLED: "You have not enrolled any biometric authentication method.",
+    ALERT_TITLE_BIO_PREVIOUSLY_DENIED: "Biometrics previously denied",
+    ALERT_MSG_BIO_PREVIOUSLY_DENIED: "You have previously denied biometric authentication. Please enable it in your device settings.",
 
     // Errors
     ERROR_GENERIC_SUBTITLE: "Something went wrong!",
