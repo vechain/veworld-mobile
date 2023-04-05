@@ -7,7 +7,7 @@ export const useBiometricsValidation = () => {
     const { LL } = useI18nContext()
 
     const authenticateBiometrics = useCallback(
-        async (handleOnSecurityUpgrade: () => void) => {
+        async (onSuccess: () => void) => {
             let result = await BiometricsUtils.authenticateWithBiometric()
             // user_cancel
             // not_available
@@ -16,10 +16,8 @@ export const useBiometricsValidation = () => {
             // system_cancel
 
             if (result.success) {
-                handleOnSecurityUpgrade()
+                onSuccess()
             } else {
-                console.log(result)
-
                 if (result.error === "not_enrolled") {
                     AlertUtils.showDefaultAlert(
                         LL.ALERT_TITLE_NOT_ENROLLED(),

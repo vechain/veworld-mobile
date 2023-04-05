@@ -20,17 +20,13 @@ export const EnableBiometrics = () => {
         onClose: closePasswordPrompt,
     } = useDisclosure()
 
-    const handleOnSecurityUpgrade = useCallback(() => {
-        openPasswordPrompt()
-    }, [openPasswordPrompt])
-
     const { securityButtons, shouldCallRequireBiometricsAndEnableIt } =
-        useSecurityButtons(handleOnSecurityUpgrade)
+        useSecurityButtons(openPasswordPrompt)
 
     const onPasswordSuccess = useCallback(
         async (password: string) => {
             await runSecurityUpgrade(password, () => {
-                // weird crashes happen occasionally without this timeout, also the reason why we use the closure here
+                // weird crashes happen occasionally without this timeout, also the reason why we use the callback here
                 // https://stackoverflow.com/questions/61170501/exception-thrown-while-executing-ui-block-parentnode-is-a-required-a-required
                 setTimeout(() => {
                     closePasswordPrompt()

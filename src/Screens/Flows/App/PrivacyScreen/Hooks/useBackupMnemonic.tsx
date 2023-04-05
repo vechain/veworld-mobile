@@ -65,8 +65,6 @@ export const useBackupMnemonic = ({
      */
     const onPasswordSuccess = useCallback(
         async (password: string) => {
-            console.log("onPasswordSuccess", password)
-
             setUserPin(password)
             closePasswordPrompt()
 
