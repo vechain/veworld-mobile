@@ -1,8 +1,10 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
+    AddContactScreen,
     AdvancedScreen,
     ChangeNetworkScreen,
+    ContactsScreen,
     AddCustomNodeScreen,
     GeneralScreen,
     PrivacyScreen,
@@ -18,6 +20,8 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_PRIVACY]: undefined
     [Routes.SETTINGS_ADVANCED]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
+    [Routes.SETTINGS_CONTACTS]: undefined
+    [Routes.SETTINGS_ADD_CONTACT]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
 }
 
@@ -64,6 +68,18 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.SETTINGS_GENERAL}
                     component={GeneralScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.SETTINGS_CONTACTS}
+                    component={ContactsScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.SETTINGS_ADD_CONTACT}
+                    component={AddContactScreen}
                     options={{ headerShown: false }}
                 />
             </Settings.Group>
