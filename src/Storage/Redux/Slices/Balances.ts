@@ -1,4 +1,5 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
+import { VET, VTHO } from "~Common"
 import { BalanceState, TokenBalance } from "../Types/Balances"
 
 export const initialState: BalanceState = []
@@ -15,17 +16,54 @@ export const BalanceSlice = createSlice({
         },
         removeTokenBalance: (
             state: Draft<BalanceState>,
-            action: PayloadAction<string>,
+            action: PayloadAction<{
+                accountAddress: string
+                tokenAddress: string
+            }>,
         ) => {
-            return state.filter(
-                balance => balance.tokenAddress !== action.payload,
-            )
+            const { accountAddress, tokenAddress } = action.payload
+
+            let position = 0
+            return state
+                .filter(
+                    // remove deleted element
+                    balance =>
+                        balance.tokenAddress !== tokenAddress ||
+                        balance.accountAddress !== accountAddress,
+                )
+                .map(balance => {
+                    //recalculate positions
+                    if (
+                        balance.tokenAddress === tokenAddress &&
+                        balance.accountAddress === accountAddress &&
+                        balance.accountAddress !== VET.address &&
+                        balance.accountAddress !== VTHO.address
+                    ) {
+                        const newBalance = {
+                            ...balance,
+                            position,
+                        }
+                        position++
+                        return newBalance
+                    }
+                    return balance
+                })
         },
-        addTokenBalances: (
+        changeBalancePosition: (
             state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance[]>,
+            action: PayloadAction<TokenBalance[]>, // tokenBalances with updated position fields
         ) => {
-            state.push(...action.payload)
+            const updatedAccountBalances = action.payload
+            return state.map(balance => {
+                const updatedBalance = updatedAccountBalances.find(
+                    updatedAccountBalance =>
+                        balance.tokenAddress ===
+                            updatedAccountBalance.tokenAddress &&
+                        balance.accountAddress ===
+                            updatedAccountBalance.accountAddress,
+                )
+                return updatedBalance ? updatedBalance : balance
+            })
         },
         setTokenBalances: (
             state: Draft<BalanceState>,
@@ -38,7 +76,7 @@ export const BalanceSlice = createSlice({
 
 export const {
     addTokenBalance,
-    addTokenBalances,
     setTokenBalances,
     removeTokenBalance,
+    changeBalancePosition,
 } = BalanceSlice.actions
