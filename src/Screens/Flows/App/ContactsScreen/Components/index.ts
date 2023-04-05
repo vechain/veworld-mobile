@@ -1,4 +1,5 @@
 export * from "./ContactDetailBox"
-export * from "./ContactRemovalBottomSheet"
+export * from "./RemoveContactBottomSheet"
 export * from "./AddContactButton"
-export * from "./ContactEditBottomSheet"
+export * from "./EditContactBottomSheet"
+export * from "./Hooks"

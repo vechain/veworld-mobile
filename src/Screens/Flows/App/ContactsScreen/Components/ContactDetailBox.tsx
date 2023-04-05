@@ -12,17 +12,17 @@ import { Contact } from "~Model"
 
 type Props = {
     contact: Contact
-    onPressDelete: (address: string) => void
-    onPressEdit: (address: string) => void
+    onDeletePress: (address: string) => void
+    onEditPress: (name: string, address: string) => void
 }
 export const ContactDetailBox: React.FC<Props> = memo(
-    ({ contact, onPressDelete, onPressEdit }) => {
+    ({ contact, onDeletePress, onEditPress }) => {
         const theme = useTheme()
 
         return (
             <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
-                    action={() => onPressEdit(contact.address)}
+                    action={() => onEditPress(contact.alias, contact.address)}
                     justifyContent="space-between"
                     containerStyle={baseStyles.container}>
                     <BaseView flexDirection="column">
@@ -43,7 +43,9 @@ export const ContactDetailBox: React.FC<Props> = memo(
                             color={theme.colors.primary}
                             size={20}
                             name={"pencil"}
-                            action={() => onPressEdit(contact.address)}
+                            action={() =>
+                                onEditPress(contact.alias, contact.address)
+                            }
                         />
                     </BaseView>
                 </BaseTouchableBox>
@@ -52,7 +54,7 @@ export const ContactDetailBox: React.FC<Props> = memo(
                     style={baseStyles.deleteIcon}
                     name={"trash-can-outline"}
                     bg={theme.colors.secondary}
-                    action={() => onPressDelete(contact.address)}
+                    action={() => onDeletePress(contact.address)}
                 />
             </BaseView>
         )

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseBottomSheet,
@@ -10,89 +10,57 @@ import {
     BaseView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { AddressUtils, FormUtils, useTheme } from "~Common"
 import { ContactForm } from "../../AddContactScreen/Components"
-import { address as thorAddress } from "thor-devkit"
-import { Contact } from "~Model"
-
-const MAX_INPUT_LENGTH = 19
+import { useContactValidation } from "./Hooks"
+import { useTheme } from "~Common"
+import { selectContactByAddress, useAppSelector } from "~Storage"
 
 type Props = {
     currentContactName: string
     currentContactAddress: string
-    contacts: Contact[]
+    setCurrentContactName: (name: string) => void
+    setCurrentContactAddress: (address: string) => void
     onClose: () => void
     onEditContact: (alias: string, address: string) => void
 }
 
 const snapPoints = ["70%"]
 
-export const ContactEditBottomSheet = React.forwardRef<
+export const EditContactBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(
     (
-        { currentContactName, currentContactAddress, contacts, onEditContact },
+        {
+            currentContactName,
+            currentContactAddress,
+            setCurrentContactName,
+            setCurrentContactAddress,
+            onEditContact,
+        },
         ref,
     ) => {
-        // [Start] Hooks
         const { LL } = useI18nContext()
 
         const theme = useTheme()
 
-        // Contact form states
-        const [name, setName] = useState<string>(currentContactName)
-        const [address, setAddress] = useState<string>(currentContactAddress)
-        const [isValidForm, setIsValidForm] = useState<boolean>(false)
-
-        useEffect(() => {
-            setName(currentContactName)
-            setAddress(currentContactAddress)
-        }, [currentContactName, currentContactAddress])
-
-        // [End] Hooks
-
-        // [Start] Methods
-
-        const validateName = useCallback(
-            (contactName: string) => {
-                if (contactName.length === 0) {
-                    return LL.ERROR_REQUIRED_FIELD()
-                }
-                if (contactName.length > MAX_INPUT_LENGTH) {
-                    return LL.ERROR_MAX_INPUT_LENGTH()
-                }
-                if (FormUtils.alreadyExists(contactName, contacts, "alias")) {
-                    return LL.ERROR_NAME_ALREADY_EXISTS()
-                }
-                return ""
-            },
-            [LL, contacts],
+        const selectedContact = useAppSelector(
+            selectContactByAddress(currentContactAddress),
         )
 
-        const validateAddress = useCallback(
-            (contactAddress: string) => {
-                if (contactAddress.length === 0) {
-                    return LL.ERROR_REQUIRED_FIELD()
-                }
-                if (!AddressUtils.isValid(contactAddress)) {
-                    return LL.ERROR_ADDRESS_INVALID()
-                }
-                if (
-                    FormUtils.alreadyExists(
-                        thorAddress.toChecksumed(contactAddress),
-                        contacts,
-                        "address",
-                    )
-                ) {
-                    return LL.ERROR_ADDRESS_EXISTS()
-                }
-                return ""
-            },
-            [LL, contacts],
+        const { validateName, validateAddress } = useContactValidation(
+            true,
+            selectedContact,
         )
 
-        // [End] Methods
+        const { nameError, addressError } = {
+            nameError: validateName(currentContactName),
+            addressError: validateAddress(currentContactAddress),
+        }
+
+        const isFormValid = useMemo(() => {
+            return nameError.length === 0 || addressError.length === 0
+        }, [addressError.length, nameError.length])
 
         return (
             <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
@@ -119,13 +87,12 @@ export const ContactEditBottomSheet = React.forwardRef<
                                 placeholderAddress={currentContactAddress}
                                 titleName={LL.BD_CONTACT_NAME()}
                                 titleAddress={LL.BD_CONTACT_ADDRESS()}
-                                name={name}
-                                address={address}
-                                setName={setName}
-                                setAddress={setAddress}
-                                setIsValidForm={setIsValidForm}
-                                validateName={validateName}
-                                validateAddress={validateAddress}
+                                nameError={nameError}
+                                addressError={addressError}
+                                setName={setCurrentContactName}
+                                setAddress={setCurrentContactAddress}
+                                valueName={currentContactName}
+                                valueAddress={currentContactAddress}
                             />
 
                             <BaseSpacer height={16} />
@@ -165,9 +132,14 @@ export const ContactEditBottomSheet = React.forwardRef<
 
                         <BaseView flexDirection="row" mb={20}>
                             <BaseButton
-                                action={() => onEditContact(name, address)}
+                                action={() =>
+                                    onEditContact(
+                                        currentContactName,
+                                        currentContactAddress,
+                                    )
+                                }
                                 w={100}
-                                disabled={!isValidForm}
+                                disabled={!isFormValid}
                                 title={LL.COMMON_BTN_SAVE().toUpperCase()}
                                 bgColor={theme.colors.primary}
                             />

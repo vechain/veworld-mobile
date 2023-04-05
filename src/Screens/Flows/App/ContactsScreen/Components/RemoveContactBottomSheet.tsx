@@ -17,7 +17,7 @@ type Props = {
 
 const snapPoints = ["40%"]
 
-export const ContactRemoveBottomSheet = React.forwardRef<
+export const RemoveContactBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose, onRemoveContact }, ref) => {
