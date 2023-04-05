@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { PlatformUtils, useBottomSheetModal, useTheme } from "~Common"
 import {
@@ -18,10 +18,9 @@ import { selectContacts } from "~Storage/Redux/Selectors"
 import {
     AddContactButton,
     ContactDetailBox,
-    ContactEditBottomSheet,
-    ContactRemoveBottomSheet,
+    EditContactBottomSheet,
+    RemoveContactBottomSheet,
 } from "./Components"
-import { Contact } from "~Model"
 
 export const ContactsScreen = () => {
     // [Start] Hooks
@@ -50,17 +49,13 @@ export const ContactsScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    // Address of the contact the user wants to delete
+    // Address of the contact the user wants to delete/edit
     const [currentContactAddress, setCurrentContactAddress] =
         useState<string>("")
-
-    const currentContactName = useMemo(() => {
-        const currentContact = contacts.find(
-            (contact: Contact) => contact.address === currentContactAddress,
-        )
-
-        return currentContact?.alias || ""
-    }, [contacts, currentContactAddress])
+    // Address of the contact before the user edits it
+    const [previousContactAddress, setPreviousContactAddress] =
+        useState<string>("")
+    const [currentContactName, setCurrentContactName] = useState<string>("")
 
     // [End] Hooks
 
@@ -78,16 +73,20 @@ export const ContactsScreen = () => {
 
     const onDeleteContactPress = useCallback(
         (address: string) => {
-            openRemoveContactSheet()
             setCurrentContactAddress(address)
+
+            openRemoveContactSheet()
         },
         [openRemoveContactSheet],
     )
 
     const onEditContactPress = useCallback(
-        (address: string) => {
-            openEditContactSheet()
+        (name: string, address: string) => {
             setCurrentContactAddress(address)
+            setPreviousContactAddress(address)
+            setCurrentContactName(name)
+
+            openEditContactSheet()
         },
         [openEditContactSheet],
     )
@@ -101,12 +100,12 @@ export const ContactsScreen = () => {
 
     const handleEditContact = useCallback(
         (_alias: string, _address: string) => {
-            if (currentContactAddress) {
-                dispatch(editContact(_alias, _address, currentContactAddress))
+            if (previousContactAddress) {
+                dispatch(editContact(_alias, _address, previousContactAddress))
                 closeEditContactSheet()
             }
         },
-        [closeEditContactSheet, currentContactAddress, dispatch],
+        [closeEditContactSheet, dispatch, previousContactAddress],
     )
 
     // [End] Methods
@@ -139,8 +138,8 @@ export const ContactsScreen = () => {
                                 <BaseView mx={20}>
                                     <ContactDetailBox
                                         contact={item}
-                                        onPressDelete={onDeleteContactPress}
-                                        onPressEdit={onEditContactPress}
+                                        onDeletePress={onDeleteContactPress}
+                                        onEditPress={onEditContactPress}
                                     />
                                 </BaseView>
                             )
@@ -208,17 +207,18 @@ export const ContactsScreen = () => {
             {!!contacts.length && renderContactsList()}
 
             {/* Bottom Sheets */}
-            <ContactRemoveBottomSheet
+            <RemoveContactBottomSheet
                 ref={confirmRemoveContactSheet}
                 onClose={closeRemoveContactSheet}
                 onRemoveContact={handleRemoveContact}
             />
 
-            <ContactEditBottomSheet
+            <EditContactBottomSheet
                 ref={editContactSheet}
-                contacts={contacts}
                 currentContactName={currentContactName}
                 currentContactAddress={currentContactAddress}
+                setCurrentContactName={setCurrentContactName}
+                setCurrentContactAddress={setCurrentContactAddress}
                 onClose={closeEditContactSheet}
                 onEditContact={handleEditContact}
             />
