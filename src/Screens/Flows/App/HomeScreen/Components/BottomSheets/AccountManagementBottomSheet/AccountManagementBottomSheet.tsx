@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useTheme } from "~Common"
+import { info, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSpacer,
@@ -32,7 +32,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const handleSheetChanges = useCallback((index: number) => {
-        console.log("accountManagementSheet position changed", index)
+        info("accountManagementSheet position changed", index)
     }, [])
 
     const onAddAccount = useCallback(() => {

@@ -1,4 +1,5 @@
 import { BigNumber } from "bignumber.js"
+import { error } from "~Common"
 // import dayjs from "dayjs"
 // import RelativeTime from "dayjs/plugin/relativeTime"
 // import VeWorldErrors from "common/errors/VeWorldErrors"
@@ -39,7 +40,7 @@ export const scaleNumberUp = (
 
         return amount.toFixed(roundDecimal, roundingStrategy)
     } catch (e) {
-        console.error(e)
+        error(e)
         throw e
         // throw VeWorldErrors.internal(`Failed to scale number up (${val})`, e)
     }
@@ -73,7 +74,7 @@ export const scaleNumberDown = (
 
         return amount.toFixed(roundDecimal, roundingStrategy)
     } catch (e) {
-        console.error(e)
+        error(e)
         throw e
         // throw VeWorldErrors.internal(`Failed to scale number down (${val})`, e)
     }

@@ -1,3 +1,5 @@
+import { error } from "~Common"
+
 function parseUrl(url?: string) {
     const trimmedUrl = url?.trim()
     const match = trimmedUrl?.match(
@@ -47,6 +49,7 @@ const isHttps = (url: string) => {
         const parsedURL = parseUrl(url)
         return parsedURL.protocol === "https:"
     } catch (e) {
+        error(e)
         return false
     }
 }
@@ -60,6 +63,7 @@ const isLocalHost = (url: string) => {
             parsedURL.hostname === "127.0.0.1"
         )
     } catch (e) {
+        error(e)
         return false
     }
 }
@@ -69,6 +73,7 @@ const isHttp = (url: string) => {
         const parsedURL = parseUrl(url)
         return parsedURL.protocol === "http:"
     } catch (e) {
+        error(e)
         return false
     }
 }

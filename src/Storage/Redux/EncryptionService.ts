@@ -1,7 +1,7 @@
 import crypto from "react-native-quick-crypto"
 import { createTransform } from "redux-persist"
 import type { TransformConfig } from "redux-persist/lib/createTransform"
-import { CryptoUtils } from "~Common"
+import { CryptoUtils, warn } from "~Common"
 import KeychainService from "~Services/KeychainService"
 
 export interface EncryptTransformConfig {
@@ -26,8 +26,7 @@ export const encryptTransform = <HSS, S = any, RS = any>(
         throw makeError("No secret key provided.")
     }
 
-    const onError =
-        typeof config.onError === "function" ? config.onError : console.warn
+    const onError = typeof config.onError === "function" ? config.onError : warn
 
     return createTransform<HSS, string, S, RS>(
         (inboundState, _key) =>
