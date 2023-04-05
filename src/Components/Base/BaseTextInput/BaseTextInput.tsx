@@ -8,7 +8,7 @@ import { BaseView } from "../BaseView"
 const { defaults: defaultTypography } = typography
 
 type Props = {
-    placeholder: string
+    placeholder?: string
     label?: string
     value?: string
     setValue?: (s: string) => void
