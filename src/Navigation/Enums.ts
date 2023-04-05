@@ -25,6 +25,7 @@ export enum Routes {
     SETTINGS_NFT = "Settings_NFT",
     SETTINGS_NETWORK = "Settings_Network",
     SETTINGS_CONTACTS = "Settings_Contacts",
+    SETTINGS_ADD_CONTACT = "Settings_Add_Contact",
     SETTINGS_PRIVACY = "Settings_Privacy",
     SETTINGS_ALERTS = "Settings_Alerts",
     SETTINGS_CONNECTED_APPS = "Settings_Connected_Apps",

@@ -8,6 +8,7 @@ import {
     BalanceSlice,
     NetworkSlice,
     CacheSlice,
+    ContactsSlice,
 } from "./Slices"
 import { currencySlice } from "./Slices/Currency"
 
@@ -21,4 +22,5 @@ export const reducer = combineReducers({
     networks: NetworkSlice.reducer,
     balances: BalanceSlice.reducer,
     cache: CacheSlice.reducer,
+    contacts: ContactsSlice.reducer,
 })

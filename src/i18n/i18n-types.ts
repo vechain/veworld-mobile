@@ -155,6 +155,14 @@ type RootTranslation = {
 	 */
 	BTN_SCAN_QR_CODE: string
 	/**
+	 * A​d​d​ ​c​o​n​t​a​c​t
+	 */
+	BTN_ADD_CONTACT: string
+	/**
+	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 */
+	BTN_CREATE_CONTACT: string
+	/**
 	 * E​d​i​t​ ​P​i​n
 	 */
 	BTN_EDIT_PIN: string
@@ -364,6 +372,34 @@ type RootTranslation = {
 	 */
 	BD_SCANED_ADDRESS_COPPIED: string
 	/**
+	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t
+	 */
+	BD_CONTACTS_LIST: string
+	/**
+	 * A​d​d​ ​f​r​i​e​n​d​s​ ​a​n​d​ ​a​d​d​r​e​s​s​e​s​ ​y​o​u​ ​t​r​u​s​t
+	 */
+	BD_CONTACTS_LIST_DISCLAIMER: string
+	/**
+	 * A​d​d​ ​c​o​n​t​a​c​t​ ​d​e​t​a​i​l​s
+	 */
+	BD_ADD_CONTACT: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​d​a​t​a​ ​t​o​ ​a​d​d​ ​a​ ​n​e​w​ ​c​o​n​t​a​c​t
+	 */
+	BD_ADD_CONTACT_DISCLAIMER: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	BD_CONTACT_NAME: string
+	/**
+	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	BD_CONTACT_ADDRESS: string
+	/**
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​o​n​t​a​c​t​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 */
+	BD_CONFIRM_REMOVE_CONTACT: string
+	/**
 	 * R​e​q​u​i​r​e​ ​t​h​e​ ​p​i​n​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​w​i​t​h​ ​l​o​c​a​l​ ​w​a​l​l​e​t​s
 	 */
 	BD_APP_LOCK: string
@@ -484,6 +520,14 @@ type RootTranslation = {
 	 */
 	TITLE_ADVANCED: string
 	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	TITLE_CONTACTS: string
+	/**
+	 * A​d​d​ ​C​o​n​t​a​c​t
+	 */
+	TITLE_ADD_CONTACT: string
+	/**
 	 * M​a​n​a​g​e​ ​W​a​l​l​e​t
 	 */
 	TITLE_MANAGE_WALLET: string
@@ -503,10 +547,6 @@ type RootTranslation = {
 	 * N​e​t​w​o​r​k​s
 	 */
 	TITLE_NETWORKS: string
-	/**
-	 * C​o​n​t​a​c​t​s
-	 */
-	TITLE_CONTACTS: string
 	/**
 	 * P​r​i​v​a​c​y​ ​a​n​d​ ​S​e​c​u​r​i​t​y
 	 */
@@ -607,6 +647,22 @@ type RootTranslation = {
 	 */
 	SB_YOUR_NFTS: string
 	/**
+	 * C​o​n​f​i​r​m​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​?
+	 */
+	SB_CONFIRM_OPERATION: string
+	/**
+	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t​ ​i​s​ ​e​m​p​t​y
+	 */
+	SB_CONTACT_LIST_EMPTY: string
+	/**
+	 * C​r​e​a​t​e​ ​o​n​e
+	 */
+	SB_CREATE_ONE: string
+	/**
+	 * E​d​i​t​ ​c​o​n​t​a​c​t
+	 */
+	SB_EDIT_CONTACT: string
+	/**
 	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
 	 */
 	SB_PASSWORD_AUTH: string
@@ -662,6 +718,10 @@ type RootTranslation = {
 	 * C​a​n​c​e​l
 	 */
 	COMMON_BTN_CANCEL: string
+	/**
+	 * R​e​m​o​v​e
+	 */
+	COMMON_BTN_REMOVE: string
 	/**
 	 * R​e​t​r​y
 	 */
@@ -784,6 +844,38 @@ type RootTranslation = {
 	 * N​e​t​w​o​r​k​ ​a​l​r​e​a​d​y​ ​i​n​ ​u​s​e
 	 */
 	ERROR_URL_ALREADY_USER: string
+	/**
+	 * R​e​q​u​i​r​e​d
+	 */
+	ERROR_REQUIRED_FIELD: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e​ ​t​o​o​ ​l​o​n​g
+	 */
+	ERROR_MAX_INPUT_LENGTH: string
+	/**
+	 * N​a​m​e​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​ ​i​n​ ​c​o​n​t​a​c​t​s
+	 */
+	ERROR_NAME_ALREADY_EXISTS: string
+	/**
+	 * A​d​d​r​e​s​s​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​ ​i​n​ ​c​o​n​t​a​c​t​s
+	 */
+	ERROR_ADDRESS_EXISTS: string
+	/**
+	 * P​l​e​a​s​e​ ​e​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​V​e​c​h​a​i​n​ ​a​d​d​r​e​s​s
+	 */
+	ERROR_ADDRESS_INVALID: string
+	/**
+	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
+	 */
+	PLACEHOLDER_SEARCH_TOKEN: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​n​a​m​e
+	 */
+	PLACEHOLDER_ENTER_NAME: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​a​d​d​r​e​s​s
+	 */
+	PLACEHOLDER_ENTER_ADDRESS: string
 	/**
 	 * M​a​n​a​g​e​ ​n​o​d​e​s
 	 */
@@ -1017,6 +1109,14 @@ export type TranslationFunctions = {
 	 */
 	BTN_SCAN_QR_CODE: () => LocalizedString
 	/**
+	 * Add contact
+	 */
+	BTN_ADD_CONTACT: () => LocalizedString
+	/**
+	 * Create contact
+	 */
+	BTN_CREATE_CONTACT: () => LocalizedString
+	/**
 	 * Edit Pin
 	 */
 	BTN_EDIT_PIN: () => LocalizedString
@@ -1225,6 +1325,34 @@ export type TranslationFunctions = {
 	 */
 	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
 	/**
+	 * Your contact list
+	 */
+	BD_CONTACTS_LIST: () => LocalizedString
+	/**
+	 * Add friends and addresses you trust
+	 */
+	BD_CONTACTS_LIST_DISCLAIMER: () => LocalizedString
+	/**
+	 * Add contact details
+	 */
+	BD_ADD_CONTACT: () => LocalizedString
+	/**
+	 * Insert the required data to add a new contact
+	 */
+	BD_ADD_CONTACT_DISCLAIMER: () => LocalizedString
+	/**
+	 * Contact name
+	 */
+	BD_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Contact address
+	 */
+	BD_CONTACT_ADDRESS: () => LocalizedString
+	/**
+	 * Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.
+	 */
+	BD_CONFIRM_REMOVE_CONTACT: () => LocalizedString
+	/**
 	 * Require the pin when performing transactions with local wallets
 	 */
 	BD_APP_LOCK: () => LocalizedString
@@ -1345,6 +1473,14 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ADVANCED: () => LocalizedString
 	/**
+	 * Contacts
+	 */
+	TITLE_CONTACTS: () => LocalizedString
+	/**
+	 * Add Contact
+	 */
+	TITLE_ADD_CONTACT: () => LocalizedString
+	/**
 	 * Manage Wallet
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
@@ -1364,10 +1500,6 @@ export type TranslationFunctions = {
 	 * Networks
 	 */
 	TITLE_NETWORKS: () => LocalizedString
-	/**
-	 * Contacts
-	 */
-	TITLE_CONTACTS: () => LocalizedString
 	/**
 	 * Privacy and Security
 	 */
@@ -1465,6 +1597,22 @@ export type TranslationFunctions = {
 	 */
 	SB_YOUR_NFTS: () => LocalizedString
 	/**
+	 * Confirm the operation?
+	 */
+	SB_CONFIRM_OPERATION: () => LocalizedString
+	/**
+	 * Your contact list is empty
+	 */
+	SB_CONTACT_LIST_EMPTY: () => LocalizedString
+	/**
+	 * Create one
+	 */
+	SB_CREATE_ONE: () => LocalizedString
+	/**
+	 * Edit contact
+	 */
+	SB_EDIT_CONTACT: () => LocalizedString
+	/**
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
@@ -1520,6 +1668,10 @@ export type TranslationFunctions = {
 	 * Cancel
 	 */
 	COMMON_BTN_CANCEL: () => LocalizedString
+	/**
+	 * Remove
+	 */
+	COMMON_BTN_REMOVE: () => LocalizedString
 	/**
 	 * Retry
 	 */
@@ -1641,6 +1793,38 @@ Please, try again later.
 	 * Network already in use
 	 */
 	ERROR_URL_ALREADY_USER: () => LocalizedString
+	/**
+	 * Required
+	 */
+	ERROR_REQUIRED_FIELD: () => LocalizedString
+	/**
+	 * Contact name too long
+	 */
+	ERROR_MAX_INPUT_LENGTH: () => LocalizedString
+	/**
+	 * Name already exists in contacts
+	 */
+	ERROR_NAME_ALREADY_EXISTS: () => LocalizedString
+	/**
+	 * Address already exists in contacts
+	 */
+	ERROR_ADDRESS_EXISTS: () => LocalizedString
+	/**
+	 * Please enter a valid Vechain address
+	 */
+	ERROR_ADDRESS_INVALID: () => LocalizedString
+	/**
+	 * Search a token
+	 */
+	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Enter the name
+	 */
+	PLACEHOLDER_ENTER_NAME: () => LocalizedString
+	/**
+	 * Enter the address
+	 */
+	PLACEHOLDER_ENTER_ADDRESS: () => LocalizedString
 	/**
 	 * Manage nodes
 	 */
