@@ -748,9 +748,13 @@ type RootTranslation = {
 	 */
 	ERROR_INCORRECT_MNEMONIC: string
 	/**
-	 * E​r​r​o​r​!​ ​T​h​e​ ​w​o​r​d​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 * W​r​o​n​g​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n
 	 */
-	ERROR_WRONG_MNEMONIC_WORDS: string
+	ERROR_WRONG_WORDS_COMBINATION: string
+	/**
+	 * T​h​e​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_WRONG_WORDS_COMBINATION_DESC: string
 	/**
 	 * W​a​l​l​e​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
 	 */
@@ -1561,9 +1565,13 @@ Please, try again later.
 	 */
 	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
 	/**
-	 * Error! The word combination is wrong, Please, try again.
+	 * Wrong words combination
 	 */
-	ERROR_WRONG_MNEMONIC_WORDS: () => LocalizedString
+	ERROR_WRONG_WORDS_COMBINATION: () => LocalizedString
+	/**
+	 * The words combination is wrong, try again.
+	 */
+	ERROR_WRONG_WORDS_COMBINATION_DESC: () => LocalizedString
 	/**
 	 * Wallet already exists
 	 */
