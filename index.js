@@ -9,7 +9,11 @@ import { Provider } from "react-redux"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Common"
-import { ConnexContextProvider, TranslationProvider } from "~Components"
+import {
+    ConnexContextProvider,
+    TranslationProvider,
+    BaseToast,
+} from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import {
@@ -27,7 +31,6 @@ import { typography } from "~Common/Theme/Typography"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { useInitStore } from "~Storage/Redux"
-import { BaseToast } from "~Components"
 
 const { fontFamily } = typography
 
