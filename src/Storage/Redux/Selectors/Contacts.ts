@@ -48,7 +48,7 @@ export const selectKnownContacts = createSelector(
  * @param {string} _address - The address of the contact to find.
  * @returns {Contact | undefined} - The contact with the specified address, or undefined if not found.
  */
-export const selectContactByAddress = (_address: string) =>
+export const selectContactByAddress = (_address?: string) =>
     createSelector(selectContactsState, state => {
         return state.contacts.find(
             (contact: Contact) => contact.address === _address,

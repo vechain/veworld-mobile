@@ -14,7 +14,10 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { editContact, removeContact } from "~Storage/Redux/Actions/Contacts"
-import { selectContacts } from "~Storage/Redux/Selectors"
+import {
+    selectContactByAddress,
+    selectContacts,
+} from "~Storage/Redux/Selectors"
 import {
     AddContactButton,
     ContactDetailBox,
@@ -49,13 +52,12 @@ export const ContactsScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    // Address of the contact the user wants to delete/edit
-    const [currentContactAddress, setCurrentContactAddress] =
-        useState<string>("")
-    // Address of the contact before the user edits it
-    const [previousContactAddress, setPreviousContactAddress] =
-        useState<string>("")
-    const [currentContactName, setCurrentContactName] = useState<string>("")
+    const [selectedContactAddress, setSelectedContactAddress] =
+        useState<string>()
+
+    const selectedContact = useAppSelector(
+        selectContactByAddress(selectedContactAddress),
+    )
 
     // [End] Hooks
 
@@ -73,7 +75,7 @@ export const ContactsScreen = () => {
 
     const onDeleteContactPress = useCallback(
         (address: string) => {
-            setCurrentContactAddress(address)
+            setSelectedContactAddress(address)
 
             openRemoveContactSheet()
         },
@@ -82,9 +84,7 @@ export const ContactsScreen = () => {
 
     const onEditContactPress = useCallback(
         (name: string, address: string) => {
-            setCurrentContactAddress(address)
-            setPreviousContactAddress(address)
-            setCurrentContactName(name)
+            setSelectedContactAddress(address)
 
             openEditContactSheet()
         },
@@ -92,20 +92,20 @@ export const ContactsScreen = () => {
     )
 
     const handleRemoveContact = useCallback(() => {
-        if (currentContactAddress) {
-            dispatch(removeContact(currentContactAddress))
+        if (selectedContactAddress) {
+            dispatch(removeContact(selectedContactAddress))
             closeRemoveContactSheet()
         }
-    }, [closeRemoveContactSheet, currentContactAddress, dispatch])
+    }, [closeRemoveContactSheet, selectedContactAddress, dispatch])
 
     const handleEditContact = useCallback(
         (_alias: string, _address: string) => {
-            if (previousContactAddress) {
-                dispatch(editContact(_alias, _address, previousContactAddress))
+            if (selectedContactAddress) {
+                dispatch(editContact(_alias, _address, selectedContactAddress))
                 closeEditContactSheet()
             }
         },
-        [closeEditContactSheet, dispatch, previousContactAddress],
+        [closeEditContactSheet, dispatch, selectedContactAddress],
     )
 
     // [End] Methods
@@ -212,14 +212,9 @@ export const ContactsScreen = () => {
                 onClose={closeRemoveContactSheet}
                 onRemoveContact={handleRemoveContact}
             />
-
             <EditContactBottomSheet
                 ref={editContactSheet}
-                currentContactName={currentContactName}
-                currentContactAddress={currentContactAddress}
-                previousContactAddress={previousContactAddress}
-                setCurrentContactName={setCurrentContactName}
-                setCurrentContactAddress={setCurrentContactAddress}
+                contact={selectedContact}
                 onClose={closeEditContactSheet}
                 onEditContact={handleEditContact}
             />

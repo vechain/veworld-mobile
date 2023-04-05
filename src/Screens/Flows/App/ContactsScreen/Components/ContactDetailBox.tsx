@@ -26,16 +26,13 @@ export const ContactDetailBox: React.FC<Props> = memo(
                     justifyContent="space-between"
                     containerStyle={baseStyles.container}>
                     <BaseView flexDirection="column">
-                        <BaseText
-                            style={baseStyles.alias}
-                            typographyFont="button">
+                        <BaseText typographyFont="button">
                             {contact.alias}
                         </BaseText>
                         <BaseSpacer height={4} />
                         <BaseText
-                            style={baseStyles.address}
                             fontSize={10}
-                            typographyFont="smallAddress">
+                            typographyFont="smallCaptionRegular">
                             {FormattingUtils.humanAddress(
                                 contact.address,
                                 4,
@@ -67,12 +64,6 @@ export const ContactDetailBox: React.FC<Props> = memo(
 )
 
 const baseStyles = StyleSheet.create({
-    alias: {
-        opacity: 1,
-    },
-    address: {
-        opacity: 0.7,
-    },
     container: {
         flex: 1,
     },
