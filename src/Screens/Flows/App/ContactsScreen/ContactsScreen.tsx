@@ -217,6 +217,7 @@ export const ContactsScreen = () => {
                 ref={editContactSheet}
                 currentContactName={currentContactName}
                 currentContactAddress={currentContactAddress}
+                previousContactAddress={previousContactAddress}
                 setCurrentContactName={setCurrentContactName}
                 setCurrentContactAddress={setCurrentContactAddress}
                 onClose={closeEditContactSheet}

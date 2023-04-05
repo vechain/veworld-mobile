@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react"
+import React, { memo, useState } from "react"
 import { BaseSpacer, BaseTextInput } from "~Components"
 
 type Props = {
@@ -31,34 +31,15 @@ export const ContactForm: React.FC<Props> = memo(
         const [nameTouched, setNameTouched] = useState(false)
         const [addressTouched, setAddressTouched] = useState(false)
 
-        const handleNameChange = useCallback(
-            (name: string) => {
-                setName(name)
-                if (!nameTouched) {
-                    setNameTouched(true)
-                }
-            },
-            [setName, nameTouched],
-        )
-
-        const handleAddressChange = useCallback(
-            (address: string) => {
-                setAddress(address)
-                if (!addressTouched) {
-                    setAddressTouched(true)
-                }
-            },
-            [setAddress, addressTouched],
-        )
-
         return (
             <>
                 <BaseTextInput
                     placeholder={placeholderName}
                     label={titleName}
-                    setValue={handleNameChange}
+                    setValue={setName}
                     errorMessage={nameTouched ? nameError : ""}
                     value={valueName}
+                    onTouchStart={() => setNameTouched(true)}
                 />
 
                 <BaseSpacer height={7} />
@@ -66,9 +47,10 @@ export const ContactForm: React.FC<Props> = memo(
                 <BaseTextInput
                     placeholder={placeholderAddress}
                     label={titleAddress}
-                    setValue={handleAddressChange}
+                    setValue={setAddress}
                     errorMessage={addressTouched ? addressError : ""}
                     value={valueAddress}
+                    onTouchStart={() => setAddressTouched(true)}
                 />
             </>
         )

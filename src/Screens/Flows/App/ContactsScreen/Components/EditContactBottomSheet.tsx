@@ -18,6 +18,7 @@ import { selectContactByAddress, useAppSelector } from "~Storage"
 type Props = {
     currentContactName: string
     currentContactAddress: string
+    previousContactAddress: string
     setCurrentContactName: (name: string) => void
     setCurrentContactAddress: (address: string) => void
     onClose: () => void
@@ -34,6 +35,7 @@ export const EditContactBottomSheet = React.forwardRef<
         {
             currentContactName,
             currentContactAddress,
+            previousContactAddress,
             setCurrentContactName,
             setCurrentContactAddress,
             onEditContact,
@@ -45,11 +47,11 @@ export const EditContactBottomSheet = React.forwardRef<
         const theme = useTheme()
 
         const selectedContact = useAppSelector(
-            selectContactByAddress(currentContactAddress),
+            selectContactByAddress(previousContactAddress),
         )
 
         const { validateName, validateAddress } = useContactValidation(
-            true,
+            false,
             selectedContact,
         )
 
@@ -59,8 +61,8 @@ export const EditContactBottomSheet = React.forwardRef<
         }
 
         const isFormValid = useMemo(() => {
-            return nameError.length === 0 || addressError.length === 0
-        }, [addressError.length, nameError.length])
+            return addressError.length === 0
+        }, [addressError.length])
 
         return (
             <BaseBottomSheet snapPoints={snapPoints} ref={ref}>

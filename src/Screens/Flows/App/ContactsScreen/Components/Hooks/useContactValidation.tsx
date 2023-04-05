@@ -47,13 +47,14 @@ export const useContactValidation = (
                     thorAddress.toChecksumed(contactAddress),
                     contacts,
                     "address",
+                    exclude,
                 )
             ) {
                 return LL.ERROR_ADDRESS_EXISTS()
             }
             return ""
         },
-        [LL, contacts],
+        [LL, contacts, exclude],
     )
 
     return { validateName, validateAddress }
