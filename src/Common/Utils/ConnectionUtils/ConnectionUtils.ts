@@ -18,45 +18,38 @@ import URLUtils from "../URLUtils"
 const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
     debug("Verifying websocket connection")
 
-    try {
-        await new Promise<void>(function (resolve, reject) {
-            setTimeout(
-                () =>
-                    reject(
-                        veWorldErrors.provider.disconnected({
-                            message: "Node timed out",
-                        }),
-                    ),
-                timeout,
-            )
-            const wsUrl = URLUtils.toWebsocketURL(url, "/subscriptions/beat2")
-            const webSocket = new WebSocket(wsUrl)
-
-            console.log({ wsUrl })
-
-            webSocket.onopen = () => {
-                console.log("Websocket opened")
-                resolve()
-                webSocket.close()
-            }
-
-            webSocket.onerror = () => {
+    await new Promise<void>(function (resolve, reject) {
+        setTimeout(
+            () =>
                 reject(
                     veWorldErrors.provider.disconnected({
-                        message: "Failed to test WS connection",
+                        message: "Node timed out",
                     }),
-                )
-                webSocket.close()
-            }
+                ),
+            timeout,
+        )
+        const wsUrl = URLUtils.toWebsocketURL(url, "/subscriptions/beat2")
+        const webSocket = new WebSocket(wsUrl)
 
-            webSocket.onclose = () => warn("Websocket closed")
-        })
-    } catch (e) {
-        throw veWorldErrors.rpc.internal({
-            message: "Failed to test WS connection",
-            error: e,
-        })
-    }
+        console.log({ wsUrl })
+
+        webSocket.onopen = () => {
+            console.log("Websocket opened")
+            resolve()
+            webSocket.close()
+        }
+
+        webSocket.onerror = () => {
+            reject(
+                veWorldErrors.provider.disconnected({
+                    message: "Failed to test WS connection",
+                }),
+            )
+            webSocket.close()
+        }
+
+        webSocket.onclose = () => warn("Websocket closed")
+    })
 }
 
 export default { verifyWebSocketConnection }

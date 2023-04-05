@@ -3,7 +3,7 @@ import React, { useCallback } from "react"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectCustomNetworks, useAppSelector } from "~Storage"
+import { selectCustomNetworks, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     openBottomSheet: () => void

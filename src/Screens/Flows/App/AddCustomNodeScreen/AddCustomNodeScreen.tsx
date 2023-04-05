@@ -9,6 +9,7 @@ import {
     BaseText,
     BaseTextInput,
     BaseView,
+    showErrorToast,
 } from "~Components"
 import { error, URLUtils, useTheme } from "~Common"
 import { useNavigation } from "@react-navigation/native"
@@ -18,7 +19,7 @@ import {
     useAppDispatch,
     useAppSelector,
     validateAndAddCustomNode,
-} from "~Storage"
+} from "~Storage/Redux"
 import * as Haptics from "expo-haptics"
 
 export const AddCustomNodeScreen = () => {
@@ -51,9 +52,18 @@ export const AddCustomNodeScreen = () => {
         } catch (e) {
             error(e)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            showErrorToast(LL.ERROR_ADDING_CUSTOM_NODE())
         }
         setIsSubmitting(false)
-    }, [setIsSubmitting, dispatch, isSubmitDisabled, nodeName, nodeUrl, goBack])
+    }, [
+        setIsSubmitting,
+        dispatch,
+        isSubmitDisabled,
+        nodeName,
+        nodeUrl,
+        goBack,
+        LL,
+    ])
 
     const validateUrlInput = useCallback(
         (value: string): string => {
