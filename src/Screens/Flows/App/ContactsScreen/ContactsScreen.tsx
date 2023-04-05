@@ -12,7 +12,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { useAppDispatch, useAppSelector } from "~Storage"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { editContact, removeContact } from "~Storage/Redux/Actions/Contacts"
 import { selectContacts } from "~Storage/Redux/Selectors"
 import {

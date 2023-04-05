@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo } from "react"
-import { useBiometricsValidation, useDisclosure } from "~Common"
+import React, { useCallback } from "react"
+import { useDisclosure } from "~Common"
 import {
     BaseButtonGroupHorizontal,
     BaseSpacer,
@@ -8,37 +8,11 @@ import {
 } from "~Components"
 import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
 import { useI18nContext } from "~i18n"
-import {
-    BaseButtonGroupHorizontalType,
-    UserSelectedSecurityLevel,
-} from "~Model"
+import { useSecurityButtons } from "../Hooks/useSecurityButtons"
 
-const buttons = (
-    isWalletSecurityBiometrics: boolean,
-): BaseButtonGroupHorizontalType[] => [
-    {
-        id: UserSelectedSecurityLevel.BIOMETRIC,
-        label: "Face ID",
-        icon: "face-recognition",
-        disabled: false,
-    },
-    {
-        id: UserSelectedSecurityLevel.PASSWORD,
-        label: "Pin",
-        icon: "dialpad",
-        disabled: isWalletSecurityBiometrics,
-    },
-]
-
-type Props = {
-    isWalletSecurityBiometrics: boolean
-}
-
-export const EnableBiometrics = ({ isWalletSecurityBiometrics }: Props) => {
+export const EnableBiometrics = () => {
     const runSecurityUpgrade = useSecurityUpgrade()
     const { LL } = useI18nContext()
-    const { authenticateBiometrics, isAuthenticated } =
-        useBiometricsValidation()
 
     const {
         isOpen: isPasswordPromptOpen,
@@ -46,43 +20,20 @@ export const EnableBiometrics = ({ isWalletSecurityBiometrics }: Props) => {
         onClose: closePasswordPrompt,
     } = useDisclosure()
 
+    const { securityButtons, shouldCallRequireBiometricsAndEnableIt } =
+        useSecurityButtons(openPasswordPrompt)
+
     const onPasswordSuccess = useCallback(
         async (password: string) => {
-            await runSecurityUpgrade(password, closePasswordPrompt)
+            await runSecurityUpgrade(password, () => {
+                // weird crashes happen occasionally without this timeout, also the reason why we use the callback here
+                // https://stackoverflow.com/questions/61170501/exception-thrown-while-executing-ui-block-parentnode-is-a-required-a-required
+                setTimeout(() => {
+                    closePasswordPrompt()
+                }, 10)
+            })
         },
         [runSecurityUpgrade, closePasswordPrompt],
-    )
-
-    const securityButtons = useMemo(
-        () => buttons(isWalletSecurityBiometrics),
-        [isWalletSecurityBiometrics],
-    )
-
-    const currentSecurity = useMemo(
-        () =>
-            isWalletSecurityBiometrics
-                ? securityButtons[0].id
-                : securityButtons[1].id,
-        [isWalletSecurityBiometrics, securityButtons],
-    )
-
-    const requireBiometricsAndEnableIt = useCallback(async () => {
-        authenticateBiometrics()
-    }, [authenticateBiometrics])
-
-    useEffect(() => {
-        isAuthenticated && openPasswordPrompt()
-    }, [isAuthenticated, openPasswordPrompt])
-
-    const shouldCallRequireBiometricsAndEnableIt = useCallback(
-        (button: BaseButtonGroupHorizontalType) => {
-            if (
-                button.id === UserSelectedSecurityLevel.BIOMETRIC &&
-                !isWalletSecurityBiometrics
-            )
-                requireBiometricsAndEnableIt()
-        },
-        [isWalletSecurityBiometrics, requireBiometricsAndEnableIt],
     )
 
     return (
@@ -103,8 +54,8 @@ export const EnableBiometrics = ({ isWalletSecurityBiometrics }: Props) => {
             />
 
             <BaseButtonGroupHorizontal
-                selectedButtonIds={[currentSecurity]}
-                buttons={securityButtons}
+                selectedButtonIds={[securityButtons.currentSecurity]}
+                buttons={securityButtons.buttons}
                 action={shouldCallRequireBiometricsAndEnableIt}
             />
         </>

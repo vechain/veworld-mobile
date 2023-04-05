@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { usePasswordValidation } from "~Common"
 import {
     BaseSafeArea,
@@ -24,7 +24,7 @@ type Titles = {
 
 const digitNumber = 6
 
-export const LockScreen: React.FC<Props> = ({ onSuccess, scenario }) => {
+export const LockScreen: React.FC<Props> = memo(({ onSuccess, scenario }) => {
     const { LL } = useI18nContext()
 
     const validatePassword = usePasswordValidation()
@@ -106,4 +106,4 @@ export const LockScreen: React.FC<Props> = ({ onSuccess, scenario }) => {
             <BaseSpacer height={40} />
         </BaseSafeArea>
     )
-}
+})

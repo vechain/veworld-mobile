@@ -13,7 +13,7 @@ import { useI18nContext } from "~i18n"
 import { ContactForm } from "../../AddContactScreen/Components"
 import { useContactValidation } from "./Hooks"
 import { useTheme } from "~Common"
-import { selectContactByAddress, useAppSelector } from "~Storage"
+import { selectContactByAddress, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     currentContactName: string

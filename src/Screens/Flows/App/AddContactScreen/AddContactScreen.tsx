@@ -13,7 +13,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes, tabbarBaseStyles } from "~Navigation"
-import { useAppDispatch } from "~Storage"
+import { useAppDispatch } from "~Storage/Redux"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { ContactForm } from "./Components"
 import { useContactValidation } from "../ContactsScreen"

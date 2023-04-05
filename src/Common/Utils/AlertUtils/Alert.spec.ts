@@ -3,7 +3,7 @@ import { AlertButtonStyle } from "./enums"
 import {
     Alert,
     showCancelledFaceIdAlert,
-    showGoToSettingsCameraAlert,
+    showGoToSettingsAlert,
     showDefaultAlert,
 } from "./Alert"
 import { LocalizedString } from "typesafe-i18n"
@@ -84,11 +84,18 @@ describe("showCancelledFaceIdAlert", () => {
     })
 })
 
-describe("showGoToSettingsCameraAlert", () => {
+describe("showGoToSettingsAlert", () => {
     it("should show an alert for going to camera settings", () => {
         const cancelAction = jest.fn()
         const buttonAction = jest.fn()
-        showGoToSettingsCameraAlert(cancelAction, buttonAction)
+        const title = "Alert Title"
+        const message = "Alert Message"
+        showGoToSettingsAlert(
+            title as LocalizedString,
+            message as LocalizedString,
+            cancelAction,
+            buttonAction,
+        )
         expect(RNAlert.alert).toHaveBeenCalled()
     })
 })
