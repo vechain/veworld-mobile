@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
 import { selectSelectedAccount } from "./Account"
-import { VET, VTHO } from "~Common/Constant/Token/TokenConstants"
+import { VET, VTHO } from "~Common/Constant"
 import {
     DenormalizedAccountTokenBalance,
     RootState,
