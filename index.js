@@ -27,7 +27,7 @@ import { typography } from "~Common/Theme/Typography"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { useInitStore } from "~Storage/Redux"
-import Toast from "react-native-toast-message"
+import { BaseToast } from "~Components"
 
 const { fontFamily } = typography
 
@@ -63,7 +63,7 @@ const Main = () => {
                                     </TranslationProvider>
                                 </NavigationProvider>
                             </BottomSheetModalProvider>
-                            <Toast />
+                            <BaseToast />
                         </SafeAreaProvider>
                     </ConnexContextProvider>
                 </GestureHandlerRootView>

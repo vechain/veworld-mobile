@@ -7,6 +7,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    showErrorToast,
 } from "~Components"
 import {
     BaseButtonGroup,
@@ -17,7 +18,6 @@ import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
 import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
-import { Toast } from "react-native-toast-message/lib/src/Toast"
 import * as Haptics from "expo-haptics"
 
 export const ConfirmMnemonicScreen = () => {
@@ -46,14 +46,6 @@ export const ConfirmMnemonicScreen = () => {
         [],
     )
 
-    const showErrorToast = useCallback(() => {
-        Toast.show({
-            type: "error",
-            text1: LL.ERROR_WRONG_WORDS_COMBINATION(),
-            text2: LL.ERROR_WRONG_WORDS_COMBINATION_DESC(),
-        })
-    }, [LL])
-
     const onConfirmPress = () => {
         if (
             selectedFirstWord === mnemonicArray[firstIndex] &&
@@ -68,7 +60,10 @@ export const ConfirmMnemonicScreen = () => {
             }
         } else {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-            showErrorToast()
+            showErrorToast(
+                LL.ERROR_WRONG_WORDS_COMBINATION(),
+                LL.ERROR_WRONG_WORDS_COMBINATION_DESC(),
+            )
             setSelectedFirstWord(null)
             setSelectedSecondWord(null)
             setSelectedThirdWord(null)
