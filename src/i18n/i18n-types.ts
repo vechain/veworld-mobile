@@ -635,6 +635,10 @@ type RootTranslation = {
 	 */
 	FINGERPRINT: string
 	/**
+	 * B​i​o​m​e​t​r​i​c​s
+	 */
+	BIOMETRICS: string
+	/**
 	 * I​r​i​s
 	 */
 	IRIS: string
@@ -714,6 +718,22 @@ type RootTranslation = {
 	 * F​a​v​o​u​r​i​t​e​s
 	 */
 	COMMON_LBL_FAVOURITES: string
+	/**
+	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	ALERT_TITLE_NOT_ENROLLED: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​n​o​t​ ​e​n​r​o​l​l​e​d​ ​a​n​y​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​m​e​t​h​o​d​.
+	 */
+	ALERT_MSG_NOT_ENROLLED: string
+	/**
+	 * B​i​o​m​e​t​r​i​c​s​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d
+	 */
+	ALERT_TITLE_BIO_PREVIOUSLY_DENIED: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
+	 */
+	ALERT_MSG_BIO_PREVIOUSLY_DENIED: string
 	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
@@ -1432,6 +1452,10 @@ export type TranslationFunctions = {
 	 */
 	FINGERPRINT: () => LocalizedString
 	/**
+	 * Biometrics
+	 */
+	BIOMETRICS: () => LocalizedString
+	/**
 	 * Iris
 	 */
 	IRIS: () => LocalizedString
@@ -1511,6 +1535,22 @@ export type TranslationFunctions = {
 	 * Favourites
 	 */
 	COMMON_LBL_FAVOURITES: () => LocalizedString
+	/**
+	 * Biometrics not available
+	 */
+	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
+	/**
+	 * You have not enrolled any biometric authentication method.
+	 */
+	ALERT_MSG_NOT_ENROLLED: () => LocalizedString
+	/**
+	 * Biometrics previously denied
+	 */
+	ALERT_TITLE_BIO_PREVIOUSLY_DENIED: () => LocalizedString
+	/**
+	 * You have previously denied biometric authentication. Please enable it in your device settings.
+	 */
+	ALERT_MSG_BIO_PREVIOUSLY_DENIED: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */

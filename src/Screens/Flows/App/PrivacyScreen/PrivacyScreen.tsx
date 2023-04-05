@@ -12,7 +12,7 @@ import {
     BaseSafeArea,
     BaseSpacer,
     BaseText,
-    // BaseTouchable,
+    BaseTouchable,
     BaseView,
     EnableFeature,
     RequireUserPassword,
@@ -20,12 +20,12 @@ import {
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
 import {
-    // EnableBiometrics,
+    EnableBiometrics,
     BackupMnemonicBottomSheet,
     WalletMgmtBottomSheet,
 } from "./Components"
 import { WALLET_STATUS } from "~Model"
-import { useAppDispatch, useAppSelector } from "~Storage"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectAnalyticsTrackingEnabled,
     selectDevices,
@@ -50,8 +50,7 @@ export const PrivacyScreen = () => {
     )
     const devices = useAppSelector(selectDevices())
 
-    const { isWalletSecurityBiometrics, isBiometricsEnabled } =
-        useWalletSecurity()
+    const { isWalletSecurityBiometrics } = useWalletSecurity()
 
     const {
         ref: BackupPhraseSheetRef,
@@ -73,7 +72,7 @@ export const PrivacyScreen = () => {
 
     const {
         onPasswordSuccess,
-        // checkSecurityBeforeOpening,
+        checkSecurityBeforeOpening,
         handleOnSelectedWallet,
         mnemonicArray,
     } = useBackupMnemonic({
@@ -84,7 +83,6 @@ export const PrivacyScreen = () => {
         closeWalletMgmtSheet,
         devices,
         isWalletSecurityBiometrics,
-        isBiometricsEnabled,
     })
     // [END] - Hooks setup
 
@@ -128,22 +126,21 @@ export const PrivacyScreen = () => {
                     value={isAppLockActive}
                 />
 
-                {/* <BaseSpacer height={24} /> */}
-                {/* <EnableBiometrics
-                    isWalletSecurityBiometrics={isWalletSecurityBiometrics}
-                /> */}
+                <BaseSpacer height={24} />
+                <EnableBiometrics />
 
-                {/* <BaseSpacer height={16} /> */}
+                {!isWalletSecurityBiometrics && (
+                    <>
+                        <BaseSpacer height={16} />
+                        <BaseTouchable
+                            action={() => {}}
+                            title={LL.BTN_EDIT_PIN()}
+                            underlined
+                        />
+                    </>
+                )}
 
-                {/* {!isWalletSecurityBiometrics && (
-                    <BaseTouchable
-                        action={() => {}}
-                        title={LL.BTN_EDIT_PIN()}
-                        underlined
-                    />
-                )} */}
-
-                {/* <BaseSpacer height={24} />
+                <BaseSpacer height={24} />
 
                 <BaseText typographyFont="bodyMedium">
                     {LL.SB_BACKUP_MNEMONIC()}
@@ -160,7 +157,7 @@ export const PrivacyScreen = () => {
                     underlined
                 />
 
-                <BaseSpacer height={24} /> */}
+                <BaseSpacer height={24} />
 
                 <EnableFeature
                     title={LL.SB_ANALYTICS_TRACKING()}

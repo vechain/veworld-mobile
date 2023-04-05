@@ -11,12 +11,10 @@ import { selectDevices } from "~Storage/Redux/Selectors"
 export const useSecurityUpgrade = () => {
     const { walletSecurity } = useWalletSecurity()
     const devices = useAppSelector(selectDevices())
-
     const dispatch = useAppDispatch()
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
-            console.log(runSecurityUpgrade, { password })
             if (walletSecurity === WalletSecurity.BIO_UNLOCK) return
 
             const updatedDevices: Device[] = []
