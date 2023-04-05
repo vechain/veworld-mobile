@@ -1,54 +1,64 @@
-import React, { memo, useEffect, useMemo } from "react"
+import React, { memo, useCallback, useState } from "react"
 import { BaseSpacer, BaseTextInput } from "~Components"
 
 type Props = {
-    placeholderName: string
-    placeholderAddress: string
     titleName: string
     titleAddress: string
-    name: string
-    address: string
+    nameError: string
+    addressError: string
+    placeholderName?: string
+    placeholderAddress?: string
+    valueName?: string
+    valueAddress?: string
     setName: (name: string) => void
     setAddress: (address: string) => void
-    setIsValidForm: (isValid: boolean) => void
-    validateName: (name: string) => string
-    validateAddress: (address: string) => string
 }
 
 export const ContactForm: React.FC<Props> = memo(
     ({
-        placeholderName,
-        placeholderAddress,
         titleName,
         titleAddress,
-        name,
-        address,
+        nameError,
+        addressError,
+        placeholderName,
+        placeholderAddress,
+        valueName,
+        valueAddress,
         setName,
         setAddress,
-        setIsValidForm,
-        validateName,
-        validateAddress,
     }) => {
-        const { nameError, addressError } = useMemo(() => {
-            return {
-                nameError: validateName(name),
-                addressError: validateAddress(address),
-            }
-        }, [validateName, name, validateAddress, address])
+        // States to handle showing error message once the user decides to add a contact, not at first render
+        const [nameTouched, setNameTouched] = useState(false)
+        const [addressTouched, setAddressTouched] = useState(false)
 
-        useEffect(() => {
-            if (nameError.length === 0 && addressError.length === 0)
-                setIsValidForm(true)
-            else setIsValidForm(false)
-        }, [addressError.length, nameError.length, setIsValidForm])
+        const handleNameChange = useCallback(
+            (name: string) => {
+                setName(name)
+                if (!nameTouched) {
+                    setNameTouched(true)
+                }
+            },
+            [setName, nameTouched],
+        )
+
+        const handleAddressChange = useCallback(
+            (address: string) => {
+                setAddress(address)
+                if (!addressTouched) {
+                    setAddressTouched(true)
+                }
+            },
+            [setAddress, addressTouched],
+        )
 
         return (
             <>
                 <BaseTextInput
                     placeholder={placeholderName}
                     label={titleName}
-                    setValue={setName}
-                    errorMessage={nameError}
+                    setValue={handleNameChange}
+                    errorMessage={nameTouched ? nameError : ""}
+                    value={valueName}
                 />
 
                 <BaseSpacer height={7} />
@@ -56,8 +66,9 @@ export const ContactForm: React.FC<Props> = memo(
                 <BaseTextInput
                     placeholder={placeholderAddress}
                     label={titleAddress}
-                    setValue={setAddress}
-                    errorMessage={addressError}
+                    setValue={handleAddressChange}
+                    errorMessage={addressTouched ? addressError : ""}
+                    value={valueAddress}
                 />
             </>
         )
