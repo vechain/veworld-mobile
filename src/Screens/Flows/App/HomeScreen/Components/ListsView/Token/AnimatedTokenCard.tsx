@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react"
+import React, { memo } from "react"
 import { Pressable, View, StyleSheet } from "react-native"
 import {
     RenderItemParams,
@@ -15,34 +15,20 @@ import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 interface IAnimatedTokenCard
     extends RenderItemParams<DenormalizedAccountTokenBalance> {
     isEdit: boolean
-    onDeleteItem: (item: DenormalizedAccountTokenBalance) => void
 }
 
 export const AnimatedTokenCard = memo(
-    ({ item, drag, isActive, isEdit, onDeleteItem }: IAnimatedTokenCard) => {
+    ({ item, drag, isActive, isEdit }: IAnimatedTokenCard) => {
         const { styles } = useThemedStyles(baseStyles(isActive))
-
-        const onDrag = useCallback(
-            (_drag: any) => {
-                return isEdit ? _drag() : undefined
-            },
-            [isEdit],
-        )
-
-        const {
-            animatedWidthRow,
-            animatedPositionInnerRow,
-            animatedOpacity,
-            animatedDeleteIcon,
-        } = useTokenAnimations(isEdit)
+        const { animatedOpacity } = useTokenAnimations(isEdit)
 
         return (
             <ShadowDecorator>
                 <View style={styles.outerContainer}>
-                    <Animated.View style={animatedWidthRow}>
+                    <Animated.View>
                         <DropShadow style={styles.cardShadow}>
                             <Pressable
-                                onLongPress={() => onDrag(drag)}
+                                onPressIn={isEdit ? drag : undefined}
                                 disabled={isActive}
                                 style={styles.pressable}>
                                 <View style={styles.animatedOuterContainer}>
@@ -51,35 +37,12 @@ export const AnimatedTokenCard = memo(
                                             animatedOpacity,
                                             styles.animatedInnerContainer,
                                         ]}>
-                                        <BaseIcon
-                                            name={"drag"}
-                                            size={28}
-                                            action={() => onDeleteItem(item)}
-                                        />
+                                        <BaseIcon name={"drag"} size={28} />
                                     </Animated.View>
-
-                                    <Animated.View
-                                        style={[
-                                            animatedPositionInnerRow,
-                                            styles.animatedInnerRow,
-                                        ]}>
-                                        <TokenCard
-                                            token={item}
-                                            isAnimation={isEdit}
-                                        />
-                                    </Animated.View>
+                                    <TokenCard token={item} isEdit={isEdit} />
                                 </View>
                             </Pressable>
                         </DropShadow>
-                    </Animated.View>
-
-                    <Animated.View style={animatedDeleteIcon}>
-                        <BaseIcon
-                            name={"trash-can-outline"}
-                            size={28}
-                            action={() => onDeleteItem(item)}
-                            style={styles.deleteIconColor}
-                        />
                     </Animated.View>
                 </View>
             </ShadowDecorator>
@@ -102,20 +65,13 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
             backgroundColor: theme.colors.card,
             flexDirection: "row",
             alignItems: "center",
-            borderRadius: 10,
+            borderRadius: 16,
             opacity: isActive ? 0.6 : 1,
             height: 62,
         },
         animatedInnerContainer: {
             position: "absolute",
-        },
-        animatedInnerRow: {
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            borderRadius: 10,
-            paddingHorizontal: 14,
-            paddingVertical: 12,
-            height: "100%",
+            left: 10,
         },
 
         deleteIconColor: {

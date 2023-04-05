@@ -81,7 +81,7 @@ const baseStyles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         flexGrow: 1,
-        paddingLeft: 12,
+        paddingHorizontal: 12,
     },
     tokenIcon: {
         width: 40,
