@@ -8,7 +8,6 @@ import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectBalanceInFiat, selectCurrency } from "~Storage/Redux/Selectors"
 import { VeChainToken } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
-import { BigNumber } from "bignumber.js"
 
 type Props = {
     token: DenormalizedAccountTokenBalance

@@ -1,10 +1,9 @@
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, useCallback } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
 import {
     ColorThemeType,
-    CryptoUtils,
     useTheme,
     useThemedStyles,
     PlatformUtils,
