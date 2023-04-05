@@ -10,6 +10,7 @@ export interface UserPreferenceState {
     currency: CURRENCY
     language: LANGUAGE
     isAnalyticsTrackingEnabled: boolean
+    balanceInFiat: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -20,6 +21,7 @@ const initialState: UserPreferenceState = {
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,
     isAnalyticsTrackingEnabled: false,
+    balanceInFiat: false,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -40,6 +42,10 @@ export const UserPreferencesSlice = createSlice({
 
         setBalanceVisible: (state, action: PayloadAction<boolean>) => {
             state.balanceVisible = action.payload
+        },
+
+        setBalanceInFiat: (state, action: PayloadAction<boolean>) => {
+            state.balanceInFiat = action.payload
         },
 
         setCurrency: (state, action: PayloadAction<CURRENCY>) => {
@@ -66,6 +72,7 @@ export const {
     setHideTokensWithNoBalance,
     setIsAppLockActive,
     setBalanceVisible,
+    setBalanceInFiat,
     setCurrency,
     setLanguage,
     setAnalyticsTrackingEnabled,

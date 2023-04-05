@@ -19,6 +19,10 @@ export const getBalanceVisible = createSelector(reducer, state => {
     return state.balanceVisible
 })
 
+export const getBalanceInFiat = createSelector(reducer, state => {
+    return state.balanceInFiat
+})
+
 export const selectHideTokensWithNoBalance = createSelector(reducer, state => {
     return state.hideTokensWithNoBalance
 })

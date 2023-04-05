@@ -3,6 +3,7 @@ import { FungibleToken } from "~Model"
 export interface TokenBalance {
     accountAddress: string
     tokenAddress: string
+    networkGenesisId: string
     balance: string
     timeUpdated: string
     position?: number

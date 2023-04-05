@@ -17,8 +17,13 @@ import {
     SelectLanguageBottomSheet,
 } from "./Components"
 import { LANGUAGE, useBottomSheetModal } from "~Common"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    setBalanceInFiat,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import {
+    getBalanceInFiat,
     selectHideTokensWithNoBalance,
     selectLangauge,
 } from "~Storage/Redux/Selectors"
@@ -44,7 +49,13 @@ export const GeneralScreen = () => {
     const hideTokensWithNoBalance = useAppSelector(
         selectHideTokensWithNoBalance,
     )
-
+    const balanceInFiat = useAppSelector(getBalanceInFiat)
+    const toggleBalanceInFiat = useCallback(
+        (newValue: boolean) => {
+            dispatch(setBalanceInFiat(newValue))
+        },
+        [dispatch],
+    )
     const goBack = useCallback(() => nav.goBack(), [nav])
     const toggleTokensHiddenSwitch = useCallback(
         (newValue: boolean) => {
@@ -86,6 +97,13 @@ export const GeneralScreen = () => {
                 <BaseSpacer height={20} />
 
                 <ChangeCurrency />
+                <BaseSpacer height={20} />
+
+                <EnableFeature
+                    title={LL.SETTINGS_CURRENCIES_CONVERT_TO_FIAT()}
+                    onValueChange={toggleBalanceInFiat}
+                    value={balanceInFiat}
+                />
 
                 <BaseSpacer height={20} />
 

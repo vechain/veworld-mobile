@@ -19,7 +19,11 @@ import {
     BaseView,
 } from "~Components"
 import { WalletAccount } from "~Model"
-import { useAppDispatch } from "~Storage/Redux"
+import {
+    getAccountBalance,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
 
@@ -49,8 +53,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
         dispatch(setBalanceVisible(!balanceVisible))
     }, [balanceVisible, dispatch])
 
-    const randomBalance = useMemo(() => CryptoUtils.random().toString(), [])
-
+    const balance = useAppSelector(getAccountBalance)
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
@@ -90,7 +93,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 <Balance
                     isVisible={balanceVisible}
                     toggleVisible={toggleBalanceVisibility}
-                    balance={randomBalance}
+                    balance={balance}
                     selectedCurrency={selectedCurrency}
                 />
             </BaseView>
