@@ -8,7 +8,7 @@ import {
 } from "~Components"
 import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
 import { useI18nContext } from "~i18n"
-import { useSecurityButtons } from "../Hooks/useGetSecurityButtons"
+import { useSecurityButtons } from "../Hooks/useSecurityButtons"
 
 export const EnableBiometrics = () => {
     const runSecurityUpgrade = useSecurityUpgrade()
