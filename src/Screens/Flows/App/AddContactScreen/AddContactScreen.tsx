@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { AddressUtils, FormUtils, useTheme } from "~Common"
+import { useTheme } from "~Common"
 import {
     BaseButton,
     BaseIcon,
@@ -13,13 +13,10 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes, tabbarBaseStyles } from "~Navigation"
-import { useAppDispatch, useAppSelector } from "~Storage"
+import { useAppDispatch } from "~Storage"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { ContactForm } from "./Components"
-import { selectContacts } from "~Storage/Redux/Selectors"
-import { address as thorAddress } from "thor-devkit"
-
-const MAX_INPUT_LENGTH = 19
+import { useContactValidation } from "../ContactsScreen"
 
 export const AddContactScreen = () => {
     // [START] Hooks
@@ -33,61 +30,30 @@ export const AddContactScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    const contacts = useAppSelector(selectContacts)
     // [END] Hooks
 
     // [START] States
     const [name, setName] = useState<string>("")
     const [address, setAddress] = useState<string>("")
-    const [isValidForm, setIsValidForm] = useState<boolean>(false)
     // [END] States
 
-    // [START] Methods
-    const validateName = useCallback(
-        (contactName: string) => {
-            if (contactName.length === 0) {
-                return LL.ERROR_REQUIRED_FIELD()
-            }
-            if (contactName.length > MAX_INPUT_LENGTH) {
-                return LL.ERROR_MAX_INPUT_LENGTH()
-            }
-            if (FormUtils.alreadyExists(contactName, contacts, "alias")) {
-                return LL.ERROR_NAME_ALREADY_EXISTS()
-            }
-            return ""
-        },
-        [LL, contacts],
-    )
+    const { validateName, validateAddress } = useContactValidation(false)
 
-    const validateAddress = useCallback(
-        (contactAddress: string) => {
-            if (contactAddress.length === 0) {
-                return LL.ERROR_REQUIRED_FIELD()
-            }
-            if (!AddressUtils.isValid(contactAddress)) {
-                return LL.ERROR_ADDRESS_INVALID()
-            }
-            if (
-                FormUtils.alreadyExists(
-                    thorAddress.toChecksumed(contactAddress),
-                    contacts,
-                    "address",
-                )
-            ) {
-                return LL.ERROR_ADDRESS_EXISTS()
-            }
-            return ""
-        },
-        [LL, contacts],
-    )
+    const { nameError, addressError } = {
+        nameError: validateName(name),
+        addressError: validateAddress(address),
+    }
+
+    const isFormValid = useMemo(() => {
+        return nameError.length === 0 && addressError.length === 0
+    }, [addressError.length, nameError.length])
 
     const onCreateContact = useCallback(() => {
-        if (isValidForm) {
+        if (isFormValid) {
             dispatch(addContact(name, address))
             nav.navigate(Routes.SETTINGS_CONTACTS)
         }
-    }, [address, dispatch, isValidForm, name, nav])
-    // [END] Methods
+    }, [address, dispatch, isFormValid, name, nav])
 
     return (
         <BaseSafeArea grow={1}>
@@ -127,13 +93,10 @@ export const AddContactScreen = () => {
                         placeholderAddress={LL.PLACEHOLDER_ENTER_ADDRESS()}
                         titleName={LL.BD_CONTACT_NAME()}
                         titleAddress={LL.BD_CONTACT_ADDRESS()}
-                        name={name}
-                        address={address}
+                        nameError={nameError}
+                        addressError={addressError}
                         setName={setName}
                         setAddress={setAddress}
-                        setIsValidForm={setIsValidForm}
-                        validateName={validateName}
-                        validateAddress={validateAddress}
                     />
 
                     <BaseSpacer height={20} />
@@ -175,7 +138,7 @@ export const AddContactScreen = () => {
                         w={100}
                         px={20}
                         title={LL.BTN_ADD_CONTACT().toUpperCase()}
-                        disabled={!isValidForm}
+                        disabled={!isFormValid}
                         bgColor={theme.colors.primary}
                         style={baseStyles.primaryButton}
                     />
