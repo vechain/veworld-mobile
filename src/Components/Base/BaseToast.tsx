@@ -54,8 +54,22 @@ const toastConfig = {
     //   )
 }
 
-export const BaseToast = () => {
-    return <Toast config={toastConfig} />
+export const commonToastParams: {
+    position: "top" | "bottom"
+    visibilityTime: number
+    autoHide: boolean
+    topOffset: number
+    bottomOffset: number
+} = {
+    position: "top",
+    visibilityTime: 4000,
+    autoHide: true,
+    topOffset: 30,
+    bottomOffset: 40,
+}
+
+export const BaseToast: React.FC = () => {
+    return <Toast config={toastConfig} {...commonToastParams} />
 }
 
 export const showSuccessToast = (text1: string, text2?: string) => {
@@ -63,10 +77,6 @@ export const showSuccessToast = (text1: string, text2?: string) => {
         type: "success",
         text1,
         text2,
-        visibilityTime: 4000,
-        autoHide: true,
-        topOffset: 30,
-        bottomOffset: 40,
     })
 }
 
@@ -75,10 +85,6 @@ export const showErrorToast = (text1: string, text2?: string) => {
         type: "error",
         text1,
         text2,
-        visibilityTime: 4000,
-        autoHide: true,
-        topOffset: 30,
-        bottomOffset: 40,
     })
 }
 
@@ -87,10 +93,6 @@ export const showInfoToast = (text1: string, text2?: string) => {
         type: "info",
         text1,
         text2,
-        visibilityTime: 4000,
-        autoHide: true,
-        topOffset: 30,
-        bottomOffset: 40,
     })
 }
 
@@ -99,9 +101,5 @@ export const showWarningToast = (text1: string, text2?: string) => {
         type: "warning",
         text1,
         text2,
-        visibilityTime: 4000,
-        autoHide: true,
-        topOffset: 30,
-        bottomOffset: 40,
     })
 }
