@@ -10,6 +10,7 @@ import { typography, TFonts } from "~Common/Theme"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText } from "./BaseText"
 import * as Haptics from "expo-haptics"
+import { DotsLoader } from "~Components/Reusable"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -38,6 +39,7 @@ type Props = {
     haptics?: "light" | "medium" | "heavy"
     leftIcon?: React.ReactNode
     rightIcon?: React.ReactNode
+    isLoading?: boolean
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -49,6 +51,7 @@ export const BaseButton = ({
     disabled = false,
     leftIcon,
     rightIcon,
+    isLoading = false,
     ...otherProps
 }: Props) => {
     const { typographyFont, fontFamily, fontSize, fontWeight, children } =
@@ -140,21 +143,25 @@ export const BaseButton = ({
             ]}
             {...otherProps}>
             {leftIcon}
-            <BaseText
-                color={
-                    textColor ||
-                    (isSolidButton
-                        ? theme.colors.background
-                        : theme.colors.text)
-                }
-                typographyFont={computedTypographyFont}
-                fontFamily={fontFamily}
-                fontWeight={fontWeight}
-                fontSize={fontSize}
-                style={themedStyles.text}>
-                {otherProps.title}
-                {children}
-            </BaseText>
+            {isLoading ? (
+                <DotsLoader style={{ height: 17.7 }} />
+            ) : (
+                <BaseText
+                    color={
+                        textColor ||
+                        (isSolidButton
+                            ? theme.colors.background
+                            : theme.colors.text)
+                    }
+                    typographyFont={computedTypographyFont}
+                    fontFamily={fontFamily}
+                    fontWeight={fontWeight}
+                    fontSize={fontSize}
+                    style={themedStyles.text}>
+                    {otherProps.title}
+                    {children}
+                </BaseText>
+            )}
             {rightIcon}
         </TouchableOpacity>
     )
