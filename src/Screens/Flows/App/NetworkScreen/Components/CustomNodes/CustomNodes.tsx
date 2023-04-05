@@ -1,6 +1,13 @@
-import { useNavigation, useTheme } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
+import { useTheme } from "~Common"
+import {
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectCustomNetworks, useAppSelector } from "~Storage/Redux"
@@ -37,10 +44,21 @@ export const CustomNodes: React.FC<Props> = ({ openBottomSheet }) => {
                 <BaseTouchableBox
                     action={openBottomSheet}
                     justifyContent="center">
-                    <BaseIcon name="tune" color={theme.colors.text} />
-                    <BaseText pl={8} typographyFont="buttonSecondary">
+                    <BaseIcon name="tune" color={theme.colors.primary} />
+                    <BaseText px={8} typographyFont="buttonSecondary">
                         {LL.NETWORK_MANAGE_NODES()}
                     </BaseText>
+                    <BaseView
+                        bg={theme.colors.primary}
+                        borderRadius={6}
+                        px={4}
+                        py={2}>
+                        <BaseText
+                            typographyFont="smallCaptionMedium"
+                            color={theme.colors.primaryReversed}>
+                            {customNodes.length}
+                        </BaseText>
+                    </BaseView>
                 </BaseTouchableBox>
             ) : (
                 <BaseTouchableBox
