@@ -8,6 +8,7 @@ import {
     ThunkDispatch,
     Dispatch,
     ThunkAction,
+    createAsyncThunk,
 } from "@reduxjs/toolkit"
 
 export type PersistedState = RootState & PersistPartial
@@ -30,3 +31,10 @@ export type AppThunk<ReturnType = void> = ThunkAction<
     unknown,
     AnyAction
 >
+
+export const createAppAsyncThunk = createAsyncThunk.withTypes<{
+    state: RootState
+    dispatch: AppDispatch
+    rejectValue: string
+    extra: { s: string; n: number }
+}>()

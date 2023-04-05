@@ -9,6 +9,7 @@ import {
     BaseText,
     BaseTextInput,
     BaseView,
+    hideToast,
     showErrorToast,
 } from "~Components"
 import { error, URLUtils, useTheme } from "~Common"
@@ -41,29 +42,26 @@ export const AddCustomNodeScreen = () => {
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const onAddNetworkPress = useCallback(async () => {
+        hideToast()
         if (isSubmitDisabled) return
         setIsSubmitting(true)
         try {
             await dispatch(
-                validateAndAddCustomNode({ name: nodeName, url: nodeUrl }),
-            )
+                validateAndAddCustomNode({
+                    name: nodeName,
+                    url: nodeUrl,
+                }),
+            ).unwrap()
+
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             goBack()
         } catch (e) {
             error(e)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-            showErrorToast(LL.ERROR_ADDING_CUSTOM_NODE())
+            showErrorToast(e as string)
         }
         setIsSubmitting(false)
-    }, [
-        setIsSubmitting,
-        dispatch,
-        isSubmitDisabled,
-        nodeName,
-        nodeUrl,
-        goBack,
-        LL,
-    ])
+    }, [setIsSubmitting, dispatch, isSubmitDisabled, nodeName, nodeUrl, goBack])
 
     const validateUrlInput = useCallback(
         (value: string): string => {
@@ -138,11 +136,8 @@ export const AddCustomNodeScreen = () => {
                     action={onAddNetworkPress}
                     w={100}
                     px={20}
-                    title={
-                        isSubmitting
-                            ? "....."
-                            : LL.NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK()
-                    }
+                    isLoading={isSubmitting}
+                    title={LL.NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK()}
                     disabled={isSubmitting || isSubmitDisabled}
                     radius={16}
                 />

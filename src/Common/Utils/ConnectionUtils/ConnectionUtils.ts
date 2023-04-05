@@ -40,6 +40,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
         }
 
         webSocket.onerror = () => {
+            console.log("Websocket errored")
             reject(
                 veWorldErrors.provider.disconnected({
                     message: "Failed to test WS connection",
