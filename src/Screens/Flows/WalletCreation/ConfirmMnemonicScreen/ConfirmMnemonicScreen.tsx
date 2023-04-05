@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { CryptoUtils } from "~Common"
+import { CryptoUtils, useTheme } from "~Common"
 import {
     BaseButton,
     BaseSafeArea,
@@ -23,6 +23,7 @@ import * as Haptics from "expo-haptics"
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
+    const theme = useTheme()
 
     const [selectedFirstWord, setSelectedFirstWord] = useState<string | null>(
         null,
@@ -185,6 +186,7 @@ export const ConfirmMnemonicScreen = () => {
                         selectedButtonIds={[selectedFirstWord || ""]}
                         buttons={buttonsFirstWord}
                         action={handleSelectFirstWord}
+                        selectedColor={theme.colors.primaryLight}
                     />
                     <BaseSpacer height={21} />
                     <BaseText typographyFont="body">
@@ -195,6 +197,7 @@ export const ConfirmMnemonicScreen = () => {
                         selectedButtonIds={[selectedSecondWord || ""]}
                         buttons={buttonsSecondWord}
                         action={handleSelectSecondWord}
+                        selectedColor={theme.colors.primaryLight}
                     />
                     <BaseSpacer height={21} />
                     <BaseText typographyFont="body">
@@ -205,6 +208,7 @@ export const ConfirmMnemonicScreen = () => {
                         selectedButtonIds={[selectedThirdWord || ""]}
                         buttons={buttonsThirdWord}
                         action={handleSelectThirdWord}
+                        selectedColor={theme.colors.primaryLight}
                     />
                 </BaseView>
                 <BaseButton

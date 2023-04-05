@@ -732,7 +732,7 @@ type RootTranslation = {
 	 */
 	ERROR_WRONG_WORDS_COMBINATION: string
 	/**
-	 * T​h​e​ ​w​o​r​d​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 * T​h​e​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_WRONG_WORDS_COMBINATION_DESC: string
 	/**
@@ -1529,7 +1529,7 @@ Please, try again later.
 	 */
 	ERROR_WRONG_WORDS_COMBINATION: () => LocalizedString
 	/**
-	 * The word combination is wrong, Please, try again.
+	 * The words combination is wrong, try again.
 	 */
 	ERROR_WRONG_WORDS_COMBINATION_DESC: () => LocalizedString
 	/**

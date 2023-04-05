@@ -1,5 +1,6 @@
 export type Colors = {
     primary: string
+    primaryLight: string
     primaryReversed: string
     primaryDisabled: string
     neutralDisabled: string
@@ -28,6 +29,7 @@ enum COLORS {
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#FAFAFA",
     LIME_GREEN = "#E2F895",
+    LIME_GREEN_LIGHT = "#E6F5B2",
     LIME_GREEN_DISABLED = "#B7C685",
     DARK_PURPLE = "#0B0043",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.6)",
@@ -42,6 +44,7 @@ enum COLORS {
 
 const light: Colors = {
     primary: COLORS.DARK_PURPLE,
+    primaryLight: COLORS.PURPLE,
     primaryReversed: COLORS.LIME_GREEN,
     primaryDisabled: COLORS.PURPLE_DISABLED,
     neutralDisabled: COLORS.WHITE_DISABLED,
@@ -65,6 +68,7 @@ const light: Colors = {
 
 const dark: Colors = {
     primary: COLORS.LIME_GREEN,
+    primaryLight: COLORS.LIME_GREEN_LIGHT,
     primaryReversed: COLORS.DARK_PURPLE,
     primaryDisabled: COLORS.LIME_GREEN_DISABLED,
     neutralDisabled: COLORS.PURPLE_DISABLED,

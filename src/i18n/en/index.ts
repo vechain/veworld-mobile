@@ -214,7 +214,7 @@ const en: BaseTranslation = {
     ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_WRONG_WORDS_COMBINATION: "Wrong words combination",
-    ERROR_WRONG_WORDS_COMBINATION_DESC: "The word combination is wrong, Please, try again.",
+    ERROR_WRONG_WORDS_COMBINATION_DESC: "The words combination is wrong, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
 
     // Network
