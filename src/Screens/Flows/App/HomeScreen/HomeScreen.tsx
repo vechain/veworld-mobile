@@ -9,9 +9,7 @@ import {
 import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useNavigation } from "@react-navigation/native"
 import { BaseSafeArea, BaseSpacer } from "~Components"
-import { Routes } from "~Navigation"
 
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
@@ -41,8 +39,6 @@ export const HomeScreen = () => {
     const paddingBottom = useBottomTabBarHeight()
     const visibleHeightRef = useRef<number>(0)
 
-    const nav = useNavigation()
-
     return (
         <BaseSafeArea grow={1}>
             <NestableScrollContainer
@@ -55,11 +51,7 @@ export const HomeScreen = () => {
                     openAccountManagementSheet={openAccountManagementSheet}
                 />
                 <BaseSpacer height={24} />
-                <EditTokensBar
-                    isEdit={isEdit}
-                    setIsEdit={setIsEdit}
-                    handleAddToken={() => nav.navigate(Routes.MANAGE_TOKEN)}
-                />
+                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                 <BaseSpacer height={24} />
                 <TokenList
                     isEdit={isEdit}

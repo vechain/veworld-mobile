@@ -1,63 +1,85 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useTheme } from "~Common"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import {
+    BaseButton,
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
 
 type Props = {
     isEdit: boolean
     setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
-    handleAddToken: () => void
 }
 
-export const EditTokensBar = memo(
-    ({ isEdit, setIsEdit, handleAddToken }: Props) => {
-        const { LL } = useI18nContext()
-        const theme = useTheme()
-        const onButtonPress = useCallback(() => {
-            setIsEdit(prevState => !prevState)
-        }, [setIsEdit])
+export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
+    const { LL } = useI18nContext()
+    const theme = useTheme()
+    const onButtonPress = useCallback(() => {
+        setIsEdit(prevState => !prevState)
+    }, [setIsEdit])
 
-        const getActionsButtons = useCallback(() => {
-            if (!isEdit)
-                return (
-                    <BaseIcon
-                        name="pencil-outline"
-                        bg={theme.colors.secondary}
-                        action={onButtonPress}
-                        size={24}
-                    />
-                )
+    const nav = useNavigation()
+
+    const handleManageToken = useCallback(
+        () => nav.navigate(Routes.MANAGE_TOKEN),
+        [nav],
+    )
+
+    const getActionsButtons = useCallback(() => {
+        if (!isEdit)
             return (
                 <BaseView flexDirection="row">
                     <BaseIcon
-                        name="plus"
-                        bg={theme.colors.secondary}
-                        action={handleAddToken}
-                        size={24}
-                        style={{ marginHorizontal: 16 }}
-                    />
-                    <BaseIcon
-                        name="check"
-                        bg={theme.colors.secondary}
+                        name="priority-low"
                         action={onButtonPress}
+                        size={24}
+                    />
+                    <BaseSpacer width={18} />
+                    <BaseIcon
+                        name="pencil-outline"
+                        bg={theme.colors.secondary}
+                        action={handleManageToken}
                         size={24}
                     />
                 </BaseView>
             )
-        }, [isEdit, theme, onButtonPress, handleAddToken])
-
         return (
-            <BaseView
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                px={20}>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.SB_YOUR_TOKENS()}
-                </BaseText>
-
-                {getActionsButtons()}
-            </BaseView>
+            <BaseButton
+                action={onButtonPress}
+                bgColor={theme.colors.secondary}
+                textColor={theme.colors.text}
+                radius={30}
+                py={10}
+                leftIcon={<BaseIcon name="check" size={20} />}>
+                <BaseSpacer width={8} />
+                {LL.COMMON_BTN_SAVE()}
+            </BaseButton>
         )
-    },
-)
+    }, [
+        isEdit,
+        onButtonPress,
+        theme.colors.secondary,
+        theme.colors.text,
+        handleManageToken,
+        LL,
+    ])
+
+    return (
+        <BaseView
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            px={20}>
+            <BaseText typographyFont="subTitleBold">
+                {LL.SB_YOUR_TOKENS()}
+            </BaseText>
+
+            {getActionsButtons()}
+        </BaseView>
+    )
+})

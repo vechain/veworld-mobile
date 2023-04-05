@@ -4,7 +4,6 @@ import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseView } from "~Components"
 import { LineChart } from "react-native-wagmi-charts"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 
@@ -65,10 +64,7 @@ export const AnimatedChartCard = memo(({ token, isEdit }: NativeTokenProps) => {
         <DropShadow style={styles.cardShadow}>
             <Animated.View
                 style={[styles.nativeTokenContainer, animatedOuterCard]}>
-                <BaseView w={100} flexGrow={1} px={12}>
-                    <VechainTokenCard token={token} isAnimation={isEdit} />
-                </BaseView>
-
+                <VechainTokenCard token={token} isAnimation={isEdit} />
                 <Animated.View style={[styles.fullWidth, animatedInnerCard]}>
                     <LineChart.Provider data={CHART_DATA}>
                         <LineChart height={HEIGHT}>

@@ -198,6 +198,7 @@ const en: BaseTranslation = {
     COMMON_BTN_DONE: "Done",
     COMMON_BTN_CONFIRM: "Confirm",
     COMMON_BTN_ADD: "Add",
+    COMMON_BTN_SAVE: "Save",
 
     // Common Labels
     COMMON_LBL_ADDRESS: "Address",

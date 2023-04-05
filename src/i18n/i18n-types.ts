@@ -691,6 +691,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_ADD: string
 	/**
+	 * S​a​v​e
+	 */
+	COMMON_BTN_SAVE: string
+	/**
 	 * A​d​d​r​e​s​s
 	 */
 	COMMON_LBL_ADDRESS: string
@@ -1499,6 +1503,10 @@ export type TranslationFunctions = {
 	 * Add
 	 */
 	COMMON_BTN_ADD: () => LocalizedString
+	/**
+	 * Save
+	 */
+	COMMON_BTN_SAVE: () => LocalizedString
 	/**
 	 * Address
 	 */

@@ -5,7 +5,11 @@ import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { ColorThemeType, useThemedStyles } from "~Common"
-import { useAppSelector } from "~Storage/Redux"
+import {
+    changeBalancePosition,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import {
     getVetDenormalizedAccountTokenBalances,
     getVthoDenormalizedAccountTokenBalances,
@@ -21,6 +25,7 @@ interface Props extends AnimateProps<ViewProps> {
 
 export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
+        const dispatch = useAppDispatch()
         const tokenBalances: DenormalizedAccountTokenBalance[] = useAppSelector(
             selectNonVechainDenormalizedAccountTokenBalances,
         )
@@ -36,12 +41,21 @@ export const TokenList = memo(
             [],
         )
 
-        const onDeleteItem = useCallback(
-            (_item: DenormalizedAccountTokenBalance) => {
-                console.log("onDeleteItem", _item)
-            },
-            [],
-        )
+        const handleDragEnd = ({
+            data,
+        }: {
+            data: DenormalizedAccountTokenBalance[]
+        }) => {
+            dispatch(
+                changeBalancePosition(
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    data.map(({ token, ...otherAttributes }, index) => ({
+                        ...otherAttributes,
+                        position: index,
+                    })),
+                ),
+            )
+        }
 
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
@@ -55,14 +69,10 @@ export const TokenList = memo(
                 <NestableDraggableFlatList
                     data={tokenBalances}
                     extraData={isEdit}
-                    onDragEnd={() => {}}
+                    onDragEnd={handleDragEnd}
                     keyExtractor={item => item.tokenAddress}
                     renderItem={itemParams => (
-                        <AnimatedTokenCard
-                            {...itemParams}
-                            isEdit={isEdit}
-                            onDeleteItem={onDeleteItem}
-                        />
+                        <AnimatedTokenCard {...itemParams} isEdit={isEdit} />
                     )}
                     activationDistance={40}
                     showsVerticalScrollIndicator={false}

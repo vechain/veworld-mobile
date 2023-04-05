@@ -6,25 +6,27 @@ import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 
 type Props = {
     token: DenormalizedAccountTokenBalance
-    isAnimation: boolean
+    isEdit: boolean
 }
 
-export const TokenCard = memo(({ token: tokenBalance, isAnimation }: Props) => {
+export const TokenCard = memo(({ token: tokenBalance, isEdit }: Props) => {
     const animatedOpacityReverse = useAnimatedStyle(() => {
         return {
-            opacity: withTiming(isAnimation ? 0 : 1, {
+            opacity: withTiming(isEdit ? 0 : 1, {
                 duration: 200,
             }),
         }
-    }, [isAnimation])
+    }, [isEdit])
+
+    const styles = baseStyles(isEdit)
 
     return (
-        <Animated.View style={[baseStyles.innerRow]}>
+        <BaseView style={styles.innerRow}>
             <BaseView flexDirection="row">
-                <BaseCard style={baseStyles.imageContainer}>
+                <BaseCard style={styles.imageContainer}>
                     <Image
                         source={{ uri: tokenBalance.token.icon }}
-                        style={baseStyles.image}
+                        style={styles.image}
                     />
                 </BaseCard>
                 <BaseSpacer width={16} />
@@ -34,35 +36,34 @@ export const TokenCard = memo(({ token: tokenBalance, isAnimation }: Props) => {
                     </BaseText>
                 </BaseView>
             </BaseView>
-            <Animated.View style={animatedOpacityReverse}>
-                <BaseText>
-                    {tokenBalance.balance} {tokenBalance.token.symbol}
+            <Animated.View
+                style={[
+                    animatedOpacityReverse,
+                    { flexDirection: "row", alignItems: "flex-end" },
+                ]}>
+                <BaseText typographyFont="subTitleBold">
+                    {tokenBalance.balance}
                 </BaseText>
+                <BaseText> {tokenBalance.token.symbol}</BaseText>
             </Animated.View>
-        </Animated.View>
+        </BaseView>
     )
 })
 
-const baseStyles = StyleSheet.create({
-    imageContainer: {
-        borderRadius: 30,
-        padding: 10,
-    },
-    image: { width: 20, height: 20 },
-    innerRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        width: "100%",
-        flexGrow: 1,
-        paddingLeft: 12,
-    },
-    tokenIcon: {
-        width: 40,
-        height: 40,
-        backgroundColor: "red",
-        borderRadius: 20,
-        marginRight: 10,
-        position: "absolute",
-    },
-})
+const baseStyles = (isEdit: boolean) =>
+    StyleSheet.create({
+        imageContainer: {
+            borderRadius: 30,
+            padding: 10,
+        },
+        image: { width: 20, height: 20 },
+        innerRow: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            flexGrow: 1,
+            paddingHorizontal: 12,
+            paddingLeft: isEdit ? 44 : 12,
+        },
+    })
