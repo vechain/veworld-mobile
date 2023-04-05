@@ -14,7 +14,7 @@ import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import {
     DeviceBox,
-    WalletManagementBottomSheet,
+    AccountMgmtBottomSheet,
     WalletManagementHeader,
 } from "./components"
 
@@ -25,9 +25,9 @@ export const WalletManagementScreen = () => {
     const [selectedDevice, setSelectedDevice] = useState<Device>()
 
     const {
-        ref: walletManagementBottomSheetRef,
-        onOpen: openWalletManagementSheet,
-        onClose: closeWalletManagementSheet,
+        ref: accountMgmtBottomSheetRef,
+        onOpen: openAccountMgmtSheet,
+        onClose: closeAccountMgmtSheet,
     } = useBottomSheetModal()
 
     const devicesListSeparator = useCallback(
@@ -35,12 +35,12 @@ export const WalletManagementScreen = () => {
         [],
     )
 
-    const onDeviceClick = useCallback(
+    const onDeviceSelected = useCallback(
         (device: Device) => () => {
             setSelectedDevice(device)
-            openWalletManagementSheet()
+            openAccountMgmtSheet()
         },
-        [openWalletManagementSheet, setSelectedDevice],
+        [openAccountMgmtSheet, setSelectedDevice],
     )
 
     const checkViewableItems = useCallback(
@@ -71,7 +71,7 @@ export const WalletManagementScreen = () => {
                         return (
                             <DeviceBox
                                 device={item}
-                                onDeviceClick={onDeviceClick(item)}
+                                onDeviceSelected={onDeviceSelected(item)}
                             />
                         )
                     }}
@@ -84,9 +84,9 @@ export const WalletManagementScreen = () => {
                     }}
                 />
 
-                <WalletManagementBottomSheet
-                    ref={walletManagementBottomSheetRef}
-                    onClose={closeWalletManagementSheet}
+                <AccountMgmtBottomSheet
+                    ref={accountMgmtBottomSheetRef}
+                    onClose={closeAccountMgmtSheet}
                     device={selectedDevice}
                 />
             </BaseView>

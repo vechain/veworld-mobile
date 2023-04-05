@@ -62,6 +62,7 @@ export const updateAccountBalances =
                     tokenAddress: accountBalance.tokenAddress,
                     balance,
                     timeUpdated: new Date().toISOString(),
+                    position: accountBalance.position,
                 })
             }
             dispatch(setTokenBalances(balances))

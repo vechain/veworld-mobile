@@ -27,11 +27,9 @@ export const useBiometricType = () => {
                     return LL.TOUCH_ID()
                 }
             } else {
-                return LL.DEVICE_PIN()
+                return LL.BIOMETRICS()
             }
-        }
-
-        if (PlatformUtils.isAndroid()) {
+        } else {
             if (
                 biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
             ) {
@@ -47,6 +45,8 @@ export const useBiometricType = () => {
                 ) {
                     return LL.FINGERPRINT()
                 }
+            } else {
+                return LL.BIOMETRICS()
             }
         }
     }, [LL, biometrics])

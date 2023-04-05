@@ -4,8 +4,10 @@ import { AlertUtils } from "~Common/Utils"
 import { useAppState } from "./useAppState"
 import { AppStateType } from "~Model"
 import { Camera } from "expo-camera"
+import { useI18nContext } from "~i18n"
 
 export const useCameraPermissions = () => {
+    const { LL } = useI18nContext()
     const [hasPerms, setHasPerms] = useState(false)
     const [isCanceled, setIsCanceled] = useState(false)
     const [previousState, currentState] = useAppState()
@@ -33,7 +35,12 @@ export const useCameraPermissions = () => {
         }
 
         if (!status?.granted && !status?.canAskAgain) {
-            AlertUtils.showGoToSettingsCameraAlert(
+            let title = LL.TITLE_ALERT_CAMERA_PERMISSION()
+            let msg = LL.SB_ALERT_CAMERA_PERMISSION()
+
+            AlertUtils.showGoToSettingsAlert(
+                title,
+                msg,
                 () => {
                     setIsCanceled(true)
                     return
@@ -49,7 +56,7 @@ export const useCameraPermissions = () => {
             await requestPermissions()
             return
         }
-    }, [requestPermissions])
+    }, [LL, requestPermissions])
 
     useEffect(() => {
         async function init() {

@@ -7,8 +7,8 @@ import {
     BaseView,
 } from "~Components"
 import {
-    BiometricsUtils,
     useBiometricType,
+    useBiometricsValidation,
     useCreateWalletWithBiometrics,
 } from "~Common"
 import { useI18nContext } from "~i18n"
@@ -21,16 +21,16 @@ export const AppSecurityScreen = () => {
     const nav = useNavigation()
 
     const { currentSecurityLevel } = useBiometricType()
-    const { accessControl } = useCreateWalletWithBiometrics()
+    useCreateWalletWithBiometrics()
+    const { authenticateBiometrics } = useBiometricsValidation()
 
     const onBiometricsPress = useCallback(async () => {
-        let { success } = await BiometricsUtils.authenticateWithBiometric()
-        if (success) {
+        authenticateBiometrics(() => {
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.BIOMETRIC,
             })
-        }
-    }, [nav])
+        })
+    }, [authenticateBiometrics, nav])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)
@@ -57,17 +57,15 @@ export const AppSecurityScreen = () => {
                 </BaseView>
 
                 <BaseView alignItems="center" w={100}>
-                    {accessControl && (
-                        <BaseButton
-                            action={onBiometricsPress}
-                            w={100}
-                            mx={20}
-                            my={20}
-                            title={LL.BTN_SECURTY_USE_TYPE({
-                                type: currentSecurityLevel!,
-                            })}
-                        />
-                    )}
+                    <BaseButton
+                        action={onBiometricsPress}
+                        w={100}
+                        mx={20}
+                        my={20}
+                        title={LL.BTN_SECURTY_USE_TYPE({
+                            type: currentSecurityLevel!,
+                        })}
+                    />
 
                     <BaseButton
                         variant="outline"

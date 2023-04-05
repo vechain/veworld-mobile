@@ -19,6 +19,7 @@ type Props = {
      */
     selectedButtonIds: string[]
     buttonTestID?: string
+    selectedColor?: string
 }
 
 export const BaseButtonGroup = ({
@@ -26,6 +27,7 @@ export const BaseButtonGroup = ({
     selectedButtonIds,
     buttons,
     buttonTestID,
+    selectedColor,
 }: Props) => {
     const theme = useTheme()
 
@@ -42,20 +44,20 @@ export const BaseButtonGroup = ({
 
                 const borderTopRadius = index === 0 ? 16 : 0
                 const borderBottomRadius = index === buttons.length - 1 ? 16 : 0
+                const bgColor = selected
+                    ? selectedColor || theme.colors.primary
+                    : theme.colors.card
+                const textColor = selected
+                    ? theme.colors.textReversed
+                    : theme.colors.text
                 return (
                     <BaseButton
                         key={`${index}-${label}`}
                         action={onPress(button)}
                         disabled={disabled}
                         title={label}
-                        bgColor={
-                            selected ? theme.colors.primary : theme.colors.card
-                        }
-                        textColor={
-                            selected
-                                ? theme.colors.textReversed
-                                : theme.colors.text
-                        }
+                        bgColor={bgColor}
+                        textColor={textColor}
                         typographyFont="bodyMedium"
                         style={{
                             borderTopLeftRadius: borderTopRadius,

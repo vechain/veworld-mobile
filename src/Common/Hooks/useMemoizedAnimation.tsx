@@ -4,10 +4,10 @@ import { ComplexAnimationBuilder } from "react-native-reanimated"
 type AnimationType<T extends ComplexAnimationBuilder> = T
 
 type Props<T extends ComplexAnimationBuilder> = {
-    enteringAnimation: AnimationType<T>
+    enteringAnimation?: AnimationType<T>
     enteringDelay?: number
     enteringDuration?: number
-    exitingAnimation: AnimationType<T>
+    exitingAnimation?: AnimationType<T>
     exitingDelay?: number
     exitingDuration?: number
 }
@@ -27,19 +27,22 @@ export const useMemoizedAnimation = <T extends ComplexAnimationBuilder>({
 
     const animateEntering = useMemo(
         () =>
-            firstLoad
+            enteringAnimation && firstLoad
                 ? enteringAnimation
                       .delay(enteringDelay)
                       .duration(enteringDuration)
-                : enteringAnimation.duration(enteringDuration),
+                : enteringAnimation &&
+                  enteringAnimation.duration(enteringDuration),
         [firstLoad, enteringAnimation, enteringDelay, enteringDuration],
     )
 
     const animateExiting = useMemo(
         () =>
             firstLoad
-                ? exitingAnimation.delay(exitingDelay).duration(exitingDuration)
-                : exitingAnimation.duration(exitingDuration),
+                ? exitingAnimation &&
+                  exitingAnimation.delay(exitingDelay).duration(exitingDuration)
+                : exitingAnimation &&
+                  exitingAnimation.duration(exitingDuration),
         [firstLoad, exitingAnimation, exitingDelay, exitingDuration],
     )
 

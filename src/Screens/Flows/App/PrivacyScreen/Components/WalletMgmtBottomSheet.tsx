@@ -1,46 +1,26 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { AddressUtils, useTheme } from "~Common"
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-    BaseBottomSheet,
-} from "~Components"
+import { BaseBottomSheet } from "~Components"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 
 import { useI18nContext } from "~i18n"
-import { AccountDetailBox } from "./AccountDetailBox"
 import { Device } from "~Model"
-import { useAppSelector } from "~Storage/Redux"
-import {
-    selectAccountsByDevice,
-    selectSelectedAccount,
-} from "~Storage/Redux/Selectors"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { DeviceBox } from "../../WalletManagementScreen/components"
 
 type Props = {
-    device?: Device
-    onClose: () => void
+    devices?: Device[]
+    onClose: (device: Device) => void
 }
 
-export const WalletManagementBottomSheet = React.forwardRef<
+export const WalletMgmtBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ device }, ref) => {
-    const theme = useTheme()
+>(({ devices, onClose }, ref) => {
     const { LL } = useI18nContext()
 
-    const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
-
-    const deviceAccounts = useAppSelector(
-        selectAccountsByDevice(device?.rootAddress),
-    )
-
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-
+    const snapPoints = useMemo(() => ["30%", "90%"], [])
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
     // The list is scrollable when the bottom sheet is fully expanded
@@ -59,6 +39,13 @@ export const WalletManagementBottomSheet = React.forwardRef<
         [],
     )
 
+    const onDeviceSelected = useCallback(
+        (device: Device) => () => {
+            onClose(device)
+        },
+        [onClose],
+    )
+
     return (
         <BaseBottomSheet
             snapPoints={snapPoints}
@@ -66,41 +53,24 @@ export const WalletManagementBottomSheet = React.forwardRef<
             ref={ref}>
             <BaseView flexDirection="row" w={100}>
                 <BaseText typographyFont="subTitleBold">
-                    {LL.SB_EDIT_WALLET({ name: device?.alias })}
+                    {LL.TITLE_EDIT_WALLET()}
                 </BaseText>
-
-                <BaseIcon
-                    name={"pencil"}
-                    size={24}
-                    bg={theme.colors.secondary}
-                    disabled
-                />
             </BaseView>
-            <BaseSpacer height={16} />
-            <BaseTouchableBox action={() => {}}>
-                <BaseText>{device?.alias}</BaseText>
-            </BaseTouchableBox>
-            <BaseSpacer height={16} />
-            <BaseText typographyFont="button">
-                {LL.SB_RENAME_REORDER_ACCOUNTS()}
-            </BaseText>
-            <BaseSpacer height={16} />
+
+            <BaseSpacer height={24} />
+
             <BaseView flexDirection="row" style={baseStyles.list}>
-                {device && !!deviceAccounts.length && (
+                {!!devices?.length && (
                     <BottomSheetFlatList
-                        data={deviceAccounts}
-                        keyExtractor={account => account.address}
+                        data={devices}
+                        keyExtractor={device => device.rootAddress}
                         ItemSeparatorComponent={accountsListSeparator}
                         renderItem={({ item }) => {
-                            const isSelected = AddressUtils.compareAddresses(
-                                selectedAccount?.address,
-                                item.address,
-                            )
-
                             return (
-                                <AccountDetailBox
-                                    account={item}
-                                    isSelected={isSelected}
+                                <DeviceBox
+                                    device={item}
+                                    onDeviceSelected={onDeviceSelected(item)}
+                                    isIconVisible={false}
                                 />
                             )
                         }}

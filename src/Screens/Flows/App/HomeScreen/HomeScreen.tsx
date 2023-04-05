@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react"
+import React, { useRef, useState } from "react"
 import {
     AddAccountBottomSheet,
     TokenList,
@@ -9,15 +9,14 @@ import {
 import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useIsFocused, useNavigation } from "@react-navigation/native"
-import { BaseSafeArea, useThor, BaseSpacer } from "~Components"
-import { Routes } from "~Navigation"
+import { BaseSafeArea, BaseSpacer } from "~Components"
 
-import { SlideInLeft } from "react-native-reanimated"
+import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 
 export const HomeScreen = () => {
     useTokenBalances()
+
     const {
         ref: accountManagementBottomSheetRef,
         onOpen: openAccountManagementSheet,
@@ -30,30 +29,15 @@ export const HomeScreen = () => {
         onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
 
-    const { animateEntering, animateExiting } = useMemoizedAnimation({
-        enteringAnimation: new SlideInLeft(),
-        enteringDelay: 200,
+    const { animateEntering } = useMemoizedAnimation({
+        enteringAnimation: new FadeInRight(),
+        enteringDelay: 50,
         enteringDuration: 200,
-        exitingAnimation: new SlideInLeft(),
-        exitingDelay: 0,
-        exitingDuration: 200,
     })
 
     const [isEdit, setIsEdit] = useState(false)
     const paddingBottom = useBottomTabBarHeight()
     const visibleHeightRef = useRef<number>(0)
-    const isFocused = useIsFocused()
-    const thorClient = useThor()
-
-    const nav = useNavigation()
-
-    useEffect(() => {
-        async function init() {
-            const genesis = thorClient.genesis.id
-            console.log("genesis number", genesis)
-        }
-        init()
-    }, [isFocused, thorClient])
 
     return (
         <BaseSafeArea grow={1}>
@@ -67,17 +51,12 @@ export const HomeScreen = () => {
                     openAccountManagementSheet={openAccountManagementSheet}
                 />
                 <BaseSpacer height={24} />
-                <EditTokensBar
-                    isEdit={isEdit}
-                    setIsEdit={setIsEdit}
-                    handleAddToken={() => nav.navigate(Routes.MANAGE_TOKEN)}
-                />
+                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                 <BaseSpacer height={24} />
                 <TokenList
                     isEdit={isEdit}
                     visibleHeightRef={visibleHeightRef.current}
                     entering={animateEntering}
-                    exiting={animateExiting}
                 />
             </NestableScrollContainer>
 

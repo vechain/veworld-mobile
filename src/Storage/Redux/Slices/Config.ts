@@ -19,7 +19,7 @@ const initialState: ConfigState = {
     userSelectedSecurity: UserSelectedSecurityLevel.NONE,
     lastSecurityLevel: SecurityLevelType.NONE,
     isSecurityDowngrade: false,
-    isResettingApp: false, // TODO - this will become obsolete once we have a fully implemented redux since we don't need a new stack anymore
+    isResettingApp: false, // TODO - #316
     pinValidationString: SettingsConstants.VALIDATION_STRING,
 }
 

@@ -55,11 +55,18 @@ export const selectDenormalizedAccountTokenBalances = createSelector(
 export const selectNonVechainDenormalizedAccountTokenBalances = createSelector(
     [selectDenormalizedAccountTokenBalances],
     balances =>
-        balances.filter(
-            (balance: DenormalizedAccountTokenBalance) =>
-                balance.token.symbol !== VET.symbol &&
-                balance.token.symbol !== VTHO.symbol,
-        ),
+        balances
+            .filter(
+                (balance: DenormalizedAccountTokenBalance) =>
+                    balance.token.symbol !== VET.symbol &&
+                    balance.token.symbol !== VTHO.symbol,
+            )
+            .sort(
+                (
+                    a: DenormalizedAccountTokenBalance,
+                    b: DenormalizedAccountTokenBalance,
+                ) => a.position!! - b.position!!,
+            ),
 )
 
 /**

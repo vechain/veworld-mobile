@@ -54,23 +54,36 @@ export const ManageTokenScreen = () => {
     )
 
     const selectToken = (token: FungibleToken) => {
-        setSelectedTokenSymbols(tokenSymbols => [...tokenSymbols, token.symbol])
         if (account?.address) {
+            setSelectedTokenSymbols(tokenSymbols => [
+                ...tokenSymbols,
+                token.symbol,
+            ])
             dispatch(
                 addTokenBalance({
                     balance: "0",
                     accountAddress: account.address,
                     tokenAddress: token.address,
                     timeUpdated: new Date().toISOString(),
+                    position: selectedTokenSymbols.length,
                 }),
             )
         }
     }
     const unselectToken = (token: FungibleToken) => {
-        setSelectedTokenSymbols(tokenSymbols =>
-            tokenSymbols.filter(tokenSymbol => tokenSymbol !== token.symbol),
-        )
-        dispatch(removeTokenBalance(token.address))
+        if (account?.address) {
+            setSelectedTokenSymbols(tokenSymbols =>
+                tokenSymbols.filter(
+                    tokenSymbol => tokenSymbol !== token.symbol,
+                ),
+            )
+            dispatch(
+                removeTokenBalance({
+                    accountAddress: account.address,
+                    tokenAddress: token.address,
+                }),
+            )
+        }
     }
 
     const handleClickToken = (token: FungibleToken) => () => {
