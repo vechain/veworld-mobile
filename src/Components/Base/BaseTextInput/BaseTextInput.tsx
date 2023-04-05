@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { TextInput, StyleSheet } from "react-native"
+import { TextInput, StyleSheet, TextInputProps } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
 import { typography } from "~Common/Theme"
@@ -11,12 +11,19 @@ type Props = {
     placeholder?: string
     label?: string
     value?: string
-    setValue?: (s: string) => void
     errorMessage?: string
-}
+    setValue?: (s: string) => void
+} & TextInputProps
 
 export const BaseTextInput = memo(
-    ({ placeholder, label, value, setValue, errorMessage }: Props) => {
+    ({
+        placeholder,
+        label,
+        value,
+        errorMessage,
+        setValue,
+        ...otherProps
+    }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const theme = useTheme()
@@ -35,6 +42,7 @@ export const BaseTextInput = memo(
                         placeholderTextColor={theme.colors.text}
                         onChangeText={setValue}
                         value={value}
+                        {...otherProps}
                     />
                 </BaseView>
                 {errorMessage && (
