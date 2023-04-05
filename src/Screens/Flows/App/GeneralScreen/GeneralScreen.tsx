@@ -23,7 +23,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import {
-    getBalanceInFiat,
+    selectBalanceInFiat,
     selectHideTokensWithNoBalance,
     selectLangauge,
 } from "~Storage/Redux/Selectors"
@@ -49,7 +49,7 @@ export const GeneralScreen = () => {
     const hideTokensWithNoBalance = useAppSelector(
         selectHideTokensWithNoBalance,
     )
-    const balanceInFiat = useAppSelector(getBalanceInFiat)
+    const balanceInFiat = useAppSelector(selectBalanceInFiat)
     const toggleBalanceInFiat = useCallback(
         (newValue: boolean) => {
             dispatch(setBalanceInFiat(newValue))

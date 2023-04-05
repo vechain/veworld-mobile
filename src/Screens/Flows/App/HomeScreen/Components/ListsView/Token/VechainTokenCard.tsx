@@ -5,7 +5,7 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { FormattingUtils } from "~Common"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
-import { getBalanceInFiat, selectCurrency } from "~Storage/Redux/Selectors"
+import { selectBalanceInFiat, selectCurrency } from "~Storage/Redux/Selectors"
 import { VeChainToken } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
@@ -44,7 +44,7 @@ export const VechainTokenCard = memo(
             tokenBalance.balance,
         )
 
-        const balanceInFiat = useAppSelector(getBalanceInFiat)
+        const balanceInFiat = useAppSelector(selectBalanceInFiat)
         const balance = balanceInFiat ? fiatBalance : tokenUnitBalance
         const animatedOpacityReverse = useAnimatedStyle(() => {
             return {

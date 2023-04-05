@@ -19,7 +19,7 @@ export const getBalanceVisible = createSelector(reducer, state => {
     return state.balanceVisible
 })
 
-export const getBalanceInFiat = createSelector(reducer, state => {
+export const selectBalanceInFiat = createSelector(reducer, state => {
     return state.balanceInFiat
 })
 
