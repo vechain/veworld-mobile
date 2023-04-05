@@ -10,11 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
-import {
-    SecurityLevelType,
-    UserSelectedSecurityLevel,
-    WALLET_STATUS,
-} from "~Model"
+import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -34,7 +30,6 @@ import {
     selectHasOnboarded,
     selectUserSelectedSecurity,
 } from "~Storage/Redux/Selectors"
-import { setAppLockStatus } from "~Storage/Redux/Actions"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -86,6 +81,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
         if (userHasOnboarded) {
             if (userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC) {
+                // todo.vas -> replace with authenticateWithBiometrics new hook?
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
                 if (success) {
@@ -152,8 +148,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         }
                     }
                 }
-            } else {
-                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
             }
         }
     }, [

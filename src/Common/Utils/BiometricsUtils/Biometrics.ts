@@ -1,10 +1,5 @@
 import * as LocalAuthentication from "expo-local-authentication"
-import {
-    TSecurityLevel,
-    TAuthentication,
-    SecurityLevelType,
-    WALLET_STATUS,
-} from "~Model"
+import { TSecurityLevel, TAuthentication, SecurityLevelType } from "~Model"
 import * as i18n from "~i18n"
 import PlatformUtils from "../PlatformUtils"
 
@@ -55,17 +50,17 @@ export const authenticateWithBiometric = async () => {
 export const isSecurityDowngrade = (
     oldLevel: string,
     newLevel: TSecurityLevel,
-    appLockStatus: WALLET_STATUS,
+    appLockStatusActive: boolean,
 ) =>
     oldLevel === SecurityLevelType.BIOMETRIC &&
     newLevel !== SecurityLevelType.BIOMETRIC &&
-    appLockStatus !== WALLET_STATUS.NOT_INITIALISED
+    appLockStatusActive
 
 export const isSecurityUpgrade = (
     oldLevel: string,
     newLevel: TSecurityLevel,
-    appLockStatus: WALLET_STATUS,
+    appLockStatusActive: boolean,
 ) =>
     oldLevel !== SecurityLevelType.BIOMETRIC &&
     newLevel === SecurityLevelType.BIOMETRIC &&
-    appLockStatus !== WALLET_STATUS.NOT_INITIALISED
+    appLockStatusActive

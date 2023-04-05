@@ -15,7 +15,8 @@ export interface UserPreferenceState {
 const initialState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
     hideTokensWithNoBalance: false,
-    isAppLockActive: process.env.NODE_ENV !== "development",
+    // isAppLockActive: process.env.NODE_ENV !== "development",
+    isAppLockActive: true,
     balanceVisible: true,
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,

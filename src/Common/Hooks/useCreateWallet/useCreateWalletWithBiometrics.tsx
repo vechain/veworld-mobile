@@ -1,5 +1,9 @@
-import { useCallback, useMemo, useState } from "react"
-import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
+import { useCallback, useState } from "react"
+import {
+    SecurityLevelType,
+    UserSelectedSecurityLevel,
+    WALLET_STATUS,
+} from "~Model"
 import { CryptoUtils } from "~Common/Utils"
 import { useBiometrics } from "../useBiometrics"
 import { useDeviceUtils } from "../useDeviceUtils"
@@ -10,6 +14,7 @@ import {
     setLastSecurityLevel,
     setUserSelectedSecurity,
     setMnemonic,
+    setAppLockStatus,
 } from "~Storage/Redux/Actions"
 import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
@@ -20,16 +25,10 @@ import { error } from "~Common/Logger"
  */
 export const useCreateWalletWithBiometrics = () => {
     const { getDeviceFromMnemonic } = useDeviceUtils()
-    const [isComplete, setIsComplete] = useState(false)
-
     const biometrics = useBiometrics()
-    const accessControl = useMemo(
-        () => biometrics?.accessControl,
-        [biometrics?.accessControl],
-    )
-
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const [isComplete, setIsComplete] = useState(false)
 
     //* [START] - Create Wallet
     const onCreateWallet = useCallback(
@@ -41,7 +40,7 @@ export const useCreateWalletWithBiometrics = () => {
             onError?: (error: unknown) => void
         }) => {
             try {
-                if (!accessControl)
+                if (!biometrics?.accessControl)
                     throw new Error(
                         "Biometrics is not supported: accessControl is !true ",
                     )
@@ -53,7 +52,7 @@ export const useCreateWalletWithBiometrics = () => {
                 const { encryptedWallet } = await CryptoUtils.encryptWallet({
                     wallet,
                     rootAddress: device.rootAddress,
-                    accessControl: true,
+                    accessControl: biometrics.accessControl,
                 })
 
                 const newAccount = dispatch(
@@ -62,6 +61,8 @@ export const useCreateWalletWithBiometrics = () => {
                         wallet: encryptedWallet,
                     }),
                 )
+
+                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
                 if (!selectedAccount)
                     dispatch(selectAccount({ address: newAccount.address }))
 
@@ -79,7 +80,12 @@ export const useCreateWalletWithBiometrics = () => {
                 onError && onError(e)
             }
         },
-        [accessControl, getDeviceFromMnemonic, dispatch, selectedAccount],
+        [
+            biometrics.accessControl,
+            getDeviceFromMnemonic,
+            dispatch,
+            selectedAccount,
+        ],
     )
     //* [END] - Create Wallet
 

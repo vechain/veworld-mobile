@@ -1,4 +1,4 @@
 export * from "./TranslationProvider"
 export * from "./WrappedTranslation"
-export * from "./Security"
+export * from "./SecurityProvider/SecurityProvider"
 export * from "./ConnexProvider"

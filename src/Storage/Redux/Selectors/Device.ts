@@ -11,7 +11,7 @@ const selectDevicesState = (state: RootState) => state.devices
  *  a user has onboarded if they have at least one device and have selected an account
  */
 export const selectHasOnboarded = createSelector(selectAll, state => {
-    return state.devices.length > 0 && state.accounts.selectedAccount
+    return state.devices.length > 0 && !!state.accounts.selectedAccount
 })
 
 /**
