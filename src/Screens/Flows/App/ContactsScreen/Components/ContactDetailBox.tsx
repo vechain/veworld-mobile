@@ -26,11 +26,16 @@ export const ContactDetailBox: React.FC<Props> = memo(
                     justifyContent="space-between"
                     containerStyle={baseStyles.container}>
                     <BaseView flexDirection="column">
-                        <BaseText style={baseStyles.alias}>
+                        <BaseText
+                            style={baseStyles.alias}
+                            typographyFont="button">
                             {contact.alias}
                         </BaseText>
                         <BaseSpacer height={4} />
-                        <BaseText style={baseStyles.address} fontSize={10}>
+                        <BaseText
+                            style={baseStyles.address}
+                            fontSize={10}
+                            typographyFont="smallAddress">
                             {FormattingUtils.humanAddress(
                                 contact.address,
                                 4,
