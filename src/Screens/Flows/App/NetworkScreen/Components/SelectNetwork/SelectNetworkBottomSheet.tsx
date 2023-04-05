@@ -85,7 +85,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
 
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
-            const isSelected = selectedNetwork.currentUrl === item.currentUrl
+            const isSelected = selectedNetwork.id === item.id
             return (
                 <NetworkBox
                     network={item}
