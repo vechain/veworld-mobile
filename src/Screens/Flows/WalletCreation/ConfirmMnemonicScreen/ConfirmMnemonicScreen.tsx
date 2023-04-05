@@ -1,13 +1,13 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { useTheme, CryptoUtils } from "~Common"
+import { CryptoUtils, useTheme } from "~Common"
 import {
     BaseButton,
-    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    showErrorToast,
 } from "~Components"
 import {
     BaseButtonGroup,
@@ -18,6 +18,7 @@ import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
 import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
+import * as Haptics from "expo-haptics"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
@@ -33,7 +34,6 @@ export const ConfirmMnemonicScreen = () => {
     const [selectedThirdWord, setSelectedThirdWord] = useState<string | null>(
         null,
     )
-    const [isError, setIsError] = useState(false)
 
     const mnemonic = useAppSelector(selectMnemonic)
 
@@ -52,13 +52,18 @@ export const ConfirmMnemonicScreen = () => {
             selectedSecondWord === mnemonicArray[secondIndex] &&
             selectedThirdWord === mnemonicArray[thirdIndex]
         ) {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
             }
         } else {
-            setIsError(true)
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            showErrorToast(
+                LL.ERROR_WRONG_WORDS_COMBINATION(),
+                LL.ERROR_WRONG_WORDS_COMBINATION_DESC(),
+            )
             setSelectedFirstWord(null)
             setSelectedSecondWord(null)
             setSelectedThirdWord(null)
@@ -126,15 +131,12 @@ export const ConfirmMnemonicScreen = () => {
 
     const handleSelectFirstWord = useCallback((button: ButtonType) => {
         setSelectedFirstWord(button.id)
-        setIsError(false)
     }, [])
     const handleSelectSecondWord = useCallback((button: ButtonType) => {
         setSelectedSecondWord(button.id)
-        setIsError(false)
     }, [])
     const handleSelectThirdWord = useCallback((button: ButtonType) => {
         setSelectedThirdWord(button.id)
-        setIsError(false)
     }, [])
 
     const isSubmitDisabled =
@@ -179,6 +181,7 @@ export const ConfirmMnemonicScreen = () => {
                         selectedButtonIds={[selectedFirstWord || ""]}
                         buttons={buttonsFirstWord}
                         action={handleSelectFirstWord}
+                        selectedColor={theme.colors.primaryLight}
                     />
                     <BaseSpacer height={21} />
                     <BaseText typographyFont="body">
@@ -189,6 +192,7 @@ export const ConfirmMnemonicScreen = () => {
                         selectedButtonIds={[selectedSecondWord || ""]}
                         buttons={buttonsSecondWord}
                         action={handleSelectSecondWord}
+                        selectedColor={theme.colors.primaryLight}
                     />
                     <BaseSpacer height={21} />
                     <BaseText typographyFont="body">
@@ -199,30 +203,8 @@ export const ConfirmMnemonicScreen = () => {
                         selectedButtonIds={[selectedThirdWord || ""]}
                         buttons={buttonsThirdWord}
                         action={handleSelectThirdWord}
+                        selectedColor={theme.colors.primaryLight}
                     />
-                    {isError && (
-                        <BaseView>
-                            <BaseSpacer height={16} />
-                            <BaseView
-                                flexDirection="row"
-                                mx={50}
-                                justifyContent="center">
-                                <BaseIcon
-                                    name={"alert-circle-outline"}
-                                    size={20}
-                                    color={theme.colors.danger}
-                                />
-                                <BaseSpacer width={8} />
-                                <BaseText
-                                    typographyFont="body"
-                                    fontSize={12}
-                                    color={theme.colors.danger}>
-                                    {LL.ERROR_WRONG_MNEMONIC_WORDS()}
-                                </BaseText>
-                                <BaseSpacer height={24} />
-                            </BaseView>
-                        </BaseView>
-                    )}
                 </BaseView>
                 <BaseButton
                     action={onConfirmPress}
