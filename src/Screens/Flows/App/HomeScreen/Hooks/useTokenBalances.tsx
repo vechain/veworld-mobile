@@ -1,4 +1,5 @@
 import {
+    setTokenBalances,
     useAppDispatch,
     useAppSelector,
     useGetTokensFromGithubQuery,
@@ -15,7 +16,6 @@ import {
 } from "~Storage/Redux/Selectors"
 import {
     fetchExchangeRate,
-    setTokenBalances,
     updateAccountBalances,
 } from "~Storage/Redux/Actions"
 
