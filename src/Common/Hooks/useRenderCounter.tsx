@@ -1,6 +1,7 @@
 import { useRef } from "react"
+import { debug } from "~Common/Logger"
 
 export const useRenderCounter = (view: string) => {
     let renders = useRef(0)
-    console.log(`${view} has rendered : ${renders.current++} times.`)
+    debug(`${view} has rendered : ${renders.current++} times.`)
 }

@@ -66,6 +66,7 @@ export const compareAddresses = (
             address.toChecksumed(address2 as string)
         )
     } catch (e) {
+        error(e)
         return false
     }
 }
@@ -79,6 +80,7 @@ export const isValid = (addr: string): boolean => {
         address.toChecksumed(HexUtils.addPrefix(addr))
         return true
     } catch (e) {
+        error(e)
         return false
     }
 }
