@@ -36,7 +36,7 @@ export const useBiometrics = () => {
             setBiometrics({ ...obj })
         }
 
-        // lodash utility function - deep compare objects
+        // lodash utility function - deep compare objects - exit early if no changes occur
         if (isEqual(biometrics, obj)) return
 
         setBiometrics({ ...obj })

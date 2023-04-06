@@ -123,6 +123,7 @@ const en: BaseTranslation = {
     BD_BACKUP_MNEMONIC: "Backup your mnemonic phrase",
     BD_ANALYTICS_TRACKING: "I accept to be tracked by Analytics and for research and service quality purposes",
     BD_MNEMONIC_COPIED_TO_CLIPBOARD: "Mnemonic copied to clipboard",
+    BD_SECURITY_DOWNGRADE: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -164,6 +165,7 @@ const en: BaseTranslation = {
     TITLE_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
     TITLE_ADD_TOKEN: "Add Token",
     TITLE_EDIT_WALLET: "Edit wallet",
+    TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",

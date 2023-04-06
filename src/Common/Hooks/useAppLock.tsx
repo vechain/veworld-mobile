@@ -15,15 +15,18 @@ export const useAppLock = () => {
     const _appLockStatus = useAppSelector(selectAppLockStatus)
     const isAppLockActive = useAppSelector(selectIsAppLockActive)
 
-    const appLockStatus = useMemo(() => {
-        if (!userHasOnboarded || !isAppLockActive) {
-            return WALLET_STATUS.NOT_INITIALISED
-        }
+    const appLockStatusInactive = useMemo(
+        () => !userHasOnboarded || !isAppLockActive,
+        [userHasOnboarded, isAppLockActive],
+    )
 
-        if (isAppLockActive && _appLockStatus === WALLET_STATUS.LOCKED) {
-            return WALLET_STATUS.LOCKED
-        }
-    }, [_appLockStatus, userHasOnboarded, isAppLockActive])
+    const appLockStatusActive = useMemo(
+        () =>
+            isAppLockActive &&
+            _appLockStatus === WALLET_STATUS.LOCKED &&
+            userHasOnboarded,
+        [isAppLockActive, _appLockStatus, userHasOnboarded],
+    )
 
     const unlockApp = useCallback(() => {
         dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
@@ -33,5 +36,10 @@ export const useAppLock = () => {
         dispatch(setAppLockStatus(WALLET_STATUS.LOCKED))
     }, [dispatch])
 
-    return { appLockStatus, lockApp, unlockApp }
+    return {
+        lockApp,
+        unlockApp,
+        appLockStatusInactive,
+        appLockStatusActive,
+    }
 }

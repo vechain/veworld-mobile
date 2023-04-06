@@ -2,15 +2,16 @@ import { useMemo } from "react"
 import { UserSelectedSecurityLevel } from "~Model"
 import { useBiometrics } from "./useBiometrics"
 import { useAppSelector } from "~Storage/Redux"
-import {
-    selectIsSecurityDowngrade,
-    selectUserSelectedSecurity,
-} from "~Storage/Redux/Selectors"
+import { selectUserSelectedSecurity } from "~Storage/Redux/Selectors"
+
+enum WalletSecurity {
+    NONE = "NONE",
+    BIO_UNLOCK = "BIO_UNLOCK",
+    PASS_UNLOCK = "PASS_UNLOCK",
+}
 
 export const useWalletSecurity = () => {
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
-    const isSecurityDowngrade = useAppSelector(selectIsSecurityDowngrade)
-
     const biometrics = useBiometrics()
 
     const walletSecurity = useMemo(() => {
@@ -44,16 +45,8 @@ export const useWalletSecurity = () => {
     )
 
     return {
-        walletSecurity,
         isWalletSecurityBiometrics,
         isWalletSecurityPassword,
         isWalletSecurityNone,
-        isSecurityDowngrade,
     }
-}
-
-export enum WalletSecurity {
-    NONE = "NONE",
-    BIO_UNLOCK = "BIO_UNLOCK",
-    PASS_UNLOCK = "PASS_UNLOCK",
 }

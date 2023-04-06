@@ -1,26 +1,26 @@
-import { WalletSecurity } from "~Common/Hooks"
-import { WALLET_STATUS } from "~Model"
+export const isHideSplash = (
+    appLockStatusInactive: boolean,
+    isWalletSecurityPassword: boolean,
+) => {
+    return appLockStatusInactive || isWalletSecurityPassword
+}
 
 export const isLockScreenFlow = (
-    appLockStatus: WALLET_STATUS | undefined,
-    walletSecurity: WalletSecurity,
+    appLockStatusInactive: boolean,
+    isWalletSecurityPassword: boolean,
 ) => {
-    return (
-        appLockStatus === WALLET_STATUS.LOCKED &&
-        walletSecurity === WalletSecurity.PASS_UNLOCK
-    )
+    return appLockStatusInactive && isWalletSecurityPassword
 }
+
 export const isBiometricLockFlow = (
-    appLockStatus: WALLET_STATUS | undefined,
-    walletSecurity: WalletSecurity,
+    appLockStatusInactive: boolean,
+    isWalletSecurityBiometrics: boolean,
 ) => {
-    return (
-        appLockStatus === WALLET_STATUS.LOCKED &&
-        walletSecurity === WalletSecurity.BIO_UNLOCK
-    )
+    return appLockStatusInactive && isWalletSecurityBiometrics
 }
 
 export default {
+    isHideSplash,
     isLockScreenFlow,
     isBiometricLockFlow,
 }
