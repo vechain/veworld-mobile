@@ -9,15 +9,16 @@ type Props = {
     onPress: (network: Network) => void
     rightIcon?: string
     isSelected?: boolean
+    flex?: number
 }
 export const NetworkBox: React.FC<Props> = ({
     network,
     onPress,
     rightIcon,
     isSelected = false,
+    flex,
 }) => {
     const { theme, styles: themedStyles } = useThemedStyles(baseStyles)
-
     const style = isSelected ? themedStyles.selected : themedStyles.notSelected
 
     const handleOnPress = useCallback(
@@ -27,13 +28,22 @@ export const NetworkBox: React.FC<Props> = ({
 
     return (
         <BaseTouchableBox
+            flex={flex}
             action={handleOnPress}
             innerContainerStyle={style}
             justifyContent="space-between">
             <BaseView flexDirection="column">
-                <BaseText typographyFont="button">
-                    {StringUtils.capitalize(network.name)}
-                </BaseText>
+                <BaseView flexDirection="row">
+                    <BaseText typographyFont="button">
+                        {StringUtils.capitalize(network.name)}
+                    </BaseText>
+                    {network.defaultNet && (
+                        <BaseText pl={2} typographyFont="captionRegular">
+                            {/* ({LL.COMMON_LBL_DEFAULT()}) */}
+                            (Default)
+                        </BaseText>
+                    )}
+                </BaseView>
                 <BaseText pt={2} typographyFont="captionMedium">
                     {network.currentUrl}
                 </BaseText>
