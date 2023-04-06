@@ -102,7 +102,7 @@ if (__DEV__) {
     const errorWarn = global.console.error
     global.console.error = (...arg) => {
         for (const error of ignoreWarns) {
-            if (arg[0].startsWith(error)) {
+            if (arg[0]?.startsWith?.(error)) {
                 return
             }
         }

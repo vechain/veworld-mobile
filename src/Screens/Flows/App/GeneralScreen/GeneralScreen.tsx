@@ -17,12 +17,14 @@ import {
     SelectLanguageBottomSheet,
 } from "./Components"
 import { LANGUAGE, useBottomSheetModal } from "~Common"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    useAppDispatch,
+    useAppSelector,
     selectHideTokensWithNoBalance,
     selectLangauge,
-} from "~Storage/Redux/Selectors"
-import { setHideTokensWithNoBalance, setLanguage } from "~Storage/Redux/Actions"
+    setHideTokensWithNoBalance,
+    setLanguage,
+} from "~Storage/Redux"
 
 export const GeneralScreen = () => {
     const nav = useNavigation()
@@ -44,7 +46,6 @@ export const GeneralScreen = () => {
     const hideTokensWithNoBalance = useAppSelector(
         selectHideTokensWithNoBalance,
     )
-
     const goBack = useCallback(() => nav.goBack(), [nav])
     const toggleTokensHiddenSwitch = useCallback(
         (newValue: boolean) => {
@@ -86,6 +87,7 @@ export const GeneralScreen = () => {
                 <BaseSpacer height={20} />
 
                 <ChangeCurrency />
+                <BaseSpacer height={20} />
 
                 <BaseSpacer height={20} />
 
