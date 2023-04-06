@@ -10,14 +10,14 @@ module.exports = {
         "ios.debug": {
             type: "ios.app",
             binaryPath:
-                "ios/build/Build/Products/Debug-iphonesimulator/veWorldMobile.app",
-            build: "xcodebuild -workspace ios/veWorldMobile.xcworkspace -scheme veWorldMobile -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+                "ios/build/Build/Products/Debug-iphonesimulator/VeWorld.app",
+            build: "xcodebuild -workspace ios/VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         },
         "ios.release": {
             type: "ios.app",
             binaryPath:
-                "ios/build/Build/Products/Release-iphonesimulator/veWorldMobile.app",
-            build: "xcodebuild -workspace ios/veWorldMobile.xcworkspace -scheme veWorldMobile -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
+                "ios/build/Build/Products/Release-iphonesimulator/VeWorld.app",
+            build: "xcodebuild -workspace ios/VeWorld.xcworkspace -scheme VeWorld -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
         },
         "android.debug": {
             type: "android.apk",
