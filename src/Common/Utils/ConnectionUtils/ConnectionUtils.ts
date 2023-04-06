@@ -28,7 +28,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
                 ),
             timeout,
         )
-        const wsUrl = URLUtils.toWebsocketURL(url, "/subscriptions/beat2")
+        const wsUrl = URLUtils.toWebsocketURL(url, "/subscriptions/beat")
         const webSocket = new WebSocket(wsUrl)
 
         console.log({ wsUrl })
