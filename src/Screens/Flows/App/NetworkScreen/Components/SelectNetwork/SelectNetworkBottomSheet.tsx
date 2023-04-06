@@ -16,6 +16,7 @@ import {
     SectionListRenderItemInfo,
     StyleSheet,
 } from "react-native"
+import { info } from "~Common"
 
 type Props = {
     onClose: () => void
@@ -116,7 +117,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
     )
 
     const handleSheetChanges = useCallback((index: number) => {
-        console.log("walletManagementSheet position changed", index)
+        info("walletManagementSheet position changed", index)
         setSnapIndex(index)
     }, [])
 

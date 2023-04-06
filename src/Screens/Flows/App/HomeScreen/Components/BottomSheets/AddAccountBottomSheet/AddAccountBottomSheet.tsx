@@ -7,6 +7,7 @@ import { useI18nContext } from "~i18n"
 import { useAppDispatch } from "~Storage/Redux"
 import { addAccountForDevice } from "~Storage/Redux/Actions"
 import { Device } from "~Model"
+import { info } from "~Common"
 
 type Props = {
     onClose: () => void
@@ -31,7 +32,7 @@ export const AddAccountBottomSheet = React.forwardRef<
     }, [dispatch, onClose, selectedDevice])
 
     const handleSheetChanges = useCallback((index: number) => {
-        console.log("addAccountSheet position changed", index)
+        info("addAccountSheet position changed", index)
     }, [])
 
     // const renderFooter = useCallback(

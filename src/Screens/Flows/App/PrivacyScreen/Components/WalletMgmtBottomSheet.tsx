@@ -8,6 +8,7 @@ import { Device } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { DeviceBox } from "../../WalletManagementScreen/components"
+import { info } from "~Common"
 
 type Props = {
     devices?: Device[]
@@ -30,7 +31,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
     )
 
     const handleSheetChanges = useCallback((index: number) => {
-        console.log("walletManagementSheet position changed", index)
+        info("walletManagementSheet position changed", index)
         setSnapIndex(index)
     }, [])
 

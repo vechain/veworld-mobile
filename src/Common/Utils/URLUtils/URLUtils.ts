@@ -1,3 +1,5 @@
+import { error } from "~Common"
+
 // https://stackoverflow.com/questions/736513/how-do-i-parse-a-url-into-hostname-and-path-in-javascript
 function parseUrl(url?: string) {
     const trimmedUrl = url?.trim()
@@ -48,6 +50,7 @@ const isHttps = (url: string) => {
         const parsedURL = parseUrl(url)
         return parsedURL.protocol === "https:"
     } catch (e) {
+        error(e)
         return false
     }
 }
@@ -61,6 +64,7 @@ const isLocalHost = (url: string) => {
             parsedURL.hostname === "127.0.0.1"
         )
     } catch (e) {
+        error(e)
         return false
     }
 }
@@ -70,6 +74,7 @@ const isHttp = (url: string) => {
         const parsedURL = parseUrl(url)
         return parsedURL.protocol === "http:"
     } catch (e) {
+        error(e)
         return false
     }
 }

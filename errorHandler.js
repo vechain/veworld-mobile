@@ -10,12 +10,6 @@ const allowInDevMode = true // is an optional parameter is a boolean.
 // unhandled JS errors
 // in this case is just possible to display an alert to the user and log the error to sentry
 setJSExceptionHandler((error, isFatal) => {
-    // TODO: add sentry logging
-    if (error instanceof Error) {
-        console.warn(error.name, error.message, error.stack)
-    } else {
-        console.warn(error)
-    }
     if (isFatal) {
         Alert.alert("Error", "Unexpected error occurred", [
             {

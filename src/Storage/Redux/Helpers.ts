@@ -1,3 +1,4 @@
+import { warn } from "~Common"
 import { encryptTransform, initEncryption } from "./EncryptionService"
 import { storage } from "./Storage"
 
@@ -7,7 +8,7 @@ export const getPersistorConfig = async () => {
     const encryptor = encryptTransform({
         secretKey: key,
         onError: function (error) {
-            console.warn(error)
+            warn(error)
         },
     })
 
