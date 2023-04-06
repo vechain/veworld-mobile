@@ -14,6 +14,7 @@ export enum Routes {
     WALLET_SUCCESS = "Wallet_Success",
     HOME = "Home",
     MANAGE_TOKEN = "Manage_Token",
+    MANAGE_CUSTOM_TOKEN = "Manage_Custom_Token",
     BUY = "Buy",
     SEND = "Send",
     SWAP = "Swap",

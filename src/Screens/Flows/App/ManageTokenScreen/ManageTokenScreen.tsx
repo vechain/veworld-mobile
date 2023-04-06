@@ -24,9 +24,12 @@ import {
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
+    const nav = useNavigation()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const account = useAppSelector(selectSelectedAccount)
@@ -98,6 +101,10 @@ export const ManageTokenScreen = () => {
         }
     }
 
+    const navigateManageCustomTokens = () => {
+        nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
+    }
+
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
@@ -115,7 +122,7 @@ export const ManageTokenScreen = () => {
                 </BaseText>
                 <BaseSpacer height={16} />
                 <BaseTouchableBox
-                    action={() => {}} // TODO: add action
+                    action={navigateManageCustomTokens}
                     justifyContent="center">
                     <BaseIcon name="tune" size={16} color={theme.colors.text} />
                     <BaseSpacer width={10} />

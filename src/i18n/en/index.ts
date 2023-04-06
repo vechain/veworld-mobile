@@ -289,6 +289,10 @@ const en: BaseTranslation = {
     MANAGE_TOKEN_UNSELECTED: "Unselected",
     MANAGE_TOKEN_SEARCH_TOKEN: "Search a token",
 
+    // Manage Custom tokens
+    MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: "Add custom token",
+    MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: "Enter an address",
+    MANAGE_CUSTOM_TOKENS_WRONG_ADDRESS: "The address entered is incorrect",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

@@ -929,6 +929,18 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: string
 	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: string
+	/**
+	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s
+	 */
+	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: string
+	/**
+	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t
+	 */
+	MANAGE_CUSTOM_TOKENS_WRONG_ADDRESS: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -1848,6 +1860,18 @@ Please, try again later.
 	 * Search a token
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Add custom token
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Enter an address
+	 */
+	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: () => LocalizedString
+	/**
+	 * The address entered is incorrect
+	 */
+	MANAGE_CUSTOM_TOKENS_WRONG_ADDRESS: () => LocalizedString
 	/**
 	 * Account
 	 */
