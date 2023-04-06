@@ -2,10 +2,10 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { FormattingUtils } from "~Common"
+import { FormattingUtils, useTheme } from "~Common"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
-import { selectBalanceInFiat, selectCurrency } from "~Storage/Redux/Selectors"
+import { selectCurrency } from "~Storage/Redux/Selectors"
 import { VeChainToken } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 
@@ -16,6 +16,7 @@ type Props = {
 
 export const VechainTokenCard = memo(
     ({ token: tokenBalance, isAnimation }: Props) => {
+        const theme = useTheme()
         const exchangeRate = useAppSelector(state =>
             getCurrencyExchangeRate(
                 state,
@@ -23,8 +24,11 @@ export const VechainTokenCard = memo(
             ),
         )
         const currency = useAppSelector(selectCurrency)
+        const isPositive24hChange = (exchangeRate?.change || 0) > 0
         const change24h =
-            FormattingUtils.humanNumber(exchangeRate?.change || 0) + "%"
+            (isPositive24hChange ? "+" : "") +
+            FormattingUtils.humanNumber(exchangeRate?.change || 0) +
+            "%"
 
         const fiatBalance = FormattingUtils.humanNumber(
             FormattingUtils.convertToFiatBalance(
@@ -43,8 +47,6 @@ export const VechainTokenCard = memo(
             tokenBalance.balance,
         )
 
-        const balanceInFiat = useAppSelector(selectBalanceInFiat)
-        const balance = balanceInFiat ? fiatBalance : tokenUnitBalance
         const animatedOpacityReverse = useAnimatedStyle(() => {
             return {
                 opacity: withTiming(isAnimation ? 0 : 1, {
@@ -67,7 +69,18 @@ export const VechainTokenCard = memo(
                         <BaseText typographyFont="subTitleBold">
                             {tokenBalance.token.name}
                         </BaseText>
-                        <BaseText>{tokenBalance.token.symbol}</BaseText>
+                        <BaseView flexDirection="row" alignItems="baseline">
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                color={theme.colors.darkPurpleDisabled}>
+                                {tokenUnitBalance}{" "}
+                            </BaseText>
+                            <BaseText
+                                typographyFont="captionRegular"
+                                color={theme.colors.darkPurpleDisabled}>
+                                {tokenBalance.token.symbol}
+                            </BaseText>
+                        </BaseView>
                     </BaseView>
                 </BaseView>
                 <Animated.View
@@ -75,17 +88,24 @@ export const VechainTokenCard = memo(
                         animatedOpacityReverse,
                         baseStyles.balancesContainer,
                     ]}>
-                    <BaseView flexDirection="row">
+                    <BaseView flexDirection="row" alignItems="baseline">
                         <BaseText typographyFont="subTitleBold">
-                            {balance}{" "}
+                            {fiatBalance}{" "}
                         </BaseText>
-                        <BaseText>
-                            {balanceInFiat
-                                ? currency
-                                : tokenBalance.token.symbol}
+                        <BaseText typographyFont="captionRegular">
+                            {currency}
                         </BaseText>
                     </BaseView>
-                    <BaseText>{change24h}</BaseText>
+                    <BaseSpacer height={3} />
+                    <BaseText
+                        typographyFont="captionBold"
+                        color={
+                            isPositive24hChange
+                                ? theme.colors.green
+                                : theme.colors.red
+                        }>
+                        {change24h}
+                    </BaseText>
                 </Animated.View>
             </Animated.View>
         )

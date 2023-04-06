@@ -101,7 +101,7 @@ export const getVthoDenormalizedAccountTokenBalances = createSelector(
         ),
 )
 
-export const getAccountBalance = createSelector(
+export const getFiatBalance = createSelector(
     [
         getVetDenormalizedAccountTokenBalances,
         state => getCurrencyExchangeRate(state, "VET"),
@@ -124,5 +124,18 @@ export const getAccountBalance = createSelector(
                 ),
             )
             .toString()
+    },
+)
+
+export const getVetBalance = createSelector(
+    [getVetDenormalizedAccountTokenBalances],
+    vetBalance => {
+        return new BigNumber(
+            FormattingUtils.convertToFiatBalance(
+                vetBalance?.balance || "0",
+                1,
+                VET.decimals,
+            ),
+        ).toString()
     },
 )

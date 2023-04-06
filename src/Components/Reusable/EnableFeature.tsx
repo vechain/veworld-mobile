@@ -1,10 +1,9 @@
 import React from "react"
 import { BaseSpacer, BaseSwitch, BaseText } from "~Components"
-import { LocalizedString } from "typesafe-i18n"
 
 type Props = {
-    title: LocalizedString
-    subtitle?: LocalizedString
+    title: string
+    subtitle?: string
     onValueChange: (value: boolean) => void
     value: boolean
 }

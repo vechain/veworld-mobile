@@ -18,11 +18,7 @@ import {
     BaseView,
 } from "~Components"
 import { WalletAccount } from "~Model"
-import {
-    getAccountBalance,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { getVetBalance, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
 
@@ -40,7 +36,6 @@ export const AccountCard: React.FC<Props> = memo(props => {
         account,
         openAccountManagement,
         balanceVisible,
-        selectedCurrency,
         ...animatedViewProps
     } = props
     const theme = useTheme()
@@ -52,7 +47,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
         dispatch(setBalanceVisible(!balanceVisible))
     }, [balanceVisible, dispatch])
 
-    const balance = useAppSelector(getAccountBalance)
+    const balance = useAppSelector(getVetBalance)
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
@@ -93,7 +88,6 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     isVisible={balanceVisible}
                     toggleVisible={toggleBalanceVisibility}
                     balance={balance}
-                    selectedCurrency={selectedCurrency}
                 />
             </BaseView>
         </Animated.View>
