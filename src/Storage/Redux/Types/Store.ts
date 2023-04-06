@@ -8,7 +8,6 @@ import {
     ThunkDispatch,
     Dispatch,
     ThunkAction,
-    ThunkMiddleware,
 } from "@reduxjs/toolkit"
 
 export type PersistedState = RootState & PersistPartial
@@ -16,7 +15,7 @@ export type PersistedState = RootState & PersistPartial
 export type Store = ToolkitStore<
     PersistedState,
     AnyAction,
-    MiddlewareArray<[ThunkMiddleware<PersistedState, AnyAction>]>
+    MiddlewareArray<any>
 >
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
