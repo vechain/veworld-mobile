@@ -24,6 +24,7 @@ export type TFonts =
     | "bodyAccent"
     | "footNoteAccent"
     | "captionAccent"
+    | "smallCaptionRegular"
 
 const fontFamily = {
     "Inter-Bold": "Inter-Bold",
@@ -175,6 +176,11 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontSize: 10,
         fontWeight: fontWeight.normal,
         lineHeight: lineHeight.caption,
+    },
+    smallCaptionRegular: {
+        fontFamily: fontFamily["Inter-Regular"],
+        fontSize: 10,
+        fontWeight: fontWeight[400],
     },
 
     // MONO

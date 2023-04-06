@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { ConnexContextProvider } from "~Components"
+import { BaseToast, ConnexContextProvider } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Common"
@@ -63,6 +63,7 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
                         </TestTranslationProvider>
                     </NavigationProvider>
                 </BottomSheetModalProvider>
+                <BaseToast />
             </ConnexContextProvider>
         </Provider>
     )

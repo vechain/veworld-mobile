@@ -22,6 +22,7 @@ import StringUtils from "./StringUtils"
 // import TransactionUtils from "./TransactionUtils"
 import URLUtils from "./URLUtils"
 import LanguageUtils from "./LanguageUtils"
+import FormUtils from "./FormUtils"
 
 export {
     // AliasUtils,
@@ -48,4 +49,5 @@ export {
     // TransactionUtils,
     URLUtils,
     LanguageUtils,
+    FormUtils,
 }
