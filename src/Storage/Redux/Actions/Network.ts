@@ -1,10 +1,18 @@
-import { createAppAsyncThunk } from "../Types"
+import { AppThunk, createAppAsyncThunk } from "../Types"
 
-import { addCustomNetwork, changeSelectedNetwork } from "../Slices/Network"
+import {
+    addCustomNetwork,
+    changeSelectedNetwork,
+    removeCustomNetwork,
+} from "../Slices/Network"
 import { ConnectionUtils, debug, URLUtils, veWorldErrors } from "~Common"
 import { genesises } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
-import { selectCustomNetworks } from "../Selectors"
+import {
+    selectCustomNetworks,
+    selectDefaultNetworks,
+    selectSelectedNetwork,
+} from "../Selectors"
 import { Network } from "~Model"
 import uuid from "react-native-uuid"
 
@@ -72,3 +80,32 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
         }
     },
 )
+
+export const handleRemoveCustomNode =
+    (id: string): AppThunk<void> =>
+    (dispatch, getState) => {
+        const customNetworks = selectCustomNetworks(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
+        const customNodeExists = customNetworks.some(net => net.id === id)
+
+        if (!customNodeExists)
+            throw veWorldErrors.rpc.invalidRequest({
+                message: "Network does not exist",
+            })
+
+        //if the selected network is the one being removed, change the selected network to the default network
+        if (selectedNetwork.id === id) {
+            const defaultNetworks = selectDefaultNetworks(getState())
+            //find the default network that matches the type of the network being removed
+            const defaultNetwork =
+                defaultNetworks.find(
+                    net => net.type === selectedNetwork.type,
+                ) || defaultNetworks[0]
+
+            if (defaultNetwork) {
+                dispatch(changeSelectedNetwork(defaultNetwork))
+            }
+        }
+
+        dispatch(removeCustomNetwork({ id }))
+    }
