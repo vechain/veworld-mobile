@@ -6,7 +6,6 @@ import {
     AnyAction,
     MiddlewareArray,
     ThunkDispatch,
-    Dispatch,
     ThunkAction,
     createAsyncThunk,
 } from "@reduxjs/toolkit"
@@ -19,11 +18,11 @@ export type Store = ToolkitStore<
     MiddlewareArray<any>
 >
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+// 1. Get the root state's type from reducers
 export type RootState = ReturnType<typeof reducer>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = ThunkDispatch<any, undefined, AnyAction> &
-    Dispatch<AnyAction>
+
+// 2. Create a type for thunk dispatch
+export type AppThunkDispatch = ThunkDispatch<RootState, any, AnyAction>
 
 export type AppThunk<ReturnType = void> = ThunkAction<
     ReturnType,
@@ -34,7 +33,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 
 export const createAppAsyncThunk = createAsyncThunk.withTypes<{
     state: RootState
-    dispatch: AppDispatch
+    dispatch: AppThunkDispatch
     rejectValue: string
     extra: { s: string; n: number }
 }>()
