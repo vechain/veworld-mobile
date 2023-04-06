@@ -68,7 +68,7 @@ const fontSize = {
 const lineHeight = {
     title: 28,
     bodyMedium: 20,
-    caption: 16,
+    caption: 13,
 }
 
 export type TypographyObject = {
