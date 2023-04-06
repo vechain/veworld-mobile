@@ -424,6 +424,10 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: string
 	/**
+	 * L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t
+	 */
+	BD_SECURITY_DOWNGRADE: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -579,6 +583,10 @@ type RootTranslation = {
 	 * E​d​i​t​ ​w​a​l​l​e​t
 	 */
 	TITLE_EDIT_WALLET: string
+	/**
+	 * Y​o​u​r​ ​a​p​p​ ​i​s​ ​b​l​o​c​k​e​d
+	 */
+	TITLE_SECURITY_DOWNGRADE: string
 	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
@@ -1340,6 +1348,10 @@ export type TranslationFunctions = {
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
+	 * Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text
+	 */
+	BD_SECURITY_DOWNGRADE: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -1495,6 +1507,10 @@ export type TranslationFunctions = {
 	 * Edit wallet
 	 */
 	TITLE_EDIT_WALLET: () => LocalizedString
+	/**
+	 * Your app is blocked
+	 */
+	TITLE_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
 	 * Local wallet
 	 */
