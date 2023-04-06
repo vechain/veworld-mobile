@@ -6,8 +6,6 @@ import { useI18nContext } from "~i18n"
 export const HideView = ({ background }: { background: string }) => {
     const { LL } = useI18nContext()
 
-    console.log(LL)
-
     return (
         <BaseView
             style={[StyleSheet.absoluteFill, baseStyle.container]}
