@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { CryptoUtils, WalletSecurity, useWalletSecurity, error } from "~Common"
+import { CryptoUtils, useWalletSecurity, error } from "~Common"
 import { Device, UserSelectedSecurityLevel } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -9,13 +9,13 @@ import {
 import { selectDevices } from "~Storage/Redux/Selectors"
 
 export const useSecurityUpgrade = () => {
-    const { walletSecurity } = useWalletSecurity()
+    const { isWalletSecurityBiometrics } = useWalletSecurity()
     const devices = useAppSelector(selectDevices())
     const dispatch = useAppDispatch()
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
-            if (walletSecurity === WalletSecurity.BIO_UNLOCK) return
+            if (isWalletSecurityBiometrics) return
 
             const updatedDevices: Device[] = []
 
@@ -54,7 +54,7 @@ export const useSecurityUpgrade = () => {
                 error("SECURITY UPGRADE ERROR", e)
             }
         },
-        [walletSecurity, dispatch, devices],
+        [isWalletSecurityBiometrics, dispatch, devices],
     )
 
     return runSecurityUpgrade
