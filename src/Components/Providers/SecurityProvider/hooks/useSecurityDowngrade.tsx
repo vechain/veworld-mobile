@@ -23,26 +23,30 @@ export const useSecurityDowngrade = () => {
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
 
     const dispatcher = useCallback(
-        (level: TSecurityLevel, isDowngrade?: boolean) => {
-            isDowngrade && dispatch(setIsSecurityDowngrade(isDowngrade))
+        (level: TSecurityLevel, isDowngrade: boolean = false) => {
+            dispatch(setIsSecurityDowngrade(isDowngrade))
             dispatch(setLastSecurityLevel(level))
         },
         [dispatch],
     )
 
     const securityDowngrade = useCallback(() => {
+        // exit early if user has selected password as it is impossible to downgrade
         if (userSelectedSecurity === UserSelectedSecurityLevel.PASSWORD) return
+
+        // exit early if biometrics object is not ready
         if (!biometrics.currentSecurityLevel) return
 
+        // set state and exit if user has not onboarded yet
         if (
             lastSecurityLevel === SecurityLevelType.NONE &&
             biometrics.currentSecurityLevel
         ) {
-            console.log("init")
             dispatcher(biometrics.currentSecurityLevel)
             return
         }
 
+        // set state and exit if we have a downgrade
         if (
             BiometricsUtils.isSecurityDowngrade(
                 lastSecurityLevel,
@@ -50,11 +54,11 @@ export const useSecurityDowngrade = () => {
                 userHasOnboarded,
             )
         ) {
-            console.log("isSecurityDowngrade")
             dispatcher(biometrics.currentSecurityLevel, true)
             return
         }
 
+        // set state if we have an upgrade
         if (
             BiometricsUtils.isSecurityUpgrade(
                 lastSecurityLevel,
@@ -62,9 +66,7 @@ export const useSecurityDowngrade = () => {
                 userHasOnboarded,
             )
         ) {
-            console.log("isSecurityUpgrade")
             dispatcher(biometrics.currentSecurityLevel, false)
-            return
         }
     }, [
         userSelectedSecurity,

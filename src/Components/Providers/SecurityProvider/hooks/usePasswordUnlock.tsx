@@ -1,8 +1,7 @@
-import { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { LockScreenUtils, useAppLock, useWalletSecurity } from "~Common"
 import RNBootSplash from "react-native-bootsplash"
 import { LockScreen } from "~Screens"
-import React from "react"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
 export const usePasswordUnlock = () => {

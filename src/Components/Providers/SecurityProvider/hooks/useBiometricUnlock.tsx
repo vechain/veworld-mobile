@@ -34,6 +34,11 @@ export const useBiometricUnlock = () => {
 
     useEffect(() => {
         const initBiometricUnlock = async () => {
+            if (isSecurityDowngrade) {
+                await RNBootSplash.hide({ fade: true })
+                return
+            }
+
             if (
                 LockScreenUtils.isBiometricLockFlow(
                     appLockStatusActive,
