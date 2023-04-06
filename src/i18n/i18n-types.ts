@@ -889,6 +889,10 @@ type RootTranslation = {
 	 */
 	SYSTEM_THEME: string
 	/**
+	 * C​o​n​v​e​r​t​ ​b​a​l​a​n​c​e​s​ ​t​o​ ​f​i​a​t
+	 */
+	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: string
+	/**
 	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
 	 */
 	MANAGE_TOKEN_TITLE: string
@@ -1796,6 +1800,10 @@ Please, try again later.
 	 * System
 	 */
 	SYSTEM_THEME: () => LocalizedString
+	/**
+	 * Convert balances to fiat
+	 */
+	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: () => LocalizedString
 	/**
 	 * Manage Tokens
 	 */

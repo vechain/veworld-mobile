@@ -63,6 +63,7 @@ export const updateAccountBalances =
                     balance,
                     timeUpdated: new Date().toISOString(),
                     position: accountBalance.position,
+                    networkGenesisId: network.genesisId,
                 })
             }
             dispatch(setTokenBalances(balances))

@@ -1,5 +1,6 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { VET, VTHO } from "~Common"
+import { DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common"
+import { Account, Network } from "~Model"
 import { BalanceState, TokenBalance } from "../Types/Balances"
 
 export const initialState: BalanceState = []
@@ -71,6 +72,20 @@ export const BalanceSlice = createSlice({
         ) => {
             return action.payload
         },
+        resetTokenBalances: (
+            state: Draft<BalanceState>,
+            action: PayloadAction<{ network: Network; account: Account }>,
+        ) => {
+            const { network, account } = action.payload
+            const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(network.type)
+            return defaultTokens!!.map(token => ({
+                accountAddress: account?.address,
+                tokenAddress: token.address,
+                balance: "0",
+                timeUpdated: new Date().toISOString(),
+                networkGenesisId: network.genesisId,
+            }))
+        },
     },
 })
 
@@ -79,4 +94,5 @@ export const {
     setTokenBalances,
     removeTokenBalance,
     changeBalancePosition,
+    resetTokenBalances,
 } = BalanceSlice.actions

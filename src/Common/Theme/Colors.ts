@@ -22,7 +22,7 @@ export type Colors = {
     darkPurple: string
 }
 
-enum COLORS {
+export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
     WHITE_DISABLED = "#E5E5E5",

@@ -1,10 +1,9 @@
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, useCallback } from "react"
 import { StyleProp, ViewStyle, ViewProps, StyleSheet } from "react-native"
 import type { AnimateProps } from "react-native-reanimated"
 import Animated from "react-native-reanimated"
 import {
     ColorThemeType,
-    CryptoUtils,
     useTheme,
     useThemedStyles,
     PlatformUtils,
@@ -19,7 +18,7 @@ import {
     BaseView,
 } from "~Components"
 import { WalletAccount } from "~Model"
-import { useAppDispatch } from "~Storage/Redux"
+import { getVetBalance, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
 
@@ -37,7 +36,6 @@ export const AccountCard: React.FC<Props> = memo(props => {
         account,
         openAccountManagement,
         balanceVisible,
-        selectedCurrency,
         ...animatedViewProps
     } = props
     const theme = useTheme()
@@ -49,8 +47,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
         dispatch(setBalanceVisible(!balanceVisible))
     }, [balanceVisible, dispatch])
 
-    const randomBalance = useMemo(() => CryptoUtils.random().toString(), [])
-
+    const balance = useAppSelector(getVetBalance)
     return (
         <Animated.View style={styles.container} {...animatedViewProps}>
             <BaseView
@@ -90,8 +87,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 <Balance
                     isVisible={balanceVisible}
                     toggleVisible={toggleBalanceVisibility}
-                    balance={randomBalance}
-                    selectedCurrency={selectedCurrency}
+                    balance={balance}
                 />
             </BaseView>
         </Animated.View>

@@ -2,12 +2,13 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { CURRENCY_SYMBOLS, FormattingUtils } from "~Common"
+import { FormattingUtils, useTheme } from "~Common"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
-import { useSelector } from "react-redux"
 import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { VeChainToken } from "~Model"
+import { useAppSelector } from "~Storage/Redux"
+import { COLORS } from "~Common/Theme"
 
 type Props = {
     token: DenormalizedAccountTokenBalance
@@ -16,15 +17,19 @@ type Props = {
 
 export const VechainTokenCard = memo(
     ({ token: tokenBalance, isAnimation }: Props) => {
-        const exchangeRate = useSelector(state =>
+        const theme = useTheme()
+        const exchangeRate = useAppSelector(state =>
             getCurrencyExchangeRate(
                 state,
                 tokenBalance.token.symbol as VeChainToken,
             ),
         )
-        const currency = useSelector(selectCurrency)
+        const currency = useAppSelector(selectCurrency)
+        const isPositive24hChange = (exchangeRate?.change || 0) > 0
         const change24h =
-            FormattingUtils.humanNumber(exchangeRate?.change || 0) + "%"
+            (isPositive24hChange ? "+" : "") +
+            FormattingUtils.humanNumber(exchangeRate?.change || 0) +
+            "%"
 
         const fiatBalance = FormattingUtils.humanNumber(
             FormattingUtils.convertToFiatBalance(
@@ -33,8 +38,16 @@ export const VechainTokenCard = memo(
                 tokenBalance.token.decimals,
             ),
             tokenBalance.balance,
-            CURRENCY_SYMBOLS[currency],
         )
+        const tokenUnitBalance = FormattingUtils.humanNumber(
+            FormattingUtils.convertToFiatBalance(
+                tokenBalance.balance,
+                1,
+                tokenBalance.token.decimals,
+            ),
+            tokenBalance.balance,
+        )
+
         const animatedOpacityReverse = useAnimatedStyle(() => {
             return {
                 opacity: withTiming(isAnimation ? 0 : 1, {
@@ -42,6 +55,10 @@ export const VechainTokenCard = memo(
                 }),
             }
         }, [isAnimation])
+
+        const tokenValueLabelColor = theme.isDark
+            ? COLORS.GRAY
+            : COLORS.DARK_PURPLE_DISABLED
 
         return (
             <Animated.View style={[baseStyles.innerRow]}>
@@ -57,12 +74,43 @@ export const VechainTokenCard = memo(
                         <BaseText typographyFont="subTitleBold">
                             {tokenBalance.token.name}
                         </BaseText>
-                        <BaseText>{tokenBalance.token.symbol}</BaseText>
+                        <BaseView flexDirection="row" alignItems="baseline">
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                color={tokenValueLabelColor}>
+                                {tokenUnitBalance}{" "}
+                            </BaseText>
+                            <BaseText
+                                typographyFont="captionRegular"
+                                color={tokenValueLabelColor}>
+                                {tokenBalance.token.symbol}
+                            </BaseText>
+                        </BaseView>
                     </BaseView>
                 </BaseView>
-                <Animated.View style={animatedOpacityReverse}>
-                    <BaseText typographyFont="title">{fiatBalance}</BaseText>
-                    <BaseText>{change24h}</BaseText>
+                <Animated.View
+                    style={[
+                        animatedOpacityReverse,
+                        baseStyles.balancesContainer,
+                    ]}>
+                    <BaseView flexDirection="row" alignItems="baseline">
+                        <BaseText typographyFont="subTitleBold">
+                            {fiatBalance}{" "}
+                        </BaseText>
+                        <BaseText typographyFont="captionRegular">
+                            {currency}
+                        </BaseText>
+                    </BaseView>
+                    <BaseSpacer height={3} />
+                    <BaseText
+                        typographyFont="captionBold"
+                        color={
+                            isPositive24hChange
+                                ? theme.colors.success
+                                : theme.colors.danger
+                        }>
+                        {change24h}
+                    </BaseText>
                 </Animated.View>
             </Animated.View>
         )
@@ -90,5 +138,8 @@ const baseStyles = StyleSheet.create({
         borderRadius: 20,
         marginRight: 10,
         position: "absolute",
+    },
+    balancesContainer: {
+        alignItems: "flex-end",
     },
 })
