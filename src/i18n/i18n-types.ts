@@ -792,6 +792,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_ENTER_THE: RequiredParams<'name'>
 	/**
+	 * D​e​f​a​u​l​t
+	 */
+	COMMON_LBL_DEFAULT: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -901,6 +905,10 @@ type RootTranslation = {
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
 	/**
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​u​s​t​o​m​ ​n​o​d​e​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE: string
+	/**
 	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: string
@@ -909,9 +917,9 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: string
 	/**
-	 * C​u​s​t​o​m​ ​N​e​t​w​o​r​k​s
+	 * O​t​h​e​r​ ​N​e​t​w​o​r​k​s
 	 */
-	NETWORK_LABEL_CUSTOM_NETWORKS: string
+	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
@@ -1741,6 +1749,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_ENTER_THE: (arg: { name: unknown }) => LocalizedString
 	/**
+	 * Default
+	 */
+	COMMON_LBL_DEFAULT: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -1850,6 +1862,10 @@ Please, try again later.
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
 	/**
+	 * Confirming this will remove the custom node from the list, you will necessarily have to re-add it manually.
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE: () => LocalizedString
+	/**
 	 * Main Networks
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
@@ -1858,9 +1874,9 @@ Please, try again later.
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
 	/**
-	 * Custom Networks
+	 * Other Networks
 	 */
-	NETWORK_LABEL_CUSTOM_NETWORKS: () => LocalizedString
+	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
 	 * {name} copied to clipboard!
 	 */

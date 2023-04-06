@@ -47,6 +47,11 @@ export const selectSelectedNetwork = createSelector(
     },
 )
 
+export const selectNetworkById = (id?: string) =>
+    createSelector(selectNetworks, networks => {
+        return networks.find(net => net.id === id)
+    })
+
 export const selectShowConversionOnOtherNets = createSelector(
     selectNetworksState,
     state => {

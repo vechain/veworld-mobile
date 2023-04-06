@@ -59,7 +59,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
         }
         if (otherNetworks.length > 0) {
             data.push({
-                title: LL.NETWORK_LABEL_CUSTOM_NETWORKS(),
+                title: LL.NETWORK_LABEL_OTHER_NETWORKS(),
                 data: otherNetworks,
             })
         }
