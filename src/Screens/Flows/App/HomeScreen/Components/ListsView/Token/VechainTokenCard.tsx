@@ -8,6 +8,7 @@ import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { VeChainToken } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
+import { COLORS } from "~Common/Theme"
 
 type Props = {
     token: DenormalizedAccountTokenBalance
@@ -55,6 +56,10 @@ export const VechainTokenCard = memo(
             }
         }, [isAnimation])
 
+        const tokenValueLabelColor = theme.isDark
+            ? COLORS.GRAY
+            : COLORS.DARK_PURPLE_DISABLED
+
         return (
             <Animated.View style={[baseStyles.innerRow]}>
                 <BaseView flexDirection="row">
@@ -72,12 +77,12 @@ export const VechainTokenCard = memo(
                         <BaseView flexDirection="row" alignItems="baseline">
                             <BaseText
                                 typographyFont="bodyMedium"
-                                color={theme.colors.darkPurpleDisabled}>
+                                color={tokenValueLabelColor}>
                                 {tokenUnitBalance}{" "}
                             </BaseText>
                             <BaseText
                                 typographyFont="captionRegular"
-                                color={theme.colors.darkPurpleDisabled}>
+                                color={tokenValueLabelColor}>
                                 {tokenBalance.token.symbol}
                             </BaseText>
                         </BaseView>
@@ -101,8 +106,8 @@ export const VechainTokenCard = memo(
                         typographyFont="captionBold"
                         color={
                             isPositive24hChange
-                                ? theme.colors.green
-                                : theme.colors.red
+                                ? theme.colors.success
+                                : theme.colors.danger
                         }>
                         {change24h}
                     </BaseText>

@@ -20,11 +20,9 @@ export type Colors = {
     transparent: string
     darkPurpleRGBA: string
     darkPurple: string
-    green: string
-    red: string
 }
 
-enum COLORS {
+export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
     WHITE_DISABLED = "#E5E5E5",
@@ -66,8 +64,6 @@ const light: Colors = {
     transparent: COLORS.TRANSPARENT,
     darkPurpleRGBA: COLORS.DARK_PURPLE_RBGA,
     darkPurple: COLORS.DARK_PURPLE,
-    green: COLORS.DARK_GREEN,
-    red: COLORS.DARK_RED,
 }
 
 const dark: Colors = {
@@ -92,8 +88,6 @@ const dark: Colors = {
     transparent: COLORS.TRANSPARENT,
     darkPurpleRGBA: COLORS.DARK_PURPLE_RBGA,
     darkPurple: COLORS.DARK_PURPLE,
-    green: COLORS.LIGHT_GREEN,
-    red: COLORS.LIGHT_RED,
 }
 
 export const colors = { light, dark }
