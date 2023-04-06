@@ -288,6 +288,8 @@ const en: BaseTranslation = {
 
     // Settings Currencies
 
+    SETTINGS_CURRENCIES_CONVERT_TO_FIAT: "Convert balances to fiat",
+    
     // Settings Languages
 
     // Manage Token

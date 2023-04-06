@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Common"
+import { AddressUtils, FormattingUtils } from "~Common"
 import { selectSelectedAccount } from "./Account"
 import { VET, VTHO } from "~Common/Constant"
 import {
@@ -7,6 +7,9 @@ import {
     RootState,
 } from "~Storage/Redux/Types"
 import { selectAllFungibleTokens } from "./TokenApi"
+import { getCurrencyExchangeRate } from "./Currency"
+import { BigNumber } from "bignumber.js"
+import { selectSelectedNetwork } from "./Network"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -14,13 +17,18 @@ export const selectBalancesState = (state: RootState) => state.balances
  * Get all account balances
  */
 export const selectAccountBalances = createSelector(
-    [selectBalancesState, selectSelectedAccount],
-    (balances, account) =>
-        balances.filter(balance =>
-            AddressUtils.compareAddresses(
-                balance.accountAddress,
-                account?.address,
-            ),
+    [selectBalancesState, selectSelectedAccount, selectSelectedNetwork],
+    (balances, account, network) =>
+        balances.filter(
+            balance =>
+                AddressUtils.compareAddresses(
+                    balance.accountAddress,
+                    account?.address,
+                ) &&
+                AddressUtils.compareAddresses(
+                    network.genesisId,
+                    balance?.networkGenesisId,
+                ),
         ),
 )
 
@@ -91,4 +99,43 @@ export const getVthoDenormalizedAccountTokenBalances = createSelector(
             (balance: DenormalizedAccountTokenBalance) =>
                 balance.token.symbol === VTHO.symbol,
         ),
+)
+
+export const getFiatBalance = createSelector(
+    [
+        getVetDenormalizedAccountTokenBalances,
+        state => getCurrencyExchangeRate(state, "VET"),
+        getVthoDenormalizedAccountTokenBalances,
+        state => getCurrencyExchangeRate(state, "VTHO"),
+    ],
+    (vetBalance, vetExchangeRate, vthoBalance, vthoExchangeRate) => {
+        return new BigNumber(
+            FormattingUtils.convertToFiatBalance(
+                vetBalance?.balance || "0",
+                vetExchangeRate?.rate || 0,
+                VET.decimals,
+            ),
+        )
+            .plus(
+                FormattingUtils.convertToFiatBalance(
+                    vthoBalance?.balance || "0",
+                    vthoExchangeRate?.rate || 0,
+                    VTHO.decimals,
+                ),
+            )
+            .toString()
+    },
+)
+
+export const getVetBalance = createSelector(
+    [getVetDenormalizedAccountTokenBalances],
+    vetBalance => {
+        return new BigNumber(
+            FormattingUtils.convertToFiatBalance(
+                vetBalance?.balance || "0",
+                1,
+                VET.decimals,
+            ),
+        ).toString()
+    },
 )

@@ -20,6 +20,7 @@ import {
     selectNonVechainFungibleTokens,
     selectSelectedAccount,
     selectNonVechainDenormalizedAccountTokenBalances,
+    selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -37,6 +38,8 @@ export const ManageTokenScreen = () => {
     const [selectedTokenSymbols, setSelectedTokenSymbols] = useState<string[]>(
         tokenBalances.map(({ token }) => token.symbol),
     )
+    const currentNetwork = useAppSelector(selectSelectedNetwork)
+
     const filteredTokens = tokens.filter(
         token =>
             token.name
@@ -66,6 +69,7 @@ export const ManageTokenScreen = () => {
                     tokenAddress: token.address,
                     timeUpdated: new Date().toISOString(),
                     position: selectedTokenSymbols.length,
+                    networkGenesisId: currentNetwork.genesisId,
                 }),
             )
         }

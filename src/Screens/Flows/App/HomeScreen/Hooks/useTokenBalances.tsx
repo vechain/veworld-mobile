@@ -1,23 +1,18 @@
 import {
-    setTokenBalances,
     useAppDispatch,
     useAppSelector,
+    selectSelectedAccount,
+    selectAccountBalances,
+    selectSelectedNetwork,
+    selectCurrency,
+    fetchExchangeRate,
+    updateAccountBalances,
     useGetTokensFromGithubQuery,
+    resetTokenBalances,
 } from "~Storage/Redux"
-import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Common/Constant"
 import { useThor } from "~Components"
 import { useEffect } from "react"
 import BigNumber from "bignumber.js"
-import {
-    selectAccountBalances,
-    selectCurrency,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-} from "~Storage/Redux/Selectors"
-import {
-    fetchExchangeRate,
-    updateAccountBalances,
-} from "~Storage/Redux/Actions"
 
 // If the env variable isn't set, use the default
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
@@ -49,37 +44,19 @@ export const useTokenBalances = () => {
     })
 
     /**
-     * init default balances
+     * init default balances if no balances found on redux
      */
     useEffect(() => {
-        if (
-            currentAccount?.address &&
-            currentNetwork.genesis.id &&
-            balances?.length === 0
-        ) {
-            const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(
-                currentNetwork.type,
+        if (currentAccount?.address && balances?.length === 0) {
+            dispatch(
+                resetTokenBalances({
+                    network: currentNetwork,
+                    account: currentAccount,
+                }),
             )
-            if (defaultTokens)
-                dispatch(
-                    setTokenBalances(
-                        defaultTokens.map(token => ({
-                            accountAddress: currentAccount?.address,
-                            tokenAddress: token.address,
-                            balance: "0",
-                            timeUpdated: new Date().toISOString(),
-                        })),
-                    ),
-                )
             dispatch(updateAccountBalances(thorClient))
         }
-    }, [
-        currentNetwork,
-        currentAccount?.address,
-        dispatch,
-        thorClient,
-        balances,
-    ])
+    }, [dispatch, thorClient, balances, currentAccount, currentNetwork])
 
     useEffect(() => {
         const updateBalances = () => {
