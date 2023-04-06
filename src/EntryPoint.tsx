@@ -6,6 +6,7 @@ import { SwitchStack } from "~Navigation"
 import {
     AlertUtils,
     BiometricsUtils,
+    info,
     LockScreenUtils,
     useAppLock,
     useWalletSecurity,
@@ -75,7 +76,7 @@ const recursiveFaceId = async () => {
         AlertUtils.showCancelledFaceIdAlert(
             async () => {
                 // TODO: SIGN OUT USER
-                console.log("cancel action - SIGN OUT USER")
+                info("cancel action - SIGN OUT USER")
             },
             async () => {
                 return await recursiveFaceId()

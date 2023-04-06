@@ -10,7 +10,13 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import { CryptoUtils, SeedUtils, useDeviceUtils, useTheme } from "~Common"
+import {
+    CryptoUtils,
+    error,
+    SeedUtils,
+    useDeviceUtils,
+    useTheme,
+} from "~Common"
 import { Keyboard } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
@@ -42,6 +48,7 @@ export const ImportMnemonicScreen = () => {
             try {
                 getDeviceFromMnemonic(sanitisedMnemonic)
             } catch (e) {
+                error(e)
                 setIsError(LL.ERROR_WALLET_ALREADY_EXISTS())
                 return
             }

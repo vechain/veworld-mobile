@@ -7,6 +7,7 @@ import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { DeviceBox } from "../../WalletManagementScreen/components"
 import { useScrollableList } from "~Common"
+import { info } from "~Common"
 
 type Props = {
     devices: Device[]
@@ -27,6 +28,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
         useScrollableList(devices, snapIndex, snapPoints.length)
 
     const handleSheetChanges = useCallback((index: number) => {
+        info("walletManagementSheet position changed", index)
         setSnapIndex(index)
     }, [])
 

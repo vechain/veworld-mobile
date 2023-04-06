@@ -1,3 +1,4 @@
+import { error } from "~Common"
 import { VeChainToken, CurrencyExchangeRate } from "~Model"
 import FiatExchangeClients from "./fiat"
 
@@ -15,7 +16,9 @@ export const getExchangeRate = async (
         try {
             const exchange = await provider.getExchangeRate(fiatSymbol, symbol)
             return exchange
-        } catch (e) {}
+        } catch (e) {
+            error(e)
+        }
     }
     throw new Error("Failed to get exchange rate from any provider")
 }

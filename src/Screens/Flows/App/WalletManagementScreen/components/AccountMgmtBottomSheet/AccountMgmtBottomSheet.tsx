@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { AddressUtils, useScrollableList, useTheme } from "~Common"
+import { AddressUtils, useScrollableList, info, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSpacer,
@@ -46,6 +46,7 @@ export const AccountMgmtBottomSheet = React.forwardRef<
         useScrollableList(deviceAccounts, snapIndex, snapPoints.length)
 
     const handleSheetChanges = useCallback((index: number) => {
+        info("walletManagementSheet position changed", index)
         setSnapIndex(index)
     }, [])
 
