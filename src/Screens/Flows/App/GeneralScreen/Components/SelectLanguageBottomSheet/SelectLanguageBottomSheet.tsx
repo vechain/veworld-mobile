@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseSpacer,
@@ -8,7 +8,7 @@ import {
     BaseBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { LANGUAGE, LanguageUtils, useTheme } from "~Common"
+import { LANGUAGE, LanguageUtils, useScrollableList, useTheme } from "~Common"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
@@ -26,18 +26,30 @@ export const SelectLanguageBottomSheet = React.forwardRef<
 
     const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
 
-    const languagesListSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
-    )
-
     // Retrieve the list of supported languages in human readable format (e.g. "English", "Spanish"...)
     const supportedLanguages = LanguageUtils.getSupportedLanguages()
 
     const theme = useTheme()
 
+    const [snapIndex, setSnapIndex] = useState<number>(0)
+
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
+        useScrollableList(supportedLanguages, snapIndex, snapPoints.length)
+
+    const languagesListSeparator = useCallback(
+        () => <BaseSpacer height={16} />,
+        [],
+    )
+
+    const handleSheetChanges = useCallback((index: number) => {
+        setSnapIndex(index)
+    }, [])
+
     return (
-        <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
+        <BaseBottomSheet
+            snapPoints={snapPoints}
+            ref={ref}
+            onChange={handleSheetChanges}>
             <BaseView
                 flexDirection="row"
                 justifyContent="space-between"
@@ -53,6 +65,8 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                     data={supportedLanguages}
                     keyExtractor={lang => lang}
                     ItemSeparatorComponent={languagesListSeparator}
+                    onViewableItemsChanged={onViewableItemsChanged}
+                    viewabilityConfig={viewabilityConfig}
                     renderItem={({ item }) => {
                         return (
                             <BaseTouchableBox
@@ -79,6 +93,7 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                     }}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
+                    scrollEnabled={isListScrollable}
                 />
             </BaseView>
         </BaseBottomSheet>

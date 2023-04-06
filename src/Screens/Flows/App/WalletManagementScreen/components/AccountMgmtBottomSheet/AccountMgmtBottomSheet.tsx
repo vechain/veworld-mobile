@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { AddressUtils, info, useTheme } from "~Common"
+import { AddressUtils, useScrollableList, info, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSpacer,
@@ -9,7 +9,6 @@ import {
     BaseView,
     BaseBottomSheet,
 } from "~Components"
-
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { Device } from "~Model"
@@ -43,11 +42,8 @@ export const AccountMgmtBottomSheet = React.forwardRef<
 
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
-    // The list is scrollable when the bottom sheet is fully expanded
-    const isListScrollable = useMemo(
-        () => snapIndex === snapPoints.length - 1,
-        [snapIndex, snapPoints],
-    )
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
+        useScrollableList(deviceAccounts, snapIndex, snapPoints.length)
 
     const handleSheetChanges = useCallback((index: number) => {
         info("walletManagementSheet position changed", index)
@@ -91,6 +87,8 @@ export const AccountMgmtBottomSheet = React.forwardRef<
                         data={deviceAccounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
+                        onViewableItemsChanged={onViewableItemsChanged}
+                        viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => {
                             const isSelected = AddressUtils.compareAddresses(
                                 selectedAccount?.address,
