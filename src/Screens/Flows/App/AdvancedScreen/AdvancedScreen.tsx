@@ -10,7 +10,7 @@ import {
 } from "~Components"
 import { Reset } from "./Components/Reset"
 import { useI18nContext } from "~i18n"
-import { useTheme } from "~Common"
+import { info, useTheme } from "~Common"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
@@ -22,7 +22,7 @@ export const AdvancedScreen = () => {
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const onDownloadLogs = useCallback(() => {
-        console.log("Download logs")
+        info("Download logs")
     }, [])
 
     const [isAnalytics, setIsAnalytics] = useState(true)

@@ -7,6 +7,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
+import { info } from "~Common/Logger"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
@@ -26,7 +27,7 @@ export const useAppReset = () => {
         const persistConfig = await getPersistorConfig()
         purgeStoredState(persistConfig)
         dispatch({ type: "RESET" })
-        console.log("App Reset Finished")
+        info("App Reset Finished")
     }, [removeEncryptionKeysFromKeychain, dispatch])
 
     return appReset

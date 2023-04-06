@@ -1,4 +1,4 @@
-import { CURRENCY } from "~Common"
+import { CURRENCY, error } from "~Common"
 import { VeChainToken } from "~Model"
 import { clearExchangeRate, updateExchangeRate } from "~Storage/Redux/Slices"
 import { AppDispatch } from "~Storage/Redux/Types"
@@ -17,6 +17,7 @@ export const fetchExchangeRate =
                 }),
             )
         } catch (e) {
+            error(e)
             dispatch(clearExchangeRate(tokenSymbol))
         }
     }
