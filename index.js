@@ -59,14 +59,14 @@ const Main = () => {
                 <GestureHandlerRootView style={{ flex: 1 }}>
                     <ConnexContextProvider>
                         <SafeAreaProvider>
-                            <BottomSheetModalProvider>
-                                <NavigationProvider>
-                                    <TranslationProvider>
+                            <TranslationProvider>
+                                <BottomSheetModalProvider>
+                                    <NavigationProvider>
                                         {fontsLoaded && <EntryPoint />}
-                                    </TranslationProvider>
-                                </NavigationProvider>
-                            </BottomSheetModalProvider>
-                            <BaseToast />
+                                    </NavigationProvider>
+                                </BottomSheetModalProvider>
+                                <BaseToast />
+                            </TranslationProvider>
                         </SafeAreaProvider>
                     </ConnexContextProvider>
                 </GestureHandlerRootView>

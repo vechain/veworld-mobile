@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native"
 import { ColorThemeType, StringUtils, useThemedStyles } from "~Common"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { Network } from "~Model"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     network: Network
@@ -18,6 +19,7 @@ export const NetworkBox: React.FC<Props> = ({
     isSelected = false,
     flex,
 }) => {
+    const { LL } = useI18nContext()
     const { theme, styles: themedStyles } = useThemedStyles(baseStyles)
     const style = isSelected ? themedStyles.selected : themedStyles.notSelected
 
@@ -39,8 +41,7 @@ export const NetworkBox: React.FC<Props> = ({
                     </BaseText>
                     {network.defaultNet && (
                         <BaseText pl={2} typographyFont="captionRegular">
-                            {/* ({LL.COMMON_LBL_DEFAULT()}) */}
-                            (Default)
+                            ({LL.COMMON_LBL_DEFAULT()})
                         </BaseText>
                     )}
                 </BaseView>
