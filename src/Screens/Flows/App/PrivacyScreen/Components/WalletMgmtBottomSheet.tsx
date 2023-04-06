@@ -1,16 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet } from "~Components"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
-
+import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Device } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { DeviceBox } from "../../WalletManagementScreen/components"
+import { useScrollableList } from "~Common"
 
 type Props = {
-    devices?: Device[]
+    devices: Device[]
     onClose: (device: Device) => void
 }
 
@@ -21,16 +20,13 @@ export const WalletMgmtBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => ["30%", "90%"], [])
+
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
-    // The list is scrollable when the bottom sheet is fully expanded
-    const isListScrollable = useMemo(
-        () => snapIndex === snapPoints.length - 1,
-        [snapIndex, snapPoints],
-    )
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
+        useScrollableList(devices, snapIndex, snapPoints.length)
 
     const handleSheetChanges = useCallback((index: number) => {
-        console.log("walletManagementSheet position changed", index)
         setSnapIndex(index)
     }, [])
 
@@ -65,6 +61,8 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                         data={devices}
                         keyExtractor={device => device.rootAddress}
                         ItemSeparatorComponent={accountsListSeparator}
+                        onViewableItemsChanged={onViewableItemsChanged}
+                        viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => {
                             return (
                                 <DeviceBox
