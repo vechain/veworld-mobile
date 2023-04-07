@@ -46,20 +46,30 @@ jobs:
 
             # Install CocoaPods
             - name: Install CocoaPods
+              if: steps.pods-cache-restore.outputs.cache-hit != 'true'
               run: npx pod-install
+
+            # Save Pods cache
+            - name: Save Pods cache
+              uses: actions/cache/save@v3
+              id: pods-cache
+              if: always()
+              with:
+                  path: ios/Pods
+                  key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
             # Install Detox CLI
             - name: Rebuild Detox Framework
               run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
+            # Start Metro Bundler
+            - name: Start Metro Bundler
+              run: yarn react-native start &
+
             # Build iOS app
             - name: Detox build iOS Debug
               timeout-minutes: 60
               run: yarn detox build --configuration ios.sim.debug
-
-            # Start Metro Bundler
-            - name: Start Metro Bundler
-              run: yarn react-native start &
 
             # Test with Detox
             - name: Detox test iOS release
