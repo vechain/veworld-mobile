@@ -26,7 +26,7 @@ export const selectAccountBalances = createSelector(
                     account?.address,
                 ) &&
                 AddressUtils.compareAddresses(
-                    network.genesisId,
+                    network.genesis.id,
                     balance?.networkGenesisId,
                 ),
         ),

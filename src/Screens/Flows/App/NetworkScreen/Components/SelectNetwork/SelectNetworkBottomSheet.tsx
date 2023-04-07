@@ -60,7 +60,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
         }
         if (otherNetworks.length > 0) {
             data.push({
-                title: LL.NETWORK_LABEL_CUSTOM_NETWORKS(),
+                title: LL.NETWORK_LABEL_OTHER_NETWORKS(),
                 data: otherNetworks,
             })
         }
@@ -86,7 +86,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
 
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
-            const isSelected = selectedNetwork.currentUrl === item.currentUrl
+            const isSelected = selectedNetwork.id === item.id
             return (
                 <NetworkBox
                     network={item}

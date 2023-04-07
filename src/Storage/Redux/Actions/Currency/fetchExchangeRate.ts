@@ -1,12 +1,12 @@
 import { CURRENCY, error } from "~Common"
 import { VeChainToken } from "~Model"
 import { clearExchangeRate, updateExchangeRate } from "~Storage/Redux/Slices"
-import { AppDispatch } from "~Storage/Redux/Types"
 import { getExchangeRate } from "./getExchangeRate"
+import { AppThunk } from "~Storage/Redux/Types"
 
 export const fetchExchangeRate =
-    (tokenSymbol: VeChainToken, currency: CURRENCY) =>
-    async (dispatch: AppDispatch) => {
+    (tokenSymbol: VeChainToken, currency: CURRENCY): AppThunk =>
+    async dispatch => {
         try {
             const vetExchangeRate = await getExchangeRate(currency, tokenSymbol)
 

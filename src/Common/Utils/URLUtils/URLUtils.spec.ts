@@ -135,13 +135,19 @@ describe("URLUtils", () => {
     })
 
     describe("To Websocket URL", function () {
-        test("should return websocket URL", function () {
+        test("should return websocket URL - suffix ", function () {
             expect(
                 URLUtils.toWebsocketURL(
                     "https://www.google.com",
                     "/subscriptions/beat2",
                 ),
             ).toBe("wss://www.google.com/subscriptions/beat2")
+        })
+
+        test("should return websocket URL - no suffix", function () {
+            expect(URLUtils.toWebsocketURL("https://www.google.com")).toBe(
+                "wss://www.google.com",
+            )
         })
     })
 
@@ -191,6 +197,9 @@ describe("URLUtils", () => {
         })
         test("should return false for https", function () {
             expect(URLUtils.isHttp("https://www.google.com")).toBe(false)
+        })
+        test("should return false for non valid url", function () {
+            expect(URLUtils.isHttp("gsrgdgfgdf.com")).toBe(false)
         })
     })
 

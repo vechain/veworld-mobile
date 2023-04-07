@@ -19,13 +19,14 @@ export type TFonts =
     | "captionRegular"
     | "captionMedium"
     | "smallCaption"
+    | "smallCaptionMedium"
+    | "smallCaptionRegular"
     | "largeTitleAccent"
     | "titleAccent"
     | "subTitleAccent"
     | "bodyAccent"
     | "footNoteAccent"
     | "captionAccent"
-    | "smallCaptionRegular"
 
 const fontFamily = {
     "Inter-Bold": "Inter-Bold",
@@ -67,7 +68,7 @@ const fontSize = {
 const lineHeight = {
     title: 28,
     bodyMedium: 20,
-    caption: 16,
+    caption: 13,
 }
 
 export type TypographyObject = {
@@ -179,6 +180,12 @@ export const defaults: Record<TFonts, TypographyObject> = {
     },
     smallCaption: {
         fontFamily: fontFamily["Inter-Light"],
+        fontSize: 10,
+        fontWeight: fontWeight.normal,
+        lineHeight: lineHeight.caption,
+    },
+    smallCaptionMedium: {
+        fontFamily: fontFamily["Inter-Medium"],
         fontSize: 10,
         fontWeight: fontWeight.normal,
         lineHeight: lineHeight.caption,

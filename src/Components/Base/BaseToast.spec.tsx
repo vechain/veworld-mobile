@@ -1,4 +1,5 @@
 import {
+    hideToast,
     showErrorToast,
     showInfoToast,
     showSuccessToast,
@@ -13,6 +14,11 @@ jest.mock("react-native-toast-message", () => ({
 
 // we're not able to test baseToast directly for some reasons, but it's already defined in testWrapper
 describe("BaseToast", () => {
+    it("showHideToast should call hide", () => {
+        hideToast()
+        expect(Toast.hide).toHaveBeenCalled()
+    })
+
     it("showSuccessToast should call show with the correct params", () => {
         const text1 = "test"
         const text2 = "test2"

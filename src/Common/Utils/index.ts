@@ -23,6 +23,7 @@ import StringUtils from "./StringUtils"
 import URLUtils from "./URLUtils"
 import LanguageUtils from "./LanguageUtils"
 import FormUtils from "./FormUtils"
+import ConnectionUtils from "./ConnectionUtils"
 
 export {
     // AliasUtils,
@@ -50,4 +51,5 @@ export {
     URLUtils,
     LanguageUtils,
     FormUtils,
+    ConnectionUtils,
 }

@@ -1,3 +1,3 @@
-import * as URLUtils from "./URLUtils"
+import URLUtils from "./URLUtils"
 
 export default URLUtils
