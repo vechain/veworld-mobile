@@ -73,9 +73,19 @@ const skipToCreateLocalWallet = async () => {
 const skipToImportLocalWallet = async () => {
     await skipToCreatePassword()
 
+    await waitFor(element(by.text("Import wallet")))
+        .toBeVisible()
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("Import wallet")).tap()
 
+    console.log("DEBUGGING CI - OnboardingFlows:81")
+
+    await waitFor(element(by.id("import-local-wallet")))
+        .toBeVisible()
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.id("import-local-wallet")).tap()
+
+    console.log("DEBUGGING CI - OnboardingFlows:88")
 }
 
 const backupMnemonic = async (): Promise<string[]> => {
@@ -133,9 +143,18 @@ const pasteMnemonic = async (mnemonic: string) => {
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
+    console.log("DEBUGGING CI - OnboardingFlows:146")
+
     await element(by.id("import-mnemonic-input")).replaceText(mnemonic)
 
+    console.log("DEBUGGING CI - OnboardingFlows:150")
+
+    await waitFor(element(by.text("Verify")))
+        .toBeVisible()
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("Verify")).tap()
+
+    console.log("DEBUGGING CI - OnboardingFlows:157")
 }
 
 const chooseAndConfirmPassword = async (
