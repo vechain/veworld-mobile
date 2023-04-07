@@ -37,7 +37,7 @@ const validateCustomNode = async ({
         //Test the Websocket connection for the user's URL - throws an error if it fails
         await ConnectionUtils.verifyWebSocketConnection(url)
 
-        console.log("Websocket connection verified")
+        debug("Websocket connection verified")
 
         //Get the genesis block
         const blockResponse = await axios.get<Connex.Thor.Block>(
