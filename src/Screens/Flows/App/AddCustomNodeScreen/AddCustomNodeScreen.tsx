@@ -72,7 +72,7 @@ export const AddCustomNodeScreen = () => {
             const urlAlreadyExist = customNodes.find(
                 net => net.currentUrl === value,
             )
-            if (urlAlreadyExist) return LL.ERROR_URL_ALREADY_USER()
+            if (urlAlreadyExist) return LL.ERROR_URL_ALREADY_USED()
 
             return ""
         },

@@ -38,14 +38,13 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
             //Test the Websocket connection for the user's URL - throws an error if it fails
             await ConnectionUtils.verifyWebSocketConnection(url)
 
-            console.log("Websocket connection verified")
+            debug("Websocket connection verified")
 
             //Get the genesis block
             const blockResponse = await axios.get<Connex.Thor.Block>(
                 `${url}/blocks/0`,
             )
             const block = blockResponse.data
-            console.log({ block })
 
             //Check if this is a network that we know
             const type = genesises.which(block.id)

@@ -245,7 +245,7 @@ const en: BaseTranslation = {
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
     ERROR_ENTER_VALID_URL: "Enter a valid URL",
     ERROR_URL_NOT_VALID: "URL must be https or localhost",
-    ERROR_URL_ALREADY_USER: "Network already in use",
+    ERROR_URL_ALREADY_USED: "Network already in use",
 
     ERROR_REQUIRED_FIELD: "Required",
     ERROR_MAX_INPUT_LENGTH: "Contact name too long",

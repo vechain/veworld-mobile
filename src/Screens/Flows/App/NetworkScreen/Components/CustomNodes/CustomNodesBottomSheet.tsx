@@ -10,7 +10,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { useTheme } from "~Common"
+import { debug, useTheme } from "~Common"
 import { Network, NETWORK_TYPE } from "~Model"
 import {
     SectionListData,
@@ -149,7 +149,7 @@ export const CustomNodesBottomSheet = React.forwardRef<
     )
 
     const handleSheetChanges = useCallback((index: number) => {
-        console.log("walletManagementSheet position changed", index)
+        debug("walletManagementSheet position changed", index)
         setSnapIndex(index)
     }, [])
 
