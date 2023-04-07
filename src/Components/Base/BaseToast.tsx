@@ -72,6 +72,10 @@ export const BaseToast: React.FC = () => {
     return <Toast config={toastConfig} {...commonToastParams} />
 }
 
+export const hideToast = () => {
+    Toast.hide()
+}
+
 export const showSuccessToast = (text1: string, text2?: string) => {
     Toast.show({
         type: "success",

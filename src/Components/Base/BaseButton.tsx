@@ -38,6 +38,7 @@ type Props = {
     haptics?: "light" | "medium" | "heavy"
     leftIcon?: React.ReactNode
     rightIcon?: React.ReactNode
+    isLoading?: boolean
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -49,6 +50,7 @@ export const BaseButton = ({
     disabled = false,
     leftIcon,
     rightIcon,
+    isLoading = false,
     ...otherProps
 }: Props) => {
     const { typographyFont, fontFamily, fontSize, fontWeight, children } =
@@ -152,7 +154,7 @@ export const BaseButton = ({
                 fontWeight={fontWeight}
                 fontSize={fontSize}
                 style={themedStyles.text}>
-                {otherProps.title}
+                {!isLoading ? otherProps.title : "..."}
                 {children}
             </BaseText>
             {rightIcon}

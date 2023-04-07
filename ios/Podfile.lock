@@ -24,7 +24,7 @@ PODS:
     - React-Core
   - EXLocalAuthentication (13.0.2):
     - ExpoModulesCore
-  - Expo (47.0.13):
+  - Expo (47.0.14):
     - ExpoModulesCore
   - ExpoClipboard (4.0.2):
     - ExpoModulesCore
@@ -434,7 +434,7 @@ PODS:
     - React-perflogger (= 0.70.6)
   - ReactNativeExceptionHandler (2.10.10):
     - React-Core
-  - RNBootSplash (4.5.3):
+  - RNBootSplash (4.6.0):
     - React-Core
   - RNFlashList (1.4.2):
     - React-Core
@@ -743,7 +743,7 @@ SPEC CHECKSUMS:
   EXFont: 319606bfe48c33b5b5063fb0994afdc496befe80
   EXImageLoader: 84b65e6bd9d3345d6fbb3ab936a546c54496a64d
   EXLocalAuthentication: 78cc5a00b13745b41d16d189ab332b61a01299f9
-  Expo: b9fa98bf260992312ee3c424400819fb9beadafe
+  Expo: 5f4240506a147162542178989696e56e3dd72924
   ExpoClipboard: dc3c9469926884bfe1af886c9243de69bebf6363
   ExpoHaptics: 5a56d30a87ea213dd00b09566dc4b441a4dff97f
   ExpoKeepAwake: 69b59d0a8d2b24de9f82759c39b3821fec030318
@@ -804,7 +804,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
-  RNBootSplash: 8fb33325dc3620a01984c6660c42cbd93fadcc80
+  RNBootSplash: 91e0c16bfc96703cb5b0562785b9a8cbfeb298fe
   RNFlashList: 7fbca4fc075484a9426f1610d648dbea2de94eb0
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c

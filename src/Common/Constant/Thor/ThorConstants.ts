@@ -107,47 +107,27 @@ export const DEFAULT_GAS_COEFFICIENT = 0
 export const BASE_GAS_PRICE =
     "0x000000000000000000000000000000000000626173652d6761732d7072696365"
 
-export const makeNetwork = (type: NETWORK_TYPE): Network => {
-    switch (type) {
-        case NETWORK_TYPE.MAIN:
-            return {
-                defaultNet: true,
-                id: uuid.v4().toString(),
-                tag: NETWORK_TYPE.MAIN,
-                type: NETWORK_TYPE.MAIN,
-                urls: THOR_MAIN_URLS,
-                currentUrl: THOR_MAIN_URLS[0],
-                genesisId: genesisesId.main,
-                genesis: genesises.main,
-            }
-
-        case NETWORK_TYPE.TEST:
-            return {
-                defaultNet: true,
-                id: uuid.v4().toString(),
-                tag: NETWORK_TYPE.TEST,
-                type: NETWORK_TYPE.TEST,
-                urls: THOR_TESTNET_URLS,
-                currentUrl: THOR_TESTNET_URLS[0],
-                genesisId: genesisesId.test,
-                genesis: genesises.test,
-            }
-
-        default:
-            return {
-                defaultNet: true,
-                id: uuid.v4().toString(),
-                tag: NETWORK_TYPE.MAIN,
-                type: NETWORK_TYPE.MAIN,
-                urls: THOR_MAIN_URLS,
-                currentUrl: THOR_MAIN_URLS[0],
-                genesisId: genesisesId.main,
-                genesis: genesises.main,
-            }
-    }
+export const defaultMainNetwork: Network = {
+    id: uuid.v4().toString(),
+    defaultNet: true,
+    name: NETWORK_TYPE.MAIN,
+    type: NETWORK_TYPE.MAIN,
+    urls: THOR_MAIN_URLS,
+    currentUrl: THOR_MAIN_URLS[0],
+    genesis: genesises.main,
 }
 
-export const defaultNetworks = [
-    makeNetwork(NETWORK_TYPE.MAIN),
-    makeNetwork(NETWORK_TYPE.TEST),
+export const defaultTestNetwork: Network = {
+    id: uuid.v4().toString(),
+    defaultNet: true,
+    name: NETWORK_TYPE.TEST,
+    type: NETWORK_TYPE.TEST,
+    urls: THOR_TESTNET_URLS,
+    currentUrl: THOR_TESTNET_URLS[0],
+    genesis: genesises.test,
+}
+
+export const defaultNetworks: Network[] = [
+    defaultMainNetwork,
+    defaultTestNetwork,
 ]

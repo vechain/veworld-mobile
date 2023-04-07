@@ -9,6 +9,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    DeleteConfirmationBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -22,7 +23,6 @@ import {
     AddContactButton,
     ContactDetailBox,
     EditContactBottomSheet,
-    RemoveContactBottomSheet,
 } from "./Components"
 
 export const ContactsScreen = () => {
@@ -207,10 +207,11 @@ export const ContactsScreen = () => {
             {!!contacts.length && renderContactsList()}
 
             {/* Bottom Sheets */}
-            <RemoveContactBottomSheet
+            <DeleteConfirmationBottomSheet
                 ref={confirmRemoveContactSheet}
                 onClose={closeRemoveContactSheet}
-                onRemoveContact={handleRemoveContact}
+                onConfirm={handleRemoveContact}
+                description={LL.BD_CONFIRM_REMOVE_CONTACT()}
             />
             <EditContactBottomSheet
                 ref={editContactSheet}

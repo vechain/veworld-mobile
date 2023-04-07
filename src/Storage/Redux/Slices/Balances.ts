@@ -83,7 +83,7 @@ export const BalanceSlice = createSlice({
                 tokenAddress: token.address,
                 balance: "0",
                 timeUpdated: new Date().toISOString(),
-                networkGenesisId: network.genesisId,
+                networkGenesisId: network.genesis.id,
             }))
         },
     },

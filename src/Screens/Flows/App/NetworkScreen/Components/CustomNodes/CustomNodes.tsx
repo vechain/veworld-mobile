@@ -1,5 +1,6 @@
-import { useNavigation, useTheme } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
+import { useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSpacer,
@@ -9,6 +10,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { selectCustomNetworks, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     openBottomSheet: () => void
@@ -23,6 +25,8 @@ export const CustomNodes: React.FC<Props> = ({ openBottomSheet }) => {
         [nav],
     )
 
+    const customNodes = useAppSelector(selectCustomNetworks)
+
     return (
         <>
             <BaseText typographyFont="bodyMedium">
@@ -36,30 +40,36 @@ export const CustomNodes: React.FC<Props> = ({ openBottomSheet }) => {
 
             <BaseSpacer height={16} />
 
-            <BaseView flexDirection="row" justifyContent="space-between">
+            {customNodes.length ? (
                 <BaseTouchableBox
-                    flex={1}
-                    action={onAddCustomPress}
-                    justifyContent="flex-start">
-                    <BaseIcon name="plus" color={theme.colors.text} />
-                    <BaseText pl={8} typographyFont="buttonSecondary">
-                        {LL.NETWORK_ADD_NODE()}
-                    </BaseText>
-                </BaseTouchableBox>
-                <BaseSpacer width={15} />
-                <BaseTouchableBox
-                    flex={1}
                     action={openBottomSheet}
-                    justifyContent="flex-start">
-                    <BaseIcon
-                        name="format-list-bulleted"
-                        color={theme.colors.text}
-                    />
-                    <BaseText pl={8} typographyFont="buttonSecondary">
+                    justifyContent="center">
+                    <BaseIcon name="tune" color={theme.colors.primary} />
+                    <BaseText px={8} typographyFont="buttonSecondary">
                         {LL.NETWORK_MANAGE_NODES()}
                     </BaseText>
+                    <BaseView
+                        bg={theme.colors.primary}
+                        borderRadius={6}
+                        px={4}
+                        py={2}>
+                        <BaseText
+                            typographyFont="smallCaptionMedium"
+                            color={theme.colors.primaryReversed}>
+                            {customNodes.length}
+                        </BaseText>
+                    </BaseView>
                 </BaseTouchableBox>
-            </BaseView>
+            ) : (
+                <BaseTouchableBox
+                    action={onAddCustomPress}
+                    justifyContent="center">
+                    <BaseIcon name="plus" color={theme.colors.text} />
+                    <BaseText pl={8} typographyFont="buttonSecondary">
+                        {LL.NETWORK_ADD_CUSTOM_NODE()}
+                    </BaseText>
+                </BaseTouchableBox>
+            )}
         </>
     )
 }

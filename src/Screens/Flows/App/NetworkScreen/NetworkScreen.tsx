@@ -1,14 +1,15 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import {
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseView,
+    DeleteConfirmationBottomSheet,
     EnableFeature,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import { useBottomSheetModal, useTheme } from "~Common"
+import { error, useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -17,6 +18,7 @@ import {
     selectShowTestnetTag,
 } from "~Storage/Redux/Selectors"
 import {
+    handleRemoveCustomNode,
     toggleShowConversionOtherNetworks,
     toggleShowTestnetTag,
 } from "~Storage/Redux/Actions"
@@ -26,6 +28,8 @@ import {
     SelectNetwork,
     SelectNetworkBottomSheet,
 } from "./Components"
+import { Network } from "~Model"
+import * as Haptics from "expo-haptics"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
@@ -33,6 +37,16 @@ export const ChangeNetworkScreen = () => {
     const { LL } = useI18nContext()
 
     const dispatch = useAppDispatch()
+
+    const [networkToEditDeleteId, setNetworkToEditDeleteId] = useState<string>()
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
+    const showTestNetTag = useAppSelector(selectShowTestnetTag)
+
+    const showConversionOnOtherNets = useAppSelector(
+        selectShowConversionOnOtherNets,
+    )
 
     const {
         ref: selectNetworkBottomSheetRef,
@@ -43,16 +57,14 @@ export const ChangeNetworkScreen = () => {
     const {
         ref: customNodesBottomSheetRef,
         onOpen: openCustomNodesBottomSheet,
-        onClose: closeCustomNodesBottonSheet,
+        onClose: closeCustomNodesBottomSheet,
     } = useBottomSheetModal()
 
-    const showConversionOnOtherNets = useAppSelector(
-        selectShowConversionOnOtherNets,
-    )
-
-    const showTestNetTag = useAppSelector(selectShowTestnetTag)
-
-    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const {
+        ref: deleteConfirmationSheetRef,
+        onOpen: openDeleteConfirmationSheet,
+        onClose: closeDeleteConfirmationSheet,
+    } = useBottomSheetModal()
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
@@ -69,6 +81,37 @@ export const ChangeNetworkScreen = () => {
         },
         [dispatch],
     )
+
+    const onEditNetworkClick = useCallback(
+        (network: Network) => {
+            setNetworkToEditDeleteId(network.id)
+            closeCustomNodesBottomSheet()
+            // openSelectNetworkBottomSheet()
+        },
+        [closeCustomNodesBottomSheet],
+    )
+
+    const onDeleteNetworkClick = useCallback(
+        (network: Network) => {
+            setNetworkToEditDeleteId(network.id)
+            closeCustomNodesBottomSheet()
+            openDeleteConfirmationSheet()
+        },
+        [closeCustomNodesBottomSheet, openDeleteConfirmationSheet],
+    )
+
+    const onDeleteNetworkConfirm = useCallback(() => {
+        try {
+            if (networkToEditDeleteId) {
+                dispatch(handleRemoveCustomNode(networkToEditDeleteId))
+            }
+            closeDeleteConfirmationSheet()
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+        } catch (e) {
+            error(e)
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+        }
+    }, [closeDeleteConfirmationSheet, networkToEditDeleteId, dispatch])
 
     return (
         <BaseSafeArea grow={1}>
@@ -116,7 +159,15 @@ export const ChangeNetworkScreen = () => {
             />
             <CustomNodesBottomSheet
                 ref={customNodesBottomSheetRef}
-                onClose={closeCustomNodesBottonSheet}
+                onClose={closeCustomNodesBottomSheet}
+                onEditNetwork={onEditNetworkClick}
+                onDeleteNetwork={onDeleteNetworkClick}
+            />
+            <DeleteConfirmationBottomSheet
+                ref={deleteConfirmationSheetRef}
+                onClose={closeDeleteConfirmationSheet}
+                onConfirm={onDeleteNetworkConfirm}
+                description={LL.NETWORK_CONFIRM_REMOVE_NODE()}
             />
         </BaseSafeArea>
     )

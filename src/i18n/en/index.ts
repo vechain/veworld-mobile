@@ -76,7 +76,7 @@ const en: BaseTranslation = {
     BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12-word recovery phrase.",
     BD_IMPORT_WALLET_TYPE_HARDWARE: "You can connect a hardware wallet which will give you access to your new and existing accounts.",
     BD_WALLET_IMPORT_LOCAL:
-    "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
+        "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
     BD_CONFIRM_RESET: "Confirm reset",
@@ -107,8 +107,8 @@ const en: BaseTranslation = {
     BD_APP_THEME_DISCLAIMER: "Select the general app theme",
     BD_HIDE_TOKENS_DISCLAIMER: "Tokens without balance won't be shown in the assets list",
     BD_APP_LANGUAGE_DISCLAIMER: "Select the general app language",
-    BD_USD : "USD",
-    BD_EUR : "EUR",
+    BD_USD: "USD",
+    BD_EUR: "EUR",
     BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
     BD_CONTACTS_LIST: "Your contact list", 
     BD_CONTACTS_LIST_DISCLAIMER: "Add friends and addresses you trust", 
@@ -177,7 +177,7 @@ const en: BaseTranslation = {
     SB_EDIT_WALLET: "Edit wallet {name}",
     SB_RENAME_WALLET: "Rename wallet",
     SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
-    SB_DEVICE_CARD : "{alias} ({accounts} accounts)",
+    SB_DEVICE_CARD: "{alias} ({accounts} accounts)",
     SB_ENTER_LANGUAGE: "Enter your language",
     SB_SELECT_LANGUAGE: "Select your language",
     SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
@@ -218,12 +218,17 @@ const en: BaseTranslation = {
     COMMON_BTN_SAVE: "Save",
 
     // Common Labels
+    COMMON_LBL_NAME: "name",
+    COMMON_LBL_URL: "URL",
     COMMON_LBL_ADDRESS: "Address",
     COMMON_LBL_SUCCESS: "Success",
     COMMON_LBL_ERROR: "Error",
     COMMON_LBL_IMPORT: "Import",
     COMMON_LBL_FAVOURITE: "Favourite",
     COMMON_LBL_FAVOURITES: "Favourites",
+    COMMON_LBL_ENTER_THE: "Enter the {name}",
+    COMMON_LBL_DEFAULT: "Default",
+
 
     // Common Titles
     ALERT_TITLE_NOT_ENROLLED: "Biometrics not available",
@@ -238,6 +243,10 @@ const en: BaseTranslation = {
     ERROR_WRONG_WORDS_COMBINATION: "Wrong words combination",
     ERROR_WRONG_WORDS_COMBINATION_DESC: "The words combination is wrong, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
+    ERROR_ENTER_VALID_URL: "Enter a valid URL",
+    ERROR_URL_NOT_VALID: "URL must be https or localhost",
+    ERROR_URL_ALREADY_USED: "Network already in use",
+
     ERROR_REQUIRED_FIELD: "Required",
     ERROR_MAX_INPUT_LENGTH: "Contact name too long",
     ERROR_NAME_ALREADY_EXISTS: "Name already exists in contacts",
@@ -251,12 +260,17 @@ const en: BaseTranslation = {
 
     // Network
     NETWORK_MANAGE_NODES: "Manage nodes",
-    NETWORK_ADD_NODE: "Add node",
+    NETWORK_ADD_CUSTOM_NODE: "Add custom node",
+    NETWORK_ADD_CUSTOM_NODE_SB: "Add network details",
+    NETWORK_ADD_CUSTOM_NODE_SB_DESC: "If you are having problems adding your custom node, it usually indicates a poorly formatted URL or a problem with the CORS configuration of the node.",
+    NETWORK_ADD_CUSTOM_NODE_NAME: "Node name",
+    NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: "Add network",
+    NETWORK_CONFIRM_REMOVE_NODE: "Confirming this will remove the custom node from the list, you will necessarily have to re-add it manually.",
 
     // Network Labels
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",
     NETWORK_LABEL_TEST_NETWORKS: "Test Networks",
-    NETWORK_LABEL_CUSTOM_NETWORKS: "Custom Networks",
+    NETWORK_LABEL_OTHER_NETWORKS: "Other Networks",
 
     // Notifications
     NOTIFICATION_COPIED_CLIPBOARD: "{name} copied to clipboard!",
