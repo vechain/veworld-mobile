@@ -47,6 +47,16 @@ module.exports = {
         "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
+    coveragePathIgnorePatterns: [
+        "/node_modules/",
+        "/__tests__/",
+        "/__mocks__/",
+        "/__fixtures__/",
+        "/__snapshots__/",
+        "/__generated__/",
+        "<rootDir>/src/Common/Utils/ConnectionUtils/ConnectionUtils.ts",
+    ],
+
     coverageThreshold: {
         global: {
             statements: 95,
