@@ -26,7 +26,7 @@ type Props = {
     p?: number
     px?: number
     py?: number
-    w?: number
+    w?: number | string
     h?: number
     radius?: number
     size?: "sm" | "md" | "lg"

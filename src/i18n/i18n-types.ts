@@ -937,9 +937,21 @@ type RootTranslation = {
 	 */
 	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: string
 	/**
+	 * C​o​n​f​i​r​m​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: string
+	/**
 	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t
 	 */
-	MANAGE_CUSTOM_TOKENS_WRONG_ADDRESS: string
+	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: string
+	/**
+	 * T​h​i​s​ ​i​s​ ​a​n​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​,​ ​p​l​e​a​s​e​ ​s​e​l​e​c​t​ ​i​t​ ​f​r​o​m​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​l​i​s​t
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: string
+	/**
+	 * T​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​i​s​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -1869,9 +1881,21 @@ Please, try again later.
 	 */
 	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: () => LocalizedString
 	/**
+	 * Confirm custom token
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: () => LocalizedString
+	/**
 	 * The address entered is incorrect
 	 */
-	MANAGE_CUSTOM_TOKENS_WRONG_ADDRESS: () => LocalizedString
+	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: () => LocalizedString
+	/**
+	 * This is an official token, please select it from the previous list
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: () => LocalizedString
+	/**
+	 * This custom token is already present
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
 	/**
 	 * Account
 	 */
