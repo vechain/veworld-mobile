@@ -3,7 +3,7 @@ import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
 import { PlatformUtils, useDisclosure, useTheme } from "~Common"
-import { HideView } from "./HideView.android"
+import { HideView } from "./HideView"
 import DropShadow from "react-native-drop-shadow"
 
 type Props = {

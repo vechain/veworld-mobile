@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
 import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"

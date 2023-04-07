@@ -1,6 +1,10 @@
 import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
-import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
+import {
+    SecurityLevelType,
+    UserSelectedSecurityLevel,
+    WALLET_STATUS,
+} from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -9,6 +13,7 @@ import {
     setLastSecurityLevel,
     setUserSelectedSecurity,
     setMnemonic,
+    setAppLockStatus,
 } from "~Storage/Redux/Actions"
 import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
@@ -50,6 +55,9 @@ export const useCreateWalletWithPassword = () => {
                         wallet: encryptedWallet,
                     }),
                 )
+
+                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
+
                 if (!selectedAccount)
                     dispatch(selectAccount({ address: newAccount.address }))
 

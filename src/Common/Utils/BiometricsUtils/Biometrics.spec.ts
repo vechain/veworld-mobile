@@ -95,15 +95,18 @@ describe("authentication functions", () => {
         })
     })
     describe("isSecurityDowngrade", () => {
-        it("returns true when the old security level is biometric and the new security level is secret, and the wallet status is unlocked", () => {
+        it("returns true when the old security level is biometric and the new security level is secret, and appLockStatusActive is true", () => {
             const oldLevel = SecurityLevelType.BIOMETRIC
             const newLevel: SecurityLevelType = SecurityLevelType.SECRET
-            const appLockStatus = WALLET_STATUS.UNLOCKED
+            const userHasOnboarded = true
+            const isAppLockActive = true
+            const appLockStatusActive =
+                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
             const result = isSecurityDowngrade(
                 oldLevel,
                 newLevel,
-                appLockStatus,
+                appLockStatusActive,
             )
 
             expect(result).toBe(true)
@@ -112,12 +115,15 @@ describe("authentication functions", () => {
         it("returns false when the old security level is secret, regardless of the new security level and wallet status", () => {
             const oldLevel = SecurityLevelType.SECRET
             const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
-            const appLockStatus = WALLET_STATUS.NOT_INITIALISED
+            const userHasOnboarded = true
+            const isAppLockActive = true
+            const appLockStatusActive =
+                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
             const result = isSecurityDowngrade(
                 oldLevel,
                 newLevel,
-                appLockStatus,
+                appLockStatusActive,
             )
 
             expect(result).toBe(false)
@@ -126,26 +132,32 @@ describe("authentication functions", () => {
         it("returns false when the new security level is biometric, regardless of the old security level and wallet status", () => {
             const oldLevel = SecurityLevelType.SECRET
             const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
-            const appLockStatus = WALLET_STATUS.LOCKED
+            const userHasOnboarded = true
+            const isAppLockActive = true
+            const appLockStatusActive =
+                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
             const result = isSecurityDowngrade(
                 oldLevel,
                 newLevel,
-                appLockStatus,
+                appLockStatusActive,
             )
 
             expect(result).toBe(false)
         })
 
-        it("returns false when the wallet status is not initialized, regardless of the old and new security levels", () => {
+        it("returns false when the user hasn't onboarded, regardless of the old and new security levels", () => {
             const oldLevel = SecurityLevelType.SECRET
             const newLevel: SecurityLevelType = SecurityLevelType.NONE
-            const appLockStatus = WALLET_STATUS.NOT_INITIALISED
+            const userHasOnboarded = true
+            const isAppLockActive = true
+            const appLockStatusActive =
+                WALLET_STATUS.LOCKED && !userHasOnboarded && isAppLockActive
 
             const result = isSecurityDowngrade(
                 oldLevel,
                 newLevel,
-                appLockStatus,
+                appLockStatusActive,
             )
 
             expect(result).toBe(false)
@@ -156,9 +168,16 @@ describe("authentication functions", () => {
         it("returns true when the old security level is none and the new security level is biometric, and the wallet status is unlocked", () => {
             const oldLevel = SecurityLevelType.NONE
             const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
-            const appLockStatus = WALLET_STATUS.UNLOCKED
+            const userHasOnboarded = true
+            const isAppLockActive = true
+            const appLockStatusActive =
+                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityUpgrade(oldLevel, newLevel, appLockStatus)
+            const result = isSecurityUpgrade(
+                oldLevel,
+                newLevel,
+                appLockStatusActive,
+            )
 
             expect(result).toBe(true)
         })
@@ -166,9 +185,16 @@ describe("authentication functions", () => {
         it("returns false when the old security level is biometric, regardless of the new security level and wallet status", () => {
             const oldLevel = SecurityLevelType.BIOMETRIC
             const newLevel: SecurityLevelType = SecurityLevelType.SECRET
-            const appLockStatus = WALLET_STATUS.LOCKED
+            const userHasOnboarded = true
+            const isAppLockActive = true
+            const appLockStatusActive =
+                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityUpgrade(oldLevel, newLevel, appLockStatus)
+            const result = isSecurityUpgrade(
+                oldLevel,
+                newLevel,
+                appLockStatusActive,
+            )
 
             expect(result).toBe(false)
         })
@@ -176,9 +202,16 @@ describe("authentication functions", () => {
         it("returns false when the new security level is secret, regardless of the old security level and wallet status", () => {
             const oldLevel = SecurityLevelType.SECRET
             const newLevel: SecurityLevelType = SecurityLevelType.NONE
-            const appLockStatus = WALLET_STATUS.UNLOCKED
+            const userHasOnboarded = true
+            const isAppLockActive = true
+            const appLockStatusActive =
+                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityUpgrade(oldLevel, newLevel, appLockStatus)
+            const result = isSecurityUpgrade(
+                oldLevel,
+                newLevel,
+                appLockStatusActive,
+            )
 
             expect(result).toBe(false)
         })
