@@ -86,7 +86,7 @@ jobs:
             - name: Detox build iOS Debug
               if: steps.detox-cache-restore.outputs.cache-hit != 'true'
               timeout-minutes: 60
-              run: yarn detox build --configuration ios.sim.debug
+              run: yarn detox build --configuration ios.sim.debug --name "User successfully imports a local wallet"
 
             # Save Detox build cache
             - name: Save Detox build
