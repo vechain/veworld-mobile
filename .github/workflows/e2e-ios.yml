@@ -44,6 +44,14 @@ jobs:
             - name: Install & Patch packages
               run: yarn install --frozen-lockfile --network-timeout 300000
 
+            # Restore Pods cache
+            - name: Restore Pods cache
+              uses: actions/cache/restore@v3
+              id: pods-cache-restore
+              with:
+                  path: ios/Pods
+                  key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+
             # Install CocoaPods
             - name: Install CocoaPods
               if: steps.pods-cache-restore.outputs.cache-hit != 'true'
