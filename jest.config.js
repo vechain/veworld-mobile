@@ -49,11 +49,6 @@ module.exports = {
     ],
     coveragePathIgnorePatterns: [
         "/node_modules/",
-        "/__tests__/",
-        "/__mocks__/",
-        "/__fixtures__/",
-        "/__snapshots__/",
-        "/__generated__/",
         "<rootDir>/src/Common/Utils/ConnectionUtils/ConnectionUtils.ts",
     ],
 
