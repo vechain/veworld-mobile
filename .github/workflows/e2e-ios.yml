@@ -86,7 +86,7 @@ jobs:
             - name: Detox build iOS Debug
               if: steps.detox-cache-restore.outputs.cache-hit != 'true'
               timeout-minutes: 60
-              run: yarn detox build --configuration ios.sim.debug --name "User successfully imports a local wallet"
+              run: yarn detox build --configuration ios.sim.debug
 
             # Save Detox build cache
             - name: Save Detox build
@@ -100,7 +100,7 @@ jobs:
             # Test with Detox
             - name: Detox test iOS release
               timeout-minutes: 20
-              run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel debug --headless --record-logs all
+              run: yarn detox test --configuration ios.sim.debug --name 'User successfully imports a local wallet' --cleanup --loglevel debug --headless --record-logs all 
 
             # Upload artifacts
             - name: Upload artifacts

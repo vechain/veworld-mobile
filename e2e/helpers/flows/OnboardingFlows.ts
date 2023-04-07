@@ -143,18 +143,20 @@ const pasteMnemonic = async (mnemonic: string) => {
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
-    console.log("DEBUGGING CI - OnboardingFlows:146")
+    console.log("DEBUGGING CI - OnboardingFlows:146 - mnemonic: ", mnemonic)
+
+    console.log("DEBUGGING CI - OnboardingFlows:148")
 
     await element(by.id("import-mnemonic-input")).replaceText(mnemonic)
 
-    console.log("DEBUGGING CI - OnboardingFlows:150")
+    console.log("DEBUGGING CI - OnboardingFlows:152")
 
     await waitFor(element(by.text("Verify")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("Verify")).tap()
 
-    console.log("DEBUGGING CI - OnboardingFlows:157")
+    console.log("DEBUGGING CI - OnboardingFlows:159")
 }
 
 const chooseAndConfirmPassword = async (
