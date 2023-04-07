@@ -8,7 +8,7 @@ import { selectSelectedNetwork } from "./Network"
 
 const getQueryArgs = (state: RootState) => {
     const network = selectSelectedNetwork(state)
-    return { networkGenesisId: network.genesisId, networkType: network.type }
+    return { networkGenesisId: network.genesis.id, networkType: network.type }
 }
 
 export const selectTokensFromGithub = (state: RootState) =>
@@ -28,7 +28,7 @@ export const selectFungibleTokens = createSelector(
     selectSelectedNetwork,
     (tokens, network) =>
         tokens.filter(
-            (token: FungibleToken) => token.genesisId === network.genesisId,
+            (token: FungibleToken) => token.genesisId === network.genesis.id,
         ),
 )
 

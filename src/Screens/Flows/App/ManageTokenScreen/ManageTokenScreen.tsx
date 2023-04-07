@@ -69,7 +69,7 @@ export const ManageTokenScreen = () => {
                     tokenAddress: token.address,
                     timeUpdated: new Date().toISOString(),
                     position: selectedTokenSymbols.length,
-                    networkGenesisId: currentNetwork.genesisId,
+                    networkGenesisId: currentNetwork.genesis.id,
                 }),
             )
         }
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
 // TODO: Davide Carpini: this will be used in custom token bottom sheet, please do not remove
 <BaseView flexDirection="row">
                     <BaseTouchableBox
-                        action={() => {}} 
+                        action={() => {}}
                         w="auto"
                         flex={1}
                         justifyContent="space-between">

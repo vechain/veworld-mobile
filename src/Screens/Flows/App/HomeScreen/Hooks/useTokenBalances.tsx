@@ -39,7 +39,7 @@ export const useTokenBalances = () => {
     const thorClient = useThor()
 
     useGetTokensFromGithubQuery({
-        networkGenesisId: currentNetwork.genesisId,
+        networkGenesisId: currentNetwork.genesis.id,
         networkType: currentNetwork.type,
     })
 
@@ -56,14 +56,7 @@ export const useTokenBalances = () => {
             )
             dispatch(updateAccountBalances(thorClient))
         }
-    }, [
-        currentAccount?.address,
-        dispatch,
-        thorClient,
-        balances,
-        currentAccount,
-        currentNetwork,
-    ])
+    }, [dispatch, thorClient, balances, currentAccount, currentNetwork])
 
     useEffect(() => {
         const updateBalances = () => {
