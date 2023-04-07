@@ -1,55 +1,56 @@
 import { waitFor, element } from "detox"
 import assert from "assert"
 import { MnemonicScreen } from "../screens"
+import { DEFAULT_TIMEOUT, SHORT_TIMEOUT } from "../constants"
 
 const goThroughOnboardingSlides = async () => {
     await waitFor(element(by.text("GET STARTED")))
         .toExist()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("GET STARTED")).tap()
 
     await waitFor(element(by.text("NEXT: SUSTAINABLE")))
         .toExist()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("NEXT: SUSTAINABLE")).tap()
 
     await waitFor(element(by.text("NEXT: SAFE AND FAST")))
         .toExist()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("NEXT: SAFE AND FAST")).tap()
 
     await waitFor(element(by.text("NEXT: CREATE PASSWORD")))
         .toExist()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("NEXT: CREATE PASSWORD")).tap()
 }
 
 const goThroughPasswordSlides = async () => {
     await waitFor(element(by.text("NEXT: CUSTODY")))
         .toExist()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("NEXT: CUSTODY")).tap()
 
     await waitFor(element(by.text("NEXT: SAFETY")))
         .toExist()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("NEXT: SAFETY")).tap()
 
     await waitFor(element(by.text("NEXT: SECRET PHRASE")))
         .toExist()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("NEXT: SECRET PHRASE")).tap()
 }
 
 const skipToCreatePassword = async () => {
     await waitFor(element(by.text("GET STARTED")))
         .toBeVisible()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("GET STARTED")).tap()
 
     await waitFor(element(by.text("Skip ahead to create password")))
         .toBeVisible()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("Skip ahead to create password")).tap()
 }
 
@@ -108,7 +109,7 @@ const verifyMnemonic = async (mnemonic: string[]) => {
     for (let i = 0; i < 12; i++) {
         await waitFor(element(by.text(`Select word ${i + 1}`)))
             .toExist()
-            .withTimeout(1_000)
+            .withTimeout(SHORT_TIMEOUT)
             .then(async () => {
                 console.log(`Selecting word ${i + 1}: ${mnemonic[i]}`)
                 await element(
@@ -128,6 +129,10 @@ const verifyMnemonic = async (mnemonic: string[]) => {
 }
 
 const pasteMnemonic = async (mnemonic: string) => {
+    await waitFor(element(by.id("import-mnemonic-input")))
+        .toBeVisible()
+        .withTimeout(DEFAULT_TIMEOUT)
+
     await element(by.id("import-mnemonic-input")).replaceText(mnemonic)
 
     await element(by.text("Verify")).tap()
@@ -153,37 +158,41 @@ const protectWithBiometrics = async () => {
 
     await waitFor(element(by.text("Use Biometrics")))
         .toBeVisible()
-        .withTimeout(1_000)
+        .withTimeout(SHORT_TIMEOUT)
         .then(async () => {
             await element(by.text("Use Biometrics")).tap()
             await matchBiometrics()
+            return
         })
         .catch(() => {})
 
     await waitFor(element(by.text("Use Face ID")))
         .toBeVisible()
-        .withTimeout(1_000)
+        .withTimeout(SHORT_TIMEOUT)
         .then(async () => {
             await element(by.text("Use Face ID")).tap()
             await matchBiometrics()
+            return
         })
         .catch(() => {})
 
     await waitFor(element(by.text("Use Fingerprint")))
         .toBeVisible()
-        .withTimeout(1_000)
+        .withTimeout(SHORT_TIMEOUT)
         .then(async () => {
             await element(by.text("Use Fingerprint")).tap()
             await matchBiometrics()
+            return
         })
         .catch(() => {})
 
     await waitFor(element(by.text("Use Touch ID")))
         .toBeVisible()
-        .withTimeout(1_000)
+        .withTimeout(SHORT_TIMEOUT)
         .then(async () => {
             await element(by.text("Use Touch ID")).tap()
             await matchBiometrics()
+            return
         })
         .catch(() => {})
 }

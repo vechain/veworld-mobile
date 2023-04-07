@@ -1,7 +1,7 @@
 import { Given, Then, When } from "@cucumber/cucumber"
 import { waitFor, element } from "detox"
 import OnboardingFlows from "../helpers/flows/OnboardingFlows"
-import { WalletSuccessScreen } from "../helpers"
+import { DEFAULT_TIMEOUT, WalletSuccessScreen } from "../helpers"
 
 Given("The app is opened", { timeout: -1 }, async () => {
     let retries: number = 5
@@ -38,64 +38,62 @@ Given(
     },
 )
 
-Given("The user follows the onboarding process", { timeout: -1 }, async () => {
+When("The user follows the onboarding process", async () => {
     await OnboardingFlows.goThroughOnboardingSlides()
 })
 
-When("The user skips to password creation", { timeout: -1 }, async () => {
-    await OnboardingFlows.skipToCreatePassword()
-})
-
 When(
-    "The user follows the create wallet process",
+    "The user follows the onboarding and create wallet processes",
     { timeout: -1 },
     async () => {
+        await OnboardingFlows.goThroughOnboardingSlides()
+        await OnboardingFlows.selectCreateWallet()
         await OnboardingFlows.goThroughPasswordSlides()
     },
 )
 
-When("The user selects to create a new wallet", { timeout: -1 }, async () => {
+When("The user skips to password creation", async () => {
+    await OnboardingFlows.skipToCreatePassword()
+})
+
+When("The user follows the create wallet process", async () => {
+    await OnboardingFlows.goThroughPasswordSlides()
+})
+
+When("The user selects to create a new wallet", async () => {
     await OnboardingFlows.selectCreateWallet()
 })
 
-When(
-    "The user skips to creating a new local wallet",
-    { timeout: -1 },
-    async () => {
-        await OnboardingFlows.skipToCreateLocalWallet()
-    },
-)
+When("The user skips to creating a new local wallet", async () => {
+    await OnboardingFlows.skipToCreateLocalWallet()
+})
 
-When("The user skips to import local wallet", { timeout: -1 }, async () => {
+When("The user skips to import local wallet", async () => {
     await OnboardingFlows.skipToImportLocalWallet()
 })
 
 When("The user onboards with a new local wallet", { timeout: -1 }, async () => {
+    await OnboardingFlows.skipToCreateLocalWallet()
+
     const mnemonic = await OnboardingFlows.backupMnemonic()
 
     await OnboardingFlows.verifyMnemonic(mnemonic)
 })
 
 When(
-    "The user imports a local wallet with the mnemonic {string}",
+    "The user onboards with an imported mnemonic {string}",
     { timeout: -1 },
     async (mnemonic: string) => {
+        await OnboardingFlows.skipToImportLocalWallet()
         await OnboardingFlows.pasteMnemonic(mnemonic)
     },
 )
 
 When(
-    "The user chooses to protect the wallet with a password",
-    { timeout: -1 },
-    async () => {
-        await element(by.text("Create password")).tap()
-    },
-)
-
-When(
-    "The user enters a new password {string} and confirm password {string}",
+    "The user chooses to protect the wallet with a password {string} and confirms with {string}",
     { timeout: -1 },
     async (password: string, confirmPassword: string) => {
+        await element(by.text("Create password")).tap()
         await OnboardingFlows.chooseAndConfirmPassword(
             password,
             confirmPassword,
@@ -111,25 +109,25 @@ When(
     },
 )
 
-Then("The user should be onboarded", { timeout: -1 }, async () => {
+Then("The user should be onboarded", async () => {
     await waitFor(element(by.text("Create Wallet")))
         .toBeVisible()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
 })
 
-Then("The user should see password creation", { timeout: -1 }, async () => {
+Then("The user should see password creation", async () => {
     await waitFor(element(by.text("Create Wallet")))
         .toBeVisible()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
 })
 
-Then("The user can create wallet", { timeout: -1 }, async () => {
+Then("The user can create wallet", async () => {
     await waitFor(element(by.text("Your Mnemonic")))
         .toBeVisible()
-        .withTimeout(10_000)
+        .withTimeout(DEFAULT_TIMEOUT)
 })
 
-Then("The user should see wallet success screen", { timeout: -1 }, async () => {
+Then("The user should see wallet success screen", async () => {
     await WalletSuccessScreen.isActive()
 })
 
@@ -139,7 +137,7 @@ Then(
     async () => {
         await waitFor(element(by.text("You're finally one of us!")))
             .not.toBeVisible()
-            .withTimeout(10_000)
+            .withTimeout(DEFAULT_TIMEOUT)
     },
 )
 
@@ -149,6 +147,6 @@ Then(
     async () => {
         await waitFor(element(by.text("Protect your wallet")))
             .not.toBeVisible()
-            .withTimeout(10_000)
+            .withTimeout(DEFAULT_TIMEOUT)
     },
 )
