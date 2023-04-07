@@ -119,6 +119,10 @@ type RootTranslation = {
 	 */
 	BTN_ADD_CUSTOM_NODE: string
 	/**
+	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	BTN_EDIT_CUSTOM_NODE: string
+	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
 	BTN_DOWNLOAD_LOGS: string
@@ -913,6 +917,10 @@ type RootTranslation = {
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
 	/**
+	 * E​d​i​t​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: string
+	/**
 	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​u​s​t​o​m​ ​n​o​d​e​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
 	 */
 	NETWORK_CONFIRM_REMOVE_NODE: string
@@ -1092,6 +1100,10 @@ export type TranslationFunctions = {
 	 * Add a custom node
 	 */
 	BTN_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Edit custom node
+	 */
+	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
 	/**
 	 * Download logs
 	 */
@@ -1881,6 +1893,10 @@ Please, try again later.
 	 * Add network
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
+	/**
+	 * Edit network
+	 */
+	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: () => LocalizedString
 	/**
 	 * Confirming this will remove the custom node from the list, you will necessarily have to re-add it manually.
 	 */
