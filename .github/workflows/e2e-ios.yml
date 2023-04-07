@@ -54,7 +54,7 @@ jobs:
 
             # Build iOS app
             - name: Detox build iOS Debug
-              timeout-minutes: 10
+              timeout-minutes: 60
               run: yarn detox build --configuration ios.sim.debug
 
             # Start Metro Bundler
