@@ -40,7 +40,7 @@ export const CustomNodes: React.FC<Props> = ({ openBottomSheet }) => {
 
             <BaseSpacer height={16} />
 
-            {customNodes.length > 0 ? (
+            {customNodes.length ? (
                 <BaseTouchableBox
                     action={openBottomSheet}
                     justifyContent="center">
