@@ -5,7 +5,6 @@ import {
     BaseText,
     BaseView,
     BaseBottomSheet,
-    BaseIcon,
     BaseTextInput,
     BaseButton,
     hideToast,
@@ -13,35 +12,35 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
-import { URLUtils, error, useTheme } from "~Common"
+import { URLUtils, error } from "~Common"
 import { Network } from "~Model"
 import {
     selectCustomNetworks,
     useAppDispatch,
     useAppSelector,
+    validateAndUpdateCustomNode,
 } from "~Storage/Redux"
 import * as Haptics from "expo-haptics"
 
 type Props = {
     onClose: () => void
-    network: Network
+    network?: Network
 }
 
-const snapPoints = ["50%", "90%"]
+const snapPoints = ["70%"]
 
 export const EditCustomNodeBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose }, ref) => {
+>(({ onClose, network }, ref) => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
 
     const customNodes = useAppSelector(selectCustomNetworks)
 
     const dispatch = useAppDispatch()
 
-    const [nodeName, setNodeName] = useState("")
-    const [nodeUrl, setNodeUrl] = useState("")
+    const [nodeName, setNodeName] = useState(network?.name)
+    const [nodeUrl, setNodeUrl] = useState(network?.currentUrl)
     const [nodeUrlError, setNodeUrlError] = useState("")
 
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -54,11 +53,12 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
 
     const onEditNetworkPress = useCallback(async () => {
         hideToast()
-        if (isSubmitDisabled) return
+        if (isSubmitDisabled || !network?.id) return
         setIsSubmitting(true)
         try {
             await dispatch(
-                validateAndAddCustomNode({
+                validateAndUpdateCustomNode({
+                    networkToUpdateId: network.id,
                     name: nodeName,
                     url: nodeUrl,
                 }),
@@ -79,6 +79,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
         nodeName,
         nodeUrl,
         onClose,
+        network,
     ])
 
     const validateUrlInput = useCallback(
@@ -88,14 +89,19 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
             if (!URLUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()
 
             const urlAlreadyExist = customNodes.find(
-                net => net.currentUrl === value,
+                net => net.currentUrl === value && net.id !== network?.id,
             )
             if (urlAlreadyExist) return LL.ERROR_URL_ALREADY_USER()
 
             return ""
         },
-        [customNodes, LL],
+        [network, customNodes, LL],
     )
+
+    useEffect(() => {
+        setNodeName(network?.name || "")
+        setNodeUrl(network?.currentUrl || "")
+    }, [network])
 
     useEffect(() => {
         if (nodeUrl) {
@@ -108,36 +114,20 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
             snapPoints={snapPoints}
             ref={ref}
             onChange={handleSheetChanges}>
-            <BaseView flexDirection="row" w={100}>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.BD_CUSTOM_NODES()}
-                </BaseText>
-                <BaseIcon
-                    name={"plus"}
-                    size={24}
-                    bg={theme.colors.secondary}
-                    action={onEditNetworkPress}
-                />
-            </BaseView>
-
-            <BaseSpacer height={16} />
             <BaseView
-                mx={20}
+                w={100}
+                h={100}
                 flexGrow={1}
                 justifyContent="space-between"
                 alignItems="center">
                 <BaseView>
-                    <BaseText typographyFont="title">
-                        {LL.BTN_ADD_CUSTOM_NODE()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
-                    <BaseText typographyFont="button" pb={8}>
-                        {LL.NETWORK_ADD_CUSTOM_NODE_SB()}
-                    </BaseText>
-                    <BaseText typographyFont="captionRegular">
-                        {LL.NETWORK_ADD_CUSTOM_NODE_SB_DESC()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
+                    <BaseView flexDirection="row" w={100}>
+                        <BaseText typographyFont="subTitleBold">
+                            {LL.BTN_EDIT_CUSTOM_NODE()}
+                        </BaseText>
+                    </BaseView>
+
+                    <BaseSpacer height={16} />
                     <BaseTextInput
                         placeholder={LL.COMMON_LBL_ENTER_THE({
                             name: LL.COMMON_LBL_NAME(),
@@ -157,15 +147,17 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
                         errorMessage={nodeUrlError}
                     />
                 </BaseView>
-                <BaseButton
-                    action={onEditNetworkPress}
-                    w={100}
-                    px={20}
-                    isLoading={isSubmitting}
-                    title={LL.NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK()}
-                    disabled={isSubmitting || isSubmitDisabled}
-                    radius={16}
-                />
+                <BaseView mb={20} w={100}>
+                    <BaseButton
+                        action={onEditNetworkPress}
+                        w={100}
+                        px={20}
+                        isLoading={isSubmitting}
+                        title={LL.NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK()}
+                        disabled={isSubmitting || isSubmitDisabled}
+                        radius={16}
+                    />
+                </BaseView>
             </BaseView>
         </BaseBottomSheet>
     )
