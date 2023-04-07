@@ -1,5 +1,5 @@
 import { veWorldErrors } from "~Common/Errors"
-import { debug, warn } from "~Common/Logger"
+import { debug, error, warn } from "~Common/Logger"
 import URLUtils from "../URLUtils"
 
 /**
@@ -31,16 +31,14 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
         const wsUrl = URLUtils.toWebsocketURL(url, "/subscriptions/beat")
         const webSocket = new WebSocket(wsUrl)
 
-        console.log({ wsUrl })
-
         webSocket.onopen = () => {
-            console.log("Websocket opened")
+            debug("Websocket opened")
             resolve()
             webSocket.close()
         }
 
         webSocket.onerror = () => {
-            console.log("Websocket errored")
+            error("Websocket errored")
             reject(
                 veWorldErrors.provider.disconnected({
                     message: "Failed to test WS connection",

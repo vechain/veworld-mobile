@@ -859,7 +859,7 @@ type RootTranslation = {
 	/**
 	 * N​e​t​w​o​r​k​ ​a​l​r​e​a​d​y​ ​i​n​ ​u​s​e
 	 */
-	ERROR_URL_ALREADY_USER: string
+	ERROR_URL_ALREADY_USED: string
 	/**
 	 * R​e​q​u​i​r​e​d
 	 */
@@ -1836,7 +1836,7 @@ Please, try again later.
 	/**
 	 * Network already in use
 	 */
-	ERROR_URL_ALREADY_USER: () => LocalizedString
+	ERROR_URL_ALREADY_USED: () => LocalizedString
 	/**
 	 * Required
 	 */

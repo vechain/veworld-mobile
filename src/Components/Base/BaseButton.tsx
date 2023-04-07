@@ -10,7 +10,6 @@ import { typography, TFonts } from "~Common/Theme"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText } from "./BaseText"
 import * as Haptics from "expo-haptics"
-import { DotsLoader } from "~Components/Reusable"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -143,25 +142,21 @@ export const BaseButton = ({
             ]}
             {...otherProps}>
             {leftIcon}
-            {isLoading ? (
-                <DotsLoader style={{ height: 17.7 }} />
-            ) : (
-                <BaseText
-                    color={
-                        textColor ||
-                        (isSolidButton
-                            ? theme.colors.background
-                            : theme.colors.text)
-                    }
-                    typographyFont={computedTypographyFont}
-                    fontFamily={fontFamily}
-                    fontWeight={fontWeight}
-                    fontSize={fontSize}
-                    style={themedStyles.text}>
-                    {otherProps.title}
-                    {children}
-                </BaseText>
-            )}
+            <BaseText
+                color={
+                    textColor ||
+                    (isSolidButton
+                        ? theme.colors.background
+                        : theme.colors.text)
+                }
+                typographyFont={computedTypographyFont}
+                fontFamily={fontFamily}
+                fontWeight={fontWeight}
+                fontSize={fontSize}
+                style={themedStyles.text}>
+                {!isLoading ? otherProps.title : "..."}
+                {children}
+            </BaseText>
             {rightIcon}
         </TouchableOpacity>
     )

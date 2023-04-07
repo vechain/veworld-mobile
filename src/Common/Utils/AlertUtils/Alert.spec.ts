@@ -101,7 +101,7 @@ describe("showGoToSettingsAlert", () => {
 })
 
 describe("showDefaultAlert", () => {
-    it("should show the default alert", () => {
+    it("should show the default alert - no action", () => {
         const title = "Alert Title"
         const message = "Alert Message"
         const buttonTitle = "OK"
@@ -109,6 +109,19 @@ describe("showDefaultAlert", () => {
             title as LocalizedString,
             message as LocalizedString,
             buttonTitle as LocalizedString,
+        )
+        expect(RNAlert.alert).toHaveBeenCalled()
+    })
+    it("should show the default alert - action", () => {
+        const title = "Alert Title"
+        const message = "Alert Message"
+        const buttonTitle = "OK"
+        const buttonAction = jest.fn()
+        showDefaultAlert(
+            title as LocalizedString,
+            message as LocalizedString,
+            buttonTitle as LocalizedString,
+            buttonAction,
         )
         expect(RNAlert.alert).toHaveBeenCalled()
     })
