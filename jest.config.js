@@ -48,7 +48,6 @@ module.exports = {
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
     coveragePathIgnorePatterns: [
-        "/node_modules/",
         "<rootDir>/src/Common/Utils/ConnectionUtils/ConnectionUtils.ts",
     ],
 
