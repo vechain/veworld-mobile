@@ -158,6 +158,8 @@ const pasteMnemonic = async (mnemonic: string) => {
     await waitFor(element(by.text("Verify")))
         .toExist()
         .withTimeout(DEFAULT_TIMEOUT)
+
+    await device.takeScreenshot("screenshot-verify-button")
     await element(by.text("Verify")).tap()
 }
 
