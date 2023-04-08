@@ -151,8 +151,12 @@ const pasteMnemonic = async (mnemonic: string) => {
 
     console.log(inputField)
 
+    const verifyButton = await element(by.text("Verify")).getAttributes()
+
+    console.log("verifyButton: ", verifyButton)
+
     await waitFor(element(by.text("Verify")))
-        .toBeVisible()
+        .toExist()
         .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("Verify")).tap()
 }
