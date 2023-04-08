@@ -145,7 +145,10 @@ const pasteMnemonic = async (mnemonic: string) => {
 
     await element(by.id("import-mnemonic-input")).replaceText(mnemonic)
 
-    //Close the keyboard by tapping somewhere outside of the input field
+    // TextInput needs to be tapped again to be able to dismiss keyboard
+    await element(by.id("import-mnemonic-input")).tap()
+
+    // Dismiss keyboard by tapping outside, for example the title
     await element(by.text("Import Local Wallet")).tap()
 
     await waitFor(element(by.text("Verify")))
