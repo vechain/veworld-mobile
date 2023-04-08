@@ -78,14 +78,10 @@ const skipToImportLocalWallet = async () => {
         .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("Import wallet")).tap()
 
-    console.log("DEBUGGING CI - OnboardingFlows:81")
-
     await waitFor(element(by.id("import-local-wallet")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
     await element(by.id("import-local-wallet")).tap()
-
-    console.log("DEBUGGING CI - OnboardingFlows:88")
 }
 
 const backupMnemonic = async (): Promise<string[]> => {
@@ -155,7 +151,6 @@ const pasteMnemonic = async (mnemonic: string) => {
         .toExist()
         .withTimeout(DEFAULT_TIMEOUT)
 
-    await device.takeScreenshot("screenshot-verify-button")
     await element(by.text("Verify")).tap()
 }
 
