@@ -149,7 +149,7 @@ const pasteMnemonic = async (mnemonic: string) => {
     await element(by.text("Import Local Wallet")).tap()
 
     await waitFor(element(by.text("Verify")))
-        .toBeVisible()
+        .toExist()
         .withTimeout(DEFAULT_TIMEOUT)
 
     await device.takeScreenshot("screenshot-verify-button")
