@@ -145,18 +145,11 @@ const pasteMnemonic = async (mnemonic: string) => {
 
     await element(by.id("import-mnemonic-input")).replaceText(mnemonic)
 
-    const inputField: any = await element(
-        by.id("import-mnemonic-input"),
-    ).getAttributes()
-
-    console.log(inputField)
-
-    const verifyButton = await element(by.text("Verify")).getAttributes()
-
-    console.log("verifyButton: ", verifyButton)
+    //Close the keyboard by tapping somewhere outside of the input field
+    await element(by.text("Import Local Wallet")).tap()
 
     await waitFor(element(by.text("Verify")))
-        .toExist()
+        .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
     await device.takeScreenshot("screenshot-verify-button")
