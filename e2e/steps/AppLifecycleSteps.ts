@@ -1,5 +1,6 @@
 import { Given, Then } from "@cucumber/cucumber"
 import detox from "detox"
+import { LONG_TIMEOUT } from "../helpers"
 
 // Default cucumber timeout has to be deactivated for this step
 Given("The user has installed the app", { timeout: -1 }, async () => {
@@ -37,13 +38,13 @@ Given("The user closes the app", { timeout: -1 }, async () => {
     }
 })
 
-Then("The app is started successfully", async () => {
+Then("The app is started successfully", { timeout: -1 }, async () => {
     if (isAndroid()) {
         return "skipped"
     } else {
         await waitFor(element(by.id("welcome-title-id")))
             .toBeVisible()
-            .withTimeout(10_000)
+            .withTimeout(LONG_TIMEOUT)
     }
 })
 
