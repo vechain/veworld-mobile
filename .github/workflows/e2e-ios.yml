@@ -100,7 +100,7 @@ jobs:
             # Test with Detox
             - name: Detox test iOS release
               timeout-minutes: 20
-              run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel debug --headless --record-logs all 
+              run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel debug --headless --record-logs all
 
             # Upload artifacts
             - name: Upload artifacts
