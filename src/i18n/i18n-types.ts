@@ -396,10 +396,6 @@ type RootTranslation = {
 	 */
 	BD_CONTACT_ADDRESS: string
 	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​o​n​t​a​c​t​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
-	 */
-	BD_CONFIRM_REMOVE_CONTACT: string
-	/**
 	 * R​e​q​u​i​r​e​ ​t​h​e​ ​p​i​n​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​w​i​t​h​ ​l​o​c​a​l​ ​w​a​l​l​e​t​s
 	 */
 	BD_APP_LOCK: string
@@ -889,6 +885,14 @@ type RootTranslation = {
 	 */
 	PLACEHOLDER_ENTER_ADDRESS: string
 	/**
+	 * R​e​m​o​v​e​ ​c​o​n​t​a​c​t
+	 */
+	CONTACTS_CONFIRM_REMOVE_CONTACT_TITLE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​o​n​t​a​c​t​?
+	 */
+	CONTACTS_CONFIRM_REMOVE_CONTACT_DESC: string
+	/**
 	 * M​a​n​a​g​e​ ​n​o​d​e​s
 	 */
 	NETWORK_MANAGE_NODES: string
@@ -913,9 +917,13 @@ type RootTranslation = {
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
 	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​u​s​t​o​m​ ​n​o​d​e​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 * R​e​m​o​v​e​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
-	NETWORK_CONFIRM_REMOVE_NODE: string
+	NETWORK_CONFIRM_REMOVE_NODE_TITLE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​n​o​d​e​?​ ​Y​o​u​'​l​l​ ​n​e​e​d​ ​t​o​ ​a​d​d​ ​i​t​ ​a​g​a​i​n​ ​i​f​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​u​s​e​ ​i​t​.
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE_DESC: string
 	/**
 	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
 	 */
@@ -1368,10 +1376,6 @@ export type TranslationFunctions = {
 	 * Contact address
 	 */
 	BD_CONTACT_ADDRESS: () => LocalizedString
-	/**
-	 * Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.
-	 */
-	BD_CONFIRM_REMOVE_CONTACT: () => LocalizedString
 	/**
 	 * Require the pin when performing transactions with local wallets
 	 */
@@ -1858,6 +1862,14 @@ Please, try again later.
 	 */
 	PLACEHOLDER_ENTER_ADDRESS: () => LocalizedString
 	/**
+	 * Remove contact
+	 */
+	CONTACTS_CONFIRM_REMOVE_CONTACT_TITLE: () => LocalizedString
+	/**
+	 * Are you sure you want to remove this contact?
+	 */
+	CONTACTS_CONFIRM_REMOVE_CONTACT_DESC: () => LocalizedString
+	/**
 	 * Manage nodes
 	 */
 	NETWORK_MANAGE_NODES: () => LocalizedString
@@ -1882,9 +1894,13 @@ Please, try again later.
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
 	/**
-	 * Confirming this will remove the custom node from the list, you will necessarily have to re-add it manually.
+	 * Remove custom node
 	 */
-	NETWORK_CONFIRM_REMOVE_NODE: () => LocalizedString
+	NETWORK_CONFIRM_REMOVE_NODE_TITLE: () => LocalizedString
+	/**
+	 * Are you sure you want to remove this node? You'll need to add it again if you want to use it.
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE_DESC: () => LocalizedString
 	/**
 	 * Main Networks
 	 */

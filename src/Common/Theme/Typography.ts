@@ -10,6 +10,7 @@ export type TFonts =
     | "body"
     | "bodyMedium"
     | "button"
+    | "buttonRegular"
     | "buttonPrimary"
     | "buttonSecondary"
     | "smallButtonPrimary"
@@ -123,6 +124,11 @@ export const defaults: Record<TFonts, TypographyObject> = {
     },
     button: {
         fontFamily: fontFamily["Inter-Medium"],
+        fontSize: 16,
+        fontWeight: fontWeight[500],
+    },
+    buttonRegular: {
+        fontFamily: fontFamily["Inter-Regular"],
         fontSize: 16,
         fontWeight: fontWeight[500],
     },

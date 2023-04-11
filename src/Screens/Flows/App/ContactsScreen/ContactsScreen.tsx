@@ -21,7 +21,8 @@ import {
 } from "~Storage/Redux/Selectors"
 import {
     AddContactButton,
-    ContactDetailBox,
+    ContactBox,
+    ContactBoxWithDelete,
     EditContactBottomSheet,
 } from "./Components"
 
@@ -76,16 +77,14 @@ export const ContactsScreen = () => {
     const onDeleteContactPress = useCallback(
         (address: string) => {
             setSelectedContactAddress(address)
-
             openRemoveContactSheet()
         },
         [openRemoveContactSheet],
     )
 
     const onEditContactPress = useCallback(
-        (name: string, address: string) => {
+        (address: string) => {
             setSelectedContactAddress(address)
-
             openEditContactSheet()
         },
         [openEditContactSheet],
@@ -134,14 +133,20 @@ export const ContactsScreen = () => {
                         keyExtractor={contact => contact.address}
                         ItemSeparatorComponent={contactsListSeparator}
                         renderItem={({ item }) => {
+                            const onContactDelete = () => {
+                                onDeleteContactPress(item.address)
+                            }
+
+                            const onContactEdit = () => {
+                                onEditContactPress(item.address)
+                            }
+
                             return (
-                                <BaseView mx={20}>
-                                    <ContactDetailBox
-                                        contact={item}
-                                        onDeletePress={onDeleteContactPress}
-                                        onEditPress={onEditContactPress}
-                                    />
-                                </BaseView>
+                                <ContactBoxWithDelete
+                                    contact={item}
+                                    onPress={onContactEdit}
+                                    onDeletePress={onContactDelete}
+                                />
                             )
                         }}
                         showsVerticalScrollIndicator={false}
@@ -211,7 +216,11 @@ export const ContactsScreen = () => {
                 ref={confirmRemoveContactSheet}
                 onClose={closeRemoveContactSheet}
                 onConfirm={handleRemoveContact}
-                description={LL.BD_CONFIRM_REMOVE_CONTACT()}
+                title={LL.CONTACTS_CONFIRM_REMOVE_CONTACT_TITLE()}
+                description={LL.CONTACTS_CONFIRM_REMOVE_CONTACT_DESC()}
+                additionalContent={
+                    <ContactBox contact={selectedContact} onPress={() => {}} />
+                }
             />
             <EditContactBottomSheet
                 ref={editContactSheet}
