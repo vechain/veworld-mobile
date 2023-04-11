@@ -83,8 +83,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                         )
                         return
                     }
-                    console.log("customTokens", customTokens)
-                    console.log("address", address)
                     // check if already present
                     if (
                         customTokens
@@ -169,7 +167,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             dispatch(setScannedAddress(undefined))
         }
     }, [dispatch, handleValueChange, temporaryAddress])
-    console.log("newCustomToken", newCustomToken)
 
     return (
         <BaseBottomSheet
