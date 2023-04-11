@@ -4,6 +4,7 @@ import {
     addCustomNetwork,
     changeSelectedNetwork,
     removeCustomNetwork,
+    updateCustomNetwork,
 } from "../Slices/Network"
 import { ConnectionUtils, debug, URLUtils, veWorldErrors } from "~Common"
 import { genesises } from "~Common/Constant/Thor/ThorConstants"
@@ -18,6 +19,50 @@ import uuid from "react-native-uuid"
 
 export * from "../Slices/Network"
 
+const validateCustomNode = async ({
+    url,
+    name,
+}: {
+    url: string
+    name: string
+}) => {
+    if (!URLUtils.isAllowed(url))
+        throw veWorldErrors.rpc.invalidParams({
+            message: "URL must be secure (https or localhost)",
+        })
+    try {
+        //Clean the URL
+        url = URLUtils.clean(url)
+
+        //Test the Websocket connection for the user's URL - throws an error if it fails
+        await ConnectionUtils.verifyWebSocketConnection(url)
+
+        debug("Websocket connection verified")
+
+        //Get the genesis block
+        const blockResponse = await axios.get<Connex.Thor.Block>(
+            `${url}/blocks/0`,
+        )
+        const block = blockResponse.data
+
+        //Check if this is a network that we know
+        const type = genesises.which(block.id)
+
+        const network: Network = {
+            id: uuid.v4().toString(),
+            defaultNet: false,
+            name,
+            type: type,
+            currentUrl: url,
+            urls: [url],
+            genesis: block,
+        }
+        return network
+    } catch (e) {
+        throw new Error("Failed to add validate network")
+    }
+}
+
 export const validateAndAddCustomNode = createAppAsyncThunk(
     "network/validateAndAddCustomNode",
     async (
@@ -26,28 +71,8 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
     ) => {
         debug("Attempting to add a custom network")
 
-        if (!URLUtils.isAllowed(url))
-            throw veWorldErrors.rpc.invalidParams({
-                message: "URL must be secure (https or localhost)",
-            })
-
         try {
-            //Clean the URL
-            url = URLUtils.clean(url)
-
-            //Test the Websocket connection for the user's URL - throws an error if it fails
-            await ConnectionUtils.verifyWebSocketConnection(url)
-
-            debug("Websocket connection verified")
-
-            //Get the genesis block
-            const blockResponse = await axios.get<Connex.Thor.Block>(
-                `${url}/blocks/0`,
-            )
-            const block = blockResponse.data
-
-            //Check if this is a network that we know
-            const type = genesises.which(block.id)
+            const network = await validateCustomNode({ url, name })
 
             const customNetworks = selectCustomNetworks(getState())
 
@@ -58,21 +83,56 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
                         message: "Network already exists",
                     })
             })
-            const network: Network = {
-                id: uuid.v4().toString(),
-                defaultNet: false,
-                name,
-                type: type,
-                currentUrl: url,
-                urls: [url],
-                genesis: block,
-            }
+
             dispatch(addCustomNetwork(network))
             dispatch(changeSelectedNetwork(network))
         } catch (e) {
             return rejectWithValue(
                 veWorldErrors.rpc.internal({
                     message: "Failed to add custom network",
+                    error: e,
+                }).message,
+            )
+        }
+    },
+)
+
+export const validateAndUpdateCustomNode = createAppAsyncThunk(
+    "network/validateAndUpdateCustomNode",
+    async (
+        {
+            networkToUpdateId,
+            url,
+            name,
+        }: { networkToUpdateId: string; url: string; name: string },
+        { dispatch, getState, rejectWithValue },
+    ) => {
+        debug("Attempting to update a custom network")
+
+        try {
+            const network = await validateCustomNode({ url, name })
+
+            const customNetworks = selectCustomNetworks(getState())
+
+            //Check if the custom network already exists and is not the one being updated
+            customNetworks.forEach(net => {
+                if (net.id !== networkToUpdateId)
+                    if (net.urls.some(u => URLUtils.compareURLs(u, url)))
+                        throw veWorldErrors.rpc.invalidRequest({
+                            message: "Network already exists",
+                        })
+            })
+
+            dispatch(
+                updateCustomNetwork({
+                    id: networkToUpdateId,
+                    updatedNetwork: network,
+                }),
+            )
+        } catch (e) {
+            return rejectWithValue(
+                veWorldErrors.rpc.internal({
+                    message: "Failed to add update network",
                     error: e,
                 }).message,
             )

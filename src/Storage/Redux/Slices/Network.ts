@@ -29,6 +29,16 @@ export const NetworkSlice = createSlice({
             state.customNetworks.push(action.payload)
         },
 
+        updateCustomNetwork: (
+            state,
+            action: PayloadAction<{ id: string; updatedNetwork: Network }>,
+        ) => {
+            const index = state.customNetworks.findIndex(
+                net => net.id === action.payload.id,
+            )
+            if (index !== -1)
+                state.customNetworks[index] = action.payload.updatedNetwork
+        },
         removeCustomNetwork: (state, action: PayloadAction<{ id: string }>) => {
             const index = state.customNetworks.findIndex(
                 net => net.id === action.payload.id,
@@ -52,6 +62,7 @@ export const NetworkSlice = createSlice({
 export const {
     changeSelectedNetwork,
     addCustomNetwork,
+    updateCustomNetwork,
     removeCustomNetwork,
     toggleShowTestnetTag,
     toggleShowConversionOtherNetworks,

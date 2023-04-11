@@ -13,6 +13,7 @@ import { error, useBottomSheetModal, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    selectNetworkById,
     selectSelectedNetwork,
     selectShowConversionOnOtherNets,
     selectShowTestnetTag,
@@ -25,6 +26,7 @@ import {
 import {
     CustomNodes,
     CustomNodesBottomSheet,
+    EditCustomNodeBottomSheet,
     SelectNetwork,
     SelectNetworkBottomSheet,
 } from "./Components"
@@ -39,6 +41,10 @@ export const ChangeNetworkScreen = () => {
     const dispatch = useAppDispatch()
 
     const [networkToEditDeleteId, setNetworkToEditDeleteId] = useState<string>()
+
+    const networkToEdit = useAppSelector(
+        selectNetworkById(networkToEditDeleteId),
+    )
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
@@ -66,6 +72,12 @@ export const ChangeNetworkScreen = () => {
         onClose: closeDeleteConfirmationSheet,
     } = useBottomSheetModal()
 
+    const {
+        ref: editNetworkSheetRef,
+        onOpen: openEditNetworkSheet,
+        onClose: closeEditNetworkSheet,
+    } = useBottomSheetModal()
+
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const toggleConversionSwitch = useCallback(
@@ -86,9 +98,9 @@ export const ChangeNetworkScreen = () => {
         (network: Network) => {
             setNetworkToEditDeleteId(network.id)
             closeCustomNodesBottomSheet()
-            // openSelectNetworkBottomSheet()
+            openEditNetworkSheet()
         },
-        [closeCustomNodesBottomSheet],
+        [closeCustomNodesBottomSheet, openEditNetworkSheet],
     )
 
     const onDeleteNetworkClick = useCallback(
@@ -168,6 +180,11 @@ export const ChangeNetworkScreen = () => {
                 onClose={closeDeleteConfirmationSheet}
                 onConfirm={onDeleteNetworkConfirm}
                 description={LL.NETWORK_CONFIRM_REMOVE_NODE()}
+            />
+            <EditCustomNodeBottomSheet
+                ref={editNetworkSheetRef}
+                onClose={closeEditNetworkSheet}
+                network={networkToEdit}
             />
         </BaseSafeArea>
     )
