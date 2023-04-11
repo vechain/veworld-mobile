@@ -170,8 +170,6 @@ const chooseAndConfirmPassword = async (
 const protectWithBiometrics = async () => {
     assert(detox.device.getPlatform() === "ios", "Not on iOS device")
 
-    await detox.device.setBiometricEnrollment(true)
-
     await waitFor(element(by.text("Use Biometrics")))
         .toBeVisible()
         .withTimeout(SHORT_TIMEOUT)

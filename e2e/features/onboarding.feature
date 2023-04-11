@@ -77,3 +77,23 @@ Feature: User Onboarding
     Examples:
       | password     | mnemonic                                                                    |
       | 134679       | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
+
+  Scenario: The user attempts to use biometrics when it is not authorized
+    Given The app is opened and is iOS and does not have biometrics authorization
+    And The user onboards with an imported mnemonic "<mnemonic>"
+    And The user chooses to protect the wallet with biometrics
+    Then The user should see biometrics disabled alert
+
+    Examples:
+      | mnemonic                                                                            |
+      | denial kitchen pet squirrel other broom bar gas better priority spoil cross         |
+
+  Scenario: The user attempts to use biometrics when device is not enrolled
+    Given The app is opened and is iOS
+    And The user onboards with an imported mnemonic "<mnemonic>"
+    And The user chooses to protect the wallet with biometrics and does not enroll
+    Then The user should see biometrics not enrolled alert
+
+    Examples:
+      | mnemonic                                                                            |
+      | denial kitchen pet squirrel other broom bar gas better priority spoil cross         |

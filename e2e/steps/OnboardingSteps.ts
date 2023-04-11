@@ -1,7 +1,11 @@
 import { Given, Then, When } from "@cucumber/cucumber"
 import { waitFor, element } from "detox"
 import OnboardingFlows from "../helpers/flows/OnboardingFlows"
-import { DEFAULT_TIMEOUT, WalletSuccessScreen } from "../helpers"
+import {
+    BiometricsScreen,
+    DEFAULT_TIMEOUT,
+    WalletSuccessScreen,
+} from "../helpers"
 
 Given("The app is opened", { timeout: -1 }, async () => {
     let retries: number = 5
@@ -37,6 +41,45 @@ Given(
         if (retries === 0) return "skipped"
     },
 )
+
+Given(
+    "The app is opened and is iOS and does not have biometrics authorization",
+    { timeout: -1 },
+    async () => {
+        if (detox.device.getPlatform() !== "ios") return "skipped"
+
+        let retries: number = 5
+        while (retries-- > 0) {
+            try {
+                await detox.device.launchApp({
+                    newInstance: true,
+                    permissions: { faceid: "NO" },
+                })
+                break
+            } catch (error) {
+                console.log("Error while launching app: " + error)
+            }
+        }
+        if (retries === 0) return "skipped"
+    },
+)
+
+Given("The app is opened and is iOS", { timeout: -1 }, async () => {
+    if (detox.device.getPlatform() !== "ios") return "skipped"
+
+    let retries: number = 5
+    while (retries-- > 0) {
+        try {
+            await detox.device.launchApp({
+                newInstance: true,
+            })
+            break
+        } catch (error) {
+            console.log("Error while launching app: " + error)
+        }
+    }
+    if (retries === 0) return "skipped"
+})
 
 When("The user follows the onboarding process", async () => {
     await OnboardingFlows.goThroughOnboardingSlides()
@@ -105,6 +148,16 @@ When(
     "The user chooses to protect the wallet with biometrics",
     { timeout: -1 },
     async () => {
+        await BiometricsScreen.enrollBiometrics(true)
+        await OnboardingFlows.protectWithBiometrics()
+    },
+)
+
+When(
+    "The user chooses to protect the wallet with biometrics and does not enroll",
+    { timeout: -1 },
+    async () => {
+        await BiometricsScreen.enrollBiometrics(false)
         await OnboardingFlows.protectWithBiometrics()
     },
 )
@@ -147,6 +200,26 @@ Then(
     async () => {
         await waitFor(element(by.text("Protect your wallet")))
             .not.toBeVisible()
+            .withTimeout(DEFAULT_TIMEOUT)
+    },
+)
+
+Then(
+    "The user should see biometrics disabled alert",
+    { timeout: -1 },
+    async () => {
+        await waitFor(element(by.text("Biometrics previously denied")))
+            .toBeVisible()
+            .withTimeout(DEFAULT_TIMEOUT)
+    },
+)
+
+Then(
+    "The user should see biometrics not enrolled alert",
+    { timeout: -1 },
+    async () => {
+        await waitFor(element(by.text("Biometrics not available")))
+            .toBeVisible()
             .withTimeout(DEFAULT_TIMEOUT)
     },
 )
