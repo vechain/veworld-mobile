@@ -47,10 +47,6 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
 
     const isSubmitDisabled = !nodeName || !nodeUrl || !!nodeUrlError
 
-    const handleSheetChanges = useCallback((index: number) => {
-        console.log("EditCustomNodeSheet position changed", index)
-    }, [])
-
     const onEditNetworkPress = useCallback(async () => {
         hideToast()
         if (isSubmitDisabled || !network?.id) return
@@ -110,10 +106,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
     }, [nodeUrl, validateUrlInput])
 
     return (
-        <BaseBottomSheet
-            snapPoints={snapPoints}
-            ref={ref}
-            onChange={handleSheetChanges}>
+        <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
             <BaseView
                 w={100}
                 h={100}
