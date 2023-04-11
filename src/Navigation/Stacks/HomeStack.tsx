@@ -9,6 +9,7 @@ import {
     SwapScreen,
     WalletManagementScreen,
     ManageCustomTokenScreen,
+    CameraScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 

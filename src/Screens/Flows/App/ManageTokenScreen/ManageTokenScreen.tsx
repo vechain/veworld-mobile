@@ -21,6 +21,7 @@ import {
     selectSelectedAccount,
     selectNonVechainDenormalizedAccountTokenBalances,
     selectSelectedNetwork,
+    selectCustomTokens,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -42,6 +43,7 @@ export const ManageTokenScreen = () => {
         tokenBalances.map(({ token }) => token.symbol),
     )
     const currentNetwork = useAppSelector(selectSelectedNetwork)
+    const customTokens = useAppSelector(selectCustomTokens)
 
     const filteredTokens = tokens.filter(
         token =>
@@ -75,6 +77,10 @@ export const ManageTokenScreen = () => {
                     networkGenesisId: currentNetwork.genesisId,
                 }),
             )
+        } else {
+            throw new Error(
+                "Trying to select an official token without an account selected",
+            )
         }
     }
     const unselectToken = (token: FungibleToken) => {
@@ -89,6 +95,10 @@ export const ManageTokenScreen = () => {
                     accountAddress: account.address,
                     tokenAddress: token.address,
                 }),
+            )
+        } else {
+            throw new Error(
+                "Trying to unselect an official token without an account selected",
             )
         }
     }
@@ -129,6 +139,14 @@ export const ManageTokenScreen = () => {
                     <BaseText py={3}>
                         {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
                     </BaseText>
+                    <BaseSpacer width={10} />
+                    <BaseView bg={theme.colors.primary} style={styles.counter}>
+                        <BaseText
+                            color={theme.colors.textReversed}
+                            typographyFont="captionMedium">
+                            {customTokens.length}
+                        </BaseText>
+                    </BaseView>
                 </BaseTouchableBox>
                 <BaseSpacer height={16} />
                 <BaseSearchInput
@@ -193,5 +211,10 @@ const styles = StyleSheet.create({
     scrollView: {
         paddingHorizontal: 20,
         width: "100%",
+    },
+    counter: {
+        borderRadius: 6,
+        paddingVertical: 2,
+        paddingHorizontal: 4,
     },
 })

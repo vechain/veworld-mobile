@@ -10,3 +10,7 @@ export const selectMnemonic = createSelector(reducer, state => {
 export const selectAppLockStatus = createSelector(reducer, state => {
     return state.appLockStatus
 })
+
+export const selectScannedAddress = createSelector(reducer, state => {
+    return state.temporaryScannedAddress
+})

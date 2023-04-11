@@ -16,7 +16,13 @@ export const TokenSlice = createSlice({
         addCustomToken: (state, action: PayloadAction<FungibleToken>) => {
             state.custom.push(action.payload)
         },
+        deleteCustomToken: (state, action: PayloadAction<string>) => {
+            state.custom = state.custom.filter(
+                token => token.address !== action.payload,
+            )
+        },
     },
 })
 
-export const { updateCustomTokens, addCustomToken } = TokenSlice.actions
+export const { updateCustomTokens, addCustomToken, deleteCustomToken } =
+    TokenSlice.actions

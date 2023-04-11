@@ -23,7 +23,9 @@ export const OfficialTokenCard = memo(
             <BaseTouchableBox
                 action={action}
                 containerStyle={[styles.container, style]}>
-                <BaseCard style={styles.card}>
+                <BaseCard
+                    style={styles.card}
+                    containerStyle={styles.imageShadow}>
                     {/* @ts-ignore */}
                     <Image source={{ uri: token.icon }} style={styles.image} />
                 </BaseCard>
@@ -43,6 +45,9 @@ export const OfficialTokenCard = memo(
 
 const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
+        imageShadow: {
+            width: "auto",
+        },
         container: {
             width: "100%",
             marginVertical: 7,

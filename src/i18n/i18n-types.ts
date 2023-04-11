@@ -941,7 +941,7 @@ type RootTranslation = {
 	 */
 	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: string
 	/**
-	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t
+	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t​ ​o​r​ ​c​a​n​'​t​ ​b​e​ ​a​d​d​e​d​ ​t​o​ ​t​h​i​s​ ​n​e​t​w​o​r​k
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: string
 	/**
@@ -1885,7 +1885,7 @@ Please, try again later.
 	 */
 	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: () => LocalizedString
 	/**
-	 * The address entered is incorrect
+	 * The address entered is incorrect or can't be added to this network
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: () => LocalizedString
 	/**

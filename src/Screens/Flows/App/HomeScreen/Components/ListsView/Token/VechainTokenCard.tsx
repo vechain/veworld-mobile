@@ -63,7 +63,9 @@ export const VechainTokenCard = memo(
         return (
             <Animated.View style={[baseStyles.innerRow]}>
                 <BaseView flexDirection="row">
-                    <BaseCard style={baseStyles.imageContainer}>
+                    <BaseCard
+                        style={baseStyles.imageContainer}
+                        containerStyle={baseStyles.imageShadow}>
                         <Image
                             source={{ uri: tokenBalance.token.icon }}
                             style={baseStyles.image}
@@ -121,6 +123,9 @@ const baseStyles = StyleSheet.create({
     imageContainer: {
         borderRadius: 30,
         padding: 10,
+    },
+    imageShadow: {
+        width: "auto",
     },
     image: { width: 20, height: 20 },
     innerRow: {

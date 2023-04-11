@@ -5,6 +5,7 @@ import { WALLET_STATUS } from "~Model"
 export interface CacheState {
     mnemonic?: string
     appLockStatus: WALLET_STATUS
+    temporaryScannedAddress?: string
 }
 
 const initialState: CacheState = {
@@ -22,10 +23,17 @@ export const CacheSlice = createSlice({
         setAppLockStatus: (state, action: PayloadAction<WALLET_STATUS>) => {
             state.appLockStatus = action.payload
         },
+        setScannedAddress: (
+            state,
+            action: PayloadAction<string | undefined>,
+        ) => {
+            state.temporaryScannedAddress = action.payload
+        },
     },
     extraReducers: builder => {
         builder.addCase(PURGE, () => initialState)
     },
 })
 
-export const { setMnemonic, setAppLockStatus } = CacheSlice.actions
+export const { setMnemonic, setAppLockStatus, setScannedAddress } =
+    CacheSlice.actions

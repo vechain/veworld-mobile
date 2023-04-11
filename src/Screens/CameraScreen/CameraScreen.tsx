@@ -9,6 +9,7 @@ import { useConfirmAddress } from "./hooks/useConfirmAddress"
 import { Camera, CameraType } from "expo-camera"
 import { BarCodeScanner } from "expo-barcode-scanner"
 import { useCamDisclosure } from "./hooks/useCamDisclosure"
+import { setScannedAddress, useAppDispatch } from "~Storage/Redux"
 
 const deviceWidth = Dimensions.get("window").width
 
@@ -19,10 +20,13 @@ export const CameraScreen = () => {
     const [isCameraReady, setIsCameraReady] = useState(false)
     const { isConfirmed, confirmAddress, address } = useConfirmAddress()
     const { onClose, isActive } = useCamDisclosure()
-
+    const dispatch = useAppDispatch()
     useEffect(() => {
-        if (isConfirmed && address) onClose()
-    }, [address, isConfirmed, onClose])
+        if (isConfirmed && address) {
+            dispatch(setScannedAddress(address))
+            onClose()
+        }
+    }, [address, dispatch, isConfirmed, onClose])
 
     useEffect(() => {
         if (isCanceled) onClose()

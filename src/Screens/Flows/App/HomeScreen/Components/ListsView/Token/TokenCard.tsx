@@ -23,7 +23,9 @@ export const TokenCard = memo(({ token: tokenBalance, isEdit }: Props) => {
     return (
         <BaseView style={styles.innerRow}>
             <BaseView flexDirection="row">
-                <BaseCard style={styles.imageContainer}>
+                <BaseCard
+                    style={styles.imageContainer}
+                    containerStyle={styles.imageShadow}>
                     <Image
                         source={{ uri: tokenBalance.token.icon }}
                         style={styles.image}
@@ -52,6 +54,9 @@ export const TokenCard = memo(({ token: tokenBalance, isEdit }: Props) => {
 
 const baseStyles = (isEdit: boolean) =>
     StyleSheet.create({
+        imageShadow: {
+            width: "auto",
+        },
         imageContainer: {
             borderRadius: 30,
             padding: 10,

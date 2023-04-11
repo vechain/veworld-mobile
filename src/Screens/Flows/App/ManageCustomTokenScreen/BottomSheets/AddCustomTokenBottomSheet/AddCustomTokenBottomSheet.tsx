@@ -1,4 +1,10 @@
-import React, { Dispatch, useMemo, useState } from "react"
+import React, {
+    Dispatch,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseSpacer,
@@ -15,15 +21,22 @@ import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import {
     addCustomToken,
+    addTokenBalance,
     selectCustomTokens,
     selectFungibleTokens,
+    selectNonVechainDenormalizedAccountTokenBalances,
+    selectScannedAddress,
+    selectSelectedAccount,
     selectSelectedNetwork,
+    setScannedAddress,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
 import { AddressUtils, debug, error, info, useTheme } from "~Common"
 import { getCustomTokenInfo } from "../../Utils"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = {
     onClose: () => void
@@ -45,46 +58,76 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const [errorMessage, setErrorMessage] = useState("")
     const officialTokens = useAppSelector(selectFungibleTokens)
     const customTokens = useAppSelector(selectCustomTokens)
-
-    const handleValueChange = async (address: string) => {
-        setErrorMessage("")
-        setValue(address)
-        if (AddressUtils.isValid(address)) {
-            debug("Valid address")
-            try {
-                // check if it is an official token
-                if (
-                    officialTokens.map(token => token.address).includes(address)
-                ) {
+    const account = useAppSelector(selectSelectedAccount)
+    const tokenBalances = useAppSelector(
+        selectNonVechainDenormalizedAccountTokenBalances,
+    )
+    const temporaryAddress = useAppSelector(selectScannedAddress)
+    const nav = useNavigation()
+    const handleValueChange = useCallback(
+        async (address: string) => {
+            setErrorMessage("")
+            setValue(address)
+            if (AddressUtils.isValid(address)) {
+                debug("Valid address")
+                try {
+                    // check if it is an official token
+                    if (
+                        officialTokens
+                            .map(token => token.address)
+                            .includes(address)
+                    ) {
+                        setErrorMessage(
+                            LL.MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN(),
+                        )
+                        return
+                    }
+                    // check if already present
+                    if (
+                        customTokens
+                            .map(token => token.address)
+                            .includes(address)
+                    ) {
+                        setErrorMessage(
+                            LL.MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT(),
+                        )
+                        return
+                    }
+                    const newToken = await getCustomTokenInfo({
+                        network,
+                        tokenAddress: address,
+                        thorClient,
+                    })
+                    if (newToken) {
+                        info(
+                            "fetched custom token info: ",
+                            JSON.stringify(newToken),
+                        )
+                        setNewCustomToken(newToken)
+                    } else {
+                        setErrorMessage(
+                            LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS(),
+                        )
+                    }
+                } catch (e) {
+                    error(e)
                     setErrorMessage(
-                        LL.MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN(),
+                        LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS(),
                     )
-                    return
                 }
-                // check if already present
-                if (
-                    customTokens.map(token => token.address).includes(address)
-                ) {
-                    setErrorMessage(
-                        LL.MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT(),
-                    )
-                    return
-                }
-                const newToken = await getCustomTokenInfo({
-                    network,
-                    tokenAddress: address,
-                    thorClient,
-                })
-                info("fetched custom token info: ", JSON.stringify(newToken))
-                setNewCustomToken(newToken)
-            } catch (e) {
-                error(e)
-                setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS())
+            } else {
+                debug("Address not valid yet")
             }
-        } else {
-            debug("Address not valid yet")
-        }
-    }
+        },
+        [
+            LL,
+            customTokens,
+            network,
+            officialTokens,
+            setNewCustomToken,
+            thorClient,
+        ],
+    )
 
     const handleOnDismissModal = () => {
         setErrorMessage("")
@@ -93,11 +136,36 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     }
 
     const handleAddCustomToken = () => {
-        dispatch(addCustomToken(newCustomToken!!))
-        onClose()
+        if (account?.address) {
+            dispatch(addCustomToken(newCustomToken!!))
+            dispatch(
+                addTokenBalance({
+                    balance: "0",
+                    accountAddress: account.address,
+                    tokenAddress: newCustomToken!!.address,
+                    timeUpdated: new Date().toISOString(),
+                    position: tokenBalances.length,
+                    networkGenesisId: network.genesisId,
+                }),
+            )
+            onClose()
+        } else {
+            throw new Error(
+                "Trying to select an official token without an account selected",
+            )
+        }
+    }
+    const onOpenCamera = () => {
+        nav.navigate(Routes.CAMERA)
     }
 
-    const onOpenCamera = () => {}
+    useEffect(() => {
+        if (temporaryAddress) {
+            info("scanned address: ", temporaryAddress)
+            handleValueChange(temporaryAddress)
+            dispatch(setScannedAddress(undefined))
+        }
+    }, [dispatch, handleValueChange, temporaryAddress])
 
     return (
         <BaseBottomSheet
