@@ -119,6 +119,10 @@ type RootTranslation = {
 	 */
 	BTN_ADD_CUSTOM_NODE: string
 	/**
+	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	BTN_EDIT_CUSTOM_NODE: string
+	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
 	BTN_DOWNLOAD_LOGS: string
@@ -917,6 +921,10 @@ type RootTranslation = {
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
 	/**
+	 * E​d​i​t​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: string
+	/**
 	 * R​e​m​o​v​e​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	NETWORK_CONFIRM_REMOVE_NODE_TITLE: string
@@ -1100,6 +1108,10 @@ export type TranslationFunctions = {
 	 * Add a custom node
 	 */
 	BTN_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Edit custom node
+	 */
+	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
 	/**
 	 * Download logs
 	 */
@@ -1893,6 +1905,10 @@ Please, try again later.
 	 * Add network
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
+	/**
+	 * Edit network
+	 */
+	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: () => LocalizedString
 	/**
 	 * Remove custom node
 	 */

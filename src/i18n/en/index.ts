@@ -32,6 +32,7 @@ const en: BaseTranslation = {
     BTN_REMOVE_ACCOUNT: "Remove account",
     BTN_ADD_ACCOUNT: "Add account",
     BTN_ADD_CUSTOM_NODE: "Add a custom node",
+    BTN_EDIT_CUSTOM_NODE: "Edit custom node",
     BTN_DOWNLOAD_LOGS: "Download logs",
     BTN_RESET_APP: "Reset App",
     BTN_BUY: "Buy",
@@ -270,6 +271,7 @@ const en: BaseTranslation = {
     NETWORK_ADD_CUSTOM_NODE_SB_DESC: "If you are having problems adding your custom node, it usually indicates a poorly formatted URL or a problem with the CORS configuration of the node.",
     NETWORK_ADD_CUSTOM_NODE_NAME: "Node name",
     NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: "Add network",
+    NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: "Edit network",
     NETWORK_CONFIRM_REMOVE_NODE_TITLE: "Remove custom node",
     NETWORK_CONFIRM_REMOVE_NODE_DESC: "Are you sure you want to remove this node? You'll need to add it again if you want to use it.",
 
