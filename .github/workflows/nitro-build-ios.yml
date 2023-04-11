@@ -29,7 +29,10 @@ jobs:
 
             - uses: nitro-build/github-action-nitro-ios@v1
               with:
-                  detox-configuration: ios.sim.release
+                  detox-configuration: ios.sim.debug
+              nitro-app-path:
+                  description: "The full path to access the iOS package (.app or .ipa)"
+                  value: ${{ github.workspace }}/ios/build/Build/Products/Debug-iphonesimulator/VeWorld.app
 
             - name: Run tests with Detox
               run: |
