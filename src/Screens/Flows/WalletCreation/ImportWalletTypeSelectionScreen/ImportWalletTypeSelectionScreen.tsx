@@ -49,6 +49,7 @@ export const ImportWalletTypeSelectionScreen = () => {
                         action={onImportWithMnemonic}
                         w={100}
                         my={20}
+                        testID="import-local-wallet"
                         title={LL.BTN_CREATE_WALLET_TYPE_IMPORT()}
                     />
 
