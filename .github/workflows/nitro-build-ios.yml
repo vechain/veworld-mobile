@@ -33,9 +33,10 @@ jobs:
 
             - name: Run tests with Detox
               run: |
-                  detox test --configuration ios.sim.debug --cleanup --headless
+                  detox test --configuration ios.sim.debug --cleanup --headless --loglevel debug --record-logs all
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v3
               with:
+                  name: detox-artifacts
                   path: ${{ steps.nitro.outputs.nitro-output-dir }}
