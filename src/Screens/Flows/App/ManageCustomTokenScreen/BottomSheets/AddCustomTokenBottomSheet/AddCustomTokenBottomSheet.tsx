@@ -65,7 +65,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const temporaryAddress = useAppSelector(selectScannedAddress)
     const nav = useNavigation()
     const handleValueChange = useCallback(
-        async (address: string) => {
+        async (addressRaw: string) => {
+            const address = addressRaw.toLowerCase()
             setErrorMessage("")
             setValue(address)
             if (AddressUtils.isValid(address)) {
@@ -74,7 +75,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     // check if it is an official token
                     if (
                         officialTokens
-                            .map(token => token.address)
+                            .map(token => token.address.toLowerCase())
                             .includes(address)
                     ) {
                         setErrorMessage(
@@ -82,10 +83,12 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                         )
                         return
                     }
+                    console.log("customTokens", customTokens)
+                    console.log("address", address)
                     // check if already present
                     if (
                         customTokens
-                            .map(token => token.address)
+                            .map(token => token.address.toLowerCase())
                             .includes(address)
                     ) {
                         setErrorMessage(
@@ -166,6 +169,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             dispatch(setScannedAddress(undefined))
         }
     }, [dispatch, handleValueChange, temporaryAddress])
+    console.log("newCustomToken", newCustomToken)
 
     return (
         <BaseBottomSheet
