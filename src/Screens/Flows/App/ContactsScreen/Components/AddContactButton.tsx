@@ -1,6 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Common"
+import { COLORS } from "~Common/Theme"
 import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
@@ -25,12 +26,12 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
                         my={8}
                         size={55}
                         name="plus"
-                        color={theme.colors.darkPurple}
+                        color={COLORS.DARK_PURPLE}
                     />
                     <BaseText
                         py={5}
                         typographyFont="bodyMedium"
-                        color={theme.colors.darkPurple}>
+                        color={COLORS.DARK_PURPLE}>
                         {LL.BTN_CREATE_CONTACT()}
                     </BaseText>
                 </BaseView>
