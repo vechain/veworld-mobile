@@ -30,17 +30,12 @@ jobs:
             - uses: nitro-build/github-action-nitro-ios@v1
               with:
                   detox-configuration: ios.sim.debug
-              nitro-app-path:
-                  description: "The full path to access the iOS package (.app or .ipa)"
-                  value: ${{ github.workspace }}/ios/build/Build/Products/Debug-iphonesimulator/VeWorld.app
 
             - name: Run tests with Detox
               run: |
                   detox test --configuration ios.sim.debug --cleanup --headless
 
             - name: Upload artifacts
-              if: failure()
               uses: actions/upload-artifact@v3
               with:
-                  name: detox-fail-artifacts
-                  path: artifacts
+                  path: ${{ steps.nitro.outputs.nitro-output-dir }}
