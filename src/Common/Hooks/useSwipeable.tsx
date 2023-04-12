@@ -11,10 +11,10 @@ type SwipeableProps = {
  * Custom hook to create swipeable components.
  *
  * @param {Function} renderRightActions - Function that returns the right swipe action component.
- * @param {Function} onOpen - Callback function that is called when the swipeable component is opened.
- * @param {Function} onClose - Callback function that is called when the swipeable component is closed.
+ * @param {Function} onSwipeEnded - Callback function that is called when the swipeable component is fully opened.
  *
- * @returns {Function} Function that takes children as input and returns a swipeable component with the children.
+ * @returns {Object} An object containing the `renderSwipeable` function that takes children as input and returns a swipeable component with the children,
+ *                   and the `onClose` function that closes the swipeable component.
  */
 export const useSwipeable = ({
     renderRightActions,
