@@ -38,6 +38,9 @@ const { fontFamily } = typography
 // immer setup
 enableAllPlugins()
 
+const isHermes = () => !!global.HermesInternal
+console.log("is Hermes active : ", isHermes())
+
 const Main = () => {
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
