@@ -1,10 +1,4 @@
-import React, {
-    Dispatch,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from "react"
+import React, { Dispatch, useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseSpacer,
@@ -25,10 +19,8 @@ import {
     selectCustomTokens,
     selectFungibleTokens,
     selectNonVechainDenormalizedAccountTokenBalances,
-    selectScannedAddress,
     selectSelectedAccount,
     selectSelectedNetwork,
-    setScannedAddress,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -62,7 +54,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const tokenBalances = useAppSelector(
         selectNonVechainDenormalizedAccountTokenBalances,
     )
-    const temporaryAddress = useAppSelector(selectScannedAddress)
     const nav = useNavigation()
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
@@ -156,17 +147,10 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             )
         }
     }
-    const onOpenCamera = () => {
-        nav.navigate(Routes.CAMERA)
-    }
 
-    useEffect(() => {
-        if (temporaryAddress) {
-            info("scanned address: ", temporaryAddress)
-            handleValueChange(temporaryAddress)
-            dispatch(setScannedAddress(undefined))
-        }
-    }, [dispatch, handleValueChange, temporaryAddress])
+    const onOpenCamera = () => {
+        nav.navigate(Routes.CAMERA, { onScan: handleValueChange })
+    }
 
     return (
         <BaseBottomSheet

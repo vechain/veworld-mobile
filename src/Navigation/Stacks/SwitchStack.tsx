@@ -11,7 +11,9 @@ export type RootStackParamListSwitch = {
     TabStack: undefined
     ResetAppScreen: undefined
     Create_Wallet_Flow: undefined
-    Camera: undefined
+    [Routes.CAMERA]: {
+        onScan: (str: string) => void
+    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 

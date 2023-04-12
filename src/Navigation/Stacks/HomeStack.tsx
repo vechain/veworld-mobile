@@ -9,7 +9,6 @@ import {
     SwapScreen,
     WalletManagementScreen,
     ManageCustomTokenScreen,
-    CameraScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
@@ -23,7 +22,6 @@ export type RootStackParamListHome = {
     [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.CAMERA]: undefined
 }
 
 const { Navigator, Group, Screen } =

@@ -9,11 +9,15 @@ import { useConfirmAddress } from "./hooks/useConfirmAddress"
 import { Camera, CameraType } from "expo-camera"
 import { BarCodeScanner } from "expo-barcode-scanner"
 import { useCamDisclosure } from "./hooks/useCamDisclosure"
-import { setScannedAddress, useAppDispatch } from "~Storage/Redux"
+import { useAppDispatch } from "~Storage/Redux"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
 
 const deviceWidth = Dimensions.get("window").width
 
-export const CameraScreen = () => {
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CAMERA>
+
+export const CameraScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const { checkPermissions, hasPerms, isCanceled } = useCameraPermissions()
@@ -23,10 +27,10 @@ export const CameraScreen = () => {
     const dispatch = useAppDispatch()
     useEffect(() => {
         if (isConfirmed && address) {
-            dispatch(setScannedAddress(address))
+            route?.params?.onScan?.(address)
             onClose()
         }
-    }, [address, dispatch, isConfirmed, onClose])
+    }, [address, dispatch, isConfirmed, onClose, route?.params])
 
     useEffect(() => {
         if (isCanceled) onClose()
