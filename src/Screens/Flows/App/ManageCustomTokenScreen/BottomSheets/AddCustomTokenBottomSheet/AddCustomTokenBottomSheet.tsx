@@ -137,7 +137,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     tokenAddress: newCustomToken!!.address,
                     timeUpdated: new Date().toISOString(),
                     position: tokenBalances.length,
-                    networkGenesisId: network.genesisId,
+                    networkGenesisId: network.genesis.id,
                 }),
             )
             onClose()
@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     footerStyle: { flex: 0.15, paddingBottom: 24 },
     icon: {
         position: "absolute",
+        top: 10,
         right: 10,
     },
     inputContainer: {

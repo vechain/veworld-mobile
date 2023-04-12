@@ -10,6 +10,6 @@ export const selectCustomTokens = createSelector(
     selectSelectedNetwork,
     (tokens, network) =>
         tokens.custom.filter(
-            (token: FungibleToken) => token.genesisId === network.genesisId,
+            (token: FungibleToken) => token.genesisId === network.genesis.id,
         ),
 )
