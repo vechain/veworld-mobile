@@ -10,6 +10,7 @@ type Props = {
     fontColor?: string
     text: LocalizedString | string
     checkSize?: number
+    testID?: string
     checkAction: (checked: boolean) => void
 }
 
@@ -18,6 +19,7 @@ export const CheckBoxWithText: FC<Props> = ({
     fontColor,
     text,
     checkSize,
+    testID,
     checkAction,
 }) => {
     const theme = useTheme()
@@ -32,7 +34,8 @@ export const CheckBoxWithText: FC<Props> = ({
                     typographyFont={font ? font : "footNote"}
                     color={fontColor}
                     my={14}
-                    mx={10}>
+                    mx={10}
+                    testID={testID}>
                     {text}
                 </BaseText>
             }

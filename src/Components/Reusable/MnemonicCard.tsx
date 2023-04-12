@@ -40,7 +40,10 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                                 typographyFont="footNoteAccent"
                                 key={`word${index}`}
                                 my={8}
-                                w={33}>{`${index + 1}. ${word}`}</BaseText>
+                                w={33}
+                                testID={`word-${index}`}>{`${
+                                index + 1
+                            }. ${word}`}</BaseText>
                         ))}
 
                         {!isShow && PlatformUtils.isIOS() && <BlurView />}
@@ -62,6 +65,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                             size={18}
                             color={iconColor}
                             style={baseStyles.icon}
+                            testID="toggle-mnemonic-visibility"
                         />
                     </BaseView>
                 </BaseView>
