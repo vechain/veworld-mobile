@@ -11,7 +11,7 @@ import {
     BaseButton,
     CustomTokenCard,
 } from "~Components"
-import { StyleSheet } from "react-native"
+import { KeyboardAvoidingView, StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import {
     addCustomToken,
@@ -32,19 +32,17 @@ import { useNavigation } from "@react-navigation/native"
 
 type Props = {
     onClose: () => void
-    setNewCustomToken: Dispatch<React.SetStateAction<FungibleToken | undefined>>
-    newCustomToken?: FungibleToken
 }
-
+const snapPoints = ["35%"]
 export const AddCustomTokenBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, setNewCustomToken, newCustomToken }, ref) => {
+>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const thorClient = useThor()
-    const snapPoints = useMemo(() => ["35%"], [])
+    const [newCustomToken, setNewCustomToken] = useState<FungibleToken>()
     const [value, setValue] = useState("")
     const theme = useTheme()
     const [errorMessage, setErrorMessage] = useState("")
@@ -159,50 +157,41 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             contentStyle={styles.contentStyle}
             footerStyle={styles.footerStyle}
             onDismiss={handleOnDismissModal}>
+            <BaseText typographyFont="subTitleBold">
+                {LL.MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE()}
+            </BaseText>
+            <BaseSpacer height={24} />
             {newCustomToken ? (
-                <BaseView
-                    justifyContent="space-between"
-                    alignItems="stretch"
-                    w="100%"
-                    h="100%">
-                    <BaseView>
-                        <BaseText typographyFont="subTitleBold">
-                            {LL.MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE()}
-                        </BaseText>
-                        <BaseSpacer height={24} />
-                        <CustomTokenCard token={newCustomToken} />
-                    </BaseView>
-                    <BaseButton
-                        title={LL.COMMON_BTN_ADD()}
-                        action={handleAddCustomToken}
-                    />
+                <BaseView alignItems="stretch" w="100%">
+                    <CustomTokenCard token={newCustomToken} />
                 </BaseView>
             ) : (
-                <>
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
-                    <BaseView flexDirection="row" w="100%">
-                        <BaseTextInput
-                            containerStyle={styles.inputContainer}
-                            value={value}
-                            setValue={handleValueChange}
-                            placeholder={LL.MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS()}
-                            errorMessage={errorMessage}
+                <BaseView flexDirection="row" w="100%">
+                    <BaseTextInput
+                        containerStyle={styles.inputContainer}
+                        value={value}
+                        setValue={handleValueChange}
+                        placeholder={LL.MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS()}
+                        errorMessage={errorMessage}
+                    />
+                    {!value && (
+                        <BaseIcon
+                            name={"flip-horizontal"}
+                            size={24}
+                            color={theme.colors.primary}
+                            action={onOpenCamera}
+                            style={styles.icon}
                         />
-                        {!value && (
-                            <BaseIcon
-                                name={"flip-horizontal"}
-                                size={24}
-                                color={theme.colors.primary}
-                                action={onOpenCamera}
-                                style={styles.icon}
-                            />
-                        )}
-                    </BaseView>
-                </>
+                    )}
+                </BaseView>
             )}
+            <BaseSpacer height={24} />
+            <BaseButton
+                w="100%"
+                title={LL.COMMON_BTN_ADD()}
+                action={handleAddCustomToken}
+                disabled={!newCustomToken}
+            />
         </BaseBottomSheet>
     )
 })

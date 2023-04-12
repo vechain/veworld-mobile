@@ -3,6 +3,9 @@ import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
+import { COLORS } from "~Common/Theme"
+import { PlaceholderSVG } from "~Assets"
+import { useTheme } from "~Common"
 
 type Props = {
     token: DenormalizedAccountTokenBalance
@@ -17,37 +20,45 @@ export const TokenCard = memo(({ token: tokenBalance, isEdit }: Props) => {
             }),
         }
     }, [isEdit])
+    const theme = useTheme()
 
     const styles = baseStyles(isEdit)
-
+    const icon = tokenBalance.token.icon
+    const tokenValueLabelColor = theme.isDark
+        ? COLORS.WHITE_DISABLED
+        : COLORS.DARK_PURPLE_DISABLED
     return (
         <BaseView style={styles.innerRow}>
-            <BaseView flexDirection="row">
-                <BaseCard
-                    style={styles.imageContainer}
-                    containerStyle={styles.imageShadow}>
-                    <Image
-                        source={{ uri: tokenBalance.token.icon }}
-                        style={styles.image}
-                    />
-                </BaseCard>
-                <BaseSpacer width={16} />
-                <BaseView>
-                    <BaseText typographyFont="subTitleBold">
-                        {tokenBalance.token.name}
+            <BaseCard
+                style={[
+                    styles.imageContainer,
+                    { backgroundColor: COLORS.WHITE },
+                ]}
+                containerStyle={styles.imageShadow}>
+                {icon ? (
+                    <Image source={{ uri: icon }} style={styles.image} />
+                ) : (
+                    <PlaceholderSVG />
+                )}
+            </BaseCard>
+            <BaseSpacer width={16} />
+            <BaseView>
+                <BaseText typographyFont="subTitleBold">
+                    {tokenBalance.token.name}
+                </BaseText>
+                <BaseView flexDirection="row" alignItems="baseline">
+                    <BaseText
+                        typographyFont="bodyMedium"
+                        color={tokenValueLabelColor}>
+                        {tokenBalance.balance}{" "}
+                    </BaseText>
+                    <BaseText
+                        typographyFont="captionRegular"
+                        color={tokenValueLabelColor}>
+                        {tokenBalance.token.symbol}
                     </BaseText>
                 </BaseView>
             </BaseView>
-            <Animated.View
-                style={[
-                    animatedOpacityReverse,
-                    { flexDirection: "row", alignItems: "flex-end" },
-                ]}>
-                <BaseText typographyFont="subTitleBold">
-                    {tokenBalance.balance}
-                </BaseText>
-                <BaseText> {tokenBalance.token.symbol}</BaseText>
-            </Animated.View>
         </BaseView>
     )
 })
@@ -64,7 +75,6 @@ const baseStyles = (isEdit: boolean) =>
         image: { width: 20, height: 20 },
         innerRow: {
             flexDirection: "row",
-            justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
             flexGrow: 1,

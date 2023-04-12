@@ -974,6 +974,10 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_MANAGE_CUSTOM: string
 	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM: string
+	/**
 	 * S​e​l​e​c​t​e​d
 	 */
 	MANAGE_TOKEN_SELECTED: string
@@ -1973,6 +1977,10 @@ Please, try again later.
 	 * Manage custom tokens
 	 */
 	MANAGE_TOKEN_MANAGE_CUSTOM: () => LocalizedString
+	/**
+	 * Add custom token
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM: () => LocalizedString
 	/**
 	 * Selected
 	 */

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { useBottomSheetModal, useTheme } from "~Common"
 import {
     BackButtonHeader,
@@ -11,14 +11,11 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
-import { AddCustomTokenBottomSheet } from "./BottomSheets"
 import {
-    ListRenderItem,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-    FlatList,
-} from "react-native"
+    AddCustomTokenBottomSheet,
+    DeleteCustomTokenBottomSheet,
+} from "./BottomSheets"
+import { ListRenderItem, StyleSheet, View, FlatList } from "react-native"
 import {
     deleteCustomToken,
     removeTokenBalance,
@@ -28,40 +25,84 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import SwipeableItem, {
-    useSwipeableItemParams,
+    SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
 
 export const ManageCustomTokenScreen = () => {
     const theme = useTheme()
+    const swipeableItemRef = useRef<(SwipeableItemImperativeRef | null)[]>([])
     const { LL } = useI18nContext()
-    const [newCustomToken, setNewCustomToken] = useState<FungibleToken>()
     const customTokens = useAppSelector(selectCustomTokens)
-
+    const dispatch = useAppDispatch()
+    const account = useAppSelector(selectSelectedAccount)
     const {
         ref: addCustomTokenSheetRef,
         onOpen: openAddCustomTokenSheet,
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
+    const [selectedToken, setSelectedToken] = useState<FungibleToken>()
+    const [selectedIndex, setSelectedIndex] = useState<number>()
+
+    const {
+        ref: removeCustomTokenSheetRef,
+        onOpen: openRemoveCustomTokenSheet,
+        onClose: closeRemoveCustomTokenSheet,
+    } = useBottomSheetModal()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const handleSwipe =
+        (item: FungibleToken, index: number) =>
+        ({ openDirection }: { openDirection: string }) => {
+            setSelectedToken(item)
+            setSelectedIndex(index)
+            if (openDirection !== "none") {
+                openRemoveCustomTokenSheet()
+            }
+        }
 
     const renderItem: ListRenderItem<FungibleToken> = useCallback(
-        ({ item: token, index }) => {
+        ({ item, index }) => {
             const customStyle = index === 0 ? { marginTop: 20 } : {}
             return (
                 <SwipeableItem
-                    key={token.address}
-                    item={token}
+                    ref={el => (swipeableItemRef.current[index] = el)}
+                    key={item.address}
+                    item={item}
                     renderUnderlayLeft={() => <UnderlayLeft index={index} />}
-                    snapPointsLeft={[50]}>
+                    snapPointsLeft={[50]}
+                    onChange={handleSwipe(item, index)}>
                     <CustomTokenCard
-                        token={token}
-                        key={token.address}
+                        token={item}
+                        key={item.address}
                         containerStyle={[styles.card, customStyle]}
                     />
                 </SwipeableItem>
             )
         },
-        [],
+        [handleSwipe],
     )
+
+    const handleDelete = () => {
+        if (account?.address && selectedToken?.address) {
+            dispatch(
+                removeTokenBalance({
+                    accountAddress: account.address,
+                    tokenAddress: selectedToken.address,
+                }),
+            )
+            dispatch(deleteCustomToken(selectedToken.address))
+            closeRemoveCustomTokenSheet()
+        } else {
+            throw new Error(
+                "Trying to unselect an official token without an account selected",
+            )
+        }
+    }
+
+    const handleCloseDeleteModal = () => {
+        swipeableItemRef.current?.[selectedIndex!!]?.close?.()
+        closeRemoveCustomTokenSheet()
+    }
 
     return (
         <BaseSafeArea grow={1}>
@@ -79,7 +120,7 @@ export const ManageCustomTokenScreen = () => {
             </BaseView>
             <View style={styles.flatListContainer}>
                 <FlatList
-                    keyExtractor={token => token.address}
+                    keyExtractor={_token => _token.address}
                     data={customTokens}
                     renderItem={renderItem}
                 />
@@ -87,35 +128,19 @@ export const ManageCustomTokenScreen = () => {
             <AddCustomTokenBottomSheet
                 ref={addCustomTokenSheetRef}
                 onClose={closeAddCustomTokenSheet}
-                setNewCustomToken={setNewCustomToken}
-                newCustomToken={newCustomToken}
+            />
+            <DeleteCustomTokenBottomSheet
+                ref={removeCustomTokenSheetRef}
+                onClose={handleCloseDeleteModal}
+                onConfirm={handleDelete}
+                token={selectedToken}
             />
         </BaseSafeArea>
     )
 }
 
 const UnderlayLeft = ({ index }: { index: number }) => {
-    const { close, item: token } = useSwipeableItemParams<FungibleToken>()
     const theme = useTheme()
-    const dispatch = useAppDispatch()
-    const account = useAppSelector(selectSelectedAccount)
-
-    const handleDelete = () => {
-        if (account?.address) {
-            dispatch(
-                removeTokenBalance({
-                    accountAddress: account.address,
-                    tokenAddress: token.address,
-                }),
-            )
-            dispatch(deleteCustomToken(token.address))
-            close()
-        } else {
-            throw new Error(
-                "Trying to unselect an official token without an account selected",
-            )
-        }
-    }
 
     return (
         <View style={styles.underlayContainer}>
@@ -129,14 +154,12 @@ const UnderlayLeft = ({ index }: { index: number }) => {
                         marginTop: index === 0 ? 20 : 8,
                     },
                 ]}>
-                <TouchableOpacity onPress={handleDelete}>
-                    <BaseIcon
-                        name={"delete"}
-                        size={20}
-                        bg={theme.colors.danger}
-                        color={theme.colors.card}
-                    />
-                </TouchableOpacity>
+                <BaseIcon
+                    name={"delete"}
+                    size={20}
+                    bg={theme.colors.danger}
+                    color={theme.colors.card}
+                />
             </View>
             <BaseSpacer width={20} />
         </View>

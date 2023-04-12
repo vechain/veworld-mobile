@@ -9,6 +9,7 @@ import {
     BaseView,
 } from "~Components"
 import { ColorThemeType, useThemedStyles } from "~Common"
+import { COLORS } from "~Common/Theme"
 
 type Props = {
     token: FungibleToken | Token
@@ -24,7 +25,7 @@ export const OfficialTokenCard = memo(
                 action={action}
                 containerStyle={[styles.container, style]}>
                 <BaseCard
-                    style={styles.card}
+                    style={[styles.card, { backgroundColor: COLORS.WHITE }]}
                     containerStyle={styles.imageShadow}>
                     {/* @ts-ignore */}
                     <Image source={{ uri: token.icon }} style={styles.image} />
@@ -56,6 +57,7 @@ const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
             borderColor: theme.colors.text,
         },
         card: {
+            borderRadius: 30,
             padding: 10,
         },
         image: { width: 20, height: 20 },

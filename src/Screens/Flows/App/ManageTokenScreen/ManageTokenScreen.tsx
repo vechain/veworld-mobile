@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Common"
 import {
     BackButtonHeader,
     BaseIcon,
@@ -27,6 +27,7 @@ import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
@@ -44,6 +45,11 @@ export const ManageTokenScreen = () => {
     )
     const currentNetwork = useAppSelector(selectSelectedNetwork)
     const customTokens = useAppSelector(selectCustomTokens)
+    const {
+        ref: addCustomTokenSheetRef,
+        onOpen: openAddCustomTokenSheet,
+        onClose: closeAddCustomTokenSheet,
+    } = useBottomSheetModal()
 
     const filteredTokens = tokens.filter(
         token =>
@@ -111,7 +117,7 @@ export const ManageTokenScreen = () => {
         }
     }
 
-    const navigateManageCustomTokens = () => {
+    const navigateManageCustomTokenScreen = () => {
         nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
     }
 
@@ -131,23 +137,45 @@ export const ManageTokenScreen = () => {
                     {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}
                 </BaseText>
                 <BaseSpacer height={16} />
-                <BaseTouchableBox
-                    action={navigateManageCustomTokens}
-                    justifyContent="center">
-                    <BaseIcon name="tune" size={16} color={theme.colors.text} />
-                    <BaseSpacer width={10} />
-                    <BaseText py={3}>
-                        {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
-                    </BaseText>
-                    <BaseSpacer width={10} />
-                    <BaseView bg={theme.colors.primary} style={styles.counter}>
-                        <BaseText
-                            color={theme.colors.textReversed}
-                            typographyFont="captionMedium">
-                            {customTokens.length}
+                {customTokens.length ? (
+                    <BaseTouchableBox
+                        action={navigateManageCustomTokenScreen}
+                        justifyContent="center">
+                        <BaseIcon
+                            name="tune"
+                            size={16}
+                            color={theme.colors.text}
+                        />
+                        <BaseSpacer width={10} />
+                        <BaseText py={3}>
+                            {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
                         </BaseText>
-                    </BaseView>
-                </BaseTouchableBox>
+                        <BaseSpacer width={10} />
+                        <BaseView
+                            bg={theme.colors.primary}
+                            style={styles.counter}>
+                            <BaseText
+                                color={theme.colors.textReversed}
+                                typographyFont="bodyMedium">
+                                {customTokens.length}
+                            </BaseText>
+                        </BaseView>
+                    </BaseTouchableBox>
+                ) : (
+                    <BaseTouchableBox
+                        action={openAddCustomTokenSheet}
+                        justifyContent="center">
+                        <BaseIcon
+                            name="plus"
+                            size={20}
+                            color={theme.colors.primary}
+                        />
+                        <BaseSpacer width={10} />
+                        <BaseText py={3}>
+                            {LL.MANAGE_TOKEN_ADD_CUSTOM()}
+                        </BaseText>
+                    </BaseTouchableBox>
+                )}
                 <BaseSpacer height={16} />
                 <BaseSearchInput
                     value={tokenQuery}
@@ -198,6 +226,10 @@ export const ManageTokenScreen = () => {
                     <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
                 )}
             </BaseScrollView>
+            <AddCustomTokenBottomSheet
+                ref={addCustomTokenSheetRef}
+                onClose={closeAddCustomTokenSheet}
+            />
         </BaseSafeArea>
     )
 }

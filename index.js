@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
-import { AppRegistry } from "react-native"
+import { AppRegistry, KeyboardAvoidingView } from "react-native"
 import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
@@ -55,24 +55,26 @@ const Main = () => {
     if (!store || !persistor) return <></>
 
     return (
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <GestureHandlerRootView style={{ flex: 1 }}>
-                    <ConnexContextProvider>
-                        <SafeAreaProvider>
-                            <TranslationProvider>
-                                <BottomSheetModalProvider>
-                                    <NavigationProvider>
-                                        {fontsLoaded && <EntryPoint />}
-                                    </NavigationProvider>
-                                </BottomSheetModalProvider>
-                                <BaseToast />
-                            </TranslationProvider>
-                        </SafeAreaProvider>
-                    </ConnexContextProvider>
-                </GestureHandlerRootView>
-            </PersistGate>
-        </Provider>
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
+                    <GestureHandlerRootView style={{ flex: 1 }}>
+                        <ConnexContextProvider>
+                            <SafeAreaProvider>
+                                <TranslationProvider>
+                                    <BottomSheetModalProvider>
+                                        <NavigationProvider>
+                                            {fontsLoaded && <EntryPoint />}
+                                        </NavigationProvider>
+                                    </BottomSheetModalProvider>
+                                    <BaseToast />
+                                </TranslationProvider>
+                            </SafeAreaProvider>
+                        </ConnexContextProvider>
+                    </GestureHandlerRootView>
+                </PersistGate>
+            </Provider>
+        </KeyboardAvoidingView>
     )
 }
 
