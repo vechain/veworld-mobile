@@ -6,19 +6,15 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     await detoxConfig.init()
     console.log("Detox test session started!")
 
-    if (detox.device.getPlatform() === "ios") {
-        console.log("Launching app...")
-        await detox.device.launchApp()
-        console.log("App launched!")
-    }
+    console.log("Launching app...")
+    await detox.device.launchApp()
+    console.log("App launched!")
 })
 
 Before({ timeout: 600 * 1000 }, async () => {
-    if (detox.device.getPlatform() === "ios") {
-        console.log("Relaunching app before test...")
-        await detox.device.reloadReactNative()
-        console.log("App relaunched!")
-    }
+    console.log("Relaunching app before test...")
+    await detox.device.reloadReactNative()
+    console.log("App relaunched!")
 })
 
 AfterAll({ timeout: 600 * 1000 }, async () => {

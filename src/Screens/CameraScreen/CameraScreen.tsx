@@ -4,7 +4,7 @@ import { Dimensions, StyleSheet, View } from "react-native"
 import { useI18nContext } from "~i18n"
 import { QrScannerLayout } from "./Components/QrScannerLayout"
 import { CameraHeader } from "./Components/CameraHeader"
-import { useCameraPermissions, useTheme } from "~Common"
+import { useCameraPermissions } from "~Common"
 import { useConfirmAddress } from "./hooks/useConfirmAddress"
 import { Camera, CameraType } from "expo-camera"
 import { BarCodeScanner } from "expo-barcode-scanner"
@@ -12,6 +12,7 @@ import { useCamDisclosure } from "./hooks/useCamDisclosure"
 import { useAppDispatch } from "~Storage/Redux"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { COLORS } from "~Common/Theme"
 
 const deviceWidth = Dimensions.get("window").width
 
@@ -19,7 +20,6 @@ type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CAMERA>
 
 export const CameraScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
     const { checkPermissions, hasPerms, isCanceled } = useCameraPermissions()
     const [isCameraReady, setIsCameraReady] = useState(false)
     const { isConfirmed, confirmAddress, address } = useConfirmAddress()
@@ -47,7 +47,7 @@ export const CameraScreen = ({ route }: Props) => {
         return (
             <BaseView
                 style={StyleSheet.absoluteFill}
-                bg={theme.colors.darkPurple}
+                bg={COLORS.DARK_PURPLE}
                 justifyContent="center"
                 flexGrow={1}
                 alignItems="center">
@@ -59,7 +59,7 @@ export const CameraScreen = ({ route }: Props) => {
         <View
             style={[
                 baseStyles.container,
-                { backgroundColor: theme.colors.darkPurple },
+                { backgroundColor: COLORS.DARK_PURPLE },
             ]}>
             {isActive && (
                 <Camera
@@ -73,7 +73,7 @@ export const CameraScreen = ({ route }: Props) => {
                     onMountError={onClose}
                     ratio={"16:9"}>
                     {isCameraReady && (
-                        <QrScannerLayout color={theme.colors.darkPurpleRGBA} />
+                        <QrScannerLayout color={COLORS.DARK_PURPLE_RBGA} />
                     )}
                     <CameraHeader onClose={onClose} />
                 </Camera>

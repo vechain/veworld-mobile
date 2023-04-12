@@ -16,16 +16,13 @@ export type Colors = {
     card: string
     border: string
     notification: string
-    darkPurpleDisabled: string
     transparent: string
-    darkPurpleRGBA: string
-    darkPurple: string
 }
 
 export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
-    WHITE_DISABLED = "#E5E5E5",
+    WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#FAFAFA",
     LIME_GREEN = "#E2F895",
@@ -60,10 +57,7 @@ const light: Colors = {
     card: COLORS.WHITE,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
-    darkPurpleDisabled: COLORS.DARK_PURPLE_DISABLED,
     transparent: COLORS.TRANSPARENT,
-    darkPurpleRGBA: COLORS.DARK_PURPLE_RBGA,
-    darkPurple: COLORS.DARK_PURPLE,
 }
 
 const dark: Colors = {
@@ -84,10 +78,7 @@ const dark: Colors = {
     card: COLORS.PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
-    darkPurpleDisabled: COLORS.DARK_PURPLE_DISABLED,
     transparent: COLORS.TRANSPARENT,
-    darkPurpleRGBA: COLORS.DARK_PURPLE_RBGA,
-    darkPurple: COLORS.DARK_PURPLE,
 }
 
 export const colors = { light, dark }

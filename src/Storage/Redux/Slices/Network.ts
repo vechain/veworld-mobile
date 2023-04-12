@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PURGE } from "redux-persist"
-import { Network, NETWORK_TYPE } from "~Model"
-import { makeNetwork } from "~Common/Constant/Thor/ThorConstants"
+import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
+import { Network } from "~Model"
 
 export interface NetworkState {
-    selectedNetwork: Network
+    selectedNetwork: string
     customNetworks: Network[]
     showTestNetTag: boolean
     showConversionOtherNets: boolean
 }
 
 const initialState: NetworkState = {
-    selectedNetwork: makeNetwork(NETWORK_TYPE.MAIN),
+    selectedNetwork: defaultMainNetwork.id,
     customNetworks: [],
     showTestNetTag: true,
     showConversionOtherNets: true,
@@ -22,11 +22,28 @@ export const NetworkSlice = createSlice({
     initialState,
     reducers: {
         changeSelectedNetwork: (state, action: PayloadAction<Network>) => {
-            state.selectedNetwork = action.payload
+            state.selectedNetwork = action.payload.id
         },
 
         addCustomNetwork: (state, action: PayloadAction<Network>) => {
             state.customNetworks.push(action.payload)
+        },
+
+        updateCustomNetwork: (
+            state,
+            action: PayloadAction<{ id: string; updatedNetwork: Network }>,
+        ) => {
+            const index = state.customNetworks.findIndex(
+                net => net.id === action.payload.id,
+            )
+            if (index !== -1)
+                state.customNetworks[index] = action.payload.updatedNetwork
+        },
+        removeCustomNetwork: (state, action: PayloadAction<{ id: string }>) => {
+            const index = state.customNetworks.findIndex(
+                net => net.id === action.payload.id,
+            )
+            if (index !== -1) state.customNetworks.splice(index, 1)
         },
 
         toggleShowTestnetTag: state => {
@@ -45,6 +62,8 @@ export const NetworkSlice = createSlice({
 export const {
     changeSelectedNetwork,
     addCustomNetwork,
+    updateCustomNetwork,
+    removeCustomNetwork,
     toggleShowTestnetTag,
     toggleShowConversionOtherNetworks,
 } = NetworkSlice.actions

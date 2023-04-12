@@ -28,6 +28,7 @@ export const ImportMnemonicInput = ({
                 numberOfLines={4}
                 onChangeText={onChangeText}
                 value={mnemonic}
+                testID="import-mnemonic-input"
             />
         </DropShadow>
     )

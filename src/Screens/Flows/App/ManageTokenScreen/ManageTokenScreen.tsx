@@ -74,7 +74,7 @@ export const ManageTokenScreen = () => {
                     tokenAddress: token.address,
                     timeUpdated: new Date().toISOString(),
                     position: selectedTokenSymbols.length,
-                    networkGenesisId: currentNetwork.genesisId,
+                    networkGenesisId: currentNetwork.genesis.id,
                 }),
             )
         } else {

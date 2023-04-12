@@ -7,8 +7,8 @@ import {
     ViewStyle,
 } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
-import { typography } from "~Common/Theme"
+import { ColorThemeType, useThemedStyles } from "~Common"
+import { COLORS, typography } from "~Common/Theme"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "../BaseView"
 const { defaults: defaultTypography } = typography
@@ -32,9 +32,11 @@ export const BaseTextInput = memo(
         containerStyle,
         ...otherProps
     }: Props) => {
-        const { styles } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles(!!errorMessage))
 
-        const theme = useTheme()
+        const placeholderColor = theme.isDark
+            ? COLORS.WHITE_DISABLED
+            : COLORS.DARK_PURPLE_DISABLED
 
         return (
             <DropShadow style={containerStyle}>
@@ -47,35 +49,36 @@ export const BaseTextInput = memo(
                     <TextInput
                         style={styles.input}
                         placeholder={placeholder}
-                        placeholderTextColor={theme.colors.text}
+                        placeholderTextColor={placeholderColor}
                         onChangeText={setValue}
                         value={value}
+                        autoCapitalize="none"
                         {...otherProps}
                     />
                 </BaseView>
-                {errorMessage && (
-                    <BaseView py={10}>
-                        <BaseView flexDirection="row">
-                            <BaseIcon
-                                name={"alert-circle-outline"}
-                                size={20}
-                                color={theme.colors.danger}
-                            />
-                            <BaseText
-                                px={7}
-                                color={theme.colors.danger}
-                                typographyFont="caption">
-                                {errorMessage}
-                            </BaseText>
-                        </BaseView>
-                    </BaseView>
-                )}
+                <BaseView
+                    pt={10}
+                    flexDirection="row"
+                    justifyContent="flex-start"
+                    style={styles.errorContainer}>
+                    <BaseIcon
+                        name={"alert-circle-outline"}
+                        size={20}
+                        color={theme.colors.danger}
+                    />
+                    <BaseText
+                        px={7}
+                        color={theme.colors.danger}
+                        typographyFont="caption">
+                        {errorMessage || " "}
+                    </BaseText>
+                </BaseView>
             </DropShadow>
         )
     },
 )
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             ...theme.shadows.card,
@@ -99,5 +102,8 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingVertical: 12,
             paddingLeft: 16,
             paddingRight: 8,
+        },
+        errorContainer: {
+            opacity: isError ? 1 : 0,
         },
     })

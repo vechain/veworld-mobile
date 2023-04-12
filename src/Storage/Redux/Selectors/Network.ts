@@ -1,16 +1,12 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { defaultNetworks } from "~Common/Constant/Thor/ThorConstants"
+import {
+    defaultMainNetwork,
+    defaultNetworks,
+} from "~Common/Constant/Thor/ThorConstants"
 import { RootState } from "../Types"
 import { NETWORK_TYPE } from "~Model"
 
 const selectNetworksState = (state: RootState) => state.networks
-
-export const selectSelectedNetwork = createSelector(
-    selectNetworksState,
-    state => {
-        return state.selectedNetwork
-    },
-)
 
 export const selectDefaultNetworks = createSelector(
     selectNetworksState,
@@ -39,6 +35,22 @@ export const selectCustomNetworks = createSelector(
         return state.customNetworks
     },
 )
+
+export const selectSelectedNetwork = createSelector(
+    selectNetworksState,
+    selectNetworks,
+    (state, networks) => {
+        return (
+            networks.find(net => net.id === state.selectedNetwork) ||
+            defaultMainNetwork
+        )
+    },
+)
+
+export const selectNetworkById = (id?: string) =>
+    createSelector(selectNetworks, networks => {
+        return networks.find(net => net.id === id)
+    })
 
 export const selectShowConversionOnOtherNets = createSelector(
     selectNetworksState,

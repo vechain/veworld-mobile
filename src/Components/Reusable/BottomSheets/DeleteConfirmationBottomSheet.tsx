@@ -11,16 +11,17 @@ import { useI18nContext } from "~i18n"
 import { useTheme } from "~Common"
 
 type Props = {
+    description: string
     onClose: () => void
-    onRemoveContact: () => void
+    onConfirm: () => void
 }
 
 const snapPoints = ["40%"]
 
-export const RemoveContactBottomSheet = React.forwardRef<
+export const DeleteConfirmationBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, onRemoveContact }, ref) => {
+>(({ onClose, onConfirm, description }, ref) => {
     const { LL } = useI18nContext()
 
     const theme = useTheme()
@@ -40,14 +41,14 @@ export const RemoveContactBottomSheet = React.forwardRef<
             <BaseSpacer height={16} />
 
             <BaseText typographyFont="body" my={8}>
-                {LL.BD_CONFIRM_REMOVE_CONTACT()}
+                {description}
             </BaseText>
 
             <BaseSpacer height={32} />
 
             <BaseView alignItems="center" w={100}>
                 <BaseButton
-                    action={onRemoveContact}
+                    action={onConfirm}
                     w={100}
                     px={20}
                     title={LL.COMMON_BTN_REMOVE().toUpperCase()}

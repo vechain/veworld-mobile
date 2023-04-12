@@ -119,6 +119,10 @@ type RootTranslation = {
 	 */
 	BTN_ADD_CUSTOM_NODE: string
 	/**
+	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	BTN_EDIT_CUSTOM_NODE: string
+	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
 	BTN_DOWNLOAD_LOGS: string
@@ -763,6 +767,14 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_SAVE: string
 	/**
+	 * n​a​m​e
+	 */
+	COMMON_LBL_NAME: string
+	/**
+	 * U​R​L
+	 */
+	COMMON_LBL_URL: string
+	/**
 	 * A​d​d​r​e​s​s
 	 */
 	COMMON_LBL_ADDRESS: string
@@ -786,6 +798,15 @@ type RootTranslation = {
 	 * F​a​v​o​u​r​i​t​e​s
 	 */
 	COMMON_LBL_FAVOURITES: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​{​n​a​m​e​}
+	 * @param {unknown} name
+	 */
+	COMMON_LBL_ENTER_THE: RequiredParams<'name'>
+	/**
+	 * D​e​f​a​u​l​t
+	 */
+	COMMON_LBL_DEFAULT: string
 	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -828,6 +849,18 @@ type RootTranslation = {
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: string
 	/**
+	 * E​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​U​R​L
+	 */
+	ERROR_ENTER_VALID_URL: string
+	/**
+	 * U​R​L​ ​m​u​s​t​ ​b​e​ ​h​t​t​p​s​ ​o​r​ ​l​o​c​a​l​h​o​s​t
+	 */
+	ERROR_URL_NOT_VALID: string
+	/**
+	 * N​e​t​w​o​r​k​ ​a​l​r​e​a​d​y​ ​i​n​ ​u​s​e
+	 */
+	ERROR_URL_ALREADY_USED: string
+	/**
 	 * R​e​q​u​i​r​e​d
 	 */
 	ERROR_REQUIRED_FIELD: string
@@ -864,9 +897,33 @@ type RootTranslation = {
 	 */
 	NETWORK_MANAGE_NODES: string
 	/**
-	 * A​d​d​ ​n​o​d​e
+	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
-	NETWORK_ADD_NODE: string
+	NETWORK_ADD_CUSTOM_NODE: string
+	/**
+	 * A​d​d​ ​n​e​t​w​o​r​k​ ​d​e​t​a​i​l​s
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB: string
+	/**
+	 * I​f​ ​y​o​u​ ​a​r​e​ ​h​a​v​i​n​g​ ​p​r​o​b​l​e​m​s​ ​a​d​d​i​n​g​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​,​ ​i​t​ ​u​s​u​a​l​l​y​ ​i​n​d​i​c​a​t​e​s​ ​a​ ​p​o​o​r​l​y​ ​f​o​r​m​a​t​t​e​d​ ​U​R​L​ ​o​r​ ​a​ ​p​r​o​b​l​e​m​ ​w​i​t​h​ ​t​h​e​ ​C​O​R​S​ ​c​o​n​f​i​g​u​r​a​t​i​o​n​ ​o​f​ ​t​h​e​ ​n​o​d​e​.
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB_DESC: string
+	/**
+	 * N​o​d​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NODE_NAME: string
+	/**
+	 * A​d​d​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
+	/**
+	 * E​d​i​t​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: string
+	/**
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​u​s​t​o​m​ ​n​o​d​e​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE: string
 	/**
 	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
 	 */
@@ -876,9 +933,9 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: string
 	/**
-	 * C​u​s​t​o​m​ ​N​e​t​w​o​r​k​s
+	 * O​t​h​e​r​ ​N​e​t​w​o​r​k​s
 	 */
-	NETWORK_LABEL_CUSTOM_NETWORKS: string
+	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
@@ -1067,6 +1124,10 @@ export type TranslationFunctions = {
 	 * Add a custom node
 	 */
 	BTN_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Edit custom node
+	 */
+	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
 	/**
 	 * Download logs
 	 */
@@ -1708,6 +1769,14 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_SAVE: () => LocalizedString
 	/**
+	 * name
+	 */
+	COMMON_LBL_NAME: () => LocalizedString
+	/**
+	 * URL
+	 */
+	COMMON_LBL_URL: () => LocalizedString
+	/**
 	 * Address
 	 */
 	COMMON_LBL_ADDRESS: () => LocalizedString
@@ -1731,6 +1800,14 @@ export type TranslationFunctions = {
 	 * Favourites
 	 */
 	COMMON_LBL_FAVOURITES: () => LocalizedString
+	/**
+	 * Enter the {name}
+	 */
+	COMMON_LBL_ENTER_THE: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Default
+	 */
+	COMMON_LBL_DEFAULT: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */
@@ -1773,6 +1850,18 @@ Please, try again later.
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
 	/**
+	 * Enter a valid URL
+	 */
+	ERROR_ENTER_VALID_URL: () => LocalizedString
+	/**
+	 * URL must be https or localhost
+	 */
+	ERROR_URL_NOT_VALID: () => LocalizedString
+	/**
+	 * Network already in use
+	 */
+	ERROR_URL_ALREADY_USED: () => LocalizedString
+	/**
 	 * Required
 	 */
 	ERROR_REQUIRED_FIELD: () => LocalizedString
@@ -1809,9 +1898,33 @@ Please, try again later.
 	 */
 	NETWORK_MANAGE_NODES: () => LocalizedString
 	/**
-	 * Add node
+	 * Add custom node
 	 */
-	NETWORK_ADD_NODE: () => LocalizedString
+	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Add network details
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB: () => LocalizedString
+	/**
+	 * If you are having problems adding your custom node, it usually indicates a poorly formatted URL or a problem with the CORS configuration of the node.
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB_DESC: () => LocalizedString
+	/**
+	 * Node name
+	 */
+	NETWORK_ADD_CUSTOM_NODE_NAME: () => LocalizedString
+	/**
+	 * Add network
+	 */
+	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
+	/**
+	 * Edit network
+	 */
+	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: () => LocalizedString
+	/**
+	 * Confirming this will remove the custom node from the list, you will necessarily have to re-add it manually.
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE: () => LocalizedString
 	/**
 	 * Main Networks
 	 */
@@ -1821,9 +1934,9 @@ Please, try again later.
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
 	/**
-	 * Custom Networks
+	 * Other Networks
 	 */
-	NETWORK_LABEL_CUSTOM_NETWORKS: () => LocalizedString
+	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
 	 * {name} copied to clipboard!
 	 */

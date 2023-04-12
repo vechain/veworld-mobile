@@ -42,7 +42,7 @@ export const ContactForm: React.FC<Props> = memo(
                     onTouchStart={() => setNameTouched(true)}
                 />
 
-                <BaseSpacer height={7} />
+                <BaseSpacer height={16} />
 
                 <BaseTextInput
                     placeholder={placeholderAddress}

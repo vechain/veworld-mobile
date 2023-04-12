@@ -94,6 +94,7 @@ export const NewMnemonicScreen = () => {
                     <CheckBoxWithText
                         text={LL.BTN_MNEMONIC_CHECKBOX()}
                         checkAction={setIsChecked}
+                        testID="mnemonic-checkbox"
                     />
 
                     <BaseButton

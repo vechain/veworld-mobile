@@ -182,6 +182,8 @@ export const ConfirmMnemonicScreen = () => {
                         buttons={buttonsFirstWord}
                         action={handleSelectFirstWord}
                         selectedColor={theme.colors.primaryLight}
+                        buttonGroupTestID="first-word-button-group"
+                        buttonTestID="word-1"
                     />
                     <BaseSpacer height={21} />
                     <BaseText typographyFont="body">
@@ -193,6 +195,8 @@ export const ConfirmMnemonicScreen = () => {
                         buttons={buttonsSecondWord}
                         action={handleSelectSecondWord}
                         selectedColor={theme.colors.primaryLight}
+                        buttonGroupTestID="second-word-button-group"
+                        buttonTestID="word-2"
                     />
                     <BaseSpacer height={21} />
                     <BaseText typographyFont="body">
@@ -204,6 +208,8 @@ export const ConfirmMnemonicScreen = () => {
                         buttons={buttonsThirdWord}
                         action={handleSelectThirdWord}
                         selectedColor={theme.colors.primaryLight}
+                        buttonGroupTestID="third-word-button-group"
+                        buttonTestID="word-3"
                     />
                 </BaseView>
                 <BaseButton
