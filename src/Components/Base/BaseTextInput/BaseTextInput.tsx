@@ -90,7 +90,9 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: theme.colors.transparent,
+            borderColor: isError
+                ? theme.colors.danger
+                : theme.colors.transparent,
             borderWidth: 1,
             borderRadius: 16,
             backgroundColor: theme.colors.card,
