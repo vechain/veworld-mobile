@@ -40,4 +40,6 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                   name: detox-artifacts
-                  path: ${{ steps.nitro.outputs.nitro-output-dir }}
+                  path: |
+                      ${{ steps.nitro.outputs.nitro-output-dir }}
+                      ${{ github.workspace }}/node_modules/detox/src/artifacts

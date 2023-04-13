@@ -34,7 +34,9 @@ jobs:
               uses: reactivecircus/android-emulator-runner@v2
               with:
                   api-level: 33
+                  target: google_apis
                   arch: x86_64
+                  emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
                   avd-name: Pixel_6_Pro_API_33 # this should match with the one defined in .detoxrc.js config
                   script: detox test --configuration android.emu.release.33 --cleanup --headless --loglevel debug --record-logs all
 
@@ -45,3 +47,4 @@ jobs:
                   name: detox-artifacts
                   path: |
                       ${{ steps.nitro.outputs.nitro-output-dir }}
+                      ${{ github.workspace }}/node_modules/detox/src/artifacts

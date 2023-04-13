@@ -13,7 +13,7 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Detox test session started!")
 
     console.log("Launching app...")
-    await device.launchApp({ delete: true })
+    await device.launchApp()
     console.log("App launched!")
 })
 
@@ -41,8 +41,6 @@ After(async (message: ITestCaseHookParameter) => {
 
 AfterAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting cleanup Detox test session...")
-
     await detox.cleanup()
-
     console.log("Detox test session cleaned up!")
 })
