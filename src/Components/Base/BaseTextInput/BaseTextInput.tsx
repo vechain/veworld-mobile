@@ -19,6 +19,7 @@ type Props = {
     value?: string
     errorMessage?: string
     rightIcon?: string
+    rightIconTestID?: string
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
     setValue?: (s: string) => void
@@ -31,6 +32,7 @@ export const BaseTextInput = memo(
         value,
         errorMessage,
         rightIcon,
+        rightIconTestID,
         onIconPress,
         setValue,
         containerStyle,
@@ -62,10 +64,11 @@ export const BaseTextInput = memo(
                     {rightIcon && (
                         <BaseIcon
                             action={onIconPress}
-                            name={"flip-horizontal"}
+                            name={rightIcon}
                             size={24}
                             color={theme.colors.text}
                             style={styles.scanQrCodeIcon}
+                            testID={rightIconTestID}
                         />
                     )}
                 </BaseView>
