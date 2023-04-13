@@ -1,3 +1,3 @@
-// import * as ThorConstants from "./ThorConstants"
+import * as ThorConstants from "./ThorConstants"
 
-// export default ThorConstants
+export default ThorConstants

@@ -2,79 +2,170 @@
 import {
     TouchableOpacity,
     TouchableOpacityProps,
-    StyleSheet,
     FlexAlignType,
+    StyleSheet,
 } from "react-native"
-import React from "react"
-import { TFonts, useTheme } from "~Common"
+import React, { useCallback, useMemo } from "react"
+import { typography, TFonts } from "~Common/Theme"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText } from "./BaseText"
-import { LocalizedString } from "typesafe-i18n"
+import * as Haptics from "expo-haptics"
+
+const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     action: () => void
     disabled?: boolean
-    filled?: boolean
-    bordered?: boolean
-    title: LocalizedString | string
+    variant?: "solid" | "outline" | "ghost" | "link"
+    bgColor?: string
+    textColor?: string
+    title?: string
     m?: number
     mx?: number
     my?: number
     p?: number
     px?: number
     py?: number
-    w?: number
-    h?: number
-    font?: TFonts
-    selfAlign?: "auto" | FlexAlignType | undefined
+    w?: number // NOTE: this is a number in percentage
+    h?: number // NOTE: this is a number in percentage
+    radius?: number
+    size?: "sm" | "md" | "lg"
+    typographyFont?: keyof typeof defaultTypography
+    fontSize?: keyof typeof otherTypography.fontSize
+    fontWeight?: keyof typeof otherTypography.fontWeight
+    fontFamily?: keyof typeof otherTypography.fontFamily
+    selfAlign?: "auto" | FlexAlignType
+    haptics?: "light" | "medium" | "heavy"
+    leftIcon?: React.ReactNode
+    rightIcon?: React.ReactNode
+    isLoading?: boolean
 } & TouchableOpacityProps
 
-export const BaseButton = (props: Props) => {
-    const { style, disabled = false, ...otherProps } = props
-    const theme = useTheme()
+export const BaseButton = ({
+    style,
+    textColor,
+    variant = "solid",
+    size = "lg",
+    radius = 16,
+    disabled = false,
+    leftIcon,
+    rightIcon,
+    isLoading = false,
+    ...otherProps
+}: Props) => {
+    const { typographyFont, fontFamily, fontSize, fontWeight, children } =
+        otherProps
+
+    const { styles: themedStyles, theme } = useThemedStyles(
+        baseStyles(variant === "link"),
+    )
+
+    const onButtonPress = useCallback(() => {
+        if (otherProps.haptics) {
+            switch (otherProps.haptics) {
+                case Haptics.ImpactFeedbackStyle.Light:
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                    break
+
+                case Haptics.ImpactFeedbackStyle.Medium:
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                    break
+
+                case Haptics.ImpactFeedbackStyle.Heavy:
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+                    break
+            }
+        }
+
+        otherProps.action()
+    }, [otherProps])
+
+    const bgColor = useMemo(() => {
+        if (otherProps.bgColor) return otherProps.bgColor
+        return theme.colors.primary
+    }, [theme, otherProps.bgColor])
+
+    const isSolidButton = useMemo(() => variant === "solid", [variant])
+    const isOutlineButton = useMemo(() => variant === "outline", [variant])
+
+    const paddingX = useMemo(() => {
+        if (otherProps.px) return otherProps.px
+        if (size === "sm") return 8
+        if (size === "md") return 8
+        if (size === "lg") return 16
+    }, [otherProps.px, size])
+
+    const paddingY = useMemo(() => {
+        if (otherProps.py) return otherProps.py
+        if (size === "sm") return 3.5
+        if (size === "md") return 9.5
+        if (size === "lg") return 15
+    }, [otherProps.py, size])
+
+    const computedTypographyFont: TFonts | undefined = useMemo(() => {
+        if (typographyFont) return typographyFont
+        if (size === "sm") return "smallButtonPrimary"
+        if (size === "md") return "button"
+        if (size === "lg") return "buttonPrimary"
+    }, [size, typographyFont])
 
     return (
         <TouchableOpacity
-            onPress={props.action}
+            onPress={onButtonPress}
             activeOpacity={0.7}
             disabled={disabled}
             style={[
                 {
-                    backgroundColor: props.filled
-                        ? theme.colors.button
-                        : theme.constants.transparent,
-                    borderColor: props.bordered
-                        ? theme.colors.button
-                        : theme.constants.transparent,
-                    width: props.w && `${props.w}%`,
-                    height: props.h && `${props.h}%`,
-                    margin: props.m,
-                    marginVertical: props.my,
-                    marginHorizontal: props.mx,
-                    padding: props.p,
-                    paddingVertical: props.py ? props.py : 14,
-                    paddingHorizontal: props.px,
+                    backgroundColor: isSolidButton
+                        ? bgColor
+                        : theme.colors.transparent,
+                    borderColor: isOutlineButton
+                        ? bgColor
+                        : theme.colors.transparent,
+                    width: otherProps.w && `${otherProps.w}%`,
+                    height: otherProps.h && `${otherProps.h}%`,
+                    margin: otherProps.m,
+                    marginVertical: otherProps.my,
+                    marginHorizontal: otherProps.mx,
+                    padding: otherProps.p,
+                    paddingVertical: paddingY,
+                    paddingHorizontal: paddingX,
                     opacity: disabled ? 0.5 : 1,
-                    alignSelf: props.selfAlign,
+                    alignSelf: otherProps.selfAlign,
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: leftIcon || rightIcon ? "row" : "column",
+                    borderRadius: radius,
+                    borderWidth: isOutlineButton ? 1 : 0,
                 },
                 style,
-                baseStyle.default,
             ]}
             {...otherProps}>
+            {leftIcon}
             <BaseText
                 color={
-                    props.filled ? theme.colors.background : theme.colors.button
+                    textColor ||
+                    (isSolidButton
+                        ? theme.colors.background
+                        : theme.colors.text)
                 }
-                font={props.font ? props.font : "body_accent"}>
-                {props.title}
+                typographyFont={computedTypographyFont}
+                fontFamily={fontFamily}
+                fontWeight={fontWeight}
+                fontSize={fontSize}
+                style={themedStyles.text}>
+                {!isLoading ? otherProps.title : "..."}
+                {children}
             </BaseText>
+            {rightIcon}
         </TouchableOpacity>
     )
 }
 
-const baseStyle = StyleSheet.create({
-    default: {
-        borderRadius: 8,
-        borderWidth: 1,
-        alignItems: "center",
-    },
-})
+const baseStyles = (isLink: boolean) => (theme: ColorThemeType) =>
+    StyleSheet.create({
+        text: {
+            textDecorationLine: isLink ? "underline" : "none",
+            textDecorationColor: theme.colors.text,
+        },
+    })

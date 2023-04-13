@@ -1,14 +1,16 @@
 import React, { FC } from "react"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 import { BaseText } from "~Components/Base"
-import { TFonts, useTheme } from "~Common"
+import { useTheme } from "~Common"
 import { LocalizedString } from "typesafe-i18n"
+import { TFonts } from "~Common/Theme"
 
 type Props = {
     font?: TFonts
     fontColor?: string
     text: LocalizedString | string
     checkSize?: number
+    testID?: string
     checkAction: (checked: boolean) => void
 }
 
@@ -17,6 +19,7 @@ export const CheckBoxWithText: FC<Props> = ({
     fontColor,
     text,
     checkSize,
+    testID,
     checkAction,
 }) => {
     const theme = useTheme()
@@ -25,14 +28,14 @@ export const CheckBoxWithText: FC<Props> = ({
         <BouncyCheckbox
             onPress={checkAction}
             size={checkSize ?? 22}
-            fillColor={theme.colors.button}
+            fillColor={theme.colors.primary}
             textComponent={
                 <BaseText
-                    font={font ?? "footnote"}
+                    typographyFont={font ? font : "footNote"}
                     color={fontColor}
-                    my={10}
-                    w={87}
-                    mx={10}>
+                    my={14}
+                    mx={10}
+                    testID={testID}>
                     {text}
                 </BaseText>
             }

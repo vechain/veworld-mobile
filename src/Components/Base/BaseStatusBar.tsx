@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { memo, useMemo } from "react"
 import { StatusBar, StatusBarProps } from "react-native"
 import { useTheme } from "~Common"
 import { computeBarStyle } from "./Helpers/ComputeBarStyle"
@@ -8,7 +8,7 @@ type Props = {
     transparent?: boolean
 } & StatusBarProps
 
-export const BaseStatusBar = (props: Props) => {
+export const BaseStatusBar = memo((props: Props) => {
     const theme = useTheme()
 
     const barStyle = useMemo(
@@ -22,10 +22,10 @@ export const BaseStatusBar = (props: Props) => {
             barStyle={barStyle}
             backgroundColor={
                 props.transparent
-                    ? theme.constants.transparent
+                    ? theme.colors.transparent
                     : theme.colors.background
             }
             {...props}
         />
     )
-}
+})

@@ -1,89 +1,30 @@
-import { ThemeType } from "./Types"
+import { Colors, colors } from "./Colors"
+import { radius } from "./Radius"
+import { shadows } from "./Shadows"
+import { spacing } from "./Spacing"
+import { typography } from "./Typography"
 
-export const Theme: ThemeType = {
-    constants: {
-        transparent: "transparent",
-        bgDark: "black",
-        bgLght: "white",
-        lightGrey: "#D3D3D3",
-    },
-
-    typography: {
-        // INTER
-        large_title: {
-            fontFamily: "Inter-Bold",
-            fontSize: 32,
-        },
-        title: {
-            fontFamily: "Inter-Regular",
-            fontSize: 28,
-        },
-        sub_title: {
-            fontFamily: "Inter-Bold",
-            fontSize: 22,
-        },
-        body: {
-            fontFamily: "Inter-Regular",
-            fontSize: 16,
-        },
-        footnote: {
-            fontFamily: "Inter-Light",
-            fontSize: 13,
-        },
-        caption: {
-            fontSize: 11,
-            fontFamily: "Inter-Light",
-        },
-
-        // MONO
-        large_title_accent: {
-            fontFamily: "Mono-Extra-Bold",
-            fontSize: 32,
-        },
-        title_accent: {
-            fontFamily: "Mono_Bold",
-            fontSize: 28,
-        },
-        sub_title_accent: {
-            fontFamily: "Mono_Bold",
-            fontSize: 22,
-        },
-        body_accent: {
-            fontFamily: "Mono-Regular",
-            fontSize: 16,
-        },
-        footnote_accent: {
-            fontFamily: "Mono-Light",
-            fontSize: 13,
-        },
-        caption_accent: {
-            fontSize: 11,
-            fontFamily: "Mono-Light",
-        },
-    },
-
-    dark: {
-        isDark: true,
-
-        colors: {
-            background: "black",
-            reversed_bg: "white",
-            text: "white",
-            tabicon: "#b1b1b1",
-            tabiconInactive: "#595959",
-            button: "#270089",
-        },
-    },
-    light: {
-        isDark: false,
-
-        colors: {
-            background: "white",
-            reversed_bg: "black",
-            text: "black",
-            tabicon: "black",
-            tabiconInactive: "#595959",
-            button: "#270089",
-        },
-    },
+export type ColorThemeType = {
+    isDark: boolean
+    colors: Colors
+    shadows: (typeof shadows)["dark"] | (typeof shadows)["light"]
 }
+
+export const ColorTheme = (type: "light" | "dark"): ColorThemeType => ({
+    isDark: type === "dark",
+    shadows: shadows[type],
+    colors: colors[type],
+})
+
+type ThemeType = {
+    typography: typeof typography
+    radius: typeof radius
+    spacing: typeof spacing
+}
+export const Theme: ThemeType = {
+    typography,
+    radius,
+    spacing,
+}
+
+export * from "./StylesProps"

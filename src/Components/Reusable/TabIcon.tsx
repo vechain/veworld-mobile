@@ -1,24 +1,57 @@
-import React, { FC } from "react"
-import Icon from "react-native-vector-icons/Ionicons"
-import { useTheme } from "~Common"
+import React, { FC, memo } from "react"
+import { StyleSheet, TextStyle, View } from "react-native"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { ColorThemeType, useThemedStyles } from "~Common"
+import { BaseView } from "~Components/Base"
 
 type Props = {
     focused: boolean
-    size: number
     title: string
 }
 
-export const TabIcon: FC<Props> = ({ focused, size, title }) => {
-    const theme = useTheme()
+export const TabIcon: FC<Props> = memo(({ focused, title }) => {
+    const { styles } = useThemedStyles(baseStyles(focused))
+
     return (
-        <Icon
-            name={
-                focused
-                    ? title.toLocaleLowerCase()
-                    : `${title.toLocaleLowerCase()}-outline`
-            }
-            size={size}
-            color={theme.colors.tabicon}
-        />
+        <BaseView
+            justifyContent="center"
+            alignItems="center"
+            style={styles.container}>
+            <Icon
+                name={title.toLowerCase()}
+                size={24}
+                color={(styles.icon as TextStyle).color}
+            />
+
+            <View style={styles.dot} />
+        </BaseView>
     )
+})
+
+const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
+    const iconColor = () => {
+        if (isFocused)
+            return theme.isDark ? theme.colors.tertiary : theme.colors.primary
+        return theme.colors.primary
+    }
+
+    const bgColor = isFocused ? theme.colors.secondary : "transparent"
+    return StyleSheet.create({
+        icon: {
+            color: iconColor(),
+        },
+        container: {
+            borderRadius: 10,
+            paddingHorizontal: 12,
+            paddingVertical: 8.5,
+            backgroundColor: bgColor,
+        },
+        dot: {
+            height: 4,
+            width: 4,
+            backgroundColor: isFocused ? iconColor() : "transparent",
+            borderRadius: 4,
+            marginTop: 1,
+        },
+    })
 }

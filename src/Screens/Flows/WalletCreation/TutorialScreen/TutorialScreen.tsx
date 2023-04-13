@@ -7,71 +7,91 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    ListSlide,
+    PaginationItem,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { ListSlide } from "../Components/ListSlide"
-import { Slide } from "../Types"
+import { Slide } from "~Model"
 import { STEPS } from "../Enums"
-import { ChessIcon, KeyIcon, ShieldIcon } from "~Assets"
+import { ShieldIconSVG, KeyIconSVG, ChessIconSVG } from "~Assets"
+import { useSharedValue } from "react-native-reanimated"
 
 export const TutorialScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
     const flatListRef = useRef<FlatList | null>(null)
-    const [ListIndex, setListIndex] = useState(1)
-    const [BtnIndex, setBtnIndex] = useState(0)
+    const [listIndex, setListIndex] = useState(1)
+    const [btnIndex, setBtnIndex] = useState(0)
+
+    // Progress value for the stage of tutorial screen
+    const progressValue = useSharedValue<number>(0)
 
     const slides = [
         {
             title: LL.TITLE_WALLET_TUTORIAL_SLIDE_01(),
             text: LL.BD_WALLET_TUTORIAL_SLIDE_01(),
-            icon: ShieldIcon,
+            icon: <ShieldIconSVG />,
             button: LL.BTN_WALLET_TUTORIAL_SLIDE_01(),
         },
         {
             title: LL.TITLE_WALLET_TUTORIAL_SLIDE_02(),
             text: LL.BD_WALLET_TUTORIAL_SLIDE_02(),
-            icon: KeyIcon,
+            icon: <KeyIconSVG />,
             button: LL.BTN_WALLET_TUTORIAL_SLIDE_02(),
         },
         {
             title: LL.TITLE_WALLET_TUTORIAL_SLIDE_03(),
             text: LL.BD_WALLET_TUTORIAL_SLIDE_03(),
-            icon: ChessIcon,
+            icon: <ChessIconSVG />,
             button: LL.BTN_WALLET_TUTORIAL_SLIDE_03(),
         },
     ]
 
-    const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
-        let activeIndex = viewableItems[0].index
-        setBtnIndex(activeIndex)
+    const onViewableItemsChanged = useCallback(
+        ({ viewableItems }: any) => {
+            let activeIndex = viewableItems[0].index
+            setBtnIndex(activeIndex)
 
-        if (activeIndex < STEPS.SAFETY) {
-            setListIndex(activeIndex + 1)
-        }
-    }, [])
+            //Quickly switch PaginatedItem to the next or previous slide when visible on screen
+            if (
+                viewableItems[1] &&
+                viewableItems[1].index !== progressValue.value
+            )
+                progressValue.value = viewableItems[1].index
+            else progressValue.value = viewableItems[0].index
+
+            if (activeIndex < STEPS.SAFETY) {
+                setListIndex(activeIndex + 1)
+            }
+        },
+        [progressValue],
+    )
 
     const onButtonPress = () => {
         if (flatListRef.current) {
-            flatListRef.current.scrollToIndex({ index: ListIndex })
+            flatListRef.current.scrollToIndex({ index: listIndex })
         }
 
-        if (BtnIndex === STEPS.SAFETY) {
-            nav.navigate(Routes.SEED_PHRASE)
+        if (btnIndex === STEPS.SAFETY) {
+            nav.navigate(Routes.NEW_MNEMONIC)
         }
     }
 
     const onNavigate = () => {
-        nav.navigate(Routes.SEED_PHRASE)
+        nav.navigate(Routes.NEW_MNEMONIC)
     }
 
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" grow={1}>
-                <BaseText font="large_title">Create Wallet</BaseText>
+            <BaseView alignItems="center">
+                <BaseView alignSelf="flex-start" mx={20}>
+                    <BaseText typographyFont="largeTitle">
+                        Create Wallet
+                    </BaseText>
+                </BaseView>
 
                 <FlatList
                     ref={flatListRef}
@@ -87,22 +107,38 @@ export const TutorialScreen = () => {
                     onViewableItemsChanged={onViewableItemsChanged}
                     keyExtractor={item => item.title}
                 />
+            </BaseView>
+            <BaseView
+                alignItems="center"
+                flexGrow={1}
+                justifyContent="space-between">
+                {!!progressValue && (
+                    <BaseView flexDirection="row" alignSelf="center" py={24}>
+                        {slides.map((slide, index) => (
+                            <PaginationItem
+                                animValue={progressValue}
+                                index={index}
+                                key={slide.title}
+                                length={slides.length}
+                            />
+                        ))}
+                    </BaseView>
+                )}
 
-                <BaseView align="center" w={100} px={20}>
+                <BaseView alignItems="center" w={100} px={20}>
                     <BaseButton
                         action={onNavigate}
-                        font="footnote_accent"
+                        typographyFont="bodyMedium"
                         title={LL.BTN_WALLET_TUTORIAL_SKIP()}
-                        selfAlign="flex-start"
                         px={5}
+                        variant="link"
                     />
 
                     <BaseButton
-                        filled
                         action={onButtonPress}
                         w={100}
                         mx={20}
-                        title={slides[BtnIndex].button}
+                        title={slides[btnIndex].button}
                     />
                 </BaseView>
             </BaseView>

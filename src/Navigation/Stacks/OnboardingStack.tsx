@@ -2,22 +2,37 @@ import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     OnboardingScreen,
-    SecurityScreen,
-    SeedPhraseScreen,
+    WelcomeScreen,
+    NewMnemonicScreen,
     TutorialScreen,
     WalletTypeSelectionScreen,
-    WelcomeScreen,
-    UserPasswordScreen,
+    ConfirmMnemonicScreen,
+    AppSecurityScreen,
+    UserCreatePasswordScreen,
+    ImportWalletTypeSelectionScreen,
+    ImportMnemonicScreen,
+    WalletSuccessScreen,
 } from "~Screens"
+import { Routes } from "~Navigation/Enums"
+import { SecurityLevelType } from "~Model"
 
 export type RootStackParamListOnboarding = {
-    Welcome: undefined
-    Onboarding: undefined
-    Security: undefined
-    Wallet_Tutorial: undefined
-    Wallet_Type_Creation: undefined
-    Seed_Phrase: undefined
-    User_Password: undefined
+    [Routes.WELCOME]: undefined
+    [Routes.ONBOARDING]: undefined
+    [Routes.WALLET_TUTORIAL]: undefined
+    [Routes.WALLET_TYPE_CREATION]: undefined
+    [Routes.WALLET_TYPE_IMPORT]: undefined
+    [Routes.NEW_MNEMONIC]: undefined
+    [Routes.CONFIRM_MNEMONIC]: undefined
+    [Routes.IMPORT_MNEMONIC]: undefined
+    [Routes.USER_CREATE_PASSWORD]: undefined
+    [Routes.APP_SECURITY]: undefined
+    [Routes.WALLET_SUCCESS]:
+        | {
+              securityLevelSelected?: SecurityLevelType
+              userPin?: string
+          }
+        | undefined
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -27,44 +42,68 @@ export const OnboardingStack = () => {
         <Onboarding.Navigator screenOptions={{ headerShown: false }}>
             <Onboarding.Group>
                 <Onboarding.Screen
-                    name="Welcome"
+                    name={Routes.WELCOME}
                     component={WelcomeScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="Onboarding"
+                    name={Routes.ONBOARDING}
                     component={OnboardingScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="Wallet_Type_Creation"
+                    name={Routes.WALLET_TYPE_CREATION}
                     component={WalletTypeSelectionScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="Wallet_Tutorial"
+                    name={Routes.WALLET_TYPE_IMPORT}
+                    component={ImportWalletTypeSelectionScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.WALLET_TUTORIAL}
                     component={TutorialScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="Seed_Phrase"
-                    component={SeedPhraseScreen}
+                    name={Routes.NEW_MNEMONIC}
+                    component={NewMnemonicScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="Security"
-                    component={SecurityScreen}
+                    name={Routes.CONFIRM_MNEMONIC}
+                    component={ConfirmMnemonicScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Onboarding.Screen
-                    name="User_Password"
-                    component={UserPasswordScreen}
+                    name={Routes.IMPORT_MNEMONIC}
+                    component={ImportMnemonicScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.APP_SECURITY}
+                    component={AppSecurityScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.USER_CREATE_PASSWORD}
+                    component={UserCreatePasswordScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.WALLET_SUCCESS}
+                    component={WalletSuccessScreen}
                     options={{ headerShown: false }}
                 />
             </Onboarding.Group>

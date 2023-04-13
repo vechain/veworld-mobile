@@ -1,6 +1,8 @@
 module.exports = {
     presets: ["module:metro-react-native-babel-preset"],
+
     plugins: [
+        ["module:react-native-dotenv"],
         [
             "module-resolver",
             {
@@ -15,6 +17,8 @@ module.exports = {
                     "~Components": "./src/Components",
                     "~i18n": "./src/i18n",
                     "~Assets": "./src/Assets",
+                    "~Selectors": "./src/Selectors",
+                    "~Test": "./src/Test/index.tsx",
                     http: "stream-http",
                     https: "https-browserify",
                     crypto: "react-native-quick-crypto",
@@ -23,6 +27,13 @@ module.exports = {
                     "@ethersproject/pbkdf2": "./patches/patch-pbkdf2.js",
                     url: "url",
                 },
+            },
+        ],
+        [
+            // should always come last
+            "react-native-reanimated/plugin",
+            {
+                globals: ["__scanCodes"],
             },
         ],
     ],

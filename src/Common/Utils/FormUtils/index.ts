@@ -1,3 +1,3 @@
-// import FormUtils from "./FormUtils"
+import * as FormUtils from "./FormUtils"
 
-// export default FormUtils
+export default FormUtils

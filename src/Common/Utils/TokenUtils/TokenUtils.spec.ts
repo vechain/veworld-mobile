@@ -1,35 +1,29 @@
-// import { FungibleToken } from "~Model/Token"
-// import { VET, VTHO } from "../../constants/Token/TokenConstants"
-// import ThorConstants from "../../constants/Thor"
-// import TokenUtils from "./TokenUtils"
+import { FungibleToken } from "~Model"
+import { mergeTokens } from "./TokenUtils"
 
-// export const External: FungibleToken = {
-//     name: "Test",
-//     symbol: "EXT",
-//     address: "0x00032020",
-//     decimals: 18,
-//     icon: "http://blah.sdf",
-//     genesisId: ThorConstants.genesises.test.id,
-// }
+describe("mergeTokens", () => {
+    it("mergeTokens should merge two token arrays and remove duplicates based on symbol and genesisId", () => {
+        const a = [
+            { symbol: "ETH", genesisId: "1" },
+            { symbol: "BTC", genesisId: "2" },
+            { symbol: "USDT", genesisId: "3" },
+        ]
 
-// test("isExternalToken - VET", () => {
-//     expect(
-//         TokenUtils.isExternalToken({
-//             ...VET,
-//             genesisId: ThorConstants.genesises.test.id,
-//         }),
-//     ).toBeFalsy()
-// })
+        const b = [
+            { symbol: "BTC", genesisId: "2" },
+            { symbol: "LINK", genesisId: "4" },
+            { symbol: "ETH", genesisId: "1" },
+        ]
 
-// test("isExternalToken - VTHO", () => {
-//     expect(
-//         TokenUtils.isExternalToken({
-//             ...VTHO,
-//             genesisId: ThorConstants.genesises.test.id,
-//         }),
-//     ).toBeFalsy()
-// })
+        const expectedOutput = [
+            { symbol: "USDT", genesisId: "3" },
+            { symbol: "BTC", genesisId: "2" },
+            { symbol: "LINK", genesisId: "4" },
+            { symbol: "ETH", genesisId: "1" },
+        ]
 
-// test("isExternalToken - External", () => {
-//     expect(TokenUtils.isExternalToken(External)).toBeTruthy()
-// })
+        const output = mergeTokens(a as FungibleToken[], b as FungibleToken[])
+
+        expect(output).toEqual(expectedOutput)
+    })
+})

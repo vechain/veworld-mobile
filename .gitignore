@@ -63,6 +63,14 @@ buck-out/
 /ios/Pods/
 /vendor/bundle/
 
+# vscode
+.vscode/settings.json
 
-#Yarn
-yarn.lock
+# jest
+coverage
+
+# local env files (that override others)
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local

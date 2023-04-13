@@ -2,7 +2,7 @@ module.exports = {
     root: true,
     extends: "@react-native-community",
     parser: "@typescript-eslint/parser",
-    plugins: ["@typescript-eslint"],
+    plugins: ["@typescript-eslint", "i18next"],
     ignorePatterns: ["src/i18n/*"],
     overrides: [
         {
@@ -14,6 +14,7 @@ module.exports = {
                 semi: "off",
                 curly: "off",
                 quotes: [2, "double", { avoidEscape: true }],
+                "i18next/no-literal-string": 1,
             },
         },
     ],

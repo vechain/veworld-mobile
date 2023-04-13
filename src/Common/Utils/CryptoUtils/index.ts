@@ -1,3 +1,3 @@
-// import * as CryptoUtils from "./CryptoUtils"
+import CryptoUtils from "./CryptoUtils"
 
-// export default CryptoUtils
+export default CryptoUtils

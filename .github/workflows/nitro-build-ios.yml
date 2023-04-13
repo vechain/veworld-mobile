@@ -1,0 +1,43 @@
+name: detox-nitro-ios
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build-test-ios:
+        name: Detox Build & Test iOS Debug
+        runs-on: macos-12
+
+        env:
+            NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Install Detox dependencies
+              shell: bash
+              run: |
+                  yarn global add detox-cli react-native-cli
+                  brew tap wix/brew
+                  brew install applesimutils
+
+            - uses: nitro-build/github-action-nitro-ios@v1
+              with:
+                  detox-configuration: ios.sim.debug
+
+            - name: Run tests with Detox
+              run: |
+                  detox test --configuration ios.sim.debug --cleanup --headless --loglevel debug --record-logs all
+
+            - name: Upload artifacts
+              if: failure()
+              uses: actions/upload-artifact@v3
+              with:
+                  name: detox-artifacts
+                  path: artifacts

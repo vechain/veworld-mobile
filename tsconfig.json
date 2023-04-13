@@ -1,9 +1,13 @@
 {
     "extends": "@tsconfig/react-native/tsconfig.json",
     "compilerOptions": {
+        "resolveJsonModule": true,
+        "strict": true,
+        "experimentalDecorators": true,
         "jsx": "react",
         "skipLibCheck": true,
         "types": ["node", "jest"],
+        "typeRoots": ["./node_modules/@types", "./src/@types"],
         "paths": {
             "~*": ["./src/*"],
             "~Storage/*": ["./src/Storage/*"],
@@ -14,8 +18,8 @@
             "~Common/*": ["./src/Common/*"],
             "~Components/*": ["./src/Components/*"],
             "~i18n/*": ["./src/i18n/*"],
-            "~Assets/*": ["./src/Assets/*"]
+            "~Assets/*": ["./src/Assets/*"],
+            "~Test": ["./src/Test/index.tsx"]
         }
-    },
-    "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx"]
+    }
 }

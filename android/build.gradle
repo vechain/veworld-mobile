@@ -3,7 +3,7 @@
 buildscript {
     ext {
         buildToolsVersion = "31.0.0"
-        minSdkVersion = 21
+        minSdkVersion = 23
         compileSdkVersion = 31
         targetSdkVersion = 31
         kotlinVersion = "1.7.20"
@@ -42,6 +42,9 @@ allprojects {
         }
         maven {
             url("$rootDir/../node_modules/detox/Detox-android")
+        }
+        maven {
+            url("$rootDir/../node_modules/expo-camera/android/maven")
         }
         mavenCentral {
             // We don't want to fetch react-native from Maven Central as there are

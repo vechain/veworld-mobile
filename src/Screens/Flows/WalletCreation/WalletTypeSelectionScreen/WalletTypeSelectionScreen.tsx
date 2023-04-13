@@ -8,37 +8,49 @@ import {
     BaseView,
 } from "~Components"
 import { Routes } from "~Navigation"
+import { useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
+import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const onCreateWallet = () => {
-        nav.navigate(Routes.WALLET_TUTORIAL)
+        if (userHasOnboarded) {
+            nav.navigate(Routes.NEW_MNEMONIC)
+        } else {
+            nav.navigate(Routes.WALLET_TUTORIAL)
+        }
     }
 
-    const onImportWallet = () => {}
+    const onImportWallet = () => {
+        nav.navigate(Routes.WALLET_TYPE_IMPORT)
+    }
 
     return (
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
-            <BaseView align="center" justify="space-between" grow={1} mx={20}>
-                <BaseView selfAlign="flex-start">
-                    <BaseText font="large_title">
+            <BaseView
+                alignItems="center"
+                justifyContent="space-between"
+                flexGrow={1}
+                mx={20}>
+                <BaseView alignSelf="flex-start">
+                    <BaseText typographyFont="title">
                         {LL.TITLE_CREATE_WALLET_TYPE()}
                     </BaseText>
 
-                    <BaseText font="body" my={10}>
+                    <BaseText typographyFont="body" my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                         sed do eiusmod tempor incididunt ut labore et dolore
                         magna aliqua.
                     </BaseText>
                 </BaseView>
 
-                <BaseView align="center" w={100}>
+                <BaseView alignItems="center" w={100}>
                     <BaseButton
-                        filled
                         action={onCreateWallet}
                         w={100}
                         mx={20}
@@ -47,7 +59,7 @@ export const WalletTypeSelectionScreen = () => {
                     />
 
                     <BaseButton
-                        bordered
+                        variant="outline"
                         action={onImportWallet}
                         w={100}
                         mx={20}

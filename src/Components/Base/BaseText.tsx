@@ -1,11 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
 import { FlexAlignType, Text, TextProps } from "react-native"
-import { TFonts, useTheme } from "~Common"
+import { useTheme } from "~Common"
+import { typography } from "~Common/Theme"
 import { BaseView } from "./BaseView"
 
+const { defaults: defaultTypography, ...otherTypography } = typography
+
 type Props = {
-    font?: TFonts
+    typographyFont?: keyof typeof defaultTypography
+    fontSize?: keyof typeof otherTypography.fontSize
+    fontWeight?: keyof typeof otherTypography.fontWeight
+    fontFamily?: keyof typeof otherTypography.fontFamily
     align?: "left" | "center" | "right"
     italic?: boolean
     color?: string
@@ -13,9 +19,15 @@ type Props = {
     m?: number
     mx?: number
     my?: number
+    mb?: number
+    mt?: number
     p?: number
     px?: number
     py?: number
+    pb?: number
+    pt?: number
+    pl?: number
+    pr?: number
     w?: number
     h?: number
     alignContainer?: FlexAlignType
@@ -29,39 +41,76 @@ type Props = {
 } & TextProps
 
 export const BaseText = (props: Props) => {
-    const { style, ...otherProps } = props
+    const {
+        style,
+        typographyFont,
+        fontSize,
+        fontWeight,
+        fontFamily,
+        ...otherProps
+    } = props
     const theme = useTheme()
 
-    const computeFont = useMemo(
-        () => theme.typography[props.font ?? "body"].fontSize,
-        [props.font, theme.typography],
+    const computedFontSize = useMemo(
+        () =>
+            fontSize ||
+            ((typographyFont &&
+                defaultTypography[typographyFont]
+                    .fontSize) as keyof typeof otherTypography.fontSize) ||
+            14,
+        [typographyFont, fontSize],
     )
 
-    const computeFamily = useMemo(
-        () => theme.typography[props.font ?? "body"].fontFamily,
-        [props.font, theme.typography],
+    const computedFontWeight = useMemo(
+        () =>
+            fontWeight ||
+            ((typographyFont &&
+                defaultTypography[typographyFont]
+                    .fontWeight) as keyof typeof otherTypography.fontWeight) ||
+            "500",
+        [typographyFont, fontWeight],
+    )
+
+    const computedFontFamily = useMemo(
+        () =>
+            fontFamily ||
+            ((typographyFont &&
+                defaultTypography[typographyFont]
+                    .fontFamily) as keyof typeof otherTypography.fontFamily) ||
+            "Inter-Regular",
+        [typographyFont, fontFamily],
     )
 
     return (
         <BaseView
-            align={props.alignContainer}
-            justify={props.justifyContainer}
+            alignItems={props.alignContainer}
+            justifyContent={props.justifyContainer}
             m={props.m}
             mx={props.mx}
             my={props.my}
+            mt={props.mt}
+            mb={props.mb}
             p={props.p}
             px={props.px}
             py={props.py}
+            pb={props.pb}
+            pt={props.pt}
+            pl={props.pl}
+            pr={props.pr}
             w={props.w}
             h={props.h}>
             <Text
                 style={[
                     {
-                        color: props.color ? props.color : theme.colors.text,
-                        fontSize: computeFont,
-                        fontFamily: computeFamily,
+                        color: props.color || theme.colors.text,
+                        fontSize: computedFontSize,
+                        fontFamily: computedFontFamily,
+                        fontWeight: computedFontWeight,
                         textAlign: props.align,
                         fontStyle: props.italic ? "italic" : "normal",
+                        lineHeight: typographyFont
+                            ? defaultTypography[typographyFont].lineHeight
+                            : undefined,
                     },
                     style,
                 ]}
