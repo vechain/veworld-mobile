@@ -6,6 +6,7 @@ import {
     BaseText,
     BaseView,
     BaseBottomSheet,
+    CustomTokenCard,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useTheme } from "~Common"
@@ -17,12 +18,12 @@ type Props = {
     token?: FungibleToken
 }
 
-const snapPoints = ["40%"]
+const snapPoints = ["50%"]
 
 export const DeleteCustomTokenBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, onConfirm }, ref) => {
+>(({ onClose, onConfirm, token }, ref) => {
     const { LL } = useI18nContext()
 
     const theme = useTheme()
@@ -42,9 +43,11 @@ export const DeleteCustomTokenBottomSheet = React.forwardRef<
             <BaseSpacer height={16} />
 
             <BaseText typographyFont="body" my={8}>
-                {"descrizione"}
+                {LL.MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION()}
             </BaseText>
 
+            <BaseSpacer height={16} />
+            <CustomTokenCard token={token!!} />
             <BaseSpacer height={32} />
 
             <BaseView alignItems="center" w={100}>

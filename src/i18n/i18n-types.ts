@@ -1002,6 +1002,10 @@ type RootTranslation = {
 	 */
 	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: string
 	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​?
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION: string
+	/**
 	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t​ ​o​r​ ​c​a​n​'​t​ ​b​e​ ​a​d​d​e​d​ ​t​o​ ​t​h​i​s​ ​n​e​t​w​o​r​k
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: string
@@ -2005,6 +2009,10 @@ Please, try again later.
 	 * Confirm custom token
 	 */
 	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Are you sure you want to remove this custom token?
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION: () => LocalizedString
 	/**
 	 * The address entered is incorrect or can't be added to this network
 	 */

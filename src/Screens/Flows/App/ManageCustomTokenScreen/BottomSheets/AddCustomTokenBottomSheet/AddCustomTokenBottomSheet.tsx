@@ -162,9 +162,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             </BaseText>
             <BaseSpacer height={24} />
             {newCustomToken ? (
-                <BaseView alignItems="stretch" w="100%">
-                    <CustomTokenCard token={newCustomToken} />
-                </BaseView>
+                <CustomTokenCard token={newCustomToken} />
             ) : (
                 <BaseView flexDirection="row" w="100%">
                     <BaseTextInput
