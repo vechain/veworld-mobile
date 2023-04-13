@@ -61,11 +61,11 @@ const Main = () => {
                     <ConnexContextProvider>
                         <SafeAreaProvider>
                             <TranslationProvider>
-                                <BottomSheetModalProvider>
-                                    <NavigationProvider>
+                                <NavigationProvider>
+                                    <BottomSheetModalProvider>
                                         {fontsLoaded && <EntryPoint />}
-                                    </NavigationProvider>
-                                </BottomSheetModalProvider>
+                                    </BottomSheetModalProvider>
+                                </NavigationProvider>
                                 <BaseToast />
                             </TranslationProvider>
                         </SafeAreaProvider>
