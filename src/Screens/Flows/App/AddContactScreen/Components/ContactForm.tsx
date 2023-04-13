@@ -36,8 +36,9 @@ export const ContactForm: React.FC<Props> = memo(
         const nav = useNavigation()
 
         const onOpenCamera = useCallback(() => {
-            nav.navigate(Routes.CAMERA)
-        }, [nav])
+            setAddressTouched(true)
+            nav.navigate(Routes.CAMERA, { onScan: setAddress })
+        }, [nav, setAddress])
 
         return (
             <>
