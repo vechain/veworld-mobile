@@ -17,7 +17,7 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("App launched!")
 })
 
-Before(async (message: ITestCaseHookParameter) => {
+Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     console.log("Relaunching app before test...")
     await device.reloadReactNative()
     console.log("App relaunched!")
@@ -30,7 +30,7 @@ Before(async (message: ITestCaseHookParameter) => {
     })
 })
 
-After(async (message: ITestCaseHookParameter) => {
+After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     const { pickle, result } = message
     await detox.onTestDone({
         title: pickle.uri,
