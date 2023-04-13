@@ -1,6 +1,5 @@
 import React, { memo } from "react"
-import { Image, StyleProp, ViewStyle } from "react-native"
-import { StyleSheet } from "react-native"
+import { Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
 import { PlaceholderSVG } from "~Assets"
 import { COLORS } from "~Common/Theme"
 import { BaseText, BaseCard, BaseSpacer, BaseView } from "~Components"

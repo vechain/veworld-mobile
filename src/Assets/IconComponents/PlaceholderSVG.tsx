@@ -1,6 +1,12 @@
 import React, { ReactElement } from "react"
-import Svg, { Defs, Image, Pattern, SvgProps, Use } from "react-native-svg"
-import { Rect } from "react-native-svg"
+import Svg, {
+    Defs,
+    Image,
+    Pattern,
+    SvgProps,
+    Use,
+    Rect,
+} from "react-native-svg"
 
 export const PlaceholderSVG = (props: SvgProps): ReactElement => {
     return (
