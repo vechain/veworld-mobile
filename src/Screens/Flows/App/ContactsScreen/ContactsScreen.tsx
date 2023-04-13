@@ -2,12 +2,18 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { PlatformUtils, useBottomSheetModal, useTheme } from "~Common"
+import {
+    FormattingUtils,
+    PlatformUtils,
+    useBottomSheetModal,
+    useTheme,
+} from "~Common"
 import {
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
+    BaseTouchableBox,
     BaseView,
     DeleteConfirmationBottomSheet,
 } from "~Components"
@@ -256,6 +262,30 @@ export const ContactsScreen = () => {
                 onClose={closeRemoveContactSheet}
                 onConfirm={handleRemoveContact}
                 description={LL.BD_CONFIRM_REMOVE_CONTACT()}
+                deletingElement={
+                    <BaseView w={100} flexDirection="row">
+                        <BaseTouchableBox
+                            justifyContent="space-between"
+                            containerStyle={baseStyles.contactContainer}
+                            activeOpacity={1}>
+                            <BaseView flexDirection="column">
+                                <BaseText typographyFont="button">
+                                    {selectedContact?.alias}
+                                </BaseText>
+                                <BaseSpacer height={4} />
+                                <BaseText
+                                    fontSize={10}
+                                    typographyFont="smallCaptionRegular">
+                                    {FormattingUtils.humanAddress(
+                                        selectedContactAddress || "",
+                                        4,
+                                        6,
+                                    )}
+                                </BaseText>
+                            </BaseView>
+                        </BaseTouchableBox>
+                    </BaseView>
+                }
             />
             <EditContactBottomSheet
                 ref={editContactSheet}
@@ -283,4 +313,5 @@ const baseStyles = StyleSheet.create({
     list: {
         height: PlatformUtils.isIOS() ? "70%" : "76%",
     },
+    contactContainer: { flex: 1 },
 })
