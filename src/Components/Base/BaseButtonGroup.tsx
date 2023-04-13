@@ -19,6 +19,7 @@ type Props = {
      */
     selectedButtonIds: string[]
     buttonTestID?: string
+    buttonGroupTestID?: string
     selectedColor?: string
 }
 
@@ -27,6 +28,7 @@ export const BaseButtonGroup = ({
     selectedButtonIds,
     buttons,
     buttonTestID,
+    buttonGroupTestID,
     selectedColor,
 }: Props) => {
     const theme = useTheme()
@@ -37,7 +39,7 @@ export const BaseButtonGroup = ({
     )
 
     return (
-        <DropShadow style={theme.shadows.card}>
+        <DropShadow style={theme.shadows.card} testID={buttonGroupTestID}>
             {buttons.map((button, index) => {
                 const { id, label, disabled } = button
                 const selected = selectedButtonIds.includes(id)

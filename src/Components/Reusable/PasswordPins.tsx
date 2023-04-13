@@ -1,6 +1,7 @@
 import React, { FC, memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ColorThemeType, useThemedStyles } from "~Common"
+import { COLORS } from "~Common/Theme"
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
@@ -86,7 +87,7 @@ const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
             backgroundColor: theme.colors.text,
         },
         notPressed: {
-            backgroundColor: theme.colors.darkPurpleDisabled,
+            backgroundColor: COLORS.DARK_PURPLE_DISABLED,
         },
         messageTextStyle: { opacity: isMessageVisible ? 1 : 0 },
     })
