@@ -69,14 +69,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                 {LL.COMMON_BTN_SAVE()}
             </BaseButton>
         )
-    }, [
-        isEdit,
-        onButtonPress,
-        theme.colors.secondary,
-        theme.colors.text,
-        handleManageToken,
-        LL,
-    ])
+    }, [isEdit, onButtonPress, theme.colors.text, handleManageToken, LL])
 
     return (
         <BaseView

@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback, useMemo, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseSpacer,
@@ -11,7 +11,7 @@ import {
     BaseButton,
     CustomTokenCard,
 } from "~Components"
-import { KeyboardAvoidingView, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import {
     addCustomToken,
@@ -147,6 +147,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     }
 
     const onOpenCamera = () => {
+        // @ts-ignore
         nav.navigate(Routes.CAMERA, { onScan: handleValueChange })
     }
 

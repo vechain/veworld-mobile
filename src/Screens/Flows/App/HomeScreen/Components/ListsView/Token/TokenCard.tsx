@@ -1,7 +1,6 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { COLORS } from "~Common/Theme"
 import { PlaceholderSVG } from "~Assets"
@@ -13,15 +12,7 @@ type Props = {
 }
 
 export const TokenCard = memo(({ token: tokenBalance, isEdit }: Props) => {
-    const animatedOpacityReverse = useAnimatedStyle(() => {
-        return {
-            opacity: withTiming(isEdit ? 0 : 1, {
-                duration: 200,
-            }),
-        }
-    }, [isEdit])
     const theme = useTheme()
-
     const styles = baseStyles(isEdit)
     const icon = tokenBalance.token.icon
     const tokenValueLabelColor = theme.isDark
