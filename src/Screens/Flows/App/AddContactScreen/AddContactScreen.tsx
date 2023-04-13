@@ -8,7 +8,6 @@ import {
     BaseSafeArea,
     BaseSpacer,
     BaseText,
-    BaseTouchableBox,
     BaseView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -100,34 +99,6 @@ export const AddContactScreen = () => {
                     />
 
                     <BaseSpacer height={20} />
-
-                    <BaseView flexDirection="row">
-                        <BaseTouchableBox
-                            action={() => {}} // TODO: add action
-                            w="auto"
-                            flex={1}
-                            justifyContent="space-between">
-                            <BaseIcon
-                                name="clipboard-outline"
-                                size={20}
-                                color={theme.colors.text}
-                            />
-                            <BaseText>{LL.BTN_PASTE_ADDRESS()}</BaseText>
-                        </BaseTouchableBox>
-                        <BaseSpacer width={16} />
-                        <BaseTouchableBox
-                            action={() => {}} // TODO: add action
-                            w="auto"
-                            flex={1}
-                            justifyContent="space-between">
-                            <BaseIcon
-                                name="flip-horizontal"
-                                size={20}
-                                color={theme.colors.text}
-                            />
-                            <BaseText>{LL.BTN_SCAN_QR_CODE()}</BaseText>
-                        </BaseTouchableBox>
-                    </BaseView>
                 </BaseView>
 
                 <BaseSpacer height={20} />

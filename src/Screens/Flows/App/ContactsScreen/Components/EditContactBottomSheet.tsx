@@ -3,10 +3,8 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import {
     BaseBottomSheet,
     BaseButton,
-    BaseIcon,
     BaseSpacer,
     BaseText,
-    BaseTouchableBox,
     BaseView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -21,7 +19,7 @@ type Props = {
     onEditContact: (alias: string, address: string) => void
 }
 
-const snapPoints = ["70%"]
+const snapPoints = ["55%"]
 
 export const EditContactBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -85,34 +83,6 @@ export const EditContactBottomSheet = React.forwardRef<
                         />
 
                         <BaseSpacer height={16} />
-
-                        <BaseView flexDirection="row">
-                            <BaseTouchableBox
-                                action={() => {}} // TODO: add action
-                                w="auto"
-                                flex={1}
-                                justifyContent="space-between">
-                                <BaseIcon
-                                    name="clipboard-outline"
-                                    size={20}
-                                    color={theme.colors.text}
-                                />
-                                <BaseText>{LL.BTN_PASTE_ADDRESS()}</BaseText>
-                            </BaseTouchableBox>
-                            <BaseSpacer width={16} />
-                            <BaseTouchableBox
-                                action={() => {}} // TODO: add action
-                                w="auto"
-                                flex={1}
-                                justifyContent="space-between">
-                                <BaseIcon
-                                    name="flip-horizontal"
-                                    size={20}
-                                    color={theme.colors.text}
-                                />
-                                <BaseText>{LL.BTN_SCAN_QR_CODE()}</BaseText>
-                            </BaseTouchableBox>
-                        </BaseView>
                     </BaseView>
 
                     <BaseSpacer height={28} />
