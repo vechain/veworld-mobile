@@ -47,6 +47,7 @@ export const ContactsScreen = () => {
 
     const { LL } = useI18nContext()
 
+    // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
         new Map(),
     )
