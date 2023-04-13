@@ -1,30 +1,48 @@
-import { AfterAll, Before, BeforeAll } from "@cucumber/cucumber"
-import * as detoxConfig from "detox/internals"
+import {
+    Before,
+    BeforeAll,
+    AfterAll,
+    After,
+    ITestCaseHookParameter,
+} from "@cucumber/cucumber"
+import detox from "detox/internals"
 
 BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")
-    await detoxConfig.init()
+    await detox.init()
     console.log("Detox test session started!")
 
     console.log("Launching app...")
-    await detox.device.launchApp({ delete: true })
+    await device.launchApp({ delete: true })
     console.log("App launched!")
 })
 
-Before({ timeout: 600 * 1000 }, async () => {
-    // console.log("Relaunching app before test...")
-    // await detox.device.reloadReactNative()
-    // console.log("App relaunched!")
+Before(async (message: ITestCaseHookParameter) => {
+    console.log("Relaunching app before test...")
+    await device.reloadReactNative()
+    console.log("App relaunched!")
 
-    console.log("Launching app...")
-    await detox.device.launchApp({ delete: true })
-    console.log("App launched!")
+    const { pickle } = message
+    await detox.onTestStart({
+        title: pickle.uri,
+        fullName: pickle.name,
+        status: "running",
+    })
+})
+
+After(async (message: ITestCaseHookParameter) => {
+    const { pickle, result } = message
+    await detox.onTestDone({
+        title: pickle.uri,
+        fullName: pickle.name,
+        status: result ? "passed" : "failed",
+    })
 })
 
 AfterAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting cleanup Detox test session...")
 
-    await detoxConfig.cleanup()
+    await detox.cleanup()
 
     console.log("Detox test session cleaned up!")
 })

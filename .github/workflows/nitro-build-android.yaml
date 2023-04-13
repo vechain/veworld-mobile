@@ -28,19 +28,20 @@ jobs:
             - uses: nitro-build/github-action-nitro-android@v1
               id: nitro
               with:
-                  detox-configuration: "android.emu.release.31"
+                  detox-configuration: "android.emu.release.33"
 
             - name: Run Detox Tests
               uses: reactivecircus/android-emulator-runner@v2
               with:
-                  api-level: 31
+                  api-level: 33
                   arch: x86_64
-                  avd-name: Pixel_6_Pro_API_31 # this should match with the one defined in .detoxrc.js config
-                  script: detox test --configuration android.emu.release.31 --cleanup --headless --loglevel debug --record-logs all
+                  avd-name: Pixel_6_Pro_API_33 # this should match with the one defined in .detoxrc.js config
+                  script: detox test --configuration android.emu.release.33 --cleanup --headless --loglevel debug --record-logs all
 
             - name: Upload artifacts
               if: failure()
               uses: actions/upload-artifact@v3
               with:
                   name: detox-artifacts
-                  path: ${{ steps.nitro.outputs.nitro-output-dir }}
+                  path: |
+                      ${{ steps.nitro.outputs.nitro-output-dir }}
