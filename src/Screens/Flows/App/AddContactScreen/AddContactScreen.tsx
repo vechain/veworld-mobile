@@ -9,6 +9,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes, tabbarBaseStyles } from "~Navigation"
@@ -49,10 +50,14 @@ export const AddContactScreen = () => {
 
     const onCreateContact = useCallback(() => {
         if (isFormValid) {
-            dispatch(addContact(name, address))
-            nav.navigate(Routes.SETTINGS_CONTACTS)
+            try {
+                dispatch(addContact(name, address))
+                nav.navigate(Routes.SETTINGS_CONTACTS)
+            } catch (e) {
+                showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
+            }
         }
-    }, [address, dispatch, isFormValid, name, nav])
+    }, [LL, address, dispatch, isFormValid, name, nav])
 
     return (
         <BaseSafeArea grow={1}>
