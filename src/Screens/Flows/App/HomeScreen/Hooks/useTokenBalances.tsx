@@ -37,6 +37,7 @@ export const useTokenBalances = () => {
     const balances = useAppSelector(selectAccountBalances)
     const currency = useAppSelector(selectCurrency)
     const thorClient = useThor()
+    const balancesKey = balances?.map(balance => balance.tokenAddress).join("-")
 
     useGetTokensFromGithubQuery({
         networkGenesisId: currentNetwork.genesis.id,
@@ -66,7 +67,7 @@ export const useTokenBalances = () => {
         updateBalances()
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
         return () => clearInterval(interval)
-    }, [dispatch, thorClient])
+    }, [dispatch, thorClient, balancesKey])
 
     useEffect(() => {
         const updateVechainExchangeRates = () => {

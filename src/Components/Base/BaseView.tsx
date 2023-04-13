@@ -11,8 +11,8 @@ import {
 } from "~Common"
 
 type Props = {
-    w?: number | string
-    h?: number | string
+    w?: number // NOTE: this is a number in percentage
+    h?: number // NOTE: this is a number in percentage
     bg?: string
     flexDirection?: FlexDirection
     justifyContent?: JustifyContent
@@ -123,8 +123,8 @@ type BaseStyles = {
     flexWrap?: FlexWrap
     alignSelf?: AlignSelf
     bg?: string
-    w?: number | string
-    h?: number | string
+    w?: number
+    h?: number
     m?: number
     ml?: number
     mr?: number

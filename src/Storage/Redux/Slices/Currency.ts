@@ -6,7 +6,7 @@ export const initialCurrencyState: CurrencyState = {
     availableCurrencies: [],
 }
 
-export const currencySlice = createSlice({
+export const CurrencySlice = createSlice({
     name: "currency",
     initialState: initialCurrencyState,
     reducers: {
@@ -37,4 +37,4 @@ export const {
     updateExchangeRate,
     clearExchangeRate,
     updateAvailableCurrencies,
-} = currencySlice.actions
+} = CurrencySlice.actions

@@ -15,7 +15,9 @@ export const Header = memo(() => {
     }, [nav])
 
     const onOpenCamera = useCallback(() => {
-        nav.navigate(Routes.CAMERA)
+        nav.navigate(Routes.CAMERA, {
+            onScan: () => {},
+        })
     }, [nav])
 
     return (

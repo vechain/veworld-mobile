@@ -26,8 +26,8 @@ type Props = {
     p?: number
     px?: number
     py?: number
-    w?: number
-    h?: number
+    w?: number // NOTE: this is a number in percentage
+    h?: number // NOTE: this is a number in percentage
     radius?: number
     size?: "sm" | "md" | "lg"
     typographyFont?: keyof typeof defaultTypography
