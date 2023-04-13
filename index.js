@@ -55,11 +55,13 @@ const Main = () => {
     if (!store || !persistor) return <></>
 
     return (
-        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <GestureHandlerRootView style={{ flex: 1 }}>
-                        <ConnexContextProvider>
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                    <ConnexContextProvider>
+                        <KeyboardAvoidingView
+                            behavior="padding"
+                            style={{ flex: 1 }}>
                             <SafeAreaProvider>
                                 <TranslationProvider>
                                     <BottomSheetModalProvider>
@@ -70,11 +72,11 @@ const Main = () => {
                                     <BaseToast />
                                 </TranslationProvider>
                             </SafeAreaProvider>
-                        </ConnexContextProvider>
-                    </GestureHandlerRootView>
-                </PersistGate>
-            </Provider>
-        </KeyboardAvoidingView>
+                        </KeyboardAvoidingView>
+                    </ConnexContextProvider>
+                </GestureHandlerRootView>
+            </PersistGate>
+        </Provider>
     )
 }
 

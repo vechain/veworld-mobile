@@ -1,5 +1,10 @@
 import React, { useCallback, useRef, useState } from "react"
-import { useBottomSheetModal, useTheme } from "~Common"
+import {
+    ColorThemeType,
+    useBottomSheetModal,
+    useTheme,
+    useThemedStyles,
+} from "~Common"
 import {
     BackButtonHeader,
     BaseIcon,
@@ -139,33 +144,6 @@ export const ManageCustomTokenScreen = () => {
     )
 }
 
-const UnderlayLeft = ({ index }: { index: number }) => {
-    const theme = useTheme()
-
-    return (
-        <View style={styles.underlayContainer}>
-            <BaseSpacer width={20} />
-            <View
-                style={[
-                    styles.underlayLeft,
-                    // eslint-disable-next-line react-native/no-inline-styles
-                    {
-                        backgroundColor: theme.colors.danger,
-                        marginTop: index === 0 ? 20 : 8,
-                    },
-                ]}>
-                <BaseIcon
-                    name={"delete"}
-                    size={20}
-                    bg={theme.colors.danger}
-                    color={theme.colors.card}
-                />
-            </View>
-            <BaseSpacer width={20} />
-        </View>
-    )
-}
-
 const styles = StyleSheet.create({
     flatListContainer: {
         flex: 1,
@@ -179,14 +157,41 @@ const styles = StyleSheet.create({
     underlayContainer: {
         flexDirection: "row",
     },
-    underlayLeft: {
-        flexDirection: "row",
-        alignItems: "center",
-        flex: 1,
-        justifyContent: "flex-end",
-        borderRadius: 16,
-        height: 64,
-        marginVertical: 8,
-        paddingRight: 10,
-    },
 })
+
+const UnderlayLeft = ({ index }: { index: number }) => {
+    const theme = useTheme()
+    const { styles: underlayStyles } = useThemedStyles(
+        baseUnderlayStyles(index),
+    )
+    return (
+        <View style={styles.underlayContainer}>
+            <BaseSpacer width={20} />
+            <View style={underlayStyles.underlayLeft}>
+                <BaseIcon
+                    name={"delete"}
+                    size={20}
+                    bg={theme.colors.danger}
+                    color={theme.colors.card}
+                />
+            </View>
+            <BaseSpacer width={20} />
+        </View>
+    )
+}
+
+const baseUnderlayStyles = (index: number) => (theme: ColorThemeType) =>
+    StyleSheet.create({
+        underlayLeft: {
+            flexDirection: "row",
+            alignItems: "center",
+            flex: 1,
+            justifyContent: "flex-end",
+            borderRadius: 16,
+            height: 64,
+            marginVertical: 8,
+            paddingRight: 10,
+            backgroundColor: theme.colors.danger,
+            marginTop: index === 0 ? 20 : 8,
+        },
+    })
