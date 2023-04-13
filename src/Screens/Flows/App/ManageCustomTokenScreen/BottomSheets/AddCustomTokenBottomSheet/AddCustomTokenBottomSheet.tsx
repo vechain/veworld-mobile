@@ -164,7 +164,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             {newCustomToken ? (
                 <CustomTokenCard token={newCustomToken} />
             ) : (
-                <BaseView flexDirection="row" w="100%">
+                <BaseView flexDirection="row" w={100}>
                     <BaseTextInput
                         containerStyle={styles.inputContainer}
                         value={value}
@@ -185,7 +185,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             )}
             <BaseSpacer height={24} />
             <BaseButton
-                w="100%"
+                w={100}
                 title={LL.COMMON_BTN_ADD()}
                 action={handleAddCustomToken}
                 disabled={!newCustomToken}
