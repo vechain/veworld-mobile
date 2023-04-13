@@ -37,10 +37,6 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
         }
     }, [initConnex, connex, selectedNetwork?.genesis, driver])
 
-    if (!value) {
-        return <></>
-    }
-
     return (
         <ConnexContext.Provider value={value}>
             {children}
@@ -60,9 +56,7 @@ const initThor = (currentDriver: Driver) => {
 const useThor = () => {
     const context = React.useContext(ConnexContext)
     if (!context) {
-        throw new Error(
-            "useThorContext must be used within a UserContextProvider",
-        )
+        error("useThorContext must be used within a UserContextProvider")
     }
 
     return context
