@@ -12,7 +12,7 @@ import { useTheme } from "~Common"
 
 type Props = {
     description: string
-    deletingElement: React.ReactNode
+    deletingElement?: React.ReactNode
     onClose: () => void
     onConfirm: () => void
 }
