@@ -12,6 +12,8 @@ type Props = {
     label?: string
     value?: string
     errorMessage?: string
+    rightIcon?: string
+    onIconPress?: () => void
     setValue?: (s: string) => void
 } & TextInputProps
 
@@ -21,6 +23,8 @@ export const BaseTextInput = memo(
         label,
         value,
         errorMessage,
+        rightIcon,
+        onIconPress,
         setValue,
         ...otherProps
     }: Props) => {
@@ -45,6 +49,15 @@ export const BaseTextInput = memo(
                         autoCapitalize="none"
                         {...otherProps}
                     />
+                    {rightIcon && (
+                        <BaseIcon
+                            action={onIconPress}
+                            name={"flip-horizontal"}
+                            size={24}
+                            color={theme.colors.text}
+                            style={styles.scanQrCodeIcon}
+                        />
+                    )}
                 </BaseView>
                 {errorMessage && (
                     <BaseView py={10}>
@@ -92,5 +105,8 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingVertical: 12,
             paddingLeft: 16,
             paddingRight: 8,
+        },
+        scanQrCodeIcon: {
+            marginHorizontal: 10,
         },
     })
