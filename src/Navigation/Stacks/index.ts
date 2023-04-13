@@ -8,8 +8,10 @@ import { RootStackParamListOnboarding } from "./OnboardingStack"
 import { RootStackParamListHome } from "./HomeStack"
 import { RootStackParamListSettings } from "./SettingsStack"
 import { RootStackParamListCreateWalletApp } from "./CreateWalletAppStack"
+import { RootStackParamListSwitch } from "./SwitchStack"
 
-export type ScreenRootParams = RootStackParamListOnboarding &
+export type ScreenRootParams = RootStackParamListSwitch &
+    RootStackParamListOnboarding &
     RootStackParamListHome &
     RootStackParamListSettings &
     RootStackParamListCreateWalletApp

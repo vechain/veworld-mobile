@@ -8,6 +8,7 @@ import {
     SendScreen,
     SwapScreen,
     WalletManagementScreen,
+    ManageCustomTokenScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
@@ -18,9 +19,9 @@ export type RootStackParamListHome = {
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined
     [Routes.MANAGE_TOKEN]: undefined
+    [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.CAMERA]: undefined
 }
 
 const { Navigator, Group, Screen } =
@@ -58,6 +59,11 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.MANAGE_TOKEN}
                     component={ManageTokenScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.MANAGE_CUSTOM_TOKEN}
+                    component={ManageCustomTokenScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

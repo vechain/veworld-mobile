@@ -303,9 +303,20 @@ const en: BaseTranslation = {
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: "Select your official tokens or add a new custom one",
     MANAGE_TOKEN_MANAGE_CUSTOM: "Manage custom tokens",
+    MANAGE_TOKEN_ADD_CUSTOM: "Add custom token",
     MANAGE_TOKEN_SELECTED: "Selected",
     MANAGE_TOKEN_UNSELECTED: "Unselected",
     MANAGE_TOKEN_SEARCH_TOKEN: "Search a token",
+
+    // Manage Custom tokens
+    MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: "Add custom token",
+    MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: "Enter an address",
+    MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: "Confirm custom token",
+    MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION: "Are you sure you want to remove this custom token?",
+
+    MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: "The address entered is incorrect or can't be added to this network",
+    MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: "This is an official token, please select it from the previous list",
+    MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: "This custom token is already present",
 
 
     // Wallets New Local

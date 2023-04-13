@@ -12,8 +12,17 @@ export const BaseCard = memo(
     ({ children, testID, style, containerStyle }: ViewProps & Props) => {
         const theme = useTheme()
         return (
-            <DropShadow style={[theme.shadows.card, containerStyle]}>
-                <BaseView style={[styles.view, style]} testID={testID}>
+            <DropShadow
+                style={[theme.shadows.card, styles.container, containerStyle]}>
+                <BaseView
+                    style={[
+                        styles.view,
+                        {
+                            backgroundColor: theme.colors.card,
+                        },
+                        style,
+                    ]}
+                    testID={testID}>
                     {children}
                 </BaseView>
             </DropShadow>
@@ -22,6 +31,9 @@ export const BaseCard = memo(
 )
 
 const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+    },
     view: {
         flexDirection: "row",
         alignItems: "center",
