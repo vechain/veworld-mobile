@@ -101,6 +101,7 @@ export const AddContactScreen = () => {
                         addressError={addressError}
                         setName={setName}
                         setAddress={setAddress}
+                        valueAddress={address}
                     />
 
                     <BaseSpacer height={20} />
