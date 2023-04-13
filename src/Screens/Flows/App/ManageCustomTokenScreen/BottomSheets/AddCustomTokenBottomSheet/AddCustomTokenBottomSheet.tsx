@@ -147,7 +147,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     }
 
     const onOpenCamera = () => {
-        // @ts-ignore
         nav.navigate(Routes.CAMERA, { onScan: handleValueChange })
     }
 
