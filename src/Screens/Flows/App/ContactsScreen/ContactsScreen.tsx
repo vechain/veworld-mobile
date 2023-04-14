@@ -136,7 +136,7 @@ export const ContactsScreen = () => {
     )
 
     const registerSwipeableItemRef = useCallback(
-        (address: string, ref: any) => {
+        (address: string, ref: SwipeableItemImperativeRef | null) => {
             if (ref) swipeableItemRefs.current.set(address, ref)
         },
         [],
