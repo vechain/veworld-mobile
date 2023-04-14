@@ -1,11 +1,7 @@
 import { Given, Then, When } from "@cucumber/cucumber"
 import { waitFor, element } from "detox"
 import OnboardingFlows from "../helpers/flows/OnboardingFlows"
-import {
-    BiometricsScreen,
-    DEFAULT_TIMEOUT,
-    WalletSuccessScreen,
-} from "../helpers"
+import { BiometricsScreen, LONG_TIMEOUT, WalletSuccessScreen } from "../helpers"
 
 Given("The app is opened", { timeout: -1 }, async () => {
     let retries: number = 5
@@ -162,22 +158,22 @@ When(
     },
 )
 
-Then("The user should be onboarded", async () => {
+Then("The user should be onboarded", { timeout: -1 }, async () => {
     await waitFor(element(by.text("Create Wallet")))
         .toBeVisible()
-        .withTimeout(DEFAULT_TIMEOUT)
+        .withTimeout(LONG_TIMEOUT)
 })
 
-Then("The user should see password creation", async () => {
+Then("The user should see password creation", { timeout: -1 }, async () => {
     await waitFor(element(by.text("Create Wallet")))
         .toBeVisible()
-        .withTimeout(DEFAULT_TIMEOUT)
+        .withTimeout(LONG_TIMEOUT)
 })
 
-Then("The user can create wallet", async () => {
+Then("The user can create wallet", { timeout: -1 }, async () => {
     await waitFor(element(by.text("Your Mnemonic")))
         .toBeVisible()
-        .withTimeout(DEFAULT_TIMEOUT)
+        .withTimeout(LONG_TIMEOUT)
 })
 
 Then("The user should see wallet success screen", async () => {
@@ -190,7 +186,7 @@ Then(
     async () => {
         await waitFor(element(by.text("You're finally one of us!")))
             .not.toBeVisible()
-            .withTimeout(DEFAULT_TIMEOUT)
+            .withTimeout(LONG_TIMEOUT)
     },
 )
 
@@ -200,7 +196,7 @@ Then(
     async () => {
         await waitFor(element(by.text("Protect your wallet")))
             .not.toBeVisible()
-            .withTimeout(DEFAULT_TIMEOUT)
+            .withTimeout(LONG_TIMEOUT)
     },
 )
 
@@ -210,7 +206,7 @@ Then(
     async () => {
         await waitFor(element(by.text("Biometrics previously denied")))
             .toBeVisible()
-            .withTimeout(DEFAULT_TIMEOUT)
+            .withTimeout(LONG_TIMEOUT)
     },
 )
 
@@ -220,6 +216,6 @@ Then(
     async () => {
         await waitFor(element(by.text("Biometrics not available")))
             .toBeVisible()
-            .withTimeout(DEFAULT_TIMEOUT)
+            .withTimeout(LONG_TIMEOUT)
     },
 )

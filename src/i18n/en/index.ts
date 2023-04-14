@@ -117,7 +117,7 @@ const en: BaseTranslation = {
     BD_ADD_CONTACT_DISCLAIMER: "Insert the required data to add a new contact",
     BD_CONTACT_NAME: "Contact name",
     BD_CONTACT_ADDRESS: "Contact address",
-    BD_CONFIRM_REMOVE_CONTACT: "Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.",
+    BD_CONFIRM_REMOVE_CONTACT: "Are you sure you want to remove this contact?",
     BD_APP_LOCK: "Require the pin when performing transactions with local wallets",
     BD_SECURITY_METHOD: "Click to reset VeVault and erase all your data stored on it",
     BD_NO_TOKEN_FOUND: "No token found",
@@ -253,6 +253,8 @@ const en: BaseTranslation = {
     ERROR_NAME_ALREADY_EXISTS: "Name already exists in contacts",
     ERROR_ADDRESS_EXISTS: "Address already exists in contacts",
     ERROR_ADDRESS_INVALID: "Please enter a valid Vechain address",
+    ERROR: "Error!",
+    ERROR_GENERIC_OPERATION: "The operation went wrong. Please, try again.",
 
     // Placeholders
     PLACEHOLDER_SEARCH_TOKEN: "Search a token",

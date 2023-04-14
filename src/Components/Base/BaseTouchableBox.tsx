@@ -17,7 +17,7 @@ import {
 
 type Props = {
     children: React.ReactNode
-    action: () => void
+    action?: () => void
     flexDirection?: FlexDirection
     justifyContent?: JustifyContent
     alignItems?: AlignItems

@@ -130,4 +130,44 @@ describe("BaseTextInput", () => {
         const label = await screen.findByText(customLabel)
         expect(label).toBeVisible()
     })
+
+    it("renders rightIcon correctly when rightIcon prop is provided", async () => {
+        const rightIconName = "flip-horizontal"
+        const rightIconTestID = "right-icon-test-id"
+
+        render(
+            <BaseTextInput
+                {...mandatoryProps}
+                rightIcon={rightIconName}
+                rightIconTestID={rightIconTestID}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+
+        const rightIcon = await screen.findByTestId(rightIconTestID)
+        expect(rightIcon).toBeVisible()
+    })
+
+    it("calls onIconPress prop when rightIcon is pressed", async () => {
+        const rightIconName = "flip-horizontal"
+        const rightIconTestID = "right-icon-test-id"
+        const mockOnIconPress = jest.fn()
+
+        render(
+            <BaseTextInput
+                {...mandatoryProps}
+                rightIcon={rightIconName}
+                onIconPress={mockOnIconPress}
+                rightIconTestID={rightIconTestID}
+            />,
+            { wrapper: TestWrapper },
+        )
+
+        const rightIcon = await screen.findByTestId(rightIconTestID)
+        fireEvent.press(rightIcon)
+
+        expect(mockOnIconPress).toHaveBeenCalledTimes(1)
+    })
 })
