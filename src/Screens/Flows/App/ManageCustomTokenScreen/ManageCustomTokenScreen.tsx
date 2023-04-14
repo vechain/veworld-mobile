@@ -118,7 +118,6 @@ export const ManageCustomTokenScreen = () => {
                 </BaseText>
                 <BaseIcon
                     name={"plus"}
-                    size={32}
                     bg={theme.colors.secondary}
                     action={openAddCustomTokenSheet}
                 />
