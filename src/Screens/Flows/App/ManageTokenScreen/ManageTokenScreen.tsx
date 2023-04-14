@@ -174,8 +174,8 @@ export const ManageTokenScreen = () => {
                     setValue={setTokenQuery}
                     placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
                 />
-                <BaseSpacer height={16} />
             </BaseView>
+            <BaseSpacer height={24} />
             <BaseScrollView
                 containerStyle={styles.scrollViewContainer}
                 style={styles.scrollView}>
@@ -183,7 +183,7 @@ export const ManageTokenScreen = () => {
                     <>
                         {!!selectedTokens.length && (
                             <>
-                                <BaseText typographyFont="body">
+                                <BaseText typographyFont="subSubTitle">
                                     {LL.MANAGE_TOKEN_SELECTED()}
                                 </BaseText>
                                 <BaseSpacer height={16} />
@@ -195,12 +195,12 @@ export const ManageTokenScreen = () => {
                                         action={handleClickToken(token)}
                                     />
                                 ))}
-                                <BaseSpacer height={24} />
+                                <BaseSpacer height={17} />
                             </>
                         )}
                         {!!unselectedTokens.length && (
                             <>
-                                <BaseText typographyFont="body">
+                                <BaseText typographyFont="subSubTitle">
                                     {LL.MANAGE_TOKEN_UNSELECTED()}
                                 </BaseText>
                                 <BaseSpacer height={16} />
