@@ -22,6 +22,7 @@ export const ContactDetailBox: React.FC<Props> = memo(
         return (
             <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
+                    action={() => onEditPress(contact.alias, contact.address)}
                     justifyContent="space-between"
                     containerStyle={baseStyles.container}
                     activeOpacity={1}>
