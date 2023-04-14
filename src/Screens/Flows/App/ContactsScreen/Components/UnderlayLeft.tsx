@@ -24,7 +24,7 @@ export const UnderlayLeft = ({ onDelete }: Props) => {
     return (
         <BaseView style={styles.underlayContainer}>
             <BaseView style={styles.underlayLeft}>
-                <TouchableOpacity onPress={() => handleDelete()}>
+                <TouchableOpacity onPress={handleDelete}>
                     <BaseIcon
                         name={"delete"}
                         size={20}
