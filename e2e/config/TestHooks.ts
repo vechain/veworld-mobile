@@ -13,7 +13,7 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Detox test session started!")
 
     console.log("Launching app...")
-    await device.launchApp()
+    await device.launchApp({ newInstance: true })
     console.log("App launched!")
 })
 

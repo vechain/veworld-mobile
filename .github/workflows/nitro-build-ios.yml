@@ -40,5 +40,4 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                   name: detox-artifacts
-                  path: |
-                      ${{ steps.nitro.outputs.nitro-output-dir }}
+                  path: ${{ steps.nitro.outputs.nitro-output-dir }}
