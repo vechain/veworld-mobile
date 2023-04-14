@@ -42,4 +42,3 @@ jobs:
                   name: detox-artifacts
                   path: |
                       ${{ steps.nitro.outputs.nitro-output-dir }}
-                      ${{ github.workspace }}/node_modules/detox/src/artifacts
