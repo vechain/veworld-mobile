@@ -34,7 +34,7 @@ jobs:
               uses: reactivecircus/android-emulator-runner@v2
               with:
                   api-level: 33
-                  target: google_apis
+                  target: playstore
                   arch: x86_64
                   emulator-options: -dns-server 8.8.8.8 -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
                   avd-name: Pixel_6_Pro_API_33 # this should match with the one defined in .detoxrc.js config
