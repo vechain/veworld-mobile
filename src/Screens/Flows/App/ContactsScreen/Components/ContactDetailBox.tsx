@@ -43,7 +43,7 @@ export const ContactDetailBox: React.FC<Props> = memo(
                     <BaseView style={baseStyles.rightSubContainer}>
                         <BaseIcon
                             color={theme.colors.primary}
-                            size={20}
+                            size={24}
                             name={"pencil"}
                             action={() =>
                                 onEditPress(contact.alias, contact.address)
@@ -64,7 +64,6 @@ const baseStyles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "flex-end",
     },
-    deleteIcon: { marginLeft: 16 },
     leftSwipeBox: {
         flexDirection: "row",
         alignItems: "flex-end",

@@ -27,7 +27,7 @@ export const UnderlayLeft = ({ onDelete }: Props) => {
                 <TouchableOpacity onPress={handleDelete}>
                     <BaseIcon
                         name={"delete"}
-                        size={20}
+                        size={24}
                         bg={theme.colors.danger}
                         color={theme.colors.card}
                         style={styles.deleteIcon}

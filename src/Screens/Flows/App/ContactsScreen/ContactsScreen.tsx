@@ -35,7 +35,7 @@ import {
     UnderlayLeft,
 } from "./Components"
 
-const underlaySnapPoints = [50]
+const underlaySnapPoints = [58]
 
 export const ContactsScreen = () => {
     // [Start] Hooks
@@ -235,7 +235,7 @@ export const ContactsScreen = () => {
                         <BaseIcon
                             style={baseStyles.addContactIcon}
                             name={"plus"}
-                            size={32}
+                            size={24}
                             bg={theme.colors.secondary}
                             action={onAddContactPress}
                         />
