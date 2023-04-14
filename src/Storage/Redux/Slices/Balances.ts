@@ -15,6 +15,30 @@ export const BalanceSlice = createSlice({
         ) => {
             state.push(action.payload)
         },
+        updateTokenBalances: (
+            state: Draft<BalanceState>,
+            action: PayloadAction<TokenBalance[]>,
+        ) => {
+            const newBalances = action.payload
+            const newState = state.filter(
+                oldBalance =>
+                    !newBalances.find(
+                        newBalance =>
+                            AddressUtils.compareAddresses(
+                                newBalance.accountAddress,
+                                oldBalance.accountAddress,
+                            ) &&
+                            AddressUtils.compareAddresses(
+                                newBalance.tokenAddress,
+                                oldBalance.tokenAddress,
+                            ) &&
+                            newBalance.networkGenesisId ===
+                                oldBalance.networkGenesisId,
+                    ),
+            )
+            newState.push(...newBalances)
+            return newState
+        },
         removeTokenBalance: (
             state: Draft<BalanceState>,
             action: PayloadAction<{
@@ -72,33 +96,12 @@ export const BalanceSlice = createSlice({
                 return updatedBalance ? updatedBalance : balance
             })
         },
-        setTokenBalances: (
-            state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance[]>,
-        ) => {
-            return action.payload
-        },
-        resetTokenBalances: (
-            state: Draft<BalanceState>,
-            action: PayloadAction<{ network: Network; account: Account }>,
-        ) => {
-            const { network, account } = action.payload
-            const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(network.type)
-            return defaultTokens!!.map(token => ({
-                accountAddress: account?.address,
-                tokenAddress: token.address,
-                balance: "0",
-                timeUpdated: new Date().toISOString(),
-                networkGenesisId: network.genesis.id,
-            }))
-        },
     },
 })
 
 export const {
     addTokenBalance,
-    setTokenBalances,
+    updateTokenBalances,
     removeTokenBalance,
     changeBalancePosition,
-    resetTokenBalances,
 } = BalanceSlice.actions

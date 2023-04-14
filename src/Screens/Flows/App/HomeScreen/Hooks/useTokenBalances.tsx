@@ -32,7 +32,6 @@ const TOKEN_BALANCE_SYNC_PERIOD = new BigNumber(
  */
 export const useTokenBalances = () => {
     const dispatch = useAppDispatch()
-    const currentAccount = useAppSelector(selectSelectedAccount)
     const currentNetwork = useAppSelector(selectSelectedNetwork)
     const balances = useAppSelector(selectAccountBalances)
     const currency = useAppSelector(selectCurrency)
@@ -48,16 +47,11 @@ export const useTokenBalances = () => {
      * init default balances if no balances found on redux
      */
     useEffect(() => {
-        if (currentAccount?.address && balances?.length === 0) {
-            dispatch(
-                resetTokenBalances({
-                    network: currentNetwork,
-                    account: currentAccount,
-                }),
-            )
+        if (balances?.length === 0) {
+            dispatch(resetTokenBalances)
             dispatch(updateAccountBalances(thorClient))
         }
-    }, [dispatch, thorClient, balances, currentAccount, currentNetwork])
+    }, [dispatch, thorClient, balances, currentNetwork])
 
     useEffect(() => {
         const updateBalances = () => {
@@ -67,7 +61,7 @@ export const useTokenBalances = () => {
         updateBalances()
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
         return () => clearInterval(interval)
-    }, [dispatch, thorClient, balancesKey])
+    }, [dispatch, thorClient, balancesKey, currentNetwork?.genesis.id])
 
     useEffect(() => {
         const updateVechainExchangeRates = () => {
