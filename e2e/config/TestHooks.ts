@@ -12,8 +12,6 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     await detox.init()
     console.log("Detox test session started!")
 
-    await device.disableSynchronization()
-
     console.log("Launching app...")
     await device.launchApp()
     console.log("App launched!")
