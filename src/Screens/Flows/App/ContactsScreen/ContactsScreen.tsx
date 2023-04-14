@@ -141,6 +141,7 @@ export const ContactsScreen = () => {
         },
         [],
     )
+
     // [End] Methods
 
     // [Start] Render sub components
@@ -170,6 +171,12 @@ export const ContactsScreen = () => {
                             return (
                                 <BaseView mx={20}>
                                     <SwipeableItem
+                                        ref={ref =>
+                                            registerSwipeableItemRef(
+                                                contact.address,
+                                                ref,
+                                            )
+                                        }
                                         key={contact.address}
                                         item={contact}
                                         renderUnderlayLeft={() => (
@@ -177,13 +184,7 @@ export const ContactsScreen = () => {
                                                 onDelete={onDeleteContactPress}
                                             />
                                         )}
-                                        snapPointsLeft={underlaySnapPoints}
-                                        ref={ref =>
-                                            registerSwipeableItemRef(
-                                                contact.address,
-                                                ref,
-                                            )
-                                        }>
+                                        snapPointsLeft={underlaySnapPoints}>
                                         <ContactDetailBox
                                             contact={contact}
                                             onEditPress={onEditContactPress}
