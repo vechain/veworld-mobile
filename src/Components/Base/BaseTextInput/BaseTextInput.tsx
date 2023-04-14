@@ -122,7 +122,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             paddingRight: 8,
         },
         rightIconStyle: {
-            marginHorizontal: 10,
+            marginRight: 16,
         },
         errorContainer: {
             opacity: isError ? 1 : 0,
