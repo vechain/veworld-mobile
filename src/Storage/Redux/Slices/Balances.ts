@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common"
+import { AddressUtils, DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common"
 import { Account, Network } from "~Model"
 import { BalanceState, TokenBalance } from "../Types/Balances"
 
@@ -37,8 +37,14 @@ export const BalanceSlice = createSlice({
                     if (
                         balance.tokenAddress === tokenAddress &&
                         balance.accountAddress === accountAddress &&
-                        balance.accountAddress !== VET.address &&
-                        balance.accountAddress !== VTHO.address
+                        !AddressUtils.compareAddresses(
+                            balance.tokenAddress,
+                            VET.address,
+                        ) &&
+                        !AddressUtils.compareAddresses(
+                            balance.tokenAddress,
+                            VTHO.address,
+                        )
                     ) {
                         const newBalance = {
                             ...balance,
