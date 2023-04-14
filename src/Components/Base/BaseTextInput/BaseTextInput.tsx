@@ -67,7 +67,7 @@ export const BaseTextInput = memo(
                             name={rightIcon}
                             size={24}
                             color={theme.colors.text}
-                            style={styles.scanQrCodeIcon}
+                            style={styles.rightIconStyle}
                             testID={rightIconTestID}
                         />
                     )}
@@ -121,7 +121,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             paddingLeft: 16,
             paddingRight: 8,
         },
-        scanQrCodeIcon: {
+        rightIconStyle: {
             marginHorizontal: 10,
         },
         errorContainer: {
