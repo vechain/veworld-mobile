@@ -7,7 +7,7 @@ import { useI18nContext } from "~i18n"
 
 type Props = {
     network: Network
-    onPress: (network: Network) => void
+    onPress?: (network: Network) => void
     rightIcon?: string
     isSelected?: boolean
     flex?: number

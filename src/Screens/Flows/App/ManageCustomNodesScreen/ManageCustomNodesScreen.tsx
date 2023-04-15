@@ -31,6 +31,7 @@ import { EditCustomNodeBottomSheet, SwipeableNetworkBox } from "./components"
 import * as Haptics from "expo-haptics"
 import { ViewToken } from "react-native"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { NetworkBox } from "../NetworkScreen/Components/SelectNetwork/NetworkBox"
 
 export const ManageCustomNodesScreen = () => {
     const { LL } = useI18nContext()
@@ -246,7 +247,18 @@ export const ManageCustomNodesScreen = () => {
                 ref={deleteConfirmationSheetRef}
                 onClose={closeDeleteConfirmationSheet}
                 onConfirm={onDeleteNetworkConfirm}
-                description={LL.NETWORK_CONFIRM_REMOVE_NODE()}
+                title={LL.NETWORK_CONFIRM_REMOVE_NODE()}
+                description={LL.NETWORK_CONFIRM_REMOVE_NODE_DESC()}
+                deletingElement={
+                    networkToEdit && (
+                        <BaseView w={100} flexDirection="row">
+                            <NetworkBox
+                                network={networkToEdit}
+                                activeOpacity={1}
+                            />
+                        </BaseView>
+                    )
+                }
             />
         </BaseSafeArea>
     )

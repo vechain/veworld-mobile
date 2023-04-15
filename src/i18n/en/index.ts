@@ -117,7 +117,8 @@ const en: BaseTranslation = {
     BD_ADD_CONTACT_DISCLAIMER: "Insert the required data to add a new contact",
     BD_CONTACT_NAME: "Contact name",
     BD_CONTACT_ADDRESS: "Contact address",
-    BD_CONFIRM_REMOVE_CONTACT: "Are you sure you want to remove this contact?",
+    BD_CONFIRM_REMOVE_CONTACT: "Remove contact",
+    BD_CONFIRM_REMOVE_CONTACT_DESC: "Are you sure you want to remove this contact?",
     BD_APP_LOCK: "Require the pin when performing transactions with local wallets",
     BD_SECURITY_METHOD: "Click to reset VeVault and erase all your data stored on it",
     BD_NO_TOKEN_FOUND: "No token found",
@@ -269,7 +270,8 @@ const en: BaseTranslation = {
     NETWORK_ADD_CUSTOM_NODE_NAME: "Node name",
     NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: "Add network",
     NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: "Edit network",
-    NETWORK_CONFIRM_REMOVE_NODE: "Confirming this will remove the custom node from the list, you will necessarily have to re-add it manually.",
+    NETWORK_CONFIRM_REMOVE_NODE: "Remove custom node",
+    NETWORK_CONFIRM_REMOVE_NODE_DESC: "Are you sure you want to remove this custom node?",
 
     // Network Labels
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",
