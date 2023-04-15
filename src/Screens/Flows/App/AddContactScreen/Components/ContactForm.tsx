@@ -1,5 +1,7 @@
-import React, { memo, useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import React, { memo, useCallback, useState } from "react"
 import { BaseSpacer, BaseTextInput } from "~Components"
+import { Routes } from "~Navigation"
 
 type Props = {
     titleName: string
@@ -31,6 +33,13 @@ export const ContactForm: React.FC<Props> = memo(
         const [nameTouched, setNameTouched] = useState(false)
         const [addressTouched, setAddressTouched] = useState(false)
 
+        const nav = useNavigation()
+
+        const onOpenCamera = useCallback(() => {
+            setAddressTouched(true)
+            nav.navigate(Routes.CAMERA, { onScan: setAddress })
+        }, [nav, setAddress])
+
         return (
             <>
                 <BaseTextInput
@@ -51,6 +60,8 @@ export const ContactForm: React.FC<Props> = memo(
                     errorMessage={addressTouched ? addressError : ""}
                     value={valueAddress}
                     onTouchStart={() => setAddressTouched(true)}
+                    rightIcon="flip-horizontal"
+                    onIconPress={onOpenCamera}
                 />
             </>
         )

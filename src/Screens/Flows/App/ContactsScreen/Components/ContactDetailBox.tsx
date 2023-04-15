@@ -12,11 +12,11 @@ import { Contact } from "~Model"
 
 type Props = {
     contact: Contact
-    onDeletePress: (address: string) => void
     onEditPress: (name: string, address: string) => void
 }
+
 export const ContactDetailBox: React.FC<Props> = memo(
-    ({ contact, onDeletePress, onEditPress }) => {
+    ({ contact, onEditPress }) => {
         const theme = useTheme()
 
         return (
@@ -24,7 +24,8 @@ export const ContactDetailBox: React.FC<Props> = memo(
                 <BaseTouchableBox
                     action={() => onEditPress(contact.alias, contact.address)}
                     justifyContent="space-between"
-                    containerStyle={baseStyles.container}>
+                    containerStyle={baseStyles.container}
+                    activeOpacity={1}>
                     <BaseView flexDirection="column">
                         <BaseText typographyFont="button">
                             {contact.alias}
@@ -43,7 +44,7 @@ export const ContactDetailBox: React.FC<Props> = memo(
                     <BaseView style={baseStyles.rightSubContainer}>
                         <BaseIcon
                             color={theme.colors.primary}
-                            size={20}
+                            size={24}
                             name={"pencil"}
                             action={() =>
                                 onEditPress(contact.alias, contact.address)
@@ -51,13 +52,6 @@ export const ContactDetailBox: React.FC<Props> = memo(
                         />
                     </BaseView>
                 </BaseTouchableBox>
-                <BaseIcon
-                    size={24}
-                    style={baseStyles.deleteIcon}
-                    name={"trash-can-outline"}
-                    bg={theme.colors.secondary}
-                    action={() => onDeletePress(contact.address)}
-                />
             </BaseView>
         )
     },
@@ -71,5 +65,9 @@ const baseStyles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "flex-end",
     },
-    deleteIcon: { marginLeft: 16 },
+    leftSwipeBox: {
+        flexDirection: "row",
+        alignItems: "flex-end",
+        paddingLeft: 16,
+    },
 })

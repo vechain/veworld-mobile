@@ -18,6 +18,9 @@ type Props = {
     label?: string
     value?: string
     errorMessage?: string
+    rightIcon?: string
+    rightIconTestID?: string
+    onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
     setValue?: (s: string) => void
 } & TextInputProps
@@ -28,6 +31,9 @@ export const BaseTextInput = memo(
         label,
         value,
         errorMessage,
+        rightIcon,
+        rightIconTestID,
+        onIconPress,
         setValue,
         containerStyle,
         ...otherProps
@@ -55,6 +61,16 @@ export const BaseTextInput = memo(
                         autoCapitalize="none"
                         {...otherProps}
                     />
+                    {rightIcon && (
+                        <BaseIcon
+                            action={onIconPress}
+                            name={rightIcon}
+                            size={24}
+                            color={theme.colors.text}
+                            style={styles.rightIconStyle}
+                            testID={rightIconTestID}
+                        />
+                    )}
                 </BaseView>
                 <BaseView
                     pt={10}
@@ -85,7 +101,9 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: theme.colors.transparent,
+            borderColor: isError
+                ? theme.colors.danger
+                : theme.colors.transparent,
             borderWidth: 1,
             borderRadius: 16,
             backgroundColor: theme.colors.card,
@@ -102,6 +120,9 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             paddingVertical: 12,
             paddingLeft: 16,
             paddingRight: 8,
+        },
+        rightIconStyle: {
+            marginRight: 16,
         },
         errorContainer: {
             opacity: isError ? 1 : 0,

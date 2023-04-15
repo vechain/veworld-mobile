@@ -400,7 +400,7 @@ type RootTranslation = {
 	 */
 	BD_CONTACT_ADDRESS: string
 	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​o​n​t​a​c​t​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​o​n​t​a​c​t​?
 	 */
 	BD_CONFIRM_REMOVE_CONTACT: string
 	/**
@@ -880,6 +880,14 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​ ​e​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​V​e​c​h​a​i​n​ ​a​d​d​r​e​s​s
 	 */
 	ERROR_ADDRESS_INVALID: string
+	/**
+	 * E​r​r​o​r​!
+	 */
+	ERROR: string
+	/**
+	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_GENERIC_OPERATION: string
 	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
@@ -1413,7 +1421,7 @@ export type TranslationFunctions = {
 	 */
 	BD_CONTACT_ADDRESS: () => LocalizedString
 	/**
-	 * Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.
+	 * Are you sure you want to remove this contact?
 	 */
 	BD_CONFIRM_REMOVE_CONTACT: () => LocalizedString
 	/**
@@ -1889,6 +1897,14 @@ Please, try again later.
 	 * Please enter a valid Vechain address
 	 */
 	ERROR_ADDRESS_INVALID: () => LocalizedString
+	/**
+	 * Error!
+	 */
+	ERROR: () => LocalizedString
+	/**
+	 * The operation went wrong. Please, try again.
+	 */
+	ERROR_GENERIC_OPERATION: () => LocalizedString
 	/**
 	 * Search a token
 	 */
