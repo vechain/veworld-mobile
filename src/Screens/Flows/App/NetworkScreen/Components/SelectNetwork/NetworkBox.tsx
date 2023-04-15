@@ -11,6 +11,7 @@ type Props = {
     rightIcon?: string
     isSelected?: boolean
     flex?: number
+    activeOpacity?: number
 }
 export const NetworkBox: React.FC<Props> = ({
     network,
@@ -18,6 +19,7 @@ export const NetworkBox: React.FC<Props> = ({
     rightIcon,
     isSelected = false,
     flex,
+    activeOpacity,
 }) => {
     const { LL } = useI18nContext()
     const { theme, styles: themedStyles } = useThemedStyles(baseStyles)
@@ -31,6 +33,7 @@ export const NetworkBox: React.FC<Props> = ({
     return (
         <BaseTouchableBox
             flex={flex}
+            activeOpacity={activeOpacity}
             action={handleOnPress}
             innerContainerStyle={style}
             justifyContent="space-between">

@@ -1,11 +1,5 @@
-import React, { useCallback, useMemo, useState } from "react"
-import {
-    ColorThemeType,
-    error,
-    useBottomSheetModal,
-    useTheme,
-    useThemedStyles,
-} from "~Common"
+import React, { useCallback, useMemo, useRef, useState } from "react"
+import { error, useBottomSheetModal, useTheme } from "~Common"
 import {
     BackButtonHeader,
     BaseIcon,
@@ -19,7 +13,6 @@ import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE, Network } from "~Model"
 import {
     StyleSheet,
-    View,
     SectionListData,
     SectionListRenderItemInfo,
     SectionList,
@@ -34,10 +27,10 @@ import {
 
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
-import { NetworkBox } from "../NetworkScreen/Components/SelectNetwork/NetworkBox"
-import { EditCustomNodeBottomSheet } from "./components"
+import { EditCustomNodeBottomSheet, SwipeableNetworkBox } from "./components"
 import * as Haptics from "expo-haptics"
 import { ViewToken } from "react-native"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 export const ManageCustomNodesScreen = () => {
     const { LL } = useI18nContext()
@@ -63,7 +56,7 @@ export const ManageCustomNodesScreen = () => {
 
     const {
         ref: deleteConfirmationSheetRef,
-        // onOpen: openDeleteConfirmationSheet,
+        onOpen: openDeleteConfirmationSheet,
         onClose: closeDeleteConfirmationSheet,
     } = useBottomSheetModal()
 
@@ -118,13 +111,13 @@ export const ManageCustomNodesScreen = () => {
         [openEditNetworkSheet],
     )
 
-    // const onDeleteNetworkClick = useCallback(
-    //     (network: Network) => {
-    //         setNetworkToEditDeleteId(network.id)
-    //         openDeleteConfirmationSheet()
-    //     },
-    //     [openDeleteConfirmationSheet],
-    // )
+    const onDeleteNetworkClick = useCallback(
+        (network: Network) => {
+            setNetworkToEditDeleteId(network.id)
+            openDeleteConfirmationSheet()
+        },
+        [openDeleteConfirmationSheet],
+    )
 
     const onDeleteNetworkConfirm = useCallback(() => {
         try {
@@ -150,21 +143,51 @@ export const ManageCustomNodesScreen = () => {
         [],
     )
 
+    // Keep track of the swipeable items refs
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
+        new Map(),
+    )
+
+    const registerSwipeableItemRef = useCallback(
+        (id: string, ref: SwipeableItemImperativeRef | null) => {
+            if (ref) swipeableItemRefs.current.set(id, ref)
+        },
+        [],
+    )
+
+    const closeOtherSwipeableItems = useCallback((network?: Network) => {
+        swipeableItemRefs?.current.forEach((ref, id) => {
+            if (id !== network?.id) {
+                ref?.close()
+            }
+        })
+    }, [])
+
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
             const onPress = () => onEditNetworkClick(item)
+            const onSwipe = () => onDeleteNetworkClick(item)
+            const closeSwipeables = (closeSelf?: boolean) =>
+                closeOtherSwipeableItems(closeSelf ? undefined : item)
+
             return (
                 <BaseView flexDirection="row" mx={20}>
-                    <NetworkBox
-                        flex={1}
+                    <SwipeableNetworkBox
                         network={item}
                         onPress={onPress}
-                        rightIcon="pencil-outline"
+                        onSwipe={onSwipe}
+                        registerSwipeable={registerSwipeableItemRef}
+                        closeSwipeables={closeSwipeables}
                     />
                 </BaseView>
             )
         },
-        [onEditNetworkClick],
+        [
+            onEditNetworkClick,
+            onDeleteNetworkClick,
+            registerSwipeableItemRef,
+            closeOtherSwipeableItems,
+        ],
     )
 
     const renderItemSeparator = useCallback(
@@ -185,7 +208,7 @@ export const ManageCustomNodesScreen = () => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} onTouchStart={() => closeOtherSwipeableItems()}>
             <BackButtonHeader />
             <BaseView flexDirection="row" mx={20}>
                 <BaseText typographyFont="subTitleBold">
@@ -238,44 +261,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginVertical: 8,
     },
-    underlayContainer: {
-        flexDirection: "row",
-    },
 })
-
-export const UnderlayLeft = ({ index }: { index: number }) => {
-    const theme = useTheme()
-    const { styles: underlayStyles } = useThemedStyles(
-        baseUnderlayStyles(index),
-    )
-    return (
-        <View style={styles.underlayContainer}>
-            <BaseSpacer width={20} />
-            <View style={underlayStyles.underlayLeft}>
-                <BaseIcon
-                    name={"delete"}
-                    size={20}
-                    bg={theme.colors.danger}
-                    color={theme.colors.card}
-                />
-            </View>
-            <BaseSpacer width={20} />
-        </View>
-    )
-}
-
-const baseUnderlayStyles = (index: number) => (theme: ColorThemeType) =>
-    StyleSheet.create({
-        underlayLeft: {
-            flexDirection: "row",
-            alignItems: "center",
-            flex: 1,
-            justifyContent: "flex-end",
-            borderRadius: 16,
-            height: 64,
-            marginVertical: 8,
-            paddingRight: 10,
-            backgroundColor: theme.colors.danger,
-            marginTop: index === 0 ? 20 : 8,
-        },
-    })
