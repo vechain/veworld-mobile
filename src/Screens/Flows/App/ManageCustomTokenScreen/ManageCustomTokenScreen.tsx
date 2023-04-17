@@ -13,13 +13,11 @@ import {
     BaseText,
     BaseView,
     CustomTokenCard,
+    DeleteConfirmationBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
-import {
-    AddCustomTokenBottomSheet,
-    DeleteCustomTokenBottomSheet,
-} from "./BottomSheets"
+import { AddCustomTokenBottomSheet } from "./BottomSheets"
 import { ListRenderItem, StyleSheet, View, FlatList } from "react-native"
 import {
     removeTokenBalance,
@@ -131,11 +129,17 @@ export const ManageCustomTokenScreen = () => {
                 ref={addCustomTokenSheetRef}
                 onClose={closeAddCustomTokenSheet}
             />
-            <DeleteCustomTokenBottomSheet
+            <DeleteConfirmationBottomSheet
                 ref={removeCustomTokenSheetRef}
                 onClose={handleCloseDeleteModal}
+                title={LL.MANAGE_CUSTOM_TOKENS_DELETE_TITLE()}
+                description={LL.MANAGE_CUSTOM_TOKENS_DELETE_DESC()}
                 onConfirm={handleDelete}
-                token={selectedToken}
+                deletingElement={
+                    <BaseView flexDirection="row">
+                        <CustomTokenCard token={selectedToken!!} />
+                    </BaseView>
+                }
             />
         </BaseSafeArea>
     )
