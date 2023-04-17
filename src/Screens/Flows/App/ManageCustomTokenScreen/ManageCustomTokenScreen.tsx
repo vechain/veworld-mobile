@@ -20,9 +20,8 @@ import { FungibleToken } from "~Model"
 import { AddCustomTokenBottomSheet } from "./BottomSheets"
 import { ListRenderItem, StyleSheet, View, FlatList } from "react-native"
 import {
-    deleteCustomToken,
     removeTokenBalance,
-    selectCustomTokens,
+    selectAccountCustomTokens,
     selectSelectedAccount,
     useAppDispatch,
     useAppSelector,
@@ -35,7 +34,7 @@ export const ManageCustomTokenScreen = () => {
     const theme = useTheme()
     const swipeableItemRef = useRef<(SwipeableItemImperativeRef | null)[]>([])
     const { LL } = useI18nContext()
-    const customTokens = useAppSelector(selectCustomTokens)
+    const customTokens = useAppSelector(selectAccountCustomTokens)
     const dispatch = useAppDispatch()
     const account = useAppSelector(selectSelectedAccount)
     const {
@@ -93,7 +92,6 @@ export const ManageCustomTokenScreen = () => {
                     tokenAddress: selectedToken.address,
                 }),
             )
-            dispatch(deleteCustomToken(selectedToken.address))
             closeRemoveCustomTokenSheet()
         } else {
             throw new Error(
