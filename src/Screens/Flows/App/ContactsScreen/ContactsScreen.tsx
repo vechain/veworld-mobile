@@ -263,7 +263,8 @@ export const ContactsScreen = () => {
                 ref={confirmRemoveContactSheet}
                 onClose={closeRemoveContactSheet}
                 onConfirm={handleRemoveContact}
-                description={LL.BD_CONFIRM_REMOVE_CONTACT()}
+                title={LL.BD_CONFIRM_REMOVE_CONTACT()}
+                description={LL.BD_CONFIRM_REMOVE_CONTACT_DESC()}
                 deletingElement={
                     <BaseView w={100} flexDirection="row">
                         <BaseTouchableBox

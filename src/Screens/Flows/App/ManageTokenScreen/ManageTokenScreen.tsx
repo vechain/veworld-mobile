@@ -21,7 +21,7 @@ import {
     selectSelectedAccount,
     selectNonVechainDenormalizedAccountTokenBalances,
     selectSelectedNetwork,
-    selectCustomTokens,
+    selectAccountCustomTokens,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -44,7 +44,7 @@ export const ManageTokenScreen = () => {
         tokenBalances.map(({ token }) => token.symbol),
     )
     const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const customTokens = useAppSelector(selectCustomTokens)
+    const customTokens = useAppSelector(selectAccountCustomTokens)
     const {
         ref: addCustomTokenSheetRef,
         onOpen: openAddCustomTokenSheet,
@@ -141,22 +141,18 @@ export const ManageTokenScreen = () => {
                     <BaseTouchableBox
                         action={navigateManageCustomTokenScreen}
                         justifyContent="center">
-                        <BaseIcon
-                            name="tune"
-                            size={16}
-                            color={theme.colors.text}
-                        />
-                        <BaseSpacer width={10} />
-                        <BaseText py={3}>
+                        <BaseIcon name="tune" color={theme.colors.primary} />
+                        <BaseSpacer width={8} />
+                        <BaseText typographyFont="bodyMedium">
                             {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
                         </BaseText>
-                        <BaseSpacer width={10} />
+                        <BaseSpacer width={8} />
                         <BaseView
                             bg={theme.colors.primary}
                             style={styles.counter}>
                             <BaseText
                                 color={theme.colors.textReversed}
-                                typographyFont="bodyMedium">
+                                typographyFont="smallCaptionMedium">
                                 {customTokens.length}
                             </BaseText>
                         </BaseView>
@@ -165,13 +161,9 @@ export const ManageTokenScreen = () => {
                     <BaseTouchableBox
                         action={openAddCustomTokenSheet}
                         justifyContent="center">
-                        <BaseIcon
-                            name="plus"
-                            size={20}
-                            color={theme.colors.primary}
-                        />
-                        <BaseSpacer width={10} />
-                        <BaseText py={3}>
+                        <BaseIcon name="plus" color={theme.colors.primary} />
+                        <BaseSpacer width={8} />
+                        <BaseText py={3} typographyFont="bodyMedium">
                             {LL.MANAGE_TOKEN_ADD_CUSTOM()}
                         </BaseText>
                     </BaseTouchableBox>
@@ -182,8 +174,8 @@ export const ManageTokenScreen = () => {
                     setValue={setTokenQuery}
                     placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
                 />
-                <BaseSpacer height={16} />
             </BaseView>
+            <BaseSpacer height={24} />
             <BaseScrollView
                 containerStyle={styles.scrollViewContainer}
                 style={styles.scrollView}>
@@ -191,7 +183,7 @@ export const ManageTokenScreen = () => {
                     <>
                         {!!selectedTokens.length && (
                             <>
-                                <BaseText typographyFont="body">
+                                <BaseText typographyFont="subSubTitle">
                                     {LL.MANAGE_TOKEN_SELECTED()}
                                 </BaseText>
                                 <BaseSpacer height={16} />
@@ -203,12 +195,12 @@ export const ManageTokenScreen = () => {
                                         action={handleClickToken(token)}
                                     />
                                 ))}
-                                <BaseSpacer height={24} />
+                                <BaseSpacer height={17} />
                             </>
                         )}
                         {!!unselectedTokens.length && (
                             <>
-                                <BaseText typographyFont="body">
+                                <BaseText typographyFont="subSubTitle">
                                     {LL.MANAGE_TOKEN_UNSELECTED()}
                                 </BaseText>
                                 <BaseSpacer height={16} />
