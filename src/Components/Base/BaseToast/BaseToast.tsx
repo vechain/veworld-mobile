@@ -32,7 +32,6 @@ export const toastConfig = (theme: ColorThemeType) => ({
                 text1={text1}
                 text2={text2}
                 text3={textLink}
-                theme={theme}
                 onPress={onPress}
                 hideToast={hideToast}
             />
@@ -54,7 +53,6 @@ export const toastConfig = (theme: ColorThemeType) => ({
                 text1={text1}
                 text2={text2}
                 text3={textLink}
-                theme={theme}
                 onPress={onPress}
                 hideToast={hideToast}
             />
@@ -76,7 +74,6 @@ export const toastConfig = (theme: ColorThemeType) => ({
                 text1={text1}
                 text2={text2}
                 text3={textLink}
-                theme={theme}
                 onPress={onPress}
                 hideToast={hideToast}
             />
@@ -98,7 +95,6 @@ export const toastConfig = (theme: ColorThemeType) => ({
                 text1={text1}
                 text2={text2}
                 text3={textLink}
-                theme={theme}
                 onPress={onPress}
                 hideToast={hideToast}
             />

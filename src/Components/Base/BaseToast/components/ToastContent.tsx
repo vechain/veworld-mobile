@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { BaseIcon, BaseText, BaseView, hideToast } from "~Components"
-import { ColorThemeType } from "~Common"
+import { useTheme } from "~Common"
 import { ToastStyles } from "../util"
 
 type Props = {
@@ -10,7 +10,6 @@ type Props = {
     text1?: string
     text2?: string
     text3?: string
-    theme: ColorThemeType
     onPress?: () => void
     hideToast?: () => void
 }
@@ -22,9 +21,10 @@ export const ToastContent = ({
     iconColor,
     text2,
     text3,
-    theme,
     onPress,
 }: Props) => {
+    const theme = useTheme()
+
     const handleOnPress = useCallback(() => {
         if (onPress) {
             onPress()
