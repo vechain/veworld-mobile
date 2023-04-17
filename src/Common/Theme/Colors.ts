@@ -34,9 +34,18 @@ export enum COLORS {
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
     LIGHT_RED = "#FFC7B3",
+    PASTEL_RED = "#f7c4bc",
     DARK_RED = "#931536",
+    DARK_RED_ALERT = "#9D1800",
+    MEDIUM_RED = "#E02200",
     DARK_GREEN = "#325B00",
+    DARK_GREEN_ALERT = "#185927",
     LIGHT_GREEN = "#AAD836",
+    PASTEL_GREEN = "#c5eacd",
+    MEDIUM_GREEN = "#30B34E",
+    PASTEL_ORANGE = "#fedbc0",
+    DARK_ORANGE_ALERT = "#AF4F0A",
+    MEDIUM_ORANGE = "#FA710E",
 }
 
 const light: Colors = {
