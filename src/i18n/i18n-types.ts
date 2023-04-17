@@ -400,7 +400,7 @@ type RootTranslation = {
 	 */
 	BD_CONTACT_ADDRESS: string
 	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​o​n​t​a​c​t​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​o​n​t​a​c​t​?
 	 */
 	BD_CONFIRM_REMOVE_CONTACT: string
 	/**
@@ -881,6 +881,14 @@ type RootTranslation = {
 	 */
 	ERROR_ADDRESS_INVALID: string
 	/**
+	 * E​r​r​o​r​!
+	 */
+	ERROR: string
+	/**
+	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_GENERIC_OPERATION: string
+	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
@@ -974,6 +982,10 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_MANAGE_CUSTOM: string
 	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM: string
+	/**
 	 * S​e​l​e​c​t​e​d
 	 */
 	MANAGE_TOKEN_SELECTED: string
@@ -985,6 +997,34 @@ type RootTranslation = {
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: string
+	/**
+	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s
+	 */
+	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: string
+	/**
+	 * C​o​n​f​i​r​m​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​?
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION: string
+	/**
+	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t​ ​o​r​ ​c​a​n​'​t​ ​b​e​ ​a​d​d​e​d​ ​t​o​ ​t​h​i​s​ ​n​e​t​w​o​r​k
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: string
+	/**
+	 * T​h​i​s​ ​i​s​ ​a​n​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​,​ ​p​l​e​a​s​e​ ​s​e​l​e​c​t​ ​i​t​ ​f​r​o​m​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​l​i​s​t
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: string
+	/**
+	 * T​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​i​s​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -1381,7 +1421,7 @@ export type TranslationFunctions = {
 	 */
 	BD_CONTACT_ADDRESS: () => LocalizedString
 	/**
-	 * Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.
+	 * Are you sure you want to remove this contact?
 	 */
 	BD_CONFIRM_REMOVE_CONTACT: () => LocalizedString
 	/**
@@ -1858,6 +1898,14 @@ Please, try again later.
 	 */
 	ERROR_ADDRESS_INVALID: () => LocalizedString
 	/**
+	 * Error!
+	 */
+	ERROR: () => LocalizedString
+	/**
+	 * The operation went wrong. Please, try again.
+	 */
+	ERROR_GENERIC_OPERATION: () => LocalizedString
+	/**
 	 * Search a token
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
@@ -1950,6 +1998,10 @@ Please, try again later.
 	 */
 	MANAGE_TOKEN_MANAGE_CUSTOM: () => LocalizedString
 	/**
+	 * Add custom token
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM: () => LocalizedString
+	/**
 	 * Selected
 	 */
 	MANAGE_TOKEN_SELECTED: () => LocalizedString
@@ -1961,6 +2013,34 @@ Please, try again later.
 	 * Search a token
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Add custom token
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Enter an address
+	 */
+	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: () => LocalizedString
+	/**
+	 * Confirm custom token
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Are you sure you want to remove this custom token?
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION: () => LocalizedString
+	/**
+	 * The address entered is incorrect or can't be added to this network
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: () => LocalizedString
+	/**
+	 * This is an official token, please select it from the previous list
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: () => LocalizedString
+	/**
+	 * This custom token is already present
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
 	/**
 	 * Account
 	 */

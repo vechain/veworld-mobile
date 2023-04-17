@@ -9,12 +9,14 @@ import {
     NetworkSlice,
     CacheSlice,
     ContactsSlice,
+    TokenSlice,
+    CurrencySlice,
 } from "./Slices"
-import { currencySlice } from "./Slices/Currency"
 
 export const reducer = combineReducers({
     [TokenApi.reducerPath]: TokenApi.reducer,
-    [currencySlice.name]: currencySlice.reducer,
+    [CurrencySlice.name]: CurrencySlice.reducer,
+    [TokenSlice.name]: TokenSlice.reducer,
     userPreferences: UserPreferencesSlice.reducer,
     config: ConfigSlice.reducer,
     devices: DeviceSlice.reducer,

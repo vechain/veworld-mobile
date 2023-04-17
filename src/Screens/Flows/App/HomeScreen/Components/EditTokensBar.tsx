@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useTheme } from "~Common"
+import { COLORS } from "~Common/Theme"
 import {
     BaseButton,
     BaseIcon,
@@ -38,11 +39,13 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                         name="priority-low"
                         action={onButtonPress}
                         size={24}
+                        color={theme.colors.text}
                     />
                     <BaseSpacer width={18} />
                     <BaseIcon
                         name="pencil-outline"
-                        bg={theme.colors.secondary}
+                        bg={COLORS.LIME_GREEN}
+                        color={COLORS.DARK_PURPLE}
                         action={handleManageToken}
                         size={24}
                     />
@@ -51,23 +54,22 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
         return (
             <BaseButton
                 action={onButtonPress}
-                bgColor={theme.colors.secondary}
-                textColor={theme.colors.text}
+                bgColor={COLORS.LIME_GREEN}
+                textColor={COLORS.DARK_PURPLE}
                 radius={30}
                 py={10}
-                leftIcon={<BaseIcon name="check" size={20} />}>
+                leftIcon={
+                    <BaseIcon
+                        name="check"
+                        size={20}
+                        color={COLORS.DARK_PURPLE}
+                    />
+                }>
                 <BaseSpacer width={8} />
                 {LL.COMMON_BTN_SAVE()}
             </BaseButton>
         )
-    }, [
-        isEdit,
-        onButtonPress,
-        theme.colors.secondary,
-        theme.colors.text,
-        handleManageToken,
-        LL,
-    ])
+    }, [isEdit, onButtonPress, theme.colors.text, handleManageToken, LL])
 
     return (
         <BaseView

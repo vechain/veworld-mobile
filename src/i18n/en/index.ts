@@ -117,7 +117,7 @@ const en: BaseTranslation = {
     BD_ADD_CONTACT_DISCLAIMER: "Insert the required data to add a new contact",
     BD_CONTACT_NAME: "Contact name",
     BD_CONTACT_ADDRESS: "Contact address",
-    BD_CONFIRM_REMOVE_CONTACT: "Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.",
+    BD_CONFIRM_REMOVE_CONTACT: "Are you sure you want to remove this contact?",
     BD_APP_LOCK: "Require the pin when performing transactions with local wallets",
     BD_SECURITY_METHOD: "Click to reset VeVault and erase all your data stored on it",
     BD_NO_TOKEN_FOUND: "No token found",
@@ -253,6 +253,8 @@ const en: BaseTranslation = {
     ERROR_NAME_ALREADY_EXISTS: "Name already exists in contacts",
     ERROR_ADDRESS_EXISTS: "Address already exists in contacts",
     ERROR_ADDRESS_INVALID: "Please enter a valid Vechain address",
+    ERROR: "Error!",
+    ERROR_GENERIC_OPERATION: "The operation went wrong. Please, try again.",
 
     // Placeholders
     PLACEHOLDER_SEARCH_TOKEN: "Search a token",
@@ -301,9 +303,20 @@ const en: BaseTranslation = {
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: "Select your official tokens or add a new custom one",
     MANAGE_TOKEN_MANAGE_CUSTOM: "Manage custom tokens",
+    MANAGE_TOKEN_ADD_CUSTOM: "Add custom token",
     MANAGE_TOKEN_SELECTED: "Selected",
     MANAGE_TOKEN_UNSELECTED: "Unselected",
     MANAGE_TOKEN_SEARCH_TOKEN: "Search a token",
+
+    // Manage Custom tokens
+    MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: "Add custom token",
+    MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: "Enter an address",
+    MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: "Confirm custom token",
+    MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION: "Are you sure you want to remove this custom token?",
+
+    MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: "The address entered is incorrect or can't be added to this network",
+    MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: "This is an official token, please select it from the previous list",
+    MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: "This custom token is already present",
 
 
     // Wallets New Local

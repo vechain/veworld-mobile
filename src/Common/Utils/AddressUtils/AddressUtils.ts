@@ -1,6 +1,6 @@
 import { address, HDNode } from "thor-devkit"
 import { XPub } from "~Model"
-import { veWorldErrors, error, HexUtils } from "~Common"
+import { veWorldErrors, error, HexUtils, VET } from "~Common"
 import CryptoUtils from "../CryptoUtils"
 
 /**
@@ -56,7 +56,12 @@ export const compareAddresses = (
     if (typeof address1 !== "string" || typeof address2 !== "string")
         return false
 
-    if (address2 === address1) return true
+    if (address2 === address1) {
+        return true
+    } else if (address1 === VET.address || address2 === VET.address) {
+        // NOTE: this is a work-around because VET address is "VET" and it doesn't have a real address
+        return false
+    }
 
     try {
         address1 = HexUtils.addPrefix(address1)

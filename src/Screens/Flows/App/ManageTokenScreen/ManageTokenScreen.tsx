@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Common"
 import {
     BackButtonHeader,
     BaseIcon,
@@ -21,12 +21,17 @@ import {
     selectSelectedAccount,
     selectNonVechainDenormalizedAccountTokenBalances,
     selectSelectedNetwork,
+    selectCustomTokens,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
+    const nav = useNavigation()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const account = useAppSelector(selectSelectedAccount)
@@ -39,6 +44,12 @@ export const ManageTokenScreen = () => {
         tokenBalances.map(({ token }) => token.symbol),
     )
     const currentNetwork = useAppSelector(selectSelectedNetwork)
+    const customTokens = useAppSelector(selectCustomTokens)
+    const {
+        ref: addCustomTokenSheetRef,
+        onOpen: openAddCustomTokenSheet,
+        onClose: closeAddCustomTokenSheet,
+    } = useBottomSheetModal()
 
     const filteredTokens = tokens.filter(
         token =>
@@ -72,6 +83,10 @@ export const ManageTokenScreen = () => {
                     networkGenesisId: currentNetwork.genesis.id,
                 }),
             )
+        } else {
+            throw new Error(
+                "Trying to select an official token without an account selected",
+            )
         }
     }
     const unselectToken = (token: FungibleToken) => {
@@ -87,6 +102,10 @@ export const ManageTokenScreen = () => {
                     tokenAddress: token.address,
                 }),
             )
+        } else {
+            throw new Error(
+                "Trying to unselect an official token without an account selected",
+            )
         }
     }
 
@@ -96,6 +115,10 @@ export const ManageTokenScreen = () => {
         } else {
             selectToken(token)
         }
+    }
+
+    const navigateManageCustomTokenScreen = () => {
+        nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
     }
 
     return (
@@ -114,15 +137,45 @@ export const ManageTokenScreen = () => {
                     {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}
                 </BaseText>
                 <BaseSpacer height={16} />
-                <BaseTouchableBox
-                    action={() => {}} // TODO: add action
-                    justifyContent="center">
-                    <BaseIcon name="tune" size={16} color={theme.colors.text} />
-                    <BaseSpacer width={10} />
-                    <BaseText py={3}>
-                        {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
-                    </BaseText>
-                </BaseTouchableBox>
+                {customTokens.length ? (
+                    <BaseTouchableBox
+                        action={navigateManageCustomTokenScreen}
+                        justifyContent="center">
+                        <BaseIcon
+                            name="tune"
+                            size={16}
+                            color={theme.colors.text}
+                        />
+                        <BaseSpacer width={10} />
+                        <BaseText py={3}>
+                            {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
+                        </BaseText>
+                        <BaseSpacer width={10} />
+                        <BaseView
+                            bg={theme.colors.primary}
+                            style={styles.counter}>
+                            <BaseText
+                                color={theme.colors.textReversed}
+                                typographyFont="bodyMedium">
+                                {customTokens.length}
+                            </BaseText>
+                        </BaseView>
+                    </BaseTouchableBox>
+                ) : (
+                    <BaseTouchableBox
+                        action={openAddCustomTokenSheet}
+                        justifyContent="center">
+                        <BaseIcon
+                            name="plus"
+                            size={20}
+                            color={theme.colors.primary}
+                        />
+                        <BaseSpacer width={10} />
+                        <BaseText py={3}>
+                            {LL.MANAGE_TOKEN_ADD_CUSTOM()}
+                        </BaseText>
+                    </BaseTouchableBox>
+                )}
                 <BaseSpacer height={16} />
                 <BaseSearchInput
                     value={tokenQuery}
@@ -173,6 +226,10 @@ export const ManageTokenScreen = () => {
                     <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
                 )}
             </BaseScrollView>
+            <AddCustomTokenBottomSheet
+                ref={addCustomTokenSheetRef}
+                onClose={closeAddCustomTokenSheet}
+            />
         </BaseSafeArea>
     )
 }
@@ -187,35 +244,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         width: "100%",
     },
+    counter: {
+        borderRadius: 6,
+        paddingVertical: 2,
+        paddingHorizontal: 4,
+    },
 })
-
-/*
-// TODO: Davide Carpini: this will be used in custom token bottom sheet, please do not remove
-<BaseView flexDirection="row">
-                    <BaseTouchableBox
-                        action={() => {}}
-                        w="auto"
-                        flex={1}
-                        justifyContent="space-between">
-                        <BaseIcon
-                            name="clipboard-outline"
-                            size={20}
-                            color={theme.colors.text}
-                        />
-                        <BaseText>{LL.BTN_PASTE_ADDRESS()}</BaseText>
-                    </BaseTouchableBox>
-                    <BaseSpacer width={16} />
-                    <BaseTouchableBox
-                        action={() => {}} // TODO: add action
-                        w="auto"
-                        flex={1}
-                        justifyContent="space-between">
-                        <BaseIcon
-                            name="flip-horizontal"
-                            size={20}
-                            color={theme.colors.text}
-                        />
-                        <BaseText>{LL.BTN_SCAN_QR_CODE()}</BaseText>
-                    </BaseTouchableBox>
-                </BaseView>
-*/

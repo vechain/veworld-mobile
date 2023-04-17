@@ -4,8 +4,8 @@ import { useTheme } from "~Common"
 import { BaseView } from "./BaseView"
 
 type Props = {
-    h?: string | number
-    w?: string | number
+    h?: number
+    w?: number
     containerStyle?: StyleProp<ViewStyle>
 } & ScrollViewProps
 
