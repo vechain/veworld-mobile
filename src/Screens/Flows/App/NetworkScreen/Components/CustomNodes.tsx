@@ -13,9 +13,9 @@ import { Routes } from "~Navigation"
 import { selectCustomNetworks, useAppSelector } from "~Storage/Redux"
 
 type Props = {
-    openBottomSheet: () => void
+    onManageNodesClick: () => void
 }
-export const CustomNodes: React.FC<Props> = ({ openBottomSheet }) => {
+export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const theme = useTheme()
@@ -42,7 +42,7 @@ export const CustomNodes: React.FC<Props> = ({ openBottomSheet }) => {
 
             {customNodes.length ? (
                 <BaseTouchableBox
-                    action={openBottomSheet}
+                    action={onManageNodesClick}
                     justifyContent="center">
                     <BaseIcon name="tune" color={theme.colors.primary} />
                     <BaseText px={8} typographyFont="buttonSecondary">

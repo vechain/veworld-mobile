@@ -7,10 +7,11 @@ import { useI18nContext } from "~i18n"
 
 type Props = {
     network: Network
-    onPress: (network: Network) => void
+    onPress?: (network: Network) => void
     rightIcon?: string
     isSelected?: boolean
     flex?: number
+    activeOpacity?: number
 }
 export const NetworkBox: React.FC<Props> = ({
     network,
@@ -18,19 +19,21 @@ export const NetworkBox: React.FC<Props> = ({
     rightIcon,
     isSelected = false,
     flex,
+    activeOpacity,
 }) => {
     const { LL } = useI18nContext()
     const { theme, styles: themedStyles } = useThemedStyles(baseStyles)
     const style = isSelected ? themedStyles.selected : themedStyles.notSelected
 
     const handleOnPress = useCallback(
-        () => onPress(network),
+        () => !!onPress && onPress(network),
         [onPress, network],
     )
 
     return (
         <BaseTouchableBox
             flex={flex}
+            activeOpacity={activeOpacity}
             action={handleOnPress}
             innerContainerStyle={style}
             justifyContent="space-between">

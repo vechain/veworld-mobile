@@ -1,6 +1,12 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    BaseBottomSheet,
+    NetworkBox,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"
@@ -9,7 +15,6 @@ import {
     selectNetworksByType,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
-import { NetworkBox } from "./NetworkBox"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import {
     SectionListData,
