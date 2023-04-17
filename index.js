@@ -59,20 +59,16 @@ const Main = () => {
             <PersistGate loading={null} persistor={persistor}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
                     <ConnexContextProvider>
-                        <KeyboardAvoidingView
-                            behavior="padding"
-                            style={{ flex: 1 }}>
-                            <SafeAreaProvider>
-                                <TranslationProvider>
+                        <SafeAreaProvider>
+                            <TranslationProvider>
+                                <NavigationProvider>
                                     <BottomSheetModalProvider>
-                                        <NavigationProvider>
-                                            {fontsLoaded && <EntryPoint />}
-                                        </NavigationProvider>
+                                        {fontsLoaded && <EntryPoint />}
                                     </BottomSheetModalProvider>
-                                    <BaseToast />
-                                </TranslationProvider>
-                            </SafeAreaProvider>
-                        </KeyboardAvoidingView>
+                                </NavigationProvider>
+                                <BaseToast />
+                            </TranslationProvider>
+                        </SafeAreaProvider>
                     </ConnexContextProvider>
                 </GestureHandlerRootView>
             </PersistGate>
