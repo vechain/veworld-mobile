@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { FungibleToken } from "~Model"
+import { FungibleToken, VeChainToken } from "~Model"
 import { TokensState } from "../Types"
 import { AddressUtils } from "~Common"
 
 export const initialTokenState: TokensState = {
     custom: [],
+    dashboardChartData: {},
 }
 
 export const TokenSlice = createSlice({
@@ -30,7 +31,15 @@ export const TokenSlice = createSlice({
             filteredTokens.push(action.payload)
             state.custom = filteredTokens
         },
+        setDashboardChartData: (
+            state,
+            action: PayloadAction<{ symbol: VeChainToken; data: number[] }>,
+        ) => {
+            const { symbol, data } = action.payload
+            state.dashboardChartData[symbol] = data
+        },
     },
 })
 
-export const { addOrUpdateCustomToken } = TokenSlice.actions
+export const { addOrUpdateCustomToken, setDashboardChartData } =
+    TokenSlice.actions

@@ -1,7 +1,7 @@
 import axios from "axios"
-import { VET } from "~Common/Constant"
+import { CURRENCY } from "~Common"
+import { EXCHANGE_CLIENT_AXIOS_OPTS, VET } from "~Common/Constant"
 import { VeChainToken, CurrencyExchangeRate } from "~Model"
-import { EXCHANGE_CLIENT_AXIOS_OPTS } from "./constants"
 
 const getCurrencies = async (): Promise<string[]> => {
     const currencies = await axios.get<string[]>(
@@ -18,7 +18,7 @@ interface PriceChangeResponse {
 }
 
 const getExchangeRate = async (
-    fiatSymbol: string,
+    fiatSymbol: CURRENCY,
     symbol: VeChainToken,
 ): Promise<CurrencyExchangeRate> => {
     const coin = symbol === VET.symbol ? "vechain" : "vethor-token"
