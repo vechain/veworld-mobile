@@ -36,28 +36,14 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<
                 justifyContent="space-between"
                 flexGrow={1}>
                 <BaseView alignSelf="flex-start">
-                    <BaseView
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        w={100}
-                        alignItems="center">
-                        <BaseText typographyFont="subTitleBold">
-                            {title}
-                        </BaseText>
-                    </BaseView>
-
+                    <BaseText typographyFont="subTitleBold">{title}</BaseText>
                     <BaseSpacer height={16} />
-
                     <BaseText typographyFont="body" my={8}>
                         {description}
                     </BaseText>
+                    <BaseSpacer height={16} />
+                    {deletingElement}
                 </BaseView>
-
-                <BaseSpacer height={16} />
-
-                {deletingElement}
-
-                <BaseSpacer height={32} />
 
                 <BaseView
                     flexDirection="row"
