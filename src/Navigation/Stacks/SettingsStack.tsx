@@ -10,6 +10,7 @@ import {
     PrivacyScreen,
     SettingsScreen,
     WalletManagementScreen,
+    ManageCustomNodesScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
@@ -17,6 +18,7 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
+    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
     [Routes.SETTINGS_PRIVACY]: undefined
     [Routes.SETTINGS_ADVANCED]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
@@ -45,6 +47,12 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.SETTINGS_ADD_CUSTOM_NODE}
                     component={AddCustomNodeScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
+                    component={ManageCustomNodesScreen}
                     options={{ headerShown: false }}
                 />
 
