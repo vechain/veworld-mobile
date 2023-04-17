@@ -1,0 +1,48 @@
+name: detox-nitro-android
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build:
+        name: Detox Build & Test Android Debug
+        runs-on: macos-12
+
+        env:
+            NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Install Detox dependencies
+              shell: bash
+              run: |
+                  yarn global add detox-cli react-native-cli
+
+            - uses: nitro-build/github-action-nitro-android@v1
+              id: nitro
+              with:
+                  detox-configuration: "android.emu.release.33"
+
+            - name: Run Detox Tests
+              uses: reactivecircus/android-emulator-runner@v2
+              with:
+                  api-level: 33
+                  target: google_apis
+                  arch: x86_64
+                  emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+                  avd-name: Pixel_6_Pro_API_33 # this should match with the one defined in .detoxrc.js config
+                  script: detox test --configuration android.emu.release.33 --cleanup --headless --loglevel debug --record-logs all
+
+            - name: Upload artifacts
+              if: failure()
+              uses: actions/upload-artifact@v3
+              with:
+                  name: detox-artifacts
+                  path: ${{ steps.nitro.outputs.nitro-output-dir }}
