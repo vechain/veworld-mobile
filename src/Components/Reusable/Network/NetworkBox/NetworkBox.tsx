@@ -26,7 +26,7 @@ export const NetworkBox: React.FC<Props> = ({
     const style = isSelected ? themedStyles.selected : themedStyles.notSelected
 
     const handleOnPress = useCallback(
-        () => onPress(network),
+        () => !!onPress && onPress(network),
         [onPress, network],
     )
 

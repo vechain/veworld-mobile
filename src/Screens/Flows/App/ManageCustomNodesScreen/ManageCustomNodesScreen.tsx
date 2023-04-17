@@ -8,6 +8,7 @@ import {
     BaseText,
     BaseView,
     DeleteConfirmationBottomSheet,
+    NetworkBox,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE, Network } from "~Model"
@@ -31,7 +32,6 @@ import { EditCustomNodeBottomSheet, SwipeableNetworkBox } from "./components"
 import * as Haptics from "expo-haptics"
 import { ViewToken } from "react-native"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { NetworkBox } from "../NetworkScreen/Components/SelectNetwork/NetworkBox"
 
 export const ManageCustomNodesScreen = () => {
     const { LL } = useI18nContext()
