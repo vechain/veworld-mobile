@@ -71,7 +71,14 @@ export const compareAddresses = (
             address.toChecksumed(address2 as string)
         )
     } catch (e) {
-        error(e)
+        error(
+            "Got error:",
+            e,
+            "Trying to compare address1:",
+            address1,
+            "with address2:",
+            address2,
+        )
         return false
     }
 }

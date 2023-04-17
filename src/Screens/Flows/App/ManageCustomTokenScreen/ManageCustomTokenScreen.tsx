@@ -13,18 +13,15 @@ import {
     BaseText,
     BaseView,
     CustomTokenCard,
+    DeleteConfirmationBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
-import {
-    AddCustomTokenBottomSheet,
-    DeleteCustomTokenBottomSheet,
-} from "./BottomSheets"
+import { AddCustomTokenBottomSheet } from "./BottomSheets"
 import { ListRenderItem, StyleSheet, View, FlatList } from "react-native"
 import {
-    deleteCustomToken,
     removeTokenBalance,
-    selectCustomTokens,
+    selectAccountCustomTokens,
     selectSelectedAccount,
     useAppDispatch,
     useAppSelector,
@@ -37,7 +34,7 @@ export const ManageCustomTokenScreen = () => {
     const theme = useTheme()
     const swipeableItemRef = useRef<(SwipeableItemImperativeRef | null)[]>([])
     const { LL } = useI18nContext()
-    const customTokens = useAppSelector(selectCustomTokens)
+    const customTokens = useAppSelector(selectAccountCustomTokens)
     const dispatch = useAppDispatch()
     const account = useAppSelector(selectSelectedAccount)
     const {
@@ -95,7 +92,6 @@ export const ManageCustomTokenScreen = () => {
                     tokenAddress: selectedToken.address,
                 }),
             )
-            dispatch(deleteCustomToken(selectedToken.address))
             closeRemoveCustomTokenSheet()
         } else {
             throw new Error(
@@ -118,7 +114,6 @@ export const ManageCustomTokenScreen = () => {
                 </BaseText>
                 <BaseIcon
                     name={"plus"}
-                    size={32}
                     bg={theme.colors.secondary}
                     action={openAddCustomTokenSheet}
                 />
@@ -134,11 +129,17 @@ export const ManageCustomTokenScreen = () => {
                 ref={addCustomTokenSheetRef}
                 onClose={closeAddCustomTokenSheet}
             />
-            <DeleteCustomTokenBottomSheet
+            <DeleteConfirmationBottomSheet
                 ref={removeCustomTokenSheetRef}
                 onClose={handleCloseDeleteModal}
+                title={LL.MANAGE_CUSTOM_TOKENS_DELETE_TITLE()}
+                description={LL.MANAGE_CUSTOM_TOKENS_DELETE_DESC()}
                 onConfirm={handleDelete}
-                token={selectedToken}
+                deletingElement={
+                    <BaseView flexDirection="row">
+                        <CustomTokenCard token={selectedToken!!} />
+                    </BaseView>
+                }
             />
         </BaseSafeArea>
     )
