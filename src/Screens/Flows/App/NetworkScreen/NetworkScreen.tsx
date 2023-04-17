@@ -179,6 +179,7 @@ export const ChangeNetworkScreen = () => {
                 ref={deleteConfirmationSheetRef}
                 onClose={closeDeleteConfirmationSheet}
                 onConfirm={onDeleteNetworkConfirm}
+                title={LL.SB_CONFIRM_OPERATION()}
                 description={LL.NETWORK_CONFIRM_REMOVE_NODE()}
             />
             <EditCustomNodeBottomSheet
