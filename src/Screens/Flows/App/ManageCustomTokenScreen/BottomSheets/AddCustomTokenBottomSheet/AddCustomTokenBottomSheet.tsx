@@ -14,9 +14,9 @@ import {
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import {
-    addCustomToken,
+    addOrUpdateCustomToken,
     addTokenBalance,
-    selectCustomTokens,
+    selectAccountCustomTokens,
     selectFungibleTokens,
     selectNonVechainDenormalizedAccountTokenBalances,
     selectSelectedAccount,
@@ -47,7 +47,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const theme = useTheme()
     const [errorMessage, setErrorMessage] = useState("")
     const officialTokens = useAppSelector(selectFungibleTokens)
-    const customTokens = useAppSelector(selectCustomTokens)
+    const customTokens = useAppSelector(selectAccountCustomTokens)
     const account = useAppSelector(selectSelectedAccount)
     const tokenBalances = useAppSelector(
         selectNonVechainDenormalizedAccountTokenBalances,
@@ -127,7 +127,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 
     const handleAddCustomToken = () => {
         if (account?.address) {
-            dispatch(addCustomToken(newCustomToken!!))
+            dispatch(addOrUpdateCustomToken(newCustomToken!!))
             dispatch(
                 addTokenBalance({
                     balance: "0",

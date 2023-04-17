@@ -11,6 +11,7 @@ import { getCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
 import { selectCustomTokens } from "./Tokens"
+import { FungibleToken } from "~Model"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -25,19 +26,28 @@ export const selectAccountBalances = createSelector(
                 AddressUtils.compareAddresses(
                     balance.accountAddress,
                     account?.address,
-                ) &&
-                AddressUtils.compareAddresses(
-                    network.genesis.id,
-                    balance?.networkGenesisId,
-                ),
+                ) && network.genesis.id === balance?.networkGenesisId,
         ),
+)
+
+export const selectAccountCustomTokens = createSelector(
+    selectCustomTokens,
+    selectAccountBalances,
+    (tokens, balances) => {
+        const accountTokenAddresses = balances.map(
+            balance => balance.tokenAddress,
+        )
+        return tokens.filter((token: FungibleToken) =>
+            accountTokenAddresses.includes(token.address),
+        )
+    },
 )
 
 /**
  * Get all account balances with denormalized token data
  */
 export const selectDenormalizedAccountTokenBalances = createSelector(
-    [selectAccountBalances, selectAllFungibleTokens, selectCustomTokens],
+    [selectAccountBalances, selectAllFungibleTokens, selectAccountCustomTokens],
     (balances, tokens, customTokens) =>
         balances.map(balance => {
             const balanceToken = [...tokens, ...customTokens].find(token =>

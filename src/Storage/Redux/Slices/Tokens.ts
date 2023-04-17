@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FungibleToken } from "~Model"
 import { TokensState } from "../Types"
+import { AddressUtils } from "~Common"
 
 export const initialTokenState: TokensState = {
     custom: [],
@@ -10,19 +11,26 @@ export const TokenSlice = createSlice({
     name: "tokens",
     initialState: initialTokenState,
     reducers: {
-        updateCustomTokens: (state, action: PayloadAction<FungibleToken[]>) => {
-            state.custom = action.payload
-        },
-        addCustomToken: (state, action: PayloadAction<FungibleToken>) => {
-            state.custom.push(action.payload)
-        },
-        deleteCustomToken: (state, action: PayloadAction<string>) => {
-            state.custom = state.custom.filter(
-                token => token.address !== action.payload,
+        addOrUpdateCustomToken: (
+            state,
+            action: PayloadAction<FungibleToken>,
+        ) => {
+            const newToken = action.payload
+            const filteredTokens = state.custom.filter(
+                oldToken =>
+                    !AddressUtils.compareAddresses(
+                        oldToken.address,
+                        newToken.address,
+                    ) ||
+                    !AddressUtils.compareAddresses(
+                        oldToken.genesisId,
+                        newToken.genesisId,
+                    ),
             )
+            filteredTokens.push(action.payload)
+            state.custom = filteredTokens
         },
     },
 })
 
-export const { updateCustomTokens, addCustomToken, deleteCustomToken } =
-    TokenSlice.actions
+export const { addOrUpdateCustomToken } = TokenSlice.actions
