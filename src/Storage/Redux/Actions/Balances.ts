@@ -1,14 +1,15 @@
 import {
     selectAccountBalances,
+    selectSelectedAccount,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
 import { RootState, TokenBalance } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Common"
-import { VET, VTHO } from "~Common/Constant"
+import { AddressUtils, error } from "~Common"
+import { DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common/Constant"
 import axios from "axios"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
-import { setTokenBalances } from "~Storage/Redux/Slices"
+import { updateTokenBalances } from "~Storage/Redux/Slices"
 
 /**
  * Updates all balances for an account
@@ -66,8 +67,38 @@ export const updateAccountBalances =
                     networkGenesisId: network.genesis.id,
                 })
             }
-            dispatch(setTokenBalances(balances))
+            dispatch(updateTokenBalances(balances))
         } catch (e) {
             throw new Error("Failed to get balance from external service")
         }
     }
+
+export const resetTokenBalances = async (
+    dispatch: Dispatch,
+    getState: () => RootState,
+) => {
+    const account = selectSelectedAccount(getState())
+    const network = selectSelectedNetwork(getState())
+
+    const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(network.type)
+    if (account) {
+        dispatch(
+            updateTokenBalances(
+                defaultTokens!!.map(token => ({
+                    accountAddress: account.address,
+                    tokenAddress: token.address,
+                    balance: "0",
+                    timeUpdated: new Date().toISOString(),
+                    networkGenesisId: network.genesis.id,
+                })),
+            ),
+        )
+    } else {
+        error(
+            "Is not possible to init balances for account:",
+            account,
+            "and network:",
+            network,
+        )
+    }
+}

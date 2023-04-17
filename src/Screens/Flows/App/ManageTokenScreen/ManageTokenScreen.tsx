@@ -21,7 +21,7 @@ import {
     selectSelectedAccount,
     selectNonVechainDenormalizedAccountTokenBalances,
     selectSelectedNetwork,
-    selectCustomTokens,
+    selectAccountCustomTokens,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -44,7 +44,7 @@ export const ManageTokenScreen = () => {
         tokenBalances.map(({ token }) => token.symbol),
     )
     const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const customTokens = useAppSelector(selectCustomTokens)
+    const customTokens = useAppSelector(selectAccountCustomTokens)
     const {
         ref: addCustomTokenSheetRef,
         onOpen: openAddCustomTokenSheet,
