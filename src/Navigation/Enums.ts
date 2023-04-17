@@ -33,4 +33,5 @@ export enum Routes {
     SETTINGS_ABOUT = "Settings_About",
     SETTINGS_ADD_CUSTOM_NODE = "Settings_Add_Custom_Node",
     CAMERA = "Camera",
+    DISCOVER = "Discover",
 }

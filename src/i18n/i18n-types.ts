@@ -596,6 +596,10 @@ type RootTranslation = {
 	 */
 	TITLE_SECURITY_DOWNGRADE: string
 	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	TITLE_DISCOVER: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -811,6 +815,14 @@ type RootTranslation = {
 	 * D​e​f​a​u​l​t
 	 */
 	COMMON_LBL_DEFAULT: string
+	/**
+	 * A​s​s​e​t​s
+	 */
+	COMMON_ASSETS: string
+	/**
+	 * D​A​p​p​s
+	 */
+	COMMON_DAPPS: string
 	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -1625,6 +1637,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
+	 * Discover
+	 */
+	TITLE_DISCOVER: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -1836,6 +1852,14 @@ export type TranslationFunctions = {
 	 * Default
 	 */
 	COMMON_LBL_DEFAULT: () => LocalizedString
+	/**
+	 * Assets
+	 */
+	COMMON_ASSETS: () => LocalizedString
+	/**
+	 * DApps
+	 */
+	COMMON_DAPPS: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */
