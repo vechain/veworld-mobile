@@ -1,6 +1,5 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { AddressUtils, DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common"
-import { Account, Network } from "~Model"
+import { AddressUtils, VET, VTHO } from "~Common"
 import { BalanceState, TokenBalance } from "../Types/Balances"
 
 export const initialState: BalanceState = []
