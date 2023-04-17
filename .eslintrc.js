@@ -3,7 +3,7 @@ module.exports = {
     extends: "@react-native-community",
     parser: "@typescript-eslint/parser",
     plugins: ["@typescript-eslint", "i18next"],
-    ignorePatterns: ["src/i18n/*"],
+    ignorePatterns: ["src/i18n/*", "coverage/*"],
     overrides: [
         {
             files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -14,7 +14,12 @@ module.exports = {
                 semi: "off",
                 curly: "off",
                 quotes: [2, "double", { avoidEscape: true }],
-                "i18next/no-literal-string": 1,
+                "i18next/no-literal-string": "error",
+                "no-console": "error",
+                "no-duplicate-imports": "error",
+                "@typescript-eslint/no-unused-vars": "error",
+                "no-useless-escape": "error",
+                "react-native/no-inline-styles": "error",
             },
         },
     ],

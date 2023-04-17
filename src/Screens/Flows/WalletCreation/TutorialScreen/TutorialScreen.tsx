@@ -89,7 +89,7 @@ export const TutorialScreen = () => {
             <BaseView alignItems="center">
                 <BaseView alignSelf="flex-start" mx={20}>
                     <BaseText typographyFont="largeTitle">
-                        Create Wallet
+                        {LL.TITLE_CREATE_WALLET_TYPE()}
                     </BaseText>
                 </BaseView>
 

@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import { TestWrapper } from "~Test"
 import React from "react"
 import { render, screen } from "@testing-library/react-native"

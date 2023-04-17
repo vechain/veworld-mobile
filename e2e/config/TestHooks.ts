@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { AfterAll, Before, BeforeAll } from "@cucumber/cucumber"
 import * as detoxConfig from "detox/internals"
 

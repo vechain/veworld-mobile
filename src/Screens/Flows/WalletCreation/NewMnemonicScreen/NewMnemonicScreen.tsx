@@ -9,7 +9,7 @@ import {
     CheckBoxWithText,
     MnemonicCard,
 } from "~Components"
-import { Alert } from "react-native"
+import { Alert, StyleSheet } from "react-native"
 import * as Clipboard from "expo-clipboard"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -72,7 +72,7 @@ export const NewMnemonicScreen = () => {
                                 name="content-copy"
                                 color={theme.colors.card}
                                 size={12}
-                                style={{ marginLeft: 6 }}
+                                style={styles.icon}
                             />
                         }
                     />
@@ -111,3 +111,7 @@ export const NewMnemonicScreen = () => {
         </BaseSafeArea>
     )
 }
+
+const styles = StyleSheet.create({
+    icon: { marginLeft: 6 },
+})

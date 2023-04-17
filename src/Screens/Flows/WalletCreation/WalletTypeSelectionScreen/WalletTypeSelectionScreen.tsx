@@ -41,7 +41,8 @@ export const WalletTypeSelectionScreen = () => {
                     <BaseText typographyFont="title">
                         {LL.TITLE_CREATE_WALLET_TYPE()}
                     </BaseText>
-
+                    {/* TODO: change this lorem ipsum */}
+                    {/* eslint-disable-next-line i18next/no-literal-string */}
                     <BaseText typographyFont="body" my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                         sed do eiusmod tempor incididunt ut labore et dolore
