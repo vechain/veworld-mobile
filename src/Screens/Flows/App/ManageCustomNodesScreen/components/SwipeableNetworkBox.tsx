@@ -4,8 +4,7 @@ import SwipeableItem, {
     OpenDirection,
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
-import { NetworkBox } from "../../NetworkScreen/Components/SelectNetwork/NetworkBox"
-import { DeleteUnderlay } from "~Components"
+import { DeleteUnderlay, NetworkBox } from "~Components"
 
 type Props = {
     network: Network
