@@ -1,5 +1,6 @@
 export * from "./Account"
-// export * from "./Activity"
+export * from "./Activity"
+export * from "./Transaction"
 // export * from "./Backup"
 // export * from "./Balance"
 // export * from "./ConnectedApp"
