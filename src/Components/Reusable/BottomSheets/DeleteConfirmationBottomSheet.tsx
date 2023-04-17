@@ -11,6 +11,7 @@ import { useI18nContext } from "~i18n"
 import { useTheme } from "~Common"
 
 type Props = {
+    title: string
     description: string
     deletingElement?: React.ReactNode
     onClose: () => void
@@ -22,7 +23,7 @@ const snapPoints = ["50%"]
 export const DeleteConfirmationBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, onConfirm, description, deletingElement }, ref) => {
+>(({ onClose, onConfirm, title, description, deletingElement }, ref) => {
     const { LL } = useI18nContext()
 
     const theme = useTheme()
@@ -41,7 +42,7 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<
                         w={100}
                         alignItems="center">
                         <BaseText typographyFont="subTitleBold">
-                            {LL.SB_CONFIRM_OPERATION()}
+                            {title}
                         </BaseText>
                     </BaseView>
 
