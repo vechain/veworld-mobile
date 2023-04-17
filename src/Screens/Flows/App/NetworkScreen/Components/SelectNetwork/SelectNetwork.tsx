@@ -1,8 +1,7 @@
 import React from "react"
-import { BaseSpacer, BaseText } from "~Components"
+import { BaseSpacer, BaseText, NetworkBox } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Network } from "~Model"
-import { NetworkBox } from "./NetworkBox"
 
 type Props = {
     openBottomSheet: () => void
