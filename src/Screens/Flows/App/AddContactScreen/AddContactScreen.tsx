@@ -8,8 +8,8 @@ import {
     BaseSafeArea,
     BaseSpacer,
     BaseText,
-    BaseTouchableBox,
     BaseView,
+    showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes, tabbarBaseStyles } from "~Navigation"
@@ -50,10 +50,14 @@ export const AddContactScreen = () => {
 
     const onCreateContact = useCallback(() => {
         if (isFormValid) {
-            dispatch(addContact(name, address))
-            nav.navigate(Routes.SETTINGS_CONTACTS)
+            try {
+                dispatch(addContact(name, address))
+                nav.navigate(Routes.SETTINGS_CONTACTS)
+            } catch (e) {
+                showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
+            }
         }
-    }, [address, dispatch, isFormValid, name, nav])
+    }, [LL, address, dispatch, isFormValid, name, nav])
 
     return (
         <BaseSafeArea grow={1}>
@@ -97,37 +101,10 @@ export const AddContactScreen = () => {
                         addressError={addressError}
                         setName={setName}
                         setAddress={setAddress}
+                        valueAddress={address}
                     />
 
                     <BaseSpacer height={20} />
-
-                    <BaseView flexDirection="row">
-                        <BaseTouchableBox
-                            action={() => {}} // TODO: add action
-                            w="auto"
-                            flex={1}
-                            justifyContent="space-between">
-                            <BaseIcon
-                                name="clipboard-outline"
-                                size={20}
-                                color={theme.colors.text}
-                            />
-                            <BaseText>{LL.BTN_PASTE_ADDRESS()}</BaseText>
-                        </BaseTouchableBox>
-                        <BaseSpacer width={16} />
-                        <BaseTouchableBox
-                            action={() => {}} // TODO: add action
-                            w="auto"
-                            flex={1}
-                            justifyContent="space-between">
-                            <BaseIcon
-                                name="flip-horizontal"
-                                size={20}
-                                color={theme.colors.text}
-                            />
-                            <BaseText>{LL.BTN_SCAN_QR_CODE()}</BaseText>
-                        </BaseTouchableBox>
-                    </BaseView>
                 </BaseView>
 
                 <BaseSpacer height={20} />

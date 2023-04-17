@@ -68,7 +68,7 @@ const fontSize = {
 
 const lineHeight = {
     title: 28,
-    bodyMedium: 20,
+    bodyMedium: 18.2,
     caption: 13,
 }
 

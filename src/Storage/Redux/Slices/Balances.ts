@@ -1,6 +1,5 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common"
-import { Account, Network } from "~Model"
+import { AddressUtils, VET, VTHO } from "~Common"
 import { BalanceState, TokenBalance } from "../Types/Balances"
 
 export const initialState: BalanceState = []
@@ -14,6 +13,30 @@ export const BalanceSlice = createSlice({
             action: PayloadAction<TokenBalance>,
         ) => {
             state.push(action.payload)
+        },
+        updateTokenBalances: (
+            state: Draft<BalanceState>,
+            action: PayloadAction<TokenBalance[]>,
+        ) => {
+            const newBalances = action.payload
+            const newState = state.filter(
+                oldBalance =>
+                    !newBalances.find(
+                        newBalance =>
+                            AddressUtils.compareAddresses(
+                                newBalance.accountAddress,
+                                oldBalance.accountAddress,
+                            ) &&
+                            AddressUtils.compareAddresses(
+                                newBalance.tokenAddress,
+                                oldBalance.tokenAddress,
+                            ) &&
+                            newBalance.networkGenesisId ===
+                                oldBalance.networkGenesisId,
+                    ),
+            )
+            newState.push(...newBalances)
+            return newState
         },
         removeTokenBalance: (
             state: Draft<BalanceState>,
@@ -37,8 +60,14 @@ export const BalanceSlice = createSlice({
                     if (
                         balance.tokenAddress === tokenAddress &&
                         balance.accountAddress === accountAddress &&
-                        balance.accountAddress !== VET.address &&
-                        balance.accountAddress !== VTHO.address
+                        !AddressUtils.compareAddresses(
+                            balance.tokenAddress,
+                            VET.address,
+                        ) &&
+                        !AddressUtils.compareAddresses(
+                            balance.tokenAddress,
+                            VTHO.address,
+                        )
                     ) {
                         const newBalance = {
                             ...balance,
@@ -66,33 +95,12 @@ export const BalanceSlice = createSlice({
                 return updatedBalance ? updatedBalance : balance
             })
         },
-        setTokenBalances: (
-            state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance[]>,
-        ) => {
-            return action.payload
-        },
-        resetTokenBalances: (
-            state: Draft<BalanceState>,
-            action: PayloadAction<{ network: Network; account: Account }>,
-        ) => {
-            const { network, account } = action.payload
-            const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(network.type)
-            return defaultTokens!!.map(token => ({
-                accountAddress: account?.address,
-                tokenAddress: token.address,
-                balance: "0",
-                timeUpdated: new Date().toISOString(),
-                networkGenesisId: network.genesis.id,
-            }))
-        },
     },
 })
 
 export const {
     addTokenBalance,
-    setTokenBalances,
+    updateTokenBalances,
     removeTokenBalance,
     changeBalancePosition,
-    resetTokenBalances,
 } = BalanceSlice.actions

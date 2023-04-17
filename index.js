@@ -9,7 +9,7 @@ import { PersistGate } from "redux-persist/integration/react"
 import { Provider } from "react-redux"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { useTheme } from "~Common"
+import { info, useTheme } from "~Common"
 import {
     ConnexContextProvider,
     TranslationProvider,
@@ -38,6 +38,9 @@ const { fontFamily } = typography
 // immer setup
 enableAllPlugins()
 
+const isHermes = () => !!global.HermesInternal
+info("is Hermes active : ", isHermes())
+
 const Main = () => {
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
@@ -59,20 +62,16 @@ const Main = () => {
             <PersistGate loading={null} persistor={persistor}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
                     <ConnexContextProvider>
-                        <KeyboardAvoidingView
-                            behavior="padding"
-                            style={{ flex: 1 }}>
-                            <SafeAreaProvider>
-                                <TranslationProvider>
+                        <SafeAreaProvider>
+                            <TranslationProvider>
+                                <NavigationProvider>
                                     <BottomSheetModalProvider>
-                                        <NavigationProvider>
-                                            {fontsLoaded && <EntryPoint />}
-                                        </NavigationProvider>
+                                        {fontsLoaded && <EntryPoint />}
                                     </BottomSheetModalProvider>
-                                    <BaseToast />
-                                </TranslationProvider>
-                            </SafeAreaProvider>
-                        </KeyboardAvoidingView>
+                                </NavigationProvider>
+                                <BaseToast />
+                            </TranslationProvider>
+                        </SafeAreaProvider>
                     </ConnexContextProvider>
                 </GestureHandlerRootView>
             </PersistGate>

@@ -1,13 +1,19 @@
 import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { PlatformUtils, useBottomSheetModal, useTheme } from "~Common"
+import {
+    FormattingUtils,
+    PlatformUtils,
+    useBottomSheetModal,
+    useTheme,
+} from "~Common"
 import {
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
+    BaseTouchableBox,
     BaseView,
     DeleteConfirmationBottomSheet,
 } from "~Components"
@@ -19,11 +25,17 @@ import {
     selectContactByAddress,
     selectContacts,
 } from "~Storage/Redux/Selectors"
+import SwipeableItem, {
+    SwipeableItemImperativeRef,
+} from "react-native-swipeable-item"
 import {
     AddContactButton,
     ContactDetailBox,
     EditContactBottomSheet,
+    UnderlayLeft,
 } from "./Components"
+
+const underlaySnapPoints = [58]
 
 export const ContactsScreen = () => {
     // [Start] Hooks
@@ -34,6 +46,11 @@ export const ContactsScreen = () => {
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const { LL } = useI18nContext()
+
+    // Keep track of the swipeable items refs
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
+        new Map(),
+    )
 
     /* Bottom Sheets */
     const {
@@ -73,6 +90,14 @@ export const ContactsScreen = () => {
         [],
     )
 
+    const closeOtherSwipeableItems = useCallback((currentAddress: string) => {
+        swipeableItemRefs?.current.forEach((ref, address) => {
+            if (address !== currentAddress) {
+                ref?.close()
+            }
+        })
+    }, [])
+
     const onDeleteContactPress = useCallback(
         (address: string) => {
             setSelectedContactAddress(address)
@@ -87,13 +112,15 @@ export const ContactsScreen = () => {
             setSelectedContactAddress(address)
 
             openEditContactSheet()
+            closeOtherSwipeableItems("") // Pass an empty string to close all items
         },
-        [openEditContactSheet],
+        [closeOtherSwipeableItems, openEditContactSheet],
     )
 
     const handleRemoveContact = useCallback(() => {
         if (selectedContactAddress) {
             dispatch(removeContact(selectedContactAddress))
+            swipeableItemRefs?.current.delete(selectedContactAddress)
             closeRemoveContactSheet()
         }
     }, [closeRemoveContactSheet, selectedContactAddress, dispatch])
@@ -106,6 +133,13 @@ export const ContactsScreen = () => {
             }
         },
         [closeEditContactSheet, dispatch, selectedContactAddress],
+    )
+
+    const registerSwipeableItemRef = useCallback(
+        (address: string, ref: SwipeableItemImperativeRef | null) => {
+            if (ref) swipeableItemRefs.current.set(address, ref)
+        },
+        [],
     )
 
     // [End] Methods
@@ -133,14 +167,29 @@ export const ContactsScreen = () => {
                         data={contacts}
                         keyExtractor={contact => contact.address}
                         ItemSeparatorComponent={contactsListSeparator}
-                        renderItem={({ item }) => {
+                        renderItem={({ item: contact }) => {
                             return (
                                 <BaseView mx={20}>
-                                    <ContactDetailBox
-                                        contact={item}
-                                        onDeletePress={onDeleteContactPress}
-                                        onEditPress={onEditContactPress}
-                                    />
+                                    <SwipeableItem
+                                        ref={ref =>
+                                            registerSwipeableItemRef(
+                                                contact.address,
+                                                ref,
+                                            )
+                                        }
+                                        key={contact.address}
+                                        item={contact}
+                                        renderUnderlayLeft={() => (
+                                            <UnderlayLeft
+                                                onDelete={onDeleteContactPress}
+                                            />
+                                        )}
+                                        snapPointsLeft={underlaySnapPoints}>
+                                        <ContactDetailBox
+                                            contact={contact}
+                                            onEditPress={onEditContactPress}
+                                        />
+                                    </SwipeableItem>
                                 </BaseView>
                             )
                         }}
@@ -160,12 +209,15 @@ export const ContactsScreen = () => {
         contactsListSeparator,
         onDeleteContactPress,
         onEditContactPress,
+        registerSwipeableItemRef,
     ])
 
     // [End] Render sub components
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea
+            grow={1}
+            onTouchStart={() => closeOtherSwipeableItems("")}>
             <BaseIcon
                 style={baseStyles.backIcon}
                 size={36}
@@ -184,7 +236,7 @@ export const ContactsScreen = () => {
                         <BaseIcon
                             style={baseStyles.addContactIcon}
                             name={"plus"}
-                            size={32}
+                            size={24}
                             bg={theme.colors.secondary}
                             action={onAddContactPress}
                         />
@@ -200,7 +252,7 @@ export const ContactsScreen = () => {
                 </BaseText>
             </BaseView>
 
-            {/* Add contact button if List is empty */}
+            {/* Add contact button if contacts list is empty */}
             {!contacts.length && renderAddContactButton()}
 
             {/* Contacts List */}
@@ -211,7 +263,32 @@ export const ContactsScreen = () => {
                 ref={confirmRemoveContactSheet}
                 onClose={closeRemoveContactSheet}
                 onConfirm={handleRemoveContact}
-                description={LL.BD_CONFIRM_REMOVE_CONTACT()}
+                title={LL.BD_CONFIRM_REMOVE_CONTACT()}
+                description={LL.BD_CONFIRM_REMOVE_CONTACT_DESC()}
+                deletingElement={
+                    <BaseView w={100} flexDirection="row">
+                        <BaseTouchableBox
+                            justifyContent="space-between"
+                            containerStyle={baseStyles.contactContainer}
+                            activeOpacity={1}>
+                            <BaseView flexDirection="column">
+                                <BaseText typographyFont="button">
+                                    {selectedContact?.alias}
+                                </BaseText>
+                                <BaseSpacer height={4} />
+                                <BaseText
+                                    fontSize={10}
+                                    typographyFont="smallCaptionRegular">
+                                    {FormattingUtils.humanAddress(
+                                        selectedContactAddress || "",
+                                        4,
+                                        6,
+                                    )}
+                                </BaseText>
+                            </BaseView>
+                        </BaseTouchableBox>
+                    </BaseView>
+                }
             />
             <EditContactBottomSheet
                 ref={editContactSheet}
@@ -239,4 +316,5 @@ const baseStyles = StyleSheet.create({
     list: {
         height: PlatformUtils.isIOS() ? "70%" : "76%",
     },
+    contactContainer: { flex: 1 },
 })

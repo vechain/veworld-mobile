@@ -1,6 +1,6 @@
 import { address, HDNode } from "thor-devkit"
 import { XPub } from "~Model"
-import { veWorldErrors, error, HexUtils } from "~Common"
+import { veWorldErrors, error, HexUtils, VET } from "~Common"
 import CryptoUtils from "../CryptoUtils"
 
 /**
@@ -56,7 +56,12 @@ export const compareAddresses = (
     if (typeof address1 !== "string" || typeof address2 !== "string")
         return false
 
-    if (address2 === address1) return true
+    if (address2 === address1) {
+        return true
+    } else if (address1 === VET.address || address2 === VET.address) {
+        // NOTE: this is a work-around because VET address is "VET" and it doesn't have a real address
+        return false
+    }
 
     try {
         address1 = HexUtils.addPrefix(address1)
@@ -66,7 +71,14 @@ export const compareAddresses = (
             address.toChecksumed(address2 as string)
         )
     } catch (e) {
-        error(e)
+        error(
+            "Got error:",
+            e,
+            "Trying to compare address1:",
+            address1,
+            "with address2:",
+            address2,
+        )
         return false
     }
 }

@@ -11,17 +11,19 @@ import { useI18nContext } from "~i18n"
 import { useTheme } from "~Common"
 
 type Props = {
+    title: string
     description: string
+    deletingElement?: React.ReactNode
     onClose: () => void
     onConfirm: () => void
 }
 
-const snapPoints = ["40%"]
+const snapPoints = ["50%"]
 
 export const DeleteConfirmationBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, onConfirm, description }, ref) => {
+>(({ onClose, onConfirm, title, description, deletingElement }, ref) => {
     const { LL } = useI18nContext()
 
     const theme = useTheme()
@@ -29,38 +31,42 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
             <BaseView
-                flexDirection="row"
+                h={100}
+                alignItems="center"
                 justifyContent="space-between"
-                w={100}
-                alignItems="center">
-                <BaseText typographyFont="subTitleBold">
-                    {LL.SB_CONFIRM_OPERATION()}
-                </BaseText>
-            </BaseView>
+                flexGrow={1}>
+                <BaseView alignSelf="flex-start">
+                    <BaseText typographyFont="subTitleBold">{title}</BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="body" my={8}>
+                        {description}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    {deletingElement}
+                </BaseView>
 
-            <BaseSpacer height={16} />
-
-            <BaseText typographyFont="body" my={8}>
-                {description}
-            </BaseText>
-
-            <BaseSpacer height={32} />
-
-            <BaseView alignItems="center" w={100}>
-                <BaseButton
-                    action={onConfirm}
+                <BaseView
+                    flexDirection="row"
+                    justifyContent="space-between"
                     w={100}
-                    px={20}
-                    title={LL.COMMON_BTN_REMOVE().toUpperCase()}
-                    bgColor={theme.colors.primary}
-                />
-                <BaseButton
-                    variant="outline"
-                    action={onClose}
-                    w={100}
-                    my={10}
-                    title={LL.COMMON_BTN_CANCEL().toUpperCase()}
-                />
+                    alignItems="center">
+                    <BaseView alignItems="center" w={100}>
+                        <BaseButton
+                            action={onConfirm}
+                            w={100}
+                            px={20}
+                            title={LL.COMMON_BTN_REMOVE().toUpperCase()}
+                            bgColor={theme.colors.primary}
+                        />
+                        <BaseButton
+                            variant="outline"
+                            action={onClose}
+                            w={100}
+                            my={10}
+                            title={LL.COMMON_BTN_CANCEL().toUpperCase()}
+                        />
+                    </BaseView>
+                </BaseView>
             </BaseView>
         </BaseBottomSheet>
     )

@@ -400,9 +400,13 @@ type RootTranslation = {
 	 */
 	BD_CONTACT_ADDRESS: string
 	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​t​h​e​ ​c​o​n​t​a​c​t​ ​f​r​o​m​ ​t​h​e​ ​l​i​s​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​c​e​s​s​a​r​i​l​y​ ​h​a​v​e​ ​t​o​ ​r​e​-​a​d​d​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 * R​e​m​o​v​e​ ​c​o​n​t​a​c​t
 	 */
 	BD_CONFIRM_REMOVE_CONTACT: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​o​n​t​a​c​t​?
+	 */
+	BD_CONFIRM_REMOVE_CONTACT_DESC: string
 	/**
 	 * R​e​q​u​i​r​e​ ​t​h​e​ ​p​i​n​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​w​i​t​h​ ​l​o​c​a​l​ ​w​a​l​l​e​t​s
 	 */
@@ -881,6 +885,14 @@ type RootTranslation = {
 	 */
 	ERROR_ADDRESS_INVALID: string
 	/**
+	 * E​r​r​o​r​!
+	 */
+	ERROR: string
+	/**
+	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_GENERIC_OPERATION: string
+	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
@@ -1002,9 +1014,13 @@ type RootTranslation = {
 	 */
 	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: string
 	/**
+	 * R​e​m​o​v​e​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_CUSTOM_TOKENS_DELETE_TITLE: string
+	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​?
 	 */
-	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION: string
+	MANAGE_CUSTOM_TOKENS_DELETE_DESC: string
 	/**
 	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t​ ​o​r​ ​c​a​n​'​t​ ​b​e​ ​a​d​d​e​d​ ​t​o​ ​t​h​i​s​ ​n​e​t​w​o​r​k
 	 */
@@ -1413,9 +1429,13 @@ export type TranslationFunctions = {
 	 */
 	BD_CONTACT_ADDRESS: () => LocalizedString
 	/**
-	 * Confirming this will remove the contact from the list, you will necessarily have to re-add it manually.
+	 * Remove contact
 	 */
 	BD_CONFIRM_REMOVE_CONTACT: () => LocalizedString
+	/**
+	 * Are you sure you want to remove this contact?
+	 */
+	BD_CONFIRM_REMOVE_CONTACT_DESC: () => LocalizedString
 	/**
 	 * Require the pin when performing transactions with local wallets
 	 */
@@ -1890,6 +1910,14 @@ Please, try again later.
 	 */
 	ERROR_ADDRESS_INVALID: () => LocalizedString
 	/**
+	 * Error!
+	 */
+	ERROR: () => LocalizedString
+	/**
+	 * The operation went wrong. Please, try again.
+	 */
+	ERROR_GENERIC_OPERATION: () => LocalizedString
+	/**
 	 * Search a token
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
@@ -2010,9 +2038,13 @@ Please, try again later.
 	 */
 	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: () => LocalizedString
 	/**
+	 * Remove custom token
+	 */
+	MANAGE_CUSTOM_TOKENS_DELETE_TITLE: () => LocalizedString
+	/**
 	 * Are you sure you want to remove this custom token?
 	 */
-	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_DELETION: () => LocalizedString
+	MANAGE_CUSTOM_TOKENS_DELETE_DESC: () => LocalizedString
 	/**
 	 * The address entered is incorrect or can't be added to this network
 	 */
