@@ -9,6 +9,10 @@ export type Colors = {
     disabled: string
     danger: string
     success: string
+    successMedium: string
+    infoMedium: string
+    warningMedium: string
+    errorMedium: string
     text: string
     textReversed: string
     background: string
@@ -59,6 +63,10 @@ const light: Colors = {
     disabled: COLORS.WHITE_DISABLED,
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
+    successMedium: COLORS.MEDIUM_GREEN,
+    infoMedium: COLORS.DARK_PURPLE,
+    warningMedium: COLORS.MEDIUM_ORANGE,
+    errorMedium: COLORS.MEDIUM_RED,
     text: COLORS.DARK_PURPLE,
     textReversed: COLORS.WHITE,
     background: COLORS.LIGHT_GRAY,
@@ -80,6 +88,10 @@ const dark: Colors = {
     disabled: COLORS.WHITE_DISABLED,
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
+    successMedium: COLORS.WHITE,
+    infoMedium: COLORS.WHITE,
+    warningMedium: COLORS.WHITE,
+    errorMedium: COLORS.WHITE,
     text: COLORS.WHITE,
     textReversed: COLORS.DARK_PURPLE,
     background: COLORS.DARK_PURPLE,
