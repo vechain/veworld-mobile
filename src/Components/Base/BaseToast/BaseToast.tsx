@@ -7,7 +7,6 @@ import {
     successToastStyles,
     warningToastStyles,
 } from "./util"
-import { COLORS } from "~Common/Theme"
 import { ToastContent } from "./components"
 
 /**
@@ -22,13 +21,10 @@ export const toastConfig = (theme: ColorThemeType) => ({
 
         const { textLink, onPress } = props
 
-        const iconColor = theme.isDark ? COLORS.WHITE : COLORS.MEDIUM_GREEN
-
         return (
             <ToastContent
                 styles={styles}
                 icon="check-circle-outline"
-                iconColor={iconColor}
                 text1={text1}
                 text2={text2}
                 text3={textLink}
@@ -43,13 +39,10 @@ export const toastConfig = (theme: ColorThemeType) => ({
 
         const { textLink, onPress } = props
 
-        const iconColor = theme.isDark ? COLORS.WHITE : COLORS.MEDIUM_RED
-
         return (
             <ToastContent
                 styles={styles}
                 icon="alert-circle-outline"
-                iconColor={iconColor}
                 text1={text1}
                 text2={text2}
                 text3={textLink}
@@ -64,13 +57,10 @@ export const toastConfig = (theme: ColorThemeType) => ({
 
         const { textLink, onPress } = props
 
-        const iconColor = theme.isDark ? COLORS.WHITE : COLORS.MEDIUM_ORANGE
-
         return (
             <ToastContent
                 styles={styles}
                 icon="alert-outline"
-                iconColor={iconColor}
                 text1={text1}
                 text2={text2}
                 text3={textLink}
@@ -85,13 +75,10 @@ export const toastConfig = (theme: ColorThemeType) => ({
 
         const { textLink, onPress } = props
 
-        const iconColor = theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE
-
         return (
             <ToastContent
                 styles={styles}
                 icon="alert-circle-outline"
-                iconColor={iconColor}
                 text1={text1}
                 text2={text2}
                 text3={textLink}
