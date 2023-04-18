@@ -117,6 +117,7 @@ const verifyMnemonic = async (mnemonic: string[]) => {
             .toExist()
             .withTimeout(SHORT_TIMEOUT)
             .then(async () => {
+                // eslint-disable-next-line no-console
                 console.log(`Selecting word ${i + 1}: ${mnemonic[i]}`)
                 await element(
                     by

@@ -30,7 +30,9 @@ export const WelcomeScreen = () => {
                         testID="welcome-title-id">
                         {LL.TITLE_WELCOME_TO()}
                     </BaseText>
-                    <BaseText typographyFont="largeTitle">VeWorld</BaseText>
+                    <BaseText typographyFont="largeTitle">
+                        {LL.VEWORLD()}
+                    </BaseText>
                 </BaseView>
 
                 <BaseSpacer height={80} />

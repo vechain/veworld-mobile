@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
-import { Pressable } from "react-native"
+import { StyleSheet, Pressable } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import { useTheme } from "~Common"
 import { BaseIcon, BaseText, BaseView } from "~Components"

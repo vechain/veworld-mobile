@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useState } from "react"
 
-import { ViewToken } from "react-native"
+import { ViewToken, StyleSheet } from "react-native"
 import { useBottomSheetModal } from "~Common"
 import {
     BackButtonHeader,
@@ -53,7 +53,7 @@ export const WalletManagementScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
-            <BaseView px={20} style={{ height: "100%", width: "100%" }}>
+            <BaseView px={20} style={styles.view}>
                 <FlashList
                     data={devices}
                     scrollEnabled={isScrollable}
@@ -93,3 +93,7 @@ export const WalletManagementScreen = () => {
         </BaseSafeArea>
     )
 }
+
+const styles = StyleSheet.create({
+    view: { height: "100%", width: "100%" },
+})
