@@ -57,8 +57,8 @@ const generateToastStyles = (
 export const successToastStyles = (theme: ColorThemeType): ToastStyles =>
     generateToastStyles(
         theme,
-        COLORS.DARK_GREEN_ALERT,
         COLORS.PASTEL_GREEN,
+        COLORS.DARK_GREEN_ALERT,
         theme.colors.successMedium,
     )
 
@@ -71,9 +71,9 @@ export const successToastStyles = (theme: ColorThemeType): ToastStyles =>
 export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
     generateToastStyles(
         theme,
-        COLORS.DARK_RED_ALERT,
         COLORS.PASTEL_RED,
-        theme.colors.errorMedium,
+        COLORS.DARK_RED_ALERT,
+        theme.colors.error,
     )
 
 /**
@@ -85,9 +85,9 @@ export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
 export const warningToastStyles = (theme: ColorThemeType): ToastStyles =>
     generateToastStyles(
         theme,
-        COLORS.DARK_ORANGE_ALERT,
         COLORS.PASTEL_ORANGE,
-        theme.colors.warningMedium,
+        COLORS.DARK_ORANGE_ALERT,
+        theme.colors.warning,
     )
 
 /**
@@ -97,9 +97,4 @@ export const warningToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated info toast styles object.
  */
 export const infoToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(
-        theme,
-        COLORS.PURPLE,
-        COLORS.WHITE,
-        theme.colors.infoMedium,
-    )
+    generateToastStyles(theme, COLORS.WHITE, COLORS.PURPLE, theme.colors.info)

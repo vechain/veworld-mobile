@@ -37,12 +37,12 @@ export const ToastContent = ({
                 <BaseView>
                     <BaseView style={styles.textContainer} pl={12}>
                         <BaseText
-                            color={theme.colors.text}
+                            color={theme.colors.textReversed}
                             typographyFont="bodyBold">
                             {text1}{" "}
                         </BaseText>
                         <BaseText
-                            color={theme.colors.text}
+                            color={theme.colors.textReversed}
                             typographyFont="body">
                             {text2}{" "}
                         </BaseText>
@@ -50,7 +50,7 @@ export const ToastContent = ({
                             disabled={!onPress}
                             underline={onPress ? true : false}
                             onPress={handleOnPress}
-                            color={theme.colors.text}
+                            color={theme.colors.textReversed}
                             typographyFont="body">
                             {text3}
                         </BaseText>
