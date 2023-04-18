@@ -8,8 +8,5 @@ export const copyMnemonic = async (): Promise<string[]> => {
 
         mnemonic.push(wordAttributes.text.toString().split(" ")[1])
     }
-
-    console.log(mnemonic)
-
     return mnemonic
 }

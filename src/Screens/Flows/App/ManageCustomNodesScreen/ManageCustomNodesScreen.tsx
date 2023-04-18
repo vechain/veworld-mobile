@@ -17,6 +17,7 @@ import {
     SectionListData,
     SectionListRenderItemInfo,
     SectionList,
+    ViewToken,
 } from "react-native"
 import {
     handleRemoveCustomNode,
@@ -30,7 +31,6 @@ import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { EditCustomNodeBottomSheet, SwipeableNetworkBox } from "./components"
 import * as Haptics from "expo-haptics"
-import { ViewToken } from "react-native"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 export const ManageCustomNodesScreen = () => {

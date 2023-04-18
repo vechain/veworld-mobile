@@ -18,6 +18,7 @@ const checkLogLevelHOC = (
     logID: keyof typeof LOG_LEVELS,
 ): ((...args: unknown[]) => void) => {
     if (LOG_LEVELS[logID] >= LOG_LEVELS[logLevel as keyof typeof LOG_LEVELS]) {
+        // eslint-disable-next-line no-console
         return console[logID]
     }
     return () => {}

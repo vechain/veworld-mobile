@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback } from "react"
-import { ViewProps } from "react-native"
+import { StyleSheet, ViewProps } from "react-native"
 import RNRestart from "react-native-restart"
 import { useTheme } from "~Common"
 import {
@@ -32,7 +32,7 @@ const Error = (): ReactElement => {
                         name={"close-circle-outline"}
                         size={70}
                         color={theme.colors.primary}
-                        style={{ alignItems: "flex-start" }}
+                        style={styles.icon}
                     />
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="subSubTitle">
@@ -53,6 +53,10 @@ const Error = (): ReactElement => {
         </BaseSafeArea>
     )
 }
+
+const styles = StyleSheet.create({
+    icon: { alignItems: "flex-start" },
+})
 
 // TODO: show the correct error screen
 // NOTE: we don't need to log on the console or send to sentry because the error is intercepted by errorHandler.js
