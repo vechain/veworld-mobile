@@ -168,6 +168,7 @@ const en: BaseTranslation = {
     TITLE_ADD_TOKEN: "Add Token",
     TITLE_EDIT_WALLET: "Edit wallet",
     TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
+    TITLE_DISCOVER: "Discover",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
@@ -230,6 +231,8 @@ const en: BaseTranslation = {
     COMMON_LBL_FAVOURITES: "Favourites",
     COMMON_LBL_ENTER_THE: "Enter the {name}",
     COMMON_LBL_DEFAULT: "Default",
+    COMMON_ASSETS: "Assets",
+    COMMON_DAPPS: "DApps",
 
 
     // Common Titles

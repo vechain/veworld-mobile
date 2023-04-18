@@ -1,9 +1,25 @@
 import React from "react"
+import { StyleSheet } from "react-native"
 import Toast, {
     BaseToast as BaseRNToastMessage,
     ErrorToast as BaseRNErrorToastMessage,
     BaseToastProps,
 } from "react-native-toast-message"
+
+const styles = StyleSheet.create({
+    successStyle: { borderLeftColor: "pink" },
+    successContainerStyle: { paddingHorizontal: 15 },
+    successText1Style: {
+        fontSize: 15,
+        fontWeight: "400",
+    },
+    errorText1Style: {
+        fontSize: 17,
+    },
+    errorText2Style: {
+        fontSize: 15,
+    },
+})
 
 /*
   1. Create the config
@@ -16,12 +32,9 @@ const toastConfig = {
     success: (props: BaseToastProps) => (
         <BaseRNToastMessage
             {...props}
-            style={{ borderLeftColor: "pink" }}
-            contentContainerStyle={{ paddingHorizontal: 15 }}
-            text1Style={{
-                fontSize: 15,
-                fontWeight: "400",
-            }}
+            style={styles.successStyle}
+            contentContainerStyle={styles.successContainerStyle}
+            text1Style={styles.successText1Style}
         />
     ),
     /*
@@ -31,12 +44,8 @@ const toastConfig = {
     error: (props: BaseToastProps) => (
         <BaseRNErrorToastMessage
             {...props}
-            text1Style={{
-                fontSize: 17,
-            }}
-            text2Style={{
-                fontSize: 15,
-            }}
+            text1Style={styles.errorText1Style}
+            text2Style={styles.errorText2Style}
         />
     ),
     /*
