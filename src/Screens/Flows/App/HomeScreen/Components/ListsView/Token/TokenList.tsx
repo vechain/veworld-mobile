@@ -15,8 +15,8 @@ import {
     getVthoDenormalizedAccountTokenBalances,
     selectNonVechainDenormalizedAccountTokenBalances,
 } from "~Storage/Redux/Selectors"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { AnimatedChartCard } from "./AnimatedChartCard"
+import { DenormalizedAccountTokenBalance } from "~Model"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean

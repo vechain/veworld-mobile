@@ -1,10 +1,10 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { COLORS } from "~Common/Theme"
 import { PlaceholderSVG } from "~Assets"
 import { useTheme } from "~Common"
+import { DenormalizedAccountTokenBalance } from "~Model"
 
 type Props = {
     token: DenormalizedAccountTokenBalance

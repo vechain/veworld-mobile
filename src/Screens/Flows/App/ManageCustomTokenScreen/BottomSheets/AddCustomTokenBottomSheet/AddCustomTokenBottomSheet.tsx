@@ -135,7 +135,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     tokenAddress: newCustomToken!!.address,
                     timeUpdated: new Date().toISOString(),
                     position: tokenBalances.length,
-                    networkGenesisId: network.genesis.id,
+                    genesisId: network.genesis.id,
                 }),
             )
             onClose()

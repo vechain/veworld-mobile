@@ -2,16 +2,13 @@ import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils, FormattingUtils } from "~Common"
 import { selectSelectedAccount } from "./Account"
 import { VET, VTHO } from "~Common/Constant"
-import {
-    DenormalizedAccountTokenBalance,
-    RootState,
-} from "~Storage/Redux/Types"
+import { RootState } from "~Storage/Redux/Types"
 import { selectAllFungibleTokens } from "./TokenApi"
 import { getCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
 import { selectCustomTokens } from "./Tokens"
-import { FungibleToken } from "~Model"
+import { DenormalizedAccountTokenBalance, FungibleToken } from "~Model"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -26,7 +23,7 @@ export const selectAccountBalances = createSelector(
                 AddressUtils.compareAddresses(
                     balance.accountAddress,
                     account?.address,
-                ) && network.genesis.id === balance?.networkGenesisId,
+                ) && network.genesis.id === balance?.genesisId,
         ),
 )
 
