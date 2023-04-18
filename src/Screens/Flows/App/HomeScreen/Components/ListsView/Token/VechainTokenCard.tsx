@@ -5,22 +5,22 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { FormattingUtils, useTheme } from "~Common"
 import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectCurrency } from "~Storage/Redux/Selectors"
-import { VeChainToken, DenormalizedAccountTokenBalance } from "~Model"
+import { VeChainToken, FungibleTokenWithBalance } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Common/Theme"
 
 type Props = {
-    token: DenormalizedAccountTokenBalance
+    tokenWithBalance: FungibleTokenWithBalance
     isAnimation: boolean
 }
 
 export const VechainTokenCard = memo(
-    ({ token: tokenBalance, isAnimation }: Props) => {
+    ({ tokenWithBalance, isAnimation }: Props) => {
         const theme = useTheme()
         const exchangeRate = useAppSelector(state =>
             getCurrencyExchangeRate(
                 state,
-                tokenBalance.token.symbol as VeChainToken,
+                tokenWithBalance.symbol as VeChainToken,
             ),
         )
         const currency = useAppSelector(selectCurrency)
@@ -32,19 +32,19 @@ export const VechainTokenCard = memo(
 
         const fiatBalance = FormattingUtils.humanNumber(
             FormattingUtils.convertToFiatBalance(
-                tokenBalance.balance,
+                tokenWithBalance.balance.balance,
                 exchangeRate?.rate || 0,
-                tokenBalance.token.decimals,
+                tokenWithBalance.decimals,
             ),
-            tokenBalance.balance,
+            tokenWithBalance.balance.balance,
         )
         const tokenUnitBalance = FormattingUtils.humanNumber(
             FormattingUtils.convertToFiatBalance(
-                tokenBalance.balance,
+                tokenWithBalance.balance.balance,
                 1,
-                tokenBalance.token.decimals,
+                tokenWithBalance.decimals,
             ),
-            tokenBalance.balance,
+            tokenWithBalance.balance.balance,
         )
 
         const animatedOpacityReverse = useAnimatedStyle(() => {
@@ -69,14 +69,14 @@ export const VechainTokenCard = memo(
                         ]}
                         containerStyle={baseStyles.imageShadow}>
                         <Image
-                            source={{ uri: tokenBalance.token.icon }}
+                            source={{ uri: tokenWithBalance.icon }}
                             style={baseStyles.image}
                         />
                     </BaseCard>
                     <BaseSpacer width={16} />
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">
-                            {tokenBalance.token.name}
+                            {tokenWithBalance.name}
                         </BaseText>
                         <BaseView flexDirection="row" alignItems="baseline">
                             <BaseText
@@ -87,7 +87,7 @@ export const VechainTokenCard = memo(
                             <BaseText
                                 typographyFont="captionRegular"
                                 color={tokenValueLabelColor}>
-                                {tokenBalance.token.symbol}
+                                {tokenWithBalance.symbol}
                             </BaseText>
                         </BaseView>
                     </BaseView>

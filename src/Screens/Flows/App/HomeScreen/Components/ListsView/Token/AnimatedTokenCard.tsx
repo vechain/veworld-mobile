@@ -10,10 +10,10 @@ import { ColorThemeType, useThemedStyles } from "~Common"
 import DropShadow from "react-native-drop-shadow"
 import { TokenCard } from "./TokenCard"
 import { useTokenAnimations } from "./useTokenAnimations"
-import { DenormalizedAccountTokenBalance } from "~Model"
+import { FungibleTokenWithBalance } from "~Model"
 
 interface IAnimatedTokenCard
-    extends RenderItemParams<DenormalizedAccountTokenBalance> {
+    extends RenderItemParams<FungibleTokenWithBalance> {
     isEdit: boolean
 }
 
@@ -39,7 +39,10 @@ export const AnimatedTokenCard = memo(
                                         ]}>
                                         <BaseIcon name={"drag"} size={28} />
                                     </Animated.View>
-                                    <TokenCard token={item} isEdit={isEdit} />
+                                    <TokenCard
+                                        tokenWithBalance={item}
+                                        isEdit={isEdit}
+                                    />
                                 </View>
                             </Pressable>
                         </DropShadow>

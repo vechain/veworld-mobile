@@ -6,22 +6,22 @@ import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
 import { usePollingChartData } from "../../../Hooks"
-import { DenormalizedAccountTokenBalance, VeChainToken } from "~Model"
+import { FungibleTokenWithBalance, VeChainToken } from "~Model"
 import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
 
 const HEIGHT = 100
 
 export type NativeTokenProps = {
-    tokenBalance: DenormalizedAccountTokenBalance
+    tokenWithBalance: FungibleTokenWithBalance
     isEdit: boolean
 }
 
 export const AnimatedChartCard = memo(
-    ({ tokenBalance, isEdit }: NativeTokenProps) => {
+    ({ tokenWithBalance, isEdit }: NativeTokenProps) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-        usePollingChartData(tokenBalance.token.symbol as VeChainToken)
+        usePollingChartData(tokenWithBalance.symbol as VeChainToken)
         const chartData = useAppSelector(state =>
-            selectDashboardChartData(tokenBalance.token.symbol, state),
+            selectDashboardChartData(tokenWithBalance.symbol, state),
         )
         const animatedOuterCard = useAnimatedStyle(() => {
             return {
@@ -55,7 +55,7 @@ export const AnimatedChartCard = memo(
                 <Animated.View
                     style={[styles.nativeTokenContainer, animatedOuterCard]}>
                     <VechainTokenCard
-                        token={tokenBalance}
+                        tokenWithBalance={tokenWithBalance}
                         isAnimation={isEdit}
                     />
                     <Animated.View
