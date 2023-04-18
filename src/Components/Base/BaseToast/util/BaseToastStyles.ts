@@ -1,4 +1,4 @@
-import { Dimensions, ViewStyle } from "react-native"
+import { ColorValue, Dimensions, ViewStyle } from "react-native"
 import { ColorThemeType } from "~Common"
 import { COLORS } from "~Common/Theme"
 
@@ -7,6 +7,7 @@ export type ToastStyles = {
     container: ViewStyle
     contentContainer: ViewStyle
     textContainer: ViewStyle
+    iconColor: ColorValue
 }
 
 /**
@@ -21,6 +22,7 @@ const generateToastStyles = (
     theme: ColorThemeType,
     darkColor: string,
     lightColor: string,
+    iconColor: string,
 ): ToastStyles => ({
     container: {
         borderLeftColor: theme.isDark ? darkColor : lightColor,
@@ -43,6 +45,7 @@ const generateToastStyles = (
         alignItems: "center",
         flexWrap: "wrap",
     },
+    iconColor: iconColor,
 })
 
 /**
@@ -52,7 +55,12 @@ const generateToastStyles = (
  * @returns {ToastStyles} The generated success toast styles object.
  */
 export const successToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(theme, COLORS.DARK_GREEN_ALERT, COLORS.PASTEL_GREEN)
+    generateToastStyles(
+        theme,
+        COLORS.DARK_GREEN_ALERT,
+        COLORS.PASTEL_GREEN,
+        theme.colors.successMedium,
+    )
 
 /**
  * Generates error toast styles based on the color theme.
@@ -61,7 +69,12 @@ export const successToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated error toast styles object.
  */
 export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(theme, COLORS.DARK_RED_ALERT, COLORS.PASTEL_RED)
+    generateToastStyles(
+        theme,
+        COLORS.DARK_RED_ALERT,
+        COLORS.PASTEL_RED,
+        theme.colors.errorMedium,
+    )
 
 /**
  * Generates warning toast styles based on the color theme.
@@ -70,7 +83,12 @@ export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated warning toast styles object.
  */
 export const warningToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(theme, COLORS.DARK_ORANGE_ALERT, COLORS.PASTEL_ORANGE)
+    generateToastStyles(
+        theme,
+        COLORS.DARK_ORANGE_ALERT,
+        COLORS.PASTEL_ORANGE,
+        theme.colors.warningMedium,
+    )
 
 /**
  * Generates info toast styles based on the color theme.
@@ -79,4 +97,9 @@ export const warningToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated info toast styles object.
  */
 export const infoToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(theme, COLORS.PURPLE, COLORS.WHITE)
+    generateToastStyles(
+        theme,
+        COLORS.PURPLE,
+        COLORS.WHITE,
+        theme.colors.infoMedium,
+    )
