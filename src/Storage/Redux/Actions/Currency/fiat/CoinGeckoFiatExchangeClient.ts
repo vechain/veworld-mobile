@@ -1,11 +1,16 @@
 import axios from "axios"
-import { VET } from "~Common/Constant"
+import { CURRENCY } from "~Common"
+import {
+    COINGECKO_MARKET_CHART_ENDPOINT,
+    COINGECKO_SUPPORTED_CURRENCIES_ENDPOINT,
+    EXCHANGE_CLIENT_AXIOS_OPTS,
+    getCoinGeckoIdBySymbol,
+} from "~Common/Constant"
 import { VeChainToken, CurrencyExchangeRate } from "~Model"
-import { EXCHANGE_CLIENT_AXIOS_OPTS } from "./constants"
 
 const getCurrencies = async (): Promise<string[]> => {
     const currencies = await axios.get<string[]>(
-        `${process.env.REACT_APP_COINGECKO_URL}/simple/supported_vs_currencies`,
+        COINGECKO_SUPPORTED_CURRENCIES_ENDPOINT,
         EXCHANGE_CLIENT_AXIOS_OPTS,
     )
 
@@ -18,13 +23,12 @@ interface PriceChangeResponse {
 }
 
 const getExchangeRate = async (
-    fiatSymbol: string,
+    fiatSymbol: CURRENCY,
     symbol: VeChainToken,
 ): Promise<CurrencyExchangeRate> => {
-    const coin = symbol === VET.symbol ? "vechain" : "vethor-token"
-
+    const coin = getCoinGeckoIdBySymbol[symbol]
     const pricesResponse = await axios.get<PriceChangeResponse>(
-        `${process.env.REACT_APP_COINGECKO_URL}/coins/${coin}/market_chart`,
+        COINGECKO_MARKET_CHART_ENDPOINT(coin),
         {
             ...EXCHANGE_CLIENT_AXIOS_OPTS,
             params: {
