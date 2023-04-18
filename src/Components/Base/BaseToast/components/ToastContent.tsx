@@ -6,7 +6,6 @@ import { ToastStyles } from "../util"
 type Props = {
     styles: ToastStyles
     icon: string
-    iconColor: string
     text1?: string
     text2?: string
     text3?: string
@@ -18,7 +17,6 @@ export const ToastContent = ({
     styles,
     text1,
     icon,
-    iconColor,
     text2,
     text3,
     onPress,
@@ -35,7 +33,7 @@ export const ToastContent = ({
     return (
         <BaseView style={styles.container}>
             <BaseView style={styles.contentContainer}>
-                <BaseIcon name={icon} size={20} color={iconColor} />
+                <BaseIcon name={icon} size={20} color={styles.iconColor} />
                 <BaseView>
                     <BaseView style={styles.textContainer} pl={12}>
                         <BaseText
