@@ -60,10 +60,16 @@ export const TokenList = memo(
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
                 {vetBalance && (
-                    <AnimatedChartCard token={vetBalance} isEdit={isEdit} />
+                    <AnimatedChartCard
+                        tokenBalance={vetBalance}
+                        isEdit={isEdit}
+                    />
                 )}
                 {vthoBalance && (
-                    <AnimatedChartCard token={vthoBalance} isEdit={isEdit} />
+                    <AnimatedChartCard
+                        tokenBalance={vthoBalance}
+                        isEdit={isEdit}
+                    />
                 )}
 
                 <NestableDraggableFlatList
