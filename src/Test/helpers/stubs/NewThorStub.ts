@@ -224,7 +224,10 @@ export class NewThorGetAccountRejectsStub implements Connex.Thor {
  * A hardcoded Connex.Thor instance that rejects on get account
  *
  */
-export const mockNewThorGetAccountRejects = (): Connex.Thor => {
+export const mockNewThorGetAccountRejects = (
+    revert: boolean = false,
+    vmError: boolean = false,
+): Connex.Thor => {
     return {
         genesis: genesises.test,
         status: {
@@ -265,7 +268,36 @@ export const mockNewThorGetAccountRejects = (): Connex.Thor => {
             throw Error("Not implemented")
         },
         explain(clauses: Connex.VM.Clause[]): Connex.VM.Explainer {
-            throw Error("Not implemented")
+            return {
+                cache(hints: string[]) {
+                    return this
+                },
+                caller(addr: string) {
+                    return this
+                },
+                execute(): Promise<Connex.VM.Output[]> {
+                    return Promise.resolve([
+                        {
+                            data: "data",
+                            vmError: vmError ? "vmError" : "",
+                            gasUsed: 1,
+                            reverted: revert,
+                            revertReason: revert ? "revertReason" : "",
+                            events: [],
+                            transfers: [],
+                        },
+                    ])
+                },
+                gas(gas: number) {
+                    return this
+                },
+                gasPayer(addr: string) {
+                    return this
+                },
+                gasPrice(gp: string | number) {
+                    return this
+                },
+            }
         },
         filter(
             kind: "event" | "transfer",

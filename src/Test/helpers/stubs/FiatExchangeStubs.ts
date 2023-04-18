@@ -1,10 +1,10 @@
 import MockAdapter from "axios-mock-adapter"
 
-import coinGeckoCurrenciesResponse from "~Test/helpers/data/FiatExchangeData/CoinGeckoGetCurrenciesResponse.json"
-import coinbaseCurrenciesResponse from "~Test/helpers/data/FiatExchangeData/CoinbaseGetCurrenciesResponse.json"
-import coinGeckoExchangeRatesResponse from "~Test/helpers/data/FiatExchangeData/CoinGeckoGetRatesResponse.json"
-import coinbaseVetExchangeRatesResponse from "~Test/helpers/data/FiatExchangeData/CoinbaseGetVetRatesResponse.json"
-import coinbaseVthoExchangeRatesResponse from "~Test/helpers/data/FiatExchangeData/CoinbaseGetVthoRatesResponse.json"
+import coinGeckoCurrenciesResponse from "../data/FiatExchangeData/CoinGeckoGetCurrenciesResponse.json"
+import coinbaseCurrenciesResponse from "../data/FiatExchangeData/CoinbaseGetCurrenciesResponse.json"
+import coinGeckoExchangeRatesResponse from "../data/FiatExchangeData/CoinGeckoGetRatesResponse.json"
+import coinbaseVetExchangeRatesResponse from "../data/FiatExchangeData/CoinbaseGetVetRatesResponse.json"
+import coinbaseVthoExchangeRatesResponse from "../data/FiatExchangeData/CoinbaseGetVthoRatesResponse.json"
 
 import { Action } from "./consts"
 

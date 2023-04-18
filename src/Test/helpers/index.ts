@@ -9,8 +9,13 @@ import { mockTokenRegistry } from "./stubs/TokenRegistryStubs"
 import { mockGetBlock } from "./stubs/BlockStubs"
 import { mockTransactionCall } from "./stubs/TransactionStubs"
 import { mockGetBalance } from "./stubs/BalanceStubs"
-
+import {
+    NewThorStub as mockNewThor,
+    mockNewThorGetAccountRejects,
+} from "./stubs/NewThorStub"
+import * as data from "./data"
 export default {
+    data,
     mockTokenRegistry,
     mockThorTransactions,
     mockFiatExchanges,
@@ -18,6 +23,8 @@ export default {
     mockGetVetExchangeRate,
     mockGetVthoExchangeRate,
     mockGetBlock,
+    mockNewThor,
+    mockNewThorGetAccountRejects,
     mockTransactionCall,
     mockGetBalance,
 }

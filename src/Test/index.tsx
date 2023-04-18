@@ -6,6 +6,7 @@ import { useTheme } from "~Common"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
 import { useInitStore } from "~Storage/Redux"
+export { default as TestHelpers } from "./helpers"
 
 const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
