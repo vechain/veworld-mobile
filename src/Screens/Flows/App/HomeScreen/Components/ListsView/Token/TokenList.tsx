@@ -48,11 +48,12 @@ export const TokenList = memo(
         }) => {
             dispatch(
                 changeBalancePosition(
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    data.map(({ token, ...otherAttributes }, index) => ({
-                        ...otherAttributes,
-                        position: index,
-                    })),
+                    data.map(
+                        ({ token: _token, ...otherAttributes }, index) => ({
+                            ...otherAttributes,
+                            position: index,
+                        }),
+                    ),
                 ),
             )
         }

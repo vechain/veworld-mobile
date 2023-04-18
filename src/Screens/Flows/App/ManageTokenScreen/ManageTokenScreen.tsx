@@ -11,10 +11,10 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    OfficialTokenCard,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
-import { OfficialTokenCard } from "./Components/OfficialTokenCard"
 import { FungibleToken } from "~Model"
 import {
     selectNonVechainFungibleTokens,
