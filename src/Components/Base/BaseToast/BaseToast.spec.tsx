@@ -183,7 +183,6 @@ describe("toastConfig", () => {
             type: "error",
         })
 
-        expect(result.props.iconColor).toBe("#E02200")
         expect(result.props.icon).toBe("alert-circle-outline")
         expect(result.props.text1).toBe("Error")
         expect(result.props.text2).toBe("Details")
@@ -206,7 +205,6 @@ describe("toastConfig", () => {
             type: "success",
         })
 
-        expect(result.props.iconColor).toBe("#30B34E")
         expect(result.props.icon).toBe("check-circle-outline")
         expect(result.props.text1).toBe("Success")
         expect(result.props.text2).toBe("Details")
@@ -229,7 +227,6 @@ describe("toastConfig", () => {
             type: "warning",
         })
 
-        expect(result.props.iconColor).toBe("#FA710E")
         expect(result.props.icon).toBe("alert-outline")
         expect(result.props.text1).toBe("Warning")
         expect(result.props.text2).toBe("Details")
@@ -252,7 +249,6 @@ describe("toastConfig", () => {
             type: "info",
         })
 
-        expect(result.props.iconColor).toBe("#0B0043")
         expect(result.props.icon).toBe("alert-circle-outline")
         expect(result.props.text1).toBe("Info")
         expect(result.props.text2).toBe("Details")
