@@ -2,6 +2,7 @@ import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs"
 import React from "react"
 import { Pressable, StyleSheet, Animated } from "react-native"
 import { ColorThemeType, useThemedStyles } from "~Common"
+import { COLORS } from "~Common/Theme"
 import { BaseText, BaseView } from "~Components"
 
 export const TopTabbar = ({
@@ -76,9 +77,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         underline: {
             marginTop: 4,
-            backgroundColor: theme.isDark
-                ? theme.colors.backgroundReversed
-                : theme.colors.primary,
+            backgroundColor: theme.isDark ? COLORS.GRAY : COLORS.DARK_PURPLE,
             height: 4,
             width: 12,
             borderRadius: 2,

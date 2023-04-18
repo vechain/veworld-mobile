@@ -5,7 +5,7 @@ export const DiscoverAssets = () => {
     return (
         <>
             <BaseView flexDirection="row" />
-            <BaseText typographyFont="largeTitle">DiscoverAssets</BaseText>
+            <BaseText typographyFont="largeTitle" />
         </>
     )
 }
