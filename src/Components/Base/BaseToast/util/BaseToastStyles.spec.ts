@@ -15,11 +15,11 @@ describe("successToastStyles", () => {
         const styles = successToastStyles(lightTheme)
 
         expect(styles.container.borderLeftColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_GREEN_ALERT : COLORS.PASTEL_GREEN,
+            lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
         )
         expect(styles.container.borderRadius).toBe(16)
         expect(styles.container.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_GREEN_ALERT : COLORS.PASTEL_GREEN,
+            lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
         )
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
@@ -29,7 +29,7 @@ describe("successToastStyles", () => {
         expect(styles.contentContainer.paddingHorizontal).toBe(16)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_GREEN_ALERT : COLORS.PASTEL_GREEN,
+            lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
         expect(styles.contentContainer.width).toBe(
@@ -47,11 +47,11 @@ describe("successToastStyles", () => {
         const styles = successToastStyles(darkTheme)
 
         expect(styles.container.borderLeftColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_GREEN_ALERT : COLORS.PASTEL_GREEN,
+            darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
         )
         expect(styles.container.borderRadius).toBe(16)
         expect(styles.container.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_GREEN_ALERT : COLORS.PASTEL_GREEN,
+            darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
         )
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
@@ -61,7 +61,7 @@ describe("successToastStyles", () => {
         expect(styles.contentContainer.paddingHorizontal).toBe(16)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_GREEN_ALERT : COLORS.PASTEL_GREEN,
+            darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
         expect(styles.contentContainer.width).toBe(
@@ -81,11 +81,11 @@ describe("errorToastStyles", () => {
         const styles = errorToastStyles(lightTheme)
 
         expect(styles.container.borderLeftColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_RED_ALERT : COLORS.PASTEL_RED,
+            lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
         )
         expect(styles.container.borderRadius).toBe(16)
         expect(styles.container.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_RED_ALERT : COLORS.PASTEL_RED,
+            lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
         )
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
@@ -95,7 +95,7 @@ describe("errorToastStyles", () => {
         expect(styles.contentContainer.paddingHorizontal).toBe(16)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_RED_ALERT : COLORS.PASTEL_RED,
+            lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
         expect(styles.contentContainer.width).toBe(
@@ -113,11 +113,11 @@ describe("errorToastStyles", () => {
         const styles = errorToastStyles(darkTheme)
 
         expect(styles.container.borderLeftColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_RED_ALERT : COLORS.PASTEL_RED,
+            darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
         )
         expect(styles.container.borderRadius).toBe(16)
         expect(styles.container.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_RED_ALERT : COLORS.PASTEL_RED,
+            darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
         )
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
@@ -127,7 +127,7 @@ describe("errorToastStyles", () => {
         expect(styles.contentContainer.paddingHorizontal).toBe(16)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_RED_ALERT : COLORS.PASTEL_RED,
+            darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
         expect(styles.contentContainer.width).toBe(
@@ -147,11 +147,11 @@ describe("warningToastStyles", () => {
         const styles = warningToastStyles(lightTheme)
 
         expect(styles.container.borderLeftColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_ORANGE_ALERT : COLORS.PASTEL_ORANGE,
+            lightTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
         )
         expect(styles.container.borderRadius).toBe(16)
         expect(styles.container.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_ORANGE_ALERT : COLORS.PASTEL_ORANGE,
+            lightTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
         )
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
@@ -161,7 +161,7 @@ describe("warningToastStyles", () => {
         expect(styles.contentContainer.paddingHorizontal).toBe(16)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.DARK_ORANGE_ALERT : COLORS.PASTEL_ORANGE,
+            lightTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
         expect(styles.contentContainer.width).toBe(
@@ -179,11 +179,11 @@ describe("warningToastStyles", () => {
         const styles = warningToastStyles(darkTheme)
 
         expect(styles.container.borderLeftColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_ORANGE_ALERT : COLORS.PASTEL_ORANGE,
+            darkTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
         )
         expect(styles.container.borderRadius).toBe(16)
         expect(styles.container.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_ORANGE_ALERT : COLORS.PASTEL_ORANGE,
+            darkTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
         )
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
@@ -193,7 +193,7 @@ describe("warningToastStyles", () => {
         expect(styles.contentContainer.paddingHorizontal).toBe(16)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.DARK_ORANGE_ALERT : COLORS.PASTEL_ORANGE,
+            darkTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
         expect(styles.contentContainer.width).toBe(
@@ -213,11 +213,11 @@ describe("infoToastStyles", () => {
         const styles = infoToastStyles(lightTheme)
 
         expect(styles.container.borderLeftColor).toBe(
-            lightTheme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
         )
         expect(styles.container.borderRadius).toBe(16)
         expect(styles.container.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
         )
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
@@ -227,7 +227,7 @@ describe("infoToastStyles", () => {
         expect(styles.contentContainer.paddingHorizontal).toBe(16)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
         expect(styles.contentContainer.width).toBe(
@@ -245,11 +245,11 @@ describe("infoToastStyles", () => {
         const styles = infoToastStyles(darkTheme)
 
         expect(styles.container.borderLeftColor).toBe(
-            darkTheme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
         )
         expect(styles.container.borderRadius).toBe(16)
         expect(styles.container.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
         )
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
@@ -259,7 +259,7 @@ describe("infoToastStyles", () => {
         expect(styles.contentContainer.paddingHorizontal).toBe(16)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
         expect(styles.contentContainer.width).toBe(
