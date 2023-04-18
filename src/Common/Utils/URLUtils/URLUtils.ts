@@ -13,6 +13,7 @@ import { error } from "~Common"
 function parseUrl(url?: string) {
     const trimmedUrl = url?.trim()
     const match = trimmedUrl?.match(
+        // eslint-disable-next-line no-useless-escape
         /^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/,
     )
     if (!match) {

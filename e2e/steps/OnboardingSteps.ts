@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Given, Then, When } from "@cucumber/cucumber"
 import { waitFor, element } from "detox"
 import OnboardingFlows from "../helpers/flows/OnboardingFlows"

@@ -1,6 +1,5 @@
 import React from "react"
-import { Dimensions } from "react-native"
-import { StyleSheet, View } from "react-native"
+import { Dimensions, StyleSheet, View } from "react-native"
 import { Mask, Rect, Svg, Defs } from "react-native-svg"
 
 const deviceWidth = Dimensions.get("window").width

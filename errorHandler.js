@@ -32,6 +32,7 @@ const executeDefaultHandler = false // is an optional boolean (both IOS, ANDROID
 // in this case is not possible to display anything to the user, the app will just crash but we can log the error to sentry
 const exceptionhandler = exceptionString => {
     // TODO: add sentry logging
+    // eslint-disable-next-line no-console
     console.warn(exceptionString)
 }
 setNativeExceptionHandler(exceptionhandler, forceAppQuit, executeDefaultHandler)

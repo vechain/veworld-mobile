@@ -48,7 +48,8 @@ export const AppSecurityScreen = () => {
                     <BaseText typographyFont="largeTitle">
                         {LL.TITLE_SECURITY()}
                     </BaseText>
-
+                    {/* TODO: change this lorem ipsum */}
+                    {/* eslint-disable-next-line i18next/no-literal-string */}
                     <BaseText typographyFont="body" my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                         sed do eiusmod tempor incididunt ut labore et dolore

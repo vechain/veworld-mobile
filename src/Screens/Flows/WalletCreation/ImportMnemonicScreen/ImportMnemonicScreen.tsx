@@ -17,7 +17,7 @@ import {
     useDeviceUtils,
     useTheme,
 } from "~Common"
-import { Keyboard } from "react-native"
+import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
 import { useNavigation } from "@react-navigation/native"
@@ -134,7 +134,7 @@ export const ImportMnemonicScreen = () => {
                             <BaseIcon
                                 name={"content-paste"}
                                 size={32}
-                                style={{ marginHorizontal: 20 }}
+                                style={styles.icon}
                                 bg={theme.colors.secondary}
                                 action={onPasteFromClipboard}
                             />
@@ -183,3 +183,7 @@ export const ImportMnemonicScreen = () => {
         </DismissKeyboardView>
     )
 }
+
+const styles = StyleSheet.create({
+    icon: { marginHorizontal: 20 },
+})

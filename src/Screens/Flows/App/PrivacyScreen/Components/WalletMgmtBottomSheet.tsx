@@ -6,8 +6,7 @@ import { Device } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { DeviceBox } from "../../WalletManagementScreen/components"
-import { useScrollableList } from "~Common"
-import { info } from "~Common"
+import { useScrollableList, info } from "~Common"
 
 type Props = {
     devices: Device[]
