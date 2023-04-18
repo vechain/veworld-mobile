@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { VeChainToken } from "~Model"
-import { fetchHistoricalData, useAppDispatch } from "~Storage/Redux"
+import { fetchDashboardChartData, useAppDispatch } from "~Storage/Redux"
 
 const TOKEN_BALANCE_SYNC_PERIOD = Number(
     process.env.REACT_APP_TOKEN_BALANCE_SYNC_PERIOD || "300000",
@@ -11,7 +11,7 @@ export const usePollingChartData = (symbol: VeChainToken) => {
 
     useEffect(() => {
         const updateHistoricalData = () => {
-            dispatch(fetchHistoricalData({ symbol }))
+            dispatch(fetchDashboardChartData({ symbol }))
         }
         updateHistoricalData()
         const interval = setInterval(

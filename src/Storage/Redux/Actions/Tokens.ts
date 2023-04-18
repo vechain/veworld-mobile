@@ -1,6 +1,11 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import axios from "axios"
-import { error, EXCHANGE_CLIENT_AXIOS_OPTS, VET } from "~Common"
+import {
+    COINGECKO_MARKET_CHART_ENDPOINT,
+    error,
+    EXCHANGE_CLIENT_AXIOS_OPTS,
+    getCoinGeckoIdBySymbol,
+} from "~Common"
 import { VeChainToken } from "~Model"
 import { selectCurrency } from "../Selectors"
 import { setDashboardChartData } from "../Slices"
@@ -10,14 +15,14 @@ type CoinMarketChartResponse = {
     prices: number[][]
 }
 
-export const fetchHistoricalData =
+export const fetchDashboardChartData =
     ({ symbol }: { symbol: VeChainToken }) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         const currency = selectCurrency(getState())
-        const coin = symbol === VET.symbol ? "vechain" : "vethor-token"
+        const coin = getCoinGeckoIdBySymbol[symbol]
         try {
             const pricesResponse = await axios.get<CoinMarketChartResponse>(
-                `${process.env.REACT_APP_COINGECKO_URL}/coins/${coin}/market_chart`,
+                COINGECKO_MARKET_CHART_ENDPOINT(coin),
                 {
                     ...EXCHANGE_CLIENT_AXIOS_OPTS,
                     params: {

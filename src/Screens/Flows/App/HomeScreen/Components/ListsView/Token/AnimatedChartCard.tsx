@@ -6,7 +6,7 @@ import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
 import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
-import { usePollingChartData } from "../../../Hooks/usePollingChartData"
+import { usePollingChartData } from "../../../Hooks"
 import { VeChainToken } from "~Model"
 import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
 
