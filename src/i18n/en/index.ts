@@ -273,7 +273,8 @@ const en: BaseTranslation = {
     NETWORK_ADD_CUSTOM_NODE_NAME: "Node name",
     NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: "Add network",
     NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: "Edit network",
-    NETWORK_CONFIRM_REMOVE_NODE: "Confirming this will remove the custom node from the list, you will necessarily have to re-add it manually.",
+    NETWORK_CONFIRM_REMOVE_NODE: "Remove custom node",
+    NETWORK_CONFIRM_REMOVE_NODE_DESC: "Are you sure you want to remove this custom node?",
 
     // Network Labels
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",

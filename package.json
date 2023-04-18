@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
-        "install:all": "yarn install && npx pod-install && yarn husky install",
+        "install:all": "yarn install && npx pod-install",
         "postinstall": "patch-package",
         "pods": "cd ios && pod install && cd ..",
         "doctor": "react-native doctor",
@@ -28,7 +28,8 @@
         "e2e.android.test.d": "detox test --configuration android.emu.debug.31",
         "e2e.android.test.r": "detox test --configuration android.emu.release.31",
         "i18n": "typesafe-i18n",
-        "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='./iOS'"
+        "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='./iOS'",
+        "prepare": "husky install"
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
@@ -144,13 +145,8 @@
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
-            "yarn prettier --check src",
-            "eslint . --ext .js,.jsx,.ts,.tsx",
-            "git add"
-        ],
-        "*.{html,css,less,ejs}": [
-            "prettier --write",
-            "git add"
+            "eslint --fix",
+            "prettier --write"
         ]
     }
 }

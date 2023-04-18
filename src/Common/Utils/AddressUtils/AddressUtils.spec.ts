@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { HDNode, mnemonic } from "thor-devkit"
 import { XPub } from "~Model/Crypto"
 import {
