@@ -3,13 +3,14 @@ import {
     selectSelectedAccount,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
-import { RootState, TokenBalance } from "~Storage/Redux/Types"
+import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
 import { AddressUtils, error } from "~Common"
 import { DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common/Constant"
 import axios from "axios"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 import { updateTokenBalances } from "~Storage/Redux/Slices"
+import { Balance } from "~Model"
 
 /**
  * Updates all balances for an account
@@ -20,7 +21,7 @@ export const updateAccountBalances =
     async (dispatch: Dispatch, getState: () => RootState) => {
         const accountBalances = selectAccountBalances(getState())
         const network = selectSelectedNetwork(getState())
-        const balances: TokenBalance[] = []
+        const balances: Balance[] = []
         try {
             for (const accountBalance of accountBalances) {
                 let balance: string
@@ -64,7 +65,7 @@ export const updateAccountBalances =
                     balance,
                     timeUpdated: new Date().toISOString(),
                     position: accountBalance.position,
-                    networkGenesisId: network.genesis.id,
+                    genesisId: network.genesis.id,
                 })
             }
             dispatch(updateTokenBalances(balances))
@@ -89,7 +90,7 @@ export const resetTokenBalances = async (
                     tokenAddress: token.address,
                     balance: "0",
                     timeUpdated: new Date().toISOString(),
-                    networkGenesisId: network.genesis.id,
+                    genesisId: network.genesis.id,
                 })),
             ),
         )
