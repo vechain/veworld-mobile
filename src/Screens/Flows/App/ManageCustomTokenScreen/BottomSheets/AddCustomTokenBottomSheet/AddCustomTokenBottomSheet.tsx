@@ -25,7 +25,14 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import { AddressUtils, debug, error, info, useTheme } from "~Common"
+import {
+    AddressUtils,
+    debug,
+    error,
+    info,
+    useKeyboard,
+    useTheme,
+} from "~Common"
 import { getCustomTokenInfo } from "../../Utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
@@ -33,7 +40,7 @@ import { useNavigation } from "@react-navigation/native"
 type Props = {
     onClose: () => void
 }
-const snapPoints = ["35%"]
+
 export const AddCustomTokenBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
@@ -50,6 +57,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const customTokens = useAppSelector(selectAccountCustomTokens)
     const account = useAppSelector(selectSelectedAccount)
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+    const { visible } = useKeyboard()
+    const snapPoints = [visible ? "80%" : "35%"]
     const nav = useNavigation()
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
