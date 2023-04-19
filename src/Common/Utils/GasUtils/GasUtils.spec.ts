@@ -2,7 +2,21 @@ import { TestHelpers } from "~Test"
 import GasUtils from "./GasUtils"
 import BigNumber from "bignumber.js"
 
-const thor = new TestHelpers.mockNewThor()
+const thor = TestHelpers.thor.mockThorInstance({})
+const thorExplainExecuteVmError = TestHelpers.thor.mockThorInstance({
+    explain: (clauses: Connex.VM.Clause[]) => ({
+        ...TestHelpers.thor.stubs.explain.explain(clauses),
+        execute:
+            TestHelpers.thor.stubs.explain.stubs.execute.vmErrorExecuteStub,
+    }),
+})
+const thorExplainExecuteReverts = TestHelpers.thor.mockThorInstance({
+    explain: (clauses: Connex.VM.Clause[]) => ({
+        ...TestHelpers.thor.stubs.explain.explain(clauses),
+        execute:
+            TestHelpers.thor.stubs.explain.stubs.execute.revertingExecuteStub,
+    }),
+})
 
 describe("GasUtils", () => {
     describe("estimateGas", () => {
@@ -58,7 +72,7 @@ describe("GasUtils", () => {
 
         it("should return the estimated gas - reverted", async () => {
             const reverted = await GasUtils.estimateGas(
-                TestHelpers.mockNewThorGetAccountRejects(true),
+                thorExplainExecuteReverts,
                 [],
                 0,
                 "0x",
@@ -77,7 +91,7 @@ describe("GasUtils", () => {
 
         it("should return the estimated gas - vmError", async () => {
             const reverted = await GasUtils.estimateGas(
-                TestHelpers.mockNewThorGetAccountRejects(false, true),
+                thorExplainExecuteVmError,
                 [],
                 0,
                 "0x",

@@ -9,10 +9,7 @@ import { mockTokenRegistry } from "./stubs/TokenRegistryStubs"
 import { mockGetBlock } from "./stubs/BlockStubs"
 import { mockTransactionCall } from "./stubs/TransactionStubs"
 import { mockGetBalance } from "./stubs/BalanceStubs"
-import {
-    NewThorStub as mockNewThor,
-    mockNewThorGetAccountRejects,
-} from "./stubs/NewThorStub"
+import ThorHelpers from "./stubs/Thor"
 import * as data from "./data"
 export default {
     data,
@@ -23,8 +20,7 @@ export default {
     mockGetVetExchangeRate,
     mockGetVthoExchangeRate,
     mockGetBlock,
-    mockNewThor,
-    mockNewThorGetAccountRejects,
+    thor: ThorHelpers,
     mockTransactionCall,
     mockGetBalance,
 }
