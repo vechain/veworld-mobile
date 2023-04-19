@@ -1,3 +1,5 @@
+import { CurrencyExchangeRate } from "~Model/Currency"
+
 import { Balance } from "~Model/Balance"
 
 export type VeChainToken = "VET" | "VTHO"
@@ -27,6 +29,10 @@ export interface FungibleToken extends Token {
     decimals: number
     genesisId: string
 }
+
+export interface TokenWithExchangeRate
+    extends FungibleToken,
+        CurrencyExchangeRate {}
 
 /**
  * VIP180 - Fungible Token with a balance field also
