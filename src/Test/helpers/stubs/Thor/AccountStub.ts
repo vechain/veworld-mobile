@@ -1,5 +1,5 @@
 import { AddressUtils } from "~Common"
-import { account1D1 } from "~Test/helpers/data"
+import { account1D1 } from "../../data"
 
 /**
  * Mock account method of Connex.Thor

@@ -1,7 +1,7 @@
 import MockAdapter from "axios-mock-adapter"
 
-import coinGeckoCurrenciesResponse from "~Test/helpers/data/FiatExchangeData/CoinGeckoGetCurrenciesResponse.json"
-import coinGeckoExchangeRatesResponse from "~Test/helpers/data/FiatExchangeData/CoinGeckoGetRatesResponse.json"
+import coinGeckoCurrenciesResponse from "../data/FiatExchangeData/CoinGeckoGetCurrenciesResponse.json"
+import coinGeckoExchangeRatesResponse from "../data/FiatExchangeData/CoinGeckoGetRatesResponse.json"
 
 import { Action } from "./consts"
 

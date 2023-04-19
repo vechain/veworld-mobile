@@ -24,7 +24,7 @@ describe("GasUtils", () => {
             const estimated = await GasUtils.estimateGas(thor, [], 0, "0x")
             expect(estimated).toStrictEqual({
                 caller: "0x",
-                gas: 21000,
+                gas: 36001,
                 reverted: false,
                 revertReason: "",
                 vmError: "",
@@ -42,7 +42,7 @@ describe("GasUtils", () => {
             )
             expect(estimated).toStrictEqual({
                 caller: "0x",
-                gas: 53000,
+                gas: 68001,
                 reverted: false,
                 revertReason: "",
                 vmError: "",
@@ -61,7 +61,7 @@ describe("GasUtils", () => {
             )
             expect(estimated).toStrictEqual({
                 caller: "0x",
-                gas: 53000,
+                gas: 68001,
                 reverted: false,
                 revertReason: "",
                 vmError: "",

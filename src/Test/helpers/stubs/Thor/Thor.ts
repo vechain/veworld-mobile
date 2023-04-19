@@ -2,7 +2,7 @@ import { genesises } from "~Common/Constant/Thor/ThorConstants"
 import { accountStub } from "./AccountStub"
 import { blockStub } from "./BlockStub"
 import { explainStub } from "./ExplainStub/ExplainStub"
-import { filterStub } from "./FilterStub"
+import { filterStub } from "./FilterStub/FilterStub"
 import { tickerStub } from "./TickerStub"
 import { transactionStub } from "./TransactionStub"
 

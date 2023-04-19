@@ -1,4 +1,4 @@
-import { account1D1, account1D2 } from "~Test/helpers/data"
+import { account1D1, account1D2 } from "../../../../data"
 
 /**
  * Mock transfer filter apply method
