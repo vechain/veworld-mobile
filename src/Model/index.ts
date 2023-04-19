@@ -1,7 +1,7 @@
 export * from "./Account"
 // export * from "./Activity"
 // export * from "./Backup"
-// export * from "./Balance"
+export * from "./Balance"
 // export * from "./ConnectedApp"
 // export * from "./Connex"
 export * from "./Contact"
