@@ -4,7 +4,7 @@ import { NFTScreen } from "./NFTScreen"
 import { render, screen } from "@testing-library/react-native"
 
 const findElement = async () =>
-    await screen.findByText("NFTs", {}, { timeout: 20000 })
+    await screen.findByText("NFTs", {}, { timeout: 10000 })
 
 describe("NFTScreen", () => {
     it("should render correctly", async () => {
@@ -12,5 +12,5 @@ describe("NFTScreen", () => {
             wrapper: TestWrapper,
         })
         await findElement()
-    }, 20000)
+    }, 10000)
 })
