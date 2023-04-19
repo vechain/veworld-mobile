@@ -1,4 +1,4 @@
-import { StyleSheet, ViewProps } from "react-native"
+import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo } from "react"
 import { TokenWithExchangeRate } from "~Model"
 import {
@@ -51,36 +51,31 @@ export const OfficialTokenCard = memo(
                         </BaseText>
                     </BaseView>
 
-                    {isPositive24hChange &&
-                        change24h &&
-                        currency &&
-                        token.rate && (
-                            <BaseView
-                                flexDirection="column"
-                                alignItems="flex-end"
-                                flexGrow={1}>
-                                <BaseView
-                                    flexDirection="row"
-                                    alignItems="baseline">
-                                    <BaseText typographyFont="subTitleBold">
-                                        {token.rate?.toFixed(4)}{" "}
-                                    </BaseText>
-                                    <BaseText typographyFont="captionRegular">
-                                        {currency}
-                                    </BaseText>
-                                </BaseView>
-
-                                <BaseText
-                                    typographyFont="captionBold"
-                                    color={
-                                        isPositive24hChange
-                                            ? theme.colors.success
-                                            : theme.colors.danger
-                                    }>
-                                    {change24h}
+                    {change24h && currency && token.rate && (
+                        <BaseView
+                            flexDirection="column"
+                            alignItems="flex-end"
+                            flexGrow={1}>
+                            <BaseView flexDirection="row" alignItems="baseline">
+                                <BaseText typographyFont="subTitleBold">
+                                    {token.rate?.toFixed(4)}{" "}
+                                </BaseText>
+                                <BaseText typographyFont="captionRegular">
+                                    {currency}
                                 </BaseText>
                             </BaseView>
-                        )}
+
+                            <BaseText
+                                typographyFont="captionBold"
+                                color={
+                                    isPositive24hChange
+                                        ? theme.colors.success
+                                        : theme.colors.danger
+                                }>
+                                {change24h}
+                            </BaseText>
+                        </BaseView>
+                    )}
                 </BaseView>
             </BaseTouchableBox>
         )
@@ -93,7 +88,8 @@ const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
             width: "auto",
         },
         container: {
-            width: "100%",
+            minWidth: Dimensions.get("window").width - 48,
+            // width: "100%",
             marginVertical: 7,
             borderWidth: selected ? 1 : 0,
             borderRadius: 16,

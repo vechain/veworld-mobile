@@ -11,11 +11,7 @@ type OfficialTokenCardWithExchangeRateProps = {
 } & ViewProps
 
 export const OfficialTokenCardWithExchangeRate = memo(
-    ({
-        token,
-        style,
-        action,
-    }: OfficialTokenCardWithExchangeRateProps & ViewProps) => {
+    ({ token, style, action }: OfficialTokenCardWithExchangeRateProps) => {
         const currency = useAppSelector(selectCurrency)
         const isPositive24hChange = useMemo(
             () => (token.change || 0) > 0,

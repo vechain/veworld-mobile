@@ -8,10 +8,11 @@ type Props = {
 } & FastImageProps
 
 export const BaseImage = (props: Props) => {
-    const { uri, w, h, style, ...rest } = props
+    const { uri, w, h, style, testID, ...rest } = props
 
     return (
         <FastImage
+            testID={testID}
             style={[{ width: w, height: h }, style]}
             source={{
                 uri,

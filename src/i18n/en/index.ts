@@ -241,6 +241,7 @@ const en: BaseTranslation = {
     ALERT_TITLE_BIO_PREVIOUSLY_DENIED: "Biometrics previously denied",
     ALERT_MSG_BIO_PREVIOUSLY_DENIED: "You have previously denied biometric authentication. Please enable it in your device settings.",
 
+
     // Errors
     ERROR_GENERIC_SUBTITLE: "Something went wrong!",
     ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
@@ -251,6 +252,7 @@ const en: BaseTranslation = {
     ERROR_ENTER_VALID_URL: "Enter a valid URL",
     ERROR_URL_NOT_VALID: "URL must be https or localhost",
     ERROR_URL_ALREADY_USED: "Network already in use",
+    ERROR_NO_ASSETS_FOUND: "No assets found",
 
     ERROR_REQUIRED_FIELD: "Required",
     ERROR_MAX_INPUT_LENGTH: "Contact name too long",
