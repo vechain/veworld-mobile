@@ -1,17 +1,13 @@
 import MockAdapter from "axios-mock-adapter"
 
-import coinGeckoCurrenciesResponse from "../data/FiatExchangeData/CoinGeckoGetCurrenciesResponse.json"
-import coinbaseCurrenciesResponse from "../data/FiatExchangeData/CoinbaseGetCurrenciesResponse.json"
-import coinGeckoExchangeRatesResponse from "../data/FiatExchangeData/CoinGeckoGetRatesResponse.json"
-import coinbaseVetExchangeRatesResponse from "../data/FiatExchangeData/CoinbaseGetVetRatesResponse.json"
-import coinbaseVthoExchangeRatesResponse from "../data/FiatExchangeData/CoinbaseGetVthoRatesResponse.json"
+import coinGeckoCurrenciesResponse from "~Test/helpers/data/FiatExchangeData/CoinGeckoGetCurrenciesResponse.json"
+import coinGeckoExchangeRatesResponse from "~Test/helpers/data/FiatExchangeData/CoinGeckoGetRatesResponse.json"
 
 import { Action } from "./consts"
 
 export const mockGetCurrencies = (
     mockAdapter: MockAdapter,
     coinGeckoAction = Action.SUCCESS,
-    coinbaseAction = Action.SUCCESS,
 ) => {
     // Coin Gecko
     const coinGeckoMatcher = mockAdapter.onGet(
@@ -25,24 +21,11 @@ export const mockGetCurrencies = (
         coinGeckoMatcher.networkError()
     else if (coinGeckoAction === Action.API_ERROR) coinGeckoMatcher.reply(403)
     else if (coinGeckoAction === Action.TIMEOUT) coinGeckoMatcher.timeout()
-
-    // Coinbase
-    const coinbaseMatcher = mockAdapter.onGet(
-        "https://api.coinbase.com/v2/currencies",
-    )
-    if (coinbaseAction === Action.SUCCESS)
-        coinbaseMatcher.reply(200, coinbaseCurrenciesResponse)
-    else if (coinbaseAction === Action.ABORT) coinbaseMatcher.abortRequest()
-    else if (coinbaseAction === Action.NETWORK_ERROR)
-        coinbaseMatcher.networkError()
-    else if (coinbaseAction === Action.API_ERROR) coinbaseMatcher.reply(403)
-    else if (coinbaseAction === Action.TIMEOUT) coinbaseMatcher.timeout()
 }
 
 export const mockGetVetExchangeRate = (
     mockAdapter: MockAdapter,
     coinGeckoAction = Action.SUCCESS,
-    coinbaseAction = Action.SUCCESS,
 ) => {
     // Coin Gecko
     const coinGeckoMatcher = mockAdapter.onGet(
@@ -56,25 +39,11 @@ export const mockGetVetExchangeRate = (
         coinGeckoMatcher.networkError()
     else if (coinGeckoAction === Action.API_ERROR) coinGeckoMatcher.reply(403)
     else if (coinGeckoAction === Action.TIMEOUT) coinGeckoMatcher.timeout()
-
-    // Coinbase
-    const coinbaseMatcher = mockAdapter.onGet(
-        "https://api.coinbase.com/v2/exchange-rates?currency=VET",
-    )
-
-    if (coinbaseAction === Action.SUCCESS)
-        coinbaseMatcher.reply(200, coinbaseVetExchangeRatesResponse)
-    else if (coinbaseAction === Action.ABORT) coinbaseMatcher.abortRequest()
-    else if (coinbaseAction === Action.NETWORK_ERROR)
-        coinbaseMatcher.networkError()
-    else if (coinbaseAction === Action.API_ERROR) coinbaseMatcher.reply(403)
-    else if (coinbaseAction === Action.TIMEOUT) coinbaseMatcher.timeout()
 }
 
 export const mockGetVthoExchangeRate = (
     mockAdapter: MockAdapter,
     coinGeckoAction = Action.SUCCESS,
-    coinbaseAction = Action.SUCCESS,
 ) => {
     // Coin Gecko
     const coinGeckoMatcher = mockAdapter.onGet(
@@ -88,19 +57,6 @@ export const mockGetVthoExchangeRate = (
         coinGeckoMatcher.networkError()
     else if (coinGeckoAction === Action.API_ERROR) coinGeckoMatcher.reply(403)
     else if (coinGeckoAction === Action.TIMEOUT) coinGeckoMatcher.timeout()
-
-    // Coinbase
-    const coinbaseMatcher = mockAdapter.onGet(
-        "https://api.coinbase.com/v2/exchange-rates?currency=VTHO",
-    )
-
-    if (coinbaseAction === Action.SUCCESS)
-        coinbaseMatcher.reply(200, coinbaseVthoExchangeRatesResponse)
-    else if (coinbaseAction === Action.ABORT) coinbaseMatcher.abortRequest()
-    else if (coinbaseAction === Action.NETWORK_ERROR)
-        coinbaseMatcher.networkError()
-    else if (coinbaseAction === Action.API_ERROR) coinbaseMatcher.reply(403)
-    else if (coinbaseAction === Action.TIMEOUT) coinbaseMatcher.timeout()
 }
 
 export const mockFiatExchanges = (mockAdapter: MockAdapter) => {
