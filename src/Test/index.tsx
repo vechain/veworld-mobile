@@ -5,7 +5,8 @@ import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Common"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
-import { useInitStore } from "~Storage/Redux"
+import { TokenApi, reducer } from "~Storage/Redux"
+import { configureStore } from "@reduxjs/toolkit"
 
 const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
@@ -47,12 +48,26 @@ export const TestTranslationProvider = ({
 
     return <TypesafeI18n locale={localeLoaded}>{children}</TypesafeI18n>
 }
-
+const store = configureStore({
+    reducer: reducer,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware().concat(TokenApi.middleware),
+    preloadedState: {
+        accounts: {
+            accounts: [
+                {
+                    address: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    alias: "Account 1",
+                    index: 0,
+                    rootAddress: "0x90d70a5d0e9ce28336f7d45990b9c63c0a4142g0",
+                    visible: true,
+                },
+            ],
+            selectedAccount: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+        },
+    },
+})
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
-    const { store, persistor } = useInitStore()
-
-    if (!store || !persistor) return <></>
-
     return (
         <Provider store={store}>
             <ConnexContextProvider>
