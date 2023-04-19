@@ -14,6 +14,7 @@ type Props = {
     fontFamily?: keyof typeof otherTypography.fontFamily
     align?: "left" | "center" | "right"
     italic?: boolean
+    underline?: boolean
     color?: string
     isButton?: boolean
     m?: number
@@ -108,6 +109,9 @@ export const BaseText = (props: Props) => {
                         fontWeight: computedFontWeight,
                         textAlign: props.align,
                         fontStyle: props.italic ? "italic" : "normal",
+                        textDecorationLine: props.underline
+                            ? "underline"
+                            : "none",
                         lineHeight: typographyFont
                             ? defaultTypography[typographyFont].lineHeight
                             : undefined,

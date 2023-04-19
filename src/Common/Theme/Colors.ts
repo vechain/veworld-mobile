@@ -9,6 +9,10 @@ export type Colors = {
     disabled: string
     danger: string
     success: string
+    successMedium: string
+    info: string
+    warning: string
+    error: string
     text: string
     textReversed: string
     background: string
@@ -34,9 +38,18 @@ export enum COLORS {
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
     LIGHT_RED = "#FFC7B3",
+    PASTEL_RED = "#f7c4bc",
     DARK_RED = "#931536",
+    DARK_RED_ALERT = "#9D1800",
+    MEDIUM_RED = "#E02200",
     DARK_GREEN = "#325B00",
+    DARK_GREEN_ALERT = "#185927",
     LIGHT_GREEN = "#AAD836",
+    PASTEL_GREEN = "#c5eacd",
+    MEDIUM_GREEN = "#30B34E",
+    PASTEL_ORANGE = "#fedbc0",
+    DARK_ORANGE_ALERT = "#AF4F0A",
+    MEDIUM_ORANGE = "#FA710E",
 }
 
 const light: Colors = {
@@ -50,6 +63,10 @@ const light: Colors = {
     disabled: COLORS.WHITE_DISABLED,
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
+    successMedium: COLORS.WHITE,
+    info: COLORS.WHITE,
+    warning: COLORS.WHITE,
+    error: COLORS.WHITE,
     text: COLORS.DARK_PURPLE,
     textReversed: COLORS.WHITE,
     background: COLORS.LIGHT_GRAY,
@@ -71,6 +88,10 @@ const dark: Colors = {
     disabled: COLORS.WHITE_DISABLED,
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
+    successMedium: COLORS.MEDIUM_GREEN,
+    info: COLORS.DARK_PURPLE,
+    warning: COLORS.MEDIUM_ORANGE,
+    error: COLORS.MEDIUM_RED,
     text: COLORS.WHITE,
     textReversed: COLORS.DARK_PURPLE,
     background: COLORS.DARK_PURPLE,

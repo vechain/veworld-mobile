@@ -877,6 +877,10 @@ type RootTranslation = {
 	 */
 	ERROR_URL_ALREADY_USED: string
 	/**
+	 * N​o​ ​a​s​s​e​t​s​ ​f​o​u​n​d
+	 */
+	ERROR_NO_ASSETS_FOUND: string
+	/**
 	 * R​e​q​u​i​r​e​d
 	 */
 	ERROR_REQUIRED_FIELD: string
@@ -1917,6 +1921,10 @@ Please, try again later.
 	 * Network already in use
 	 */
 	ERROR_URL_ALREADY_USED: () => LocalizedString
+	/**
+	 * No assets found
+	 */
+	ERROR_NO_ASSETS_FOUND: () => LocalizedString
 	/**
 	 * Required
 	 */

@@ -1,6 +1,8 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { AddressUtils, VET, VTHO } from "~Common"
-import { BalanceState, TokenBalance } from "../Types/Balances"
+import { Balance } from "~Model"
+
+export type BalanceState = Balance[]
 
 export const initialState: BalanceState = []
 
@@ -10,13 +12,13 @@ export const BalanceSlice = createSlice({
     reducers: {
         addTokenBalance: (
             state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance>,
+            action: PayloadAction<Balance>,
         ) => {
             state.push(action.payload)
         },
         updateTokenBalances: (
             state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance[]>,
+            action: PayloadAction<Balance[]>,
         ) => {
             const newBalances = action.payload
             const newState = state.filter(
@@ -31,8 +33,7 @@ export const BalanceSlice = createSlice({
                                 newBalance.tokenAddress,
                                 oldBalance.tokenAddress,
                             ) &&
-                            newBalance.networkGenesisId ===
-                                oldBalance.networkGenesisId,
+                            newBalance.genesisId === oldBalance.genesisId,
                     ),
             )
             newState.push(...newBalances)
@@ -81,7 +82,7 @@ export const BalanceSlice = createSlice({
         },
         changeBalancePosition: (
             state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance[]>, // tokenBalances with updated position fields
+            action: PayloadAction<Balance[]>, // tokenBalances with updated position fields
         ) => {
             const updatedAccountBalances = action.payload
             return state.map(balance => {

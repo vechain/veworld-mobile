@@ -11,15 +11,15 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    OfficialTokenCard,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
-import { OfficialTokenCard } from "./Components/OfficialTokenCard"
 import { FungibleToken } from "~Model"
 import {
     selectNonVechainFungibleTokens,
     selectSelectedAccount,
-    selectNonVechainDenormalizedAccountTokenBalances,
+    selectNonVechainTokensWithBalances,
     selectSelectedNetwork,
     selectAccountCustomTokens,
 } from "~Storage/Redux/Selectors"
@@ -37,11 +37,9 @@ export const ManageTokenScreen = () => {
     const account = useAppSelector(selectSelectedAccount)
     const [tokenQuery, setTokenQuery] = useState<string>("")
     const tokens = useAppSelector(selectNonVechainFungibleTokens)
-    const tokenBalances = useAppSelector(
-        selectNonVechainDenormalizedAccountTokenBalances,
-    )
+    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
     const [selectedTokenSymbols, setSelectedTokenSymbols] = useState<string[]>(
-        tokenBalances.map(({ token }) => token.symbol),
+        tokenBalances.map(tokenWithBalance => tokenWithBalance.symbol),
     )
     const currentNetwork = useAppSelector(selectSelectedNetwork)
     const customTokens = useAppSelector(selectAccountCustomTokens)
@@ -80,7 +78,7 @@ export const ManageTokenScreen = () => {
                     tokenAddress: token.address,
                     timeUpdated: new Date().toISOString(),
                     position: selectedTokenSymbols.length,
-                    networkGenesisId: currentNetwork.genesis.id,
+                    genesisId: currentNetwork.genesis.id,
                 }),
             )
         } else {

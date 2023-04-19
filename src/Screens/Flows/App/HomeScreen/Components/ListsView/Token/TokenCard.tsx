@@ -1,20 +1,20 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { COLORS } from "~Common/Theme"
 import { PlaceholderSVG } from "~Assets"
 import { useTheme } from "~Common"
+import { FungibleTokenWithBalance } from "~Model"
 
 type Props = {
-    token: DenormalizedAccountTokenBalance
+    tokenWithBalance: FungibleTokenWithBalance
     isEdit: boolean
 }
 
-export const TokenCard = memo(({ token: tokenBalance, isEdit }: Props) => {
+export const TokenCard = memo(({ tokenWithBalance, isEdit }: Props) => {
     const theme = useTheme()
     const styles = baseStyles(isEdit)
-    const icon = tokenBalance.token.icon
+    const icon = tokenWithBalance.icon
     const tokenValueLabelColor = theme.isDark
         ? COLORS.WHITE_DISABLED
         : COLORS.DARK_PURPLE_DISABLED
@@ -35,18 +35,18 @@ export const TokenCard = memo(({ token: tokenBalance, isEdit }: Props) => {
             <BaseSpacer width={16} />
             <BaseView>
                 <BaseText typographyFont="subTitleBold">
-                    {tokenBalance.token.name}
+                    {tokenWithBalance.name}
                 </BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
                     <BaseText
                         typographyFont="bodyMedium"
                         color={tokenValueLabelColor}>
-                        {tokenBalance.balance}{" "}
+                        {tokenWithBalance.balance.balance}{" "}
                     </BaseText>
                     <BaseText
                         typographyFont="captionRegular"
                         color={tokenValueLabelColor}>
-                        {tokenBalance.token.symbol}
+                        {tokenWithBalance.symbol}
                     </BaseText>
                 </BaseView>
             </BaseView>

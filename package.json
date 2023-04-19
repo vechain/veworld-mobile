@@ -15,7 +15,8 @@
         "start:reset": "react-native start --reset-cache",
         "start:i18n": "yarn i18n & react-native start & wait",
         "test": "jest",
-        "test:coverage": "yarn test --detectOpenHandles --forceExit --coverage",
+        "test:coverage:debug": "yarn test --detectOpenHandles --forceExit --coverage",
+        "test:coverage": "yarn test:coverage:debug --silent",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "format": "yarn prettier --write src",
         "format:check": "yarn prettier --check src",
@@ -73,6 +74,7 @@
         "react-native-draggable-flatlist": "4.0.1",
         "react-native-drop-shadow": "^0.0.6",
         "react-native-exception-handler": "^2.10.10",
+        "react-native-fast-image": "^8.6.3",
         "react-native-gesture-handler": "^2.9.0",
         "react-native-haptic-feedback": "^1.14.0",
         "react-native-mmkv": "2.5.1",
@@ -97,7 +99,8 @@
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
         "thor-devkit": "https://github.com/vechainfoundation/thor-devkit.js",
-        "url": "^0.11.0"
+        "url": "^0.11.0",
+        "whatwg-fetch": "^3.6.2"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",

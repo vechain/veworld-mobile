@@ -4,6 +4,6 @@
  * @field `change` - The change in price as a percent
  */
 export interface CurrencyExchangeRate {
-    rate: number
+    rate?: number
     change?: number
 }
