@@ -168,6 +168,7 @@ const en: BaseTranslation = {
     TITLE_ADD_TOKEN: "Add Token",
     TITLE_EDIT_WALLET: "Edit wallet",
     TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
+    TITLE_DISCOVER: "Discover",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
@@ -230,6 +231,8 @@ const en: BaseTranslation = {
     COMMON_LBL_FAVOURITES: "Favourites",
     COMMON_LBL_ENTER_THE: "Enter the {name}",
     COMMON_LBL_DEFAULT: "Default",
+    COMMON_ASSETS: "Assets",
+    COMMON_DAPPS: "DApps",
 
 
     // Common Titles
@@ -237,6 +240,7 @@ const en: BaseTranslation = {
     ALERT_MSG_NOT_ENROLLED: "You have not enrolled any biometric authentication method.",
     ALERT_TITLE_BIO_PREVIOUSLY_DENIED: "Biometrics previously denied",
     ALERT_MSG_BIO_PREVIOUSLY_DENIED: "You have previously denied biometric authentication. Please enable it in your device settings.",
+
 
     // Errors
     ERROR_GENERIC_SUBTITLE: "Something went wrong!",
@@ -248,6 +252,7 @@ const en: BaseTranslation = {
     ERROR_ENTER_VALID_URL: "Enter a valid URL",
     ERROR_URL_NOT_VALID: "URL must be https or localhost",
     ERROR_URL_ALREADY_USED: "Network already in use",
+    ERROR_NO_ASSETS_FOUND: "No assets found",
 
     ERROR_REQUIRED_FIELD: "Required",
     ERROR_MAX_INPUT_LENGTH: "Contact name too long",

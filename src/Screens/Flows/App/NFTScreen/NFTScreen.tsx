@@ -1,11 +1,7 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import React, { useRef } from "react"
-
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
-import { SlideInLeft } from "react-native-reanimated"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { useMemoizedAnimation } from "~Common"
-import { BaseSpacer } from "~Components"
+import { BaseSafeArea, BaseSpacer } from "~Components"
 import { CollectionsList, NftScreenHeader } from "./components"
 
 export type NFTItem = {
@@ -17,22 +13,12 @@ export type NFTItem = {
 }
 
 export const NFTScreen = () => {
-    const { animateEntering, animateExiting } = useMemoizedAnimation({
-        enteringAnimation: new SlideInLeft(),
-        enteringDelay: 200,
-        enteringDuration: 200,
-        exitingAnimation: new SlideInLeft(),
-        exitingDelay: 0,
-        exitingDuration: 200,
-    })
-
     const paddingBottom = useBottomTabBarHeight()
 
     const visibleHeightRef = useRef<number>(0)
 
     return (
-        <>
-            <SafeAreaView />
+        <BaseSafeArea grow={1}>
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom }}
@@ -41,11 +27,8 @@ export const NFTScreen = () => {
                 }}>
                 <NftScreenHeader />
                 <BaseSpacer height={24} />
-                <CollectionsList
-                    entering={animateEntering}
-                    exiting={animateExiting}
-                />
+                <CollectionsList />
             </NestableScrollContainer>
-        </>
+        </BaseSafeArea>
     )
 }

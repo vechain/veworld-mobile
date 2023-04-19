@@ -5,79 +5,74 @@ import { ColorThemeType, useThemedStyles } from "~Common"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
+import { usePollingChartData } from "../../../Hooks"
+import { FungibleTokenWithBalance, VeChainToken } from "~Model"
+import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
 
 const HEIGHT = 100
 
 export type NativeTokenProps = {
-    token: DenormalizedAccountTokenBalance
+    tokenWithBalance: FungibleTokenWithBalance
     isEdit: boolean
 }
 
-const CHART_DATA = [
-    { timestamp: 0, value: 12 },
-    { timestamp: 1, value: 8 },
-    { timestamp: 2, value: 6 },
-    { timestamp: 3, value: 9 },
-    { timestamp: 4, value: 11 },
-    { timestamp: 5, value: 10 },
-    { timestamp: 6, value: 10.4 },
-    { timestamp: 7, value: 7 },
-    { timestamp: 8, value: 8 },
-    { timestamp: 9, value: 12 },
-    { timestamp: 10, value: 14 },
-    { timestamp: 11, value: 12 },
-    { timestamp: 12, value: 13.5 },
-]
-
-export const AnimatedChartCard = memo(({ token, isEdit }: NativeTokenProps) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
-
-    const animatedOuterCard = useAnimatedStyle(() => {
-        return {
-            height: withTiming(isEdit ? 62 : 162, {
-                duration: 200,
-            }),
-
-            backgroundColor: withTiming(
-                isEdit ? theme.colors.neutralDisabled : theme.colors.card,
-                {
+export const AnimatedChartCard = memo(
+    ({ tokenWithBalance, isEdit }: NativeTokenProps) => {
+        const { styles, theme } = useThemedStyles(baseStyles)
+        usePollingChartData(tokenWithBalance.symbol as VeChainToken)
+        const chartData = useAppSelector(state =>
+            selectDashboardChartData(tokenWithBalance.symbol, state),
+        )
+        const animatedOuterCard = useAnimatedStyle(() => {
+            return {
+                height: withTiming(isEdit ? 62 : 162, {
                     duration: 200,
-                },
-            ),
-        }
-    }, [isEdit, theme.isDark])
+                }),
 
-    const animatedInnerCard = useAnimatedStyle(() => {
-        return {
-            height: withTiming(isEdit ? 0 : HEIGHT, {
-                duration: 200,
-            }),
+                backgroundColor: withTiming(
+                    isEdit ? theme.colors.neutralDisabled : theme.colors.card,
+                    {
+                        duration: 200,
+                    },
+                ),
+            }
+        }, [isEdit, theme.isDark])
 
-            opacity: withTiming(isEdit ? 0 : 1, {
-                duration: 200,
-            }),
-        }
-    }, [isEdit])
+        const animatedInnerCard = useAnimatedStyle(() => {
+            return {
+                height: withTiming(isEdit ? 0 : HEIGHT, {
+                    duration: 200,
+                }),
 
-    return (
-        <DropShadow style={styles.cardShadow}>
-            <Animated.View
-                style={[styles.nativeTokenContainer, animatedOuterCard]}>
-                <VechainTokenCard token={token} isAnimation={isEdit} />
-                <Animated.View style={[styles.fullWidth, animatedInnerCard]}>
-                    <LineChart.Provider data={CHART_DATA}>
-                        <LineChart height={HEIGHT}>
-                            <LineChart.Path color={theme.colors.primary}>
-                                <LineChart.Gradient />
-                            </LineChart.Path>
-                        </LineChart>
-                    </LineChart.Provider>
+                opacity: withTiming(isEdit ? 0 : 1, {
+                    duration: 200,
+                }),
+            }
+        }, [isEdit])
+
+        return (
+            <DropShadow style={styles.cardShadow}>
+                <Animated.View
+                    style={[styles.nativeTokenContainer, animatedOuterCard]}>
+                    <VechainTokenCard
+                        tokenWithBalance={tokenWithBalance}
+                        isAnimation={isEdit}
+                    />
+                    <Animated.View
+                        style={[styles.fullWidth, animatedInnerCard]}>
+                        <LineChart.Provider data={chartData}>
+                            <LineChart height={HEIGHT}>
+                                <LineChart.Path color={theme.colors.primary}>
+                                    <LineChart.Gradient />
+                                </LineChart.Path>
+                            </LineChart>
+                        </LineChart.Provider>
+                    </Animated.View>
                 </Animated.View>
-            </Animated.View>
-        </DropShadow>
-    )
-})
+            </DropShadow>
+        )
+    },
+)
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

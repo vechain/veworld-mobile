@@ -1,4 +1,6 @@
 import "@testing-library/jest-native/extend-expect"
+import "whatwg-fetch"
+jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),

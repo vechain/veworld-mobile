@@ -18,7 +18,7 @@ import {
     addTokenBalance,
     selectAccountCustomTokens,
     selectFungibleTokens,
-    selectNonVechainDenormalizedAccountTokenBalances,
+    selectNonVechainTokensWithBalances,
     selectSelectedAccount,
     selectSelectedNetwork,
     useAppDispatch,
@@ -49,9 +49,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const officialTokens = useAppSelector(selectFungibleTokens)
     const customTokens = useAppSelector(selectAccountCustomTokens)
     const account = useAppSelector(selectSelectedAccount)
-    const tokenBalances = useAppSelector(
-        selectNonVechainDenormalizedAccountTokenBalances,
-    )
+    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
     const nav = useNavigation()
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
@@ -135,7 +133,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     tokenAddress: newCustomToken!!.address,
                     timeUpdated: new Date().toISOString(),
                     position: tokenBalances.length,
-                    networkGenesisId: network.genesis.id,
+                    genesisId: network.genesis.id,
                 }),
             )
             onClose()

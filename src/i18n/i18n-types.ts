@@ -596,6 +596,10 @@ type RootTranslation = {
 	 */
 	TITLE_SECURITY_DOWNGRADE: string
 	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	TITLE_DISCOVER: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -812,6 +816,14 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_DEFAULT: string
 	/**
+	 * A​s​s​e​t​s
+	 */
+	COMMON_ASSETS: string
+	/**
+	 * D​A​p​p​s
+	 */
+	COMMON_DAPPS: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -864,6 +876,10 @@ type RootTranslation = {
 	 * N​e​t​w​o​r​k​ ​a​l​r​e​a​d​y​ ​i​n​ ​u​s​e
 	 */
 	ERROR_URL_ALREADY_USED: string
+	/**
+	 * N​o​ ​a​s​s​e​t​s​ ​f​o​u​n​d
+	 */
+	ERROR_NO_ASSETS_FOUND: string
 	/**
 	 * R​e​q​u​i​r​e​d
 	 */
@@ -1629,6 +1645,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
+	 * Discover
+	 */
+	TITLE_DISCOVER: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -1841,6 +1861,14 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_DEFAULT: () => LocalizedString
 	/**
+	 * Assets
+	 */
+	COMMON_ASSETS: () => LocalizedString
+	/**
+	 * DApps
+	 */
+	COMMON_DAPPS: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -1893,6 +1921,10 @@ Please, try again later.
 	 * Network already in use
 	 */
 	ERROR_URL_ALREADY_USED: () => LocalizedString
+	/**
+	 * No assets found
+	 */
+	ERROR_NO_ASSETS_FOUND: () => LocalizedString
 	/**
 	 * Required
 	 */

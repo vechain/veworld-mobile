@@ -1,4 +1,4 @@
-import { error } from "~Common"
+import { CURRENCY, error } from "~Common"
 import { VeChainToken, CurrencyExchangeRate } from "~Model"
 import FiatExchangeClients from "./fiat"
 
@@ -9,7 +9,7 @@ const exchangeProviders = [
 ]
 
 export const getExchangeRate = async (
-    fiatSymbol: string,
+    fiatSymbol: CURRENCY,
     symbol: VeChainToken,
 ): Promise<CurrencyExchangeRate> => {
     for (const provider of exchangeProviders) {
