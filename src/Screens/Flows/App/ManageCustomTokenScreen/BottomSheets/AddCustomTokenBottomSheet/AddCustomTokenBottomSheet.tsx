@@ -18,7 +18,7 @@ import {
     addTokenBalance,
     selectAccountCustomTokens,
     selectFungibleTokens,
-    selectNonVechainDenormalizedAccountTokenBalances,
+    selectNonVechainTokensWithBalances,
     selectSelectedAccount,
     selectSelectedNetwork,
     useAppDispatch,
@@ -56,9 +56,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const officialTokens = useAppSelector(selectFungibleTokens)
     const customTokens = useAppSelector(selectAccountCustomTokens)
     const account = useAppSelector(selectSelectedAccount)
-    const tokenBalances = useAppSelector(
-        selectNonVechainDenormalizedAccountTokenBalances,
-    )
+    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
     const { visible } = useKeyboard()
     const snapPoints = [visible ? "80%" : "35%"]
     const nav = useNavigation()
@@ -144,7 +142,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     tokenAddress: newCustomToken!!.address,
                     timeUpdated: new Date().toISOString(),
                     position: tokenBalances.length,
-                    networkGenesisId: network.genesis.id,
+                    genesisId: network.genesis.id,
                 }),
             )
             onClose()
