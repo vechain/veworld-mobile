@@ -15,7 +15,7 @@
         "start:reset": "react-native start --reset-cache",
         "start:i18n": "yarn i18n & react-native start & wait",
         "test": "jest",
-        "test:coverage:debug": "yarn test --forceExit --coverage",
+        "test:coverage:debug": "yarn test --detectOpenHandles --forceExit --coverage",
         "test:coverage": "yarn test:coverage:debug --silent",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "format": "yarn prettier --write src",
