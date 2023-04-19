@@ -11,12 +11,12 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import {
-    getVetDenormalizedAccountTokenBalances,
-    getVthoDenormalizedAccountTokenBalances,
-    selectNonVechainDenormalizedAccountTokenBalances,
+    selectVetTokenWithBalance,
+    selectVthoTokenWithBalance,
+    selectNonVechainTokensWithBalances,
 } from "~Storage/Redux/Selectors"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { AnimatedChartCard } from "./AnimatedChartCard"
+import { FungibleTokenWithBalance } from "~Model"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -26,13 +26,9 @@ interface Props extends AnimateProps<ViewProps> {
 export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
         const dispatch = useAppDispatch()
-        const tokenBalances: DenormalizedAccountTokenBalance[] = useAppSelector(
-            selectNonVechainDenormalizedAccountTokenBalances,
-        )
-        const vetBalance: DenormalizedAccountTokenBalance | undefined =
-            useAppSelector(getVetDenormalizedAccountTokenBalances)
-        const vthoBalance: DenormalizedAccountTokenBalance | undefined =
-            useAppSelector(getVthoDenormalizedAccountTokenBalances)
+        const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+        const vetBalance = useAppSelector(selectVetTokenWithBalance)
+        const vthoBalance = useAppSelector(selectVthoTokenWithBalance)
 
         const { styles } = useThemedStyles(baseStyles)
 
@@ -44,16 +40,14 @@ export const TokenList = memo(
         const handleDragEnd = ({
             data,
         }: {
-            data: DenormalizedAccountTokenBalance[]
+            data: FungibleTokenWithBalance[]
         }) => {
             dispatch(
                 changeBalancePosition(
-                    data.map(
-                        ({ token: _token, ...otherAttributes }, index) => ({
-                            ...otherAttributes,
-                            position: index,
-                        }),
-                    ),
+                    data.map(({ balance }, index) => ({
+                        ...balance,
+                        position: index,
+                    })),
                 ),
             )
         }
@@ -62,13 +56,13 @@ export const TokenList = memo(
             <Animated.View style={styles.container} {...animatedViewProps}>
                 {vetBalance && (
                     <AnimatedChartCard
-                        tokenBalance={vetBalance}
+                        tokenWithBalance={vetBalance}
                         isEdit={isEdit}
                     />
                 )}
                 {vthoBalance && (
                     <AnimatedChartCard
-                        tokenBalance={vthoBalance}
+                        tokenWithBalance={vthoBalance}
                         isEdit={isEdit}
                     />
                 )}
@@ -77,7 +71,7 @@ export const TokenList = memo(
                     data={tokenBalances}
                     extraData={isEdit}
                     onDragEnd={handleDragEnd}
-                    keyExtractor={item => item.tokenAddress}
+                    keyExtractor={item => item.address}
                     renderItem={itemParams => (
                         <AnimatedTokenCard {...itemParams} isEdit={isEdit} />
                     )}

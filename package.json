@@ -15,7 +15,8 @@
         "start:reset": "react-native start --reset-cache",
         "start:i18n": "yarn i18n & react-native start & wait",
         "test": "jest",
-        "test:coverage": "yarn test --detectOpenHandles --forceExit --coverage",
+        "test:coverage:debug": "yarn test --detectOpenHandles --forceExit --coverage",
+        "test:coverage": "yarn test:coverage:debug --silent",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "format": "yarn prettier --write src",
         "format:check": "yarn prettier --check src",
@@ -98,7 +99,8 @@
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
         "thor-devkit": "https://github.com/vechainfoundation/thor-devkit.js",
-        "url": "^0.11.0"
+        "url": "^0.11.0",
+        "whatwg-fetch": "^3.6.2"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
