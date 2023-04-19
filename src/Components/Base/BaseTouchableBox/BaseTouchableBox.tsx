@@ -2,10 +2,10 @@ import React from "react"
 import {
     StyleProp,
     StyleSheet,
-    TouchableOpacity,
     TouchableOpacityProps,
     ViewStyle,
 } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
 import DropShadow from "react-native-drop-shadow"
 import {
     AlignItems,
@@ -14,6 +14,7 @@ import {
     JustifyContent,
     useThemedStyles,
 } from "~Common"
+import { GenericTouchableProps } from "./Types"
 
 type Props = {
     children: React.ReactNode
@@ -26,7 +27,8 @@ type Props = {
     bg?: string
     w?: string | number
     flex?: number
-} & Omit<TouchableOpacityProps, "style">
+} & Omit<TouchableOpacityProps, "style"> &
+    GenericTouchableProps
 
 export const BaseTouchableBox: React.FC<Props> = ({
     children,
@@ -53,6 +55,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
             flex,
         }),
     )
+
     return (
         <DropShadow
             style={[theme.shadows.card, styles.container, containerStyle]}>
