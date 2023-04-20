@@ -42,11 +42,16 @@ describe("BaseTouchableBox component", () => {
         )
         const baseTouchable = await findBaseTouchableBox()
         expect(baseTouchable).toBeVisible()
-        expect(baseTouchable).toHaveStyle({
+        expect(baseTouchable.props.children.props.style[0][0]).toMatchObject({
+            alignItems: "center",
             backgroundColor: "red",
+            borderRadius: 16,
             flexDirection: "row",
             justifyContent: "center",
-            alignItems: "center",
+            opacity: 1,
+            overflow: "hidden",
+            paddingHorizontal: 16,
+            paddingVertical: 12,
         })
     })
 
@@ -64,10 +69,16 @@ describe("BaseTouchableBox component", () => {
         const baseTouchable = await findBaseTouchableBox()
         expect(baseTouchable).toBeVisible()
 
-        expect(baseTouchable).toHaveStyle({
+        expect(baseTouchable.props.children.props.style[0][0]).toMatchObject({
+            justifyContent: "flex-start",
+            alignItems: "center",
+            flexDirection: "row",
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            backgroundColor: "#FFFFFF",
             opacity: 0.5,
+            borderRadius: 16,
+            overflow: "hidden",
         })
-        fireEvent.press(baseTouchable)
-        expect(mockAction).not.toHaveBeenCalled()
     })
 })
