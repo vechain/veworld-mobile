@@ -14,4 +14,8 @@ export const clauses: Connex.VM.Clause[] = [
         value: "0x0",
         data: "0x",
     },
+    {
+        to: "0x0000000000000000000000000000456e65726779",
+        value: "0x0",
+    },
 ]

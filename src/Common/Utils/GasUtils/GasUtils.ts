@@ -41,14 +41,12 @@ const estimateGas = async (
         clauses.map(item => {
             return {
                 to: item.to,
-                value: item.value || 0,
+                value: item.value,
                 data: item.data || "0x",
             }
         }),
     )
-    const offeredGas = suggestedGas
-        ? Math.max(suggestedGas - intrinsicGas, 1)
-        : 2000 * 10000
+    const offeredGas = Math.max(suggestedGas - intrinsicGas, 1)
     const explainer = thor.explain(clauses).caller(caller).gas(offeredGas)
 
     if (gasPayer) {
