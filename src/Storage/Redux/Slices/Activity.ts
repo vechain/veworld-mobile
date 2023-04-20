@@ -14,15 +14,24 @@ export const ActivitiesSlice = createSlice({
     initialState: initialActivitiesState,
     reducers: {
         insertActivity: (state, action: PayloadAction<Activity>) => {
+            const newActivity = action.payload
             const activityExists = state.activities.find(
-                activity => activity.id,
-                action.payload.id,
+                activity => activity.id === newActivity.id,
             )
             if (!activityExists) {
-                state.activities.push(action.payload)
+                state.activities.push(newActivity)
+            }
+        },
+        updateActivity: (state, action: PayloadAction<Activity>) => {
+            const updatedActivity = action.payload
+            const activityExistsIndex = state.activities.findIndex(
+                activity => activity.id === updatedActivity.id,
+            )
+            if (activityExistsIndex !== -1) {
+                state.activities[activityExistsIndex] = updatedActivity
             }
         },
     },
 })
 
-export const { insertActivity } = ActivitiesSlice.actions
+export const { insertActivity, updateActivity } = ActivitiesSlice.actions
