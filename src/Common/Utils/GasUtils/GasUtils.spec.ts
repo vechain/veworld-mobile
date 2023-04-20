@@ -18,6 +18,8 @@ const thorExplainExecuteReverts = TestHelpers.thor.mockThorInstance({
     }),
 })
 
+const clausesStubs = TestHelpers.data.clauses
+
 describe("GasUtils", () => {
     describe("estimateGas", () => {
         it("should return the estimated gas - no clauses", async () => {
@@ -36,13 +38,13 @@ describe("GasUtils", () => {
         it("should return the estimated gas - clauses", async () => {
             const estimated = await GasUtils.estimateGas(
                 thor,
-                TestHelpers.data.clauses,
+                clausesStubs,
                 0,
                 "0x",
             )
             expect(estimated).toStrictEqual({
                 caller: "0x",
-                gas: 68001,
+                gas: 84001,
                 reverted: false,
                 revertReason: "",
                 vmError: "",
@@ -54,14 +56,14 @@ describe("GasUtils", () => {
         it("should return the estimated gas - gasPayer", async () => {
             const estimated = await GasUtils.estimateGas(
                 thor,
-                TestHelpers.data.clauses,
+                clausesStubs,
                 0,
                 "0x",
                 TestHelpers.data.account1D1.address,
             )
             expect(estimated).toStrictEqual({
                 caller: "0x",
-                gas: 68001,
+                gas: 84001,
                 reverted: false,
                 revertReason: "",
                 vmError: "",
