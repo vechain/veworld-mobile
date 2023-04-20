@@ -1,4 +1,4 @@
-/*eslint-disable*/
+/*eslint-disable no-console*/
 export const mockLedgerAccount = {
     publicKey:
         "042e7f024c8af943a41af6b74a8be59c57daf978282fb0118674cba85cac0fe68eeca595a4a84f93f76ab8d648e40e5ec880691787cbfe6607de578a4217d4c15c",
