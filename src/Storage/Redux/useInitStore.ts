@@ -18,7 +18,7 @@ import { RootState, Store } from "./Types"
 import { getPersistorConfig } from "./Helpers"
 import { TokenApi } from "./Api"
 
-export const useInitStore = () => {
+export const useInitStore = (preloadedState?: Partial<RootState>) => {
     const [store, setStore] = useState<Store | undefined>()
     const [persistor, setPersistor] = useState<Persistor | undefined>()
 
@@ -48,6 +48,7 @@ export const useInitStore = () => {
                     }).concat(TokenApi.middleware),
                 enhancers: [reduxReset()],
                 devTools: process.env.NODE_ENV !== "production",
+                preloadedState,
             })
 
             const _persistor = persistStore(_store)
@@ -57,6 +58,7 @@ export const useInitStore = () => {
         }
 
         init()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return { store, persistor }
