@@ -70,7 +70,7 @@ export const updateAccountBalances =
             }
             dispatch(updateTokenBalances(balances))
         } catch (e) {
-            throw new Error("Failed to get balance from external service")
+            throw new Error(`Failed to get balance from external service: ${e}`)
         }
     }
 
