@@ -52,7 +52,6 @@ jest.mock("react-native-wagmi-charts", () => {
         LineChart,
     }
 })
-jest.mock("react-native-gesture-handler")
 jest.mock("expo-camera", () => {})
 jest.mock("expo-barcode-scanner", () => {})
 jest.mock("@react-navigation/bottom-tabs", () => ({
