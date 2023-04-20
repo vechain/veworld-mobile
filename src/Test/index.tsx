@@ -6,6 +6,7 @@ import { useTheme } from "~Common"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
 import { useInitStore } from "~Storage/Redux"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
@@ -55,16 +56,18 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <Provider store={store}>
-            <ConnexContextProvider>
-                <BottomSheetModalProvider>
-                    <NavigationProvider>
-                        <TestTranslationProvider>
-                            {children}
-                        </TestTranslationProvider>
-                    </NavigationProvider>
-                </BottomSheetModalProvider>
-                <BaseToast />
-            </ConnexContextProvider>
+            <GestureHandlerRootView>
+                <ConnexContextProvider>
+                    <BottomSheetModalProvider>
+                        <NavigationProvider>
+                            <TestTranslationProvider>
+                                {children}
+                            </TestTranslationProvider>
+                        </NavigationProvider>
+                    </BottomSheetModalProvider>
+                    <BaseToast />
+                </ConnexContextProvider>
+            </GestureHandlerRootView>
         </Provider>
     )
 }
