@@ -1,5 +1,8 @@
 import "@testing-library/jest-native/extend-expect"
+import { ReactNode } from "react"
 import "whatwg-fetch"
+
+const componentMock = ({ children }: { children: ReactNode }) => children
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
@@ -34,9 +37,22 @@ jest.mock("expo-haptics", () => ({
 }))
 jest.mock("expo-localization", () => {})
 jest.mock("expo-clipboard", () => {})
-jest.mock("react-native-wagmi-charts", () => {})
-jest.mock("react-native-draggable-flatlist", () => {})
-jest.mock("react-native-gesture-handler", () => {})
+jest.mock("react-native-draggable-flatlist", () => ({
+    NestableScrollContainer: componentMock,
+    NestableDraggableFlatList: componentMock,
+}))
+jest.mock("react-native-wagmi-charts", () => {
+    let LineChart = ({ children }: { children: ReactNode }) => children
+    Object.assign(LineChart, {
+        Provider: ({ children }: { children: ReactNode }) => children,
+        Path: ({ children }: { children: ReactNode }) => children,
+        Gradient: ({ children }: { children: ReactNode }) => children,
+    })
+    return {
+        LineChart,
+    }
+})
+jest.mock("react-native-gesture-handler")
 jest.mock("expo-camera", () => {})
 jest.mock("expo-barcode-scanner", () => {})
 jest.mock("@react-navigation/bottom-tabs", () => ({
