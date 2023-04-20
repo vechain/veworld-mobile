@@ -24,8 +24,8 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
-                node-version-file: .nvmrc
-                cache: 'yarn'
+                  node-version-file: .nvmrc
+                  cache: "yarn"
 
             - name: Install & Patch packages
               run: yarn install
@@ -34,6 +34,8 @@ jobs:
               run: yarn lint && yarn format:check
 
             - name: Test with Coverage
+              env:
+                  NODE_OPTIONS: "--max_old_space_size=4096"
               run: yarn test:coverage
 
             - name: Sonar Args
