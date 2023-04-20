@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
     ColorThemeType,
     useBottomSheetModal,
@@ -29,6 +29,7 @@ import {
 import SwipeableItem, {
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
+import { useNavigation } from "@react-navigation/native"
 
 export const ManageCustomTokenScreen = () => {
     const theme = useTheme()
@@ -44,7 +45,7 @@ export const ManageCustomTokenScreen = () => {
     } = useBottomSheetModal()
     const [selectedToken, setSelectedToken] = useState<FungibleToken>()
     const [selectedIndex, setSelectedIndex] = useState<number>()
-
+    const nav = useNavigation()
     const {
         ref: removeCustomTokenSheetRef,
         onOpen: openRemoveCustomTokenSheet,
@@ -104,6 +105,12 @@ export const ManageCustomTokenScreen = () => {
         swipeableItemRef.current?.[selectedIndex!!]?.close?.()
         closeRemoveCustomTokenSheet()
     }
+
+    useEffect(() => {
+        if (customTokens.length === 0) {
+            nav.goBack()
+        }
+    }, [customTokens.length, nav])
 
     return (
         <BaseSafeArea grow={1}>
