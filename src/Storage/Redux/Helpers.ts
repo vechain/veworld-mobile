@@ -28,6 +28,7 @@ export const getPersistorConfig = async () => {
             "contacts",
             "currency",
             "tokens",
+            "activities",
         ],
         transforms: [encryptor],
     }
