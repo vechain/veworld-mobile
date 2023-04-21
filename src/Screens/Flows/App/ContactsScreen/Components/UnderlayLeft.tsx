@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { useSwipeableItemParams } from "react-native-swipeable-item"
 import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
@@ -10,11 +10,7 @@ type Props = {
 }
 
 export const UnderlayLeft = ({ onDelete }: Props) => {
-    const {
-        close,
-        item: contact,
-        percentOpen,
-    } = useSwipeableItemParams<Contact>()
+    const { close, item: contact } = useSwipeableItemParams<Contact>()
 
     const theme = useTheme()
 
@@ -24,12 +20,6 @@ export const UnderlayLeft = ({ onDelete }: Props) => {
         onDelete(contact.address)
         close()
     }, [close, contact.address, onDelete])
-
-    useEffect(() => {
-        if (percentOpen.value === 1) {
-            handleDelete()
-        }
-    }, [handleDelete, percentOpen.value])
 
     return (
         <BaseView style={styles.underlayContainer}>
