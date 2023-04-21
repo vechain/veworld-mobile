@@ -9,7 +9,7 @@ import { TransactionUtils } from "~Common"
  * @param activity - Activity to upsert
  * @param thor - Connex.Thor instance
  */
-export const validateAndupsertActivity = createAppAsyncThunk(
+export const validateAndUpsertActivity = createAppAsyncThunk(
     "activity/upsertTransactionDetails",
     async (
         { activity, thor }: { activity: Activity; thor: Connex.Thor },
@@ -40,5 +40,6 @@ export const validateAndupsertActivity = createAppAsyncThunk(
             }
         }
         dispatch(upsertActivity(activity))
+        return activity
     },
 )
