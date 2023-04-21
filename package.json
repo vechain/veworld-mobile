@@ -94,6 +94,7 @@
         "react-native-wagmi-charts": "^2.3.0",
         "react-redux": "^8.0.5",
         "react-test-renderer": "18.2.0",
+        "react-use-websocket": "3.0.0",
         "redux-persist": "^6.0.0",
         "redux-reset": "^0.3.0",
         "stream-browserify": "^3.0.0",
