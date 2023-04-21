@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import axios from "axios"
+import { COINGECKO_TOKEN_ENDPOINT, EXCHANGE_CLIENT_AXIOS_OPTS } from "~Common"
 import { FungibleToken, NETWORK_TYPE } from "~Model"
+import { TokenInfoResponse } from "../Types"
 
 const TOKEN_URL = "https://vechain.github.io/token-registry/"
 
@@ -30,3 +33,16 @@ export const TokenApi = createApi({
 })
 
 export const { useGetTokensFromGithubQuery } = TokenApi
+
+export const getTokenInfo = async (tokenId: string) => {
+    const response = await axios.get<TokenInfoResponse>(
+        COINGECKO_TOKEN_ENDPOINT(tokenId),
+        {
+            ...EXCHANGE_CLIENT_AXIOS_OPTS,
+            params: {
+                days: 1,
+            },
+        },
+    )
+    return response.data
+}

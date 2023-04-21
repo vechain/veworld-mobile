@@ -1,7 +1,11 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"
-import { FungibleToken } from "~Model"
+import { FungibleToken, TokenWithCompleteInfo } from "~Model"
+import { selectFungibleTokens } from "./TokenApi"
+import { selectAllExchangeRates } from "./Currency"
+import { LocaleUtils } from "~Common"
+import { uniqBy } from "lodash"
 
 const selectTokenState = (state: RootState) => state.tokens
 
@@ -37,4 +41,85 @@ export const selectDashboardChartData = createSelector(
             timestamp: index,
             value: price,
         })) || DEFAULT_CHART_DATA,
+)
+
+export const selectCoinGeckoTokens = createSelector(
+    selectTokenState,
+    state => state.coinGeckoTokens,
+)
+
+export const selectTokensWithInfo = createSelector(
+    selectCoinGeckoTokens,
+    selectFungibleTokens,
+    selectAllExchangeRates,
+    selectSelectedNetwork,
+    (coinGeckoTokens, githubTokens, exchangeRates, network) => {
+        const defaultLocale = LocaleUtils.getLocale()
+
+        const tokens: TokenWithCompleteInfo[] = githubTokens.map(
+            (token: FungibleToken) => {
+                const foundToken = coinGeckoTokens.find(
+                    t => t.symbol.toLowerCase() === token.symbol.toLowerCase(),
+                )
+
+                const foundExchangeRate = exchangeRates.find(
+                    rate => foundToken?.id === rate.coinGeckoId,
+                )
+
+                if (foundToken) {
+                    let obj: TokenWithCompleteInfo = {
+                        ...token,
+                        coinGeckoId: foundToken.id,
+                        symbol: foundToken.symbol.toUpperCase() ?? token.symbol,
+                        name: foundToken.name ?? token.name,
+                        decimals:
+                            foundToken.detail_platforms.vechain.decimal_place ||
+                            token.decimals,
+                        address:
+                            foundToken.detail_platforms.vechain
+                                .contract_address ?? token.address,
+                        icon:
+                            token.symbol.toUpperCase() === "VET" ||
+                            token.symbol.toUpperCase() === "VTHO"
+                                ? token.icon
+                                : foundToken.image.large,
+                        rate: foundExchangeRate?.rate || 0,
+                        change: foundExchangeRate?.change || 0,
+                        desc:
+                            foundToken.description[defaultLocale] ?? token.desc,
+                        links: {
+                            blockchain_site: foundToken.links.blockchain_site,
+                            homepage: foundToken.links.homepage,
+                        },
+                    }
+                    return obj
+                } else {
+                    return token as TokenWithCompleteInfo
+                }
+            },
+        )
+
+        const sortedTokens = uniqBy(tokens, "symbol")
+            .filter(
+                (token: TokenWithCompleteInfo) =>
+                    token.genesisId === network.genesis.id,
+            )
+            .sort((a: TokenWithCompleteInfo, b: TokenWithCompleteInfo) => {
+                // if both objects have a coinGeckoId property
+                if (a.coinGeckoId && b.coinGeckoId) {
+                    return 0
+                } else if (a.coinGeckoId && !b.coinGeckoId) {
+                    // if only a has a coinGeckoId property
+                    return -1
+                } else if (!a.coinGeckoId && b.coinGeckoId) {
+                    // if only b has a coinGeckoId property
+                    return 1
+                } else {
+                    // if neither object has a coinGeckoId property, sort by name
+                    return 0
+                }
+            })
+
+        return sortedTokens
+    },
 )

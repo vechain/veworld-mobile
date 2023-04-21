@@ -1,23 +1,40 @@
-import { CURRENCY, error } from "~Common"
-import { VeChainToken } from "~Model"
-import { clearExchangeRate, updateExchangeRate } from "~Storage/Redux/Slices"
+import { error } from "~Common"
+import { CurrencyExchangeRate } from "~Model"
+import { updateExchangeRate } from "~Storage/Redux/Slices"
 import { getExchangeRate } from "./getExchangeRate"
-import { AppThunk } from "~Storage/Redux/Types"
+import {
+    AppThunkDispatch,
+    RootState,
+    TokenInfoResponse,
+} from "~Storage/Redux/Types"
+import { selectCurrency } from "~Storage/Redux/Selectors"
+var allSettled = require("promise.allsettled")
 
-export const fetchExchangeRate =
-    (tokenSymbol: VeChainToken, currency: CURRENCY): AppThunk =>
-    async dispatch => {
+export const fetchExchangeRates =
+    ({ coinGeckoTokens }: { coinGeckoTokens: TokenInfoResponse[] }) =>
+    async (dispatch: AppThunkDispatch, getState: () => RootState) => {
         try {
-            const vetExchangeRate = await getExchangeRate(currency, tokenSymbol)
+            const currency = selectCurrency(getState())
 
-            dispatch(
-                updateExchangeRate({
-                    token: tokenSymbol,
-                    rate: vetExchangeRate,
-                }),
+            const exchangePromises: Promise<CurrencyExchangeRate>[] = []
+            for (const token of coinGeckoTokens) {
+                exchangePromises.push(
+                    getExchangeRate(currency, token.symbol, token.id),
+                )
+            }
+
+            const exchangeResults = await allSettled(exchangePromises)
+
+            const exchangeRates: CurrencyExchangeRate[] = exchangeResults.map(
+                (result: PromiseSettledResult<TokenInfoResponse>) => {
+                    if (result.status === "fulfilled") {
+                        return result.value
+                    }
+                },
             )
+
+            dispatch(updateExchangeRate(exchangeRates))
         } catch (e) {
             error(e)
-            dispatch(clearExchangeRate(tokenSymbol))
         }
     }

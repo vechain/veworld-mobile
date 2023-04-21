@@ -3,9 +3,9 @@ import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { FormattingUtils, useTheme } from "~Common"
-import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
+import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectCurrency } from "~Storage/Redux/Selectors"
-import { VeChainToken, FungibleTokenWithBalance } from "~Model"
+import { FungibleTokenWithBalance } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Common/Theme"
 
@@ -18,9 +18,9 @@ export const VechainTokenCard = memo(
     ({ tokenWithBalance, isAnimation }: Props) => {
         const theme = useTheme()
         const exchangeRate = useAppSelector(state =>
-            getCurrencyExchangeRate(
+            selectCurrencyExchangeRate(
                 state,
-                tokenWithBalance.symbol as VeChainToken,
+                tokenWithBalance.symbol as string,
             ),
         )
         const currency = useAppSelector(selectCurrency)
