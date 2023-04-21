@@ -1,15 +1,9 @@
 import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo } from "react"
 import { TokenWithExchangeRate } from "~Model"
-import {
-    BaseCard,
-    BaseImage,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-} from "~Components"
+import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { CURRENCY, ColorThemeType, useThemedStyles } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { TokenImage } from "../TokenImage"
 
 type OfficialTokenCardProps = {
     token: TokenWithExchangeRate
@@ -36,12 +30,8 @@ export const OfficialTokenCard = memo(
                 action={action}
                 containerStyle={[styles.container, style]}>
                 <BaseView flexDirection="row" justifyContent="space-between">
-                    <BaseCard
-                        style={[styles.card, { backgroundColor: COLORS.WHITE }]}
-                        containerStyle={styles.imageShadow}>
-                        <BaseImage uri={token.icon} w={20} h={20} />
-                    </BaseCard>
-
+                    <TokenImage icon={token.icon} />
+                    <BaseSpacer width={16} />
                     <BaseView flexDirection="column" flexGrow={1}>
                         <BaseText typographyFont="buttonPrimary">
                             {token.name}

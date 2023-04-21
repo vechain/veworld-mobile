@@ -326,6 +326,13 @@ const en: BaseTranslation = {
     MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: "This is an official token, please select it from the previous list",
     MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: "This custom token is already present",
 
+    // Send Token
+    SEND_TOKEN_TITLE: "Send",
+    SEND_TOKEN_SUBTITLE: "Send your token",
+    SEND_TOKEN_SELECT_ASSET: "Select the asset that you want to transfer",
+    SEND_CURRENT_BALANCE: "Currency balance",
+    SEND_BALANCE_PERCENTAGE: "Balance percentage",
+
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

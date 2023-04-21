@@ -1054,6 +1054,26 @@ type RootTranslation = {
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
 	/**
+	 * S​e​n​d
+	 */
+	SEND_TOKEN_TITLE: string
+	/**
+	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
+	 */
+	SEND_TOKEN_SUBTITLE: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​f​e​r
+	 */
+	SEND_TOKEN_SELECT_ASSET: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​b​a​l​a​n​c​e
+	 */
+	SEND_CURRENT_BALANCE: string
+	/**
+	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e
+	 */
+	SEND_BALANCE_PERCENTAGE: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -2097,6 +2117,26 @@ Please, try again later.
 	 * This custom token is already present
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
+	/**
+	 * Send
+	 */
+	SEND_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Send your token
+	 */
+	SEND_TOKEN_SUBTITLE: () => LocalizedString
+	/**
+	 * Select the asset that you want to transfer
+	 */
+	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
+	/**
+	 * Currency balance
+	 */
+	SEND_CURRENT_BALANCE: () => LocalizedString
+	/**
+	 * Balance percentage
+	 */
+	SEND_BALANCE_PERCENTAGE: () => LocalizedString
 	/**
 	 * Account
 	 */

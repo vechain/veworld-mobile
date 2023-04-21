@@ -3,8 +3,8 @@ import FastImage, { FastImageProps } from "react-native-fast-image"
 
 type Props = {
     uri: string
-    w: number
-    h: number
+    w?: number
+    h?: number
 } & FastImageProps
 
 export const BaseImage = (props: Props) => {
