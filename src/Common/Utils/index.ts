@@ -3,7 +3,7 @@ import AddressUtils from "./AddressUtils"
 // import AliasUtils from "./AliasUtils"
 // import AsyncUtils from "./AsyncUtils"
 import BiometricsUtils from "./BiometricsUtils"
-// import BloomUtils from "./BloomUtils"
+import BloomUtils from "./BloomUtils"
 import CryptoUtils from "./CryptoUtils"
 // import FormUtils from "./FormUtils"
 import FormattingUtils from "./FormattingUtils"
@@ -33,7 +33,7 @@ export {
     // AccountsUtils,
     AddressUtils,
     BiometricsUtils,
-    // BloomUtils,
+    BloomUtils,
     CryptoUtils,
     // FormUtils,
     FormattingUtils,
