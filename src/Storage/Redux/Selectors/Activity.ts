@@ -43,7 +43,7 @@ export const selectCurrentActivities = createSelector(
         activities
             // Filter account TXs and Account delegations
             .filter(act => {
-                const byFromAccount = AddressUtils.compareAddresses(
+                const byAccount = AddressUtils.compareAddresses(
                     act.from,
                     account?.address,
                 )
@@ -55,7 +55,7 @@ export const selectCurrentActivities = createSelector(
                         account?.address,
                     )
 
-                return byFromAccount || byDelegator
+                return byAccount || byDelegator
             })
             //Convert delegated transactions to a new type (DELEGATED_TRANSACTION)
             .map(act => {

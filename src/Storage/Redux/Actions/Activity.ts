@@ -1,48 +1,15 @@
 import { Activity, ActivityStatus } from "~Model"
 import { createAppAsyncThunk } from "../Types"
-import { selectAllActivities } from "../Selectors"
 import { upsertActivity } from "../Slices"
-import { TransactionUtils, warn } from "~Common"
+import { TransactionUtils } from "~Common"
 
 /**
- * Validates an activity and adds it to the store: if the activity is a transaction, we fetch the transaction from the chain
- * @param activity - Activity to validate and add
+ * Upsert an activity to the store fetching the transaction details from the chain
+ * If the activity is not a transaction, it will just upsert the activity
+ * @param activity - Activity to upsert
  * @param thor - Connex.Thor instance
  */
-export const validateAndAddActivity = createAppAsyncThunk(
-    "activity/validateAndAddActivity",
-    async (
-        { activity, thor }: { activity: Activity; thor: Connex.Thor },
-        { dispatch, getState },
-    ) => {
-        const activities = selectAllActivities(getState())
-
-        const activityExists = activities.find(ac => activity.id === ac.id)
-
-        if (activityExists) {
-            warn("Activity already exists")
-            return
-        }
-
-        // If the activity is a transaction, we need to fetch the transaction from the chain
-        if (activity.isTransaction) {
-            const transaction = await thor.transaction(activity.id).get()
-            activity.transaction = transaction
-            activity.timestamp = !transaction
-                ? Date.now() / 1000
-                : transaction.meta.blockTimestamp
-        }
-
-        dispatch(upsertActivity(activity))
-    },
-)
-
-/**
- * Updates the transaction details of an activity querying the chain
- * @param activity - Activity to update
- * @param thor - Connex.Thor instance
- */
-export const updateTransactionDetails = createAppAsyncThunk(
+export const validateAndupsertActivity = createAppAsyncThunk(
     "activity/upsertTransactionDetails",
     async (
         { activity, thor }: { activity: Activity; thor: Connex.Thor },
@@ -51,12 +18,18 @@ export const updateTransactionDetails = createAppAsyncThunk(
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (activity.isTransaction) {
             activity.transaction = await thor.transaction(activity.id).get()
+            activity.timestamp = !activity.transaction
+                ? Date.now() / 1000
+                : activity.transaction.meta.blockTimestamp
+
             activity.txReceipt = await thor
                 .transaction(activity.id)
                 .getReceipt()
-            activity.status = activity.txReceipt?.reverted
-                ? ActivityStatus.REVERTED
-                : ActivityStatus.SUCCESS
+            if (!activity.txReceipt) activity.status = ActivityStatus.PENDING
+            else
+                activity.status = activity.txReceipt.reverted
+                    ? ActivityStatus.REVERTED
+                    : ActivityStatus.SUCCESS
 
             if (!activity.finality) {
                 activity.finality =
@@ -65,7 +38,7 @@ export const updateTransactionDetails = createAppAsyncThunk(
                         thor,
                     )
             }
-            dispatch(upsertActivity(activity))
         }
+        dispatch(upsertActivity(activity))
     },
 )
