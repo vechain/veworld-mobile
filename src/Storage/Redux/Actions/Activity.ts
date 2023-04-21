@@ -1,7 +1,7 @@
 import { Activity, ActivityStatus } from "~Model"
 import { createAppAsyncThunk } from "../Types"
 import { selectAllActivities } from "../Selectors"
-import { insertActivity, updateActivity } from "../Slices"
+import { upsertActivity } from "../Slices"
 import { TransactionUtils, warn } from "~Common"
 
 /**
@@ -33,7 +33,7 @@ export const validateAndAddActivity = createAppAsyncThunk(
                 : transaction.meta.blockTimestamp
         }
 
-        dispatch(insertActivity(activity))
+        dispatch(upsertActivity(activity))
     },
 )
 
@@ -65,7 +65,7 @@ export const updateTransactionDetails = createAppAsyncThunk(
                         thor,
                     )
             }
-            dispatch(updateActivity(activity))
+            dispatch(upsertActivity(activity))
         }
     },
 )

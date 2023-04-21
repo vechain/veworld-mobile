@@ -9,8 +9,7 @@ import { AddressUtils } from "~Common"
  * Gets all activities for ALL accounts
  * @param state
  */
-export const selectAllActivities = (state: RootState) =>
-    state.activities.activities
+export const selectAllActivities = (state: RootState) => state.activities
 
 /**
  * select a specific activity by txId
