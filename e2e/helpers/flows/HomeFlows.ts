@@ -1,3 +1,4 @@
+import { waitFor, element } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../constants"
 
 export const goToContactsManagement = async () => {

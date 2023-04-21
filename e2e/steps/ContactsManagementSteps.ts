@@ -7,6 +7,7 @@ import {
     HomeFlows,
     ContactsManagementFlows,
 } from "../helpers"
+import { waitFor, element } from "detox"
 
 Given(
     "The user is in the contacts management screen",
