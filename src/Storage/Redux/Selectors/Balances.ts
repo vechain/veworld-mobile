@@ -15,7 +15,7 @@ export const selectBalancesState = (state: RootState) => state.balances
 /**
  * Get all account balances
  */
-export const selectAccountBalances = createSelector(
+export const selectSelectedAccountBalances = createSelector(
     [selectBalancesState, selectSelectedAccount, selectSelectedNetwork],
     (balances, account, network) =>
         balances.filter(
@@ -27,9 +27,28 @@ export const selectAccountBalances = createSelector(
         ),
 )
 
+/**
+ * Get a specific account balance
+ */
+export const selectAccountBalances = createSelector(
+    [
+        selectBalancesState,
+        selectSelectedNetwork,
+        (_, accountAddress: string) => accountAddress,
+    ],
+    (balances, network, accountAddress) =>
+        balances.filter(
+            balance =>
+                AddressUtils.compareAddresses(
+                    balance.accountAddress,
+                    accountAddress,
+                ) && network.genesis.id === balance?.genesisId,
+        ),
+)
+
 export const selectAccountCustomTokens = createSelector(
     selectCustomTokens,
-    selectAccountBalances,
+    selectSelectedAccountBalances,
     (tokens, balances) => {
         const accountTokenAddresses = balances.map(
             balance => balance.tokenAddress,
@@ -44,7 +63,11 @@ export const selectAccountCustomTokens = createSelector(
  * Get all account balances with related token data
  */
 export const selectTokensWithBalances = createSelector(
-    [selectAccountBalances, selectAllFungibleTokens, selectAccountCustomTokens],
+    [
+        selectSelectedAccountBalances,
+        selectAllFungibleTokens,
+        selectAccountCustomTokens,
+    ],
     (balances, tokens, customTokens): FungibleTokenWithBalance[] =>
         balances.map(balance => {
             const balanceToken = [...tokens, ...customTokens].find(token =>

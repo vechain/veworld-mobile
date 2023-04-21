@@ -1,13 +1,14 @@
 import {
     useAppDispatch,
     useAppSelector,
-    selectAccountBalances,
+    selectSelectedAccountBalances,
     selectSelectedNetwork,
     selectCurrency,
     fetchExchangeRate,
     updateAccountBalances,
     useGetTokensFromGithubQuery,
     resetTokenBalances,
+    selectSelectedAccount,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useEffect } from "react"
@@ -32,7 +33,8 @@ const TOKEN_BALANCE_SYNC_PERIOD = new BigNumber(
 export const useTokenBalances = () => {
     const dispatch = useAppDispatch()
     const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const balances = useAppSelector(selectAccountBalances)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const balances = useAppSelector(selectSelectedAccountBalances)
     const currency = useAppSelector(selectCurrency)
     const thorClient = useThor()
     const balancesKey = balances?.map(balance => balance.tokenAddress).join("-")
@@ -46,21 +48,30 @@ export const useTokenBalances = () => {
      * init default balances if no balances found on redux
      */
     useEffect(() => {
-        if (balances?.length === 0) {
+        if (balances?.length === 0 && selectedAccount?.address) {
             dispatch(resetTokenBalances)
-            dispatch(updateAccountBalances(thorClient))
+            dispatch(updateAccountBalances(thorClient, selectedAccount.address))
         }
-    }, [dispatch, thorClient, balances, currentNetwork])
+    }, [dispatch, thorClient, selectedAccount, balances, currentNetwork])
 
     useEffect(() => {
         const updateBalances = () => {
             // Update balances
-            dispatch(updateAccountBalances(thorClient))
+            if (selectedAccount?.address)
+                dispatch(
+                    updateAccountBalances(thorClient, selectedAccount.address),
+                )
         }
         updateBalances()
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
         return () => clearInterval(interval)
-    }, [dispatch, thorClient, balancesKey, currentNetwork?.genesis.id])
+    }, [
+        dispatch,
+        thorClient,
+        selectedAccount,
+        balancesKey,
+        currentNetwork?.genesis.id,
+    ])
 
     useEffect(() => {
         const updateVechainExchangeRates = () => {

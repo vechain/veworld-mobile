@@ -14,12 +14,16 @@ import { Balance } from "~Model"
 
 /**
  * Updates all balances for an account
- * @param accountAddress - the acccount address for this balance
+ * @param thorClient - The thor client to use
+ * @param accountAddress - The address of the account to update
  */
 export const updateAccountBalances =
-    (thorClient: Connex.Thor) =>
+    (thorClient: Connex.Thor, accountAddress: string) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
-        const accountBalances = selectAccountBalances(getState())
+        const accountBalances = selectAccountBalances(
+            getState(),
+            accountAddress,
+        )
         const network = selectSelectedNetwork(getState())
         const balances: Balance[] = []
         try {
