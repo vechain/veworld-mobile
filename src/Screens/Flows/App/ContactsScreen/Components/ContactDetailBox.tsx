@@ -25,7 +25,8 @@ export const ContactDetailBox: React.FC<Props> = memo(
                     action={() => onEditPress(contact.alias, contact.address)}
                     justifyContent="space-between"
                     containerStyle={baseStyles.container}
-                    activeOpacity={1}>
+                    activeOpacity={1}
+                    testID={`${contact.alias}-contact-box`}>
                     <BaseView flexDirection="column">
                         <BaseText typographyFont="button">
                             {contact.alias}
