@@ -1,18 +1,15 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useState } from "react"
+import React from "react"
 import { BaseSafeArea, BaseText, BaseView } from "~Components"
-import { TokenWithCompleteInfo } from "~Model"
 import { RootStackParamListDiscover, Routes } from "~Navigation"
 
-type Props = {} & NativeStackScreenProps<
+type Props = NativeStackScreenProps<
     RootStackParamListDiscover,
     Routes.TOKEN_DETAILS
 >
 
 export const AssetDetailScreen = ({ route }: Props) => {
-    const [token] = useState<TokenWithCompleteInfo | undefined>(
-        route.params.token,
-    )
+    const token = route.params.token
 
     return (
         <BaseSafeArea grow={1}>
