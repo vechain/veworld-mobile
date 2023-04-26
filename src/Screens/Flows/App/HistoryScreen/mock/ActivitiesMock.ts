@@ -45,8 +45,8 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         //Send
         from: "0x4F4e906d3De39A7F2952d3D9Cf84C0cA4Cb476B1",
         to: ["0x67C0F9A8eD050253694bbE5E156D92Acd1023889"],
-        type: ActivityType.VET_TRANSFER,
-        tokenAddress: VET.address,
+        type: ActivityType.FUNGIBLE_TOKEN,
+        tokenAddress: "0x107a0b0faeb58c1fdef97f37f50e319833ad1b94",
         timestamp: 1682337919000,
         direction: DIRECTIONS.UP,
         amount: 1236536456545.44,
@@ -75,8 +75,8 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         //Send
         from: "0x4F4e906d3De39A7F2952d3D9Cf84C0cA4Cb476B1",
         to: ["0x67C0F9A8eD050253694bbE5E156D92Acd1023889"],
-        type: ActivityType.VET_TRANSFER,
-        tokenAddress: VET.address,
+        type: ActivityType.FUNGIBLE_TOKEN,
+        tokenAddress: "0x1b8ec6c2a45cca481da6f243df0d7a5744afc1f8",
         timestamp: 1982337919000,
         direction: DIRECTIONS.UP,
         amount: 523523876877853532.44,
