@@ -8,8 +8,11 @@ import {
     TokenInfoResponse,
 } from "~Storage/Redux/Types"
 import { selectCurrency } from "~Storage/Redux/Selectors"
-var allSettled = require("promise.allsettled")
+const allSettled = require("promise.allsettled")
 
+/**
+ * Fetches exchange rates for all vechain tokens gotten from coinGecko.
+ */
 export const fetchExchangeRates =
     ({ coinGeckoTokens }: { coinGeckoTokens: TokenInfoResponse[] }) =>
     async (dispatch: AppThunkDispatch, getState: () => RootState) => {

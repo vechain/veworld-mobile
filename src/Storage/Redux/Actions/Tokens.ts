@@ -11,7 +11,7 @@ import { VeChainToken } from "~Model"
 import { selectCurrency } from "../Selectors"
 import { setCoinGeckoTokens, setDashboardChartData } from "../Slices"
 import { AppThunkDispatch, RootState, TokenInfoResponse } from "../Types"
-var allSettled = require("promise.allsettled")
+const allSettled = require("promise.allsettled")
 import { getTokenInfo } from "../Api"
 import { fetchExchangeRates } from "./Currency"
 
@@ -52,6 +52,11 @@ type FetchTokensResponse = {
     }
 }
 
+/**
+ * Fetches all tokens from CoinGecko that are on the VeChain network
+ * and dispatches the results to the store. Then calls "fetchExchangeRates"
+ * to fetch the exchange rates for each token.
+ */
 export const fetchTokensWithInfo = () => async (dispatch: AppThunkDispatch) => {
     try {
         const coinGeckoTokensResponse = await axios.get<FetchTokensResponse[]>(

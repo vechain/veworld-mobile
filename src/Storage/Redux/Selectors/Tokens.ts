@@ -66,35 +66,31 @@ export const selectTokensWithInfo = createSelector(
                     rate => foundToken?.id === rate.coinGeckoId,
                 )
 
-                if (foundToken) {
-                    let obj: TokenWithCompleteInfo = {
-                        ...token,
-                        coinGeckoId: foundToken.id,
-                        symbol: foundToken.symbol.toUpperCase() ?? token.symbol,
-                        name: foundToken.name ?? token.name,
-                        decimals:
-                            foundToken.detail_platforms.vechain.decimal_place ||
-                            token.decimals,
-                        address:
-                            foundToken.detail_platforms.vechain
-                                .contract_address ?? token.address,
-                        icon:
-                            token.symbol.toUpperCase() === "VET" ||
-                            token.symbol.toUpperCase() === "VTHO"
-                                ? token.icon
-                                : foundToken.image.large,
-                        rate: foundExchangeRate?.rate || 0,
-                        change: foundExchangeRate?.change || 0,
-                        desc:
-                            foundToken.description[defaultLocale] ?? token.desc,
-                        links: {
-                            blockchain_site: foundToken.links.blockchain_site,
-                            homepage: foundToken.links.homepage,
-                        },
-                    }
-                    return obj
-                } else {
-                    return token as TokenWithCompleteInfo
+                if (!foundToken) return token as TokenWithCompleteInfo
+
+                return {
+                    ...token,
+                    coinGeckoId: foundToken.id,
+                    symbol: foundToken.symbol.toUpperCase() ?? token.symbol,
+                    name: foundToken.name ?? token.name,
+                    decimals:
+                        foundToken.detail_platforms.vechain.decimal_place ||
+                        token.decimals,
+                    address:
+                        foundToken.detail_platforms.vechain.contract_address ??
+                        token.address,
+                    icon:
+                        token.symbol.toUpperCase() === "VET" ||
+                        token.symbol.toUpperCase() === "VTHO"
+                            ? token.icon
+                            : foundToken.image.large,
+                    rate: foundExchangeRate?.rate || 0,
+                    change: foundExchangeRate?.change || 0,
+                    desc: foundToken.description[defaultLocale] ?? token.desc,
+                    links: {
+                        blockchain_site: foundToken.links.blockchain_site,
+                        homepage: foundToken.links.homepage,
+                    },
                 }
             },
         )
@@ -106,18 +102,16 @@ export const selectTokensWithInfo = createSelector(
             )
             .sort((a: TokenWithCompleteInfo, b: TokenWithCompleteInfo) => {
                 // if both objects have a coinGeckoId property
-                if (a.coinGeckoId && b.coinGeckoId) {
-                    return 0
-                } else if (a.coinGeckoId && !b.coinGeckoId) {
-                    // if only a has a coinGeckoId property
-                    return -1
-                } else if (!a.coinGeckoId && b.coinGeckoId) {
-                    // if only b has a coinGeckoId property
-                    return 1
-                } else {
-                    // if neither object has a coinGeckoId property, sort by name
-                    return 0
-                }
+                if (a.coinGeckoId && b.coinGeckoId) return 0
+
+                // if only a has a coinGeckoId property
+                if (a.coinGeckoId && !b.coinGeckoId) return -1
+
+                // if only b has a coinGeckoId property
+                if (!a.coinGeckoId && b.coinGeckoId) return 1
+
+                // if neither object has a coinGeckoId property, sort by name
+                return 0
             })
 
         return sortedTokens
