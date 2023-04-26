@@ -219,6 +219,7 @@ const en: BaseTranslation = {
     COMMON_BTN_CONFIRM: "Confirm",
     COMMON_BTN_ADD: "Add",
     COMMON_BTN_SAVE: "Save",
+    COMMON_BTN_NEXT: "NEXT",
 
     // Common Labels
     COMMON_LBL_NAME: "name",
@@ -332,6 +333,9 @@ const en: BaseTranslation = {
     SEND_TOKEN_SELECT_ASSET: "Select the asset that you want to transfer",
     SEND_CURRENT_BALANCE: "Currency balance",
     SEND_BALANCE_PERCENTAGE: "Balance percentage",
+    SEND_RANGE_ZERO: "0%",
+    SEND_RANGE_MAX: "MAX",
+    SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
 
 
     // Wallets New Local

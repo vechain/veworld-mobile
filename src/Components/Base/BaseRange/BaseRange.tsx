@@ -8,14 +8,14 @@ type Props = {
     value: number
     maximumValue?: number
     marks?: number[]
-    setValue: (n: number) => void
+    onChange: (n: number) => void
 }
 
 const SLIDER_OFFSET = 3
 
 export const BaseRange = ({
     value,
-    setValue,
+    onChange,
     marks = [0, 25, 50, 75, 100],
     maximumValue = 100,
 }: Props) => {
@@ -50,7 +50,7 @@ export const BaseRange = ({
             })}
             <Slider
                 value={value}
-                onValueChange={setValue}
+                onValueChange={onChange}
                 style={styles.slider}
                 minimumValue={0}
                 maximumValue={100}

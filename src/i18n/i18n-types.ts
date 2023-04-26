@@ -775,6 +775,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_SAVE: string
 	/**
+	 * N​E​X​T
+	 */
+	COMMON_BTN_NEXT: string
+	/**
 	 * n​a​m​e
 	 */
 	COMMON_LBL_NAME: string
@@ -1073,6 +1077,18 @@ type RootTranslation = {
 	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e
 	 */
 	SEND_BALANCE_PERCENTAGE: string
+	/**
+	 * 0​%
+	 */
+	SEND_RANGE_ZERO: string
+	/**
+	 * M​A​X
+	 */
+	SEND_RANGE_MAX: string
+	/**
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​b​a​l​a​n​c​e
+	 */
+	SEND_INSUFFICIENT_BALANCE: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -1841,6 +1857,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_SAVE: () => LocalizedString
 	/**
+	 * NEXT
+	 */
+	COMMON_BTN_NEXT: () => LocalizedString
+	/**
 	 * name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
@@ -2137,6 +2157,18 @@ Please, try again later.
 	 * Balance percentage
 	 */
 	SEND_BALANCE_PERCENTAGE: () => LocalizedString
+	/**
+	 * 0%
+	 */
+	SEND_RANGE_ZERO: () => LocalizedString
+	/**
+	 * MAX
+	 */
+	SEND_RANGE_MAX: () => LocalizedString
+	/**
+	 * Insufficient balance
+	 */
+	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
 	/**
 	 * Account
 	 */

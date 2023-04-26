@@ -20,6 +20,11 @@ export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
     const [tokenQuery, setTokenQuery] = useState<string>("")
     const tokens = useAppSelector(selectSendableTokenWithBalance)
+    const filteredTokens = tokens.filter(
+        token =>
+            token.name?.toLowerCase().includes(tokenQuery.toLowerCase()) ||
+            token.symbol?.toLowerCase().includes(tokenQuery.toLowerCase()),
+    )
     const nav = useNavigation()
     const handleClickToken = (token: FungibleTokenWithBalance) => () => {
         nav.navigate(Routes.SELECT_AMOUNT_SEND, {
@@ -52,8 +57,8 @@ export const SelectTokenSendScreen = () => {
             <BaseScrollView
                 containerStyle={styles.scrollViewContainer}
                 style={styles.scrollView}>
-                {tokens.length ? (
-                    tokens.map(token => (
+                {filteredTokens.length ? (
+                    filteredTokens.map(token => (
                         <OfficialTokenCard
                             key={token.address}
                             token={token}

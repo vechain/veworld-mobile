@@ -1,1 +1,2 @@
-export * from "./TokenUtils"
+import * as TokenUtils from "./TokenUtils"
+export default TokenUtils
