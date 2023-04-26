@@ -1,6 +1,6 @@
 import { address, HDNode } from "thor-devkit"
 import { XPub } from "~Model"
-import { veWorldErrors, error, HexUtils, VET } from "~Common"
+import { veWorldErrors, error, HexUtils, VET, VTHO } from "~Common"
 import CryptoUtils from "../CryptoUtils"
 
 /**
@@ -95,6 +95,10 @@ export const isValid = (addr: string): boolean => {
         error(e)
         return false
     }
+}
+
+export const isVechainToken = (addr: string): boolean => {
+    return addr === VET.address || addr === VTHO.address
 }
 
 // export enum ExplorerLinkType {
