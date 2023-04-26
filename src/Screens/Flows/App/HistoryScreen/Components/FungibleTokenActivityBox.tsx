@@ -145,7 +145,8 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                             </BaseView>
                             <BaseView
                                 flexDirection="column"
-                                alignItems="center">
+                                alignItems="center"
+                                pl={5}>
                                 <BaseIcon
                                     size={24}
                                     name="chevron-right"
