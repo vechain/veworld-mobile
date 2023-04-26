@@ -63,8 +63,3 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
 ;(global as any).ReanimatedDataMock = {
     now: () => 0,
 }
-jest.mock("react-native-localize", () => {
-    return {
-        getLocales: jest.fn(),
-    }
-})
