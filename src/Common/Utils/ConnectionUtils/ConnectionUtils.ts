@@ -28,8 +28,12 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
                 ),
             timeout,
         )
-        const wsUrl = URLUtils.toWebsocketURL(url, "/subscriptions/beat")
-        const webSocket = new WebSocket(wsUrl)
+        const wsUrl = URLUtils.toNodeBeatWebsocketUrl(url)
+        const webSocket = new WebSocket(wsUrl, null, {
+            headers: {
+                "User-Agent": "ReactNative",
+            },
+        })
 
         webSocket.onopen = () => {
             debug("Websocket opened")
@@ -47,7 +51,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
             webSocket.close()
         }
 
-        webSocket.onclose = () => warn("Websocket closed")
+        webSocket.onclose = e => warn("Websocket closed", e)
     })
 }
 

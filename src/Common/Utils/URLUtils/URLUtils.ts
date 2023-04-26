@@ -57,6 +57,10 @@ const toWebsocketURL = (url: string, suffix?: string) => {
         .concat(suffix || "")
 }
 
+// Returns the default websocket url for the node (beat2)
+const toNodeBeatWebsocketUrl = (url: string) =>
+    toWebsocketURL(url, "/subscriptions/beat2")
+
 const isHttps = (url: string) => {
     try {
         const parsedURL = parseUrl(url)
@@ -104,6 +108,7 @@ export default {
     compareURLs,
     clean,
     toWebsocketURL,
+    toNodeBeatWebsocketUrl,
     isHttp,
     isHttps,
     isLocalHost,
