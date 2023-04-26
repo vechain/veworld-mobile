@@ -11,14 +11,14 @@ import {
 } from "~Common"
 import { COLORS } from "~Common/Theme"
 import { BaseIcon, BaseText, BaseView } from "~Components"
-import { FungibleToken, FungibleTokenActivity, VeChainToken } from "~Model"
+import { FungibleToken, FungibleTokenActivity } from "~Model"
 import {
     selectCurrency,
     selectCustomTokens,
     selectFungibleTokens,
     useAppSelector,
 } from "~Storage/Redux"
-import { getCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
+import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { RootState } from "~Storage/Redux/Types"
 import { useI18nContext } from "~i18n"
 import * as RNLocalize from "react-native-localize"
@@ -50,12 +50,33 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             [activity.tokenAddress, allTokens],
         )
 
-        // exchangeRate is defined if the token is a {VeChainToken}
         const exchangeRate = useAppSelector((state: RootState) =>
-            getCurrencyExchangeRate(state, token?.symbol as VeChainToken),
+            selectCurrencyExchangeRate(state, token?.symbol || ""),
         )
 
         const currency = useAppSelector(selectCurrency)
+
+        const amountTransferred = useMemo(() => {
+            return FormattingUtils.humanNumber(
+                FormattingUtils.scaleNumberDown(
+                    activity.amount,
+                    token?.decimals || 0,
+                    FormattingUtils.ROUND_DECIMAL_DEFAULT,
+                ),
+                activity.amount,
+            )
+        }, [activity.amount, token?.decimals])
+
+        const fiatValueTransferred = useMemo(() => {
+            return FormattingUtils.humanNumber(
+                FormattingUtils.convertToFiatBalance(
+                    activity.amount as string,
+                    exchangeRate?.rate || 0,
+                    token?.decimals || 0,
+                ),
+                activity.amount,
+            )
+        }, [activity.amount, exchangeRate?.rate, token?.decimals])
 
         const transferDirectionText =
             activity.direction === DIRECTIONS.UP
@@ -110,14 +131,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                                 <BaseView alignItems="flex-end">
                                     <BaseView flexDirection="row" pb={5}>
                                         <BaseText typographyFont="subTitleBold">
-                                            {FormattingUtils.humanNumber(
-                                                FormattingUtils.scaleNumberDown(
-                                                    activity.amount,
-                                                    token.decimals,
-                                                    FormattingUtils.ROUND_DECIMAL_DEFAULT,
-                                                ),
-                                                activity.amount,
-                                            )}{" "}
+                                            {amountTransferred}{" "}
                                         </BaseText>
                                         <BaseView
                                             flexDirection="row"
@@ -131,15 +145,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                                     <BaseText
                                         typographyFont="smallCaptionMedium"
                                         color={theme.colors.success}>
-                                        {FormattingUtils.humanNumber(
-                                            FormattingUtils.convertToFiatBalance(
-                                                activity.amount as string,
-                                                exchangeRate?.rate || 0,
-                                                token.decimals || 0,
-                                            ),
-                                            activity.amount,
-                                        )}{" "}
-                                        {currency}
+                                        {fiatValueTransferred} {currency}
                                     </BaseText>
                                 </BaseView>
                             </BaseView>
