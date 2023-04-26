@@ -24,6 +24,7 @@ import URLUtils from "./URLUtils"
 import LanguageUtils from "./LanguageUtils"
 import FormUtils from "./FormUtils"
 import ConnectionUtils from "./ConnectionUtils"
+import LocaleUtils from "./LocaleUtils"
 
 export {
     // AliasUtils,
@@ -52,4 +53,5 @@ export {
     LanguageUtils,
     FormUtils,
     ConnectionUtils,
+    LocaleUtils,
 }

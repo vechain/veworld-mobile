@@ -35,7 +35,9 @@ jest.mock("expo-haptics", () => ({
     },
     impactAsync: jest.fn(),
 }))
-jest.mock("expo-localization", () => {})
+jest.mock("expo-localization", () => ({
+    getLocales: () => [{ languageCode: "en" }],
+}))
 jest.mock("expo-clipboard", () => {})
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
