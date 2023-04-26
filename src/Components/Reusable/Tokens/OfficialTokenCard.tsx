@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo } from "react"
-import { TokenWithExchangeRate } from "~Model"
+import { TokenWithCompleteInfo } from "~Model"
 import {
     BaseCard,
     BaseImage,
@@ -12,7 +12,7 @@ import { CURRENCY, ColorThemeType, useThemedStyles } from "~Common"
 import { COLORS } from "~Common/Theme"
 
 type OfficialTokenCardProps = {
-    token: TokenWithExchangeRate
+    token: TokenWithCompleteInfo
     action: () => void
     selected?: boolean
     currency?: CURRENCY

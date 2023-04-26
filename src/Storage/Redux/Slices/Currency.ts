@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { CurrencyExchangeRate, VeChainToken } from "~Model"
+import { CurrencyExchangeRate } from "~Model"
 import { CurrencyState } from "../Types/Currency"
 
 export const initialCurrencyState: CurrencyState = {
     availableCurrencies: [],
+    exchangeRates: [],
 }
 
 export const CurrencySlice = createSlice({
@@ -15,19 +16,15 @@ export const CurrencySlice = createSlice({
         },
         updateExchangeRate: (
             state,
-            action: PayloadAction<{
-                token: VeChainToken
-                rate: CurrencyExchangeRate
-            }>,
+            action: PayloadAction<CurrencyExchangeRate[]>,
         ) => {
-            const { token, rate } = action.payload
-            state[token] = rate
+            state.exchangeRates = action.payload
         },
         updateAvailableCurrencies: (state, action: PayloadAction<string[]>) => {
             state.availableCurrencies = action.payload
         },
-        clearExchangeRate: (state, action: PayloadAction<VeChainToken>) => {
-            delete state[action.payload]
+        clearExchangeRate: state => {
+            state.exchangeRates = []
         },
     },
 })

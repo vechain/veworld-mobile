@@ -6,12 +6,14 @@ import {
     BaseView,
     OfficialTokenCardWithExchangeRate,
 } from "~Components"
-import { selectTokenExchangeRates, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { FungibleToken } from "~Model"
 import { StyleSheet, ScrollView } from "react-native"
-import { ColorThemeType, info, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { selectTokensWithInfo, useAppSelector } from "~Storage/Redux"
+import { TokenWithCompleteInfo } from "~Model"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 // import { FlashList } from "@shopify/flash-list"
 // const ITEM_WIDTH = Dimensions.get("window").width - 40
@@ -22,7 +24,8 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 export const DiscoverAssets = () => {
     const { LL } = useI18nContext()
     const paddingBottom = useBottomTabBarHeight()
-    const tokensWithCurrency = useAppSelector(selectTokenExchangeRates)
+    const tokensWithCurrency = useAppSelector(selectTokensWithInfo)
+    const nav = useNavigation()
 
     const { styles: themedStyles } = useThemedStyles(
         baseStyles({
@@ -46,8 +49,10 @@ export const DiscoverAssets = () => {
         [tokenQuery, tokensWithCurrency],
     )
 
-    const handleClickToken = (token: FungibleToken) => () => {
-        info(token)
+    const handleClickToken = (token: TokenWithCompleteInfo) => () => {
+        if (token.coinGeckoId) {
+            nav.navigate(Routes.TOKEN_DETAILS, { token })
+        }
     }
 
     return (
@@ -94,7 +99,7 @@ export const DiscoverAssets = () => {
                     style={themedStyles.styles_SCROLLVIEW}>
                     {filteredTokens.map(token => (
                         <OfficialTokenCardWithExchangeRate
-                            key={token.address}
+                            key={token.symbol}
                             token={token}
                             action={handleClickToken(token)}
                         />

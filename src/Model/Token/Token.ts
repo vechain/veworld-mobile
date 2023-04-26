@@ -1,5 +1,3 @@
-import { CurrencyExchangeRate } from "~Model/Currency"
-
 import { Balance } from "~Model/Balance"
 
 export type VeChainToken = "VET" | "VTHO"
@@ -18,6 +16,7 @@ export interface Token {
     address: string
     icon: string
     custom: boolean
+    desc?: string
 }
 
 /**
@@ -30,9 +29,16 @@ export interface FungibleToken extends Token {
     genesisId: string
 }
 
-export interface TokenWithExchangeRate
-    extends FungibleToken,
-        CurrencyExchangeRate {}
+export interface TokenWithCompleteInfo extends FungibleToken {
+    coinGeckoId?: string
+    rate?: number
+    change?: number
+    desc?: string
+    links?: {
+        blockchain_site: string[]
+        homepage: string[]
+    }
+}
 
 /**
  * VIP180 - Fungible Token with a balance field also

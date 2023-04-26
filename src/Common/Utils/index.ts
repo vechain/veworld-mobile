@@ -25,6 +25,7 @@ import LanguageUtils from "./LanguageUtils"
 import FormUtils from "./FormUtils"
 import ConnectionUtils from "./ConnectionUtils"
 import DateUtils from "./DateUtils"
+import LocaleUtils from "./LocaleUtils"
 
 export {
     // AliasUtils,
@@ -54,4 +55,5 @@ export {
     FormUtils,
     ConnectionUtils,
     DateUtils,
+    LocaleUtils,
 }
