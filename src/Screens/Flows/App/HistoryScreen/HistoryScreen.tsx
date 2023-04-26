@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { FormattingUtils, PlatformUtils, useTheme } from "~Common"
 import {
@@ -47,7 +47,7 @@ export const HistoryScreen = () => {
         }
     }, [])
 
-    const renderActivitiesList = useCallback(() => {
+    const renderActivitiesList = useMemo(() => {
         return (
             <>
                 <BaseSpacer height={30} />
@@ -100,7 +100,7 @@ export const HistoryScreen = () => {
                 />
             </BaseView>
             {/* Activities List */}
-            {!!ACTIVITIES_MOCK.length && renderActivitiesList()}
+            {!!ACTIVITIES_MOCK.length && renderActivitiesList}
         </BaseSafeArea>
     )
 }
