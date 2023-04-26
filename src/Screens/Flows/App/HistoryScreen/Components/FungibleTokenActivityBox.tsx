@@ -21,7 +21,7 @@ import {
 import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { RootState } from "~Storage/Redux/Types"
 import { useI18nContext } from "~i18n"
-import * as RNLocalize from "react-native-localize"
+import { getCalendars } from "expo-localization"
 
 type Props = {
     activity: FungibleTokenActivity
@@ -78,6 +78,16 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             )
         }, [activity.amount, exchangeRate?.rate, token?.decimals])
 
+        const dateTimeTransfer = useMemo(() => {
+            return activity.timestamp
+                ? DateUtils.formatDateTime(
+                      activity.timestamp,
+                      locale,
+                      getCalendars()[0].timeZone ?? "UTC",
+                  )
+                : LL.DATE_NOT_AVAILABLE()
+        }, [LL, activity.timestamp, locale])
+
         const transferDirectionText =
             activity.direction === DIRECTIONS.UP
                 ? LL.BTN_SEND()
@@ -111,13 +121,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                                 {transferDirectionText}
                             </BaseText>
                             <BaseText typographyFont="smallCaptionRegular">
-                                {activity.timestamp
-                                    ? DateUtils.formatDateTime(
-                                          activity.timestamp,
-                                          locale,
-                                          RNLocalize.getTimeZone(),
-                                      )
-                                    : LL.DATE_NOT_AVAILABLE()}
+                                {dateTimeTransfer}
                             </BaseText>
                         </BaseView>
                     </BaseView>
