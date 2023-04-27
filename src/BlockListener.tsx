@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import useWebSocket from "react-use-websocket"
 import {
     AddressUtils,
     BloomUtils,
+    TransfersUtils,
     URLUtils,
+    VET,
     // VET,
     debug,
     error,
@@ -66,7 +68,8 @@ const BlockListener: React.FC = () => {
         increment: incrementCounter,
         reset: resetCounter,
     } = useCounter()
-    const { showTransactionReverted } = useToastNotification()
+    const { showTransactionReverted, showFoundTokenTransfer } =
+        useToastNotification()
 
     useEffect(() => {
         resetCounter()
@@ -157,30 +160,30 @@ const BlockListener: React.FC = () => {
         debug({ relevantAccounts })
         if (relevantAccounts.length === 0) return
 
-        // Filter out tokens we are not interested in
-        // const relevantTokens = tokens.filter(
-        //     tkn =>
-        //         tkn.address !== VET.symbol &&
-        //         BloomUtils.testBloomForAddress(beat.bloom, beat.k, tkn.address),
-        // )
-
         // Detect transfer events for all accounts and alert the user
-        // await attemptAlertOnTransfer(beat.number, relevantAccounts)
+        await attemptAlertOnTransfer(beat.number, relevantAccounts)
+
+        // Filter out tokens we are not interested in (the one we are not tracking)
+        const relevantTokens = tokens.filter(
+            tkn =>
+                tkn.address !== VET.symbol &&
+                BloomUtils.testBloomForAddress(beat.bloom, beat.k, tkn.address),
+        )
 
         // Detect token transfer events for all accounts and alert the user
-        // for (const acct of relevantAccounts) {
-        // const relevantTokensForAcct = relevantTokens.filter(t =>
-        //     AddressUtils.compareAddresses(
-        //         t.balance.accountAddress,
-        //         acct.address,
-        //     ),
-        // )
-        // if (relevantTokensForAcct.length > 0)
-        //     await attemptAlertOnTokenTransfer(
-        //         beat.number,
-        //         relevantTokensForAcct,
-        //     )
-        // }
+        for (const acct of relevantAccounts) {
+            const relevantTokensForAcct = relevantTokens.filter(t =>
+                AddressUtils.compareAddresses(
+                    t.balance.accountAddress,
+                    acct.address,
+                ),
+            )
+            if (relevantTokensForAcct.length > 0)
+                await attemptAlertOnTokenTransfer(
+                    beat.number,
+                    relevantTokensForAcct,
+                )
+        }
 
         // If the selected account is relevant update the balances
         if (
@@ -196,74 +199,71 @@ const BlockListener: React.FC = () => {
         }
     }
 
-    // const attemptAlertOnTransfer = async (
-    //     blockNumber: number,
-    //     relevantAccounts: Account[],
-    // ) => {
-    //     if (relevantAccounts.length === 0) return
+    const attemptAlertOnTransfer = async (
+        blockNumber: number,
+        relevantAccounts: Account[],
+    ) => {
+        if (relevantAccounts.length === 0) return
 
-    //     const relevantAddresses = relevantAccounts.map(acc => acc.address)
+        const relevantAddresses = relevantAccounts.map(acc => acc.address)
 
-    //     const criteria = relevantAddresses.reduce<
-    //         Connex.Thor.Filter.Criteria<"transfer">[]
-    //     >((prev, cur) => {
-    //         prev.push({ sender: cur }, { recipient: cur })
-    //         return prev
-    //     }, [])
+        const criteria = relevantAddresses.reduce<
+            Connex.Thor.Filter.Criteria<"transfer">[]
+        >((prev, cur) => {
+            prev.push({ sender: cur }, { recipient: cur })
+            return prev
+        }, [])
 
-    //     if (!thor) throw Error("Thor undefined")
-    //     const transfers = await thor
-    //         .filter("transfer", criteria)
-    //         .cache(relevantAddresses)
-    //         .range({ unit: "block", from: blockNumber, to: blockNumber })
-    //         .apply(0, 5)
+        if (!thor) throw Error("Thor undefined")
+        const transfers = await thor
+            .filter("transfer", criteria)
+            .cache(relevantAddresses)
+            .range({ unit: "block", from: blockNumber, to: blockNumber })
+            .apply(0, 5)
 
-    //     // send toast notification for each transfer
-    //     transfers.forEach(tran => showFoundTokenTransfer(VET, tran.amount))
-    // }
+        // send toast notification for each transfer
+        transfers.forEach(tran => showFoundTokenTransfer(VET, tran.amount))
+    }
 
-    // const processedTransactionIds = new Set<string>()
+    const [processedTransactionIds, setProcessedTransactionIds] = useState<
+        Set<string>
+    >(new Set<string>())
 
-    // const attemptAlertOnTokenTransfer = async (
-    //     blockNumber: number,
-    //     relevantTokens: FungibleTokenWithBalance[],
-    // ) => {
-    //     if (relevantTokens.length === 0) return
+    /**
+     *  Check for token transfers in a block for the given tokens and alert the user with a toast notification
+     * @param blockNumber   The block number to check for transfers
+     * @param relevantTokens  The tokens to check for transfers
+     * @returns
+     */
+    const attemptAlertOnTokenTransfer = async (
+        blockNumber: number,
+        relevantTokens: FungibleTokenWithBalance[],
+    ) => {
+        if (relevantTokens.length === 0) return
 
-    //     if (!thor) return warn("Thor not initialized")
+        if (!thor) return warn("Thor not initialized")
 
-    //     for (const token of relevantTokens) {
-    //         const tokenTransfers = await TransfersService.getTransfers({
-    //             thor,
-    //             token,
-    //             accountAddress: token.balance.accountAddress,
-    //             fromBlock: blockNumber,
-    //             toBlock: blockNumber,
-    //             offset: 0,
-    //             size: 5,
-    //         })
+        for (const token of relevantTokens) {
+            const tokenTransfers = await TransfersUtils.getTransfers({
+                thor,
+                token,
+                accountAddress: token.balance.accountAddress,
+                fromBlock: blockNumber,
+                toBlock: blockNumber,
+                offset: 0,
+                size: 5,
+            })
 
-    //         tokenTransfers.forEach(evt => {
-    //             if (!processedTransactionIds.has(evt.transactionId)) {
-    //                 toast.success(
-    //                     LL.NOTIFICATION_found_token_transfer({
-    //                         token: token.symbol.toUpperCase(),
-    //                         amount: humanNumber(
-    //                             scaleNumberDown(
-    //                                 evt.amount,
-    //                                 token.decimals,
-    //                                 ROUND_DECIMAL_DEFAULT,
-    //                             ),
-    //                             evt.amount,
-    //                             token.symbol,
-    //                         ),
-    //                     }),
-    //                 )
-    //                 processedTransactionIds.add(evt.transactionId)
-    //             }
-    //         })
-    //     }
-    // }
+            tokenTransfers.forEach(evt => {
+                if (!processedTransactionIds.has(evt.transactionId)) {
+                    showFoundTokenTransfer(token, evt.amount)
+                    setProcessedTransactionIds(
+                        prev => new Set([...prev, evt.transactionId]),
+                    )
+                }
+            })
+        }
+    }
 
     return <></>
 }
