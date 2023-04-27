@@ -48,7 +48,7 @@ export const DiscoverScreen = () => {
                 initialLayout={{
                     width: Dimensions.get("window").width,
                 }}
-                tabBar={props => <TopTabbar {...props} />}>
+                tabBar={TopTabbar}>
                 <Tab.Screen
                     name={LL.COMMON_ASSETS()}
                     component={DiscoverAssets}

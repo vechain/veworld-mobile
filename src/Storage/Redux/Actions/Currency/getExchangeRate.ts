@@ -1,5 +1,5 @@
 import { CURRENCY, error } from "~Common"
-import { VeChainToken, CurrencyExchangeRate } from "~Model"
+import { CurrencyExchangeRate } from "~Model"
 import FiatExchangeClients from "./fiat"
 
 //ALWAYS put CoinGecko first
@@ -10,11 +10,17 @@ const exchangeProviders = [
 
 export const getExchangeRate = async (
     fiatSymbol: CURRENCY,
-    symbol: VeChainToken,
+    symbol: string,
+    coinGeckoId: string,
 ): Promise<CurrencyExchangeRate> => {
     for (const provider of exchangeProviders) {
         try {
-            const exchange = await provider.getExchangeRate(fiatSymbol, symbol)
+            const exchange = await provider.getExchangeRate(
+                fiatSymbol,
+                symbol,
+                coinGeckoId,
+            )
+
             return exchange
         } catch (e) {
             error(e)

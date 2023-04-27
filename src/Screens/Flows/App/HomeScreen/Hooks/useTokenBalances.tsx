@@ -3,11 +3,12 @@ import {
     useAppSelector,
     selectAccountBalances,
     selectSelectedNetwork,
-    selectCurrency,
-    fetchExchangeRate,
     updateAccountBalances,
     useGetTokensFromGithubQuery,
     resetTokenBalances,
+    fetchTokensWithInfo,
+    fetchExchangeRates,
+    selectCoinGeckoTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useEffect } from "react"
@@ -33,8 +34,8 @@ export const useTokenBalances = () => {
     const dispatch = useAppDispatch()
     const currentNetwork = useAppSelector(selectSelectedNetwork)
     const balances = useAppSelector(selectAccountBalances)
-    const currency = useAppSelector(selectCurrency)
     const thorClient = useThor()
+    const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
     const balancesKey = balances?.map(balance => balance.tokenAddress).join("-")
 
     useGetTokensFromGithubQuery({
@@ -63,17 +64,20 @@ export const useTokenBalances = () => {
     }, [dispatch, thorClient, balancesKey, currentNetwork?.genesis.id])
 
     useEffect(() => {
+        dispatch(fetchTokensWithInfo())
+    }, [dispatch])
+
+    useEffect(() => {
         const updateVechainExchangeRates = () => {
-            // Update VET exchange rate
-            dispatch(fetchExchangeRate("VET", currency))
-            // Update VTHO exchange rate
-            dispatch(fetchExchangeRate("VTHO", currency))
+            dispatch(fetchExchangeRates({ coinGeckoTokens }))
         }
+
         updateVechainExchangeRates()
+
         const interval = setInterval(
             updateVechainExchangeRates,
             EXCHANGE_RATE_SYNC_PERIOD,
         )
         return () => clearInterval(interval)
-    }, [dispatch, currency])
+    }, [dispatch, coinGeckoTokens])
 }

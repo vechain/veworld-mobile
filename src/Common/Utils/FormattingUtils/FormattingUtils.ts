@@ -10,6 +10,7 @@ import { error } from "~Common"
 import RoundingMode = BigNumber.RoundingMode
 
 export const ROUND_DECIMAL_DEFAULT = 2
+export const ROUND_DECIMAL_PRECISE = 6
 
 // const locale = detectLocale()
 
