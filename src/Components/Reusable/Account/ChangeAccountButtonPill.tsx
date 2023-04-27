@@ -17,7 +17,7 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
             <BaseView>
                 <BaseText
                     color={theme.colors.textReversed}
-                    typographyFont="smallCaptionMedium">
+                    typographyFont="smallCaptionBold">
                     {title}
                 </BaseText>
                 <BaseText
