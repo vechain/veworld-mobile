@@ -26,9 +26,9 @@ export interface IQueryParams {
 export const getTransfers = async (
     params: IQueryParams,
 ): Promise<TransferLog[]> => {
-    return params.token.symbol === VET.symbol
-        ? getVetTransfers(params)
-        : getTokenTransfers(params)
+    if (params.token.symbol === VET.symbol) return getVetTransfers(params)
+
+    return getTokenTransfers(params)
 }
 
 /**
@@ -146,7 +146,6 @@ const buildEventCriteria = (
             from: addr,
         })
     })
-    debug({ from })
     const to = tokens.map(item => {
         return thor.account(item).event(abis.vip180.TransferEvent).asCriteria({
             to: addr,
