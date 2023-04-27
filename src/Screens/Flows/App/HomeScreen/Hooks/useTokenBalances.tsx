@@ -1,14 +1,14 @@
 import {
     useAppDispatch,
     useAppSelector,
-    selectSelectedAccountBalances,
+    selectAccountBalances,
     selectSelectedNetwork,
-    selectCurrency,
-    fetchExchangeRate,
     updateAccountBalances,
     useGetTokensFromGithubQuery,
     resetTokenBalances,
-    selectSelectedAccount,
+    fetchTokensWithInfo,
+    fetchExchangeRates,
+    selectCoinGeckoTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useEffect } from "react"
@@ -33,10 +33,9 @@ const TOKEN_BALANCE_SYNC_PERIOD = new BigNumber(
 export const useTokenBalances = () => {
     const dispatch = useAppDispatch()
     const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-    const balances = useAppSelector(selectSelectedAccountBalances)
-    const currency = useAppSelector(selectCurrency)
+    const balances = useAppSelector(selectAccountBalances)
     const thorClient = useThor()
+    const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
     const balancesKey = balances?.map(balance => balance.tokenAddress).join("-")
 
     useGetTokensFromGithubQuery({
@@ -48,43 +47,37 @@ export const useTokenBalances = () => {
      * init default balances if no balances found on redux
      */
     useEffect(() => {
-        if (balances?.length === 0 && selectedAccount?.address) {
+        if (balances?.length === 0) {
             dispatch(resetTokenBalances)
-            dispatch(updateAccountBalances(thorClient, selectedAccount.address))
+            dispatch(updateAccountBalances(thorClient))
         }
-    }, [dispatch, thorClient, selectedAccount, balances, currentNetwork])
+    }, [dispatch, thorClient, balances, currentNetwork])
 
     useEffect(() => {
         const updateBalances = () => {
             // Update balances
-            if (selectedAccount?.address)
-                dispatch(
-                    updateAccountBalances(thorClient, selectedAccount.address),
-                )
+            dispatch(updateAccountBalances(thorClient))
         }
         updateBalances()
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
         return () => clearInterval(interval)
-    }, [
-        dispatch,
-        thorClient,
-        selectedAccount,
-        balancesKey,
-        currentNetwork?.genesis.id,
-    ])
+    }, [dispatch, thorClient, balancesKey, currentNetwork?.genesis.id])
+
+    useEffect(() => {
+        dispatch(fetchTokensWithInfo())
+    }, [dispatch])
 
     useEffect(() => {
         const updateVechainExchangeRates = () => {
-            // Update VET exchange rate
-            dispatch(fetchExchangeRate("VET", currency))
-            // Update VTHO exchange rate
-            dispatch(fetchExchangeRate("VTHO", currency))
+            dispatch(fetchExchangeRates({ coinGeckoTokens }))
         }
+
         updateVechainExchangeRates()
+
         const interval = setInterval(
             updateVechainExchangeRates,
             EXCHANGE_RATE_SYNC_PERIOD,
         )
         return () => clearInterval(interval)
-    }, [dispatch, currency])
+    }, [dispatch, coinGeckoTokens])
 }

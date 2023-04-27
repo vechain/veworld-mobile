@@ -4,7 +4,7 @@ import { selectSelectedAccount } from "./Account"
 import { VET, VTHO } from "~Common/Constant"
 import { RootState } from "~Storage/Redux/Types"
 import { selectAllFungibleTokens } from "./TokenApi"
-import { getCurrencyExchangeRate } from "./Currency"
+import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
 import { selectCustomTokens } from "./Tokens"
@@ -124,9 +124,9 @@ export const selectVthoTokenWithBalance = createSelector(
 export const selectFiatBalance = createSelector(
     [
         selectVetTokenWithBalance,
-        state => getCurrencyExchangeRate(state, "VET"),
+        state => selectCurrencyExchangeRate(state, "VET"),
         selectVthoTokenWithBalance,
-        state => getCurrencyExchangeRate(state, "VTHO"),
+        state => selectCurrencyExchangeRate(state, "VTHO"),
     ],
     (vetBalance, vetExchangeRate, vthoBalance, vthoExchangeRate) => {
         return new BigNumber(

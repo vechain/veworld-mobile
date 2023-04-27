@@ -1072,6 +1072,14 @@ type RootTranslation = {
 	 * W​a​l​l​e​t
 	 */
 	WALLET_LABEL_WALLET: string
+	/**
+	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	DATE_NOT_AVAILABLE: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	RECEIVE_ACTIVITY: string
 }
 
 export type TranslationFunctions = {
@@ -2124,6 +2132,14 @@ Please, try again later.
 	 * Wallet
 	 */
 	WALLET_LABEL_WALLET: () => LocalizedString
+	/**
+	 * Date not available
+	 */
+	DATE_NOT_AVAILABLE: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	RECEIVE_ACTIVITY: () => LocalizedString
 }
 
 export type Formatters = {}

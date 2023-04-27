@@ -35,4 +35,5 @@ export enum Routes {
     SETTINGS_MANAGE_CUSTOM_NODES = "Settings_Manage_custom_Nodes",
     CAMERA = "Camera",
     DISCOVER = "Discover",
+    TOKEN_DETAILS = "Token_Details",
 }

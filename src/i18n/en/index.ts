@@ -356,6 +356,8 @@ const en: BaseTranslation = {
     // Send Confirm
 
     // Activities
+    DATE_NOT_AVAILABLE: "Date not available",
+    RECEIVE_ACTIVITY: "Receive",
 
     // Transfers
 
