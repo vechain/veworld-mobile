@@ -13,7 +13,7 @@ import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 export const selectBalancesState = (state: RootState) => state.balances
 
 /**
- * Get all account balances
+ * Get all balances of the selected account
  */
 export const selectSelectedAccountBalances = createSelector(
     [selectBalancesState, selectSelectedAccount, selectSelectedNetwork],
@@ -28,23 +28,20 @@ export const selectSelectedAccountBalances = createSelector(
 )
 
 /**
- * Get a specific account balance
+ * Get all balances of a specific account
  */
-export const selectAccountBalances = createSelector(
-    [
-        selectBalancesState,
-        selectSelectedNetwork,
-        (_, accountAddress: string) => accountAddress,
-    ],
-    (balances, network, accountAddress) =>
-        balances.filter(
-            balance =>
-                AddressUtils.compareAddresses(
-                    balance.accountAddress,
-                    accountAddress,
-                ) && network.genesis.id === balance?.genesisId,
-        ),
-)
+export const selectAccountBalances = (accountAddress: string) =>
+    createSelector(
+        [selectBalancesState, selectSelectedNetwork],
+        (balances, network) =>
+            balances.filter(
+                balance =>
+                    AddressUtils.compareAddresses(
+                        balance.accountAddress,
+                        accountAddress,
+                    ) && network.genesis.id === balance?.genesisId,
+            ),
+    )
 
 export const selectAccountCustomTokens = createSelector(
     selectCustomTokens,
@@ -63,7 +60,11 @@ export const selectAccountCustomTokens = createSelector(
  * Get all account balances with related token data
  */
 export const selectTokensWithBalances = createSelector(
-    [selectBalancesState, selectAllFungibleTokens, selectAccountCustomTokens],
+    [
+        selectSelectedAccountBalances,
+        selectAllFungibleTokens,
+        selectAccountCustomTokens,
+    ],
     (balances, tokens, customTokens): FungibleTokenWithBalance[] =>
         balances.map(balance => {
             const balanceToken = [...tokens, ...customTokens].find(token =>

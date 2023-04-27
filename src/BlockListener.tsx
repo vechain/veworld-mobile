@@ -18,7 +18,6 @@ import { useThor } from "~Components"
 import { Account, Activity, FungibleTokenWithBalance } from "~Model"
 import {
     selectActivitiesWithoutFinality,
-    selectSelectedAccount,
     selectSelectedNetwork,
     selectTokensWithBalances,
     selectVisibleAccounts,
@@ -55,12 +54,10 @@ export interface Beat {
 }
 
 const BlockListener: React.FC = () => {
-    // const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const allTokensWithBalance = useAppSelector(selectTokensWithBalances)
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
-    const currentAccount = useAppSelector(selectSelectedAccount)
     const thor = useThor()
     const pendingActivities = useAppSelector(selectActivitiesWithoutFinality)
     const {
@@ -105,7 +102,7 @@ const BlockListener: React.FC = () => {
     useWebSocket(beatUrl, {
         onMessage,
         onOpen: ev => {
-            info("Beat WS open on: ", ev.currentTarget)
+            info("Beat WS open on: ", ev.currentTarget.url)
             dispatch(updateNodeError(false))
         },
         onError: ev => {
@@ -161,7 +158,7 @@ const BlockListener: React.FC = () => {
         if (relevantAccounts.length === 0) return
 
         // Detect transfer events for all accounts and alert the user
-        await attemptAlertOnTransfer(beat.number, relevantAccounts)
+        await attemptAlertOnVetTransfer(beat.number, relevantAccounts)
 
         // Filter out tokens we are not interested in (the one we are not tracking)
         const relevantTokens = tokens.filter(
@@ -185,21 +182,13 @@ const BlockListener: React.FC = () => {
                 )
         }
 
-        // If the selected account is relevant update the balances
-        if (
-            currentAccount &&
-            relevantAccounts.some(acc =>
-                AddressUtils.compareAddresses(
-                    acc.address,
-                    currentAccount.address,
-                ),
-            )
-        ) {
-            await dispatch(updateAccountBalances(thor, currentAccount.address))
+        // Update balances of all relevant accounts
+        for (const acct of relevantAccounts) {
+            await dispatch(updateAccountBalances(thor, acct.address))
         }
     }
 
-    const attemptAlertOnTransfer = async (
+    const attemptAlertOnVetTransfer = async (
         blockNumber: number,
         relevantAccounts: Account[],
     ) => {
@@ -220,6 +209,8 @@ const BlockListener: React.FC = () => {
             .cache(relevantAddresses)
             .range({ unit: "block", from: blockNumber, to: blockNumber })
             .apply(0, 5)
+
+        debug({ transfers })
 
         // send toast notification for each transfer
         transfers.forEach(tran => showFoundTokenTransfer(VET, tran.amount))
