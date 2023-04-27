@@ -34,7 +34,7 @@ export const deleteContact = async (name: string) => {
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
-    await element(by.id(`${name}-contact-box`)).swipe("left", "slow", 0.4) //TODO Try to swipe from point to point instead of using swipe
+    await element(by.id(`${name}-contact-box`)).swipe("left", "slow", 0.4)
 
     await waitFor(element(by.text("REMOVE")))
         .toBeVisible()
