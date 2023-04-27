@@ -1,6 +1,7 @@
 import { CurrencyExchangeRate } from "~Model/Currency"
 
 import { Balance } from "~Model/Balance"
+import { DIRECTIONS } from "~Common"
 
 export type VeChainToken = "VET" | "VTHO"
 
@@ -40,4 +41,30 @@ export interface TokenWithExchangeRate
  */
 export interface FungibleTokenWithBalance extends FungibleToken {
     balance: Balance
+}
+
+//Logs
+
+/**
+ * VIP180 - Fungible Token Transfer Log
+ * @field `meta` - The meta data of the transaction
+ * @field `token` - The token that was transferred
+ * @field `amount` - The amount of tokens that were transferred
+ * @field `sender` - The sender of the tokens
+ * @field `recipient` - The recipient of the tokens
+ * @field `timestamp` - The timestamp of the transaction
+ * @field `index` - The index of the transaction
+ * @field `direction` - The direction of the transaction
+ * @field `transactionId` - The transaction ID of the transaction
+ */
+export interface TransferLog {
+    meta: Connex.Thor.Filter.WithMeta["meta"]
+    token: FungibleToken
+    amount: string
+    sender: string
+    recipient: string
+    timestamp: number
+    index: number
+    direction: DIRECTIONS
+    transactionId: string
 }
