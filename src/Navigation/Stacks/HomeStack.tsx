@@ -7,9 +7,11 @@ import {
     HomeScreen,
     SelectTokenSendScreen,
     SelectAmountSendScreen,
+    InsertAddressSendScreen,
     SwapScreen,
     WalletManagementScreen,
     ManageCustomTokenScreen,
+    TransactionSummarySendScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { FungibleTokenWithBalance } from "~Model"
@@ -20,6 +22,15 @@ export type RootStackParamListHome = {
     [Routes.SELECT_TOKEN_SEND]: undefined
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
+    }
+    [Routes.INSERT_ADDRESS_SEND]: {
+        token: FungibleTokenWithBalance
+        amount: string
+    }
+    [Routes.TRANSACTION_SUMMARY_SEND]: {
+        token: FungibleTokenWithBalance
+        amount: string
+        address: string
     }
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined
@@ -54,6 +65,16 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.SELECT_AMOUNT_SEND}
                     component={SelectAmountSendScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.INSERT_ADDRESS_SEND}
+                    component={InsertAddressSendScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.TRANSACTION_SUMMARY_SEND}
+                    component={TransactionSummarySendScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen

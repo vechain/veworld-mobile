@@ -31,6 +31,7 @@ import {
 } from "~Storage/Redux"
 import { VeChainToken } from "~Model"
 import { BigNumber } from "bignumber.js"
+import { useNavigation } from "@react-navigation/native"
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<
@@ -41,6 +42,7 @@ type Props = NativeStackScreenProps<
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const { token } = route?.params
+    const nav = useNavigation()
     const { input, setInput } = useAmountInput()
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
@@ -110,6 +112,12 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             setIsError(false)
         }
         setInput(newValue)
+    }
+    const goToInsertAddress = () => {
+        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+            token,
+            amount: isInputInFiat ? rawTokenInput : input,
+        })
     }
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text
@@ -267,7 +275,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 disabled={
                     isError || input === "" || new BigNumber(input).isZero()
                 }
-                action={() => {}}
+                action={goToInsertAddress}
             />
         </BaseSafeArea>
     )

@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js"
 import { Transaction } from "thor-devkit"
 import { abis, BASE_GAS_PRICE } from "~Common/Constant/Thor/ThorConstants"
+import { EstimateGasResult } from "~Model"
 
 const paramsCache: Record<string, string> = {}
 
@@ -19,15 +20,6 @@ const getBaseGasPrice = async (thor: Connex.Thor): Promise<string> => {
         paramsCache[k] = result.data
         return result.data
     }
-}
-
-export type EstimateGasResult = {
-    caller: string
-    gas: number
-    reverted: boolean
-    revertReason: string
-    vmError: string
-    baseGasPrice: string
 }
 
 const estimateGas = async (
@@ -54,7 +46,6 @@ const estimateGas = async (
     }
 
     const outputs = await explainer.execute()
-
     let gas = suggestedGas
     if (!gas) {
         const execGas = outputs.reduce((sum, out) => sum + out.gasUsed, 0)

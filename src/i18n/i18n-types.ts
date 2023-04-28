@@ -1090,6 +1090,42 @@ type RootTranslation = {
 	 */
 	SEND_INSUFFICIENT_BALANCE: string
 	/**
+	 * R​e​c​i​p​i​e​n​t​ ​A​d​d​r​e​s​s
+	 */
+	SEND_INSERT_ADDRESS: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​c​i​p​i​e​n​t​ ​a​d​d​r​e​s​s​ 
+	 */
+	SEND_INSERT_ADDRESS_DESCRIPTION: string
+	/**
+	 * F​r​o​m
+	 */
+	SEND_FROM: string
+	/**
+	 * T​o
+	 */
+	SEND_TO: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	SEND_DETAILS: string
+	/**
+	 * A​m​o​u​n​t
+	 */
+	SEND_AMOUNT: string
+	/**
+	 * G​a​s​ ​f​e​e
+	 */
+	SEND_GAS_FEE: string
+	/**
+	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
+	 */
+	SEND_ESTIMATED_TIME: string
+	/**
+	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
+	 */
+	SEND_LESS_THAN_1_MIN: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -2169,6 +2205,42 @@ Please, try again later.
 	 * Insufficient balance
 	 */
 	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
+	/**
+	 * Recipient Address
+	 */
+	SEND_INSERT_ADDRESS: () => LocalizedString
+	/**
+	 * Insert the recipient address 
+	 */
+	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
+	/**
+	 * From
+	 */
+	SEND_FROM: () => LocalizedString
+	/**
+	 * To
+	 */
+	SEND_TO: () => LocalizedString
+	/**
+	 * Details
+	 */
+	SEND_DETAILS: () => LocalizedString
+	/**
+	 * Amount
+	 */
+	SEND_AMOUNT: () => LocalizedString
+	/**
+	 * Gas fee
+	 */
+	SEND_GAS_FEE: () => LocalizedString
+	/**
+	 * Estimated time
+	 */
+	SEND_ESTIMATED_TIME: () => LocalizedString
+	/**
+	 * Less than 1 min
+	 */
+	SEND_LESS_THAN_1_MIN: () => LocalizedString
 	/**
 	 * Account
 	 */

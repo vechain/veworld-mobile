@@ -18,6 +18,8 @@ export enum Routes {
     BUY = "Buy",
     SELECT_TOKEN_SEND = "Select_Token_Send",
     SELECT_AMOUNT_SEND = "Select_Amount_Send",
+    INSERT_ADDRESS_SEND = "Insert_Address_Send",
+    TRANSACTION_SUMMARY_SEND = "Transaction_Summary_Send",
     SWAP = "Swap",
     HISTORY = "History",
     NFTS = "NFTs",

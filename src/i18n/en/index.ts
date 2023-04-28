@@ -336,6 +336,15 @@ const en: BaseTranslation = {
     SEND_RANGE_ZERO: "0%",
     SEND_RANGE_MAX: "MAX",
     SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
+    SEND_INSERT_ADDRESS: "Recipient Address",
+    SEND_INSERT_ADDRESS_DESCRIPTION: "Insert the recipient address ",
+    SEND_FROM: "From",
+    SEND_TO: "To",
+    SEND_DETAILS: "Details",
+    SEND_AMOUNT: "Amount",
+    SEND_GAS_FEE: "Gas fee",
+    SEND_ESTIMATED_TIME: "Estimated time",
+    SEND_LESS_THAN_1_MIN: "Less than 1 min",
 
 
     // Wallets New Local

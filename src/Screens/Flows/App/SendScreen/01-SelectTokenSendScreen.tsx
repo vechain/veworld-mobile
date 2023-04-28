@@ -35,7 +35,7 @@ export const SelectTokenSendScreen = () => {
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
             <BaseView mx={24}>
-                <BaseText typographyFont="subTitleBold">
+                <BaseText typographyFont="title">
                     {LL.SEND_TOKEN_TITLE()}
                 </BaseText>
                 <BaseSpacer height={24} />
