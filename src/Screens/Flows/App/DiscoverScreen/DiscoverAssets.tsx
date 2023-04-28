@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import {
     BaseSearchInput,
     BaseSpacer,
@@ -49,11 +49,14 @@ export const DiscoverAssets = () => {
         [tokenQuery, tokensWithCurrency],
     )
 
-    const handleClickToken = (token: TokenWithCompleteInfo) => () => {
-        if (token.coinGeckoId) {
-            nav.navigate(Routes.TOKEN_DETAILS, { token })
-        }
-    }
+    const handleClickToken = useCallback(
+        (token: TokenWithCompleteInfo) => () => {
+            if (token.coinGeckoId) {
+                nav.navigate(Routes.TOKEN_DETAILS, { token })
+            }
+        },
+        [nav],
+    )
 
     return (
         <>

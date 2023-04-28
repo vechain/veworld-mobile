@@ -7,7 +7,6 @@ import {
     EXCHANGE_CLIENT_AXIOS_OPTS,
     getCoinGeckoIdBySymbol,
 } from "~Common"
-import { VeChainToken } from "~Model"
 import { selectCurrency } from "../Selectors"
 import { setCoinGeckoTokens, setDashboardChartData } from "../Slices"
 import { AppThunkDispatch, RootState, TokenInfoResponse } from "../Types"
@@ -20,7 +19,7 @@ type CoinMarketChartResponse = {
 }
 
 export const fetchDashboardChartData =
-    ({ symbol }: { symbol: VeChainToken }) =>
+    ({ symbol }: { symbol: string }) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         const currency = selectCurrency(getState())
         const coin = getCoinGeckoIdBySymbol[symbol]
@@ -36,7 +35,10 @@ export const fetchDashboardChartData =
                 },
             )
 
-            const prices = pricesResponse.data.prices.map(ele => ele[1])
+            // console.log(pricesResponse.data)
+
+            // const prices = pricesResponse.data.prices.map(ele => ele[1])
+            const prices = pricesResponse.data.prices
             dispatch(setDashboardChartData({ symbol, data: prices }))
         } catch (e) {
             error(e)

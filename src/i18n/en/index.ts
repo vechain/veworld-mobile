@@ -233,6 +233,8 @@ const en: BaseTranslation = {
     COMMON_LBL_DEFAULT: "Default",
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
+    COMMON_PRICE: "Price",
+    COMMON_TODAY: "Today",
 
 
     // Common Titles

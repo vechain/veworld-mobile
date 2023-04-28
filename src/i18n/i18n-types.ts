@@ -824,6 +824,14 @@ type RootTranslation = {
 	 */
 	COMMON_DAPPS: string
 	/**
+	 * P​r​i​c​e
+	 */
+	COMMON_PRICE: string
+	/**
+	 * T​o​d​a​y
+	 */
+	COMMON_TODAY: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1868,6 +1876,14 @@ export type TranslationFunctions = {
 	 * DApps
 	 */
 	COMMON_DAPPS: () => LocalizedString
+	/**
+	 * Price
+	 */
+	COMMON_PRICE: () => LocalizedString
+	/**
+	 * Today
+	 */
+	COMMON_TODAY: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */
