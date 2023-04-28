@@ -41,7 +41,7 @@ type Props = NativeStackScreenProps<
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
-    const { token } = route?.params
+    const { token } = route.params
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
     const [isInputInFiat, setIsInputInFiat] = useState(false)

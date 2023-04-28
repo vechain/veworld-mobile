@@ -31,7 +31,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address } = route?.params
+    const { token, amount, address } = route.params
     const { LL } = useI18nContext()
     const theme = useTheme()
 

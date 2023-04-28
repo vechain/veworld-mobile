@@ -22,7 +22,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const InsertAddressSendScreen = ({ route }: Props) => {
-    const { token, amount } = route?.params
+    const { token, amount } = route.params
     const { LL } = useI18nContext()
     const [address, setAddress] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
