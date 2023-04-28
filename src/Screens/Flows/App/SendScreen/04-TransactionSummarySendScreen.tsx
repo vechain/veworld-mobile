@@ -1,9 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, VET, VTHO, useCheckIdentity, useTheme } from "~Common"
+import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
+    AccountIcon,
     BackButtonHeader,
     BaseButton,
     BaseCardGroup,
@@ -13,7 +14,6 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { TokenImage } from "~Components/Reusable/TokenImage"
 import { VeChainToken } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
@@ -82,8 +82,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                     </BaseText>
                                     <BaseSpacer height={8} />
                                     <BaseView flexDirection="row">
-                                        {/** TODO: change with account icon */}
-                                        <TokenImage icon={VET.icon} />
+                                        <AccountIcon
+                                            address={account?.address || ""}
+                                        />
                                         <BaseSpacer width={8} />
                                         <BaseView>
                                             <BaseText typographyFont="subSubTitle">
@@ -115,8 +116,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                     </BaseText>
                                     <BaseSpacer height={8} />
                                     <BaseView flexDirection="row">
-                                        {/** TODO: change with account icon */}
-                                        <TokenImage icon={VET.icon} />
+                                        <AccountIcon address={address} />
                                         <BaseSpacer width={8} />
                                         <BaseView>
                                             <BaseText typographyFont="subSubTitle">
