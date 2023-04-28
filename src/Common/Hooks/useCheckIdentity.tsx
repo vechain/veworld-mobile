@@ -69,7 +69,7 @@ export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
      * open the biometrics prompt. If the user has not enabled biometrics, it will
      * open the password prompt.
      */
-    const checkSecurityBeforeOpening = useCallback(async () => {
+    const checkIdentityBeforeOpening = useCallback(async () => {
         if (isWalletSecurityBiometrics) {
             decryptWallet()
         } else {
@@ -101,7 +101,7 @@ export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
 
     return {
         onPasswordSuccess,
-        checkSecurityBeforeOpening,
+        checkIdentityBeforeOpening,
         isPasswordPromptOpen,
         openPasswordPrompt,
         closePasswordPrompt,

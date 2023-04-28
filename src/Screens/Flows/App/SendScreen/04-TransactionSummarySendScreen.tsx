@@ -55,7 +55,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         address,
     })
 
-    const { ConfirmIdentityBottomSheet, checkSecurityBeforeOpening } =
+    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: signTransaction,
         })
@@ -187,7 +187,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 style={styles.nextButton}
                 mx={24}
                 title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                action={checkSecurityBeforeOpening}
+                action={checkIdentityBeforeOpening}
             />
             <ConfirmIdentityBottomSheet />
         </BaseSafeArea>
