@@ -206,7 +206,7 @@ export const humanNumber = (
 }
 
 export const isZero = (value?: BigNumber.Value) => {
-    if (!value) return false
+    if (!value && value !== 0) return false
     return new BigNumber(value).isZero()
 }
 
