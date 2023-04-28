@@ -90,7 +90,6 @@
         "react-native-swipeable-item": "^2.0.9",
         "react-native-tab-view": "^3.5.1",
         "react-native-toast-message": "^2.1.6",
-        "react-native-use-websocket": "^0.2.6",
         "react-native-uuid": "^2.0.1",
         "react-native-vector-icons": "^9.2.0",
         "react-native-wagmi-charts": "^2.3.0",
