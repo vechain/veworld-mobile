@@ -2,8 +2,16 @@ import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 import { useEffect, useMemo, useState } from "react"
 import { HDNode, Transaction, abi, secp256k1 } from "thor-devkit"
-import { FormattingUtils, GasUtils, HexUtils, VET, error, info } from "~Common"
-import { useThor } from "~Components"
+import {
+    FormattingUtils,
+    GasUtils,
+    HexUtils,
+    ThorConstants,
+    VET,
+    error,
+    info,
+} from "~Common"
+import { showErrorToast, showSuccessToast, useThor } from "~Components"
 import { EstimateGasResult, FungibleTokenWithBalance, Wallet } from "~Model"
 import {
     selectSelectedAccount,
@@ -13,6 +21,8 @@ import {
 import { BigNumber } from "bignumber.js"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 import { Routes } from "~Navigation"
+import { useI18nContext } from "~i18n"
+import { Linking } from "react-native"
 
 export const useSendTransaction = ({
     amount,
@@ -24,6 +34,7 @@ export const useSendTransaction = ({
     address: string
 }) => {
     const nav = useNavigation()
+    const { LL } = useI18nContext()
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -115,10 +126,25 @@ export const useSendTransaction = ({
             const signature = Buffer.concat([senderSignature])
             tx.signature = signature
 
-            await sendSignedTransaction(tx, network.currentUrl)
+            const id = await sendSignedTransaction(tx, network.currentUrl)
+            showSuccessToast(
+                LL.SUCCESS_GENERIC(),
+                LL.SUCCESS_GENERIC_OPERATION(),
+                LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+                () => {
+                    Linking.openURL(
+                        `${
+                            network.explorerUrl ||
+                            ThorConstants.defaultMainNetwork.explorerUrl
+                        }/transactions/${id}`,
+                    )
+                },
+            )
+
             nav.navigate(Routes.HOME)
         } catch (e) {
             error(e)
+            showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
         }
 
         // onSentTransaction(tx, id, currentAccount.address)

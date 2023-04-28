@@ -263,6 +263,12 @@ const en: BaseTranslation = {
     ERROR: "Error!",
     ERROR_GENERIC_OPERATION: "The operation went wrong. Please, try again.",
 
+    // Success
+
+    SUCCESS_GENERIC: "Success!",
+    SUCCESS_GENERIC_OPERATION: "The operation went well!",
+    SUCCESS_GENERIC_VIEW_DETAIL_LINK: "View operation detail.",
+
     // Placeholders
     PLACEHOLDER_SEARCH_TOKEN: "Search a token",
     PLACEHOLDER_ENTER_NAME: "Enter the name",

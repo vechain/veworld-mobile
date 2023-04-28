@@ -913,6 +913,18 @@ type RootTranslation = {
 	 */
 	ERROR_GENERIC_OPERATION: string
 	/**
+	 * S​u​c​c​e​s​s​!
+	 */
+	SUCCESS_GENERIC: string
+	/**
+	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​e​l​l​!
+	 */
+	SUCCESS_GENERIC_OPERATION: string
+	/**
+	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
+	 */
+	SUCCESS_GENERIC_VIEW_DETAIL_LINK: string
+	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
@@ -2037,6 +2049,18 @@ Please, try again later.
 	 * The operation went wrong. Please, try again.
 	 */
 	ERROR_GENERIC_OPERATION: () => LocalizedString
+	/**
+	 * Success!
+	 */
+	SUCCESS_GENERIC: () => LocalizedString
+	/**
+	 * The operation went well!
+	 */
+	SUCCESS_GENERIC_OPERATION: () => LocalizedString
+	/**
+	 * View operation detail.
+	 */
+	SUCCESS_GENERIC_VIEW_DETAIL_LINK: () => LocalizedString
 	/**
 	 * Search a token
 	 */
