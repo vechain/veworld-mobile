@@ -9,6 +9,7 @@ type Props = {
     maximumValue?: number
     marks?: number[]
     onChange: (n: number) => void
+    testID?: string
 }
 
 const SLIDER_OFFSET = 3
@@ -18,11 +19,16 @@ export const BaseRange = ({
     onChange,
     marks = [0, 25, 50, 75, 100],
     maximumValue = 100,
+    testID,
 }: Props) => {
     const theme = useTheme()
 
     return (
-        <BaseView flex={1} flexDirection="row" style={styles.container}>
+        <BaseView
+            flex={1}
+            flexDirection="row"
+            style={styles.container}
+            testID={testID}>
             {marks.map((markValue: number, index: number) => {
                 let percentage = (markValue / maximumValue) * 100
                 let left: number | string = `${percentage}%`

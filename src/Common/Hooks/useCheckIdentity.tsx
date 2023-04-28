@@ -49,7 +49,7 @@ export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
                 )
                 if (decryptedWallet) {
                     setMnemonicArray(decryptedWallet.mnemonic)
-                    onIdentityConfirmed()
+                    onIdentityConfirmed(decryptedWallet)
                 }
             }
         } else {

@@ -17,7 +17,7 @@ import { TokenImage } from "~Components/Reusable/TokenImage"
 import { VeChainToken } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
-    getCurrencyExchangeRate,
+    selectCurrencyExchangeRate,
     selectCurrency,
     selectSelectedAccount,
     useAppSelector,
@@ -38,7 +38,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
     const exchangeRate = useAppSelector(state =>
-        getCurrencyExchangeRate(state, token.symbol as VeChainToken),
+        selectCurrencyExchangeRate(state, token.symbol as VeChainToken),
     )
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(

@@ -25,7 +25,7 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { COLORS, typography } from "~Common/Theme"
 import {
-    getCurrencyExchangeRate,
+    selectCurrencyExchangeRate,
     selectCurrency,
     useAppSelector,
 } from "~Storage/Redux"
@@ -57,7 +57,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         : token.balance.balance
     const formattedTokenBalance = FormattingUtils.humanNumber(rawTokenBalance)
     const exchangeRate = useAppSelector(state =>
-        getCurrencyExchangeRate(state, token.symbol as VeChainToken),
+        selectCurrencyExchangeRate(state, token.symbol as VeChainToken),
     )
     const isExchangeRateAvailable = !!exchangeRate?.rate
     const formattedFiatInput = FormattingUtils.humanNumber(
