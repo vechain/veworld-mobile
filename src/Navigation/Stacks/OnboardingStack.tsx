@@ -12,6 +12,7 @@ import {
     ImportWalletTypeSelectionScreen,
     ImportMnemonicScreen,
     WalletSuccessScreen,
+    SelectLedgerDevice,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { SecurityLevelType } from "~Model"
@@ -27,6 +28,7 @@ export type RootStackParamListOnboarding = {
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
     [Routes.APP_SECURITY]: undefined
+    [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
     [Routes.WALLET_SUCCESS]:
         | {
               securityLevelSelected?: SecurityLevelType
@@ -100,7 +102,11 @@ export const OnboardingStack = () => {
                     component={UserCreatePasswordScreen}
                     options={{ headerShown: false }}
                 />
-
+                <Onboarding.Screen
+                    name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}
+                    component={SelectLedgerDevice}
+                    options={{ headerShown: false }}
+                />
                 <Onboarding.Screen
                     name={Routes.WALLET_SUCCESS}
                     component={WalletSuccessScreen}

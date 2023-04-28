@@ -14,11 +14,10 @@ export const ImportWalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const onImportWithMnemonic = () => {
-        nav.navigate(Routes.IMPORT_MNEMONIC)
-    }
+    const onImportWithMnemonic = () => nav.navigate(Routes.IMPORT_MNEMONIC)
 
-    const onImportWithHardware = () => {}
+    const onImportWithHardware = () =>
+        nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_DEVICE)
 
     return (
         <BaseSafeArea grow={1}>
