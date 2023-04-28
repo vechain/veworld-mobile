@@ -92,9 +92,10 @@ export const convertToFiatBalance = (
     balance: string,
     rate: number,
     decimals: number,
+    roundDecimals: number = 2,
 ) => {
     const fiatBalance = new BigNumber(balance).multipliedBy(rate)
-    return scaleNumberDown(fiatBalance, decimals, 2)
+    return scaleNumberDown(fiatBalance, decimals, roundDecimals)
 }
 
 export type DateType = "short" | "full" | "long" | "medium" | undefined

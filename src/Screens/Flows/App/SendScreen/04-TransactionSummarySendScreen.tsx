@@ -59,7 +59,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         useCheckIdentity({
             onIdentityConfirmed: signTransaction,
         })
-
+    const gasFees = gas?.gas
+        ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5)
+        : "N.A."
     return (
         <BaseSafeArea grow={1} style={styles.safeArea}>
             <BaseView style={styles.container}>
@@ -164,7 +166,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                     <BaseSpacer height={6} />
                     <BaseText typographyFont="subSubTitle">
-                        {gas?.gas || "N.A."} {VTHO.symbol}
+                        {gasFees} {VTHO.symbol}
                     </BaseText>
                     <BaseSpacer height={12} />
                     <BaseSpacer
