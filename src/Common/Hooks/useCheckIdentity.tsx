@@ -1,19 +1,26 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback } from "react"
 import {
     CryptoUtils,
     useBottomSheetModal,
     useDisclosure,
     useWalletSecurity,
 } from "~Common"
-import { RequireUserPassword, WalletMgmtBottomSheet } from "~Components"
-import { Device, Wallet } from "~Model"
-import { selectDevices, useAppSelector } from "~Storage/Redux"
+import { RequireUserPassword } from "~Components"
+import { Wallet } from "~Model"
+import {
+    selectDevices,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type Props = {
     onIdentityConfirmed: (wallet: Wallet) => void
 }
-
+/**
+ * hook used to handle reusable identity flow
+ */
 export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
+    const account = useAppSelector(selectSelectedAccount)
     const devices = useAppSelector(selectDevices())
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
@@ -27,130 +34,80 @@ export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
         onOpen: openPasswordPrompt,
         onClose: closePasswordPrompt,
     } = useDisclosure()
-    const [userPin, setUserPin] = useState<string | undefined>(undefined)
-    const [mnemonicArray, setMnemonicArray] = useState<string[]>([""])
+
+    /**
+     * function that decrypt wallet either with password or without it (in case of biometrics)
+     */
+    const decryptWallet = useCallback(
+        async (password?: string) => {
+            if (!account?.rootAddress) {
+                throw new Error(
+                    "can not decript wallet: account.rootAddress undefined",
+                )
+            }
+            const device = devices.find(
+                _device => _device.rootAddress === account.rootAddress,
+            )
+            if (!device) {
+                throw new Error(
+                    `can not find device with rootAddress: ${account.rootAddress}`,
+                )
+            }
+            const { decryptedWallet } = await CryptoUtils.decryptWallet(
+                device,
+                password,
+            )
+            if (decryptedWallet) {
+                onIdentityConfirmed(decryptedWallet)
+            }
+        },
+        [account?.rootAddress, devices, onIdentityConfirmed],
+    )
 
     /*
-    * This function checks if the user has enabled biometrics and if so, it will
-    * open the biometrics prompt. If the user has not enabled biometrics, it will
-    * open the password prompt.
-
-    * If the user has only one wallet, it will decrypt the wallet and open the
-    * backup phrase sheet. If the user has multiple wallets, it will open the
-    * wallet management sheet.
-    */
+     * This function checks if the user has enabled biometrics and if so, it will
+     * open the biometrics prompt. If the user has not enabled biometrics, it will
+     * open the password prompt.
+     */
     const checkSecurityBeforeOpening = useCallback(async () => {
         if (isWalletSecurityBiometrics) {
-            if (devices.length > 1) {
-                openWalletMgmtSheetWithDelay(300)
-            } else {
-                const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                    devices[0],
-                )
-                if (decryptedWallet) {
-                    setMnemonicArray(decryptedWallet.mnemonic)
-                    onIdentityConfirmed(decryptedWallet)
-                }
-            }
+            decryptWallet()
         } else {
             openPasswordPrompt()
         }
-    }, [
-        devices,
-        isWalletSecurityBiometrics,
-        onIdentityConfirmed,
-        openPasswordPrompt,
-        openWalletMgmtSheetWithDelay,
-    ])
+    }, [decryptWallet, isWalletSecurityBiometrics, openPasswordPrompt])
 
     /*
      * This function is called when the user enters the correct password. It will
      * close the password prompt and if the user has multiple wallets, it will
      * open the wallet management sheet. If the user has only one wallet, it will
-     * decrypt the wallet and open the backup phrase sheet.
+     * decrypt the wallet
      */
     const onPasswordSuccess = useCallback(
         async (password: string) => {
-            setUserPin(password)
             closePasswordPrompt()
-
-            if (devices.length > 1) {
-                openWalletMgmtSheetWithDelay(300)
-            } else {
-                const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                    devices[0],
-                    password,
-                )
-
-                if (decryptedWallet) {
-                    setMnemonicArray(decryptedWallet.mnemonic)
-                    onIdentityConfirmed(decryptedWallet)
-                }
-            }
+            decryptWallet(password)
         },
-        [
-            closePasswordPrompt,
-            devices,
-            onIdentityConfirmed,
-            openWalletMgmtSheetWithDelay,
-        ],
+        [closePasswordPrompt, decryptWallet],
     )
 
-    /*
-     * This function is called when the user selects a wallet from the wallet
-     * management sheet. It will close the wallet management sheet and decrypt
-     * the wallet using the user's PIN if exists.
-     */
-    const handleOnSelectedWallet = useCallback(
-        async (device: Device) => {
-            closeWalletMgmtSheet()
-
-            const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                device,
-                userPin,
-            )
-
-            if (decryptedWallet) {
-                setMnemonicArray(decryptedWallet.mnemonic)
-                onIdentityConfirmed(decryptedWallet)
-            }
-        },
-        [closeWalletMgmtSheet, onIdentityConfirmed, userPin],
+    const ConfirmIdentityBottomSheet = () => (
+        <RequireUserPassword
+            isOpen={isPasswordPromptOpen}
+            onClose={closePasswordPrompt}
+            onSuccess={onPasswordSuccess}
+        />
     )
-
-    const IdentityBottomSheets = () => (
-        <>
-            <WalletMgmtBottomSheet
-                ref={walletMgmtBottomSheetRef}
-                onClose={handleOnSelectedWallet}
-                devices={devices}
-            />
-            <RequireUserPassword
-                isOpen={isPasswordPromptOpen}
-                onClose={closePasswordPrompt}
-                onSuccess={onPasswordSuccess}
-            />
-        </>
-    )
-
-    useEffect(() => {
-        return () => {
-            setMnemonicArray([""])
-            setUserPin(undefined)
-        }
-    }, [])
 
     return {
         onPasswordSuccess,
         checkSecurityBeforeOpening,
-        handleOnSelectedWallet,
-        mnemonicArray,
         isPasswordPromptOpen,
         openPasswordPrompt,
         closePasswordPrompt,
         walletMgmtBottomSheetRef,
         openWalletMgmtSheetWithDelay,
         closeWalletMgmtSheet,
-        IdentityBottomSheets,
+        ConfirmIdentityBottomSheet,
     }
 }
