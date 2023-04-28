@@ -4,7 +4,6 @@ import { FungibleToken, TransferLog } from "~Model"
 import AddressUtils from "../AddressUtils"
 import { DIRECTIONS } from "~Common/Enums"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
-import { debug } from "~Common/Logger"
 
 export interface IQueryParams {
     thor: Connex.Thor
@@ -144,7 +143,6 @@ const buildEventCriteria = (
             from: addr,
         })
     })
-    debug({ from })
     const to = tokens.map(item => {
         return thor.account(item).event(abis.vip180.TransferEvent).asCriteria({
             to: addr,
