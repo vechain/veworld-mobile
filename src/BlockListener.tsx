@@ -92,6 +92,13 @@ const BlockListener: React.FC = () => {
         [dispatch, thor],
     )
 
+    debug({ beatUrl })
+
+    const onOpen = () => {
+        info("Beat WS open on: ", beatUrl)
+        dispatch(updateNodeError(false))
+    }
+
     const onMessage = async (ev: WebSocketMessageEvent) => {
         dispatch(updateNodeError(false))
         const beat: Beat = JSON.parse(ev.data)
@@ -99,42 +106,43 @@ const BlockListener: React.FC = () => {
         await handleBeat(beat, allTokensWithBalance, visibleAccounts)
     }
 
-    useWebSocket(beatUrl, {
-        onMessage,
-        onOpen: ev => {
-            info("Beat WS open on: ", ev.currentTarget.url)
-            dispatch(updateNodeError(false))
-        },
-        onError: ev => {
-            error(ev)
-            //If we've seen at least 3 errors, then we should show a node error on the dashboard
-            if (counter > 3) {
-                warn("Troubles connecting to the node.")
-                dispatch(updateNodeError(true))
-            } else {
-                incrementCounter()
-            }
-        },
-        onClose: ev => info(ev),
-        shouldReconnect: closeEvent => {
-            const log = closeEvent.wasClean ? info : warn
-            log(
-                "Will attempt to reconnect web socket after closure",
-                closeEvent,
-            )
+    const onError = (ev: WebSocketErrorEvent) => {
+        error("Error on beat WS: ", ev)
+        //If we've seen at least 3 errors, then we should show a node error on the dashboard
+        if (counter > 3) {
+            warn("Troubles connecting to the node.")
+            dispatch(updateNodeError(true))
+        } else {
+            incrementCounter()
+        }
+    }
 
-            //Attempt to use another node if the current one has issues
-            //Not doing async because the result should not affect this function
-            // if (!closeEvent.wasClean && network.defaultNet) {
-            //     dispatch(changeSelectedNetwork(network.id))
-            //         .then(e => info(e))
-            //         .catch(e => warn(e))
-            // }
-            return true
-        },
+    const onClose = (ev: WebSocketCloseEvent) => {
+        info("wss closed ", ev)
+    }
+
+    const shouldReconnect = useCallback((closeEvent: WebSocketCloseEvent) => {
+        const log = closeEvent.isTrusted ? info : warn
+        log("Will attempt to reconnect web socket after closure", closeEvent)
+        //Attempt to use another node if the current one has issues
+        //Not doing async because the result should not affect this function
+        // if (!closeEvent.wasClean && network.defaultNet) {
+        //     dispatch(changeSelectedNetwork(network.id))
+        //         .then(e => info(e))
+        //         .catch(e => warn(e))
+        // }
+        return true
+    }, [])
+
+    useWebSocket(beatUrl, {
+        onOpen,
+        onMessage,
+        onError,
+        onClose,
+        shouldReconnect,
         retryOnError: true,
-        reconnectAttempts: 10_000,
-        reconnectInterval: 1_000,
+        reconnectAttempts: 1000,
+        reconnectInterval: 3000,
     })
 
     const handleBeat = async (

@@ -93,8 +93,6 @@ const getTokenTransfers = async (
     )
     const filter = params.thor.filter("event", tokenCriteria)
 
-    debug({ filter })
-
     const events = await filter
         .order("desc")
         .range({

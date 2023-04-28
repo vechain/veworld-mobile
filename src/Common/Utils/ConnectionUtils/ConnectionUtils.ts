@@ -29,11 +29,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
             timeout,
         )
         const wsUrl = URLUtils.toNodeBeatWebsocketUrl(url)
-        const webSocket = new WebSocket(wsUrl, null, {
-            headers: {
-                "User-Agent": "ReactNative",
-            },
-        })
+        const webSocket = new WebSocket(wsUrl)
 
         webSocket.onopen = () => {
             debug("Websocket opened")
