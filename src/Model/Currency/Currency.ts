@@ -6,4 +6,6 @@
 export interface CurrencyExchangeRate {
     rate?: number
     change?: number
+    coinGeckoId?: string
+    symbol?: string
 }

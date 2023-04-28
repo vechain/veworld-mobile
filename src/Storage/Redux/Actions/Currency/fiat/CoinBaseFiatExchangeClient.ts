@@ -1,6 +1,6 @@
 import axios from "axios"
 import { EXCHANGE_CLIENT_AXIOS_OPTS } from "~Common"
-import { VeChainToken, CurrencyExchangeRate } from "~Model"
+import { CurrencyExchangeRate } from "~Model"
 
 const COINBASE_URL = process.env.REACT_APP_COINBASE_URL
 
@@ -58,7 +58,7 @@ const getCurrencies = async (): Promise<string[]> => {
 
 const getExchangeRate = async (
     fiatSymbol: string,
-    symbol: VeChainToken,
+    symbol: string,
 ): Promise<CurrencyExchangeRate> => {
     const exchangeRates = await axios.get<ExchangeRateResponse>(
         `${COINBASE_URL}/exchange-rates?currency=${symbol}`,

@@ -21,6 +21,7 @@ export type TFonts =
     | "captionMedium"
     | "smallCaption"
     | "smallCaptionMedium"
+    | "smallCaptionBold"
     | "smallCaptionRegular"
     | "largeTitleAccent"
     | "titleAccent"
@@ -195,6 +196,11 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontSize: 10,
         fontWeight: fontWeight.normal,
         lineHeight: lineHeight.caption,
+    },
+    smallCaptionBold: {
+        fontFamily: fontFamily["Inter-Bold"],
+        fontSize: 10,
+        fontWeight: fontWeight[700],
     },
     smallCaptionRegular: {
         fontFamily: fontFamily["Inter-Regular"],
