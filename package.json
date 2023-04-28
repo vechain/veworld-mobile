@@ -49,6 +49,7 @@
         "@vechain/picasso": "^2.1.1",
         "axios": "^0.27.2",
         "babel-plugin-module-resolver": "^4.1.0",
+        "buffer": "^6.0.3",
         "eth-rpc-errors": "^4.0.3",
         "expo": "^47.0.9",
         "expo-barcode-scanner": "~12.1.0",
@@ -103,6 +104,7 @@
         "stream-http": "^3.2.0",
         "thor-devkit": "https://github.com/vechainfoundation/thor-devkit.js",
         "url": "^0.11.0",
+        "util": "^0.12.5",
         "whatwg-fetch": "^3.6.2"
     },
     "devDependencies": {
