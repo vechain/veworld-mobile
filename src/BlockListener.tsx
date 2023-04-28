@@ -92,8 +92,6 @@ const BlockListener: React.FC = () => {
         [dispatch, thor],
     )
 
-    debug({ beatUrl })
-
     const onOpen = () => {
         info("Beat WS open on: ", beatUrl)
         dispatch(updateNodeError(false))
@@ -162,8 +160,12 @@ const BlockListener: React.FC = () => {
         const relevantAccounts = accounts.filter(acc =>
             BloomUtils.testBloomForAddress(beat.bloom, beat.k, acc.address),
         )
-        debug({ relevantAccounts })
         if (relevantAccounts.length === 0) return
+
+        debug(
+            "Possible relevant accounts found in this bloom",
+            relevantAccounts,
+        )
 
         // Detect transfer events for all accounts and alert the user
         await attemptAlertOnVetTransfer(beat.number, relevantAccounts)
@@ -217,8 +219,6 @@ const BlockListener: React.FC = () => {
             .cache(relevantAddresses)
             .range({ unit: "block", from: blockNumber, to: blockNumber })
             .apply(0, 5)
-
-        debug({ transfers })
 
         // send toast notification for each transfer
         transfers.forEach(tran => showFoundTokenTransfer(VET, tran.amount))
