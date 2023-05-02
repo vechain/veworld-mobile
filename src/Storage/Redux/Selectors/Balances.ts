@@ -102,7 +102,7 @@ export const selectVthoTokenWithBalance = createSelector(
         ),
 )
 
-export const selectSendableTokenWithBalance = createSelector(
+export const selectSendableTokensWithBalance = createSelector(
     [
         selectVetTokenWithBalance,
         selectVthoTokenWithBalance,

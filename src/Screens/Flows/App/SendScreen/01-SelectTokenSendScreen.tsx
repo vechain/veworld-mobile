@@ -13,13 +13,13 @@ import {
 } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { selectSendableTokenWithBalance, useAppSelector } from "~Storage/Redux"
+import { selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
 export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
     const [tokenQuery, setTokenQuery] = useState<string>("")
-    const tokens = useAppSelector(selectSendableTokenWithBalance)
+    const tokens = useAppSelector(selectSendableTokensWithBalance)
     const filteredTokens = tokens.filter(
         token =>
             token.name?.toLowerCase().includes(tokenQuery.toLowerCase()) ||
