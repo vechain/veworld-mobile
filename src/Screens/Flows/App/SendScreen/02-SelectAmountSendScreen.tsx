@@ -29,7 +29,6 @@ import {
     selectCurrency,
     useAppSelector,
 } from "~Storage/Redux"
-import { VeChainToken } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 const { defaults: defaultTypography } = typography
@@ -57,7 +56,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         : token.balance.balance
     const formattedTokenBalance = FormattingUtils.humanNumber(rawTokenBalance)
     const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol as VeChainToken),
+        selectCurrencyExchangeRate(state, token.symbol),
     )
     const isExchangeRateAvailable = !!exchangeRate?.rate
     const formattedFiatInput = FormattingUtils.humanNumber(
