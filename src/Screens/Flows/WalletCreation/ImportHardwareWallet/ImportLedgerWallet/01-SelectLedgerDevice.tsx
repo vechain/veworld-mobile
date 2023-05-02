@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 import {
     BaseButton,
     BaseIcon,
@@ -14,31 +14,58 @@ import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
+import { LedgerDevice } from "../types"
+import { LedgerDeviceBox } from "../components"
+import { FlatList } from "react-native-gesture-handler"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const theme = useTheme()
 
-    const [isDisabled] = useState(true)
+    const [availableDevices, setAvailableDevices] = useState<LedgerDevice[]>([])
+    const [selectedDevice, setSelectedDevice] = useState<LedgerDevice>()
 
     const goBack = () => nav.goBack()
 
+    const onDeviceSelect = useCallback((device: LedgerDevice) => {
+        setSelectedDevice(device)
+    }, [])
+
+    /**
+     * Listen for new ledger (nanox) devices
+     */
     BleTransport.listen({
         complete: () => {
             debug("complete")
         },
         next: e => {
             debug({ e })
-            // if (e.type === "add") {
-            //     const device = e.descriptor
-            //     addDeviceToTheUI(device)
-            // }
+            if (e.type === "add") {
+                const device = e.descriptor as LedgerDevice | undefined
+                if (device) setAvailableDevices([device])
+            }
         },
         error: error => {
             debug({ error })
         },
     })
+
+    const renderItem = useCallback(
+        ({ item }: { item: LedgerDevice }) => {
+            return (
+                <LedgerDeviceBox
+                    key={item.id}
+                    device={item}
+                    onPress={() => onDeviceSelect(item)}
+                    isSelected={selectedDevice?.id === item.id}
+                />
+            )
+        },
+        [onDeviceSelect, selectedDevice],
+    )
+
+    const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     return (
         <DismissKeyboardView>
@@ -68,6 +95,17 @@ export const SelectLedgerDevice = () => {
                         </BaseText>
 
                         <BaseSpacer height={20} />
+                        <FlatList
+                            style={styles.container}
+                            data={availableDevices}
+                            numColumns={1}
+                            horizontal={false}
+                            renderItem={renderItem}
+                            nestedScrollEnabled={false}
+                            showsVerticalScrollIndicator={false}
+                            ItemSeparatorComponent={renderSeparator}
+                            keyExtractor={item => item.id}
+                        />
                     </BaseView>
 
                     <BaseView w={100}>
@@ -75,7 +113,7 @@ export const SelectLedgerDevice = () => {
                             action={() => null}
                             w={100}
                             title={LL.COMMON_LBL_IMPORT()}
-                            disabled={isDisabled}
+                            disabled={!selectedDevice}
                         />
                     </BaseView>
                 </BaseView>
@@ -88,4 +126,7 @@ export const SelectLedgerDevice = () => {
 
 const styles = StyleSheet.create({
     backIcon: { marginHorizontal: 20, alignSelf: "flex-start" },
+    container: {
+        width: "100%",
+    },
 })
