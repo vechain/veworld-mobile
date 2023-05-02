@@ -160,7 +160,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
                 title: LL.TRANSACTION_ID(),
                 value: `${transactionIDshort}`,
                 icon: "copy",
-                onValuePress: () => onCopyToClipboard(activity.id),
+                onValuePress: async () => await onCopyToClipboard(activity.id),
             },
             {
                 id: 4,
