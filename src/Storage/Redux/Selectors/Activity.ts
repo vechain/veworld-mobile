@@ -4,13 +4,14 @@ import { ActivityStatus, ActivityType } from "~Model"
 import { selectSelectedNetwork } from "./Network"
 import { selectSelectedAccount } from "./Account"
 import { AddressUtils } from "~Common"
+import { ActivitiesSlice } from "../Slices"
 
 /**
  * Gets all activities for ALL accounts
  * @param state
  */
 export const selectAllActivities = (state: RootState) =>
-    state.activities.activities
+    state[ActivitiesSlice.name].activities
 
 /**
  * select a specific activity by txId

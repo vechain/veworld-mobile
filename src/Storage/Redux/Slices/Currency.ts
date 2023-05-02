@@ -8,7 +8,7 @@ export const initialCurrencyState: CurrencyState = {
 }
 
 export const CurrencySlice = createSlice({
-    name: "currency",
+    name: "currencies",
     initialState: initialCurrencyState,
     reducers: {
         updateCurrency: (_, action: PayloadAction<CurrencyState>) => {

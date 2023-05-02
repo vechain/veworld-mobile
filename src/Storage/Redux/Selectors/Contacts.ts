@@ -1,13 +1,14 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { Contact, ContactType } from "~Model"
+import { ContactsSlice } from "../Slices"
 
 /**
  * selectContactsState: A selector to get the contacts state from the root state.
  * @param {RootState} state - The root state of the Redux store.
  * @returns {ContactsState} - The contacts state.
  */
-const selectContactsState = (state: RootState) => state.contacts
+const selectContactsState = (state: RootState) => state[ContactsSlice.name]
 
 /**
  * selectContacts: A selector to get all the contacts.

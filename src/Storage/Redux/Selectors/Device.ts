@@ -1,9 +1,10 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "../Types"
+import { DeviceSlice } from "../Slices"
 
 const selectAll = (state: RootState) => state
-const selectDevicesState = (state: RootState) => state.devices
+const selectDevicesState = (state: RootState) => state[DeviceSlice.name]
 
 /**
  *
@@ -11,7 +12,9 @@ const selectDevicesState = (state: RootState) => state.devices
  *  a user has onboarded if they have at least one device and have selected an account
  */
 export const selectHasOnboarded = createSelector(selectAll, state => {
-    return state.devices.length > 0 && !!state.accounts.selectedAccount
+    return (
+        state[DeviceSlice.name].length > 0 && !!state.accounts.selectedAccount
+    )
 })
 
 /**

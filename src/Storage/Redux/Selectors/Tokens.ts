@@ -6,8 +6,9 @@ import { selectFungibleTokens } from "./TokenApi"
 import { selectAllExchangeRates } from "./Currency"
 import { LocaleUtils } from "~Common"
 import { uniqBy } from "lodash"
+import { TokenSlice } from "../Slices"
 
-const selectTokenState = (state: RootState) => state.tokens
+const selectTokenState = (state: RootState) => state[TokenSlice.name]
 
 export const selectCustomTokens = createSelector(
     selectTokenState,
