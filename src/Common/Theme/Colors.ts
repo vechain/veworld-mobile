@@ -22,6 +22,7 @@ export type Colors = {
     notification: string
     transparent: string
     separator: string
+    switcher: string
 }
 
 export enum COLORS {
@@ -77,6 +78,7 @@ const light: Colors = {
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.DARK_PURPLE_RBGA,
+    switcher: COLORS.DARK_PURPLE,
 }
 
 const dark: Colors = {
@@ -103,6 +105,7 @@ const dark: Colors = {
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.WHITE_DISABLED,
+    switcher: COLORS.DARK_PURPLE_DISABLED,
 }
 
 export const colors = { light, dark }
