@@ -24,6 +24,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useSendTransaction } from "./Hooks/useSendTransaction"
+import { useSignTransaction } from "./Hooks/useSignTransaction"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -49,10 +50,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         amount,
     )
 
-    const { gas, signTransaction } = useSendTransaction({
+    const { gas, transaction } = useSendTransaction({
         token,
         amount,
         address,
+    })
+
+    const { signTransaction } = useSignTransaction({
+        transaction,
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
@@ -60,7 +65,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             onIdentityConfirmed: signTransaction,
         })
     const gasFees = gas?.gas
-        ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5)
+        ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
         : "N.A."
     return (
         <BaseSafeArea grow={1} style={styles.safeArea}>

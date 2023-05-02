@@ -17,6 +17,6 @@ export type Network = {
     type: NETWORK_TYPE
     currentUrl: string
     urls: string[]
-    explorerUrl: string
+    explorerUrl?: string
     genesis: typeof genesises.main
 }
