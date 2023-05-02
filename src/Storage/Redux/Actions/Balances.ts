@@ -19,8 +19,9 @@ import { Balance } from "~Model"
 export const updateAccountBalances =
     (thorClient: Connex.Thor, accountAddress: string) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
-        const accountBalances = selectAccountBalances(accountAddress)(
+        const accountBalances = selectAccountBalances(
             getState(),
+            accountAddress,
         )
         const network = selectSelectedNetwork(getState())
         const balances: Balance[] = []
