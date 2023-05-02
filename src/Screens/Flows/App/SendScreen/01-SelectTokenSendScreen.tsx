@@ -75,11 +75,8 @@ export const SelectTokenSendScreen = () => {
 const styles = StyleSheet.create({
     scrollViewContainer: {
         marginBottom: 60,
-        flex: 1,
-        width: "100%",
     },
     scrollView: {
         paddingHorizontal: 20,
-        width: "100%",
     },
 })
