@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { getNumberFormatSettings } from "react-native-localize"
+import { useDecimalSeparator } from "../useDecimalSeparator"
 
 export const useAmountInput = (initialValue: string = "") => {
-    const { decimalSeparator } = getNumberFormatSettings()
+    const decimalSeparator = useDecimalSeparator()
     const [input, setInput] = useState(initialValue)
 
     const handleChangeInput = (text: string) => {
