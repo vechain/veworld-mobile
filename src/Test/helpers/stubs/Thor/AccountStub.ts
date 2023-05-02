@@ -17,7 +17,7 @@ export function accountStub(addr: string): Connex.Thor.Account.Visitor {
                     return {
                         address: "0x9652aead889e8df7b5717ed984f147c132f85a69",
                         topic0: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-                        topic1: "0x000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa",
+                        topic1: undefined,
                         topic2: undefined,
                         topic3: undefined,
                         topic4: undefined,
