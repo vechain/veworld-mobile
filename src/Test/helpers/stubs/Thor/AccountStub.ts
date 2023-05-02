@@ -12,7 +12,21 @@ export function accountStub(addr: string): Connex.Thor.Account.Visitor {
     return {
         address: addr,
         event(_abi: object): Connex.Thor.Account.Event {
-            throw Error("Not implemented")
+            return {
+                asCriteria(): Connex.Thor.Filter.Criteria<"event"> {
+                    return {
+                        address: "0x9652aead889e8df7b5717ed984f147c132f85a69",
+                        topic0: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                        topic1: undefined,
+                        topic2: undefined,
+                        topic3: undefined,
+                        topic4: undefined,
+                    }
+                },
+                filter(_indexedSet) {
+                    throw Error("Not implemented")
+                },
+            }
         },
         get(): Promise<Connex.Thor.Account> {
             if (AddressUtils.compareAddresses(addr, account1D1.address))
