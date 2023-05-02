@@ -5,6 +5,7 @@ import {
     GasUtils,
     VTHO,
     currencySymbolMap,
+    debug,
     useTheme,
     useThemedStyles,
     warn,
@@ -160,7 +161,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
                 title: LL.TRANSACTION_ID(),
                 value: `${transactionIDshort}`,
                 icon: "copy",
-                onValuePress: async () => await onCopyToClipboard(activity.id),
+                onValuePress: () => onCopyToClipboard(activity.id),
             },
             {
                 id: 4,
@@ -175,14 +176,19 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         ]
 
         const onCopyToClipboard = useCallback(
-            async (text: string) => {
-                await Clipboard.setStringAsync(text)
-                Alert.alert(
-                    LL.COMMON_LBL_SUCCESS(),
-                    LL.NOTIFICATION_COPIED_CLIPBOARD({
-                        name: LL.COMMON_LBL_ADDRESS(),
-                    }),
-                )
+            (text: string) => {
+                Clipboard.setStringAsync(text)
+                    .then(() => {
+                        Alert.alert(
+                            LL.COMMON_LBL_SUCCESS(),
+                            LL.NOTIFICATION_COPIED_CLIPBOARD({
+                                name: LL.COMMON_LBL_ADDRESS(),
+                            }),
+                        )
+                    })
+                    .catch(error => {
+                        debug(error)
+                    })
             },
             [LL],
         )
