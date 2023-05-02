@@ -9,8 +9,10 @@ import {
     SwapScreen,
     WalletManagementScreen,
     ManageCustomTokenScreen,
+    ActivityDetailsScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
+import { Activity, FungibleToken } from "~Model"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -22,6 +24,7 @@ export type RootStackParamListHome = {
     [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
+    [Routes.ACTIVITY_DETAILS]: { activity: Activity; token?: FungibleToken }
 }
 
 const { Navigator, Group, Screen } =
@@ -54,6 +57,11 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.HISTORY}
                     component={HistoryScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.ACTIVITY_DETAILS}
+                    component={ActivityDetailsScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
