@@ -81,9 +81,9 @@ const BlockListener: React.FC = () => {
     const updateActivities = useCallback(
         async (activities: Activity[]) => {
             const updatedActs: Activity[] = []
-            for (const act of activities) {
+            for (const activity of activities) {
                 const updated = await dispatch(
-                    validateAndUpsertActivity({ activity: act, thor }),
+                    validateAndUpsertActivity({ activity, thor }),
                 ).unwrap()
                 updatedActs.push(updated)
             }
@@ -122,7 +122,8 @@ const BlockListener: React.FC = () => {
     const shouldReconnect = useCallback((closeEvent: WebSocketCloseEvent) => {
         const log = closeEvent.isTrusted ? info : warn
         log("Will attempt to reconnect web socket after closure", closeEvent)
-        //Attempt to use another node if the current one has issues
+
+        // TODO: //Attempt to use another node if the current one has issues
         //Not doing async because the result should not affect this function
         // if (!closeEvent.wasClean && network.defaultNet) {
         //     dispatch(changeSelectedNetwork(network.id))
