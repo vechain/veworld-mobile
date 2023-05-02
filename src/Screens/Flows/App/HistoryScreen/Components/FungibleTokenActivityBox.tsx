@@ -10,8 +10,8 @@ import {
     useThemedStyles,
 } from "~Common"
 import { COLORS } from "~Common/Theme"
-import { BaseIcon, BaseText, BaseView } from "~Components"
-import { FungibleToken, FungibleTokenActivity } from "~Model"
+import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { Activity, FungibleToken, FungibleTokenActivity } from "~Model"
 import {
     selectCurrency,
     selectCustomTokens,
@@ -25,7 +25,7 @@ import { getCalendars } from "expo-localization"
 
 type Props = {
     activity: FungibleTokenActivity
-    onPress: () => void
+    onPress: (activity: Activity, token?: FungibleToken) => void
 }
 
 export const FungibleTokenActivityBox: React.FC<Props> = memo(
@@ -83,7 +83,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                 ? DateUtils.formatDateTime(
                       activity.timestamp,
                       locale,
-                      getCalendars()[0].timeZone ?? "UTC",
+                      getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
                   )
                 : LL.DATE_NOT_AVAILABLE()
         }, [LL, activity.timestamp, locale])
@@ -97,77 +97,80 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             activity.direction === DIRECTIONS.UP ? "arrow-up" : "arrow-down"
 
         return (
-            <BaseView
-                w={100}
-                flexDirection="row"
-                style={styles.container}
-                justifyContent="space-between">
-                <BaseView flexDirection="row">
-                    <DropShadow style={[theme.shadows.card]}>
-                        <BaseView flexDirection="column" alignItems="center">
-                            <BaseIcon
-                                name={directionIcon}
-                                size={20}
-                                color={COLORS.DARK_PURPLE}
-                                testID="magnify"
-                                bg={COLORS.WHITE}
-                                iconPadding={4}
-                            />
-                        </BaseView>
-                    </DropShadow>
-                    <BaseView flexDirection="column" alignItems="center">
-                        <BaseView pl={12}>
-                            <BaseText typographyFont="buttonPrimary" pb={5}>
-                                {transferDirectionText}
-                            </BaseText>
-                            <BaseText typographyFont="smallCaptionRegular">
-                                {dateTimeTransfer}
-                            </BaseText>
-                        </BaseView>
-                    </BaseView>
-                </BaseView>
-                <BaseView flexDirection="row">
-                    {token && (
-                        <>
+            <BaseTouchable action={() => onPress(activity, token)}>
+                <BaseView
+                    w={100}
+                    flexDirection="row"
+                    style={styles.container}
+                    justifyContent="space-between">
+                    <BaseView flexDirection="row">
+                        <DropShadow style={[theme.shadows.card]}>
                             <BaseView
                                 flexDirection="column"
                                 alignItems="center">
-                                <BaseView alignItems="flex-end">
-                                    <BaseView flexDirection="row" pb={5}>
-                                        <BaseText typographyFont="subTitleBold">
-                                            {amountTransferred}{" "}
-                                        </BaseText>
-                                        <BaseView
-                                            flexDirection="row"
-                                            alignItems="flex-end"
-                                            h={100}>
-                                            <BaseText typographyFont="captionRegular">
-                                                {token.symbol.toUpperCase()}
-                                            </BaseText>
-                                        </BaseView>
-                                    </BaseView>
-                                    <BaseText
-                                        typographyFont="smallCaptionMedium"
-                                        color={theme.colors.success}>
-                                        {fiatValueTransferred} {currency}
-                                    </BaseText>
-                                </BaseView>
-                            </BaseView>
-                            <BaseView
-                                flexDirection="column"
-                                alignItems="center"
-                                pl={5}>
                                 <BaseIcon
-                                    size={24}
-                                    name="chevron-right"
-                                    color={theme.colors.text}
-                                    action={onPress}
+                                    name={directionIcon}
+                                    size={20}
+                                    color={COLORS.DARK_PURPLE}
+                                    testID="magnify"
+                                    bg={COLORS.WHITE}
+                                    iconPadding={4}
                                 />
                             </BaseView>
-                        </>
-                    )}
+                        </DropShadow>
+                        <BaseView flexDirection="column" alignItems="center">
+                            <BaseView pl={12}>
+                                <BaseText typographyFont="buttonPrimary" pb={5}>
+                                    {transferDirectionText}
+                                </BaseText>
+                                <BaseText typographyFont="smallCaptionRegular">
+                                    {dateTimeTransfer}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
+                    </BaseView>
+                    <BaseView flexDirection="row">
+                        {token && (
+                            <>
+                                <BaseView
+                                    flexDirection="column"
+                                    alignItems="center">
+                                    <BaseView alignItems="flex-end">
+                                        <BaseView flexDirection="row" pb={5}>
+                                            <BaseText typographyFont="subTitleBold">
+                                                {amountTransferred}{" "}
+                                            </BaseText>
+                                            <BaseView
+                                                flexDirection="row"
+                                                alignItems="flex-end"
+                                                h={100}>
+                                                <BaseText typographyFont="captionRegular">
+                                                    {token.symbol.toUpperCase()}
+                                                </BaseText>
+                                            </BaseView>
+                                        </BaseView>
+                                        <BaseText
+                                            typographyFont="smallCaptionMedium"
+                                            color={theme.colors.success}>
+                                            {fiatValueTransferred} {currency}
+                                        </BaseText>
+                                    </BaseView>
+                                </BaseView>
+                            </>
+                        )}
+                        <BaseView
+                            flexDirection="column"
+                            alignItems="center"
+                            pl={5}>
+                            <BaseIcon
+                                size={24}
+                                name="chevron-right"
+                                color={theme.colors.text}
+                            />
+                        </BaseView>
+                    </BaseView>
                 </BaseView>
-            </BaseView>
+            </BaseTouchable>
         )
     },
 )
