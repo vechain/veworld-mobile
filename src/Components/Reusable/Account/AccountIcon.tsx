@@ -22,7 +22,8 @@ type PicassoAddressIconProps = {
     address: string
     size?: number
 }
-const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
+
+export const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
     ({ address, size = 50 }) => {
         const uri = PicassoUtils.getPicassoImgSrc(address).toString()
 
