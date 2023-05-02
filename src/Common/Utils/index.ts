@@ -20,6 +20,7 @@ import StringUtils from "./StringUtils"
 // import SignatureUtils from "./SignatureUtils"
 // import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
+import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
 import LanguageUtils from "./LanguageUtils"
 import FormUtils from "./FormUtils"
@@ -50,6 +51,7 @@ export {
     // SignatureUtils,
     // TokenUtils,
     TransactionUtils,
+    TransfersUtils,
     URLUtils,
     LanguageUtils,
     FormUtils,
