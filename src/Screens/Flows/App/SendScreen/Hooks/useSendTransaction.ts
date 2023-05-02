@@ -43,7 +43,7 @@ export const useSendTransaction = ({
 
         return response.data.id
     }
-    // TODO: understand if it is correct
+    // TODO: understand if it calculates clauses correctly
     const clauses = useMemo(() => {
         const scaledAmount =
             "0x" +
