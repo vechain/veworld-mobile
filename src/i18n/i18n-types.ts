@@ -1069,6 +1069,54 @@ type RootTranslation = {
 	 * R​e​c​e​i​v​e
 	 */
 	RECEIVE_ACTIVITY: string
+	/**
+	 * F​r​o​m
+	 */
+	FROM: string
+	/**
+	 * T​o
+	 */
+	TO: string
+	/**
+	 * U​n​k​n​o​w​n​ ​A​c​c​o​u​n​t
+	 */
+	UNKNOWN_ACCOUNT: string
+	/**
+	 * V​a​l​u​e
+	 */
+	VALUE_TITLE: string
+	/**
+	 * G​a​s​ ​f​e​e
+	 */
+	GAS_FEE: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	DETAILS: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
+	 */
+	TRANSACTION_ID: string
+	/**
+	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
+	 */
+	VIEW_ON_EXPLORER: string
+	/**
+	 * B​l​o​c​k​ ​n​u​m​b​e​r
+	 */
+	BLOCK_NUMBER: string
+	/**
+	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
+	 */
+	DAPP_TRANSACTION: string
+	/**
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGN_CERTIFICATE: string
+	/**
+	 * S​i​g​n​e​d​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGNED_CERTIFICATE: string
 }
 
 export type TranslationFunctions = {
@@ -2121,6 +2169,54 @@ Please, try again later.
 	 * Receive
 	 */
 	RECEIVE_ACTIVITY: () => LocalizedString
+	/**
+	 * From
+	 */
+	FROM: () => LocalizedString
+	/**
+	 * To
+	 */
+	TO: () => LocalizedString
+	/**
+	 * Unknown Account
+	 */
+	UNKNOWN_ACCOUNT: () => LocalizedString
+	/**
+	 * Value
+	 */
+	VALUE_TITLE: () => LocalizedString
+	/**
+	 * Gas fee
+	 */
+	GAS_FEE: () => LocalizedString
+	/**
+	 * Details
+	 */
+	DETAILS: () => LocalizedString
+	/**
+	 * Transaction ID
+	 */
+	TRANSACTION_ID: () => LocalizedString
+	/**
+	 * View on explorer
+	 */
+	VIEW_ON_EXPLORER: () => LocalizedString
+	/**
+	 * Block number
+	 */
+	BLOCK_NUMBER: () => LocalizedString
+	/**
+	 * DApp Transaction
+	 */
+	DAPP_TRANSACTION: () => LocalizedString
+	/**
+	 * Sign certificate
+	 */
+	SIGN_CERTIFICATE: () => LocalizedString
+	/**
+	 * Signed certificate
+	 */
+	SIGNED_CERTIFICATE: () => LocalizedString
 }
 
 export type Formatters = {}
