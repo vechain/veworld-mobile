@@ -1,21 +1,14 @@
 /* eslint-disable no-console */
 import { Given, Then, When } from "@cucumber/cucumber"
 import { waitFor, element } from "detox"
-import OnboardingFlows from "../helpers/flows/OnboardingFlows"
-import { BiometricsScreen, LONG_TIMEOUT, WalletSuccessScreen } from "../helpers"
-
-Given("The app is opened", { timeout: -1 }, async () => {
-    let retries: number = 5
-    while (retries-- > 0) {
-        try {
-            await detox.device.launchApp({ newInstance: true })
-            break
-        } catch (error) {
-            console.log("Error while launching app: " + error)
-        }
-    }
-    if (retries === 0) return "skipped"
-})
+import {
+    AdvancedSettingsFlow,
+    BiometricsScreen,
+    HomeFlows,
+    LONG_TIMEOUT,
+    OnboardingFlows,
+    WalletSuccessScreen,
+} from "../helpers"
 
 Given(
     "The app is opened and is iOS and has biometrics authorization",
@@ -77,6 +70,17 @@ Given("The app is opened and is iOS", { timeout: -1 }, async () => {
     }
     if (retries === 0) return "skipped"
 })
+
+Given(
+    "The user is in the onboarding welcome screen",
+    { timeout: -1 },
+    async () => {
+        if (!(await OnboardingFlows.isInOnboardingWelcomeScreen())) {
+            await HomeFlows.goToAdvancedSettings()
+            await AdvancedSettingsFlow.resetApp()
+        }
+    },
+)
 
 When("The user follows the onboarding process", async () => {
     await OnboardingFlows.goThroughOnboardingSlides()
