@@ -80,7 +80,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             return FormattingUtils.humanNumber(
                 FormattingUtils.scaleNumberDown(
                     activity.amount,
-                    token?.decimals || 0,
+                    token?.decimals ?? 0,
                     FormattingUtils.ROUND_DECIMAL_DEFAULT,
                 ),
                 activity.amount,
@@ -88,7 +88,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         }, [activity.amount, token?.decimals])
 
         const exchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, token?.symbol || ""),
+            selectCurrencyExchangeRate(state, token?.symbol ?? ""),
         )
 
         const VTHOexchangeRate = useAppSelector((state: RootState) =>
@@ -98,7 +98,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         // Converts gas fee in wei to VTHO
         const gasFeeInVTHOHumanReadable = useMemo(() => {
             return FormattingUtils.scaleNumberDown(
-                gasFeeInVTHO || 0,
+                gasFeeInVTHO ?? 0,
                 VTHO.decimals,
                 FormattingUtils.ROUND_DECIMAL_DEFAULT,
             )
@@ -108,8 +108,8 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     activity.amount as string,
-                    exchangeRate?.rate || 0,
-                    token?.decimals || 0,
+                    exchangeRate?.rate ?? 0,
+                    token?.decimals ?? 0,
                 ),
                 activity.amount,
             )
@@ -119,8 +119,8 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     gasFeeInVTHOHumanReadable,
-                    VTHOexchangeRate?.rate || 0,
-                    token?.decimals || 0,
+                    VTHOexchangeRate?.rate ?? 0,
+                    token?.decimals ?? 0,
                 ),
                 activity.amount,
             )

@@ -51,7 +51,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
         )
 
         const exchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, token?.symbol || ""),
+            selectCurrencyExchangeRate(state, token?.symbol ?? ""),
         )
 
         const currency = useAppSelector(selectCurrency)
@@ -60,7 +60,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             return FormattingUtils.humanNumber(
                 FormattingUtils.scaleNumberDown(
                     activity.amount,
-                    token?.decimals || 0,
+                    token?.decimals ?? 0,
                     FormattingUtils.ROUND_DECIMAL_DEFAULT,
                 ),
                 activity.amount,
@@ -71,8 +71,8 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     activity.amount as string,
-                    exchangeRate?.rate || 0,
-                    token?.decimals || 0,
+                    exchangeRate?.rate ?? 0,
+                    token?.decimals ?? 0,
                 ),
                 activity.amount,
             )
