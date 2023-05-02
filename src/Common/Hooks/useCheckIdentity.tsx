@@ -42,7 +42,7 @@ export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
         async (password?: string) => {
             if (!account?.rootAddress) {
                 throw new Error(
-                    "can not decript wallet: account.rootAddress undefined",
+                    "can not decrypt wallet: account.rootAddress undefined",
                 )
             }
             const device = devices.find(

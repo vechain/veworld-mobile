@@ -4,10 +4,8 @@ import DropShadow from "react-native-drop-shadow"
 import { useTheme } from "~Common"
 import { BaseView } from "../BaseView"
 
-type View = ViewProps
-
 type Props = {
-    views: View[]
+    views: ViewProps[]
     containerStyle?: StyleProp<ViewStyle>
 }
 

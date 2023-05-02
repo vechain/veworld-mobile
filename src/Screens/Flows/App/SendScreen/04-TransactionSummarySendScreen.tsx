@@ -1,5 +1,5 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React from "react"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
 import { COLORS } from "~Common/Theme"
@@ -14,7 +14,6 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { VeChainToken } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     selectCurrencyExchangeRate,
@@ -39,7 +38,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
     const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol as VeChainToken),
+        selectCurrencyExchangeRate(state, token.symbol),
     )
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
