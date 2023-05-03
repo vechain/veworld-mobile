@@ -1,24 +1,24 @@
 Feature: User Onboarding
 
+  Background:
+    * The app is opened
+    * The user is in the onboarding welcome screen
+
   Scenario: User can onboard
-    Given The app is opened
-    And The user follows the onboarding process
+    When The user follows the onboarding process
     Then The user should be onboarded
 
   Scenario: User can skip to password creation
-    Given The app is opened
-    And The user skips to password creation
+    When The user skips to password creation
     Then The user should see password creation
 
 
   Scenario: User can go through all onboarding screens for creating a new local wallet
-    Given The app is opened
-    And The user follows the onboarding and create wallet processes
+    When The user follows the onboarding and create wallet processes
     Then The user can create wallet
 
   Scenario: User successfully creates a local wallet with password protection
-    Given The app is opened
-    And The user onboards with a new local wallet
+    When The user onboards with a new local wallet
     And The user chooses to protect the wallet with a password "<password>" and confirms with "<password>"
     Then The user should see wallet success screen 
 
@@ -39,8 +39,7 @@ Feature: User Onboarding
 
 
   Scenario:  User successfully imports a local wallet
-    Given The app is opened
-    And The user onboards with an imported mnemonic "<mnemonic>"
+    When The user onboards with an imported mnemonic "<mnemonic>"
     And The user chooses to protect the wallet with a password "<password>" and confirms with "<password>"
     Then The user should see wallet success screen
 
@@ -50,8 +49,7 @@ Feature: User Onboarding
 
   
   Scenario: User attemps to import a local wallet with an invalid mnemonic
-    Given The app is opened
-    And The user onboards with an imported mnemonic "<mnemonic>"
+    When The user onboards with an imported mnemonic "<mnemonic>"
     Then The user should not see wallet protection screen
 
     Examples:
@@ -59,8 +57,7 @@ Feature: User Onboarding
       | denial denial denial denial denial denial denial denial denial denial denial denial |
 
   Scenario: User attemps to import a local wallet with an invalid password
-    Given The app is opened
-    And The user onboards with an imported mnemonic "<mnemonic>"
+    When The user onboards with an imported mnemonic "<mnemonic>"
     And The user chooses to protect the wallet with a password "<password>" and confirms with "<confirmPassword>"
     Then The user should not see wallet success screen
 

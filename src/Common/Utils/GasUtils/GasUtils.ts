@@ -48,7 +48,6 @@ const estimateGas = async (
     }
 
     const outputs = await explainer.execute()
-
     let gas = suggestedGas
     if (!gas) {
         const execGas = outputs.reduce((sum, out) => sum + out.gasUsed, 0)

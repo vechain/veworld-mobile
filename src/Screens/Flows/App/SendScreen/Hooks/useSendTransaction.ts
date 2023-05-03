@@ -42,7 +42,6 @@ export const useSendTransaction = ({
         // if fungible token
         const func = new abi.Function(abis.vip180.transfer)
         const data = func.encode(address, scaledAmount)
-
         return [
             {
                 to: token.address,

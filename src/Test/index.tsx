@@ -6,6 +6,7 @@ import { useTheme } from "~Common"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
 import { TokenApi, reducer } from "~Storage/Redux"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 export { default as TestHelpers } from "./helpers"
 import { configureStore } from "@reduxjs/toolkit"
 
@@ -71,16 +72,18 @@ const store = configureStore({
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider store={store}>
-            <ConnexContextProvider>
-                <BottomSheetModalProvider>
-                    <NavigationProvider>
-                        <TestTranslationProvider>
-                            {children}
-                        </TestTranslationProvider>
-                    </NavigationProvider>
-                </BottomSheetModalProvider>
-                <BaseToast />
-            </ConnexContextProvider>
+            <GestureHandlerRootView>
+                <ConnexContextProvider>
+                    <BottomSheetModalProvider>
+                        <NavigationProvider>
+                            <TestTranslationProvider>
+                                {children}
+                            </TestTranslationProvider>
+                        </NavigationProvider>
+                    </BottomSheetModalProvider>
+                    <BaseToast />
+                </ConnexContextProvider>
+            </GestureHandlerRootView>
         </Provider>
     )
 }
