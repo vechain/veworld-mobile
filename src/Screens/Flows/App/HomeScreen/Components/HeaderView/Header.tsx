@@ -28,7 +28,9 @@ export const Header = memo(() => {
             alignItems="center"
             justifyContent="space-between">
             <BaseView alignItems="flex-start" alignSelf="flex-start">
-                <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>
+                <BaseText typographyFont="largeTitle" testID="veworld-homepage">
+                    {LL.VEWORLD()}
+                </BaseText>
             </BaseView>
 
             <BaseView flexDirection="row">

@@ -1,9 +1,22 @@
 import { waitFor, element } from "detox"
 import assert from "assert"
 import { MnemonicScreen } from "../screens"
-import { DEFAULT_TIMEOUT, SHORT_TIMEOUT } from "../constants"
+import {
+    DEFAULT_TIMEOUT,
+    SHORT_TIMEOUT,
+    TEST_MNEMONIC,
+    TEST_PASSWORD,
+} from "../constants"
 
-const goThroughOnboardingSlides = async () => {
+export const isInOnboardingWelcomeScreen = async (): Promise<boolean> => {
+    return await waitFor(element(by.id("welcome-title-id")))
+        .toBeVisible()
+        .withTimeout(DEFAULT_TIMEOUT)
+        .then(() => true)
+        .catch(() => false)
+}
+
+export const goThroughOnboardingSlides = async () => {
     await waitFor(element(by.text("GET STARTED")))
         .toExist()
         .withTimeout(DEFAULT_TIMEOUT)
@@ -25,7 +38,7 @@ const goThroughOnboardingSlides = async () => {
     await element(by.text("NEXT: CREATE PASSWORD")).tap()
 }
 
-const goThroughPasswordSlides = async () => {
+export const goThroughPasswordSlides = async () => {
     await waitFor(element(by.text("NEXT: CUSTODY")))
         .toExist()
         .withTimeout(DEFAULT_TIMEOUT)
@@ -42,7 +55,7 @@ const goThroughPasswordSlides = async () => {
     await element(by.text("NEXT: SECRET PHRASE")).tap()
 }
 
-const skipToCreatePassword = async () => {
+export const skipToCreatePassword = async () => {
     await waitFor(element(by.text("GET STARTED")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
@@ -54,15 +67,15 @@ const skipToCreatePassword = async () => {
     await element(by.text("Skip ahead to create password")).tap()
 }
 
-const skipToRecoveryPhrase = async () => {
+export const skipToRecoveryPhrase = async () => {
     await element(by.text("Skip ahead to recovery phrase")).tap()
 }
 
-const selectCreateWallet = async () => {
+export const selectCreateWallet = async () => {
     await element(by.text("Create new wallet")).tap()
 }
 
-const skipToCreateLocalWallet = async () => {
+export const skipToCreateLocalWallet = async () => {
     await skipToCreatePassword()
 
     await selectCreateWallet()
@@ -70,7 +83,7 @@ const skipToCreateLocalWallet = async () => {
     await skipToRecoveryPhrase()
 }
 
-const skipToImportLocalWallet = async () => {
+export const skipToImportLocalWallet = async () => {
     await skipToCreatePassword()
 
     await waitFor(element(by.text("Import wallet")))
@@ -84,7 +97,7 @@ const skipToImportLocalWallet = async () => {
     await element(by.id("import-local-wallet")).tap()
 }
 
-const backupMnemonic = async (): Promise<string[]> => {
+export const backupMnemonic = async (): Promise<string[]> => {
     await element(by.id("toggle-mnemonic-visibility")).tap()
 
     const mnemonic: string[] = await MnemonicScreen.copyMnemonic()
@@ -103,7 +116,7 @@ const backupMnemonic = async (): Promise<string[]> => {
  * @param {string[]} mnemonic - The array of mnemonic words to be verified.
  * @returns {Promise<void>} - Resolves when the mnemonic has been successfully verified.
  */
-const verifyMnemonic = async (mnemonic: string[]) => {
+export const verifyMnemonic = async (mnemonic: string[]) => {
     const buttonGroupIds = [
         "first-word-button-group",
         "second-word-button-group",
@@ -135,7 +148,7 @@ const verifyMnemonic = async (mnemonic: string[]) => {
     await element(by.text("Confirm")).tap()
 }
 
-const pasteMnemonic = async (mnemonic: string) => {
+export const pasteMnemonic = async (mnemonic: string) => {
     await waitFor(element(by.id("import-mnemonic-input")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
@@ -155,7 +168,7 @@ const pasteMnemonic = async (mnemonic: string) => {
     await element(by.text("Verify")).tap()
 }
 
-const chooseAndConfirmPassword = async (
+export const chooseAndConfirmPassword = async (
     password: string,
     confirmPassword: string,
 ) => {
@@ -168,7 +181,7 @@ const chooseAndConfirmPassword = async (
     }
 }
 
-const protectWithBiometrics = async () => {
+export const protectWithBiometrics = async () => {
     assert(detox.device.getPlatform() === "ios", "Not on iOS device")
 
     await waitFor(element(by.text("Use Biometrics")))
@@ -212,23 +225,25 @@ const protectWithBiometrics = async () => {
         .catch(() => {})
 }
 
-const matchBiometrics = async () => {
+export const matchBiometrics = async () => {
     if (element(by.text("Use Face ID"))) await detox.device.matchFace()
     if (element(by.text("Use Touch ID"))) await detox.device.matchFinger()
 }
 
-export default {
-    goThroughOnboardingSlides,
-    goThroughPasswordSlides,
-    selectCreateWallet,
-    skipToRecoveryPhrase,
-    skipToCreatePassword,
-    skipToCreateLocalWallet,
-    skipToImportLocalWallet,
-    backupMnemonic,
-    verifyMnemonic,
-    pasteMnemonic,
-    chooseAndConfirmPassword,
-    protectWithBiometrics,
-    matchBiometrics,
+export const completeOnboarding = async (
+    mnemonic?: string,
+    password?: string,
+) => {
+    await skipToImportLocalWallet()
+
+    mnemonic = mnemonic || TEST_MNEMONIC
+    password = password || TEST_PASSWORD
+
+    await pasteMnemonic(mnemonic)
+
+    await element(by.text("Create password")).tap()
+
+    await chooseAndConfirmPassword(password, password)
+
+    await element(by.text("CREATE WALLET")).tap()
 }

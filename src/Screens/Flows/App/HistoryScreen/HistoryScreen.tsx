@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, PlatformUtils, useTheme } from "~Common"
+import { FormattingUtils, useTheme } from "~Common"
 import {
     BaseText,
     BaseSafeArea,
@@ -23,6 +23,7 @@ import {
     FungibleTokenActivity,
     SignCertActivity,
 } from "~Model"
+import PlatformUtils from "~Common/Utils/PlatformUtils" // this is imported like so to avoid circular dependency
 import { Routes } from "~Navigation"
 import { DappTransactionActivityBox } from "./Components/DappTransactionActivityBox"
 import { SignedCertificateActivityBox } from "./Components/SignedCertificateActivityBox"

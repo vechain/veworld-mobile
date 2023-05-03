@@ -226,13 +226,10 @@ export const ManageTokenScreen = () => {
 
 const styles = StyleSheet.create({
     scrollViewContainer: {
-        flex: 1,
-        width: "100%",
         marginBottom: 60,
     },
     scrollView: {
         paddingHorizontal: 20,
-        width: "100%",
     },
     counter: {
         borderRadius: 6,
