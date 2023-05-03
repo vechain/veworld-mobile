@@ -2,12 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import {
-    FormattingUtils,
-    PlatformUtils,
-    useBottomSheetModal,
-    useTheme,
-} from "~Common"
+import { FormattingUtils, useBottomSheetModal, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSafeArea,
@@ -35,6 +30,7 @@ import {
     EditContactBottomSheet,
     UnderlayLeft,
 } from "./Components"
+import PlatformUtils from "~Common/Utils/PlatformUtils" // this is imported like so to avoid circular dependency
 
 const underlaySnapPoints = [58]
 

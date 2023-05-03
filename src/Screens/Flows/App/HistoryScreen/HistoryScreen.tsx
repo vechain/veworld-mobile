@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, PlatformUtils, useTheme } from "~Common"
+import { FormattingUtils, useTheme } from "~Common"
 import {
     BaseText,
     BaseSafeArea,
@@ -16,6 +16,7 @@ import { ACTIVITIES_MOCK } from "./mock"
 import { FlashList } from "@shopify/flash-list"
 import { FungibleTokenActivityBox } from "./Components"
 import { Activity, ActivityType, FungibleTokenActivity } from "~Model"
+import PlatformUtils from "~Common/Utils/PlatformUtils" // this is imported like so to avoid circular dependency
 
 export const HistoryScreen = () => {
     const { LL } = useI18nContext()

@@ -4,8 +4,8 @@ import { useTheme } from "~Common"
 import { BaseView } from "./BaseView"
 
 type Props = {
-    height?: number
-    width?: number
+    height?: number | string
+    width?: number | string
     background?: string
 } & ViewProps
 
@@ -18,9 +18,7 @@ export const BaseSpacer: FC<Props> = (props: Props) => {
     return (
         <BaseView
             style={[{ height: props.height, width: props.width }, style]}
-            background={
-                props.background ? props.background : theme.colors.transparent
-            }
+            bg={props.background ? props.background : theme.colors.transparent}
             {...otherProps}
         />
     )

@@ -775,6 +775,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_SAVE: string
 	/**
+	 * N​E​X​T
+	 */
+	COMMON_BTN_NEXT: string
+	/**
 	 * n​a​m​e
 	 */
 	COMMON_LBL_NAME: string
@@ -1053,6 +1057,74 @@ type RootTranslation = {
 	 * T​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​i​s​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
+	/**
+	 * S​e​n​d
+	 */
+	SEND_TOKEN_TITLE: string
+	/**
+	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
+	 */
+	SEND_TOKEN_SUBTITLE: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​f​e​r
+	 */
+	SEND_TOKEN_SELECT_ASSET: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​b​a​l​a​n​c​e
+	 */
+	SEND_CURRENT_BALANCE: string
+	/**
+	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e
+	 */
+	SEND_BALANCE_PERCENTAGE: string
+	/**
+	 * 0​%
+	 */
+	SEND_RANGE_ZERO: string
+	/**
+	 * M​A​X
+	 */
+	SEND_RANGE_MAX: string
+	/**
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​b​a​l​a​n​c​e
+	 */
+	SEND_INSUFFICIENT_BALANCE: string
+	/**
+	 * R​e​c​i​p​i​e​n​t​ ​A​d​d​r​e​s​s
+	 */
+	SEND_INSERT_ADDRESS: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​c​i​p​i​e​n​t​ ​a​d​d​r​e​s​s​ 
+	 */
+	SEND_INSERT_ADDRESS_DESCRIPTION: string
+	/**
+	 * F​r​o​m
+	 */
+	SEND_FROM: string
+	/**
+	 * T​o
+	 */
+	SEND_TO: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	SEND_DETAILS: string
+	/**
+	 * A​m​o​u​n​t
+	 */
+	SEND_AMOUNT: string
+	/**
+	 * G​a​s​ ​f​e​e
+	 */
+	SEND_GAS_FEE: string
+	/**
+	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
+	 */
+	SEND_ESTIMATED_TIME: string
+	/**
+	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
+	 */
+	SEND_LESS_THAN_1_MIN: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -1829,6 +1901,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_SAVE: () => LocalizedString
 	/**
+	 * NEXT
+	 */
+	COMMON_BTN_NEXT: () => LocalizedString
+	/**
 	 * name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
@@ -2105,6 +2181,74 @@ Please, try again later.
 	 * This custom token is already present
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
+	/**
+	 * Send
+	 */
+	SEND_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Send your token
+	 */
+	SEND_TOKEN_SUBTITLE: () => LocalizedString
+	/**
+	 * Select the asset that you want to transfer
+	 */
+	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
+	/**
+	 * Currency balance
+	 */
+	SEND_CURRENT_BALANCE: () => LocalizedString
+	/**
+	 * Balance percentage
+	 */
+	SEND_BALANCE_PERCENTAGE: () => LocalizedString
+	/**
+	 * 0%
+	 */
+	SEND_RANGE_ZERO: () => LocalizedString
+	/**
+	 * MAX
+	 */
+	SEND_RANGE_MAX: () => LocalizedString
+	/**
+	 * Insufficient balance
+	 */
+	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
+	/**
+	 * Recipient Address
+	 */
+	SEND_INSERT_ADDRESS: () => LocalizedString
+	/**
+	 * Insert the recipient address 
+	 */
+	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
+	/**
+	 * From
+	 */
+	SEND_FROM: () => LocalizedString
+	/**
+	 * To
+	 */
+	SEND_TO: () => LocalizedString
+	/**
+	 * Details
+	 */
+	SEND_DETAILS: () => LocalizedString
+	/**
+	 * Amount
+	 */
+	SEND_AMOUNT: () => LocalizedString
+	/**
+	 * Gas fee
+	 */
+	SEND_GAS_FEE: () => LocalizedString
+	/**
+	 * Estimated time
+	 */
+	SEND_ESTIMATED_TIME: () => LocalizedString
+	/**
+	 * Less than 1 min
+	 */
+	SEND_LESS_THAN_1_MIN: () => LocalizedString
 	/**
 	 * Account
 	 */

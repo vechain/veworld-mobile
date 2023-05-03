@@ -102,6 +102,30 @@ export const selectVthoTokenWithBalance = createSelector(
         ),
 )
 
+export const selectSendableTokensWithBalance = createSelector(
+    [
+        selectVetTokenWithBalance,
+        selectVthoTokenWithBalance,
+        selectNonVechainTokensWithBalances,
+    ],
+    (
+        vetTokenWithBalance,
+        vthoTokenWithBalance,
+        nonVechainTokensWithBalances,
+    ) => {
+        const balances = [
+            vetTokenWithBalance,
+            vthoTokenWithBalance,
+            ...nonVechainTokensWithBalances,
+        ]
+        return balances.filter(
+            tokenWithBalance =>
+                tokenWithBalance &&
+                !new BigNumber(tokenWithBalance.balance.balance).isZero(),
+        ) as FungibleTokenWithBalance[]
+    },
+)
+
 export const selectFiatBalance = createSelector(
     [
         selectVetTokenWithBalance,
