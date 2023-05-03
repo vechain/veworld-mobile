@@ -8,7 +8,6 @@ import {
     debug,
     useTheme,
     useThemedStyles,
-    warn,
 } from "~Common"
 import { DEFAULT_GAS_COEFFICIENT } from "~Common/Constant/Thor/ThorConstants"
 import {
@@ -16,6 +15,7 @@ import {
     BaseText,
     BaseTouchable,
     BaseView,
+    showInfoToast,
     useThor,
 } from "~Components"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
@@ -71,9 +71,9 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
                     .then(res => {
                         setFeeInVTHO(res)
                     })
-                    .catch(err => {
-                        warn(err)
-                    })
+                    .catch(() =>
+                        showInfoToast("Info", "Gas fee may not be accurate."),
+                    )
             }
         }, [activity.txReceipt, thor])
 
