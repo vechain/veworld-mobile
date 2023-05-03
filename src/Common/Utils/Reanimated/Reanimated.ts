@@ -52,7 +52,7 @@ function renderFormat(
  * from https://github.com/wcandillon/react-native-redash/blob/master/src/Math.ts
  * @worklet
  */
-const round = (value: number, precision = 0): number => {
+export const round = (value: number, precision = 0): number => {
     "worklet"
     const p = Math.pow(10, precision)
     return Math.round(value * p) / p

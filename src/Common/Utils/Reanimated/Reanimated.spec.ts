@@ -2,6 +2,7 @@ import {
     Language,
     numberToLocaleStringWorklet,
     numberToPercentWorklet,
+    round,
 } from "./Reanimated"
 
 describe("reanimated numberToLocaleStringWorklet", function () {
@@ -258,5 +259,13 @@ describe("reanimated numberToLocaleStringWorklet", function () {
         expect(
             numberToPercentWorklet(intNum, { precision: 2, absolute: true }),
         ).toBe("10.00%")
+    })
+})
+
+describe("reaniamted round funciton", function () {
+    it("should round corrrectly", function () {
+        const numberToRound = 123.4321
+
+        expect(round(numberToRound, 2)).toBe(123.43)
     })
 })
