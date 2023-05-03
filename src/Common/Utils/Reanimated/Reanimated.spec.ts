@@ -263,7 +263,7 @@ describe("reanimated numberToLocaleStringWorklet", function () {
 })
 
 describe("Reaniamted round funciton", function () {
-    it("should round corrrectly", function () {
+    it("should round numbers corrrectly", function () {
         const numberToRound = 123.4321
 
         expect(round(numberToRound, 2)).toBe(123.43)
