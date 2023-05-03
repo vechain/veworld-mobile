@@ -262,7 +262,7 @@ describe("reanimated numberToLocaleStringWorklet", function () {
     })
 })
 
-describe("reaniamted round funciton", function () {
+describe("Reaniamted round funciton", function () {
     it("should round corrrectly", function () {
         const numberToRound = 123.4321
 
