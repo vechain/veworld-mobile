@@ -1,7 +1,8 @@
 import { address, HDNode } from "thor-devkit"
 import { XPub } from "~Model"
-import { veWorldErrors, error, HexUtils, VET } from "~Common"
-import CryptoUtils from "../CryptoUtils"
+import { error } from "~Common/Logger"
+import { VET, VTHO } from "~Common/Constant"
+import { HexUtils, CryptoUtils } from "~Common/Utils"
 
 /**
  * Get the address for the given index
@@ -15,10 +16,7 @@ export const getAddressFromXPub = (xPub: XPub, index: number): string => {
         return getAddressFromHdNode(hdNode, index)
     } catch (e) {
         error(e)
-        throw veWorldErrors.rpc.internal({
-            error: e,
-            message: "Invalid XPub",
-        })
+        throw new Error("Invalid XPub")
     }
 }
 
@@ -34,10 +32,7 @@ export const getAddressFromHdNode = (hdNode: HDNode, index: number): string => {
         return address.toChecksumed(account.address)
     } catch (e) {
         error(e)
-        throw veWorldErrors.rpc.internal({
-            error: e,
-            message: "Invalid XPub",
-        })
+        throw new Error("Invalid XPub")
     }
 }
 
@@ -95,6 +90,10 @@ export const isValid = (addr: string): boolean => {
         error(e)
         return false
     }
+}
+
+export const isVechainToken = (addr: string): boolean => {
+    return addr === VET.address || addr === VTHO.address
 }
 
 // export enum ExplorerLinkType {

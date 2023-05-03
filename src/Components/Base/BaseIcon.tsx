@@ -21,6 +21,7 @@ type Props =
           p?: number
           px?: number
           py?: number
+          iconPadding?: number
       } & IconProps &
           TouchableOpacityProps &
           ViewProps
@@ -45,6 +46,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
                 size={props.size ?? 22}
                 testID={testID}
                 color={iconColor}
+                style={{ padding: props.iconPadding ?? 0 }}
                 {...otherProps}
             />
         </BaseIconWrapper>

@@ -60,7 +60,7 @@ export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
             },
             {
                 name: LL.BTN_SEND(),
-                action: () => nav.navigate(Routes.SEND),
+                action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
                 icon: (
                     <BaseIcon color={theme.colors.text} name="send-outline" />
                 ),

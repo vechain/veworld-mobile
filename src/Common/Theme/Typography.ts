@@ -7,6 +7,7 @@ export type TFonts =
     | "subTitle"
     | "subTitleLight"
     | "subSubTitle"
+    | "subSubTitleLight"
     | "body"
     | "bodyBold"
     | "bodyMedium"
@@ -21,6 +22,7 @@ export type TFonts =
     | "captionMedium"
     | "smallCaption"
     | "smallCaptionMedium"
+    | "smallCaptionBold"
     | "smallCaptionRegular"
     | "largeTitleAccent"
     | "titleAccent"
@@ -124,6 +126,11 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontSize: 16,
         fontWeight: fontWeight[700],
     },
+    subSubTitleLight: {
+        fontFamily: fontFamily["Inter-Regular"],
+        fontSize: 16,
+        fontWeight: fontWeight[400],
+    },
     button: {
         fontFamily: fontFamily["Inter-Medium"],
         fontSize: 16,
@@ -155,15 +162,15 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontSize: 14,
         fontWeight: fontWeight[400],
     },
-    smallButtonPrimary: {
-        fontFamily: fontFamily["Inter-Medium"],
-        fontSize: 12,
-        fontWeight: fontWeight[500],
-    },
     footNote: {
         fontFamily: fontFamily["Inter-Light"],
         fontSize: 13,
         fontWeight: fontWeight.normal,
+    },
+    smallButtonPrimary: {
+        fontFamily: fontFamily["Inter-Medium"],
+        fontSize: 12,
+        fontWeight: fontWeight[500],
     },
     captionBold: {
         fontFamily: fontFamily["Inter-Bold"],
@@ -197,6 +204,11 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontSize: 10,
         fontWeight: fontWeight.normal,
         lineHeight: lineHeight.caption,
+    },
+    smallCaptionBold: {
+        fontFamily: fontFamily["Inter-Bold"],
+        fontSize: 10,
+        fontWeight: fontWeight[700],
     },
     smallCaptionRegular: {
         fontFamily: fontFamily["Inter-Regular"],

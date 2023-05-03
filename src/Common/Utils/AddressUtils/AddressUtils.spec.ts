@@ -6,6 +6,7 @@ import {
     getAddressFromHdNode,
     getAddressFromXPub,
     isValid,
+    isVechainToken,
     regexPattern,
 } from "./AddressUtils"
 
@@ -168,5 +169,25 @@ describe("Is Valid Address", () => {
 describe("regexPattern", () => {
     test("returns the correct result", () => {
         expect(regexPattern()).toStrictEqual(/^0x[a-fA-F0-9]{40}$/)
+    })
+})
+
+describe("Check vechain address", () => {
+    test("Valid vechain address must return true", () => {
+        expect(isVechainToken("VET")).toBe(true)
+    })
+
+    test("Invalid vechain address must return false", () => {
+        expect(isVechainToken("vet")).toBe(false)
+    })
+
+    test("Valid vechain thor token address must return true", () => {
+        expect(
+            isVechainToken("0x0000000000000000000000000000456e65726779"),
+        ).toBe(true)
+    })
+
+    test("Invalid vechain thor token address must return false", () => {
+        expect(isVechainToken("invalid-address")).toBe(false)
     })
 })

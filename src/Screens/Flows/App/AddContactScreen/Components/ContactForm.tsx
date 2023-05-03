@@ -49,6 +49,7 @@ export const ContactForm: React.FC<Props> = memo(
                     errorMessage={nameTouched ? nameError : ""}
                     value={valueName}
                     onTouchStart={() => setNameTouched(true)}
+                    testID="contact-name-input"
                 />
 
                 <BaseSpacer height={16} />
@@ -62,6 +63,7 @@ export const ContactForm: React.FC<Props> = memo(
                     onTouchStart={() => setAddressTouched(true)}
                     rightIcon="flip-horizontal"
                     onIconPress={onOpenCamera}
+                    testID="contact-address-input"
                 />
             </>
         )

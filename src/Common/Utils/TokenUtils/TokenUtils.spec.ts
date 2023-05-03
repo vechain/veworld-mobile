@@ -1,5 +1,6 @@
 import { FungibleToken } from "~Model"
-import { mergeTokens } from "./TokenUtils"
+import { isVechainToken, mergeTokens } from "./TokenUtils"
+import { VET, VTHO } from "~Common/Constant"
 
 describe("mergeTokens", () => {
     it("mergeTokens should merge two token arrays and remove duplicates based on symbol and genesisId", () => {
@@ -25,5 +26,13 @@ describe("mergeTokens", () => {
         const output = mergeTokens(a as FungibleToken[], b as FungibleToken[])
 
         expect(output).toEqual(expectedOutput)
+    })
+})
+
+describe("isVechainToken", () => {
+    it("should return correctly", () => {
+        expect(isVechainToken(VET)).toBe(true)
+        expect(isVechainToken(VTHO)).toBe(true)
+        expect(isVechainToken({ symbol: "bar" } as FungibleToken)).toBe(false)
     })
 })

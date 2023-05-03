@@ -9,6 +9,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    DismissKeyboardView,
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -60,68 +61,71 @@ export const AddContactScreen = () => {
     }, [LL, address, dispatch, isFormValid, name, nav])
 
     return (
-        <BaseSafeArea grow={1}>
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
+        <DismissKeyboardView>
+            <BaseSafeArea grow={1}>
+                <BaseIcon
+                    style={baseStyles.backIcon}
+                    size={36}
+                    name="chevron-left"
+                    color={theme.colors.text}
+                    action={goBack}
+                />
 
-            <BaseSpacer height={22} />
+                <BaseSpacer height={22} />
 
-            <BaseView
-                alignItems="center"
-                justifyContent="space-between"
-                mx={20}
-                flexGrow={1}>
-                <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="title">
-                        {LL.TITLE_ADD_CONTACT()}
-                    </BaseText>
+                <BaseView
+                    alignItems="center"
+                    justifyContent="space-between"
+                    mx={20}
+                    flexGrow={1}>
+                    <BaseView alignSelf="flex-start">
+                        <BaseText typographyFont="title">
+                            {LL.TITLE_ADD_CONTACT()}
+                        </BaseText>
+
+                        <BaseSpacer height={20} />
+
+                        <BaseText typographyFont="bodyMedium" my={8}>
+                            {LL.BD_ADD_CONTACT()}
+                        </BaseText>
+                        <BaseText typographyFont="caption">
+                            {LL.BD_ADD_CONTACT_DISCLAIMER()}
+                        </BaseText>
+
+                        <BaseSpacer height={20} />
+
+                        <ContactForm
+                            placeholderName={LL.PLACEHOLDER_ENTER_NAME()}
+                            placeholderAddress={LL.PLACEHOLDER_ENTER_ADDRESS()}
+                            titleName={LL.BD_CONTACT_NAME()}
+                            titleAddress={LL.BD_CONTACT_ADDRESS()}
+                            nameError={nameError}
+                            addressError={addressError}
+                            setName={setName}
+                            setAddress={setAddress}
+                            valueAddress={address}
+                        />
+
+                        <BaseSpacer height={20} />
+                    </BaseView>
 
                     <BaseSpacer height={20} />
 
-                    <BaseText typographyFont="bodyMedium" my={8}>
-                        {LL.BD_ADD_CONTACT()}
-                    </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_ADD_CONTACT_DISCLAIMER()}
-                    </BaseText>
-
-                    <BaseSpacer height={20} />
-
-                    <ContactForm
-                        placeholderName={LL.PLACEHOLDER_ENTER_NAME()}
-                        placeholderAddress={LL.PLACEHOLDER_ENTER_ADDRESS()}
-                        titleName={LL.BD_CONTACT_NAME()}
-                        titleAddress={LL.BD_CONTACT_ADDRESS()}
-                        nameError={nameError}
-                        addressError={addressError}
-                        setName={setName}
-                        setAddress={setAddress}
-                        valueAddress={address}
-                    />
-
-                    <BaseSpacer height={20} />
+                    <BaseView alignItems="center" w={100}>
+                        <BaseButton
+                            action={onCreateContact}
+                            w={100}
+                            px={20}
+                            title={LL.BTN_ADD_CONTACT().toUpperCase()}
+                            disabled={!isFormValid}
+                            bgColor={theme.colors.primary}
+                            style={baseStyles.primaryButton}
+                            testID="add-contact-button"
+                        />
+                    </BaseView>
                 </BaseView>
-
-                <BaseSpacer height={20} />
-
-                <BaseView alignItems="center" w={100}>
-                    <BaseButton
-                        action={onCreateContact}
-                        w={100}
-                        px={20}
-                        title={LL.BTN_ADD_CONTACT().toUpperCase()}
-                        disabled={!isFormValid}
-                        bgColor={theme.colors.primary}
-                        style={baseStyles.primaryButton}
-                    />
-                </BaseView>
-            </BaseView>
-        </BaseSafeArea>
+            </BaseSafeArea>
+        </DismissKeyboardView>
     )
 }
 

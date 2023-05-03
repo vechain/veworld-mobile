@@ -34,6 +34,7 @@ export const TabStack = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: "Wallet",
+                    tabBarTestID: "wallet-tab",
                     tabBarIcon: ({ focused }) =>
                         renderTabBarIcon(
                             focused,
@@ -47,6 +48,7 @@ export const TabStack = () => {
                 component={NFTStack}
                 options={{
                     tabBarLabel: "NFT",
+                    tabBarTestID: "nft-tab",
                     tabBarIcon: ({ focused }) =>
                         renderTabBarIcon(
                             focused,
@@ -75,6 +77,7 @@ export const TabStack = () => {
                 component={SettingsStack}
                 options={{
                     tabBarLabel: "Settings",
+                    tabBarTestID: "settings-tab",
                     tabBarIcon: ({ focused }) =>
                         renderTabBarIcon(
                             focused,

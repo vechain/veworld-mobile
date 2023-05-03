@@ -2,12 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import {
-    FormattingUtils,
-    PlatformUtils,
-    useBottomSheetModal,
-    useTheme,
-} from "~Common"
+import { FormattingUtils, useBottomSheetModal, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSafeArea,
@@ -26,6 +21,7 @@ import {
     selectContacts,
 } from "~Storage/Redux/Selectors"
 import SwipeableItem, {
+    OpenDirection,
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
 import {
@@ -34,6 +30,7 @@ import {
     EditContactBottomSheet,
     UnderlayLeft,
 } from "./Components"
+import PlatformUtils from "~Common/Utils/PlatformUtils" // this is imported like so to avoid circular dependency
 
 const underlaySnapPoints = [58]
 
@@ -142,6 +139,14 @@ export const ContactsScreen = () => {
         [],
     )
 
+    const onSwipeableItemChange = useCallback(
+        (address: string) => {
+            closeOtherSwipeableItems("")
+            onDeleteContactPress(address)
+        },
+        [closeOtherSwipeableItems, onDeleteContactPress],
+    )
+
     // [End] Methods
 
     // [Start] Render sub components
@@ -179,6 +184,15 @@ export const ContactsScreen = () => {
                                         }
                                         key={contact.address}
                                         item={contact}
+                                        onChange={({ openDirection }) => {
+                                            if (
+                                                openDirection !==
+                                                OpenDirection.NONE
+                                            )
+                                                onSwipeableItemChange(
+                                                    contact.address,
+                                                )
+                                        }}
                                         renderUnderlayLeft={() => (
                                             <UnderlayLeft
                                                 onDelete={onDeleteContactPress}
@@ -200,6 +214,7 @@ export const ContactsScreen = () => {
                             height: 184,
                             width: 400,
                         }}
+                        testID="contacts-list"
                     />
                 </BaseView>
             </>
@@ -209,6 +224,7 @@ export const ContactsScreen = () => {
         contactsListSeparator,
         onDeleteContactPress,
         onEditContactPress,
+        onSwipeableItemChange,
         registerSwipeableItemRef,
     ])
 
@@ -229,7 +245,9 @@ export const ContactsScreen = () => {
             <BaseSpacer height={12} />
             <BaseView mx={20}>
                 <BaseView flexDirection="row" w={100}>
-                    <BaseText typographyFont="title">
+                    <BaseText
+                        typographyFont="title"
+                        testID="contacts-screen-title">
                         {LL.TITLE_CONTACTS()}
                     </BaseText>
                     {contacts.length > 0 && (
@@ -239,6 +257,7 @@ export const ContactsScreen = () => {
                             size={24}
                             bg={theme.colors.secondary}
                             action={onAddContactPress}
+                            testID="add-contact-button"
                         />
                     )}
                 </BaseView>

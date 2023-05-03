@@ -1,7 +1,7 @@
 import {
     useAppDispatch,
     useAppSelector,
-    selectAccountBalances,
+    selectSelectedAccountBalances,
     selectSelectedNetwork,
     updateAccountBalances,
     useGetTokensFromGithubQuery,
@@ -9,6 +9,7 @@ import {
     fetchTokensWithInfo,
     fetchExchangeRates,
     selectCoinGeckoTokens,
+    selectSelectedAccount,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useEffect } from "react"
@@ -33,7 +34,8 @@ const TOKEN_BALANCE_SYNC_PERIOD = new BigNumber(
 export const useTokenBalances = () => {
     const dispatch = useAppDispatch()
     const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const balances = useAppSelector(selectAccountBalances)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const balances = useAppSelector(selectSelectedAccountBalances)
     const thorClient = useThor()
     const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
     const balancesKey = balances?.map(balance => balance.tokenAddress).join("-")
@@ -47,21 +49,32 @@ export const useTokenBalances = () => {
      * init default balances if no balances found on redux
      */
     useEffect(() => {
-        if (balances?.length === 0) {
+        if (balances?.length === 0 && selectedAccount) {
             dispatch(resetTokenBalances)
-            dispatch(updateAccountBalances(thorClient))
+            dispatch(
+                updateAccountBalances(thorClient, selectedAccount?.address),
+            )
         }
-    }, [dispatch, thorClient, balances, currentNetwork])
+    }, [dispatch, thorClient, balances, currentNetwork, selectedAccount])
 
     useEffect(() => {
         const updateBalances = () => {
             // Update balances
-            dispatch(updateAccountBalances(thorClient))
+            if (selectedAccount)
+                dispatch(
+                    updateAccountBalances(thorClient, selectedAccount?.address),
+                )
         }
         updateBalances()
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
         return () => clearInterval(interval)
-    }, [dispatch, thorClient, balancesKey, currentNetwork?.genesis.id])
+    }, [
+        dispatch,
+        thorClient,
+        balancesKey,
+        currentNetwork?.genesis.id,
+        selectedAccount,
+    ])
 
     useEffect(() => {
         dispatch(fetchTokensWithInfo())

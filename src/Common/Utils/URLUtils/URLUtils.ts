@@ -1,4 +1,4 @@
-import { error } from "~Common"
+import { error } from "~Common/Logger"
 
 // https://stackoverflow.com/questions/736513/how-do-i-parse-a-url-into-hostname-and-path-in-javascript
 // /^: This is the start of the regular expression, and it indicates that the string to be matched should start with the following pattern.
@@ -57,6 +57,10 @@ const toWebsocketURL = (url: string, suffix?: string) => {
         .concat(suffix || "")
 }
 
+// Returns the default websocket url for the node (beat2)
+const toNodeBeatWebsocketUrl = (url: string) =>
+    toWebsocketURL(url, "/subscriptions/beat2")
+
 const isHttps = (url: string) => {
     try {
         const parsedURL = parseUrl(url)
@@ -104,6 +108,7 @@ export default {
     compareURLs,
     clean,
     toWebsocketURL,
+    toNodeBeatWebsocketUrl,
     isHttp,
     isHttps,
     isLocalHost,

@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { useDisclosure } from "~Common"
+import { useDisclosure } from "~Common/Hooks"
 import {
     BaseButtonGroupHorizontal,
     BaseSpacer,

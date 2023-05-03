@@ -151,6 +151,14 @@ describe("URLUtils", () => {
         })
     })
 
+    describe("toNodeBeatWebsocketUrl", function () {
+        test("should return  the node beat websocket URL", function () {
+            expect(
+                URLUtils.toNodeBeatWebsocketUrl("https://www.google.com"),
+            ).toBe("wss://www.google.com/subscriptions/beat2")
+        })
+    })
+
     describe("isHttps", function () {
         test("should return true for https", function () {
             expect(URLUtils.isHttps("https://www.google.com")).toBe(true)

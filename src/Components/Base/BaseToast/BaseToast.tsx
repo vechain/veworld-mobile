@@ -1,6 +1,8 @@
 import React from "react"
 import Toast, { ToastConfigParams } from "react-native-toast-message"
-import { ColorThemeType, PlatformUtils, useTheme } from "~Common"
+import { ColorThemeType } from "~Common/Theme"
+import { useTheme } from "~Common/Hooks"
+import PlatformUtils from "~Common/Utils/PlatformUtils" // this is imported like so to avoid circular dependency
 import {
     errorToastStyles,
     infoToastStyles,

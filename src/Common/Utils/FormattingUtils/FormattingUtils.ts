@@ -1,5 +1,5 @@
 import { BigNumber } from "bignumber.js"
-import { error } from "~Common"
+import { error } from "../../Logger"
 // import dayjs from "dayjs"
 // import RelativeTime from "dayjs/plugin/relativeTime"
 // import VeWorldErrors from "common/errors/VeWorldErrors"
@@ -10,6 +10,7 @@ import { error } from "~Common"
 import RoundingMode = BigNumber.RoundingMode
 
 export const ROUND_DECIMAL_DEFAULT = 2
+export const ROUND_DECIMAL_PRECISE = 6
 
 // const locale = detectLocale()
 
