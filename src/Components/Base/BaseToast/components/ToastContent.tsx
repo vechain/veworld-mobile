@@ -38,7 +38,7 @@ export const ToastContent = ({
                     <BaseView style={styles.textContainer} pl={12}>
                         <BaseText
                             color={theme.colors.textReversed}
-                            typographyFont="bodyBold">
+                            typographyFont="buttonPrimary">
                             {text1}{" "}
                         </BaseText>
                         <BaseText

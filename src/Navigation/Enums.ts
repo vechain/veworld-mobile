@@ -19,7 +19,10 @@ export enum Routes {
     MANAGE_TOKEN = "Manage_Token",
     MANAGE_CUSTOM_TOKEN = "Manage_Custom_Token",
     BUY = "Buy",
-    SEND = "Send",
+    SELECT_TOKEN_SEND = "Select_Token_Send",
+    SELECT_AMOUNT_SEND = "Select_Amount_Send",
+    INSERT_ADDRESS_SEND = "Insert_Address_Send",
+    TRANSACTION_SUMMARY_SEND = "Transaction_Summary_Send",
     SWAP = "Swap",
     HISTORY = "History",
     NFTS = "NFTs",
@@ -39,4 +42,5 @@ export enum Routes {
     CAMERA = "Camera",
     DISCOVER = "Discover",
     TOKEN_DETAILS = "Token_Details",
+    ACTIVITY_DETAILS = "Activity_Details",
 }

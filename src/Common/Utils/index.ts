@@ -3,7 +3,7 @@ import AddressUtils from "./AddressUtils"
 // import AliasUtils from "./AliasUtils"
 // import AsyncUtils from "./AsyncUtils"
 import BiometricsUtils from "./BiometricsUtils"
-// import BloomUtils from "./BloomUtils"
+import BloomUtils from "./BloomUtils"
 import CryptoUtils from "./CryptoUtils"
 // import FormUtils from "./FormUtils"
 import FormattingUtils from "./FormattingUtils"
@@ -18,8 +18,9 @@ import AlertUtils from "./AlertUtils"
 import PicassoUtils from "./PicassoUtils"
 import StringUtils from "./StringUtils"
 // import SignatureUtils from "./SignatureUtils"
-// import TokenUtils from "./TokenUtils"
+import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
+import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
 import LanguageUtils from "./LanguageUtils"
 import FormUtils from "./FormUtils"
@@ -33,7 +34,7 @@ export {
     // AccountsUtils,
     AddressUtils,
     BiometricsUtils,
-    // BloomUtils,
+    BloomUtils,
     CryptoUtils,
     // FormUtils,
     FormattingUtils,
@@ -48,8 +49,9 @@ export {
     PicassoUtils,
     StringUtils,
     // SignatureUtils,
-    // TokenUtils,
+    TokenUtils,
     TransactionUtils,
+    TransfersUtils,
     URLUtils,
     LanguageUtils,
     FormUtils,

@@ -2,10 +2,11 @@ import React, { useEffect, useMemo, useState } from "react"
 import { BaseToast, ConnexContextProvider } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Common/Hooks"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
 import { TokenApi, reducer } from "~Storage/Redux"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 export { default as TestHelpers } from "./helpers"
 import { configureStore } from "@reduxjs/toolkit"
 
@@ -71,16 +72,18 @@ const store = configureStore({
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider store={store}>
-            <ConnexContextProvider>
-                <BottomSheetModalProvider>
-                    <NavigationProvider>
-                        <TestTranslationProvider>
-                            {children}
-                        </TestTranslationProvider>
-                    </NavigationProvider>
-                </BottomSheetModalProvider>
-                <BaseToast />
-            </ConnexContextProvider>
+            <GestureHandlerRootView>
+                <ConnexContextProvider>
+                    <BottomSheetModalProvider>
+                        <NavigationProvider>
+                            <TestTranslationProvider>
+                                {children}
+                            </TestTranslationProvider>
+                        </NavigationProvider>
+                    </BottomSheetModalProvider>
+                    <BaseToast />
+                </ConnexContextProvider>
+            </GestureHandlerRootView>
         </Provider>
     )
 }

@@ -1,11 +1,10 @@
-import { ColorTheme } from "~Common"
 import {
     errorToastStyles,
     infoToastStyles,
     successToastStyles,
     warningToastStyles,
 } from "./BaseToastStyles"
-import { COLORS } from "~Common/Theme"
+import { COLORS, ColorTheme } from "~Common/Theme"
 import { Dimensions } from "react-native"
 
 describe("successToastStyles", () => {

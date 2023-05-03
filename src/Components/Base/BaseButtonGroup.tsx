@@ -7,7 +7,6 @@ import DropShadow from "react-native-drop-shadow"
 export type Button = {
     id: string
     label: string
-
     disabled?: boolean
 }
 
