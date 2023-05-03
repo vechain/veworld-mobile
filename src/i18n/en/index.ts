@@ -286,6 +286,8 @@ const en: BaseTranslation = {
 
     // Notifications
     NOTIFICATION_COPIED_CLIPBOARD: "{name} copied to clipboard!",
+    NOTIFICATION_transaction_reverted: "Transaction {txId} was reverted.",
+    NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
     // Accounts
 

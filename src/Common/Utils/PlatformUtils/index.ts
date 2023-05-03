@@ -1,3 +1,3 @@
-import * as PlatformUtils from "./Platform"
+import * as PlatformUtils from "./PlatformUtils"
 
 export default PlatformUtils

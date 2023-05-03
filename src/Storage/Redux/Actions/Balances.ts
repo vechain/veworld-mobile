@@ -1,7 +1,7 @@
 import {
-    selectAccountBalances,
     selectSelectedAccount,
     selectSelectedNetwork,
+    selectAccountBalances,
 } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
@@ -17,9 +17,12 @@ import { Balance } from "~Model"
  * @param accountAddress - the acccount address for this balance
  */
 export const updateAccountBalances =
-    (thorClient: Connex.Thor) =>
+    (thorClient: Connex.Thor, accountAddress: string) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
-        const accountBalances = selectAccountBalances(getState())
+        const accountBalances = selectAccountBalances(
+            getState(),
+            accountAddress,
+        )
         const network = selectSelectedNetwork(getState())
         const balances: Balance[] = []
         try {

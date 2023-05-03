@@ -4,7 +4,6 @@ import { FungibleToken, TransferLog } from "~Model"
 import AddressUtils from "../AddressUtils"
 import { DIRECTIONS } from "~Common/Enums"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
-import { debug } from "~Common/Logger"
 
 export interface IQueryParams {
     thor: Connex.Thor
@@ -23,9 +22,7 @@ export interface IQueryParams {
  * @param params  - The query params
  * @returns
  */
-export const getTransfers = async (
-    params: IQueryParams,
-): Promise<TransferLog[]> => {
+const getTransfers = async (params: IQueryParams): Promise<TransferLog[]> => {
     if (params.token.symbol === VET.symbol) return getVetTransfers(params)
 
     return getTokenTransfers(params)
@@ -93,8 +90,6 @@ const getTokenTransfers = async (
     )
     const filter = params.thor.filter("event", tokenCriteria)
 
-    debug({ filter })
-
     const events = await filter
         .order("desc")
         .range({
@@ -152,4 +147,8 @@ const buildEventCriteria = (
         })
     })
     return [...from, ...to]
+}
+
+export default {
+    getTransfers,
 }
