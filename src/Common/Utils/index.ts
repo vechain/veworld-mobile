@@ -5,10 +5,15 @@ import AddressUtils from "./AddressUtils"
 import BiometricsUtils from "./BiometricsUtils"
 import BloomUtils from "./BloomUtils"
 import CryptoUtils from "./CryptoUtils"
-// import FormUtils from "./FormUtils"
+import ConnectionUtils from "./ConnectionUtils"
+import DateUtils from "./DateUtils"
+import FormUtils from "./FormUtils"
 import FormattingUtils from "./FormattingUtils"
 import GasUtils from "./GasUtils"
 import HexUtils from "./HexUtils"
+import LanguageUtils from "./LanguageUtils"
+import LedgerUtils from "./LedgerUtils"
+import LocaleUtils from "./LocaleUtils"
 // import MappingUtils from "./MappingUtils"
 import PasswordUtils from "./PasswordUtils"
 import PlatformUtils from "./PlatformUtils"
@@ -22,11 +27,6 @@ import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
-import LanguageUtils from "./LanguageUtils"
-import FormUtils from "./FormUtils"
-import ConnectionUtils from "./ConnectionUtils"
-import DateUtils from "./DateUtils"
-import LocaleUtils from "./LocaleUtils"
 
 export {
     // AliasUtils,
@@ -35,11 +35,16 @@ export {
     AddressUtils,
     BiometricsUtils,
     BloomUtils,
+    ConnectionUtils,
     CryptoUtils,
-    // FormUtils,
+    DateUtils,
+    FormUtils,
     FormattingUtils,
     GasUtils,
     HexUtils,
+    LanguageUtils,
+    LedgerUtils,
+    LocaleUtils,
     // MappingUtils,
     PasswordUtils,
     PlatformUtils,
@@ -53,9 +58,4 @@ export {
     TransactionUtils,
     TransfersUtils,
     URLUtils,
-    LanguageUtils,
-    FormUtils,
-    ConnectionUtils,
-    DateUtils,
-    LocaleUtils,
 }
