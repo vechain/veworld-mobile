@@ -376,6 +376,18 @@ const en: BaseTranslation = {
     // Activities
     DATE_NOT_AVAILABLE: "Date not available",
     RECEIVE_ACTIVITY: "Receive",
+    FROM: "From",
+    TO: "To",
+    UNKNOWN_ACCOUNT: "Unknown Account",
+    VALUE_TITLE: "Value",
+    GAS_FEE: "Gas fee",
+    DETAILS: "Details",
+    TRANSACTION_ID: "Transaction ID",
+    VIEW_ON_EXPLORER: "View on explorer",
+    BLOCK_NUMBER: "Block number",
+    DAPP_TRANSACTION: "DApp Transaction",
+    SIGN_CERTIFICATE: "Sign certificate",
+    SIGNED_CERTIFICATE: "Signed certificate",
 
     // Transfers
 
