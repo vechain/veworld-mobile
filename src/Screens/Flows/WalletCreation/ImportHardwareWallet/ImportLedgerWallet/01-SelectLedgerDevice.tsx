@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
     BaseButton,
     BaseIcon,
@@ -17,6 +17,7 @@ import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerDevice } from "../types"
 import { LedgerDeviceBox } from "../components"
 import { FlatList } from "react-native-gesture-handler"
+import { Routes } from "~Navigation"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
@@ -32,24 +33,38 @@ export const SelectLedgerDevice = () => {
         setSelectedDevice(device)
     }, [])
 
+    const onImportClick = useCallback(() => {
+        if (selectedDevice) {
+            nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS, {
+                device: selectedDevice,
+            })
+        }
+    }, [nav, selectedDevice])
+
     /**
      * Listen for new ledger (nanox) devices
      */
-    BleTransport.listen({
-        complete: () => {
-            debug("complete")
-        },
-        next: e => {
-            debug({ e })
-            if (e.type === "add") {
-                const device = e.descriptor as LedgerDevice | undefined
-                if (device) setAvailableDevices([device])
-            }
-        },
-        error: error => {
-            debug({ error })
-        },
-    })
+    useEffect(() => {
+        const subscription = BleTransport.listen({
+            complete: () => {
+                debug("complete")
+            },
+            next: e => {
+                debug({ e })
+                if (e.type === "add") {
+                    const device = e.descriptor as LedgerDevice | undefined
+                    if (device) setAvailableDevices([device])
+                }
+            },
+            error: error => {
+                debug({ error })
+            },
+        })
+
+        return () => {
+            subscription.unsubscribe()
+        }
+    }, [])
 
     const renderItem = useCallback(
         ({ item }: { item: LedgerDevice }) => {
@@ -110,7 +125,7 @@ export const SelectLedgerDevice = () => {
 
                     <BaseView w={100}>
                         <BaseButton
-                            action={() => null}
+                            action={onImportClick}
                             w={100}
                             title={LL.COMMON_LBL_IMPORT()}
                             disabled={!selectedDevice}
