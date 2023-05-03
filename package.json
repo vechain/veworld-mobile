@@ -10,6 +10,7 @@
         "doctor": "react-native doctor",
         "android": "react-native run-android",
         "ios": "react-native run-ios --simulator 'iPhone 14 Pro'",
+        "ios:my-device": "react-native run-ios",
         "ios:old-device": "react-native run-ios --simulator 'iPhone SE (3rd generation)'",
         "start": "react-native start",
         "start:reset": "react-native start --reset-cache",
