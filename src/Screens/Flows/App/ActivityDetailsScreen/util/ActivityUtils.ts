@@ -1,4 +1,4 @@
-import { DIRECTIONS } from "~Common"
+import { DIRECTIONS, warn } from "~Common"
 import { Activity, ActivityType, FungibleTokenActivity } from "~Model"
 import { TranslationFunctions } from "~i18n"
 
@@ -18,5 +18,7 @@ export const getActivityTitle = (
             return LL.SIGNED_CERTIFICATE()
         case ActivityType.CONNECTED_APP_TRANSACTION:
             return LL.DAPP_TRANSACTION()
+        default:
+            warn("Unknown activity type")
     }
 }
