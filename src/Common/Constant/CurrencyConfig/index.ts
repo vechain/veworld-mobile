@@ -1,3 +1,1 @@
-import CurrencyConfig from "./CurrencyConfig"
-
-export default CurrencyConfig
+export * from "./CurrencyConfig"

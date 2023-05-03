@@ -18,6 +18,7 @@ type Props = {
     label?: string
     value?: string
     errorMessage?: string
+    testID?: string
     rightIcon?: string
     rightIconTestID?: string
     onIconPress?: () => void
@@ -31,6 +32,7 @@ export const BaseTextInput = memo(
         label,
         value,
         errorMessage,
+        testID,
         rightIcon,
         rightIconTestID,
         onIconPress,
@@ -59,6 +61,7 @@ export const BaseTextInput = memo(
                         onChangeText={setValue}
                         value={value}
                         autoCapitalize="none"
+                        testID={testID}
                         {...otherProps}
                     />
                     {rightIcon && (

@@ -1,1 +1,4 @@
-export * from "./OnboardingFlows"
+export * as OnboardingFlows from "./OnboardingFlows"
+export * as ContactsManagementFlows from "./ContactsManagementFlows"
+export * as HomeFlows from "./HomeFlows"
+export * as AdvancedSettingsFlow from "./AdvancedSettingsFlow"
