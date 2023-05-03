@@ -28,7 +28,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
                 ),
             timeout,
         )
-        const wsUrl = URLUtils.toWebsocketURL(url, "/subscriptions/beat")
+        const wsUrl = URLUtils.toNodeBeatWebsocketUrl(url)
         const webSocket = new WebSocket(wsUrl)
 
         webSocket.onopen = () => {
@@ -47,7 +47,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
             webSocket.close()
         }
 
-        webSocket.onclose = () => warn("Websocket closed")
+        webSocket.onclose = e => warn("Websocket closed", e)
     })
 }
 

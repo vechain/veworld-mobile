@@ -1,0 +1,87 @@
+import React, { memo, useMemo } from "react"
+import { StyleSheet } from "react-native"
+import DropShadow from "react-native-drop-shadow"
+import { ColorThemeType, DateUtils, useTheme, useThemedStyles } from "~Common"
+import { COLORS } from "~Common/Theme"
+import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { Activity, ConnectedAppTxActivity } from "~Model"
+import { useI18nContext } from "~i18n"
+import { getCalendars } from "expo-localization"
+
+type Props = {
+    activity: ConnectedAppTxActivity
+    onPress: (activity: Activity) => void
+}
+
+export const DappTransactionActivityBox: React.FC<Props> = memo(
+    ({ activity, onPress }) => {
+        const theme = useTheme()
+
+        const { styles } = useThemedStyles(baseStyles)
+
+        const { LL, locale } = useI18nContext()
+
+        const dateTimeActivity = useMemo(() => {
+            return activity.timestamp
+                ? DateUtils.formatDateTime(
+                      activity.timestamp,
+                      locale,
+                      getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
+                  )
+                : LL.DATE_NOT_AVAILABLE()
+        }, [LL, activity.timestamp, locale])
+
+        return (
+            <BaseTouchable action={() => onPress(activity)}>
+                <BaseView
+                    w={100}
+                    flexDirection="row"
+                    style={styles.container}
+                    justifyContent="space-between">
+                    <BaseView flexDirection="row">
+                        <DropShadow style={[theme.shadows.card]}>
+                            <BaseView
+                                flexDirection="column"
+                                alignItems="center">
+                                <BaseIcon
+                                    name="view-grid-outline"
+                                    size={20}
+                                    color={COLORS.DARK_PURPLE}
+                                    testID="magnify"
+                                    bg={COLORS.WHITE}
+                                    iconPadding={4}
+                                />
+                            </BaseView>
+                        </DropShadow>
+                        <BaseView flexDirection="column" alignItems="center">
+                            <BaseView pl={12}>
+                                <BaseText typographyFont="buttonPrimary" pb={5}>
+                                    {LL.DAPP_TRANSACTION()}
+                                </BaseText>
+                                <BaseText typographyFont="smallCaptionRegular">
+                                    {dateTimeActivity}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
+                    </BaseView>
+                    <BaseView flexDirection="column" alignItems="center" pl={5}>
+                        <BaseIcon
+                            size={24}
+                            name="chevron-right"
+                            color={theme.colors.text}
+                        />
+                    </BaseView>
+                </BaseView>
+            </BaseTouchable>
+        )
+    },
+)
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            borderBottomColor: theme.colors.separator,
+            borderBottomWidth: 0.5,
+            height: 65,
+        },
+    })

@@ -39,4 +39,5 @@ export enum Routes {
     CAMERA = "Camera",
     DISCOVER = "Discover",
     TOKEN_DETAILS = "Token_Details",
+    ACTIVITY_DETAILS = "Activity_Details",
 }

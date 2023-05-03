@@ -23,3 +23,8 @@ fiatCurrencies.push({
 export default [...fiatCurrencies].sort(function (a, b) {
     return a.currency.localeCompare(b.currency)
 })
+
+export const currencySymbolMap: Record<CURRENCY, CURRENCY_SYMBOLS> = {
+    [CURRENCY.USD]: CURRENCY_SYMBOLS.USD,
+    [CURRENCY.EUR]: CURRENCY_SYMBOLS.EUR,
+}

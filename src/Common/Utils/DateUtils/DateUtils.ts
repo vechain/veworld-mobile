@@ -72,3 +72,5 @@ export const formatDateTime = (
         "",
     )}${timeSuffix}`
 }
+
+export const DEFAULT_TIMEZONE = "UTC"
