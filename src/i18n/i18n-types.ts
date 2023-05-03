@@ -978,6 +978,17 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
 	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
+	 * @param {unknown} txId
+	 */
+	NOTIFICATION_transaction_reverted: RequiredParams<'txId'>
+	/**
+	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}
+	 * @param {unknown} amount
+	 * @param {unknown} token
+	 */
+	NOTIFICATION_found_token_transfer: RequiredParams<'amount' | 'token'>
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -2149,6 +2160,14 @@ Please, try again later.
 	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Transaction {txId} was reverted.
+	 */
+	NOTIFICATION_transaction_reverted: (arg: { txId: unknown }) => LocalizedString
+	/**
+	 * Found {token} transfer: {amount}
+	 */
+	NOTIFICATION_found_token_transfer: (arg: { amount: unknown, token: unknown }) => LocalizedString
 	/**
 	 * Light
 	 */
