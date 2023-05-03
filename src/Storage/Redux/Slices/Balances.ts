@@ -1,5 +1,4 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
 import { AddressUtils, VET, VTHO } from "~Common"
 import { Balance } from "~Model"
 
@@ -97,9 +96,6 @@ export const BalanceSlice = createSlice({
                 return updatedBalance ? updatedBalance : balance
             })
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialState)
     },
 })
 

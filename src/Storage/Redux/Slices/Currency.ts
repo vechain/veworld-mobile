@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { CurrencyExchangeRate } from "~Model"
 import { CurrencyState } from "../Types/Currency"
-import { PURGE } from "redux-persist"
 
 export const initialCurrencyState: CurrencyState = {
     availableCurrencies: [],
@@ -27,9 +26,6 @@ export const CurrencySlice = createSlice({
         clearExchangeRate: state => {
             state.exchangeRates = []
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialCurrencyState)
     },
 })
 

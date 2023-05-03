@@ -1,6 +1,5 @@
 import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
 import { CURRENCY, ThemeEnum } from "~Common/Enums"
 export interface UserPreferenceState {
     theme: ThemeEnum
@@ -55,9 +54,6 @@ export const UserPreferencesSlice = createSlice({
         ) => {
             state.isAnalyticsTrackingEnabled = action.payload
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialState)
     },
 })
 

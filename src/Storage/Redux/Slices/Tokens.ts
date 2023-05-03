@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FungibleToken, TokenWithCompleteInfo, VeChainToken } from "~Model"
 import { TokenInfoResponse, TokensState } from "../Types"
 import { AddressUtils } from "~Common"
-import { PURGE } from "redux-persist"
 
 export const initialTokenState: TokensState = {
     custom: [],
@@ -56,9 +55,6 @@ export const TokenSlice = createSlice({
         ) => {
             state.coinGeckoTokens = action.payload
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialTokenState)
     },
 })
 

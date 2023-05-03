@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
 import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
 import { Network } from "~Model"
 
@@ -53,9 +52,6 @@ export const NetworkSlice = createSlice({
         toggleShowConversionOtherNetworks: state => {
             state.showConversionOtherNets = !state.showConversionOtherNets
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialState)
     },
 })
 

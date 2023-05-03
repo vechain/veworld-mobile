@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
 import { AddressUtils } from "~Common"
 import { Contact } from "~Model"
 
@@ -60,9 +59,6 @@ export const ContactsSlice = createSlice({
                 state.contacts[contactExistsIndex].alias = alias
             }
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialContactsState)
     },
 })
 
