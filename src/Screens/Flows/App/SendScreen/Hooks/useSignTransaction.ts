@@ -92,7 +92,7 @@ export const useSignTransaction = ({
                 },
             )
             nav.navigate(Routes.HOME)
-            dispatch(updateAccountBalances(thorClient))
+            dispatch(updateAccountBalances(thorClient, account.address))
         } catch (e) {
             error(e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
