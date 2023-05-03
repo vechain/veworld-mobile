@@ -1,13 +1,9 @@
-const mockNavigate = jest.fn()
-jest.mock("@react-navigation/native", () => ({
-    ...jest.requireActual("@react-navigation/native"),
-    useNavigation: jest.fn(() => ({ navigate: mockNavigate })),
-}))
 import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react-native"
 import { TestWrapper } from "~Test"
 import { FastActionsBar } from "./FastActionsBar"
-import { Routes } from "~Navigation"
+import { BaseIcon } from "~Components/Base"
+import { FastAction } from "~Model"
 
 const getBuyButton = async () =>
     await screen.findByTestId("buyButton", {}, { timeout: 5000 })
@@ -18,9 +14,41 @@ const getSwapButton = async () =>
 const getHistoryButton = async () =>
     await screen.findByTestId("historyButton", {}, { timeout: 5000 })
 
+const mocked_action_buy = jest.fn()
+const mocked_action_send = jest.fn()
+const mocked_action_swap = jest.fn()
+const mocked_action_history = jest.fn()
+
 describe("FastActionsBar component", () => {
     it("renders buttons with correct navigation", async () => {
-        render(<FastActionsBar />, {
+        const Actions: FastAction[] = [
+            {
+                name: "Buy",
+                action: mocked_action_buy,
+                icon: <BaseIcon name="cart-outline" />,
+                testID: "buyButton",
+            },
+            {
+                name: "Send",
+                action: mocked_action_send,
+                icon: <BaseIcon name="send-outline" />,
+                testID: "sendButton",
+            },
+            {
+                name: "Swap",
+                action: mocked_action_swap,
+                icon: <BaseIcon name="swap-horizontal" />,
+                testID: "swapButton",
+            },
+            {
+                name: "History",
+                action: mocked_action_history,
+                icon: <BaseIcon name="history" />,
+                testID: "historyButton",
+            },
+        ]
+
+        render(<FastActionsBar actions={Actions} />, {
             wrapper: TestWrapper,
         })
 
@@ -35,12 +63,12 @@ describe("FastActionsBar component", () => {
         expect(historyButton).toBeVisible()
 
         fireEvent.press(buyButton)
-        expect(mockNavigate).toHaveBeenCalledWith(Routes.BUY)
+        expect(mocked_action_buy).toHaveBeenCalled()
         fireEvent.press(sendButton)
-        expect(mockNavigate).toHaveBeenCalledWith(Routes.SELECT_TOKEN_SEND)
+        expect(mocked_action_send).toHaveBeenCalled()
         fireEvent.press(swapButton)
-        expect(mockNavigate).toHaveBeenCalledWith(Routes.SWAP)
+        expect(mocked_action_swap).toHaveBeenCalled()
         fireEvent.press(historyButton)
-        expect(mockNavigate).toHaveBeenCalledWith(Routes.HISTORY)
+        expect(mocked_action_history).toHaveBeenCalled()
     })
 })
