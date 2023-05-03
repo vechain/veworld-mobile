@@ -1,8 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { UserPreferencesSlice } from "../Slices"
 
-const reducer = (state: RootState) => state[UserPreferencesSlice.name]
+const reducer = (state: RootState) => state.userPreferences
 
 export const selectTheme = createSelector(reducer, state => {
     return state.theme

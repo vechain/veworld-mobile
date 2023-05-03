@@ -1,9 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
 import { RootState } from "../Types"
-import { AccountSlice } from "../Slices"
 
-const selectAccountsState = (state: RootState) => state[AccountSlice.name]
+const selectAccountsState = (state: RootState) => state.accounts
 
 /**
  * @returns the selected account

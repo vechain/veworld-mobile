@@ -9,10 +9,8 @@ import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
 import { selectCustomTokens } from "./Tokens"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
-import { BalanceSlice } from "../Slices"
 
-export const selectBalancesState = (state: RootState) =>
-    state[BalanceSlice.name]
+export const selectBalancesState = (state: RootState) => state.balances
 
 /**
  * Get all account balances

@@ -1,8 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { CacheSlice } from "../Slices"
 
-const reducer = (state: RootState) => state[CacheSlice.name]
+const reducer = (state: RootState) => state.cache
 
 export const selectMnemonic = createSelector(reducer, state => {
     return state.mnemonic

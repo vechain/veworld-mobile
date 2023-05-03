@@ -5,9 +5,8 @@ import {
 } from "~Common/Constant/Thor/ThorConstants"
 import { RootState } from "../Types"
 import { NETWORK_TYPE } from "~Model"
-import { NetworkSlice } from "../Slices"
 
-const selectNetworksState = (state: RootState) => state[NetworkSlice.name]
+const selectNetworksState = (state: RootState) => state.networks
 
 export const selectDefaultNetworks = createSelector(
     selectNetworksState,
