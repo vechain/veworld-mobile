@@ -22,9 +22,7 @@ export interface IQueryParams {
  * @param params  - The query params
  * @returns
  */
-export const getTransfers = async (
-    params: IQueryParams,
-): Promise<TransferLog[]> => {
+const getTransfers = async (params: IQueryParams): Promise<TransferLog[]> => {
     if (params.token.symbol === VET.symbol) return getVetTransfers(params)
 
     return getTokenTransfers(params)
@@ -149,4 +147,8 @@ const buildEventCriteria = (
         })
     })
     return [...from, ...to]
+}
+
+export default {
+    getTransfers,
 }

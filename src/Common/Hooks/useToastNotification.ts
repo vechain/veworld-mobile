@@ -2,7 +2,7 @@ import {
     ROUND_DECIMAL_DEFAULT,
     humanNumber,
     scaleNumberDown,
-} from "~Common/Utils/FormattingUtils/FormattingUtils"
+} from "../Utils/FormattingUtils/FormattingUtils"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { FungibleToken } from "~Model"
 import { useI18nContext } from "~i18n"

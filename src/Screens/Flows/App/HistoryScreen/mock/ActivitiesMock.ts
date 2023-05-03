@@ -1,4 +1,5 @@
-import { DIRECTIONS, VET, VTHO } from "~Common"
+import { DIRECTIONS } from "~Common/Enums"
+import { VET, VTHO } from "~Common/Constant/Token"
 import {
     Activity,
     ActivityStatus,

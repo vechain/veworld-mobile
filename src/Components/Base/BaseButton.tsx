@@ -6,8 +6,8 @@ import {
     StyleSheet,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { typography, TFonts } from "~Common/Theme"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { typography, TFonts, ColorThemeType } from "~Common/Theme"
+import { useThemedStyles } from "~Common/Hooks"
 import { BaseText } from "./BaseText"
 import * as Haptics from "expo-haptics"
 

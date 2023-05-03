@@ -1,13 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback } from "react"
-import { useTheme } from "~Common"
+import { useTheme } from "~Common/Hooks"
 import { BaseButton } from "./BaseButton"
 import DropShadow from "react-native-drop-shadow"
 
 export type Button = {
     id: string
     label: string
-
     disabled?: boolean
 }
 

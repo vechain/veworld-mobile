@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
-import { CURRENCY } from "~Common"
-import CurrencyConfig from "~Common/Constant/CurrencyConfig/CurrencyConfig"
+import { CURRENCY } from "~Common/Enums"
+import CurrencyConfig from "~Common/Constant/CurrencyConfig"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"
