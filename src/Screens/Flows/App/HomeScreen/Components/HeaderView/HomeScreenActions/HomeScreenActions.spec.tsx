@@ -37,7 +37,7 @@ describe("HomeScreenActions component", () => {
         fireEvent.press(buyButton)
         expect(mockNavigate).toHaveBeenCalledWith(Routes.BUY)
         fireEvent.press(sendButton)
-        expect(mockNavigate).toHaveBeenCalledWith(Routes.SEND)
+        expect(mockNavigate).toHaveBeenCalledWith(Routes.SELECT_TOKEN_SEND)
         fireEvent.press(swapButton)
         expect(mockNavigate).toHaveBeenCalledWith(Routes.SWAP)
         fireEvent.press(historyButton)

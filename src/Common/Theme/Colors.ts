@@ -14,6 +14,7 @@ export type Colors = {
     warning: string
     error: string
     text: string
+    textDisabled: string
     textReversed: string
     background: string
     backgroundReversed: string
@@ -22,6 +23,7 @@ export type Colors = {
     notification: string
     transparent: string
     separator: string
+    switcher: string
 }
 
 export enum COLORS {
@@ -69,6 +71,7 @@ const light: Colors = {
     warning: COLORS.WHITE,
     error: COLORS.WHITE,
     text: COLORS.DARK_PURPLE,
+    textDisabled: COLORS.DARK_PURPLE_DISABLED,
     textReversed: COLORS.WHITE,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
@@ -77,6 +80,7 @@ const light: Colors = {
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.DARK_PURPLE_RBGA,
+    switcher: COLORS.DARK_PURPLE,
 }
 
 const dark: Colors = {
@@ -95,6 +99,7 @@ const dark: Colors = {
     warning: COLORS.MEDIUM_ORANGE,
     error: COLORS.MEDIUM_RED,
     text: COLORS.WHITE,
+    textDisabled: COLORS.WHITE_DISABLED,
     textReversed: COLORS.DARK_PURPLE,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
@@ -103,6 +108,7 @@ const dark: Colors = {
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.WHITE_DISABLED,
+    switcher: COLORS.DARK_PURPLE_DISABLED,
 }
 
 export const colors = { light, dark }

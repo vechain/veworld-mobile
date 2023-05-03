@@ -1,3 +1,3 @@
-import * as TransfersUtils from "./TransfersUtils"
+import TransfersUtils from "./TransfersUtils"
 
 export default TransfersUtils

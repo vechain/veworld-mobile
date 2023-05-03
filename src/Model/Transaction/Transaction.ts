@@ -1,5 +1,4 @@
 import { Transaction } from "thor-devkit"
-import { EstimateGasResult } from "~Common/Utils/GasUtils/GasUtils"
 import { FungibleToken } from "~Model/Token"
 
 export enum ClauseType {
@@ -33,6 +32,14 @@ export interface TransactionWithRevertData {
     isReverted: boolean
 }
 
+export type EstimateGasResult = {
+    caller: string
+    gas: number
+    reverted: boolean
+    revertReason: string
+    vmError: string
+    baseGasPrice: string
+}
 export interface CreateBodyParams {
     thorClient: Connex.Thor
     clauses: Transaction.Clause[]

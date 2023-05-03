@@ -775,6 +775,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_SAVE: string
 	/**
+	 * N​E​X​T
+	 */
+	COMMON_BTN_NEXT: string
+	/**
 	 * n​a​m​e
 	 */
 	COMMON_LBL_NAME: string
@@ -974,6 +978,17 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
 	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
+	 * @param {unknown} txId
+	 */
+	NOTIFICATION_transaction_reverted: RequiredParams<'txId'>
+	/**
+	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}
+	 * @param {unknown} amount
+	 * @param {unknown} token
+	 */
+	NOTIFICATION_found_token_transfer: RequiredParams<'amount' | 'token'>
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -1054,6 +1069,74 @@ type RootTranslation = {
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
 	/**
+	 * S​e​n​d
+	 */
+	SEND_TOKEN_TITLE: string
+	/**
+	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
+	 */
+	SEND_TOKEN_SUBTITLE: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​f​e​r
+	 */
+	SEND_TOKEN_SELECT_ASSET: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​b​a​l​a​n​c​e
+	 */
+	SEND_CURRENT_BALANCE: string
+	/**
+	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e
+	 */
+	SEND_BALANCE_PERCENTAGE: string
+	/**
+	 * 0​%
+	 */
+	SEND_RANGE_ZERO: string
+	/**
+	 * M​A​X
+	 */
+	SEND_RANGE_MAX: string
+	/**
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​b​a​l​a​n​c​e
+	 */
+	SEND_INSUFFICIENT_BALANCE: string
+	/**
+	 * R​e​c​i​p​i​e​n​t​ ​A​d​d​r​e​s​s
+	 */
+	SEND_INSERT_ADDRESS: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​c​i​p​i​e​n​t​ ​a​d​d​r​e​s​s​ 
+	 */
+	SEND_INSERT_ADDRESS_DESCRIPTION: string
+	/**
+	 * F​r​o​m
+	 */
+	SEND_FROM: string
+	/**
+	 * T​o
+	 */
+	SEND_TO: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	SEND_DETAILS: string
+	/**
+	 * A​m​o​u​n​t
+	 */
+	SEND_AMOUNT: string
+	/**
+	 * G​a​s​ ​f​e​e
+	 */
+	SEND_GAS_FEE: string
+	/**
+	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
+	 */
+	SEND_ESTIMATED_TIME: string
+	/**
+	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
+	 */
+	SEND_LESS_THAN_1_MIN: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -1069,6 +1152,54 @@ type RootTranslation = {
 	 * R​e​c​e​i​v​e
 	 */
 	RECEIVE_ACTIVITY: string
+	/**
+	 * F​r​o​m
+	 */
+	FROM: string
+	/**
+	 * T​o
+	 */
+	TO: string
+	/**
+	 * U​n​k​n​o​w​n​ ​A​c​c​o​u​n​t
+	 */
+	UNKNOWN_ACCOUNT: string
+	/**
+	 * V​a​l​u​e
+	 */
+	VALUE_TITLE: string
+	/**
+	 * G​a​s​ ​f​e​e
+	 */
+	GAS_FEE: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	DETAILS: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
+	 */
+	TRANSACTION_ID: string
+	/**
+	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
+	 */
+	VIEW_ON_EXPLORER: string
+	/**
+	 * B​l​o​c​k​ ​n​u​m​b​e​r
+	 */
+	BLOCK_NUMBER: string
+	/**
+	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
+	 */
+	DAPP_TRANSACTION: string
+	/**
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGN_CERTIFICATE: string
+	/**
+	 * S​i​g​n​e​d​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGNED_CERTIFICATE: string
 }
 
 export type TranslationFunctions = {
@@ -1829,6 +1960,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_SAVE: () => LocalizedString
 	/**
+	 * NEXT
+	 */
+	COMMON_BTN_NEXT: () => LocalizedString
+	/**
 	 * name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
@@ -2026,6 +2161,14 @@ Please, try again later.
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
 	/**
+	 * Transaction {txId} was reverted.
+	 */
+	NOTIFICATION_transaction_reverted: (arg: { txId: unknown }) => LocalizedString
+	/**
+	 * Found {token} transfer: {amount}
+	 */
+	NOTIFICATION_found_token_transfer: (arg: { amount: unknown, token: unknown }) => LocalizedString
+	/**
 	 * Light
 	 */
 	LIGHT_THEME: () => LocalizedString
@@ -2106,6 +2249,74 @@ Please, try again later.
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
 	/**
+	 * Send
+	 */
+	SEND_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Send your token
+	 */
+	SEND_TOKEN_SUBTITLE: () => LocalizedString
+	/**
+	 * Select the asset that you want to transfer
+	 */
+	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
+	/**
+	 * Currency balance
+	 */
+	SEND_CURRENT_BALANCE: () => LocalizedString
+	/**
+	 * Balance percentage
+	 */
+	SEND_BALANCE_PERCENTAGE: () => LocalizedString
+	/**
+	 * 0%
+	 */
+	SEND_RANGE_ZERO: () => LocalizedString
+	/**
+	 * MAX
+	 */
+	SEND_RANGE_MAX: () => LocalizedString
+	/**
+	 * Insufficient balance
+	 */
+	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
+	/**
+	 * Recipient Address
+	 */
+	SEND_INSERT_ADDRESS: () => LocalizedString
+	/**
+	 * Insert the recipient address 
+	 */
+	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
+	/**
+	 * From
+	 */
+	SEND_FROM: () => LocalizedString
+	/**
+	 * To
+	 */
+	SEND_TO: () => LocalizedString
+	/**
+	 * Details
+	 */
+	SEND_DETAILS: () => LocalizedString
+	/**
+	 * Amount
+	 */
+	SEND_AMOUNT: () => LocalizedString
+	/**
+	 * Gas fee
+	 */
+	SEND_GAS_FEE: () => LocalizedString
+	/**
+	 * Estimated time
+	 */
+	SEND_ESTIMATED_TIME: () => LocalizedString
+	/**
+	 * Less than 1 min
+	 */
+	SEND_LESS_THAN_1_MIN: () => LocalizedString
+	/**
 	 * Account
 	 */
 	WALLET_LABEL_ACCOUNT: () => LocalizedString
@@ -2121,6 +2332,54 @@ Please, try again later.
 	 * Receive
 	 */
 	RECEIVE_ACTIVITY: () => LocalizedString
+	/**
+	 * From
+	 */
+	FROM: () => LocalizedString
+	/**
+	 * To
+	 */
+	TO: () => LocalizedString
+	/**
+	 * Unknown Account
+	 */
+	UNKNOWN_ACCOUNT: () => LocalizedString
+	/**
+	 * Value
+	 */
+	VALUE_TITLE: () => LocalizedString
+	/**
+	 * Gas fee
+	 */
+	GAS_FEE: () => LocalizedString
+	/**
+	 * Details
+	 */
+	DETAILS: () => LocalizedString
+	/**
+	 * Transaction ID
+	 */
+	TRANSACTION_ID: () => LocalizedString
+	/**
+	 * View on explorer
+	 */
+	VIEW_ON_EXPLORER: () => LocalizedString
+	/**
+	 * Block number
+	 */
+	BLOCK_NUMBER: () => LocalizedString
+	/**
+	 * DApp Transaction
+	 */
+	DAPP_TRANSACTION: () => LocalizedString
+	/**
+	 * Sign certificate
+	 */
+	SIGN_CERTIFICATE: () => LocalizedString
+	/**
+	 * Signed certificate
+	 */
+	SIGNED_CERTIFICATE: () => LocalizedString
 }
 
 export type Formatters = {}

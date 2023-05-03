@@ -65,3 +65,7 @@ export const selectShowTestnetTag = createSelector(
         return state.showTestNetTag
     },
 )
+
+export const selectIsNodeError = createSelector(selectNetworksState, state => {
+    return state.isNodeError
+})
