@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PURGE } from "redux-persist"
 import { AddressUtils } from "~Common"
 import { Device } from "~Model"
 
@@ -69,6 +70,9 @@ export const DeviceSlice = createSlice({
 
             state.splice(index, 1)
         },
+    },
+    extraReducers: builder => {
+        builder.addCase(PURGE, () => initialDeviceState)
     },
 })
 

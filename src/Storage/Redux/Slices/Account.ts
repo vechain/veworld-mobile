@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PURGE } from "redux-persist"
 import { AddressUtils } from "~Common"
 import { WalletAccount } from "~Model"
 
@@ -101,6 +102,9 @@ export const AccountSlice = createSlice({
                     !state.accounts[accountExistsIndex].visible
             }
         },
+    },
+    extraReducers: builder => {
+        builder.addCase(PURGE, () => initialAccountState)
     },
 })
 

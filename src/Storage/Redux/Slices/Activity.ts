@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PURGE } from "redux-persist"
 import { Activity } from "~Model"
 
 type ActivitiesSliceState = {
@@ -31,6 +32,9 @@ export const ActivitiesSlice = createSlice({
                 state.activities[activityExistsIndex] = updatedActivity
             }
         },
+    },
+    extraReducers: builder => {
+        builder.addCase(PURGE, () => initialActivitiesState)
     },
 })
 
