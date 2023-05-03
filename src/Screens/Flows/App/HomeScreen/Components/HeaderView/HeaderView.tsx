@@ -1,9 +1,9 @@
 import React, { memo, useCallback, useMemo } from "react"
-import { BaseSpacer, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseView, FastActionsBar } from "~Components"
 import { Header } from "./Header"
 import { AccountsCarousel } from "./AccountsCarousel"
-import { HomeScreenActions } from "./HomeScreenActions"
-import { AddressUtils } from "~Common"
+
+import { AddressUtils, useTheme } from "~Common"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     getBalanceVisible,
@@ -11,7 +11,10 @@ import {
     selectVisibleAccounts,
 } from "~Storage/Redux/Selectors"
 import { selectAccount } from "~Storage/Redux/Actions"
-import { WalletAccount } from "~Model"
+import { FastAction, WalletAccount } from "~Model"
+import { useI18nContext } from "~i18n"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type Props = {
     openAccountManagementSheet: () => void
@@ -22,7 +25,10 @@ export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const balanceVisible = useAppSelector(getBalanceVisible)
 
+    const { LL } = useI18nContext()
+    const nav = useNavigation()
     const dispatch = useAppDispatch()
+    const theme = useTheme()
 
     const selectedAccountIndex = useMemo(
         () =>
@@ -42,6 +48,45 @@ export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
         [dispatch],
     )
 
+    const Actions: FastAction[] = useMemo(
+        () => [
+            {
+                name: LL.BTN_BUY(),
+                action: () => nav.navigate(Routes.BUY),
+                icon: (
+                    <BaseIcon color={theme.colors.text} name="cart-outline" />
+                ),
+                testID: "buyButton",
+            },
+            {
+                name: LL.BTN_SEND(),
+                action: () => nav.navigate(Routes.SEND),
+                icon: (
+                    <BaseIcon color={theme.colors.text} name="send-outline" />
+                ),
+                testID: "sendButton",
+            },
+            {
+                name: LL.BTN_SWAP(),
+                action: () => nav.navigate(Routes.SWAP),
+                icon: (
+                    <BaseIcon
+                        color={theme.colors.text}
+                        name="swap-horizontal"
+                    />
+                ),
+                testID: "swapButton",
+            },
+            {
+                name: LL.BTN_HISTORY(),
+                action: () => nav.navigate(Routes.HISTORY),
+                icon: <BaseIcon color={theme.colors.text} name="history" />,
+                testID: "historyButton",
+            },
+        ],
+        [LL, nav, theme.colors.text],
+    )
+
     return (
         <>
             <BaseView alignItems="center">
@@ -57,7 +102,7 @@ export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
             </BaseView>
 
             <BaseSpacer height={24} />
-            <HomeScreenActions />
+            <FastActionsBar actions={Actions} />
         </>
     )
 })

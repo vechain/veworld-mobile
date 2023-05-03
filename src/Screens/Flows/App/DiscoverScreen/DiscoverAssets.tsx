@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BaseSearchInput,
     BaseSpacer,
@@ -10,9 +10,15 @@ import { useI18nContext } from "~i18n"
 import { StyleSheet, ScrollView } from "react-native"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { selectTokensWithInfo, useAppSelector } from "~Storage/Redux"
+import {
+    fetchExchangeRates,
+    selectCoinGeckoTokens,
+    selectTokensWithInfo,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { TokenWithCompleteInfo } from "~Model"
-import { useNavigation } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 
 // import { FlashList } from "@shopify/flash-list"
@@ -25,7 +31,14 @@ export const DiscoverAssets = () => {
     const { LL } = useI18nContext()
     const paddingBottom = useBottomTabBarHeight()
     const tokensWithCurrency = useAppSelector(selectTokensWithInfo)
+    const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
+    const isFocus = useIsFocused()
+
+    useEffect(() => {
+        isFocus && dispatch(fetchExchangeRates({ coinGeckoTokens }))
+    }, [coinGeckoTokens, dispatch, isFocus])
 
     const { styles: themedStyles } = useThemedStyles(
         baseStyles({

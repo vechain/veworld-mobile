@@ -1,71 +1,146 @@
 import React, { useMemo } from "react"
-import Animated, { useAnimatedProps } from "react-native-reanimated"
-import {
-    useLineChartDatetime,
-    useLineChartPrice,
-} from "react-native-wagmi-charts"
+import Animated, {
+    useAnimatedProps,
+    useAnimatedStyle,
+    useDerivedValue,
+} from "react-native-reanimated"
 import {
     TextInputProps,
     TextInput,
     TextProps as RNTextProps,
+    StyleSheet,
 } from "react-native"
-import { FormattingUtils, useTheme } from "~Common"
+import { ColorThemeType, FormattingUtils, useThemedStyles } from "~Common"
 import { BaseText, BaseView } from "~Components"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
+import {
+    useLineChartDatetime,
+    useLineChartPrice,
+    useLineChartRelativeChange,
+} from "../Hooks/usePrice"
 
-type Props = {
-    change: number
-}
+import { typography } from "~Common/Theme"
+import { TokenWithCompleteInfo } from "~Model"
+import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
+const { ...otherTypography } = typography
 
-export const AssetPriceBanner = ({ change }: Props) => {
+export const AssetPriceBanner = ({
+    token,
+}: {
+    token?: TokenWithCompleteInfo
+}) => {
     const { LL } = useI18nContext()
-    const currency = useAppSelector(selectCurrency)
-    const theme = useTheme()
+    const currency = useAppSelector(selectCurrencySymbol)
     const datetime = useLineChartDatetime()
-    const price = useLineChartPrice({ precision: 6 })
+    const { formatted: formattedPrice } = useLineChartPrice()
+    const { value: priceChangeValue, formatted: formattedPriceChange } =
+        useLineChartRelativeChange({})
 
-    const isPositive24hChange = useMemo(() => (change || 0) > 0, [change])
+    const { styles, theme } = useThemedStyles(baseStyles)
+
+    const isPositive24hChange = useMemo(
+        () => (token?.change || 0) > 0,
+        [token?.change],
+    )
 
     const change24h = useMemo(
         () =>
             (isPositive24hChange ? "+" : "") +
-            FormattingUtils.humanNumber(change || 0) +
+            FormattingUtils.humanNumber(token?.change || 0) +
             "%",
-        [isPositive24hChange, change],
+        [isPositive24hChange, token?.change],
     )
+
+    const icon = useDerivedValue(() => (priceChangeValue.value > 0 ? "+" : "-"))
+    const changeStyles = useAnimatedStyle(() => ({
+        color:
+            priceChangeValue.value > 0
+                ? theme.colors.success
+                : theme.colors.danger,
+    }))
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            <BaseView>
+            <BaseView
+                style={styles.textContainer}
+                justifyContent="space-between">
                 <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
-                    <BaseAnimatedText
-                        text={price.value}
-                        // style={{ color: theme.colors.primary, fontSize: 24 }}
-                    />
-                    <BaseText typographyFont="captionRegular">
-                        {currency}
-                    </BaseText>
+                    {token ? (
+                        <>
+                            <BaseText typographyFont="largeTitle">
+                                {currency}
+                            </BaseText>
+                            <BaseText typographyFont="largeTitle">
+                                {token.rate?.toFixed(5)}
+                            </BaseText>
+                        </>
+                    ) : (
+                        <BaseAnimatedText
+                            text={formattedPrice}
+                            style={styles.textBigTitle}
+                        />
+                    )}
                 </BaseView>
             </BaseView>
 
-            <BaseView alignItems="flex-end">
-                <BaseAnimatedText text={datetime.formatted} />
+            <BaseView
+                alignItems="flex-end"
+                style={styles.textContainer}
+                justifyContent="space-between">
+                <BaseAnimatedText
+                    text={datetime.formatted}
+                    style={{ color: theme.colors.text }}
+                />
 
-                <BaseText
-                    typographyFont="title"
-                    color={
-                        isPositive24hChange
-                            ? theme.colors.success
-                            : theme.colors.danger
-                    }>
-                    {change24h}
-                </BaseText>
+                <BaseView flexDirection="row">
+                    {token ? (
+                        <>
+                            <BaseText
+                                typographyFont="title"
+                                color={
+                                    isPositive24hChange
+                                        ? theme.colors.success
+                                        : theme.colors.danger
+                                }>
+                                {change24h}
+                            </BaseText>
+                        </>
+                    ) : (
+                        <>
+                            <BaseAnimatedText
+                                text={icon}
+                                style={[changeStyles, styles.textTitle]}
+                            />
+                            <BaseAnimatedText
+                                text={formattedPriceChange}
+                                style={[changeStyles, styles.textTitle]}
+                            />
+                        </>
+                    )}
+                </BaseView>
             </BaseView>
         </BaseView>
     )
 }
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        textContainer: {
+            height: 56,
+        },
+        textBigTitle: {
+            color: theme.colors.primary,
+            fontSize: otherTypography.fontSize[32],
+            fontWeight: "700",
+            fontFamily: otherTypography.fontFamily["Inter-Bold"],
+        },
+        textTitle: {
+            fontSize: otherTypography.fontSize[22],
+            fontWeight: "700",
+            fontFamily: otherTypography.fontFamily["Inter-Bold"],
+        },
+    })
 
 // base animated text component using a TextInput
 // forked from https://github.com/wcandillon/react-native-redash/blob/master/src/ReText.tsx

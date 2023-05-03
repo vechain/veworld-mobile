@@ -816,6 +816,11 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_DEFAULT: string
 	/**
+	 * N​o​ ​a​v​a​i​l​a​b​l​e​ ​p​r​i​c​e​ ​h​i​s​t​o​r​y​ ​f​o​r​ ​{​t​o​k​e​n​N​a​m​e​}
+	 * @param {string} tokenName
+	 */
+	COMMON_LBL_NO_TOKEN_DATA: RequiredParams<'tokenName'>
+	/**
 	 * A​s​s​e​t​s
 	 */
 	COMMON_ASSETS: string
@@ -1868,6 +1873,10 @@ export type TranslationFunctions = {
 	 * Default
 	 */
 	COMMON_LBL_DEFAULT: () => LocalizedString
+	/**
+	 * No available price history for {tokenName}
+	 */
+	COMMON_LBL_NO_TOKEN_DATA: (arg: { tokenName: string }) => LocalizedString
 	/**
 	 * Assets
 	 */

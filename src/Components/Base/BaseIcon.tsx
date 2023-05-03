@@ -42,7 +42,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
             color={color}
             {...otherProps}>
             <Icon
-                size={props.size ?? 24}
+                size={props.size ?? 22}
                 testID={testID}
                 color={iconColor}
                 {...otherProps}

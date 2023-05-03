@@ -6,7 +6,7 @@ jest.mock("@react-navigation/native", () => ({
 import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react-native"
 import { TestWrapper } from "~Test"
-import { HomeScreenActions } from "./HomeScreenActions"
+import { FastActionsBar } from "./FastActionsBar"
 import { Routes } from "~Navigation"
 
 const getBuyButton = async () =>
@@ -18,9 +18,9 @@ const getSwapButton = async () =>
 const getHistoryButton = async () =>
     await screen.findByTestId("historyButton", {}, { timeout: 5000 })
 
-describe("HomeScreenActions component", () => {
+describe("FastActionsBar component", () => {
     it("renders buttons with correct navigation", async () => {
-        render(<HomeScreenActions />, {
+        render(<FastActionsBar />, {
             wrapper: TestWrapper,
         })
 

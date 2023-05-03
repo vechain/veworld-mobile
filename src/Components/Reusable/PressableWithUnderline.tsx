@@ -5,32 +5,26 @@ import { ColorThemeType, useThemedStyles } from "~Common"
 import { COLORS } from "~Common/Theme"
 
 type Props = {
-    onPress: (button: number) => void
+    onPress: (button: string) => void
+    data: { label: string; value: any; secondaryValue: any }[]
 }
 
-const timelineDays = [
-    { label: "1D", value: 1 },
-    { label: "1W", value: 7 },
-    { label: "1M", value: 30 },
-    { label: "All", value: 0 },
-]
-
 export const PressableWithUnderline = (props: Props) => {
-    const { onPress } = props
+    const { onPress, data } = props
     const { styles } = useThemedStyles(baseStyles)
     const [activeIndex, setActiveIndex] = useState(0)
 
     const onButtonPress = useCallback(
-        (button: { label: string; value: number }, index: number) => {
+        (button: { label: string }, index: number) => {
             setActiveIndex(index)
-            onPress(button.value)
+            onPress(button.label)
         },
         [onPress],
     )
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            {timelineDays.map((item, index) => (
+            {data.map((item, index) => (
                 <Pressable
                     key={item.label}
                     accessibilityRole="button"

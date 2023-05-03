@@ -19,25 +19,32 @@ type CoinMarketChartResponse = {
 }
 
 export const fetchDashboardChartData =
-    ({ symbol }: { symbol: string }) =>
+    ({
+        symbol,
+        days,
+        interval,
+    }: {
+        symbol: string
+        days: string | number
+        interval: string
+    }) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         const currency = selectCurrency(getState())
         const coin = getCoinGeckoIdBySymbol[symbol]
+
         try {
             const pricesResponse = await axios.get<CoinMarketChartResponse>(
                 COINGECKO_MARKET_CHART_ENDPOINT(coin),
                 {
                     ...EXCHANGE_CLIENT_AXIOS_OPTS,
                     params: {
-                        days: 1,
+                        days,
+                        interval,
                         vs_currency: currency,
                     },
                 },
             )
 
-            // console.log(pricesResponse.data)
-
-            // const prices = pricesResponse.data.prices.map(ele => ele[1])
             const prices = pricesResponse.data.prices
             dispatch(setDashboardChartData({ symbol, data: prices }))
         } catch (e) {
