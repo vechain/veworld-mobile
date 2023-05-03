@@ -24,7 +24,6 @@ export const getPersistorConfig = async () => {
             "devices",
             "networks",
             "balances",
-            "tokenApi",
             "contacts",
             "currency",
             "tokens",

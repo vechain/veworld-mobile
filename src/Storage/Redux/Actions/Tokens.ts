@@ -6,13 +6,14 @@ import {
     error,
     EXCHANGE_CLIENT_AXIOS_OPTS,
     getCoinGeckoIdBySymbol,
+    debug,
+    COINGECKO_TOKEN_ENDPOINT,
 } from "~Common"
-import { VeChainToken } from "~Model"
+import { VeChainToken, FungibleToken, NETWORK_TYPE, Network } from "~Model"
 import { selectCurrency } from "../Selectors"
 import { setCoinGeckoTokens, setDashboardChartData } from "../Slices"
 import { AppThunkDispatch, RootState, TokenInfoResponse } from "../Types"
 const allSettled = require("promise.allsettled")
-import { getTokenInfo } from "../Api"
 import { fetchExchangeRates } from "./Currency"
 
 type CoinMarketChartResponse = {
@@ -50,6 +51,19 @@ type FetchTokensResponse = {
     platforms: {
         vechain: string
     }
+}
+
+export const getTokenInfo = async (tokenId: string) => {
+    const response = await axios.get<TokenInfoResponse>(
+        COINGECKO_TOKEN_ENDPOINT(tokenId),
+        {
+            ...EXCHANGE_CLIENT_AXIOS_OPTS,
+            params: {
+                days: 1,
+            },
+        },
+    )
+    return response.data
 }
 
 /**
@@ -93,4 +107,46 @@ export const fetchTokensWithInfo = () => async (dispatch: AppThunkDispatch) => {
     } catch (e) {
         error(e)
     }
+}
+
+const TOKEN_URL = "https://vechain.github.io/token-registry/"
+
+/**
+ * Call out to our github repo and return the tokens for the given network
+ */
+export const getTokensFromGithub = async ({
+    network,
+}: {
+    network: Network
+}): Promise<FungibleToken[]> => {
+    debug("Getting tokens from github")
+
+    let tokens: FungibleToken[] = []
+
+    if (
+        network.type === NETWORK_TYPE.MAIN ||
+        network.type === NETWORK_TYPE.TEST
+    ) {
+        const rawTokens = await axios.get(
+            `${TOKEN_URL}/${
+                network.type === NETWORK_TYPE.MAIN ? "main" : "test"
+            }.json`,
+            {
+                transformResponse: data => data,
+                timeout: 30 * 1000,
+            },
+        )
+
+        const tokensFromGithub = JSON.parse(rawTokens.data) as FungibleToken[]
+        tokens = tokensFromGithub.map(token => {
+            return {
+                ...token,
+                genesisId: network.genesis.id,
+                icon: `${TOKEN_URL}/assets/${token.icon}`,
+                custom: false,
+            }
+        })
+    }
+
+    return tokens
 }

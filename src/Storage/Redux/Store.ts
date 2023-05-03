@@ -1,5 +1,4 @@
 import { combineReducers } from "redux"
-import { TokenApi } from "./Api"
 import {
     DeviceSlice,
     UserPreferencesSlice,
@@ -15,7 +14,6 @@ import {
 } from "./Slices"
 
 export const reducer = combineReducers({
-    [TokenApi.reducerPath]: TokenApi.reducer,
     [CurrencySlice.name]: CurrencySlice.reducer,
     [TokenSlice.name]: TokenSlice.reducer,
     userPreferences: UserPreferencesSlice.reducer,
