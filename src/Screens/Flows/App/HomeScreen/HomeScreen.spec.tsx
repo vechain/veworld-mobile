@@ -1,5 +1,5 @@
 import React from "react"
-import { TestWrapper } from "~Test"
+import { TestWrapper, TestHelpers } from "~Test"
 import { HomeScreen } from "./HomeScreen"
 import { render, screen } from "@testing-library/react-native"
 jest.mock("axios")
@@ -28,6 +28,11 @@ import crypto from "react-native-quick-crypto"
         return {
             rate: 0,
             change: 0,
+        }
+    }
+    if (url.includes("vechain.github.io/token-registry")) {
+        return {
+            data: JSON.stringify(TestHelpers.data.tokensMock),
         }
     }
 })
