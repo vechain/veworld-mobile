@@ -232,8 +232,11 @@ const en: BaseTranslation = {
     COMMON_LBL_FAVOURITES: "Favourites",
     COMMON_LBL_ENTER_THE: "Enter the {name}",
     COMMON_LBL_DEFAULT: "Default",
+    COMMON_LBL_NO_TOKEN_DATA: "No available price history for {tokenName: string}",
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
+    COMMON_PRICE: "Price",
+    COMMON_TODAY: "Today",
 
 
     // Common Titles

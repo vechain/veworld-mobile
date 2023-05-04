@@ -1,12 +1,19 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { AssetDetailScreen, DiscoverScreen } from "~Screens"
+import {
+    AssetDetailScreen,
+    BuyScreen,
+    DiscoverScreen,
+    SwapScreen,
+} from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { TokenWithCompleteInfo } from "~Model"
 
 export type RootStackParamListDiscover = {
     [Routes.DISCOVER]: undefined
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.BUY]: undefined
+    [Routes.SWAP]: undefined
 }
 
 const { Navigator, Group, Screen } =
@@ -25,6 +32,17 @@ export const DiscoverStack = () => {
                 <Screen
                     name={Routes.TOKEN_DETAILS}
                     component={AssetDetailScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.BUY}
+                    component={BuyScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.SWAP}
+                    component={SwapScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

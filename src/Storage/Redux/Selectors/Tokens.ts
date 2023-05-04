@@ -37,9 +37,9 @@ const DEFAULT_CHART_DATA = [
 export const selectDashboardChartData = createSelector(
     [(_, state) => selectTokenState(state), symbol => symbol],
     (tokens, symbol) =>
-        tokens.dashboardChartData?.[symbol]?.map((price, index) => ({
-            timestamp: index,
-            value: price,
+        tokens.dashboardChartData?.[symbol]?.map(el => ({
+            timestamp: el[0],
+            value: el[1],
         })) || DEFAULT_CHART_DATA,
 )
 
@@ -63,7 +63,7 @@ export const selectTokensWithInfo = createSelector(
                 )
 
                 const foundExchangeRate = exchangeRates.find(
-                    rate => foundToken?.id === rate.coinGeckoId,
+                    rate => foundToken?.id === rate?.coinGeckoId,
                 )
 
                 if (!foundToken) return token as TokenWithCompleteInfo
