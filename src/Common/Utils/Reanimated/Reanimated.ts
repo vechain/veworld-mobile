@@ -303,7 +303,7 @@ interface OptionsType {
 }
 
 // need this function because JS will auto convert very small numbers to scientific notation
-function convertSmallSciNotationToDecimal(value: number): string {
+export function convertSmallSciNotationToDecimal(value: number): string {
     "worklet"
     const num = value.toPrecision(4)
     if (!num.includes("e-")) return num
