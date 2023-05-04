@@ -626,7 +626,7 @@
 				PRODUCT_NAME = VeWorld;
 				PROVISIONING_PROFILE = "089834b9-5304-4be6-9fbc-9fddd75a0c15";
 				PROVISIONING_PROFILE_SPECIFIER = "org.vechain.veworld.app AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "org.vechain.veworld.app AppStore 1682089058";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "org.vechain.veworld.app AppStore";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
