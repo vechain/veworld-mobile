@@ -141,6 +141,7 @@
         "eslint": "^7.32.0",
         "eslint-plugin-i18next": "^6.0.0-2",
         "husky": "^8.0.2",
+        "jest-junit": "^16.0.0",
         "jest-transform-stub": "^2.0.0",
         "lint-staged": "^13.1.0",
         "metro-react-native-babel-preset": "0.72.3",
@@ -161,5 +162,14 @@
             "eslint --fix",
             "prettier --write"
         ]
-    }
+    },
+    "jest": {
+        "reporters": [
+          "default",
+          "jest-junit"
+        ]
+      },
+      "jest-junit": {
+        "addFileAttribute": "true"
+      }
 }

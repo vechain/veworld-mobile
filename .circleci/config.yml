@@ -32,7 +32,7 @@ jobs:
                   name: Run Unit Tests
                   command: |
                       mkdir -p test-results/jest
-                      TEST=$(circleci tests glob src/**/*.spec.ts | circleci tests split --split-by=timings
+                      TEST=$(circleci tests glob "src/**/*.spec.ts" | circleci tests split --split-by=timings
                       yarn test:coverage:debug $TEST --ci --runInBand --reporters=default --reporters=jest-junit
                   environment:
                       NODE_OPTIONS: "--max_old_space_size=4096"
