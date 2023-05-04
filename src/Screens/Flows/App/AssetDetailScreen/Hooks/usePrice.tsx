@@ -131,12 +131,12 @@ export function useLineChartRelativeChange({
         return change
     })
 
-    const relativeChangeFormattted = useDerivedValue(() => {
+    const relativeChangeFormatted = useDerivedValue(() => {
         return numberToPercentWorklet(relativeChange.value, {
             precision: 2,
             absolute: true,
         })
     })
 
-    return { value: relativeChange, formatted: relativeChangeFormattted }
+    return { value: relativeChange, formatted: relativeChangeFormatted }
 }
