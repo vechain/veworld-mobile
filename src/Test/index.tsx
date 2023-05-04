@@ -9,7 +9,6 @@ import { TokenApi, reducer } from "~Storage/Redux"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 export { default as TestHelpers } from "./helpers"
 import { configureStore } from "@reduxjs/toolkit"
-import { SafeAreaProvider } from "react-native-safe-area-context"
 
 const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
@@ -75,16 +74,14 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
         <Provider store={store}>
             <GestureHandlerRootView>
                 <ConnexContextProvider>
-                    <SafeAreaProvider>
-                        <BottomSheetModalProvider>
-                            <NavigationProvider>
-                                <TestTranslationProvider>
-                                    {children}
-                                </TestTranslationProvider>
-                            </NavigationProvider>
-                        </BottomSheetModalProvider>
-                        <BaseToast />
-                    </SafeAreaProvider>
+                    <BottomSheetModalProvider>
+                        <NavigationProvider>
+                            <TestTranslationProvider>
+                                {children}
+                            </TestTranslationProvider>
+                        </NavigationProvider>
+                    </BottomSheetModalProvider>
+                    <BaseToast />
                 </ConnexContextProvider>
             </GestureHandlerRootView>
         </Provider>
