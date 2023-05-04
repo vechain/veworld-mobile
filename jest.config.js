@@ -60,4 +60,8 @@ module.exports = {
             lines: 97.3,
         },
     },
+    coverageReporters: ["default", "jest-junit"],
+    "jest-junit": {
+        addFileAttribute: "true",
+    },
 }

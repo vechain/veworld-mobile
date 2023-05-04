@@ -162,14 +162,5 @@
             "eslint --fix",
             "prettier --write"
         ]
-    },
-    "jest": {
-        "reporters": [
-          "default",
-          "jest-junit"
-        ]
-      },
-      "jest-junit": {
-        "addFileAttribute": "true"
-      }
+    }
 }
