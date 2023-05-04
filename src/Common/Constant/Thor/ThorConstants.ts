@@ -16,6 +16,9 @@ const THOR_TESTNET_URLS = [
     "https://testnet.vecha.in",
 ]
 
+const MAIN_EXPLORER_URL = "https://explore.vechain.org"
+const TEST_EXPLORER_URL = "https://explore-testnet.vechain.org"
+
 const paramsGet: abi.Function.Definition = {
     constant: true,
     inputs: [{ name: "_key", type: "bytes32" }],
@@ -113,6 +116,7 @@ export const defaultMainNetwork: Network = {
     defaultNet: true,
     urls: THOR_MAIN_URLS,
     currentUrl: THOR_MAIN_URLS[0],
+    explorerUrl: MAIN_EXPLORER_URL,
     genesis: genesises.main,
 }
 
@@ -123,6 +127,7 @@ export const defaultTestNetwork: Network = {
     defaultNet: true,
     urls: THOR_TESTNET_URLS,
     currentUrl: THOR_TESTNET_URLS[0],
+    explorerUrl: TEST_EXPLORER_URL,
     genesis: genesises.test,
 }
 
