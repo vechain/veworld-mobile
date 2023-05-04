@@ -16,5 +16,18 @@ jobs:
                   command: yarn install
 
             - run:
+                  name: Lint & Format Check
+                  commnad: yarn lint && yarn format:check
+
+            - run:
+                  name: Install JUnit coverage reporter
+                  command: yarn add --dev jest-junit
+
+            - run:
                   name: Run Unit Tests
-                  command: yarn test:coverage
+                  command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+                  environment:
+                      JEST_JUNIT_OUTPUT_DIR: ./reports/
+
+            - store_test_results:
+                  path: ./reports/
