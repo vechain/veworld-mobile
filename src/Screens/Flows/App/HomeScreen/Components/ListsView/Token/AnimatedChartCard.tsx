@@ -62,7 +62,9 @@ export const AnimatedChartCard = memo(
                         style={[styles.fullWidth, animatedInnerCard]}>
                         <LineChart.Provider data={chartData}>
                             <LineChart height={HEIGHT}>
-                                <LineChart.Path color={theme.colors.primary}>
+                                <LineChart.Path
+                                    color={theme.colors.primary}
+                                    width={2}>
                                     <LineChart.Gradient />
                                 </LineChart.Path>
                             </LineChart>

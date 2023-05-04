@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 
-export const getCurrency = (state: RootState) => state.currency
+export const getCurrency = (state: RootState) => state.currencies
 
 export const selectCurrencyExchangeRate = createSelector(
     [getCurrency, (_, symbol: string) => symbol],

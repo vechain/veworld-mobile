@@ -27,6 +27,7 @@ import FormUtils from "./FormUtils"
 import ConnectionUtils from "./ConnectionUtils"
 import DateUtils from "./DateUtils"
 import LocaleUtils from "./LocaleUtils"
+import * as ReanimatedUtils from "./Reanimated"
 
 export {
     // AliasUtils,
@@ -58,4 +59,5 @@ export {
     ConnectionUtils,
     DateUtils,
     LocaleUtils,
+    ReanimatedUtils,
 }

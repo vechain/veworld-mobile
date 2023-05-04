@@ -29,7 +29,7 @@ const initialState: NetworkState = {
 }
 
 export const NetworkSlice = createSlice({
-    name: "network",
+    name: "networks",
     initialState,
     reducers: {
         changeSelectedNetwork: (state, action: PayloadAction<Network>) => {
