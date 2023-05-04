@@ -20,8 +20,7 @@ import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
 
 /**
- * useCreateWalletWithBiometrics
- * @returns
+ * this hook is used to create a wallet with biometrics
  */
 export const useCreateWalletWithBiometrics = () => {
     const { getDeviceFromMnemonic } = useDeviceUtils()

@@ -11,6 +11,9 @@ const {
     getBiometricTypeAvailable,
 } = BiometricsUtils
 
+/**
+ * hook that returns the biometrics state
+ */
 export const useBiometrics = () => {
     const [previousState, currentState] = useAppState()
     const [biometrics, setBiometrics] = useState<BiometricState | undefined>()
@@ -30,10 +33,6 @@ export const useBiometrics = () => {
             isDeviceEnrolled: isEnrolled,
             isHardwareAvailable: isHardware,
             accessControl: accessControl,
-        }
-
-        if (!biometrics) {
-            setBiometrics({ ...obj })
         }
 
         // lodash utility function - deep compare objects - exit early if no changes occur

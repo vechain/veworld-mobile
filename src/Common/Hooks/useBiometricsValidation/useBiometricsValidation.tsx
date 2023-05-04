@@ -3,6 +3,9 @@ import { Linking } from "react-native"
 import { AlertUtils, BiometricsUtils } from "~Common/Utils"
 import { useI18nContext } from "~i18n"
 
+/**
+ * it validates biometrics response and shows alert if needed
+ */
 export const useBiometricsValidation = () => {
     const { LL } = useI18nContext()
 
@@ -23,9 +26,6 @@ export const useBiometricsValidation = () => {
                         LL.ALERT_TITLE_NOT_ENROLLED(),
                         LL.ALERT_MSG_NOT_ENROLLED(),
                         LL.COMMON_BTN_OK(),
-                        () => {
-                            return
-                        },
                     )
                 }
 
