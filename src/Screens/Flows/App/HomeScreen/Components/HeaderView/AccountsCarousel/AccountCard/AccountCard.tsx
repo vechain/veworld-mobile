@@ -7,6 +7,7 @@ import {
     useThemedStyles,
     PlatformUtils,
     CURRENCY,
+    valueToHP,
 } from "~Common"
 import {
     AccountIcon,
@@ -24,7 +25,6 @@ import {
 } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
-import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 
 interface Props extends AnimateProps<ViewProps> {
     style?: StyleProp<ViewStyle>
@@ -101,7 +101,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            height: hp("22.3%") < 170 ? 170 : hp("22.3%"),
+            height: valueToHP[190] < 170 ? 170 : valueToHP[190],
         },
         itemContainer: {
             flex: 1,

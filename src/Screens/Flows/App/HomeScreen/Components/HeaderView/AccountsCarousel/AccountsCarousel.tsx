@@ -4,11 +4,10 @@ import { FadeInRight } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
 import { BaseSpacer, PaginatedDot } from "~Components"
 import { AccountCard } from "./AccountCard"
-import { useTheme } from "~Common"
+import { useTheme, valueToHP } from "~Common"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
 import { WalletAccount } from "~Model"
-import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 
 const width = Dimensions.get("window").width - 40
 
@@ -88,7 +87,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
                     loop={false}
                     style={baseStyles.carouselContainer}
                     width={width}
-                    height={hp("22.3%")}
+                    height={valueToHP[190]}
                     pagingEnabled={true}
                     snapEnabled={true}
                     scrollAnimationDuration={1000}
@@ -117,7 +116,7 @@ export const AccountsCarousel: React.FC<Props> = memo(
 const baseStyles = StyleSheet.create({
     carouselContainer: {
         width: "100%",
-        height: hp("25.3%") < 190 ? 190 : hp("25.3%"),
+        height: valueToHP[190] < 190 ? 190 : valueToHP[190],
         alignItems: "center",
         justifyContent: "center",
     },

@@ -12,10 +12,9 @@ import { SecurityLevelType } from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
-import { CryptoUtils, SettingsConstants } from "~Common"
+import { CryptoUtils, SettingsConstants, valueToHP } from "~Common"
 import { useAppDispatch } from "~Storage/Redux"
 import { setPinValidationString } from "~Storage/Redux/Actions"
-import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 
 const digitNumber = 6
 export const UserCreatePasswordScreen = () => {
@@ -80,7 +79,7 @@ export const UserCreatePasswordScreen = () => {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     </BaseText>
                 </BaseView>
-                <BaseSpacer height={hp("7%")} />
+                <BaseSpacer height={valueToHP[60]} />
                 <PasswordPins
                     pin={pin}
                     digitNumber={digitNumber}
@@ -93,7 +92,7 @@ export const UserCreatePasswordScreen = () => {
                 />
             </BaseView>
 
-            <BaseSpacer height={hp("4.69%")} />
+            <BaseSpacer height={valueToHP[40]} />
         </BaseSafeArea>
     )
 }

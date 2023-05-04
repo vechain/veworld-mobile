@@ -11,18 +11,13 @@ import {
 import { Reset } from "./Components/Reset"
 import { useI18nContext } from "~i18n"
 import { info, useTheme } from "~Common"
-import { ScrollView, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 export const AdvancedScreen = () => {
     const nav = useNavigation()
-
     const theme = useTheme()
-
     const { LL } = useI18nContext()
-
-    const tabBarHeight = useBottomTabBarHeight()
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
@@ -37,72 +32,62 @@ export const AdvancedScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={[
-                    baseStyles.scrollViewContainer,
-                    { paddingBottom: tabBarHeight },
-                ]}
-                style={baseStyles.scrollView}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
+            <BaseIcon
+                style={baseStyles.backIcon}
+                size={36}
+                name="chevron-left"
+                color={theme.colors.text}
+                action={goBack}
+            />
+            <BaseSpacer height={12} />
+
+            <BaseView mx={20}>
+                <BaseText typographyFont="title">
+                    {LL.TITLE_ADVANCED()}
+                </BaseText>
+                <BaseSpacer height={24} />
+
+                <BaseText typographyFont="bodyMedium" my={8}>
+                    {LL.BD_STATE_LOGS()}
+                </BaseText>
+                <BaseText typographyFont="caption">
+                    {LL.BD_STATE_LOGS_DISCLAIMER()}
+                </BaseText>
+                <BaseSpacer height={16} />
+                <BaseButton
+                    style={baseStyles.btnWidth}
+                    size="md"
+                    radius={12}
+                    action={onDownloadLogs}
+                    title={LL.BTN_DOWNLOAD_LOGS()}
+                    rightIcon={
+                        <BaseIcon
+                            name="tray-arrow-down"
+                            size={20}
+                            color={theme.colors.textReversed}
+                            style={baseStyles.iconMargin}
+                        />
+                    }
                 />
-                <BaseSpacer height={12} />
 
-                <BaseView mx={20}>
-                    <BaseText typographyFont="title">
-                        {LL.TITLE_ADVANCED()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
+                <BaseSpacer height={24} />
+                <BaseText typographyFont="bodyMedium" my={8}>
+                    {LL.BD_RESET()}
+                </BaseText>
+                <BaseText typographyFont="caption">
+                    {LL.BD_RESET_DISCLAIMER()}
+                </BaseText>
+                <BaseSpacer height={16} />
+                <Reset />
 
-                    <BaseText typographyFont="bodyMedium" my={8}>
-                        {LL.BD_STATE_LOGS()}
-                    </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_STATE_LOGS_DISCLAIMER()}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseButton
-                        style={baseStyles.btnWidth}
-                        size="md"
-                        radius={12}
-                        action={onDownloadLogs}
-                        title={LL.BTN_DOWNLOAD_LOGS()}
-                        rightIcon={
-                            <BaseIcon
-                                name="tray-arrow-down"
-                                size={20}
-                                color={theme.colors.textReversed}
-                                style={baseStyles.iconMargin}
-                            />
-                        }
-                    />
-
-                    <BaseSpacer height={24} />
-                    <BaseText typographyFont="bodyMedium" my={8}>
-                        {LL.BD_RESET()}
-                    </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_RESET_DISCLAIMER()}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    <Reset />
-
-                    <BaseSpacer height={24} />
-                    <EnableFeature
-                        title={LL.BD_HELP_IMPROVE()}
-                        subtitle={LL.BD_HELP_IMPROVE_DISCLAIMER()}
-                        onValueChange={toggleTagSwitch}
-                        value={isAnalytics}
-                    />
-                </BaseView>
-            </ScrollView>
+                <BaseSpacer height={24} />
+                <EnableFeature
+                    title={LL.BD_HELP_IMPROVE()}
+                    subtitle={LL.BD_HELP_IMPROVE_DISCLAIMER()}
+                    onValueChange={toggleTagSwitch}
+                    value={isAnalytics}
+                />
+            </BaseView>
         </BaseSafeArea>
     )
 }
@@ -112,16 +97,12 @@ const baseStyles = StyleSheet.create({
         marginHorizontal: 8,
         alignSelf: "flex-start",
     },
+
     btnWidth: {
         width: 172,
     },
+
     iconMargin: {
         marginHorizontal: 12,
-    },
-    scrollViewContainer: {
-        width: "100%",
-    },
-    scrollView: {
-        width: "100%",
     },
 })
