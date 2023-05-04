@@ -41,11 +41,11 @@ export const AssetChart = ({ token }: Props) => {
         [getChartData],
     )
 
-    const IsShowChart =
+    const isVechainToken =
         token.symbol.toLowerCase().trim() === "vet" ||
         token.symbol.toLowerCase().trim() === "vtho"
 
-    if (IsShowChart) {
+    if (isVechainToken) {
         return (
             <>
                 <LineChart.Provider
