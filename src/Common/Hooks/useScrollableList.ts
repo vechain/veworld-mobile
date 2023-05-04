@@ -32,7 +32,7 @@ export const useScrollableList = <T>(
 
     const viewabilityConfig = useMemo(
         () => ({
-            itemVisiblePercentThreshold: 50,
+            itemVisiblePercentThreshold: 100,
         }),
         [],
     )
