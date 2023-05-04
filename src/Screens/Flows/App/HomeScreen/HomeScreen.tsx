@@ -10,7 +10,6 @@ import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { BaseSafeArea, BaseSpacer } from "~Components"
-
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 

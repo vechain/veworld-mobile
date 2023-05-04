@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, PlatformUtils, useTheme } from "~Common"
+import { FormattingUtils, useTheme } from "~Common"
 import {
     BaseText,
     BaseSafeArea,
@@ -15,7 +15,18 @@ import { useI18nContext } from "~i18n"
 import { ACTIVITIES_MOCK } from "./mock"
 import { FlashList } from "@shopify/flash-list"
 import { FungibleTokenActivityBox } from "./Components"
-import { Activity, ActivityType, FungibleTokenActivity } from "~Model"
+import {
+    Activity,
+    ActivityType,
+    ConnectedAppTxActivity,
+    FungibleToken,
+    FungibleTokenActivity,
+    SignCertActivity,
+} from "~Model"
+import PlatformUtils from "~Common/Utils/PlatformUtils" // this is imported like so to avoid circular dependency
+import { Routes } from "~Navigation"
+import { DappTransactionActivityBox } from "./Components/DappTransactionActivityBox"
+import { SignedCertificateActivityBox } from "./Components/SignedCertificateActivityBox"
 
 export const HistoryScreen = () => {
     const { LL } = useI18nContext()
@@ -31,21 +42,46 @@ export const HistoryScreen = () => {
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
-    const renderActivity = useCallback((activity: Activity, index: number) => {
-        const id = `activity-${index}`
+    const onActivityPress = useCallback(
+        (activity: Activity, token?: FungibleToken) => {
+            nav.navigate(Routes.ACTIVITY_DETAILS, { activity, token })
+        },
+        [nav],
+    )
 
-        switch (activity.type) {
-            case ActivityType.FUNGIBLE_TOKEN:
-            case ActivityType.VET_TRANSFER:
-                return (
-                    <FungibleTokenActivityBox
-                        key={id}
-                        activity={activity as FungibleTokenActivity}
-                        onPress={() => {}}
-                    />
-                )
-        }
-    }, [])
+    const renderActivity = useCallback(
+        (activity: Activity, index: number) => {
+            const id = `activity-${index}`
+
+            switch (activity.type) {
+                case ActivityType.FUNGIBLE_TOKEN:
+                case ActivityType.VET_TRANSFER:
+                    return (
+                        <FungibleTokenActivityBox
+                            key={id}
+                            activity={activity as FungibleTokenActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
+                case ActivityType.CONNECTED_APP_TRANSACTION:
+                    return (
+                        <DappTransactionActivityBox
+                            key={id}
+                            activity={activity as ConnectedAppTxActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
+                case ActivityType.SIGN_CERT:
+                    return (
+                        <SignedCertificateActivityBox
+                            activity={activity as SignCertActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
+            }
+        },
+        [onActivityPress],
+    )
 
     const renderActivitiesList = useMemo(() => {
         return (
@@ -53,7 +89,7 @@ export const HistoryScreen = () => {
                 <BaseSpacer height={30} />
                 <BaseView flexDirection="row" style={baseStyles.list}>
                     <FlashList
-                        data={ACTIVITIES_MOCK}
+                        data={ACTIVITIES_MOCK} //TODO replace with real data
                         keyExtractor={activity => activity.id}
                         renderItem={({ item: activity, index }) => {
                             return (

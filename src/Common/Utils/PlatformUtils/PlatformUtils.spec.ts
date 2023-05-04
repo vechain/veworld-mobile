@@ -1,4 +1,4 @@
-import { isAndroid, isIOS } from "./Platform"
+import { isAndroid, isIOS } from "./PlatformUtils"
 
 describe("isIOS", () => {
     it("should return true", () => {

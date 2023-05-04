@@ -1,3 +1,5 @@
+import { element } from "detox"
+
 export const copyMnemonic = async (): Promise<string[]> => {
     const mnemonic: string[] = []
 

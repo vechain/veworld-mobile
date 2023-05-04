@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { ThemeEnum } from "~Common"
+import { ThemeEnum } from "~Common/Enums"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"

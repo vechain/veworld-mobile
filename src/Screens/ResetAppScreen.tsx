@@ -73,6 +73,7 @@ export const ResetAppScreen = () => {
                     <CheckBoxWithText
                         text={LL.BTN_RESET_APP_CHECKBOX()}
                         checkAction={setIsChecked}
+                        testID="reset-app-checkbox"
                     />
 
                     <BaseButton

@@ -18,7 +18,7 @@ import AlertUtils from "./AlertUtils"
 import PicassoUtils from "./PicassoUtils"
 import StringUtils from "./StringUtils"
 // import SignatureUtils from "./SignatureUtils"
-// import TokenUtils from "./TokenUtils"
+import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
@@ -49,7 +49,7 @@ export {
     PicassoUtils,
     StringUtils,
     // SignatureUtils,
-    // TokenUtils,
+    TokenUtils,
     TransactionUtils,
     TransfersUtils,
     URLUtils,

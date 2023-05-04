@@ -1,1 +1,1 @@
-export * from "./fetchExchangeRate"
+export * from "./fetchExchangeRates"

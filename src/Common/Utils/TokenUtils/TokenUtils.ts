@@ -1,3 +1,4 @@
+import { VET, VTHO } from "~Common/Constant"
 import { FungibleToken } from "~Model"
 
 export const mergeTokens = (a: FungibleToken[], b: FungibleToken[]) =>
@@ -11,3 +12,6 @@ export const mergeTokens = (a: FungibleToken[], b: FungibleToken[]) =>
                 ),
         )
         .concat(b)
+
+export const isVechainToken = (token: FungibleToken) =>
+    token.symbol === VET.symbol || token.symbol === VTHO.symbol
