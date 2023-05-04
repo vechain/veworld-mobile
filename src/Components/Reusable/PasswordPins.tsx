@@ -4,6 +4,7 @@ import { ColorThemeType, useThemedStyles } from "~Common"
 import { COLORS } from "~Common/Theme"
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
+import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 
 type Props = {
     pin: string[]
@@ -79,8 +80,8 @@ export const PasswordPins: FC<Props> = memo(
 const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         pinBase: {
-            width: 12,
-            height: 12,
+            width: hp("1.4%"),
+            height: hp("1.4%"),
             borderRadius: 6,
         },
         pressed: {

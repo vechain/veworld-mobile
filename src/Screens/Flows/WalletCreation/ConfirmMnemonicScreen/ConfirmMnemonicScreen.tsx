@@ -20,6 +20,8 @@ import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
 import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import * as Haptics from "expo-haptics"
+import { heightPercentageToDP as hp } from "react-native-responsive-screen"
+import { isSmallScreen } from "~Common"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
@@ -143,6 +145,11 @@ export const ConfirmMnemonicScreen = () => {
     const isSubmitDisabled =
         !selectedFirstWord || !selectedSecondWord || !selectedThirdWord
 
+    const buttonGroupTypography = useMemo(
+        () => (isSmallScreen ? "captionMedium" : "bodyMedium"),
+        [],
+    )
+
     return (
         <BaseSafeArea grow={1}>
             <BaseView
@@ -173,11 +180,11 @@ export const ConfirmMnemonicScreen = () => {
                             />
                         )}
                     </BaseView>
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={hp("1.87%")} />
                     <BaseText align="left" typographyFont="body">
                         {LL.BD_SELECT_WORD({ number: firstIndex + 1 })}
                     </BaseText>
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={hp("1.87%")} />
                     <BaseButtonGroup
                         selectedButtonIds={[selectedFirstWord || ""]}
                         buttons={buttonsFirstWord}
@@ -185,12 +192,13 @@ export const ConfirmMnemonicScreen = () => {
                         selectedColor={theme.colors.primaryLight}
                         buttonGroupTestID="first-word-button-group"
                         buttonTestID="word-1"
+                        typographyFont={buttonGroupTypography}
                     />
-                    <BaseSpacer height={21} />
+                    <BaseSpacer height={hp("2.46%%")} />
                     <BaseText typographyFont="body">
                         {LL.BD_SELECT_WORD({ number: secondIndex + 1 })}
                     </BaseText>
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={hp("1.87%")} />
                     <BaseButtonGroup
                         selectedButtonIds={[selectedSecondWord || ""]}
                         buttons={buttonsSecondWord}
@@ -198,12 +206,13 @@ export const ConfirmMnemonicScreen = () => {
                         selectedColor={theme.colors.primaryLight}
                         buttonGroupTestID="second-word-button-group"
                         buttonTestID="word-2"
+                        typographyFont={buttonGroupTypography}
                     />
                     <BaseSpacer height={21} />
                     <BaseText typographyFont="body">
                         {LL.BD_SELECT_WORD({ number: thirdIndex + 1 })}
                     </BaseText>
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={hp("1.87%")} />
                     <BaseButtonGroup
                         selectedButtonIds={[selectedThirdWord || ""]}
                         buttons={buttonsThirdWord}
@@ -211,6 +220,7 @@ export const ConfirmMnemonicScreen = () => {
                         selectedColor={theme.colors.primaryLight}
                         buttonGroupTestID="third-word-button-group"
                         buttonTestID="word-3"
+                        typographyFont={buttonGroupTypography}
                     />
                 </BaseView>
                 <BaseButton

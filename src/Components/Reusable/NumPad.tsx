@@ -4,6 +4,7 @@ import { BaseText, BaseView } from "~Components"
 import * as Haptics from "expo-haptics"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import DropShadow from "react-native-drop-shadow"
+import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
 
@@ -60,11 +61,11 @@ const baseStyles = (theme: ColorThemeType) =>
             width: "33%",
             justifyContent: "center",
             alignItems: "center",
-            paddingVertical: 22,
+            paddingVertical: hp("2.58%"),
         },
         pressable: {
-            paddingVertical: 12,
-            paddingHorizontal: 24,
+            paddingVertical: hp("1.4%"),
+            paddingHorizontal: hp("2.816%"),
             backgroundColor: theme.colors.card,
             borderRadius: Dimensions.get("window").width * 0.5,
         },

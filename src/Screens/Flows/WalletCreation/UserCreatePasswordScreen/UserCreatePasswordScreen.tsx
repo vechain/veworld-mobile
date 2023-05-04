@@ -15,6 +15,7 @@ import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmati
 import { CryptoUtils, SettingsConstants } from "~Common"
 import { useAppDispatch } from "~Storage/Redux"
 import { setPinValidationString } from "~Storage/Redux/Actions"
+import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 
 const digitNumber = 6
 export const UserCreatePasswordScreen = () => {
@@ -79,7 +80,7 @@ export const UserCreatePasswordScreen = () => {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     </BaseText>
                 </BaseView>
-                <BaseSpacer height={60} />
+                <BaseSpacer height={hp("7%")} />
                 <PasswordPins
                     pin={pin}
                     digitNumber={digitNumber}
@@ -92,7 +93,7 @@ export const UserCreatePasswordScreen = () => {
                 />
             </BaseView>
 
-            <BaseSpacer height={40} />
+            <BaseSpacer height={hp("4.69%")} />
         </BaseSafeArea>
     )
 }
