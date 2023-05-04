@@ -162,8 +162,5 @@
             "eslint --fix",
             "prettier --write"
         ]
-    },
-    "jest-junit": {
-        "addFileAttribute": "true"
     }
 }
