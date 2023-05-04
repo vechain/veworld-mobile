@@ -11,7 +11,7 @@ type Props = {
 }
 
 const getBalanceText = (balance: string, isVisible: boolean) => {
-    if (isVisible) return FormattingUtils.humanNumber(balance)
+    if (isVisible) return FormattingUtils.humanNumber(balance, balance)
     return Array.from(
         Array(FormattingUtils.humanNumber(balance).length).keys(),
     ).map(_value => "*")
