@@ -2,48 +2,38 @@ version: 2.1
 jobs:
     build:
         working_directory: ~/veworld-mobile
-
         docker:
-            - image: cimg/node:18.12.1
-
+            - image: "cimg/node:18.12.1"
         steps:
             - checkout
-
             - restore_cache:
-                key: yarn-v1-{{ checksum "yarn.lock" }}
-
+                  key: 'yarn-v1-{{ checksum "yarn.lock" }}'
             - restore_cache:
-                key: node-v1-{{ checksum "package.json" }}
-
+                  key: 'node-v1-{{ checksum "package.json" }}'
             - run:
                   name: Install Dependencies
                   command: yarn install
-
             - save_cache:
-                key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-                paths:
-                    - ~/.cache/yarn
-
+                  key: 'yarn-v1-{{ checksum "yarn.lock" }}'
+                  paths:
+                      - ~/.cache/yarn
             - save_cache:
-                key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-                paths:
-                    - node_modules
-
+                  key: 'node-v1-{{ checksum "package.json" }}'
+                  paths:
+                      - node_modules
             - run:
                   name: Lint & Format Check
-                  command: yarn lint && yarn format:check
-
+                  command: "yarn lint && yarn format:check"
             - run:
                   name: Install JUnit coverage reporter
                   command: yarn add --dev jest-junit
-
             - run:
                   name: Run Unit Tests
+                  command: >-
+                      test:coverage --ci --runInBand --reporters=default
+                      --reporters=jest-junit
                   environment:
                       NODE_OPTIONS: "--max_old_space_size=4096"
-                  command: test:coverage --ci --runInBand --reporters=default --reporters=jest-junit
-                  environment:
                       JEST_JUNIT_OUTPUT_DIR: ./reports/
-
             - store_test_results:
                   path: ./reports/
