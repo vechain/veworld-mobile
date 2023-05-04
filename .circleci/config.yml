@@ -1,0 +1,20 @@
+version: 2.1
+jobs:
+    build:
+        working_directory: ~/veworld-mobile
+
+        docker:
+            - image: cimg/node:18.12.1
+
+        steps:
+            - checkout
+            - restore_cache:
+                  key: dependency-cache-{{ checksum "yarn.lock" }}
+
+            - run:
+                  name: Install Dependencies
+                  command: yarn install
+
+            - run:
+                  name: Run Unit Tests
+                  command: yarn test:coverage

@@ -16,6 +16,15 @@
 default_platform(:ios)
 
 platform :ios do
+
+  desc "Run e2e tests"
+  lane :e2e do
+    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
+      sh("detox build --configuration ios.sim.debug")
+      sh("detox test --configuration ios.sim.debug --loglevel trace --record-logs all")
+    end
+  end
+
   desc "Push a new beta build to TestFlight"
   lane :beta do
     increment_build_number(xcodeproj: "VeWorld.xcodeproj")

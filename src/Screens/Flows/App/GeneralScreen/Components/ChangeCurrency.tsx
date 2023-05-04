@@ -3,8 +3,8 @@ import { CURRENCY } from "~Common/Enums"
 import CurrencyConfig from "~Common/Constant/CurrencyConfig/CurrencyConfig"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectCurrency } from "~Storage/Redux/Selectors"
-import { setCurrency } from "~Storage/Redux/Actions"
+import { selectCoinGeckoTokens, selectCurrency } from "~Storage/Redux/Selectors"
+import { fetchExchangeRates, setCurrency } from "~Storage/Redux/Actions"
 import { BaseButtonGroupHorizontalType } from "~Model"
 
 const currencies: Array<BaseButtonGroupHorizontalType> = CurrencyConfig.map(
@@ -16,6 +16,7 @@ const currencies: Array<BaseButtonGroupHorizontalType> = CurrencyConfig.map(
 )
 
 export const ChangeCurrency: React.FC = () => {
+    const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
     const selectedCurrency = useAppSelector(selectCurrency)
 
     const dispatch = useAppDispatch()
@@ -23,8 +24,9 @@ export const ChangeCurrency: React.FC = () => {
     const handleSelectCurrency = useCallback(
         (button: BaseButtonGroupHorizontalType) => {
             dispatch(setCurrency(button.id as CURRENCY))
+            dispatch(fetchExchangeRates({ coinGeckoTokens }))
         },
-        [dispatch],
+        [coinGeckoTokens, dispatch],
     )
 
     return (
