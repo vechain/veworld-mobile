@@ -23,7 +23,7 @@ const initialState: UserPreferenceState = {
 }
 
 export const UserPreferencesSlice = createSlice({
-    name: "UserPreferences",
+    name: "userPreferences",
     initialState,
     reducers: {
         setTheme: (state, action: PayloadAction<ThemeEnum>) => {
