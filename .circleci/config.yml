@@ -8,12 +8,26 @@ jobs:
 
         steps:
             - checkout
+
             - restore_cache:
-                  key: dependency-cache-{{ checksum "yarn.lock" }}
+                key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+
+            - restore_cache:
+                key: node-v1-{{ checksum "package.json" }}-{{ arch }}
 
             - run:
                   name: Install Dependencies
                   command: yarn install
+
+            - save_cache:
+                key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+            paths:
+                - ~/.cache/yarn
+
+            - save_cache:
+                key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+            paths:
+                - node_modules
 
             - run:
                   name: Lint & Format Check
