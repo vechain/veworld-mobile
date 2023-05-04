@@ -20,7 +20,7 @@ export const OfficialTokenCardWithExchangeRate = memo(
         const change24h = useMemo(
             () =>
                 (isPositive24hChange ? "+" : "") +
-                FormattingUtils.humanNumber(token.change || 0) +
+                FormattingUtils.humanNumber(token.change || 0, token.change) +
                 "%",
             [isPositive24hChange, token.change],
         )

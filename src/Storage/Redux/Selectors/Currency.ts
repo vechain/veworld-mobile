@@ -6,7 +6,7 @@ export const getCurrency = (state: RootState) => state.currencies
 export const selectCurrencyExchangeRate = createSelector(
     [getCurrency, (_, symbol: string) => symbol],
     (currency, symbol) =>
-        currency?.exchangeRates.find(
+        currency.exchangeRates?.find(
             rate => rate?.symbol?.toLowerCase() === symbol.toLowerCase(),
         ),
 )

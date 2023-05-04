@@ -1,18 +1,11 @@
-import { useNavigation } from "@react-navigation/native"
-import axios from "axios"
 import { useEffect, useMemo, useState } from "react"
-import { HDNode, Transaction, abi, secp256k1 } from "thor-devkit"
-import { FormattingUtils, GasUtils, HexUtils, VET, error, info } from "~Common"
+import { Transaction, abi } from "thor-devkit"
+import { FormattingUtils, GasUtils, HexUtils, VET, info } from "~Common"
 import { useThor } from "~Components"
-import { EstimateGasResult, FungibleTokenWithBalance, Wallet } from "~Model"
-import {
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    useAppSelector,
-} from "~Storage/Redux"
+import { EstimateGasResult, FungibleTokenWithBalance } from "~Model"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
-import { Routes } from "~Navigation"
 
 export const useSendTransaction = ({
     amount,
@@ -23,27 +16,13 @@ export const useSendTransaction = ({
     amount: string
     address: string
 }) => {
-    const nav = useNavigation()
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
-    const network = useAppSelector(selectSelectedNetwork)
     const thorClient = useThor()
-    const sendSignedTransaction = async (
-        tx: Transaction,
-        networkUrl: string,
-    ) => {
-        const encodedRawTx = {
-            raw: HexUtils.addPrefix(tx.encode().toString("hex")),
-        }
 
-        const response = await axios.post(
-            `${networkUrl}/transactions`,
-            encodedRawTx,
-        )
-
-        return response.data.id
-    }
-    // TODO: understand if it calculates clauses correctly
+    /**
+     * recalculate clauses on data changes
+     */
     const clauses = useMemo(() => {
         const scaledAmount =
             "0x" +
@@ -71,8 +50,10 @@ export const useSendTransaction = ({
             },
         ]
     }, [address, amount, token.address, token.decimals, token.symbol])
+    /**
+     * recalculate transaction on data changes
+     */
     const transaction = useMemo((): Transaction.Body => {
-        // TODO: move it somewhere else
         const DEFAULT_GAS_COEFFICIENT = 0
         return {
             chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
@@ -85,58 +66,23 @@ export const useSendTransaction = ({
             nonce: HexUtils.generateRandom(8),
         }
     }, [clauses, thorClient.genesis.id, thorClient.status.head.id, gas?.gas])
-    const signTransaction = async (wallet: Wallet) => {
-        try {
-            // TODO: Add delegation
-            // const tx = delegation.isDelegated
-            //     ? TransactionUtils.toDelegation(transaction.body)
-            //     : new Transaction(transaction.body)
-            const tx = new Transaction(transaction)
 
-            if (!wallet.mnemonic)
-                error("Mnemonic wallet can't have an empty mnemonic")
-
-            if (!account?.index && account?.index !== 0)
-                throw new Error("account index is empty")
-
-            const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
-            const derivedNode = hdNode.derive(account.index)
-
-            const privateKey = derivedNode.privateKey as Buffer
-            const hash = tx.signingHash()
-
-            const senderSignature = secp256k1.sign(hash, privateKey)
-
-            // TODO: add delegation
-            // const signature = delegationSignature
-            //     ? Buffer.concat([senderSignature, delegationSignature])
-            //     : senderSignature
-
-            const signature = Buffer.concat([senderSignature])
-            tx.signature = signature
-
-            await sendSignedTransaction(tx, network.currentUrl)
-            nav.navigate(Routes.HOME)
-        } catch (e) {
-            error(e)
-        }
-
-        // onSentTransaction(tx, id, currentAccount.address)
-    }
     useEffect(() => {
-        // eslint-disable-next-line no-extra-semi
-        ;(async () => {
-            const estimatedGas = await GasUtils.estimateGas(
-                thorClient,
-                clauses,
-                0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
-                address,
-                // NOTE: gasPayer: undefined; in extension it was not used
-            )
-            info("estimatedGas", estimatedGas)
-            setGas(estimatedGas)
-        })()
-    }, [address, clauses, thorClient])
+        if (account) {
+            // eslint-disable-next-line no-extra-semi
+            ;(async () => {
+                const estimatedGas = await GasUtils.estimateGas(
+                    thorClient,
+                    clauses,
+                    0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
+                    account?.address,
+                    // NOTE: gasPayer: undefined; in extension it was not used
+                )
+                info("estimatedGas", estimatedGas)
+                setGas(estimatedGas)
+            })()
+        }
+    }, [account, clauses, thorClient])
 
-    return { gas, setGas, signTransaction }
+    return { gas, setGas, transaction }
 }

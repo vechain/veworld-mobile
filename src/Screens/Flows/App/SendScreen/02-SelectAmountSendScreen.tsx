@@ -4,7 +4,6 @@ import { StyleSheet, TextInput } from "react-native"
 import {
     CURRENCY_SYMBOLS,
     FormattingUtils,
-    TokenUtils,
     useAmountInput,
     useTheme,
 } from "~Common"
@@ -47,13 +46,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const [isError, setIsError] = useState(false)
     const currency = useAppSelector(selectCurrency)
     const theme = useTheme()
-    const rawTokenBalance = TokenUtils.isVechainToken(token)
-        ? FormattingUtils.convertToFiatBalance(
-              token.balance.balance,
-              1,
-              token.decimals,
-          )
-        : token.balance.balance
+    const rawTokenBalance = FormattingUtils.scaleNumberDown(
+        token.balance.balance,
+        token.decimals,
+    )
     const formattedTokenBalance = FormattingUtils.humanNumber(rawTokenBalance)
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
