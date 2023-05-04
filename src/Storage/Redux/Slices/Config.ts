@@ -24,7 +24,7 @@ const initialState: ConfigState = {
 }
 
 export const ConfigSlice = createSlice({
-    name: "Config",
+    name: "config",
     initialState,
     reducers: {
         setUserSelectedSecurity: (
