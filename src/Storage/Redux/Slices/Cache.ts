@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
 import { WALLET_STATUS } from "~Model"
 
 export interface CacheState {
@@ -22,9 +21,6 @@ export const CacheSlice = createSlice({
         setAppLockStatus: (state, action: PayloadAction<WALLET_STATUS>) => {
             state.appLockStatus = action.payload
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialState)
     },
 })
 
