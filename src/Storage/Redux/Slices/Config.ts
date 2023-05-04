@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
 import {
     SecurityLevelType,
     TSecurityLevel,
@@ -24,7 +23,7 @@ const initialState: ConfigState = {
 }
 
 export const ConfigSlice = createSlice({
-    name: "Config",
+    name: "config",
     initialState,
     reducers: {
         setUserSelectedSecurity: (
@@ -52,9 +51,6 @@ export const ConfigSlice = createSlice({
         setPinValidationString: (state, action: PayloadAction<string>) => {
             state.pinValidationString = action.payload
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialState)
     },
 })
 

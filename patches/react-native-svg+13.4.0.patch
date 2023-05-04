@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-svg/lib/typescript/elements/Path.d.ts b/node_modules/react-native-svg/lib/typescript/elements/Path.d.ts
+index 2e30956..a8b8681 100644
+--- a/node_modules/react-native-svg/lib/typescript/elements/Path.d.ts
++++ b/node_modules/react-native-svg/lib/typescript/elements/Path.d.ts
+@@ -4,6 +4,7 @@ import { CommonPathProps, NumberProp } from '../lib/extract/types';
+ export interface PathProps extends CommonPathProps {
+     d?: string;
+     opacity?: NumberProp;
++    lastGradientValue?: number
+ }
+ export default class Path extends Shape<PathProps> {
+     static displayName: string;

@@ -9,7 +9,7 @@ import {
     debug,
     COINGECKO_TOKEN_ENDPOINT,
 } from "~Common"
-import { VeChainToken, FungibleToken, NETWORK_TYPE, Network } from "~Model"
+import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
 import { selectCurrency } from "../Selectors"
 import { setCoinGeckoTokens, setDashboardChartData } from "../Slices"
 import { AppThunkDispatch, RootState, TokenInfoResponse } from "../Types"
@@ -21,23 +21,33 @@ type CoinMarketChartResponse = {
 }
 
 export const fetchDashboardChartData =
-    ({ symbol }: { symbol: VeChainToken }) =>
+    ({
+        symbol,
+        days,
+        interval,
+    }: {
+        symbol: string
+        days: string | number
+        interval: string
+    }) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         const currency = selectCurrency(getState())
         const coin = getCoinGeckoIdBySymbol[symbol]
+
         try {
             const pricesResponse = await axios.get<CoinMarketChartResponse>(
                 COINGECKO_MARKET_CHART_ENDPOINT(coin),
                 {
                     ...EXCHANGE_CLIENT_AXIOS_OPTS,
                     params: {
-                        days: 1,
+                        days,
+                        interval,
                         vs_currency: currency,
                     },
                 },
             )
 
-            const prices = pricesResponse.data.prices.map(ele => ele[1])
+            const prices = pricesResponse.data.prices
             dispatch(setDashboardChartData({ symbol, data: prices }))
         } catch (e) {
             error(e)
