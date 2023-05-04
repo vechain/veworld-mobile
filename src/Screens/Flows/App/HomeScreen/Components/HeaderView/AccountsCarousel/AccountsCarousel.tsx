@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import Carousel from "react-native-reanimated-carousel"
 import { FadeInRight } from "react-native-reanimated"
 import { StyleSheet, Dimensions } from "react-native"
@@ -81,11 +81,21 @@ export const AccountsCarousel: React.FC<Props> = memo(
             ],
         )
 
+        // Workaround otherwise Jest fails with valueToHP[190] is undefined
+        const carouselHeight = useMemo(() => {
+            if (valueToHP) return valueToHP[190] < 190 ? 190 : valueToHP[190]
+
+            return 190
+        }, [])
+
         return (
             <>
                 <Carousel
                     loop={false}
-                    style={baseStyles.carouselContainer}
+                    style={[
+                        baseStyles.carouselContainer,
+                        { height: carouselHeight },
+                    ]}
                     width={width}
                     height={valueToHP[190]}
                     pagingEnabled={true}
@@ -116,7 +126,6 @@ export const AccountsCarousel: React.FC<Props> = memo(
 const baseStyles = StyleSheet.create({
     carouselContainer: {
         width: "100%",
-        height: valueToHP[190] < 190 ? 190 : valueToHP[190],
         alignItems: "center",
         justifyContent: "center",
     },
