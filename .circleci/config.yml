@@ -4,6 +4,7 @@ jobs:
         working_directory: ~/veworld-mobile
         docker:
             - image: "cimg/node:18.12.1"
+        parallelism: 4
         steps:
             - checkout
             - restore_cache:
@@ -29,11 +30,14 @@ jobs:
                   command: yarn add --dev jest-junit
             - run:
                   name: Run Unit Tests
-                  command: >-
-                      yarn test:coverage --ci --runInBand --reporters=default
-                      --reporters=jest-junit
+                  command: |
+                      mkdir -p test-results/jest
+                      TEST=$(circleci tests glob src/**/*.spec.ts | circleci tests split --split-by=timings
+                      yarn test:coverage:debug $TEST --ci --runInBand --reporters=default --reporters=jest-junit
                   environment:
                       NODE_OPTIONS: "--max_old_space_size=4096"
-                      JEST_JUNIT_OUTPUT_DIR: ./reports/
+                      JEST_JUNIT_OUTPUT_DIR: test-results/jest/junit.xml
             - store_test_results:
-                  path: ./reports/
+                  path: test-results
+            - store_artifacts:
+                  path: test-results
