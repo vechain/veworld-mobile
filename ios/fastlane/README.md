@@ -15,6 +15,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios e2e
+
+```sh
+[bundle exec] fastlane ios e2e
+```
+
+Run e2e tests
+
 ### ios beta
 
 ```sh
