@@ -32,11 +32,13 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
         }, [LL, activity.timestamp, locale])
 
         return (
-            <BaseTouchable action={() => onPress(activity)}>
+            <BaseTouchable
+                action={() => onPress(activity)}
+                style={styles.container}>
                 <BaseView
                     w={100}
                     flexDirection="row"
-                    style={styles.container}
+                    style={styles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
                         <DropShadow style={[theme.shadows.card]}>
@@ -79,9 +81,12 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        container: {
+        innerContainer: {
             borderBottomColor: theme.colors.separator,
             borderBottomWidth: 0.5,
             height: 65,
+        },
+        container: {
+            width: "100%",
         },
     })
