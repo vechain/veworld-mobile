@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
 import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
 import { Network } from "~Model"
 
@@ -29,7 +28,7 @@ const initialState: NetworkState = {
 }
 
 export const NetworkSlice = createSlice({
-    name: "network",
+    name: "networks",
     initialState,
     reducers: {
         changeSelectedNetwork: (state, action: PayloadAction<Network>) => {
@@ -67,9 +66,6 @@ export const NetworkSlice = createSlice({
         updateNodeError: (state, action: PayloadAction<boolean>) => {
             state.isNodeError = action.payload
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialState)
     },
 })
 

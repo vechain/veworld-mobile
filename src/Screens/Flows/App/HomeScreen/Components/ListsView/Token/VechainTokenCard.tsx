@@ -27,7 +27,10 @@ export const VechainTokenCard = memo(
         const isPositive24hChange = (exchangeRate?.change || 0) > 0
         const change24h =
             (isPositive24hChange ? "+" : "") +
-            FormattingUtils.humanNumber(exchangeRate?.change || 0) +
+            FormattingUtils.humanNumber(
+                exchangeRate?.change || 0,
+                exchangeRate?.change || 0,
+            ) +
             "%"
 
         const fiatBalance = FormattingUtils.humanNumber(

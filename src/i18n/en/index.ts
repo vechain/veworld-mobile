@@ -232,8 +232,11 @@ const en: BaseTranslation = {
     COMMON_LBL_FAVOURITES: "Favourites",
     COMMON_LBL_ENTER_THE: "Enter the {name}",
     COMMON_LBL_DEFAULT: "Default",
+    COMMON_LBL_NO_TOKEN_DATA: "No available price history for {tokenName: string}",
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
+    COMMON_PRICE: "Price",
+    COMMON_TODAY: "Today",
 
 
     // Common Titles
@@ -262,6 +265,12 @@ const en: BaseTranslation = {
     ERROR_ADDRESS_INVALID: "Please enter a valid Vechain address",
     ERROR: "Error!",
     ERROR_GENERIC_OPERATION: "The operation went wrong. Please, try again.",
+
+    // Success
+
+    SUCCESS_GENERIC: "Success!",
+    SUCCESS_GENERIC_OPERATION: "The operation went well!",
+    SUCCESS_GENERIC_VIEW_DETAIL_LINK: "View operation detail.",
 
     // Placeholders
     PLACEHOLDER_SEARCH_TOKEN: "Search a token",

@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
 import { useTheme } from "~Common"
 import PlatformUtils from "~Common/Utils/PlatformUtils"
-import { HomeStack, SettingsStack } from "~Navigation/Stacks"
+import { DiscoverStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
 
 const Tab = createBottomTabNavigator()
@@ -36,7 +36,10 @@ export const TabStack = () => {
                     tabBarLabel: "Wallet",
                     tabBarTestID: "wallet-tab",
                     tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(focused, "home"),
+                        renderTabBarIcon(
+                            focused,
+                            focused ? "home" : "home-outline",
+                        ),
                 }}
             />
 
@@ -47,7 +50,25 @@ export const TabStack = () => {
                     tabBarLabel: "NFT",
                     tabBarTestID: "nft-tab",
                     tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(focused, "image-multiple-outline"),
+                        renderTabBarIcon(
+                            focused,
+                            focused
+                                ? "image-multiple"
+                                : "image-multiple-outline",
+                        ),
+                }}
+            />
+
+            <Tab.Screen
+                name="DiscoverStack"
+                component={DiscoverStack}
+                options={{
+                    tabBarLabel: "Settings",
+                    tabBarIcon: ({ focused }) =>
+                        renderTabBarIcon(
+                            focused,
+                            focused ? "compass" : "compass-outline",
+                        ),
                 }}
             />
 
@@ -58,7 +79,10 @@ export const TabStack = () => {
                     tabBarLabel: "Settings",
                     tabBarTestID: "settings-tab",
                     tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(focused, "cog"),
+                        renderTabBarIcon(
+                            focused,
+                            focused ? "cog" : "cog-outline",
+                        ),
                 }}
             />
         </Tab.Navigator>

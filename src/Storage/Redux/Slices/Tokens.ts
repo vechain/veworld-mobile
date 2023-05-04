@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { FungibleToken, TokenWithCompleteInfo, VeChainToken } from "~Model"
+import { FungibleToken, TokenWithCompleteInfo } from "~Model"
 import { TokenInfoResponse, TokensState } from "../Types"
 import { AddressUtils } from "~Common"
 
@@ -36,7 +36,7 @@ export const TokenSlice = createSlice({
 
         setDashboardChartData: (
             state,
-            action: PayloadAction<{ symbol: VeChainToken; data: number[] }>,
+            action: PayloadAction<{ symbol: string; data: number[][] }>,
         ) => {
             const { symbol, data } = action.payload
             state.dashboardChartData[symbol] = data

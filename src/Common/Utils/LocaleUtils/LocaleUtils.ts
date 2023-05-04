@@ -9,6 +9,14 @@ export const getLocale = () => {
     )
 }
 
+export const getLanguageTag = () => {
+    const localeLanguage = Localization.getLocales().find(loc =>
+        isLocale(loc.languageCode),
+    )
+    return localeLanguage?.languageTag
+}
+
 export default {
     getLocale,
+    getLanguageTag,
 }
