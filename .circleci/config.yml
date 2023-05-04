@@ -25,11 +25,10 @@ jobs:
 
             - run:
                   name: Run Unit Tests
-                  env:
-                    NODE_OPTIONS: "--max_old_space_size=4096"
                   command: yarn test --ci --runInBand --reporters=default --reporters=jest-junit
                   environment:
                       JEST_JUNIT_OUTPUT_DIR: ./reports/
+                      NODE_OPTIONS: "--max_old_space_size=4096"
 
             - store_test_results:
                   path: ./reports/
