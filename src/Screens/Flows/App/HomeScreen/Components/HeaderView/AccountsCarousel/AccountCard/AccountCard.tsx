@@ -24,6 +24,7 @@ import {
 } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
+import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 
 interface Props extends AnimateProps<ViewProps> {
     style?: StyleProp<ViewStyle>
@@ -56,7 +57,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
             <BaseView
                 bg={theme.colors.primary}
                 flex={1}
-                justifyContent="flex-start"
+                justifyContent="space-between"
                 alignItems="flex-start"
                 borderRadius={24}
                 px={16}
@@ -100,7 +101,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            flex: 1,
+            height: hp("22.3%") < 170 ? 170 : hp("22.3%"),
         },
         itemContainer: {
             flex: 1,
