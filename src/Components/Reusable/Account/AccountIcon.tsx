@@ -3,17 +3,15 @@ import { StyleSheet } from "react-native"
 import { SvgXml } from "react-native-svg"
 import { PicassoUtils } from "~Common"
 import { BaseView } from "~Components/Base"
-import { Account } from "~Model"
 
 type AccountIconProps = {
-    account: Account
-    showDeviceIcon?: boolean
+    address: string
 }
 
-export const AccountIcon: React.FC<AccountIconProps> = memo(({ account }) => {
+export const AccountIcon: React.FC<AccountIconProps> = memo(({ address }) => {
     return (
         <BaseView>
-            <PicassoAddressIcon address={account.address} />
+            <PicassoAddressIcon address={address} />
         </BaseView>
     )
 })
