@@ -13,7 +13,7 @@ const initialState: CacheState = {
 }
 
 export const CacheSlice = createSlice({
-    name: "Cache",
+    name: "cache",
     initialState,
     reducers: {
         setMnemonic: (state, action: PayloadAction<string | undefined>) => {

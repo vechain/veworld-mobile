@@ -1,6 +1,19 @@
 import { warn } from "~Common"
 import { encryptTransform, initEncryption } from "./EncryptionService"
 import { storage } from "./Storage"
+import { TokenApi } from "./Api"
+import {
+    CurrencySlice,
+    TokenSlice,
+    UserPreferencesSlice,
+    ConfigSlice,
+    DeviceSlice,
+    AccountSlice,
+    NetworkSlice,
+    BalanceSlice,
+    ContactsSlice,
+    ActivitiesSlice,
+} from "./Slices"
 
 export const getPersistorConfig = async () => {
     const key = await initEncryption()
@@ -18,17 +31,17 @@ export const getPersistorConfig = async () => {
         version: 1,
         blacklist: [],
         whitelist: [
-            "userPreferences",
-            "config",
-            "accounts",
-            "devices",
-            "networks",
-            "balances",
-            "tokenApi",
-            "contacts",
-            "currency",
-            "tokens",
-            "activities",
+            TokenApi.reducerPath,
+            CurrencySlice.name,
+            TokenSlice.name,
+            UserPreferencesSlice.name,
+            ConfigSlice.name,
+            DeviceSlice.name,
+            AccountSlice.name,
+            NetworkSlice.name,
+            BalanceSlice.name,
+            ContactsSlice.name,
+            ActivitiesSlice.name,
         ],
         transforms: [encryptor],
     }
