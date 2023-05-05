@@ -49,6 +49,7 @@ module.exports = {
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
     coveragePathIgnorePatterns: [
+        "<rootDir>/src/Common/Hooks/useAppReset/useAppReset.tsx",
         "<rootDir>/src/Common/Utils/ConnectionUtils/ConnectionUtils.ts",
     ],
 

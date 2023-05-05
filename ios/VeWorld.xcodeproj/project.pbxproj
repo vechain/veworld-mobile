@@ -14,6 +14,7 @@
 		2282337A29B779F400A26507 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 2282337929B779F300A26507 /* fonts */; };
 		2CE0DD7F5BD444FF44094A90 /* libPods-VeWorld.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F70D3ADB76F4B770CEB53E /* libPods-VeWorld.a */; };
 		345FBAB16846978F3D287B74 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648782E6EE09DF1615096A3A /* ExpoModulesProvider.swift */; };
+		4719B5AE80F00AF8BE95E47F /* libPods-VeWorld-VeWorldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4AAB2247221E23DAF71EC81 /* libPods-VeWorld-VeWorldTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		EA4AB58529D59C1F009916EE /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB8DD4729BE1B2200929DFC /* OpenSSL.xcframework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		EA9F31F52991455200D288F5 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA9F31F42991455200D288F5 /* BootSplash.storyboard */; };

@@ -1,6 +1,9 @@
 import { useState } from "react"
 import { useDecimalSeparator } from "../useDecimalSeparator"
 
+/**
+ * hook to handle the amount input, filtering out non-numeric characters and duplicate decimal separators
+ */
 export const useAmountInput = (initialValue: string = "") => {
     const decimalSeparator = useDecimalSeparator()
     const [input, setInput] = useState(initialValue)
