@@ -43,3 +43,5 @@ export const token2: Token = {
     icon,
     custom: false,
 }
+
+export const tokensMock = [token1, token2]

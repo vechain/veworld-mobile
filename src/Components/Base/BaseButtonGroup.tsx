@@ -3,6 +3,7 @@ import React, { useCallback } from "react"
 import { useTheme } from "~Common"
 import { BaseButton } from "./BaseButton"
 import DropShadow from "react-native-drop-shadow"
+import { TFonts } from "~Common/Theme"
 
 export type Button = {
     id: string
@@ -20,6 +21,7 @@ type Props = {
     buttonTestID?: string
     buttonGroupTestID?: string
     selectedColor?: string
+    typographyFont?: TFonts
 }
 
 export const BaseButtonGroup = ({
@@ -29,6 +31,7 @@ export const BaseButtonGroup = ({
     buttonTestID,
     buttonGroupTestID,
     selectedColor,
+    typographyFont = "bodyMedium",
 }: Props) => {
     const theme = useTheme()
 
@@ -59,7 +62,7 @@ export const BaseButtonGroup = ({
                         title={label}
                         bgColor={bgColor}
                         textColor={textColor}
-                        typographyFont="bodyMedium"
+                        typographyFont={typographyFont}
                         style={{
                             borderTopLeftRadius: borderTopRadius,
                             borderTopRightRadius: borderTopRadius,

@@ -1,7 +1,6 @@
 import { warn } from "~Common"
 import { encryptTransform, initEncryption } from "./EncryptionService"
 import { storage } from "./Storage"
-import { TokenApi } from "./Api"
 import {
     CurrencySlice,
     TokenSlice,
@@ -31,7 +30,6 @@ export const getPersistorConfig = async () => {
         version: 1,
         blacklist: [],
         whitelist: [
-            TokenApi.reducerPath,
             CurrencySlice.name,
             TokenSlice.name,
             UserPreferencesSlice.name,

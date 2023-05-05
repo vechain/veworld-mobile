@@ -1,6 +1,6 @@
 import React, { FC, memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles, valueToHP } from "~Common"
 import { COLORS } from "~Common/Theme"
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -79,8 +79,8 @@ export const PasswordPins: FC<Props> = memo(
 const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         pinBase: {
-            width: 12,
-            height: 12,
+            width: valueToHP[12],
+            height: valueToHP[12],
             borderRadius: 6,
         },
         pressed: {

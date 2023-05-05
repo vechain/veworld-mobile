@@ -1,9 +1,10 @@
 import React from "react"
 import { Dimensions, StyleSheet, View } from "react-native"
 import { Mask, Rect, Svg, Defs } from "react-native-svg"
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Common"
 
-const deviceWidth = Dimensions.get("window").width
-const deviceHeight = Dimensions.get("window").height
+const deviceWidth = SCREEN_WIDTH
+const deviceHeight = SCREEN_HEIGHT
 const QR_SCAN_SQUARE_SIZE = Dimensions.get("window").width - 40
 
 type Props = { color: string }
