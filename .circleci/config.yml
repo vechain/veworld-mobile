@@ -55,7 +55,7 @@ workflows:
           requires:
             - build-and-test
           environment:
-            COVERAGE_REPORTS: <<.circleci/test-results/*/coverage-final.json>>
+            COVERAGE_REPORTS: \<<.circleci/test-results/*/coverage-final.json\>>
           steps:
             - run:
                 name: Merge coverage reports
