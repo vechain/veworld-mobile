@@ -8,6 +8,9 @@ import {
 } from "~Storage/Redux/Selectors"
 import { setAppLockStatus } from "~Storage/Redux/Actions"
 
+/**
+ * hook to handle app lock
+ */
 export const useAppLock = () => {
     const dispatch = useAppDispatch()
 

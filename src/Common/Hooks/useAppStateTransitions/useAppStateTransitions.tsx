@@ -1,7 +1,10 @@
 import { useMemo } from "react"
 import { AppStateType } from "~Model"
-import { useAppState } from "./useAppState"
+import { useAppState } from "../useAppState"
 
+/**
+ * hook that returns whether the app state transitioned from one state to another
+ */
 export const useAppStateTransitions = () => {
     const [previousState, currentState] = useAppState()
 

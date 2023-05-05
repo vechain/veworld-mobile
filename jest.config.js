@@ -46,9 +46,11 @@ module.exports = {
      */
     collectCoverageFrom: [
         "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
+        "src/Common/Hooks/**/*.{js,jsx,ts,tsx}",
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
     coveragePathIgnorePatterns: [
+        "index.ts",
         "<rootDir>/src/Common/Hooks/useAppReset/useAppReset.tsx",
         "<rootDir>/src/Common/Utils/ConnectionUtils/ConnectionUtils.ts",
     ],
