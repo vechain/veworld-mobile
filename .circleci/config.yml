@@ -31,8 +31,7 @@ jobs:
       - run:
           name: Run Unit Tests
           command: >
-            TEST=$(circleci tests glob "**/*.(spec|test).(ts|tsx|js|jsx)" |
-            circleci tests split --split-by=timings)
+            TEST=$(circleci tests glob "src/**/*.spec.ts" "src/**/*.spec.tsx" | circleci tests split --split-by=timings --timings-type=autodetect)
 
             yarn test:coverage:debug $TEST --ci --runInBand --reporters=default
             --reporters=jest-junit
@@ -44,7 +43,7 @@ jobs:
       - store_test_results:
           path: ~/junit
       - store_artifacts:
-          path: ~/junit
+          path: ~/jest-artifacts
 workflows:
   build-and-test:
     jobs:
