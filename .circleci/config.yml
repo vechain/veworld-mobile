@@ -33,10 +33,10 @@ jobs:
           command: >
             TEST=$(circleci tests glob "src/**/*.spec.ts" "src/**/*.spec.tsx"
             "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split
-            --split-by=timings)
+            --split-by=timings --timings-type=classname)
 
             yarn test:coverage:debug $TEST --ci --runInBand --reporters=default 
-            --reporters=jest-junit --coverageDirectory=coverage
+            --reporters=jest-junit
           environment:
             NODE_OPTIONS: "--max_old_space_size=4096"
       - run:
@@ -45,8 +45,7 @@ jobs:
       - store_test_results:
           path: ~/junit
       - store_artifacts:
-          path: coverage/coverage-final.json
-          destination: coverage/coverage-final.json
+          path: coverage
 
 workflows:
   build-and-test:
