@@ -43,7 +43,7 @@ jobs:
       - store_test_results:
           path: ~/junit
       - store_artifacts:
-          path: ~/jest-artifacts
+          path: ~/coverage
 workflows:
   build-and-test:
     jobs:
