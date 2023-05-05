@@ -35,7 +35,7 @@ jobs:
             "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split
             --split-by=timings)
 
-            yarn test --forceExit $TEST --ci --runInBand --reporters=default --reporters=jest-junit
+            yarn test --forceExit --maxWorkers=4 $TEST --ci --runInBand --reporters=default --reporters=jest-junit 
           environment:
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
             NODE_OPTIONS: "--max_old_space_size=4096"
