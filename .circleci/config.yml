@@ -35,7 +35,7 @@ jobs:
             "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split
             --split-by=timings)
 
-            yarn test --forceExit --maxWorkers=4 $TEST --ci --runInBand --reporters=default --reporters=jest-junit 
+            yarn test --forceExit $TEST --ci --runInBand --reporters=default --reporters=jest-junit
           environment:
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
             NODE_OPTIONS: "--max_old_space_size=4096"
@@ -51,3 +51,18 @@ workflows:
   build-and-test:
     jobs:
       - build-and-test
+      - aggregate-coverage:
+          requires:
+            - build-and-test
+          environment:
+            COVERAGE_REPORTS: <<.circleci/test-results/*/coverage-final.json>>
+          steps:
+            - run:
+                name: Merge coverage reports
+                command: |
+                  npx nyc merge .circleci/artifacts/coverage .circleci/test-results/*/coverage-final.json
+                  npx nyc report --reporter=html --report-dir=.circleci/artifacts/coverage
+                when: always
+            - store_artifacts:
+                path: .circleci/artifacts/coverage
+                destination: coverage
