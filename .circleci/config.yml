@@ -33,7 +33,7 @@ jobs:
           command: >
             TEST=$(circleci tests glob "src/**/*.spec.ts" "src/**/*.spec.tsx"
             "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split
-            --split-by=timings --timings-type=classname)
+            --split-by=timings)
 
             yarn test --forceExit $TEST --ci --runInBand --reporters=default --reporters=jest-junit
           environment:
