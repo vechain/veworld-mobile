@@ -45,7 +45,7 @@ jobs:
       - store_test_results:
           path: ~/junit
       - store_artifacts:
-          path: coverage
+          path: ~/junit
 
 workflows:
   build-and-test:
