@@ -38,24 +38,22 @@ jobs:
             yarn test --forceExit $TEST --ci --runInBand --reporters=default --reporters=jest-junit
           environment:
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
+            JEST_JUNIT_OUTPUT_DIR: ./eslint-reports/
             NODE_OPTIONS: "--max_old_space_size=4096"
-            COVERAGE_REPORTS: \<<.circleci/test-results/*/coverage-final.json\>>
       - run:
           command: cp junit.xml ~/junit/
           when: always
       - store_test_results:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/junit
+          path: ~/reports
       - run:
-          name: Merge coverage reports
           command: |
-            npx nyc merge .circleci/artifacts/coverage .circleci/test-results/*/coverage-final.json
-            npx nyc report --reporter=html --report-dir=.circleci/artifacts/coverage
+            mkdir -p ~/eslint-reports
+            eslint ./src/ --format junit --output-file ~/eslint-reports/eslint.xml
           when: always
+      - store_test_results:
+          path: ~/eslint-reports
       - store_artifacts:
-          path: .circleci/artifacts/coverage
-          destination: coverage
+          path: ~/reports
 
 workflows:
   build-and-test:
