@@ -3,11 +3,10 @@ import { AddressUtils, FormattingUtils } from "~Common"
 import { selectSelectedAccount } from "./Account"
 import { VET, VTHO } from "~Common/Constant"
 import { RootState } from "~Storage/Redux/Types"
-import { selectAllFungibleTokens } from "./TokenApi"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
-import { selectCustomTokens } from "./Tokens"
+import { selectAllFungibleTokens, selectCustomTokens } from "./Tokens"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 
 export const selectBalancesState = (state: RootState) => state.balances
