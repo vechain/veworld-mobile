@@ -35,8 +35,7 @@ jobs:
             "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split
             --split-by=timings --timings-type=classname)
 
-            yarn test --forceExit $TEST --ci --runInBand --reporters=default 
-            --reporters=jest-junit
+            yarn test --forceExit $TEST --ci --runInBand --reporters=jest-junit
           environment:
             NODE_OPTIONS: "--max_old_space_size=4096"
       - run:
