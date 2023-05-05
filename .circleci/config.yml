@@ -39,6 +39,7 @@ jobs:
           environment:
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
             NODE_OPTIONS: "--max_old_space_size=4096"
+            COVERAGE_REPORTS: \<<.circleci/test-results/*/coverage-final.json\>>
       - run:
           command: cp junit.xml ~/junit/
           when: always
@@ -46,25 +47,17 @@ jobs:
           path: ~/junit
       - store_artifacts:
           path: ~/junit
-
-  aggregate-coverage:
-    environment:
-      COVERAGE_REPORTS: \<<.circleci/test-results/*/coverage-final.json\>>
-      steps:
-        - run:
-            name: Merge coverage reports
-            command: |
-              npx nyc merge .circleci/artifacts/coverage .circleci/test-results/*/coverage-final.json
-              npx nyc report --reporter=html --report-dir=.circleci/artifacts/coverage
-            when: always
-        - store_artifacts:
-            path: .circleci/artifacts/coverage
-            destination: coverage
+      - run:
+          name: Merge coverage reports
+          command: |
+            npx nyc merge .circleci/artifacts/coverage .circleci/test-results/*/coverage-final.json
+            npx nyc report --reporter=html --report-dir=.circleci/artifacts/coverage
+          when: always
+      - store_artifacts:
+          path: .circleci/artifacts/coverage
+          destination: coverage
 
 workflows:
   build-and-test:
     jobs:
       - build-and-test
-      - aggregate-coverage:
-          requires:
-            - build-and-test
