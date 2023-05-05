@@ -1,51 +1,51 @@
 version: 2.1
 jobs:
-    build-and-test:
-        docker:
-            - image: "cimg/node:18.12.1"
-        parallelism: 4
-        steps:
-            - checkout
-            - restore_cache:
-                  key: 'yarn-v2-{{ checksum "yarn.lock" }}'
-            - restore_cache:
-                  key: 'node-v2-{{ checksum "package.json" }}'
-            - run:
-                  name: Install Dependencies
-                  command: yarn install --frozen-lockfile
-            - save_cache:
-                  key: 'yarn-v2-{{ checksum "yarn.lock" }}'
-                  paths:
-                      - ~/.cache/yarn
-            - save_cache:
-                  key: 'node-v2-{{ checksum "package.json" }}'
-                  paths:
-                      - node_modules
-            - run:
-                  name: Lint & Format Check
-                  command: "yarn lint && yarn format:check"
-            - run:
-                  name: Install JUnit coverage reporter
-                  command: yarn add --dev jest-junit
-            - run: mkdir ~/junit
-            - run:
-                  name: Run Unit Tests
-                  command: >
-                      TEST=$(circleci tests glob "src/**/*.(spec|test).(ts|tsx|js|jsx)" |
-                      circleci tests split --split-by=timings)
+  build-and-test:
+    docker:
+      - image: 'cimg/node:18.12.1'
+    parallelism: 4
+    steps:
+      - checkout
+      - restore_cache:
+          key: 'yarn-v2-{{ checksum "yarn.lock" }}'
+      - restore_cache:
+          key: 'node-v2-{{ checksum "package.json" }}'
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          key: 'yarn-v2-{{ checksum "yarn.lock" }}'
+          paths:
+            - ~/.cache/yarn
+      - save_cache:
+          key: 'node-v2-{{ checksum "package.json" }}'
+          paths:
+            - node_modules
+      - run:
+          name: Lint & Format Check
+          command: 'yarn lint && yarn format:check'
+      - run:
+          name: Install JUnit coverage reporter
+          command: yarn add --dev jest-junit
+      - run: mkdir ~/junit
+      - run:
+          name: Run Unit Tests
+          command: >
+            TEST=$(circleci tests glob "src/**/*.(spec|test).(ts|tsx|js|jsx)" |
+            circleci tests split --split-by=timings)
 
-                      yarn test:coverage:debug $TEST --ci --runInBand --reporters=default
-                      --reporters=jest-junit
-                  environment:
-                      NODE_OPTIONS: "--max_old_space_size=4096"
-            - run:
-                  command: cp junit.xml ~/junit/
-                  when: always
-            - store_test_results:
-                  path: ~/junit
-            - store_artifacts:
-                  path: ~/junit
+            yarn test:coverage:debug $TEST --ci --runInBand --reporters=default
+            --reporters=jest-junit
+          environment:
+            NODE_OPTIONS: '--max_old_space_size=4096'
+      - run:
+          command: cp junit.xml ~/junit/
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
 workflows:
-    build-and-test:
-        jobs:
-            - build-and-test
+  build-and-test:
+    jobs:
+      - build-and-test
