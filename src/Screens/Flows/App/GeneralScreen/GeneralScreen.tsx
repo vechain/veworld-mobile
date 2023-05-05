@@ -1,6 +1,6 @@
 import { useNavigation, useTheme } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import {
     BaseIcon,
     BaseSafeArea,
@@ -25,6 +25,7 @@ import {
     setHideTokensWithNoBalance,
     setLanguage,
 } from "~Storage/Redux"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 export const GeneralScreen = () => {
     const nav = useNavigation()
@@ -32,6 +33,8 @@ export const GeneralScreen = () => {
     const theme = useTheme()
 
     const { LL } = useI18nContext()
+
+    const tabBarHeight = useBottomTabBarHeight()
 
     const {
         ref: selectLanguageSheetRef,
@@ -65,75 +68,89 @@ export const GeneralScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
-            <BaseSpacer height={12} />
-            <BaseView mx={20}>
-                <BaseText typographyFont="title">{LL.TITLE_GENERAL()}</BaseText>
-                <BaseSpacer height={20} />
-
-                <BaseText typographyFont="bodyMedium" my={8}>
-                    {LL.BD_CONVERSION_CURRENCY()}
-                </BaseText>
-                <BaseText typographyFont="caption">
-                    {LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}
-                </BaseText>
-
-                <BaseSpacer height={20} />
-
-                <ChangeCurrency />
-                <BaseSpacer height={20} />
-
-                <BaseSpacer height={20} />
-
-                <BaseText typographyFont="bodyMedium" my={8}>
-                    {LL.BD_APP_THEME()}
-                </BaseText>
-                <BaseText typographyFont="caption">
-                    {LL.BD_APP_THEME_DISCLAIMER()}
-                </BaseText>
-
-                <BaseSpacer height={20} />
-
-                <ChangeTheme />
-
-                <BaseSpacer height={20} />
-
-                <EnableFeature
-                    title={LL.BD_HIDE_TOKENS()}
-                    subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
-                    onValueChange={toggleTokensHiddenSwitch}
-                    value={hideTokensWithNoBalance}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentInsetAdjustmentBehavior="automatic"
+                contentContainerStyle={[
+                    baseStyles.scrollViewContainer,
+                    { paddingBottom: tabBarHeight },
+                ]}
+                style={baseStyles.scrollView}>
+                <BaseIcon
+                    style={baseStyles.backIcon}
+                    size={36}
+                    name="chevron-left"
+                    color={theme.colors.text}
+                    action={goBack}
                 />
+                <BaseSpacer height={12} />
+                <BaseView mx={20}>
+                    <BaseText typographyFont="title">
+                        {LL.TITLE_GENERAL()}
+                    </BaseText>
+                    <BaseSpacer height={20} />
 
-                <BaseSpacer height={20} />
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_CONVERSION_CURRENCY()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">
+                        {LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}
+                    </BaseText>
 
-                <BaseText typographyFont="bodyMedium" my={8}>
-                    {LL.BD_APP_LANGUAGE()}
-                </BaseText>
-                <BaseText typographyFont="caption">
-                    {LL.BD_APP_LANGUAGE_DISCLAIMER()}
-                </BaseText>
+                    <BaseSpacer height={20} />
 
-                <BaseSpacer height={20} />
+                    <ChangeCurrency />
+                    <BaseSpacer height={20} />
 
-                <ChangeLanguage
-                    language={selectedLanguage}
-                    onPress={openSelectLanguageSheet}
-                />
+                    <BaseSpacer height={20} />
 
-                <SelectLanguageBottomSheet
-                    ref={selectLanguageSheetRef}
-                    onClose={closeSelectLanguageSheet}
-                    selectedLanguage={selectedLanguage}
-                    handleSelectLanguage={handleSelectLanguage}
-                />
-            </BaseView>
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_APP_THEME()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">
+                        {LL.BD_APP_THEME_DISCLAIMER()}
+                    </BaseText>
+
+                    <BaseSpacer height={20} />
+
+                    <ChangeTheme />
+
+                    <BaseSpacer height={20} />
+
+                    <EnableFeature
+                        title={LL.BD_HIDE_TOKENS()}
+                        subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
+                        onValueChange={toggleTokensHiddenSwitch}
+                        value={hideTokensWithNoBalance}
+                    />
+
+                    <BaseSpacer height={20} />
+
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_APP_LANGUAGE()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">
+                        {LL.BD_APP_LANGUAGE_DISCLAIMER()}
+                    </BaseText>
+
+                    <BaseSpacer height={20} />
+
+                    <ChangeLanguage
+                        language={selectedLanguage}
+                        onPress={openSelectLanguageSheet}
+                    />
+
+                    <SelectLanguageBottomSheet
+                        ref={selectLanguageSheetRef}
+                        onClose={closeSelectLanguageSheet}
+                        selectedLanguage={selectedLanguage}
+                        handleSelectLanguage={handleSelectLanguage}
+                    />
+
+                    <BaseSpacer height={20} />
+                </BaseView>
+            </ScrollView>
         </BaseSafeArea>
     )
 }
@@ -142,5 +159,11 @@ const baseStyles = StyleSheet.create({
     backIcon: {
         marginHorizontal: 8,
         alignSelf: "flex-start",
+    },
+    scrollViewContainer: {
+        width: "100%",
+    },
+    scrollView: {
+        width: "100%",
     },
 })
