@@ -80,7 +80,7 @@ describe("useCreateWalletWithPassword", () => {
         await waitForNextUpdate()
         const onCreateWallet = result.current.onCreateWallet
         await onCreateWallet({
-            mnemonic: "mnemonic",
+            mnemonic: mnemonic.join(" "),
             userPassword: "password",
             onError: undefined,
         })

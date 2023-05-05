@@ -93,7 +93,7 @@ describe("useCreateWalletWithBiometrics", () => {
         await waitForNextUpdate()
         const { onCreateWallet } = result.current
 
-        await onCreateWallet({ mnemonic: "test mnemonic" })
+        await onCreateWallet({ mnemonic: mnemonic.join(" ") })
         await waitFor(() => result.current.isComplete)
         expect(result.current.accessControl).toBe(true)
         expect(result.current.isComplete).toBe(true)
