@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Run Unit Tests
           command: >
-            TEST=$(circleci tests glob "src/**/*.spec.ts" "src/**/*.spec.tsx" | circleci tests split --split-by=timings --timings-type=autodetect)
+            TEST=$(circleci tests glob "src/**/*.spec.ts" "src/**/*.spec.tsx" "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split --split-by=timings)
 
             yarn test:coverage:debug $TEST --ci --runInBand --reporters=default
             --reporters=jest-junit
