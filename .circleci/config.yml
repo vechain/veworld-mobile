@@ -47,6 +47,20 @@ jobs:
       - store_artifacts:
           path: ~/junit
 
+  aggregate-coverage:
+    environment:
+      COVERAGE_REPORTS: \<<.circleci/test-results/*/coverage-final.json\>>
+      steps:
+        - run:
+            name: Merge coverage reports
+            command: |
+              npx nyc merge .circleci/artifacts/coverage .circleci/test-results/*/coverage-final.json
+              npx nyc report --reporter=html --report-dir=.circleci/artifacts/coverage
+            when: always
+        - store_artifacts:
+            path: .circleci/artifacts/coverage
+            destination: coverage
+
 workflows:
   build-and-test:
     jobs:
@@ -54,15 +68,3 @@ workflows:
       - aggregate-coverage:
           requires:
             - build-and-test
-          environment:
-            COVERAGE_REPORTS: \<<.circleci/test-results/*/coverage-final.json\>>
-          steps:
-            - run:
-                name: Merge coverage reports
-                command: |
-                  npx nyc merge .circleci/artifacts/coverage .circleci/test-results/*/coverage-final.json
-                  npx nyc report --reporter=html --report-dir=.circleci/artifacts/coverage
-                when: always
-            - store_artifacts:
-                path: .circleci/artifacts/coverage
-                destination: coverage
