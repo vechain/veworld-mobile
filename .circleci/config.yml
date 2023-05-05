@@ -7,18 +7,18 @@ jobs:
         steps:
             - checkout
             - restore_cache:
-                  key: 'yarn-v1-{{ checksum "yarn.lock" }}'
+                  key: 'yarn-v2-{{ checksum "yarn.lock" }}'
             - restore_cache:
-                  key: 'node-v1-{{ checksum "package.json" }}'
+                  key: 'node-v2-{{ checksum "package.json" }}'
             - run:
                   name: Install Dependencies
                   command: yarn install --frozen-lockfile
             - save_cache:
-                  key: 'yarn-v1-{{ checksum "yarn.lock" }}'
+                  key: 'yarn-v2-{{ checksum "yarn.lock" }}'
                   paths:
                       - ~/.cache/yarn
             - save_cache:
-                  key: 'node-v1-{{ checksum "package.json" }}'
+                  key: 'node-v2-{{ checksum "package.json" }}'
                   paths:
                       - node_modules
             - run:
