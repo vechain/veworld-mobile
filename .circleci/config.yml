@@ -39,10 +39,6 @@ jobs:
             --reporters=jest-junit
           environment:
             NODE_OPTIONS: "--max_old_space_size=4096"
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .nyc_output_temp/*
       - run:
           command: cp junit.xml ~/junit/
           when: always
