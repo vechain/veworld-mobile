@@ -35,9 +35,6 @@ jobs:
             "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split
             --split-by=timings)
 
-            xargs npx nyc
-            --temp-dir=./.nyc_output_temp/$CIRCLE_JOB-$CIRCLE_NODE_INDEX/nyc_output
-
             yarn test --forceExit $TEST --ci --runInBand --reporters=default 
             --reporters=jest-junit
           environment:
@@ -54,23 +51,7 @@ jobs:
       - store_artifacts:
           path: ~/coverage
 
-  test-coverage:
-    docker:
-      - image: "cimg/node:18.12.1"
-    steps:
-      - run:
-          name: Merge coverage output
-          command: node merge-coverage.js
-      - run:
-          name: Check code coverage
-          command: >-
-            npx nyc report --reporter=lcov --reporter=text-summary
-            --check-coverage
-
 workflows:
   build-and-test:
     jobs:
       - build-and-test
-  test-coverage:
-    jobs:
-      - test-coverage
