@@ -2,7 +2,12 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, useBottomSheetModal, useTheme } from "~Common"
+import {
+    FormattingUtils,
+    useBottomSheetModal,
+    useScrollableList,
+    useTheme,
+} from "~Common"
 import {
     BaseIcon,
     BaseSafeArea,
@@ -30,7 +35,8 @@ import {
     EditContactBottomSheet,
     UnderlayLeft,
 } from "./Components"
-import PlatformUtils from "~Common/Utils/PlatformUtils" // this is imported like so to avoid circular dependency
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 const underlaySnapPoints = [58]
 
@@ -41,6 +47,10 @@ export const ContactsScreen = () => {
     const theme = useTheme()
 
     const goBack = useCallback(() => nav.goBack(), [nav])
+
+    const insets = useSafeAreaInsets()
+
+    const tabBarHeight = useBottomTabBarHeight()
 
     const { LL } = useI18nContext()
 
@@ -63,6 +73,9 @@ export const ContactsScreen = () => {
     } = useBottomSheetModal()
 
     const contacts = useAppSelector(selectContacts)
+
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
+        useScrollableList(contacts, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
 
     const dispatch = useAppDispatch()
 
@@ -167,11 +180,20 @@ export const ContactsScreen = () => {
         return (
             <>
                 <BaseSpacer height={20} />
-                <BaseView flexDirection="row" style={baseStyles.list}>
+                <BaseView
+                    flexDirection="row"
+                    style={[
+                        baseStyles.list,
+                        { paddingBottom: tabBarHeight - insets.bottom },
+                    ]}>
                     <FlashList
                         data={contacts}
                         keyExtractor={contact => contact.address}
                         ItemSeparatorComponent={contactsListSeparator}
+                        onViewableItemsChanged={onViewableItemsChanged}
+                        viewabilityConfig={viewabilityConfig}
+                        scrollEnabled={isListScrollable}
+                        ListFooterComponent={<BaseSpacer height={20} />}
                         renderItem={({ item: contact }) => {
                             return (
                                 <BaseView mx={20}>
@@ -211,7 +233,7 @@ export const ContactsScreen = () => {
                         showsHorizontalScrollIndicator={false}
                         estimatedItemSize={80}
                         estimatedListSize={{
-                            height: 184,
+                            height: 80 * contacts.length,
                             width: 400,
                         }}
                         testID="contacts-list"
@@ -222,10 +244,15 @@ export const ContactsScreen = () => {
     }, [
         contacts,
         contactsListSeparator,
+        insets.bottom,
+        isListScrollable,
         onDeleteContactPress,
         onEditContactPress,
         onSwipeableItemChange,
+        onViewableItemsChanged,
         registerSwipeableItemRef,
+        tabBarHeight,
+        viewabilityConfig,
     ])
 
     // [End] Render sub components
@@ -333,7 +360,8 @@ const baseStyles = StyleSheet.create({
         flexDirection: "column",
     },
     list: {
-        height: PlatformUtils.isIOS() ? "70%" : "76%",
+        top: 0,
+        flex: 1,
     },
     contactContainer: { flex: 1 },
 })

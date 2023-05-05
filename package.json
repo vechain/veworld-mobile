@@ -124,6 +124,7 @@
         "@formatjs/intl-pluralrules": "^5.1.8",
         "@react-native-community/eslint-config": "^2.0.0",
         "@testing-library/jest-native": "^5.4.2",
+        "@testing-library/react-hooks": "^8.0.1",
         "@testing-library/react-native": "^12.0.0",
         "@tsconfig/react-native": "^2.0.2",
         "@types/cucumber": "^7.0.0",
