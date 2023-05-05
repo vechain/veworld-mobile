@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: 'cimg/node:18.12.1'
+      - image: "cimg/node:18.12.1"
     parallelism: 4
     steps:
       - checkout
@@ -23,7 +23,7 @@ jobs:
             - node_modules
       - run:
           name: Lint & Format Check
-          command: 'yarn lint && yarn format:check'
+          command: "yarn lint && yarn format:check"
       - run:
           name: Install JUnit coverage reporter
           command: yarn add --dev jest-junit
@@ -31,12 +31,21 @@ jobs:
       - run:
           name: Run Unit Tests
           command: >
-            TEST=$(circleci tests glob "src/**/*.spec.ts" "src/**/*.spec.tsx" "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split --split-by=timings)
+            TEST=$(circleci tests glob "src/**/*.spec.ts" "src/**/*.spec.tsx"
+            "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split
+            --split-by=timings)
 
-            yarn test:coverage:debug $TEST --ci --runInBand --reporters=default
+            xargs npx nyc
+            --temp-dir=./.nyc_output_temp/$CIRCLE_JOB-$CIRCLE_NODE_INDEX/nyc_output
+
+            yarn test --forceExit $TEST --ci --runInBand --reporters=default 
             --reporters=jest-junit
           environment:
-            NODE_OPTIONS: '--max_old_space_size=4096'
+            NODE_OPTIONS: "--max_old_space_size=4096"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .nyc_output_temp/*
       - run:
           command: cp junit.xml ~/junit/
           when: always
@@ -44,7 +53,24 @@ jobs:
           path: ~/junit
       - store_artifacts:
           path: ~/coverage
+
+  test-coverage:
+    docker:
+      - image: "cimg/node:18.12.1"
+    steps:
+      - run:
+          name: Merge coverage output
+          command: node merge-coverage.js
+      - run:
+          name: Check code coverage
+          command: >-
+            npx nyc report --reporter=lcov --reporter=text-summary
+            --check-coverage
+
 workflows:
   build-and-test:
     jobs:
       - build-and-test
+  test-coverage:
+    jobs:
+      - test-coverage
