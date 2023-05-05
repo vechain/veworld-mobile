@@ -30,9 +30,9 @@ jobs:
             - run: mkdir ~/junit
             - run:
                   name: Run Unit Tests
-                  command:
-                      TEST=$(circleci tests glob "src/**/*.(spec|test).(ts|tsx|js|jsx)" | circleci tests split
-                      --split-by=timings)
+                  command: >
+                      TEST=$(circleci tests glob "src/**/*.(spec|test).(ts|tsx|js|jsx)" |
+                      circleci tests split --split-by=timings)
 
                       yarn test:coverage:debug $TEST --ci --runInBand --reporters=default
                       --reporters=jest-junit
