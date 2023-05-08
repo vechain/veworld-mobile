@@ -57,10 +57,10 @@ module.exports = {
 
     coverageThreshold: {
         global: {
-            statements: 97.12,
-            branches: 89.34,
-            functions: 96.27,
-            lines: 97.3,
+            statements: 97.45,
+            branches: 89.35,
+            functions: 96.35,
+            lines: 97.58,
         },
     },
     reporters: ["default", "jest-junit"],
