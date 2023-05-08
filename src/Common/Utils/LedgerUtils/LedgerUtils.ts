@@ -90,7 +90,7 @@ const signTransaction = async (
     })
 }
 
-type LedgerAccount = {
+export type LedgerAccount = {
     address: string
     balance?: Connex.Thor.Account
 }
@@ -103,8 +103,8 @@ type LedgerAccount = {
  */
 const getAccountsWithBalances = async (
     rootAccount: VETLedgerAccount,
-    numberOfAccounts = 6,
     network: Network,
+    numberOfAccounts = 6,
 ): Promise<LedgerAccount[]> => {
     debug("Getting accounts with balances")
 
