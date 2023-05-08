@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native"
-import { ColorThemeType, ColorTheme } from "../Theme/Theme"
+import { ColorThemeType, ColorTheme } from "../../Theme/Theme"
 import { useAppSelector } from "~Storage/Redux"
 import { selectTheme } from "~Storage/Redux/Selectors"
-import { useColorScheme } from "./useColorScheme/useColorScheme"
+import { useColorScheme } from "../useColorScheme/useColorScheme"
 import { ThemeEnum } from "~Common/Enums"
 import { useCallback } from "react"
 
