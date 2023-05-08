@@ -1,10 +1,14 @@
-import { Device } from "~Model"
+import { Device, Network } from "~Model"
 import { Mutex } from "async-mutex"
-import { Certificate, Transaction } from "thor-devkit"
+import { Certificate, Transaction, HDNode } from "thor-devkit"
 import AddressUtils from "../AddressUtils"
-import VETLedgerApp, { VET_DERIVATION_PATH } from "~Common/Ledger/VetLedgerApp"
+import VETLedgerApp, {
+    VETLedgerAccount,
+    VET_DERIVATION_PATH,
+} from "~Common/Ledger/VetLedgerApp"
 import { debug, error, warn } from "../../Logger"
 import { Buffer } from "buffer"
+import BalanceUtils from "../BalanceUtils"
 
 const ledgerMutex = new Mutex()
 
@@ -85,51 +89,55 @@ const signTransaction = async (
         }
     })
 }
-// /**
-//  * Get a number of accounts and their balances
-//  *
-//  * @param rootAccount - the root account of the ledger (with chaincode)
-//  * @param numberOfAccounts - the number of accounts to get. Defaults to 6
-//  */
-// const getAccountsWithBalances =
-//     (
-//         rootAccount: VETLedgerAccount,
-//         numberOfAccounts = 6,
-//     ): AppThunk<Promise<LedgerAccount[]>> =>
-//     async dispatch => {
-//         debug("Getting accounts with balances")
 
-//         if (numberOfAccounts < 1)
-//             throw VeWorldErrors.invalidRequest("Must get at least 1 account")
+type LedgerAccount = {
+    address: string
+    balance?: Connex.Thor.Account
+}
 
-//         if (!rootAccount.publicKey || !rootAccount.chainCode)
-//             throw VeWorldErrors.internal("Failed to get public key/ chaincode")
+/**
+ * Get a number of accounts and their balances
+ *
+ * @param rootAccount - the root account of the ledger (with chaincode)
+ * @param numberOfAccounts - the number of accounts to get. Defaults to 6
+ */
+const getAccountsWithBalances = async (
+    rootAccount: VETLedgerAccount,
+    numberOfAccounts = 6,
+    network: Network,
+): Promise<LedgerAccount[]> => {
+    debug("Getting accounts with balances")
 
-//         const publicKey = Buffer.from(rootAccount.publicKey, "hex")
-//         const chainCode = Buffer.from(rootAccount.chainCode, "hex")
+    if (numberOfAccounts < 1) throw new Error("Must get at least 1 account")
 
-//         const hdNode = HDNode.fromPublicKey(publicKey, chainCode)
+    if (!rootAccount.publicKey || !rootAccount.chainCode)
+        throw new Error("Failed to get public key/ chaincode")
 
-//         const accounts: LedgerAccount[] = []
+    const publicKey = Buffer.from(rootAccount.publicKey, "hex")
+    const chainCode = Buffer.from(rootAccount.chainCode, "hex")
 
-//         for (let i = 0; i < numberOfAccounts; i++) {
-//             const childNode = hdNode.derive(i)
+    const hdNode = HDNode.fromPublicKey(publicKey, chainCode)
 
-//             try {
-//                 const balance = await dispatch(
-//                     BalanceService.getVetAndVthoBalancesFromBlockchain(
-//                         childNode.address,
-//                     ),
-//                 )
+    const accounts: LedgerAccount[] = []
 
-//                 accounts.push({ address: childNode.address, balance: balance })
-//             } catch (e) {
-//                 accounts.push({ address: childNode.address })
-//             }
-//         }
+    for (let i = 0; i < numberOfAccounts; i++) {
+        const childNode = hdNode.derive(i)
 
-//         return accounts
-//     }
+        try {
+            const balance =
+                await BalanceUtils.getVetAndVthoBalancesFromBlockchain(
+                    childNode.address,
+                    network,
+                )
+
+            accounts.push({ address: childNode.address, balance: balance })
+        } catch (e) {
+            accounts.push({ address: childNode.address })
+        }
+    }
+
+    return accounts
+}
 
 // const addLedgerDevice =
 //     (
@@ -210,8 +218,8 @@ const validateRootAddress = async (
 }
 
 export default {
-    signTransaction,
+    getAccountsWithBalances,
     signCertificate,
+    signTransaction,
     // addLedgerDevice,
-    // getAccountsWithBalances,
 }
