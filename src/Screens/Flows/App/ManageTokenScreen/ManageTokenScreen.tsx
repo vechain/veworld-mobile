@@ -3,6 +3,8 @@ import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useTheme } from "~Common"
 import {
     BackButtonHeader,
+    BaseButton,
+    BaseCard,
     BaseIcon,
     BaseSafeArea,
     BaseScrollView,
@@ -28,6 +30,7 @@ import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import { useSuggestedTokens } from "./useSuggestedTokens"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
@@ -48,7 +51,7 @@ export const ManageTokenScreen = () => {
         onOpen: openAddCustomTokenSheet,
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
-
+    const { missingSuggestedTokens } = useSuggestedTokens(selectedTokenSymbols)
     const filteredTokens = tokens.filter(
         token =>
             token.name
@@ -172,6 +175,25 @@ export const ManageTokenScreen = () => {
                     setValue={setTokenQuery}
                     placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
                 />
+                {!!missingSuggestedTokens.length && (
+                    <>
+                        <BaseSpacer height={16} />
+                        <BaseCard>
+                            <BaseView>
+                                <BaseText typographyFont="body">
+                                    {LL.MANAGE_TOKEN_SUGGESTED_TOKENS()}
+                                </BaseText>
+                                <BaseButton
+                                    variant="link"
+                                    action={() => {}}
+                                    px={0}
+                                    size="md">
+                                    {LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
+                                </BaseButton>
+                            </BaseView>
+                        </BaseCard>
+                    </>
+                )}
             </BaseView>
             <BaseSpacer height={24} />
             <BaseScrollView

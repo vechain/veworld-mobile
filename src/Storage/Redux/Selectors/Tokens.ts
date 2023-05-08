@@ -58,6 +58,11 @@ export const selectOfficialTokens = createSelector(
     state => state.officialTokens,
 )
 
+export const selectSuggestedTokens = createSelector(
+    selectTokenState,
+    state => state.suggestedTokens,
+)
+
 export const selectAllFungibleTokens = createSelector(
     selectOfficialTokens,
     tokens => TokenUtils.mergeTokens(DEFAULT_VECHAIN_TOKENS, tokens),
