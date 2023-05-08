@@ -1,9 +1,10 @@
 import React from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, VET, VTHO, useCheckIdentity, useTheme } from "~Common"
+import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
+    AccountIcon,
     BackButtonHeader,
     BaseButton,
     BaseCardGroup,
@@ -13,7 +14,6 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { TokenImage } from "~Components/Reusable/TokenImage"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     selectCurrencyExchangeRate,
@@ -23,6 +23,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useSendTransaction } from "./Hooks/useSendTransaction"
+import { useSignTransaction } from "./Hooks/useSignTransaction"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -48,17 +49,23 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         amount,
     )
 
-    const { gas, signTransaction } = useSendTransaction({
+    const { gas, transaction } = useSendTransaction({
         token,
         amount,
         address,
+    })
+
+    const { signTransaction } = useSignTransaction({
+        transaction,
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: signTransaction,
         })
-
+    const gasFees = gas?.gas
+        ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
+        : "N.A."
     return (
         <BaseSafeArea grow={1} style={styles.safeArea}>
             <BaseView style={styles.container}>
@@ -81,8 +88,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                     </BaseText>
                                     <BaseSpacer height={8} />
                                     <BaseView flexDirection="row">
-                                        {/** TODO: change with account icon */}
-                                        <TokenImage icon={VET.icon} />
+                                        <AccountIcon
+                                            address={account?.address || ""}
+                                        />
                                         <BaseSpacer width={8} />
                                         <BaseView>
                                             <BaseText typographyFont="subSubTitle">
@@ -114,8 +122,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                     </BaseText>
                                     <BaseSpacer height={8} />
                                     <BaseView flexDirection="row">
-                                        {/** TODO: change with account icon */}
-                                        <TokenImage icon={VET.icon} />
+                                        <AccountIcon address={address} />
                                         <BaseSpacer width={8} />
                                         <BaseView>
                                             <BaseText typographyFont="subSubTitle">
@@ -163,7 +170,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                     <BaseSpacer height={6} />
                     <BaseText typographyFont="subSubTitle">
-                        {gas?.gas || "N.A."} {VTHO.symbol}
+                        {gasFees} {VTHO.symbol}
                     </BaseText>
                     <BaseSpacer height={12} />
                     <BaseSpacer

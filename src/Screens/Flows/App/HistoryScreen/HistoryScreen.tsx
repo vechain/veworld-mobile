@@ -23,10 +23,11 @@ import {
     FungibleTokenActivity,
     SignCertActivity,
 } from "~Model"
-import PlatformUtils from "~Common/Utils/PlatformUtils" // this is imported like so to avoid circular dependency
 import { Routes } from "~Navigation"
 import { DappTransactionActivityBox } from "./Components/DappTransactionActivityBox"
 import { SignedCertificateActivityBox } from "./Components/SignedCertificateActivityBox"
+import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 export const HistoryScreen = () => {
     const { LL } = useI18nContext()
@@ -36,6 +37,12 @@ export const HistoryScreen = () => {
     const nav = useNavigation()
 
     const theme = useTheme()
+
+    const insets = useSafeAreaInsets()
+
+    const tabBarHeight = useBottomTabBarHeight()
+
+    const styles = baseStyles(insets, tabBarHeight)
 
     // TODO
     const onChangeAccountPress = () => {}
@@ -87,10 +94,11 @@ export const HistoryScreen = () => {
         return (
             <>
                 <BaseSpacer height={30} />
-                <BaseView flexDirection="row" style={baseStyles.list}>
+                <BaseView flexDirection="row" style={styles.list}>
                     <FlashList
                         data={ACTIVITIES_MOCK} //TODO replace with real data
                         keyExtractor={activity => activity.id}
+                        ListFooterComponent={<BaseSpacer height={20} />}
                         renderItem={({ item: activity, index }) => {
                             return (
                                 <BaseView mx={20}>
@@ -102,19 +110,19 @@ export const HistoryScreen = () => {
                         showsHorizontalScrollIndicator={false}
                         estimatedItemSize={80}
                         estimatedListSize={{
-                            height: 500,
+                            height: 80 * ACTIVITIES_MOCK.length,
                             width: 400,
                         }}
                     />
                 </BaseView>
             </>
         )
-    }, [renderActivity])
+    }, [renderActivity, styles.list])
 
     return (
         <BaseSafeArea grow={1}>
             <BaseIcon
-                style={baseStyles.backIcon}
+                style={styles.backIcon}
                 size={36}
                 name="chevron-left"
                 color={theme.colors.text}
@@ -141,12 +149,15 @@ export const HistoryScreen = () => {
     )
 }
 
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-    list: {
-        height: PlatformUtils.isIOS() ? "75%" : "76%",
-    },
-})
+const baseStyles = (insets: EdgeInsets, tabBarHeight: number) =>
+    StyleSheet.create({
+        backIcon: {
+            marginHorizontal: 8,
+            alignSelf: "flex-start",
+        },
+        list: {
+            top: 0,
+            flex: 1,
+            marginBottom: tabBarHeight - insets.bottom,
+        },
+    })

@@ -4,7 +4,6 @@ import {
     BaseButton,
     BaseIcon,
     BaseSafeArea,
-    BaseScrollView,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -12,13 +11,14 @@ import {
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
-import { StyleSheet } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import { DateUtils, useTheme } from "~Common"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"
 import { ActivityType, FungibleTokenActivity } from "~Model"
 import { FungibleTokenTransferDetails } from "./Components"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -33,6 +33,8 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     const theme = useTheme()
 
     const { LL, locale } = useI18nContext()
+
+    const tabBarHeight = useBottomTabBarHeight()
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
@@ -68,18 +70,24 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseView pb={6}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-            </BaseView>
-            <BaseScrollView
-                containerStyle={baseStyles.scrollViewContainer}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentInsetAdjustmentBehavior="automatic"
+                contentContainerStyle={[
+                    baseStyles.scrollViewContainer,
+                    { paddingBottom: tabBarHeight },
+                ]}
                 style={baseStyles.scrollView}>
+                <BaseView pb={6}>
+                    <BaseIcon
+                        style={baseStyles.backIcon}
+                        size={36}
+                        name="chevron-left"
+                        color={theme.colors.text}
+                        action={goBack}
+                    />
+                </BaseView>
                 <BaseView mx={20}>
                     <BaseText typographyFont="title">
                         {getActivityTitle(activity, LL)}
@@ -122,7 +130,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     {/* Render Activity Details */}
                     {renderActivityDetails}
                 </BaseView>
-            </BaseScrollView>
+            </ScrollView>
         </BaseSafeArea>
     )
 }
@@ -133,9 +141,7 @@ const baseStyles = StyleSheet.create({
         alignSelf: "flex-start",
     },
     scrollViewContainer: {
-        flex: 1,
         width: "100%",
-        marginBottom: 60,
     },
     scrollView: {
         width: "100%",

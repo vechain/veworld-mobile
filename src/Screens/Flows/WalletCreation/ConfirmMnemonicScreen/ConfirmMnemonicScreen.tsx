@@ -21,6 +21,9 @@ import { useAppSelector } from "~Storage/Redux"
 import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import * as Haptics from "expo-haptics"
 
+import { isSmallScreen, valueToHP } from "~Common"
+import { ScrollView, StyleSheet } from "react-native"
+
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
@@ -145,85 +148,105 @@ export const ConfirmMnemonicScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseView
-                justifyContent="space-between"
-                alignItems="flex-start"
-                flexGrow={1}
-                mx={20}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentInsetAdjustmentBehavior="automatic"
+                scrollEnabled={isSmallScreen}
+                contentContainerStyle={[baseStyles.scrollViewContainer]}
+                style={baseStyles.scrollView}>
                 <BaseView
                     justifyContent="space-between"
-                    alignItems="stretch"
-                    w={100}>
+                    alignItems="flex-start"
+                    flexGrow={1}
+                    mx={20}>
                     <BaseView
-                        flexDirection="row"
                         justifyContent="space-between"
+                        alignItems="stretch"
                         w={100}>
-                        <BaseText align="left" typographyFont="title">
-                            {LL.TITLE_CONFIRM_MNEMONIC()}
+                        <BaseView
+                            flexDirection="row"
+                            justifyContent="space-between"
+                            w={100}>
+                            <BaseText align="left" typographyFont="title">
+                                {LL.TITLE_CONFIRM_MNEMONIC()}
+                            </BaseText>
+                            {__DEV__ && (
+                                <BaseButton
+                                    variant="link"
+                                    action={() =>
+                                        userHasOnboarded
+                                            ? nav.navigate(
+                                                  Routes.WALLET_SUCCESS,
+                                              )
+                                            : nav.navigate(Routes.APP_SECURITY)
+                                    }
+                                    title="DEV:SKIP"
+                                />
+                            )}
+                        </BaseView>
+                        <BaseSpacer height={valueToHP[16]} />
+                        <BaseText align="left" typographyFont="body">
+                            {LL.BD_SELECT_WORD({ number: firstIndex + 1 })}
                         </BaseText>
-                        {__DEV__ && (
-                            <BaseButton
-                                variant="link"
-                                action={() =>
-                                    userHasOnboarded
-                                        ? nav.navigate(Routes.WALLET_SUCCESS)
-                                        : nav.navigate(Routes.APP_SECURITY)
-                                }
-                                title="DEV:SKIP"
-                            />
-                        )}
+                        <BaseSpacer height={valueToHP[16]} />
+                        <BaseButtonGroup
+                            selectedButtonIds={[selectedFirstWord || ""]}
+                            buttons={buttonsFirstWord}
+                            action={handleSelectFirstWord}
+                            selectedColor={theme.colors.primaryLight}
+                            buttonGroupTestID="first-word-button-group"
+                            buttonTestID="word-1"
+                        />
+                        <BaseSpacer height={valueToHP[21]} />
+                        <BaseText typographyFont="body">
+                            {LL.BD_SELECT_WORD({ number: secondIndex + 1 })}
+                        </BaseText>
+                        <BaseSpacer height={valueToHP[16]} />
+                        <BaseButtonGroup
+                            selectedButtonIds={[selectedSecondWord || ""]}
+                            buttons={buttonsSecondWord}
+                            action={handleSelectSecondWord}
+                            selectedColor={theme.colors.primaryLight}
+                            buttonGroupTestID="second-word-button-group"
+                            buttonTestID="word-2"
+                        />
+                        <BaseSpacer height={21} />
+                        <BaseText typographyFont="body">
+                            {LL.BD_SELECT_WORD({ number: thirdIndex + 1 })}
+                        </BaseText>
+                        <BaseSpacer height={valueToHP[16]} />
+                        <BaseButtonGroup
+                            selectedButtonIds={[selectedThirdWord || ""]}
+                            buttons={buttonsThirdWord}
+                            action={handleSelectThirdWord}
+                            selectedColor={theme.colors.primaryLight}
+                            buttonGroupTestID="third-word-button-group"
+                            buttonTestID="word-3"
+                        />
                     </BaseView>
-                    <BaseSpacer height={16} />
-                    <BaseText align="left" typographyFont="body">
-                        {LL.BD_SELECT_WORD({ number: firstIndex + 1 })}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseButtonGroup
-                        selectedButtonIds={[selectedFirstWord || ""]}
-                        buttons={buttonsFirstWord}
-                        action={handleSelectFirstWord}
-                        selectedColor={theme.colors.primaryLight}
-                        buttonGroupTestID="first-word-button-group"
-                        buttonTestID="word-1"
-                    />
-                    <BaseSpacer height={21} />
-                    <BaseText typographyFont="body">
-                        {LL.BD_SELECT_WORD({ number: secondIndex + 1 })}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseButtonGroup
-                        selectedButtonIds={[selectedSecondWord || ""]}
-                        buttons={buttonsSecondWord}
-                        action={handleSelectSecondWord}
-                        selectedColor={theme.colors.primaryLight}
-                        buttonGroupTestID="second-word-button-group"
-                        buttonTestID="word-2"
-                    />
-                    <BaseSpacer height={21} />
-                    <BaseText typographyFont="body">
-                        {LL.BD_SELECT_WORD({ number: thirdIndex + 1 })}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseButtonGroup
-                        selectedButtonIds={[selectedThirdWord || ""]}
-                        buttons={buttonsThirdWord}
-                        action={handleSelectThirdWord}
-                        selectedColor={theme.colors.primaryLight}
-                        buttonGroupTestID="third-word-button-group"
-                        buttonTestID="word-3"
+                    <BaseSpacer height={20} />
+                    <BaseButton
+                        action={onConfirmPress}
+                        w={100}
+                        px={20}
+                        title={LL.COMMON_BTN_CONFIRM()}
+                        disabled={isSubmitDisabled}
+                        radius={16}
                     />
                 </BaseView>
-                <BaseButton
-                    action={onConfirmPress}
-                    w={100}
-                    px={20}
-                    title={LL.COMMON_BTN_CONFIRM()}
-                    disabled={isSubmitDisabled}
-                    radius={16}
-                />
-            </BaseView>
 
-            <BaseSpacer height={20} />
+                <BaseSpacer height={20} />
+            </ScrollView>
         </BaseSafeArea>
     )
 }
+
+const baseStyles = StyleSheet.create({
+    scrollViewContainer: {
+        width: "100%",
+    },
+    scrollView: {
+        width: "100%",
+    },
+})

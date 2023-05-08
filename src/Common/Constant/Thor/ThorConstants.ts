@@ -1,7 +1,6 @@
 import type { abi } from "thor-devkit"
 import vip180 from "./abis/VIP180.abi"
 import { Network, NETWORK_TYPE } from "~Model"
-import uuid from "react-native-uuid"
 
 const THOR_MAIN_URLS = [
     "https://mainnet.vechain.org",
@@ -16,6 +15,9 @@ const THOR_TESTNET_URLS = [
     "https://sync-testnet.veblocks.net",
     "https://testnet.vecha.in",
 ]
+
+const MAIN_EXPLORER_URL = "https://explore.vechain.org"
+const TEST_EXPLORER_URL = "https://explore-testnet.vechain.org"
 
 const paramsGet: abi.Function.Definition = {
     constant: true,
@@ -108,22 +110,24 @@ export const BASE_GAS_PRICE =
     "0x000000000000000000000000000000000000626173652d6761732d7072696365"
 
 export const defaultMainNetwork: Network = {
-    id: uuid.v4().toString(),
-    defaultNet: true,
+    id: NETWORK_TYPE.MAIN,
     name: NETWORK_TYPE.MAIN,
     type: NETWORK_TYPE.MAIN,
+    defaultNet: true,
     urls: THOR_MAIN_URLS,
     currentUrl: THOR_MAIN_URLS[0],
+    explorerUrl: MAIN_EXPLORER_URL,
     genesis: genesises.main,
 }
 
 export const defaultTestNetwork: Network = {
-    id: uuid.v4().toString(),
-    defaultNet: true,
+    id: NETWORK_TYPE.TEST,
     name: NETWORK_TYPE.TEST,
     type: NETWORK_TYPE.TEST,
+    defaultNet: true,
     urls: THOR_TESTNET_URLS,
     currentUrl: THOR_TESTNET_URLS[0],
+    explorerUrl: TEST_EXPLORER_URL,
     genesis: genesises.test,
 }
 
