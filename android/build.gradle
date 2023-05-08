@@ -57,3 +57,27 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
+
+subprojects{
+    afterEvaluate {
+        // check if `android` block is available
+        if(it.hasProperty('android')){
+            android {
+                // On linux there is an error when building the app: 
+                // 2 files found for path lib/arm64-v8a/libreact_nativemodule_core.so and lib/arm64-v8a/libturbomodulejsijni.so
+                // This version of the Android Gradle Plugin chooses the first file it finds.
+                packagingOptions {
+                    pickFirst 'lib/x86/libreact_nativemodule_core.so'
+                    pickFirst 'lib/x86_64/libreact_nativemodule_core.so'
+                    pickFirst 'lib/armeabi-v7a/libreact_nativemodule_core.so'
+                    pickFirst 'lib/arm64-v8a/libreact_nativemodule_core.so'
+
+                    pickFirst 'lib/x86/libturbomodulejsijni.so'
+                    pickFirst 'lib/x86_64/libturbomodulejsijni.so'
+                    pickFirst 'lib/armeabi-v7a/libturbomodulejsijni.so'
+                    pickFirst 'lib/arm64-v8a/libturbomodulejsijni.so'
+                }
+            }
+        }
+    }
+}
