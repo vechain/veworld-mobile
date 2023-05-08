@@ -38,22 +38,14 @@ jobs:
             yarn test --forceExit $TEST --ci --runInBand --reporters=default --reporters=jest-junit
           environment:
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
-            JEST_JUNIT_OUTPUT_DIR: ./eslint-reports/
             NODE_OPTIONS: "--max_old_space_size=4096"
       - run:
           command: cp junit.xml ~/junit/
           when: always
       - store_test_results:
-          path: ~/reports
-      - run:
-          command: |
-            mkdir -p ~/eslint-reports
-            eslint ./src/ --format junit --output-file ~/eslint-reports/eslint.xml
-          when: always
-      - store_test_results:
-          path: ~/eslint-reports
+          path: ~/junit
       - store_artifacts:
-          path: ~/reports
+          path: ~/junit
 
 workflows:
   build-and-test:
