@@ -1,20 +1,53 @@
 version: 2.1
 jobs:
-    build:
-        working_directory: ~/veworld-mobile
+  build-and-test:
+    docker:
+      - image: "cimg/node:18.12.1"
+    parallelism: 4
+    steps:
+      - checkout
+      - restore_cache:
+          key: 'yarn-v2-{{ checksum "yarn.lock" }}'
+      - restore_cache:
+          key: 'node-v2-{{ checksum "package.json" }}'
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          key: 'yarn-v2-{{ checksum "yarn.lock" }}'
+          paths:
+            - ~/.cache/yarn
+      - save_cache:
+          key: 'node-v2-{{ checksum "package.json" }}'
+          paths:
+            - node_modules
+      - run:
+          name: Lint & Format Check
+          command: "yarn lint && yarn format:check"
+      - run:
+          name: Install JUnit coverage reporter
+          command: yarn add --dev jest-junit
+      - run: mkdir ~/junit
+      - run:
+          name: Run Unit Tests
+          command: >
+            TEST=$(circleci tests glob "src/**/*.spec.ts" "src/**/*.spec.tsx"
+            "src/**/*.test.ts" "src/**/*.test.tsx" | circleci tests split
+            --split-by=timings)
 
-        docker:
-            - image: cimg/node:18.12.1
+            yarn test --forceExit $TEST --ci --runInBand --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
+            NODE_OPTIONS: "--max_old_space_size=4096"
+      - run:
+          command: cp junit.xml ~/junit/
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
 
-        steps:
-            - checkout
-            - restore_cache:
-                  key: dependency-cache-{{ checksum "yarn.lock" }}
-
-            - run:
-                  name: Install Dependencies
-                  command: yarn install
-
-            - run:
-                  name: Run Unit Tests
-                  command: yarn test:coverage
+workflows:
+  build-and-test:
+    jobs:
+      - build-and-test
