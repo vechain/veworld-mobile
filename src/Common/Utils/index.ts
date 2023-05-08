@@ -1,7 +1,9 @@
 import AddressUtils from "./AddressUtils"
+import AlertUtils from "./AlertUtils"
 // import AccountsUtils from "./AccountsUtils"
 // import AliasUtils from "./AliasUtils"
 // import AsyncUtils from "./AsyncUtils"
+import BalanceUtils from "./BalanceUtils"
 import BiometricsUtils from "./BiometricsUtils"
 import BloomUtils from "./BloomUtils"
 import CryptoUtils from "./CryptoUtils"
@@ -14,13 +16,12 @@ import HexUtils from "./HexUtils"
 import LanguageUtils from "./LanguageUtils"
 import LedgerUtils from "./LedgerUtils"
 import LocaleUtils from "./LocaleUtils"
+import LockScreenUtils from "./LockScreenUtils"
 // import MappingUtils from "./MappingUtils"
 import PasswordUtils from "./PasswordUtils"
+import PicassoUtils from "./PicassoUtils"
 import PlatformUtils from "./PlatformUtils"
 import SeedUtils from "./SeedUtils"
-import LockScreenUtils from "./LockScreenUtils"
-import AlertUtils from "./AlertUtils"
-import PicassoUtils from "./PicassoUtils"
 import StringUtils from "./StringUtils"
 // import SignatureUtils from "./SignatureUtils"
 import TokenUtils from "./TokenUtils"
@@ -35,6 +36,7 @@ export {
     // AccountsUtils,
     AlertUtils,
     AddressUtils,
+    BalanceUtils,
     BiometricsUtils,
     BloomUtils,
     ConnectionUtils,
