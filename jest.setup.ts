@@ -22,6 +22,8 @@ jest.mock("react-native-quick-crypto", () => ({
     })),
 }))
 
+jest.mock("react-native-bootsplash", () => {})
+
 jest.mock("expo-secure-store", () => ({
     getItemAsync: jest.fn(),
     setItemAsync: jest.fn(),

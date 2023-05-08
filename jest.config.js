@@ -63,4 +63,5 @@ module.exports = {
             lines: 97.3,
         },
     },
+    reporters: ["default", "jest-junit"],
 }
