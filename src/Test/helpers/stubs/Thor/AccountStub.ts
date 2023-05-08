@@ -68,7 +68,7 @@ export function accountStub(addr: string): Connex.Thor.Account.Visitor {
                         gasUsed: 1234,
                         reverted: false,
                         transfers: [],
-                        decoded: [],
+                        decoded: ["0x9184e72a000"],
                     })
                 },
                 caller(_addr: string) {
