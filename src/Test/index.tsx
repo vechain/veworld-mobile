@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Common/Hooks"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
-import { TokenApi, reducer } from "~Storage/Redux"
+import { reducer } from "~Storage/Redux"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 export { default as TestHelpers } from "./helpers"
 import { configureStore } from "@reduxjs/toolkit"
@@ -52,8 +52,7 @@ export const TestTranslationProvider = ({
 }
 const store = configureStore({
     reducer: reducer,
-    middleware: getDefaultMiddleware =>
-        getDefaultMiddleware().concat(TokenApi.middleware),
+    middleware: getDefaultMiddleware => getDefaultMiddleware(),
     preloadedState: {
         accounts: {
             accounts: [

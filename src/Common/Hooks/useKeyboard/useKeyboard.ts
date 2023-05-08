@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react"
 import { Keyboard } from "react-native"
 
+/**
+ * this hook is used to detect if the keyboard is visible or not
+ */
 export const useKeyboard = (
     onChange?: (visible: boolean) => void,
 ): { visible: boolean } => {

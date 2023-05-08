@@ -4,12 +4,13 @@ import {
     selectSelectedAccountBalances,
     selectSelectedNetwork,
     updateAccountBalances,
-    useGetTokensFromGithubQuery,
     resetTokenBalances,
     fetchTokensWithInfo,
     fetchExchangeRates,
     selectCoinGeckoTokens,
     selectSelectedAccount,
+    getTokensFromGithub,
+    setOfficialTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useEffect } from "react"
@@ -26,24 +27,26 @@ const TOKEN_BALANCE_SYNC_PERIOD = new BigNumber(
 ).toNumber()
 
 /**
- * This component is responsible for keeping the available tokens, balances and currency data up to date.
- * We will use hooks to trigger calls to the external services we use to update this date.
- * The reason this is a separate component is in order to remove any dependencies on these external services.
- * If they are down we want the wallet to continue to function.
+ * This hook is responsible for keeping the available tokens, balances and exchange rates data up to date.
  */
 export const useTokenBalances = () => {
     const dispatch = useAppDispatch()
-    const currentNetwork = useAppSelector(selectSelectedNetwork)
+    const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const balances = useAppSelector(selectSelectedAccountBalances)
     const thorClient = useThor()
     const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
     const balancesKey = balances?.map(balance => balance.tokenAddress).join("-")
 
-    useGetTokensFromGithubQuery({
-        networkGenesisId: currentNetwork.genesis.id,
-        networkType: currentNetwork.type,
-    })
+    // fetch official tokens from github
+    useEffect(() => {
+        ;(async () => {
+            const tokens = await getTokensFromGithub({
+                network,
+            })
+            dispatch(setOfficialTokens(tokens))
+        })()
+    }, [network, dispatch])
 
     /**
      * init default balances if no balances found on redux
@@ -55,8 +58,11 @@ export const useTokenBalances = () => {
                 updateAccountBalances(thorClient, selectedAccount?.address),
             )
         }
-    }, [dispatch, thorClient, balances, currentNetwork, selectedAccount])
+    }, [dispatch, thorClient, balances, network, selectedAccount])
 
+    /**
+     * keep balances up to date
+     */
     useEffect(() => {
         const updateBalances = () => {
             // Update balances
@@ -72,14 +78,20 @@ export const useTokenBalances = () => {
         dispatch,
         thorClient,
         balancesKey,
-        currentNetwork?.genesis.id,
+        network?.genesis.id,
         selectedAccount,
     ])
 
+    /**
+     * fetch tokens with info
+     */
     useEffect(() => {
         dispatch(fetchTokensWithInfo())
     }, [dispatch])
 
+    /**
+     * keeps exchange rates up to date
+     */
     useEffect(() => {
         const updateVechainExchangeRates = () => {
             dispatch(fetchExchangeRates({ coinGeckoTokens }))

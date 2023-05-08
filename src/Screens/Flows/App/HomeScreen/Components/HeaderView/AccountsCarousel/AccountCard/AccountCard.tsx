@@ -7,6 +7,7 @@ import {
     useThemedStyles,
     PlatformUtils,
     CURRENCY,
+    valueToHP,
 } from "~Common"
 import {
     AccountIcon,
@@ -56,7 +57,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
             <BaseView
                 bg={theme.colors.primary}
                 flex={1}
-                justifyContent="flex-start"
+                justifyContent="space-between"
                 alignItems="flex-start"
                 borderRadius={24}
                 px={16}
@@ -100,7 +101,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            flex: 1,
+            height: valueToHP[190] < 170 ? 170 : valueToHP[190],
         },
         itemContainer: {
             flex: 1,

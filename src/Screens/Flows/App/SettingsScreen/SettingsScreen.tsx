@@ -1,31 +1,31 @@
-import React, { useCallback, useMemo, useState } from "react"
-import { BaseSafeArea, BaseSpacer, BaseText } from "~Components"
+import React, { useCallback, useMemo } from "react"
+import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { FlashList } from "@shopify/flash-list"
-import { StyleSheet, View, ViewToken } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { ColorThemeType, useScrollableList, useThemedStyles } from "~Common"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
 
     const SCREEN_LIST = useMemo(() => getList(LL), [LL])
 
-    const [isScrollable, setIsScrollable] = useState(false)
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
+        useScrollableList(SCREEN_LIST, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
 
     const { styles: themedStyles } = useThemedStyles(baseStyles)
+
+    const insets = useSafeAreaInsets()
+
+    const tabBarHeight = useBottomTabBarHeight()
 
     const renderSeparator = useCallback(
         () => <View style={themedStyles.separator} />,
         [themedStyles],
-    )
-
-    const checkViewableItems = useCallback(
-        ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            setIsScrollable(viewableItems.length < SCREEN_LIST.length)
-        },
-        [SCREEN_LIST.length],
     )
 
     const renderItem = useCallback(
@@ -41,24 +41,39 @@ export const SettingsScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseText typographyFont="largeTitle" mx={20}>
+            <BaseText
+                typographyFont="largeTitle"
+                mx={20}
+                testID="settings-screen">
                 {LL.TITLE_SETTINGS()}
             </BaseText>
 
             <BaseSpacer height={20} />
 
-            <FlashList
-                data={SCREEN_LIST}
-                contentContainerStyle={themedStyles.contentContainerStyle}
-                ItemSeparatorComponent={renderSeparator}
-                estimatedItemSize={56}
-                scrollEnabled={isScrollable}
-                keyExtractor={item => item.screenName}
-                onViewableItemsChanged={checkViewableItems}
-                renderItem={renderItem}
-            />
-
-            <BaseSpacer height={40} />
+            <BaseView
+                flexDirection="row"
+                style={[
+                    themedStyles.list,
+                    { paddingBottom: tabBarHeight - insets.bottom },
+                ]}>
+                <FlashList
+                    data={SCREEN_LIST}
+                    contentContainerStyle={themedStyles.contentContainerStyle}
+                    ItemSeparatorComponent={renderSeparator}
+                    scrollEnabled={isListScrollable}
+                    onViewableItemsChanged={onViewableItemsChanged}
+                    viewabilityConfig={viewabilityConfig}
+                    keyExtractor={item => item.screenName}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={renderItem}
+                    estimatedItemSize={56}
+                    estimatedListSize={{
+                        height: 56 * SCREEN_LIST.length,
+                        width: 400,
+                    }}
+                />
+            </BaseView>
         </BaseSafeArea>
     )
 }
@@ -72,6 +87,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderBottomColor: theme.colors.text,
             borderBottomWidth: 0.5,
         },
+        list: { flex: 1 },
     })
 
 const getList = (LL: TranslationFunctions) => [
