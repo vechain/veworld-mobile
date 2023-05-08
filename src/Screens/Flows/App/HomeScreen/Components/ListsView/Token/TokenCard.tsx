@@ -3,7 +3,7 @@ import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import { COLORS } from "~Common/Theme"
 import { PlaceholderSVG } from "~Assets"
-import { useTheme } from "~Common"
+import { FormattingUtils, useTheme } from "~Common"
 import { FungibleTokenWithBalance } from "~Model"
 
 type Props = {
@@ -18,6 +18,10 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit }: Props) => {
     const tokenValueLabelColor = theme.isDark
         ? COLORS.WHITE_DISABLED
         : COLORS.DARK_PURPLE_DISABLED
+    const tokenBalance = FormattingUtils.scaleNumberDown(
+        tokenWithBalance.balance.balance,
+        tokenWithBalance.decimals,
+    )
     return (
         <BaseView style={styles.innerRow}>
             <BaseCard
@@ -41,7 +45,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit }: Props) => {
                     <BaseText
                         typographyFont="bodyMedium"
                         color={tokenValueLabelColor}>
-                        {tokenWithBalance.balance.balance}{" "}
+                        {tokenBalance}{" "}
                     </BaseText>
                     <BaseText
                         typographyFont="captionRegular"

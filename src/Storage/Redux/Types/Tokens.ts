@@ -2,7 +2,7 @@ import { FungibleToken, TokenWithCompleteInfo } from "~Model"
 
 export interface TokensState {
     custom: FungibleToken[]
-    dashboardChartData: { [key: string]: number[] }
+    dashboardChartData: { [key: string]: number[][] }
     officialTokens: TokenWithCompleteInfo[]
     coinGeckoTokens: TokenInfoResponse[]
 }

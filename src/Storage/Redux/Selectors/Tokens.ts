@@ -2,9 +2,14 @@ import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"
 import { FungibleToken, TokenWithCompleteInfo } from "~Model"
-import { selectFungibleTokens } from "./TokenApi"
 import { selectAllExchangeRates } from "./Currency"
-import { LocaleUtils } from "~Common"
+import {
+    DEFAULT_VECHAIN_TOKENS,
+    LocaleUtils,
+    TokenUtils,
+    VET,
+    VTHO,
+} from "~Common"
 import { uniqBy } from "lodash"
 
 const selectTokenState = (state: RootState) => state.tokens
@@ -37,15 +42,49 @@ const DEFAULT_CHART_DATA = [
 export const selectDashboardChartData = createSelector(
     [(_, state) => selectTokenState(state), symbol => symbol],
     (tokens, symbol) =>
-        tokens.dashboardChartData?.[symbol]?.map((price, index) => ({
-            timestamp: index,
-            value: price,
+        tokens.dashboardChartData?.[symbol]?.map(el => ({
+            timestamp: el[0],
+            value: el[1],
         })) || DEFAULT_CHART_DATA,
 )
 
 export const selectCoinGeckoTokens = createSelector(
     selectTokenState,
     state => state.coinGeckoTokens,
+)
+
+export const selectOfficialTokens = createSelector(
+    selectTokenState,
+    state => state.officialTokens,
+)
+
+export const selectAllFungibleTokens = createSelector(
+    selectOfficialTokens,
+    tokens => TokenUtils.mergeTokens(DEFAULT_VECHAIN_TOKENS, tokens),
+)
+
+/**
+ * Get fungible tokens for the current network
+ */
+export const selectFungibleTokens = createSelector(
+    selectAllFungibleTokens,
+    selectSelectedNetwork,
+    (tokens, network) =>
+        tokens.filter(
+            (token: FungibleToken) => token.genesisId === network.genesis.id,
+        ),
+)
+
+/**
+ * Get fungible tokens for the current network but remove default ones
+ */
+export const selectNonVechainFungibleTokens = createSelector(
+    selectFungibleTokens,
+    tokens =>
+        tokens.filter(
+            (token: FungibleToken) =>
+                token.symbol !== VET.symbol && token.symbol !== VTHO.symbol,
+        ),
 )
 
 export const selectTokensWithInfo = createSelector(
@@ -63,7 +102,7 @@ export const selectTokensWithInfo = createSelector(
                 )
 
                 const foundExchangeRate = exchangeRates.find(
-                    rate => foundToken?.id === rate.coinGeckoId,
+                    rate => foundToken?.id === rate?.coinGeckoId,
                 )
 
                 if (!foundToken) return token as TokenWithCompleteInfo

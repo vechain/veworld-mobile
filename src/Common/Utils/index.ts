@@ -27,11 +27,13 @@ import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
+import * as ReanimatedUtils from "./Reanimated"
 
 export {
     // AliasUtils,
     // AsyncUtils,
     // AccountsUtils,
+    AlertUtils,
     AddressUtils,
     BiometricsUtils,
     BloomUtils,
@@ -50,8 +52,8 @@ export {
     PlatformUtils,
     SeedUtils,
     LockScreenUtils,
-    AlertUtils,
     PicassoUtils,
+    ReanimatedUtils,
     StringUtils,
     // SignatureUtils,
     TokenUtils,

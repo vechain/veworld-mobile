@@ -820,6 +820,11 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_DEFAULT: string
 	/**
+	 * N​o​ ​a​v​a​i​l​a​b​l​e​ ​p​r​i​c​e​ ​h​i​s​t​o​r​y​ ​f​o​r​ ​{​t​o​k​e​n​N​a​m​e​}
+	 * @param {string} tokenName
+	 */
+	COMMON_LBL_NO_TOKEN_DATA: RequiredParams<'tokenName'>
+	/**
 	 * A​s​s​e​t​s
 	 */
 	COMMON_ASSETS: string
@@ -827,6 +832,14 @@ type RootTranslation = {
 	 * D​A​p​p​s
 	 */
 	COMMON_DAPPS: string
+	/**
+	 * P​r​i​c​e
+	 */
+	COMMON_PRICE: string
+	/**
+	 * T​o​d​a​y
+	 */
+	COMMON_TODAY: string
 	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -912,6 +925,18 @@ type RootTranslation = {
 	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_GENERIC_OPERATION: string
+	/**
+	 * S​u​c​c​e​s​s​!
+	 */
+	SUCCESS_GENERIC: string
+	/**
+	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​e​l​l​!
+	 */
+	SUCCESS_GENERIC_OPERATION: string
+	/**
+	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
+	 */
+	SUCCESS_GENERIC_VIEW_DETAIL_LINK: string
 	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
@@ -2012,6 +2037,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_DEFAULT: () => LocalizedString
 	/**
+	 * No available price history for {tokenName}
+	 */
+	COMMON_LBL_NO_TOKEN_DATA: (arg: { tokenName: string }) => LocalizedString
+	/**
 	 * Assets
 	 */
 	COMMON_ASSETS: () => LocalizedString
@@ -2019,6 +2048,14 @@ export type TranslationFunctions = {
 	 * DApps
 	 */
 	COMMON_DAPPS: () => LocalizedString
+	/**
+	 * Price
+	 */
+	COMMON_PRICE: () => LocalizedString
+	/**
+	 * Today
+	 */
+	COMMON_TODAY: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */
@@ -2104,6 +2141,18 @@ Please, try again later.
 	 * The operation went wrong. Please, try again.
 	 */
 	ERROR_GENERIC_OPERATION: () => LocalizedString
+	/**
+	 * Success!
+	 */
+	SUCCESS_GENERIC: () => LocalizedString
+	/**
+	 * The operation went well!
+	 */
+	SUCCESS_GENERIC_OPERATION: () => LocalizedString
+	/**
+	 * View operation detail.
+	 */
+	SUCCESS_GENERIC_VIEW_DETAIL_LINK: () => LocalizedString
 	/**
 	 * Search a token
 	 */
