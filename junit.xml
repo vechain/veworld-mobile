@@ -1,13 +1,855 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="4" failures="0" errors="0" time="6.566">
-  <testsuite name="BalanceUtils" errors="0" failures="0" skipped="0" timestamp="2023-05-08T12:49:05" time="6.521" tests="4">
+<testsuites name="jest tests" tests="345" failures="0" errors="0" time="38.094">
+  <testsuite name="Expected error messages" errors="0" failures="0" skipped="12" timestamp="2023-05-08T13:14:20" time="4.741" tests="12">
+    <testcase classname="Expected error messages Single parameter with valid i18n key" name="Expected error messages Single parameter with valid i18n key" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages Throw veWorld error, catch it, throw another - should return original veWorld error" name="Expected error messages Throw veWorld error, catch it, throw another - should return original veWorld error" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages Throw regular error and catch &amp; throw veWorld error - should be have an 18n key" name="Expected error messages Throw regular error and catch &amp; throw veWorld error - should be have an 18n key" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages Hardcoded error message - i18n should be undefined &amp; message should be hardcoded error message" name="Expected error messages Hardcoded error message - i18n should be undefined &amp; message should be hardcoded error message" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages Hardcoded error message with i18n fallback - should contain i18n key and original error message" name="Expected error messages Hardcoded error message with i18n fallback - should contain i18n key and original error message" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages Unknown error - message should be from unknown error" name="Expected error messages Unknown error - message should be from unknown error" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages All parameters passed to veWorld error" name="Expected error messages All parameters passed to veWorld error" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages 2 parameters passed - message &amp; translation" name="Expected error messages 2 parameters passed - message &amp; translation" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages 2 parameters passed - message &amp; error" name="Expected error messages 2 parameters passed - message &amp; error" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages 2 parameters passed - translation &amp; error" name="Expected error messages 2 parameters passed - translation &amp; error" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages Only message passed" name="Expected error messages Only message passed" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Expected error messages Only translation passed" name="Expected error messages Only translation passed" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseToast" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:20" time="8.103" tests="13">
+    <testcase classname="BaseToast calls showSuccessToast with correct parameters" name="BaseToast calls showSuccessToast with correct parameters" time="0.006">
+    </testcase>
+    <testcase classname="BaseToast calls showErrorToast with correct parameters" name="BaseToast calls showErrorToast with correct parameters" time="0.013">
+    </testcase>
+    <testcase classname="BaseToast calls showWarningToast with correct parameters" name="BaseToast calls showWarningToast with correct parameters" time="0.005">
+    </testcase>
+    <testcase classname="BaseToast calls showInfoToast with correct parameters" name="BaseToast calls showInfoToast with correct parameters" time="0.001">
+    </testcase>
+    <testcase classname="BaseToast triggers onPress for textLink when provided for showSuccessToast" name="BaseToast triggers onPress for textLink when provided for showSuccessToast" time="0.002">
+    </testcase>
+    <testcase classname="BaseToast triggers onPress for textLink when provided for showErrorToast" name="BaseToast triggers onPress for textLink when provided for showErrorToast" time="0">
+    </testcase>
+    <testcase classname="BaseToast triggers onPress for textLink when provided for showWarningToast" name="BaseToast triggers onPress for textLink when provided for showWarningToast" time="0.001">
+    </testcase>
+    <testcase classname="BaseToast triggers onPress for textLink when provided for showInfoToast" name="BaseToast triggers onPress for textLink when provided for showInfoToast" time="0">
+    </testcase>
+    <testcase classname="toastConfig returns the correct configuration for error toast" name="toastConfig returns the correct configuration for error toast" time="0.006">
+    </testcase>
+    <testcase classname="toastConfig returns the correct configuration for success toast" name="toastConfig returns the correct configuration for success toast" time="0.01">
+    </testcase>
+    <testcase classname="toastConfig returns the correct configuration for warning toast" name="toastConfig returns the correct configuration for warning toast" time="0.004">
+    </testcase>
+    <testcase classname="toastConfig returns the correct configuration for info toast" name="toastConfig returns the correct configuration for info toast" time="0.005">
+    </testcase>
+    <testcase classname="hideToast calls Toast.hide()" name="hideToast calls Toast.hide()" time="0.039">
+    </testcase>
+  </testsuite>
+  <testsuite name="GasUtils" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:20" time="10.51" tests="7">
+    <testcase classname="GasUtils estimateGas should return the estimated gas - no clauses" name="GasUtils estimateGas should return the estimated gas - no clauses" time="0.002">
+    </testcase>
+    <testcase classname="GasUtils estimateGas should return the estimated gas - clauses" name="GasUtils estimateGas should return the estimated gas - clauses" time="0.001">
+    </testcase>
+    <testcase classname="GasUtils estimateGas should return the estimated gas - gasPayer" name="GasUtils estimateGas should return the estimated gas - gasPayer" time="0">
+    </testcase>
+    <testcase classname="GasUtils estimateGas should return the estimated gas - reverted" name="GasUtils estimateGas should return the estimated gas - reverted" time="0">
+    </testcase>
+    <testcase classname="GasUtils estimateGas should return the estimated gas - vmError" name="GasUtils estimateGas should return the estimated gas - vmError" time="0.001">
+    </testcase>
+    <testcase classname="GasUtils estimateGas should run correctly with suggested gas" name="GasUtils estimateGas should run correctly with suggested gas" time="0">
+    </testcase>
+    <testcase classname="GasUtils calculateFee should return the calculated fee" name="GasUtils calculateFee should return the calculated fee" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="useCreateWalletWithPassword" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:20" time="11.146" tests="1">
+    <testcase classname="useCreateWalletWithPassword should create wallet with password" name="useCreateWalletWithPassword should create wallet with password" time="0.685">
+    </testcase>
+  </testsuite>
+  <testsuite name="xPubFromHdNode" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:20" time="11.18" tests="4">
+    <testcase classname="xPubFromHdNode xPubFromHdNode should return XPub with correct publicKey and chainCode values" name="xPubFromHdNode xPubFromHdNode should return XPub with correct publicKey and chainCode values" time="0.285">
+    </testcase>
+    <testcase classname="hdNodeFromXPub hdNodeFromXPub should return hdNode" name="hdNodeFromXPub hdNodeFromXPub should return hdNode" time="0.032">
+    </testcase>
+    <testcase classname="encryptWallet: not tested properly should not throw execptions" name="encryptWallet: not tested properly should not throw execptions" time="0.001">
+    </testcase>
+    <testcase classname="verifyMnemonic should create hdNode from mnemonic" name="verifyMnemonic should create hdNode from mnemonic" time="0.284">
+    </testcase>
+  </testsuite>
+  <testsuite name="useCreateWalletWithBiometrics" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:20" time="11.199" tests="1">
+    <testcase classname="useCreateWalletWithBiometrics should create a wallet with biometrics" name="useCreateWalletWithBiometrics should create a wallet with biometrics" time="0.599">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseIcon" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:20" time="11.227" tests="1">
+    <testcase classname="BaseIcon renders the icon with default values" name="BaseIcon renders the icon with default values" time="0.657">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseSafeArea" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:25" time="7.205" tests="3">
+    <testcase classname="BaseSafeArea renders correctly along with its content" name="BaseSafeArea renders correctly along with its content" time="0.562">
+    </testcase>
+    <testcase classname="BaseSafeArea transparent override bg" name="BaseSafeArea transparent override bg" time="0.463">
+    </testcase>
+    <testcase classname="BaseSafeArea android" name="BaseSafeArea android" time="0.476">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseTouchable" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:28" time="4.296" tests="2">
+    <testcase classname="BaseTouchable renders correctly with title" name="BaseTouchable renders correctly with title" time="0.492">
+    </testcase>
+    <testcase classname="BaseTouchable calls action when pressed" name="BaseTouchable calls action when pressed" time="0.466">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseButton" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:20" time="12.906" tests="3">
+    <testcase classname="BaseButton renders correctly with default props" name="BaseButton renders correctly with default props" time="0.455">
+    </testcase>
+    <testcase classname="BaseButton renders correctly with custom props" name="BaseButton renders correctly with custom props" time="0.474">
+    </testcase>
+    <testcase classname="BaseButton renders correctly with corner case props and all haptics" name="BaseButton renders correctly with corner case props and all haptics" time="1.343">
+    </testcase>
+  </testsuite>
+  <testsuite name="BalanceUtils" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:31" time="3.136" tests="6">
     <testcase classname="BalanceUtils VET - should return the correct balance" name="BalanceUtils VET - should return the correct balance" time="0.002">
     </testcase>
-    <testcase classname="BalanceUtils VTHO - should return the correct balance" name="BalanceUtils VTHO - should return the correct balance" time="0.001">
+    <testcase classname="BalanceUtils VTHO - should return the correct balance" name="BalanceUtils VTHO - should return the correct balance" time="0">
     </testcase>
-    <testcase classname="BalanceUtils PLA Token - should return the correct balance" name="BalanceUtils PLA Token - should return the correct balance" time="0.002">
+    <testcase classname="BalanceUtils VTHO - should throw network error" name="BalanceUtils VTHO - should throw network error" time="0.011">
     </testcase>
-    <testcase classname="BalanceUtils SHA Token - should return the correct balance" name="BalanceUtils SHA Token - should return the correct balance" time="0.001">
+    <testcase classname="BalanceUtils PLA Token - should return the correct balance" name="BalanceUtils PLA Token - should return the correct balance" time="0.001">
+    </testcase>
+    <testcase classname="BalanceUtils SHA Token - should return the correct balance" name="BalanceUtils SHA Token - should return the correct balance" time="0">
+    </testcase>
+    <testcase classname="BalanceUtils SHA token - should throw an error" name="BalanceUtils SHA token - should throw an error" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseTextInput" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:20" time="14.786" tests="10">
+    <testcase classname="BaseTextInput renders correctly with mandatory props" name="BaseTextInput renders correctly with mandatory props" time="0.561">
+    </testcase>
+    <testcase classname="BaseTextInput renders correctly with custom props" name="BaseTextInput renders correctly with custom props" time="0.527">
+    </testcase>
+    <testcase classname="BaseTextInput updates value correctly" name="BaseTextInput updates value correctly" time="0.361">
+    </testcase>
+    <testcase classname="BaseTextInput renders error message correctly" name="BaseTextInput renders error message correctly" time="0.412">
+    </testcase>
+    <testcase classname="BaseTextInput renders the correct value prop" name="BaseTextInput renders the correct value prop" time="0.42">
+    </testcase>
+    <testcase classname="BaseTextInput calls setValue prop on input change" name="BaseTextInput calls setValue prop on input change" time="0.36">
+    </testcase>
+    <testcase classname="BaseTextInput renders error message when errorMessage prop is provided" name="BaseTextInput renders error message when errorMessage prop is provided" time="0.464">
+    </testcase>
+    <testcase classname="BaseTextInput renders label correctly when label prop is provided" name="BaseTextInput renders label correctly when label prop is provided" time="0.414">
+    </testcase>
+    <testcase classname="BaseTextInput renders rightIcon correctly when rightIcon prop is provided" name="BaseTextInput renders rightIcon correctly when rightIcon prop is provided" time="0.36">
+    </testcase>
+    <testcase classname="BaseTextInput calls onIconPress prop when rightIcon is pressed" name="BaseTextInput calls onIconPress prop when rightIcon is pressed" time="0.438">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseRange" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:31" time="3.67" tests="1">
+    <testcase classname="BaseRange renders correctly" name="BaseRange renders correctly" time="0.457">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseIcon" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:30" time="4.856" tests="4">
+    <testcase classname="BaseIcon renders the icon with default values" name="BaseIcon renders the icon with default values" time="0.456">
+    </testcase>
+    <testcase classname="BaseIcon calls the action prop when clicked" name="BaseIcon calls the action prop when clicked" time="0.464">
+    </testcase>
+    <testcase classname="BaseIcon render correctly with corner case props" name="BaseIcon render correctly with corner case props" time="0.523">
+    </testcase>
+    <testcase classname="BaseIcon renders correctly when disabled" name="BaseIcon renders correctly when disabled" time="0.371">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseSearchInput" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:31" time="4.172" tests="2">
+    <testcase classname="BaseSearchInput renders correctly" name="BaseSearchInput renders correctly" time="0.599">
+    </testcase>
+    <testcase classname="BaseSearchInput renders a custom placeholder" name="BaseSearchInput renders a custom placeholder" time="0.37">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseScrollView" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:32" time="3.717" tests="1">
+    <testcase classname="BaseScrollView renders without crashing" name="BaseScrollView renders without crashing" time="0.463">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseButtonGroupHorizontal" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:31" time="4.882" tests="3">
+    <testcase classname="BaseButtonGroupHorizontal Should render all the buttons correctly" name="BaseButtonGroupHorizontal Should render all the buttons correctly" time="0.656">
+    </testcase>
+    <testcase classname="BaseButtonGroupHorizontal Call the correct function for each button" name="BaseButtonGroupHorizontal Call the correct function for each button" time="0.481">
+    </testcase>
+    <testcase classname="BaseButtonGroupHorizontal should disable a disabled button" name="BaseButtonGroupHorizontal should disable a disabled button" time="0.488">
+    </testcase>
+  </testsuite>
+  <testsuite name="NFTScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:33" time="4.274" tests="1">
+    <testcase classname="NFTScreen should render correctly" name="NFTScreen should render correctly" time="0.605">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseSwitch component" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:32" time="4.902" tests="3">
+    <testcase classname="BaseSwitch component renders switch component" name="BaseSwitch component renders switch component" time="0.473">
+    </testcase>
+    <testcase classname="BaseSwitch component renders switch without value" name="BaseSwitch component renders switch without value" time="0.425">
+    </testcase>
+    <testcase classname="BaseSwitch component handles onValueChange callback" name="BaseSwitch component handles onValueChange callback" time="0.516">
+    </testcase>
+  </testsuite>
+  <testsuite name="ChangeNetworkScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:34" time="4.745" tests="1">
+    <testcase classname="ChangeNetworkScreen should render correctly" name="ChangeNetworkScreen should render correctly" time="0.489">
+    </testcase>
+  </testsuite>
+  <testsuite name="GeneralScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:35" time="4.432" tests="1">
+    <testcase classname="GeneralScreen should render correctly" name="GeneralScreen should render correctly" time="0.468">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseAccordion" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:35" time="4.879" tests="1">
+    <testcase classname="BaseAccordion renders correctly with default props" name="BaseAccordion renders correctly with default props" time="0.509">
+    </testcase>
+  </testsuite>
+  <testsuite name="FastActionsBar component" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:35" time="4.426" tests="1">
+    <testcase classname="FastActionsBar component renders buttons with correct navigation" name="FastActionsBar component renders buttons with correct navigation" time="0.458">
+    </testcase>
+  </testsuite>
+  <testsuite name="TransfersUtils" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:36" time="3.925" tests="3">
+    <testcase classname="TransfersUtils VET - should return the correct amount of transfers" name="TransfersUtils VET - should return the correct amount of transfers" time="0.003">
+    </testcase>
+    <testcase classname="TransfersUtils VET - account === item.sender,  should return the correct amount of transfers" name="TransfersUtils VET - account === item.sender,  should return the correct amount of transfers" time="0">
+    </testcase>
+    <testcase classname="TransfersUtils Other token - should return the correct amount of transfers" name="TransfersUtils Other token - should return the correct amount of transfers" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="useBiometricsValidation" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:36" time="5.468" tests="3">
+    <testcase classname="useBiometricsValidation should call onSuccess when biometric authentication is successful" name="useBiometricsValidation should call onSuccess when biometric authentication is successful" time="0.455">
+    </testcase>
+    <testcase classname="useBiometricsValidation should show the &apos;not enrolled&apos; alert when biometric authentication is not enrolled" name="useBiometricsValidation should show the &apos;not enrolled&apos; alert when biometric authentication is not enrolled" time="0.439">
+    </testcase>
+    <testcase classname="useBiometricsValidation should show the &apos;go to settings&apos; alert when biometric authentication is not available" name="useBiometricsValidation should show the &apos;go to settings&apos; alert when biometric authentication is not available" time="0.405">
+    </testcase>
+  </testsuite>
+  <testsuite name="HomeScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:37" time="4.887" tests="1">
+    <testcase classname="HomeScreen should render correctly" name="HomeScreen should render correctly" time="0.778">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseView component" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:36" time="6.778" tests="5">
+    <testcase classname="BaseView component should render correctly with default props" name="BaseView component should render correctly with default props" time="0.482">
+    </testcase>
+    <testcase classname="BaseView component should render with custom style props" name="BaseView component should render with custom style props" time="0.537">
+    </testcase>
+    <testcase classname="BaseView component should override justifyContent and alignItems when flexDirection is row" name="BaseView component should override justifyContent and alignItems when flexDirection is row" time="0.413">
+    </testcase>
+    <testcase classname="BaseView component should set default alignItems when none is provided" name="BaseView component should set default alignItems when none is provided" time="0.519">
+    </testcase>
+    <testcase classname="BaseView component should set default justifyContent when none is provided" name="BaseView component should set default justifyContent when none is provided" time="0.463">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseSpacer" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:37" time="5.461" tests="2">
+    <testcase classname="BaseSpacer should render correctly with width prop" name="BaseSpacer should render correctly with width prop" time="0.566">
+    </testcase>
+    <testcase classname="BaseSpacer should render correctly with height prop" name="BaseSpacer should render correctly with height prop" time="0.524">
+    </testcase>
+  </testsuite>
+  <testsuite name="WalletManagementScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:39" time="4.537" tests="1">
+    <testcase classname="WalletManagementScreen should render correctly" name="WalletManagementScreen should render correctly" time="0.472">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseModal" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:39" time="4.68" tests="1">
+    <testcase classname="BaseModal renders the children when isOpen is true" name="BaseModal renders the children when isOpen is true" time="0.502">
+    </testcase>
+  </testsuite>
+  <testsuite name="AdvancedScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:40" time="4.573" tests="1">
+    <testcase classname="AdvancedScreen should render correctly" name="AdvancedScreen should render correctly" time="0.497">
+    </testcase>
+  </testsuite>
+  <testsuite name="ManageCustomTokenScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:40" time="4.823" tests="1">
+    <testcase classname="ManageCustomTokenScreen should render correctly" name="ManageCustomTokenScreen should render correctly" time="0.559">
+    </testcase>
+  </testsuite>
+  <testsuite name="useBiometricType" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:41" time="4.892" tests="1">
+    <testcase classname="useBiometricType should returns Biometrics" name="useBiometricType should returns Biometrics" time="0.773">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseTouchableBox component" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:41" time="5.803" tests="3">
+    <testcase classname="BaseTouchableBox component should call action function when clicked" name="BaseTouchableBox component should call action function when clicked" time="0.576">
+    </testcase>
+    <testcase classname="BaseTouchableBox component should render with custom style props" name="BaseTouchableBox component should render with custom style props" time="0.677">
+    </testcase>
+    <testcase classname="BaseTouchableBox component should be disabled when &apos;disabled&apos; prop is true" name="BaseTouchableBox component should be disabled when &apos;disabled&apos; prop is true" time="0.519">
+    </testcase>
+  </testsuite>
+  <testsuite name="BackButtonHeader" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:42" time="4.713" tests="1">
+    <testcase classname="BackButtonHeader should render correctly and go back" name="BackButtonHeader should render correctly and go back" time="0.724">
+    </testcase>
+  </testsuite>
+  <testsuite name="ManageCustomNodesScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:43" time="6.728" tests="1">
+    <testcase classname="ManageCustomNodesScreen should render correctly" name="ManageCustomNodesScreen should render correctly" time="1.192">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseButtonGroup" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:43" time="7.523" tests="3">
+    <testcase classname="BaseButtonGroup renders all buttons" name="BaseButtonGroup renders all buttons" time="1.37">
+    </testcase>
+    <testcase classname="BaseButtonGroup Each button click calls action function with the correct params if not disabled " name="BaseButtonGroup Each button click calls action function with the correct params if not disabled " time="0.949">
+    </testcase>
+    <testcase classname="BaseButtonGroup uses the correct typographyFont" name="BaseButtonGroup uses the correct typographyFont" time="0.476">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseStatusBar" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:44" time="7.551" tests="2">
+    <testcase classname="BaseStatusBar renders correctly" name="BaseStatusBar renders correctly" time="0.602">
+    </testcase>
+    <testcase classname="BaseStatusBar renders trasnparent correctly" name="BaseStatusBar renders trasnparent correctly" time="0.531">
+    </testcase>
+  </testsuite>
+  <testsuite name="PrivacyScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:44" time="7.331" tests="1">
+    <testcase classname="PrivacyScreen should render correctly" name="PrivacyScreen should render correctly" time="0.81">
+    </testcase>
+  </testsuite>
+  <testsuite name="DiscoverScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:45" time="7.096" tests="1">
+    <testcase classname="DiscoverScreen should render correctly" name="DiscoverScreen should render correctly" time="0.525">
+    </testcase>
+  </testsuite>
+  <testsuite name="AddContactScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:45" time="7.259" tests="1">
+    <testcase classname="AddContactScreen should render correctly" name="AddContactScreen should render correctly" time="0.74">
+    </testcase>
+  </testsuite>
+  <testsuite name="useWalletSecurity" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:52" time="2.064" tests="3">
+    <testcase classname="useWalletSecurity should return the correct wallet security for biometrics" name="useWalletSecurity should return the correct wallet security for biometrics" time="0.011">
+    </testcase>
+    <testcase classname="useWalletSecurity should return the correct wallet security for password" name="useWalletSecurity should return the correct wallet security for password" time="0">
+    </testcase>
+    <testcase classname="useWalletSecurity should return the correct wallet security for none" name="useWalletSecurity should return the correct wallet security for none" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="AddCustomNodeScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:46" time="7.716" tests="1">
+    <testcase classname="AddCustomNodeScreen should render correctly" name="AddCustomNodeScreen should render correctly" time="0.515">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseText" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:46" time="8.187" tests="2">
+    <testcase classname="BaseText should render correctly with default props" name="BaseText should render correctly with default props" time="0.501">
+    </testcase>
+    <testcase classname="BaseText should render correctly then italic" name="BaseText should render correctly then italic" time="0.418">
+    </testcase>
+  </testsuite>
+  <testsuite name="getAddressFromXPub - positive tests" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:52" time="2.15" tests="26">
+    <testcase classname="getAddressFromXPub - positive tests valid XPub - address1" name="getAddressFromXPub - positive tests valid XPub - address1" time="0.156">
+    </testcase>
+    <testcase classname="getAddressFromXPub - positive tests valid XPub - address2" name="getAddressFromXPub - positive tests valid XPub - address2" time="0.165">
+    </testcase>
+    <testcase classname="getAddressFromXPub - negative tests invalid XPub" name="getAddressFromXPub - negative tests invalid XPub" time="0.009">
+    </testcase>
+    <testcase classname="getAddressFromHdNode - positive tests valid mnemonic phrase - address1" name="getAddressFromHdNode - positive tests valid mnemonic phrase - address1" time="0.426">
+    </testcase>
+    <testcase classname="getAddressFromHdNode - positive tests valid mnemonic phrase - address2" name="getAddressFromHdNode - positive tests valid mnemonic phrase - address2" time="0.461">
+    </testcase>
+    <testcase classname="compareAddresses - positive testing regular addresses - same" name="compareAddresses - positive testing regular addresses - same" time="0">
+    </testcase>
+    <testcase classname="compareAddresses - positive testing regular addresses - different" name="compareAddresses - positive testing regular addresses - different" time="0">
+    </testcase>
+    <testcase classname="compareAddresses - positive testing 1 uppercase, 1 lowercase" name="compareAddresses - positive testing 1 uppercase, 1 lowercase" time="0.001">
+    </testcase>
+    <testcase classname="compareAddresses - positive testing both uppercase" name="compareAddresses - positive testing both uppercase" time="0">
+    </testcase>
+    <testcase classname="compareAddresses - positive testing both lowercase" name="compareAddresses - positive testing both lowercase" time="0">
+    </testcase>
+    <testcase classname="compareAddresses - positive testing generated node" name="compareAddresses - positive testing generated node" time="0.432">
+    </testcase>
+    <testcase classname="compareAddresses - negative testing 1 address, 1 not hex" name="compareAddresses - negative testing 1 address, 1 not hex" time="0">
+    </testcase>
+    <testcase classname="compareAddresses - negative testing bad length" name="compareAddresses - negative testing bad length" time="0">
+    </testcase>
+    <testcase classname="compareAddresses - negative testing equal strings - neither addresses" name="compareAddresses - negative testing equal strings - neither addresses" time="0">
+    </testcase>
+    <testcase classname="compareAddresses - negative testing one address no hex" name="compareAddresses - negative testing one address no hex" time="0">
+    </testcase>
+    <testcase classname="compareAddresses - negative testing nonstring addresses" name="compareAddresses - negative testing nonstring addresses" time="0">
+    </testcase>
+    <testcase classname="Is Valid Address valid address" name="Is Valid Address valid address" time="0">
+    </testcase>
+    <testcase classname="Is Valid Address No prefix" name="Is Valid Address No prefix" time="0.001">
+    </testcase>
+    <testcase classname="Is Valid Address invalid length hex" name="Is Valid Address invalid length hex" time="0">
+    </testcase>
+    <testcase classname="Is Valid Address Invalid prefix" name="Is Valid Address Invalid prefix" time="0">
+    </testcase>
+    <testcase classname="Is Valid Address Not Hex" name="Is Valid Address Not Hex" time="0">
+    </testcase>
+    <testcase classname="regexPattern returns the correct result" name="regexPattern returns the correct result" time="0.006">
+    </testcase>
+    <testcase classname="Check vechain address Valid vechain address must return true" name="Check vechain address Valid vechain address must return true" time="0">
+    </testcase>
+    <testcase classname="Check vechain address Invalid vechain address must return false" name="Check vechain address Invalid vechain address must return false" time="0.001">
+    </testcase>
+    <testcase classname="Check vechain address Valid vechain thor token address must return true" name="Check vechain address Valid vechain thor token address must return true" time="0.001">
+    </testcase>
+    <testcase classname="Check vechain address Invalid vechain thor token address must return false" name="Check vechain address Invalid vechain thor token address must return false" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="mergeTokens" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:54" time="0.161" tests="2">
+    <testcase classname="mergeTokens mergeTokens should merge two token arrays and remove duplicates based on symbol and genesisId" name="mergeTokens mergeTokens should merge two token arrays and remove duplicates based on symbol and genesisId" time="0.001">
+    </testcase>
+    <testcase classname="isVechainToken should return correctly" name="isVechainToken should return correctly" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="usePasswordValidation" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:52" time="3.037" tests="3">
+    <testcase classname="usePasswordValidation should return a function to validate the password" name="usePasswordValidation should return a function to validate the password" time="0.007">
+    </testcase>
+    <testcase classname="usePasswordValidation should return false if the decrypted string is not equal to the validation string" name="usePasswordValidation should return false if the decrypted string is not equal to the validation string" time="0.001">
+    </testcase>
+    <testcase classname="usePasswordValidation should return false if an error occurs during decryption" name="usePasswordValidation should return false if an error occurs during decryption" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseBottomSheet" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:47" time="7.587" tests="1">
+    <testcase classname="BaseBottomSheet renders correctly without errors" name="BaseBottomSheet renders correctly without errors" time="0.823">
+    </testcase>
+  </testsuite>
+  <testsuite name="scaleNumberUp - positive testing" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.428" tests="22">
+    <testcase classname="scaleNumberUp - positive testing scale up by 2 decimals" name="scaleNumberUp - positive testing scale up by 2 decimals" time="0.002">
+    </testcase>
+    <testcase classname="scaleNumberUp - positive testing scale up by 10 decimals" name="scaleNumberUp - positive testing scale up by 10 decimals" time="0">
+    </testcase>
+    <testcase classname="scaleNumberUp - positive testing scale up by 0" name="scaleNumberUp - positive testing scale up by 0" time="0">
+    </testcase>
+    <testcase classname="scaleNumberUp - positive testing scale up by 16 decimals" name="scaleNumberUp - positive testing scale up by 16 decimals" time="0">
+    </testcase>
+    <testcase classname="scaleNumberUp - negative testing scale up by a negative number" name="scaleNumberUp - negative testing scale up by a negative number" time="0.012">
+    </testcase>
+    <testcase classname="scaleNumberUp - negative testing scale up an invalid number" name="scaleNumberUp - negative testing scale up an invalid number" time="0.001">
+    </testcase>
+    <testcase classname="scaleNumberDown - positive testing scale down by 2 decimals" name="scaleNumberDown - positive testing scale down by 2 decimals" time="0">
+    </testcase>
+    <testcase classname="scaleNumberDown - positive testing scale down by 0" name="scaleNumberDown - positive testing scale down by 0" time="0.001">
+    </testcase>
+    <testcase classname="scaleNumberDown - positive testing scale down by 10 decimals" name="scaleNumberDown - positive testing scale down by 10 decimals" time="0">
+    </testcase>
+    <testcase classname="scaleNumberDown - positive testing scale down by 16 decimals" name="scaleNumberDown - positive testing scale down by 16 decimals" time="0">
+    </testcase>
+    <testcase classname="scaleNumberDown - negative testing scale down by a negative number" name="scaleNumberDown - negative testing scale down by a negative number" time="0">
+    </testcase>
+    <testcase classname="scaleNumberDown - negative testing scale down an invalid number" name="scaleNumberDown - negative testing scale down an invalid number" time="0.003">
+    </testcase>
+    <testcase classname="scaleNumberDown - negative testing scale down by too many decimals" name="scaleNumberDown - negative testing scale down by too many decimals" time="0">
+    </testcase>
+    <testcase classname="convertToFiatBalance should return correctly" name="convertToFiatBalance should return correctly" time="0.001">
+    </testcase>
+    <testcase classname="humanNumber should return correct decimals" name="humanNumber should return correct decimals" time="0.004">
+    </testcase>
+    <testcase classname="humanNumber should return &lt; 0.01" name="humanNumber should return &lt; 0.01" time="0.001">
+    </testcase>
+    <testcase classname="isZero should return true" name="isZero should return true" time="0">
+    </testcase>
+    <testcase classname="isZero should return false" name="isZero should return false" time="0">
+    </testcase>
+    <testcase classname="humanAddress should return correctly" name="humanAddress should return correctly" time="0">
+    </testcase>
+    <testcase classname="humanUrl should return correctly" name="humanUrl should return correctly" time="0">
+    </testcase>
+    <testcase classname="formatAlias should return correctly" name="formatAlias should return correctly" time="0">
+    </testcase>
+    <testcase classname="removeUrlProtocolAndPath should return correctly" name="removeUrlProtocolAndPath should return correctly" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="HexUtils tests" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.471" tests="37">
+    <testcase classname="HexUtils tests Remove prefix - valid hex lowercase with prefix" name="HexUtils tests Remove prefix - valid hex lowercase with prefix" time="0.001">
+    </testcase>
+    <testcase classname="HexUtils tests Remove prefix - valid hex lowercase without prefix" name="HexUtils tests Remove prefix - valid hex lowercase without prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Remove prefix - valid hex uppercase with prefix" name="HexUtils tests Remove prefix - valid hex uppercase with prefix" time="0.001">
+    </testcase>
+    <testcase classname="HexUtils tests Remove prefix - valid hex uppercase without prefix" name="HexUtils tests Remove prefix - valid hex uppercase without prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Remove prefix - valid hex mixedcase with prefix" name="HexUtils tests Remove prefix - valid hex mixedcase with prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Remove prefix - valid hex mixedcase without prefix" name="HexUtils tests Remove prefix - valid hex mixedcase without prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Remove prefix - invalid hex string" name="HexUtils tests Remove prefix - invalid hex string" time="0.016">
+    </testcase>
+    <testcase classname="HexUtils tests Remove prefix - multiple prefix hex string" name="HexUtils tests Remove prefix - multiple prefix hex string" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Add prefix - valid hex lowercase with prefix" name="HexUtils tests Add prefix - valid hex lowercase with prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Add prefix - valid hex lowercase without prefix" name="HexUtils tests Add prefix - valid hex lowercase without prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Add prefix - valid hex uppercase with prefix" name="HexUtils tests Add prefix - valid hex uppercase with prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Add prefix - valid hex uppercase without prefix" name="HexUtils tests Add prefix - valid hex uppercase without prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Add prefix - valid hex mixedcase with prefix" name="HexUtils tests Add prefix - valid hex mixedcase with prefix" time="0.013">
+    </testcase>
+    <testcase classname="HexUtils tests Add prefix - valid hex mixedcase without prefix" name="HexUtils tests Add prefix - valid hex mixedcase without prefix" time="0.001">
+    </testcase>
+    <testcase classname="HexUtils tests Add prefix - invalid hex string" name="HexUtils tests Add prefix - invalid hex string" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Add prefix - multiple prefix hex string" name="HexUtils tests Add prefix - multiple prefix hex string" time="0.001">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - hex lowercase has prefix" name="HexUtils tests Validate - hex lowercase has prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - hex lowercase no prefix" name="HexUtils tests Validate - hex lowercase no prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - hex uppercase has prefix uppercase" name="HexUtils tests Validate - hex uppercase has prefix uppercase" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - hex uppercase has prefix lowercase" name="HexUtils tests Validate - hex uppercase has prefix lowercase" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - hex uppercase no prefix" name="HexUtils tests Validate - hex uppercase no prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - hex mixedcase has prefix" name="HexUtils tests Validate - hex mixedcase has prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - hex mixedcase no prefix" name="HexUtils tests Validate - hex mixedcase no prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - invalid hex string" name="HexUtils tests Validate - invalid hex string" time="0.002">
+    </testcase>
+    <testcase classname="HexUtils tests Validate - multiple prefix hex string" name="HexUtils tests Validate - multiple prefix hex string" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - hex lowercase has prefix" name="HexUtils tests Is Valid - hex lowercase has prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - hex lowercase no prefix" name="HexUtils tests Is Valid - hex lowercase no prefix" time="0.001">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - hex uppercase has prefix uppercase" name="HexUtils tests Is Valid - hex uppercase has prefix uppercase" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - hex uppercase has prefix lowercase" name="HexUtils tests Is Valid - hex uppercase has prefix lowercase" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - hex uppercase no prefix" name="HexUtils tests Is Valid - hex uppercase no prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - hex mixedcase has prefix" name="HexUtils tests Is Valid - hex mixedcase has prefix" time="0.005">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - hex mixedcase no prefix" name="HexUtils tests Is Valid - hex mixedcase no prefix" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - invalid hex string" name="HexUtils tests Is Valid - invalid hex string" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Is Valid - multiple prefix hex string" name="HexUtils tests Is Valid - multiple prefix hex string" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Generate Random" name="HexUtils tests Generate Random" time="0.228">
+    </testcase>
+    <testcase classname="HexUtils tests Generate Random - length 0" name="HexUtils tests Generate Random - length 0" time="0">
+    </testcase>
+    <testcase classname="HexUtils tests Generate Random - length -1" name="HexUtils tests Generate Random - length -1" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="useBiometrics" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:54" time="0.518" tests="2">
+    <testcase classname="useBiometrics should initialize biometrics state on mount" name="useBiometrics should initialize biometrics state on mount" time="0.018">
+    </testcase>
+    <testcase classname="useBiometrics should update biometrics state when app state changes" name="useBiometrics should update biometrics state when app state changes" time="0.033">
+    </testcase>
+  </testsuite>
+  <testsuite name="TransactionUtils" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.152" tests="4">
+    <testcase classname="TransactionUtils checkForTransactionFinality should return false if the activity is not a transaction" name="TransactionUtils checkForTransactionFinality should return false if the activity is not a transaction" time="0.001">
+    </testcase>
+    <testcase classname="TransactionUtils checkForTransactionFinality should return false if the activity does not have a txReceipt" name="TransactionUtils checkForTransactionFinality should return false if the activity does not have a txReceipt" time="0">
+    </testcase>
+    <testcase classname="TransactionUtils checkForTransactionFinality should return false if the block is not finalised" name="TransactionUtils checkForTransactionFinality should return false if the block is not finalised" time="0.001">
+    </testcase>
+    <testcase classname="TransactionUtils checkForTransactionFinality should return true if the block is finalised" name="TransactionUtils checkForTransactionFinality should return true if the block is finalised" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="capitalize" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.079" tests="1">
+    <testcase classname="capitalize should return correctly" name="capitalize should return correctly" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="useKeyboard" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.19" tests="1">
+    <testcase classname="useKeyboard should set visible to true when keyboard is shown" name="useKeyboard should set visible to true when keyboard is shown" time="0.041">
+    </testcase>
+  </testsuite>
+  <testsuite name="getPicassoImgSrc" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.093" tests="2">
+    <testcase classname="getPicassoImgSrc returns a base64 encoded string when &quot;base64&quot; argument is true" name="getPicassoImgSrc returns a base64 encoded string when &quot;base64&quot; argument is true" time="0.001">
+    </testcase>
+    <testcase classname="getPicassoImgSrc returns a non-base64 encoded string when &quot;base64&quot; argument is false" name="getPicassoImgSrc returns a non-base64 encoded string when &quot;base64&quot; argument is false" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="isIOS" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.095" tests="2">
+    <testcase classname="isIOS should return true" name="isIOS should return true" time="0.001">
+    </testcase>
+    <testcase classname="isAndroid should return false" name="isAndroid should return false" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="BloomUtils" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.225" tests="2">
+    <testcase classname="BloomUtils testBloomForAddress should return false if the bloom filter contains the address" name="BloomUtils testBloomForAddress should return false if the bloom filter contains the address" time="0.002">
+    </testcase>
+    <testcase classname="BloomUtils testBloomForAddress should return false if the bloom filter does not contain the address" name="BloomUtils testBloomForAddress should return false if the bloom filter does not contain the address" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="isLockScreenFlow" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.109" tests="6">
+    <testcase classname="isLockScreenFlow should return false if isWalletSecurityPassword is false" name="isLockScreenFlow should return false if isWalletSecurityPassword is false" time="0.001">
+    </testcase>
+    <testcase classname="isLockScreenFlow should return true if appLockStatusInactive is true and isWalletSecurityPassword is true" name="isLockScreenFlow should return true if appLockStatusInactive is true and isWalletSecurityPassword is true" time="0">
+    </testcase>
+    <testcase classname="isBiometricLockFlow should return false if appLockStatusInactive is false" name="isBiometricLockFlow should return false if appLockStatusInactive is false" time="0">
+    </testcase>
+    <testcase classname="isBiometricLockFlow should return true if appLockStatusInactive is true and isWalletSecurityBiometrics is true" name="isBiometricLockFlow should return true if appLockStatusInactive is true and isWalletSecurityBiometrics is true" time="0">
+    </testcase>
+    <testcase classname="isHideSplash should return false if both appLockStatusInactive and isWalletSecurityBiometrics are true" name="isHideSplash should return false if both appLockStatusInactive and isWalletSecurityBiometrics are true" time="0">
+    </testcase>
+    <testcase classname="isHideSplash should return true if either appLockStatusInactive or isWalletSecurityBiometrics are true" name="isHideSplash should return true if either appLockStatusInactive or isWalletSecurityBiometrics are true" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="getTabbar" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.081" tests="3">
+    <testcase classname="getTabbar returns null when the parent is null" name="getTabbar returns null when the parent is null" time="0.001">
+    </testcase>
+    <testcase classname="getTabbar returns the parent when the parent type is tab" name="getTabbar returns the parent when the parent type is tab" time="0">
+    </testcase>
+    <testcase classname="getTabbar recursively searches for the tabbar parent" name="getTabbar recursively searches for the tabbar parent" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="alreadyExists" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.155" tests="7">
+    <testcase classname="alreadyExists should return true when the value exists in the key" name="alreadyExists should return true when the value exists in the key" time="0.001">
+    </testcase>
+    <testcase classname="alreadyExists should return false when the value does not exist in the key" name="alreadyExists should return false when the value does not exist in the key" time="0">
+    </testcase>
+    <testcase classname="alreadyExists should return false when excluding the only matching element" name="alreadyExists should return false when excluding the only matching element" time="0">
+    </testcase>
+    <testcase classname="alreadyExists should return true when using a custom compare function" name="alreadyExists should return true when using a custom compare function" time="0">
+    </testcase>
+    <testcase classname="alreadyExists should return false when using a custom compare function with no match" name="alreadyExists should return false when using a custom compare function with no match" time="0.001">
+    </testcase>
+    <testcase classname="alreadyExists should return true when the value exists in the key for a different data type" name="alreadyExists should return true when the value exists in the key for a different data type" time="0">
+    </testcase>
+    <testcase classname="alreadyExists should return false when key is not present in array elements" name="alreadyExists should return false when key is not present in array elements" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="reanimated numberToLocaleStringWorklet" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.191" tests="23">
+    <testcase classname="reanimated numberToLocaleStringWorklet needs to be overridden for phantomjs" name="reanimated numberToLocaleStringWorklet needs to be overridden for phantomjs" time="0.005">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string" name="reanimated numberToLocaleStringWorklet returns a string" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns &lt;$0.00000001 if the value is below that amount" name="reanimated numberToLocaleStringWorklet returns &lt;$0.00000001 if the value is below that amount" time="0.001">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string with 3 sig figs if it is between 0.00000001 and 1," name="reanimated numberToLocaleStringWorklet returns a string with 3 sig figs if it is between 0.00000001 and 1," time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string formatted in FR style (1 234.5) when passed FR" name="reanimated numberToLocaleStringWorklet returns a string formatted in FR style (1 234.5) when passed FR" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string formatted in US style (1,234.5) when passed US" name="reanimated numberToLocaleStringWorklet returns a string formatted in US style (1,234.5) when passed US" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string formatted in IT style (1.234,5) when passed IT" name="reanimated numberToLocaleStringWorklet returns a string formatted in IT style (1.234,5) when passed IT" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string formatted in de-CH style (1&apos;234.5) when passed de-CH" name="reanimated numberToLocaleStringWorklet returns a string formatted in de-CH style (1&apos;234.5) when passed de-CH" time="0.001">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string formatted in DK style (1.234,5) when passed da-DK" name="reanimated numberToLocaleStringWorklet returns a string formatted in DK style (1.234,5) when passed da-DK" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a dash if there is no value passed to funciton" name="reanimated numberToLocaleStringWorklet returns a dash if there is no value passed to funciton" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string formatted in NO style (1 234,5) when passed nb-NO" name="reanimated numberToLocaleStringWorklet returns a string formatted in NO style (1 234,5) when passed nb-NO" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet throws when the language tag does not conform to the standard" name="reanimated numberToLocaleStringWorklet throws when the language tag does not conform to the standard" time="0.067">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string formatted in US style (1,234.5) by default" name="reanimated numberToLocaleStringWorklet returns a string formatted in US style (1,234.5) by default" time="0.001">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns a string formatted in Hungarian style (1 234,56) by default" name="reanimated numberToLocaleStringWorklet returns a string formatted in Hungarian style (1 234,56) by default" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns currency properly formatted for the locale specified" name="reanimated numberToLocaleStringWorklet returns currency properly formatted for the locale specified" time="0.001">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet format percentages with rounding and zero padding" name="reanimated numberToLocaleStringWorklet format percentages with rounding and zero padding" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet thrown error if precission is a negative number" name="reanimated numberToLocaleStringWorklet thrown error if precission is a negative number" time="0.001">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet returns dash if value is undefined or NaN" name="reanimated numberToLocaleStringWorklet returns dash if value is undefined or NaN" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet format zero value percentages with zero padding" name="reanimated numberToLocaleStringWorklet format zero value percentages with zero padding" time="0">
+    </testcase>
+    <testcase classname="reanimated numberToLocaleStringWorklet format integer values with zero padding" name="reanimated numberToLocaleStringWorklet format integer values with zero padding" time="0.007">
+    </testcase>
+    <testcase classname="Reanimated round funciton should round numbers corrrectly when it has a precisison param" name="Reanimated round funciton should round numbers corrrectly when it has a precisison param" time="0">
+    </testcase>
+    <testcase classname="Reanimated round funciton should round numbers corrrectly with default precisison param" name="Reanimated round funciton should round numbers corrrectly with default precisison param" time="0">
+    </testcase>
+    <testcase classname="Reaniamted convertSmallSciNotationToDecimal funciton should return the correct value after precision" name="Reaniamted convertSmallSciNotationToDecimal funciton should return the correct value after precision" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="sanifySeed" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.079" tests="1">
+    <testcase classname="sanifySeed should return correct seed" name="sanifySeed should return correct seed" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="useAmountInput" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.114" tests="3">
+    <testcase classname="useAmountInput should set input value correctly when input is valid" name="useAmountInput should set input value correctly when input is valid" time="0.01">
+    </testcase>
+    <testcase classname="useAmountInput should filter out invalid characters from input value" name="useAmountInput should filter out invalid characters from input value" time="0.001">
+    </testcase>
+    <testcase classname="useAmountInput should filter out duplicate decimal separators from input value" name="useAmountInput should filter out duplicate decimal separators from input value" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Alert" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.141" tests="6">
+    <testcase classname="Alert should display an alert with one button if cancelTitle is not provided" name="Alert should display an alert with one button if cancelTitle is not provided" time="0.02">
+    </testcase>
+    <testcase classname="Alert should display an alert with two buttons if cancelTitle is provided" name="Alert should display an alert with two buttons if cancelTitle is provided" time="0.005">
+    </testcase>
+    <testcase classname="showCancelledFaceIdAlert should show an alert for cancelled Face ID authentication" name="showCancelledFaceIdAlert should show an alert for cancelled Face ID authentication" time="0.003">
+    </testcase>
+    <testcase classname="showGoToSettingsAlert should show an alert for going to camera settings" name="showGoToSettingsAlert should show an alert for going to camera settings" time="0">
+    </testcase>
+    <testcase classname="showDefaultAlert should show the default alert - no action" name="showDefaultAlert should show the default alert - no action" time="0">
+    </testcase>
+    <testcase classname="showDefaultAlert should show the default alert - action" name="showDefaultAlert should show the default alert - action" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="authentication functions" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.199" tests="13">
+    <testcase classname="authentication functions getDeviceEnrolledLevel should return the enrolled security level of the device" name="authentication functions getDeviceEnrolledLevel should return the enrolled security level of the device" time="0.001">
+    </testcase>
+    <testcase classname="authentication functions getDeviceHasHardware should return a boolean indicating whether the device has biometric hardware" name="authentication functions getDeviceHasHardware should return a boolean indicating whether the device has biometric hardware" time="0">
+    </testcase>
+    <testcase classname="authentication functions getIsDeviceEnrolled should return a boolean indicating whether the device has enrolled biometric data" name="authentication functions getIsDeviceEnrolled should return a boolean indicating whether the device has enrolled biometric data" time="0">
+    </testcase>
+    <testcase classname="authentication functions getBiometricTypeAvailable should return the available biometric authentication type on the device" name="authentication functions getBiometricTypeAvailable should return the available biometric authentication type on the device" time="0">
+    </testcase>
+    <testcase classname="authentication functions authenticateWithBiometric should authenticate the user with the biometric authentication type available on the device" name="authentication functions authenticateWithBiometric should authenticate the user with the biometric authentication type available on the device" time="0.012">
+    </testcase>
+    <testcase classname="authentication functions authenticateWithBiometric should not pass promptMessage on Android" name="authentication functions authenticateWithBiometric should not pass promptMessage on Android" time="0.009">
+    </testcase>
+    <testcase classname="authentication functions isSecurityDowngrade returns true when the old security level is biometric and the new security level is secret, and appLockStatusActive is true" name="authentication functions isSecurityDowngrade returns true when the old security level is biometric and the new security level is secret, and appLockStatusActive is true" time="0">
+    </testcase>
+    <testcase classname="authentication functions isSecurityDowngrade returns false when the old security level is secret, regardless of the new security level and wallet status" name="authentication functions isSecurityDowngrade returns false when the old security level is secret, regardless of the new security level and wallet status" time="0">
+    </testcase>
+    <testcase classname="authentication functions isSecurityDowngrade returns false when the new security level is biometric, regardless of the old security level and wallet status" name="authentication functions isSecurityDowngrade returns false when the new security level is biometric, regardless of the old security level and wallet status" time="0">
+    </testcase>
+    <testcase classname="authentication functions isSecurityDowngrade returns false when the user hasn&apos;t onboarded, regardless of the old and new security levels" name="authentication functions isSecurityDowngrade returns false when the user hasn&apos;t onboarded, regardless of the old and new security levels" time="0.001">
+    </testcase>
+    <testcase classname="authentication functions isSecurityUpgrade returns true when the old security level is none and the new security level is biometric, and the wallet status is unlocked" name="authentication functions isSecurityUpgrade returns true when the old security level is none and the new security level is biometric, and the wallet status is unlocked" time="0">
+    </testcase>
+    <testcase classname="authentication functions isSecurityUpgrade returns false when the old security level is biometric, regardless of the new security level and wallet status" name="authentication functions isSecurityUpgrade returns false when the old security level is biometric, regardless of the new security level and wallet status" time="0.002">
+    </testcase>
+    <testcase classname="authentication functions isSecurityUpgrade returns false when the new security level is secret, regardless of the old security level and wallet status" name="authentication functions isSecurityUpgrade returns false when the new security level is secret, regardless of the old security level and wallet status" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="isValidLocale" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.369" tests="8">
+    <testcase classname="isValidLocale should return true for a valid locale" name="isValidLocale should return true for a valid locale" time="0.011">
+    </testcase>
+    <testcase classname="isValidLocale should return false for an invalid locale" name="isValidLocale should return false for an invalid locale" time="0">
+    </testcase>
+    <testcase classname="formatDateTime should format the timestamp correctly in English" name="formatDateTime should format the timestamp correctly in English" time="0.001">
+    </testcase>
+    <testcase classname="formatDateTime should throw an error for invalid locale" name="formatDateTime should throw an error for invalid locale" time="0.044">
+    </testcase>
+    <testcase classname="formatDateTime should throw an error for invalid timezone" name="formatDateTime should throw an error for invalid timezone" time="0">
+    </testcase>
+    <testcase classname="formatDateTime should format the timestamp with Europe/Berlin timezone" name="formatDateTime should format the timestamp with Europe/Berlin timezone" time="0.001">
+    </testcase>
+    <testcase classname="formatDateTime should format the timestamp correctly in Italian" name="formatDateTime should format the timestamp correctly in Italian" time="0.001">
+    </testcase>
+    <testcase classname="formatDateTime should format the timestamp correctly in German" name="formatDateTime should format the timestamp correctly in German" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="getSupportedLanguages" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:56" time="0.126" tests="1">
+    <testcase classname="getSupportedLanguages should return correctly" name="getSupportedLanguages should return correctly" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="URLUtils" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:55" time="0.204" tests="33">
+    <testcase classname="URLUtils parseUrl should return parsed URL - https" name="URLUtils parseUrl should return parsed URL - https" time="0.001">
+    </testcase>
+    <testcase classname="URLUtils parseUrl should return parsed URL - http" name="URLUtils parseUrl should return parsed URL - http" time="0">
+    </testcase>
+    <testcase classname="URLUtils parseUrl should return parsed URL - http with trailing spaces" name="URLUtils parseUrl should return parsed URL - http with trailing spaces" time="0.001">
+    </testcase>
+    <testcase classname="URLUtils parseUrl should throw an exception - no protocol" name="URLUtils parseUrl should throw an exception - no protocol" time="0.009">
+    </testcase>
+    <testcase classname="URLUtils parseUrl should throw an exception - invalid protocol" name="URLUtils parseUrl should throw an exception - invalid protocol" time="0">
+    </testcase>
+    <testcase classname="URLUtils parseUrl should throw an exception - invalid URL" name="URLUtils parseUrl should throw an exception - invalid URL" time="0">
+    </testcase>
+    <testcase classname="URLUtils Compare URLs should return true for same URLs" name="URLUtils Compare URLs should return true for same URLs" time="0">
+    </testcase>
+    <testcase classname="URLUtils Compare URLs should return false for different URLs" name="URLUtils Compare URLs should return false for different URLs" time="0">
+    </testcase>
+    <testcase classname="URLUtils Compare URLs Compare world of V DApps should return false for different DApps" name="URLUtils Compare URLs Compare world of V DApps should return false for different DApps" time="0.001">
+    </testcase>
+    <testcase classname="URLUtils Compare URLs Compare world of V DApps should return false for different worldofV DApps" name="URLUtils Compare URLs Compare world of V DApps should return false for different worldofV DApps" time="0">
+    </testcase>
+    <testcase classname="URLUtils Compare URLs Compare world of V DApps should return false for other different DApps" name="URLUtils Compare URLs Compare world of V DApps should return false for other different DApps" time="0">
+    </testcase>
+    <testcase classname="URLUtils Clean URLs should return clean URL - no trailing slash" name="URLUtils Clean URLs should return clean URL - no trailing slash" time="0">
+    </testcase>
+    <testcase classname="URLUtils Clean URLs should return clean URL - trailing slash" name="URLUtils Clean URLs should return clean URL - trailing slash" time="0">
+    </testcase>
+    <testcase classname="URLUtils Clean URLs should return clean URL - paths" name="URLUtils Clean URLs should return clean URL - paths" time="0.001">
+    </testcase>
+    <testcase classname="URLUtils Clean URLs should return clean URL - paths with trailing slash" name="URLUtils Clean URLs should return clean URL - paths with trailing slash" time="0">
+    </testcase>
+    <testcase classname="URLUtils To Websocket URL should return websocket URL - suffix " name="URLUtils To Websocket URL should return websocket URL - suffix " time="0">
+    </testcase>
+    <testcase classname="URLUtils To Websocket URL should return websocket URL - no suffix" name="URLUtils To Websocket URL should return websocket URL - no suffix" time="0">
+    </testcase>
+    <testcase classname="URLUtils toNodeBeatWebsocketUrl should return  the node beat websocket URL" name="URLUtils toNodeBeatWebsocketUrl should return  the node beat websocket URL" time="0">
+    </testcase>
+    <testcase classname="URLUtils isHttps should return true for https" name="URLUtils isHttps should return true for https" time="0">
+    </testcase>
+    <testcase classname="URLUtils isHttps should return false for http" name="URLUtils isHttps should return false for http" time="0.001">
+    </testcase>
+    <testcase classname="URLUtils isHttps should return false chrome://" name="URLUtils isHttps should return false chrome://" time="0">
+    </testcase>
+    <testcase classname="URLUtils isLocalHost should return true for localhost" name="URLUtils isLocalHost should return true for localhost" time="0">
+    </testcase>
+    <testcase classname="URLUtils isLocalHost should return true for localhost with port" name="URLUtils isLocalHost should return true for localhost with port" time="0">
+    </testcase>
+    <testcase classname="URLUtils isLocalHost should return false for google.com" name="URLUtils isLocalHost should return false for google.com" time="0">
+    </testcase>
+    <testcase classname="URLUtils isLocalHost should return false for chrome://" name="URLUtils isLocalHost should return false for chrome://" time="0">
+    </testcase>
+    <testcase classname="URLUtils isLocalHost should return true for IP http://127.0.0.1" name="URLUtils isLocalHost should return true for IP http://127.0.0.1" time="0">
+    </testcase>
+    <testcase classname="URLUtils isLocalHost should return true for IP with port" name="URLUtils isLocalHost should return true for IP with port" time="0">
+    </testcase>
+    <testcase classname="URLUtils isHttp should return true for http" name="URLUtils isHttp should return true for http" time="0">
+    </testcase>
+    <testcase classname="URLUtils isHttp should return false for https" name="URLUtils isHttp should return false for https" time="0">
+    </testcase>
+    <testcase classname="URLUtils isHttp should return false for non valid url" name="URLUtils isHttp should return false for non valid url" time="0">
+    </testcase>
+    <testcase classname="URLUtils isAllowed should return true for https" name="URLUtils isAllowed should return true for https" time="0">
+    </testcase>
+    <testcase classname="URLUtils isAllowed should return false for http" name="URLUtils isAllowed should return false for http" time="0">
+    </testcase>
+    <testcase classname="URLUtils isAllowed should return for localhost" name="URLUtils isAllowed should return for localhost" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="computeBarStyle" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:56" time="0.114" tests="2">
+    <testcase classname="computeBarStyle returns &apos;light-content&apos; when isHero or isDark is true" name="computeBarStyle returns &apos;light-content&apos; when isHero or isDark is true" time="0.002">
+    </testcase>
+    <testcase classname="computeBarStyle returns &apos;dark-content&apos; when isHero and isDark are false" name="computeBarStyle returns &apos;dark-content&apos; when isHero and isDark are false" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="successToastStyles" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:56" time="0.165" tests="8">
+    <testcase classname="successToastStyles should generate the correct styles for a light theme" name="successToastStyles should generate the correct styles for a light theme" time="0.006">
+    </testcase>
+    <testcase classname="successToastStyles should generate the correct styles for a dark theme" name="successToastStyles should generate the correct styles for a dark theme" time="0.001">
+    </testcase>
+    <testcase classname="errorToastStyles should generate the correct styles for a light theme" name="errorToastStyles should generate the correct styles for a light theme" time="0.001">
+    </testcase>
+    <testcase classname="errorToastStyles should generate the correct styles for a dark theme" name="errorToastStyles should generate the correct styles for a dark theme" time="0.005">
+    </testcase>
+    <testcase classname="warningToastStyles should generate the correct styles for a light theme" name="warningToastStyles should generate the correct styles for a light theme" time="0.001">
+    </testcase>
+    <testcase classname="warningToastStyles should generate the correct styles for a dark theme" name="warningToastStyles should generate the correct styles for a dark theme" time="0.001">
+    </testcase>
+    <testcase classname="infoToastStyles should generate the correct styles for a light theme" name="infoToastStyles should generate the correct styles for a light theme" time="0">
+    </testcase>
+    <testcase classname="infoToastStyles should generate the correct styles for a dark theme" name="infoToastStyles should generate the correct styles for a dark theme" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="getCorrectLocale" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:56" time="0.21" tests="2">
+    <testcase classname="getCorrectLocale should return correctly" name="getCorrectLocale should return correctly" time="0.002">
+    </testcase>
+    <testcase classname="getCorrectLanguageTag should return correctly" name="getCorrectLanguageTag should return correctly" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="getNodes" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:54" time="1.512" tests="1">
+    <testcase classname="getNodes should return the correct wallet and device objects" name="getNodes should return the correct wallet and device objects" time="1.073">
+    </testcase>
+  </testsuite>
+  <testsuite name="ManageTokenScreen" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:50" time="5.923" tests="1">
+    <testcase classname="ManageTokenScreen should render correctly" name="ManageTokenScreen should render correctly" time="0.464">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseCardGroup" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:50" time="6.031" tests="1">
+    <testcase classname="BaseCardGroup renders correctly" name="BaseCardGroup renders correctly" time="0.462">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseCard" errors="0" failures="0" skipped="0" timestamp="2023-05-08T13:14:52" time="5.422" tests="1">
+    <testcase classname="BaseCard renders correctly" name="BaseCard renders correctly" time="0.483">
     </testcase>
   </testsuite>
 </testsuites>
