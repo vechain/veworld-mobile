@@ -445,7 +445,7 @@ PODS:
     - React-perflogger (= 0.70.6)
   - ReactNativeExceptionHandler (2.10.10):
     - React-Core
-  - RNBootSplash (4.6.0):
+  - RNBootSplash (4.7.1):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
@@ -836,7 +836,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
-  RNBootSplash: 91e0c16bfc96703cb5b0562785b9a8cbfeb298fe
+  RNBootSplash: 3f3f7f82efe2addbfe7ddeda20877ff4d579cd81
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: ade81b4e928ebd585dd492014d40fb8d0e848aab
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
@@ -853,4 +853,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: fb0257b682edba86ff59d8c0335a2e9837ee457b
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1
