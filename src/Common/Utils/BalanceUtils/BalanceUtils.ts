@@ -1,7 +1,7 @@
 import { VET, VTHO } from "~Common/Constant"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
-import { debug, error } from "~/Common/Logger"
+import { debug, error } from "~Common/Logger"
 import { Network, Balance } from "~Model"
 import AddressUtils from "../AddressUtils"
 
@@ -44,7 +44,7 @@ const getBalanceFromBlockchain = async (
             accountAddress,
             genesisId: network.genesis.id,
             tokenAddress,
-            timeUpdated: Date.now().toString(),
+            timeUpdated: new Date().toISOString(),
         }
     } catch (e) {
         error(e)
