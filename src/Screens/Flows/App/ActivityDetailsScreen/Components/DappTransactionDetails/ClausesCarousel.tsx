@@ -1,176 +1,39 @@
 import React, { memo, useCallback, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import {
-    ColorThemeType,
-    FormattingUtils,
-    SCREEN_WIDTH,
-    useCopyClipboard,
-    useTheme,
-    useThemedStyles,
-} from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText, BaseView, PaginatedDot } from "~Components"
 import { ClauseType, ClauseWithMetadata } from "~Model"
 import { useI18nContext } from "~i18n"
-import { ClauseDetail } from "./ClauseDetail"
+import { TransferClause } from "./Clauses/TransferClause"
+import { DeployContractClause } from "./Clauses/DeployContractClause"
+import { ContractCallClause } from "./Clauses/ContractCallClause"
 
 type Props = {
     clausesMetadata: ClauseWithMetadata[]
 }
 
 export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
-    const theme = useTheme()
-
     const { LL } = useI18nContext()
 
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     const [activeIndex, setActiveIndex] = useState(0)
-
-    const { onCopyToClipboard } = useCopyClipboard()
-
-    const getTransferClause = useCallback(
-        (clause: ClauseWithMetadata) => {
-            return (
-                <BaseView style={{ width: SCREEN_WIDTH - 80 }}>
-                    <ClauseDetail
-                        title={LL.TYPE()}
-                        value={LL.CONNECTED_APP_token_transfer()}
-                    />
-                    {clause.to !== null && (
-                        <ClauseDetail
-                            title={LL.TO()}
-                            value={FormattingUtils.humanAddress(
-                                clause.to,
-                                7,
-                                9,
-                            )}
-                            onValuePress={() =>
-                                onCopyToClipboard(
-                                    clause.to ?? "",
-                                    LL.COMMON_LBL_ADDRESS(),
-                                )
-                            }
-                            valueIcon="content-copy"
-                        />
-                    )}
-                    {clause.tokenSymbol && (
-                        <ClauseDetail
-                            title={LL.TOKEN_SYMBOL()}
-                            value={clause.tokenSymbol}
-                            border={false}
-                        />
-                    )}
-                </BaseView>
-            )
-        },
-        [LL, onCopyToClipboard],
-    )
-
-    const getContractCallClause = useCallback(
-        (clause: ClauseWithMetadata) => {
-            return (
-                <BaseView style={{ width: SCREEN_WIDTH - 80 }}>
-                    <ClauseDetail
-                        title={LL.TYPE()}
-                        value={LL.CONNECTED_APP_contract_call()}
-                    />
-                    {clause.to && (
-                        <ClauseDetail
-                            title={LL.TO()}
-                            value={FormattingUtils.humanAddress(
-                                clause.to,
-                                7,
-                                9,
-                            )}
-                            onValuePress={() =>
-                                onCopyToClipboard(
-                                    clause.to ?? "",
-                                    LL.COMMON_LBL_ADDRESS(),
-                                )
-                            }
-                            valueIcon="content-copy"
-                        />
-                    )}
-
-                    <ClauseDetail
-                        title={LL.CONTRACT_DATA()}
-                        value={FormattingUtils.humanAddress(clause.data, 7, 9)}
-                        border={false}
-                        onValuePress={() =>
-                            onCopyToClipboard(
-                                clause.to ?? "",
-                                LL.COMMON_LBL_DATA(),
-                            )
-                        }
-                        valueIcon="content-copy"
-                    />
-                </BaseView>
-            )
-        },
-        [LL, onCopyToClipboard],
-    )
-
-    const getDeployContractClause = useCallback(
-        (clause: ClauseWithMetadata) => {
-            return (
-                <BaseView style={{ width: SCREEN_WIDTH - 80 }}>
-                    <ClauseDetail
-                        title={LL.TYPE()}
-                        value={LL.CONNECTED_APP_deploy_contract()}
-                    />
-                    {clause.to && (
-                        <ClauseDetail
-                            title={LL.TO()}
-                            value={FormattingUtils.humanAddress(
-                                clause.to,
-                                7,
-                                9,
-                            )}
-                            onValuePress={() =>
-                                onCopyToClipboard(
-                                    clause.to ?? "",
-                                    LL.COMMON_LBL_ADDRESS(),
-                                )
-                            }
-                            valueIcon="content-copy"
-                        />
-                    )}
-
-                    {clause.abi && (
-                        <ClauseDetail
-                            title={LL.CONTRACT_ABI()}
-                            value={LL.COPY_ABI()}
-                            onValuePress={() =>
-                                onCopyToClipboard(
-                                    JSON.stringify(clause.abi),
-                                    LL.COMMON_LBL_ADDRESS(),
-                                )
-                            }
-                            valueIcon="content-copy"
-                            border={false}
-                        />
-                    )}
-                </BaseView>
-            )
-        },
-        [LL, onCopyToClipboard],
-    )
 
     const renderClause = useCallback(
         ({ item }: { item: ClauseWithMetadata }) => {
             switch (item.type) {
                 case ClauseType.TRANSFER:
-                    return getTransferClause(item)
+                    return <TransferClause clause={item} />
                 case ClauseType.CONTRACT_CALL:
-                    return getContractCallClause(item)
+                    return <ContractCallClause clause={item} />
                 case ClauseType.DEPLOY_CONTRACT:
-                    return getDeployContractClause(item)
+                    return <DeployContractClause clause={item} />
                 default:
                     return <></>
             }
         },
-        [getContractCallClause, getDeployContractClause, getTransferClause],
+        [],
     )
 
     const onViewableItemsChanged = useCallback(
@@ -201,7 +64,7 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
                             showsHorizontalScrollIndicator={false}
                             showsVerticalScrollIndicator={false}
                             horizontal
-                            pagingEnabled={true}
+                            pagingEnabled
                             snapToAlignment="start"
                             keyExtractor={item => item.data}
                             onViewableItemsChanged={onViewableItemsChanged}

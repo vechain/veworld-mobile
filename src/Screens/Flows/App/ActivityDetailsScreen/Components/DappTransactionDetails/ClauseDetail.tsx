@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
+import { ColorThemeType, SCREEN_WIDTH, useThemedStyles } from "~Common"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 
 type Props = {
@@ -13,12 +13,16 @@ type Props = {
 
 export const ClauseDetail: React.FC<Props> = memo(
     ({ title, value, border = true, valueIcon, onValuePress }) => {
-        const { styles } = useThemedStyles(baseStyles)
-
-        const theme = useTheme()
+        const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
-            <BaseView w={100} pt={8} style={border ? styles.border : {}}>
+            <BaseView
+                w={100}
+                pt={8}
+                style={[
+                    border ? styles.border : {},
+                    { width: SCREEN_WIDTH - 100 },
+                ]}>
                 <BaseText typographyFont="buttonSecondary" pb={6}>
                     {title}
                 </BaseText>
@@ -50,6 +54,5 @@ const baseStyles = (theme: ColorThemeType) =>
         border: {
             borderBottomColor: theme.colors.separator,
             borderBottomWidth: 0.5,
-            width: "100%",
         },
     })
