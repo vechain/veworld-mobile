@@ -37,6 +37,7 @@ export {
     AlertUtils,
     AddressUtils,
     BalanceUtils,
+    BalanceUtils,
     BiometricsUtils,
     BloomUtils,
     ConnectionUtils,
