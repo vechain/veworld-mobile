@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
     BaseButton,
@@ -12,13 +12,33 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ScrollView, StyleSheet } from "react-native"
-import { DateUtils, useTheme } from "~Common"
+import {
+    DateUtils,
+    SCREEN_WIDTH,
+    useBottomSheetModal,
+    useTheme,
+    valueToHP,
+} from "~Common"
 import { useI18nContext } from "~i18n"
-import { getActivityTitle } from "./util"
+import { getActivityTitle } from "./Util"
 import { getCalendars } from "expo-localization"
-import { ActivityType, FungibleTokenActivity } from "~Model"
-import { FungibleTokenTransferDetails } from "./Components"
+import {
+    ActivityType,
+    ConnectedAppTxActivity,
+    ContactType,
+    FungibleTokenActivity,
+    SignCertActivity,
+} from "~Model"
+import {
+    FungibleTokenTransferDetails,
+    SignCertificateDetails,
+    DappTransactionDetails,
+} from "./Components"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { LinearGradient } from "expo-linear-gradient"
+import { ContactManagementBottomSheet } from "../ContactsScreen"
+import { addContact } from "~Storage/Redux/Actions/Contacts"
+import { useAppDispatch } from "~Storage/Redux"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -36,7 +56,18 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const tabBarHeight = useBottomTabBarHeight()
 
+    const dispatch = useAppDispatch()
+
+    const [selectedContactAddress, setSelectedContactAddress] =
+        useState<string>()
+
     const goBack = useCallback(() => nav.goBack(), [nav])
+
+    const {
+        ref: addContactSheet,
+        onOpen: openAddContactSheet,
+        onClose: closeAddContactSheet,
+    } = useBottomSheetModal()
 
     const dateTimeActivity = useMemo(() => {
         return DateUtils.formatDateTime(
@@ -45,13 +76,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
         )
     }, [activity.timestamp, locale])
-
-    const isFungibleTokenActivity = useMemo(() => {
-        return (
-            activity.type === ActivityType.FUNGIBLE_TOKEN ||
-            activity.type === ActivityType.VET_TRANSFER
-        )
-    }, [activity.type])
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
@@ -64,9 +88,43 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     />
                 )
             }
-            //TODO Other activity type details
+            case ActivityType.SIGN_CERT: {
+                return (
+                    <SignCertificateDetails
+                        activity={activity as SignCertActivity}
+                    />
+                )
+            }
+            case ActivityType.CONNECTED_APP_TRANSACTION: {
+                return (
+                    <DappTransactionDetails
+                        activity={activity as ConnectedAppTxActivity}
+                    />
+                )
+            }
+            default:
+                return <></>
         }
     }, [activity, token])
+
+    const onAddContactPress = useCallback(
+        (address: string) => {
+            setSelectedContactAddress(address)
+
+            openAddContactSheet()
+        },
+        [openAddContactSheet],
+    )
+
+    const handleSaveContact = useCallback(
+        (_alias: string, _address: string) => {
+            if (selectedContactAddress) {
+                dispatch(addContact(_alias, _address))
+                closeAddContactSheet()
+            }
+        },
+        [closeAddContactSheet, dispatch, selectedContactAddress],
+    )
 
     return (
         <BaseSafeArea grow={1}>
@@ -101,22 +159,11 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={16} />
 
-                    {activity.to && isFungibleTokenActivity && (
-                        <TransferCard
-                            fromAddress={activity.from}
-                            toAddress={activity.to[0]}
-                        />
-                    )}
-
-                    <BaseSpacer height={20} />
-
-                    {/* TODO action click opens in-app browser or system browser. TBD with others */}
-                    <BaseButton
-                        action={() => {}}
-                        w={100}
-                        title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                        haptics="medium"
-                        typographyFont="buttonPrimary"
+                    {/* Transfer card shows the Address/Addresses involved in the given activity */}
+                    <TransferCard
+                        fromAddress={activity.from}
+                        toAddresses={activity.to}
+                        onAddContactPress={onAddContactPress}
                     />
 
                     <BaseSpacer height={20} />
@@ -127,10 +174,52 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={2} />
 
-                    {/* Render Activity Details */}
+                    {/* Render Activity Details based on the 'activity.type' */}
                     {renderActivityDetails}
+
+                    <BaseSpacer height={32} />
                 </BaseView>
             </ScrollView>
+
+            {/* Linear gradient fades the elements below the child button */}
+            <LinearGradient
+                style={[
+                    baseStyles.explorerButton,
+                    {
+                        bottom: tabBarHeight,
+                    },
+                ]}
+                colors={[
+                    theme.colors.backgroundTransparent,
+                    theme.colors.background,
+                ]}>
+                <BaseView
+                    mx={20}
+                    style={{ width: SCREEN_WIDTH - 40 }}
+                    py={valueToHP[16]}>
+                    {/* TODO action click opens in-app browser or system browser. TBD with others */}
+                    <BaseButton
+                        action={() => {}}
+                        w={100}
+                        title={LL.VIEW_ON_EXPLORER().toUpperCase()}
+                        haptics="medium"
+                        typographyFont="buttonPrimary"
+                    />
+                </BaseView>
+            </LinearGradient>
+
+            <ContactManagementBottomSheet
+                ref={addContactSheet}
+                contact={{
+                    alias: "",
+                    address: selectedContactAddress ?? "",
+                    type: ContactType.KNOWN,
+                }}
+                onClose={closeAddContactSheet}
+                onSaveContact={handleSaveContact}
+                isAddingContact={true}
+                checkTouched={false}
+            />
         </BaseSafeArea>
     )
 }
@@ -144,6 +233,10 @@ const baseStyles = StyleSheet.create({
         width: "100%",
     },
     scrollView: {
+        width: "100%",
+    },
+    explorerButton: {
+        position: "absolute",
         width: "100%",
     },
 })
