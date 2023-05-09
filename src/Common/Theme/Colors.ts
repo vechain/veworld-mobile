@@ -18,6 +18,7 @@ export type Colors = {
     textReversed: string
     background: string
     backgroundReversed: string
+    backgroundTransparent: string
     card: string
     border: string
     notification: string
@@ -32,10 +33,12 @@ export enum COLORS {
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#FAFAFA",
+    LIGHT_GRAY_TRANSPARENT = "rgba(250, 250, 250, 0.0)",
     LIME_GREEN = "#E2F895",
     LIME_GREEN_LIGHT = "#E6F5B2",
     LIME_GREEN_DISABLED = "#B7C685",
     DARK_PURPLE = "#0B0043",
+    DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.6)",
     PURPLE = "#30265F",
     PURPLE_DISABLED = "#261E4C",
@@ -75,12 +78,13 @@ const light: Colors = {
     textReversed: COLORS.WHITE,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
+    backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
     card: COLORS.WHITE,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.DARK_PURPLE_RBGA,
-    switcher: COLORS.DARK_PURPLE,
+    switcher: COLORS.DARK_PURPLE_DISABLED,
 }
 
 const dark: Colors = {
@@ -103,6 +107,7 @@ const dark: Colors = {
     textReversed: COLORS.DARK_PURPLE,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
+    backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
     card: COLORS.PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
