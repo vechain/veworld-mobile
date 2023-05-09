@@ -1291,9 +1291,9 @@
     regexp-match-indices "1.0.2"
 
 "@cucumber/cucumber@*":
-  version "9.1.1"
-  resolved "https://registry.yarnpkg.com/@cucumber/cucumber/-/cucumber-9.1.1.tgz#ccb2e33b316fb842a508f38c979a8ea5d0d30d34"
-  integrity sha512-NR+nc2Up13rIojQlLE6xwuCYT2ve5QR0TVL8AnYFwNBNUSwPtti6+mi6bn/rbyN8DWcgsLQMbU7QuaomdYBJGw==
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/@cucumber/cucumber/-/cucumber-9.1.2.tgz#b134a9b678a615a678dbd1ef84ceb72908f9e57c"
+  integrity sha512-0V96qH4Uozfu68vm6BY3DA8ZqbnQWgz8N3rnqw/geOG9sY05QeLUQ1PRGDZCznluqEdxt8iEu/QzoGwR7EjDcg==
   dependencies:
     "@cucumber/ci-environment" "9.1.0"
     "@cucumber/cucumber-expressions" "16.1.1"
@@ -2837,9 +2837,9 @@
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
 "@types/node@*":
-  version "20.0.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.0.0.tgz#081d9afd28421be956c1a47ced1c9a0034b467e2"
-  integrity sha512-cD2uPTDnQQCVpmRefonO98/PPijuOnnEy5oytWJFPY1N9aJCz2wJ5kSGWO+zJoed2cY2JxQh6yBuUq4vIn61hw==
+  version "20.1.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.1.0.tgz#258805edc37c327cf706e64c6957f241ca4c4c20"
+  integrity sha512-O+z53uwx64xY7D6roOi4+jApDGFg0qn6WHcxe5QeqjMaTezBO/mxdfFXIVAVVyNWKx84OmPB3L8kbVYOTeN34A==
 
 "@types/node@^10.3.2":
   version "10.17.60"
@@ -2889,9 +2889,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^18.0.21":
-  version "18.2.5"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.5.tgz#f9403e1113b12b53f7edcdd9a900c10dd4b49a59"
-  integrity sha512-RuoMedzJ5AOh23Dvws13LU9jpZHIc/k90AgmK7CecAYeWmSr3553L4u5rk4sWAPBuQosfT7HmTfG4Rg5o4nGEA==
+  version "18.2.6"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.6.tgz#5cd53ee0d30ffc193b159d3516c8c8ad2f19d571"
+  integrity sha512-wRZClXn//zxCFW+ye/D2qY65UsYP1Fpex2YXorHc8awoNamkMZSvBxwxdYVInsHOZZd2Ppq8isnSzJL5Mpf8OA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -4181,9 +4181,9 @@ camelcase@^6.0.0, camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001449:
-  version "1.0.30001482"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001482.tgz#8b3fad73dc35b2674a5c96df2d4f9f1c561435de"
-  integrity sha512-F1ZInsg53cegyjroxLNW9DmrEQ1SuGRTO1QlpA0o2/6OpQ0gFeDRoq1yFmnr8Sakn9qwwt9DmbxHB6w167OSuQ==
+  version "1.0.30001486"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001486.tgz#56a08885228edf62cbe1ac8980f2b5dae159997e"
+  integrity sha512-uv7/gXuHi10Whlj0pp5q/tsK/32J2QSqVRKQhs2j8VsDCjgyruAh/eEXHF822VqO9yT6iZKw3nRwZRSPBE9OQg==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -4626,9 +4626,9 @@ copy-descriptor@^0.1.0:
   integrity sha512-XgZ0pFcakEUlbwQEVNg3+QAis1FyTL3Qel9FYy8pSkQqoG3PNoT0bOCQtOXcOkur21r2Eq2kI+IE+gsmAEVlYw==
 
 core-js-compat@^3.25.1:
-  version "3.30.1"
-  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.30.1.tgz#961541e22db9c27fc48bfc13a3cafa8734171dfe"
-  integrity sha512-d690npR7MC6P0gq4npTl5n2VQeNAmUrJ90n+MHiKS7W2+xno4o3F5GDEuylSdi6EJ3VssibSGXOa1r3YXD3Mhw==
+  version "3.30.2"
+  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.30.2.tgz#83f136e375babdb8c80ad3c22d67c69098c1dd8b"
+  integrity sha512-nriW1nuJjUgvkEjIot1Spwakz52V9YkYHZAQG6A1eCgC8AA1p0zngrQEP9R0+V6hji5XilWKG1Bd0YRppmGimA==
   dependencies:
     browserslist "^4.21.5"
 
@@ -5097,9 +5097,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 detox@*, detox@^20.1.0:
-  version "20.7.2"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-20.7.2.tgz#a93c6e5c95a7e3c5f8b49450a5587c31594dc8e2"
-  integrity sha512-0vQfkqm6mE9TR9v+6j8d4cwKjA0UTenCR+TJPaSw5IoBqCl6zhyWvi1aXcWkT4+vkvFqnOICWw+jSSkXWQme2A==
+  version "20.8.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-20.8.0.tgz#8e76cfbcd826c91cd9a8b077510372b87faa608a"
+  integrity sha512-8pQcxITBfWHgBihV7PV+BidelZ7NZubUU/m9Zyf60AI2dX2NgLOu29Wiit9KUN+E+z4YeXW8/JKyUcIZeYnaSw==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
@@ -5879,6 +5879,11 @@ expo-keep-awake@~11.0.1:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-11.0.1.tgz#ee354465892a94040ffe09901b85b469e7d54fb3"
   integrity sha512-44ZjgLE4lnce2d40Pv8xsjMVc6R5GvgHOwZfkLYtGmgYG9TYrEJeEj5UfSeweXPL3pBFhXKfFU8xpGYMaHdP0A==
+
+expo-linear-gradient@~12.0.1:
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-12.0.1.tgz#452f793b0463ddf313aad431552f23acc85f5d64"
+  integrity sha512-TMl/wBTVQOliL4S3DS5Aa3UFfVySr0mdJEHLG6kfBdMCLkr+tfLI2rGyJ+scS7xgMsvhTIaurhf1+Z0sL3aLCg==
 
 expo-local-authentication@~13.0.2:
   version "13.0.2"
@@ -10169,7 +10174,7 @@ react-keyed-flatten-children@^1.3.0:
   dependencies:
     react-is "^16.8.6"
 
-react-native-bootsplash@^4.4.2:
+react-native-bootsplash@4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/react-native-bootsplash/-/react-native-bootsplash-4.6.0.tgz#0c58be3d5ab92f972a81b19023e57d475002286a"
   integrity sha512-sIkuIaZvqmZS/XE8Emqv6cLSHbq8GnPsv9s1wef8+um+btu3E4oryktGi5vxTu0WdAz3aIIGBBMo8A+R2DyloQ==
@@ -11972,12 +11977,11 @@ tr46@~0.0.3:
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
 
 trace-event-lib@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/trace-event-lib/-/trace-event-lib-1.3.1.tgz#8113146caa30778f45d0ec479d899f9eda94d594"
-  integrity sha512-RO/TD5E9RNqU6MhOfi/njFWKYhrzOJCpRXlEQHgXwM+6boLSrQnOZ9xbHwOXzC+Luyixc7LNNSiTsqTVeF7I1g==
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/trace-event-lib/-/trace-event-lib-1.4.1.tgz#a749b8141650f56dcdecea760df4735f28d1ac6b"
+  integrity sha512-TOgFolKG8JFY+9d5EohGWMvwvteRafcyfPWWNIqcuD1W/FUvxWcy2MSCZ/beYHM63oYPHYHCd3tkbgCctHVP7w==
   dependencies:
     browser-process-hrtime "^1.0.0"
-    lodash "^4.17.21"
 
 traverse@~0.6.6:
   version "0.6.7"
