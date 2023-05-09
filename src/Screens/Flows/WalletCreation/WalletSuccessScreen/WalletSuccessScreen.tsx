@@ -13,8 +13,7 @@ import { useI18nContext } from "~i18n"
 import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
 import {
     BiometricsUtils,
-    useCreateWalletWithBiometrics,
-    useCreateWalletWithPassword,
+    useCreateWallet,
     useDisclosure,
     useTheme,
 } from "~Common"
@@ -51,14 +50,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     const mnemonic = useAppSelector(selectMnemonic)
 
-    const {
-        onCreateWallet: createWalletWithBiometrics,
-        isComplete: isWalletCreatedWithBiometrics,
-    } = useCreateWalletWithBiometrics()
-    const {
-        onCreateWallet: createWalletWithPassword,
-        isComplete: isWalletCreatedWithPassword,
-    } = useCreateWalletWithPassword()
+    const { onCreateWallet: createWallet, isComplete: isWalletCreated } =
+        useCreateWallet()
 
     const {
         isOpen: isPasswordPromptOpen,
@@ -85,7 +78,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometric()
                 if (success) {
-                    await createWalletWithBiometrics({
+                    await createWallet({
                         mnemonic,
                         onError: onWalletCreationError,
                     })
@@ -95,11 +88,11 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             }
         } else {
             if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                await createWalletWithBiometrics({ mnemonic })
+                await createWallet({ mnemonic })
             } else if (
                 params?.securityLevelSelected === SecurityLevelType.SECRET
             ) {
-                await createWalletWithPassword({
+                await createWallet({
                     userPassword: params?.userPin!,
                     onError: onWalletCreationError,
                     mnemonic,
@@ -110,10 +103,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         route.params,
         userHasOnboarded,
         userSelectedSecurity,
-        createWalletWithBiometrics,
+        createWallet,
         onWalletCreationError,
         openPasswordPrompt,
-        createWalletWithPassword,
         mnemonic,
     ])
 
@@ -121,17 +113,17 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         async (password: string) => {
             if (!mnemonic) throw new Error("Mnemonic is not available")
 
-            await createWalletWithPassword({
+            await createWallet({
                 userPassword: password,
                 mnemonic,
                 onError: onWalletCreationError,
             })
         },
-        [createWalletWithPassword, onWalletCreationError, mnemonic],
+        [createWallet, onWalletCreationError, mnemonic],
     )
 
     useEffect(() => {
-        if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
+        if (isWalletCreated) {
             if (userHasOnboarded) {
                 closePasswordPrompt()
 
@@ -155,8 +147,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         dispatch,
         isPasswordPromptOpen,
         userHasOnboarded,
-        isWalletCreatedWithBiometrics,
-        isWalletCreatedWithPassword,
+        isWalletCreated,
         nav,
     ])
 
