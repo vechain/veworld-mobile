@@ -1,7 +1,7 @@
 import { AddressUtils } from "~Common/Utils"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
-import { getNodes } from "./useCreateWallet/Helpers"
+import { getNodes } from "../useCreateWallet/Helpers"
 
 export const useDeviceUtils = () => {
     const devices = useAppSelector(selectDevices())

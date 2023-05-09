@@ -8,6 +8,7 @@ import {
     setUserSelectedSecurity,
 } from "~Storage/Redux/Actions"
 import { TestWrapper } from "~Test"
+import KeychainService from "~Services/KeychainService"
 const device = {
     alias: "Wallet 1",
     index: 0,
@@ -103,5 +104,26 @@ describe("useCreateWalletWithPassword", () => {
         expect(setLastSecurityLevel).toBeCalledWith("SECRET")
         expect(setMnemonic).toBeCalledWith(undefined)
         expect(result.current.isComplete).toBe(true)
+    })
+    it("should throw and handle error correctly", async () => {
+        jest.spyOn(
+            KeychainService,
+            "setDeviceEncryptionKey",
+        ).mockImplementation(() => {
+            throw new Error("key error")
+        })
+        const { result, waitForNextUpdate } = renderHook(
+            () => useCreateWalletWithPassword(),
+            { wrapper: TestWrapper },
+        )
+        await waitForNextUpdate()
+        const onCreateWallet = result.current.onCreateWallet
+        const onErrorMock = jest.fn()
+        await onCreateWallet({
+            mnemonic: mnemonic.join(" "),
+            userPassword: "password",
+            onError: onErrorMock,
+        })
+        expect(onErrorMock).toHaveBeenCalledWith(new Error("key error"))
     })
 })
