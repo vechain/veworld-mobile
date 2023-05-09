@@ -9,13 +9,12 @@ import {
     CheckBoxWithText,
     MnemonicCard,
 } from "~Components"
-import { Alert, StyleSheet } from "react-native"
-import * as Clipboard from "expo-clipboard"
+import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
-import { useTheme } from "~Common"
+import { useCopyClipboard, useTheme } from "~Common"
 import { useAppDispatch } from "~Storage/Redux"
 import { setMnemonic } from "~Storage/Redux/Actions"
 
@@ -29,10 +28,7 @@ export const NewMnemonicScreen = () => {
 
     const theme = useTheme()
 
-    const onCopyToClipboard = useCallback(async () => {
-        await Clipboard.setStringAsync(mnemonic)
-        Alert.alert("Success!", "Mnemonic copied to clipboard")
-    }, [mnemonic])
+    const { onCopyToClipboard } = useCopyClipboard()
 
     const onBackupPress = useCallback(() => {
         dispatch(setMnemonic(mnemonic))
@@ -63,7 +59,12 @@ export const NewMnemonicScreen = () => {
                     <BaseButton
                         size="sm"
                         selfAlign="flex-end"
-                        action={onCopyToClipboard}
+                        action={() =>
+                            onCopyToClipboard(
+                                mnemonicArray.join(" "),
+                                LL.TITLE_MNEMONIC(),
+                            )
+                        }
                         w={100}
                         title={LL.BTN_MNEMONIC_CLIPBOARD()}
                         disabled={!mnemonic}
