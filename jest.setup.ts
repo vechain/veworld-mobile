@@ -39,6 +39,7 @@ jest.mock("expo-localization", () => ({
     getLocales: () => [{ languageCode: "en", languageTag: "en-US" }],
 }))
 jest.mock("expo-clipboard", () => {})
+jest.mock("expo-linear-gradient", () => {})
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,
