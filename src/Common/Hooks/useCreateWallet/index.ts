@@ -1,2 +1,1 @@
-export * from "./useCreateWalletWithBiometrics"
-export * from "./useCreateWalletWithPassword"
+export * from "./useCreateWallet"
