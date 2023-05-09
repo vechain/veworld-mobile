@@ -1,7 +1,9 @@
 import AddressUtils from "./AddressUtils"
+import AlertUtils from "./AlertUtils"
 // import AccountsUtils from "./AccountsUtils"
 // import AliasUtils from "./AliasUtils"
 // import AsyncUtils from "./AsyncUtils"
+import BalanceUtils from "./BalanceUtils"
 import BiometricsUtils from "./BiometricsUtils"
 import BloomUtils from "./BloomUtils"
 import CryptoUtils from "./CryptoUtils"
@@ -9,24 +11,23 @@ import CryptoUtils from "./CryptoUtils"
 import FormattingUtils from "./FormattingUtils"
 import GasUtils from "./GasUtils"
 import HexUtils from "./HexUtils"
+import LanguageUtils from "./LanguageUtils"
+import LocaleUtils from "./LocaleUtils"
+import LockScreenUtils from "./LockScreenUtils"
 // import MappingUtils from "./MappingUtils"
 import PasswordUtils from "./PasswordUtils"
+import PicassoUtils from "./PicassoUtils"
 import PlatformUtils from "./PlatformUtils"
 import SeedUtils from "./SeedUtils"
-import LockScreenUtils from "./LockScreenUtils"
-import AlertUtils from "./AlertUtils"
-import PicassoUtils from "./PicassoUtils"
 import StringUtils from "./StringUtils"
 // import SignatureUtils from "./SignatureUtils"
 import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
-import LanguageUtils from "./LanguageUtils"
 import FormUtils from "./FormUtils"
 import ConnectionUtils from "./ConnectionUtils"
 import DateUtils from "./DateUtils"
-import LocaleUtils from "./LocaleUtils"
 import * as ReanimatedUtils from "./Reanimated"
 
 export {
@@ -34,6 +35,7 @@ export {
     // AsyncUtils,
     // AccountsUtils,
     AddressUtils,
+    BalanceUtils,
     BiometricsUtils,
     BloomUtils,
     CryptoUtils,
