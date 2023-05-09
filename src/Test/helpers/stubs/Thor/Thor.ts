@@ -43,7 +43,7 @@ interface MockThorInstanceOptions {
 export const mockThorInstance = ({
     genesis = genesises.test,
     status = mockedChainStatus,
-    account = accountStub,
+    account = accountStub({}),
     block = blockStub,
     explain = explainStub,
     filter = filterStub,

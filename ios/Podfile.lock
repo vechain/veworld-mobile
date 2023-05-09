@@ -127,9 +127,9 @@ PODS:
   - lottie-react-native (6.0.0-rc.6):
     - lottie-ios (~> 3.5.0)
     - React-Core
-  - MMKV (1.2.16):
-    - MMKVCore (~> 1.2.16)
-  - MMKVCore (1.2.16)
+  - MMKV (1.2.15):
+    - MMKVCore (~> 1.2.15)
+  - MMKVCore (1.2.15)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -447,7 +447,7 @@ PODS:
     - React-perflogger (= 0.70.6)
   - ReactNativeExceptionHandler (2.10.10):
     - React-Core
-  - RNBootSplash (4.6.0):
+  - RNBootSplash (4.7.1):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
@@ -804,8 +804,8 @@ SPEC CHECKSUMS:
   libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
   lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
   lottie-react-native: 701060db35cf892b3baa26e8f0fccdc9101a2f80
-  MMKV: 784471ce430a2e2d16afef9053d63fab1b357d9e
-  MMKVCore: 9cfef4c48c6c46f66226fc2e4634d78490206a48
+  MMKV: 7f34558bbb5a33b0eaefae2de4b6a20a2ffdad6f
+  MMKVCore: ddf41b9d9262f058419f9ba7598719af56c02cd3
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: e1866f61af7049eb3d8e08e8b133abd38bc1ca7a
@@ -842,7 +842,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
-  RNBootSplash: 91e0c16bfc96703cb5b0562785b9a8cbfeb298fe
+  RNBootSplash: 3f3f7f82efe2addbfe7ddeda20877ff4d579cd81
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: ade81b4e928ebd585dd492014d40fb8d0e848aab
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
@@ -859,4 +859,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: fb0257b682edba86ff59d8c0335a2e9837ee457b
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1

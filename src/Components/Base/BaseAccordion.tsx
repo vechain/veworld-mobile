@@ -42,20 +42,20 @@ export const BaseAccordion = ({
     const computedHeaderStyle = useAnimatedStyle(() => {
         if (open.value) return headerOpenedStyle || {}
         return headerClosedStyle || {}
-    })
+    }, [open.value])
 
     const bodyContainerDynamicStyle = useAnimatedStyle(() => {
         return {
             height: height.value * progress.value + 0.1,
             opacity: progress.value === 0 ? 0 : 1,
         }
-    })
+    }, [height.value, progress.value])
 
     const dynamicStyle = useAnimatedStyle(() => {
         return {
             transform: [{ rotate: `${progress.value * 180}deg` }],
         }
-    })
+    }, [])
 
     const onChevronPress = useCallback(() => {
         if (height.value === 0) {

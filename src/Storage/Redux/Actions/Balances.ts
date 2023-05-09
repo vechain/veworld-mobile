@@ -5,10 +5,9 @@ import {
 } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
-import { AddressUtils, error } from "~Common"
-import { DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common/Constant"
-import axios from "axios"
-import { abis } from "~Common/Constant/Thor/ThorConstants"
+import { error } from "~Common/Logger"
+import { BalanceUtils } from "~Common/Utils"
+import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Common/Constant"
 import { updateTokenBalances } from "~Storage/Redux/Slices"
 import { Balance } from "~Model"
 
@@ -27,48 +26,17 @@ export const updateAccountBalances =
         const balances: Balance[] = []
         try {
             for (const accountBalance of accountBalances) {
-                let balance: string
-
-                if (
-                    AddressUtils.compareAddresses(
-                        accountBalance.tokenAddress,
-                        VET.address,
-                    ) ||
-                    AddressUtils.compareAddresses(
-                        accountBalance.tokenAddress,
-                        VTHO.address,
-                    )
-                ) {
-                    const accountResponse =
-                        await axios.get<Connex.Thor.Account>(
-                            `${network.currentUrl}/accounts/${accountBalance.accountAddress}`,
-                        )
-                    if (
-                        AddressUtils.compareAddresses(
-                            accountBalance.tokenAddress,
-                            VET.address,
-                        )
-                    ) {
-                        balance = accountResponse.data.balance
-                    } else {
-                        balance = accountResponse.data.energy
-                    }
-                } else {
-                    const res = await thorClient
-                        .account(accountBalance.tokenAddress)
-                        .method(abis.vip180.balanceOf)
-                        .call(accountBalance.accountAddress)
-
-                    balance = res.decoded[0]
-                }
+                const balance = await BalanceUtils.getBalanceFromBlockchain(
+                    accountBalance.tokenAddress,
+                    accountBalance.accountAddress,
+                    network,
+                    thorClient,
+                )
 
                 balances.push({
-                    accountAddress: accountBalance.accountAddress,
-                    tokenAddress: accountBalance.tokenAddress,
-                    balance,
-                    timeUpdated: new Date().toISOString(),
+                    ...balance,
+
                     position: accountBalance.position,
-                    genesisId: network.genesis.id,
                 })
             }
             dispatch(updateTokenBalances(balances))
