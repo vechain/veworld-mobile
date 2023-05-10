@@ -1,7 +1,13 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
+import {
+    CryptoUtils,
+    FormattingUtils,
+    VTHO,
+    useCheckIdentity,
+    useTheme,
+} from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
     AccountIcon,
@@ -20,6 +26,7 @@ import {
     selectCurrency,
     selectSelectedAccount,
     useAppSelector,
+    selectDevice,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useSendTransaction } from "./Hooks/useSendTransaction"
@@ -40,6 +47,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
+    const selectedDevice = useAppSelector(selectDevice(account?.rootAddress))
+
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
             amount || "0",
@@ -59,9 +68,25 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         transaction,
     })
 
+    const onIdentityConfirmed = useCallback(
+        async (password?: string) => {
+            if (!selectedDevice) return
+
+            //local mnemonic, identity already verified via useCheckIdentity
+            if ("wallet" in selectedDevice) {
+                const { decryptedWallet } = await CryptoUtils.decryptWallet(
+                    selectedDevice,
+                    password,
+                )
+                signTransaction(decryptedWallet)
+            }
+        },
+        [selectedDevice, signTransaction],
+    )
+
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed: signTransaction,
+            onIdentityConfirmed,
         })
     const gasFees = gas?.gas
         ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
