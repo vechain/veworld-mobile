@@ -20,7 +20,7 @@ import {
     valueToHP,
 } from "~Common"
 import { useI18nContext } from "~i18n"
-import { getActivityTitle } from "./Util"
+import { getActivityTitle } from "./utils"
 import { getCalendars } from "expo-localization"
 import {
     ActivityType,
