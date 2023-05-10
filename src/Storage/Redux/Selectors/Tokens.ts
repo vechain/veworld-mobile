@@ -63,6 +63,9 @@ export const selectSuggestedTokens = createSelector(
     state => state.suggestedTokens,
 )
 
+/**
+ * TODO: refactor name of the selectors
+ */
 export const selectAllFungibleTokens = createSelector(
     selectOfficialTokens,
     tokens => TokenUtils.mergeTokens(DEFAULT_VECHAIN_TOKENS, tokens),

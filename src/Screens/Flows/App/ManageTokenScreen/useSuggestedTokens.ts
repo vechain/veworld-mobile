@@ -2,10 +2,9 @@ import { useEffect } from "react"
 import { BalanceUtils } from "~Common"
 import { useThor } from "~Components"
 import {
-    selectOfficialTokens,
+    selectNonVechainFungibleTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectSuggestedTokens,
     setSuggestedTokens,
     useAppDispatch,
     useAppSelector,
@@ -15,15 +14,11 @@ import { FungibleTokenWithBalance } from "~Model"
 
 export const useSuggestedTokens = (selectedTokenSymbols: string[]) => {
     const dispatch = useAppDispatch()
-    const officialTokens = useAppSelector(selectOfficialTokens)
+    const officialTokens = useAppSelector(selectNonVechainFungibleTokens)
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
-    const suggestedTokens = useAppSelector(selectSuggestedTokens)
+
     const thorClient = useThor()
-    const missingSuggestedTokens =
-        suggestedTokens?.filter(
-            token => !selectedTokenSymbols.includes(token.symbol),
-        ) || []
 
     const updateSuggestedTokens = async () => {
         if (selectedTokenSymbols.length === 0 && account?.address) {
@@ -47,8 +42,4 @@ export const useSuggestedTokens = (selectedTokenSymbols: string[]) => {
         updateSuggestedTokens()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    return {
-        missingSuggestedTokens,
-    }
 }

@@ -1070,6 +1070,10 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: string
 	/**
+	 * S​u​g​g​e​s​t​e​d​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: string
+	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
 	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: string
@@ -2281,6 +2285,10 @@ Please, try again later.
 	 * Add tokens
 	 */
 	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Suggested token
+	 */
+	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: () => LocalizedString
 	/**
 	 * Add custom token
 	 */

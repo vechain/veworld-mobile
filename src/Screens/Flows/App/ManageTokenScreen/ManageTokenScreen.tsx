@@ -24,12 +24,16 @@ import {
     selectNonVechainTokensWithBalances,
     selectSelectedNetwork,
     selectAccountCustomTokens,
+    selectSuggestedTokens,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import {
+    AddCustomTokenBottomSheet,
+    AddSuggestedBottomSheet,
+} from "../ManageCustomTokenScreen/BottomSheets"
 import { useSuggestedTokens } from "./useSuggestedTokens"
 
 export const ManageTokenScreen = () => {
@@ -51,7 +55,17 @@ export const ManageTokenScreen = () => {
         onOpen: openAddCustomTokenSheet,
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
-    const { missingSuggestedTokens } = useSuggestedTokens(selectedTokenSymbols)
+    const {
+        ref: addSuggestedBottomSheet,
+        onOpen: openAddSuggestedBottomSheet,
+        onClose: closeAddSuggestedBottomSheet,
+    } = useBottomSheetModal()
+    const suggestedTokens = useAppSelector(selectSuggestedTokens)
+    const missingSuggestedTokens =
+        suggestedTokens?.filter(
+            token => !selectedTokenSymbols.includes(token.symbol),
+        ) || []
+    useSuggestedTokens(selectedTokenSymbols)
     const filteredTokens = tokens.filter(
         token =>
             token.name
@@ -185,7 +199,7 @@ export const ManageTokenScreen = () => {
                                 </BaseText>
                                 <BaseButton
                                     variant="link"
-                                    action={() => {}}
+                                    action={openAddSuggestedBottomSheet}
                                     px={0}
                                     size="md">
                                     {LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
@@ -241,6 +255,12 @@ export const ManageTokenScreen = () => {
             <AddCustomTokenBottomSheet
                 ref={addCustomTokenSheetRef}
                 onClose={closeAddCustomTokenSheet}
+            />
+            <AddSuggestedBottomSheet
+                setSelectedTokenSymbols={setSelectedTokenSymbols}
+                missingSuggestedTokens={missingSuggestedTokens}
+                ref={addSuggestedBottomSheet}
+                onClose={closeAddSuggestedBottomSheet}
             />
         </BaseSafeArea>
     )
