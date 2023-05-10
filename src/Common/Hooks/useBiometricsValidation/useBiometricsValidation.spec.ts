@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react-hooks"
+import { act, renderHook } from "@testing-library/react-hooks"
 import { AlertUtils, BiometricsUtils } from "~Common/Utils"
 import { useBiometricsValidation } from "./useBiometricsValidation"
 import { TestWrapper } from "~Test"
@@ -62,7 +62,14 @@ describe("useBiometricsValidation", () => {
             success: false,
             error: "not_available",
         })
-
+        let successFn: () => void
+        let cancelFn: () => void
+        ;(AlertUtils.showGoToSettingsAlert as jest.Mock).mockImplementationOnce(
+            (_title, _message, _cancel, _success) => {
+                cancelFn = _cancel
+                successFn = _success
+            },
+        )
         const { result, waitForNextUpdate } = renderHook(
             () => useBiometricsValidation(),
             { wrapper: TestWrapper },
@@ -70,7 +77,10 @@ describe("useBiometricsValidation", () => {
 
         await waitForNextUpdate()
         await result.current.authenticateBiometrics(onSuccess)
-
+        act(() => {
+            successFn()
+            cancelFn()
+        })
         expect(AlertUtils.showGoToSettingsAlert).toHaveBeenCalled()
         expect(onSuccess).not.toHaveBeenCalled()
         expect(AlertUtils.showDefaultAlert).not.toHaveBeenCalled()
