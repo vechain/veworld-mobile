@@ -19,6 +19,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    showWarningToast,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
@@ -79,6 +80,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     password,
                 )
                 signTransaction(decryptedWallet)
+            } else {
+                // TODO: support hardware wallet
+                showWarningToast("Hardware wallet not supported yet")
             }
         },
         [selectedDevice, signTransaction],
