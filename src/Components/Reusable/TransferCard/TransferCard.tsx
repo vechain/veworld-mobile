@@ -6,7 +6,6 @@ import {
     ColorThemeType,
     FormattingUtils,
     SCREEN_WIDTH,
-    useTheme,
     useThemedStyles,
 } from "~Common"
 import { COLORS } from "~Common/Theme"
@@ -41,11 +40,9 @@ enum PROVENANCE {
 
 export const TransferCard = memo(
     ({ fromAddress, toAddresses, onAddContactPress }: Props) => {
-        const theme = useTheme()
-
         const { LL } = useI18nContext()
 
-        const { styles } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles)
 
         const accounts = useAppSelector(selectVisibleAccounts)
 
