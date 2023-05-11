@@ -14,7 +14,7 @@ describe("useBiometricsValidation", () => {
     it("should call onSuccess when biometric authentication is successful", async () => {
         const onSuccess = jest.fn()
         ;(
-            BiometricsUtils.authenticateWithBiometric as jest.Mock
+            BiometricsUtils.authenticateWithBiometrics as jest.Mock
         ).mockResolvedValueOnce({
             success: true,
         })
@@ -35,7 +35,7 @@ describe("useBiometricsValidation", () => {
     it("should show the 'not enrolled' alert when biometric authentication is not enrolled", async () => {
         const onSuccess = jest.fn()
         ;(
-            BiometricsUtils.authenticateWithBiometric as jest.Mock
+            BiometricsUtils.authenticateWithBiometrics as jest.Mock
         ).mockResolvedValueOnce({
             success: false,
             error: "not_enrolled",
@@ -57,7 +57,7 @@ describe("useBiometricsValidation", () => {
     it("should show the 'go to settings' alert when biometric authentication is not available", async () => {
         const onSuccess = jest.fn()
         ;(
-            BiometricsUtils.authenticateWithBiometric as jest.Mock
+            BiometricsUtils.authenticateWithBiometrics as jest.Mock
         ).mockResolvedValueOnce({
             success: false,
             error: "not_available",
