@@ -89,14 +89,14 @@ export const BaseButton = ({
     const isOutlineButton = useMemo(() => variant === "outline", [variant])
 
     const paddingX = useMemo(() => {
-        if (otherProps.px || otherProps.px === 0) return otherProps.px
+        if (Number.isFinite(otherProps.px)) return otherProps.px
         if (size === "sm") return 8
         if (size === "md") return 8
         if (size === "lg") return 16
     }, [otherProps.px, size])
 
     const paddingY = useMemo(() => {
-        if (otherProps.py || otherProps.py === 0) return otherProps.py
+        if (Number.isFinite(otherProps.py)) return otherProps.py
         if (size === "sm") return 3.5
         if (size === "md") return 9.5
         if (size === "lg") return 15

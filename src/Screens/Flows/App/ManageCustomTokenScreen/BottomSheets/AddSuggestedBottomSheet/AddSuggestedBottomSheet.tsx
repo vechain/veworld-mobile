@@ -22,9 +22,11 @@ import {
 
 type Props = {
     onClose: () => void
-    missingSuggestedTokens: FungibleTokenWithBalance
+    missingSuggestedTokens: FungibleTokenWithBalance[]
     setSelectedTokenSymbols: Dispatch<SetStateAction<string[]>>
 }
+
+const snapPoints = ["70%"]
 
 export const AddSuggestedBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -32,7 +34,6 @@ export const AddSuggestedBottomSheet = React.forwardRef<
 >(({ onClose, missingSuggestedTokens, setSelectedTokenSymbols }, ref) => {
     const [selectedTokens, setSelectedTokens] = useState<string[]>([])
     const { LL } = useI18nContext()
-    const snapPoints = ["70%"]
     const dispatch = useAppDispatch()
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -62,11 +63,17 @@ export const AddSuggestedBottomSheet = React.forwardRef<
                     (missingToken: FungibleTokenWithBalance) =>
                         tokenAddress === missingToken.symbol,
                 )
+                if (!token) {
+                    throw new Error(
+                        "Trying to select a suggested official token without finding it",
+                    )
+                }
+
                 dispatch(
                     addTokenBalance({
                         balance: "0",
                         accountAddress: account.address,
-                        tokenAddress: token!!.address,
+                        tokenAddress: token.address,
                         timeUpdated: new Date().toISOString(),
                         position: tokenBalances.length,
                         genesisId: network.genesis.id,
@@ -77,7 +84,7 @@ export const AddSuggestedBottomSheet = React.forwardRef<
             setSelectedTokenSymbols((s: string[]) => [...s, ...selectedTokens])
         } else {
             throw new Error(
-                "Trying to select an official token without an account selected",
+                "Trying to select a suggested official token token without an account selected",
             )
         }
     }

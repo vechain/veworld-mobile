@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { BalanceUtils } from "~Common"
+import { BalanceUtils, error } from "~Common"
 import { useThor } from "~Components"
 import {
     selectNonVechainFungibleTokens,
@@ -24,14 +24,21 @@ export const useSuggestedTokens = (selectedTokenSymbols: string[]) => {
         if (selectedTokenSymbols.length === 0 && account?.address) {
             const newSuggestedTokens: FungibleTokenWithBalance[] = []
             for (const token of officialTokens) {
-                const balance = await BalanceUtils.getBalanceFromBlockchain(
-                    token.address,
-                    account?.address,
-                    network,
-                    thorClient,
-                )
-                if (!new BigNumber(balance.balance).isZero()) {
-                    newSuggestedTokens.push({ ...token, balance: balance })
+                try {
+                    const balance = await BalanceUtils.getBalanceFromBlockchain(
+                        token.address,
+                        account.address,
+                        network,
+                        thorClient,
+                    )
+                    if (!new BigNumber(balance.balance).isZero()) {
+                        newSuggestedTokens.push({
+                            ...token,
+                            balance: balance,
+                        })
+                    }
+                } catch (e) {
+                    error("Can't fetch balance for token: ", token)
                 }
             }
             dispatch(setSuggestedTokens(newSuggestedTokens))
