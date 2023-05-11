@@ -79,7 +79,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     selectedDevice,
                     password,
                 )
-                signTransaction(decryptedWallet)
+                await signTransaction(decryptedWallet)
             } else {
                 // TODO: support hardware wallet
                 showWarningToast("Hardware wallet not supported yet")
