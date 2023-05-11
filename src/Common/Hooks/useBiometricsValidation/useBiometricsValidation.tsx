@@ -11,7 +11,7 @@ export const useBiometricsValidation = () => {
 
     const authenticateBiometrics = useCallback(
         async (onSuccess: () => void) => {
-            let result = await BiometricsUtils.authenticateWithBiometric()
+            let result = await BiometricsUtils.authenticateWithBiometrics()
             // user_cancel
             // not_available
             // not_enrolled
