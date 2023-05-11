@@ -24,7 +24,7 @@ export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
      */
     const checkIdentityBeforeOpening = useCallback(async () => {
         if (isWalletSecurityBiometrics) {
-            let { success } = await BiometricsUtils.authenticateWithBiometric()
+            let { success } = await BiometricsUtils.authenticateWithBiometrics()
             if (success) {
                 onIdentityConfirmed()
             }

@@ -83,7 +83,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             if (userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC) {
                 // todo.vas -> replace with authenticateWithBiometrics new hook?
                 let { success } =
-                    await BiometricsUtils.authenticateWithBiometric()
+                    await BiometricsUtils.authenticateWithBiometrics()
                 if (success) {
                     await createWalletWithBiometrics({
                         mnemonic,
