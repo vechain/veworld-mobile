@@ -38,7 +38,7 @@ jest.mock("expo-haptics", () => ({
     impactAsync: jest.fn(),
 }))
 jest.mock("expo-localization", () => ({
-    getLocales: () => [{ languageCode: "en", languageTag: "en-US" }],
+    getLocales: jest.fn(() => [{ languageCode: "en", languageTag: "en-US" }]),
 }))
 jest.mock("expo-clipboard", () => {})
 jest.mock("react-native-draggable-flatlist", () => ({
@@ -56,7 +56,12 @@ jest.mock("react-native-wagmi-charts", () => {
         LineChart,
     }
 })
-jest.mock("expo-camera", () => {})
+jest.mock("expo-camera", () => ({
+    Camera: {
+        getCameraPermissionsAsync: jest.fn(),
+        requestCameraPermissionsAsync: jest.fn(),
+    },
+}))
 jest.mock("expo-barcode-scanner", () => {})
 jest.mock("@react-navigation/bottom-tabs", () => ({
     ...jest.requireActual("@react-navigation/bottom-tabs"),

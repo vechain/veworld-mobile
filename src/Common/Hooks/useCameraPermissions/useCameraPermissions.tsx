@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react"
 import { Linking } from "react-native"
 import { AlertUtils } from "~Common/Utils"
-import { useAppState } from "./useAppState"
+import { useAppState } from "../useAppState"
 import { AppStateType } from "~Model"
 import { Camera } from "expo-camera"
 import { useI18nContext } from "~i18n"
 
+/**
+ * hook to check and request camera permissions
+ */
 export const useCameraPermissions = () => {
     const { LL } = useI18nContext()
     const [hasPerms, setHasPerms] = useState(false)

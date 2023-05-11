@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { StyleSheet } from "react-native"
 import {
@@ -12,11 +13,20 @@ import {
     OfficialTokenCard,
 } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
-import { Routes } from "~Navigation"
+import {
+    RootStackParamListDiscover,
+    RootStackParamListHome,
+    Routes,
+} from "~Navigation"
 import { selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
-export const SelectTokenSendScreen = () => {
+type Props = NativeStackScreenProps<
+    RootStackParamListHome & RootStackParamListDiscover,
+    Routes.SELECT_TOKEN_SEND
+>
+
+export const SelectTokenSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const [tokenQuery, setTokenQuery] = useState<string>("")
     const tokens = useAppSelector(selectSendableTokensWithBalance)
@@ -29,6 +39,7 @@ export const SelectTokenSendScreen = () => {
     const handleClickToken = (token: FungibleTokenWithBalance) => () => {
         nav.navigate(Routes.SELECT_AMOUNT_SEND, {
             token,
+            initialRoute: route.params.initialRoute ?? "",
         })
     }
     return (

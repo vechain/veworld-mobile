@@ -45,6 +45,7 @@ export const useScrollableList = <T>(
     )
 
     return {
+        visibleItemsCount,
         isListScrollable,
         viewabilityConfig,
         onViewableItemsChanged,
