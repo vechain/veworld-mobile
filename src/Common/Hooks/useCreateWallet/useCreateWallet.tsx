@@ -18,6 +18,7 @@ import {
 import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
 import { useBiometrics } from "../useBiometrics"
+import { useWalletSecurity } from "../useWalletSecurity"
 /**
  * useCreateWalletWithPassword
  * @returns
@@ -28,6 +29,7 @@ export const useCreateWallet = () => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const [isComplete, setIsComplete] = useState(false)
+    const { isWalletSecurityPassword } = useWalletSecurity()
 
     /**
      * Insert new wallet in store
@@ -48,6 +50,11 @@ export const useCreateWallet = () => {
             onError?: (error: unknown) => void
         }) => {
             try {
+                if (isWalletSecurityPassword && !userPassword)
+                    throw new Error(
+                        "You must provide the password as you secured with it",
+                    )
+
                 if (!userPassword && !biometrics?.accessControl)
                     throw new Error(
                         "Biometrics is not supported: accessControl is !true ",
@@ -102,7 +109,13 @@ export const useCreateWallet = () => {
                 onError && onError(e)
             }
         },
-        [dispatch, biometrics, getDeviceFromMnemonic, selectedAccount],
+        [
+            dispatch,
+            biometrics,
+            getDeviceFromMnemonic,
+            selectedAccount,
+            isWalletSecurityPassword,
+        ],
     )
     //* [END] - Create Wallet
 
