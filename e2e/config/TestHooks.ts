@@ -20,6 +20,8 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
 })
 
 Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
+    await device.terminateApp()
+
     const { pickle } = message
     await detox.onTestStart({
         title: pickle.uri,
@@ -35,8 +37,6 @@ After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
         fullName: pickle.name,
         status: result ? "passed" : "failed",
     })
-
-    await device.terminateApp()
 })
 
 AfterAll({ timeout: 600 * 1000 }, async () => {

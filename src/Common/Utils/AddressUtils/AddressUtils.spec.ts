@@ -76,6 +76,11 @@ describe("getAddressFromHdNode - positive tests", () => {
         const hdNode = HDNode.fromMnemonic(validMnemonicPhrase)
         expect(getAddressFromHdNode(hdNode, 1)).toBe(address2)
     })
+    test("it should throw", () => {
+        expect(() => {
+            getAddressFromHdNode({} as HDNode, 0)
+        }).toThrow("Invalid XPub")
+    })
 })
 
 describe("compareAddresses - positive testing", () => {

@@ -6,7 +6,7 @@ import {
     getDeviceHasHardware,
     getIsDeviceEnrolled,
     getBiometricTypeAvailable,
-    authenticateWithBiometric,
+    authenticateWithBiometrics,
     isSecurityDowngrade,
     isSecurityUpgrade,
 } from "./Biometrics"
@@ -67,7 +67,7 @@ describe("authentication functions", () => {
         })
     })
 
-    describe("authenticateWithBiometric", () => {
+    describe("authenticateWithBiometrics", () => {
         it("should authenticate the user with the biometric authentication type available on the device", async () => {
             const mockResult = { success: true }
 
@@ -75,7 +75,7 @@ describe("authentication functions", () => {
                 LocalAuthentication.authenticateAsync as jest.Mock
             ).mockResolvedValue(mockResult)
 
-            const result = await authenticateWithBiometric()
+            const result = await authenticateWithBiometrics()
 
             expect(result).toBe(mockResult)
             expect(LocalAuthentication.authenticateAsync).toHaveBeenCalled()
@@ -89,7 +89,7 @@ describe("authentication functions", () => {
                 LocalAuthentication.authenticateAsync as jest.Mock
             ).mockResolvedValue(mockResult)
 
-            const result = await authenticateWithBiometric()
+            const result = await authenticateWithBiometrics()
             expect(result).toBe(mockResult)
             expect(LocalAuthentication.authenticateAsync).toHaveBeenCalled()
         })

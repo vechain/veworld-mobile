@@ -46,19 +46,21 @@ module.exports = {
      */
     collectCoverageFrom: [
         "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
+        "src/Common/Hooks/**/*.{js,jsx,ts,tsx}",
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
     coveragePathIgnorePatterns: [
+        "index.ts",
         "<rootDir>/src/Common/Hooks/useAppReset/useAppReset.tsx",
         "<rootDir>/src/Common/Utils/ConnectionUtils/ConnectionUtils.ts",
     ],
 
     coverageThreshold: {
         global: {
-            statements: 97.12,
-            branches: 89.34,
-            functions: 96.27,
-            lines: 97.3,
+            statements: 97.45,
+            branches: 89.35,
+            functions: 96.35,
+            lines: 97.58,
         },
     },
     reporters: ["default", "jest-junit"],
