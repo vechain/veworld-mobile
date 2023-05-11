@@ -2,10 +2,10 @@ import React from "react"
 import { useTheme } from "~Common"
 
 import { BaseIcon, BaseText, BaseTouchableBox } from "~Components"
-import { Device } from "~Model"
+import { BaseDevice } from "~Model"
 
 type Props = {
-    device: Device
+    device: BaseDevice
     onDeviceSelected: () => void
     isIconVisible?: boolean
 }

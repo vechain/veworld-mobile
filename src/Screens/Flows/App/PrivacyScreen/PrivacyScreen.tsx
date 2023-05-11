@@ -24,12 +24,12 @@ import {
     BackupMnemonicBottomSheet,
     WalletMgmtBottomSheet,
 } from "./Components"
-import { WALLET_STATUS } from "~Model"
+import { LocalDevice, WALLET_STATUS } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectAnalyticsTrackingEnabled,
-    selectDevices,
     selectIsAppLockActive,
+    selectLocalDevices,
 } from "~Storage/Redux/Selectors"
 
 import {
@@ -56,7 +56,7 @@ export const PrivacyScreen = () => {
     const isAnalyticsTrackingEnabled = useAppSelector(
         selectAnalyticsTrackingEnabled,
     )
-    const devices = useAppSelector(selectDevices())
+    const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
 
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
@@ -191,7 +191,7 @@ export const PrivacyScreen = () => {
                         mnemonicArray={mnemonicArray}
                     />
 
-                    <WalletMgmtBottomSheet
+                    <WalletMgmtBottomSheet<Device>
                         ref={walletMgmtBottomSheetRef}
                         onClose={handleOnSelectedWallet}
                         devices={devices}

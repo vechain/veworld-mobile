@@ -2,21 +2,25 @@ import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
-import { Device } from "~Model"
+import { BaseDevice } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { DeviceBox } from "../../WalletManagementScreen/components"
 import { useScrollableList, info } from "~Common"
 
-type Props = {
-    devices: Device[]
-    onClose: (device: Device) => void
+type Props<T extends BaseDevice = BaseDevice> = {
+    devices: T[]
+    onClose: (device: T) => void
 }
 
-export const WalletMgmtBottomSheet = React.forwardRef<
+interface WithForwardRefType extends React.FC<Props<BaseDevice>> {
+    <T extends BaseDevice>(props: Props<T>): ReturnType<React.FC<Props<T>>>
+}
+
+export const WalletMgmtBottomSheet: WithForwardRefType = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ devices, onClose }, ref) => {
+>(({ devices, onClose }, ref: React.Ref<BottomSheetModalMethods>) => {
     const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => ["30%", "90%"], [])
@@ -37,7 +41,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
     )
 
     const onDeviceSelected = useCallback(
-        (device: Device) => () => {
+        (device: BaseDevice) => () => {
             onClose(device)
         },
         [onClose],

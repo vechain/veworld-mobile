@@ -12,7 +12,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { VET } from "~Common/Constant/Token"
-import { FormattingUtils, LedgerUtils, AddressUtils } from "~Common/Utils"
+import { FormattingUtils, LedgerUtils } from "~Common/Utils"
 
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
@@ -25,7 +25,12 @@ import {
 } from "~Navigation"
 
 import useLedger, { LedgerStatus } from "~Common/Hooks/useLedger"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import {
+    addLedgerDevice,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { LedgerAccount } from "~Common/Utils/LedgerUtils/LedgerUtils"
 import { humanAddress } from "~Common/Utils/FormattingUtils/FormattingUtils"
 import { FlashList, ViewToken } from "@shopify/flash-list"
@@ -37,6 +42,7 @@ type Props = {} & NativeStackScreenProps<
 
 export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const { device } = route.params
+    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { styles: themedStyles, theme } = useThemedStyles(styles)
@@ -48,9 +54,24 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     const { status, rootAccount, connect } = useLedger(device, onDisconnect)
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
-    const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
+    const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<
+        number[]
+    >([])
     const [isScrollable, setIsScrollable] = useState(false)
 
+    const onConfirm = useCallback(async () => {
+        if (selectedAccountsIndex.length > 0 && rootAccount) {
+            dispatch(
+                addLedgerDevice(
+                    rootAccount,
+                    device.deviceModel,
+                    selectedAccountsIndex,
+                ),
+            )
+            nav.navigate(Routes.HOME)
+        }
+        showWarningToast("Not valid")
+    }, [selectedAccountsIndex, rootAccount, device, dispatch, nav])
     /**
      * When the root account changes, fetch the accounts and balances
      */
@@ -77,29 +98,19 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         item: LedgerAccount
         index: number
     }) => {
-        const isSelected = selectedAccounts.some(address =>
-            AddressUtils.compareAddresses(address, item.address),
-        )
+        const isSelected = selectedAccountsIndex.some(ind => ind === index)
 
         const style = isSelected
             ? themedStyles.selected
             : themedStyles.notSelected
 
         const onAccountClick = () => {
-            setSelectedAccounts(prev => {
-                const alreadySelected = prev.findIndex(address =>
-                    AddressUtils.compareAddresses(address, item.address),
-                )
+            setSelectedAccountsIndex(prev => {
+                const alreadySelected = prev.findIndex(ind => ind === index)
                 if (alreadySelected >= 0) {
-                    return prev.filter(
-                        address =>
-                            !AddressUtils.compareAddresses(
-                                address,
-                                item.address,
-                            ),
-                    )
+                    return prev.filter(ind => index !== ind)
                 } else {
-                    return [...prev, item.address]
+                    return [...prev, index]
                 }
             })
         }
@@ -180,7 +191,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         {!!ledgerAccounts.length && (
                             <FlashList
                                 data={ledgerAccounts}
-                                extraData={selectedAccounts}
+                                extraData={selectedAccountsIndex}
                                 scrollEnabled={isScrollable}
                                 onViewableItemsChanged={checkViewableItems}
                                 keyExtractor={item => item.address}
@@ -201,10 +212,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                 </BaseView>
                 <BaseView w={100}>
                     <BaseButton
-                        action={() => null}
+                        action={onConfirm}
                         w={100}
                         title={LL.COMMON_LBL_IMPORT()}
-                        disabled={!selectedAccounts.length}
+                        disabled={!selectedAccountsIndex.length}
                     />
                 </BaseView>
             </BaseView>

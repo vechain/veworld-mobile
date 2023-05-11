@@ -4,13 +4,13 @@ import { FlatList } from "react-native-gesture-handler"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
 import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
-import { Device } from "~Model"
+import { BaseDevice } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 
 type Props = {
-    selectedDevice?: Device
-    onDevicePress: (device: Device) => void
+    selectedDevice?: BaseDevice
+    onDevicePress: (device: BaseDevice) => void
     inBottomSheet?: boolean
 }
 export const DevicesList: React.FC<Props> = ({
@@ -21,13 +21,13 @@ export const DevicesList: React.FC<Props> = ({
     const devices = useAppSelector(selectDevices())
 
     const handleOnDevicePress = useCallback(
-        (device: Device) => () => {
+        (device: BaseDevice) => () => {
             onDevicePress(device)
         },
         [onDevicePress],
     )
     const renderItem = useCallback(
-        ({ item }: { item: Device }) => {
+        ({ item }: { item: BaseDevice }) => {
             const isSelected = compareAddresses(
                 item.rootAddress,
                 selectedDevice?.rootAddress,
