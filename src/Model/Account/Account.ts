@@ -1,4 +1,4 @@
-import { Device } from "~Model/Device"
+import { BaseDevice } from "~Model/Device"
 
 /**
  * The model for an Account in the wallet
@@ -26,6 +26,6 @@ export interface WalletAccount extends Account {
  * Grouping accounts by their device
  */
 export interface GroupedAccounts {
-    device: Device
+    device: BaseDevice
     accounts: WalletAccount[]
 }

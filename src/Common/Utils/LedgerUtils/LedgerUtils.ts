@@ -1,4 +1,4 @@
-import { Device, Network } from "~Model"
+import { LedgerDevice, Network } from "~Model"
 import { Mutex } from "async-mutex"
 import { Certificate, Transaction, HDNode } from "thor-devkit"
 import AddressUtils from "../AddressUtils"
@@ -24,7 +24,7 @@ const ledgerMutex = new Mutex()
 const signCertificate = async (
     index: number,
     cert: Certificate,
-    device: Device,
+    device: LedgerDevice,
     vetLedger: VETLedgerApp,
 ): Promise<Buffer> => {
     debug("Signing certificate")
@@ -61,7 +61,7 @@ const signCertificate = async (
 const signTransaction = async (
     index: number,
     transaction: Transaction,
-    device: Device,
+    device: LedgerDevice,
     vetLedger: VETLedgerApp,
     onIsAwaitingForSignature: () => void,
     onProgressUpdate?: (progress: number) => void,
