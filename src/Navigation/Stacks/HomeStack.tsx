@@ -20,18 +20,21 @@ import { Activity, FungibleToken, FungibleTokenWithBalance } from "~Model"
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
     [Routes.BUY]: undefined
-    [Routes.SELECT_TOKEN_SEND]: undefined
+    [Routes.SELECT_TOKEN_SEND]: { initialRoute: string }
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
+        initialRoute: string
     }
     [Routes.INSERT_ADDRESS_SEND]: {
         token: FungibleTokenWithBalance
         amount: string
+        initialRoute: string
     }
     [Routes.TRANSACTION_SUMMARY_SEND]: {
         token: FungibleTokenWithBalance
         amount: string
         address: string
+        initialRoute: string
     }
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined

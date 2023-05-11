@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
 import { HexUtils, ThorConstants, error } from "~Common"
@@ -10,17 +9,17 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
 import { Wallet } from "~Model"
 
 export const useSignTransaction = ({
     transaction,
+    onTXFinish,
 }: {
     transaction: Transaction.Body
+    onTXFinish: () => void
 }) => {
-    const nav = useNavigation()
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
@@ -91,13 +90,13 @@ export const useSignTransaction = ({
                     )
                 },
             )
-            nav.navigate(Routes.HOME)
             dispatch(updateAccountBalances(thorClient, account.address))
         } catch (e) {
             error(e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
-            nav.navigate(Routes.HOME)
         }
+
+        onTXFinish()
     }
 
     return { signTransaction }
