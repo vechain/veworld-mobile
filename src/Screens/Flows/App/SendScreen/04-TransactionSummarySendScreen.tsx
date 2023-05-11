@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
@@ -61,27 +61,26 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         address,
     })
 
-    const { signTransaction, isFinishedTx } = useSignTransaction({
-        transaction,
-    })
+    const onTXFinish = useCallback(() => {
+        switch (initialRoute) {
+            case Routes.HOME:
+                nav.navigate(Routes.HOME)
+                break
 
-    useEffect(() => {
-        if (isFinishedTx) {
-            switch (initialRoute) {
-                case Routes.HOME:
-                    nav.navigate(Routes.HOME)
-                    break
+            case Routes.DISCOVER:
+                nav.navigate(Routes.DISCOVER)
+                break
 
-                case Routes.DISCOVER:
-                    nav.navigate(Routes.DISCOVER)
-                    break
-
-                default:
-                    nav.navigate(Routes.HOME)
-                    break
-            }
+            default:
+                nav.navigate(Routes.HOME)
+                break
         }
-    }, [initialRoute, isFinishedTx, nav])
+    }, [initialRoute, nav])
+
+    const { signTransaction } = useSignTransaction({
+        transaction,
+        onTXFinish,
+    })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({

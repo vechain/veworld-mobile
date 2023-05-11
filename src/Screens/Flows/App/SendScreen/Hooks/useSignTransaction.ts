@@ -12,19 +12,19 @@ import {
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
 import { Wallet } from "~Model"
-import { useState } from "react"
 
 export const useSignTransaction = ({
     transaction,
+    onTXFinish,
 }: {
     transaction: Transaction.Body
+    onTXFinish: () => void
 }) => {
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
     const thorClient = useThor()
-    const [isFinishedTx, setIsFinishedTx] = useState(false)
     /**
      * send signed transaction with thorest apis
      */
@@ -96,8 +96,8 @@ export const useSignTransaction = ({
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
         }
 
-        setIsFinishedTx(true)
+        onTXFinish()
     }
 
-    return { signTransaction, isFinishedTx }
+    return { signTransaction }
 }
