@@ -130,7 +130,10 @@ const getAccountsWithBalances = async (
                     network,
                 )
 
-            accounts.push({ address: childNode.address, balance: balance })
+            accounts.push({
+                address: childNode.address,
+                balance: balance,
+            })
         } catch (e) {
             accounts.push({ address: childNode.address })
         }
