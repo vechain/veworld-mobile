@@ -121,7 +121,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
 
             <BaseSpacer height={16} />
 
-            {!!(activity.clauseMetadata && activity.clauseMetadata.length) && (
+            {!!activity.clauseMetadata?.length && (
                 <ClausesCarousel clausesMetadata={activity.clauseMetadata} />
             )}
 
