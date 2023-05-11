@@ -20,7 +20,11 @@ import {
     BaseButton,
 } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import {
+    RootStackParamListDiscover,
+    RootStackParamListHome,
+    Routes,
+} from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { COLORS, typography } from "~Common/Theme"
 import {
@@ -33,13 +37,13 @@ import { useNavigation } from "@react-navigation/native"
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<
-    RootStackParamListHome,
+    RootStackParamListHome & RootStackParamListDiscover,
     Routes.SELECT_AMOUNT_SEND
 >
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
-    const { token } = route.params
+    const { token, initialRoute } = route.params
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
     const [isInputInFiat, setIsInputInFiat] = useState(false)
@@ -112,6 +116,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
             amount: isInputInFiat ? rawTokenInput : input,
+            initialRoute: initialRoute ?? "",
         })
     }
 

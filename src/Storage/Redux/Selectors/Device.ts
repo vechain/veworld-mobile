@@ -19,7 +19,7 @@ export const selectHasOnboarded = createSelector(selectAll, state => {
  * @param rootAddress rootAddress of device to get
  * @returns the device with the given rootAddress
  */
-export const selectDevice = (rootAddress: string) =>
+export const selectDevice = (rootAddress?: string) =>
     createSelector(selectDevicesState, state => {
         return state.find(device => device.rootAddress === rootAddress)
     })
