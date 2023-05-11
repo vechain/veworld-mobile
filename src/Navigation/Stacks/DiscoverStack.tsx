@@ -4,16 +4,36 @@ import {
     AssetDetailScreen,
     BuyScreen,
     DiscoverScreen,
+    InsertAddressSendScreen,
+    SelectAmountSendScreen,
+    SelectTokenSendScreen,
     SwapScreen,
+    TransactionSummarySendScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { TokenWithCompleteInfo } from "~Model"
+import { FungibleTokenWithBalance, TokenWithCompleteInfo } from "~Model"
 
 export type RootStackParamListDiscover = {
     [Routes.DISCOVER]: undefined
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.BUY]: undefined
     [Routes.SWAP]: undefined
+    [Routes.SELECT_TOKEN_SEND]: { initialRoute: string }
+    [Routes.SELECT_AMOUNT_SEND]: {
+        token: FungibleTokenWithBalance
+        initialRoute: string
+    }
+    [Routes.INSERT_ADDRESS_SEND]: {
+        token: FungibleTokenWithBalance
+        amount: string
+        initialRoute: string
+    }
+    [Routes.TRANSACTION_SUMMARY_SEND]: {
+        token: FungibleTokenWithBalance
+        amount: string
+        address: string
+        initialRoute: string
+    }
 }
 
 const { Navigator, Group, Screen } =
@@ -43,6 +63,30 @@ export const DiscoverStack = () => {
                 <Screen
                     name={Routes.SWAP}
                     component={SwapScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.SELECT_TOKEN_SEND}
+                    component={SelectTokenSendScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.SELECT_AMOUNT_SEND}
+                    component={SelectAmountSendScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.INSERT_ADDRESS_SEND}
+                    component={InsertAddressSendScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.TRANSACTION_SUMMARY_SEND}
+                    component={TransactionSummarySendScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

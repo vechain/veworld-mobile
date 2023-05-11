@@ -21,7 +21,11 @@ import {
     BaseView,
     showWarningToast,
 } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import {
+    RootStackParamListDiscover,
+    RootStackParamListHome,
+    Routes,
+} from "~Navigation"
 import {
     selectCurrencyExchangeRate,
     selectCurrency,
@@ -32,14 +36,16 @@ import {
 import { useI18nContext } from "~i18n"
 import { useSendTransaction } from "./Hooks/useSendTransaction"
 import { useSignTransaction } from "./Hooks/useSignTransaction"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<
-    RootStackParamListHome,
+    RootStackParamListHome & RootStackParamListDiscover,
     Routes.TRANSACTION_SUMMARY_SEND
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address } = route.params
+    const nav = useNavigation()
+    const { token, amount, address, initialRoute } = route.params
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -65,8 +71,25 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         address,
     })
 
+    const onTXFinish = useCallback(() => {
+        switch (initialRoute) {
+            case Routes.HOME:
+                nav.navigate(Routes.HOME)
+                break
+
+            case Routes.DISCOVER:
+                nav.navigate(Routes.DISCOVER)
+                break
+
+            default:
+                nav.navigate(Routes.HOME)
+                break
+        }
+    }, [initialRoute, nav])
+
     const { signTransaction } = useSignTransaction({
         transaction,
+        onTXFinish,
     })
 
     const onIdentityConfirmed = useCallback(
