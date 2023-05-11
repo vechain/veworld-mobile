@@ -45,6 +45,18 @@ export const AssetDetailScreen = ({ route }: Props) => {
             },
 
             {
+                name: LL.BTN_SEND(),
+                action: () =>
+                    nav.navigate(Routes.SELECT_TOKEN_SEND, {
+                        initialRoute: Routes.DISCOVER,
+                    }),
+                icon: (
+                    <BaseIcon color={theme.colors.text} name="send-outline" />
+                ),
+                testID: "sendButton",
+            },
+
+            {
                 name: LL.BTN_SWAP(),
                 action: () => nav.navigate(Routes.SWAP),
                 icon: (
