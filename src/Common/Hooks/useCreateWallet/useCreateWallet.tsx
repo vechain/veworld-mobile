@@ -19,7 +19,8 @@ import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
 import { useBiometrics } from "../useBiometrics"
 /**
- * useCreateWalletWithPassword
+ * useCreateWallet
+ * @description Expose functions to create a local or hardware wallet
  * @returns
  */
 export const useCreateWallet = () => {

@@ -10,7 +10,7 @@ import { DeviceModel } from "@ledgerhq/devices"
  * - deviceModel: The model of the device
  * @category Ledger
  */
-export type LedgerDevice = {
+export type ConnectedLedgerDevice = {
     id: string
     isConnectable: boolean
     localName: string

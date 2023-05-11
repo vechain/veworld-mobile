@@ -16,8 +16,7 @@ import {
     SelectLedgerAccounts,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { SecurityLevelType } from "~Model"
-import { LedgerDevice } from "~Screens/Flows/WalletCreation/ImportHardwareWallet/types"
+import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
@@ -32,7 +31,7 @@ export type RootStackParamListOnboarding = {
     [Routes.APP_SECURITY]: undefined
     [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
-        device: LedgerDevice
+        device: ConnectedLedgerDevice
     }
     [Routes.WALLET_SUCCESS]:
         | {
