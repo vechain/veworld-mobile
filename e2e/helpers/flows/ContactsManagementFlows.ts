@@ -15,11 +15,15 @@ export const addNewContact = async (name: string, address: string) => {
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
+    await element(by.id("contact-name-input")).tap()
+
     await element(by.id("contact-name-input")).replaceText(name)
 
     await waitFor(element(by.id("contact-address-input")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
+
+    await element(by.id("contact-address-input")).tap()
 
     await element(by.id("contact-address-input")).replaceText(address)
 
@@ -58,6 +62,8 @@ export const editContact = async (
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
+    await element(by.id("contact-name-input")).tap()
+
     await element(by.id("contact-name-input")).replaceText(newName)
 
     //Hide keyboard
@@ -66,6 +72,8 @@ export const editContact = async (
     await waitFor(element(by.id("contact-address-input")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
+
+    await element(by.id("contact-address-input")).tap()
 
     await element(by.id("contact-address-input")).replaceText(newAddress)
 
@@ -80,16 +88,11 @@ export const editContact = async (
 }
 
 export const verifyContactExists = async (name: string, address: string) => {
-    await waitFor(element(by.text(name)))
+    await waitFor(element(by.id(`${address}-${name}`)))
         .toBeVisible()
         .withTimeout(LONG_TIMEOUT)
 
-    await waitFor(element(by.label(name)))
-        .toBeVisible()
-        .withTimeout(DEFAULT_TIMEOUT)
-
-    await element(by.label(name)).tap()
-    await element(by.label(name)).tap()
+    await element(by.id(`${address}-${name}`)).tap()
 
     await waitFor(element(by.text(address)))
         .toExist()
