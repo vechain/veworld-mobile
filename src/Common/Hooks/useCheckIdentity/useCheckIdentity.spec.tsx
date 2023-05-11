@@ -39,7 +39,7 @@ describe("useCheckIdentity", () => {
 
             jest.spyOn(
                 BiometricsUtils,
-                "authenticateWithBiometric",
+                "authenticateWithBiometrics",
             ).mockResolvedValue({
                 success: false,
                 error: "error",
@@ -66,7 +66,7 @@ describe("useCheckIdentity", () => {
 
             jest.spyOn(
                 BiometricsUtils,
-                "authenticateWithBiometric",
+                "authenticateWithBiometrics",
             ).mockResolvedValue({
                 success: true,
             })
