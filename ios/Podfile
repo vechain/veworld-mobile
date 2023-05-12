@@ -35,7 +35,9 @@ target 'VeWorld' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
+  
+  pod 'OpenSSL-Universal', :modular_headers => true, :configurations => ['Release']
+  
   target 'VeWorldTests' do
     inherit! :complete
     # Pods for testing
