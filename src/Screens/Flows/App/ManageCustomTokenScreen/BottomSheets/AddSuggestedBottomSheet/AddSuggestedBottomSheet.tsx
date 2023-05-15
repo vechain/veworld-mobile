@@ -41,13 +41,11 @@ export const AddSuggestedBottomSheet = React.forwardRef<
 
     const toggleToken = (token: FungibleTokenWithBalance) => () => {
         if (selectedTokens.includes(token.symbol)) {
-            setSelectedTokens(
-                selectedTokens.filter(
-                    selectedToken => selectedToken !== token.symbol,
-                ),
+            setSelectedTokens(s =>
+                s.filter(selectedToken => selectedToken !== token.symbol),
             )
         } else {
-            setSelectedTokens([...selectedTokens, token.symbol])
+            setSelectedTokens(s => [...s, token.symbol])
         }
     }
 
