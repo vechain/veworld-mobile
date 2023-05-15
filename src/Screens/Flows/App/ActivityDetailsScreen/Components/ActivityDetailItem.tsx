@@ -33,11 +33,7 @@ export const ActivityDetailItem: React.FC<Props> = memo(
                     </BaseText>
 
                     <BaseTouchable
-                        action={
-                            activityDetail.onValuePress
-                                ? activityDetail.onValuePress
-                                : () => {}
-                        }
+                        action={activityDetail.onValuePress}
                         disabled={!activityDetail.onValuePress}
                         style={baseStyles.valueContainer}>
                         <BaseText typographyFont="subSubTitle">
