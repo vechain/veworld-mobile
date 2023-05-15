@@ -1,23 +1,10 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
+import React, { memo, useMemo } from "react"
 import {
-    ColorThemeType,
     FormattingUtils,
-    GasUtils,
     VTHO,
     currencySymbolMap,
-    debug,
-    useTheme,
-    useThemedStyles,
+    useCopyClipboard,
 } from "~Common"
-import { DEFAULT_GAS_COEFFICIENT } from "~Common/Constant/Thor/ThorConstants"
-import {
-    BaseIcon,
-    BaseText,
-    BaseTouchable,
-    BaseView,
-    showInfoToast,
-    useThor,
-} from "~Components"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import {
     selectCurrency,
@@ -27,55 +14,27 @@ import {
 } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { useI18nContext } from "~i18n"
-import BigNumber from "bignumber.js"
-import { Alert, StyleSheet } from "react-native"
-import * as Clipboard from "expo-clipboard"
+import { ActivityDetail } from "../Type"
+import { useGasFee } from "../Hooks"
+import { ActivityDetailItem } from "./ActivityDetailItem"
 
 type Props = {
     activity: FungibleTokenActivity
     token?: FungibleToken
 }
 
-type FungibleTokenDetail = {
-    id: number
-    title: string
-    value: string
-    valueAdditional?: string
-    icon?: string
-    onValuePress?: () => void
-}
-
 export const FungibleTokenTransferDetails: React.FC<Props> = memo(
     ({ activity, token }) => {
         const { LL } = useI18nContext()
-
-        const thor = useThor()
-
-        const theme = useTheme()
 
         const network = useAppSelector(selectSelectedNetwork)
 
         const currency = useAppSelector(selectCurrency)
 
-        const { styles } = useThemedStyles(baseStyles)
+        const { onCopyToClipboard } = useCopyClipboard()
 
-        const [gasFeeInVTHO, setFeeInVTHO] = useState<BigNumber>()
-
-        /**
-         * Calculate the fee spent for the transaction in VTHO units (same as wei in Ethereum)
-         */
-        useEffect(() => {
-            if (activity.txReceipt) {
-                const gasBn = new BigNumber(activity.txReceipt.gasUsed)
-                GasUtils.calculateFee(thor, gasBn, DEFAULT_GAS_COEFFICIENT)
-                    .then(res => {
-                        setFeeInVTHO(res)
-                    })
-                    .catch(() =>
-                        showInfoToast("Info", "Gas fee may not be accurate."),
-                    )
-            }
-        }, [activity.txReceipt, thor])
+        const { gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent } =
+            useGasFee(activity)
 
         const amountTransferred = useMemo(() => {
             return FormattingUtils.humanNumber(
@@ -92,45 +51,18 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             selectCurrencyExchangeRate(state, token?.symbol ?? ""),
         )
 
-        const VTHOexchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, VTHO.symbol),
-        )
-
-        // Converts gas fee in wei to VTHO
-        const gasFeeInVTHOHumanReadable = useMemo(() => {
-            return FormattingUtils.scaleNumberDown(
-                gasFeeInVTHO ?? 0,
-                VTHO.decimals,
-                FormattingUtils.ROUND_DECIMAL_DEFAULT,
-            )
-        }, [gasFeeInVTHO])
-
         const fiatValueTransferred = useMemo(() => {
-            return FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(
-                    activity.amount as string,
-                    exchangeRate?.rate ?? 0,
-                    token?.decimals ?? 0,
-                ),
-                activity.amount,
-            )
-        }, [activity.amount, exchangeRate?.rate, token?.decimals])
-
-        const fiatValueGasFeeSpent = useMemo(() => {
-            return FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(
-                    gasFeeInVTHOHumanReadable,
-                    VTHOexchangeRate?.rate ?? 0,
-                    token?.decimals ?? 0,
-                ),
-                activity.amount,
-            )
-        }, [
-            VTHOexchangeRate?.rate,
-            activity.amount,
-            gasFeeInVTHOHumanReadable,
-            token?.decimals,
-        ])
+            if (exchangeRate?.rate && token)
+                return FormattingUtils.humanNumber(
+                    FormattingUtils.convertToFiatBalance(
+                        activity.amount as string,
+                        exchangeRate.rate,
+                        token.decimals,
+                    ),
+                    activity.amount,
+                )
+            return undefined
+        }, [activity.amount, exchangeRate?.rate, token])
 
         const transactionIDshort = useMemo(() => {
             return FormattingUtils.humanAddress(activity.id, 7, 9)
@@ -141,17 +73,23 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         }, [activity.txReceipt?.meta.blockNumber])
 
         // Details List
-        const details: Array<FungibleTokenDetail> = [
+        const details: Array<ActivityDetail> = [
             {
                 id: 1,
                 title: LL.VALUE_TITLE(),
                 value: `${amountTransferred} ${token?.symbol}`,
-                valueAdditional: `≈ ${fiatValueTransferred} ${currencySymbolMap[currency]}`,
+                typographyFont: "subSubTitle",
+                underline: false,
+                valueAdditional: fiatValueTransferred
+                    ? `≈ ${fiatValueTransferred} ${currencySymbolMap[currency]}`
+                    : "",
             },
             {
                 id: 2,
                 title: LL.GAS_FEE(),
-                value: `${gasFeeInVTHOHumanReadable} VTHO`,
+                value: `${gasFeeInVTHOHumanReadable} ${VTHO.symbol}`,
+                typographyFont: "subSubTitle",
+                underline: false,
                 valueAdditional: fiatValueGasFeeSpent
                     ? `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
                     : "",
@@ -160,98 +98,38 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
                 id: 3,
                 title: LL.TRANSACTION_ID(),
                 value: `${transactionIDshort}`,
-                icon: "copy",
-                onValuePress: () => onCopyToClipboard(activity.id),
+                typographyFont: "subSubTitle",
+                underline: false,
+                icon: "content-copy",
+                onValuePress: () =>
+                    onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
             },
             {
                 id: 4,
                 title: LL.BLOCK_NUMBER(),
                 value: `${blockNumber}`,
+                typographyFont: "subSubTitle",
+                underline: false,
             },
             {
                 id: 5,
                 title: LL.TITLE_NETWORK(),
                 value: network.name.toUpperCase(),
+                typographyFont: "subSubTitle",
+                underline: false,
             },
         ]
 
-        const onCopyToClipboard = useCallback(
-            (text: string) => {
-                Clipboard.setStringAsync(text)
-                    .then(() => {
-                        Alert.alert(
-                            LL.COMMON_LBL_SUCCESS(),
-                            LL.NOTIFICATION_COPIED_CLIPBOARD({
-                                name: LL.COMMON_LBL_ADDRESS(),
-                            }),
-                        )
-                    })
-                    .catch(error => {
-                        debug(error)
-                    })
-            },
-            [LL],
-        )
-
         return (
             <>
-                {details.map((detail: FungibleTokenDetail) => (
-                    <BaseView
+                {details.map((detail: ActivityDetail, index: number) => (
+                    <ActivityDetailItem
                         key={detail.id}
-                        w={100}
-                        flexDirection="row"
-                        style={styles.container}
-                        justifyContent="flex-start">
-                        <BaseView>
-                            <BaseText typographyFont="body" pb={5}>
-                                {detail.title}
-                            </BaseText>
-
-                            <BaseTouchable
-                                action={
-                                    detail.onValuePress
-                                        ? detail.onValuePress
-                                        : () => {}
-                                }
-                                disabled={!detail.onValuePress}
-                                style={styles.valueContainer}>
-                                <BaseText typographyFont="subSubTitle">
-                                    {detail.value}
-                                </BaseText>
-
-                                {detail.valueAdditional && (
-                                    <BaseText typographyFont="captionRegular">
-                                        {" "}
-                                        {detail.valueAdditional}
-                                    </BaseText>
-                                )}
-                                {detail.icon && (
-                                    <BaseView pl={3}>
-                                        <BaseIcon
-                                            name="content-copy"
-                                            size={12}
-                                            color={theme.colors.text}
-                                        />
-                                    </BaseView>
-                                )}
-                            </BaseTouchable>
-                        </BaseView>
-                    </BaseView>
+                        activityDetail={detail}
+                        border={index !== details.length - 1}
+                    />
                 ))}
             </>
         )
     },
 )
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        container: {
-            borderBottomColor: theme.colors.separator,
-            borderBottomWidth: 0.5,
-            height: 65,
-        },
-        valueContainer: {
-            flexDirection: "row",
-            alignItems: "center",
-        },
-    })
