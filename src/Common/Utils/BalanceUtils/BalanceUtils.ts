@@ -17,8 +17,6 @@ const getBalanceFromBlockchain = async (
     network: Network,
     thor: Connex.Thor,
 ): Promise<Balance> => {
-    // debug("Getting balances from the chain")
-
     try {
         // We get the balance differently depending on whether it's a VIP180 or VET/VTHO
         let balance: string
@@ -76,8 +74,6 @@ const getTokenBalanceFromBlockchain = async (
     tokenAddress: string,
     thor: Connex.Thor,
 ): Promise<string> => {
-    // debug("Getting token balance from the chain")
-
     try {
         const res = await thor
             .account(tokenAddress)

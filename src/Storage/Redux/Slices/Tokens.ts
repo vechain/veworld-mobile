@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { FungibleToken, TokenWithCompleteInfo } from "~Model"
+import {
+    FungibleToken,
+    FungibleTokenWithBalance,
+    TokenWithCompleteInfo,
+} from "~Model"
 import { TokenInfoResponse, TokensState } from "../Types"
 import { AddressUtils } from "~Common"
 
@@ -8,6 +12,7 @@ export const initialTokenState: TokensState = {
     dashboardChartData: {},
     assetDetailChartData: {},
     officialTokens: [],
+    suggestedTokens: [],
     coinGeckoTokens: [],
 }
 
@@ -58,6 +63,13 @@ export const TokenSlice = createSlice({
             state.officialTokens = action.payload
         },
 
+        setSuggestedTokens: (
+            state,
+            action: PayloadAction<FungibleTokenWithBalance[]>,
+        ) => {
+            state.suggestedTokens = action.payload
+        },
+
         setCoinGeckoTokens: (
             state,
             action: PayloadAction<TokenInfoResponse[]>,
@@ -73,4 +85,5 @@ export const {
     setOfficialTokens,
     setAssertDetailChartData,
     setCoinGeckoTokens,
+    setSuggestedTokens,
 } = TokenSlice.actions

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseButton,
@@ -10,8 +10,7 @@ import {
     BaseBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { AlertUtils, useThemedStyles } from "~Common"
-import * as Clipboard from "expo-clipboard"
+import { useCopyClipboard, useThemedStyles } from "~Common"
 import { StyleSheet } from "react-native"
 
 type Props = {
@@ -24,22 +23,12 @@ const snapPoints = ["45%"]
 export const BackupMnemonicBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ mnemonicArray, onClose }, ref) => {
+>(({ mnemonicArray }, ref) => {
     const { LL } = useI18nContext()
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const onCopyToClipboard = useCallback(async () => {
-        await Clipboard.setStringAsync(mnemonicArray.join(" "))
-        AlertUtils.showDefaultAlert(
-            LL.COMMON_LBL_SUCCESS(),
-            LL.BD_MNEMONIC_COPIED_TO_CLIPBOARD(),
-            LL.COMMON_BTN_DONE(),
-            () => {
-                onClose()
-            },
-        )
-    }, [LL, mnemonicArray, onClose])
+    const { onCopyToClipboard } = useCopyClipboard()
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
@@ -59,7 +48,12 @@ export const BackupMnemonicBottomSheet = React.forwardRef<
                 <BaseButton
                     size="sm"
                     selfAlign="flex-end"
-                    action={onCopyToClipboard}
+                    action={() =>
+                        onCopyToClipboard(
+                            mnemonicArray.join(" "),
+                            LL.TITLE_MNEMONIC(),
+                        )
+                    }
                     w={100}
                     title={LL.BTN_MNEMONIC_CLIPBOARD()}
                     disabled={!mnemonicArray.length}
