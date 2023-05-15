@@ -55,7 +55,14 @@ export const BaseTextInput = memo(
                 )}
                 <BaseView style={styles.container}>
                     <TextInput
-                        style={styles.input}
+                        style={[
+                            styles.input,
+                            {
+                                color: otherProps.editable
+                                    ? theme.colors.text
+                                    : theme.colors.textDisabled,
+                            },
+                        ]}
                         placeholder={placeholder}
                         placeholderTextColor={placeholderColor}
                         onChangeText={setValue}
@@ -113,7 +120,6 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
         },
         input: {
             flex: 1,
-            color: theme.colors.text,
             backgroundColor: theme.colors.card,
             borderColor: theme.colors.transparent,
             borderWidth: 1,

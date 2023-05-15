@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { info, useTheme } from "~Common"
+import { info, useCopyClipboard, useTheme } from "~Common"
 import {
     BaseIcon,
     BaseSpacer,
@@ -10,8 +10,6 @@ import {
     BaseBottomSheet,
 } from "~Components"
 
-import * as Clipboard from "expo-clipboard"
-import { Alert } from "react-native"
 import { useI18nContext } from "~i18n"
 import { useAppSelector } from "~Storage/Redux"
 import { selectSelectedAccount } from "~Storage/Redux/Selectors"
@@ -40,14 +38,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
         openAddAccountSheet()
     }, [onClose, openAddAccountSheet])
 
-    const onCopyToClipboard = useCallback(async () => {
-        if (!selectedAccount) return
-        await Clipboard.setStringAsync(selectedAccount.address)
-        Alert.alert(
-            LL.COMMON_LBL_SUCCESS(),
-            LL.NOTIFICATION_COPIED_CLIPBOARD({ name: LL.COMMON_LBL_ADDRESS() }),
-        )
-    }, [selectedAccount, LL])
+    const { onCopyToClipboard } = useCopyClipboard()
 
     return (
         <BaseBottomSheet
@@ -66,7 +57,16 @@ export const AccountManagementBottomSheet = React.forwardRef<
                 />
             </BaseView>
             <BaseSpacer height={24} />
-            <BaseTouchableBox action={onCopyToClipboard}>
+            <BaseTouchableBox
+                action={
+                    selectedAccount
+                        ? () =>
+                              onCopyToClipboard(
+                                  selectedAccount.address,
+                                  LL.COMMON_LBL_ADDRESS(),
+                              )
+                        : undefined
+                }>
                 <BaseIcon
                     name={"content-copy"}
                     size={18}

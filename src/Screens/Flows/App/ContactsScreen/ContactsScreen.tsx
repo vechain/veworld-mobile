@@ -32,7 +32,7 @@ import SwipeableItem, {
 import {
     AddContactButton,
     ContactDetailBox,
-    EditContactBottomSheet,
+    ContactManagementBottomSheet,
     UnderlayLeft,
 } from "./Components"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -135,7 +135,7 @@ export const ContactsScreen = () => {
         }
     }, [closeRemoveContactSheet, selectedContactAddress, dispatch])
 
-    const handleEditContact = useCallback(
+    const handleSaveContact = useCallback(
         (_alias: string, _address: string) => {
             if (selectedContactAddress) {
                 dispatch(editContact(_alias, _address, selectedContactAddress))
@@ -338,11 +338,11 @@ export const ContactsScreen = () => {
                     </BaseView>
                 }
             />
-            <EditContactBottomSheet
+            <ContactManagementBottomSheet
                 ref={editContactSheet}
                 contact={selectedContact}
                 onClose={closeEditContactSheet}
-                onEditContact={handleEditContact}
+                onSaveContact={handleSaveContact}
             />
         </BaseSafeArea>
     )

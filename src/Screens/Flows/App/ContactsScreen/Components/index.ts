@@ -1,5 +1,5 @@
 export * from "./ContactDetailBox"
 export * from "./AddContactButton"
-export * from "./EditContactBottomSheet"
+export * from "./ContactManagementBottomSheet"
 export * from "./Hooks"
 export * from "./UnderlayLeft"

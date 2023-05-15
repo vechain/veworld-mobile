@@ -233,6 +233,8 @@ const en: BaseTranslation = {
     COMMON_LBL_ENTER_THE: "Enter the {name}",
     COMMON_LBL_DEFAULT: "Default",
     COMMON_LBL_NO_TOKEN_DATA: "No available price history for {tokenName: string}",
+    COMMON_LBL_DATA: "Data",
+    COMMON_LBL_COMMENT: "Comment",
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
     COMMON_PRICE: "Price",
@@ -294,7 +296,7 @@ const en: BaseTranslation = {
     NETWORK_LABEL_OTHER_NETWORKS: "Other Networks",
 
     // Notifications
-    NOTIFICATION_COPIED_CLIPBOARD: "{name} copied to clipboard!",
+    NOTIFICATION_COPIED_CLIPBOARD: "{name} has been copied to the clipboard!",
     NOTIFICATION_transaction_reverted: "Transaction {txId} was reverted.",
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
@@ -326,6 +328,9 @@ const en: BaseTranslation = {
     MANAGE_TOKEN_SELECTED: "Selected",
     MANAGE_TOKEN_UNSELECTED: "Unselected",
     MANAGE_TOKEN_SEARCH_TOKEN: "Search a token",
+    MANAGE_TOKEN_SUGGESTED_TOKENS: "We have noticed that you have tokens with balance, add them directly from here",
+    MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: "Add tokens",
+    MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: "Suggested token",
 
     // Manage Custom tokens
     MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: "Add custom token",
@@ -399,6 +404,22 @@ const en: BaseTranslation = {
     DAPP_TRANSACTION: "DApp Transaction",
     SIGN_CERTIFICATE: "Sign certificate",
     SIGNED_CERTIFICATE: "Signed certificate",
+    ORIGIN: "Origin",
+    CONTENT: "Content",
+    STATUS: "Status",
+    ACTIVITIES_STATUS_pending: "Pending",
+    ACTIVITIES_STATUS_success: "Success",
+    ACTIVITIES_STATUS_reverted: "Reverted",
+    CONNECTED_APP_token_transfer: "Token transfer",
+    CONNECTED_APP_contract_call: "Contract call",
+    CONNECTED_APP_deploy_contract: "Contract deployment",
+    OUTCOMES: "Outcomes",
+    TYPE: "Type",
+    TOKEN_SYMBOL: "Token symbol",
+    CONTRACT_DATA: "Contract data",
+    CONTRACT_ABI: "Contract ABI",
+    COPY_ABI: "Click to copy ABI",
+
 
     // Transfers
 
