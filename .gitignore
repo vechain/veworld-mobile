@@ -31,6 +31,7 @@ local.properties
 *.iml
 *.hprof
 .cxx/
+android/app/src/main/assets
 
 # node.js
 #

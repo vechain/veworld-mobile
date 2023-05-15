@@ -5,6 +5,7 @@
     "scripts": {
         "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
         "install:all": "yarn install && npx pod-install",
+        "reinstall": "yarn purge && yarn install:all",
         "postinstall": "patch-package",
         "pods": "cd ios && pod install && cd ..",
         "doctor": "react-native doctor",
@@ -34,6 +35,7 @@
         "e2e.android.test.r": "detox test --configuration android.emu.release.31",
         "i18n": "typesafe-i18n",
         "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='./iOS'",
+        "build:android:debug": "./scripts/build-debug-apk.sh",
         "prepare": "husky install"
     },
     "dependencies": {
