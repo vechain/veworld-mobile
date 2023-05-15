@@ -1062,6 +1062,18 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: string
 	/**
+	 * W​e​ ​h​a​v​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​y​o​u​ ​h​a​v​e​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​b​a​l​a​n​c​e​,​ ​a​d​d​ ​t​h​e​m​ ​d​i​r​e​c​t​l​y​ ​f​r​o​m​ ​h​e​r​e
+	 */
+	MANAGE_TOKEN_SUGGESTED_TOKENS: string
+	/**
+	 * A​d​d​ ​t​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: string
+	/**
+	 * S​u​g​g​e​s​t​e​d​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: string
+	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
 	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: string
@@ -2265,6 +2277,18 @@ Please, try again later.
 	 * Search a token
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * We have noticed that you have tokens with balance, add them directly from here
+	 */
+	MANAGE_TOKEN_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Add tokens
+	 */
+	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Suggested token
+	 */
+	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: () => LocalizedString
 	/**
 	 * Add custom token
 	 */
