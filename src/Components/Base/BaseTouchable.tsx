@@ -8,7 +8,7 @@ import { BaseText } from "./BaseText"
 
 type Props = {
     title?: string
-    action: () => void
+    action?: () => void
     underlined?: boolean
 } & TouchableOpacityProps
 
@@ -16,7 +16,10 @@ export const BaseTouchable = (props: Props) => {
     const { action, title, underlined, style, children, ...otherProps } = props
 
     return (
-        <TouchableOpacity onPress={action} style={style} {...otherProps}>
+        <TouchableOpacity
+            onPress={action ? action : undefined}
+            style={style}
+            {...otherProps}>
             {title && (
                 <BaseText
                     typographyFont="bodyMedium"

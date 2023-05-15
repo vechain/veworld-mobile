@@ -26,9 +26,7 @@ export const ClauseDetail: React.FC<Props> = memo(
                 <BaseText typographyFont="buttonSecondary" pb={6}>
                     {title}
                 </BaseText>
-                <BaseTouchable
-                    action={onValuePress ? onValuePress : () => {}}
-                    disabled={!onValuePress}>
+                <BaseTouchable action={onValuePress} disabled={!onValuePress}>
                     <BaseView flexDirection="row" alignItems="center" pb={8}>
                         <BaseText typographyFont="subSubTitle">
                             {value}
