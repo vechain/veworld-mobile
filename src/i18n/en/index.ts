@@ -328,6 +328,9 @@ const en: BaseTranslation = {
     MANAGE_TOKEN_SELECTED: "Selected",
     MANAGE_TOKEN_UNSELECTED: "Unselected",
     MANAGE_TOKEN_SEARCH_TOKEN: "Search a token",
+    MANAGE_TOKEN_SUGGESTED_TOKENS: "We have noticed that you have tokens with balance, add them directly from here",
+    MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: "Add tokens",
+    MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: "Suggested token",
 
     // Manage Custom tokens
     MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: "Add custom token",
