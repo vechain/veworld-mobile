@@ -6,6 +6,7 @@ import { AddressUtils } from "~Common"
 export const initialTokenState: TokensState = {
     custom: [],
     dashboardChartData: {},
+    assetDetailChartData: {},
     officialTokens: [],
     coinGeckoTokens: [],
 }
@@ -42,6 +43,14 @@ export const TokenSlice = createSlice({
             state.dashboardChartData[symbol] = data
         },
 
+        setAssertDetailChartData: (
+            state,
+            action: PayloadAction<{ symbol: string; data: number[][] }>,
+        ) => {
+            const { symbol, data } = action.payload
+            state.assetDetailChartData[symbol] = data
+        },
+
         setOfficialTokens: (
             state,
             action: PayloadAction<TokenWithCompleteInfo[]>,
@@ -62,5 +71,6 @@ export const {
     addOrUpdateCustomToken,
     setDashboardChartData,
     setOfficialTokens,
+    setAssertDetailChartData,
     setCoinGeckoTokens,
 } = TokenSlice.actions

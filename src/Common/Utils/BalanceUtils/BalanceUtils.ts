@@ -1,7 +1,7 @@
 import { VET, VTHO } from "~Common/Constant"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
-import { debug, error } from "~Common/Logger"
+import { error } from "~Common/Logger"
 import { Network, Balance } from "~Model"
 import AddressUtils from "../AddressUtils"
 
@@ -17,7 +17,7 @@ const getBalanceFromBlockchain = async (
     network: Network,
     thor: Connex.Thor,
 ): Promise<Balance> => {
-    debug("Getting balances from the chain")
+    // debug("Getting balances from the chain")
 
     try {
         // We get the balance differently depending on whether it's a VIP180 or VET/VTHO
@@ -62,7 +62,7 @@ const getVetAndVthoBalancesFromBlockchain = async (
     address: string,
     network: Network,
 ): Promise<Connex.Thor.Account> => {
-    debug("Getting VET and VTHO balances from the chain")
+    // debug("Getting VET and VTHO balances from the chain")
 
     const accountResponse = await axios.get<Connex.Thor.Account>(
         `${network.currentUrl}/accounts/${address}`,
@@ -76,7 +76,7 @@ const getTokenBalanceFromBlockchain = async (
     tokenAddress: string,
     thor: Connex.Thor,
 ): Promise<string> => {
-    debug("Getting token balance from the chain")
+    // debug("Getting token balance from the chain")
 
     try {
         const res = await thor

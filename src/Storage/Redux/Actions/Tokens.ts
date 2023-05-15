@@ -5,13 +5,16 @@ import {
     COINGECKO_MARKET_CHART_ENDPOINT,
     error,
     EXCHANGE_CLIENT_AXIOS_OPTS,
-    getCoinGeckoIdBySymbol,
-    debug,
     COINGECKO_TOKEN_ENDPOINT,
+    getCoinGeckoIdBySymbol,
 } from "~Common"
 import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
-import { selectCurrency } from "../Selectors"
-import { setCoinGeckoTokens, setDashboardChartData } from "../Slices"
+import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
+import {
+    setAssertDetailChartData,
+    setCoinGeckoTokens,
+    setDashboardChartData,
+} from "../Slices"
 import { AppThunkDispatch, RootState, TokenInfoResponse } from "../Types"
 const allSettled = require("promise.allsettled")
 import { fetchExchangeRates } from "./Currency"
@@ -25,18 +28,26 @@ export const fetchDashboardChartData =
         symbol,
         days,
         interval,
+        isFixedInterval = true,
     }: {
         symbol: string
         days: string | number
         interval: string
+        isFixedInterval?: boolean
     }) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         const currency = selectCurrency(getState())
         const coin = getCoinGeckoIdBySymbol[symbol]
+        const coinGeckoTokens = selectCoinGeckoTokens(getState())
+        const foundCoin = coinGeckoTokens.find(
+            t => t.symbol.toLowerCase() === symbol.toLowerCase(),
+        )
 
         try {
             const pricesResponse = await axios.get<CoinMarketChartResponse>(
-                COINGECKO_MARKET_CHART_ENDPOINT(coin),
+                COINGECKO_MARKET_CHART_ENDPOINT(
+                    foundCoin ? foundCoin?.id : coin,
+                ),
                 {
                     ...EXCHANGE_CLIENT_AXIOS_OPTS,
                     params: {
@@ -48,7 +59,16 @@ export const fetchDashboardChartData =
             )
 
             const prices = pricesResponse.data.prices
-            dispatch(setDashboardChartData({ symbol, data: prices }))
+            if (isFixedInterval) {
+                dispatch(setDashboardChartData({ symbol, data: prices }))
+            } else {
+                dispatch(setAssertDetailChartData({ symbol, data: prices }))
+            }
+
+            // this will run only the first time ever
+            if (!coinGeckoTokens.length) {
+                dispatch(setAssertDetailChartData({ symbol, data: prices }))
+            }
         } catch (e) {
             error(e)
         }
@@ -129,7 +149,7 @@ export const getTokensFromGithub = async ({
 }: {
     network: Network
 }): Promise<FungibleToken[]> => {
-    debug("Getting tokens from github")
+    // debug("Getting tokens from github")
 
     let tokens: FungibleToken[] = []
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react"
 import {
     fetchDashboardChartData,
-    selectDashboardChartData,
+    selectAssetDetailChartData,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -21,6 +21,7 @@ export const useChartData = (symbol: string) => {
                     symbol: symbol,
                     days: days,
                     interval: interval,
+                    isFixedInterval: false,
                 }),
             )
         },
@@ -32,7 +33,7 @@ export const useChartData = (symbol: string) => {
     }, [dispatch, getChartData, symbol])
 
     const chartData: TokenChartData[] = useAppSelector(state =>
-        selectDashboardChartData(symbol, state),
+        selectAssetDetailChartData(symbol, state),
     )
 
     return { chartData, getChartData }
