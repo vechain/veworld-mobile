@@ -195,8 +195,10 @@ export const ContactsScreen = () => {
                         scrollEnabled={isListScrollable}
                         ListFooterComponent={<BaseSpacer height={20} />}
                         renderItem={({ item: contact }) => {
+                            const contactId = `${contact.address}-${contact.alias}`
+
                             return (
-                                <BaseView mx={20}>
+                                <BaseView mx={20} testID={contactId}>
                                     <SwipeableItem
                                         ref={ref =>
                                             registerSwipeableItemRef(

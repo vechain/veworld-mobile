@@ -1,7 +1,13 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
+import {
+    CryptoUtils,
+    FormattingUtils,
+    VTHO,
+    useCheckIdentity,
+    useTheme,
+} from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
     AccountIcon,
@@ -13,25 +19,33 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    showWarningToast,
 } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import {
+    RootStackParamListDiscover,
+    RootStackParamListHome,
+    Routes,
+} from "~Navigation"
 import {
     selectCurrencyExchangeRate,
     selectCurrency,
     selectSelectedAccount,
     useAppSelector,
+    selectDevice,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useSendTransaction } from "./Hooks/useSendTransaction"
 import { useSignTransaction } from "./Hooks/useSignTransaction"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<
-    RootStackParamListHome,
+    RootStackParamListHome & RootStackParamListDiscover,
     Routes.TRANSACTION_SUMMARY_SEND
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address } = route.params
+    const nav = useNavigation()
+    const { token, amount, address, initialRoute } = route.params
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -40,6 +54,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
+    const selectedDevice = useAppSelector(selectDevice(account?.rootAddress))
+
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
             amount || "0",
@@ -55,13 +71,49 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         address,
     })
 
+    const onTXFinish = useCallback(() => {
+        switch (initialRoute) {
+            case Routes.HOME:
+                nav.navigate(Routes.HOME)
+                break
+
+            case Routes.DISCOVER:
+                nav.navigate(Routes.DISCOVER)
+                break
+
+            default:
+                nav.navigate(Routes.HOME)
+                break
+        }
+    }, [initialRoute, nav])
+
     const { signTransaction } = useSignTransaction({
         transaction,
+        onTXFinish,
     })
+
+    const onIdentityConfirmed = useCallback(
+        async (password?: string) => {
+            if (!selectedDevice) return
+
+            //local mnemonic, identity already verified via useCheckIdentity
+            if ("wallet" in selectedDevice) {
+                const { decryptedWallet } = await CryptoUtils.decryptWallet(
+                    selectedDevice,
+                    password,
+                )
+                await signTransaction(decryptedWallet)
+            } else {
+                // TODO: support hardware wallet
+                showWarningToast("Hardware wallet not supported yet")
+            }
+        },
+        [selectedDevice, signTransaction],
+    )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed: signTransaction,
+            onIdentityConfirmed,
         })
     const gasFees = gas?.gas
         ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that

@@ -13,16 +13,20 @@ import {
     BaseTextInput,
     BaseView,
 } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import {
+    RootStackParamListDiscover,
+    RootStackParamListHome,
+    Routes,
+} from "~Navigation"
 import { useI18nContext } from "~i18n"
 
 type Props = NativeStackScreenProps<
-    RootStackParamListHome,
+    RootStackParamListHome & RootStackParamListDiscover,
     Routes.INSERT_ADDRESS_SEND
 >
 
 export const InsertAddressSendScreen = ({ route }: Props) => {
-    const { token, amount } = route.params
+    const { token, amount, initialRoute } = route.params
     const { LL } = useI18nContext()
     const [address, setAddress] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
@@ -48,8 +52,10 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             token,
             amount,
             address,
+            initialRoute: initialRoute ?? "",
         })
     }
+
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />

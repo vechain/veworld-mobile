@@ -47,6 +47,6 @@ const baseStyles = (theme: ColorThemeType) =>
             ...theme.shadows.card,
             paddingHorizontal: 20,
             justifyContent: "center",
-            minWidth: 182,
+            minWidth: 273,
         },
     })

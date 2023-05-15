@@ -24,7 +24,7 @@ export const getBiometricTypeAvailable = async () => {
     return LocalAuthentication.AuthenticationType[type] as TAuthentication
 }
 
-export const authenticateWithBiometric = async () => {
+export const authenticateWithBiometrics = async () => {
     const locale = i18n.detectLocale()
     const promptMessage = i18n.i18n()[locale].BIOMETRICS_PROMPT()
     const cancelLabel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
