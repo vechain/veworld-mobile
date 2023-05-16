@@ -1,15 +1,12 @@
-import { Dimensions, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import React, { useMemo } from "react"
 import { LineChart } from "react-native-wagmi-charts"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles, SCREEN_WIDTH } from "~Common"
 import * as haptics from "expo-haptics"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { AssetPriceBanner } from "./AssetPriceBanner"
 import { TokenWithCompleteInfo } from "~Model"
 import { useI18nContext } from "~i18n"
-
-const PADDING = 20
-const SPACE = Dimensions.get("window").width
 
 type TokenChartData = {
     timestamp: number
@@ -39,7 +36,7 @@ export const ChartView = ({
                     w={100}
                     alignItems="flex-end"
                     style={[styles.container, styles.negativeMargin]}>
-                    <LineChart height={180} width={SPACE} yGutter={20}>
+                    <LineChart height={180} width={SCREEN_WIDTH} yGutter={20}>
                         <LineChart.Path color={theme.colors.primary} width={2}>
                             <LineChart.Gradient lastGradientValue={0} />
                         </LineChart.Path>
@@ -108,12 +105,12 @@ export const ChartView = ({
     )
 }
 
-const baseStyles = (_theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
         priceText: { opacity: 0 },
         container: { maxHeight: 180 },
         negativeMargin: { marginLeft: -20 },
-        fullWidth: { width: SPACE - PADDING * 2 },
+        fullWidth: { width: SCREEN_WIDTH - 20 * 2 },
         absolutePosition: {
             position: "absolute",
             top: 0,
