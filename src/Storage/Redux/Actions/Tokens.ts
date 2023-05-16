@@ -149,8 +149,6 @@ export const getTokensFromGithub = async ({
 }: {
     network: Network
 }): Promise<FungibleToken[]> => {
-    // debug("Getting tokens from github")
-
     let tokens: FungibleToken[] = []
 
     if (

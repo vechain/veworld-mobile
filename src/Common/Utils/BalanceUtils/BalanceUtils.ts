@@ -60,8 +60,6 @@ const getVetAndVthoBalancesFromBlockchain = async (
     address: string,
     network: Network,
 ): Promise<Connex.Thor.Account> => {
-    // debug("Getting VET and VTHO balances from the chain")
-
     const accountResponse = await axios.get<Connex.Thor.Account>(
         `${network.currentUrl}/accounts/${address}`,
     )

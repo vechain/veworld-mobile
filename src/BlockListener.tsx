@@ -96,7 +96,6 @@ const BlockListener: React.FC = () => {
     const onMessage = async (ev: WebSocketMessageEvent) => {
         dispatch(updateNodeError(false))
         const beat: Beat = JSON.parse(ev.data)
-        // debug(`Got a new beat (${beatUrl}). Block number:  ${beat.number}`)
         await handleBeat(beat, allTokensWithBalance, visibleAccounts)
     }
 
