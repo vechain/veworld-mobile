@@ -1,18 +1,55 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Common"
 import { RootState } from "../Types"
+import { selectDevicesState } from "./Device"
+import { AccountWithDevice } from "~Model"
 
 const selectAccountsState = (state: RootState) => state.accounts
+
+/**
+ * @returns all the accounts
+ */
+export const selectAccounts = createSelector(
+    selectAccountsState,
+    selectDevicesState,
+    (state, devices) => {
+        return state.accounts.map(account => {
+            const device = devices.find(
+                _device => _device.rootAddress === account.rootAddress,
+            )
+            if (!device) {
+                throw new Error(
+                    `No device found for account ${account.address}`,
+                )
+            }
+            return {
+                ...account,
+                device,
+            }
+        }) as AccountWithDevice[]
+    },
+)
+
+/**
+ * @returns all the accounts
+ */
+export const selectSelectedAccountAddress = createSelector(
+    selectAccountsState,
+    state => {
+        return state.selectedAccount
+    },
+)
 
 /**
  * @returns the selected account
  */
 export const selectSelectedAccount = createSelector(
-    selectAccountsState,
-    state => {
-        return state.accounts.find(account =>
+    selectAccounts,
+    selectSelectedAccountAddress,
+    (accounts, selectedAccountAddress) => {
+        return accounts.find(account =>
             AddressUtils.compareAddresses(
-                state.selectedAccount,
+                selectedAccountAddress,
                 account.address,
             ),
         )
@@ -20,19 +57,29 @@ export const selectSelectedAccount = createSelector(
 )
 
 /**
- * @returns all the accounts
- */
-export const selectAccounts = createSelector(selectAccountsState, state => {
-    return state.accounts
-})
-
-/**
  * @returns all the visibile accounts
  */
 export const selectVisibleAccounts = createSelector(
-    selectAccountsState,
-    state => {
-        return state.accounts.filter(account => account.visible)
+    selectAccounts,
+    accounts => {
+        return accounts.filter(account => account.visible)
+    },
+)
+
+/**
+ * @returns all the visibile accounts but the selected one
+ */
+export const selectAccountsButSelected = createSelector(
+    selectAccounts,
+    selectSelectedAccountAddress,
+    (accounts, selectedAccountAddress) => {
+        return accounts.filter(
+            account =>
+                !AddressUtils.compareAddresses(
+                    selectedAccountAddress,
+                    account.address,
+                ),
+        )
     },
 )
 
@@ -42,8 +89,8 @@ export const selectVisibleAccounts = createSelector(
  * @returns  all accounts for the given device
  */
 export const selectAccountsByDevice = (rootAddress?: string) =>
-    createSelector(selectAccountsState, state => {
-        return state.accounts.filter(account =>
+    createSelector(selectAccounts, accounts => {
+        return accounts.filter(account =>
             AddressUtils.compareAddresses(rootAddress, account.rootAddress),
         )
     })

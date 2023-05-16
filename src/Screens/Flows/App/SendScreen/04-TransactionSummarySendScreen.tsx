@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import {
@@ -10,12 +10,14 @@ import {
 } from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
+    AccountCard,
     AccountIcon,
     BackButtonHeader,
     BaseButton,
     BaseCardGroup,
     BaseIcon,
     BaseSafeArea,
+    BaseScrollView,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -37,6 +39,9 @@ import { useI18nContext } from "~i18n"
 import { useSendTransaction } from "./Hooks/useSendTransaction"
 import { useSignTransaction } from "./Hooks/useSignTransaction"
 import { useNavigation } from "@react-navigation/native"
+import { DelegationType } from "~Model/Delegation"
+import { DelegationOptions } from "./Components"
+import { AccountWithDevice } from "~Model"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -48,6 +53,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { token, amount, address, initialRoute } = route.params
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const [selectedDelegationOption, setSelectedDelegationOption] =
+        useState<DelegationType>(DelegationType.NONE)
+    const [selectedAccount, setSelectedAccount] = useState<AccountWithDevice>()
 
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
@@ -119,135 +127,152 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
         : "N.A."
     return (
-        <BaseSafeArea grow={1} style={styles.safeArea}>
-            <BaseView style={styles.container}>
-                <BackButtonHeader />
-                <BaseView mx={24}>
-                    <BaseText typographyFont="title">
-                        {LL.SEND_TOKEN_TITLE()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
-                </BaseView>
-                <BaseCardGroup
-                    views={[
-                        {
-                            children: (
-                                <BaseView
-                                    flex={1}
-                                    style={styles.addressContainer}>
-                                    <BaseText typographyFont="captionBold">
-                                        {LL.SEND_FROM()}
-                                    </BaseText>
-                                    <BaseSpacer height={8} />
-                                    <BaseView flexDirection="row">
-                                        <AccountIcon
-                                            address={account?.address || ""}
-                                        />
-                                        <BaseSpacer width={8} />
-                                        <BaseView>
-                                            <BaseText typographyFont="subSubTitle">
-                                                {account?.alias}
-                                            </BaseText>
-                                            <BaseText typographyFont="captionRegular">
-                                                {FormattingUtils.humanAddress(
-                                                    account?.address || "",
-                                                )}
-                                            </BaseText>
-                                        </BaseView>
-                                    </BaseView>
-                                    <BaseIcon
-                                        name={"arrow-down"}
-                                        size={20}
-                                        color={COLORS.WHITE}
-                                        bg={COLORS.DARK_PURPLE_DISABLED}
-                                        style={styles.icon}
-                                    />
-                                </BaseView>
-                            ),
-                            style: styles.addressView,
-                        },
-                        {
-                            children: (
-                                <BaseView flex={1}>
-                                    <BaseText typographyFont="captionBold">
-                                        {LL.SEND_TO()}
-                                    </BaseText>
-                                    <BaseSpacer height={8} />
-                                    <BaseView flexDirection="row">
-                                        <AccountIcon address={address} />
-                                        <BaseSpacer width={8} />
-                                        <BaseView>
-                                            <BaseText typographyFont="subSubTitle">
-                                                {FormattingUtils.humanAddress(
-                                                    address,
-                                                )}
-                                            </BaseText>
-                                        </BaseView>
-                                    </BaseView>
-                                </BaseView>
-                            ),
-                        },
-                    ]}
-                />
-                <BaseView mx={24}>
-                    <BaseSpacer height={24} />
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.SEND_DETAILS()}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseText typographyFont="buttonSecondary">
-                        {LL.SEND_AMOUNT()}
-                    </BaseText>
-                    <BaseSpacer height={6} />
-                    <BaseView flexDirection="row">
-                        <BaseText typographyFont="subSubTitle">
-                            {amount} {token.symbol}
+        <BaseSafeArea grow={1}>
+            <BaseScrollView>
+                <BaseView style={styles.container}>
+                    <BackButtonHeader />
+                    <BaseView mx={24}>
+                        <BaseText typographyFont="title">
+                            {LL.SEND_TOKEN_TITLE()}
                         </BaseText>
-                        {exchangeRate && (
-                            <BaseText typographyFont="buttonSecondary">
-                                {" ≈ "}
-                                {formattedFiatAmount} {currency}
-                            </BaseText>
-                        )}
+                        <BaseSpacer height={24} />
                     </BaseView>
-                    <BaseSpacer height={12} />
-                    <BaseSpacer
-                        height={0.5}
-                        width={"100%"}
-                        background={theme.colors.textDisabled}
+                    <BaseCardGroup
+                        views={[
+                            {
+                                children: (
+                                    <BaseView
+                                        flex={1}
+                                        style={styles.addressContainer}>
+                                        <BaseText typographyFont="captionBold">
+                                            {LL.SEND_FROM()}
+                                        </BaseText>
+                                        <BaseSpacer height={8} />
+                                        <BaseView flexDirection="row">
+                                            <AccountIcon
+                                                address={account?.address || ""}
+                                            />
+                                            <BaseSpacer width={8} />
+                                            <BaseView>
+                                                <BaseText typographyFont="subSubTitle">
+                                                    {account?.alias}
+                                                </BaseText>
+                                                <BaseText typographyFont="captionRegular">
+                                                    {FormattingUtils.humanAddress(
+                                                        account?.address || "",
+                                                    )}
+                                                </BaseText>
+                                            </BaseView>
+                                        </BaseView>
+                                        <BaseIcon
+                                            name={"arrow-down"}
+                                            size={20}
+                                            color={COLORS.WHITE}
+                                            bg={COLORS.DARK_PURPLE_DISABLED}
+                                            style={styles.icon}
+                                        />
+                                    </BaseView>
+                                ),
+                                style: styles.addressView,
+                            },
+                            {
+                                children: (
+                                    <BaseView flex={1}>
+                                        <BaseText typographyFont="captionBold">
+                                            {LL.SEND_TO()}
+                                        </BaseText>
+                                        <BaseSpacer height={8} />
+                                        <BaseView flexDirection="row">
+                                            <AccountIcon address={address} />
+                                            <BaseSpacer width={8} />
+                                            <BaseView>
+                                                <BaseText typographyFont="subSubTitle">
+                                                    {FormattingUtils.humanAddress(
+                                                        address,
+                                                    )}
+                                                </BaseText>
+                                            </BaseView>
+                                        </BaseView>
+                                    </BaseView>
+                                ),
+                            },
+                        ]}
                     />
-                    <BaseSpacer height={12} />
-                    <BaseText typographyFont="buttonSecondary">
-                        {LL.SEND_GAS_FEE()}
-                    </BaseText>
-                    <BaseSpacer height={6} />
-                    <BaseText typographyFont="subSubTitle">
-                        {gasFees} {VTHO.symbol}
-                    </BaseText>
-                    <BaseSpacer height={12} />
-                    <BaseSpacer
-                        height={0.5}
-                        width={"100%"}
-                        background={theme.colors.textDisabled}
-                    />
-                    <BaseSpacer height={12} />
-                    <BaseText typographyFont="buttonSecondary">
-                        {LL.SEND_ESTIMATED_TIME()}
-                    </BaseText>
-                    <BaseSpacer height={6} />
-                    <BaseText typographyFont="subSubTitle">
-                        {/** TODO: copied from extension, understand if it is fixed as "less than 1 min" */}
-                        {LL.SEND_LESS_THAN_1_MIN()}
-                    </BaseText>
+                    <BaseView mx={24}>
+                        <DelegationOptions
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationOption={
+                                setSelectedDelegationOption
+                            }
+                            setSelectedAccount={setSelectedAccount}
+                            selectedAccount={selectedAccount}
+                        />
+                        {selectedAccount && (
+                            <>
+                                <BaseSpacer height={16} />
+                                <AccountCard account={selectedAccount} />
+                            </>
+                        )}
+                        <BaseSpacer height={24} />
+                        <BaseText typographyFont="subTitleBold">
+                            {LL.SEND_DETAILS()}
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="buttonSecondary">
+                            {LL.SEND_AMOUNT()}
+                        </BaseText>
+                        <BaseSpacer height={6} />
+                        <BaseView flexDirection="row">
+                            <BaseText typographyFont="subSubTitle">
+                                {amount} {token.symbol}
+                            </BaseText>
+                            {exchangeRate && (
+                                <BaseText typographyFont="buttonSecondary">
+                                    {" ≈ "}
+                                    {formattedFiatAmount} {currency}
+                                </BaseText>
+                            )}
+                        </BaseView>
+                        <BaseSpacer height={12} />
+                        <BaseSpacer
+                            height={0.5}
+                            width={"100%"}
+                            background={theme.colors.textDisabled}
+                        />
+                        <BaseSpacer height={12} />
+                        <BaseText typographyFont="buttonSecondary">
+                            {LL.SEND_GAS_FEE()}
+                        </BaseText>
+                        <BaseSpacer height={6} />
+                        <BaseText typographyFont="subSubTitle">
+                            {gasFees} {VTHO.symbol}
+                        </BaseText>
+                        <BaseSpacer height={12} />
+                        <BaseSpacer
+                            height={0.5}
+                            width={"100%"}
+                            background={theme.colors.textDisabled}
+                        />
+                        <BaseSpacer height={12} />
+                        <BaseText typographyFont="buttonSecondary">
+                            {LL.SEND_ESTIMATED_TIME()}
+                        </BaseText>
+                        <BaseSpacer height={6} />
+                        <BaseText typographyFont="subSubTitle">
+                            {/** TODO: copied from extension, understand if it is fixed as "less than 1 min" */}
+                            {LL.SEND_LESS_THAN_1_MIN()}
+                        </BaseText>
+                        <BaseSpacer height={24} />
+                    </BaseView>
                 </BaseView>
-            </BaseView>
-            <BaseButton
-                style={styles.nextButton}
-                mx={24}
-                title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                action={checkIdentityBeforeOpening}
-            />
-            <ConfirmIdentityBottomSheet />
+                <BaseButton
+                    style={styles.nextButton}
+                    mx={24}
+                    title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
+                    action={checkIdentityBeforeOpening}
+                />
+                <ConfirmIdentityBottomSheet />
+            </BaseScrollView>
         </BaseSafeArea>
     )
 }
@@ -258,9 +283,6 @@ const styles = StyleSheet.create({
         right: 16,
         bottom: -32,
         padding: 8,
-    },
-    safeArea: {
-        justifyContent: "space-between",
     },
     container: {
         alignItems: "stretch",
