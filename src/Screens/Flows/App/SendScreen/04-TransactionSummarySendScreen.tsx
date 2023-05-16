@@ -56,6 +56,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const [selectedDelegationOption, setSelectedDelegationOption] =
         useState<DelegationType>(DelegationType.NONE)
     const [selectedAccount, setSelectedAccount] = useState<AccountWithDevice>()
+    const [selectedDelegationUrl, setSelectedDelegationUrl] = useState<string>()
 
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
@@ -206,6 +207,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                             }
                             setSelectedAccount={setSelectedAccount}
                             selectedAccount={selectedAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
                         />
                         {selectedAccount && (
                             <>

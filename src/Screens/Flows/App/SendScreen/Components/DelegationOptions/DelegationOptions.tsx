@@ -5,8 +5,12 @@ import { BaseButtonGroupHorizontalType, AccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { SelectAccountBottomSheet } from "../SelectAccountBottomSheet"
 import { useBottomSheetModal } from "~Common"
+import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
+import { SelectUrlBottomSheet } from "../SelectUrlBottomSheet"
 
 type Props = {
+    selectedDelegationUrl: string
+    setSelectedDelegationUrl: (url?: string) => void
     selectedDelegationOption: DelegationType
     setSelectedDelegationOption: (id: DelegationType) => void
     setSelectedAccount: (account?: AccountWithDevice) => void
@@ -19,12 +23,20 @@ export const DelegationOptions = ({
     setSelectedDelegationOption,
     setSelectedAccount,
     selectedAccount,
+    //selectedDelegationUrl,
+    setSelectedDelegationUrl,
 }: Props) => {
     const { LL } = useI18nContext()
+    const accounts = useAppSelector(selectAccountsButSelected)
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
+    const {
+        //ref: selectDelegationUrlBottomSheetRef,
+        onOpen: openSelectDelegationUrlBottomSheet,
+        //onClose: closeSelectDelegationUrlBottonSheet,
     } = useBottomSheetModal()
 
     const options: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
@@ -36,13 +48,14 @@ export const DelegationOptions = ({
             {
                 id: DelegationType.ACCOUNT,
                 label: LL.SEND_DELEGATION_ACCOUNT(),
+                disabled: accounts.length === 0,
             },
             {
                 id: DelegationType.URL,
                 label: LL.SEND_DELEGATION_URL(),
             },
         ]
-    }, [LL])
+    }, [LL, accounts.length])
 
     // this function is called when a delegation option is selected
     const handleSelectDelegationOption = (
@@ -51,9 +64,14 @@ export const DelegationOptions = ({
         setSelectedDelegationOption(button.id as DelegationType)
         if (button.id === DelegationType.ACCOUNT) {
             openSelectAccountBottomSheet()
-        }
-        if (button.id !== DelegationType.ACCOUNT) {
+        } else {
             setSelectedAccount(undefined)
+        }
+
+        if (button.id === DelegationType.URL) {
+            openSelectDelegationUrlBottomSheet()
+        } else {
+            setSelectedDelegationUrl(undefined)
         }
     }
 
@@ -70,6 +88,14 @@ export const DelegationOptions = ({
                 action={handleSelectDelegationOption}
             />
             <SelectAccountBottomSheet
+                onClose={closeSelectAccountBottonSheet}
+                ref={selectAccountBottomSheetRef}
+                setSelectedDelegationOption={setSelectedDelegationOption}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                selectedDelegationOption={selectedDelegationOption}
+            />
+            <SelectUrlBottomSheet
                 onClose={closeSelectAccountBottonSheet}
                 ref={selectAccountBottomSheetRef}
                 setSelectedDelegationOption={setSelectedDelegationOption}
