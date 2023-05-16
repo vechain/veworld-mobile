@@ -7,6 +7,7 @@ import {
 export interface TokensState {
     custom: FungibleToken[]
     dashboardChartData: { [key: string]: number[][] }
+    assetDetailChartData: { [key: string]: number[][] }
     officialTokens: TokenWithCompleteInfo[]
     suggestedTokens: FungibleTokenWithBalance[]
     coinGeckoTokens: TokenInfoResponse[]
