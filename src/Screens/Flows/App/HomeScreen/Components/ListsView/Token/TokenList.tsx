@@ -14,6 +14,7 @@ import {
     selectVetTokenWithBalance,
     selectVthoTokenWithBalance,
     selectNonVechainTokensWithBalances,
+    selectTokenWithInfoWithID,
 } from "~Storage/Redux/Selectors"
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
@@ -29,6 +30,9 @@ export const TokenList = memo(
         const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
         const vetBalance = useAppSelector(selectVetTokenWithBalance)
         const vthoBalance = useAppSelector(selectVthoTokenWithBalance)
+        const tokenWithInfo = useAppSelector(state =>
+            selectTokenWithInfoWithID(state, ["VET", "VTHO"]),
+        )
 
         const { styles } = useThemedStyles(baseStyles)
 
@@ -56,12 +60,14 @@ export const TokenList = memo(
             <Animated.View style={styles.container} {...animatedViewProps}>
                 {vetBalance && (
                     <AnimatedChartCard
+                        tokenWithInfo={tokenWithInfo[0]}
                         tokenWithBalance={vetBalance}
                         isEdit={isEdit}
                     />
                 )}
                 {vthoBalance && (
                     <AnimatedChartCard
+                        tokenWithInfo={tokenWithInfo[1]}
                         tokenWithBalance={vthoBalance}
                         isEdit={isEdit}
                     />

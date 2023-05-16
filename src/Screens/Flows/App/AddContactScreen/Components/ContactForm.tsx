@@ -12,6 +12,9 @@ type Props = {
     placeholderAddress?: string
     valueName?: string
     valueAddress?: string
+    nameFieldDisabled?: boolean
+    addressFieldDisabled?: boolean
+    checkTouched?: boolean
     setName: (name: string) => void
     setAddress: (address: string) => void
 }
@@ -26,6 +29,9 @@ export const ContactForm: React.FC<Props> = memo(
         placeholderAddress,
         valueName,
         valueAddress,
+        nameFieldDisabled = false,
+        addressFieldDisabled = false,
+        checkTouched = true,
         setName,
         setAddress,
     }) => {
@@ -40,15 +46,20 @@ export const ContactForm: React.FC<Props> = memo(
             nav.navigate(Routes.CAMERA, { onScan: setAddress })
         }, [nav, setAddress])
 
+        const canShowNameError = checkTouched ? nameTouched : true
+
+        const canShowAddressError = checkTouched ? addressTouched : true
+
         return (
             <>
                 <BaseTextInput
                     placeholder={placeholderName}
                     label={titleName}
                     setValue={setName}
-                    errorMessage={nameTouched ? nameError : ""}
+                    errorMessage={canShowNameError ? nameError : ""}
                     value={valueName}
                     onTouchStart={() => setNameTouched(true)}
+                    editable={!nameFieldDisabled}
                     testID="contact-name-input"
                 />
 
@@ -58,12 +69,13 @@ export const ContactForm: React.FC<Props> = memo(
                     placeholder={placeholderAddress}
                     label={titleAddress}
                     setValue={setAddress}
-                    errorMessage={addressTouched ? addressError : ""}
+                    errorMessage={canShowAddressError ? addressError : ""}
                     value={valueAddress}
                     onTouchStart={() => setAddressTouched(true)}
-                    rightIcon="flip-horizontal"
+                    rightIcon={!addressFieldDisabled ? "flip-horizontal" : ""}
                     onIconPress={onOpenCamera}
                     testID="contact-address-input"
+                    editable={!addressFieldDisabled}
                 />
             </>
         )

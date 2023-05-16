@@ -59,6 +59,14 @@ export const AssetPriceBanner = ({
                 : theme.colors.danger,
     }))
 
+    const responsiveFontSize = useDerivedValue(() => {
+        if (formattedPrice.value.length < 10) {
+            return 32
+        } else {
+            return 24
+        }
+    })
+
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
             <BaseView
@@ -78,7 +86,15 @@ export const AssetPriceBanner = ({
                     ) : (
                         <BaseAnimatedText
                             text={formattedPrice}
-                            style={styles.textBigTitle}
+                            style={[
+                                styles.textBigTitle,
+                                {
+                                    fontSize:
+                                        otherTypography.fontSize[
+                                            responsiveFontSize.value
+                                        ],
+                                },
+                            ]}
                         />
                     )}
                 </BaseView>
@@ -131,7 +147,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         textBigTitle: {
             color: theme.colors.primary,
-            fontSize: otherTypography.fontSize[32],
             fontWeight: "700",
             fontFamily: otherTypography.fontFamily["Inter-Bold"],
         },

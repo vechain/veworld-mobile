@@ -54,3 +54,15 @@ export const selectContactByAddress = (_address?: string) =>
             (contact: Contact) => contact.address === _address,
         )
     })
+
+/**
+ * selectContactsByAddresses: A selector to get contacts by their addresses.
+ * @param {string[]} _addresses - An array of addresses of the contacts to find.
+ * @returns {Contact[]} - An array of contacts with the specified addresses. If a contact is not found for an address, it will be excluded from the result.
+ */
+export const selectContactsByAddresses = (_addresses?: string[]) =>
+    createSelector(selectContactsState, state => {
+        return state.contacts.filter((contact: Contact) =>
+            _addresses?.includes(contact.address),
+        )
+    })

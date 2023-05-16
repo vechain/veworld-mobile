@@ -35,6 +35,7 @@ export interface TokenWithCompleteInfo extends FungibleToken {
     rate?: number
     change?: number
     desc?: string
+    balance?: Balance
     links?: {
         blockchain_site: string[]
         homepage: string[]
