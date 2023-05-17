@@ -14,7 +14,10 @@ import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
 import { useBiometrics } from "../useBiometrics"
 /**
- * useCreateWallet
+ * useCreateWallet is a hook that allows you to create a wallet and store it in the store
+ * @example const { onCreateWallet, accessControl, isComplete } = useCreateWallet()
+ * @returns { onCreateWallet, accessControl, isComplete }
+ * @category Hooks
  * @returns
  */
 export const useCreateWallet = () => {
