@@ -10,13 +10,13 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
         return {
             buttons: [
                 {
-                    id: SecurityLevelType.BIOMETRICS,
+                    id: SecurityLevelType.BIOMETRIC,
                     label: "Face ID",
                     icon: "face-recognition",
                     disabled: false,
                 },
                 {
-                    id: SecurityLevelType.PASSWORD,
+                    id: SecurityLevelType.SECRET,
                     label: "Pin",
                     icon: "dialpad",
                     disabled: isWalletSecurityBiometrics, // disable if wallet is already secured with biometrics
@@ -24,15 +24,15 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
             ],
 
             currentSecurity: isWalletSecurityBiometrics
-                ? SecurityLevelType.BIOMETRICS
-                : SecurityLevelType.PASSWORD,
+                ? SecurityLevelType.BIOMETRIC
+                : SecurityLevelType.SECRET,
         }
     }, [isWalletSecurityBiometrics])
 
     const shouldCallRequireBiometricsAndEnableIt = useCallback(
         (button: BaseButtonGroupHorizontalType) => {
             if (
-                button.id === SecurityLevelType.BIOMETRICS &&
+                button.id === SecurityLevelType.BIOMETRIC &&
                 !isWalletSecurityBiometrics
             )
                 authenticateBiometrics(handleOnSecurityUpgrade)

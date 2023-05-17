@@ -28,7 +28,7 @@ export const useSecurityDowngrade = () => {
 
     const securityDowngrade = useCallback(() => {
         // exit early if user has selected password as it is impossible to downgrade
-        if (userSelectedSecurity === SecurityLevelType.PASSWORD) return
+        if (userSelectedSecurity === SecurityLevelType.SECRET) return
 
         // exit early if biometrics object is not ready
         if (!biometrics.currentSecurityLevel) return

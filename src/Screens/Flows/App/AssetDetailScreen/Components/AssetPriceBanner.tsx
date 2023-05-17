@@ -1,15 +1,6 @@
 import React, { useMemo } from "react"
-import Animated, {
-    useAnimatedProps,
-    useAnimatedStyle,
-    useDerivedValue,
-} from "react-native-reanimated"
-import {
-    TextInputProps,
-    TextInput,
-    TextProps as RNTextProps,
-    StyleSheet,
-} from "react-native"
+import { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
+import { StyleSheet } from "react-native"
 import { ColorThemeType, FormattingUtils, useThemedStyles } from "~Common"
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -22,6 +13,7 @@ import {
 import { typography } from "~Common/Theme"
 import { TokenWithCompleteInfo } from "~Model"
 import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
+import { BaseAnimatedText } from "./AnimatedTextInput"
 const { ...otherTypography } = typography
 
 export const AssetPriceBanner = ({
@@ -156,36 +148,3 @@ const baseStyles = (theme: ColorThemeType) =>
             fontFamily: otherTypography.fontFamily["Inter-Bold"],
         },
     })
-
-// base animated text component using a TextInput
-// forked from https://github.com/wcandillon/react-native-redash/blob/master/src/ReText.tsx
-Animated.addWhitelistedNativeProps({ text: true })
-
-interface TextProps extends Omit<TextInputProps, "value" | "style"> {
-    text: Animated.SharedValue<string>
-    style?: Animated.AnimateProps<RNTextProps>["style"]
-}
-
-const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
-export const BaseAnimatedText = (props: TextProps): JSX.Element => {
-    const { style, text, ...rest } = props
-    const animatedProps = useAnimatedProps(() => {
-        return {
-            text: text.value,
-            // Here we use any because the text prop is not available in the type
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any
-    })
-
-    return (
-        <AnimatedTextInput
-            editable={false}
-            style={[style || undefined]}
-            underlineColorAndroid="transparent"
-            value={text.value}
-            {...rest}
-            {...{ animatedProps }}
-        />
-    )
-}
-// end of forked from https://github.com/wcandillon/react-native-redash/blob/master/src/ReText.tsx

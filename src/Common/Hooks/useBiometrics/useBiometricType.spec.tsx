@@ -11,9 +11,13 @@ jest.mock("./useBiometrics", () => ({
 
 describe("useBiometricType", () => {
     it("should returns Biometrics", async () => {
-        const { result } = renderHook(() => useBiometricType(), {
-            wrapper: TestWrapper,
-        })
+        const { result, waitForNextUpdate } = renderHook(
+            () => useBiometricType(),
+            {
+                wrapper: TestWrapper,
+            },
+        )
+        await waitForNextUpdate()
         await waitFor(() => {
             return expect(result.current).toBeTruthy()
         })
@@ -21,12 +25,17 @@ describe("useBiometricType", () => {
     })
     it("should returns Face ID", async () => {
         ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRICS,
-            authtypeAvailable: AuthenticationType.FACIAL_RECOGNITION,
+            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            authTypeAvailable: AuthenticationType.FACIAL_RECOGNITION,
         })
-        const { result } = renderHook(() => useBiometricType(), {
-            wrapper: TestWrapper,
-        })
+
+        const { result, waitForNextUpdate } = renderHook(
+            () => useBiometricType(),
+            {
+                wrapper: TestWrapper,
+            },
+        )
+        await waitForNextUpdate()
         await waitFor(() => {
             return expect(result.current).toBeTruthy()
         })
@@ -34,12 +43,16 @@ describe("useBiometricType", () => {
     })
     it("should returns Touch ID", async () => {
         ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRICS,
-            authtypeAvailable: AuthenticationType.FINGERPRINT,
+            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            authTypeAvailable: AuthenticationType.FINGERPRINT,
         })
-        const { result } = renderHook(() => useBiometricType(), {
-            wrapper: TestWrapper,
-        })
+        const { result, waitForNextUpdate } = renderHook(
+            () => useBiometricType(),
+            {
+                wrapper: TestWrapper,
+            },
+        )
+        await waitForNextUpdate()
         await waitFor(() => {
             return expect(result.current).toBeTruthy()
         })
@@ -48,12 +61,16 @@ describe("useBiometricType", () => {
     it("should returns FingerPrint when android", async () => {
         setPlatform("android")
         ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRICS,
-            authtypeAvailable: AuthenticationType.FINGERPRINT,
+            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            authTypeAvailable: AuthenticationType.FINGERPRINT,
         })
-        const { result } = renderHook(() => useBiometricType(), {
-            wrapper: TestWrapper,
-        })
+        const { result, waitForNextUpdate } = renderHook(
+            () => useBiometricType(),
+            {
+                wrapper: TestWrapper,
+            },
+        )
+        await waitForNextUpdate()
         await waitFor(() => {
             return expect(result.current).toBeTruthy()
         })

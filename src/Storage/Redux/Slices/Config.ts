@@ -22,11 +22,17 @@ export const ConfigSlice = createSlice({
     name: "config",
     initialState,
     reducers: {
+        /**
+         * Set the user selected security level, also updating the last one
+         * @param state
+         * @param action
+         */
         setUserSelectedSecurity: (
             state,
             action: PayloadAction<SecurityLevelType>,
         ) => {
             state.userSelectedSecurity = action.payload
+            state.lastSecurityLevel = action.payload
         },
 
         setLastSecurityLevel: (

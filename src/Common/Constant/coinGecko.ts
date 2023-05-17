@@ -20,3 +20,13 @@ export const COINGECKO_TOKEN_ENDPOINT = (coin: string) =>
     `${COINGECKO_URL}/coins/${coin}?localization=true&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`
 
 export const COINGECKO_LIST = `${COINGECKO_URL}/coins/list?include_platform=true`
+
+export const COINGECKO_MARKET_INFO_ENDPOINT = (
+    coins: string[],
+    currency: string,
+) =>
+    `${COINGECKO_URL}/coins/markets?vs_currency=${currency.toLowerCase()}&ids=${
+        coins[0]
+    }%2C%20${
+        coins[1]
+    }&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en`

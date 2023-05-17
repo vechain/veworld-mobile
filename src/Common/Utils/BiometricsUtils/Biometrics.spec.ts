@@ -1,5 +1,5 @@
 import * as LocalAuthentication from "expo-local-authentication"
-import { SecurityLevelType, WALLET_STATUS } from "~Model"
+import { AuthenticationType, SecurityLevelType, WALLET_STATUS } from "~Model"
 import PlatformUtils from "../PlatformUtils"
 import {
     getDeviceEnrolledLevel,
@@ -16,11 +16,12 @@ jest.mock("../PlatformUtils")
 describe("authentication functions", () => {
     describe("getDeviceEnrolledLevel", () => {
         it("should return the enrolled security level of the device", async () => {
-            const mockLevel = 2
+            const mockLevel = LocalAuthentication.SecurityLevel.BIOMETRIC
 
-            ;(
-                LocalAuthentication.getEnrolledLevelAsync as jest.Mock
-            ).mockResolvedValue(mockLevel)
+            jest.spyOn(
+                LocalAuthentication,
+                "getEnrolledLevelAsync",
+            ).mockResolvedValueOnce(mockLevel)
 
             const result = await getDeviceEnrolledLevel()
 
@@ -31,22 +32,25 @@ describe("authentication functions", () => {
     describe("getDeviceHasHardware", () => {
         it("should return a boolean indicating whether the device has biometric hardware", async () => {
             const mockHasHardware = true
-            ;(
-                LocalAuthentication.hasHardwareAsync as jest.Mock
-            ).mockResolvedValue(mockHasHardware)
+
+            jest.spyOn(
+                LocalAuthentication,
+                "hasHardwareAsync",
+            ).mockResolvedValueOnce(mockHasHardware)
 
             const result = await getDeviceHasHardware()
 
-            expect(result).toBe(true)
+            expect(result).toBe(mockHasHardware)
         })
     })
 
     describe("getIsDeviceEnrolled", () => {
         it("should return a boolean indicating whether the device has enrolled biometric data", async () => {
             const mockIsEnrolled = true
-            ;(
-                LocalAuthentication.isEnrolledAsync as jest.Mock
-            ).mockResolvedValue(mockIsEnrolled)
+            jest.spyOn(
+                LocalAuthentication,
+                "isEnrolledAsync",
+            ).mockResolvedValueOnce(mockIsEnrolled)
 
             const result = await getIsDeviceEnrolled()
 
@@ -56,24 +60,29 @@ describe("authentication functions", () => {
 
     describe("getBiometricTypeAvailable", () => {
         it("should return the available biometric authentication type on the device", async () => {
-            const mockType = 1
-            ;(
-                LocalAuthentication.supportedAuthenticationTypesAsync as jest.Mock
-            ).mockResolvedValue(mockType)
+            const mockType = [
+                LocalAuthentication.AuthenticationType.FINGERPRINT,
+            ]
+
+            jest.spyOn(
+                LocalAuthentication,
+                "supportedAuthenticationTypesAsync",
+            ).mockResolvedValueOnce(mockType)
 
             const result = await getBiometricTypeAvailable()
 
-            expect(result).toBe("FINGERPRINT")
+            expect(result).toBe(AuthenticationType.FINGERPRINT)
         })
     })
 
     describe("authenticateWithBiometrics", () => {
         it("should authenticate the user with the biometric authentication type available on the device", async () => {
-            const mockResult = { success: true }
+            const mockResult = { success: true, error: "" }
 
-            ;(
-                LocalAuthentication.authenticateAsync as jest.Mock
-            ).mockResolvedValue(mockResult)
+            jest.spyOn(
+                LocalAuthentication,
+                "authenticateAsync",
+            ).mockResolvedValueOnce(mockResult)
 
             const result = await authenticateWithBiometrics()
 
@@ -82,12 +91,14 @@ describe("authentication functions", () => {
         })
 
         it("should not pass promptMessage on Android", async () => {
-            const mockResult = { success: true }
+            const mockResult = { success: true, error: "" }
 
             ;(PlatformUtils.isAndroid as jest.Mock).mockReturnValue(true)
-            ;(
-                LocalAuthentication.authenticateAsync as jest.Mock
-            ).mockResolvedValue(mockResult)
+
+            jest.spyOn(
+                LocalAuthentication,
+                "authenticateAsync",
+            ).mockResolvedValueOnce(mockResult)
 
             const result = await authenticateWithBiometrics()
             expect(result).toBe(mockResult)

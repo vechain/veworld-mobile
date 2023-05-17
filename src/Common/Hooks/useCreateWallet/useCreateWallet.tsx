@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     addDeviceAndAccounts,
     selectAccount,
-    setLastSecurityLevel,
     setUserSelectedSecurity,
     setMnemonic,
     setAppLockStatus,
@@ -71,16 +70,10 @@ export const useCreateWallet = () => {
                 // if userPassword is undefined, then use biometrics
                 if (!userPassword) {
                     dispatch(
-                        setUserSelectedSecurity(SecurityLevelType.BIOMETRICS),
+                        setUserSelectedSecurity(SecurityLevelType.BIOMETRIC),
                     )
-
-                    dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRICS))
                 } else {
-                    dispatch(
-                        setUserSelectedSecurity(SecurityLevelType.PASSWORD),
-                    )
-
-                    dispatch(setLastSecurityLevel(SecurityLevelType.PASSWORD))
+                    dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
                 }
 
                 setIsComplete(true)

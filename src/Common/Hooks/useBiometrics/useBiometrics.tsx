@@ -19,17 +19,18 @@ export const useBiometrics = () => {
     const [biometrics, setBiometrics] = useState<BiometricState | undefined>()
 
     const init = useCallback(async () => {
-        let level = await getDeviceEnrolledLevel()
-        let isHardware = await getDeviceHasHardware()
-        let isEnrolled = await getIsDeviceEnrolled()
-        let typeAvalable = await getBiometricTypeAvailable()
+        const level = await getDeviceEnrolledLevel()
 
-        let accessControl =
-            isEnrolled && isHardware && level === SecurityLevelType.BIOMETRICS
+        const isHardware = await getDeviceHasHardware()
+        const isEnrolled = await getIsDeviceEnrolled()
+        const typeAvailable = await getBiometricTypeAvailable()
 
-        const obj = {
+        const accessControl =
+            isEnrolled && isHardware && level === SecurityLevelType.BIOMETRIC
+
+        const obj: BiometricState = {
             currentSecurityLevel: level,
-            authtypeAvailable: typeAvalable,
+            authTypeAvailable: typeAvailable,
             isDeviceEnrolled: isEnrolled,
             isHardwareAvailable: isHardware,
             accessControl: accessControl,
