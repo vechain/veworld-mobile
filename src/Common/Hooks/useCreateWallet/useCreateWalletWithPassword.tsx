@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     addDeviceAndAccounts,
     selectAccount,
-    setLastSecurityLevel,
     setUserSelectedSecurity,
     setMnemonic,
     setAppLockStatus,
@@ -58,7 +57,6 @@ export const useCreateWalletWithPassword = () => {
 
                 dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
 
-                dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
                 dispatch(setMnemonic(undefined))
 
                 setIsComplete(true)
