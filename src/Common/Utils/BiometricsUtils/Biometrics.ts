@@ -5,7 +5,7 @@ import PlatformUtils from "../PlatformUtils"
 
 export const getDeviceEnrolledLevel = async () => {
     let level = await LocalAuthentication.getEnrolledLevelAsync()
-    return LocalAuthentication.SecurityLevel[level] as TAuthentication
+    return LocalAuthentication.SecurityLevel[level] as SecurityLevelType
 }
 
 export const getDeviceHasHardware = async () => {
