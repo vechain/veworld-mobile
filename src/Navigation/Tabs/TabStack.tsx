@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
 import { useTheme } from "~Common"
 import PlatformUtils from "~Common/Utils/PlatformUtils"
-import { DiscoverStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
+import { HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
 
 const Tab = createBottomTabNavigator()
@@ -59,7 +59,9 @@ export const TabStack = () => {
                 }}
             />
 
-            <Tab.Screen
+            {/* Not to be used in the current cycle */}
+
+            {/* <Tab.Screen
                 name="DiscoverStack"
                 component={DiscoverStack}
                 options={{
@@ -70,7 +72,7 @@ export const TabStack = () => {
                             focused ? "compass" : "compass-outline",
                         ),
                 }}
-            />
+            /> */}
 
             <Tab.Screen
                 name="SettingsStack"

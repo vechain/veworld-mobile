@@ -3,6 +3,8 @@ import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useTheme } from "~Common"
 import {
     BackButtonHeader,
+    BaseButton,
+    BaseCard,
     BaseIcon,
     BaseSafeArea,
     BaseScrollView,
@@ -22,12 +24,17 @@ import {
     selectNonVechainTokensWithBalances,
     selectSelectedNetwork,
     selectAccountCustomTokens,
+    selectSuggestedTokens,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import {
+    AddCustomTokenBottomSheet,
+    AddSuggestedBottomSheet,
+} from "../ManageCustomTokenScreen/BottomSheets"
+import { useSuggestedTokens } from "./useSuggestedTokens"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
@@ -48,7 +55,17 @@ export const ManageTokenScreen = () => {
         onOpen: openAddCustomTokenSheet,
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
-
+    const {
+        ref: addSuggestedBottomSheet,
+        onOpen: openAddSuggestedBottomSheet,
+        onClose: closeAddSuggestedBottomSheet,
+    } = useBottomSheetModal()
+    const suggestedTokens = useAppSelector(selectSuggestedTokens)
+    const missingSuggestedTokens =
+        suggestedTokens?.filter(
+            token => !selectedTokenSymbols.includes(token.symbol),
+        ) || []
+    useSuggestedTokens(selectedTokenSymbols)
     const filteredTokens = tokens.filter(
         token =>
             token.name
@@ -172,6 +189,25 @@ export const ManageTokenScreen = () => {
                     setValue={setTokenQuery}
                     placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
                 />
+                {!!missingSuggestedTokens.length && (
+                    <>
+                        <BaseSpacer height={16} />
+                        <BaseCard>
+                            <BaseView>
+                                <BaseText typographyFont="body">
+                                    {LL.MANAGE_TOKEN_SUGGESTED_TOKENS()}
+                                </BaseText>
+                                <BaseButton
+                                    variant="link"
+                                    action={openAddSuggestedBottomSheet}
+                                    px={0}
+                                    size="md">
+                                    {LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
+                                </BaseButton>
+                            </BaseView>
+                        </BaseCard>
+                    </>
+                )}
             </BaseView>
             <BaseSpacer height={24} />
             <BaseScrollView
@@ -219,6 +255,12 @@ export const ManageTokenScreen = () => {
             <AddCustomTokenBottomSheet
                 ref={addCustomTokenSheetRef}
                 onClose={closeAddCustomTokenSheet}
+            />
+            <AddSuggestedBottomSheet
+                setSelectedTokenSymbols={setSelectedTokenSymbols}
+                missingSuggestedTokens={missingSuggestedTokens}
+                ref={addSuggestedBottomSheet}
+                onClose={closeAddSuggestedBottomSheet}
             />
         </BaseSafeArea>
     )

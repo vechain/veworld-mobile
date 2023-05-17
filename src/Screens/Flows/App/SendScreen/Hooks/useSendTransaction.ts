@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { Transaction, abi } from "thor-devkit"
-import { FormattingUtils, GasUtils, HexUtils, VET, info } from "~Common"
+import { FormattingUtils, GasUtils, HexUtils, VET } from "~Common"
 import { useThor } from "~Components"
 import { EstimateGasResult, FungibleTokenWithBalance } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -78,7 +78,7 @@ export const useSendTransaction = ({
                     account?.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
                 )
-                info("estimatedGas", estimatedGas)
+                // info("estimatedGas", estimatedGas)
                 setGas(estimatedGas)
             })()
         }

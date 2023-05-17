@@ -48,6 +48,15 @@ export const selectDashboardChartData = createSelector(
         })) || DEFAULT_CHART_DATA,
 )
 
+export const selectAssetDetailChartData = createSelector(
+    [(_, state) => selectTokenState(state), symbol => symbol],
+    (tokens, symbol) =>
+        tokens.assetDetailChartData?.[symbol]?.map(el => ({
+            timestamp: el[0],
+            value: el[1],
+        })),
+)
+
 export const selectCoinGeckoTokens = createSelector(
     selectTokenState,
     state => state.coinGeckoTokens,
@@ -58,6 +67,14 @@ export const selectOfficialTokens = createSelector(
     state => state.officialTokens,
 )
 
+export const selectSuggestedTokens = createSelector(
+    selectTokenState,
+    state => state.suggestedTokens,
+)
+
+/**
+ * TODO: refactor name of the selectors
+ */
 export const selectAllFungibleTokens = createSelector(
     selectOfficialTokens,
     tokens => TokenUtils.mergeTokens(DEFAULT_VECHAIN_TOKENS, tokens),
@@ -154,5 +171,23 @@ export const selectTokensWithInfo = createSelector(
             })
 
         return sortedTokens
+    },
+)
+
+export const selectTokenWithInfoWithID = createSelector(
+    [selectTokensWithInfo, (state: RootState, symbols: string[]) => symbols],
+    (tokens, symbols) => {
+        let foundTokens: TokenWithCompleteInfo[] = []
+
+        symbols.forEach(symbol => {
+            const foundToken = tokens.find(
+                (token: TokenWithCompleteInfo) =>
+                    token.symbol.toLowerCase() === symbol.toLowerCase(),
+            )
+
+            if (foundToken) foundTokens.push(foundToken)
+        })
+
+        return foundTokens
     },
 )

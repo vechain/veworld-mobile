@@ -1,9 +1,15 @@
-import { FungibleToken, TokenWithCompleteInfo } from "~Model"
+import {
+    FungibleToken,
+    TokenWithCompleteInfo,
+    FungibleTokenWithBalance,
+} from "~Model"
 
 export interface TokensState {
     custom: FungibleToken[]
     dashboardChartData: { [key: string]: number[][] }
+    assetDetailChartData: { [key: string]: number[][] }
     officialTokens: TokenWithCompleteInfo[]
+    suggestedTokens: FungibleTokenWithBalance[]
     coinGeckoTokens: TokenInfoResponse[]
 }
 
