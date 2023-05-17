@@ -17,7 +17,11 @@ import {
     RootStackParamListOnboarding,
     Routes,
 } from "~Navigation"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    setUserSelectedSecurity,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
 
 type Props = {} & NativeStackScreenProps<
@@ -67,32 +71,44 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     //     closePasswordPrompt()
     // }
 
-    const onButtonPress = useCallback(async () => {
+    /**
+     * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
+     */
+    const onboardingCreateWallet = useCallback(async () => {
         let params = route.params
 
+        if (userHasOnboarded) return
+
+        if (!mnemonic) throw new Error("Mnemonic is not available")
+
+        if (!params?.securityLevelSelected)
+            throw new Error("Security level is not available")
+
+        const securityLevelSelected = params.securityLevelSelected
+
+        if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
+            await createWallet({ mnemonic })
+            setUserSelectedSecurity(SecurityLevelType.BIOMETRIC)
+        } else if (securityLevelSelected === SecurityLevelType.SECRET) {
+            await createWallet({
+                userPassword: params?.userPin,
+                // onError: onWalletCreationError,
+                mnemonic,
+            })
+            dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
+        }
+    }, [userHasOnboarded, route.params, createWallet, dispatch, mnemonic])
+
+    const onButtonPress = useCallback(async () => {
         if (!mnemonic) throw new Error("Mnemonic is not available")
 
         if (userHasOnboarded) {
             await checkIdentityBeforeOpening()
-        } else {
-            if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                await createWallet({ mnemonic })
-            } else if (
-                params?.securityLevelSelected === SecurityLevelType.SECRET
-            ) {
-                await createWallet({
-                    userPassword: params?.userPin,
-                    // onError: onWalletCreationError,
-                    mnemonic,
-                })
-            }
-        }
+        } else await onboardingCreateWallet()
     }, [
         checkIdentityBeforeOpening,
-        route.params,
+        onboardingCreateWallet,
         userHasOnboarded,
-        createWallet,
-        // onWalletCreationError,
         mnemonic,
     ])
 
