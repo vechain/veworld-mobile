@@ -5,7 +5,7 @@ import { ColorThemeType, useThemedStyles } from "~Common"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { useI18nContext } from "~i18n"
-import { useMarketPrices } from "../Hooks/useMarketPrices"
+import { useFormattedMarketInfo } from "../Hooks/useFormattedMarketInfo"
 
 export const MarketInfoView = ({
     marketInfo,
@@ -15,7 +15,7 @@ export const MarketInfoView = ({
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { marketCap, totalSupply, totalVolume, circulatingSupply } =
-        useMarketPrices(marketInfo)
+        useFormattedMarketInfo(marketInfo)
 
     return (
         <DropShadow style={theme.shadows.card}>

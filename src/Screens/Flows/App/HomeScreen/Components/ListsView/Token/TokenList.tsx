@@ -4,7 +4,7 @@ import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { ColorThemeType, VET, VTHO, useThemedStyles } from "~Common"
 import {
     changeBalancePosition,
     useAppDispatch,
@@ -27,7 +27,7 @@ export const TokenList = memo(
         const dispatch = useAppDispatch()
         const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
         const tokenWithInfo = useAppSelector(state =>
-            selectTokenWithInfoWithID(state, ["VET", "VTHO"]),
+            selectTokenWithInfoWithID(state, [VET.symbol, VTHO.symbol]),
         )
 
         const { styles } = useThemedStyles(baseStyles)

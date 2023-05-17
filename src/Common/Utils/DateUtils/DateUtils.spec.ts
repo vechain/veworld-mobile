@@ -5,6 +5,10 @@ import {
 } from "./DateUtils"
 
 describe("isValidLocale", () => {
+    beforeAll(() => {
+        global.Intl = require("intl")
+    })
+
     it("should return true for a valid locale", () => {
         expect(isValidDateLocale("en")).toBe(true)
     })
@@ -15,6 +19,10 @@ describe("isValidLocale", () => {
 })
 
 describe("formatDateTime", () => {
+    beforeAll(() => {
+        global.Intl = require("intl")
+    })
+
     it("should format the timestamp correctly in English", () => {
         const timestamp = 1682448820000
         expect(formatDateTime(timestamp, "en", DEFAULT_TIMEZONE)).toBe(
@@ -53,7 +61,7 @@ describe("formatDateTime", () => {
     it("should format the timestamp correctly in German", () => {
         const timestamp = 1678689944000
         expect(formatDateTime(timestamp, "de", DEFAULT_TIMEZONE)).toBe(
-            "13. März 2023 - 6:45 am",
+            "13. März 2023 - 6:45 vorm. pm",
         )
     })
 })

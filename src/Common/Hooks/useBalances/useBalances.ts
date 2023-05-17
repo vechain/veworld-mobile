@@ -1,21 +1,16 @@
 import { useMemo } from "react"
 import { BalanceUtils } from "~Common/Utils"
 import { TokenWithCompleteInfo } from "~Model"
-import { selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 
 export const useBalances = ({ token }: { token: TokenWithCompleteInfo }) => {
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol as string),
-    )
-
     const fiatBalance = useMemo(
         () =>
             BalanceUtils.getFiatBalance(
                 token?.balance?.balance ?? "0",
-                exchangeRate?.rate || 0,
+                token?.rate || 0,
                 token.decimals,
             ),
-        [exchangeRate?.rate, token?.balance?.balance, token.decimals],
+        [token?.balance?.balance, token.decimals, token?.rate],
     )
 
     const tokenUnitBalance = useMemo(

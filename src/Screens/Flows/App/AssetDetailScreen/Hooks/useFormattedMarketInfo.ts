@@ -3,40 +3,40 @@ import { FormattingUtils } from "~Common"
 import { CoinMarketInfo } from "~Storage/Redux/Types"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
-export const useMarketPrices = (marketInfo: CoinMarketInfo) => {
+export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
     const currency = useAppSelector(selectCurrency)
 
     const marketCap = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo.market_cap,
+            marketInfo?.market_cap,
             undefined,
             currency,
         )
-    }, [currency, marketInfo.market_cap])
+    }, [currency, marketInfo?.market_cap])
 
     const totalSupply = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo.total_supply,
+            marketInfo?.total_supply,
             undefined,
             currency,
         )
-    }, [currency, marketInfo.total_supply])
+    }, [currency, marketInfo?.total_supply])
 
     const totalVolume = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo.total_volume,
+            marketInfo?.total_volume,
             undefined,
             currency,
         )
-    }, [currency, marketInfo.total_volume])
+    }, [currency, marketInfo?.total_volume])
 
     const circulatingSupply = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo.circulating_supply,
+            marketInfo?.circulating_supply,
             undefined,
             currency,
         )
-    }, [currency, marketInfo.circulating_supply])
+    }, [currency, marketInfo?.circulating_supply])
 
     return { marketCap, totalSupply, totalVolume, circulatingSupply }
 }

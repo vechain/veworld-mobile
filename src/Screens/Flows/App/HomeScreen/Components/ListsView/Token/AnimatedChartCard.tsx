@@ -15,7 +15,6 @@ const HEIGHT = 100
 
 export type NativeTokenProps = {
     tokenWithInfo: TokenWithCompleteInfo
-    // tokenWithBalance: FungibleTokenWithBalance
     isEdit: boolean
 }
 
