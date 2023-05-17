@@ -4,15 +4,13 @@ import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { ColorThemeType, VET, VTHO, useThemedStyles } from "~Common"
 import {
     changeBalancePosition,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import {
-    selectVetTokenWithBalance,
-    selectVthoTokenWithBalance,
     selectNonVechainTokensWithBalances,
     selectTokenWithInfoWithID,
 } from "~Storage/Redux/Selectors"
@@ -28,10 +26,8 @@ export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
         const dispatch = useAppDispatch()
         const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-        const vetBalance = useAppSelector(selectVetTokenWithBalance)
-        const vthoBalance = useAppSelector(selectVthoTokenWithBalance)
         const tokenWithInfo = useAppSelector(state =>
-            selectTokenWithInfoWithID(state, ["VET", "VTHO"]),
+            selectTokenWithInfoWithID(state, [VET.symbol, VTHO.symbol]),
         )
 
         const { styles } = useThemedStyles(baseStyles)
@@ -58,17 +54,15 @@ export const TokenList = memo(
 
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
-                {vetBalance && (
+                {tokenWithInfo[0].balance && (
                     <AnimatedChartCard
                         tokenWithInfo={tokenWithInfo[0]}
-                        tokenWithBalance={vetBalance}
                         isEdit={isEdit}
                     />
                 )}
-                {vthoBalance && (
+                {tokenWithInfo[1].balance && (
                     <AnimatedChartCard
                         tokenWithInfo={tokenWithInfo[1]}
-                        tokenWithBalance={vthoBalance}
                         isEdit={isEdit}
                     />
                 )}

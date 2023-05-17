@@ -7,15 +7,24 @@ import {
     EXCHANGE_CLIENT_AXIOS_OPTS,
     COINGECKO_TOKEN_ENDPOINT,
     getCoinGeckoIdBySymbol,
+    COINGECKO_MARKET_INFO_ENDPOINT,
+    VET,
+    VTHO,
 } from "~Common"
 import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
 import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
 import {
     setAssertDetailChartData,
     setCoinGeckoTokens,
+    setCoinMarketInfo,
     setDashboardChartData,
 } from "../Slices"
-import { AppThunkDispatch, RootState, TokenInfoResponse } from "../Types"
+import {
+    AppThunkDispatch,
+    MarketInfoResponse,
+    RootState,
+    TokenInfoResponse,
+} from "../Types"
 const allSettled = require("promise.allsettled")
 import { fetchExchangeRates } from "./Currency"
 
@@ -178,3 +187,28 @@ export const getTokensFromGithub = async ({
 
     return tokens
 }
+
+export const fetchVechainMarketInfo =
+    () => async (dispatch: Dispatch, getState: () => RootState) => {
+        const currency = selectCurrency(getState())
+
+        try {
+            const pricesResponse = await axios.get<MarketInfoResponse[]>(
+                COINGECKO_MARKET_INFO_ENDPOINT(
+                    [
+                        getCoinGeckoIdBySymbol[VET.symbol],
+                        getCoinGeckoIdBySymbol[VTHO.symbol],
+                    ],
+                    currency,
+                ),
+                {
+                    ...EXCHANGE_CLIENT_AXIOS_OPTS,
+                },
+            )
+
+            const marketInfo = pricesResponse.data
+            dispatch(setCoinMarketInfo({ data: marketInfo }))
+        } catch (e) {
+            error(e)
+        }
+    }
