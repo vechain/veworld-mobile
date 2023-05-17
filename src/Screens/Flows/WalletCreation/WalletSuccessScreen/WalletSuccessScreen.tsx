@@ -80,7 +80,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         if (!mnemonic) throw new Error("Mnemonic is not available")
 
         if (userHasOnboarded) {
-            if (userSelectedSecurity === SecurityLevelType.BIOMETRICS) {
+            if (userSelectedSecurity === SecurityLevelType.BIOMETRIC) {
                 // todo.vas -> replace with authenticateWithBiometrics new hook?
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometrics()
@@ -94,12 +94,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 return openPasswordPrompt()
             }
         } else {
-            if (
-                params?.securityLevelSelected === SecurityLevelType.BIOMETRICS
-            ) {
+            if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
                 await createWalletWithBiometrics({ mnemonic })
             } else if (
-                params?.securityLevelSelected === SecurityLevelType.PASSWORD
+                params?.securityLevelSelected === SecurityLevelType.SECRET
             ) {
                 await createWalletWithPassword({
                     userPassword: params?.userPin!,

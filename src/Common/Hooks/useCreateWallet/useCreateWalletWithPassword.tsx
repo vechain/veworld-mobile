@@ -56,9 +56,9 @@ export const useCreateWalletWithPassword = () => {
                 if (!selectedAccount)
                     dispatch(selectAccount({ address: newAccount.address }))
 
-                dispatch(setUserSelectedSecurity(SecurityLevelType.PASSWORD))
+                dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
 
-                dispatch(setLastSecurityLevel(SecurityLevelType.PASSWORD))
+                dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
                 dispatch(setMnemonic(undefined))
 
                 setIsComplete(true)

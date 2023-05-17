@@ -15,7 +15,7 @@ describe("useWalletSecurity", () => {
         mockBiometrics = {
             accessControl: true,
         }
-        mockUserSelectedSecurity = SecurityLevelType.BIOMETRICS
+        mockUserSelectedSecurity = SecurityLevelType.BIOMETRIC
         ;(useBiometrics as jest.Mock).mockReturnValue(mockBiometrics)
         ;(useAppSelector as jest.Mock).mockReturnValue(mockUserSelectedSecurity)
         const { result } = renderHook(() => useWalletSecurity())
@@ -25,7 +25,7 @@ describe("useWalletSecurity", () => {
     })
 
     it("should return the correct wallet security for password", () => {
-        mockUserSelectedSecurity = SecurityLevelType.PASSWORD
+        mockUserSelectedSecurity = SecurityLevelType.SECRET
         ;(useAppSelector as jest.Mock).mockReturnValue(mockUserSelectedSecurity)
         const { result } = renderHook(() => useWalletSecurity())
         expect(result.current.isWalletSecurityBiometrics).toBeFalsy()

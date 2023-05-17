@@ -19,12 +19,12 @@ export const useWalletSecurity = () => {
     const walletSecurity = useMemo(() => {
         if (
             biometrics.accessControl &&
-            userSelectedSecurity === SecurityLevelType.BIOMETRICS
+            userSelectedSecurity === SecurityLevelType.BIOMETRIC
         ) {
             return WalletSecurity.BIO_UNLOCK
         }
 
-        if (userSelectedSecurity === SecurityLevelType.PASSWORD) {
+        if (userSelectedSecurity === SecurityLevelType.SECRET) {
             return WalletSecurity.PASS_UNLOCK
         }
 

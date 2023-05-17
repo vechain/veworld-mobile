@@ -3,9 +3,22 @@ import { TAuthentication, SecurityLevelType } from "~Model"
 import * as i18n from "~i18n"
 import PlatformUtils from "../PlatformUtils"
 
+const mapSecurityLevel = (level: number) => {
+    switch (level) {
+        case 0:
+            return SecurityLevelType.NONE
+        case 1:
+            return SecurityLevelType.SECRET
+        case 2:
+            return SecurityLevelType.BIOMETRIC
+        default:
+            return SecurityLevelType.NONE
+    }
+}
+
 export const getDeviceEnrolledLevel = async () => {
     let level = await LocalAuthentication.getEnrolledLevelAsync()
-    return LocalAuthentication.SecurityLevel[level] as SecurityLevelType
+    return mapSecurityLevel(level)
 }
 
 export const getDeviceHasHardware = async () => {
@@ -52,8 +65,8 @@ export const isSecurityDowngrade = (
     newLevel: SecurityLevelType,
     appLockStatusActive: boolean,
 ) =>
-    oldLevel === SecurityLevelType.BIOMETRICS &&
-    newLevel !== SecurityLevelType.BIOMETRICS &&
+    oldLevel === SecurityLevelType.BIOMETRIC &&
+    newLevel !== SecurityLevelType.BIOMETRIC &&
     appLockStatusActive
 
 export const isSecurityUpgrade = (
@@ -61,6 +74,6 @@ export const isSecurityUpgrade = (
     newLevel: SecurityLevelType,
     appLockStatusActive: boolean,
 ) =>
-    oldLevel !== SecurityLevelType.BIOMETRICS &&
-    newLevel === SecurityLevelType.BIOMETRICS &&
+    oldLevel !== SecurityLevelType.BIOMETRIC &&
+    newLevel === SecurityLevelType.BIOMETRIC &&
     appLockStatusActive

@@ -61,9 +61,9 @@ export const useCreateWalletWithBiometrics = () => {
                 if (!selectedAccount)
                     dispatch(selectAccount({ address: newAccount.address }))
 
-                dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRICS))
+                dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRIC))
 
-                dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRICS))
+                dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
 
                 setIsComplete(true)
             } catch (e) {

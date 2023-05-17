@@ -15,7 +15,7 @@ describe("useBiometrics", () => {
     it("should initialize biometrics state on mount", async () => {
         ;(
             BiometricsUtils.getDeviceEnrolledLevel as jest.Mock
-        ).mockResolvedValue(SecurityLevelType.BIOMETRICS)
+        ).mockResolvedValue(SecurityLevelType.BIOMETRIC)
         ;(BiometricsUtils.getDeviceHasHardware as jest.Mock).mockResolvedValue(
             true,
         )
@@ -33,8 +33,8 @@ describe("useBiometrics", () => {
         await waitForNextUpdate()
 
         expect(result.current).toEqual({
-            currentSecurityLevel: SecurityLevelType.BIOMETRICS,
-            authtypeAvailable: "touch",
+            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            authTypeAvailable: "touch",
             isDeviceEnrolled: true,
             isHardwareAvailable: true,
             accessControl: true,
@@ -44,7 +44,7 @@ describe("useBiometrics", () => {
     it("should update biometrics state when app state changes", async () => {
         ;(
             BiometricsUtils.getDeviceEnrolledLevel as jest.Mock
-        ).mockResolvedValue(SecurityLevelType.BIOMETRICS)
+        ).mockResolvedValue(SecurityLevelType.BIOMETRIC)
         ;(BiometricsUtils.getDeviceHasHardware as jest.Mock).mockResolvedValue(
             true,
         )
@@ -71,8 +71,8 @@ describe("useBiometrics", () => {
         await waitForNextUpdate()
 
         expect(result.current).toEqual({
-            currentSecurityLevel: SecurityLevelType.BIOMETRICS,
-            authtypeAvailable: "touch",
+            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            authTypeAvailable: "touch",
             isDeviceEnrolled: true,
             isHardwareAvailable: true,
             accessControl: true,

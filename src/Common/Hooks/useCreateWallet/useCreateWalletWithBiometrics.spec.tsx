@@ -9,6 +9,7 @@ import {
     setUserSelectedSecurity,
 } from "~Storage/Redux"
 import { TestWrapper } from "~Test"
+import { SecurityLevelType } from "~Model"
 
 const device = {
     alias: "Wallet 1",
@@ -114,7 +115,11 @@ describe("useCreateWalletWithBiometrics", () => {
         expect(selectAccount).toHaveBeenCalledWith({
             address: "0xED8DA269260CE13f17624bE20FE9311807db0901",
         })
-        expect(setUserSelectedSecurity).toHaveBeenCalledWith("BIOMETRIC")
-        expect(setLastSecurityLevel).toHaveBeenCalledWith("BIOMETRIC")
+        expect(setUserSelectedSecurity).toHaveBeenCalledWith(
+            SecurityLevelType.BIOMETRIC,
+        )
+        expect(setLastSecurityLevel).toHaveBeenCalledWith(
+            SecurityLevelType.BIOMETRIC,
+        )
     })
 })

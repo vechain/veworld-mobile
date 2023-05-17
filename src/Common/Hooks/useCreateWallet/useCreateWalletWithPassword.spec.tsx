@@ -9,6 +9,7 @@ import {
 } from "~Storage/Redux/Actions"
 import { TestWrapper } from "~Test"
 import KeychainService from "~Services/KeychainService"
+import { SecurityLevelType } from "~Model"
 const device = {
     alias: "Wallet 1",
     index: 0,
@@ -100,8 +101,8 @@ describe("useCreateWalletWithPassword", () => {
             },
         })
         expect(setAppLockStatus).toBeCalledWith("UNLOCKED")
-        expect(setUserSelectedSecurity).toBeCalledWith("PASSWORD")
-        expect(setLastSecurityLevel).toBeCalledWith("SECRET")
+        expect(setUserSelectedSecurity).toBeCalledWith(SecurityLevelType.SECRET)
+        expect(setLastSecurityLevel).toBeCalledWith(SecurityLevelType.SECRET)
         expect(setMnemonic).toBeCalledWith(undefined)
         expect(result.current.isComplete).toBe(true)
     })

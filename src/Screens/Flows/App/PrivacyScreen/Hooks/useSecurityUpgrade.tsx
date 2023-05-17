@@ -43,7 +43,7 @@ export const useSecurityUpgrade = () => {
 
                 dispatch(bulkUpdateDevices(updatedDevices))
 
-                dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRICS))
+                dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRIC))
 
                 onSuccessCallback && onSuccessCallback()
             } catch (e) {

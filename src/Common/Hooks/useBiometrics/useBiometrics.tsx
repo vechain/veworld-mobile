@@ -25,11 +25,11 @@ export const useBiometrics = () => {
         let typeAvalable = await getBiometricTypeAvailable()
 
         let accessControl =
-            isEnrolled && isHardware && level === SecurityLevelType.BIOMETRICS
+            isEnrolled && isHardware && level === SecurityLevelType.BIOMETRIC
 
-        const obj = {
+        const obj: BiometricState = {
             currentSecurityLevel: level,
-            authtypeAvailable: typeAvalable,
+            authTypeAvailable: typeAvalable,
             isDeviceEnrolled: isEnrolled,
             isHardwareAvailable: isHardware,
             accessControl: accessControl,
