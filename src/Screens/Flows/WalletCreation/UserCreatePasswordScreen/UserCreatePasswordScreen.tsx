@@ -36,7 +36,7 @@ export const UserCreatePasswordScreen = () => {
             )
             dispatch(setPinValidationString(pinValidationString))
             nav.navigate(Routes.WALLET_SUCCESS, {
-                securityLevelSelected: SecurityLevelType.SECRET,
+                securityLevelSelected: SecurityLevelType.PASSWORD,
                 userPin: insertedPin,
             })
         },

@@ -1,10 +1,6 @@
 import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
-import {
-    SecurityLevelType,
-    UserSelectedSecurityLevel,
-    WALLET_STATUS,
-} from "~Model"
+import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -18,9 +14,8 @@ import {
 import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
 import { useBiometrics } from "../useBiometrics"
-import { useWalletSecurity } from "../useWalletSecurity"
 /**
- * useCreateWalletWithPassword
+ * useCreateWallet
  * @returns
  */
 export const useCreateWallet = () => {
@@ -29,13 +24,12 @@ export const useCreateWallet = () => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const [isComplete, setIsComplete] = useState(false)
-    const { isWalletSecurityPassword } = useWalletSecurity()
 
     /**
      * Insert new wallet in store
-     * if userPassword is undefined, then use biometrics
+     * if userPassword is provided, encrypt the wallet with it and store the hash
      * @param mnemonic mnemonic
-     * @param userPassword user password
+     * @param userPassword optional user password to encrypt the wallet
      * @param onError callback called if erorr
      * @returns void
      */
@@ -50,16 +44,6 @@ export const useCreateWallet = () => {
             onError?: (error: unknown) => void
         }) => {
             try {
-                if (isWalletSecurityPassword && !userPassword)
-                    throw new Error(
-                        "You must provide the password as you secured with it",
-                    )
-
-                if (!userPassword && !biometrics?.accessControl)
-                    throw new Error(
-                        "Biometrics is not supported: accessControl is !true ",
-                    )
-
                 const { device, wallet } = getDeviceFromMnemonic(mnemonic)
                 dispatch(setMnemonic(undefined))
 
@@ -87,20 +71,16 @@ export const useCreateWallet = () => {
                 // if userPassword is undefined, then use biometrics
                 if (!userPassword) {
                     dispatch(
-                        setUserSelectedSecurity(
-                            UserSelectedSecurityLevel.BIOMETRIC,
-                        ),
+                        setUserSelectedSecurity(SecurityLevelType.BIOMETRICS),
                     )
 
-                    dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
+                    dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRICS))
                 } else {
                     dispatch(
-                        setUserSelectedSecurity(
-                            UserSelectedSecurityLevel.PASSWORD,
-                        ),
+                        setUserSelectedSecurity(SecurityLevelType.PASSWORD),
                     )
 
-                    dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
+                    dispatch(setLastSecurityLevel(SecurityLevelType.PASSWORD))
                 }
 
                 setIsComplete(true)
@@ -109,13 +89,7 @@ export const useCreateWallet = () => {
                 onError && onError(e)
             }
         },
-        [
-            dispatch,
-            biometrics,
-            getDeviceFromMnemonic,
-            selectedAccount,
-            isWalletSecurityPassword,
-        ],
+        [dispatch, biometrics, getDeviceFromMnemonic, selectedAccount],
     )
     //* [END] - Create Wallet
 

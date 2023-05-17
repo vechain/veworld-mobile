@@ -12,7 +12,8 @@ export const useBiometricType = () => {
     const currentSecurityLevel = useMemo(() => {
         if (PlatformUtils.isIOS()) {
             if (
-                biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
+                biometrics?.currentSecurityLevel ===
+                SecurityLevelType.BIOMETRICS
             ) {
                 if (
                     biometrics?.authtypeAvailable ===
@@ -31,7 +32,8 @@ export const useBiometricType = () => {
             }
         } else {
             if (
-                biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
+                biometrics?.currentSecurityLevel ===
+                SecurityLevelType.BIOMETRICS
             ) {
                 if (
                     biometrics?.authtypeAvailable ===

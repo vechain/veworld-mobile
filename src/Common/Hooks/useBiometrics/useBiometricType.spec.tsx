@@ -21,7 +21,7 @@ describe("useBiometricType", () => {
     })
     it("should returns Face ID", async () => {
         ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            currentSecurityLevel: SecurityLevelType.BIOMETRICS,
             authtypeAvailable: AuthenticationType.FACIAL_RECOGNITION,
         })
         const { result } = renderHook(() => useBiometricType(), {
@@ -34,7 +34,7 @@ describe("useBiometricType", () => {
     })
     it("should returns Touch ID", async () => {
         ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            currentSecurityLevel: SecurityLevelType.BIOMETRICS,
             authtypeAvailable: AuthenticationType.FINGERPRINT,
         })
         const { result } = renderHook(() => useBiometricType(), {
@@ -48,7 +48,7 @@ describe("useBiometricType", () => {
     it("should returns FingerPrint when android", async () => {
         setPlatform("android")
         ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            currentSecurityLevel: SecurityLevelType.BIOMETRICS,
             authtypeAvailable: AuthenticationType.FINGERPRINT,
         })
         const { result } = renderHook(() => useBiometricType(), {

@@ -17,7 +17,7 @@ export const WalletTypeSelectionScreen = () => {
     const { LL } = useI18nContext()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
-    const onCreateWallet = () => {
+    const navigateToNewWallet = () => {
         if (userHasOnboarded) {
             nav.navigate(Routes.NEW_MNEMONIC)
         } else {
@@ -25,7 +25,7 @@ export const WalletTypeSelectionScreen = () => {
         }
     }
 
-    const onImportWallet = () => {
+    const navigateToImportWallet = () => {
         nav.navigate(Routes.WALLET_TYPE_IMPORT)
     }
 
@@ -52,7 +52,7 @@ export const WalletTypeSelectionScreen = () => {
 
                 <BaseView alignItems="center" w={100}>
                     <BaseButton
-                        action={onCreateWallet}
+                        action={navigateToNewWallet}
                         w={100}
                         mx={20}
                         my={20}
@@ -61,7 +61,7 @@ export const WalletTypeSelectionScreen = () => {
 
                     <BaseButton
                         variant="outline"
-                        action={onImportWallet}
+                        action={navigateToImportWallet}
                         w={100}
                         mx={20}
                         title={LL.BTN_CREATE_WALLET_TYPE_IMPORT()}

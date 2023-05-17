@@ -1,9 +1,6 @@
 import { useCallback, useMemo } from "react"
 import { useBiometricsValidation, useWalletSecurity } from "~Common"
-import {
-    BaseButtonGroupHorizontalType,
-    UserSelectedSecurityLevel,
-} from "~Model"
+import { BaseButtonGroupHorizontalType, SecurityLevelType } from "~Model"
 
 export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
@@ -13,13 +10,13 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
         return {
             buttons: [
                 {
-                    id: UserSelectedSecurityLevel.BIOMETRIC,
+                    id: SecurityLevelType.BIOMETRICS,
                     label: "Face ID",
                     icon: "face-recognition",
                     disabled: false,
                 },
                 {
-                    id: UserSelectedSecurityLevel.PASSWORD,
+                    id: SecurityLevelType.PASSWORD,
                     label: "Pin",
                     icon: "dialpad",
                     disabled: isWalletSecurityBiometrics, // disable if wallet is already secured with biometrics
@@ -27,15 +24,15 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
             ],
 
             currentSecurity: isWalletSecurityBiometrics
-                ? UserSelectedSecurityLevel.BIOMETRIC
-                : UserSelectedSecurityLevel.PASSWORD,
+                ? SecurityLevelType.BIOMETRICS
+                : SecurityLevelType.PASSWORD,
         }
     }, [isWalletSecurityBiometrics])
 
     const shouldCallRequireBiometricsAndEnableIt = useCallback(
         (button: BaseButtonGroupHorizontalType) => {
             if (
-                button.id === UserSelectedSecurityLevel.BIOMETRIC &&
+                button.id === SecurityLevelType.BIOMETRICS &&
                 !isWalletSecurityBiometrics
             )
                 authenticateBiometrics(handleOnSecurityUpgrade)

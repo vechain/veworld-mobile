@@ -22,7 +22,7 @@ export const AppSecurityScreen = () => {
     const onBiometricsPress = useCallback(async () => {
         authenticateBiometrics(() => {
             nav.navigate(Routes.WALLET_SUCCESS, {
-                securityLevelSelected: SecurityLevelType.BIOMETRIC,
+                securityLevelSelected: SecurityLevelType.BIOMETRICS,
             })
         })
     }, [authenticateBiometrics, nav])
