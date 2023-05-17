@@ -75,12 +75,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         if (userHasOnboarded) {
             await checkIdentityBeforeOpening()
         } else {
-            if (
-                params?.securityLevelSelected === SecurityLevelType.BIOMETRICS
-            ) {
+            if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
                 await createWallet({ mnemonic })
             } else if (
-                params?.securityLevelSelected === SecurityLevelType.PASSWORD
+                params?.securityLevelSelected === SecurityLevelType.SECRET
             ) {
                 await createWallet({
                     userPassword: params?.userPin,

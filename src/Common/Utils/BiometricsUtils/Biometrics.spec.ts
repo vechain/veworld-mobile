@@ -25,7 +25,7 @@ describe("authentication functions", () => {
 
             const result = await getDeviceEnrolledLevel()
 
-            expect(result).toBe(SecurityLevelType.BIOMETRICS)
+            expect(result).toBe(SecurityLevelType.BIOMETRIC)
         })
     })
 
@@ -107,8 +107,8 @@ describe("authentication functions", () => {
     })
     describe("isSecurityDowngrade", () => {
         it("returns true when the old security level is biometric and the new security level is secret, and appLockStatusActive is true", () => {
-            const oldLevel = SecurityLevelType.BIOMETRICS
-            const newLevel: SecurityLevelType = SecurityLevelType.PASSWORD
+            const oldLevel = SecurityLevelType.BIOMETRIC
+            const newLevel: SecurityLevelType = SecurityLevelType.SECRET
             const userHasOnboarded = true
             const isAppLockActive = true
             const appLockStatusActive =
@@ -124,8 +124,8 @@ describe("authentication functions", () => {
         })
 
         it("returns false when the old security level is secret, regardless of the new security level and wallet status", () => {
-            const oldLevel = SecurityLevelType.PASSWORD
-            const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRICS
+            const oldLevel = SecurityLevelType.SECRET
+            const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
             const userHasOnboarded = true
             const isAppLockActive = true
             const appLockStatusActive =
@@ -141,8 +141,8 @@ describe("authentication functions", () => {
         })
 
         it("returns false when the new security level is biometric, regardless of the old security level and wallet status", () => {
-            const oldLevel = SecurityLevelType.PASSWORD
-            const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRICS
+            const oldLevel = SecurityLevelType.SECRET
+            const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
             const userHasOnboarded = true
             const isAppLockActive = true
             const appLockStatusActive =
@@ -158,7 +158,7 @@ describe("authentication functions", () => {
         })
 
         it("returns false when the user hasn't onboarded, regardless of the old and new security levels", () => {
-            const oldLevel = SecurityLevelType.PASSWORD
+            const oldLevel = SecurityLevelType.SECRET
             const newLevel: SecurityLevelType = SecurityLevelType.NONE
             const userHasOnboarded = true
             const isAppLockActive = true
@@ -178,7 +178,7 @@ describe("authentication functions", () => {
     describe("isSecurityUpgrade", () => {
         it("returns true when the old security level is none and the new security level is biometric, and the wallet status is unlocked", () => {
             const oldLevel = SecurityLevelType.NONE
-            const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRICS
+            const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
             const userHasOnboarded = true
             const isAppLockActive = true
             const appLockStatusActive =
@@ -194,8 +194,8 @@ describe("authentication functions", () => {
         })
 
         it("returns false when the old security level is biometric, regardless of the new security level and wallet status", () => {
-            const oldLevel = SecurityLevelType.BIOMETRICS
-            const newLevel: SecurityLevelType = SecurityLevelType.PASSWORD
+            const oldLevel = SecurityLevelType.BIOMETRIC
+            const newLevel: SecurityLevelType = SecurityLevelType.SECRET
             const userHasOnboarded = true
             const isAppLockActive = true
             const appLockStatusActive =
@@ -211,7 +211,7 @@ describe("authentication functions", () => {
         })
 
         it("returns false when the new security level is secret, regardless of the old security level and wallet status", () => {
-            const oldLevel = SecurityLevelType.PASSWORD
+            const oldLevel = SecurityLevelType.SECRET
             const newLevel: SecurityLevelType = SecurityLevelType.NONE
             const userHasOnboarded = true
             const isAppLockActive = true

@@ -15,7 +15,7 @@ describe("useBiometrics", () => {
     it("should initialize biometrics state on mount", async () => {
         ;(
             BiometricsUtils.getDeviceEnrolledLevel as jest.Mock
-        ).mockResolvedValue(SecurityLevelType.BIOMETRICS)
+        ).mockResolvedValue(SecurityLevelType.BIOMETRIC)
         ;(BiometricsUtils.getDeviceHasHardware as jest.Mock).mockResolvedValue(
             true,
         )
@@ -44,7 +44,7 @@ describe("useBiometrics", () => {
     it("should update biometrics state when app state changes", async () => {
         ;(
             BiometricsUtils.getDeviceEnrolledLevel as jest.Mock
-        ).mockResolvedValue(SecurityLevelType.BIOMETRICS)
+        ).mockResolvedValue(SecurityLevelType.BIOMETRIC)
         ;(BiometricsUtils.getDeviceHasHardware as jest.Mock).mockResolvedValue(
             true,
         )
