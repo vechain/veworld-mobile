@@ -71,6 +71,7 @@ export const BaseView = memo(
         const computedAlignItems = useMemo(() => {
             if (alignItems) return alignItems
             if (flexDirection === "row") return "center"
+            // TODO: this is WRONG!!!!, should be like the default View behavior (stretch)
             return "flex-start"
         }, [flexDirection, alignItems])
 

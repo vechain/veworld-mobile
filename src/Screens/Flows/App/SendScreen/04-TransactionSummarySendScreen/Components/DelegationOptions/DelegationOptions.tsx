@@ -9,7 +9,7 @@ import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
 import { SelectUrlBottomSheet } from "../SelectUrlBottomSheet"
 
 type Props = {
-    selectedDelegationUrl: string
+    selectedDelegationUrl?: string
     setSelectedDelegationUrl: (url?: string) => void
     selectedDelegationOption: DelegationType
     setSelectedDelegationOption: (id: DelegationType) => void
@@ -23,7 +23,7 @@ export const DelegationOptions = ({
     setSelectedDelegationOption,
     setSelectedAccount,
     selectedAccount,
-    //selectedDelegationUrl,
+    selectedDelegationUrl,
     setSelectedDelegationUrl,
 }: Props) => {
     const { LL } = useI18nContext()
@@ -34,9 +34,9 @@ export const DelegationOptions = ({
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
     const {
-        //ref: selectDelegationUrlBottomSheetRef,
+        ref: selectDelegationUrlBottomSheetRef,
         onOpen: openSelectDelegationUrlBottomSheet,
-        //onClose: closeSelectDelegationUrlBottonSheet,
+        onClose: closeSelectDelegationUrlBottonSheet,
     } = useBottomSheetModal()
 
     const options: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
@@ -96,12 +96,12 @@ export const DelegationOptions = ({
                 selectedDelegationOption={selectedDelegationOption}
             />
             <SelectUrlBottomSheet
-                onClose={closeSelectAccountBottonSheet}
-                ref={selectAccountBottomSheetRef}
+                onClose={closeSelectDelegationUrlBottonSheet}
+                ref={selectDelegationUrlBottomSheetRef}
                 setSelectedDelegationOption={setSelectedDelegationOption}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
                 selectedDelegationOption={selectedDelegationOption}
+                selectedDelegationUrl={selectedDelegationUrl}
+                setSelectedDelegationUrl={setSelectedDelegationUrl}
             />
         </>
     )

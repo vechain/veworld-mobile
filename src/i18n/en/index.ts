@@ -366,6 +366,10 @@ const en: BaseTranslation = {
     SEND_DELEGATION_ACCOUNT: "Account",
     SEND_DELEGATION_URL: "URL",
     SEND_DELEGATION_SELECT_ACCOUNT: "Select account",
+    SEND_DELEGATION_SELECT_URL: "Select URL",
+    SEND_DELEGATION_ADD_URL: "Add delegation URL",
+    SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
+    SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",
 
 
     // Wallets New Local

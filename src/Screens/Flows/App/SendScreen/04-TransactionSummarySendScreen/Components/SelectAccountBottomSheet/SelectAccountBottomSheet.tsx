@@ -98,6 +98,6 @@ export const SelectAccountBottomSheet = React.forwardRef<
 
 const styles = StyleSheet.create({
     list: {
-        height: "78%",
+        height: "70%",
     },
 })

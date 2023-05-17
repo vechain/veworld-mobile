@@ -1202,6 +1202,22 @@ type RootTranslation = {
 	 */
 	SEND_DELEGATION_SELECT_ACCOUNT: string
 	/**
+	 * S​e​l​e​c​t​ ​U​R​L
+	 */
+	SEND_DELEGATION_SELECT_URL: string
+	/**
+	 * A​d​d​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​U​R​L​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​o​ ​u​s​e​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: string
+	/**
+	 * E​n​t​e​r​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -2505,6 +2521,22 @@ Please, try again later.
 	 * Select account
 	 */
 	SEND_DELEGATION_SELECT_ACCOUNT: () => LocalizedString
+	/**
+	 * Select URL
+	 */
+	SEND_DELEGATION_SELECT_URL: () => LocalizedString
+	/**
+	 * Add delegation URL
+	 */
+	SEND_DELEGATION_ADD_URL: () => LocalizedString
+	/**
+	 * Insert the URL you want to to use to delegate this transaction
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: () => LocalizedString
+	/**
+	 * Enter URL
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: () => LocalizedString
 	/**
 	 * Account
 	 */
