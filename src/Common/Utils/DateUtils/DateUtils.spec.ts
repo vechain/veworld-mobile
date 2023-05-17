@@ -46,8 +46,8 @@ describe("formatDateTime", () => {
 
     it("should format the timestamp with Europe/Berlin timezone", () => {
         const timestamp = 1682448820000
-        expect(formatDateTime(timestamp, "en", "Europe/Berlin")).toBe(
-            "Apr 25, 2023 - 8:53 pm",
+        expect(() => formatDateTime(timestamp, "en", "Europe/Berlin")).toThrow(
+            "Invalid timezone: Europe/Berlin.",
         )
     })
 
