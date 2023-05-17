@@ -1,9 +1,5 @@
 import { useCallback, useState } from "react"
-import {
-    SecurityLevelType,
-    UserSelectedSecurityLevel,
-    WALLET_STATUS,
-} from "~Model"
+import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { CryptoUtils } from "~Common/Utils"
 import { useBiometrics } from "../useBiometrics"
 import { useDeviceUtils } from "../useDeviceUtils"
@@ -65,13 +61,9 @@ export const useCreateWalletWithBiometrics = () => {
                 if (!selectedAccount)
                     dispatch(selectAccount({ address: newAccount.address }))
 
-                dispatch(
-                    setUserSelectedSecurity(
-                        UserSelectedSecurityLevel.BIOMETRIC,
-                    ),
-                )
+                dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRICS))
 
-                dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
+                dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRICS))
 
                 setIsComplete(true)
             } catch (e) {

@@ -1,11 +1,11 @@
 import * as LocalAuthentication from "expo-local-authentication"
-import { TSecurityLevel, TAuthentication, SecurityLevelType } from "~Model"
+import { TAuthentication, SecurityLevelType } from "~Model"
 import * as i18n from "~i18n"
 import PlatformUtils from "../PlatformUtils"
 
 export const getDeviceEnrolledLevel = async () => {
     let level = await LocalAuthentication.getEnrolledLevelAsync()
-    return LocalAuthentication.SecurityLevel[level] as TSecurityLevel
+    return LocalAuthentication.SecurityLevel[level] as SecurityLevelType
 }
 
 export const getDeviceHasHardware = async () => {
@@ -49,18 +49,18 @@ export const authenticateWithBiometrics = async () => {
 
 export const isSecurityDowngrade = (
     oldLevel: string,
-    newLevel: TSecurityLevel,
+    newLevel: SecurityLevelType,
     appLockStatusActive: boolean,
 ) =>
-    oldLevel === SecurityLevelType.BIOMETRIC &&
-    newLevel !== SecurityLevelType.BIOMETRIC &&
+    oldLevel === SecurityLevelType.BIOMETRICS &&
+    newLevel !== SecurityLevelType.BIOMETRICS &&
     appLockStatusActive
 
 export const isSecurityUpgrade = (
     oldLevel: string,
-    newLevel: TSecurityLevel,
+    newLevel: SecurityLevelType,
     appLockStatusActive: boolean,
 ) =>
-    oldLevel !== SecurityLevelType.BIOMETRIC &&
-    newLevel === SecurityLevelType.BIOMETRIC &&
+    oldLevel !== SecurityLevelType.BIOMETRICS &&
+    newLevel === SecurityLevelType.BIOMETRICS &&
     appLockStatusActive
