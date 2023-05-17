@@ -17,6 +17,11 @@ import {
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
 
+enum TokenIndex {
+    vet = 0,
+    vtho = 1,
+}
+
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
     visibleHeightRef: number
@@ -56,13 +61,13 @@ export const TokenList = memo(
             <Animated.View style={styles.container} {...animatedViewProps}>
                 {tokenWithInfo[0].balance && (
                     <AnimatedChartCard
-                        tokenWithInfo={tokenWithInfo[0]}
+                        tokenWithInfo={tokenWithInfo[TokenIndex.vet]}
                         isEdit={isEdit}
                     />
                 )}
                 {tokenWithInfo[1].balance && (
                     <AnimatedChartCard
-                        tokenWithInfo={tokenWithInfo[1]}
+                        tokenWithInfo={tokenWithInfo[TokenIndex.vtho]}
                         isEdit={isEdit}
                     />
                 )}
