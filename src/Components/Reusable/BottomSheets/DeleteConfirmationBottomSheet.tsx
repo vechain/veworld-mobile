@@ -18,7 +18,7 @@ type Props = {
     onConfirm: () => void
 }
 
-const snapPoints = ["50%"]
+const snapPoints = ["55%"]
 
 export const DeleteConfirmationBottomSheet = React.forwardRef<
     BottomSheetModalMethods,

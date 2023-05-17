@@ -52,4 +52,17 @@ describe("BaseTouchable", () => {
         fireEvent.press(baseTouchable)
         expect(onPress).toHaveBeenCalled()
     })
+
+    it("does nothing when pressed if action is not defined", async () => {
+        const onPress = jest.fn()
+        render(<BaseTouchable title={title} testID={baseTouchableTestId} />, {
+            wrapper: TestWrapper,
+        })
+
+        const baseTouchable = await findBaseTouchable()
+        expect(baseTouchable).toBeVisible()
+
+        fireEvent.press(baseTouchable)
+        expect(onPress).not.toHaveBeenCalled()
+    })
 })

@@ -825,6 +825,14 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_NO_TOKEN_DATA: RequiredParams<'tokenName'>
 	/**
+	 * D​a​t​a
+	 */
+	COMMON_LBL_DATA: string
+	/**
+	 * C​o​m​m​e​n​t
+	 */
+	COMMON_LBL_COMMENT: string
+	/**
 	 * A​s​s​e​t​s
 	 */
 	COMMON_ASSETS: string
@@ -840,6 +848,22 @@ type RootTranslation = {
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
+	/**
+	 * M​a​r​k​e​t​ ​C​a​p
+	 */
+	COMMON_MARKET_CAP: string
+	/**
+	 * T​o​t​a​l​ ​S​u​p​p​l​y
+	 */
+	COMMON_TOTAL_SUPPLY: string
+	/**
+	 * 2​4​h​ ​V​o​l​u​m​e
+	 */
+	COMMON_24H_VOLUME: string
+	/**
+	 * C​i​r​c​u​l​a​t​i​n​g​ ​S​u​p​p​l​y
+	 */
+	COMMON_CIRCULATING_SUPPLY: string
 	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -998,7 +1022,7 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
-	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -1061,6 +1085,18 @@ type RootTranslation = {
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: string
+	/**
+	 * W​e​ ​h​a​v​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​y​o​u​ ​h​a​v​e​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​b​a​l​a​n​c​e​,​ ​a​d​d​ ​t​h​e​m​ ​d​i​r​e​c​t​l​y​ ​f​r​o​m​ ​h​e​r​e
+	 */
+	MANAGE_TOKEN_SUGGESTED_TOKENS: string
+	/**
+	 * A​d​d​ ​t​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: string
+	/**
+	 * S​u​g​g​e​s​t​e​d​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: string
 	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
@@ -1225,6 +1261,66 @@ type RootTranslation = {
 	 * S​i​g​n​e​d​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	SIGNED_CERTIFICATE: string
+	/**
+	 * O​r​i​g​i​n
+	 */
+	ORIGIN: string
+	/**
+	 * C​o​n​t​e​n​t
+	 */
+	CONTENT: string
+	/**
+	 * S​t​a​t​u​s
+	 */
+	STATUS: string
+	/**
+	 * P​e​n​d​i​n​g
+	 */
+	ACTIVITIES_STATUS_pending: string
+	/**
+	 * S​u​c​c​e​s​s
+	 */
+	ACTIVITIES_STATUS_success: string
+	/**
+	 * R​e​v​e​r​t​e​d
+	 */
+	ACTIVITIES_STATUS_reverted: string
+	/**
+	 * T​o​k​e​n​ ​t​r​a​n​s​f​e​r
+	 */
+	CONNECTED_APP_token_transfer: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 */
+	CONNECTED_APP_contract_call: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​e​p​l​o​y​m​e​n​t
+	 */
+	CONNECTED_APP_deploy_contract: string
+	/**
+	 * O​u​t​c​o​m​e​s
+	 */
+	OUTCOMES: string
+	/**
+	 * T​y​p​e
+	 */
+	TYPE: string
+	/**
+	 * T​o​k​e​n​ ​s​y​m​b​o​l
+	 */
+	TOKEN_SYMBOL: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	CONTRACT_DATA: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​A​B​I
+	 */
+	CONTRACT_ABI: string
+	/**
+	 * C​l​i​c​k​ ​t​o​ ​c​o​p​y​ ​A​B​I
+	 */
+	COPY_ABI: string
 }
 
 export type TranslationFunctions = {
@@ -2033,6 +2129,14 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_NO_TOKEN_DATA: (arg: { tokenName: string }) => LocalizedString
 	/**
+	 * Data
+	 */
+	COMMON_LBL_DATA: () => LocalizedString
+	/**
+	 * Comment
+	 */
+	COMMON_LBL_COMMENT: () => LocalizedString
+	/**
 	 * Assets
 	 */
 	COMMON_ASSETS: () => LocalizedString
@@ -2048,6 +2152,22 @@ export type TranslationFunctions = {
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
+	/**
+	 * Market Cap
+	 */
+	COMMON_MARKET_CAP: () => LocalizedString
+	/**
+	 * Total Supply
+	 */
+	COMMON_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * 24h Volume
+	 */
+	COMMON_24H_VOLUME: () => LocalizedString
+	/**
+	 * Circulating Supply
+	 */
+	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */
@@ -2206,7 +2326,7 @@ Please, try again later.
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
-	 * {name} copied to clipboard!
+	 * {name} has been copied to the clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
 	/**
@@ -2265,6 +2385,18 @@ Please, try again later.
 	 * Search a token
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * We have noticed that you have tokens with balance, add them directly from here
+	 */
+	MANAGE_TOKEN_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Add tokens
+	 */
+	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Suggested token
+	 */
+	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: () => LocalizedString
 	/**
 	 * Add custom token
 	 */
@@ -2429,6 +2561,66 @@ Please, try again later.
 	 * Signed certificate
 	 */
 	SIGNED_CERTIFICATE: () => LocalizedString
+	/**
+	 * Origin
+	 */
+	ORIGIN: () => LocalizedString
+	/**
+	 * Content
+	 */
+	CONTENT: () => LocalizedString
+	/**
+	 * Status
+	 */
+	STATUS: () => LocalizedString
+	/**
+	 * Pending
+	 */
+	ACTIVITIES_STATUS_pending: () => LocalizedString
+	/**
+	 * Success
+	 */
+	ACTIVITIES_STATUS_success: () => LocalizedString
+	/**
+	 * Reverted
+	 */
+	ACTIVITIES_STATUS_reverted: () => LocalizedString
+	/**
+	 * Token transfer
+	 */
+	CONNECTED_APP_token_transfer: () => LocalizedString
+	/**
+	 * Contract call
+	 */
+	CONNECTED_APP_contract_call: () => LocalizedString
+	/**
+	 * Contract deployment
+	 */
+	CONNECTED_APP_deploy_contract: () => LocalizedString
+	/**
+	 * Outcomes
+	 */
+	OUTCOMES: () => LocalizedString
+	/**
+	 * Type
+	 */
+	TYPE: () => LocalizedString
+	/**
+	 * Token symbol
+	 */
+	TOKEN_SYMBOL: () => LocalizedString
+	/**
+	 * Contract data
+	 */
+	CONTRACT_DATA: () => LocalizedString
+	/**
+	 * Contract ABI
+	 */
+	CONTRACT_ABI: () => LocalizedString
+	/**
+	 * Click to copy ABI
+	 */
+	COPY_ABI: () => LocalizedString
 }
 
 export type Formatters = {}

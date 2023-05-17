@@ -1,12 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { FungibleToken, TokenWithCompleteInfo } from "~Model"
-import { TokenInfoResponse, TokensState } from "../Types"
+import {
+    FungibleToken,
+    FungibleTokenWithBalance,
+    TokenWithCompleteInfo,
+} from "~Model"
+import { CoinMarketInfo, TokenInfoResponse, TokensState } from "../Types"
 import { AddressUtils } from "~Common"
 
 export const initialTokenState: TokensState = {
     custom: [],
     dashboardChartData: {},
+    assetDetailChartData: {},
+    coinMarketInfo: {},
     officialTokens: [],
+    suggestedTokens: [],
     coinGeckoTokens: [],
 }
 
@@ -42,11 +49,40 @@ export const TokenSlice = createSlice({
             state.dashboardChartData[symbol] = data
         },
 
+        setAssertDetailChartData: (
+            state,
+            action: PayloadAction<{ symbol: string; data: number[][] }>,
+        ) => {
+            const { symbol, data } = action.payload
+            state.assetDetailChartData[symbol] = data
+        },
+
+        setCoinMarketInfo: (
+            state,
+            action: PayloadAction<{ data: CoinMarketInfo[] }>,
+        ) => {
+            const { data } = action.payload
+            state.coinMarketInfo = data.reduce(
+                (acc: { [key: string]: CoinMarketInfo }, obj) => {
+                    acc[obj.symbol] = obj
+                    return acc
+                },
+                {},
+            )
+        },
+
         setOfficialTokens: (
             state,
             action: PayloadAction<TokenWithCompleteInfo[]>,
         ) => {
             state.officialTokens = action.payload
+        },
+
+        setSuggestedTokens: (
+            state,
+            action: PayloadAction<FungibleTokenWithBalance[]>,
+        ) => {
+            state.suggestedTokens = action.payload
         },
 
         setCoinGeckoTokens: (
@@ -62,5 +98,8 @@ export const {
     addOrUpdateCustomToken,
     setDashboardChartData,
     setOfficialTokens,
+    setAssertDetailChartData,
     setCoinGeckoTokens,
+    setSuggestedTokens,
+    setCoinMarketInfo,
 } = TokenSlice.actions
