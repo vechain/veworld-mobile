@@ -4,6 +4,7 @@ import axios from "axios"
 import { error } from "~Common/Logger"
 import { Network, Balance } from "~Model"
 import AddressUtils from "../AddressUtils"
+import FormattingUtils from "../FormattingUtils"
 
 /**
  * Calls out to external sources to get the balance
@@ -87,8 +88,26 @@ const getTokenBalanceFromBlockchain = async (
     }
 }
 
+const getFiatBalance = (
+    balance: string,
+    exchangeRate: number,
+    decimals: number,
+) =>
+    FormattingUtils.humanNumber(
+        FormattingUtils.convertToFiatBalance(balance, exchangeRate, decimals),
+        balance,
+    )
+
+const getTokenUnitBalance = (balance: string, decimals: number) =>
+    FormattingUtils.humanNumber(
+        FormattingUtils.convertToFiatBalance(balance, 1, decimals),
+        balance,
+    )
+
 export default {
     getBalanceFromBlockchain,
     getVetAndVthoBalancesFromBlockchain,
     getTokenBalanceFromBlockchain,
+    getFiatBalance,
+    getTokenUnitBalance,
 }

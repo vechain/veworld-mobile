@@ -849,6 +849,22 @@ type RootTranslation = {
 	 */
 	COMMON_TODAY: string
 	/**
+	 * M​a​r​k​e​t​ ​C​a​p
+	 */
+	COMMON_MARKET_CAP: string
+	/**
+	 * T​o​t​a​l​ ​S​u​p​p​l​y
+	 */
+	COMMON_TOTAL_SUPPLY: string
+	/**
+	 * 2​4​h​ ​V​o​l​u​m​e
+	 */
+	COMMON_24H_VOLUME: string
+	/**
+	 * C​i​r​c​u​l​a​t​i​n​g​ ​S​u​p​p​l​y
+	 */
+	COMMON_CIRCULATING_SUPPLY: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1006,7 +1022,7 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
-	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -2137,6 +2153,22 @@ export type TranslationFunctions = {
 	 */
 	COMMON_TODAY: () => LocalizedString
 	/**
+	 * Market Cap
+	 */
+	COMMON_MARKET_CAP: () => LocalizedString
+	/**
+	 * Total Supply
+	 */
+	COMMON_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * 24h Volume
+	 */
+	COMMON_24H_VOLUME: () => LocalizedString
+	/**
+	 * Circulating Supply
+	 */
+	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -2294,7 +2326,7 @@ Please, try again later.
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
-	 * {name} copied to clipboard!
+	 * {name} has been copied to the clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
 	/**
