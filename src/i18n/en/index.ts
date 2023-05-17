@@ -46,6 +46,7 @@ const en: BaseTranslation = {
     BTN_CREATE_CONTACT: "Create contact",
     BTN_EDIT_PIN: "Edit Pin",
     BTN_BACKUP_MENMONIC: "Backup phrase",
+    BTN_WALLET_CONNECT: "WC",
    
 
     // BODY

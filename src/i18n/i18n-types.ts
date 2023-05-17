@@ -143,6 +143,10 @@ type RootTranslation = {
 	 */
 	BTN_SWAP: string
 	/**
+	 * S​w​a​p
+	 */
+	BTN_WALLET_CONNECT: string
+	/**
 	 * H​i​s​t​o​r​y
 	 */
 	BTN_HISTORY: string
@@ -1452,6 +1456,10 @@ export type TranslationFunctions = {
 	 * Swap
 	 */
 	BTN_SWAP: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	BTN_WALLET_CONNECT: () => LocalizedString
 	/**
 	 * History
 	 */

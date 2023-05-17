@@ -81,6 +81,17 @@ export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
                 testID: "swapButton",
             },
             {
+                name: LL.BTN_WALLET_CONNECT(),
+                action: () => nav.navigate(Routes.WALLET_CONNECT),
+                icon: (
+                    <BaseIcon
+                        color={theme.colors.text}
+                        name="flip-horizontal"
+                    />
+                ),
+                testID: "walletConnectButton",
+            },
+            {
                 name: LL.BTN_HISTORY(),
                 action: () => nav.navigate(Routes.HISTORY),
                 icon: <BaseIcon color={theme.colors.text} name="history" />,

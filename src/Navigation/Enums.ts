@@ -21,6 +21,7 @@ export enum Routes {
     INSERT_ADDRESS_SEND = "Insert_Address_Send",
     TRANSACTION_SUMMARY_SEND = "Transaction_Summary_Send",
     SWAP = "Swap",
+    WALLET_CONNECT = "Wallet_Connect",
     HISTORY = "History",
     NFTS = "NFTs",
     WALLET_MANAGEMENT = "Wallet_Management",

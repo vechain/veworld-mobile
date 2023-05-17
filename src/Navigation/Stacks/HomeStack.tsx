@@ -14,6 +14,7 @@ import {
     TransactionSummarySendScreen,
     ActivityDetailsScreen,
     AssetDetailScreen,
+    WalletConnectScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
@@ -50,6 +51,7 @@ export type RootStackParamListHome = {
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.ACTIVITY_DETAILS]: { activity: Activity; token?: FungibleToken }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.WALLET_CONNECT]: undefined
 }
 
 const { Navigator, Group, Screen } =
@@ -92,6 +94,11 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.SWAP}
                     component={SwapScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.WALLET_CONNECT}
+                    component={WalletConnectScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
