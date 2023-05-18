@@ -34,7 +34,7 @@ describe("useBiometrics", () => {
 
         expect(result.current).toEqual({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-            authtypeAvailable: "touch",
+            authTypeAvailable: "touch",
             isDeviceEnrolled: true,
             isHardwareAvailable: true,
             accessControl: true,
@@ -72,7 +72,7 @@ describe("useBiometrics", () => {
 
         expect(result.current).toEqual({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-            authtypeAvailable: "touch",
+            authTypeAvailable: "touch",
             isDeviceEnrolled: true,
             isHardwareAvailable: true,
             accessControl: true,
