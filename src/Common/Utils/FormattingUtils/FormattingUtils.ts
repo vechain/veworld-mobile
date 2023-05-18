@@ -191,8 +191,6 @@ export const humanNumber = (
     originalValue?: BigNumber.Value,
     symbol: string | null = null,
 ) => {
-    if (!formattedValue) return "N/A"
-
     const suffix = symbol ? " " + symbol : ""
 
     let value = new Intl.NumberFormat("en", {

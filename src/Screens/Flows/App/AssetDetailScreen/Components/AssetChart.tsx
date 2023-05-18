@@ -15,7 +15,7 @@ export const AssetChart = ({ token }: Props) => {
     const { chartData, getChartData } = useChartData(token.symbol)
 
     const invokeHaptic = () => {
-        if (chartData.length)
+        if (chartData && chartData.length)
             haptics.impactAsync(haptics.ImpactFeedbackStyle.Light)
     }
 
