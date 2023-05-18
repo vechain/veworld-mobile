@@ -3,7 +3,7 @@ import { AccountWithDevice } from "~Model"
 import { useState } from "react"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { Transaction } from "thor-devkit"
-import { HexUtils, error, info } from "~Common"
+import { HexUtils, TransactionUtils, error, info } from "~Common"
 import axios from "axios"
 import { showErrorToast } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -30,15 +30,15 @@ export const useDelegation = ({ transaction }: Props) => {
     const fetchSignature = async (
         txBody: Transaction.Body,
         delegationUrl: string,
-        accAddress: string,
+        accountAddress: string,
     ) => {
-        const tx = new Transaction(txBody)
+        const tx = TransactionUtils.toDelegation(txBody)
         // build hex encoded version of the transaction for signing request
         const rawTransaction = HexUtils.addPrefix(tx.encode().toString("hex"))
 
         // request to send for sponsorship/fee delegation
         const sponsorRequest = {
-            origin: accAddress.toLowerCase(),
+            origin: accountAddress.toLowerCase(),
             raw: rawTransaction,
         }
 
