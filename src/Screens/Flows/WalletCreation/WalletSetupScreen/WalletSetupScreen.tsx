@@ -14,7 +14,7 @@ import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useTheme } from "~Common"
 import { ImportWalletBottomSheet } from "./components"
 
-export const WalletTypeSelectionScreen = () => {
+export const WalletSetupScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const theme = useTheme()

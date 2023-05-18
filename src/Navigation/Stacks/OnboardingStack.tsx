@@ -3,11 +3,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     WelcomeScreen,
     NewMnemonicScreen,
-    WalletTypeSelectionScreen,
+    WalletSetupScreen,
     ConfirmMnemonicScreen,
     AppSecurityScreen,
     UserCreatePasswordScreen,
-    ImportWalletTypeSelectionScreen,
     ImportMnemonicScreen,
     WalletSuccessScreen,
 } from "~Screens"
@@ -19,7 +18,6 @@ export type RootStackParamListOnboarding = {
     [Routes.WALLET_SETUP]: undefined
     [Routes.NEW_MNEMONIC]: undefined
     [Routes.CONFIRM_MNEMONIC]: undefined
-    [Routes.WALLET_TYPE_IMPORT]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
     [Routes.APP_SECURITY]: undefined
@@ -45,13 +43,7 @@ export const OnboardingStack = () => {
 
                 <Onboarding.Screen
                     name={Routes.WALLET_SETUP}
-                    component={WalletTypeSelectionScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name={Routes.WALLET_TYPE_IMPORT}
-                    component={ImportWalletTypeSelectionScreen}
+                    component={WalletSetupScreen}
                     options={{ headerShown: false }}
                 />
 
