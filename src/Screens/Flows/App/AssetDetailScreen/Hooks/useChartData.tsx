@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react"
 import {
-    fetchDashboardChartData,
+    fetchChartData,
     selectAssetDetailChartData,
     useAppDispatch,
     useAppSelector,
@@ -17,7 +17,7 @@ export const useChartData = (symbol: string) => {
     const getChartData = useCallback(
         (days: number = 1, interval: string = "hourly") => {
             dispatch(
-                fetchDashboardChartData({
+                fetchChartData({
                     symbol: symbol,
                     days: days,
                     interval: interval,

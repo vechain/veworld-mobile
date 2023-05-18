@@ -26,28 +26,28 @@ export const MarketInfoView = ({
                 <BaseView w={50} p={12} style={styles.borderMarketCap}>
                     <BaseText>{LL.COMMON_MARKET_CAP()}</BaseText>
                     <BaseText typographyFont="bodyBold" py={4}>
-                        {marketCap}
+                        {marketCap ?? "N/A"}
                     </BaseText>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderTotalSupply}>
                     <BaseText>{LL.COMMON_TOTAL_SUPPLY()}</BaseText>
                     <BaseText typographyFont="bodyBold" py={4}>
-                        {totalSupply}
+                        {totalSupply ?? "N/A"}
                     </BaseText>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderTotalVolume}>
                     <BaseText>{LL.COMMON_24H_VOLUME()}</BaseText>
                     <BaseText typographyFont="bodyBold" py={4}>
-                        {totalVolume}
+                        {totalVolume ?? "N/A"}
                     </BaseText>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderCirculatingSupply}>
                     <BaseText>{LL.COMMON_CIRCULATING_SUPPLY()}</BaseText>
                     <BaseText typographyFont="bodyBold" py={4}>
-                        {circulatingSupply}
+                        {circulatingSupply ?? "N/A"}
                     </BaseText>
                 </BaseView>
             </BaseView>

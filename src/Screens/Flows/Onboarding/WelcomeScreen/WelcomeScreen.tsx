@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -10,14 +10,24 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
+import { fetchTokensWithInfo, useAppDispatch } from "~Storage/Redux"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.WALLET_SETUP)
     }, [nav])
+
+    /*
+     * Fetch tokens with info on app start
+     * We want to pre-fetch the tokens with info on app start to get better UX when there are no persisted tokens
+     */
+    useEffect(() => {
+        dispatch(fetchTokensWithInfo())
+    }, [dispatch])
 
     return (
         <BaseSafeArea grow={1}>
