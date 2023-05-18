@@ -1,13 +1,7 @@
 import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import {
-    CryptoUtils,
-    FormattingUtils,
-    VTHO,
-    useCheckIdentity,
-    useTheme,
-} from "~Common"
+import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
     AccountCard,
@@ -22,7 +16,6 @@ import {
     BaseText,
     BaseView,
     ScrollViewWithFooter,
-    showWarningToast,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -34,7 +27,6 @@ import {
     selectCurrency,
     selectSelectedAccount,
     useAppSelector,
-    selectDevice,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -56,7 +48,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
-    const selectedDevice = useAppSelector(selectDevice(account?.rootAddress))
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -93,33 +84,23 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectedDelegationUrl,
         setSelectedDelegationUrl,
         isDelegated,
-        delegationSignature,
+        urlDelegationSignature,
     } = useDelegation({ transaction })
 
     const { signTransaction } = useSignTransaction({
         transaction,
         onTXFinish,
         isDelegated,
-        delegationSignature,
+        urlDelegationSignature,
+        selectedDelegationAccount,
+        selectedDelegationOption,
     })
 
     const onIdentityConfirmed = useCallback(
         async (password?: string) => {
-            if (!selectedDevice) return
-
-            //local mnemonic, identity already verified via useCheckIdentity
-            if ("wallet" in selectedDevice) {
-                const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                    selectedDevice,
-                    password,
-                )
-                await signTransaction(decryptedWallet)
-            } else {
-                // TODO: support hardware wallet
-                showWarningToast("Hardware wallet not supported yet")
-            }
+            signTransaction(password)
         },
-        [selectedDevice, signTransaction],
+        [signTransaction],
     )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =

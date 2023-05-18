@@ -20,7 +20,8 @@ export const useDelegation = ({ transaction }: Props) => {
     const [selectedDelegationAccount, setSelectedDelegationAccount] =
         useState<AccountWithDevice>()
     const [selectedDelegationUrl, setSelectedDelegationUrl] = useState<string>()
-    const [delegationSignature, setDelegationSignature] = useState<Buffer>()
+    const [urlDelegationSignature, setUrlDelegationSignature] =
+        useState<Buffer>()
     const isDelegated = selectedDelegationOption !== DelegationType.NONE
 
     /**
@@ -46,7 +47,7 @@ export const useDelegation = ({ transaction }: Props) => {
             error("Failed to get signature from delegator:" + e)
             setSelectedDelegationOption(DelegationType.NONE)
             setSelectedDelegationUrl(undefined)
-            setDelegationSignature(undefined)
+            setUrlDelegationSignature(undefined)
             showErrorToast(LL.SEND_DELEGATION_ERROR_SIGNATURE())
         }
 
@@ -63,7 +64,7 @@ export const useDelegation = ({ transaction }: Props) => {
                 "hex",
             )
             info("url delegation signature", signature)
-            setDelegationSignature(signature)
+            setUrlDelegationSignature(signature)
         } catch (e) {
             onError(e)
         }
@@ -74,7 +75,7 @@ export const useDelegation = ({ transaction }: Props) => {
         if (url && account?.address) {
             fetchSignature(transaction, url, account.address)
         } else {
-            setDelegationSignature(undefined)
+            setUrlDelegationSignature(undefined)
         }
     }
 
@@ -85,8 +86,8 @@ export const useDelegation = ({ transaction }: Props) => {
         setSelectedDelegationAccount,
         selectedDelegationUrl,
         setSelectedDelegationUrl: handleSetSelectedDelegationUrl,
-        delegationSignature,
-        setDelegationSignature,
+        urlDelegationSignature,
+        setUrlDelegationSignature,
         isDelegated,
     }
 }
