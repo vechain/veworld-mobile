@@ -7,7 +7,7 @@ import {
     ViewStyle,
 } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { useTheme } from "~Common"
+import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
 import { BaseView } from "../BaseView"
 
 type Props = {
@@ -26,31 +26,17 @@ export const BaseCard = memo(
         onPress,
     }: ViewProps & Props) => {
         const theme = useTheme()
+        const { styles } = useThemedStyles(baseStyles)
         return (
             <DropShadow
                 style={[
                     theme.shadows.card,
-                    selected
-                        ? // eslint-disable-next-line react-native/no-inline-styles
-                          {
-                              borderWidth: selected ? 1 : 0,
-                              borderRadius: 16,
-                              borderColor: theme.colors.text,
-                          }
-                        : {},
+                    selected ? styles.selectedContainer : {},
                     styles.container,
                     containerStyle,
                 ]}>
                 <Pressable onPress={onPress}>
-                    <BaseView
-                        style={[
-                            styles.view,
-                            {
-                                backgroundColor: theme.colors.card,
-                            },
-                            style,
-                        ]}
-                        testID={testID}>
+                    <BaseView style={[styles.view, style]} testID={testID}>
                         {children}
                     </BaseView>
                 </Pressable>
@@ -59,15 +45,21 @@ export const BaseCard = memo(
     },
 )
 
-const styles = StyleSheet.create({
-    container: {
-        width: "100%",
-    },
-    view: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "#fff",
-        borderRadius: 16,
-        padding: 12,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            width: "100%",
+        },
+        selectedContainer: {
+            borderWidth: 1,
+            borderRadius: 16,
+            borderColor: theme.colors.text,
+        },
+        view: {
+            flexDirection: "row",
+            alignItems: "center",
+            borderRadius: 16,
+            padding: 12,
+            backgroundColor: theme.colors.card,
+        },
+    })
