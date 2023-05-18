@@ -34,7 +34,9 @@ export const WalletSetupScreen = () => {
                 flexGrow={1}
                 mx={20}>
                 <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="title">
+                    <BaseText
+                        typographyFont="title"
+                        testID="wallet-setup-title-id">
                         {LL.TITLE_CREATE_WALLET_TYPE()}
                     </BaseText>
                     <BaseText typographyFont="body" my={10}>

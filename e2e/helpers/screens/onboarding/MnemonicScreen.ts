@@ -12,3 +12,15 @@ export const copyMnemonic = async (): Promise<string[]> => {
     }
     return mnemonic
 }
+
+export const backupMnemonicAndContinue = async (): Promise<string[]> => {
+    await element(by.id("toggle-mnemonic-visibility")).tap()
+
+    const mnemonic: string[] = await copyMnemonic()
+
+    await element(by.id("mnemonic-checkbox")).tap()
+
+    await element(by.text("Backup")).tap()
+
+    return mnemonic
+}

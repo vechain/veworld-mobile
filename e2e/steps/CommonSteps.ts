@@ -7,7 +7,6 @@ Given("The app is opened", { timeout: -1 }, async () => {
     let retries: number = 5
     while (retries-- > 0) {
         try {
-            console.log("HERE")
             await detox.device.launchApp({ newInstance: true })
             break
         } catch (error) {

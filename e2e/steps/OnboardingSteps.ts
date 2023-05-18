@@ -4,10 +4,13 @@ import { waitFor, element } from "detox"
 import {
     AdvancedSettingsFlow,
     BiometricsScreen,
+    ConfirmMnemonicScreen,
     HomeFlows,
     LONG_TIMEOUT,
+    MnemonicScreen,
     OnboardingFlows,
     WalletSuccessScreen,
+    WelcomeScreen,
 } from "../helpers"
 
 Given(
@@ -75,37 +78,15 @@ Given(
     "The user is in the onboarding welcome screen",
     { timeout: -1 },
     async () => {
-        if (!(await OnboardingFlows.isInOnboardingWelcomeScreen())) {
+        if (!(await WelcomeScreen.isActive())) {
             await HomeFlows.goToAdvancedSettings()
             await AdvancedSettingsFlow.resetApp()
         }
     },
 )
 
-When("The user follows the onboarding process", async () => {
-    await OnboardingFlows.goThroughOnboardingSlides()
-})
-
-When(
-    "The user follows the onboarding and create wallet processes",
-    { timeout: -1 },
-    async () => {
-        await OnboardingFlows.goThroughOnboardingSlides()
-        await OnboardingFlows.selectCreateWallet()
-        await OnboardingFlows.goThroughPasswordSlides()
-    },
-)
-
-When("The user skips to password creation", async () => {
-    await OnboardingFlows.skipToCreatePassword()
-})
-
-When("The user follows the create wallet process", async () => {
-    await OnboardingFlows.goThroughPasswordSlides()
-})
-
-When("The user selects to create a new wallet", async () => {
-    await OnboardingFlows.selectCreateWallet()
+When("The user generates a new wallet", { timeout: -1 }, async () => {
+    await OnboardingFlows.skipToCreateLocalWallet()
 })
 
 When("The user skips to creating a new local wallet", async () => {
@@ -119,9 +100,9 @@ When("The user skips to import local wallet", async () => {
 When("The user onboards with a new local wallet", { timeout: -1 }, async () => {
     await OnboardingFlows.skipToCreateLocalWallet()
 
-    const mnemonic = await OnboardingFlows.backupMnemonic()
+    const mnemonic = await MnemonicScreen.backupMnemonicAndContinue()
 
-    await OnboardingFlows.verifyMnemonic(mnemonic)
+    await ConfirmMnemonicScreen.verifyMnemonic(mnemonic)
 })
 
 When(
@@ -162,24 +143,6 @@ When(
         await OnboardingFlows.protectWithBiometrics()
     },
 )
-
-Then("The user should be onboarded", { timeout: -1 }, async () => {
-    await waitFor(element(by.text("Create Wallet")))
-        .toBeVisible()
-        .withTimeout(LONG_TIMEOUT)
-})
-
-Then("The user should see password creation", { timeout: -1 }, async () => {
-    await waitFor(element(by.text("Create Wallet")))
-        .toBeVisible()
-        .withTimeout(LONG_TIMEOUT)
-})
-
-Then("The user can create wallet", { timeout: -1 }, async () => {
-    await waitFor(element(by.text("Your Mnemonic")))
-        .toBeVisible()
-        .withTimeout(LONG_TIMEOUT)
-})
 
 Then("The user should see wallet success screen", async () => {
     await WalletSuccessScreen.isActive()

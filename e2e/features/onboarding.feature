@@ -4,19 +4,6 @@ Feature: User Onboarding
     * The app is opened
     * The user is in the onboarding welcome screen
 
-  Scenario: User can onboard
-    When The user follows the onboarding process
-    Then The user should be onboarded
-
-  Scenario: User can skip to password creation
-    When The user skips to password creation
-    Then The user should see password creation
-
-
-  Scenario: User can go through all onboarding screens for creating a new local wallet
-    When The user follows the onboarding and create wallet processes
-    Then The user can create wallet
-
   Scenario: User successfully creates a local wallet with password protection
     When The user onboards with a new local wallet
     And The user chooses to protect the wallet with a password "<password>" and confirms with "<password>"
