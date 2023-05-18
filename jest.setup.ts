@@ -28,7 +28,6 @@ jest.mock("expo-secure-store", () => ({
     getItemAsync: jest.fn(),
     setItemAsync: jest.fn(),
 }))
-jest.mock("expo-local-authentication")
 jest.mock("expo-haptics", () => ({
     ImpactFeedbackStyle: {
         Light: "light",

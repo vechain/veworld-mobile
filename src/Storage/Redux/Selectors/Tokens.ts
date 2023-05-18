@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"
-import { FungibleToken, TokenWithCompleteInfo } from "~Model"
+import { Balance, FungibleToken, TokenWithCompleteInfo } from "~Model"
 import { selectAllExchangeRates } from "./Currency"
 import {
     DEFAULT_VECHAIN_TOKENS,
@@ -11,6 +11,10 @@ import {
     VTHO,
 } from "~Common"
 import { uniqBy } from "lodash"
+import {
+    selectVetTokenWithBalance,
+    selectVthoTokenWithBalance,
+} from "./Balances"
 
 const selectTokenState = (state: RootState) => state.tokens
 
@@ -72,9 +76,6 @@ export const selectSuggestedTokens = createSelector(
     state => state.suggestedTokens,
 )
 
-/**
- * TODO: refactor name of the selectors
- */
 export const selectAllFungibleTokens = createSelector(
     selectOfficialTokens,
     tokens => TokenUtils.mergeTokens(DEFAULT_VECHAIN_TOKENS, tokens),
@@ -105,11 +106,22 @@ export const selectNonVechainFungibleTokens = createSelector(
 )
 
 export const selectTokensWithInfo = createSelector(
-    selectCoinGeckoTokens,
-    selectFungibleTokens,
-    selectAllExchangeRates,
-    selectSelectedNetwork,
-    (coinGeckoTokens, githubTokens, exchangeRates, network) => {
+    [
+        selectCoinGeckoTokens,
+        selectFungibleTokens,
+        selectAllExchangeRates,
+        selectVetTokenWithBalance,
+        selectVthoTokenWithBalance,
+        selectSelectedNetwork,
+    ],
+    (
+        coinGeckoTokens,
+        githubTokens,
+        exchangeRates,
+        vetBalance,
+        vthoBalance,
+        network,
+    ) => {
         const defaultLocale = LocaleUtils.getLocale()
 
         const tokens: TokenWithCompleteInfo[] = githubTokens.map(
@@ -123,6 +135,14 @@ export const selectTokensWithInfo = createSelector(
                 )
 
                 if (!foundToken) return token as TokenWithCompleteInfo
+
+                let tokenBalance: Balance | undefined
+
+                if (token.symbol.toUpperCase() === "VET")
+                    tokenBalance = vetBalance?.balance
+
+                if (token.symbol.toUpperCase() === "VTHO")
+                    tokenBalance = vthoBalance?.balance
 
                 return {
                     ...token,
@@ -143,6 +163,7 @@ export const selectTokensWithInfo = createSelector(
                     rate: foundExchangeRate?.rate || 0,
                     change: foundExchangeRate?.change || 0,
                     desc: foundToken.description[defaultLocale] ?? token.desc,
+                    balance: tokenBalance,
                     links: {
                         blockchain_site: foundToken.links.blockchain_site,
                         homepage: foundToken.links.homepage,
@@ -188,6 +209,13 @@ export const selectTokenWithInfoWithID = createSelector(
             if (foundToken) foundTokens.push(foundToken)
         })
 
-        return foundTokens
+        return foundTokens || [VET, VTHO]
+    },
+)
+
+export const selectMarketInfoFor = createSelector(
+    [(_, state) => selectTokenState(state), symbol => symbol],
+    (tokens, symbol) => {
+        return tokens.coinMarketInfo[symbol.toLowerCase()]
     },
 )

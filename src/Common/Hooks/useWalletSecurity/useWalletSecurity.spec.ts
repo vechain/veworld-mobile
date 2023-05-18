@@ -1,8 +1,8 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useWalletSecurity } from "./useWalletSecurity"
-import { UserSelectedSecurityLevel } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { useBiometrics } from "../useBiometrics"
+import { SecurityLevelType } from "~Model"
 
 jest.mock("../useBiometrics")
 jest.mock("~Storage/Redux")
@@ -15,7 +15,7 @@ describe("useWalletSecurity", () => {
         mockBiometrics = {
             accessControl: true,
         }
-        mockUserSelectedSecurity = UserSelectedSecurityLevel.BIOMETRIC
+        mockUserSelectedSecurity = SecurityLevelType.BIOMETRIC
         ;(useBiometrics as jest.Mock).mockReturnValue(mockBiometrics)
         ;(useAppSelector as jest.Mock).mockReturnValue(mockUserSelectedSecurity)
         const { result } = renderHook(() => useWalletSecurity())
@@ -25,7 +25,7 @@ describe("useWalletSecurity", () => {
     })
 
     it("should return the correct wallet security for password", () => {
-        mockUserSelectedSecurity = UserSelectedSecurityLevel.PASSWORD
+        mockUserSelectedSecurity = SecurityLevelType.SECRET
         ;(useAppSelector as jest.Mock).mockReturnValue(mockUserSelectedSecurity)
         const { result } = renderHook(() => useWalletSecurity())
         expect(result.current.isWalletSecurityBiometrics).toBeFalsy()
@@ -34,7 +34,7 @@ describe("useWalletSecurity", () => {
     })
 
     it("should return the correct wallet security for none", () => {
-        mockUserSelectedSecurity = UserSelectedSecurityLevel.NONE
+        mockUserSelectedSecurity = SecurityLevelType.NONE
         ;(useAppSelector as jest.Mock).mockReturnValue(mockUserSelectedSecurity)
         const { result } = renderHook(() => useWalletSecurity())
         expect(result.current.isWalletSecurityBiometrics).toBeFalsy()

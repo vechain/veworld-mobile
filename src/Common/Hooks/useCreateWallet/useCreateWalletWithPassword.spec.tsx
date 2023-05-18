@@ -3,12 +3,12 @@ import { useCreateWalletWithPassword } from "./useCreateWalletWithPassword"
 import {
     addDeviceAndAccounts,
     setAppLockStatus,
-    setLastSecurityLevel,
     setMnemonic,
     setUserSelectedSecurity,
 } from "~Storage/Redux/Actions"
 import { TestWrapper } from "~Test"
 import KeychainService from "~Services/KeychainService"
+import { SecurityLevelType } from "~Model"
 const device = {
     alias: "Wallet 1",
     index: 0,
@@ -48,9 +48,6 @@ jest.mock("~Storage/Redux/Actions", () => ({
     ),
     selectAccount: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").selectAccount,
-    ),
-    setLastSecurityLevel: jest.fn(
-        jest.requireActual("~Storage/Redux/Actions").setLastSecurityLevel,
     ),
     setUserSelectedSecurity: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").setUserSelectedSecurity,
@@ -100,8 +97,7 @@ describe("useCreateWalletWithPassword", () => {
             },
         })
         expect(setAppLockStatus).toBeCalledWith("UNLOCKED")
-        expect(setUserSelectedSecurity).toBeCalledWith("PASSWORD")
-        expect(setLastSecurityLevel).toBeCalledWith("SECRET")
+        expect(setUserSelectedSecurity).toBeCalledWith(SecurityLevelType.SECRET)
         expect(setMnemonic).toBeCalledWith(undefined)
         expect(result.current.isComplete).toBe(true)
     })

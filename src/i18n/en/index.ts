@@ -240,7 +240,10 @@ const en: BaseTranslation = {
     COMMON_PRICE: "Price",
     COMMON_TODAY: "Today",
     COMMON_SELECT_ACCOUNT: "Select account",
-
+    COMMON_MARKET_CAP: "Market Cap",
+    COMMON_TOTAL_SUPPLY: "Total Supply",
+    COMMON_24H_VOLUME: "24h Volume",
+    COMMON_CIRCULATING_SUPPLY: "Circulating Supply",
 
 
     // Common Titles

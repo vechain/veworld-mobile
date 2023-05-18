@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleSheet, ScrollView } from "react-native"
 import { useTheme } from "~Common"
 import {
@@ -12,12 +12,22 @@ import {
     FastActionsBar,
 } from "~Components"
 import { RootStackParamListDiscover, Routes } from "~Navigation"
-import { AssetHeader } from "./Components/AssetHeader"
-import { AssetChart } from "./Components/AssetChart"
+import {
+    AssetHeader,
+    AssetChart,
+    BalanceView,
+    MarketInfoView,
+} from "./Components"
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { striptags } from "striptags"
+import {
+    fetchVechainMarketInfo,
+    selectMarketInfoFor,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type Props = NativeStackScreenProps<
     RootStackParamListDiscover,
@@ -30,8 +40,16 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const paddingBottom = useBottomTabBarHeight()
+    const marketInfo = useAppSelector(state =>
+        selectMarketInfoFor(token.symbol, state),
+    )
 
     const goBack = useCallback(() => nav.goBack(), [nav])
+
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        dispatch(fetchVechainMarketInfo())
+    }, [dispatch])
 
     const Actions: FastAction[] = useMemo(
         () => [
@@ -104,6 +122,14 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 <BaseView mx={20} alignItems="center">
                     <BaseSpacer height={24} />
                     <FastActionsBar actions={Actions} />
+
+                    <BaseSpacer height={24} />
+
+                    <BalanceView token={token} />
+
+                    <BaseSpacer height={24} />
+
+                    <MarketInfoView marketInfo={marketInfo} />
 
                     <BaseSpacer height={24} />
 

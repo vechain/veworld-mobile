@@ -6,11 +6,7 @@ import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
 import { usePollingChartData } from "../../../Hooks"
-import {
-    FungibleTokenWithBalance,
-    TokenWithCompleteInfo,
-    VeChainToken,
-} from "~Model"
+import { TokenWithCompleteInfo, VeChainToken } from "~Model"
 import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -19,20 +15,19 @@ const HEIGHT = 100
 
 export type NativeTokenProps = {
     tokenWithInfo: TokenWithCompleteInfo
-    tokenWithBalance: FungibleTokenWithBalance
     isEdit: boolean
 }
 
 export const AnimatedChartCard = memo(
-    ({ tokenWithInfo, tokenWithBalance, isEdit }: NativeTokenProps) => {
+    ({ tokenWithInfo, isEdit }: NativeTokenProps) => {
         const nav = useNavigation()
 
         const { styles, theme } = useThemedStyles(baseStyles)
 
-        usePollingChartData(tokenWithBalance.symbol as VeChainToken)
+        usePollingChartData(tokenWithInfo.symbol as VeChainToken)
 
         const chartData = useAppSelector(state =>
-            selectDashboardChartData(tokenWithBalance.symbol, state),
+            selectDashboardChartData(tokenWithInfo.symbol, state),
         )
 
         const animatedOuterCard = useAnimatedStyle(() => {
@@ -78,11 +73,10 @@ export const AnimatedChartCard = memo(
                             animatedOuterCard,
                         ]}>
                         <VechainTokenCard
-                            tokenWithBalance={tokenWithBalance}
+                            tokenWithInfo={tokenWithInfo}
                             isAnimation={isEdit}
                         />
-                        <Animated.View
-                            style={[styles.fullWidth, animatedInnerCard]}>
+                        <Animated.View style={animatedInnerCard}>
                             <LineChart.Provider data={chartData}>
                                 <LineChart height={HEIGHT}>
                                     <LineChart.Path
@@ -110,7 +104,5 @@ const baseStyles = (theme: ColorThemeType) =>
             overflow: "hidden",
             marginHorizontal: 20,
         },
-
-        fullWidth: { width: "100%" },
         cardShadow: theme.shadows.card,
     })

@@ -853,6 +853,22 @@ type RootTranslation = {
 	 */
 	COMMON_SELECT_ACCOUNT: string
 	/**
+	 * M​a​r​k​e​t​ ​C​a​p
+	 */
+	COMMON_MARKET_CAP: string
+	/**
+	 * T​o​t​a​l​ ​S​u​p​p​l​y
+	 */
+	COMMON_TOTAL_SUPPLY: string
+	/**
+	 * 2​4​h​ ​V​o​l​u​m​e
+	 */
+	COMMON_24H_VOLUME: string
+	/**
+	 * C​i​r​c​u​l​a​t​i​n​g​ ​S​u​p​p​l​y
+	 */
+	COMMON_CIRCULATING_SUPPLY: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -2176,6 +2192,22 @@ export type TranslationFunctions = {
 	 * Select account
 	 */
 	COMMON_SELECT_ACCOUNT: () => LocalizedString
+	/**
+	 * Market Cap
+	 */
+	COMMON_MARKET_CAP: () => LocalizedString
+	/**
+	 * Total Supply
+	 */
+	COMMON_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * 24h Volume
+	 */
+	COMMON_24H_VOLUME: () => LocalizedString
+	/**
+	 * Circulating Supply
+	 */
+	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */

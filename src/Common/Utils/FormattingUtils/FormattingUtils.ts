@@ -192,6 +192,7 @@ export const humanNumber = (
     symbol: string | null = null,
 ) => {
     const suffix = symbol ? " " + symbol : ""
+
     let value = new Intl.NumberFormat("en", {
         style: "decimal",
         minimumFractionDigits:
@@ -259,9 +260,9 @@ export const removeUrlProtocolAndPath = (url: string) => {
     return new URL(url).host
 }
 
-/**
- * Format currency
- */
+// /**
+//  * Format currency
+//  */
 // export const formatCurrency = (currency: CURRENCY): string => {
 //     let name = "Dollar (US)"
 //     switch (currency) {
