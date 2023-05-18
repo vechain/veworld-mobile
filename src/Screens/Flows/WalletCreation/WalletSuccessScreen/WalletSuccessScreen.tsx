@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
-import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
+import { SecurityLevelType } from "~Model"
 import {
     BiometricsUtils,
     useCreateWalletWithBiometrics,
@@ -80,7 +80,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         if (!mnemonic) throw new Error("Mnemonic is not available")
 
         if (userHasOnboarded) {
-            if (userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC) {
+            if (userSelectedSecurity === SecurityLevelType.BIOMETRIC) {
                 // todo.vas -> replace with authenticateWithBiometrics new hook?
                 let { success } =
                     await BiometricsUtils.authenticateWithBiometrics()

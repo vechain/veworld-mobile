@@ -1,21 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import {
-    SecurityLevelType,
-    TSecurityLevel,
-    UserSelectedSecurityLevel,
-} from "~Model"
+import { SecurityLevelType } from "~Model"
 import { SettingsConstants } from "~Common/Constant"
 
 export interface ConfigState {
-    userSelectedSecurity: UserSelectedSecurityLevel
-    lastSecurityLevel: TSecurityLevel
+    userSelectedSecurity: SecurityLevelType
+    lastSecurityLevel: SecurityLevelType
     isSecurityDowngrade: boolean
     isResettingApp: boolean
     pinValidationString: string
 }
 
 const initialState: ConfigState = {
-    userSelectedSecurity: UserSelectedSecurityLevel.NONE,
+    userSelectedSecurity: SecurityLevelType.NONE,
     lastSecurityLevel: SecurityLevelType.NONE,
     isSecurityDowngrade: false,
     isResettingApp: false, // TODO - #316
@@ -26,16 +22,22 @@ export const ConfigSlice = createSlice({
     name: "config",
     initialState,
     reducers: {
+        /**
+         * Set the user selected security level, also updating the last one
+         * @param state
+         * @param action
+         */
         setUserSelectedSecurity: (
             state,
-            action: PayloadAction<UserSelectedSecurityLevel>,
+            action: PayloadAction<SecurityLevelType>,
         ) => {
             state.userSelectedSecurity = action.payload
+            state.lastSecurityLevel = action.payload
         },
 
         setLastSecurityLevel: (
             state,
-            action: PayloadAction<TSecurityLevel>,
+            action: PayloadAction<SecurityLevelType>,
         ) => {
             state.lastSecurityLevel = action.payload
         },
