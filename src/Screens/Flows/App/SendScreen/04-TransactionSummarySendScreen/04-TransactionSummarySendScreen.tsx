@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import {
@@ -10,15 +10,18 @@ import {
 } from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
+    AccountCard,
     AccountIcon,
     BackButtonHeader,
     BaseButton,
+    BaseCard,
     BaseCardGroup,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    ScrollViewWithFooter,
     showWarningToast,
 } from "~Components"
 import {
@@ -34,9 +37,12 @@ import {
     selectDevice,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { useSendTransaction } from "./Hooks/useSendTransaction"
-import { useSignTransaction } from "./Hooks/useSignTransaction"
+import { useSendTransaction } from "../Hooks/useSendTransaction"
+import { useSignTransaction } from "../Hooks/useSignTransaction"
 import { useNavigation } from "@react-navigation/native"
+import { DelegationType } from "~Model/Delegation"
+import { DelegationOptions } from "./Components"
+import { AccountWithDevice } from "~Model"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -48,6 +54,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { token, amount, address, initialRoute } = route.params
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const [selectedDelegationOption, setSelectedDelegationOption] =
+        useState<DelegationType>(DelegationType.NONE)
+    const [selectedAccount, setSelectedAccount] = useState<AccountWithDevice>()
+    const [selectedDelegationUrl, setSelectedDelegationUrl] = useState<string>()
 
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
@@ -55,6 +65,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectCurrencyExchangeRate(state, token.symbol),
     )
     const selectedDevice = useAppSelector(selectDevice(account?.rootAddress))
+    // TODO: add it later
+    // const isDelegated = selectedDelegationOption !== DelegationType.NONE
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -119,8 +131,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
         : "N.A."
     return (
-        <BaseSafeArea grow={1} style={styles.safeArea}>
-            <BaseView style={styles.container}>
+        <BaseSafeArea grow={1}>
+            <ScrollViewWithFooter
+                footer={
+                    <BaseButton
+                        style={styles.nextButton}
+                        mx={24}
+                        title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
+                        action={checkIdentityBeforeOpening}
+                    />
+                }>
                 <BackButtonHeader />
                 <BaseView mx={24}>
                     <BaseText typographyFont="title">
@@ -190,6 +210,32 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     ]}
                 />
                 <BaseView mx={24}>
+                    <DelegationOptions
+                        selectedDelegationOption={selectedDelegationOption}
+                        setSelectedDelegationOption={
+                            setSelectedDelegationOption
+                        }
+                        setSelectedAccount={setSelectedAccount}
+                        selectedAccount={selectedAccount}
+                        selectedDelegationUrl={selectedDelegationUrl}
+                        setSelectedDelegationUrl={setSelectedDelegationUrl}
+                    />
+                    {selectedAccount && (
+                        <>
+                            <BaseSpacer height={16} />
+                            <AccountCard account={selectedAccount} />
+                        </>
+                    )}
+                    {selectedDelegationUrl && (
+                        <>
+                            <BaseSpacer height={16} />
+                            <BaseCard>
+                                <BaseText py={8}>
+                                    {selectedDelegationUrl}
+                                </BaseText>
+                            </BaseCard>
+                        </>
+                    )}
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="subTitleBold">
                         {LL.SEND_DETAILS()}
@@ -239,15 +285,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         {/** TODO: copied from extension, understand if it is fixed as "less than 1 min" */}
                         {LL.SEND_LESS_THAN_1_MIN()}
                     </BaseText>
+                    <BaseSpacer height={24} />
                 </BaseView>
-            </BaseView>
-            <BaseButton
-                style={styles.nextButton}
-                mx={24}
-                title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                action={checkIdentityBeforeOpening}
-            />
-            <ConfirmIdentityBottomSheet />
+                <ConfirmIdentityBottomSheet />
+            </ScrollViewWithFooter>
         </BaseSafeArea>
     )
 }
@@ -258,12 +299,6 @@ const styles = StyleSheet.create({
         right: 16,
         bottom: -32,
         padding: 8,
-    },
-    safeArea: {
-        justifyContent: "space-between",
-    },
-    container: {
-        alignItems: "stretch",
     },
     nextButton: {
         marginBottom: 70,

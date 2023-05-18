@@ -103,6 +103,14 @@ const isAllowed = (url: string) => {
     return isHttps(url) || isLocalHost(url)
 }
 
+/**
+ * Check if the URL is valid (https or http)
+ * @param url
+ */
+const isValid = (url: string) => {
+    return isHttps(url) || isHttp(url)
+}
+
 export default {
     parseUrl,
     compareURLs,
@@ -113,4 +121,5 @@ export default {
     isHttps,
     isLocalHost,
     isAllowed,
+    isValid,
 }
