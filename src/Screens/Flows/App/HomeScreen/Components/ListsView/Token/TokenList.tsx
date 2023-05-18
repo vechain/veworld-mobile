@@ -59,18 +59,14 @@ export const TokenList = memo(
 
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
-                {tokenWithInfo[0].balance && (
-                    <AnimatedChartCard
-                        tokenWithInfo={tokenWithInfo[TokenIndex.vet]}
-                        isEdit={isEdit}
-                    />
-                )}
-                {tokenWithInfo[1].balance && (
-                    <AnimatedChartCard
-                        tokenWithInfo={tokenWithInfo[TokenIndex.vtho]}
-                        isEdit={isEdit}
-                    />
-                )}
+                <AnimatedChartCard
+                    tokenWithInfo={tokenWithInfo[TokenIndex.vet]}
+                    isEdit={isEdit}
+                />
+                <AnimatedChartCard
+                    tokenWithInfo={tokenWithInfo[TokenIndex.vtho]}
+                    isEdit={isEdit}
+                />
 
                 <NestableDraggableFlatList
                     data={tokenBalances}

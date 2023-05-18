@@ -8,7 +8,7 @@ export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
 
     const marketCap = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo?.market_cap,
+            marketInfo?.market_cap || 0,
             undefined,
             currency,
         )
@@ -16,7 +16,7 @@ export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
 
     const totalSupply = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo?.total_supply,
+            marketInfo?.total_supply || 0,
             undefined,
             currency,
         )
@@ -24,7 +24,7 @@ export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
 
     const totalVolume = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo?.total_volume,
+            marketInfo?.total_volume || 0,
             undefined,
             currency,
         )
@@ -32,7 +32,7 @@ export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
 
     const circulatingSupply = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo?.circulating_supply,
+            marketInfo?.circulating_supply || 0,
             undefined,
             currency,
         )
