@@ -849,6 +849,10 @@ type RootTranslation = {
 	 */
 	COMMON_TODAY: string
 	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t
+	 */
+	COMMON_SELECT_ACCOUNT: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1197,10 +1201,6 @@ type RootTranslation = {
 	 * U​R​L
 	 */
 	SEND_DELEGATION_URL: string
-	/**
-	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t
-	 */
-	SEND_DELEGATION_SELECT_ACCOUNT: string
 	/**
 	 * S​e​l​e​c​t​ ​U​R​L
 	 */
@@ -2173,6 +2173,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_TODAY: () => LocalizedString
 	/**
+	 * Select account
+	 */
+	COMMON_SELECT_ACCOUNT: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -2517,10 +2521,6 @@ Please, try again later.
 	 * URL
 	 */
 	SEND_DELEGATION_URL: () => LocalizedString
-	/**
-	 * Select account
-	 */
-	SEND_DELEGATION_SELECT_ACCOUNT: () => LocalizedString
 	/**
 	 * Select URL
 	 */

@@ -16,21 +16,30 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
-interface Props {
-    setSelectedDelegationUrl: (url: string) => void
-    newUrl: string
-    setNewUrl: (url: string) => void
-}
 /**
  * BottomSheet content to add a new delegation url
  * @param newUrl {string} value of the new url
  * @param setNewUrl {function} function to set the new url
  * @param setSelectedDelegationUrl {function} function to set the url for the current transaction
+ * @param addUrlMode {function} bottomsheet mode
+ * @param setAddUrlMode {function} function to set bottomsheet mode
  */
+interface Props {
+    setSelectedDelegationUrl: (url: string) => void
+    newUrl: string
+    setNewUrl: (url: string) => void
+    addUrlMode: boolean
+    setAddUrlMode: (s: boolean) => void
+    onCloseBottomSheet: () => void
+}
+
 export const AddUrl = ({
     newUrl,
     setNewUrl,
     setSelectedDelegationUrl,
+    addUrlMode,
+    setAddUrlMode,
+    onCloseBottomSheet,
 }: Props) => {
     const dispatch = useAppDispatch()
     const delegationUrls = useAppSelector(selectDelegationUrls)
@@ -40,20 +49,31 @@ export const AddUrl = ({
             dispatch(addDelegationUrl(newUrl))
         }
         setSelectedDelegationUrl(newUrl)
+        onCloseBottomSheet()
+    }
+    const closeAddMode = () => {
+        setAddUrlMode(false)
     }
     return (
         <ScrollViewWithFooter
             footer={
-                <BaseView flexDirection="row">
+                <BaseView flexDirection="row" alignItems="stretch">
+                    {addUrlMode && (
+                        <>
+                            <BaseButton
+                                title={LL.COMMON_BTN_CANCEL()}
+                                action={closeAddMode}
+                                variant="outline"
+                                flex={1}
+                            />
+                            <BaseSpacer width={16} />
+                        </>
+                    )}
                     <BaseButton
                         title={LL.COMMON_BTN_ADD()}
                         action={handleAddUrl}
                         disabled={!URLUtils.isValid(newUrl)}
-                    />
-                    <BaseButton
-                        title={LL.COMMON_BTN_ADD()}
-                        action={handleAddUrl}
-                        disabled={!URLUtils.isValid(newUrl)}
+                        flex={1}
                     />
                 </BaseView>
             }>

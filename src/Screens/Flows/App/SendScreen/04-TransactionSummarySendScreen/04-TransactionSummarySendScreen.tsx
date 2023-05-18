@@ -14,6 +14,7 @@ import {
     AccountIcon,
     BackButtonHeader,
     BaseButton,
+    BaseCard,
     BaseCardGroup,
     BaseIcon,
     BaseSafeArea,
@@ -64,6 +65,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectCurrencyExchangeRate(state, token.symbol),
     )
     const selectedDevice = useAppSelector(selectDevice(account?.rootAddress))
+    // TODO: add it later
+    // const isDelegated = selectedDelegationOption !== DelegationType.NONE
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -221,6 +224,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         <>
                             <BaseSpacer height={16} />
                             <AccountCard account={selectedAccount} />
+                        </>
+                    )}
+                    {selectedDelegationUrl && (
+                        <>
+                            <BaseSpacer height={16} />
+                            <BaseCard>
+                                <BaseText py={8}>
+                                    {selectedDelegationUrl}
+                                </BaseText>
+                            </BaseCard>
                         </>
                     )}
                     <BaseSpacer height={24} />

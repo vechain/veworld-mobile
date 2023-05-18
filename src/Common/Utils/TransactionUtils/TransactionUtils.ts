@@ -1,3 +1,4 @@
+import { Transaction } from "thor-devkit"
 import { debug } from "~Common/Logger"
 import { Activity } from "~Model"
 
@@ -20,4 +21,10 @@ export const checkForTransactionFinality = async (
         return true
     }
     return false
+}
+
+export const toDelegation = (txBody: Transaction.Body) => {
+    const tx = new Transaction(txBody)
+    tx.body.reserved = { features: 1 }
+    return tx
 }

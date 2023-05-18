@@ -1,3 +1,3 @@
 export * from "./DelegationOptions"
-export * from "./SelectAccountBottomSheet"
+export * from "./SelectDelegationAccountBottomSheet"
 export * from "./SelectUrlBottomSheet"

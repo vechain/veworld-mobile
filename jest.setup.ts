@@ -71,3 +71,10 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
 ;(global as any).ReanimatedDataMock = {
     now: () => 0,
 }
+
+jest.mock("@gorhom/bottom-sheet", () => ({
+    ...jest.requireActual("@gorhom/bottom-sheet"),
+    BottomSheetFlatList: ({ data, renderItem }: any) => {
+        return data.map((row: any) => renderItem({ item: row }))
+    },
+}))

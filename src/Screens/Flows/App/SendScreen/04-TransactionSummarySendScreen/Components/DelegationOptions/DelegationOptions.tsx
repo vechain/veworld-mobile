@@ -3,10 +3,10 @@ import { BaseButtonGroupHorizontal, BaseSpacer, BaseText } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType, AccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { SelectAccountBottomSheet } from "../SelectAccountBottomSheet"
 import { useBottomSheetModal } from "~Common"
 import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
 import { SelectUrlBottomSheet } from "../SelectUrlBottomSheet"
+import { SelectDelegationAccountBottomSheet } from "../SelectDelegationAccountBottomSheet"
 
 type Props = {
     selectedDelegationUrl?: string
@@ -87,7 +87,7 @@ export const DelegationOptions = ({
                 buttons={options}
                 action={handleSelectDelegationOption}
             />
-            <SelectAccountBottomSheet
+            <SelectDelegationAccountBottomSheet
                 onClose={closeSelectAccountBottonSheet}
                 ref={selectAccountBottomSheetRef}
                 setSelectedDelegationOption={setSelectedDelegationOption}

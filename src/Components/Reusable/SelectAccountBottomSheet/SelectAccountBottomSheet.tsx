@@ -11,49 +11,42 @@ import {
     BaseView,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
-import { DelegationType } from "~Model/Delegation"
 import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 const snapPoints = ["40%"]
 
+/**
+ * @typedef {object} Props
+ * @prop {() => void} onDismiss - called on the bottom sheet dismiss
+ * @prop {() => void} closeBottomSheet - called to close the bottom sheet
+ * @prop {AccountWithDevice[]} accounts - list of accounts to display
+ * @prop {(account?: AccountWithDevice) => void} setSelectedAccount - called when an account is selected
+ * @prop {AccountWithDevice} [selectedAccount] - the selected account
+ */
 type Props = {
-    onClose: () => void
-    selectedDelegationOption: DelegationType
-    setSelectedDelegationOption: (id: DelegationType) => void
+    onDismiss: () => void
+    closeBottomSheet: () => void
+    accounts: AccountWithDevice[]
     setSelectedAccount: (account?: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
 }
 
-// component to select an account for delegation
+const ItemSeparatorComponent = () => <BaseSpacer height={16} />
+
+// component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(
     (
-        {
-            onClose,
-            setSelectedDelegationOption,
-            setSelectedAccount,
-            selectedAccount,
-            selectedDelegationOption,
-        },
+        { closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss },
         ref,
     ) => {
         const { LL } = useI18nContext()
         const accounts = useAppSelector(selectAccountsButSelected)
-
-        const onDismiss = () => {
-            if (
-                selectedDelegationOption === DelegationType.ACCOUNT &&
-                !selectedAccount
-            ) {
-                setSelectedDelegationOption(DelegationType.NONE)
-            }
-        }
-
         const handlePress = (account: AccountWithDevice) => {
             setSelectedAccount(account)
-            onClose()
+            closeBottomSheet()
         }
 
         const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
@@ -65,16 +58,14 @@ export const SelectAccountBottomSheet = React.forwardRef<
                 ref={ref}
                 onDismiss={onDismiss}>
                 <BaseText typographyFont="subTitleBold">
-                    {LL.SEND_DELEGATION_SELECT_ACCOUNT()}
+                    {LL.COMMON_SELECT_ACCOUNT()}
                 </BaseText>
                 <BaseSpacer height={16} />
                 <BaseView flexDirection="row" style={styles.list}>
                     <BottomSheetFlatList
                         data={accounts}
                         keyExtractor={account => account.address}
-                        ItemSeparatorComponent={() => (
-                            <BaseSpacer height={16} />
-                        )}
+                        ItemSeparatorComponent={ItemSeparatorComponent}
                         onViewableItemsChanged={onViewableItemsChanged}
                         viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => (
