@@ -50,7 +50,6 @@ export const SwitchStack = () => {
                         <Switch.Group
                             screenOptions={{
                                 headerShown: false,
-                                presentation: "modal",
                             }}>
                             <Switch.Screen
                                 name={Routes.CREATE_WALLET_FLOW}
@@ -60,6 +59,10 @@ export const SwitchStack = () => {
                             <Switch.Screen
                                 name={Routes.CAMERA}
                                 component={CameraScreen}
+                                options={{
+                                    headerShown: false,
+                                    presentation: "modal",
+                                }}
                             />
                         </Switch.Group>
                     </>

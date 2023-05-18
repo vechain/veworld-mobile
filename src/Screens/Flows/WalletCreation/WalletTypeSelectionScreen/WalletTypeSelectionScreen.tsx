@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import {
+    BackButtonHeader,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
@@ -10,7 +11,6 @@ import {
 } from "~Components"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { VeChainVetLogoSVG } from "~Assets"
 import { useBottomSheetModal, useTheme } from "~Common"
 import { ImportWalletBottomSheet } from "./components"
 
@@ -27,7 +27,7 @@ export const WalletTypeSelectionScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseSpacer height={20} />
+            <BackButtonHeader />
             <BaseView
                 alignItems="center"
                 justifyContent="space-between"
@@ -40,10 +40,6 @@ export const WalletTypeSelectionScreen = () => {
                     <BaseText typographyFont="body" my={10}>
                         {LL.BD_CREATE_WALLET_TYPE()}
                     </BaseText>
-                    <BaseSpacer height={40} />
-                    <BaseView alignSelf="center" w={100}>
-                        <VeChainVetLogoSVG />
-                    </BaseView>
                 </BaseView>
 
                 <BaseView alignItems="center" w={100}>
