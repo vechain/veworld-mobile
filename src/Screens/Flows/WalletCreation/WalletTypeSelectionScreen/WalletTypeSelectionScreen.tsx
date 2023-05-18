@@ -44,7 +44,12 @@ export const WalletTypeSelectionScreen = () => {
 
                 <BaseView alignItems="center" w={100}>
                     <BaseTouchableBox action={onCreateWallet} py={16}>
-                        <BaseView flex={1}>
+                        <BaseIcon
+                            name="plus-circle"
+                            size={24}
+                            color={theme.colors.text}
+                        />
+                        <BaseView flex={1} px={12}>
                             <BaseText align="left" typographyFont="subSubTitle">
                                 {LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW()}
                             </BaseText>
@@ -68,7 +73,12 @@ export const WalletTypeSelectionScreen = () => {
                         action={onOpen}
                         py={16}
                         justifyContent="space-between">
-                        <BaseView flex={1}>
+                        <BaseIcon
+                            name="tray-arrow-up"
+                            size={24}
+                            color={theme.colors.text}
+                        />
+                        <BaseView flex={1} px={12}>
                             <BaseText align="left" typographyFont="subSubTitle">
                                 {LL.BTN_CREATE_WALLET_TYPE_IMPORT()}
                             </BaseText>
@@ -88,11 +98,31 @@ export const WalletTypeSelectionScreen = () => {
                         />
                     </BaseTouchableBox>
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="body" align="center">
-                        {
-                            "Creating the wallet the user accepts Terms and Conditions and Privacy Policy"
-                        }
-                    </BaseText>
+                    <BaseView
+                        alignSelf="center"
+                        flexDirection="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        flexWrap="wrap">
+                        <BaseText typographyFont="body" align="center">
+                            {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
+                        </BaseText>
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            underline
+                            align="center">
+                            {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
+                        </BaseText>
+                        <BaseText typographyFont="body" align="center">
+                            {LL.COMMON_LBL_AND()}{" "}
+                        </BaseText>
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            underline
+                            align="center">
+                            {LL.COMMON_LBL_PRIVACY_POLICY()}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
                 <ImportWalletBottomSheet ref={ref} onClose={onClose} />
             </BaseView>

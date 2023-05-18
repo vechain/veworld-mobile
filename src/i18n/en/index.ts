@@ -127,7 +127,7 @@ const en: BaseTranslation = {
     BD_MNEMONIC_COPIED_TO_CLIPBOARD: "Mnemonic copied to clipboard",
     BD_SECURITY_DOWNGRADE: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
     BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
-    BD_CREATE_WALLET_TYPE_TS: "Creating the wallet the user accepts Terms and Conditions and Privacy Policy",
+    BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -225,6 +225,7 @@ const en: BaseTranslation = {
     COMMON_BTN_NEXT: "NEXT",
 
     // Common Labels
+    COMMON_LBL_AND: "and",
     COMMON_LBL_NAME: "name",
     COMMON_LBL_URL: "URL",
     COMMON_LBL_ADDRESS: "Address",

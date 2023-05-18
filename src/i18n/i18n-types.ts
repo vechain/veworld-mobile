@@ -440,9 +440,9 @@ type RootTranslation = {
 	 */
 	BD_CREATE_WALLET_TYPE: string
 	/**
-	 * C​r​e​a​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s​ ​T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​P​o​l​i​c​y
+	 * C​r​e​a​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s
 	 */
-	BD_CREATE_WALLET_TYPE_TS: string
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -790,6 +790,10 @@ type RootTranslation = {
 	 * N​E​X​T
 	 */
 	COMMON_BTN_NEXT: string
+	/**
+	 * a​n​d
+	 */
+	COMMON_LBL_AND: string
 	/**
 	 * n​a​m​e
 	 */
@@ -1769,9 +1773,9 @@ export type TranslationFunctions = {
 	 */
 	BD_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
-	 * Creating the wallet the user accepts Terms and Conditions and Privacy Policy
+	 * Creating the wallet the user accepts
 	 */
-	BD_CREATE_WALLET_TYPE_TS: () => LocalizedString
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
@@ -2116,6 +2120,10 @@ export type TranslationFunctions = {
 	 * NEXT
 	 */
 	COMMON_BTN_NEXT: () => LocalizedString
+	/**
+	 * and
+	 */
+	COMMON_LBL_AND: () => LocalizedString
 	/**
 	 * name
 	 */
