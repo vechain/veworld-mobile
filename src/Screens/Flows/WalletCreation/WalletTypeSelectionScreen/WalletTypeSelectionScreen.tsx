@@ -1,21 +1,28 @@
 import { useNavigation } from "@react-navigation/native"
 import React from "react"
 import {
-    BaseButton,
+    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
+    BaseTouchableBox,
     BaseView,
 } from "~Components"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { selectHasOnboarded } from "~Storage/Redux/Selectors"
+import { VeChainVetLogoSVG } from "~Assets"
+import { useBottomSheetModal, useTheme } from "~Common"
+import { ImportWalletBottomSheet } from "./components"
 
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const theme = useTheme()
+
+    const { ref, onOpen, onClose } = useBottomSheetModal()
 
     const onCreateWallet = () => {
         if (userHasOnboarded) {
@@ -23,10 +30,6 @@ export const WalletTypeSelectionScreen = () => {
         } else {
             nav.navigate(Routes.WALLET_TUTORIAL)
         }
-    }
-
-    const onImportWallet = () => {
-        nav.navigate(Routes.WALLET_TYPE_IMPORT)
     }
 
     return (
@@ -41,32 +44,68 @@ export const WalletTypeSelectionScreen = () => {
                     <BaseText typographyFont="title">
                         {LL.TITLE_CREATE_WALLET_TYPE()}
                     </BaseText>
-                    {/* TODO: change this lorem ipsum */}
-                    {/* eslint-disable-next-line i18next/no-literal-string */}
                     <BaseText typographyFont="body" my={10}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
+                        {LL.BD_CREATE_WALLET_TYPE()}
                     </BaseText>
+                    <BaseSpacer height={40} />
+                    <BaseView alignSelf="center" w={100}>
+                        <VeChainVetLogoSVG />
+                    </BaseView>
                 </BaseView>
 
                 <BaseView alignItems="center" w={100}>
-                    <BaseButton
-                        action={onCreateWallet}
-                        w={100}
-                        mx={20}
-                        my={20}
-                        title={LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW()}
-                    />
-
-                    <BaseButton
-                        variant="outline"
-                        action={onImportWallet}
-                        w={100}
-                        mx={20}
-                        title={LL.BTN_CREATE_WALLET_TYPE_IMPORT()}
-                    />
+                    <BaseTouchableBox action={onCreateWallet} py={16}>
+                        <BaseView flex={1}>
+                            <BaseText align="left" typographyFont="subSubTitle">
+                                {LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW()}
+                            </BaseText>
+                            <BaseText
+                                pt={4}
+                                align="left"
+                                typographyFont="captionRegular">
+                                {
+                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nibh euismod."
+                                }
+                            </BaseText>
+                        </BaseView>
+                        <BaseIcon
+                            name="chevron-right"
+                            size={24}
+                            color={theme.colors.text}
+                        />
+                    </BaseTouchableBox>
+                    <BaseSpacer height={16} />
+                    <BaseTouchableBox
+                        action={onOpen}
+                        py={16}
+                        justifyContent="space-between">
+                        <BaseView flex={1}>
+                            <BaseText align="left" typographyFont="subSubTitle">
+                                {LL.BTN_CREATE_WALLET_TYPE_IMPORT()}
+                            </BaseText>
+                            <BaseText
+                                align="left"
+                                pt={4}
+                                typographyFont="captionRegular">
+                                {
+                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nibh euismod."
+                                }
+                            </BaseText>
+                        </BaseView>
+                        <BaseIcon
+                            name="chevron-right"
+                            size={24}
+                            color={theme.colors.text}
+                        />
+                    </BaseTouchableBox>
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="body" align="center">
+                        {
+                            "Creating the wallet the user accepts Terms and Conditions and Privacy Policy"
+                        }
+                    </BaseText>
                 </BaseView>
+                <ImportWalletBottomSheet ref={ref} onClose={onClose} />
             </BaseView>
 
             <BaseSpacer height={40} />
