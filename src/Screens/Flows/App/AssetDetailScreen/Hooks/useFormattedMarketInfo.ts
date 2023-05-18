@@ -38,5 +38,11 @@ export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
         )
     }, [currency, marketInfo?.circulating_supply])
 
-    return { marketCap, totalSupply, totalVolume, circulatingSupply }
+    return {
+        marketCap: marketCap === "< 0.01 USD" ? "N/A" : marketCap,
+        totalSupply: totalSupply === "< 0.01 USD" ? "N/A" : totalSupply,
+        totalVolume: totalVolume === "< 0.01 USD" ? "N/A" : totalVolume,
+        circulatingSupply:
+            circulatingSupply === "< 0.01 USD" ? "N/A" : circulatingSupply,
+    }
 }
