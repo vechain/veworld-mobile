@@ -1,6 +1,6 @@
 import axios from "axios"
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
-import { HexUtils, ThorConstants, error } from "~Common"
+import { HexUtils, ThorConstants, TransactionUtils, error } from "~Common"
 import { showErrorToast, showSuccessToast, useThor } from "~Components"
 import {
     selectSelectedAccount,
@@ -13,13 +13,19 @@ import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
 import { Wallet } from "~Model"
 
+interface Props {
+    transaction: Transaction.Body
+    onTXFinish: () => void
+    isDelegated: boolean
+    delegationSignature?: Buffer
+}
+
 export const useSignTransaction = ({
     transaction,
     onTXFinish,
-}: {
-    transaction: Transaction.Body
-    onTXFinish: () => void
-}) => {
+    isDelegated,
+    delegationSignature,
+}: Props) => {
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
@@ -48,11 +54,9 @@ export const useSignTransaction = ({
      */
     const signTransaction = async (wallet: Wallet) => {
         try {
-            // TODO: Add delegation
-            // const tx = delegation.isDelegated
-            //     ? TransactionUtils.toDelegation(transaction.body)
-            //     : new Transaction(transaction.body)
-            const tx = new Transaction(transaction)
+            const tx = isDelegated
+                ? TransactionUtils.toDelegation(transaction)
+                : new Transaction(transaction)
 
             if (!wallet.mnemonic)
                 error("Mnemonic wallet can't have an empty mnemonic")
@@ -68,12 +72,11 @@ export const useSignTransaction = ({
 
             const senderSignature = secp256k1.sign(hash, privateKey)
 
-            // TODO: add delegation
-            // const signature = delegationSignature
-            //     ? Buffer.concat([senderSignature, delegationSignature])
-            //     : senderSignature
+            const signature =
+                isDelegated && delegationSignature
+                    ? Buffer.concat([senderSignature, delegationSignature])
+                    : senderSignature
 
-            const signature = Buffer.concat([senderSignature])
             tx.signature = signature
 
             const id = await sendSignedTransaction(tx, network.currentUrl)

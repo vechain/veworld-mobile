@@ -78,7 +78,6 @@ export const useSendTransaction = ({
                     account?.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
                 )
-                // info("estimatedGas", estimatedGas)
                 setGas(estimatedGas)
             })()
         }
