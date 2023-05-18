@@ -2,7 +2,7 @@ export enum Routes {
     WELCOME = "Welcome",
     ONBOARDING = "Onboarding",
     WALLET_TUTORIAL = "Wallet_Tutorial",
-    WALLET_TYPE_CREATION = "Wallet_Type_Creation",
+    WALLET_SETUP = "Wallet_Setup",
     WALLET_TYPE_IMPORT = "Wallet_Type_Import",
     NEW_MNEMONIC = "New_Mnemonic",
     CONFIRM_MNEMONIC = "Confirm_Mnemonic",

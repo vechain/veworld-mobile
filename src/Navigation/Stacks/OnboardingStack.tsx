@@ -1,10 +1,8 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
-    OnboardingScreen,
     WelcomeScreen,
     NewMnemonicScreen,
-    TutorialScreen,
     WalletTypeSelectionScreen,
     ConfirmMnemonicScreen,
     AppSecurityScreen,
@@ -18,12 +16,10 @@ import { SecurityLevelType } from "~Model"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
-    [Routes.ONBOARDING]: undefined
-    [Routes.WALLET_TUTORIAL]: undefined
-    [Routes.WALLET_TYPE_CREATION]: undefined
-    [Routes.WALLET_TYPE_IMPORT]: undefined
+    [Routes.WALLET_SETUP]: undefined
     [Routes.NEW_MNEMONIC]: undefined
     [Routes.CONFIRM_MNEMONIC]: undefined
+    [Routes.WALLET_TYPE_IMPORT]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
     [Routes.APP_SECURITY]: undefined
@@ -48,13 +44,7 @@ export const OnboardingStack = () => {
                 />
 
                 <Onboarding.Screen
-                    name={Routes.ONBOARDING}
-                    component={OnboardingScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name={Routes.WALLET_TYPE_CREATION}
+                    name={Routes.WALLET_SETUP}
                     component={WalletTypeSelectionScreen}
                     options={{ headerShown: false }}
                 />
@@ -62,12 +52,6 @@ export const OnboardingStack = () => {
                 <Onboarding.Screen
                     name={Routes.WALLET_TYPE_IMPORT}
                     component={ImportWalletTypeSelectionScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name={Routes.WALLET_TUTORIAL}
-                    component={TutorialScreen}
                     options={{ headerShown: false }}
                 />
 

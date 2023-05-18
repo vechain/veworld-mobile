@@ -16,7 +16,7 @@ export const WelcomeScreen = () => {
     const { LL } = useI18nContext()
 
     const onNavigate = useCallback(() => {
-        nav.navigate(Routes.ONBOARDING)
+        nav.navigate(Routes.WALLET_SETUP)
     }, [nav])
 
     return (

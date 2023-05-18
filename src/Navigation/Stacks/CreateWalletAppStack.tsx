@@ -5,7 +5,6 @@ import {
     ImportMnemonicScreen,
     ImportWalletTypeSelectionScreen,
     NewMnemonicScreen,
-    TutorialScreen,
     UserCreatePasswordScreen,
     WalletSuccessScreen,
     WalletTypeSelectionScreen,
@@ -15,11 +14,10 @@ import { SecurityLevelType } from "~Model"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
+    [Routes.WALLET_SETUP]: undefined
     [Routes.NEW_MNEMONIC]: undefined
-    [Routes.WALLET_TYPE_CREATION]: undefined
-    [Routes.WALLET_TYPE_IMPORT]: undefined
-    [Routes.WALLET_TUTORIAL]: undefined
     [Routes.CONFIRM_MNEMONIC]: undefined
+    [Routes.WALLET_TYPE_IMPORT]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.WALLET_SUCCESS]:
         | {
@@ -37,7 +35,7 @@ export const CreateWalletAppStack = () => {
     return (
         <CreateWalletApp.Navigator screenOptions={{ headerShown: false }}>
             <CreateWalletApp.Screen
-                name={Routes.WALLET_TYPE_CREATION}
+                name={Routes.WALLET_SETUP}
                 component={WalletTypeSelectionScreen}
                 options={{ headerShown: false }}
             />
@@ -45,12 +43,6 @@ export const CreateWalletAppStack = () => {
             <CreateWalletApp.Screen
                 name={Routes.WALLET_TYPE_IMPORT}
                 component={ImportWalletTypeSelectionScreen}
-                options={{ headerShown: false }}
-            />
-
-            <CreateWalletApp.Screen
-                name={Routes.WALLET_TUTORIAL}
-                component={TutorialScreen}
                 options={{ headerShown: false }}
             />
 

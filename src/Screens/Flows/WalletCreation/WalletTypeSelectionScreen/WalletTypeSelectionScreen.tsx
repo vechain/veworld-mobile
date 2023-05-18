@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React from "react"
+import React, { useCallback } from "react"
 import {
     BaseIcon,
     BaseSafeArea,
@@ -9,9 +9,7 @@ import {
     BaseView,
 } from "~Components"
 import { Routes } from "~Navigation"
-import { useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useBottomSheetModal, useTheme } from "~Common"
 import { ImportWalletBottomSheet } from "./components"
@@ -19,18 +17,13 @@ import { ImportWalletBottomSheet } from "./components"
 export const WalletTypeSelectionScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const theme = useTheme()
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
-    const onCreateWallet = () => {
-        if (userHasOnboarded) {
-            nav.navigate(Routes.NEW_MNEMONIC)
-        } else {
-            nav.navigate(Routes.WALLET_TUTORIAL)
-        }
-    }
+    const onCreateWallet = useCallback(() => {
+        nav.navigate(Routes.NEW_MNEMONIC)
+    }, [nav])
 
     return (
         <BaseSafeArea grow={1}>
