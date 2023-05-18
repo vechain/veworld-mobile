@@ -179,7 +179,7 @@ describe("regexPattern", () => {
 
 describe("Check vechain address", () => {
     test("Invalid vechain address must return false", () => {
-        expect(isVechainToken("vet")).toBe(true)
+        expect(isVechainToken("vet")).toBe(false)
     })
 
     test("Valid vechain thor token address must return true", () => {
