@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, useTheme } from "~Common"
+import { ColorThemeType, FormattingUtils, useThemedStyles } from "~Common"
 import {
     AccountIcon,
     BaseSpacer,
@@ -17,7 +17,7 @@ type Props = {
 }
 export const AccountCard: React.FC<Props> = memo(
     ({ account, onPress, selected }) => {
-        const theme = useTheme()
+        const { styles } = useThemedStyles(baseStyles)
         return (
             <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
@@ -25,12 +25,7 @@ export const AccountCard: React.FC<Props> = memo(
                     justifyContent="space-between"
                     containerStyle={[
                         styles.container,
-                        // eslint-disable-next-line react-native/no-inline-styles
-                        {
-                            borderWidth: selected ? 1 : 0,
-                            borderRadius: 16,
-                            borderColor: theme.colors.text,
-                        },
+                        selected ? styles.selectedContainer : {},
                     ]}>
                     <BaseView flexDirection="row">
                         <AccountIcon address={account.address} />
@@ -61,19 +56,25 @@ export const AccountCard: React.FC<Props> = memo(
     },
 )
 
-const styles = StyleSheet.create({
-    wallet: {
-        opacity: 0.7,
-    },
-    address: {
-        opacity: 0.7,
-    },
-    container: {
-        flex: 1,
-    },
-    rightSubContainer: {
-        flexDirection: "column",
-        alignItems: "flex-end",
-    },
-    eyeIcon: { marginLeft: 16, flex: 0.1 },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        wallet: {
+            opacity: 0.7,
+        },
+        address: {
+            opacity: 0.7,
+        },
+        container: {
+            flex: 1,
+        },
+        selectedContainer: {
+            borderWidth: 1,
+            borderRadius: 16,
+            borderColor: theme.colors.text,
+        },
+        rightSubContainer: {
+            flexDirection: "column",
+            alignItems: "flex-end",
+        },
+        eyeIcon: { marginLeft: 16, flex: 0.1 },
+    })
