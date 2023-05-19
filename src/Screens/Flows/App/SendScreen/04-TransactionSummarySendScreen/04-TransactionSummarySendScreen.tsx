@@ -96,16 +96,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectedDelegationOption,
     })
 
-    const onIdentityConfirmed = useCallback(
-        async (password?: string) => {
-            signTransaction(password)
-        },
-        [signTransaction],
-    )
-
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed,
+            onIdentityConfirmed: signTransaction,
         })
     const gasFees = gas?.gas
         ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
