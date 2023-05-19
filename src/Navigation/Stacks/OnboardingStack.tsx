@@ -29,8 +29,11 @@ export type RootStackParamListOnboarding = {
     }
     [Routes.WALLET_SUCCESS]:
         | {
-              securityLevelSelected?: SecurityLevelType
-              userPin?: string
+              securityLevelSelected: SecurityLevelType.BIOMETRIC
+          }
+        | {
+              securityLevelSelected: SecurityLevelType.SECRET
+              userPin: string
           }
         | undefined
 }

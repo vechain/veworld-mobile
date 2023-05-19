@@ -4,12 +4,11 @@ import {
     addDeviceAndAccounts,
     selectAccount,
     setAppLockStatus,
-    setLastSecurityLevel,
     setMnemonic,
-    setUserSelectedSecurity,
 } from "~Storage/Redux"
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
+import { WALLET_STATUS } from "~Model"
 const device = {
     alias: "Wallet 1",
     index: 0,
@@ -65,9 +64,6 @@ jest.mock("~Storage/Redux/Actions", () => ({
     selectAccount: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").selectAccount,
     ),
-    setLastSecurityLevel: jest.fn(
-        jest.requireActual("~Storage/Redux/Actions").setLastSecurityLevel,
-    ),
     setUserSelectedSecurity: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").setUserSelectedSecurity,
     ),
@@ -111,12 +107,12 @@ describe("useCreateWallet", () => {
                         "0494c3ff1acb0cf8e842c54a2bf109b7549d8f800895576892a4ea67eff584a427904a4b2545cf84569be87387bc5fe221c20d1ba5f23d278468faa98f54ddedbe",
                 },
             })
-            expect(setAppLockStatus).toHaveBeenCalledWith("UNLOCKED")
+            expect(setAppLockStatus).toHaveBeenCalledWith(
+                WALLET_STATUS.UNLOCKED,
+            )
             expect(selectAccount).toHaveBeenCalledWith({
                 address: "0xED8DA269260CE13f17624bE20FE9311807db0901",
             })
-            expect(setUserSelectedSecurity).toHaveBeenCalledWith("BIOMETRIC")
-            expect(setLastSecurityLevel).toHaveBeenCalledWith("BIOMETRIC")
         })
 
         it("should create wallet with password", async () => {
@@ -145,9 +141,7 @@ describe("useCreateWallet", () => {
                         "0494c3ff1acb0cf8e842c54a2bf109b7549d8f800895576892a4ea67eff584a427904a4b2545cf84569be87387bc5fe221c20d1ba5f23d278468faa98f54ddedbe",
                 },
             })
-            expect(setAppLockStatus).toBeCalledWith("UNLOCKED")
-            expect(setUserSelectedSecurity).toBeCalledWith("PASSWORD")
-            expect(setLastSecurityLevel).toBeCalledWith("SECRET")
+            expect(setAppLockStatus).toBeCalledWith(WALLET_STATUS.UNLOCKED)
             expect(setMnemonic).toBeCalledWith(undefined)
             expect(result.current.isComplete).toBe(true)
         })

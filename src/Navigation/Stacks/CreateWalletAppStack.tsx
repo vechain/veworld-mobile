@@ -25,8 +25,11 @@ export type RootStackParamListCreateWalletApp = {
     }
     [Routes.WALLET_SUCCESS]:
         | {
-              securityLevelSelected?: SecurityLevelType
-              userPin?: string
+              securityLevelSelected: SecurityLevelType.BIOMETRIC
+          }
+        | {
+              securityLevelSelected: SecurityLevelType.SECRET
+              userPin: string
           }
         | undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
