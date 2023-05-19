@@ -1,10 +1,11 @@
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { FC, useCallback, useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    showErrorToast,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { VeChainVetLogoSVG } from "~Assets"
@@ -34,7 +35,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
 
     const theme = useTheme()
-    const [isError] = useState("")
+    const [isError, setIsError] = useState("")
 
     const dispatch = useAppDispatch()
 
@@ -43,8 +44,12 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     const mnemonic = useAppSelector(selectMnemonic)
 
-    const { onCreateWallet: createWallet, isComplete: isWalletCreated } =
-        useCreateWallet()
+    const { onCreateWallet: createWallet } = useCreateWallet()
+
+    const onWalletCreationError = useCallback((_error: unknown) => {
+        setIsError("Error creating wallet")
+        showErrorToast("Error creating wallet")
+    }, [])
 
     const onIdentityConfirmed = useCallback(
         async (userPassword?: string) => {
@@ -53,23 +58,22 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             await createWallet({
                 mnemonic,
                 userPassword,
-                // onError: onWalletCreationError,
+                onError: onWalletCreationError,
             })
+
+            const parent = nav.getParent()
+            if (parent) {
+                let isBack = parent.canGoBack()
+                if (isBack) {
+                    parent.goBack()
+                }
+            }
         },
-        [mnemonic, createWallet],
+        [mnemonic, createWallet, onWalletCreationError, nav],
     )
 
-    const {
-        ConfirmIdentityBottomSheet,
-        isPasswordPromptOpen,
-        closePasswordPrompt,
-        checkIdentityBeforeOpening,
-    } = useCheckIdentity({ onIdentityConfirmed })
-
-    // function onWalletCreationError(_error: unknown) {
-    //     setIsError("Error creating wallet")
-    //     closePasswordPrompt()
-    // }
+    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
+        useCheckIdentity({ onIdentityConfirmed })
 
     /**
      * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
@@ -88,16 +92,26 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
         if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
             await createWallet({ mnemonic })
-            setUserSelectedSecurity(SecurityLevelType.BIOMETRIC)
         } else if (securityLevelSelected === SecurityLevelType.SECRET) {
             await createWallet({
                 userPassword: params?.userPin,
-                // onError: onWalletCreationError,
+                onError: onWalletCreationError,
                 mnemonic,
             })
-            dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
+        } else {
+            throw new Error(
+                `Security level ${securityLevelSelected} is not valid`,
+            )
         }
-    }, [userHasOnboarded, route.params, createWallet, dispatch, mnemonic])
+        dispatch(setUserSelectedSecurity(securityLevelSelected))
+    }, [
+        userHasOnboarded,
+        route.params,
+        createWallet,
+        dispatch,
+        mnemonic,
+        onWalletCreationError,
+    ])
 
     const onButtonPress = useCallback(async () => {
         if (!mnemonic) throw new Error("Mnemonic is not available")
@@ -112,39 +126,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         mnemonic,
     ])
 
-    useEffect(() => {
-        if (isWalletCreated) {
-            if (userHasOnboarded) {
-                closePasswordPrompt()
-
-                if (!isPasswordPromptOpen) {
-                    /*
-                    Navigate to parent stack (where the CreateWalletAppStack is declared)
-                    and close the modal.
-                    */
-                    let parent = nav.getParent()
-                    if (parent) {
-                        let isBack = parent.canGoBack()
-                        if (isBack) {
-                            parent.goBack()
-                        }
-                    }
-                }
-            }
-        }
-    }, [
-        closePasswordPrompt,
-        dispatch,
-        isPasswordPromptOpen,
-        userHasOnboarded,
-        isWalletCreated,
-        nav,
-    ])
-
     return (
         <>
             <ConfirmIdentityBottomSheet />
-
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
 
