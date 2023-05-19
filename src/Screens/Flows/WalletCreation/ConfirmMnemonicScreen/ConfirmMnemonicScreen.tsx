@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { useTheme } from "~Common/Hooks"
 import { CryptoUtils } from "~Common/Utils"
 import {
+    BackButtonHeader,
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
@@ -148,6 +149,7 @@ export const ConfirmMnemonicScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
+            <BackButtonHeader />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -173,6 +175,8 @@ export const ConfirmMnemonicScreen = () => {
                             </BaseText>
                             {__DEV__ && (
                                 <BaseButton
+                                    px={0}
+                                    py={0}
                                     variant="link"
                                     action={() =>
                                         userHasOnboarded

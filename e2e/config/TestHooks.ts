@@ -23,6 +23,7 @@ Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     await device.terminateApp()
 
     const { pickle } = message
+    console.log("Starting Detox test: " + pickle.name)
     await detox.onTestStart({
         title: pickle.uri,
         fullName: pickle.name,

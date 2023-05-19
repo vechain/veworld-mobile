@@ -1,5 +1,15 @@
+import * as WelcomeScreen from "./WelcomeScreen"
+import * as WalletSetupScreen from "./WalletSetupScreen"
 import * as MnemonicScreen from "./MnemonicScreen"
-import * as WalletSuccessScreen from "./WalletSuccessScreen"
+import * as ConfirmMnemonicScreen from "./ConfirmMnemonicScreen"
 import * as BiometricsScreen from "./BiometricsScreen"
+import * as WalletSuccessScreen from "./WalletSuccessScreen"
 
-export { MnemonicScreen, WalletSuccessScreen, BiometricsScreen }
+export {
+    WelcomeScreen,
+    WalletSetupScreen,
+    MnemonicScreen,
+    ConfirmMnemonicScreen,
+    BiometricsScreen,
+    WalletSuccessScreen,
+}
