@@ -129,6 +129,7 @@ PODS:
   - MMKV (1.2.15):
     - MMKVCore (~> 1.2.15)
   - MMKVCore (1.2.15)
+  - MultiplatformBleAdapter (0.1.9)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -356,6 +357,9 @@ PODS:
   - React-jsinspector (0.70.6)
   - React-logger (0.70.6):
     - glog
+  - react-native-ble-plx (2.0.3):
+    - MultiplatformBleAdapter (= 0.1.9)
+    - React-Core
   - react-native-blur (4.3.2):
     - React-Core
   - react-native-flipper (0.163.0):
@@ -574,6 +578,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-ble-plx (from `../node_modules/react-native-ble-plx`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
@@ -623,6 +628,7 @@ SPEC REPOS:
     - lottie-ios
     - MMKV
     - MMKVCore
+    - MultiplatformBleAdapter
     - OpenSSL-Universal
     - SDWebImage
     - SDWebImageWebPCoder
@@ -709,6 +715,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-ble-plx:
+    :path: "../node_modules/react-native-ble-plx"
   react-native-blur:
     :path: "../node_modules/@react-native-community/blur"
   react-native-flipper:
@@ -811,6 +819,7 @@ SPEC CHECKSUMS:
   lottie-react-native: 701060db35cf892b3baa26e8f0fccdc9101a2f80
   MMKV: 7f34558bbb5a33b0eaefae2de4b6a20a2ffdad6f
   MMKVCore: ddf41b9d9262f058419f9ba7598719af56c02cd3
+  MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: e1866f61af7049eb3d8e08e8b133abd38bc1ca7a
@@ -827,6 +836,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
+  react-native-ble-plx: f10240444452dfb2d2a13a0e4f58d7783e92d76e
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
