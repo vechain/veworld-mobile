@@ -1190,13 +1190,25 @@ type RootTranslation = {
 	 */
 	SEND_INSUFFICIENT_BALANCE: string
 	/**
-	 * R​e​c​i​p​i​e​n​t​ ​A​d​d​r​e​s​s
+	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
 	SEND_INSERT_ADDRESS: string
 	/**
-	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​c​i​p​i​e​n​t​ ​a​d​d​r​e​s​s​ 
+	 * S​e​l​e​c​t​ ​a​ ​c​o​n​t​a​c​t​ ​b​e​l​o​w​ ​o​r​ ​p​a​s​t​e​/​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
+	/**
+	 * E​n​t​e​r​ ​o​r​ ​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
+	 */
+	SEND_ENTER_AN_ADDRESS: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	SEND_INSERT_CONTACTS: string
+	/**
+	 * A​c​c​o​u​n​t​s
+	 */
+	SEND_INSERT_ACCOUNTS: string
 	/**
 	 * F​r​o​m
 	 */
@@ -2554,13 +2566,25 @@ Please, try again later.
 	 */
 	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
 	/**
-	 * Recipient Address
+	 * Send your token
 	 */
 	SEND_INSERT_ADDRESS: () => LocalizedString
 	/**
-	 * Insert the recipient address 
+	 * Select a contact below or paste/scan an address
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
+	/**
+	 * Enter or scan an address
+	 */
+	SEND_ENTER_AN_ADDRESS: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	SEND_INSERT_CONTACTS: () => LocalizedString
+	/**
+	 * Accounts
+	 */
+	SEND_INSERT_ACCOUNTS: () => LocalizedString
 	/**
 	 * From
 	 */

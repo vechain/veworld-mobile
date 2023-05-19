@@ -10,7 +10,7 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import { useTheme } from "~Common"
-import { BaseIcon, BaseSpacer } from "~Components"
+import { BaseIcon } from "~Components"
 
 type Props = {
     headerComponent: React.ReactNode
@@ -61,7 +61,6 @@ export const BaseAccordion = ({
         if (height.value === 0) {
             runOnUI(() => {
                 "worklet"
-
                 height.value = measure(aref)!.height
             })()
         }
@@ -96,7 +95,6 @@ export const BaseAccordion = ({
             <Animated.View
                 style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
                 <View ref={aref} style={styles.bodyContent}>
-                    <BaseSpacer height={2} />
                     {bodyComponent}
                 </View>
             </Animated.View>
