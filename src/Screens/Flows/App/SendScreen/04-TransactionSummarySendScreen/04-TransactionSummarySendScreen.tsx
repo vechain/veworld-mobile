@@ -1,13 +1,7 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import {
-    CryptoUtils,
-    FormattingUtils,
-    VTHO,
-    useCheckIdentity,
-    useTheme,
-} from "~Common"
+import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
     AccountCard,
@@ -22,7 +16,6 @@ import {
     BaseText,
     BaseView,
     ScrollViewWithFooter,
-    showWarningToast,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -34,15 +27,11 @@ import {
     selectCurrency,
     selectSelectedAccount,
     useAppSelector,
-    selectDevice,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { useSendTransaction } from "../Hooks/useSendTransaction"
-import { useSignTransaction } from "../Hooks/useSignTransaction"
 import { useNavigation } from "@react-navigation/native"
-import { DelegationType } from "~Model/Delegation"
 import { DelegationOptions } from "./Components"
-import { AccountWithDevice } from "~Model"
+import { useDelegation, useSendTransaction, useSignTransaction } from "./Hooks"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -54,19 +43,11 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { token, amount, address, initialRoute } = route.params
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const [selectedDelegationOption, setSelectedDelegationOption] =
-        useState<DelegationType>(DelegationType.NONE)
-    const [selectedAccount, setSelectedAccount] = useState<AccountWithDevice>()
-    const [selectedDelegationUrl, setSelectedDelegationUrl] = useState<string>()
-
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
-    const selectedDevice = useAppSelector(selectDevice(account?.rootAddress))
-    // TODO: add it later
-    // const isDelegated = selectedDelegationOption !== DelegationType.NONE
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -77,55 +58,47 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         amount,
     )
 
-    const { gas, transaction } = useSendTransaction({
-        token,
-        amount,
-        address,
-    })
-
     const onTXFinish = useCallback(() => {
         switch (initialRoute) {
-            case Routes.HOME:
-                nav.navigate(Routes.HOME)
-                break
-
             case Routes.DISCOVER:
                 nav.navigate(Routes.DISCOVER)
                 break
-
+            case Routes.HOME:
             default:
                 nav.navigate(Routes.HOME)
                 break
         }
     }, [initialRoute, nav])
 
+    const { gas, transaction } = useSendTransaction({
+        token,
+        amount,
+        address,
+    })
+
+    const {
+        selectedDelegationOption,
+        setSelectedDelegationOption,
+        selectedDelegationAccount,
+        setSelectedDelegationAccount,
+        selectedDelegationUrl,
+        setSelectedDelegationUrl,
+        isDelegated,
+        urlDelegationSignature,
+    } = useDelegation({ transaction })
+
     const { signTransaction } = useSignTransaction({
         transaction,
         onTXFinish,
+        isDelegated,
+        urlDelegationSignature,
+        selectedDelegationAccount,
+        selectedDelegationOption,
     })
-
-    const onIdentityConfirmed = useCallback(
-        async (password?: string) => {
-            if (!selectedDevice) return
-
-            //local mnemonic, identity already verified via useCheckIdentity
-            if ("wallet" in selectedDevice) {
-                const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                    selectedDevice,
-                    password,
-                )
-                await signTransaction(decryptedWallet)
-            } else {
-                // TODO: support hardware wallet
-                showWarningToast("Hardware wallet not supported yet")
-            }
-        },
-        [selectedDevice, signTransaction],
-    )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed,
+            onIdentityConfirmed: signTransaction,
         })
     const gasFees = gas?.gas
         ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
@@ -215,15 +188,15 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         setSelectedDelegationOption={
                             setSelectedDelegationOption
                         }
-                        setSelectedAccount={setSelectedAccount}
-                        selectedAccount={selectedAccount}
+                        setSelectedAccount={setSelectedDelegationAccount}
+                        selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}
                         setSelectedDelegationUrl={setSelectedDelegationUrl}
                     />
-                    {selectedAccount && (
+                    {selectedDelegationAccount && (
                         <>
                             <BaseSpacer height={16} />
-                            <AccountCard account={selectedAccount} />
+                            <AccountCard account={selectedDelegationAccount} />
                         </>
                     )}
                     {selectedDelegationUrl && (
