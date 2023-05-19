@@ -3,22 +3,18 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     ConfirmMnemonicScreen,
     ImportMnemonicScreen,
-    ImportWalletTypeSelectionScreen,
     NewMnemonicScreen,
-    TutorialScreen,
     UserCreatePasswordScreen,
     WalletSuccessScreen,
-    WalletTypeSelectionScreen,
+    WalletSetupScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { SecurityLevelType } from "~Model"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
+    [Routes.WALLET_SETUP]: undefined
     [Routes.NEW_MNEMONIC]: undefined
-    [Routes.WALLET_TYPE_CREATION]: undefined
-    [Routes.WALLET_TYPE_IMPORT]: undefined
-    [Routes.WALLET_TUTORIAL]: undefined
     [Routes.CONFIRM_MNEMONIC]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.WALLET_SUCCESS]:
@@ -37,20 +33,8 @@ export const CreateWalletAppStack = () => {
     return (
         <CreateWalletApp.Navigator screenOptions={{ headerShown: false }}>
             <CreateWalletApp.Screen
-                name={Routes.WALLET_TYPE_CREATION}
-                component={WalletTypeSelectionScreen}
-                options={{ headerShown: false }}
-            />
-
-            <CreateWalletApp.Screen
-                name={Routes.WALLET_TYPE_IMPORT}
-                component={ImportWalletTypeSelectionScreen}
-                options={{ headerShown: false }}
-            />
-
-            <CreateWalletApp.Screen
-                name={Routes.WALLET_TUTORIAL}
-                component={TutorialScreen}
+                name={Routes.WALLET_SETUP}
+                component={WalletSetupScreen}
                 options={{ headerShown: false }}
             />
 
