@@ -1,10 +1,6 @@
 import { useCallback, useState } from "react"
 import { PasswordUtils, CryptoUtils } from "~Common/Utils"
-import {
-    SecurityLevelType,
-    UserSelectedSecurityLevel,
-    WALLET_STATUS,
-} from "~Model"
+import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -81,18 +77,12 @@ export const useCreateWallet = () => {
                 // if userPassword is undefined, then use biometrics
                 if (!userPassword) {
                     dispatch(
-                        setUserSelectedSecurity(
-                            UserSelectedSecurityLevel.BIOMETRIC,
-                        ),
+                        setUserSelectedSecurity(SecurityLevelType.BIOMETRIC),
                     )
 
                     dispatch(setLastSecurityLevel(SecurityLevelType.BIOMETRIC))
                 } else {
-                    dispatch(
-                        setUserSelectedSecurity(
-                            UserSelectedSecurityLevel.PASSWORD,
-                        ),
-                    )
+                    dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
 
                     dispatch(setLastSecurityLevel(SecurityLevelType.SECRET))
                 }
