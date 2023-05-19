@@ -85,7 +85,7 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess, scenario }) => {
             <BaseSpacer height={20} />
             <BaseView mx={20} alignItems="center">
                 <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="largeTitle">{title}</BaseText>
+                    <BaseText typographyFont="title">{title}</BaseText>
 
                     <BaseText typographyFont="body" my={10}>
                         {subTitle}

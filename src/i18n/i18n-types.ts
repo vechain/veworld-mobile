@@ -436,6 +436,14 @@ type RootTranslation = {
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​i​m​p​o​r​t​ ​y​o​u​r​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​,​ ​a​n​d​ ​r​e​t​a​i​n​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​a​n​d​ ​r​e​l​a​t​e​d​ ​t​r​a​n​s​a​c​t​i​o​n​ ​k​e​y​s​.
+	 */
+	BD_CREATE_WALLET_TYPE: string
+	/**
+	 * C​r​e​a​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s
+	 */
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -468,7 +476,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: string
 	/**
-	 * C​r​e​a​t​e​ ​W​a​l​l​e​t
+	 * W​a​l​l​e​t​ ​S​e​t​u​p
 	 */
 	TITLE_CREATE_WALLET_TYPE: string
 	/**
@@ -599,6 +607,10 @@ type RootTranslation = {
 	 * D​i​s​c​o​v​e​r
 	 */
 	TITLE_DISCOVER: string
+	/**
+	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
+	 */
+	SB_IMPORT_WALLET_TYPE: string
 	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
@@ -779,6 +791,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_NEXT: string
 	/**
+	 * a​n​d
+	 */
+	COMMON_LBL_AND: string
+	/**
 	 * n​a​m​e
 	 */
 	COMMON_LBL_NAME: string
@@ -832,6 +848,14 @@ type RootTranslation = {
 	 * C​o​m​m​e​n​t
 	 */
 	COMMON_LBL_COMMENT: string
+	/**
+	 * P​r​i​v​a​c​y​ ​P​o​l​i​c​y
+	 */
+	COMMON_LBL_PRIVACY_POLICY: string
+	/**
+	 * T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s
+	 */
+	COMMON_LBL_TERMS_AND_CONDITIONS: string
 	/**
 	 * A​s​s​e​t​s
 	 */
@@ -1781,6 +1805,14 @@ export type TranslationFunctions = {
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
+	 * You can import your existing wallet, and retain all of your accounts and related transaction keys.
+	 */
+	BD_CREATE_WALLET_TYPE: () => LocalizedString
+	/**
+	 * Creating the wallet the user accepts
+	 */
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -1813,7 +1845,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
 	/**
-	 * Create Wallet
+	 * Wallet Setup
 	 */
 	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
@@ -1944,6 +1976,10 @@ export type TranslationFunctions = {
 	 * Discover
 	 */
 	TITLE_DISCOVER: () => LocalizedString
+	/**
+	 * Which kind of wallet do you want to import?
+	 */
+	SB_IMPORT_WALLET_TYPE: () => LocalizedString
 	/**
 	 * Local wallet
 	 */
@@ -2121,6 +2157,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_NEXT: () => LocalizedString
 	/**
+	 * and
+	 */
+	COMMON_LBL_AND: () => LocalizedString
+	/**
 	 * name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
@@ -2172,6 +2212,14 @@ export type TranslationFunctions = {
 	 * Comment
 	 */
 	COMMON_LBL_COMMENT: () => LocalizedString
+	/**
+	 * Privacy Policy
+	 */
+	COMMON_LBL_PRIVACY_POLICY: () => LocalizedString
+	/**
+	 * Terms and Conditions
+	 */
+	COMMON_LBL_TERMS_AND_CONDITIONS: () => LocalizedString
 	/**
 	 * Assets
 	 */

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react"
 import {
+    BackButtonHeader,
     BaseButton,
     BaseIcon,
     BaseSafeArea,
@@ -37,7 +38,7 @@ export const NewMnemonicScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseSpacer height={20} />
+            <BackButtonHeader />
             <BaseView
                 alignItems="flex-start"
                 justifyContent="space-between"
