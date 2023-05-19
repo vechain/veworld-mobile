@@ -160,8 +160,8 @@ export const useSignTransaction = ({
                 LL.SUCCESS_GENERIC(),
                 LL.SUCCESS_GENERIC_OPERATION(),
                 LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-                () => {
-                    Linking.openURL(
+                async () => {
+                    await Linking.openURL(
                         `${
                             network.explorerUrl ||
                             ThorConstants.defaultMainNetwork.explorerUrl
@@ -170,7 +170,9 @@ export const useSignTransaction = ({
                 },
             )
             account?.address &&
-                dispatch(updateAccountBalances(thorClient, account.address))
+                (await dispatch(
+                    updateAccountBalances(thorClient, account.address),
+                ))
         } catch (e) {
             error(e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())

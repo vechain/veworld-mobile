@@ -33,16 +33,6 @@ export const useDelegation = ({ transaction }: Props) => {
         delegationUrl: string,
         accountAddress: string,
     ) => {
-        const tx = TransactionUtils.toDelegation(txBody)
-        // build hex encoded version of the transaction for signing request
-        const rawTransaction = HexUtils.addPrefix(tx.encode().toString("hex"))
-
-        // request to send for sponsorship/fee delegation
-        const sponsorRequest = {
-            origin: accountAddress.toLowerCase(),
-            raw: rawTransaction,
-        }
-
         const onError = (e: any) => {
             error("Failed to get signature from delegator:" + e)
             setSelectedDelegationOption(DelegationType.NONE)
@@ -51,8 +41,19 @@ export const useDelegation = ({ transaction }: Props) => {
             showErrorToast(LL.SEND_DELEGATION_ERROR_SIGNATURE())
         }
 
-        // request sponsorship
         try {
+            const tx = TransactionUtils.toDelegation(txBody)
+            // build hex encoded version of the transaction for signing request
+            const rawTransaction = HexUtils.addPrefix(
+                tx.encode().toString("hex"),
+            )
+
+            // request to send for sponsorship/fee delegation
+            const sponsorRequest = {
+                origin: accountAddress.toLowerCase(),
+                raw: rawTransaction,
+            }
+
             const response = await axios.post(delegationUrl, sponsorRequest)
 
             if (response.data.error || !response.data.signature) {
@@ -70,10 +71,10 @@ export const useDelegation = ({ transaction }: Props) => {
         }
     }
 
-    const handleSetSelectedDelegationUrl = (url?: string) => {
+    const handleSetSelectedDelegationUrl = async (url?: string) => {
         setSelectedDelegationUrl(url)
         if (url && account?.address) {
-            fetchSignature(transaction, url, account.address)
+            await fetchSignature(transaction, url, account.address)
         } else {
             setUrlDelegationSignature(undefined)
         }
