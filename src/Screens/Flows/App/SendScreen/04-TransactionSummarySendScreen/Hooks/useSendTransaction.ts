@@ -62,7 +62,7 @@ export const useSendTransaction = ({
             clauses,
             gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
             gas: gas?.gas || "0",
-            dependsOn: null, // TODO: in extension it is null
+            dependsOn: null, // NOTE: in extension it is null
             nonce: HexUtils.generateRandom(8),
         }
     }, [clauses, thorClient.genesis.id, thorClient.status.head.id, gas?.gas])
@@ -78,7 +78,6 @@ export const useSendTransaction = ({
                     account?.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
                 )
-                // info("estimatedGas", estimatedGas)
                 setGas(estimatedGas)
             })()
         }
