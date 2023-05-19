@@ -209,7 +209,7 @@ export const selectTokenWithInfoWithID = createSelector(
             if (foundToken) foundTokens.push(foundToken)
         })
 
-        return foundTokens
+        return foundTokens || [VET, VTHO]
     },
 )
 

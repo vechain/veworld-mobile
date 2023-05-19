@@ -849,6 +849,10 @@ type RootTranslation = {
 	 */
 	COMMON_TODAY: string
 	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t
+	 */
+	COMMON_SELECT_ACCOUNT: string
+	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
 	COMMON_MARKET_CAP: string
@@ -1197,6 +1201,38 @@ type RootTranslation = {
 	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
 	 */
 	SEND_LESS_THAN_1_MIN: string
+	/**
+	 * S​e​l​e​c​t​ ​d​e​l​e​g​a​t​i​o​n
+	 */
+	SEND_DELEGATION_TITLE: string
+	/**
+	 * N​o​n​e
+	 */
+	SEND_DELEGATION_NONE: string
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	SEND_DELEGATION_ACCOUNT: string
+	/**
+	 * U​R​L
+	 */
+	SEND_DELEGATION_URL: string
+	/**
+	 * S​e​l​e​c​t​ ​U​R​L
+	 */
+	SEND_DELEGATION_SELECT_URL: string
+	/**
+	 * A​d​d​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​U​R​L​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​o​ ​u​s​e​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: string
+	/**
+	 * E​n​t​e​r​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -2153,6 +2189,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_TODAY: () => LocalizedString
 	/**
+	 * Select account
+	 */
+	COMMON_SELECT_ACCOUNT: () => LocalizedString
+	/**
 	 * Market Cap
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
@@ -2497,6 +2537,38 @@ Please, try again later.
 	 * Less than 1 min
 	 */
 	SEND_LESS_THAN_1_MIN: () => LocalizedString
+	/**
+	 * Select delegation
+	 */
+	SEND_DELEGATION_TITLE: () => LocalizedString
+	/**
+	 * None
+	 */
+	SEND_DELEGATION_NONE: () => LocalizedString
+	/**
+	 * Account
+	 */
+	SEND_DELEGATION_ACCOUNT: () => LocalizedString
+	/**
+	 * URL
+	 */
+	SEND_DELEGATION_URL: () => LocalizedString
+	/**
+	 * Select URL
+	 */
+	SEND_DELEGATION_SELECT_URL: () => LocalizedString
+	/**
+	 * Add delegation URL
+	 */
+	SEND_DELEGATION_ADD_URL: () => LocalizedString
+	/**
+	 * Insert the URL you want to to use to delegate this transaction
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: () => LocalizedString
+	/**
+	 * Enter URL
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: () => LocalizedString
 	/**
 	 * Account
 	 */

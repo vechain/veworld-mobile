@@ -76,8 +76,7 @@ export const AnimatedChartCard = memo(
                             tokenWithInfo={tokenWithInfo}
                             isAnimation={isEdit}
                         />
-                        <Animated.View
-                            style={[styles.fullWidth, animatedInnerCard]}>
+                        <Animated.View style={animatedInnerCard}>
                             <LineChart.Provider data={chartData}>
                                 <LineChart height={HEIGHT}>
                                     <LineChart.Path
@@ -105,7 +104,5 @@ const baseStyles = (theme: ColorThemeType) =>
             overflow: "hidden",
             marginHorizontal: 20,
         },
-
-        fullWidth: { width: "100%" },
         cardShadow: theme.shadows.card,
     })

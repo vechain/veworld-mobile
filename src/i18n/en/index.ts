@@ -239,6 +239,7 @@ const en: BaseTranslation = {
     COMMON_DAPPS: "DApps",
     COMMON_PRICE: "Price",
     COMMON_TODAY: "Today",
+    COMMON_SELECT_ACCOUNT: "Select account",
     COMMON_MARKET_CAP: "Market Cap",
     COMMON_TOTAL_SUPPLY: "Total Supply",
     COMMON_24H_VOLUME: "24h Volume",
@@ -365,6 +366,14 @@ const en: BaseTranslation = {
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",
+    SEND_DELEGATION_TITLE: "Select delegation",
+    SEND_DELEGATION_NONE: "None",
+    SEND_DELEGATION_ACCOUNT: "Account",
+    SEND_DELEGATION_URL: "URL",
+    SEND_DELEGATION_SELECT_URL: "Select URL",
+    SEND_DELEGATION_ADD_URL: "Add delegation URL",
+    SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
+    SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",
 
 
     // Wallets New Local

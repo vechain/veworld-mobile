@@ -13,5 +13,6 @@ export const mergeTokens = (a: FungibleToken[], b: FungibleToken[]) =>
         )
         .concat(b)
 
-export const isVechainToken = (token: FungibleToken) =>
-    token.symbol === VET.symbol || token.symbol === VTHO.symbol
+export const isVechainToken = (symbol: string) =>
+    symbol.toLowerCase() === VET.symbol.toLowerCase() ||
+    symbol.toLowerCase() === VTHO.symbol.toLowerCase()

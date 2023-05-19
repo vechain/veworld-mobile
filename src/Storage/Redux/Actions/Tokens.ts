@@ -10,6 +10,7 @@ import {
     COINGECKO_MARKET_INFO_ENDPOINT,
     VET,
     VTHO,
+    TokenUtils,
 } from "~Common"
 import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
 import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
@@ -32,7 +33,7 @@ type CoinMarketChartResponse = {
     prices: number[][]
 }
 
-export const fetchDashboardChartData =
+export const fetchChartData =
     ({
         symbol,
         days,
@@ -128,7 +129,8 @@ export const fetchTokensWithInfo = () => async (dispatch: AppThunkDispatch) => {
 
         const tokenPromises: Promise<TokenInfoResponse>[] = []
         for (const token of foundTokens) {
-            tokenPromises.push(getTokenInfo(token.id))
+            if (TokenUtils.isVechainToken(token.symbol))
+                tokenPromises.push(getTokenInfo(token.id))
         }
 
         const tokenResults = await allSettled(tokenPromises)
