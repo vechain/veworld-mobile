@@ -126,6 +126,8 @@ const en: BaseTranslation = {
     BD_ANALYTICS_TRACKING: "I accept to be tracked by Analytics and for research and service quality purposes",
     BD_MNEMONIC_COPIED_TO_CLIPBOARD: "Mnemonic copied to clipboard",
     BD_SECURITY_DOWNGRADE: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
+    BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
+    BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -136,7 +138,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_TUTORIAL_SLIDE_01: "Secret recovery phrase",
     TITLE_WALLET_TUTORIAL_SLIDE_02: "The key to your crypto",
     TITLE_WALLET_TUTORIAL_SLIDE_03: "Keep your phrase safe",
-    TITLE_CREATE_WALLET_TYPE: "Create Wallet",
+    TITLE_CREATE_WALLET_TYPE: "Wallet Setup",
     TITLE_IMPORT_WALLET_TYPE: "Import Wallet",
     TITLE_MNEMONIC: "Your Mnemonic",
     TITLE_CONFIRM_MNEMONIC: "Confirm your mnemonic",
@@ -171,6 +173,7 @@ const en: BaseTranslation = {
     TITLE_DISCOVER: "Discover",
 
     // SUBTITLES
+    SB_IMPORT_WALLET_TYPE: "Which kind of wallet do you want to import?",
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
     SB_IMPORT_WALLET_TYPE_HARDWARE: "Hardware Wallet",
     SB_UNLOCK_WALLET_PIN: "Insert the pin you created in order to unlock your wallet.",
@@ -222,6 +225,7 @@ const en: BaseTranslation = {
     COMMON_BTN_NEXT: "NEXT",
 
     // Common Labels
+    COMMON_LBL_AND: "and",
     COMMON_LBL_NAME: "name",
     COMMON_LBL_URL: "URL",
     COMMON_LBL_ADDRESS: "Address",
@@ -235,10 +239,17 @@ const en: BaseTranslation = {
     COMMON_LBL_NO_TOKEN_DATA: "No available price history for {tokenName: string}",
     COMMON_LBL_DATA: "Data",
     COMMON_LBL_COMMENT: "Comment",
+    COMMON_LBL_PRIVACY_POLICY: "Privacy Policy",
+    COMMON_LBL_TERMS_AND_CONDITIONS: "Terms and Conditions",
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
     COMMON_PRICE: "Price",
     COMMON_TODAY: "Today",
+    COMMON_SELECT_ACCOUNT: "Select account",
+    COMMON_MARKET_CAP: "Market Cap",
+    COMMON_TOTAL_SUPPLY: "Total Supply",
+    COMMON_24H_VOLUME: "24h Volume",
+    COMMON_CIRCULATING_SUPPLY: "Circulating Supply",
 
 
     // Common Titles
@@ -361,7 +372,15 @@ const en: BaseTranslation = {
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",
-
+    SEND_DELEGATION_TITLE: "Select delegation",
+    SEND_DELEGATION_NONE: "None",
+    SEND_DELEGATION_ACCOUNT: "Account",
+    SEND_DELEGATION_URL: "URL",
+    SEND_DELEGATION_SELECT_URL: "Select URL",
+    SEND_DELEGATION_ADD_URL: "Add delegation URL",
+    SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
+    SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",
+    SEND_DELEGATION_ERROR_SIGNATURE: "Failed to reach this URL. Please try again.",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

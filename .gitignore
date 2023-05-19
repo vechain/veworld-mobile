@@ -31,6 +31,9 @@ local.properties
 *.iml
 *.hprof
 .cxx/
+android/app/src/main/assets
+android/app/src/main/res/raw
+android/app/src/main/res/drawable-*/**
 
 # node.js
 #

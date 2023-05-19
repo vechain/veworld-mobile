@@ -1,5 +1,7 @@
 import { Activity } from "~Model"
 import TransactionUtils from "."
+import { toDelegation } from "./TransactionUtils"
+import { Transaction } from "thor-devkit"
 
 describe("TransactionUtils", () => {
     describe("checkForTransactionFinality", () => {
@@ -71,5 +73,12 @@ describe("TransactionUtils", () => {
             )
             expect(result).toBe(true)
         })
+    })
+})
+
+describe("toDelegation", () => {
+    it("should create a new Transaction with reserved features set to 1", () => {
+        const result = toDelegation({} as Transaction.Body)
+        expect(result.body.reserved).toEqual({ features: 1 })
     })
 })

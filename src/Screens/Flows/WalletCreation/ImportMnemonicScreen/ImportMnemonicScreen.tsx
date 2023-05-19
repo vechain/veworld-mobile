@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import {
+    BackButtonHeader,
     BaseButton,
     BaseIcon,
     BaseSafeArea,
@@ -104,7 +105,7 @@ export const ImportMnemonicScreen = () => {
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
-                <BaseSpacer height={20} />
+                <BackButtonHeader />
                 <BaseView
                     alignItems="center"
                     justifyContent="space-between"

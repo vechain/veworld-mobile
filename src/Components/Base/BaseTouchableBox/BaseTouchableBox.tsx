@@ -26,6 +26,8 @@ type Props = {
     innerContainerStyle?: StyleProp<ViewStyle>
     bg?: string
     w?: string | number
+    px?: number
+    py?: number
     flex?: number
 } & Omit<TouchableOpacityProps, "style"> &
     GenericTouchableProps
@@ -41,17 +43,21 @@ export const BaseTouchableBox: React.FC<Props> = ({
     alignItems = "center",
     bg,
     w,
+    px,
+    py,
     flex,
     ...props
 }) => {
     const { styles, theme } = useThemedStyles(
         baseStyles({
             bg,
+            w,
+            px,
+            py,
             flexDirection,
             justifyContent,
             alignItems,
             disabled,
-            w,
             flex,
         }),
     )
@@ -73,6 +79,8 @@ export const BaseTouchableBox: React.FC<Props> = ({
 type BaseStyles = {
     bg?: string
     w?: number | string
+    px?: number
+    py?: number
     flexDirection: FlexDirection
     justifyContent: JustifyContent
     alignItems: AlignItems
@@ -82,11 +90,13 @@ type BaseStyles = {
 const baseStyles =
     ({
         bg,
+        w,
+        px = 16,
+        py = 12,
         flexDirection,
         justifyContent,
         alignItems,
         disabled,
-        w,
         flex,
     }: BaseStyles) =>
     (theme: ColorThemeType) =>
@@ -100,8 +110,8 @@ const baseStyles =
                 justifyContent,
                 alignItems,
                 flexDirection,
-                paddingHorizontal: 16,
-                paddingVertical: 12,
+                paddingHorizontal: px,
+                paddingVertical: py,
                 backgroundColor: bg || theme.colors.card,
                 opacity: disabled ? 0.5 : 1,
                 borderRadius: 16,

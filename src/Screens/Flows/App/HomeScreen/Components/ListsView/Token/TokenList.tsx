@@ -4,20 +4,23 @@ import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { ColorThemeType, VET, VTHO, useThemedStyles } from "~Common"
 import {
     changeBalancePosition,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import {
-    selectVetTokenWithBalance,
-    selectVthoTokenWithBalance,
     selectNonVechainTokensWithBalances,
     selectTokenWithInfoWithID,
 } from "~Storage/Redux/Selectors"
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
+
+enum TokenIndex {
+    vet = 0,
+    vtho = 1,
+}
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -28,10 +31,8 @@ export const TokenList = memo(
     ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
         const dispatch = useAppDispatch()
         const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-        const vetBalance = useAppSelector(selectVetTokenWithBalance)
-        const vthoBalance = useAppSelector(selectVthoTokenWithBalance)
         const tokenWithInfo = useAppSelector(state =>
-            selectTokenWithInfoWithID(state, ["VET", "VTHO"]),
+            selectTokenWithInfoWithID(state, [VET.symbol, VTHO.symbol]),
         )
 
         const { styles } = useThemedStyles(baseStyles)
@@ -58,20 +59,14 @@ export const TokenList = memo(
 
         return (
             <Animated.View style={styles.container} {...animatedViewProps}>
-                {vetBalance && (
-                    <AnimatedChartCard
-                        tokenWithInfo={tokenWithInfo[0]}
-                        tokenWithBalance={vetBalance}
-                        isEdit={isEdit}
-                    />
-                )}
-                {vthoBalance && (
-                    <AnimatedChartCard
-                        tokenWithInfo={tokenWithInfo[1]}
-                        tokenWithBalance={vthoBalance}
-                        isEdit={isEdit}
-                    />
-                )}
+                <AnimatedChartCard
+                    tokenWithInfo={tokenWithInfo[TokenIndex.vet]}
+                    isEdit={isEdit}
+                />
+                <AnimatedChartCard
+                    tokenWithInfo={tokenWithInfo[TokenIndex.vtho]}
+                    isEdit={isEdit}
+                />
 
                 <NestableDraggableFlatList
                     data={tokenBalances}

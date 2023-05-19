@@ -6,8 +6,11 @@ import { RootState } from "~Storage/Redux/Types"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
-import { selectAllFungibleTokens, selectCustomTokens } from "./Tokens"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
+import {
+    selectCustomTokensForNetwork,
+    selectFungibleTokensAll,
+} from "./TokenBalances"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -46,7 +49,7 @@ export const selectAccountBalances = createSelector(
 )
 
 export const selectAccountCustomTokens = createSelector(
-    selectCustomTokens,
+    selectCustomTokensForNetwork,
     selectSelectedAccountBalances,
     (tokens, balances) => {
         const accountTokenAddresses = balances.map(
@@ -64,7 +67,7 @@ export const selectAccountCustomTokens = createSelector(
 export const selectTokensWithBalances = createSelector(
     [
         selectSelectedAccountBalances,
-        selectAllFungibleTokens,
+        selectFungibleTokensAll,
         selectAccountCustomTokens,
     ],
     (balances, tokens, customTokens): FungibleTokenWithBalance[] =>

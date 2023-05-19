@@ -15,13 +15,13 @@ export const useBiometricType = () => {
                 biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
             ) {
                 if (
-                    biometrics?.authtypeAvailable ===
+                    biometrics?.authTypeAvailable ===
                     AuthenticationType.FACIAL_RECOGNITION
                 ) {
                     return LL.FACE_ID()
                 }
                 if (
-                    biometrics?.authtypeAvailable ===
+                    biometrics?.authTypeAvailable ===
                     AuthenticationType.FINGERPRINT
                 ) {
                     return LL.TOUCH_ID()
@@ -34,13 +34,13 @@ export const useBiometricType = () => {
                 biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
             ) {
                 if (
-                    biometrics?.authtypeAvailable ===
+                    biometrics?.authTypeAvailable ===
                     AuthenticationType.FACIAL_RECOGNITION
                 ) {
                     return LL.FACE_ID()
                 }
                 if (
-                    biometrics?.authtypeAvailable ===
+                    biometrics?.authTypeAvailable ===
                     AuthenticationType.FINGERPRINT
                 ) {
                     return LL.FINGERPRINT()
