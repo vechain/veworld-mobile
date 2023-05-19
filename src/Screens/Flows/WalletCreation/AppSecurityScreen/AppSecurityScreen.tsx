@@ -7,7 +7,11 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { useBiometricType, useBiometricsValidation } from "~Common"
+import {
+    useBiometricType,
+    useBiometrics,
+    useBiometricsValidation,
+} from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -18,6 +22,7 @@ export const AppSecurityScreen = () => {
     const nav = useNavigation()
 
     const { currentSecurityLevel } = useBiometricType()
+    useBiometrics()
     const { authenticateBiometrics } = useBiometricsValidation()
 
     const onBiometricsPress = useCallback(async () => {

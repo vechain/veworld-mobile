@@ -5,11 +5,10 @@ import {
     selectAccount,
     setAppLockStatus,
     setMnemonic,
-    setUserSelectedSecurity,
 } from "~Storage/Redux"
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
-import { SecurityLevelType, WALLET_STATUS } from "~Model"
+import { WALLET_STATUS } from "~Model"
 const device = {
     alias: "Wallet 1",
     index: 0,
@@ -114,9 +113,6 @@ describe("useCreateWallet", () => {
             expect(selectAccount).toHaveBeenCalledWith({
                 address: "0xED8DA269260CE13f17624bE20FE9311807db0901",
             })
-            expect(setUserSelectedSecurity).toHaveBeenCalledWith(
-                SecurityLevelType.BIOMETRIC,
-            )
         })
 
         it("should create wallet with password", async () => {
@@ -146,9 +142,6 @@ describe("useCreateWallet", () => {
                 },
             })
             expect(setAppLockStatus).toBeCalledWith(WALLET_STATUS.UNLOCKED)
-            expect(setUserSelectedSecurity).toBeCalledWith(
-                SecurityLevelType.SECRET,
-            )
             expect(setMnemonic).toBeCalledWith(undefined)
             expect(result.current.isComplete).toBe(true)
         })
