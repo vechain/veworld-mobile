@@ -271,6 +271,11 @@ const en: BaseTranslation = {
     ERROR_ADDRESS_INVALID: "Please enter a valid Vechain address",
     ERROR: "Error!",
     ERROR_GENERIC_OPERATION: "The operation went wrong. Please, try again.",
+    ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: "Failed to get token URI from Thor",
+    ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: "Failed to get token data from IPFS",
+    ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: "Failed to get token data from Arweave",
+    ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: "The token URI protocol is not supported ({protocol})",
+    ERROR_NFT_FAILED_TO_GET_METADATA: "Failed to get token metadata",
 
     // Success
 

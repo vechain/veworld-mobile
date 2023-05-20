@@ -950,6 +950,27 @@ type RootTranslation = {
 	 */
 	ERROR_GENERIC_OPERATION: string
 	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​U​R​I​ ​f​r​o​m​ ​T​h​o​r
+	 */
+	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​I​P​F​S
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​A​r​w​e​a​v​e
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: string
+	/**
+	 * T​h​e​ ​t​o​k​e​n​ ​U​R​I​ ​p​r​o​t​o​c​o​l​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​(​{​p​r​o​t​o​c​o​l​}​)
+	 * @param {unknown} protocol
+	 */
+	ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: RequiredParams<'protocol'>
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​m​e​t​a​d​a​t​a
+	 */
+	ERROR_NFT_FAILED_TO_GET_METADATA: string
+	/**
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
@@ -2253,6 +2274,26 @@ Please, try again later.
 	 * The operation went wrong. Please, try again.
 	 */
 	ERROR_GENERIC_OPERATION: () => LocalizedString
+	/**
+	 * Failed to get token URI from Thor
+	 */
+	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: () => LocalizedString
+	/**
+	 * Failed to get token data from IPFS
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: () => LocalizedString
+	/**
+	 * Failed to get token data from Arweave
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: () => LocalizedString
+	/**
+	 * The token URI protocol is not supported ({protocol})
+	 */
+	ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: (arg: { protocol: unknown }) => LocalizedString
+	/**
+	 * Failed to get token metadata
+	 */
+	ERROR_NFT_FAILED_TO_GET_METADATA: () => LocalizedString
 	/**
 	 * Success!
 	 */
