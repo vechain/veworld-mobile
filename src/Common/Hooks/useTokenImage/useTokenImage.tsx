@@ -1,116 +1,101 @@
-// import { useCallback, useEffect, useState } from "react"
-// import { useNftContract } from "../useNftContract"
-// import { useArweave } from "../useArweave"
-// import { useIpfs } from "../useIpfs"
+import { useCallback, useEffect, useState } from "react"
+import { useNftContract } from "../useNftContract"
+import { error as logError } from "~Common/Logger"
+import { useI18nContext } from "~i18n"
+import { NonFungibleTokeCollection, NonFungibleToken } from "~Model/Nft/Nft"
+import {
+    getTokenMetaIpfs,
+    getImageUrlIpfs,
+    getTokenMetaArweave,
+    getImageUrlArweave,
+} from "~Networking"
+import { setNfts, useAppDispatch } from "../../../Storage/Redux"
 
-// import { error as logError } from "~Common/Logger"
-// import { useI18nContext } from "~i18n"
-// import { TokenMetadata } from "~Model/Nft/Nft"
+enum URIProtocol {
+    IPFS = "ipfs",
+    ARWEAVE = "ar",
+}
 
-// enum URIProtocol {
-//     IPFS = "ipfs",
-//     ARWEAVE = "ar",
-// }
+/**
+ * Gets a token's image from the VeChain NFT API
+ * @param tokenAddress
+ * @param tokenId
+ */
 
-// /**
-//  * Gets a token's image from the VeChain NFT API
-//  * @param tokenAddress
-//  * @param tokenId
-//  */
-// export const useTokenMetadata = (tokenAddress: string, tokenId: string) => {
-//     const [error, setError] = useState<string | undefined>(undefined)
-//     const [tokenMetadata, setTokenMetadata] = useState<
-//         TokenMetadata | undefined
-//     >(undefined)
-//     const [tokenUri, setTokenUri] = useState<string | undefined>(undefined)
-//     const [imageUrl, setImageUrl] = useState<string | undefined>()
+export const useTokenMetadata = () => {
+    const [error, setError] = useState<string | undefined>(undefined)
+    const { nftCollections } = useNftContract()
+    const { LL } = useI18nContext()
+    const disptach = useAppDispatch()
 
-//     const contract = useNftContract(tokenAddress)
+    const fetchMetadata = useCallback(
+        async (uri: string) => {
+            try {
+                const protocol = uri.split(":")[0]
 
-//     const arweave = useArweave()
-//     const ipfs = useIpfs()
+                switch (protocol) {
+                    case URIProtocol.IPFS: {
+                        const tokenMetadata = await getTokenMetaIpfs(uri)
+                        const imageUrl = getImageUrlIpfs(
+                            tokenMetadata.image ?? "",
+                        )
+                        return { tokenMetadata, imageUrl }
+                    }
 
-//     const { LL } = useI18nContext()
+                    case URIProtocol.ARWEAVE: {
+                        const tokenMetadata = await getTokenMetaArweave(uri)
+                        const imageUrl = await getImageUrlArweave(uri)
+                        return { tokenMetadata, imageUrl }
+                    }
 
-//     const fetchTokenUri = useCallback(async () => {
-//         try {
-//             const _tokenUri = await contract.tokenURI(tokenId)
-//             setTokenUri(_tokenUri)
-//         } catch (e) {
-//             logError(e)
-//             setError(LL.ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR())
-//         }
-//     }, [LL, contract, tokenId])
+                    default:
+                        setError(
+                            LL.ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED({
+                                protocol,
+                            }),
+                        )
+                }
+            } catch (e) {
+                logError(e)
+                setError(LL.ERROR_NFT_FAILED_TO_GET_METADATA())
+            }
+        },
+        [LL],
+    )
 
-//     const getFromIPFS = useCallback(
-//         async (uri: string) => {
-//             try {
-//                 const metadata = await ipfs.getTokenMetadata(uri)
-//                 const _imageUrl = ipfs.getImageUrl(metadata.image)
+    useEffect(() => {
+        const init = async () => {
+            let _collectionFinal: NonFungibleTokeCollection[] = []
 
-//                 setTokenMetadata(metadata)
-//                 setImageUrl(_imageUrl)
-//             } catch (e) {
-//                 logError(e)
-//                 setError(LL.ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS())
-//             }
-//         },
-//         [LL, ipfs],
-//     )
+            for (const collection of nftCollections) {
+                let _nftFinal: NonFungibleToken[] = []
 
-//     const getFromArweave = useCallback(
-//         async (uri: string) => {
-//             try {
-//                 const metadata = await arweave.getTokenMetadata(uri)
+                for (const nft of collection.nfts) {
+                    if (nft.tokenURI) {
+                        const nftMeta = await fetchMetadata(nft.tokenURI)
+                        const _nft = {
+                            ...nft,
+                            ...nftMeta?.tokenMetadata,
+                            image: nftMeta?.imageUrl,
+                        }
 
-//                 const _imageUrl = await arweave.getImageUrl(metadata.data.image)
+                        _nftFinal.push(_nft)
+                    }
+                }
 
-//                 setTokenMetadata(metadata.data)
-//                 setImageUrl(_imageUrl)
-//             } catch (e) {
-//                 logError(e)
-//                 setError(LL.ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE())
-//             }
-//         },
-//         [LL, arweave],
-//     )
+                const col = {
+                    ...collection,
+                    nfts: _nftFinal,
+                }
 
-//     const fetchMetadata = useCallback(
-//         async (uri: string) => {
-//             try {
-//                 const protocol = uri.split(":")[0]
+                _collectionFinal.push(col)
+            }
 
-//                 switch (protocol) {
-//                     case URIProtocol.IPFS:
-//                         await getFromIPFS(uri)
-//                         break
-//                     case URIProtocol.ARWEAVE:
-//                         await getFromArweave(uri)
-//                         break
-//                     default:
-//                         setError(
-//                             LL.ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED({
-//                                 protocol,
-//                             }),
-//                         )
-//                 }
-//             } catch (e) {
-//                 logError(e)
-//                 setError(LL.ERROR_NFT_FAILED_TO_GET_METADATA())
-//             }
-//         },
-//         [LL, getFromArweave, getFromIPFS],
-//     )
+            disptach(setNfts(_collectionFinal))
+        }
 
-//     useEffect(() => {
-//         fetchTokenUri()
-//     }, [fetchTokenUri, tokenAddress, tokenId])
+        init()
+    }, [disptach, fetchMetadata, nftCollections])
 
-//     useEffect(() => {
-//         if (tokenUri) fetchMetadata(tokenUri)
-//     }, [fetchMetadata, tokenUri])
-
-//     return { error, tokenMetadata, tokenUri, imageUrl }
-// }
-
-export {}
+    return { error }
+}

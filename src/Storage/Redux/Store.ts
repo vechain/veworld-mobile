@@ -11,6 +11,7 @@ import {
     TokenSlice,
     CurrencySlice,
     ActivitiesSlice,
+    NftSlice,
 } from "./Slices"
 
 export const reducer = combineReducers({
@@ -25,4 +26,5 @@ export const reducer = combineReducers({
     [CacheSlice.name]: CacheSlice.reducer,
     [ContactsSlice.name]: ContactsSlice.reducer,
     [ActivitiesSlice.name]: ActivitiesSlice.reducer,
+    [NftSlice.name]: NftSlice.reducer,
 })

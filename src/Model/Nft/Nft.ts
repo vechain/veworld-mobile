@@ -10,14 +10,32 @@ export interface NFTContract {
     creator?: string
 }
 
-export interface NonFungibleToken {
-    collectionName: string
-    contractAddress: string
+export interface NonFungibleTokeCollection {
+    name: string
+    address: string
+    symbol: string
+    creator: string
+    description: string
+    icon: string
+    balanceOf: number
+    nfts: NonFungibleToken[]
+}
+
+export interface NonFungibleToken extends TokenMetadata {
     owner: string
-    tokenId: string
-    genesisId: string
+    tokenId: number
     tokenURI?: string
-    icon?: string
+}
+
+export interface TokenMetadata {
+    name?: string
+    description?: string
+    image?: string
+    edition?: number
+    tokenId?: number
+    rank?: number
+    rarity?: number
+    attributes?: { trait_type: string; value: string }[]
 }
 
 export interface SelectedNFT {
@@ -27,12 +45,6 @@ export interface SelectedNFT {
 
 export interface SelectedNFTs {
     [accountAddress: string]: SelectedNFT[]
-}
-
-export interface NFTStorageData extends StorageData {
-    contracts: NFTContract[]
-    tokens: NonFungibleToken[]
-    selectedContracts: SelectedNFTs
 }
 
 export interface NFTTransferLog {
@@ -45,16 +57,4 @@ export interface NFTTransferLog {
     index: number
     direction: DIRECTIONS
     transactionId: string
-}
-
-export interface TokenMetadata {
-    name: string
-    description: string
-    image: string
-}
-
-export interface StorageData {
-    timeUpdated?: number
-    nonce?: string
-    appVersion: string
 }

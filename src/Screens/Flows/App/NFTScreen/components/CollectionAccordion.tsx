@@ -1,20 +1,28 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseAccordion, BaseText, BaseView } from "~Components"
-import { NFTItem } from "../NFTScreen"
+import { BaseAccordion, BaseImage, BaseText, BaseView } from "~Components"
 import { NftsList } from "./NftsList"
+import { NonFungibleTokeCollection } from "~Model"
+import { isEmpty } from "lodash"
 
 type Props = {
-    collection: { title: string; list: NFTItem[] }
+    collection: NonFungibleTokeCollection
 }
 
 export const CollectionAccordion = ({ collection }: Props) => {
     const headerComponent = useMemo(() => {
         return (
             <BaseView flexDirection="row">
-                <BaseView style={baseStyles.nftPreviewImage} />
+                {!isEmpty(collection.icon) ? (
+                    <BaseImage
+                        uri={collection.icon}
+                        style={baseStyles.nftPreviewImage}
+                    />
+                ) : (
+                    <BaseView style={baseStyles.nftPreviewImage} />
+                )}
                 <BaseText typographyFont="subTitleBold">
-                    {collection.title}
+                    {collection.name}
                 </BaseText>
             </BaseView>
         )
@@ -24,7 +32,7 @@ export const CollectionAccordion = ({ collection }: Props) => {
         <BaseAccordion
             headerComponent={headerComponent}
             headerStyle={baseStyles.headerStyle}
-            bodyComponent={<NftsList nfts={collection.list} />}
+            bodyComponent={<NftsList nfts={collection.nfts} />}
         />
     )
 }
@@ -35,7 +43,7 @@ const baseStyles = StyleSheet.create({
     nftPreviewImage: {
         width: 32,
         height: 32,
-        backgroundColor: "pink",
+        borderWidth: 1,
         borderRadius: 16,
         marginRight: 10,
     },

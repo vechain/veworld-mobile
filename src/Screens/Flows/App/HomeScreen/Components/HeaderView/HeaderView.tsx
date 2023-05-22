@@ -1,9 +1,9 @@
-import React, { memo, useCallback, useEffect, useMemo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { BaseIcon, BaseSpacer, BaseView, FastActionsBar } from "~Components"
 import { Header } from "./Header"
 import { AccountsCarousel } from "./AccountsCarousel"
 
-import { AddressUtils, useNftContract, useTheme } from "~Common"
+import { AddressUtils, useTheme } from "~Common"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     getBalanceVisible,
@@ -40,12 +40,6 @@ export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
             ),
         [selectedAccount, accounts],
     )
-
-    const { getNFTsFor } = useNftContract()
-
-    useEffect(() => {
-        getNFTsFor(accounts[0].address)
-    }, [accounts, getNFTsFor])
 
     const onAccountChange = useCallback(
         (account: WalletAccount) => {

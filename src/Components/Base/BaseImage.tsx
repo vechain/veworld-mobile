@@ -19,7 +19,7 @@ export const BaseImage = (props: Props) => {
                 priority: FastImage.priority.normal,
             }}
             {...rest}
-            resizeMode={FastImage.resizeMode.contain}
+            resizeMode={FastImage.resizeMode.cover}
         />
     )
 }

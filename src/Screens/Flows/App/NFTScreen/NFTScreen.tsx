@@ -4,17 +4,8 @@ import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { BaseSafeArea, BaseSpacer } from "~Components"
 import { CollectionsList, NftScreenHeader } from "./components"
 
-export type NFTItem = {
-    key: string
-    label: string
-    height: number
-    width: number
-    backgroundColor: string
-}
-
 export const NFTScreen = () => {
     const paddingBottom = useBottomTabBarHeight()
-
     const visibleHeightRef = useRef<number>(0)
 
     return (
