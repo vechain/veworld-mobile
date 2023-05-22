@@ -128,7 +128,6 @@ export const useAccountActivities = (address: string) => {
     // Update activities when saved activities in Redux state changes
     useEffect(() => {
         setActivities(activitiesSaved)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activitiesSaved])
 
     return {
