@@ -1,35 +1,29 @@
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { FC, useCallback, useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-    RequireUserPassword,
+    showErrorToast,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { SecurityLevelType } from "~Model"
-import {
-    BiometricsUtils,
-    useCreateWalletWithBiometrics,
-    useCreateWalletWithPassword,
-    useDisclosure,
-    useTheme,
-} from "~Common"
+import { useCheckIdentity, useCreateWallet, useTheme } from "~Common"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
     RootStackParamListCreateWalletApp,
     RootStackParamListOnboarding,
     Routes,
 } from "~Navigation"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    selectMnemonic,
-    selectHasOnboarded,
-    selectUserSelectedSecurity,
-} from "~Storage/Redux/Selectors"
+    setUserSelectedSecurity,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -47,127 +41,94 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     //we have a device and a selected account
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
-    const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
 
     const mnemonic = useAppSelector(selectMnemonic)
 
-    const {
-        onCreateWallet: createWalletWithBiometrics,
-        isComplete: isWalletCreatedWithBiometrics,
-    } = useCreateWalletWithBiometrics()
-    const {
-        onCreateWallet: createWalletWithPassword,
-        isComplete: isWalletCreatedWithPassword,
-    } = useCreateWalletWithPassword()
+    const { onCreateWallet: createWallet } = useCreateWallet()
 
-    const {
-        isOpen: isPasswordPromptOpen,
-        onOpen: openPasswordPrompt,
-        onClose: closePasswordPrompt,
-    } = useDisclosure()
+    const onWalletCreationError = useCallback((_error: unknown) => {
+        setIsError("Error creating wallet")
+        showErrorToast("Error creating wallet")
+    }, [])
 
-    const onWalletCreationError = useCallback(
-        (_error: unknown) => {
-            setIsError("Error creating wallet")
-            closePasswordPrompt()
+    const onIdentityConfirmed = useCallback(
+        async (userPassword?: string) => {
+            if (!mnemonic) throw new Error("Mnemonic is not available")
+
+            await createWallet({
+                mnemonic,
+                userPassword,
+                onError: onWalletCreationError,
+            })
+
+            const parent = nav.getParent()
+            if (parent) {
+                let isBack = parent.canGoBack()
+                if (isBack) {
+                    parent.goBack()
+                }
+            }
         },
-        [setIsError, closePasswordPrompt],
+        [mnemonic, createWallet, onWalletCreationError, nav],
     )
 
-    const onButtonPress = useCallback(async () => {
+    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
+        useCheckIdentity({ onIdentityConfirmed })
+
+    /**
+     * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
+     */
+    const onboardingCreateWallet = useCallback(async () => {
         let params = route.params
+
+        if (userHasOnboarded) return
 
         if (!mnemonic) throw new Error("Mnemonic is not available")
 
-        if (userHasOnboarded) {
-            if (userSelectedSecurity === SecurityLevelType.BIOMETRIC) {
-                // todo.vas -> replace with authenticateWithBiometrics new hook?
-                let { success } =
-                    await BiometricsUtils.authenticateWithBiometrics()
-                if (success) {
-                    await createWalletWithBiometrics({
-                        mnemonic,
-                        onError: onWalletCreationError,
-                    })
-                }
-            } else {
-                return openPasswordPrompt()
-            }
+        if (!params?.securityLevelSelected)
+            throw new Error("Security level is not available")
+
+        const securityLevelSelected = params.securityLevelSelected
+
+        if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
+            await createWallet({ mnemonic })
+        } else if (securityLevelSelected === SecurityLevelType.SECRET) {
+            await createWallet({
+                userPassword: params?.userPin,
+                onError: onWalletCreationError,
+                mnemonic,
+            })
         } else {
-            if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                await createWalletWithBiometrics({ mnemonic })
-            } else if (
-                params?.securityLevelSelected === SecurityLevelType.SECRET
-            ) {
-                await createWalletWithPassword({
-                    userPassword: params?.userPin!,
-                    onError: onWalletCreationError,
-                    mnemonic,
-                })
-            }
+            throw new Error(
+                `Security level ${securityLevelSelected} is not valid`,
+            )
         }
+        dispatch(setUserSelectedSecurity(securityLevelSelected))
     }, [
-        route.params,
         userHasOnboarded,
-        userSelectedSecurity,
-        createWalletWithBiometrics,
-        onWalletCreationError,
-        openPasswordPrompt,
-        createWalletWithPassword,
+        route.params,
+        createWallet,
+        dispatch,
         mnemonic,
+        onWalletCreationError,
     ])
 
-    const onPasswordSuccess = useCallback(
-        async (password: string) => {
-            if (!mnemonic) throw new Error("Mnemonic is not available")
+    const onButtonPress = useCallback(async () => {
+        if (!mnemonic) throw new Error("Mnemonic is not available")
 
-            await createWalletWithPassword({
-                userPassword: password,
-                mnemonic,
-                onError: onWalletCreationError,
-            })
-        },
-        [createWalletWithPassword, onWalletCreationError, mnemonic],
-    )
-
-    useEffect(() => {
-        if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
-            if (userHasOnboarded) {
-                closePasswordPrompt()
-
-                if (!isPasswordPromptOpen) {
-                    /*
-                    Navigate to parent stack (where the CreateWalletAppStack is declared)
-                    and close the modal.
-                    */
-                    let parent = nav.getParent()
-                    if (parent) {
-                        let isBack = parent.canGoBack()
-                        if (isBack) {
-                            parent.goBack()
-                        }
-                    }
-                }
-            }
-        }
+        if (userHasOnboarded) {
+            await checkIdentityBeforeOpening()
+        } else await onboardingCreateWallet()
     }, [
-        closePasswordPrompt,
-        dispatch,
-        isPasswordPromptOpen,
+        checkIdentityBeforeOpening,
+        onboardingCreateWallet,
         userHasOnboarded,
-        isWalletCreatedWithBiometrics,
-        isWalletCreatedWithPassword,
-        nav,
+        mnemonic,
     ])
 
     return (
         <>
-            <RequireUserPassword
-                isOpen={isPasswordPromptOpen}
-                onClose={closePasswordPrompt}
-                onSuccess={onPasswordSuccess}
-            />
-
+            <ConfirmIdentityBottomSheet />
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
 
