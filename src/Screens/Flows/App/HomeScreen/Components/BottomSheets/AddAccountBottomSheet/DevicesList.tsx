@@ -3,8 +3,14 @@ import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
-import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
-import { BaseDevice } from "~Model"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+    LedgerBadge,
+} from "~Components"
+import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 
@@ -40,9 +46,12 @@ export const DevicesList: React.FC<Props> = ({
                     key={item.rootAddress}
                     innerContainerStyle={style}
                     action={handleOnDevicePress(item)}>
-                    <BaseText typographyFont="subSubTitle">
-                        {item.alias}
-                    </BaseText>
+                    <BaseView flexDirection="row">
+                        {item.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                        <BaseText pl={8} typographyFont="subSubTitle">
+                            {item.alias}
+                        </BaseText>
+                    </BaseView>
                 </BaseTouchableBox>
             )
         },

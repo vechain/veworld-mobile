@@ -22,7 +22,7 @@ export interface WalletAccount extends Account {
 }
 
 export interface AccountWithDevice extends WalletAccount {
-    device: Device
+    device: BaseDevice
 }
 
 /**
