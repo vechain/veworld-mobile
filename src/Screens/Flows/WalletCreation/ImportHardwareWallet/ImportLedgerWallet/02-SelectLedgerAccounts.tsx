@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import {
+    BaseActivityIndicator,
     BaseButton,
     BaseIcon,
     BaseSafeArea,
@@ -58,6 +59,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     const { status, rootAccount, connect } = useLedger(device.id, onDisconnect)
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
+    const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<
         number[]
     >([])
@@ -97,6 +99,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     useEffect(() => {
         const getLedgerAccounts = async () => {
             if (rootAccount) {
+                setLedgerAccountsLoading(true)
                 const accounts = await LedgerUtils.getAccountsWithBalances(
                     rootAccount,
                     selectedNetwork,
@@ -104,6 +107,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                 )
                 setLedgerAccounts(accounts)
             }
+            setLedgerAccountsLoading(false)
         }
         getLedgerAccounts()
     }, [rootAccount, selectedNetwork])
@@ -173,6 +177,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     return (
         <BaseSafeArea grow={1}>
+            <BaseActivityIndicator
+                isVisible={ledgerAccountsLoading}
+                onHide={() => null}
+            />
             <BaseIcon
                 style={themedStyles.backIcon}
                 mx={8}
