@@ -7,6 +7,7 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    showErrorToast,
     showWarningToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -34,6 +35,7 @@ import {
 import { LedgerAccount } from "~Common/Utils/LedgerUtils/LedgerUtils"
 import { humanAddress } from "~Common/Utils/FormattingUtils/FormattingUtils"
 import { FlashList, ViewToken } from "@shopify/flash-list"
+import * as Haptics from "expo-haptics"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -60,18 +62,24 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const [isScrollable, setIsScrollable] = useState(false)
 
     const onConfirm = useCallback(async () => {
-        if (selectedAccountsIndex.length > 0 && rootAccount) {
-            dispatch(
-                addLedgerDevice(
-                    rootAccount,
-                    device.deviceModel,
-                    selectedAccountsIndex,
-                ),
-            )
-            nav.navigate(Routes.HOME)
+        try {
+            if (selectedAccountsIndex.length > 0 && rootAccount) {
+                await dispatch(
+                    addLedgerDevice({
+                        rootAccount,
+                        deviceModel: device.deviceModel,
+                        accounts: selectedAccountsIndex,
+                    }),
+                ).unwrap()
+
+                nav.navigate(Routes.HOME)
+            }
+        } catch (e) {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            showErrorToast(e as string)
         }
-        showWarningToast("Not valid")
     }, [selectedAccountsIndex, rootAccount, device, dispatch, nav])
+
     /**
      * When the root account changes, fetch the accounts and balances
      */

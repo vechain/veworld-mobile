@@ -14,7 +14,7 @@ import {
     updateDevice,
     bulkUpdateDevices,
 } from "../Slices/Device"
-import { AppThunk } from "../Types"
+import { AppThunk, createAppAsyncThunk } from "../Types"
 import { addAccountForDevice, removeAccountsByDevice } from "./Account"
 import { addAccount } from "../Slices"
 
@@ -62,13 +62,20 @@ const addDeviceAndAccounts =
         return account
     }
 
-const addLedgerDevice =
-    (
-        rootAccount: VETLedgerAccount,
-        deviceModel: DeviceModel,
-        accounts: number[],
-    ): AppThunk<Promise<string>> =>
-    async (dispatch, getState) => {
+const addLedgerDevice = createAppAsyncThunk(
+    "device/addLedgerDevice",
+    async (
+        {
+            rootAccount,
+            deviceModel,
+            accounts,
+        }: {
+            rootAccount: VETLedgerAccount
+            deviceModel: DeviceModel
+            accounts: number[]
+        },
+        { dispatch, getState, rejectWithValue },
+    ) => {
         debug("Adding a ledger device")
 
         const devices = selectDevices()(getState())
@@ -78,6 +85,12 @@ const addLedgerDevice =
                 throw new Error(
                     "Failed to extract chaincode from ledger device",
                 )
+            const deviceExists = devices.find(
+                device => device.rootAddress === rootAccount.address,
+            )
+
+            //TODO: Do we want to handle this differently ?
+            if (deviceExists) return deviceExists.rootAddress
 
             //Create the new ledger device and persist it
             const newDevice: LedgerDevice = {
@@ -106,9 +119,10 @@ const addLedgerDevice =
             return newDevice.rootAddress
         } catch (e) {
             error(e)
-            throw new Error("Failed to add ledger device")
+            return rejectWithValue("Failed to add ledger device")
         }
-    }
+    },
+)
 
 export {
     renameDevice,
