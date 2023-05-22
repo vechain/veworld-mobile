@@ -14,22 +14,25 @@ import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
-import { LedgerDevice } from "../types"
 import { LedgerDeviceBox } from "../components"
 import { FlatList } from "react-native-gesture-handler"
 import { Routes } from "~Navigation"
+import { ConnectedLedgerDevice } from "~Model"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const theme = useTheme()
 
-    const [availableDevices, setAvailableDevices] = useState<LedgerDevice[]>([])
-    const [selectedDevice, setSelectedDevice] = useState<LedgerDevice>()
+    const [availableDevices, setAvailableDevices] = useState<
+        ConnectedLedgerDevice[]
+    >([])
+    const [selectedDevice, setSelectedDevice] =
+        useState<ConnectedLedgerDevice>()
 
     const goBack = () => nav.goBack()
 
-    const onDeviceSelect = useCallback((device: LedgerDevice) => {
+    const onDeviceSelect = useCallback((device: ConnectedLedgerDevice) => {
         setSelectedDevice(device)
     }, [])
 
@@ -52,8 +55,22 @@ export const SelectLedgerDevice = () => {
             next: e => {
                 debug({ e })
                 if (e.type === "add") {
-                    const device = e.descriptor as LedgerDevice | undefined
-                    if (device) setAvailableDevices([device])
+                    const { descriptor, deviceModel } = e
+
+                    const device = {
+                        id: descriptor.id,
+                        isConnectable: descriptor.isConnectable,
+                        localName: descriptor.localName,
+                        name: descriptor.name,
+                        rssi: descriptor.rssi,
+                        deviceModel,
+                    } as ConnectedLedgerDevice
+
+                    if (device)
+                        setAvailableDevices(prev => {
+                            if (prev.find(d => d.id === device.id)) return prev
+                            return [...prev, device]
+                        })
                 }
             },
             error: error => {
@@ -67,7 +84,7 @@ export const SelectLedgerDevice = () => {
     }, [])
 
     const renderItem = useCallback(
-        ({ item }: { item: LedgerDevice }) => {
+        ({ item }: { item: ConnectedLedgerDevice }) => {
             return (
                 <LedgerDeviceBox
                     key={item.id}

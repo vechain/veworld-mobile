@@ -14,7 +14,7 @@ export type ConnectedLedgerDevice = {
     id: string
     isConnectable: boolean
     localName: string
-    productName: string
+    name: string
     rssi: number
     deviceModel: DeviceModel
 }
