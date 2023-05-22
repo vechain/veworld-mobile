@@ -175,6 +175,10 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_MENMONIC: string
 	/**
+	 * L​e​t​'​s​ ​g​e​t​ ​s​e​n​d​i​n​g​!
+	 */
+	BTN_LETS_GET_SENDING: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -699,6 +703,10 @@ type RootTranslation = {
 	 */
 	SB_ANALYTICS_TRACKING: string
 	/**
+	 * Y​o​u​r​ ​a​c​t​i​v​i​t​i​e​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
+	 */
+	SB_NO_TRANSACTIONS: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -946,6 +954,14 @@ type RootTranslation = {
 	 */
 	SUCCESS_GENERIC_VIEW_DETAIL_LINK: string
 	/**
+	 * H​e​a​d​s​ ​u​p​!
+	 */
+	HEADS_UP: string
+	/**
+	 * A​c​t​i​v​i​t​i​e​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​u​p​-​t​o​-​d​a​t​e​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
+	 */
+	ACTIVITIES_NOT_UP_TO_DATE: string
+	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
@@ -1006,7 +1022,7 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
-	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -1468,6 +1484,10 @@ export type TranslationFunctions = {
 	 * Backup phrase
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
+	/**
+	 * Let's get sending!
+	 */
+	BTN_LETS_GET_SENDING: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -1989,6 +2009,10 @@ export type TranslationFunctions = {
 	 */
 	SB_ANALYTICS_TRACKING: () => LocalizedString
 	/**
+	 * Your activities will appear here
+	 */
+	SB_NO_TRANSACTIONS: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -2234,6 +2258,14 @@ Please, try again later.
 	 */
 	SUCCESS_GENERIC_VIEW_DETAIL_LINK: () => LocalizedString
 	/**
+	 * Heads up!
+	 */
+	HEADS_UP: () => LocalizedString
+	/**
+	 * Activities might not be up-to-date. Check your internet connection or try later
+	 */
+	ACTIVITIES_NOT_UP_TO_DATE: () => LocalizedString
+	/**
 	 * Search a token
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
@@ -2294,7 +2326,7 @@ Please, try again later.
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
-	 * {name} copied to clipboard!
+	 * {name} has been copied to the clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
 	/**

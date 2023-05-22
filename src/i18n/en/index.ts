@@ -46,6 +46,7 @@ const en: BaseTranslation = {
     BTN_CREATE_CONTACT: "Create contact",
     BTN_EDIT_PIN: "Edit Pin",
     BTN_BACKUP_MENMONIC: "Backup phrase",
+    BTN_LETS_GET_SENDING: "Let's get sending!",
    
 
     // BODY
@@ -195,6 +196,7 @@ const en: BaseTranslation = {
     SB_SECURITY_METHOD: "Security method",
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
+    SB_NO_TRANSACTIONS: "Your activities will appear here",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -273,6 +275,11 @@ const en: BaseTranslation = {
     SUCCESS_GENERIC: "Success!",
     SUCCESS_GENERIC_OPERATION: "The operation went well!",
     SUCCESS_GENERIC_VIEW_DETAIL_LINK: "View operation detail.",
+
+    // Warning
+    HEADS_UP: "Heads up!",
+    ACTIVITIES_NOT_UP_TO_DATE: "Activities might not be up-to-date. Check your internet connection or try later",
+
 
     // Placeholders
     PLACEHOLDER_SEARCH_TOKEN: "Search a token",
