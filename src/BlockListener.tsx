@@ -11,7 +11,12 @@ import {
 } from "~Common/Utils"
 
 import { useThor } from "~Components"
-import { Account, Activity, FungibleTokenWithBalance } from "~Model"
+import {
+    Account,
+    Activity,
+    ActivityStatus,
+    FungibleTokenWithBalance,
+} from "~Model"
 import {
     selectActivitiesWithoutFinality,
     selectSelectedNetwork,
@@ -146,9 +151,10 @@ const BlockListener: React.FC = () => {
         accounts: Account[],
     ) => {
         //Update the pending transaction cache, check for reverted
+
         const updatedActivities = await updateActivities(pendingActivities)
         for (const updatedAct of updatedActivities) {
-            if (updatedAct.txReceipt?.reverted) {
+            if (updatedAct.status === ActivityStatus.REVERTED) {
                 showTransactionReverted(updatedAct.id)
             }
         }
