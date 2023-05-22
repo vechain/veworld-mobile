@@ -35,7 +35,6 @@ import {
     DappTransactionDetails,
 } from "./Components"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { LinearGradient } from "expo-linear-gradient"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { useAppDispatch } from "~Storage/Redux"
@@ -181,32 +180,25 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 </BaseView>
             </ScrollView>
 
-            {/* Linear gradient fades the elements below the child button */}
-            <LinearGradient
+            <BaseView
+                mx={20}
                 style={[
                     baseStyles.explorerButton,
                     {
                         bottom: tabBarHeight,
                     },
+                    { width: SCREEN_WIDTH - 40 },
                 ]}
-                colors={[
-                    theme.colors.backgroundTransparent,
-                    theme.colors.background,
-                ]}>
-                <BaseView
-                    mx={20}
-                    style={{ width: SCREEN_WIDTH - 40 }}
-                    py={valueToHP[16]}>
-                    {/* TODO action click opens in-app browser or system browser. TBD with others */}
-                    <BaseButton
-                        action={() => {}}
-                        w={100}
-                        title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                        haptics="medium"
-                        typographyFont="buttonPrimary"
-                    />
-                </BaseView>
-            </LinearGradient>
+                py={valueToHP[16]}>
+                {/* TODO action click opens in-app browser or system browser. TBD with others */}
+                <BaseButton
+                    action={() => {}}
+                    w={100}
+                    title={LL.VIEW_ON_EXPLORER().toUpperCase()}
+                    haptics="medium"
+                    typographyFont="buttonPrimary"
+                />
+            </BaseView>
 
             <ContactManagementBottomSheet
                 ref={addContactSheet}
