@@ -83,8 +83,11 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
                 throw new Error(
                     "Failed to extract chaincode from ledger device",
                 )
-            const deviceExists = devices.find(
-                device => device.rootAddress === rootAccount.address,
+            const deviceExists = devices.find(device =>
+                AddressUtils.compareAddresses(
+                    device.rootAddress,
+                    rootAccount.address,
+                ),
             )
 
             //TODO: Do we want to handle this differently ?
