@@ -25,6 +25,8 @@ export type Colors = {
     transparent: string
     separator: string
     switcher: string
+    skeletonBoneColor: string
+    skeletonHighlightColor: string
 }
 
 export enum COLORS {
@@ -41,6 +43,7 @@ export enum COLORS {
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.6)",
     PURPLE = "#30265F",
+    LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
     LIGHT_RED = "#FFC7B3",
@@ -85,6 +88,8 @@ const light: Colors = {
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.DARK_PURPLE_RBGA,
     switcher: COLORS.DARK_PURPLE_DISABLED,
+    skeletonBoneColor: COLORS.GRAY,
+    skeletonHighlightColor: COLORS.LIGHT_GRAY,
 }
 
 const dark: Colors = {
@@ -114,6 +119,8 @@ const dark: Colors = {
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.WHITE_DISABLED,
     switcher: COLORS.DARK_PURPLE_DISABLED,
+    skeletonBoneColor: COLORS.PURPLE,
+    skeletonHighlightColor: COLORS.LIGHT_PURPLE,
 }
 
 export const colors = { light, dark }

@@ -77,3 +77,5 @@ jest.mock("@gorhom/bottom-sheet", () => ({
         return data.map((row: any) => renderItem({ item: row }))
     },
 }))
+
+jest.mock("react-native-skeleton-content", () => {})
