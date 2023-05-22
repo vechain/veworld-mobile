@@ -16,14 +16,11 @@ import {
     BaseView,
     EnableFeature,
     RequireUserPassword,
+    SelectDeviceBottomSheet,
 } from "~Components"
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
-import {
-    EnableBiometrics,
-    BackupMnemonicBottomSheet,
-    WalletMgmtBottomSheet,
-} from "./Components"
+import { EnableBiometrics, BackupMnemonicBottomSheet } from "./Components"
 import { LocalDevice, WALLET_STATUS } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -191,7 +188,7 @@ export const PrivacyScreen = () => {
                         mnemonicArray={mnemonicArray}
                     />
 
-                    <WalletMgmtBottomSheet<Device>
+                    <SelectDeviceBottomSheet<LocalDevice>
                         ref={walletMgmtBottomSheetRef}
                         onClose={handleOnSelectedWallet}
                         devices={devices}

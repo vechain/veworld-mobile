@@ -5,22 +5,25 @@ import { useI18nContext } from "~i18n"
 import { BaseDevice } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-import { DeviceBox } from "../../WalletManagementScreen/components"
 import { useScrollableList, info } from "~Common"
+import { DeviceBox } from "../DeviceBox"
+
+// Redecalare forwardRef in order to support additional generics
+declare module "react" {
+    function forwardRef<T, P = {}>(
+        render: (props: P, ref: React.Ref<T>) => React.ReactElement | null,
+    ): (props: P & React.RefAttributes<T>) => React.ReactElement | null
+}
 
 type Props<T extends BaseDevice = BaseDevice> = {
     devices: T[]
     onClose: (device: T) => void
 }
 
-interface WithForwardRefType extends React.FC<Props<BaseDevice>> {
-    <T extends BaseDevice>(props: Props<T>): ReturnType<React.FC<Props<T>>>
-}
-
-export const WalletMgmtBottomSheet: WithForwardRefType = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(({ devices, onClose }, ref: React.Ref<BottomSheetModalMethods>) => {
+function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
+    { devices, onClose }: Props<T>,
+    ref: React.Ref<BottomSheetModalMethods>,
+) {
     const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => ["30%", "90%"], [])
@@ -41,7 +44,7 @@ export const WalletMgmtBottomSheet: WithForwardRefType = React.forwardRef<
     )
 
     const onDeviceSelected = useCallback(
-        (device: BaseDevice) => () => {
+        (device: T) => () => {
             onClose(device)
         },
         [onClose],
@@ -85,10 +88,14 @@ export const WalletMgmtBottomSheet: WithForwardRefType = React.forwardRef<
             </BaseView>
         </BaseBottomSheet>
     )
-})
+}
 
 const baseStyles = StyleSheet.create({
     list: {
         height: "78%",
     },
 })
+
+export const SelectDeviceBottomSheet = React.forwardRef(
+    SelectDeviceBottomSheetInner,
+)
