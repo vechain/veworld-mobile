@@ -20,7 +20,7 @@ import {
     valueToHP,
 } from "~Common"
 import { useI18nContext } from "~i18n"
-import { getActivityTitle } from "./utils"
+import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"
 import {
     ActivityType,
@@ -162,7 +162,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     {/* Transfer card shows the Address/Addresses involved in the given activity */}
                     <TransferCard
                         fromAddress={activity.from}
-                        toAddresses={activity.to}
+                        toAddresses={[...new Set(activity.to)]}
                         onAddContactPress={onAddContactPress}
                     />
 
