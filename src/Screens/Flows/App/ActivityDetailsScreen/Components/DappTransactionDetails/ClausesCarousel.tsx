@@ -53,7 +53,7 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
                         {LL.OUTCOMES()}
                     </BaseText>
                 </BaseView>
-                <BaseView mx={20}>
+                <BaseView mx={20} pb={6}>
                     <BaseView
                         flexDirection="row"
                         style={styles.container}
@@ -66,14 +66,14 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
                             horizontal
                             pagingEnabled
                             snapToAlignment="start"
-                            keyExtractor={item => item.data}
+                            keyExtractor={(item, index) => `clause-${index}`}
                             onViewableItemsChanged={onViewableItemsChanged}
                             scrollEnabled={clausesMetadata.length > 1}
                         />
                     </BaseView>
                 </BaseView>
                 {clausesMetadata.length > 1 && (
-                    <BaseView alignItems="center" w={100} pt={6} pb={16}>
+                    <BaseView alignItems="center" w={100} pb={16}>
                         <PaginatedDot
                             activeDotColor={theme.colors.primary}
                             inactiveDotColor={theme.colors.primary}
