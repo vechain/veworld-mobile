@@ -1,8 +1,8 @@
 import React from "react"
-import { Modal, ModalProps, StyleSheet } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { Modal, ModalProps } from "react-native"
 import { BaseSafeArea } from "./BaseSafeArea"
 import { BaseView } from "./BaseView"
+import { BaseSpacer } from "./BaseSpacer"
 
 export interface IBaseModal extends ModalProps {
     isOpen: boolean
@@ -27,7 +27,7 @@ export const BaseModal: React.FC<IBaseModal> = ({
                 onRequestClose={onClose}
                 {...otherProps}>
                 <BaseSafeArea grow={1}>
-                    <SafeAreaView style={styles.safeArea} />
+                    <BaseSpacer height={40} />
                     <BaseView
                         alignItems="center"
                         justifyContent="flex-start"
@@ -39,7 +39,3 @@ export const BaseModal: React.FC<IBaseModal> = ({
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    safeArea: { flex: 1 },
-})
