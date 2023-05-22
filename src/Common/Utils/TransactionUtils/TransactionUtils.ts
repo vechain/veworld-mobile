@@ -1,4 +1,4 @@
-import { abi } from "thor-devkit"
+import { abi, Transaction } from "thor-devkit"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 import { debug } from "~Common/Logger"
 import { ClauseType, ConnexClause, Token, TransactionOutcomes } from "~Model"
@@ -192,4 +192,10 @@ export const interpretContractCall = (
     }
 
     return result
+}
+
+export const toDelegation = (txBody: Transaction.Body) => {
+    const tx = new Transaction(txBody)
+    tx.body.reserved = { features: 1 }
+    return tx
 }

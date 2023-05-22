@@ -1,4 +1,4 @@
-import { error, info, ThorConstants } from "~Common"
+import { error, ThorConstants } from "~Common"
 import { address } from "thor-devkit"
 import { Network } from "~Model"
 
@@ -11,7 +11,7 @@ export const getCustomTokenInfo = async ({
     thorClient: Connex.Thor
     network: Network
 }) => {
-    info("Get custom token infos")
+    // info("Get custom token infos")
 
     try {
         const addr = address.toChecksumed(tokenAddress)

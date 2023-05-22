@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { CryptoUtils, useWalletSecurity, error } from "~Common"
-import { Device, UserSelectedSecurityLevel } from "~Model"
+import { Device, SecurityLevelType } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     bulkUpdateDevices,
@@ -43,11 +43,7 @@ export const useSecurityUpgrade = () => {
 
                 dispatch(bulkUpdateDevices(updatedDevices))
 
-                dispatch(
-                    setUserSelectedSecurity(
-                        UserSelectedSecurityLevel.BIOMETRIC,
-                    ),
-                )
+                dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRIC))
 
                 onSuccessCallback && onSuccessCallback()
             } catch (e) {

@@ -3,7 +3,7 @@ import { DEVICE_TYPE } from "~Model"
 import { RootState } from "../Types"
 
 const selectAll = (state: RootState) => state
-const selectDevicesState = (state: RootState) => state.devices
+export const selectDevicesState = (state: RootState) => state.devices
 
 /**
  *

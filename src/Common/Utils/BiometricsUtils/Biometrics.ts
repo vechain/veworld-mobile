@@ -1,26 +1,27 @@
 import * as LocalAuthentication from "expo-local-authentication"
-import { TSecurityLevel, TAuthentication, SecurityLevelType } from "~Model"
+import { TAuthentication, SecurityLevelType } from "~Model"
 import * as i18n from "~i18n"
 import PlatformUtils from "../PlatformUtils"
 
 export const getDeviceEnrolledLevel = async () => {
-    let level = await LocalAuthentication.getEnrolledLevelAsync()
-    return LocalAuthentication.SecurityLevel[level] as TSecurityLevel
+    const level = await LocalAuthentication.getEnrolledLevelAsync()
+    return LocalAuthentication.SecurityLevel[level] as SecurityLevelType
 }
 
 export const getDeviceHasHardware = async () => {
-    let hasHardware = await LocalAuthentication.hasHardwareAsync()
+    const hasHardware = await LocalAuthentication.hasHardwareAsync()
     return hasHardware
 }
 
 export const getIsDeviceEnrolled = async () => {
-    let enrolled = await LocalAuthentication.isEnrolledAsync()
+    const enrolled = await LocalAuthentication.isEnrolledAsync()
     return enrolled
 }
 
 export const getBiometricTypeAvailable = async () => {
-    let type = await LocalAuthentication.supportedAuthenticationTypesAsync()
-    // @ts-ignore // compiler misses enum for some reason
+    const types = await LocalAuthentication.supportedAuthenticationTypesAsync()
+    //TODO: support multiple biometric types (edge case, mostly on Android)
+    const type = types[0]
     return LocalAuthentication.AuthenticationType[type] as TAuthentication
 }
 
@@ -49,7 +50,7 @@ export const authenticateWithBiometrics = async () => {
 
 export const isSecurityDowngrade = (
     oldLevel: string,
-    newLevel: TSecurityLevel,
+    newLevel: SecurityLevelType,
     appLockStatusActive: boolean,
 ) =>
     oldLevel === SecurityLevelType.BIOMETRIC &&
@@ -58,7 +59,7 @@ export const isSecurityDowngrade = (
 
 export const isSecurityUpgrade = (
     oldLevel: string,
-    newLevel: TSecurityLevel,
+    newLevel: SecurityLevelType,
     appLockStatusActive: boolean,
 ) =>
     oldLevel !== SecurityLevelType.BIOMETRIC &&

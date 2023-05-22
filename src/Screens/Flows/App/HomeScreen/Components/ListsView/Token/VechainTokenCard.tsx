@@ -2,26 +2,23 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { FormattingUtils, useTheme } from "~Common"
+import { FormattingUtils, useBalances, useTheme } from "~Common"
 import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectCurrency } from "~Storage/Redux/Selectors"
-import { FungibleTokenWithBalance } from "~Model"
+import { TokenWithCompleteInfo } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Common/Theme"
 
 type Props = {
-    tokenWithBalance: FungibleTokenWithBalance
+    tokenWithInfo: TokenWithCompleteInfo
     isAnimation: boolean
 }
 
 export const VechainTokenCard = memo(
-    ({ tokenWithBalance, isAnimation }: Props) => {
+    ({ tokenWithInfo, isAnimation }: Props) => {
         const theme = useTheme()
         const exchangeRate = useAppSelector(state =>
-            selectCurrencyExchangeRate(
-                state,
-                tokenWithBalance.symbol as string,
-            ),
+            selectCurrencyExchangeRate(state, tokenWithInfo.symbol as string),
         )
         const currency = useAppSelector(selectCurrency)
         const isPositive24hChange = (exchangeRate?.change || 0) > 0
@@ -33,22 +30,9 @@ export const VechainTokenCard = memo(
             ) +
             "%"
 
-        const fiatBalance = FormattingUtils.humanNumber(
-            FormattingUtils.convertToFiatBalance(
-                tokenWithBalance.balance.balance,
-                exchangeRate?.rate || 0,
-                tokenWithBalance.decimals,
-            ),
-            tokenWithBalance.balance.balance,
-        )
-        const tokenUnitBalance = FormattingUtils.humanNumber(
-            FormattingUtils.convertToFiatBalance(
-                tokenWithBalance.balance.balance,
-                1,
-                tokenWithBalance.decimals,
-            ),
-            tokenWithBalance.balance.balance,
-        )
+        const { fiatBalance, tokenUnitBalance } = useBalances({
+            token: tokenWithInfo,
+        })
 
         const animatedOpacityReverse = useAnimatedStyle(() => {
             return {
@@ -72,14 +56,14 @@ export const VechainTokenCard = memo(
                         ]}
                         containerStyle={baseStyles.imageShadow}>
                         <Image
-                            source={{ uri: tokenWithBalance.icon }}
+                            source={{ uri: tokenWithInfo.icon }}
                             style={baseStyles.image}
                         />
                     </BaseCard>
                     <BaseSpacer width={16} />
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">
-                            {tokenWithBalance.name}
+                            {tokenWithInfo.name}
                         </BaseText>
                         <BaseView flexDirection="row" alignItems="baseline">
                             <BaseText
@@ -90,7 +74,7 @@ export const VechainTokenCard = memo(
                             <BaseText
                                 typographyFont="captionRegular"
                                 color={tokenValueLabelColor}>
-                                {tokenWithBalance.symbol}
+                                {tokenWithInfo.symbol}
                             </BaseText>
                         </BaseView>
                     </BaseView>

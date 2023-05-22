@@ -1,6 +1,8 @@
 import { ClauseType, Token } from "~Model"
 import TransactionUtils from "."
 import * as logger from "~Common/Logger/Logger"
+import { toDelegation } from "./TransactionUtils"
+import { Transaction } from "thor-devkit"
 
 const YEET_TOKEN: Token = {
     name: "Yeet Coin",
@@ -302,5 +304,12 @@ describe("TransactionUtils", () => {
                 TransactionUtils.interpretContractClause(clause, []),
             ).toEqual(expected)
         })
+    })
+})
+
+describe("toDelegation", () => {
+    it("should create a new Transaction with reserved features set to 1", () => {
+        const result = toDelegation({} as Transaction.Body)
+        expect(result.body.reserved).toEqual({ features: 1 })
     })
 })

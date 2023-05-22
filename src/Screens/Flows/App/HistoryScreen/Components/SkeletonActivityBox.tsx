@@ -13,7 +13,8 @@ export const SkeletonActivityBox = () => {
             boneColor={theme.colors.skeletonBoneColor}
             highlightColor={theme.colors.skeletonHighlightColor}
             layout={[
-                // Here we create a row with a circle and a line
+                // Here we create a row with a circle and two lines
+                // which are a similar layout to the activity boxes
                 {
                     flexDirection: "row",
                     alignItems: "center",

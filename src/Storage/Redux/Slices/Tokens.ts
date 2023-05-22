@@ -4,12 +4,14 @@ import {
     FungibleTokenWithBalance,
     TokenWithCompleteInfo,
 } from "~Model"
-import { TokenInfoResponse, TokensState } from "../Types"
+import { CoinMarketInfo, TokenInfoResponse, TokensState } from "../Types"
 import { AddressUtils } from "~Common"
 
 export const initialTokenState: TokensState = {
     custom: [],
     dashboardChartData: {},
+    assetDetailChartData: {},
+    coinMarketInfo: {},
     officialTokens: [],
     suggestedTokens: [],
     coinGeckoTokens: [],
@@ -47,6 +49,28 @@ export const TokenSlice = createSlice({
             state.dashboardChartData[symbol] = data
         },
 
+        setAssertDetailChartData: (
+            state,
+            action: PayloadAction<{ symbol: string; data: number[][] }>,
+        ) => {
+            const { symbol, data } = action.payload
+            state.assetDetailChartData[symbol] = data
+        },
+
+        setCoinMarketInfo: (
+            state,
+            action: PayloadAction<{ data: CoinMarketInfo[] }>,
+        ) => {
+            const { data } = action.payload
+            state.coinMarketInfo = data.reduce(
+                (acc: { [key: string]: CoinMarketInfo }, obj) => {
+                    acc[obj.symbol] = obj
+                    return acc
+                },
+                {},
+            )
+        },
+
         setOfficialTokens: (
             state,
             action: PayloadAction<TokenWithCompleteInfo[]>,
@@ -74,6 +98,8 @@ export const {
     addOrUpdateCustomToken,
     setDashboardChartData,
     setOfficialTokens,
+    setAssertDetailChartData,
     setCoinGeckoTokens,
     setSuggestedTokens,
+    setCoinMarketInfo,
 } = TokenSlice.actions

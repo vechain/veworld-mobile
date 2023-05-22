@@ -227,4 +227,13 @@ describe("URLUtils", () => {
             expect(URLUtils.isAllowed("http://localhost:3000")).toBe(true)
         })
     })
+    describe("isValid", function () {
+        test("should return true for https", function () {
+            expect(URLUtils.isValid("https://www.google.com")).toBe(true)
+        })
+
+        test("should return true for http", function () {
+            expect(URLUtils.isValid("http://www.google.com")).toBe(true)
+        })
+    })
 })

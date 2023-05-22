@@ -31,8 +31,8 @@ describe("mergeTokens", () => {
 
 describe("isVechainToken", () => {
     it("should return correctly", () => {
-        expect(isVechainToken(VET)).toBe(true)
-        expect(isVechainToken(VTHO)).toBe(true)
-        expect(isVechainToken({ symbol: "bar" } as FungibleToken)).toBe(false)
+        expect(isVechainToken(VET.symbol)).toBe(true)
+        expect(isVechainToken(VTHO.symbol)).toBe(true)
+        expect(isVechainToken("bar")).toBe(false)
     })
 })
