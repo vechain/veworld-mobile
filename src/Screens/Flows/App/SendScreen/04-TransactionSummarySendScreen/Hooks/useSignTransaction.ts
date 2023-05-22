@@ -23,7 +23,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
-import { AccountWithDevice, Wallet } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 
 interface Props {
@@ -103,19 +103,19 @@ export const useSignTransaction = ({
                 return Buffer.concat([senderSignature, urlDelegationSignature])
             case DelegationType.ACCOUNT:
                 const delegationDevice = selectedDelegationAccount?.device
-                const delegationEncryptedWallet = delegationDevice?.wallet
-                if (!delegationDevice) {
+                if (!delegationDevice)
                     throw new Error(
                         "Delegation device not found when sending transaction",
                     )
-                }
-                if (!delegationEncryptedWallet) {
-                    // TODO: support hardware wallet
+
+                //TODO: support ledger delegation
+                if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
                     showWarningToast(
                         "Delegated hardware wallet not supported yet",
                     )
                     return
                 }
+
                 const { decryptedWallet: delegationWallet } =
                     await CryptoUtils.decryptWallet(delegationDevice, password)
 
@@ -136,6 +136,12 @@ export const useSignTransaction = ({
     const signTransaction = async (password?: string) => {
         try {
             if (!senderDevice) return
+
+            //TODO: support ledger
+            if (senderDevice.type === DEVICE_TYPE.LEDGER) {
+                showWarningToast("Hardware wallet not supported yet")
+                return
+            }
 
             //local mnemonic, identity already verified via useCheckIdentity
             if (!senderDevice.wallet) {

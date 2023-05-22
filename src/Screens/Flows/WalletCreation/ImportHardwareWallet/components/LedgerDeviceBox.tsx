@@ -1,11 +1,11 @@
 import React from "react"
 import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
-import { LedgerDevice } from "../types"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { StyleSheet } from "react-native"
+import { ConnectedLedgerDevice } from "~Model"
 
 type Props = {
-    device: LedgerDevice
+    device: ConnectedLedgerDevice
     onPress: () => void
     isSelected?: boolean
 }
