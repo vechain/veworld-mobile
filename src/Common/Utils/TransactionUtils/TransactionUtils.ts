@@ -26,7 +26,7 @@ export const isVETtransferClause = (clause: Connex.VM.Clause): boolean => {
  */
 export const isTokenTransferClause = (clause: Connex.VM.Clause): boolean => {
     let { data } = clause
-    data = data || ""
+    data = data ?? ""
 
     return data.startsWith(TRANSFER_SIG)
 }
@@ -41,7 +41,7 @@ export const decodeTokenTransferClause = (
     clause: Connex.VM.Clause,
 ): { to: string; amount: string } | null => {
     let { data } = clause
-    data = data || ""
+    data = data ?? ""
 
     if (data.startsWith(TRANSFER_SIG)) {
         try {
@@ -72,8 +72,7 @@ export const decodeAsTokenTransferClause = (
     clause: Connex.VM.Clause,
     token: Token,
 ): { to: string; amount: string } | null => {
-    let { to } = clause
-    to = to && to.toLowerCase()
+    let to = clause.to?.toLowerCase()
 
     return to === token.address ? decodeTokenTransferClause(clause) : null
 }
@@ -141,7 +140,7 @@ export const interpretContractClause = (
         result.push({
             ...clause,
             type: ClauseType.DEPLOY_CONTRACT,
-            data: clause.data || "0x",
+            data: clause.data ?? "0x",
         })
     }
 

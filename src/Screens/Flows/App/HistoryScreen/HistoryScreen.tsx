@@ -42,7 +42,7 @@ export const HistoryScreen = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { fetchActivities, activities, hasFetched, page } =
-        useAccountActivities(selectedAccount?.address || "")
+        useAccountActivities(selectedAccount?.address ?? "")
 
     const nav = useNavigation()
 
