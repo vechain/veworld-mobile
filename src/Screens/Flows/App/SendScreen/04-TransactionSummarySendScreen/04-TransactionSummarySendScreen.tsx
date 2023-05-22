@@ -127,7 +127,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                             children: (
                                 <BaseView
                                     flex={1}
-                                    style={styles.addressContainer}>
+                                    style={styles.addressContainer}
+                                    alignItems="flex-start">
                                     <BaseText typographyFont="captionBold">
                                         {LL.SEND_FROM()}
                                     </BaseText>
@@ -161,7 +162,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         },
                         {
                             children: (
-                                <BaseView flex={1}>
+                                <BaseView flex={1} alignItems="flex-start">
                                     <BaseText typographyFont="captionBold">
                                         {LL.SEND_TO()}
                                     </BaseText>

@@ -123,7 +123,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const inputColor = isError ? theme.colors.danger : theme.colors.text
     return (
         <BaseSafeArea grow={1} style={styles.safeArea}>
-            <BaseView style={styles.container}>
+            <BaseView>
                 <BackButtonHeader />
                 <BaseView mx={24}>
                     <BaseText typographyFont="subTitleBold">
@@ -134,7 +134,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         {LL.SEND_CURRENT_BALANCE()}
                     </BaseText>
                     <BaseSpacer height={8} />
-                    <BaseView flexDirection="row" alignItems="baseline">
+                    <BaseView
+                        flexDirection="row"
+                        alignItems="baseline"
+                        style={styles.budget}>
                         <BaseText typographyFont="subTitleBold">
                             {formattedTokenBalance}
                         </BaseText>
@@ -289,8 +292,8 @@ const styles = StyleSheet.create({
     safeArea: {
         justifyContent: "space-between",
     },
-    container: {
-        alignItems: "stretch",
+    budget: {
+        justifyContent: "flex-start",
     },
     amountContainer: {
         overflow: "visible",
