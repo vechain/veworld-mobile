@@ -8,15 +8,12 @@ import {
     BaseSpacer,
     BaseView,
     BaseSafeArea,
+    DeviceBox,
 } from "~Components"
 import { BaseDevice } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
-import {
-    DeviceBox,
-    AccountMgmtBottomSheet,
-    WalletManagementHeader,
-} from "./components"
+import { AccountMgmtBottomSheet, WalletManagementHeader } from "./components"
 
 export const WalletManagementScreen = () => {
     const [isScrollable, setIsScrollable] = useState(false)
