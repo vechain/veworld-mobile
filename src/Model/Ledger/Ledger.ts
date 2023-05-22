@@ -1,4 +1,5 @@
-import { DeviceModel } from "@ledgerhq/devices"
+// import { DeviceModel } from "@ledgerhq/devices"
+import { VETLedgerAccount } from "~Common"
 
 /**
  * Represent a ledger device that is connected to the device via bluetooth
@@ -16,5 +17,19 @@ export type ConnectedLedgerDevice = {
     localName: string
     name: string
     rssi: number
-    deviceModel: DeviceModel
+    productName: string
+    // deviceModel: DeviceModel Additional info we don't need for now
+}
+
+/**
+ * Represent a  new ledger device not inserted in the device slice yet (it's usually in the canche one in order to be added later)
+ * - rootAccount: The root account of the device
+ * - alias: The alias of the device
+ * - accounts: The accounts of the device
+ * @category Ledger
+ */
+export type NewLedgerDevice = {
+    rootAccount: VETLedgerAccount
+    alias: string
+    accounts: number[]
 }

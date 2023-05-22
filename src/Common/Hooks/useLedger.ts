@@ -6,7 +6,6 @@ import VETLedgerApp, {
 
 import { error, warn } from "~Common/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
-import { ConnectedLedgerDevice } from "~Model"
 
 export enum LedgerStatus {
     NOT_CONNECTED = "NOT_CONNECTED",
@@ -37,7 +36,7 @@ export enum LedgerConfig {
  * @returns {@link UseLedgerProps}
  */
 const useLedger = (
-    device: ConnectedLedgerDevice,
+    deviceId: string,
     onDisconnect?: () => void,
 ): UseLedgerProps => {
     const [vetApp, setVetApp] = useState<VETLedgerApp>()
@@ -65,7 +64,7 @@ const useLedger = (
     const createConnection = async (): Promise<VETLedgerApp> => {
         if (vetApp !== undefined) return vetApp
 
-        const transport = await BleTransport.open(device.id)
+        const transport = await BleTransport.open(deviceId)
 
         transport.on("disconnect", () => {
             warn("Ledger disconnected")

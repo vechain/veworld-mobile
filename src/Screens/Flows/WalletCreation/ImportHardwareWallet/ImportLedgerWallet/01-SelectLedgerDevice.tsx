@@ -57,14 +57,14 @@ export const SelectLedgerDevice = () => {
                 if (e.type === "add") {
                     const { descriptor, deviceModel } = e
 
-                    const device = {
+                    const device: ConnectedLedgerDevice = {
                         id: descriptor.id,
                         isConnectable: descriptor.isConnectable,
                         localName: descriptor.localName,
                         name: descriptor.name,
                         rssi: descriptor.rssi,
-                        deviceModel,
-                    } as ConnectedLedgerDevice
+                        productName: deviceModel.productName,
+                    }
 
                     if (device)
                         setAvailableDevices(prev => {

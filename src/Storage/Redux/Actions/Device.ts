@@ -18,8 +18,6 @@ import { AppThunk, createAppAsyncThunk } from "../Types"
 import { addAccountForDevice, removeAccountsByDevice } from "./Account"
 import { addAccount } from "../Slices"
 
-import { DeviceModel } from "@ledgerhq/devices"
-
 /**
  * Remove the specified device and its accounts
  * @param rootAddress rootAddress of device to remove
@@ -62,16 +60,16 @@ const addDeviceAndAccounts =
         return account
     }
 
-const addLedgerDevice = createAppAsyncThunk(
-    "device/addLedgerDevice",
+const addLedgerDeviceAndAccounts = createAppAsyncThunk(
+    "device/addLedgerDeviceAndAccounts",
     async (
         {
             rootAccount,
-            deviceModel,
+            alias,
             accounts,
         }: {
             rootAccount: VETLedgerAccount
-            deviceModel: DeviceModel
+            alias: string
             accounts: number[]
         },
         { dispatch, getState, rejectWithValue },
@@ -90,7 +88,7 @@ const addLedgerDevice = createAppAsyncThunk(
             )
 
             //TODO: Do we want to handle this differently ?
-            if (deviceExists) return deviceExists.rootAddress
+            if (deviceExists) return { device: deviceExists, accounts: [] }
 
             //Create the new ledger device and persist it
             const newDevice: LedgerDevice = {
@@ -101,7 +99,7 @@ const addLedgerDevice = createAppAsyncThunk(
                 index: devices.length,
                 rootAddress: rootAccount.address,
                 type: DEVICE_TYPE.LEDGER,
-                alias: deviceModel.productName,
+                alias,
             }
 
             dispatch(addDevice(newDevice))
@@ -116,7 +114,7 @@ const addLedgerDevice = createAppAsyncThunk(
 
             dispatch(addAccount(newAccounts))
 
-            return newDevice.rootAddress
+            return { device: newDevice, accounts: newAccounts }
         } catch (e) {
             error(e)
             return rejectWithValue("Failed to add ledger device")
@@ -128,7 +126,7 @@ export {
     renameDevice,
     removeDevice,
     addDeviceAndAccounts,
-    addLedgerDevice,
+    addLedgerDeviceAndAccounts,
     updateDevice,
     bulkUpdateDevices,
 }

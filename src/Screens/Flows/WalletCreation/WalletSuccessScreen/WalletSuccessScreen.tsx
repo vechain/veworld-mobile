@@ -23,7 +23,11 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
+import {
+    selectMnemonic,
+    selectHasOnboarded,
+    selectNewLedgerDevice,
+} from "~Storage/Redux/Selectors"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -43,38 +47,64 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const mnemonic = useAppSelector(selectMnemonic)
+    const newLedger = useAppSelector(selectNewLedgerDevice)
 
-    const { onCreateWallet: createWallet } = useCreateWallet()
+    const {
+        onCreateWallet: createWallet,
+        onCreateLedgerWallet: createLedgerWallet,
+    } = useCreateWallet()
 
     const onWalletCreationError = useCallback((_error: unknown) => {
         setIsError("Error creating wallet")
         showErrorToast("Error creating wallet")
     }, [])
 
+    const navigateNext = useCallback(() => {
+        const parent = nav.getParent()
+        if (parent) {
+            if (parent.canGoBack()) {
+                parent.goBack()
+            }
+        }
+    }, [nav])
+
+    //TODO: do not authenticate user if ledger ?
     const onIdentityConfirmed = useCallback(
         async (userPassword?: string) => {
-            if (!mnemonic) throw new Error("Mnemonic is not available")
+            if (!mnemonic && !newLedger)
+                throw new Error(
+                    "Wrong/corrupted data. No device available in store",
+                )
 
-            await createWallet({
-                mnemonic,
-                userPassword,
-                onError: onWalletCreationError,
-            })
-
-            const parent = nav.getParent()
-            if (parent) {
-                let isBack = parent.canGoBack()
-                if (isBack) {
-                    parent.goBack()
-                }
+            if (mnemonic) {
+                await createWallet({
+                    mnemonic,
+                    userPassword,
+                    onError: onWalletCreationError,
+                })
             }
+
+            if (newLedger) {
+                await createLedgerWallet({
+                    newLedger,
+                    onError: onWalletCreationError,
+                })
+            }
+
+            navigateNext()
         },
-        [mnemonic, createWallet, onWalletCreationError, nav],
+        [
+            mnemonic,
+            createWallet,
+            onWalletCreationError,
+            navigateNext,
+            newLedger,
+            createLedgerWallet,
+        ],
     )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({ onIdentityConfirmed })
-
     /**
      * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
      */
@@ -83,38 +113,55 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
         if (userHasOnboarded) return
 
-        if (!mnemonic) throw new Error("Mnemonic is not available")
+        if (!mnemonic && !newLedger)
+            throw new Error(
+                "Wrong/corrupted data. No device available in store",
+            )
 
         if (!params?.securityLevelSelected)
             throw new Error("Security level is not available")
 
         const securityLevelSelected = params.securityLevelSelected
-
-        if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-            await createWallet({ mnemonic })
-        } else if (securityLevelSelected === SecurityLevelType.SECRET) {
-            await createWallet({
-                userPassword: params?.userPin,
-                onError: onWalletCreationError,
-                mnemonic,
-            })
-        } else {
-            throw new Error(
-                `Security level ${securityLevelSelected} is not valid`,
-            )
+        if (mnemonic) {
+            if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
+                await createWallet({ mnemonic })
+            } else if (securityLevelSelected === SecurityLevelType.SECRET) {
+                await createWallet({
+                    userPassword: params?.userPin,
+                    onError: onWalletCreationError,
+                    mnemonic,
+                })
+            } else {
+                throw new Error(
+                    `Security level ${securityLevelSelected} is not valid`,
+                )
+            }
         }
+
+        if (newLedger) {
+            await createLedgerWallet({
+                newLedger,
+                onError: onWalletCreationError,
+            })
+        }
+
         dispatch(setUserSelectedSecurity(securityLevelSelected))
     }, [
+        newLedger,
+        mnemonic,
         userHasOnboarded,
         route.params,
         createWallet,
+        createLedgerWallet,
         dispatch,
-        mnemonic,
         onWalletCreationError,
     ])
 
     const onButtonPress = useCallback(async () => {
-        if (!mnemonic) throw new Error("Mnemonic is not available")
+        if (!mnemonic && !newLedger)
+            throw new Error(
+                "Wrong/corrupted data. No device available in store",
+            )
 
         if (userHasOnboarded) {
             await checkIdentityBeforeOpening()
@@ -124,6 +171,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onboardingCreateWallet,
         userHasOnboarded,
         mnemonic,
+        newLedger,
     ])
 
     return (

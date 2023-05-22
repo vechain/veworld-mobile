@@ -27,8 +27,9 @@ import {
 
 import useLedger, { LedgerStatus } from "~Common/Hooks/useLedger"
 import {
-    addLedgerDevice,
+    selectHasOnboarded,
     selectSelectedNetwork,
+    setNewLedgerDevice,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -49,36 +50,46 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const { styles: themedStyles, theme } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const onDisconnect = useCallback(() => {
         showWarningToast("Device disconnected")
     }, [])
 
-    const { status, rootAccount, connect } = useLedger(device, onDisconnect)
+    const { status, rootAccount, connect } = useLedger(device.id, onDisconnect)
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<
         number[]
     >([])
     const [isScrollable, setIsScrollable] = useState(false)
 
+    const navigateNext = useCallback(() => {
+        if (userHasOnboarded) {
+            nav.navigate(Routes.WALLET_SUCCESS)
+        } else {
+            nav.navigate(Routes.APP_SECURITY)
+        }
+    }, [nav, userHasOnboarded])
+
     const onConfirm = useCallback(async () => {
         try {
             if (selectedAccountsIndex.length > 0 && rootAccount) {
-                await dispatch(
-                    addLedgerDevice({
+                // set device in the store we can use it in walletSuccess
+
+                dispatch(
+                    setNewLedgerDevice({
                         rootAccount,
-                        deviceModel: device.deviceModel,
+                        alias: device.localName,
                         accounts: selectedAccountsIndex,
                     }),
-                ).unwrap()
-
-                nav.navigate(Routes.HOME)
+                )
+                navigateNext()
             }
         } catch (e) {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast(e as string)
         }
-    }, [selectedAccountsIndex, rootAccount, device, dispatch, nav])
+    }, [selectedAccountsIndex, rootAccount, device, dispatch, navigateNext])
 
     /**
      * When the root account changes, fetch the accounts and balances
