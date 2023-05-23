@@ -9,11 +9,72 @@ import VETLedgerApp, {
 import { debug, error, warn } from "../../Logger"
 import { Buffer } from "buffer"
 import BalanceUtils from "../BalanceUtils"
+import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 
 const ledgerMutex = new Mutex()
 
 /**
- * Request a cwertificate signature to the ledger device
+ * Common Ledger Error Codes
+ */
+export enum LEDGER_ERROR_CODES {
+    OFF_OR_LOCKED = "off_or_locked",
+    NO_VET_APP = "no_vet_app",
+    UNKNOWN = "unknown",
+    DISCONNECTED = "disconnected",
+}
+
+/**
+ * Parses ledger errors based on common issues
+ */
+export const ledgerErrorHandler = (err: Error) => {
+    if (err.message.includes("0x6d02")) {
+        return LEDGER_ERROR_CODES.NO_VET_APP
+    }
+    if (
+        err.name.includes("BleError") ||
+        err.message.includes("0x6b0c") ||
+        err.message.includes("busy")
+    ) {
+        return LEDGER_ERROR_CODES.OFF_OR_LOCKED
+    }
+    if (err.name.includes("Disconnected")) {
+        error("[Ledger] - Disconnected Error")
+        return LEDGER_ERROR_CODES.DISCONNECTED
+    }
+
+    error("[Ledger] - Unknown Error")
+
+    return LEDGER_ERROR_CODES.UNKNOWN
+}
+
+export const checkLedgerConnection = async ({
+    transport,
+    successCallback,
+    errorCallback,
+}: {
+    transport: BleTransport
+    successCallback?: (app: VETLedgerApp, rootAccount: VETLedgerAccount) => void
+    errorCallback?: (errorType: LEDGER_ERROR_CODES) => void
+}) => {
+    try {
+        const app = new VETLedgerApp(transport)
+        // const appConfig = await app.getAppConfiguration()
+        // const appConfigHex = appConfig.toString("hex")
+        const rootAccount = await app.getAccount(
+            VET_DERIVATION_PATH,
+            false,
+            true,
+        )
+        successCallback?.(app, rootAccount)
+    } catch (e) {
+        error(e)
+        error(ledgerErrorHandler(e as Error))
+        errorCallback?.(ledgerErrorHandler(e as Error))
+    }
+}
+
+/**
+ * Request a certificate signature to the ledger device
  * @category Ledger
  * @param index  The index of the account to sign the certificate with
  * @param cert  The certificate to sign
@@ -142,58 +203,6 @@ const getAccountsWithBalances = async (
     return accounts
 }
 
-// const addLedgerDevice =
-//     (
-//         rootAccount: VETLedgerAccount,
-//         deviceModel: DeviceModel,
-//         selectedAccounts?: number[],
-//     ): AppThunk<Promise<string>> =>
-//     async dispatch => {
-//         debug("Add a ledger device")
-
-//         try {
-//             if (!rootAccount.chainCode)
-//                 throw VeWorldErrors.internal(
-//                     "Failed to extract chaincode from ledger device",
-//                 )
-
-//             //Create the new ledger device and persist it
-//             const newDevice: Device = {
-//                 xPub: {
-//                     publicKey: rootAccount.publicKey,
-//                     chainCode: rootAccount.chainCode,
-//                 },
-//                 rootAddress: rootAccount.address,
-//                 type: DEVICE_TYPE.LEDGER,
-//                 alias: deviceModel.productName,
-//             }
-
-//             // Store the device
-//             await dispatch(DeviceService.add(newDevice))
-
-//             // Add accounts
-//             await dispatch(
-//                 AccountService.addForNewDevice(newDevice, selectedAccounts),
-//             )
-
-//             dispatch(
-//                 AnalyticsService.trackEvent(
-//                     AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS,
-//                 ),
-//             )
-
-//             return newDevice.rootAddress
-//         } catch (e) {
-//             error(e)
-//             dispatch(
-//                 AnalyticsService.trackEvent(
-//                     AnalyticsEvent.WALLET_ADD_LEDGER_ERROR,
-//                 ),
-//             )
-//             throw VeWorldErrors.internal("Failed to add ledger device", e)
-//         }
-//     }
-
 /**
  * Validates that the root account on the ledger matches that of our XPub
  *
@@ -221,6 +230,8 @@ const validateRootAddress = async (
 }
 
 export default {
+    ledgerErrorHandler,
+    checkLedgerConnection,
     getAccountsWithBalances,
     signCertificate,
     signTransaction,

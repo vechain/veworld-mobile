@@ -9,7 +9,6 @@ import {
     BaseTouchableBox,
     BaseView,
     showErrorToast,
-    showWarningToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, useThemedStyles } from "~Common"
@@ -26,7 +25,7 @@ import {
     Routes,
 } from "~Navigation"
 
-import useLedger, { LedgerStatus } from "~Common/Hooks/useLedger"
+import useLedger from "~Common/Hooks/useLedger"
 import {
     selectHasOnboarded,
     selectSelectedNetwork,
@@ -53,11 +52,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
-    const onDisconnect = useCallback(() => {
-        showWarningToast("Device disconnected")
-    }, [])
-
-    const { status, rootAccount, connect } = useLedger(device.id, onDisconnect)
+    const { rootAccount } = useLedger(device.id)
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<
@@ -206,14 +201,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                     </BaseText>
 
                     <BaseSpacer height={20} />
-                    {status !== LedgerStatus.READY && (
-                        <BaseView flexDirection="row" w={100}>
-                            <BaseText typographyFont="body" my={10}>
-                                {status}
-                            </BaseText>
-                            <BaseButton title="Refresh" action={connect} />
-                        </BaseView>
-                    )}
                     <BaseView style={themedStyles.container} pb={20}>
                         {!!ledgerAccounts.length && (
                             <FlashList
