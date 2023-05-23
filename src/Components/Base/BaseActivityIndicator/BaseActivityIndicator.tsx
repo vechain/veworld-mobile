@@ -22,7 +22,7 @@ export const BaseActivityIndicator: React.FC<Props> = ({
             onClose={onHide}
             transparent={true}>
             <BaseView flex={1} alignItems="center" justifyContent="center">
-                <ActivityIndicator size="large" />
+                <ActivityIndicator testID="activity-indicator" size="large" />
                 {text && <BaseText>{text}</BaseText>}
             </BaseView>
         </BaseModal>
