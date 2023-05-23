@@ -37,7 +37,7 @@ export const NetworkBox: React.FC<Props> = ({
             action={handleOnPress}
             innerContainerStyle={style}
             justifyContent="space-between">
-            <BaseView flexDirection="column">
+            <BaseView flexDirection="column" alignItems="flex-start">
                 <BaseView flexDirection="row">
                     <BaseText typographyFont="button">
                         {StringUtils.capitalize(network.name)}

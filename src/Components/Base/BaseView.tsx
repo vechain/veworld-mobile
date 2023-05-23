@@ -71,7 +71,7 @@ export const BaseView = memo(
         const computedAlignItems = useMemo(() => {
             if (alignItems) return alignItems
             if (flexDirection === "row") return "center"
-            return "flex-start"
+            return "stretch"
         }, [flexDirection, alignItems])
 
         const computedJustifyContent = useMemo(() => {

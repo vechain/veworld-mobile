@@ -436,6 +436,14 @@ type RootTranslation = {
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​i​m​p​o​r​t​ ​y​o​u​r​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​,​ ​a​n​d​ ​r​e​t​a​i​n​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​a​n​d​ ​r​e​l​a​t​e​d​ ​t​r​a​n​s​a​c​t​i​o​n​ ​k​e​y​s​.
+	 */
+	BD_CREATE_WALLET_TYPE: string
+	/**
+	 * C​r​e​a​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s
+	 */
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -468,7 +476,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: string
 	/**
-	 * C​r​e​a​t​e​ ​W​a​l​l​e​t
+	 * W​a​l​l​e​t​ ​S​e​t​u​p
 	 */
 	TITLE_CREATE_WALLET_TYPE: string
 	/**
@@ -599,6 +607,10 @@ type RootTranslation = {
 	 * D​i​s​c​o​v​e​r
 	 */
 	TITLE_DISCOVER: string
+	/**
+	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
+	 */
+	SB_IMPORT_WALLET_TYPE: string
 	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
@@ -779,6 +791,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_NEXT: string
 	/**
+	 * a​n​d
+	 */
+	COMMON_LBL_AND: string
+	/**
 	 * n​a​m​e
 	 */
 	COMMON_LBL_NAME: string
@@ -833,6 +849,14 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_COMMENT: string
 	/**
+	 * P​r​i​v​a​c​y​ ​P​o​l​i​c​y
+	 */
+	COMMON_LBL_PRIVACY_POLICY: string
+	/**
+	 * T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s
+	 */
+	COMMON_LBL_TERMS_AND_CONDITIONS: string
+	/**
 	 * A​s​s​e​t​s
 	 */
 	COMMON_ASSETS: string
@@ -848,6 +872,10 @@ type RootTranslation = {
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
+	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t
+	 */
+	COMMON_SELECT_ACCOUNT: string
 	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
@@ -1218,6 +1246,42 @@ type RootTranslation = {
 	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
 	 */
 	SEND_LESS_THAN_1_MIN: string
+	/**
+	 * S​e​l​e​c​t​ ​d​e​l​e​g​a​t​i​o​n
+	 */
+	SEND_DELEGATION_TITLE: string
+	/**
+	 * N​o​n​e
+	 */
+	SEND_DELEGATION_NONE: string
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	SEND_DELEGATION_ACCOUNT: string
+	/**
+	 * U​R​L
+	 */
+	SEND_DELEGATION_URL: string
+	/**
+	 * S​e​l​e​c​t​ ​U​R​L
+	 */
+	SEND_DELEGATION_SELECT_URL: string
+	/**
+	 * A​d​d​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​U​R​L​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​o​ ​u​s​e​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: string
+	/**
+	 * E​n​t​e​r​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​r​e​a​c​h​ ​t​h​i​s​ ​U​R​L​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	SEND_DELEGATION_ERROR_SIGNATURE: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -1766,6 +1830,14 @@ export type TranslationFunctions = {
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
+	 * You can import your existing wallet, and retain all of your accounts and related transaction keys.
+	 */
+	BD_CREATE_WALLET_TYPE: () => LocalizedString
+	/**
+	 * Creating the wallet the user accepts
+	 */
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -1798,7 +1870,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
 	/**
-	 * Create Wallet
+	 * Wallet Setup
 	 */
 	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
@@ -1929,6 +2001,10 @@ export type TranslationFunctions = {
 	 * Discover
 	 */
 	TITLE_DISCOVER: () => LocalizedString
+	/**
+	 * Which kind of wallet do you want to import?
+	 */
+	SB_IMPORT_WALLET_TYPE: () => LocalizedString
 	/**
 	 * Local wallet
 	 */
@@ -2106,6 +2182,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_NEXT: () => LocalizedString
 	/**
+	 * and
+	 */
+	COMMON_LBL_AND: () => LocalizedString
+	/**
 	 * name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
@@ -2158,6 +2238,14 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_COMMENT: () => LocalizedString
 	/**
+	 * Privacy Policy
+	 */
+	COMMON_LBL_PRIVACY_POLICY: () => LocalizedString
+	/**
+	 * Terms and Conditions
+	 */
+	COMMON_LBL_TERMS_AND_CONDITIONS: () => LocalizedString
+	/**
 	 * Assets
 	 */
 	COMMON_ASSETS: () => LocalizedString
@@ -2173,6 +2261,10 @@ export type TranslationFunctions = {
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
+	/**
+	 * Select account
+	 */
+	COMMON_SELECT_ACCOUNT: () => LocalizedString
 	/**
 	 * Market Cap
 	 */
@@ -2538,6 +2630,42 @@ Please, try again later.
 	 * Less than 1 min
 	 */
 	SEND_LESS_THAN_1_MIN: () => LocalizedString
+	/**
+	 * Select delegation
+	 */
+	SEND_DELEGATION_TITLE: () => LocalizedString
+	/**
+	 * None
+	 */
+	SEND_DELEGATION_NONE: () => LocalizedString
+	/**
+	 * Account
+	 */
+	SEND_DELEGATION_ACCOUNT: () => LocalizedString
+	/**
+	 * URL
+	 */
+	SEND_DELEGATION_URL: () => LocalizedString
+	/**
+	 * Select URL
+	 */
+	SEND_DELEGATION_SELECT_URL: () => LocalizedString
+	/**
+	 * Add delegation URL
+	 */
+	SEND_DELEGATION_ADD_URL: () => LocalizedString
+	/**
+	 * Insert the URL you want to to use to delegate this transaction
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: () => LocalizedString
+	/**
+	 * Enter URL
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Failed to reach this URL. Please try again.
+	 */
+	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
 	/**
 	 * Account
 	 */

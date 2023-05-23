@@ -21,6 +21,10 @@ export interface WalletAccount extends Account {
     visible: boolean
 }
 
+export interface AccountWithDevice extends WalletAccount {
+    device: Device
+}
+
 /**
  * Used on the account management screens
  * Grouping accounts by their device

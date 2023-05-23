@@ -49,18 +49,20 @@ export const SwitchStack = () => {
                         {/* Full screen modals */}
                         <Switch.Group
                             screenOptions={{
-                                presentation: "fullScreenModal",
+                                headerShown: false,
                             }}>
                             <Switch.Screen
                                 name={Routes.CREATE_WALLET_FLOW}
                                 component={CreateWalletAppStack}
-                                options={{ headerShown: false }}
                             />
 
                             <Switch.Screen
                                 name={Routes.CAMERA}
                                 component={CameraScreen}
-                                options={{ headerShown: false }}
+                                options={{
+                                    headerShown: false,
+                                    presentation: "modal",
+                                }}
                             />
                         </Switch.Group>
                     </>
