@@ -14,6 +14,7 @@ module.exports = {
                     "~Screens": "./src/Screens",
                     "~Navigation": "./src/Navigation",
                     "~Common": "./src/Common",
+                    "~Utils": "./src/Utils",
                     "~Components": "./src/Components",
                     "~i18n": "./src/i18n",
                     "~Assets": "./src/Assets",

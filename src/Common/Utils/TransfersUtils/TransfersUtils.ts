@@ -1,7 +1,7 @@
 import { abi, address } from "thor-devkit"
 import { VET } from "~Common/Constant"
 import { FungibleToken, TransferLog } from "~Model"
-import AddressUtils from "../AddressUtils"
+import { AddressUtils } from "~Utils"
 import { DIRECTIONS } from "~Common/Enums"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 

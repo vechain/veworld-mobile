@@ -3,7 +3,8 @@ import { BaseIcon, BaseSpacer, BaseView, FastActionsBar } from "~Components"
 import { Header } from "./Header"
 import { AccountsCarousel } from "./AccountsCarousel"
 
-import { AddressUtils, useTheme } from "~Common"
+import { useTheme } from "~Common"
+import { AddressUtils } from "~Utils"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     getBalanceVisible,

@@ -1,4 +1,4 @@
-import { AddressUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 import { Device, WalletAccount } from "~Model"
 import {
     selectAccount,

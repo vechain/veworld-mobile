@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { AddressUtils, FormattingUtils } from "~Common"
+import { FormattingUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
 import { VET, VTHO } from "~Common/Constant"
 import { RootState } from "~Storage/Redux/Types"

@@ -1,4 +1,3 @@
-import AddressUtils from "./AddressUtils"
 import AlertUtils from "./AlertUtils"
 // import AccountsUtils from "./AccountsUtils"
 // import AliasUtils from "./AliasUtils"
@@ -35,7 +34,6 @@ export {
     // AliasUtils,
     // AsyncUtils,
     // AccountsUtils,
-    AddressUtils,
     BalanceUtils,
     BiometricsUtils,
     BloomUtils,

@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 import { ColorThemeType, useThemedStyles } from "~Common"
-import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
+import { AddressUtils } from "~Utils"
 import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
 import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
@@ -28,7 +28,7 @@ export const DevicesList: React.FC<Props> = ({
     )
     const renderItem = useCallback(
         ({ item }: { item: Device }) => {
-            const isSelected = compareAddresses(
+            const isSelected = AddressUtils.compareAddresses(
                 item.rootAddress,
                 selectedDevice?.rootAddress,
             )

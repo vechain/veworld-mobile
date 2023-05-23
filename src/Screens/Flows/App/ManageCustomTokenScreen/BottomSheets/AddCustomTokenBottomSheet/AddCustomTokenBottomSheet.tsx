@@ -25,14 +25,8 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import {
-    AddressUtils,
-    debug,
-    error,
-    info,
-    useKeyboard,
-    useTheme,
-} from "~Common"
+import { debug, error, info, useKeyboard, useTheme } from "~Common"
+import { AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
