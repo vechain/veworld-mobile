@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { LedgerStatus, useLedger } from "./useLedger"
+import { useLedger } from "./useLedger"
 
 import { TestHelpers } from "~Test"
 
@@ -18,9 +18,7 @@ describe("useLedger", () => {
         expect(result.current).toEqual({
             vetApp: undefined,
             rootAccount: undefined,
-            connect: expect.any(Function),
-            status: LedgerStatus.NOT_CONNECTED,
-            config: undefined,
+            isError: undefined,
         })
     })
 })
