@@ -16,5 +16,7 @@ export const alreadyExists = <T>(
     const matches = array.filter(item => {
         return !exclude || item[key] !== exclude[key]
     })
-    return matches.some(item => compare(item[key], value))
+    return matches.some(item =>
+        compare(String(item[key]).toLowerCase(), value.toLowerCase()),
+    )
 }
