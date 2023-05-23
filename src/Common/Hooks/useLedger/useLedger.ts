@@ -35,7 +35,7 @@ export enum LedgerConfig {
  *
  * @returns {@link UseLedgerProps}
  */
-const useLedger = (
+export const useLedger = (
     deviceId: string,
     onDisconnect?: () => void,
 ): UseLedgerProps => {
@@ -72,7 +72,7 @@ const useLedger = (
             setRootAccount(undefined)
             setConfig(undefined)
             setIsConnected(false)
-            if (onDisconnect) onDisconnect()
+            onDisconnect?.()
         })
 
         setIsConnected(true)
@@ -133,5 +133,3 @@ interface UseLedgerProps {
     status: LedgerStatus
     config?: string
 }
-
-export default useLedger
