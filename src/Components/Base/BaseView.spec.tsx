@@ -62,7 +62,7 @@ describe("BaseView component", () => {
         const baseView = await findBaseView()
         expect(baseView).toBeVisible()
 
-        expect(baseView).toHaveStyle({ alignItems: "flex-start" })
+        expect(baseView).toHaveStyle({ alignItems: "stretch" })
     })
 
     it("should set default justifyContent when none is provided", async () => {

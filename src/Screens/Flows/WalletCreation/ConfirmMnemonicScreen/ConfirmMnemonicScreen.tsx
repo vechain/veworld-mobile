@@ -162,10 +162,7 @@ export const ConfirmMnemonicScreen = () => {
                     alignItems="flex-start"
                     flexGrow={1}
                     mx={20}>
-                    <BaseView
-                        justifyContent="space-between"
-                        alignItems="stretch"
-                        w={100}>
+                    <BaseView justifyContent="space-between" w={100}>
                         <BaseView
                             flexDirection="row"
                             justifyContent="space-between"
