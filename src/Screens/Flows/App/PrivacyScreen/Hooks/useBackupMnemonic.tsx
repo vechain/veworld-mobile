@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { CryptoUtils } from "~Common"
-import { Device } from "~Model"
+import { LocalDevice } from "~Model"
 
 type Props = {
     closePasswordPrompt: () => void
@@ -8,7 +8,7 @@ type Props = {
     openBackupPhraseSheetWithDelay: (delay: number) => void
     openPasswordPrompt: () => void
     closeWalletMgmtSheet: () => void
-    devices: Device[]
+    devices: LocalDevice[]
     isWalletSecurityBiometrics: boolean
 }
 
@@ -96,7 +96,7 @@ export const useBackupMnemonic = ({
      * the wallet using the user's PIN if exists.
      */
     const handleOnSelectedWallet = useCallback(
-        async (device: Device) => {
+        async (device: LocalDevice) => {
             closeWalletMgmtSheet()
 
             const { decryptedWallet } = await CryptoUtils.decryptWallet(

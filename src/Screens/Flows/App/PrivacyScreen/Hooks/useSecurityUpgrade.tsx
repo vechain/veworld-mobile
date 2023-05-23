@@ -1,23 +1,31 @@
 import { useCallback } from "react"
 import { CryptoUtils, useWalletSecurity, error } from "~Common"
-import { Device, SecurityLevelType } from "~Model"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { LocalDevice, SecurityLevelType } from "~Model"
+import {
+    selectLocalDevices,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import {
     bulkUpdateDevices,
     setUserSelectedSecurity,
 } from "~Storage/Redux/Actions"
-import { selectDevices } from "~Storage/Redux/Selectors"
+
+/**
+ *  hook to trigger the security upgrade by decrypting and re-encrypting the wallet with the new security level
+ * @returns  a function to trigger the security upgrade
+ */
 
 export const useSecurityUpgrade = () => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
-    const devices = useAppSelector(selectDevices())
+    const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
     const dispatch = useAppDispatch()
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
             if (isWalletSecurityBiometrics) return
 
-            const updatedDevices: Device[] = []
+            const updatedDevices: LocalDevice[] = []
 
             try {
                 for (const device of devices) {

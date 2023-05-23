@@ -30,16 +30,25 @@ export const AccountSlice = createSlice({
                 state.selectedAccount = address
             }
         },
-        addAccount: (state, action: PayloadAction<WalletAccount>) => {
-            const accountExists = state.accounts.find(account =>
-                AddressUtils.compareAddresses(
-                    account.address,
-                    action.payload.address,
-                ),
-            )
-            if (!accountExists) {
-                state.accounts.push(action.payload)
-            }
+        addAccount: (
+            state,
+            action: PayloadAction<WalletAccount | WalletAccount[]>,
+        ) => {
+            const newAccounts: WalletAccount[] = []
+            if (!Array.isArray(action.payload)) newAccounts.push(action.payload)
+            else newAccounts.push(...action.payload)
+
+            const accountsToInsert: WalletAccount[] = []
+            newAccounts.forEach(newAcc => {
+                const accountExists = state.accounts.find(account =>
+                    AddressUtils.compareAddresses(
+                        account.address,
+                        newAcc.address,
+                    ),
+                )
+                if (!accountExists) accountsToInsert.push(newAcc)
+            })
+            state.accounts.push(...accountsToInsert)
         },
         removeAccountsByDevice: (
             state,

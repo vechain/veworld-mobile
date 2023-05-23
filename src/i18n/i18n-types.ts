@@ -1322,6 +1322,14 @@ type RootTranslation = {
 	 */
 	WALLET_LABEL_WALLET: string
 	/**
+	 * I​m​p​o​r​t​ ​l​e​d​g​e​r
+	 */
+	WALLET_LEDGER_SELECT_DEVICE_TITLE: string
+	/**
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​a​n​d​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d
+	 */
+	WALLET_LEDGER_SELECT_DEVICE_SB: string
+	/**
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
@@ -2737,6 +2745,14 @@ Please, try again later.
 	 * Wallet
 	 */
 	WALLET_LABEL_WALLET: () => LocalizedString
+	/**
+	 * Import ledger
+	 */
+	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
+	/**
+	 * Please make sure your Ledger is unlocked and the bluetooth enabled
+	 */
+	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**
 	 * Date not available
 	 */
