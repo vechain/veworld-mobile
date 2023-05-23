@@ -55,36 +55,30 @@ export const AddSuggestedBottomSheet = React.forwardRef<
     }
 
     const handleAddSelectedTokens = () => {
-        if (account?.address) {
-            for (const tokenAddress of selectedTokens) {
-                const token = missingSuggestedTokens.find(
-                    (missingToken: FungibleTokenWithBalance) =>
-                        tokenAddress === missingToken.symbol,
-                )
-                if (!token) {
-                    throw new Error(
-                        "Trying to select a suggested official token without finding it",
-                    )
-                }
-
-                dispatch(
-                    addTokenBalance({
-                        balance: "0",
-                        accountAddress: account.address,
-                        tokenAddress: token.address,
-                        timeUpdated: new Date().toISOString(),
-                        position: tokenBalances.length,
-                        genesisId: network.genesis.id,
-                    }),
-                )
-                handleDismiss()
-            }
-            setSelectedTokenSymbols((s: string[]) => [...s, ...selectedTokens])
-        } else {
-            throw new Error(
-                "Trying to select a suggested official token token without an account selected",
+        for (const tokenAddress of selectedTokens) {
+            const token = missingSuggestedTokens.find(
+                (missingToken: FungibleTokenWithBalance) =>
+                    tokenAddress === missingToken.symbol,
             )
+            if (!token) {
+                throw new Error(
+                    "Trying to select a suggested official token without finding it",
+                )
+            }
+
+            dispatch(
+                addTokenBalance({
+                    balance: "0",
+                    accountAddress: account.address,
+                    tokenAddress: token.address,
+                    timeUpdated: new Date().toISOString(),
+                    position: tokenBalances.length,
+                    genesisId: network.genesis.id,
+                }),
+            )
+            handleDismiss()
         }
+        setSelectedTokenSymbols((s: string[]) => [...s, ...selectedTokens])
     }
 
     return (
