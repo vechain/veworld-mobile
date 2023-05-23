@@ -1,6 +1,9 @@
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { Device } from "react-native-ble-plx"
-import VETLedgerApp from "~Common/Ledger/VetLedgerApp"
+import VETLedgerApp, {
+    StatusCodes,
+    VETLedgerAccount,
+} from "~Common/Ledger/VetLedgerApp"
 
 /*eslint-disable no-console*/
 export const mockLedgerAccount = {
@@ -75,4 +78,21 @@ export const mockedTransport: BleTransport = {
 export const mockLedgerApp: VETLedgerApp = {
     // @ts-ignore
     transport: mockTransport,
+    getAccount: async (
+        _path: string,
+        _display?: boolean | undefined,
+        _chainCode?: boolean | undefined,
+        _statusCodes?: StatusCodes[],
+    ): Promise<VETLedgerAccount> => {
+        return mockLedgerAccount
+    },
+    signJSON: (path: string, rawJSON: Buffer): Promise<Buffer> => {
+        return Promise.resolve(Buffer.from(path + rawJSON.toString()))
+    },
+    signTransaction: (
+        path: string,
+        rawTransaction: Buffer,
+    ): Promise<Buffer> => {
+        return Promise.resolve(Buffer.from(path + rawTransaction.toString()))
+    },
 }

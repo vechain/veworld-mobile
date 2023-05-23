@@ -142,58 +142,6 @@ const getAccountsWithBalances = async (
     return accounts
 }
 
-// const addLedgerDevice =
-//     (
-//         rootAccount: VETLedgerAccount,
-//         deviceModel: DeviceModel,
-//         selectedAccounts?: number[],
-//     ): AppThunk<Promise<string>> =>
-//     async dispatch => {
-//         debug("Add a ledger device")
-
-//         try {
-//             if (!rootAccount.chainCode)
-//                 throw VeWorldErrors.internal(
-//                     "Failed to extract chaincode from ledger device",
-//                 )
-
-//             //Create the new ledger device and persist it
-//             const newDevice: Device = {
-//                 xPub: {
-//                     publicKey: rootAccount.publicKey,
-//                     chainCode: rootAccount.chainCode,
-//                 },
-//                 rootAddress: rootAccount.address,
-//                 type: DEVICE_TYPE.LEDGER,
-//                 alias: deviceModel.productName,
-//             }
-
-//             // Store the device
-//             await dispatch(DeviceService.add(newDevice))
-
-//             // Add accounts
-//             await dispatch(
-//                 AccountService.addForNewDevice(newDevice, selectedAccounts),
-//             )
-
-//             dispatch(
-//                 AnalyticsService.trackEvent(
-//                     AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS,
-//                 ),
-//             )
-
-//             return newDevice.rootAddress
-//         } catch (e) {
-//             error(e)
-//             dispatch(
-//                 AnalyticsService.trackEvent(
-//                     AnalyticsEvent.WALLET_ADD_LEDGER_ERROR,
-//                 ),
-//             )
-//             throw VeWorldErrors.internal("Failed to add ledger device", e)
-//         }
-//     }
-
 /**
  * Validates that the root account on the ledger matches that of our XPub
  *
