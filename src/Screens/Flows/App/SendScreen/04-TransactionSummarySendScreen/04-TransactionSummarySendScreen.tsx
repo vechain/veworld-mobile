@@ -27,6 +27,8 @@ import {
     selectCurrency,
     selectSelectedAccount,
     useAppSelector,
+    selectAccountsButSelected,
+    selectKnownContacts,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -48,6 +50,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
+    const accounts = useAppSelector(selectAccountsButSelected)
+    const contacts = useAppSelector(selectKnownContacts)
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -103,6 +107,53 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const gasFees = gas?.gas
         ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
         : "N.A."
+
+    const receiverDetails = () => {
+        const contact = contacts.find(
+            _contact =>
+                _contact.address.toLowerCase() === address.toLowerCase(),
+        )
+
+        if (contact) {
+            return (
+                <BaseView>
+                    <BaseText typographyFont="subSubTitle">
+                        {contact.alias}
+                    </BaseText>
+                    <BaseText typographyFont="captionRegular">
+                        {FormattingUtils.humanAddress(contact.address || "")}
+                    </BaseText>
+                </BaseView>
+            )
+        }
+
+        const receiverAccount = accounts.find(
+            _account =>
+                _account.address.toLowerCase() === address.toLowerCase(),
+        )
+        if (receiverAccount) {
+            return (
+                <BaseView>
+                    <BaseText typographyFont="subSubTitle">
+                        {receiverAccount.alias}
+                    </BaseText>
+                    <BaseText typographyFont="captionRegular">
+                        {FormattingUtils.humanAddress(
+                            receiverAccount.address || "",
+                        )}
+                    </BaseText>
+                </BaseView>
+            )
+        }
+
+        return (
+            <BaseView>
+                <BaseText typographyFont="subSubTitle">
+                    {FormattingUtils.humanAddress(address)}
+                </BaseText>
+            </BaseView>
+        )
+    }
     return (
         <BaseSafeArea grow={1}>
             <ScrollViewWithFooter
@@ -127,23 +178,24 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                             children: (
                                 <BaseView
                                     flex={1}
-                                    style={styles.addressContainer}>
+                                    style={styles.addressContainer}
+                                    alignItems="flex-start">
                                     <BaseText typographyFont="captionBold">
                                         {LL.SEND_FROM()}
                                     </BaseText>
                                     <BaseSpacer height={8} />
                                     <BaseView flexDirection="row">
                                         <AccountIcon
-                                            address={account?.address || ""}
+                                            address={account.address}
                                         />
                                         <BaseSpacer width={8} />
                                         <BaseView>
                                             <BaseText typographyFont="subSubTitle">
-                                                {account?.alias}
+                                                {account.alias}
                                             </BaseText>
                                             <BaseText typographyFont="captionRegular">
                                                 {FormattingUtils.humanAddress(
-                                                    account?.address || "",
+                                                    account.address,
                                                 )}
                                             </BaseText>
                                         </BaseView>
@@ -161,7 +213,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         },
                         {
                             children: (
-                                <BaseView flex={1}>
+                                <BaseView flex={1} alignItems="flex-start">
                                     <BaseText typographyFont="captionBold">
                                         {LL.SEND_TO()}
                                     </BaseText>
@@ -169,13 +221,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                     <BaseView flexDirection="row">
                                         <AccountIcon address={address} />
                                         <BaseSpacer width={8} />
-                                        <BaseView>
-                                            <BaseText typographyFont="subSubTitle">
-                                                {FormattingUtils.humanAddress(
-                                                    address,
-                                                )}
-                                            </BaseText>
-                                        </BaseView>
+                                        {receiverDetails()}
                                     </BaseView>
                                 </BaseView>
                             ),

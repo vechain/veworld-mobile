@@ -31,7 +31,7 @@ const removeDevice =
         const selectedAccount = selectSelectedAccount(getState())
         const isSelectedAccountInDevice = AddressUtils.compareAddresses(
             rootAddress,
-            selectedAccount?.rootAddress,
+            selectedAccount.rootAddress,
         )
         if (isSelectedAccountInDevice)
             throw new Error("Cannot delete the selected account's device!")

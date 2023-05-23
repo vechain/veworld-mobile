@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from "react"
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import React, { useCallback, useEffect, useMemo } from "react"
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Animated, {
     measure,
     runOnUI,
@@ -10,7 +10,7 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import { useTheme } from "~Common"
-import { BaseIcon, BaseSpacer } from "~Components"
+import { BaseIcon } from "~Components"
 
 type Props = {
     headerComponent: React.ReactNode
@@ -21,6 +21,7 @@ type Props = {
         Animated.AnimateStyle<StyleProp<ViewStyle>>
     >
     bodyComponent: React.ReactNode
+    defaultIsOpen?: boolean
 }
 
 export const BaseAccordion = ({
@@ -30,6 +31,7 @@ export const BaseAccordion = ({
     headerClosedStyle,
     chevronContainerStyle,
     bodyComponent,
+    defaultIsOpen,
 }: Props) => {
     const theme = useTheme()
     const aref = useAnimatedRef<View>()
@@ -57,11 +59,10 @@ export const BaseAccordion = ({
         }
     }, [])
 
-    const onChevronPress = useCallback(() => {
+    const onHeaderPress = useCallback(() => {
         if (height.value === 0) {
             runOnUI(() => {
                 "worklet"
-
                 height.value = measure(aref)!.height
             })()
         }
@@ -75,28 +76,38 @@ export const BaseAccordion = ({
                     name={"chevron-down"}
                     color={theme.colors.text}
                     size={36}
-                    action={onChevronPress}
                     testID={"chevron"}
                 />
             </Animated.View>
         )
-    }, [dynamicStyle, chevronContainerStyle, onChevronPress, theme])
+    }, [dynamicStyle, chevronContainerStyle, theme])
+
+    // WORK AROUND!!
+    // first time it renders set default open state
+    // I didn't find a better way to set the default open state
+    useEffect(() => {
+        if (defaultIsOpen) {
+            setTimeout(onHeaderPress, 100)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <>
-            <Animated.View
-                style={[
-                    styles.headerContainer,
-                    headerStyle,
-                    computedHeaderStyle,
-                ]}>
-                {headerComponent}
-                {renderCollapseIcon}
-            </Animated.View>
+            <Pressable onPress={onHeaderPress}>
+                <Animated.View
+                    style={[
+                        styles.headerContainer,
+                        headerStyle,
+                        computedHeaderStyle,
+                    ]}>
+                    {headerComponent}
+                    {renderCollapseIcon}
+                </Animated.View>
+            </Pressable>
             <Animated.View
                 style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
                 <View ref={aref} style={styles.bodyContent}>
-                    <BaseSpacer height={2} />
                     {bodyComponent}
                 </View>
             </Animated.View>

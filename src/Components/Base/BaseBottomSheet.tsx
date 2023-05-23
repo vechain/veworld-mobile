@@ -55,7 +55,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     w={100}
                     px={24}
                     py={24}
-                    alignItems="flex-start"
+                    alignItems="stretch"
                     style={contentStyle}>
                     {children}
                 </BaseView>

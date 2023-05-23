@@ -25,7 +25,7 @@ import {
     Routes,
 } from "~Navigation"
 
-import useLedger from "~Common/Hooks/useLedger"
+import { useLedger } from "~Common/Hooks"
 import {
     selectHasOnboarded,
     selectSelectedNetwork,

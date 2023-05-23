@@ -235,5 +235,4 @@ export default {
     getAccountsWithBalances,
     signCertificate,
     signTransaction,
-    // addLedgerDevice,
 }

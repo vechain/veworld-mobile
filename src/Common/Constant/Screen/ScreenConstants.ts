@@ -18,6 +18,7 @@ export const valueToHP: Record<number, number> = {
     28: hp("3.28%"),
     40: hp("4.69%"),
     60: hp("7.04%"),
+    120: hp("14.08%"),
     170: hp("19.95%"),
     180: hp("21.12%"),
     190: hp("22.30%"),

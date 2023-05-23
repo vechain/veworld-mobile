@@ -83,45 +83,28 @@ export const ManageTokenScreen = () => {
     )
 
     const selectToken = (token: FungibleToken) => {
-        if (account?.address) {
-            setSelectedTokenSymbols(tokenSymbols => [
-                ...tokenSymbols,
-                token.symbol,
-            ])
-            dispatch(
-                addTokenBalance({
-                    balance: "0",
-                    accountAddress: account.address,
-                    tokenAddress: token.address,
-                    timeUpdated: new Date().toISOString(),
-                    position: selectedTokenSymbols.length,
-                    genesisId: currentNetwork.genesis.id,
-                }),
-            )
-        } else {
-            throw new Error(
-                "Trying to select an official token without an account selected",
-            )
-        }
+        setSelectedTokenSymbols(tokenSymbols => [...tokenSymbols, token.symbol])
+        dispatch(
+            addTokenBalance({
+                balance: "0",
+                accountAddress: account.address,
+                tokenAddress: token.address,
+                timeUpdated: new Date().toISOString(),
+                position: selectedTokenSymbols.length,
+                genesisId: currentNetwork.genesis.id,
+            }),
+        )
     }
     const unselectToken = (token: FungibleToken) => {
-        if (account?.address) {
-            setSelectedTokenSymbols(tokenSymbols =>
-                tokenSymbols.filter(
-                    tokenSymbol => tokenSymbol !== token.symbol,
-                ),
-            )
-            dispatch(
-                removeTokenBalance({
-                    accountAddress: account.address,
-                    tokenAddress: token.address,
-                }),
-            )
-        } else {
-            throw new Error(
-                "Trying to unselect an official token without an account selected",
-            )
-        }
+        setSelectedTokenSymbols(tokenSymbols =>
+            tokenSymbols.filter(tokenSymbol => tokenSymbol !== token.symbol),
+        )
+        dispatch(
+            removeTokenBalance({
+                accountAddress: account.address,
+                tokenAddress: token.address,
+            }),
+        )
     }
 
     const handleClickToken = (token: FungibleToken) => () => {

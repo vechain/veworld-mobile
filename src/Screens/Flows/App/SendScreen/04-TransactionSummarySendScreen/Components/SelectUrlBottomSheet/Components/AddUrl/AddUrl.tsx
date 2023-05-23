@@ -57,7 +57,7 @@ export const AddUrl = ({
     return (
         <ScrollViewWithFooter
             footer={
-                <BaseView flexDirection="row" alignItems="stretch">
+                <BaseView flexDirection="row">
                     {addUrlMode && (
                         <>
                             <BaseButton

@@ -57,7 +57,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         view: {
             flexDirection: "row",
-            alignItems: "center",
             borderRadius: 16,
             padding: 12,
             backgroundColor: theme.colors.card,
