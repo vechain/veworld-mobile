@@ -1,12 +1,5 @@
-import React, { useCallback, useMemo } from "react"
-import {
-    LayoutRectangle,
-    Pressable,
-    StyleProp,
-    StyleSheet,
-    View,
-    ViewStyle,
-} from "react-native"
+import React, { useCallback, useEffect, useMemo } from "react"
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Animated, {
     measure,
     runOnUI,
@@ -19,12 +12,6 @@ import Animated, {
 import { useTheme } from "~Common"
 import { BaseIcon } from "~Components"
 import * as Haptics from "expo-haptics"
-
-type LayoutEvent = {
-    layout: LayoutRectangle
-    target?: number | null | undefined
-}
-
 type Props = {
     headerComponent: React.ReactNode
     headerStyle?: StyleProp<ViewStyle>
@@ -34,6 +21,7 @@ type Props = {
         Animated.AnimateStyle<StyleProp<ViewStyle>>
     >
     bodyComponent: React.ReactNode
+    defaultIsOpen?: boolean
 }
 
 export const BaseAccordion = ({
@@ -43,14 +31,14 @@ export const BaseAccordion = ({
     headerClosedStyle,
     chevronContainerStyle,
     bodyComponent,
+    defaultIsOpen,
 }: Props) => {
     const theme = useTheme()
     const aref = useAnimatedRef<View>()
-    const open = useSharedValue(true)
-    const isFirstOpen = useSharedValue(true)
+    const open = useSharedValue(false)
     const height = useSharedValue(0)
     const progress = useDerivedValue(() =>
-        open.value || isFirstOpen.value ? withTiming(1) : withTiming(0),
+        open.value ? withTiming(1) : withTiming(0),
     )
 
     const computedHeaderStyle = useAnimatedStyle(() => {
@@ -63,7 +51,7 @@ export const BaseAccordion = ({
             height: height.value * progress.value + 0.1,
             opacity: progress.value === 0 ? 0 : 1,
         }
-    }, [height.value, progress.value, isFirstOpen.value])
+    }, [height.value, progress.value])
 
     const dynamicStyle = useAnimatedStyle(() => {
         return {
@@ -71,31 +59,16 @@ export const BaseAccordion = ({
         }
     }, [])
 
-    const onChevronPress = useCallback(() => {
+    const onHeaderPress = useCallback(() => {
         if (height.value === 0) {
             runOnUI(() => {
                 "worklet"
-
                 height.value = measure(aref)!.height
             })()
         }
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         open.value = !open.value
     }, [aref, height, open])
-
-    const inFirstOpenLayout = useCallback(
-        ({ nativeEvent }: { nativeEvent: LayoutEvent }) => {
-            runOnUI(() => {
-                "worklet"
-
-                if (isFirstOpen.value) {
-                    height.value = nativeEvent.layout.height
-                    isFirstOpen.value = false
-                }
-            })()
-        },
-        [height, isFirstOpen],
-    )
 
     const renderCollapseIcon = useMemo(() => {
         return (
@@ -110,9 +83,19 @@ export const BaseAccordion = ({
         )
     }, [dynamicStyle, chevronContainerStyle, theme])
 
+    // WORK AROUND!!
+    // first time it renders set default open state
+    // I didn't find a better way to set the default open state
+    useEffect(() => {
+        if (defaultIsOpen) {
+            setTimeout(onHeaderPress, 10)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <>
-            <Pressable onPress={onChevronPress}>
+            <Pressable onPress={onHeaderPress}>
                 <Animated.View
                     style={[
                         styles.headerContainer,
@@ -125,10 +108,7 @@ export const BaseAccordion = ({
             </Pressable>
             <Animated.View
                 style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
-                <View
-                    ref={aref}
-                    style={styles.bodyContent}
-                    onLayout={inFirstOpenLayout}>
+                <View ref={aref} style={styles.bodyContent}>
                     {bodyComponent}
                 </View>
             </Animated.View>

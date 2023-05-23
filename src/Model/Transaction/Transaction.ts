@@ -17,6 +17,11 @@ export interface ClauseWithMetadata extends Transaction.Clause {
     abi?: object
 }
 
+export type ConnexClause = Connex.VM.Clause & {
+    comment?: string
+    abi?: object
+}
+
 export interface ConnexTransactionData {
     transaction: Transaction
     delegationSignature?: Buffer

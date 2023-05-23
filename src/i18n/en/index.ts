@@ -46,6 +46,7 @@ const en: BaseTranslation = {
     BTN_CREATE_CONTACT: "Create contact",
     BTN_EDIT_PIN: "Edit Pin",
     BTN_BACKUP_MENMONIC: "Backup phrase",
+    BTN_LETS_GET_SENDING: "Let's get sending!",
    
 
     // BODY
@@ -198,6 +199,7 @@ const en: BaseTranslation = {
     SB_SECURITY_METHOD: "Security method",
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
+    SB_NO_TRANSACTIONS: "Your activities will appear here",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -290,6 +292,11 @@ const en: BaseTranslation = {
     SUCCESS_GENERIC_OPERATION: "The operation went well!",
     SUCCESS_GENERIC_VIEW_DETAIL_LINK: "View operation detail.",
 
+    // Warning
+    HEADS_UP: "Heads up!",
+    ACTIVITIES_NOT_UP_TO_DATE: "Activities might not be up-to-date. Check your internet connection or try later",
+
+
     // Placeholders
     PLACEHOLDER_SEARCH_TOKEN: "Search a token",
     PLACEHOLDER_ENTER_NAME: "Enter the name",
@@ -368,8 +375,11 @@ const en: BaseTranslation = {
     SEND_RANGE_ZERO: "0%",
     SEND_RANGE_MAX: "MAX",
     SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
-    SEND_INSERT_ADDRESS: "Recipient Address",
-    SEND_INSERT_ADDRESS_DESCRIPTION: "Insert the recipient address ",
+    SEND_INSERT_ADDRESS: "Send your token",
+    SEND_INSERT_ADDRESS_DESCRIPTION: "Select a contact below or paste/scan an address",
+    SEND_ENTER_AN_ADDRESS: "Enter or scan an address",
+    SEND_INSERT_CONTACTS: "Contacts",
+    SEND_INSERT_ACCOUNTS: "Accounts",
     SEND_FROM: "From",
     SEND_TO: "To",
     SEND_DETAILS: "Details",
@@ -386,6 +396,12 @@ const en: BaseTranslation = {
     SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
     SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",
     SEND_DELEGATION_ERROR_SIGNATURE: "Failed to reach this URL. Please try again.",
+    SEND_CREATE_CONTACT_TITLE: "Create contact",
+    SEND_CREATE_CONTACT_SUBTITLE: "We noticed that the address you entered is not associated with any saved contacts, would you like to create one?",
+    SEND_CREATE_CONTACT_CREATE_BUTTON: "CREATE CONTACT",
+    SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: "PROCEED ANYWAY",
+    SEND_CREATE_CONTACT_NAME: "Contact name",
+    SEND_CREATE_CONTACT_ADDRESS: "Contact address",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

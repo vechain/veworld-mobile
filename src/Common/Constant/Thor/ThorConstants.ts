@@ -137,3 +137,9 @@ export const defaultNetworks: Network[] = [
     defaultMainNetwork,
     defaultTestNetwork,
 ]
+
+//https://docs.vechain.org/miscellaneous
+export const chainTagToGenesisId: Record<number, string> = {
+    74: genesisesId.main,
+    39: genesisesId.test,
+}

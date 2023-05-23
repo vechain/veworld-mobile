@@ -69,8 +69,8 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         }, [activity.id])
 
         const blockNumber = useMemo(() => {
-            return activity.txReceipt?.meta.blockNumber
-        }, [activity.txReceipt?.meta.blockNumber])
+            return activity.blockNumber
+        }, [activity.blockNumber])
 
         // Details List
         const details: Array<ActivityDetail> = [

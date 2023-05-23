@@ -34,17 +34,13 @@ export const useGasFee = (activity: Activity) => {
      * The gas fee is calculated once the transaction receipt is available.
      */
     useEffect(() => {
-        if (activity.txReceipt) {
-            const gasBn = new BigNumber(activity.txReceipt.gasUsed)
-            GasUtils.calculateFee(thor, gasBn, DEFAULT_GAS_COEFFICIENT)
-                .then(res => {
-                    setFeeInVTHO(res)
-                })
-                .catch(() =>
-                    showInfoToast("Info", "Gas fee may not be accurate."),
-                )
-        }
-    }, [activity.txReceipt, thor])
+        const gasBn = new BigNumber(activity.gasUsed)
+        GasUtils.calculateFee(thor, gasBn, DEFAULT_GAS_COEFFICIENT)
+            .then(res => {
+                setFeeInVTHO(res)
+            })
+            .catch(() => showInfoToast("Info", "Gas fee may not be accurate."))
+    }, [activity.gasUsed, thor])
 
     const VTHOexchangeRate = useAppSelector((state: RootState) =>
         selectCurrencyExchangeRate(state, VTHO.symbol),

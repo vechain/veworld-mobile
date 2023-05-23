@@ -61,6 +61,7 @@ export const CollectionAccordion = ({ collection }: Props) => {
             headerComponent={headerComponent}
             headerStyle={baseStyles.headerStyle}
             bodyComponent={bodyComponent}
+            defaultIsOpen
         />
     )
 }

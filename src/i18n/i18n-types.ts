@@ -175,6 +175,10 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_MENMONIC: string
 	/**
+	 * L​e​t​'​s​ ​g​e​t​ ​s​e​n​d​i​n​g​!
+	 */
+	BTN_LETS_GET_SENDING: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -711,6 +715,10 @@ type RootTranslation = {
 	 */
 	SB_ANALYTICS_TRACKING: string
 	/**
+	 * Y​o​u​r​ ​a​c​t​i​v​i​t​i​e​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
+	 */
+	SB_NO_TRANSACTIONS: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -1011,6 +1019,14 @@ type RootTranslation = {
 	 */
 	SUCCESS_GENERIC_VIEW_DETAIL_LINK: string
 	/**
+	 * H​e​a​d​s​ ​u​p​!
+	 */
+	HEADS_UP: string
+	/**
+	 * A​c​t​i​v​i​t​i​e​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​u​p​-​t​o​-​d​a​t​e​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
+	 */
+	ACTIVITIES_NOT_UP_TO_DATE: string
+	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
@@ -1211,13 +1227,25 @@ type RootTranslation = {
 	 */
 	SEND_INSUFFICIENT_BALANCE: string
 	/**
-	 * R​e​c​i​p​i​e​n​t​ ​A​d​d​r​e​s​s
+	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
 	SEND_INSERT_ADDRESS: string
 	/**
-	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​c​i​p​i​e​n​t​ ​a​d​d​r​e​s​s​ 
+	 * S​e​l​e​c​t​ ​a​ ​c​o​n​t​a​c​t​ ​b​e​l​o​w​ ​o​r​ ​p​a​s​t​e​/​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
+	/**
+	 * E​n​t​e​r​ ​o​r​ ​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
+	 */
+	SEND_ENTER_AN_ADDRESS: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	SEND_INSERT_CONTACTS: string
+	/**
+	 * A​c​c​o​u​n​t​s
+	 */
+	SEND_INSERT_ACCOUNTS: string
 	/**
 	 * F​r​o​m
 	 */
@@ -1282,6 +1310,30 @@ type RootTranslation = {
 	 * F​a​i​l​e​d​ ​t​o​ ​r​e​a​c​h​ ​t​h​i​s​ ​U​R​L​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: string
+	/**
+	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 */
+	SEND_CREATE_CONTACT_TITLE: string
+	/**
+	 * W​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​t​h​e​ ​a​d​d​r​e​s​s​ ​y​o​u​ ​e​n​t​e​r​e​d​ ​i​s​ ​n​o​t​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​a​n​y​ ​s​a​v​e​d​ ​c​o​n​t​a​c​t​s​,​ ​w​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​c​r​e​a​t​e​ ​o​n​e​?
+	 */
+	SEND_CREATE_CONTACT_SUBTITLE: string
+	/**
+	 * C​R​E​A​T​E​ ​C​O​N​T​A​C​T
+	 */
+	SEND_CREATE_CONTACT_CREATE_BUTTON: string
+	/**
+	 * P​R​O​C​E​E​D​ ​A​N​Y​W​A​Y
+	 */
+	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	SEND_CREATE_CONTACT_NAME: string
+	/**
+	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_CREATE_CONTACT_ADDRESS: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -1569,6 +1621,10 @@ export type TranslationFunctions = {
 	 * Backup phrase
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
+	/**
+	 * Let's get sending!
+	 */
+	BTN_LETS_GET_SENDING: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -2102,6 +2158,10 @@ export type TranslationFunctions = {
 	 */
 	SB_ANALYTICS_TRACKING: () => LocalizedString
 	/**
+	 * Your activities will appear here
+	 */
+	SB_NO_TRANSACTIONS: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -2399,6 +2459,14 @@ Please, try again later.
 	 */
 	SUCCESS_GENERIC_VIEW_DETAIL_LINK: () => LocalizedString
 	/**
+	 * Heads up!
+	 */
+	HEADS_UP: () => LocalizedString
+	/**
+	 * Activities might not be up-to-date. Check your internet connection or try later
+	 */
+	ACTIVITIES_NOT_UP_TO_DATE: () => LocalizedString
+	/**
 	 * Search a token
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
@@ -2595,13 +2663,25 @@ Please, try again later.
 	 */
 	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
 	/**
-	 * Recipient Address
+	 * Send your token
 	 */
 	SEND_INSERT_ADDRESS: () => LocalizedString
 	/**
-	 * Insert the recipient address 
+	 * Select a contact below or paste/scan an address
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
+	/**
+	 * Enter or scan an address
+	 */
+	SEND_ENTER_AN_ADDRESS: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	SEND_INSERT_CONTACTS: () => LocalizedString
+	/**
+	 * Accounts
+	 */
+	SEND_INSERT_ACCOUNTS: () => LocalizedString
 	/**
 	 * From
 	 */
@@ -2666,6 +2746,30 @@ Please, try again later.
 	 * Failed to reach this URL. Please try again.
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
+	/**
+	 * Create contact
+	 */
+	SEND_CREATE_CONTACT_TITLE: () => LocalizedString
+	/**
+	 * We noticed that the address you entered is not associated with any saved contacts, would you like to create one?
+	 */
+	SEND_CREATE_CONTACT_SUBTITLE: () => LocalizedString
+	/**
+	 * CREATE CONTACT
+	 */
+	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
+	/**
+	 * PROCEED ANYWAY
+	 */
+	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: () => LocalizedString
+	/**
+	 * Contact name
+	 */
+	SEND_CREATE_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Contact address
+	 */
+	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
 	/**
 	 * Account
 	 */
