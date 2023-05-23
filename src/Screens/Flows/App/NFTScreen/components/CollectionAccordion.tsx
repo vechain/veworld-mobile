@@ -33,7 +33,7 @@ export const CollectionAccordion = ({ collection }: Props) => {
                         address={selectedAccount!.address}
                         size={32}
                         borderRadius={16}
-                        style={baseStyles.nftPreviewImage}
+                        style={baseStyles.collectionImageMargin}
                     />
                 )}
                 <BaseText typographyFont="subTitleBold">
@@ -68,8 +68,11 @@ export const CollectionAccordion = ({ collection }: Props) => {
 
 const baseStyles = StyleSheet.create({
     headerStyle: { paddingHorizontal: 20 },
-
+    collectionImageMargin: { marginRight: 10 },
     nftPreviewImage: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
         marginRight: 10,
     },
 })

@@ -18,5 +18,5 @@ export const getNftsForContract = async (
     const response = await axios.get(
         NFTS_OWNED_PER_CONTRACT(ownerAddress, contractAddress),
     )
-    return response.data
+    return response.data || []
 }

@@ -37,6 +37,8 @@ module.exports = {
         "^~i18n(.*)": ["<rootDir>/src/i18n$1"],
         "^~Assets(.*)": ["<rootDir>/src/Assets$1"],
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
+        "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
+
         Intl: "<rootDir>/node_modules/intl/",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],

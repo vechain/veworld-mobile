@@ -78,6 +78,7 @@ export const accountStub =
                             decoded: ["0x9184e72a000"],
                         })
                     },
+
                     caller(_addr: string) {
                         return this
                     },

@@ -134,6 +134,7 @@ export const useNftContract = () => {
                         tokenId: item.tokenId,
                         owner: ownerOf,
                         tokenURI,
+                        image: "",
                     }
 
                     nftCollection.nfts.push(nft)

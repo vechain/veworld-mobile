@@ -2,7 +2,7 @@ import { NETWORK_TYPE } from "~Model"
 
 export const GH_NFT_REGISTRY = (net: NETWORK_TYPE, icon?: string) => {
     if (icon) {
-        return `"https://vechain.github.io/nft-registry/${icon}`
+        return `https://vechain.github.io/nft-registry/${icon}`
     }
 
     switch (net) {
