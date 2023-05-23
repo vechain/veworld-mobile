@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Animated, {
     measure,
@@ -21,6 +21,7 @@ type Props = {
         Animated.AnimateStyle<StyleProp<ViewStyle>>
     >
     bodyComponent: React.ReactNode
+    defaultIsOpen?: boolean
 }
 
 export const BaseAccordion = ({
@@ -30,6 +31,7 @@ export const BaseAccordion = ({
     headerClosedStyle,
     chevronContainerStyle,
     bodyComponent,
+    defaultIsOpen,
 }: Props) => {
     const theme = useTheme()
     const aref = useAnimatedRef<View>()
@@ -80,6 +82,16 @@ export const BaseAccordion = ({
             </Animated.View>
         )
     }, [dynamicStyle, chevronContainerStyle, onChevronPress, theme])
+
+    // WORK AROUND!!
+    // first time it renders set default open state
+    // I didn't find a better way to set the default open state
+    useEffect(() => {
+        if (defaultIsOpen) {
+            setTimeout(onChevronPress, 100)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <>

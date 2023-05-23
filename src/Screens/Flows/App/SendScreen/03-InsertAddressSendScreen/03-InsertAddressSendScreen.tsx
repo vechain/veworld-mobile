@@ -23,7 +23,7 @@ import {
     Routes,
 } from "~Navigation"
 import {
-    selectAccountsButSelected,
+    selectAccounts,
     selectKnownContacts,
     useAppSelector,
 } from "~Storage/Redux"
@@ -43,7 +43,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const [isValid, setIsValid] = useState(false)
     const theme = useTheme()
     const nav = useNavigation()
-    const accounts = useAppSelector(selectAccountsButSelected)
+    const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
     const foundInContactsOrAccounts = !!(
         contacts.find(
@@ -138,6 +138,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 </BaseView>
                 <BaseView mx={24}>
                     <BaseAccordion
+                        defaultIsOpen
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>
@@ -166,6 +167,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         }
                     />
                     <BaseAccordion
+                        defaultIsOpen
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>

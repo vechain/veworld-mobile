@@ -57,6 +57,7 @@ export const CreateContactBottomSheet = React.forwardRef<
                                 w={100}
                                 title={LL.COMMON_BTN_SAVE()}
                                 action={handleSaveButton}
+                                disabled={!name}
                             />
                             <BaseSpacer height={16} />
                             <BaseButton
@@ -76,7 +77,11 @@ export const CreateContactBottomSheet = React.forwardRef<
                             {LL.SEND_CREATE_CONTACT_NAME()}
                         </BaseText>
                         <BaseSpacer height={16} />
-                        <BaseTextInput value={name} setValue={setName} />
+                        <BaseTextInput
+                            value={name}
+                            setValue={setName}
+                            placeholder={LL.SEND_CREATE_CONTACT_NAME()}
+                        />
                         <BaseSpacer height={24} />
                         <BaseText typographyFont="button">
                             {LL.SEND_CREATE_CONTACT_ADDRESS()}
