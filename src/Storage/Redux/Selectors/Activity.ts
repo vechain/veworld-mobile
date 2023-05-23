@@ -1,15 +1,26 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { ActivityStatus, ActivityType } from "~Model"
+import { Activity, ActivityStatus, ActivityType } from "~Model"
 import { selectSelectedNetwork } from "./Network"
 import { selectSelectedAccount } from "./Account"
-import { AddressUtils } from "~Common"
+
+export const selectActivitiesState = (state: RootState) => state.activities
 
 /**
  * Gets all activities for ALL accounts
  * @param state
  */
-export const selectAllActivities = (state: RootState) => state.activities
+export const selectAllActivities = (state: RootState) => {
+    let allActivities: Activity[] = []
+    Object.values(state.activities).forEach(activities => {
+        allActivities = [
+            ...allActivities,
+            ...activities.transactionActivities,
+            ...activities.nonTransactionActivities,
+        ]
+    })
+    return allActivities
+}
 
 /**
  * select a specific activity by txId
@@ -33,47 +44,49 @@ export const selectCurrentNetworkActivities = createSelector(
 )
 
 /**
+ * Gets all transaction activities for the current account and network
+ */
+export const selectCurrentTransactionActivities = createSelector(
+    selectActivitiesState,
+    selectSelectedNetwork,
+    selectSelectedAccount,
+    (activitiesState, network, account) => {
+        if (
+            account.address &&
+            activitiesState[account.address]?.transactionActivities
+        ) {
+            return activitiesState[
+                account.address
+            ].transactionActivities.filter(
+                act => act.genesisId === network?.genesis.id,
+            )
+        }
+
+        return []
+    },
+)
+
+/**
  * Gets all activities for the current account and network
- * @param state
  */
 export const selectCurrentActivities = createSelector(
-    selectCurrentNetworkActivities,
+    selectActivitiesState,
+    selectSelectedNetwork,
     selectSelectedAccount,
-    (activities, account) =>
-        activities
-            // Filter account TXs and Account delegations
-            .filter(act => {
-                const byAccount = AddressUtils.compareAddresses(
-                    act.from,
-                    account.address,
-                )
+    selectCurrentTransactionActivities,
+    (activitiesState, network, account, currentTransactionActivities) => {
+        if (
+            account.address &&
+            activitiesState[account.address]?.nonTransactionActivities
+        ) {
+            return activitiesState[account.address].nonTransactionActivities
+                .filter(act => act.genesisId === network?.genesis.id)
+                .concat(currentTransactionActivities)
+                .sort((a, b) => b.timestamp - a.timestamp)
+        }
 
-                const byDelegator =
-                    act.txReceipt?.gasPayer &&
-                    AddressUtils.compareAddresses(
-                        act.txReceipt?.gasPayer,
-                        account.address,
-                    )
-
-                return byAccount || byDelegator
-            })
-            //Convert delegated transactions to a new type (DELEGATED_TRANSACTION)
-            .map(act => {
-                const isAccountDelegator =
-                    act.txReceipt &&
-                    !AddressUtils.compareAddresses(
-                        act.txReceipt.meta.txOrigin,
-                        account.address,
-                    )
-
-                if (isAccountDelegator)
-                    return {
-                        ...act,
-                        type: ActivityType.DELEGATED_TRANSACTION,
-                    }
-
-                return act
-            }),
+        return []
+    },
 )
 
 /**
@@ -84,9 +97,8 @@ export const selectActivitiesWithoutFinality = createSelector(
     allActivities =>
         allActivities.filter(
             activity =>
-                !activity.finality &&
                 activity.isTransaction &&
-                activity.status !== ActivityStatus.REVERTED,
+                activity.status === ActivityStatus.PENDING,
         ),
 )
 
