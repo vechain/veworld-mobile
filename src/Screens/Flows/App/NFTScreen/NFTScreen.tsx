@@ -17,7 +17,9 @@ export const NFTScreen = () => {
                     visibleHeightRef.current = visibleHeight
                 }}>
                 <NftScreenHeader />
+
                 <BaseSpacer height={24} />
+
                 <CollectionsList />
             </NestableScrollContainer>
         </BaseSafeArea>

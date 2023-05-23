@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ViewProps } from "react-native"
 import { SvgXml } from "react-native-svg"
 import { PicassoUtils } from "~Common"
 import { BaseView } from "~Components/Base"
@@ -19,14 +19,18 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(({ address }) => {
 type PicassoAddressIconProps = {
     address: string
     size?: number
-}
+    borderRadius?: number
+} & ViewProps
 
 export const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
-    ({ address, size = 50 }) => {
+    ({ address, size = 50, borderRadius = 8, style, ...otherProps }) => {
         const uri = PicassoUtils.getPicassoImgSrc(address).toString()
 
         return (
-            <BaseView borderRadius={8} style={picassoIconStyles.view}>
+            <BaseView
+                borderRadius={borderRadius}
+                {...otherProps}
+                style={[picassoIconStyles.view, style]}>
                 <SvgXml xml={uri} width={size} height={size} />
             </BaseView>
         )

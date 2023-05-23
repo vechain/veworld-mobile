@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { useNftContract } from "../useNftContract"
+import { useNftContract } from "./useNftContract"
 import { error as logError } from "~Common/Logger"
 import { useI18nContext } from "~i18n"
 import { NonFungibleTokeCollection, NonFungibleToken } from "~Model/Nft/Nft"
@@ -16,13 +16,7 @@ enum URIProtocol {
     ARWEAVE = "ar",
 }
 
-/**
- * Gets a token's image from the VeChain NFT API
- * @param tokenAddress
- * @param tokenId
- */
-
-export const useTokenMetadata = () => {
+export const useNft = () => {
     const [error, setError] = useState<string | undefined>(undefined)
     const { nftCollections } = useNftContract()
     const { LL } = useI18nContext()

@@ -1,36 +1,54 @@
-import React, { memo } from "react"
-import { StyleSheet, ViewProps } from "react-native"
-import Animated, { AnimateProps } from "react-native-reanimated"
-import { ColorThemeType, useThemedStyles } from "~Common"
-import { BaseView } from "~Components"
+import React, { memo, useCallback } from "react"
+import { BaseSpacer, BaseView } from "~Components"
 import { CollectionAccordion } from "./CollectionAccordion"
 import { selectNftCollections, useAppSelector } from "~Storage/Redux"
+import { FlashList } from "@shopify/flash-list"
+import { NonFungibleTokeCollection } from "~Model"
+import { isEmpty } from "lodash"
 
-interface Props extends AnimateProps<ViewProps> {}
-
-export const CollectionsList = memo(({ ...animatedViewProps }: Props) => {
-    const { styles: themedStyles } = useThemedStyles(baseStyles)
-
+export const CollectionsList = memo(() => {
     const nftCollections = useAppSelector(selectNftCollections)
 
+    const renderSeparator = useCallback(() => <BaseSpacer height={12} />, [])
+
+    const renderNftCollection = useCallback(
+        ({ item }: { item: NonFungibleTokeCollection }) => {
+            const collectionWithMissingNftData = item.nfts.filter(
+                nft => !isEmpty(nft.image),
+            )
+
+            if (collectionWithMissingNftData.length) {
+                return (
+                    <BaseView key={`${item.address}`}>
+                        <CollectionAccordion collection={item} />
+                    </BaseView>
+                )
+            } else {
+                return null
+            }
+        },
+        [],
+    )
+
     return (
-        <Animated.View style={themedStyles.container} {...animatedViewProps}>
-            {nftCollections.map((data, index) => (
-                <BaseView
-                    key={`${index}-${data.address}`}
-                    style={themedStyles.innerContainer}>
-                    <CollectionAccordion collection={data} />
-                </BaseView>
-            ))}
-        </Animated.View>
+        <>
+            {nftCollections.length && (
+                <FlashList
+                    data={nftCollections}
+                    keyExtractor={item => String(item.address)}
+                    ItemSeparatorComponent={renderSeparator}
+                    renderItem={renderNftCollection}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    estimatedItemSize={nftCollections.length * 180}
+                    estimatedListSize={{
+                        height: 180,
+                        width:
+                            180 * nftCollections.length +
+                            (nftCollections.length - 1) * 12,
+                    }}
+                />
+            )}
+        </>
     )
 })
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        container: {
-            width: "100%",
-            backgroundColor: theme.colors.background,
-        },
-        innerContainer: { paddingVertical: 12 },
-    })

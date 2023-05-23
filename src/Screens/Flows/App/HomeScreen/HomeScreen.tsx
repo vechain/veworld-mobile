@@ -6,11 +6,7 @@ import {
     AccountManagementBottomSheet,
     EditTokensBar,
 } from "./Components"
-import {
-    useBottomSheetModal,
-    useMemoizedAnimation,
-    useTokenMetadata,
-} from "~Common"
+import { useBottomSheetModal, useMemoizedAnimation, useNft } from "~Common"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { BaseSafeArea, BaseSpacer } from "~Components"
@@ -19,7 +15,7 @@ import { useTokenBalances } from "./Hooks/useTokenBalances"
 
 export const HomeScreen = () => {
     useTokenBalances()
-    useTokenMetadata()
+    useNft()
 
     const {
         ref: accountManagementBottomSheetRef,

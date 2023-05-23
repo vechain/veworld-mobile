@@ -37,6 +37,7 @@ export const useNftContract = () => {
                 selectedAccount?.address!,
             )
 
+            // get nft collection info from GitHub registry
             const collectionInfo = await getCollectionInfo(network.type)
 
             // Get nftsData for each contract address
@@ -49,6 +50,7 @@ export const useNftContract = () => {
                 nftPromises.push(nfts)
             }
 
+            // resolve promisses
             const nftResults = await allSettled(nftPromises)
 
             const nftData: NftForContractResponse[][] = nftResults.map(
@@ -60,8 +62,8 @@ export const useNftContract = () => {
             )
 
             const _nftCollections: NonFungibleTokeCollection[] = []
-            // loop over the nnft collections
 
+            // loop over the nnft collections
             for (const collection of nftData) {
                 // find collection from GH registry
                 const foundCollection = collectionInfo.find(

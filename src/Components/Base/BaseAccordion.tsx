@@ -1,5 +1,12 @@
 import React, { useCallback, useMemo } from "react"
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import {
+    LayoutRectangle,
+    Pressable,
+    StyleProp,
+    StyleSheet,
+    View,
+    ViewStyle,
+} from "react-native"
 import Animated, {
     measure,
     runOnUI,
@@ -10,7 +17,13 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import { useTheme } from "~Common"
-import { BaseIcon, BaseSpacer } from "~Components"
+import { BaseIcon } from "~Components"
+import * as Haptics from "expo-haptics"
+
+type LayoutEvent = {
+    layout: LayoutRectangle
+    target?: number | null | undefined
+}
 
 type Props = {
     headerComponent: React.ReactNode
@@ -33,10 +46,11 @@ export const BaseAccordion = ({
 }: Props) => {
     const theme = useTheme()
     const aref = useAnimatedRef<View>()
-    const open = useSharedValue(false)
+    const open = useSharedValue(true)
+    const isFirstOpen = useSharedValue(true)
     const height = useSharedValue(0)
     const progress = useDerivedValue(() =>
-        open.value ? withTiming(1) : withTiming(0),
+        open.value || isFirstOpen.value ? withTiming(1) : withTiming(0),
     )
 
     const computedHeaderStyle = useAnimatedStyle(() => {
@@ -49,7 +63,7 @@ export const BaseAccordion = ({
             height: height.value * progress.value + 0.1,
             opacity: progress.value === 0 ? 0 : 1,
         }
-    }, [height.value, progress.value])
+    }, [height.value, progress.value, isFirstOpen.value])
 
     const dynamicStyle = useAnimatedStyle(() => {
         return {
@@ -65,8 +79,23 @@ export const BaseAccordion = ({
                 height.value = measure(aref)!.height
             })()
         }
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         open.value = !open.value
     }, [aref, height, open])
+
+    const inFirstOpenLayout = useCallback(
+        ({ nativeEvent }: { nativeEvent: LayoutEvent }) => {
+            runOnUI(() => {
+                "worklet"
+
+                if (isFirstOpen.value) {
+                    height.value = nativeEvent.layout.height
+                    isFirstOpen.value = false
+                }
+            })()
+        },
+        [height, isFirstOpen],
+    )
 
     const renderCollapseIcon = useMemo(() => {
         return (
@@ -75,28 +104,31 @@ export const BaseAccordion = ({
                     name={"chevron-down"}
                     color={theme.colors.text}
                     size={36}
-                    action={onChevronPress}
                     testID={"chevron"}
                 />
             </Animated.View>
         )
-    }, [dynamicStyle, chevronContainerStyle, onChevronPress, theme])
+    }, [dynamicStyle, chevronContainerStyle, theme])
 
     return (
         <>
-            <Animated.View
-                style={[
-                    styles.headerContainer,
-                    headerStyle,
-                    computedHeaderStyle,
-                ]}>
-                {headerComponent}
-                {renderCollapseIcon}
-            </Animated.View>
+            <Pressable onPress={onChevronPress}>
+                <Animated.View
+                    style={[
+                        styles.headerContainer,
+                        headerStyle,
+                        computedHeaderStyle,
+                    ]}>
+                    {headerComponent}
+                    {renderCollapseIcon}
+                </Animated.View>
+            </Pressable>
             <Animated.View
                 style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
-                <View ref={aref} style={styles.bodyContent}>
-                    <BaseSpacer height={2} />
+                <View
+                    ref={aref}
+                    style={styles.bodyContent}
+                    onLayout={inFirstOpenLayout}>
                     {bodyComponent}
                 </View>
             </Animated.View>
@@ -111,6 +143,9 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
     },
-    bodyContainer: { width: "100%", overflow: "hidden" },
+    bodyContainer: {
+        width: "100%",
+        overflow: "hidden",
+    },
     bodyContent: { width: "100%" },
 })
