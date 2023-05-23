@@ -5,6 +5,7 @@ import { selectNftCollections, useAppSelector } from "~Storage/Redux"
 import { FlashList } from "@shopify/flash-list"
 import { NonFungibleTokeCollection } from "~Model"
 import { isEmpty } from "lodash"
+import { NftSkeleton } from "./NftSkeleton"
 
 export const CollectionsList = memo(() => {
     const nftCollections = useAppSelector(selectNftCollections)
@@ -32,7 +33,7 @@ export const CollectionsList = memo(() => {
 
     return (
         <>
-            {nftCollections.length && (
+            {!isEmpty(nftCollections) ? (
                 <FlashList
                     data={nftCollections}
                     keyExtractor={item => String(item.address)}
@@ -48,6 +49,8 @@ export const CollectionsList = memo(() => {
                             (nftCollections.length - 1) * 12,
                     }}
                 />
+            ) : (
+                <NftSkeleton />
             )}
         </>
     )

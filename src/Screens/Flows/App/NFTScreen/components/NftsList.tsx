@@ -40,7 +40,7 @@ export const NftsList = ({ nfts }: Props) => {
                         <TouchableOpacity onPress={() => onNftPress(item)}>
                             <BaseView style={[themedStyles.nftCard]}>
                                 <BaseImage
-                                    uri={item.image!}
+                                    uri={item.image}
                                     w={ITEM_SIZE}
                                     h={ITEM_SIZE}
                                 />

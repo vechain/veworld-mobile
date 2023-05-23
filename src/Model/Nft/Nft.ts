@@ -30,7 +30,7 @@ export interface NonFungibleToken extends TokenMetadata {
 export interface TokenMetadata {
     name?: string
     description?: string
-    image?: string
+    image: string
     edition?: number
     tokenId?: number
     rank?: number

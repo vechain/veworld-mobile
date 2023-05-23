@@ -10,6 +10,7 @@ import {
     getImageUrlArweave,
 } from "~Networking"
 import { setNfts, useAppDispatch } from "../../../Storage/Redux"
+import { NFTPlaceholder } from "~Assets"
 
 enum URIProtocol {
     IPFS = "ipfs",
@@ -70,7 +71,7 @@ export const useNft = () => {
                         const _nft = {
                             ...nft,
                             ...nftMeta?.tokenMetadata,
-                            image: nftMeta?.imageUrl,
+                            image: nftMeta?.imageUrl ?? NFTPlaceholder,
                         }
 
                         _nftFinal.push(_nft)
