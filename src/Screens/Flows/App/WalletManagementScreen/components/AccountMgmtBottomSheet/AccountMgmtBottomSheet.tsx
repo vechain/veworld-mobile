@@ -91,7 +91,7 @@ export const AccountMgmtBottomSheet = React.forwardRef<
                         viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => {
                             const isSelected = AddressUtils.compareAddresses(
-                                selectedAccount?.address,
+                                selectedAccount.address,
                                 item.address,
                             )
 

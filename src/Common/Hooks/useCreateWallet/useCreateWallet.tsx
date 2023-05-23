@@ -9,7 +9,7 @@ import {
     setMnemonic,
     setAppLockStatus,
 } from "~Storage/Redux/Actions"
-import { selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectAccountsState } from "~Storage/Redux/Selectors"
 import { error } from "~Common/Logger"
 import { useBiometrics } from "../useBiometrics"
 /**
@@ -23,7 +23,7 @@ export const useCreateWallet = () => {
     const { getDeviceFromMnemonic } = useDeviceUtils()
     const biometrics = useBiometrics()
     const dispatch = useAppDispatch()
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
     const [isComplete, setIsComplete] = useState(false)
 
     /**
@@ -65,7 +65,6 @@ export const useCreateWallet = () => {
                 )
 
                 dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
-
                 if (!selectedAccount)
                     dispatch(selectAccount({ address: newAccount.address }))
 

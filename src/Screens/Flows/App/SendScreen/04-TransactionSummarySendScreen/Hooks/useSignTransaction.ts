@@ -46,7 +46,7 @@ export const useSignTransaction = ({
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(selectDevice(account?.rootAddress))
+    const senderDevice = useAppSelector(selectDevice(account.rootAddress))
 
     const dispatch = useAppDispatch()
     const thorClient = useThor()
@@ -77,7 +77,7 @@ export const useSignTransaction = ({
         if (!wallet.mnemonic)
             error("Mnemonic wallet can't have an empty mnemonic")
 
-        if (!account?.index && account?.index !== 0)
+        if (!account.index && account.index !== 0)
             throw new Error("account index is empty")
 
         const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
@@ -122,7 +122,7 @@ export const useSignTransaction = ({
                 const accountDelegationSignature = await getSignature(
                     tx,
                     delegationWallet,
-                    account?.address,
+                    account.address,
                 )
                 return Buffer.concat([
                     senderSignature,
@@ -169,10 +169,7 @@ export const useSignTransaction = ({
                     )
                 },
             )
-            account?.address &&
-                (await dispatch(
-                    updateAccountBalances(thorClient, account.address),
-                ))
+            await dispatch(updateAccountBalances(thorClient, account.address))
         } catch (e) {
             error(e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
