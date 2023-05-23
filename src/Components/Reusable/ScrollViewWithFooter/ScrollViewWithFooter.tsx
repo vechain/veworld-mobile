@@ -8,7 +8,7 @@ interface Props {
 
 export const ScrollViewWithFooter = ({ children, footer }: Props) => {
     return (
-        <BaseView flexGrow={1}>
+        <BaseView h={100} alignItems={"stretch"}>
             <BaseScrollView>
                 <BaseView>{children}</BaseView>
                 {/** here we can add a fade like effect */}

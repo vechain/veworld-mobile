@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { ColorThemeType, FormattingUtils, useThemedStyles } from "~Common"
 import {
     AccountIcon,
@@ -14,12 +14,13 @@ type Props = {
     account: AccountWithDevice
     onPress?: (account: AccountWithDevice) => void
     selected?: boolean
+    containerStyle?: StyleProp<ViewStyle>
 }
 export const AccountCard: React.FC<Props> = memo(
-    ({ account, onPress, selected }) => {
+    ({ account, onPress, selected, containerStyle }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
         return (
-            <BaseView w={100} flexDirection="row">
+            <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
                     action={() => onPress?.(account)}
                     justifyContent="space-between"

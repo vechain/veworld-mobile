@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     scrollView: {
+        height: "100%",
         width: "100%",
     },
 })
