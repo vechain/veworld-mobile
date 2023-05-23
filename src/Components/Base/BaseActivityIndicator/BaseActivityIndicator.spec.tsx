@@ -16,6 +16,7 @@ describe("BaseActivityIndicator", () => {
 
         const activityIndicator = await screen.findByTestId(
             "activity-indicator",
+            { timeout: 1000 },
         )
         expect(activityIndicator).toBeVisible()
     })
@@ -28,9 +29,7 @@ describe("BaseActivityIndicator", () => {
             },
         )
 
-        const activityIndicator = await screen.queryByTestId(
-            "activity-indicator",
-        )
+        const activityIndicator = screen.queryByTestId("activity-indicator")
         expect(activityIndicator).toBeNull()
     })
 
@@ -46,7 +45,7 @@ describe("BaseActivityIndicator", () => {
             },
         )
 
-        await screen.findByTestId("activity-indicator")
+        await screen.findByTestId("activity-indicator", { timeout: 1000 })
         await screen.findByText("TestText")
     })
 })
