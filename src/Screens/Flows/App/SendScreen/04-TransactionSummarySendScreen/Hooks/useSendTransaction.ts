@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Transaction, abi } from "thor-devkit"
-import { FormattingUtils, GasUtils, HexUtils, VET } from "~Common"
+import { FormattingUtils, GasUtils, VET } from "~Common"
+import { HexUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult, FungibleTokenWithBalance } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"

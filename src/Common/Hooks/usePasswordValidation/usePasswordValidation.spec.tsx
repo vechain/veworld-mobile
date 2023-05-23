@@ -1,10 +1,10 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { usePasswordValidation } from "./usePasswordValidation"
-import { CryptoUtils } from "~Common/Utils"
+import { CryptoUtils } from "~Utils"
 import { selectPinValidationString } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
 
-jest.mock("~Common/Utils")
+jest.mock("~Utils")
 jest.mock("~Common/Constant")
 jest.mock("~Common/Logger")
 jest.mock("~Storage/Redux/Selectors")

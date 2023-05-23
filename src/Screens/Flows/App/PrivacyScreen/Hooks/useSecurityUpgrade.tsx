@@ -1,6 +1,7 @@
 import { useCallback } from "react"
-import { CryptoUtils, useWalletSecurity, error } from "~Common"
+import { useWalletSecurity, error } from "~Common"
 import { LocalDevice, SecurityLevelType } from "~Model"
+import { CryptoUtils } from "~Utils"
 import {
     selectLocalDevices,
     useAppDispatch,
