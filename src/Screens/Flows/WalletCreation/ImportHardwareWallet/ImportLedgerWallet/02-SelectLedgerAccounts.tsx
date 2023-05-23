@@ -206,14 +206,14 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                     </BaseText>
 
                     <BaseSpacer height={20} />
-                    <BaseView flexDirection="row" w={100}>
-                        <BaseText typographyFont="body" my={10}>
-                            {status}
-                        </BaseText>
-                        {status !== LedgerStatus.READY && (
+                    {status !== LedgerStatus.READY && (
+                        <BaseView flexDirection="row" w={100}>
+                            <BaseText typographyFont="body" my={10}>
+                                {status}
+                            </BaseText>
                             <BaseButton title="Refresh" action={connect} />
-                        )}
-                    </BaseView>
+                        </BaseView>
+                    )}
                     <BaseView style={themedStyles.container} pb={20}>
                         {!!ledgerAccounts.length && (
                             <FlashList

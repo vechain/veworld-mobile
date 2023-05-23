@@ -16,10 +16,11 @@ export const BaseActivityIndicator: React.FC<Props> = ({
 }) => {
     return (
         <BaseModal
+            animationType="fade"
+            presentationStyle="overFullScreen"
             isOpen={isVisible}
             onClose={onHide}
-            transparent={true}
-            presentationStyle="overFullScreen">
+            transparent={true}>
             <BaseView flex={1} alignItems="center" justifyContent="center">
                 <ActivityIndicator size="large" />
                 {text && <BaseText>{text}</BaseText>}

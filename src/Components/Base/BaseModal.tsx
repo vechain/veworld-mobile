@@ -13,6 +13,7 @@ export const BaseModal: React.FC<IBaseModal> = ({
     isOpen,
     onClose,
     children,
+    transparent = false,
     ...otherProps
 }) => {
     return (
@@ -20,13 +21,15 @@ export const BaseModal: React.FC<IBaseModal> = ({
             <Modal
                 visible={isOpen}
                 animationType="slide"
-                transparent={false}
+                transparent={transparent}
                 hardwareAccelerated
                 presentationStyle="fullScreen"
                 onDismiss={onClose}
                 onRequestClose={onClose}
                 {...otherProps}>
-                <BaseSafeArea grow={1}>
+                <BaseSafeArea
+                    bg={transparent ? "transparent" : undefined}
+                    grow={1}>
                     <BaseSpacer height={40} />
                     <BaseView
                         alignItems="center"
