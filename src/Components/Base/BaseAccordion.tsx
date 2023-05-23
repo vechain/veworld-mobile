@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react"
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Animated, {
     measure,
     runOnUI,
@@ -59,7 +59,7 @@ export const BaseAccordion = ({
         }
     }, [])
 
-    const onChevronPress = useCallback(() => {
+    const onHeaderPress = useCallback(() => {
         if (height.value === 0) {
             runOnUI(() => {
                 "worklet"
@@ -76,34 +76,35 @@ export const BaseAccordion = ({
                     name={"chevron-down"}
                     color={theme.colors.text}
                     size={36}
-                    action={onChevronPress}
                     testID={"chevron"}
                 />
             </Animated.View>
         )
-    }, [dynamicStyle, chevronContainerStyle, onChevronPress, theme])
+    }, [dynamicStyle, chevronContainerStyle, theme])
 
     // WORK AROUND!!
     // first time it renders set default open state
     // I didn't find a better way to set the default open state
     useEffect(() => {
         if (defaultIsOpen) {
-            setTimeout(onChevronPress, 100)
+            setTimeout(onHeaderPress, 100)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
         <>
-            <Animated.View
-                style={[
-                    styles.headerContainer,
-                    headerStyle,
-                    computedHeaderStyle,
-                ]}>
-                {headerComponent}
-                {renderCollapseIcon}
-            </Animated.View>
+            <Pressable onPress={onHeaderPress}>
+                <Animated.View
+                    style={[
+                        styles.headerContainer,
+                        headerStyle,
+                        computedHeaderStyle,
+                    ]}>
+                    {headerComponent}
+                    {renderCollapseIcon}
+                </Animated.View>
+            </Pressable>
             <Animated.View
                 style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
                 <View ref={aref} style={styles.bodyContent}>
