@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { CryptoUtils } from "~Common"
+import { CryptoUtils } from "~Utils"
 import { Device } from "~Model"
 
 type Props = {

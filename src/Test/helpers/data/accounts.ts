@@ -5,8 +5,7 @@ import { mockLedgerAccount } from "./ledger"
 import { HDNode } from "thor-devkit"
 import { Buffer } from "buffer"
 import { WalletAccount } from "~Model"
-import { AddressUtils } from "~Utils"
-import CryptoUtils from "~Common/Utils/CryptoUtils"
+import { AddressUtils, CryptoUtils } from "~Utils"
 
 export const account1D1: WalletAccount = {
     alias: "D1 - Account 1",

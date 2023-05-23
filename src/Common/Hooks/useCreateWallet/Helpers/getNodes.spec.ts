@@ -1,5 +1,5 @@
 import { HDNode } from "thor-devkit"
-import { CryptoUtils } from "~Common/Utils"
+import { CryptoUtils } from "~Utils"
 import { DEVICE_TYPE } from "~Model"
 import { getNodes } from "./getNodes"
 

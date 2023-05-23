@@ -3,8 +3,8 @@ import useWebSocket from "react-use-websocket"
 import { debug, error, info, warn } from "~Common"
 import { VET } from "~Common/Constant/Token"
 import { useCounter, useToastNotification } from "~Common/Hooks"
-import { BloomUtils, TransfersUtils, URLUtils } from "~Common/Utils"
-import { AddressUtils } from "~Utils"
+import { TransfersUtils, URLUtils } from "~Common/Utils"
+import { AddressUtils, BloomUtils } from "~Utils"
 
 import { useThor } from "~Components"
 import {

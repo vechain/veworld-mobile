@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react"
-import { PasswordUtils, CryptoUtils } from "~Common/Utils"
+import { PasswordUtils } from "~Common/Utils"
+import { CryptoUtils } from "~Utils"
 import { WALLET_STATUS } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
