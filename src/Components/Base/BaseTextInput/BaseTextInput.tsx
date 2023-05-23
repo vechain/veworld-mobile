@@ -24,6 +24,7 @@ type Props = {
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
     setValue?: (s: string) => void
+    disabled?: boolean
 } & TextInputProps
 
 export const BaseTextInput = memo(
@@ -38,6 +39,7 @@ export const BaseTextInput = memo(
         onIconPress,
         setValue,
         containerStyle,
+        disabled,
         ...otherProps
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles(!!errorMessage))
@@ -69,6 +71,8 @@ export const BaseTextInput = memo(
                         value={value}
                         autoCapitalize="none"
                         testID={testID}
+                        editable={disabled}
+                        selectTextOnFocus={disabled}
                         {...otherProps}
                     />
                     {rightIcon && (
