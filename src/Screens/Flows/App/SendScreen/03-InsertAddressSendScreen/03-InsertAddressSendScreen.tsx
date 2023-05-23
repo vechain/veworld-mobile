@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { AddressUtils, debug, useTheme } from "~Common"
+import { AddressUtils, debug, useBottomSheetModal, useTheme } from "~Common"
 import {
     AccountCard,
     BackButtonHeader,
@@ -28,6 +28,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
+import { CreateContactBottomSheet } from "./Components/CreateContactBottomSheet/CreateContactBottomSheet"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -44,20 +45,25 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const accounts = useAppSelector(selectAccountsButSelected)
     const contacts = useAppSelector(selectKnownContacts)
-    // const foundInContactsOrAccounts = !!(
-    //     contacts.find(
-    //         contact => contact.address.toLowerCase() === address.toLowerCase(),
-    //     ) ||
-    //     accounts.find(
-    //         account => account.address.toLowerCase() === address.toLowerCase(),
-    //     )
-    // )
+    const foundInContactsOrAccounts = !!(
+        contacts.find(
+            contact => contact.address.toLowerCase() === address.toLowerCase(),
+        ) ||
+        accounts.find(
+            account => account.address.toLowerCase() === address.toLowerCase(),
+        )
+    )
+    const {
+        ref: refCreateContactBottomSheet,
+        onOpen: openCreateContactSheet,
+        onClose: closeCreateContactSheet,
+    } = useBottomSheetModal()
 
     const handleAddressChange = (addressRaw: string) => {
         const newAddress = addressRaw.toLowerCase()
         setErrorMessage("")
         setIsValid(false)
-        setAddress(newAddress)
+        setAddress(newAddress.toLowerCase())
         if (AddressUtils.isValid(newAddress)) {
             debug("Valid address")
             setIsValid(true)
@@ -66,7 +72,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const onOpenCamera = () => {
         nav.navigate(Routes.CAMERA, { onScan: handleAddressChange })
     }
-    const goToResumeTransaction = () => {
+    const goToResumeStep = () => {
         nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
             token,
             amount,
@@ -74,19 +80,29 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             initialRoute: initialRoute ?? "",
         })
     }
+    const checkIfContactExist = () => {
+        if (foundInContactsOrAccounts) {
+            goToResumeStep()
+        } else {
+            openCreateContactSheet()
+        }
+    }
 
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
             <ScrollViewWithFooter
                 footer={
-                    <BaseButton
-                        style={styles.nextButton}
-                        mx={24}
-                        title={LL.COMMON_BTN_NEXT()}
-                        disabled={!isValid}
-                        action={goToResumeTransaction}
-                    />
+                    <>
+                        <BaseButton
+                            style={styles.nextButton}
+                            mx={24}
+                            title={LL.COMMON_BTN_NEXT()}
+                            disabled={!isValid}
+                            action={checkIfContactExist}
+                        />
+                        <BaseSpacer height={96} />
+                    </>
                 }>
                 <BaseView mx={24}>
                     <BaseText typographyFont="title">
@@ -180,6 +196,12 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     />
                 </BaseView>
             </ScrollViewWithFooter>
+            <CreateContactBottomSheet
+                ref={refCreateContactBottomSheet}
+                handleClose={closeCreateContactSheet}
+                goToResumeStep={goToResumeStep}
+                address={address}
+            />
         </BaseSafeArea>
     )
 }

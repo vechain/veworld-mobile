@@ -1274,6 +1274,30 @@ type RootTranslation = {
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: string
 	/**
+	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 */
+	SEND_CREATE_CONTACT_TITLE: string
+	/**
+	 * W​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​t​h​e​ ​a​d​d​r​e​s​s​ ​y​o​u​ ​e​n​t​e​r​e​d​ ​i​s​ ​n​o​t​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​a​n​y​ ​s​a​v​e​d​ ​c​o​n​t​a​c​t​s​,​ ​w​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​c​r​e​a​t​e​ ​o​n​e​?
+	 */
+	SEND_CREATE_CONTACT_SUBTITLE: string
+	/**
+	 * C​R​E​A​T​E​ ​C​O​N​T​A​C​T
+	 */
+	SEND_CREATE_CONTACT_CREATE_BUTTON: string
+	/**
+	 * P​R​O​C​E​E​D​ ​A​N​Y​W​A​Y
+	 */
+	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	SEND_CREATE_CONTACT_NAME: string
+	/**
+	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_CREATE_CONTACT_ADDRESS: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -2649,6 +2673,30 @@ Please, try again later.
 	 * Failed to reach this URL. Please try again.
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
+	/**
+	 * Create contact
+	 */
+	SEND_CREATE_CONTACT_TITLE: () => LocalizedString
+	/**
+	 * We noticed that the address you entered is not associated with any saved contacts, would you like to create one?
+	 */
+	SEND_CREATE_CONTACT_SUBTITLE: () => LocalizedString
+	/**
+	 * CREATE CONTACT
+	 */
+	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
+	/**
+	 * PROCEED ANYWAY
+	 */
+	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: () => LocalizedString
+	/**
+	 * Contact name
+	 */
+	SEND_CREATE_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Contact address
+	 */
+	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
 	/**
 	 * Account
 	 */
