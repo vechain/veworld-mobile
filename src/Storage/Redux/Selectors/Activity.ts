@@ -29,7 +29,7 @@ export const selectCurrentNetworkActivities = createSelector(
     selectAllActivities,
     selectSelectedNetwork,
     (activities, network) =>
-        activities.filter(act => act.genesisId === network?.genesis.id),
+        activities.filter(act => act.genesisId === network.genesis.id),
 )
 
 /**
@@ -45,14 +45,14 @@ export const selectCurrentActivities = createSelector(
             .filter(act => {
                 const byAccount = AddressUtils.compareAddresses(
                     act.from,
-                    account?.address,
+                    account.address,
                 )
 
                 const byDelegator =
                     act.txReceipt?.gasPayer &&
                     AddressUtils.compareAddresses(
                         act.txReceipt?.gasPayer,
-                        account?.address,
+                        account.address,
                     )
 
                 return byAccount || byDelegator
@@ -63,7 +63,7 @@ export const selectCurrentActivities = createSelector(
                     act.txReceipt &&
                     !AddressUtils.compareAddresses(
                         act.txReceipt.meta.txOrigin,
-                        account?.address,
+                        account.address,
                     )
 
                 if (isAccountDelegator)

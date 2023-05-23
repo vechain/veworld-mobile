@@ -133,24 +133,18 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     }
 
     const handleAddCustomToken = () => {
-        if (account?.address) {
-            dispatch(addOrUpdateCustomToken(newCustomToken!!))
-            dispatch(
-                addTokenBalance({
-                    balance: "0",
-                    accountAddress: account.address,
-                    tokenAddress: newCustomToken!!.address,
-                    timeUpdated: new Date().toISOString(),
-                    position: tokenBalances.length,
-                    genesisId: network.genesis.id,
-                }),
-            )
-            onClose()
-        } else {
-            throw new Error(
-                "Trying to select an official token without an account selected",
-            )
-        }
+        dispatch(addOrUpdateCustomToken(newCustomToken!!))
+        dispatch(
+            addTokenBalance({
+                balance: "0",
+                accountAddress: account.address,
+                tokenAddress: newCustomToken!!.address,
+                timeUpdated: new Date().toISOString(),
+                position: tokenBalances.length,
+                genesisId: network.genesis.id,
+            }),
+        )
+        onClose()
     }
 
     const onOpenCamera = () => {

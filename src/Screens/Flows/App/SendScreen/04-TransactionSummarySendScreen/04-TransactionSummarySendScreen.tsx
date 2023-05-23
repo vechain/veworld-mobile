@@ -135,16 +135,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                     <BaseSpacer height={8} />
                                     <BaseView flexDirection="row">
                                         <AccountIcon
-                                            address={account?.address || ""}
+                                            address={account.address}
                                         />
                                         <BaseSpacer width={8} />
                                         <BaseView>
                                             <BaseText typographyFont="subSubTitle">
-                                                {account?.alias}
+                                                {account.alias}
                                             </BaseText>
                                             <BaseText typographyFont="captionRegular">
                                                 {FormattingUtils.humanAddress(
-                                                    account?.address || "",
+                                                    account.address,
                                                 )}
                                             </BaseText>
                                         </BaseView>
