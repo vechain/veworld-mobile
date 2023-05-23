@@ -1,11 +1,6 @@
 import { Transaction } from "thor-devkit"
-import {
-    ActivityUtils,
-    DIRECTIONS,
-    ThorConstants,
-    TransactionUtils,
-    VET,
-} from "~Common"
+import { DIRECTIONS, ThorConstants, TransactionUtils, VET } from "~Common"
+import { ActivityUtils } from "~Utils"
 import { Activity, ActivityStatus, FungibleTokenActivity } from "~Model"
 import { FetchTransactionsResponse } from "./Types"
 

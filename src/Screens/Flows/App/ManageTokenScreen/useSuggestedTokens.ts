@@ -1,5 +1,6 @@
 import { useEffect } from "react"
-import { BalanceUtils, error } from "~Common"
+import { error } from "~Common"
+import { BalanceUtils } from "~Utils"
 import { useThor } from "~Components"
 import {
     selectNonVechainFungibleTokens,

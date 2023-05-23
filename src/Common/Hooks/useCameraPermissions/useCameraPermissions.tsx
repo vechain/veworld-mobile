@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { Linking } from "react-native"
-import { AlertUtils } from "~Common/Utils"
+import { AlertUtils } from "~Utils"
 import { useAppState } from "../useAppState"
 import { AppStateType } from "~Model"
 import { Camera } from "expo-camera"

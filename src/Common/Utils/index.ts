@@ -1,9 +1,6 @@
-import AlertUtils from "./AlertUtils"
 // import AccountsUtils from "./AccountsUtils"
 // import AliasUtils from "./AliasUtils"
 // import AsyncUtils from "./AsyncUtils"
-import BalanceUtils from "./BalanceUtils"
-import BiometricsUtils from "./BiometricsUtils"
 import BloomUtils from "./BloomUtils"
 import CryptoUtils from "./CryptoUtils"
 // import FormUtils from "./FormUtils"
@@ -28,14 +25,11 @@ import FormUtils from "./FormUtils"
 import ConnectionUtils from "./ConnectionUtils"
 import DateUtils from "./DateUtils"
 import * as ReanimatedUtils from "./Reanimated"
-import ActivityUtils from "./ActivityUtils"
 
 export {
     // AliasUtils,
     // AsyncUtils,
     // AccountsUtils,
-    BalanceUtils,
-    BiometricsUtils,
     BloomUtils,
     CryptoUtils,
     // FormUtils,
@@ -47,7 +41,6 @@ export {
     PlatformUtils,
     SeedUtils,
     LockScreenUtils,
-    AlertUtils,
     PicassoUtils,
     StringUtils,
     // SignatureUtils,
@@ -61,5 +54,4 @@ export {
     DateUtils,
     LocaleUtils,
     ReanimatedUtils,
-    ActivityUtils,
 }
