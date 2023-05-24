@@ -89,7 +89,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     }
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="Insert_Address_Send_Screen">
             <BackButtonHeader />
             <ScrollViewWithFooter
                 footer={

@@ -126,7 +126,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="Activity_Details_Screen">
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}

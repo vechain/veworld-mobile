@@ -201,7 +201,7 @@ export const HistoryScreen = () => {
     }, [onStartTransactingPress, styles.noActivitiesButton])
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="History_Screen">
             <BaseIcon
                 style={styles.backIcon}
                 size={36}

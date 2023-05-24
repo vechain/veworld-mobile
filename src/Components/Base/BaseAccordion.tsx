@@ -63,7 +63,7 @@ export const BaseAccordion = ({
         if (height.value === 0) {
             runOnUI(() => {
                 "worklet"
-                height.value = measure(aref)!.height
+                height.value = measure(aref)?.height ?? 0
             })()
         }
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)

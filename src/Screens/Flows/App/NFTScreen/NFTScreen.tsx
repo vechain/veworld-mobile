@@ -8,7 +8,7 @@ export const NFTScreen = () => {
     const paddingBottom = useBottomTabBarHeight()
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="NFT_Screen">
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom }}>

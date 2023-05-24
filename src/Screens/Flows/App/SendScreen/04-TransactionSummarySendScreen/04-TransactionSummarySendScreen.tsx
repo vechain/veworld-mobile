@@ -154,8 +154,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             </BaseView>
         )
     }
+
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="Transaction_Summary_Send_Screen">
             <ScrollViewWithFooter
                 footer={
                     <BaseButton

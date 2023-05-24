@@ -14,7 +14,7 @@ type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
 export const NFTDetailScreen = ({ route }: Props) => {
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
             <BaseText>{route.params.nft.name}</BaseText>
             <BaseText>{route.params.nft.description}</BaseText>
             <BaseImage uri={route.params.nft.image ?? ""} w={200} h={200} />
