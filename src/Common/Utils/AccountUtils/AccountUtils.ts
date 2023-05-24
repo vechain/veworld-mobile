@@ -1,6 +1,6 @@
 import { debug } from "~Common/Logger"
 import { BaseDevice, WalletAccount } from "~Model"
-import { getAddressFromXPub } from "../AddressUtils/AddressUtils"
+import { AddressUtils } from "~Utils"
 
 export const nextAlias = (accountId: number) => `Account ${accountId}`
 
@@ -26,7 +26,10 @@ export const getAccountForIndex = (
     debug(`Getting account for device, index ${walletIndex}`)
     if (!device.xPub) throw new Error("The XPub can't be null for HD devices")
 
-    const accountAddress = getAddressFromXPub(device.xPub, walletIndex)
+    const accountAddress = AddressUtils.getAddressFromXPub(
+        device.xPub,
+        walletIndex,
+    )
 
     return {
         alias: nextAlias(accountId),
