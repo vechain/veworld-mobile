@@ -3,9 +3,12 @@ export enum Routes {
     ONBOARDING = "Onboarding",
     WALLET_TUTORIAL = "Wallet_Tutorial",
     WALLET_SETUP = "Wallet_Setup",
+    IMPORT_HW_LEDGER_SELECT_DEVICE = "Import_Ledger_Select_Device",
+    IMPORT_HW_LEDGER_SELECT_ACCOUNTS = "Import_Ledger_Select_Accounts",
     NEW_MNEMONIC = "New_Mnemonic",
     CONFIRM_MNEMONIC = "Confirm_Mnemonic",
     IMPORT_MNEMONIC = "Import_Mnemonic",
+
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",
     SETTINGS = "Settings",

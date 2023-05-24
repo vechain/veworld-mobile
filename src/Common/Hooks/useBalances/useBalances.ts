@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { BalanceUtils } from "~Common/Utils"
+import { BalanceUtils } from "~Utils"
 import { TokenWithCompleteInfo } from "~Model"
 
 export const useBalances = ({ token }: { token: TokenWithCompleteInfo }) => {

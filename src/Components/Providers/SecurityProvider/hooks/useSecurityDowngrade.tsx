@@ -1,5 +1,6 @@
 import { useCallback } from "react"
-import { BiometricsUtils, useBiometrics } from "~Common"
+import { useBiometrics } from "~Common"
+import { BiometricsUtils } from "~Utils"
 import { SecurityLevelType } from "~Model"
 import {
     selectHasOnboarded,

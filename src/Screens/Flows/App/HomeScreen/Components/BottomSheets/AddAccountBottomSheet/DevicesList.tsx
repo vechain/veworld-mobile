@@ -2,15 +2,21 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 import { ColorThemeType, useThemedStyles } from "~Common"
-import { compareAddresses } from "~Common/Utils/AddressUtils/AddressUtils"
-import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
-import { Device } from "~Model"
+import { AddressUtils } from "~Utils"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+    LedgerBadge,
+} from "~Components"
+import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 
 type Props = {
-    selectedDevice?: Device
-    onDevicePress: (device: Device) => void
+    selectedDevice?: BaseDevice
+    onDevicePress: (device: BaseDevice) => void
     inBottomSheet?: boolean
 }
 export const DevicesList: React.FC<Props> = ({
@@ -21,14 +27,14 @@ export const DevicesList: React.FC<Props> = ({
     const devices = useAppSelector(selectDevices())
 
     const handleOnDevicePress = useCallback(
-        (device: Device) => () => {
+        (device: BaseDevice) => () => {
             onDevicePress(device)
         },
         [onDevicePress],
     )
     const renderItem = useCallback(
-        ({ item }: { item: Device }) => {
-            const isSelected = compareAddresses(
+        ({ item }: { item: BaseDevice }) => {
+            const isSelected = AddressUtils.compareAddresses(
                 item.rootAddress,
                 selectedDevice?.rootAddress,
             )
@@ -40,9 +46,12 @@ export const DevicesList: React.FC<Props> = ({
                     key={item.rootAddress}
                     innerContainerStyle={style}
                     action={handleOnDevicePress(item)}>
-                    <BaseText typographyFont="subSubTitle">
-                        {item.alias}
-                    </BaseText>
+                    <BaseView flexDirection="row">
+                        {item.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                        <BaseText pl={8} typographyFont="subSubTitle">
+                            {item.alias}
+                        </BaseText>
+                    </BaseView>
                 </BaseTouchableBox>
             )
         },

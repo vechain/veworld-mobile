@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { Linking } from "react-native"
-import { AlertUtils, BiometricsUtils } from "~Common/Utils"
+import { AlertUtils, BiometricsUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 /**

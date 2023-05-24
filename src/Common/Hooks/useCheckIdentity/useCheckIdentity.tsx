@@ -1,5 +1,6 @@
 import React, { useCallback } from "react"
-import { BiometricsUtils, useDisclosure, useWalletSecurity } from "~Common"
+import { useDisclosure, useWalletSecurity } from "~Common"
+import { BiometricsUtils } from "~Utils"
 import { RequireUserPassword } from "~Components"
 
 type Props = {

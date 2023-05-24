@@ -1,4 +1,4 @@
-import { AddressUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 import { account1D1 } from "../../data"
 
 /**

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { useAppState } from "../useAppState"
-import { BiometricsUtils } from "~Common/Utils"
+import { BiometricsUtils } from "~Utils"
 import { AppStateType, BiometricState, SecurityLevelType } from "~Model"
 import { isEqual } from "lodash"
 

@@ -1,5 +1,6 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { AddressUtils, VET, VTHO } from "~Common"
+import { VET, VTHO } from "~Common"
+import { AddressUtils } from "~Utils"
 import { Balance } from "~Model"
 
 export type BalanceState = Balance[]

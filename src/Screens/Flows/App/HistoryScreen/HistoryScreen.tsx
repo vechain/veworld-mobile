@@ -215,9 +215,9 @@ export const HistoryScreen = () => {
                 <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
 
                 <ChangeAccountButtonPill
-                    title={selectedAccount?.alias ?? LL.WALLET_LABEL_ACCOUNT()}
+                    title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
                     text={FormattingUtils.humanAddress(
-                        selectedAccount?.address ?? "",
+                        selectedAccount.address ?? "",
                         5,
                         4,
                     )}

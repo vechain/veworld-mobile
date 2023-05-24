@@ -3,8 +3,8 @@ import { abis } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
 import { error } from "~Common/Logger"
 import { Network, Balance } from "~Model"
-import AddressUtils from "../AddressUtils"
-import FormattingUtils from "../FormattingUtils"
+import { AddressUtils } from "~Utils"
+import FormattingUtils from "../../Common/Utils/FormattingUtils"
 
 /**
  * Calls out to external sources to get the balance

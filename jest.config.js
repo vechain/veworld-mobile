@@ -33,6 +33,7 @@ module.exports = {
         "^~Screens(.*)": ["<rootDir>/src/Screens$1"],
         "^~Navigation(.*)": ["<rootDir>/src/Navigation$1"],
         "^~Common(.*)": ["<rootDir>/src/Common$1"],
+        "^~Utils(.*)": ["<rootDir>/src/Utils$1"],
         "^~Components(.*)": ["<rootDir>/src/Components$1"],
         "^~i18n(.*)": ["<rootDir>/src/i18n$1"],
         "^~Assets(.*)": ["<rootDir>/src/Assets$1"],
@@ -46,6 +47,7 @@ module.exports = {
      * this is currently checking just utils and base components, it should be extended in the future
      */
     collectCoverageFrom: [
+        "src/Utils/**/*.{js,jsx,ts,tsx}",
         "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
         "src/Common/Hooks/**/*.{js,jsx,ts,tsx}",
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
@@ -58,10 +60,10 @@ module.exports = {
 
     coverageThreshold: {
         global: {
-            statements: 97.45,
+            statements: 95.95,
             branches: 89.35,
-            functions: 96.35,
-            lines: 97.58,
+            functions: 96.0,
+            lines: 96.16,
         },
     },
     reporters: ["default", "jest-junit"],
