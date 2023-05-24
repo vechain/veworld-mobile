@@ -12,7 +12,8 @@ import {
     hideToast,
     showErrorToast,
 } from "~Components"
-import { error, URLUtils, useTheme } from "~Common"
+import { error, useTheme } from "~Common"
+import { URLUtils } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import {

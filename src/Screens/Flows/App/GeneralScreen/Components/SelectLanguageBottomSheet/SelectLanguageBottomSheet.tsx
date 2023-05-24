@@ -8,7 +8,8 @@ import {
     BaseBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { LANGUAGE, LanguageUtils, useScrollableList, useTheme } from "~Common"
+import { LANGUAGE, useScrollableList, useTheme } from "~Common"
+import { LanguageUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 

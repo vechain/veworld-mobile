@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { PlatformUtils } from "~Common/Utils"
+import { PlatformUtils } from "~Utils"
 import { AuthenticationType, SecurityLevelType } from "~Model"
 import { useI18nContext } from "~i18n"
 import { useBiometrics } from "./useBiometrics"

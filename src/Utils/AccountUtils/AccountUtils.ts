@@ -1,6 +1,6 @@
 import { debug } from "~Common/Logger"
 import { BaseDevice, WalletAccount } from "~Model"
-import { AddressUtils } from "~Utils"
+import AddressUtils from "../AddressUtils"
 
 export const nextAlias = (accountId: number) => `Account ${accountId}`
 

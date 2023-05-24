@@ -1,6 +1,5 @@
 export * from "./Hooks"
 export * from "./Theme/Theme"
-export * from "./Utils"
 export * from "./Enums"
 export * from "./Constant"
 export * from "./Errors"
