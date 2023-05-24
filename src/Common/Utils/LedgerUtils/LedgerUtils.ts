@@ -1,7 +1,7 @@
 import { LedgerDevice, Network } from "~Model"
 import { Mutex } from "async-mutex"
 import { Certificate, Transaction, HDNode } from "thor-devkit"
-import AddressUtils from "../AddressUtils"
+import { AddressUtils } from "~Utils"
 import VETLedgerApp, {
     VETLedgerAccount,
     VET_DERIVATION_PATH,
