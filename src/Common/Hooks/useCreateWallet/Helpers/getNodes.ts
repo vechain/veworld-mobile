@@ -1,4 +1,4 @@
-import { CryptoUtils, HexUtils } from "~Common/Utils"
+import { CryptoUtils, HexUtils } from "~Utils"
 import { DEVICE_TYPE, LocalDevice } from "~Model"
 import { HDNode } from "thor-devkit"
 import * as i18n from "~i18n"
