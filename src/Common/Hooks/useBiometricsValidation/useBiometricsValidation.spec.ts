@@ -1,10 +1,10 @@
 import { act, renderHook } from "@testing-library/react-hooks"
-import { AlertUtils, BiometricsUtils } from "~Common/Utils"
+import { AlertUtils, BiometricsUtils } from "~Utils"
 import { useBiometricsValidation } from "./useBiometricsValidation"
 import { TestWrapper } from "~Test"
 
-jest.mock("~Common/Utils/BiometricsUtils")
-jest.mock("~Common/Utils/AlertUtils")
+jest.mock("~Utils/BiometricsUtils")
+jest.mock("~Utils/AlertUtils")
 
 describe("useBiometricsValidation", () => {
     afterEach(() => {

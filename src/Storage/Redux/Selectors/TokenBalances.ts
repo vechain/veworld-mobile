@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { DEFAULT_VECHAIN_TOKENS, TokenUtils } from "~Common"
+import { DEFAULT_VECHAIN_TOKENS } from "~Common"
+import { TokenUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"
 import { FungibleToken } from "~Model"

@@ -10,8 +10,8 @@ import {
     COINGECKO_MARKET_INFO_ENDPOINT,
     VET,
     VTHO,
-    TokenUtils,
 } from "~Common"
+import { TokenUtils } from "~Utils"
 import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
 import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
 import {

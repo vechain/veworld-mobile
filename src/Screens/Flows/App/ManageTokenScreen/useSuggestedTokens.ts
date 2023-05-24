@@ -1,5 +1,6 @@
 import { useEffect } from "react"
-import { BalanceUtils, error } from "~Common"
+import { error } from "~Common"
+import { BalanceUtils } from "~Utils"
 import { useThor } from "~Components"
 import {
     selectNonVechainFungibleTokens,
@@ -21,7 +22,7 @@ export const useSuggestedTokens = (selectedTokenSymbols: string[]) => {
     const thorClient = useThor()
 
     const updateSuggestedTokens = async () => {
-        if (selectedTokenSymbols.length === 0 && account?.address) {
+        if (selectedTokenSymbols.length === 0) {
             const newSuggestedTokens: FungibleTokenWithBalance[] = []
             for (const token of officialTokens) {
                 try {

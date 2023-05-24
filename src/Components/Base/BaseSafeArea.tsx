@@ -3,7 +3,8 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { SafeAreaView, SafeAreaViewProps } from "react-native-safe-area-context"
-import { ColorThemeType, PlatformUtils, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
+import { PlatformUtils } from "~Utils"
 import { getTabbar } from "./Helpers/getTabbar"
 
 type Props = {

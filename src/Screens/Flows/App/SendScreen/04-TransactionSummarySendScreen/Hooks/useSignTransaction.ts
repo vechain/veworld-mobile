@@ -1,12 +1,7 @@
 import axios from "axios"
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
-import {
-    CryptoUtils,
-    HexUtils,
-    ThorConstants,
-    TransactionUtils,
-    error,
-} from "~Common"
+import { ThorConstants, error } from "~Common"
+import { HexUtils, CryptoUtils, TransactionUtils } from "~Utils"
 import {
     showErrorToast,
     showSuccessToast,
@@ -23,7 +18,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
-import { AccountWithDevice, Wallet } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 
 interface Props {
@@ -46,7 +41,7 @@ export const useSignTransaction = ({
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(selectDevice(account?.rootAddress))
+    const senderDevice = useAppSelector(selectDevice(account.rootAddress))
 
     const dispatch = useAppDispatch()
     const thorClient = useThor()
@@ -77,7 +72,7 @@ export const useSignTransaction = ({
         if (!wallet.mnemonic)
             error("Mnemonic wallet can't have an empty mnemonic")
 
-        if (!account?.index && account?.index !== 0)
+        if (!account.index && account.index !== 0)
             throw new Error("account index is empty")
 
         const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
@@ -103,26 +98,26 @@ export const useSignTransaction = ({
                 return Buffer.concat([senderSignature, urlDelegationSignature])
             case DelegationType.ACCOUNT:
                 const delegationDevice = selectedDelegationAccount?.device
-                const delegationEncryptedWallet = delegationDevice?.wallet
-                if (!delegationDevice) {
+                if (!delegationDevice)
                     throw new Error(
                         "Delegation device not found when sending transaction",
                     )
-                }
-                if (!delegationEncryptedWallet) {
-                    // TODO: support hardware wallet
+
+                //TODO: support ledger delegation
+                if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
                     showWarningToast(
                         "Delegated hardware wallet not supported yet",
                     )
                     return
                 }
+
                 const { decryptedWallet: delegationWallet } =
                     await CryptoUtils.decryptWallet(delegationDevice, password)
 
                 const accountDelegationSignature = await getSignature(
                     tx,
                     delegationWallet,
-                    account?.address,
+                    account.address,
                 )
                 return Buffer.concat([
                     senderSignature,
@@ -136,6 +131,12 @@ export const useSignTransaction = ({
     const signTransaction = async (password?: string) => {
         try {
             if (!senderDevice) return
+
+            //TODO: support ledger
+            if (senderDevice.type === DEVICE_TYPE.LEDGER) {
+                showWarningToast("Hardware wallet not supported yet")
+                return
+            }
 
             //local mnemonic, identity already verified via useCheckIdentity
             if (!senderDevice.wallet) {
@@ -169,10 +170,7 @@ export const useSignTransaction = ({
                     )
                 },
             )
-            account?.address &&
-                (await dispatch(
-                    updateAccountBalances(thorClient, account.address),
-                ))
+            await dispatch(updateAccountBalances(thorClient, account.address))
         } catch (e) {
             error(e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())

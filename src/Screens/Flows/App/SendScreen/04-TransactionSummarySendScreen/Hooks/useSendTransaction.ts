@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Transaction, abi } from "thor-devkit"
-import { FormattingUtils, GasUtils, HexUtils, VET } from "~Common"
+import { VET } from "~Common"
+import { HexUtils, FormattingUtils, GasUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult, FungibleTokenWithBalance } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -75,7 +76,7 @@ export const useSendTransaction = ({
                     thorClient,
                     clauses,
                     0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
-                    account?.address,
+                    account.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
                 )
                 setGas(estimatedGas)

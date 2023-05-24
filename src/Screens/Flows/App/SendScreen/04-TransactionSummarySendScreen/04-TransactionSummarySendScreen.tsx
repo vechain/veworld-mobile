@@ -1,7 +1,8 @@
 import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
+import { VTHO, useCheckIdentity, useTheme } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import {
     AccountCard,
@@ -187,16 +188,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                     <BaseSpacer height={8} />
                                     <BaseView flexDirection="row">
                                         <AccountIcon
-                                            address={account?.address || ""}
+                                            address={account.address}
                                         />
                                         <BaseSpacer width={8} />
                                         <BaseView>
                                             <BaseText typographyFont="subSubTitle">
-                                                {account?.alias}
+                                                {account.alias}
                                             </BaseText>
                                             <BaseText typographyFont="captionRegular">
                                                 {FormattingUtils.humanAddress(
-                                                    account?.address || "",
+                                                    account.address,
                                                 )}
                                             </BaseText>
                                         </BaseView>

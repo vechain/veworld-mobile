@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Activity } from "~Model"
 import { AccountActivities } from "../Types"
-import { ActivityUtils } from "~Common"
+import { ActivityUtils } from "~Utils"
 
 /**
  * Represents the activities related to an account.

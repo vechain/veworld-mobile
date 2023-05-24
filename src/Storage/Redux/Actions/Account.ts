@@ -1,5 +1,4 @@
-import { AddressUtils } from "~Common"
-import { Device, WalletAccount } from "~Model"
+import { BaseDevice, WalletAccount } from "~Model"
 import {
     selectAccount,
     renameAccount,
@@ -9,24 +8,9 @@ import {
     addAccount,
 } from "../Slices/Account"
 import { AppThunk } from "../Types"
-
-const nextAlias = (accountId: number) => `Account ${accountId}`
-
-/**
- *  Find the next index for a new account based on the current accounts
- * @param accounts
- * @returns
- */
-const getNextIndex = (accounts: WalletAccount[]) => {
-    let index = 0
-    const accountsIndex = accounts.map(acc => acc.index)
-    while (accountsIndex.includes(index)) {
-        index++
-    }
-    return index
-}
+import { AddressUtils, AccountUtils } from "~Utils"
 const addAccountForDevice =
-    (device: Device): AppThunk<WalletAccount> =>
+    (device: BaseDevice): AppThunk<WalletAccount> =>
     (dispatch, getState) => {
         if (!device.xPub)
             throw new Error("Cannot add account for device without xPub")
@@ -38,7 +22,7 @@ const addAccountForDevice =
             ),
         )
 
-        const nextIndex = getNextIndex(deviceAccounts)
+        const nextIndex = AccountUtils.getNextIndex(deviceAccounts)
 
         const newAccountAddress = AddressUtils.getAddressFromXPub(
             device.xPub,
@@ -46,7 +30,7 @@ const addAccountForDevice =
         )
 
         const newAccount: WalletAccount = {
-            alias: nextAlias(nextIndex + 1),
+            alias: AccountUtils.nextAlias(nextIndex + 1),
             address: newAccountAddress,
             rootAddress: device.rootAddress,
             index: nextIndex,

@@ -12,13 +12,8 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ScrollView, StyleSheet } from "react-native"
-import {
-    DateUtils,
-    SCREEN_WIDTH,
-    useBottomSheetModal,
-    useTheme,
-    valueToHP,
-} from "~Common"
+import { SCREEN_WIDTH, useBottomSheetModal, useTheme, valueToHP } from "~Common"
+import { DateUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"
@@ -38,6 +33,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { useAppDispatch } from "~Storage/Redux"
+import LinearGradient from "react-native-linear-gradient"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -180,25 +176,32 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 </BaseView>
             </ScrollView>
 
-            <BaseView
-                mx={20}
+            {/* Linear gradient fades the elements below the child button */}
+            <LinearGradient
                 style={[
                     baseStyles.explorerButton,
                     {
                         bottom: tabBarHeight,
                     },
-                    { width: SCREEN_WIDTH - 40 },
                 ]}
-                py={valueToHP[16]}>
-                {/* TODO action click opens in-app browser or system browser. TBD with others */}
-                <BaseButton
-                    action={() => {}}
-                    w={100}
-                    title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                    haptics="medium"
-                    typographyFont="buttonPrimary"
-                />
-            </BaseView>
+                colors={[
+                    theme.colors.backgroundTransparent,
+                    theme.colors.background,
+                ]}>
+                <BaseView
+                    mx={20}
+                    style={{ width: SCREEN_WIDTH - 40 }}
+                    py={valueToHP[16]}>
+                    {/* TODO action click opens in-app browser or system browser. TBD with others */}
+                    <BaseButton
+                        action={() => {}}
+                        w={100}
+                        title={LL.VIEW_ON_EXPLORER().toUpperCase()}
+                        haptics="medium"
+                        typographyFont="buttonPrimary"
+                    />
+                </BaseView>
+            </LinearGradient>
 
             <ContactManagementBottomSheet
                 ref={addContactSheet}

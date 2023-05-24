@@ -3,7 +3,8 @@ import { AccountWithDevice } from "~Model"
 import { useState } from "react"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { Transaction } from "thor-devkit"
-import { HexUtils, TransactionUtils, error, info } from "~Common"
+import { error, info } from "~Common"
+import { HexUtils, TransactionUtils } from "~Utils"
 import axios from "axios"
 import { showErrorToast } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -73,7 +74,7 @@ export const useDelegation = ({ transaction }: Props) => {
 
     const handleSetSelectedDelegationUrl = async (url?: string) => {
         setSelectedDelegationUrl(url)
-        if (url && account?.address) {
+        if (url) {
             await fetchSignature(transaction, url, account.address)
         } else {
             setUrlDelegationSignature(undefined)

@@ -46,7 +46,7 @@ jest.mock("expo-localization", () => ({
     getCalendars: jest.fn(() => [{ timeZone: "America/New_York" }]),
 }))
 jest.mock("expo-clipboard", () => {})
-jest.mock("expo-linear-gradient", () => {})
+jest.mock("react-native-linear-gradient", () => {})
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,
@@ -83,3 +83,5 @@ jest.mock("@gorhom/bottom-sheet", () => ({
         return data.map((row: any) => renderItem({ item: row }))
     },
 }))
+
+jest.mock("react-native-skeleton-content-nonexpo", () => {})

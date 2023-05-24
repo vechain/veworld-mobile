@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { SvgXml } from "react-native-svg"
-import { PicassoUtils } from "~Common"
+import { PicassoUtils } from "~Utils"
 import { BaseView } from "~Components/Base"
 
 type AccountIconProps = {

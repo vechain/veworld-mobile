@@ -2,12 +2,8 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import {
-    ColorThemeType,
-    FormattingUtils,
-    SCREEN_WIDTH,
-    useThemedStyles,
-} from "~Common"
+import { ColorThemeType, SCREEN_WIDTH, useThemedStyles } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import {
     BaseIcon,
@@ -124,7 +120,8 @@ export const TransferCard = memo(
                         py={12}
                         px={16}
                         key={_address}
-                        style={{ width: SCREEN_WIDTH - 40 }}>
+                        style={{ width: SCREEN_WIDTH - 40 }}
+                        alignItems="flex-start">
                         <BaseText typographyFont="buttonPrimary">
                             {provenanceText}
                         </BaseText>

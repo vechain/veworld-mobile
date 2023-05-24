@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { AddressUtils, debug, useBottomSheetModal, useTheme } from "~Common"
+import { debug, useBottomSheetModal, useTheme } from "~Common"
+import { AddressUtils } from "~Utils"
 import {
     AccountCard,
     BackButtonHeader,

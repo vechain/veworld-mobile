@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { AddressUtils, FormattingUtils } from "~Common"
+import { AddressUtils, FormattingUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
 import { VET, VTHO } from "~Common/Constant"
 import { RootState } from "~Storage/Redux/Types"
@@ -24,7 +24,7 @@ export const selectSelectedAccountBalances = createSelector(
             balance =>
                 AddressUtils.compareAddresses(
                     balance.accountAddress,
-                    account?.address,
+                    account.address,
                 ) && network.genesis.id === balance?.genesisId,
         ),
 )
