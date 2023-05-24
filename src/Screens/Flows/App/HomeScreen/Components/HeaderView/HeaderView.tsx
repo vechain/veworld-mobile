@@ -35,7 +35,7 @@ export const HeaderView = memo(({ openAccountManagementSheet }: Props) => {
         () =>
             accounts.findIndex(account =>
                 AddressUtils.compareAddresses(
-                    selectedAccount?.address,
+                    selectedAccount.address,
                     account.address,
                 ),
             ),

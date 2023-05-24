@@ -74,7 +74,7 @@ export const useDelegation = ({ transaction }: Props) => {
 
     const handleSetSelectedDelegationUrl = async (url?: string) => {
         setSelectedDelegationUrl(url)
-        if (url && account?.address) {
+        if (url) {
             await fetchSignature(transaction, url, account.address)
         } else {
             setUrlDelegationSignature(undefined)

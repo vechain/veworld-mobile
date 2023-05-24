@@ -6,7 +6,7 @@ import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch } from "~Storage/Redux"
 import { addAccountForDevice } from "~Storage/Redux/Actions"
-import { Device } from "~Model"
+import { BaseDevice } from "~Model"
 import { info } from "~Common"
 
 type Props = {
@@ -20,7 +20,7 @@ export const AddAccountBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
 
-    const [selectedDevice, setSelectedDevice] = useState<Device>()
+    const [selectedDevice, setSelectedDevice] = useState<BaseDevice>()
 
     const snapPoints = useMemo(() => ["75%"], [])
 

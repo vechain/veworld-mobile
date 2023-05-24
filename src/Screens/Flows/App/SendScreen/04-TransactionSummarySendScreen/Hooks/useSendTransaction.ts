@@ -76,7 +76,7 @@ export const useSendTransaction = ({
                     thorClient,
                     clauses,
                     0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
-                    account?.address,
+                    account.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
                 )
                 setGas(estimatedGas)

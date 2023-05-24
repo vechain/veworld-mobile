@@ -31,11 +31,11 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     }, [selectedNetwork])
 
     useEffect(() => {
-        if (connex?.genesis.id !== selectedNetwork?.genesis.id) {
+        if (connex?.genesis.id !== selectedNetwork.genesis.id) {
             driver?.close()
             initConnex()
         }
-    }, [initConnex, connex, selectedNetwork?.genesis, driver])
+    }, [initConnex, connex, selectedNetwork.genesis, driver])
 
     if (!value) {
         return <></>

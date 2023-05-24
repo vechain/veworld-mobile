@@ -8,21 +8,18 @@ import {
     BaseSpacer,
     BaseView,
     BaseSafeArea,
+    DeviceBox,
 } from "~Components"
-import { Device } from "~Model"
+import { BaseDevice } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
-import {
-    DeviceBox,
-    AccountMgmtBottomSheet,
-    WalletManagementHeader,
-} from "./components"
+import { AccountMgmtBottomSheet, WalletManagementHeader } from "./components"
 
 export const WalletManagementScreen = () => {
     const [isScrollable, setIsScrollable] = useState(false)
 
     const devices = useAppSelector(selectDevices())
-    const [selectedDevice, setSelectedDevice] = useState<Device>()
+    const [selectedDevice, setSelectedDevice] = useState<BaseDevice>()
 
     const {
         ref: accountMgmtBottomSheetRef,
@@ -36,7 +33,7 @@ export const WalletManagementScreen = () => {
     )
 
     const onDeviceSelected = useCallback(
-        (device: Device) => () => {
+        (device: BaseDevice) => () => {
             setSelectedDevice(device)
             openAccountMgmtSheet()
         },

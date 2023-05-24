@@ -1,11 +1,17 @@
 import React from "react"
 import { useTheme } from "~Common"
 
-import { BaseIcon, BaseText, BaseTouchableBox } from "~Components"
-import { Device } from "~Model"
+import {
+    BaseIcon,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+    LedgerBadge,
+} from "~Components"
+import { BaseDevice, DEVICE_TYPE } from "~Model"
 
 type Props = {
-    device: Device
+    device: BaseDevice
     onDeviceSelected: () => void
     isIconVisible?: boolean
 }
@@ -21,7 +27,12 @@ export const DeviceBox: React.FC<Props> = ({
         <BaseTouchableBox
             action={onDeviceSelected}
             justifyContent="space-between">
-            <BaseText typographyFont="subTitleBold">{device.alias}</BaseText>
+            <BaseView flexDirection="row">
+                {device.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                <BaseText typographyFont="subTitleBold" pl={8}>
+                    {device.alias}
+                </BaseText>
+            </BaseView>
             {isIconVisible && (
                 <BaseIcon
                     name={"pencil-outline"}

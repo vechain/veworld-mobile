@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Utils"
-import { Device } from "~Model"
+import { LocalDevice, LedgerDevice } from "~Model"
 
+type Device = LedgerDevice | LocalDevice
 export const initialDeviceState: Device[] = []
 
 export const DeviceSlice = createSlice({
@@ -25,7 +26,10 @@ export const DeviceSlice = createSlice({
         },
         updateDevice: (
             state,
-            action: PayloadAction<{ rootAddress: string; device: Device }>,
+            action: PayloadAction<{
+                rootAddress: string
+                device: Device
+            }>,
         ) => {
             const { rootAddress, device: newDeviceData } = action.payload
             const deviceExistsIndex = state.findIndex(device =>

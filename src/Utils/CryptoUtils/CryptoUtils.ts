@@ -3,7 +3,7 @@ import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
 import { PasswordUtils } from "~Common/Utils"
 import { HexUtils } from "~Utils"
-import { Device, Wallet } from "~Model"
+import { LocalDevice, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
 import stringify from "json-stringify-safe"
 import { error } from "~Common/Logger"
@@ -122,7 +122,7 @@ const encryptWallet = async ({
  * @param  {string} password? if the authentication is password
  * @returns Wallet
  */
-const decryptWallet = async (device: Device, userPassword?: string) => {
+const decryptWallet = async (device: LocalDevice, userPassword?: string) => {
     const accessControl = !userPassword
     let encryptedEncryptionKey = await KeychainService.getDeviceEncryptionKey(
         device.rootAddress,
