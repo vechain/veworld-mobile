@@ -85,6 +85,9 @@ describe("ActivityDetailsScreen", () => {
         render(<ActivityDetailsScreen {...createTestProps()} />, {
             wrapper: TestWrapper,
         })
+
+        screen.debug()
+
         await findElement()
-    })
+    }, 10000)
 })

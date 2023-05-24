@@ -12,5 +12,7 @@ describe("NFTScreen", () => {
             wrapper: TestWrapper,
         })
         await findElement()
+
+        screen.debug()
     }, 10000)
 })

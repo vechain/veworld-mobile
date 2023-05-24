@@ -1,5 +1,5 @@
 import React from "react"
-import SkeletonContent from "react-native-skeleton-content"
+import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { useTheme } from "~Common"
 import { StyleSheet } from "react-native"
 

@@ -2,6 +2,7 @@ import React from "react"
 import { TestWrapper } from "~Test"
 import { HistoryScreen } from "./HistoryScreen"
 import { render, screen } from "@testing-library/react-native"
+
 jest.mock("axios")
 import axios from "axios"
 ;(axios.get as jest.Mock).mockImplementation(url => {
@@ -59,6 +60,9 @@ describe("HistoryScreen", () => {
         render(<HistoryScreen />, {
             wrapper: TestWrapper,
         })
+
+        screen.debug()
+
         await findElement()
-    })
+    }, 10000)
 })

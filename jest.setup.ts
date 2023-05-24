@@ -27,8 +27,6 @@ jest.mock("react-native-quick-crypto", () => ({
 
 jest.mock("react-native-bootsplash", () => {})
 
-jest.mock("react-native-skeleton-content", () => "SkeletonContent")
-
 jest.mock("expo-secure-store", () => ({
     getItemAsync: jest.fn(),
     setItemAsync: jest.fn(),
@@ -46,7 +44,7 @@ jest.mock("expo-localization", () => ({
     getCalendars: jest.fn(() => [{ timeZone: "America/New_York" }]),
 }))
 jest.mock("expo-clipboard", () => {})
-jest.mock("react-native-linear-gradient", () => {})
+jest.mock("react-native-linear-gradient", () => "LinearGradient")
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,
@@ -84,4 +82,4 @@ jest.mock("@gorhom/bottom-sheet", () => ({
     },
 }))
 
-jest.mock("react-native-skeleton-content-nonexpo", () => {})
+jest.mock("react-native-skeleton-content-nonexpo", () => "SkeletonContent")
