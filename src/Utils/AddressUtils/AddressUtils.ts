@@ -2,7 +2,8 @@ import { address, HDNode } from "thor-devkit"
 import { XPub } from "~Model"
 import { error } from "~Common/Logger"
 import { VET, VTHO } from "~Common/Constant"
-import { CryptoUtils, HexUtils } from "~Utils"
+import CryptoUtils from "../CryptoUtils"
+import HexUtils from "../HexUtils"
 
 /**
  * Get the address for the given index

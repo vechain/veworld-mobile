@@ -1,6 +1,6 @@
 import { veWorldErrors } from "~Common/Errors"
 import { debug, error, warn } from "~Common/Logger"
-import URLUtils from "../../Common/Utils/URLUtils"
+import URLUtils from "../URLUtils"
 
 /**
  * Verify a websocket connection for a given URL.

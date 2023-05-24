@@ -2,7 +2,7 @@ import React from "react"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
-import { PlatformUtils } from "~Utils"
+import PlatformUtils from "~Utils/PlatformUtils" // TODO: remove this circular dependency
 
 export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
     const { LL } = useI18nContext()

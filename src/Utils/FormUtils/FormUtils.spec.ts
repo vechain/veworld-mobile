@@ -1,4 +1,4 @@
-import { FormUtils } from "~Utils"
+import FormUtils from "../FormUtils"
 
 describe("alreadyExists", () => {
     const arr = [

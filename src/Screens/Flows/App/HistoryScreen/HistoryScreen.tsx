@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { useTheme } from "~Common"
-import { FormattingUtils } from "~Utils"
+import { FormattingUtils, PlatformUtils } from "~Utils"
 import {
     BaseText,
     BaseSafeArea,

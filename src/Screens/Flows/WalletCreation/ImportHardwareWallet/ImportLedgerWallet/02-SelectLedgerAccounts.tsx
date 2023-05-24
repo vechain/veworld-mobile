@@ -14,7 +14,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { VET } from "~Common/Constant/Token"
-import { FormattingUtils } from "~Utils"
+import { FormattingUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
@@ -35,7 +35,6 @@ import {
 } from "~Storage/Redux"
 import { FlashList, ViewToken } from "@shopify/flash-list"
 import * as Haptics from "expo-haptics"
-import { LedgerUtils } from "~Common/Utils"
 import { LedgerAccount } from "~Model"
 
 type Props = {} & NativeStackScreenProps<
