@@ -1,10 +1,6 @@
-import AlertUtils from "./AlertUtils"
 import AccountUtils from "./AccountUtils"
-import ActivityUtils from "./ActivityUtils"
 // import AliasUtils from "./AliasUtils"
 // import AsyncUtils from "./AsyncUtils"
-import BalanceUtils from "./BalanceUtils"
-import BiometricsUtils from "./BiometricsUtils"
 import BloomUtils from "./BloomUtils"
 import CryptoUtils from "./CryptoUtils"
 import ConnectionUtils from "./ConnectionUtils"
@@ -34,10 +30,6 @@ export {
     // AliasUtils,
     // AsyncUtils,
     AccountUtils,
-    ActivityUtils,
-    AlertUtils,
-    BalanceUtils,
-    BiometricsUtils,
     BloomUtils,
     ConnectionUtils,
     CryptoUtils,

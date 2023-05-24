@@ -4,7 +4,7 @@ import { useCheckIdentity } from "./useCheckIdentity"
 import { useWalletSecurity } from "../useWalletSecurity"
 import { TestWrapper } from "~Test"
 import { useDisclosure } from "../useDisclosure"
-import { BiometricsUtils } from "~Common/Utils"
+import { BiometricsUtils } from "~Utils"
 import { render } from "@testing-library/react-native"
 
 jest.mock("../useWalletSecurity", () => ({
