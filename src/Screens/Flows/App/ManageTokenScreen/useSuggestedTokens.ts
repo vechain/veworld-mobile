@@ -22,7 +22,7 @@ export const useSuggestedTokens = (selectedTokenSymbols: string[]) => {
     const thorClient = useThor()
 
     const updateSuggestedTokens = async () => {
-        if (selectedTokenSymbols.length === 0 && account?.address) {
+        if (selectedTokenSymbols.length === 0) {
             const newSuggestedTokens: FungibleTokenWithBalance[] = []
             for (const token of officialTokens) {
                 try {

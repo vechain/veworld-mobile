@@ -9,7 +9,7 @@ import { AddressUtils } from "~Utils"
 import CryptoUtils from "~Common/Utils/CryptoUtils"
 
 export const account1D1: WalletAccount = {
-    alias: "D1 - Account 1",
+    alias: "Account 0",
     rootAddress: device1.rootAddress,
     address: AddressUtils.getAddressFromXPub(
         CryptoUtils.xPubFromHdNode(hdnode1),

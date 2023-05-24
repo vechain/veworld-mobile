@@ -2,21 +2,28 @@ import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
-import { Device } from "~Model"
+import { BaseDevice } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-import { DeviceBox } from "../../WalletManagementScreen/components"
 import { useScrollableList, info } from "~Common"
+import { DeviceBox } from "../DeviceBox"
 
-type Props = {
-    devices: Device[]
-    onClose: (device: Device) => void
+// Redecalare forwardRef in order to support additional generics
+declare module "react" {
+    function forwardRef<T, P = {}>(
+        render: (props: P, ref: React.Ref<T>) => React.ReactElement | null,
+    ): (props: P & React.RefAttributes<T>) => React.ReactElement | null
 }
 
-export const WalletMgmtBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(({ devices, onClose }, ref) => {
+type Props<T extends BaseDevice = BaseDevice> = {
+    devices: T[]
+    onClose: (device: T) => void
+}
+
+function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
+    { devices, onClose }: Props<T>,
+    ref: React.Ref<BottomSheetModalMethods>,
+) {
     const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => ["30%", "90%"], [])
@@ -37,7 +44,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
     )
 
     const onDeviceSelected = useCallback(
-        (device: Device) => () => {
+        (device: T) => () => {
             onClose(device)
         },
         [onClose],
@@ -81,10 +88,14 @@ export const WalletMgmtBottomSheet = React.forwardRef<
             </BaseView>
         </BaseBottomSheet>
     )
-})
+}
 
 const baseStyles = StyleSheet.create({
     list: {
         height: "78%",
     },
 })
+
+export const SelectDeviceBottomSheet = React.forwardRef(
+    SelectDeviceBottomSheetInner,
+)

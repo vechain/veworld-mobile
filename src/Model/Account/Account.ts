@@ -1,4 +1,4 @@
-import { Device } from "~Model/Device"
+import { BaseDevice, LedgerDevice, LocalDevice } from "~Model/Device"
 
 /**
  * The model for an Account in the wallet
@@ -22,7 +22,7 @@ export interface WalletAccount extends Account {
 }
 
 export interface AccountWithDevice extends WalletAccount {
-    device: Device
+    device: LedgerDevice | LocalDevice
 }
 
 /**
@@ -30,6 +30,6 @@ export interface AccountWithDevice extends WalletAccount {
  * Grouping accounts by their device
  */
 export interface GroupedAccounts {
-    device: Device
+    device: BaseDevice
     accounts: WalletAccount[]
 }

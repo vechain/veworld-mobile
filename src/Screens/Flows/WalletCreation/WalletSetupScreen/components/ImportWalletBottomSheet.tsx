@@ -37,7 +37,8 @@ export const ImportWalletBottomSheet = React.forwardRef<
 
     const navigateToImportHardwareWallet = useCallback(() => {
         onClose()
-    }, [onClose])
+        nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_DEVICE)
+    }, [onClose, nav])
 
     return (
         <BaseBottomSheet

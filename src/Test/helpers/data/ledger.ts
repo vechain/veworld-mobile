@@ -1,3 +1,10 @@
+import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
+import { Device } from "react-native-ble-plx"
+import VETLedgerApp, {
+    StatusCodes,
+    VETLedgerAccount,
+} from "~Common/Ledger/VetLedgerApp"
+
 /*eslint-disable no-console*/
 export const mockLedgerAccount = {
     publicKey:
@@ -13,6 +20,20 @@ export const mockDeviceModel = {
     usbOnly: false,
 }
 
+export const mockedDevice = {
+    isConnectable: null,
+    localName: null,
+    manufacturerData: null,
+    mtu: 0,
+    name: "Nano X B7F6",
+    overflowServiceUUIDs: null,
+    rssi: null,
+    serviceData: null,
+    serviceUUIDs: null,
+    solicitedServiceUUIDs: null,
+    txPowerLevel: null,
+}
+
 export const mockTransport = {
     deviceModel: mockDeviceModel,
     close(): Promise<void> {
@@ -21,5 +42,57 @@ export const mockTransport = {
     },
     on(eventName: string) {
         console.log("Created event for: " + eventName)
+    },
+}
+
+// @ts-ignore
+export const mockedTransport: BleTransport = {
+    // @ts-ignore
+    deviceModel: mockDeviceModel, // @ts-ignore
+    device: mockedDevice,
+    close(): Promise<void> {
+        console.log("Closed transport")
+        return Promise.resolve()
+    },
+    open(_deviceOrId: string | Device): Promise<BleTransport> {
+        return Promise.resolve(mockedTransport)
+    },
+
+    on(eventName: string) {
+        console.log("Created event for: " + eventName)
+    },
+    exchange(): Promise<any> {
+        return Promise.resolve()
+    },
+    exchangeAtomicImpl(): Promise<any> {
+        return Promise.resolve()
+    },
+    exchangeBusyPromise: null,
+    exchangeTimeout: 30000,
+    id: "4418A927-A5E6-5743-8F64-895250CC29F9",
+    isConnected: true,
+    mtuSize: 153,
+    notYetDisconnected: true,
+}
+
+export const mockLedgerApp: VETLedgerApp = {
+    // @ts-ignore
+    transport: mockTransport,
+    getAccount: async (
+        _path: string,
+        _display?: boolean | undefined,
+        _chainCode?: boolean | undefined,
+        _statusCodes?: StatusCodes[],
+    ): Promise<VETLedgerAccount> => {
+        return mockLedgerAccount
+    },
+    signJSON: (path: string, rawJSON: Buffer): Promise<Buffer> => {
+        return Promise.resolve(Buffer.from(path + rawJSON.toString()))
+    },
+    signTransaction: (
+        path: string,
+        rawTransaction: Buffer,
+    ): Promise<Buffer> => {
+        return Promise.resolve(Buffer.from(path + rawTransaction.toString()))
     },
 }
