@@ -12,7 +12,8 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
-import { URLUtils, error } from "~Common"
+import { error } from "~Common"
+import { URLUtils } from "~Utils"
 import { Network } from "~Model"
 import {
     selectCustomNetworks,

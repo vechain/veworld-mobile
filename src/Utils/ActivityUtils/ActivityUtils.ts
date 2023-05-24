@@ -1,5 +1,5 @@
 import { Activity, ActivityType } from "~Model"
-import TransactionUtils from "../../Common/Utils/TransactionUtils"
+import TransactionUtils from "../TransactionUtils"
 
 /**
  * Determines the type of activity based on the provided clauses.

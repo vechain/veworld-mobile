@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
 import { useTheme } from "~Common"
-import PlatformUtils from "~Common/Utils/PlatformUtils"
+import { PlatformUtils } from "~Utils"
 import { HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
 
