@@ -1,7 +1,7 @@
 import React from "react"
-import SkeletonContent from "react-native-skeleton-content"
 import { useTheme } from "~Common"
 import { StyleSheet } from "react-native"
+import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 export const SkeletonActivityBox = () => {
     const theme = useTheme()
