@@ -12,13 +12,8 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ScrollView, StyleSheet } from "react-native"
-import {
-    DateUtils,
-    SCREEN_WIDTH,
-    useBottomSheetModal,
-    useTheme,
-    valueToHP,
-} from "~Common"
+import { SCREEN_WIDTH, useBottomSheetModal, useTheme, valueToHP } from "~Common"
+import { DateUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"

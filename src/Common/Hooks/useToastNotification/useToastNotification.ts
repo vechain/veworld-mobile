@@ -1,8 +1,4 @@
-import {
-    ROUND_DECIMAL_DEFAULT,
-    humanNumber,
-    scaleNumberDown,
-} from "../../Utils/FormattingUtils/FormattingUtils"
+import { FormattingUtils } from "~Utils"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { FungibleToken } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -22,11 +18,11 @@ export const useToastNotification = () => {
         showSuccessToast(
             LL.NOTIFICATION_found_token_transfer({
                 token: token.symbol.toUpperCase(),
-                amount: humanNumber(
-                    scaleNumberDown(
+                amount: FormattingUtils.humanNumber(
+                    FormattingUtils.scaleNumberDown(
                         amount,
                         token.decimals,
-                        ROUND_DECIMAL_DEFAULT,
+                        FormattingUtils.ROUND_DECIMAL_DEFAULT,
                     ),
                     amount,
                     token.symbol,

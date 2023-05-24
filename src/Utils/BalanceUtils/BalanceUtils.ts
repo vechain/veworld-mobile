@@ -4,7 +4,7 @@ import axios from "axios"
 import { error } from "~Common/Logger"
 import { Network, Balance } from "~Model"
 import { AddressUtils } from "~Utils"
-import FormattingUtils from "../../Common/Utils/FormattingUtils"
+import FormattingUtils from "../FormattingUtils"
 
 /**
  * Calls out to external sources to get the balance
