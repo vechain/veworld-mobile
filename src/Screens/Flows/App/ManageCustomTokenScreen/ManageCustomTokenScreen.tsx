@@ -86,7 +86,7 @@ export const ManageCustomTokenScreen = () => {
     )
 
     const handleDelete = () => {
-        if (account?.address && selectedToken?.address) {
+        if (selectedToken?.address) {
             dispatch(
                 removeTokenBalance({
                     accountAddress: account.address,

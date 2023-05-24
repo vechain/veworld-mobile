@@ -40,7 +40,7 @@ export const selectCurrentNetworkActivities = createSelector(
     selectAllActivities,
     selectSelectedNetwork,
     (activities, network) =>
-        activities.filter(act => act.genesisId === network?.genesis.id),
+        activities.filter(act => act.genesisId === network.genesis.id),
 )
 
 /**
@@ -52,7 +52,7 @@ export const selectCurrentTransactionActivities = createSelector(
     selectSelectedAccount,
     (activitiesState, network, account) => {
         if (
-            account?.address &&
+            account.address &&
             activitiesState[account.address]?.transactionActivities
         ) {
             return activitiesState[
@@ -76,7 +76,7 @@ export const selectCurrentActivities = createSelector(
     selectCurrentTransactionActivities,
     (activitiesState, network, account, currentTransactionActivities) => {
         if (
-            account?.address &&
+            account.address &&
             activitiesState[account.address]?.nonTransactionActivities
         ) {
             return activitiesState[account.address].nonTransactionActivities

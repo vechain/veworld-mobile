@@ -4,12 +4,14 @@ import {
     ConfirmMnemonicScreen,
     ImportMnemonicScreen,
     NewMnemonicScreen,
+    SelectLedgerAccounts,
+    SelectLedgerDevice,
     UserCreatePasswordScreen,
     WalletSuccessScreen,
     WalletSetupScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { SecurityLevelType } from "~Model"
+import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -17,6 +19,10 @@ export type RootStackParamListCreateWalletApp = {
     [Routes.NEW_MNEMONIC]: undefined
     [Routes.CONFIRM_MNEMONIC]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
+    [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
+    [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
+        device: ConnectedLedgerDevice
+    }
     [Routes.WALLET_SUCCESS]:
         | {
               securityLevelSelected: SecurityLevelType.BIOMETRIC
@@ -62,6 +68,18 @@ export const CreateWalletAppStack = () => {
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_MNEMONIC}
                 component={ImportMnemonicScreen}
+                options={{ headerShown: false }}
+            />
+
+            <CreateWalletApp.Screen
+                name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}
+                component={SelectLedgerDevice}
+                options={{ headerShown: false }}
+            />
+
+            <CreateWalletApp.Screen
+                name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
+                component={SelectLedgerAccounts}
                 options={{ headerShown: false }}
             />
 
