@@ -1,4 +1,4 @@
-import { LedgerDevice, Network } from "~Model"
+import { LedgerAccount, LedgerDevice, Network } from "~Model"
 import { Mutex } from "async-mutex"
 import { Certificate, Transaction, HDNode } from "thor-devkit"
 import { AddressUtils, BalanceUtils } from "~Utils"
@@ -87,11 +87,6 @@ const signTransaction = async (
             })
         }
     })
-}
-
-export type LedgerAccount = {
-    address: string
-    balance?: Connex.Thor.Account
 }
 
 /**
