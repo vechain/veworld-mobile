@@ -4,7 +4,7 @@ import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
 import { AccountWithDevice } from "~Model"
 
-const selectAccountsState = (state: RootState) => state.accounts
+export const selectAccountsState = (state: RootState) => state.accounts
 
 /**
  * @returns all the accounts
@@ -47,12 +47,18 @@ export const selectSelectedAccount = createSelector(
     selectAccounts,
     selectSelectedAccountAddress,
     (accounts, selectedAccountAddress) => {
-        return accounts.find(account =>
+        const selectedAccount = accounts.find(account =>
             AddressUtils.compareAddresses(
                 selectedAccountAddress,
                 account.address,
             ),
         )
+        if (!selectedAccount) {
+            throw new Error(
+                `No account found for address ${selectedAccountAddress}`,
+            )
+        }
+        return selectedAccount
     },
 )
 

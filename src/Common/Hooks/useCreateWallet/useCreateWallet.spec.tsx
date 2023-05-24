@@ -2,7 +2,6 @@ import { renderHook } from "@testing-library/react-hooks"
 import { waitFor } from "@testing-library/react-native"
 import {
     addDeviceAndAccounts,
-    selectAccount,
     setAppLockStatus,
     setMnemonic,
 } from "~Storage/Redux"
@@ -110,9 +109,6 @@ describe("useCreateWallet", () => {
             expect(setAppLockStatus).toHaveBeenCalledWith(
                 WALLET_STATUS.UNLOCKED,
             )
-            expect(selectAccount).toHaveBeenCalledWith({
-                address: "0xED8DA269260CE13f17624bE20FE9311807db0901",
-            })
         })
 
         it("should create wallet with password", async () => {

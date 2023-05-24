@@ -1,7 +1,7 @@
 import * as LocalAuthentication from "expo-local-authentication"
 import { TAuthentication, SecurityLevelType } from "~Model"
 import * as i18n from "~i18n"
-import PlatformUtils from "../PlatformUtils"
+import PlatformUtils from "../../Common/Utils/PlatformUtils"
 
 export const getDeviceEnrolledLevel = async () => {
     const level = await LocalAuthentication.getEnrolledLevelAsync()

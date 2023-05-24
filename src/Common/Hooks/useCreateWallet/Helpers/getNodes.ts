@@ -1,5 +1,5 @@
 import { CryptoUtils, HexUtils } from "~Utils"
-import { Device, DEVICE_TYPE } from "~Model"
+import { DEVICE_TYPE, LocalDevice } from "~Model"
 import { HDNode } from "thor-devkit"
 import * as i18n from "~i18n"
 
@@ -9,7 +9,7 @@ type GetNodesResult = {
         nonce: string
         rootAddress: string
     }
-    device: Omit<Device, "wallet">
+    device: Omit<LocalDevice, "wallet">
 }
 /**
  *
@@ -32,7 +32,7 @@ export const getNodes = (
         rootAddress: hdNode.address,
     }
 
-    const device = {
+    const device: Omit<LocalDevice, "wallet"> = {
         alias: `${alias} ${aliasIndex}`,
         xPub: CryptoUtils.xPubFromHdNode(hdNode),
         rootAddress: hdNode.address,

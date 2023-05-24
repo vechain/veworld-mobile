@@ -412,7 +412,9 @@ const en: BaseTranslation = {
 
     // Wallet Titles
 
-    // Wallet Ledger
+    // Wallet 
+    WALLET_LEDGER_SELECT_DEVICE_TITLE: "Import ledger",
+    WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked and the bluetooth enabled",
 
     // Transaction Labels
 

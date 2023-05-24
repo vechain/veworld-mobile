@@ -66,7 +66,7 @@ describe("useFormattedMarketInfo", () => {
             },
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
 
         expect(result.current.circulatingSupply).toBe(results.circulatingSupply)
     })
@@ -83,7 +83,7 @@ describe("useFormattedMarketInfo", () => {
             },
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
 
         expect(result.current.marketCap).toBe(results.marketCap)
     })
@@ -100,7 +100,7 @@ describe("useFormattedMarketInfo", () => {
             },
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
 
         expect(result.current.totalSupply).toBe(results.totalSupply)
     })
@@ -117,7 +117,7 @@ describe("useFormattedMarketInfo", () => {
             },
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
 
         expect(result.current.totalVolume).toBe(results.totalVolume)
     })

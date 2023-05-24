@@ -168,7 +168,7 @@ export const HistoryScreen = () => {
     const renderSkeletonList = useMemo(() => {
         return (
             <>
-                <BaseSpacer height={30} />
+                <BaseSpacer height={40} />
                 <BaseView flexDirection="row" style={styles.list}>
                     <FlatList
                         data={[...Array(SKELETON_COUNT)]}
@@ -216,9 +216,9 @@ export const HistoryScreen = () => {
                 <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
 
                 <ChangeAccountButtonPill
-                    title={selectedAccount?.alias ?? LL.WALLET_LABEL_ACCOUNT()}
+                    title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
                     text={FormattingUtils.humanAddress(
-                        selectedAccount?.address ?? "",
+                        selectedAccount.address ?? "",
                         5,
                         4,
                     )}
@@ -249,7 +249,9 @@ const baseStyles = (insets: EdgeInsets, tabBarHeight: number) =>
         list: {
             top: 0,
             flex: 1,
-            marginBottom: tabBarHeight - insets.bottom,
+            marginBottom: PlatformUtils.isIOS()
+                ? tabBarHeight - insets.bottom
+                : 0,
         },
         noActivitiesButton: {
             position: "absolute",
