@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { SettingsConstants } from "~Common/Constant"
 import { error } from "~Common/Logger"
-import { CryptoUtils } from "~Common/Utils"
+import { CryptoUtils } from "~Utils"
 import { useAppSelector } from "~Storage/Redux"
 import { selectPinValidationString } from "~Storage/Redux/Selectors"
 

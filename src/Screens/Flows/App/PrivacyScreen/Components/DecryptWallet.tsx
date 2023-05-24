@@ -1,6 +1,7 @@
 import React from "react"
 import { Alert } from "react-native"
-import { CryptoUtils, error, useDisclosure, useWalletSecurity } from "~Common"
+import { error, useDisclosure, useWalletSecurity } from "~Common"
+import { CryptoUtils } from "~Utils"
 import { BaseButton, RequireUserPassword } from "~Components"
 import { LocalDevice } from "~Model"
 import { useAppSelector } from "~Storage/Redux"

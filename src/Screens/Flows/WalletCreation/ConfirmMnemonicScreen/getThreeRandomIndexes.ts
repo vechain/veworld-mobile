@@ -1,4 +1,4 @@
-import { CryptoUtils } from "~Common"
+import { CryptoUtils } from "~Utils"
 
 const TOTAL_WORDS = 12
 

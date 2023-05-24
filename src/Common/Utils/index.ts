@@ -1,14 +1,10 @@
 import AccountUtils from "./AccountUtils"
 // import AliasUtils from "./AliasUtils"
 // import AsyncUtils from "./AsyncUtils"
-import BloomUtils from "./BloomUtils"
-import CryptoUtils from "./CryptoUtils"
-import ConnectionUtils from "./ConnectionUtils"
 import DateUtils from "./DateUtils"
 import FormUtils from "./FormUtils"
 import FormattingUtils from "./FormattingUtils"
 import GasUtils from "./GasUtils"
-import HexUtils from "./HexUtils"
 import LanguageUtils from "./LanguageUtils"
 import LedgerUtils from "./LedgerUtils"
 import LocaleUtils from "./LocaleUtils"
@@ -30,14 +26,10 @@ export {
     // AliasUtils,
     // AsyncUtils,
     AccountUtils,
-    BloomUtils,
-    ConnectionUtils,
-    CryptoUtils,
     DateUtils,
     FormUtils,
     FormattingUtils,
     GasUtils,
-    HexUtils,
     LanguageUtils,
     LedgerUtils,
     LocaleUtils,
