@@ -1,6 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, useTheme, VET } from "~Common"
+import { useTheme, VET } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 

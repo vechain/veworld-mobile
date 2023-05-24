@@ -7,6 +7,9 @@ import BloomUtils from "./BloomUtils"
 import ConnectionUtils from "./ConnectionUtils"
 import CryptoUtils from "./CryptoUtils"
 import HexUtils from "./HexUtils"
+import DateUtils from "./DateUtils"
+import FormattingUtils from "./FormattingUtils"
+import FormUtils from "./FormUtils"
 
 export {
     AddressUtils,
@@ -18,4 +21,7 @@ export {
     ConnectionUtils,
     CryptoUtils,
     HexUtils,
+    DateUtils,
+    FormattingUtils,
+    FormUtils,
 }
