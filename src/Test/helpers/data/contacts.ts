@@ -1,6 +1,7 @@
 import { HDNode, mnemonic } from "thor-devkit"
 import { Contact, ContactType } from "~Model"
-import { AddressUtils, CryptoUtils } from "~Common"
+import { CryptoUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 
 export const hdnode = HDNode.fromMnemonic(mnemonic.generate())
 

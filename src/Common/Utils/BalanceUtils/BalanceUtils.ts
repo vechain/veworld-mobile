@@ -3,7 +3,7 @@ import { abis } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
 import { error } from "~Common/Logger"
 import { Network, Balance } from "~Model"
-import AddressUtils from "../AddressUtils"
+import { AddressUtils } from "~Utils"
 import FormattingUtils from "../FormattingUtils"
 
 /**

@@ -5,7 +5,7 @@ import {
     TokenWithCompleteInfo,
 } from "~Model"
 import { CoinMarketInfo, TokenInfoResponse, TokensState } from "../Types"
-import { AddressUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 
 export const initialTokenState: TokensState = {
     custom: [],

@@ -1,4 +1,4 @@
-import { AddressUtils } from "~Common/Utils"
+import { AddressUtils } from "~Utils"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { getNodes } from "../useCreateWallet/Helpers"

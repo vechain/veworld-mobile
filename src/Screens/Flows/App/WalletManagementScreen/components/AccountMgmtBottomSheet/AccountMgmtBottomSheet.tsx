@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { AddressUtils, useScrollableList, info, useTheme } from "~Common"
+import { useScrollableList, info, useTheme } from "~Common"
+import { AddressUtils } from "~Utils"
 import {
     BaseIcon,
     BaseSpacer,
