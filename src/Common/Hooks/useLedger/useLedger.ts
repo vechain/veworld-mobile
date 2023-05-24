@@ -6,13 +6,6 @@ import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerUtils } from "~Common/Utils"
 import { LEDGER_ERROR_CODES } from "~Common/Utils/LedgerUtils/LedgerUtils"
 
-export enum LedgerConfig {
-    CLAUSE_AND_CONTRACT_ENABLED = "03010007",
-    CLAUSE_ONLY_ENABLED = "02010007",
-    CONTRACT_ONLY_ENABLED = "01010007",
-    CLAUSE_AND_CONTRACT_DISABLED = "00010007",
-}
-
 /**
  * useLedger is a custom react hook for interacting with ledger devices
  *
@@ -37,6 +30,8 @@ export const useLedger = (deviceId: string): UseLedgerProps => {
     const [isError, setIsError] = useState<LEDGER_ERROR_CODES | undefined>(
         undefined,
     )
+
+    const timer = useRef<NodeJS.Timeout | undefined>(undefined)
 
     const isReady = useMemo(
         () => isConnected && vetApp && rootAccount,
@@ -98,17 +93,22 @@ export const useLedger = (deviceId: string): UseLedgerProps => {
      * Attempt to connect to the ledger every 3 seconds if not connected
      */
     useEffect(() => {
-        setInterval(async () => {
-            if (isReady) return
-
-            if (!transport.current) return await openConnection()
-
-            await LedgerUtils.checkLedgerConnection({
-                transport: transport.current,
-                errorCallback: onConnectionError,
-                successCallback: onConnectionSuccess,
-            })
+        timer.current = setInterval(async () => {
+            if (!isReady) {
+                if (!transport.current) await openConnection()
+                else
+                    await LedgerUtils.checkLedgerConnection({
+                        transport: transport.current,
+                        errorCallback: onConnectionError,
+                        successCallback: onConnectionSuccess,
+                    })
+            }
         }, 3000)
+
+        return () => {
+            if (timer.current) clearInterval(timer.current)
+            if (transport.current) transport.current.close()
+        }
     }, [
         deviceId,
         openConnection,
@@ -116,15 +116,6 @@ export const useLedger = (deviceId: string): UseLedgerProps => {
         onConnectionSuccess,
         isReady,
     ])
-
-    // useEffect(() => {
-    //     //Attempt to get the root account. This will ensure the app is open
-    //     if (vetApp !== undefined) getRootAccount(vetApp)
-    //     return () => {
-    //         //Close the connection when the hook unmounts
-    //         if (vetApp !== undefined) vetApp.transport.close()
-    //     }
-    // }, [vetApp])
 
     return {
         vetApp,

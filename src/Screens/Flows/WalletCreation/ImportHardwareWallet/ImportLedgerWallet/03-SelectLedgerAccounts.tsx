@@ -25,7 +25,6 @@ import {
     Routes,
 } from "~Navigation"
 
-import { useLedger } from "~Common/Hooks"
 import {
     selectHasOnboarded,
     selectSelectedNetwork,
@@ -44,7 +43,7 @@ type Props = {} & NativeStackScreenProps<
 >
 
 export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
-    const { device } = route.params
+    const { device, rootAccount } = route.params
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -52,7 +51,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
-    const { rootAccount } = useLedger(device.id)
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<

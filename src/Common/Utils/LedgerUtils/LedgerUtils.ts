@@ -14,6 +14,16 @@ import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 const ledgerMutex = new Mutex()
 
 /**
+ * Codes to detect if the leder has the clause and contract enabled
+ */
+export enum LedgerConfig {
+    CLAUSE_AND_CONTRACT_ENABLED = "03010007",
+    CLAUSE_ONLY_ENABLED = "02010007",
+    CONTRACT_ONLY_ENABLED = "01010007",
+    CLAUSE_AND_CONTRACT_DISABLED = "00010007",
+}
+
+/**
  * Common Ledger Error Codes
  */
 export enum LEDGER_ERROR_CODES {
@@ -42,8 +52,7 @@ export const ledgerErrorHandler = (err: Error) => {
         return LEDGER_ERROR_CODES.DISCONNECTED
     }
 
-    error("[Ledger] - Unknown Error")
-
+    error("[Ledger] - Unknown Error", err)
     return LEDGER_ERROR_CODES.UNKNOWN
 }
 

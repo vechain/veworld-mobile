@@ -415,6 +415,17 @@ const en: BaseTranslation = {
     // Wallet 
     WALLET_LEDGER_SELECT_DEVICE_TITLE: "Import ledger",
     WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked and the bluetooth enabled",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: "Enable additional settings",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB: "in order to give you the best user experience, you need to enable some additional settings in your ledger (Contract data and Multi-clause). Please follow the instructions below to proceed",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1: "Open the VET app on your Ledger",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1_DESC: "Unlock your Ledger and open the VET app. If you don't have it installed, please install it from the Ledger Live app.",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_2: "Navigate to Settings",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_2_DESC: "Use the buttons on your Ledger to navigate to Settings and press both buttons to enter the menu.",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_3: "Enable Contract data",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_3_DESC: "Navigate to Contract data and press both buttons to enable it.",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4: "Enable Multi-clause",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: "Navigate to Multi-clause and press both buttons to enable it.",
+
 
     // Transaction Labels
 

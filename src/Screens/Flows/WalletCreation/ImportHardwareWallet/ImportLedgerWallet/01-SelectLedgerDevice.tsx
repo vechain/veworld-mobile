@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import {
+    BackButtonHeader,
     BaseButton,
-    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -9,7 +9,7 @@ import {
     DismissKeyboardView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { debug, useTheme } from "~Common"
+import { debug } from "~Common"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
@@ -23,15 +23,12 @@ import { ImportLedgerSvg } from "~Assets"
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const theme = useTheme()
 
     const [availableDevices, setAvailableDevices] = useState<
         ConnectedLedgerDevice[]
     >([])
     const [selectedDevice, setSelectedDevice] =
         useState<ConnectedLedgerDevice>()
-
-    const goBack = () => nav.goBack()
 
     const onDeviceSelect = useCallback((device: ConnectedLedgerDevice) => {
         setSelectedDevice(device)
@@ -103,26 +100,16 @@ export const SelectLedgerDevice = () => {
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
-                <BaseIcon
-                    style={styles.backIcon}
-                    mx={8}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-                <BaseSpacer height={22} />
+                <BackButtonHeader />
                 <BaseView
                     alignItems="center"
                     justifyContent="space-between"
                     flexGrow={1}
                     mx={20}>
                     <BaseView alignSelf="flex-start" w={100}>
-                        <BaseView flexDirection="row" w={100}>
-                            <BaseText typographyFont="title">
-                                {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
-                            </BaseText>
-                        </BaseView>
+                        <BaseText typographyFont="title">
+                            {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
+                        </BaseText>
                         <BaseText typographyFont="body" my={10}>
                             {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                         </BaseText>
