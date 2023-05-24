@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet } from "react-native"
-import { FormattingUtils, useTheme } from "~Common"
+import { FormattingUtils, PlatformUtils, useTheme } from "~Common"
 import {
     BaseText,
     BaseSafeArea,
@@ -167,7 +167,7 @@ export const HistoryScreen = () => {
     const renderSkeletonList = useMemo(() => {
         return (
             <>
-                <BaseSpacer height={30} />
+                <BaseSpacer height={40} />
                 <BaseView flexDirection="row" style={styles.list}>
                     <FlatList
                         data={[...Array(SKELETON_COUNT)]}
@@ -248,7 +248,9 @@ const baseStyles = (insets: EdgeInsets, tabBarHeight: number) =>
         list: {
             top: 0,
             flex: 1,
-            marginBottom: tabBarHeight - insets.bottom,
+            marginBottom: PlatformUtils.isIOS()
+                ? tabBarHeight - insets.bottom
+                : 0,
         },
         noActivitiesButton: {
             position: "absolute",
