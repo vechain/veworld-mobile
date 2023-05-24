@@ -124,7 +124,8 @@ export const TransferCard = memo(
                         py={12}
                         px={16}
                         key={_address}
-                        style={{ width: SCREEN_WIDTH - 40 }}>
+                        style={{ width: SCREEN_WIDTH - 40 }}
+                        alignItems="flex-start">
                         <BaseText typographyFont="buttonPrimary">
                             {provenanceText}
                         </BaseText>
