@@ -1,10 +1,5 @@
-import {
-    AccountUtils,
-    AddressUtils,
-    VETLedgerAccount,
-    debug,
-    error,
-} from "~Common"
+import { AccountUtils, VETLedgerAccount, debug, error } from "~Common"
+import { AddressUtils } from "~Utils"
 import { DEVICE_TYPE, LocalDevice, LedgerDevice, WalletAccount } from "~Model"
 import { selectDevices, selectSelectedAccount } from "../Selectors"
 import {

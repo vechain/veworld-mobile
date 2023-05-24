@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 import { LocalDevice, LedgerDevice } from "~Model"
 
 type Device = LedgerDevice | LocalDevice

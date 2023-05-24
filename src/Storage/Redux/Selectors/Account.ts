@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
 import { AccountWithDevice } from "~Model"

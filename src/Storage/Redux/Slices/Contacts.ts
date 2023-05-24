@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 import { Contact } from "~Model"
 
 type ContactsSliceState = {
