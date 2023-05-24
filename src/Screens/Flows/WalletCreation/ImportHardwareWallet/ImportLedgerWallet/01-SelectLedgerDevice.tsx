@@ -18,6 +18,7 @@ import { LedgerDeviceBox } from "../components"
 import { FlatList } from "react-native-gesture-handler"
 import { Routes } from "~Navigation"
 import { ConnectedLedgerDevice } from "~Model"
+import { ImportLedgerSvg } from "~Assets"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
@@ -38,7 +39,7 @@ export const SelectLedgerDevice = () => {
 
     const onImportClick = useCallback(() => {
         if (selectedDevice) {
-            nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS, {
+            nav.navigate(Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS, {
                 device: selectedDevice,
             })
         }
@@ -127,17 +128,22 @@ export const SelectLedgerDevice = () => {
                         </BaseText>
 
                         <BaseSpacer height={20} />
-                        <FlatList
-                            style={styles.container}
-                            data={availableDevices}
-                            numColumns={1}
-                            horizontal={false}
-                            renderItem={renderItem}
-                            nestedScrollEnabled={false}
-                            showsVerticalScrollIndicator={false}
-                            ItemSeparatorComponent={renderSeparator}
-                            keyExtractor={item => item.id}
-                        />
+                        {!availableDevices.length && (
+                            <ImportLedgerSvg width={"100%"} />
+                        )}
+                        {availableDevices.length > 0 && (
+                            <FlatList
+                                style={styles.container}
+                                data={availableDevices}
+                                numColumns={1}
+                                horizontal={false}
+                                renderItem={renderItem}
+                                nestedScrollEnabled={false}
+                                showsVerticalScrollIndicator={false}
+                                ItemSeparatorComponent={renderSeparator}
+                                keyExtractor={item => item.id}
+                            />
+                        )}
                     </BaseView>
 
                     <BaseView w={100}>
