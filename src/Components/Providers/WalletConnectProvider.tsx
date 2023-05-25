@@ -10,7 +10,9 @@ import {
 } from "~Storage/Redux"
 import PairingModal from "../../Screens/PairingModal"
 import SignModal from "../../Screens/SignModal"
-import { addSession } from "~Storage/Redux/Actions/WalletConnect"
+import { addSession, removeSession } from "~Storage/Redux/Actions/WalletConnect"
+import { showSuccessToast } from "~Components"
+import { useI18nContext } from "~i18n"
 
 type WalletConnectContextProviderProps = { children: React.ReactNode }
 const WalletConnectContext = React.createContext<IWeb3Wallet | undefined>(
@@ -34,6 +36,7 @@ const WalletConnectContextProvider = ({
     // General
     const account = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
+    const { LL } = useI18nContext()
 
     // Needed for the context
     const value = useMemo(
@@ -88,6 +91,10 @@ const WalletConnectContextProvider = ({
             dispatch(addSession(session))
             setPairingModalVisible(false)
             setCurrentProposal(undefined)
+
+            showSuccessToast(
+                LL.NOTIFICATION_wallet_connect_successfull_pairing(),
+            )
         }
     }
 
@@ -128,6 +135,20 @@ const WalletConnectContextProvider = ({
     )
 
     /**
+     * Handle session delete
+     */
+    const onSessionDelete = useCallback(
+        (payload: { id: number; topic: string }) => {
+            dispatch(removeSession(payload.topic))
+
+            showSuccessToast(
+                LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
+            )
+        },
+        [dispatch, LL],
+    )
+
+    /**
      * Execute at start
      */
     useEffect(() => {
@@ -140,13 +161,15 @@ const WalletConnectContextProvider = ({
     useEffect(() => {
         web3Wallet?.on("session_proposal", onSessionProposal)
         web3Wallet?.on("session_request", onSessionRequest)
+        web3Wallet?.on("session_delete", onSessionDelete)
 
         // Cancel subscription to events when component unmounts
         return () => {
             web3Wallet?.off("session_proposal", onSessionProposal)
             web3Wallet?.off("session_request", onSessionRequest)
+            web3Wallet?.off("session_delete", onSessionDelete)
         }
-    }, [web3Wallet, onSessionRequest, onSessionProposal])
+    }, [web3Wallet, onSessionRequest, onSessionProposal, onSessionDelete])
 
     if (!value) {
         return <></>

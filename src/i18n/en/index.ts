@@ -318,7 +318,8 @@ const en: BaseTranslation = {
     NOTIFICATION_COPIED_CLIPBOARD: "{name} has been copied to the clipboard!",
     NOTIFICATION_transaction_reverted: "Transaction {txId} was reverted.",
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
-
+    NOTIFICATION_wallet_connect_disconnected_from_remote: "The Dapp disconnected from the wallet.",
+    NOTIFICATION_wallet_connect_successfull_pairing: "You correctly connected to the Dapp.",
     // Accounts
 
     // Onboarding

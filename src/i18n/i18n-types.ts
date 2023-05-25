@@ -1086,6 +1086,11 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_found_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
+	 * 
+	 */
+	NOTIFICATION_wallet_connect_disconnected_from_remote: string
+	NOTIFICATION_wallet_connect_successfull_pairing: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -2505,6 +2510,14 @@ Please, try again later.
 	 * {name} has been copied to the clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	/*
+	 * Wallet connect has been disconnected from remote.
+	 */
+	NOTIFICATION_wallet_connect_disconnected_from_remote: () => LocalizedString
+	/*
+	 * Wallet connect has paired successfully to the DApp.
+	 */
+	NOTIFICATION_wallet_connect_successfull_pairing: () => LocalizedString
 	/**
 	 * Transaction {txId} was reverted.
 	 */
