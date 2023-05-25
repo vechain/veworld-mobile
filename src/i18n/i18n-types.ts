@@ -1422,6 +1422,22 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_deploy_contract: string
 	/**
+	 * A​p​p​r​o​v​e​ ​N​F​T
+	 */
+	CONNECTED_APP_approve_nft: string
+	/**
+	 * S​w​a​p​ ​V​E​T​ ​f​o​r​ ​t​o​k​e​n​s
+	 */
+	CONNECTED_APP_swap_vet_for_tokens: string
+	/**
+	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​V​E​T
+	 */
+	CONNECTED_APP_swap_tokens_for_vet: string
+	/**
+	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​t​o​k​e​n​s
+	 */
+	CONNECTED_APP_swap_tokens_for_tokens: string
+	/**
 	 * O​u​t​c​o​m​e​s
 	 */
 	OUTCOMES: string
@@ -1445,6 +1461,10 @@ type RootTranslation = {
 	 * C​l​i​c​k​ ​t​o​ ​c​o​p​y​ ​A​B​I
 	 */
 	COPY_ABI: string
+	/**
+	 * T​o​k​e​n​ ​I​D
+	 */
+	TOKEN_ID: string
 }
 
 export type TranslationFunctions = {
@@ -2846,6 +2866,22 @@ Please, try again later.
 	 */
 	CONNECTED_APP_deploy_contract: () => LocalizedString
 	/**
+	 * Approve NFT
+	 */
+	CONNECTED_APP_approve_nft: () => LocalizedString
+	/**
+	 * Swap VET for tokens
+	 */
+	CONNECTED_APP_swap_vet_for_tokens: () => LocalizedString
+	/**
+	 * Swap tokens for VET
+	 */
+	CONNECTED_APP_swap_tokens_for_vet: () => LocalizedString
+	/**
+	 * Swap tokens for tokens
+	 */
+	CONNECTED_APP_swap_tokens_for_tokens: () => LocalizedString
+	/**
 	 * Outcomes
 	 */
 	OUTCOMES: () => LocalizedString
@@ -2869,6 +2905,10 @@ Please, try again later.
 	 * Click to copy ABI
 	 */
 	COPY_ABI: () => LocalizedString
+	/**
+	 * Token ID
+	 */
+	TOKEN_ID: () => LocalizedString
 }
 
 export type Formatters = {}
