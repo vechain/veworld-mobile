@@ -1,4 +1,4 @@
-import { alreadyExists } from "~Common/Utils/FormUtils/FormUtils"
+import FormUtils from "../FormUtils"
 
 describe("alreadyExists", () => {
     const arr = [
@@ -8,15 +8,17 @@ describe("alreadyExists", () => {
     ]
 
     it("should return true when the value exists in the key", () => {
-        expect(alreadyExists("Bob", arr, "name")).toBe(true)
+        expect(FormUtils.alreadyExists("Bob", arr, "name")).toBe(true)
     })
 
     it("should return false when the value does not exist in the key", () => {
-        expect(alreadyExists("David", arr, "name")).toBe(false)
+        expect(FormUtils.alreadyExists("David", arr, "name")).toBe(false)
     })
 
     it("should return false when excluding the only matching element", () => {
-        expect(alreadyExists("Alice", arr, "name", arr[0])).toBe(false)
+        expect(FormUtils.alreadyExists("Alice", arr, "name", arr[0])).toBe(
+            false,
+        )
     })
 
     it("should return true when using a custom compare function", () => {
@@ -24,7 +26,13 @@ describe("alreadyExists", () => {
             return String(value1).toLowerCase() === String(value2).toLowerCase()
         }
         expect(
-            alreadyExists("bob", arr, "name", undefined, compareFunction),
+            FormUtils.alreadyExists(
+                "bob",
+                arr,
+                "name",
+                undefined,
+                compareFunction,
+            ),
         ).toBe(true)
     })
 
@@ -33,7 +41,13 @@ describe("alreadyExists", () => {
             return String(value1).toLowerCase() === String(value2).toLowerCase()
         }
         expect(
-            alreadyExists("david", arr, "name", undefined, compareFunction),
+            FormUtils.alreadyExists(
+                "david",
+                arr,
+                "name",
+                undefined,
+                compareFunction,
+            ),
         ).toBe(false)
     })
 
@@ -43,12 +57,12 @@ describe("alreadyExists", () => {
             { id: "b", name: "Bob" },
             { id: "c", name: "Charlie" },
         ]
-        expect(alreadyExists("a", arr2, "id")).toBe(true)
+        expect(FormUtils.alreadyExists("a", arr2, "id")).toBe(true)
     })
 
     it("should return false when key is not present in array elements", () => {
         expect(
-            alreadyExists(
+            FormUtils.alreadyExists(
                 "Bob",
                 arr,
                 "nonExistentKey" as keyof (typeof arr)[number],

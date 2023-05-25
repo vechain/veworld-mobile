@@ -1,7 +1,7 @@
 import { AppThunk } from "../Types"
 import { Contact, ContactType } from "~Model"
 import { deleteContact, insertContact } from "../Slices"
-import { alreadyExists } from "~Common/Utils/FormUtils/FormUtils"
+import { FormUtils } from "~Utils"
 import { updateContact } from "../Slices/Contacts"
 import { address } from "thor-devkit"
 
@@ -42,7 +42,7 @@ const addContact =
 
         const checksumedAddress = address.toChecksumed(_address)
 
-        const contactExists = alreadyExists(
+        const contactExists = FormUtils.alreadyExists(
             checksumedAddress,
             contactsState.contacts,
             "address",
@@ -76,7 +76,7 @@ const addCachedContact =
 
         const checksumedAddress = address.toChecksumed(_address)
 
-        const contactExists = alreadyExists(
+        const contactExists = FormUtils.alreadyExists(
             checksumedAddress,
             contactsState.contacts,
             "address",
@@ -109,7 +109,7 @@ const removeContact =
 
         const checksumedAddress = address.toChecksumed(_address)
 
-        const contactExists = alreadyExists(
+        const contactExists = FormUtils.alreadyExists(
             checksumedAddress,
             contactsState.contacts,
             "address",
@@ -139,7 +139,7 @@ const editContact =
         const checksumedAddress = address.toChecksumed(_address)
         const checksumedPreviousAddress = address.toChecksumed(_previousAddress)
 
-        const contactExists = alreadyExists(
+        const contactExists = FormUtils.alreadyExists(
             checksumedPreviousAddress,
             contactsState.contacts,
             "address",

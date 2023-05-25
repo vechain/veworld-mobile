@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleProp, ViewStyle } from "react-native"
-import { FormattingUtils } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Contact } from "~Model"
 

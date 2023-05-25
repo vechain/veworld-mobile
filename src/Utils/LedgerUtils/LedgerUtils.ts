@@ -1,14 +1,14 @@
 import { LedgerDevice, Network } from "~Model"
 import { Mutex } from "async-mutex"
 import { Certificate, Transaction, HDNode } from "thor-devkit"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, BalanceUtils } from "~Utils"
 import VETLedgerApp, {
     VETLedgerAccount,
     VET_DERIVATION_PATH,
 } from "~Common/Ledger/VetLedgerApp"
-import { debug, error, warn } from "../../Logger"
+import { debug, error, warn } from "~Common/Logger"
 import { Buffer } from "buffer"
-import BalanceUtils from "../BalanceUtils"
+
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 
 const ledgerMutex = new Mutex()

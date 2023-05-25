@@ -2,7 +2,7 @@
 import { hdnode1, hdnode2 } from "./wallets"
 import { mockLedgerAccount } from "./ledger"
 import { DEVICE_TYPE, LocalDevice, LedgerDevice } from "~Model"
-import { CryptoUtils } from "~Common"
+import { CryptoUtils } from "~Utils"
 
 export const device1: LocalDevice = {
     alias: "Device 1",

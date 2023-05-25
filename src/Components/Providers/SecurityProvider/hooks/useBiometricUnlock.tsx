@@ -1,12 +1,6 @@
 import { useCallback, useEffect } from "react"
-import {
-    AlertUtils,
-    BiometricsUtils,
-    LockScreenUtils,
-    useAppLock,
-    useAppReset,
-    useWalletSecurity,
-} from "~Common"
+import { useAppLock, useAppReset, useWalletSecurity } from "~Common"
+import { AlertUtils, BiometricsUtils, LockScreenUtils } from "~Utils"
 import RNBootSplash from "react-native-bootsplash"
 import { selectIsSecurityDowngrade, useAppSelector } from "~Storage/Redux"
 

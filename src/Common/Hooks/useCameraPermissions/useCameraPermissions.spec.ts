@@ -3,7 +3,7 @@ import { Linking } from "react-native"
 import { useCameraPermissions } from "."
 import { Camera } from "expo-camera"
 import { AppStateType } from "~Model"
-import { AlertUtils } from "~Common/Utils"
+import { AlertUtils } from "~Utils"
 
 jest.mock("../useAppState", () => ({
     useAppState: () => [AppStateType.BACKGROUND, AppStateType.ACTIVE],
@@ -24,7 +24,7 @@ jest.mock("~i18n", () => ({
     })),
 }))
 
-jest.mock("~Common/Utils", () => ({
+jest.mock("~Utils", () => ({
     AlertUtils: {
         showGoToSettingsAlert: jest.fn(),
     },

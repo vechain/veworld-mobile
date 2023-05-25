@@ -1,7 +1,8 @@
 import React, { useMemo } from "react"
 import { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, FormattingUtils, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import {

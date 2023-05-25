@@ -5,10 +5,10 @@ import {
     ColorThemeType,
     useTheme,
     useThemedStyles,
-    PlatformUtils,
     CURRENCY,
     valueToHP,
 } from "~Common"
+import { PlatformUtils } from "~Utils"
 import {
     AccountIcon,
     AddressButton,

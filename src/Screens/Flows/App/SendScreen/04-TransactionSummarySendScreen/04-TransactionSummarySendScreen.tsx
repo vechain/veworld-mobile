@@ -1,7 +1,8 @@
 import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, VTHO, useCheckIdentity, useTheme } from "~Common"
+import { VTHO, useCheckIdentity, useTheme } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import {
     AccountCard,

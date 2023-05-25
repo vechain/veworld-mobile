@@ -1,6 +1,5 @@
 import { useCallback } from "react"
-import { FormUtils } from "~Common"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, FormUtils } from "~Utils"
 import { selectContacts, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { address as thorAddress } from "thor-devkit"

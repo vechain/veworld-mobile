@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { FormattingUtils } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { CoinMarketInfo } from "~Storage/Redux/Types"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 

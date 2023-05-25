@@ -1,7 +1,8 @@
 import crypto from "react-native-quick-crypto"
 import { createTransform } from "redux-persist"
 import type { TransformConfig } from "redux-persist/lib/createTransform"
-import { CryptoUtils, warn } from "~Common"
+import { warn } from "~Common"
+import { CryptoUtils } from "~Utils"
 import KeychainService from "~Services/KeychainService"
 
 export interface EncryptTransformConfig {
