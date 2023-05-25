@@ -88,7 +88,7 @@ export const BaseAccordion = ({
     // I didn't find a better way to set the default open state
     useEffect(() => {
         if (defaultIsOpen) {
-            setTimeout(onHeaderPress, 10)
+            setTimeout(onHeaderPress, 100)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

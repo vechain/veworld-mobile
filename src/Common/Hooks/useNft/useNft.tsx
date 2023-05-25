@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useNftContract } from "./useNftContract"
 import { error as logError } from "~Common/Logger"
 import { useI18nContext } from "~i18n"
-import { NonFungibleTokeCollection, NonFungibleToken } from "~Model/Nft/Nft"
+import { NonFungibleTokenCollection, NonFungibleToken } from "~Model/Nft/Nft"
 import {
     getTokenMetaIpfs,
     getImageUrlIpfs,
@@ -60,7 +60,7 @@ export const useNft = () => {
 
     useEffect(() => {
         const init = async () => {
-            let _collectionFinal: NonFungibleTokeCollection[] = []
+            let _collectionFinal: NonFungibleTokenCollection[] = []
 
             for (const collection of nftCollections) {
                 let _nftFinal: NonFungibleToken[] = []

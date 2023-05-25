@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { NonFungibleTokeCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 
-type NftSliceState = NonFungibleTokeCollection[]
+type NftSliceState = NonFungibleTokenCollection[]
 
 export const initialStateNft: NftSliceState = []
 
@@ -11,7 +11,7 @@ export const NftSlice = createSlice({
     reducers: {
         setNfts: (
             state,
-            action: PayloadAction<NonFungibleTokeCollection[]>,
+            action: PayloadAction<NonFungibleTokenCollection[]>,
         ) => {
             const nftCollection = action.payload
             state = nftCollection

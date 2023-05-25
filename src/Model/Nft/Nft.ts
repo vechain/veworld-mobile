@@ -10,7 +10,7 @@ export interface NFTContract {
     creator?: string
 }
 
-export interface NonFungibleTokeCollection {
+export interface NonFungibleTokenCollection {
     name: string
     address: string
     symbol: string

@@ -9,12 +9,12 @@ import {
     PicassoAddressIcon,
 } from "~Components"
 import { NftsList } from "./NftsList"
-import { NonFungibleTokeCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 import { isEmpty } from "lodash"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = {
-    collection: NonFungibleTokeCollection
+    collection: NonFungibleTokenCollection
 }
 
 export const CollectionAccordion = ({ collection }: Props) => {

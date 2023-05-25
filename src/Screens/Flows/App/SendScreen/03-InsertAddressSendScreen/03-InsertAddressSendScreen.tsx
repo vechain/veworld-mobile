@@ -139,7 +139,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 </BaseView>
                 <BaseView mx={24}>
                     <BaseAccordion
-                        defaultIsOpen
+                        defaultIsOpen={!!contacts.length}
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>

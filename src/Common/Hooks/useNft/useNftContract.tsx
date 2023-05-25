@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react"
 import { error } from "~Common/Logger"
 import { useThor } from "~Components"
-import { NonFungibleTokeCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 import {
     getNftsForContract,
     NftForContractResponse,
     getCollectionInfo,
     getContractAddresses,
     getTokenURI,
-    getBalanceOf,
+    getNftBalanceOf,
     getOwnerOf,
     getName,
     getSymbol,
@@ -27,7 +27,7 @@ export const useNftContract = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [nftCollections, setNftCollections] = useState<
-        NonFungibleTokeCollection[]
+        NonFungibleTokenCollection[]
     >([])
 
     const getNFTsFor = useCallback(async () => {
@@ -61,7 +61,7 @@ export const useNftContract = () => {
                 },
             )
 
-            const _nftCollections: NonFungibleTokeCollection[] = []
+            const _nftCollections: NonFungibleTokenCollection[] = []
 
             // loop over the nnft collections
             for (const collection of nftData) {
@@ -70,7 +70,7 @@ export const useNftContract = () => {
                     col => col.address === collection[0].contractAddress,
                 )
 
-                const nftCollection: NonFungibleTokeCollection = {
+                const nftCollection: NonFungibleTokenCollection = {
                     address: "",
                     name: "",
                     symbol: "",
@@ -112,7 +112,7 @@ export const useNftContract = () => {
                         )
 
                     if (!nftCollection.balanceOf)
-                        nftCollection.balanceOf = await getBalanceOf(
+                        nftCollection.balanceOf = await getNftBalanceOf(
                             selectedAccount?.address!,
                             item.contractAddress,
                             thor,

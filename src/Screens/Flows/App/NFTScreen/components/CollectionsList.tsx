@@ -3,7 +3,7 @@ import { BaseSpacer, BaseView } from "~Components"
 import { CollectionAccordion } from "./CollectionAccordion"
 import { selectNftCollections, useAppSelector } from "~Storage/Redux"
 import { FlashList } from "@shopify/flash-list"
-import { NonFungibleTokeCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 import { isEmpty } from "lodash"
 import { NftSkeleton } from "./NftSkeleton"
 
@@ -13,7 +13,7 @@ export const CollectionsList = memo(() => {
     const renderSeparator = useCallback(() => <BaseSpacer height={12} />, [])
 
     const renderNftCollection = useCallback(
-        ({ item }: { item: NonFungibleTokeCollection }) => {
+        ({ item }: { item: NonFungibleTokenCollection }) => {
             const collectionWithMissingNftData = item.nfts.filter(
                 nft => !isEmpty(nft.image),
             )

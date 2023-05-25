@@ -1,7 +1,7 @@
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 import { isEmpty } from "lodash"
 
-export const getBalanceOf = async (
+export const getNftBalanceOf = async (
     ownerAddress: string,
     contractAddress: string,
     thor: Connex.Thor,
