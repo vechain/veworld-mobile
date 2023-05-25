@@ -3,8 +3,8 @@ import VETLedgerApp, { VETLedgerAccount } from "~Common/Ledger/VetLedgerApp"
 
 import { error, info, warn, debug } from "~Common/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
-import { LedgerUtils } from "~Common/Utils"
-import { LEDGER_ERROR_CODES } from "~Common/Utils/LedgerUtils/LedgerUtils"
+import { LedgerUtils } from "~Utils"
+import { LEDGER_ERROR_CODES } from "~Utils/LedgerUtils/LedgerUtils"
 
 /**
  * useLedger is a custom react hook for interacting with ledger devices

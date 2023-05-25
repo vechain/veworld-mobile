@@ -1,6 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useMemo } from "react"
-import { LEDGER_ERROR_CODES } from "~Common/Utils/LedgerUtils/LedgerUtils"
+import { LEDGER_ERROR_CODES } from "~Utils/LedgerUtils/LedgerUtils"
 import { BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
 import { useI18nContext } from "~i18n"
 
