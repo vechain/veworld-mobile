@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
-import { VET, VTHO } from "~Common/Constant"
+import { VET, VET_BY_NETWORK, VTHO } from "~Common/Constant"
 import { RootState } from "~Storage/Redux/Types"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
@@ -13,6 +13,15 @@ import {
 } from "./TokenBalances"
 
 export const selectBalancesState = (state: RootState) => state.balances
+
+/**
+ * Get all balances of the selected network
+ */
+export const selectSelectedNetworkBalances = createSelector(
+    [selectBalancesState, selectSelectedNetwork],
+    (balances, network) =>
+        balances.filter(balance => network.genesis.id === balance?.genesisId),
+)
 
 /**
  * Get all balances of the selected account
@@ -189,3 +198,29 @@ export const selectVetBalance = createSelector(
         ).toString()
     },
 )
+
+export const selectVetTokenWithBalanceByAccount = (accountAddress: string) =>
+    createSelector(
+        [selectSelectedNetworkBalances, selectSelectedNetwork],
+        (balances, network) => {
+            const vetToken = VET_BY_NETWORK[network.type]
+
+            const balance = balances.find(
+                _balance =>
+                    _balance.accountAddress === accountAddress &&
+                    _balance.tokenAddress === vetToken.address,
+            )
+
+            if (!balance) {
+                throw new Error(
+                    `Unable to find vet balance for account: ${accountAddress}`,
+                )
+            }
+
+            const tokenWithBalance: FungibleTokenWithBalance = {
+                ...vetToken,
+                balance,
+            }
+            return tokenWithBalance
+        },
+    )

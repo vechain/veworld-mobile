@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { ColorThemeType, VET, useThemedStyles } from "~Common"
 import { FormattingUtils } from "~Utils"
 import {
     AccountIcon,
@@ -10,6 +10,11 @@ import {
     BaseView,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
+import {
+    selectVetTokenWithBalanceByAccount,
+    useAppSelector,
+} from "~Storage/Redux"
+import { BigNumber } from "bignumber.js"
 
 type Props = {
     account: AccountWithDevice
@@ -20,6 +25,16 @@ type Props = {
 export const AccountCard: React.FC<Props> = memo(
     ({ account, onPress, selected, containerStyle }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
+        const vetTokenWithBalance = useAppSelector(
+            selectVetTokenWithBalanceByAccount(account.address),
+        )
+        const vetBalance = new BigNumber(
+            FormattingUtils.convertToFiatBalance(
+                vetTokenWithBalance?.balance.balance || "0",
+                1,
+                VET.decimals,
+            ),
+        ).toString()
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
@@ -48,9 +63,9 @@ export const AccountCard: React.FC<Props> = memo(
                             )}
                         </BaseText>
                         <BaseSpacer height={4} />
-                        {/** TODO: change with a real budget */}
-                        {/* eslint-disable-next-line i18next/no-literal-string  */}
-                        <BaseText fontSize={10}>1.2235 VET</BaseText>
+                        <BaseText fontSize={10}>
+                            {vetBalance} {vetTokenWithBalance.symbol}
+                        </BaseText>
                     </BaseView>
                 </BaseTouchableBox>
             </BaseView>
