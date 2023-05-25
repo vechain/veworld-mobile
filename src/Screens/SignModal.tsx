@@ -47,7 +47,6 @@ export default function SignModal({
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
     const selectedDevice = useAppSelector(selectDevice(account?.rootAddress))
-    // console.log("SignModal requestEvent", requestEvent)
 
     // CurrentProposal values
     const chainID = requestEvent?.params?.chainId?.toUpperCase()
@@ -129,9 +128,8 @@ export default function SignModal({
                 nonce: HexUtils.generateRandom(8),
             }
 
-            // console.log('transaction', transaction);
             let encodedRawTx
-            if (params.delegateUrl !== "") {
+            if (params.delegateUrl !== undefined && params.delegateUrl !== "") {
                 const tx = TransactionUtils.toDelegation(transaction)
                 // build hex encoded version of the transaction for signing request
                 const rawTransaction = HexUtils.addPrefix(
@@ -187,6 +185,8 @@ export default function SignModal({
                     raw: HexUtils.addPrefix(tx.encode().toString("hex")),
                 }
             }
+            console.log("encodedRawTx", encodedRawTx)
+            console.log("network.currentUrl", network.currentUrl)
 
             await axios
                 .post(`${network.currentUrl}/transactions`, encodedRawTx)
