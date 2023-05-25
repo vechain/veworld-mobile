@@ -212,16 +212,21 @@ export const selectVetTokenWithBalanceByAccount = (accountAddress: string) =>
             )
 
             if (!balance) {
-                throw new Error(
-                    `Unable to find vet balance for account: ${accountAddress}`,
-                )
+                return {
+                    ...vetToken,
+                    balance: {
+                        balance: "0",
+                        accountAddress,
+                        tokenAddress: vetToken.address,
+                        genesisId: network.genesis.id,
+                    },
+                }
             }
 
-            const tokenWithBalance: FungibleTokenWithBalance = {
+            return {
                 ...vetToken,
                 balance,
             }
-            return tokenWithBalance
         },
     )
 
