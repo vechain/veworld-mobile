@@ -7,6 +7,7 @@ import {
     BaseView,
     useThor,
     useWalletConnect,
+    showErrorToast,
 } from "~Components"
 import {
     HDNode,
@@ -142,17 +143,31 @@ export default function SignModal({
                     raw: rawTransaction,
                 }
 
-                const response = await axios.post(
-                    params.delegateUrl,
-                    sponsorRequest,
-                )
+                const response = await axios
+                    .post(params.delegateUrl, sponsorRequest)
+                    .catch(async e => {
+                        const formattedResponse = formatJsonRpcError(
+                            id,
+                            e.message
+                                ? e.message
+                                : "Unexpected error while executing transaction",
+                        )
 
-                if (response.data.error || !response.data.signature) {
-                    // onError(response.data.error)
-                    // console.log(
-                    //     "Error delegating transaction",
-                    //     response.data.error,
-                    // )
+                        await web3Wallet.respondSessionRequest({
+                            topic,
+                            response: formattedResponse,
+                        })
+                    })
+
+                if (
+                    !response ||
+                    response.data.error ||
+                    !response.data.signature
+                ) {
+                    showErrorToast(
+                        "An error occurred while asking delegator to sign the transaction",
+                    )
+                    return
                 }
 
                 const urlDelegationSignature = Buffer.from(
@@ -185,13 +200,13 @@ export default function SignModal({
                     raw: HexUtils.addPrefix(tx.encode().toString("hex")),
                 }
             }
-            console.log("encodedRawTx", encodedRawTx)
-            console.log("network.currentUrl", network.currentUrl)
+
+            // console.log("encodedRawTx", encodedRawTx)
+            // console.log("network.currentUrl", network.currentUrl)
 
             await axios
                 .post(`${network.currentUrl}/transactions`, encodedRawTx)
                 .then(async response => {
-                    // console.log(response.data)
                     await web3Wallet.respondSessionRequest({
                         topic,
                         response: {
@@ -204,19 +219,24 @@ export default function SignModal({
                         },
                     })
                 })
-                .catch(async () => {
-                    //TODO: ALERT ON SCREEN
-                    // console.log('error ', JSON.stringify(error))
-
+                .catch(async e => {
                     const response = formatJsonRpcError(
                         id,
-                        getSdkError("USER_REJECTED_METHODS").message, //TODO: change error message
+                        e.message
+                            ? e.message
+                            : "An unexpected error occurred while executing transaction",
                     )
 
                     await web3Wallet.respondSessionRequest({
                         topic,
                         response,
                     })
+
+                    showErrorToast(
+                        e.message
+                            ? e.message
+                            : "An unexpected error occurred while executing transaction",
+                    )
                 })
         },
         [account, network, params, thorClient, topic, web3Wallet],
