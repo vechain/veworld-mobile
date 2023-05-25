@@ -18,13 +18,13 @@ export const getCustomTokenInfo = async ({
         const contract = thorClient.account(addr)
 
         const tokenName = await contract
-            .method(ThorConstants.abis.vip180.name)
+            .method(ThorConstants.abis.VIP180.name)
             .call()
         const tokenSymbol = await contract
-            .method(ThorConstants.abis.vip180.symbol)
+            .method(ThorConstants.abis.VIP180.symbol)
             .call()
         const decimals = await contract
-            .method(ThorConstants.abis.vip180.decimals)
+            .method(ThorConstants.abis.VIP180.decimals)
             .call()
 
         return {

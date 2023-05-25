@@ -100,7 +100,7 @@ const getTokenTransfers = async (
         .cache([params.accountAddress])
         .apply(params.offset, params.size)
 
-    const ev = new abi.Event(abis.vip180.TransferEvent)
+    const ev = new abi.Event(abis.VIP180.TransferEvent)
 
     return events.map(item => {
         const decode = ev.decode(item.data, item.topics)
@@ -137,12 +137,12 @@ const buildEventCriteria = (
     addr: string,
 ): Connex.Thor.Filter.Criteria<"event">[] => {
     const from = tokens.map(item => {
-        return thor.account(item).event(abis.vip180.TransferEvent).asCriteria({
+        return thor.account(item).event(abis.VIP180.TransferEvent).asCriteria({
             from: addr,
         })
     })
     const to = tokens.map(item => {
-        return thor.account(item).event(abis.vip180.TransferEvent).asCriteria({
+        return thor.account(item).event(abis.VIP180.TransferEvent).asCriteria({
             to: addr,
         })
     })
