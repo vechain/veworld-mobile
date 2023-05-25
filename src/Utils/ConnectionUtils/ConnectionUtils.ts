@@ -1,4 +1,3 @@
-import { veWorldErrors } from "~Common/Errors"
 import { debug, error, warn } from "~Common/Logger"
 import URLUtils from "../URLUtils"
 
@@ -19,15 +18,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
     debug("Verifying websocket connection")
 
     await new Promise<void>(function (resolve, reject) {
-        setTimeout(
-            () =>
-                reject(
-                    veWorldErrors.provider.disconnected({
-                        message: "Node timed out",
-                    }),
-                ),
-            timeout,
-        )
+        setTimeout(() => reject("Node timed out"), timeout)
         const wsUrl = URLUtils.toNodeBeatWebsocketUrl(url)
         const webSocket = new WebSocket(wsUrl)
 
@@ -39,11 +30,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
 
         webSocket.onerror = () => {
             error("Websocket errored")
-            reject(
-                veWorldErrors.provider.disconnected({
-                    message: "Failed to test WS connection",
-                }),
-            )
+            reject("Failed to test WS connection")
             webSocket.close()
         }
 
