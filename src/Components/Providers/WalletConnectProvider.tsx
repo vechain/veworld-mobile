@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { WalletConnectUtils } from "~Common"
+import { WalletConnectUtils } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SignClientTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"

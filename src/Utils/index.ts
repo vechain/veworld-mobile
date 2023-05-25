@@ -25,15 +25,8 @@ import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
-<<<<<<< HEAD:src/Common/Utils/index.ts
-import FormUtils from "./FormUtils"
-import ConnectionUtils from "./ConnectionUtils"
-import DateUtils from "./DateUtils"
-import * as ReanimatedUtils from "./Reanimated"
-import WalletConnectUtils from "./WalletConnectUtils"
-=======
 import ReanimatedUtils from "./ReanimatedUtils"
->>>>>>> main:src/Utils/index.ts
+import WalletConnectUtils from "./WalletConnectUtils"
 
 export {
     AddressUtils,
