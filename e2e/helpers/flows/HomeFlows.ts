@@ -15,6 +15,14 @@ export const goToContactsManagement = async () => {
     await element(by.text("Contacts")).tap()
 }
 
+export const goToTokensManagementScreen = async () => {
+    await waitFor(element(by.id("EditTokensBar_BaseIcon_manageToken")))
+        .toExist()
+        .withTimeout(LONG_TIMEOUT)
+
+    await element(by.id("EditTokensBar_BaseIcon_manageToken")).tap()
+}
+
 export const goToAdvancedSettings = async () => {
     await waitFor(element(by.id("settings-tab")))
         .toExist()
