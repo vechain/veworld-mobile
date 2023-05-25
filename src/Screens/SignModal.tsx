@@ -124,7 +124,7 @@ export default function SignModal({
                 expiration: 18,
                 clauses: clauses,
                 gasPriceCoef: 0,
-                gas: 4000000, //TODO: gas is not correct when calculate intrinsic gas
+                gas: 8000000, //TODO: gas is not correct when calculate intrinsic gas
                 dependsOn: null, // TODO: in extension it is null
                 nonce: HexUtils.generateRandom(8),
             }
