@@ -1,7 +1,13 @@
-import { Image, Modal, StyleSheet } from "react-native"
+import { Image, StyleSheet } from "react-native"
 import { SignClientTypes } from "@walletconnect/types"
 import React from "react"
-import { BaseText, BaseButton, BaseView } from "~Components"
+import {
+    BaseText,
+    BaseButton,
+    BaseView,
+    BaseModal,
+    BaseSpacer,
+} from "~Components"
 
 interface PairingModalProps {
     visible: boolean
@@ -27,93 +33,64 @@ export default function PairingModal({
     const icon = currentProposal?.params.proposer.metadata.icons[0]
 
     return (
-        <Modal visible={visible} animationType="slide" transparent>
-            <BaseView style={styles.container}>
-                <BaseView style={styles.modalContentContainer}>
-                    <Image
-                        style={styles.dappLogo}
-                        source={{
-                            uri: icon,
-                        }}
-                    />
-                    <BaseText>{name}</BaseText>
-                    <BaseText>{url}</BaseText>
+        <BaseModal isOpen={visible} onClose={() => {}}>
+            <BaseView>
+                <BaseView>
+                    <BaseView alignItems="center" justifyContent="center">
+                        <Image
+                            style={styles.dappLogo}
+                            source={{
+                                uri: icon,
+                            }}
+                        />
+                        <BaseText>{name}</BaseText>
+                        <BaseText>{url}</BaseText>
+                    </BaseView>
+
+                    <BaseSpacer height={24} />
 
                     <BaseText>
                         {"Chains: "} {chains}
                     </BaseText>
 
-                    <BaseView style={styles.marginVertical8}>
-                        <BaseText style={styles.subHeading}>
-                            {"Methods: "}
-                        </BaseText>
+                    <BaseSpacer height={24} />
+
+                    <BaseView>
+                        <BaseText>{"Methods: "}</BaseText>
                         {methods?.map((method, index) => (
-                            <BaseText
-                                style={styles.centerText}
-                                key={method + index}>
-                                {method}
-                            </BaseText>
+                            <BaseText key={method + index}>{method}</BaseText>
                         ))}
                     </BaseView>
 
-                    <BaseView style={styles.marginVertical8}>
-                        <BaseText style={styles.subHeading}>
-                            {"Events: "}
-                        </BaseText>
+                    <BaseSpacer height={24} />
+
+                    <BaseView>
+                        <BaseText>{"Events: "}</BaseText>
                         {events?.map(event => (
-                            <BaseText style={styles.centerText} key={event}>
-                                {event}
-                            </BaseText>
+                            <BaseText key={event}>{event}</BaseText>
                         ))}
                     </BaseView>
 
-                    <BaseView style={styles.flexRow}>
+                    <BaseSpacer height={24} />
+
+                    <BaseView
+                        alignItems="center"
+                        justifyContent="center"
+                        flexDirection="row">
                         <BaseButton action={handleReject} title="Cancel" />
                         <BaseButton action={handleAccept} title="Accept" />
                     </BaseView>
                 </BaseView>
             </BaseView>
-        </Modal>
+        </BaseModal>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    modalContentContainer: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 34,
-        borderWidth: 1,
-        width: "100%",
-        height: "50%",
-        position: "absolute",
-        backgroundColor: "white",
-        bottom: 0,
-    },
     dappLogo: {
         width: 50,
         height: 50,
         borderRadius: 8,
         marginVertical: 4,
-    },
-    flexRow: {
-        display: "flex",
-        flexDirection: "row",
-    },
-    marginVertical8: {
-        marginVertical: 8,
-        textAlign: "center",
-    },
-    subHeading: {
-        textAlign: "center",
-        fontWeight: "600",
-    },
-    centerText: {
-        textAlign: "center",
     },
 })

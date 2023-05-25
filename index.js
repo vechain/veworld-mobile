@@ -4,13 +4,14 @@ import { AppRegistry } from "react-native"
 import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
-
+import "@walletconnect/react-native-compat"
 import { PersistGate } from "redux-persist/integration/react"
 import { Provider } from "react-redux"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { info, useTheme } from "~Common"
 import {
+    WalletConnectContextProvider,
     ConnexContextProvider,
     TranslationProvider,
     BaseToast,
@@ -66,7 +67,9 @@ const Main = () => {
                             <TranslationProvider>
                                 <NavigationProvider>
                                     <BottomSheetModalProvider>
-                                        {fontsLoaded && <EntryPoint />}
+                                        <WalletConnectContextProvider>
+                                            {fontsLoaded && <EntryPoint />}
+                                        </WalletConnectContextProvider>
                                     </BottomSheetModalProvider>
                                 </NavigationProvider>
                                 <BaseToast />

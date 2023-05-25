@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useCallback } from "react"
 import {
     BaseText,
     BackButtonHeader,
@@ -7,137 +7,67 @@ import {
     BaseButton,
     BaseTextInput,
     BaseView,
+    useWalletConnect,
 } from "~Components"
-import useInitialization, {
-    currentETHAddress,
-    web3wallet,
-    web3WalletPair,
-} from "../../../../Common/Utils/WalletConnect/WalletConnectUtils"
-import PairingModal from "../../../PairingModal"
-import { SignClientTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
-import { VECHAIN_SIGNING_METHODS } from "../../../../Common/Utils/WalletConnect/Lib"
-import SignModal from "../../../SignModal"
+import {
+    selectSelectedAccount,
+    useAppSelector,
+    useAppDispatch,
+} from "~Storage/Redux"
+import { selectSessions } from "~Storage/Redux/Selectors"
+import { ISession } from "@walletconnect/types"
+import { removeSession } from "~Storage/Redux/Actions"
 
 export const WalletConnectScreen = () => {
-    //Add Initialization
-    useInitialization()
-
-    const [modalVisible, setModalVisible] = useState(false)
-
-    const [currentProposal, setCurrentProposal] = useState()
-    const [successfulSession, setSuccessfulSession] = useState(false)
-
-    const [requestSession, setRequestSession] = useState()
-    const [requestEventData, setRequestEventData] = useState()
-    const [signModalVisible, setSignModalVisible] = useState(false)
-
+    const web3Wallet = useWalletConnect()
+    const activeSessions: ISession[] = useAppSelector(selectSessions)
     const [uri, setUri] = useState("")
+    const account = useAppSelector(selectSelectedAccount)
+    const dispatch = useAppDispatch()
 
-    //Add the pairing function from W3W
-    async function pair() {
-        // console.log("Pairing uri", uri)
-        const pairing = await web3WalletPair({ uri: uri })
-        return pairing
-    }
-
-    // After the pair() function, add these functions: onSessionProposal / handleAccept / handleReject
-    const onSessionProposal = useCallback(
-        (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
-            setModalVisible(true)
-            setCurrentProposal(proposal)
-        },
-        [],
-    )
-
-    async function handleAccept() {
-        const { id, params } = currentProposal
-        const { requiredNamespaces, relays } = params
-
-        if (currentProposal) {
-            const namespaces: SessionTypes.Namespaces = {}
-
-            Object.keys(requiredNamespaces).forEach(key => {
-                const accounts: string[] = []
-                requiredNamespaces[key].chains.map((chain: string) => {
-                    ;[currentETHAddress].map(acc =>
-                        accounts.push(`${chain}:${acc}`),
-                    )
-                })
-
-                namespaces[key] = {
-                    accounts,
-                    methods: requiredNamespaces[key].methods,
-                    events: requiredNamespaces[key].events,
-                }
+    const onPair = useCallback(async () => {
+        try {
+            let result = await web3Wallet.core.pairing.pair({
+                uri,
+                activatePairing: true,
             })
-
-            await web3wallet.approveSession({
-                id,
-                relayProtocol: relays[0].protocol,
-                namespaces,
-            })
-
-            setModalVisible(false)
             setUri("")
-            setCurrentProposal(undefined)
-            setSuccessfulSession(true)
+            return result
+        } catch (err: unknown) {
+            // console.log("Error for pairing", err)
         }
-    }
+    }, [uri, web3Wallet])
 
     async function disconnect() {
-        const activeSessions = await web3wallet.getActiveSessions()
-        const topic = Object.values(activeSessions)[0].topic
+        const topic = activeSessions[0].topic
 
         if (activeSessions) {
-            await web3wallet.disconnectSession({
+            // console.log("Disconnecting session with topic: ", topic)
+            await web3Wallet.disconnectSession({
                 topic,
                 reason: getSdkError("USER_DISCONNECTED"),
             })
-        }
-        setSuccessfulSession(false)
-    }
 
-    async function handleReject() {
-        const { id } = currentProposal
-
-        if (currentProposal) {
-            await web3wallet.rejectSession({
-                id,
-                reason: getSdkError("USER_REJECTED_METHODS"),
-            })
-
-            setModalVisible(false)
-            setUri("")
-            setCurrentProposal(undefined)
+            dispatch(removeSession(topic))
         }
     }
 
-    const onSessionRequest = useCallback(
-        async (
-            requestEvent: SignClientTypes.EventArguments["session_request"],
-        ) => {
-            const { topic, params } = requestEvent
-            const { request } = params
-            const requestSessionData =
-                web3wallet.engine.signClient.session.get(topic)
+    // async function disconnectAll() {
+    //     for (const session of activeSessions) {
+    //         // console.log("Disconnecting session with topic: ", session.topic)
+    //         try {
+    //             await web3Wallet.disconnectSession({
+    //                 topic: session.topic,
+    //                 reason: getSdkError("USER_DISCONNECTED"),
+    //             })
 
-            switch (request.method) {
-                case VECHAIN_SIGNING_METHODS.ETH_SIGN:
-                case VECHAIN_SIGNING_METHODS.PERSONAL_SIGN:
-                    setRequestSession(requestSessionData)
-                    setRequestEventData(requestEvent)
-                    setSignModalVisible(true)
-                    return
-            }
-        },
-        [],
-    )
-
-    useEffect(() => {
-        web3wallet?.on("session_proposal", onSessionProposal)
-        web3wallet?.on("session_request", onSessionRequest)
-    }, [onSessionRequest, onSessionProposal, successfulSession])
+    //             dispatch(removeSession(topic))
+    //         } catch (e) {
+    //             // console.log("error while disconnecting session", e)
+    //         }
+    //     }
+    // }
 
     return (
         <BaseSafeArea>
@@ -146,11 +76,24 @@ export const WalletConnectScreen = () => {
 
             <BaseSpacer height={24} />
             <BaseText>
-                {"Address: "} {currentETHAddress || "Loading..."}
+                {"Address: "} {account?.address || "Loading..."}
             </BaseText>
             <BaseSpacer height={24} />
 
-            {!successfulSession ? (
+            <BaseText>
+                {"Active Sessions: "} {activeSessions.length || 0}
+            </BaseText>
+            <BaseSpacer height={24} />
+
+            <BaseText>
+                {"Current Session Topic: "}{" "}
+                {activeSessions?.length > 0
+                    ? activeSessions[0]?.topic
+                    : "No active sessions"}
+            </BaseText>
+            <BaseSpacer height={24} />
+
+            {activeSessions?.length < 1 ? (
                 <BaseView alignItems="center" justifyContent="center">
                     <BaseTextInput
                         placeholder={"Place here the WC URI"}
@@ -159,29 +102,17 @@ export const WalletConnectScreen = () => {
                         value={uri}
                         testID="wc-uri"
                     />
-                    <BaseButton title="Connect" action={pair} />
+                    <BaseButton title="Connect" action={onPair} />
                 </BaseView>
             ) : (
                 <BaseView alignItems="center" justifyContent="center">
-                    <BaseText>{"Connected to DApp"}</BaseText>
                     <BaseButton action={disconnect} title="Disconnect" />
                 </BaseView>
             )}
 
-            <PairingModal
-                handleAccept={handleAccept}
-                handleReject={handleReject}
-                visible={modalVisible}
-                setModalVisible={setModalVisible}
-                currentProposal={currentProposal}
-            />
-
-            <SignModal
-                visible={signModalVisible}
-                setModalVisible={setSignModalVisible}
-                requestEvent={requestEventData}
-                requestSession={requestSession}
-            />
+            {/* <BaseView alignItems="center" justifyContent="center">
+                <BaseButton action={disconnectAll} title="Disconnect all" />
+            </BaseView> */}
         </BaseSafeArea>
     )
 }
