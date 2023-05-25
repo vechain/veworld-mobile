@@ -13,6 +13,7 @@ import {
     ContactsSlice,
     ActivitiesSlice,
     DelegationSlice,
+    WalletConnectSessionsSlice,
 } from "./Slices"
 
 export const getPersistorConfig = async () => {
@@ -42,6 +43,7 @@ export const getPersistorConfig = async () => {
             ContactsSlice.name,
             ActivitiesSlice.name,
             DelegationSlice.name,
+            WalletConnectSessionsSlice.name,
         ],
         transforms: [encryptor],
     }
