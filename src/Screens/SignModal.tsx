@@ -21,7 +21,7 @@ import {
     useAppSelector,
     selectDevice,
 } from "~Storage/Redux"
-import { HexUtils, CryptoUtils } from "~Utils"
+import { HexUtils, CryptoUtils, TransactionUtils } from "~Utils"
 import { useCheckIdentity, error } from "~Common"
 import { Wallet } from "~Model"
 import axios from "axios"
@@ -130,22 +130,63 @@ export default function SignModal({
             }
 
             // console.log('transaction', transaction);
+            let encodedRawTx
+            if (params.delegateUrl !== "") {
+                const tx = TransactionUtils.toDelegation(transaction)
+                // build hex encoded version of the transaction for signing request
+                const rawTransaction = HexUtils.addPrefix(
+                    tx.encode().toString("hex"),
+                )
 
-            const tx = new Transaction(transaction)
-            const hash = tx.signingHash()
-            const senderSignature = secp256k1.sign(hash, privateKey)
-            const signature = Buffer.concat([senderSignature])
-            tx.signature = signature
+                // request to send for sponsorship/fee delegation
+                const sponsorRequest = {
+                    origin: account.address.toLowerCase(),
+                    raw: rawTransaction,
+                }
 
-            // console.log('tx', tx)
+                const response = await axios.post(
+                    params.delegateUrl,
+                    sponsorRequest,
+                )
 
-            const encodedRawTx = {
-                raw: HexUtils.addPrefix(tx.encode().toString("hex")),
+                if (response.data.error || !response.data.signature) {
+                    // onError(response.data.error)
+                    // console.log(
+                    //     "Error delegating transaction",
+                    //     response.data.error,
+                    // )
+                }
+
+                const urlDelegationSignature = Buffer.from(
+                    response.data.signature.substr(2),
+                    "hex",
+                )
+
+                const hash = tx.signingHash()
+                const senderSignature = secp256k1.sign(hash, privateKey)
+
+                const delegationSignature = Buffer.concat([
+                    senderSignature,
+                    urlDelegationSignature,
+                ])
+
+                tx.signature = delegationSignature
+
+                encodedRawTx = {
+                    raw: HexUtils.addPrefix(tx.encode().toString("hex")),
+                }
+            } else {
+                const tx = new Transaction(transaction)
+
+                const hash = tx.signingHash()
+                const senderSignature = secp256k1.sign(hash, privateKey)
+                const signature = Buffer.concat([senderSignature])
+                tx.signature = signature
+
+                encodedRawTx = {
+                    raw: HexUtils.addPrefix(tx.encode().toString("hex")),
+                }
             }
-
-            // console.log('encodedRawTx ', encodedRawTx)
-            // console.log('Sending on: ', network.currentUrl)
-            // console.log('With account ', account?.address)
 
             await axios
                 .post(`${network.currentUrl}/transactions`, encodedRawTx)
