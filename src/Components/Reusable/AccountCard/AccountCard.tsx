@@ -10,11 +10,7 @@ import {
     BaseView,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
-import {
-    selectVetTokenWithBalanceByAccount,
-    useAppSelector,
-} from "~Storage/Redux"
-import { BigNumber } from "bignumber.js"
+import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     account: AccountWithDevice
@@ -25,16 +21,9 @@ type Props = {
 export const AccountCard: React.FC<Props> = memo(
     ({ account, onPress, selected, containerStyle }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
-        const vetTokenWithBalance = useAppSelector(
-            selectVetTokenWithBalanceByAccount(account.address),
+        const vetBalance = useAppSelector(
+            selectVetBalanceByAccount(account.address),
         )
-        const vetBalance = new BigNumber(
-            FormattingUtils.convertToFiatBalance(
-                vetTokenWithBalance?.balance.balance || "0",
-                1,
-                VET.decimals,
-            ),
-        ).toString()
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
@@ -64,7 +53,7 @@ export const AccountCard: React.FC<Props> = memo(
                         </BaseText>
                         <BaseSpacer height={4} />
                         <BaseText fontSize={10}>
-                            {vetBalance} {vetTokenWithBalance.symbol}
+                            {vetBalance} {VET.symbol}
                         </BaseText>
                     </BaseView>
                 </BaseTouchableBox>

@@ -224,3 +224,17 @@ export const selectVetTokenWithBalanceByAccount = (accountAddress: string) =>
             return tokenWithBalance
         },
     )
+
+export const selectVetBalanceByAccount = (accountAddress: string) =>
+    createSelector(
+        [selectVetTokenWithBalanceByAccount(accountAddress)],
+        vetBalance => {
+            return new BigNumber(
+                FormattingUtils.convertToFiatBalance(
+                    vetBalance?.balance.balance || "0",
+                    1,
+                    VET.decimals,
+                ),
+            ).toString()
+        },
+    )
