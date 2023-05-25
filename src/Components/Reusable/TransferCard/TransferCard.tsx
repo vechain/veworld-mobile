@@ -2,12 +2,8 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import {
-    ColorThemeType,
-    FormattingUtils,
-    SCREEN_WIDTH,
-    useThemedStyles,
-} from "~Common"
+import { ColorThemeType, SCREEN_WIDTH, useThemedStyles } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import {
     BaseIcon,

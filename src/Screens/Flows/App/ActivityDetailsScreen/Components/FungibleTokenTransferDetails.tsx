@@ -1,10 +1,6 @@
 import React, { memo, useMemo } from "react"
-import {
-    FormattingUtils,
-    VTHO,
-    currencySymbolMap,
-    useCopyClipboard,
-} from "~Common"
+import { VTHO, currencySymbolMap, useCopyClipboard } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import {
     selectCurrency,

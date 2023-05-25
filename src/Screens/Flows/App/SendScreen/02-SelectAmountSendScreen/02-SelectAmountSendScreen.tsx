@@ -1,12 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { StyleSheet, TextInput } from "react-native"
-import {
-    CURRENCY_SYMBOLS,
-    FormattingUtils,
-    useAmountInput,
-    useTheme,
-} from "~Common"
+import { CURRENCY_SYMBOLS, useAmountInput, useTheme } from "~Common"
+import { FormattingUtils } from "~Utils"
 import {
     BaseText,
     BaseSafeArea,

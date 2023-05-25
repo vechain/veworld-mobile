@@ -1,14 +1,8 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import {
-    ColorThemeType,
-    DIRECTIONS,
-    DateUtils,
-    FormattingUtils,
-    useTheme,
-    useThemedStyles,
-} from "~Common"
+import { ColorThemeType, DIRECTIONS, useTheme, useThemedStyles } from "~Common"
+import { DateUtils, FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Activity, FungibleToken, FungibleTokenActivity } from "~Model"

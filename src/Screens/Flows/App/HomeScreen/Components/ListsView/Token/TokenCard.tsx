@@ -3,7 +3,8 @@ import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import { COLORS } from "~Common/Theme"
 import { PlaceholderSVG } from "~Assets"
-import { FormattingUtils, useTheme } from "~Common"
+import { useTheme } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 
 type Props = {

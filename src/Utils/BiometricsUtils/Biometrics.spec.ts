@@ -1,6 +1,6 @@
 import * as LocalAuthentication from "expo-local-authentication"
 import { AuthenticationType, SecurityLevelType, WALLET_STATUS } from "~Model"
-import PlatformUtils from "~Common/Utils/PlatformUtils"
+import PlatformUtils from "../PlatformUtils"
 import {
     getDeviceEnrolledLevel,
     getDeviceHasHardware,
@@ -11,7 +11,7 @@ import {
     isSecurityUpgrade,
 } from "./Biometrics"
 
-jest.mock("~Common/Utils/PlatformUtils")
+jest.mock("../PlatformUtils")
 
 describe("authentication functions", () => {
     describe("getDeviceEnrolledLevel", () => {

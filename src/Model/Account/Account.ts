@@ -33,3 +33,8 @@ export interface GroupedAccounts {
     device: BaseDevice
     accounts: WalletAccount[]
 }
+
+export type LedgerAccount = {
+    address: string
+    balance?: Connex.Thor.Account
+}

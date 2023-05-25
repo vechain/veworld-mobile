@@ -1,5 +1,5 @@
 import React from "react"
-import { URLUtils } from "~Common"
+import { URLUtils } from "~Utils"
 import {
     BaseButton,
     BaseSpacer,

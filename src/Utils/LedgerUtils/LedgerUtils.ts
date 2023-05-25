@@ -1,12 +1,13 @@
-import { LedgerDevice, Network } from "~Model"
+import { LedgerAccount, LedgerDevice, Network } from "~Model"
 import { Mutex } from "async-mutex"
 import { Certificate, Transaction, HDNode } from "thor-devkit"
-import { AddressUtils, BalanceUtils } from "~Utils"
+import AddressUtils from "../AddressUtils"
+import BalanceUtils from "../BalanceUtils"
 import VETLedgerApp, {
     VETLedgerAccount,
     VET_DERIVATION_PATH,
 } from "~Common/Ledger/VetLedgerApp"
-import { debug, error, warn } from "../../Logger"
+import { debug, error, warn } from "~Common"
 import { Buffer } from "buffer"
 
 const ledgerMutex = new Mutex()
@@ -87,11 +88,6 @@ const signTransaction = async (
             })
         }
     })
-}
-
-export type LedgerAccount = {
-    address: string
-    balance?: Connex.Thor.Account
 }
 
 /**

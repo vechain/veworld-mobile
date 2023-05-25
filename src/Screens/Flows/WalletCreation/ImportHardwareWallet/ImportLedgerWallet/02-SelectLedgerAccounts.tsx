@@ -14,8 +14,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { VET } from "~Common/Constant/Token"
-import { FormattingUtils, LedgerUtils } from "~Common/Utils"
-
+import { FormattingUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
@@ -34,10 +33,9 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { LedgerAccount } from "~Common/Utils/LedgerUtils/LedgerUtils"
-import { humanAddress } from "~Common/Utils/FormattingUtils/FormattingUtils"
 import { FlashList, ViewToken } from "@shopify/flash-list"
 import * as Haptics from "expo-haptics"
+import { LedgerAccount } from "~Model"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -151,7 +149,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                     </BaseText>
                     <BaseSpacer height={6} />
                     <BaseText typographyFont="captionRegular">
-                        {humanAddress(item.address)}
+                        {FormattingUtils.humanAddress(item.address)}
                     </BaseText>
                 </BaseView>
                 <BaseText typographyFont="captionRegular">

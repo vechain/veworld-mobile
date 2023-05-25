@@ -1,6 +1,6 @@
 import { ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
-import { FormattingUtils } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { OfficialTokenCard } from "./OfficialTokenCard"
 import { TokenWithCompleteInfo } from "~Model"

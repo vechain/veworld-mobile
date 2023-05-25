@@ -1,5 +1,5 @@
 import { BigNumber } from "bignumber.js"
-import { error } from "../../Logger"
+import { error } from "../../Common/Logger"
 // import dayjs from "dayjs"
 // import RelativeTime from "dayjs/plugin/relativeTime"
 // import VeWorldErrors from "common/errors/VeWorldErrors"

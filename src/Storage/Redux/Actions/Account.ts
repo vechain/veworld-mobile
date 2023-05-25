@@ -8,8 +8,7 @@ import {
     addAccount,
 } from "../Slices/Account"
 import { AppThunk } from "../Types"
-import { AccountUtils } from "~Common/Utils"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, AccountUtils } from "~Utils"
 const addAccountForDevice =
     (device: BaseDevice): AppThunk<WalletAccount> =>
     (dispatch, getState) => {

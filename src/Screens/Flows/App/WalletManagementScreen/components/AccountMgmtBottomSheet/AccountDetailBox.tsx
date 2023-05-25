@@ -1,6 +1,7 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { FormattingUtils, useTheme } from "~Common"
+import { useTheme } from "~Common"
+import { FormattingUtils } from "~Utils"
 import {
     BaseIcon,
     BaseSpacer,

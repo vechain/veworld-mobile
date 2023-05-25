@@ -1,11 +1,6 @@
 import React, { memo, useMemo } from "react"
-import {
-    FormattingUtils,
-    TransactionUtils,
-    VTHO,
-    currencySymbolMap,
-    useCopyClipboard,
-} from "~Common"
+import { VTHO, currencySymbolMap, useCopyClipboard } from "~Common"
+import { FormattingUtils, TransactionUtils } from "~Utils"
 import { BaseSpacer } from "~Components"
 import {
     selectCurrency,
