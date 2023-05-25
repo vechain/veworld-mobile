@@ -26,7 +26,7 @@ import { Wallet } from "~Model"
 import axios from "axios"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
-import { VECHAIN_SIGNING_METHODS } from "../Common/Utils/WalletConnectUtils/Lib"
+import { VECHAIN_SIGNING_METHODS } from "../Utils/WalletConnectUtils/Lib"
 
 interface SignModalProps {
     visible: boolean
