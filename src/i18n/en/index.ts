@@ -450,12 +450,17 @@ const en: BaseTranslation = {
     CONNECTED_APP_token_transfer: "Token transfer",
     CONNECTED_APP_contract_call: "Contract call",
     CONNECTED_APP_deploy_contract: "Contract deployment",
+    CONNECTED_APP_approve_nft: "Approve NFT",
+    CONNECTED_APP_swap_vet_for_tokens: "Swap VET for tokens",
+    CONNECTED_APP_swap_tokens_for_vet: "Swap tokens for VET",
+    CONNECTED_APP_swap_tokens_for_tokens: "Swap tokens for tokens",
     OUTCOMES: "Outcomes",
     TYPE: "Type",
     TOKEN_SYMBOL: "Token symbol",
     CONTRACT_DATA: "Contract data",
     CONTRACT_ABI: "Contract ABI",
     COPY_ABI: "Click to copy ABI",
+    TOKEN_ID: "Token ID",
 
 
     // Transfers
