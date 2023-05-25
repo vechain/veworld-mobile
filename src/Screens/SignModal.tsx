@@ -21,7 +21,8 @@ import {
     useAppSelector,
     selectDevice,
 } from "~Storage/Redux"
-import { HexUtils, error, CryptoUtils, useCheckIdentity } from "~Common"
+import { HexUtils, CryptoUtils } from "~Utils"
+import { useCheckIdentity, error } from "~Common"
 import { Wallet } from "~Model"
 import axios from "axios"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
