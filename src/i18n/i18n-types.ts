@@ -1370,6 +1370,30 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: string
 	/**
+	 * U​n​l​o​c​k​ ​l​e​d​g​e​r
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER: string
+	/**
+	 * P​l​e​a​s​e​,​ ​t​u​r​n​ ​o​n​ ​a​n​d​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​d​e​v​i​c​e​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: string
+	/**
+	 * O​p​e​n​ ​V​E​T​ ​a​p​p
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
+	/**
+	 * U​n​k​n​o​w​n​ ​e​r​r​o​r
+	 */
+	WALLET_LEDGER_ERROR_UNKNOWN: string
+	/**
+	 * A​n​ ​u​n​k​n​o​w​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n
+	 */
+	WALLET_LEDGER_ERROR_UNKNOWN_DESC: string
+	/**
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
@@ -2833,6 +2857,30 @@ Please, try again later.
 	 * Navigate to Multi-clause and press both buttons to enable it.
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: () => LocalizedString
+	/**
+	 * Unlock ledger
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER: () => LocalizedString
+	/**
+	 * Please, turn on and unlock your ledger device to continue
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: () => LocalizedString
+	/**
+	 * Open VET app
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP: () => LocalizedString
+	/**
+	 * Please, open the VET app to continue
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
+	/**
+	 * Unknown error
+	 */
+	WALLET_LEDGER_ERROR_UNKNOWN: () => LocalizedString
+	/**
+	 * An unknown error occurred. Please try again
+	 */
+	WALLET_LEDGER_ERROR_UNKNOWN_DESC: () => LocalizedString
 	/**
 	 * Date not available
 	 */

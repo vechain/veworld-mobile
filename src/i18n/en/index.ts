@@ -426,6 +426,13 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4: "Enable Multi-clause",
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: "Navigate to Multi-clause and press both buttons to enable it.",
 
+    WALLET_LEDGER_ERROR_UNLOCK_LEDGER: "Unlock ledger",
+    WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: "Please, turn on and unlock your ledger device to continue",
+    WALLET_LEDGER_ERROR_OPEN_APP: "Open VET app",
+    WALLET_LEDGER_ERROR_OPEN_APP_DESC: "Please, open the VET app to continue",
+    WALLET_LEDGER_ERROR_UNKNOWN: "Unknown error",
+    WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
+
 
     // Transaction Labels
 

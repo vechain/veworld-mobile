@@ -27,7 +27,7 @@ export const useLedger = (deviceId: string): UseLedgerProps => {
     const [vetApp, setVetApp] = useState<VETLedgerApp>()
     const [isConnected, setIsConnected] = useState<boolean>(false)
     const [rootAccount, setRootAccount] = useState<VETLedgerAccount>()
-    const [isError, setIsError] = useState<LEDGER_ERROR_CODES | undefined>(
+    const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(
         undefined,
     )
 
@@ -65,7 +65,7 @@ export const useLedger = (deviceId: string): UseLedgerProps => {
             if (err === LEDGER_ERROR_CODES.UNKNOWN) {
                 warn("Ledger error")
             }
-            setIsError(err)
+            setErrorCode(err)
         },
         [openConnection],
     )
@@ -75,7 +75,7 @@ export const useLedger = (deviceId: string): UseLedgerProps => {
             info("[ledger] - connected succesfully")
             setVetApp(app)
             setRootAccount(account)
-            setIsError(undefined)
+            setErrorCode(undefined)
         },
         [],
     )
@@ -120,17 +120,17 @@ export const useLedger = (deviceId: string): UseLedgerProps => {
     return {
         vetApp,
         rootAccount,
-        isError,
+        errorCode,
     }
 }
 
 /**
  * @field vetApp - a {@link VET} instance that can be used to make requests to the ledger
  * @field rootAccount - The root VET account on the ledger (with chaincode). This can be used to derive further accounts
- * @field isError - wheter an error has occured while connecting to the ledger device
+ * @field errorCode - the last error code that was encountered when attempting to connect to the ledger
  */
 interface UseLedgerProps {
     vetApp?: VETLedgerApp
     rootAccount?: VETLedgerAccount
-    isError: LEDGER_ERROR_CODES | undefined
+    errorCode: LEDGER_ERROR_CODES | undefined
 }

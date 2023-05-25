@@ -6,6 +6,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    ConnectionErrorBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
@@ -19,7 +20,7 @@ import {
     Routes,
 } from "~Navigation"
 
-import { useLedger, useTheme } from "~Common/Hooks"
+import { useBottomSheetModal, useLedger, useTheme } from "~Common/Hooks"
 
 import * as Haptics from "expo-haptics"
 import { FlatList } from "react-native-gesture-handler"
@@ -40,7 +41,9 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const theme = useTheme()
 
-    const { rootAccount } = useLedger(device.id)
+    const { ref, onOpen, onClose } = useBottomSheetModal()
+
+    const { rootAccount, errorCode } = useLedger(device.id)
 
     const onConfirm = useCallback(async () => {}, [])
 
@@ -55,11 +58,25 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
             )
             nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS, {
                 rootAccount,
+                device,
             })
         }
         if (!rootAccount) return
         triggerHapticsAndNavigate()
-    }, [rootAccount, nav])
+    }, [rootAccount, device, nav])
+
+    /**
+     * open/close the bottom sheet modal based on connection status error
+     */
+    useEffect(() => {
+        if (errorCode) {
+            onOpen()
+        }
+
+        if (!errorCode) {
+            onClose()
+        }
+    }, [errorCode, onOpen, onClose])
 
     const Steps: Step[] = [
         {
@@ -114,6 +131,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
 
     return (
         <BaseSafeArea grow={1}>
+            <ConnectionErrorBottomSheet ref={ref} error={errorCode} />
             <BackButtonHeader />
             <BaseView
                 alignItems="center"

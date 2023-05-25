@@ -48,7 +48,7 @@ export const ledgerErrorHandler = (err: Error) => {
         return LEDGER_ERROR_CODES.OFF_OR_LOCKED
     }
     if (err.name.includes("Disconnected")) {
-        error("[Ledger] - Disconnected Error")
+        // error("[Ledger] - Disconnected Error")
         return LEDGER_ERROR_CODES.DISCONNECTED
     }
 
