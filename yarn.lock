@@ -5943,11 +5943,6 @@ expo-keep-awake@~11.0.1:
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-11.0.1.tgz#ee354465892a94040ffe09901b85b469e7d54fb3"
   integrity sha512-44ZjgLE4lnce2d40Pv8xsjMVc6R5GvgHOwZfkLYtGmgYG9TYrEJeEj5UfSeweXPL3pBFhXKfFU8xpGYMaHdP0A==
 
-expo-linear-gradient@12.1.0:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-12.1.0.tgz#c3aade39ebba7450e2389afbcf21d7448942fc03"
-  integrity sha512-ICPdPxxnezhPHLhUmLRzHNadZbWGuO0UNVwfY9B7YRw45qa3CU+jNhUm70vs2Hn3z6gb+kNppuXy8TMG+Jteow==
-
 expo-local-authentication@~13.0.2:
   version "13.0.2"
   resolved "https://registry.yarnpkg.com/expo-local-authentication/-/expo-local-authentication-13.0.2.tgz#a785e589119538e0c328b65c0f63e162a423ad5f"
