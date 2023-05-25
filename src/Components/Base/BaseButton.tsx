@@ -39,6 +39,7 @@ type Props = {
     leftIcon?: React.ReactNode
     rightIcon?: React.ReactNode
     isLoading?: boolean
+    flex?: number
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -51,6 +52,7 @@ export const BaseButton = ({
     leftIcon,
     rightIcon,
     isLoading = false,
+    flex,
     ...otherProps
 }: Props) => {
     const { typographyFont, fontFamily, fontSize, fontWeight, children } =
@@ -137,6 +139,7 @@ export const BaseButton = ({
                     flexDirection: leftIcon || rightIcon ? "row" : "column",
                     borderRadius: radius,
                     borderWidth: isOutlineButton ? 1 : 0,
+                    flex,
                 },
                 style,
             ]}

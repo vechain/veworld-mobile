@@ -10,7 +10,7 @@ import { useI18nContext } from "~i18n"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { Dimensions } from "react-native"
 import { TopTabbar } from "./TopTabbar"
-import { FormattingUtils } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { DiscoverAssets } from "./DiscoverAssets"
 import { DiscoverDApps } from "./DiscoverDApps"
@@ -31,9 +31,9 @@ export const DiscoverScreen = () => {
                 </BaseText>
 
                 <ChangeAccountButtonPill
-                    title={selectedAccount?.alias ?? LL.WALLET_LABEL_ACCOUNT()}
+                    title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
                     text={FormattingUtils.humanAddress(
-                        selectedAccount?.address ?? "",
+                        selectedAccount.address ?? "",
                         5,
                         4,
                     )}

@@ -5,11 +5,10 @@ import { mockLedgerAccount } from "./ledger"
 import { HDNode } from "thor-devkit"
 import { Buffer } from "buffer"
 import { WalletAccount } from "~Model"
-import AddressUtils from "~Common/Utils/AddressUtils"
-import CryptoUtils from "~Common/Utils/CryptoUtils"
+import { AddressUtils, CryptoUtils } from "~Utils"
 
 export const account1D1: WalletAccount = {
-    alias: "D1 - Account 1",
+    alias: "Account 0",
     rootAddress: device1.rootAddress,
     address: AddressUtils.getAddressFromXPub(
         CryptoUtils.xPubFromHdNode(hdnode1),

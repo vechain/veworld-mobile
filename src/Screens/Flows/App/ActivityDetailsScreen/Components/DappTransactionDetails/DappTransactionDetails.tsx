@@ -1,14 +1,11 @@
 import React, { memo, useMemo } from "react"
-import {
-    FormattingUtils,
-    VTHO,
-    currencySymbolMap,
-    useCopyClipboard,
-} from "~Common"
+import { VTHO, currencySymbolMap, useCopyClipboard } from "~Common"
+import { FormattingUtils, TransactionUtils } from "~Utils"
 import { BaseSpacer } from "~Components"
 import {
     selectCurrency,
     selectSelectedNetwork,
+    selectTokensWithInfo,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -32,6 +29,13 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
     const { gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent } =
         useGasFee(activity)
 
+    const tokens = useAppSelector(selectTokensWithInfo)
+
+    const clausesMetadata = TransactionUtils.interpretClauses(
+        activity.clauses,
+        tokens,
+    )
+
     const transactionIDshort = useMemo(() => {
         return FormattingUtils.humanAddress(activity.id, 7, 9)
     }, [activity.id])
@@ -50,8 +54,8 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
     const { onCopyToClipboard } = useCopyClipboard()
 
     const blockNumber = useMemo(() => {
-        return activity.txReceipt?.meta.blockNumber
-    }, [activity.txReceipt?.meta.blockNumber])
+        return activity.blockNumber
+    }, [activity.blockNumber])
 
     // Details List
     const details: Array<ActivityDetail> = [
@@ -121,8 +125,8 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
 
             <BaseSpacer height={16} />
 
-            {!!activity.clauseMetadata?.length && (
-                <ClausesCarousel clausesMetadata={activity.clauseMetadata} />
+            {!!clausesMetadata.length && (
+                <ClausesCarousel clausesMetadata={clausesMetadata} />
             )}
 
             <BaseSpacer height={16} />

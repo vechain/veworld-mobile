@@ -4,11 +4,7 @@ import {
     useLineChartPrice as useRNWagmiChartLineChartPrice,
     useLineChartDatetime as useRNWagmiChartLineChartDatetime,
 } from "react-native-wagmi-charts"
-import { LocaleUtils } from "~Common"
-import {
-    numberToLocaleStringWorklet,
-    numberToPercentWorklet,
-} from "~Common/Utils/Reanimated"
+import { LocaleUtils, ReanimatedUtils } from "~Utils"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 import "intl"
@@ -42,10 +38,14 @@ export function useLineChartPrice(): ValueAndFormatted {
     })
 
     const priceFormatted = useDerivedValue(() => {
-        return numberToLocaleStringWorklet(price.value, langTag, {
-            style: "currency",
-            currency,
-        })
+        return ReanimatedUtils.numberToLocaleStringWorklet(
+            price.value,
+            langTag,
+            {
+                style: "currency",
+                currency,
+            },
+        )
     })
 
     return {
@@ -132,7 +132,7 @@ export function useLineChartRelativeChange({
     })
 
     const relativeChangeFormatted = useDerivedValue(() => {
-        return numberToPercentWorklet(relativeChange.value, {
+        return ReanimatedUtils.numberToPercentWorklet(relativeChange.value, {
             precision: 2,
             absolute: true,
         })

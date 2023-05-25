@@ -30,6 +30,12 @@ export const useInitStore = (preloadedState?: Partial<RootState>) => {
                 reducer,
             )
 
+            let middlewares: any[] = []
+            if (process.env.NODE_ENV !== "production") {
+                const createDebugger = require("redux-flipper").default
+                middlewares.push(createDebugger())
+            }
+
             const _store = configureStore({
                 reducer: persistedReducer,
                 middleware: getDefaultMiddleware =>
@@ -44,7 +50,10 @@ export const useInitStore = (preloadedState?: Partial<RootState>) => {
                                 REGISTER,
                             ],
                         },
-                    }),
+                        thunk: {
+                            extraArgument: {},
+                        },
+                    }).concat(middlewares),
                 enhancers: [reduxReset()],
                 devTools: process.env.NODE_ENV !== "production",
                 preloadedState,

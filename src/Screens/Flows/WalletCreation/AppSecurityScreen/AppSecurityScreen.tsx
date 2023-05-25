@@ -1,5 +1,6 @@
 import React, { useCallback } from "react"
 import {
+    BackButtonHeader,
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
@@ -8,8 +9,8 @@ import {
 } from "~Components"
 import {
     useBiometricType,
+    useBiometrics,
     useBiometricsValidation,
-    useCreateWalletWithBiometrics,
 } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -21,7 +22,7 @@ export const AppSecurityScreen = () => {
     const nav = useNavigation()
 
     const { currentSecurityLevel } = useBiometricType()
-    useCreateWalletWithBiometrics()
+    useBiometrics()
     const { authenticateBiometrics } = useBiometricsValidation()
 
     const onBiometricsPress = useCallback(async () => {
@@ -38,14 +39,14 @@ export const AppSecurityScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseSpacer height={20} />
+            <BackButtonHeader />
             <BaseView
                 alignItems="center"
                 justifyContent="space-between"
                 flexGrow={1}
                 mx={20}>
                 <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="largeTitle">
+                    <BaseText typographyFont="title">
                         {LL.TITLE_SECURITY()}
                     </BaseText>
                     {/* TODO: change this lorem ipsum */}

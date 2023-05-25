@@ -6,7 +6,8 @@ import {
     removeCustomNetwork,
     updateCustomNetwork,
 } from "../Slices/Network"
-import { ConnectionUtils, debug, URLUtils, veWorldErrors } from "~Common"
+import { debug } from "~Common"
+import { ConnectionUtils, URLUtils } from "~Utils"
 import { genesises } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
 import {
@@ -27,9 +28,7 @@ const validateCustomNode = async ({
     name: string
 }) => {
     if (!URLUtils.isAllowed(url))
-        throw veWorldErrors.rpc.invalidParams({
-            message: "URL must be secure (https or localhost)",
-        })
+        throw new Error("URL must be secure (https or localhost)")
     try {
         //Clean the URL
         url = URLUtils.clean(url)
@@ -79,20 +78,13 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
             //Check if the custom network already exists
             customNetworks.forEach(net => {
                 if (net.urls.some(u => URLUtils.compareURLs(u, url)))
-                    throw veWorldErrors.rpc.invalidRequest({
-                        message: "Network already exists",
-                    })
+                    throw new Error("Network already exists")
             })
 
             dispatch(addCustomNetwork(network))
             dispatch(changeSelectedNetwork(network))
         } catch (e) {
-            return rejectWithValue(
-                veWorldErrors.rpc.internal({
-                    message: "Failed to add custom network",
-                    error: e,
-                }).message,
-            )
+            return rejectWithValue("Failed to add custom network")
         }
     },
 )
@@ -118,9 +110,7 @@ export const validateAndUpdateCustomNode = createAppAsyncThunk(
             customNetworks.forEach(net => {
                 if (net.id !== networkToUpdateId)
                     if (net.urls.some(u => URLUtils.compareURLs(u, url)))
-                        throw veWorldErrors.rpc.invalidRequest({
-                            message: "Network already exists",
-                        })
+                        throw new Error("Network already exists")
             })
 
             dispatch(
@@ -130,12 +120,7 @@ export const validateAndUpdateCustomNode = createAppAsyncThunk(
                 }),
             )
         } catch (e) {
-            return rejectWithValue(
-                veWorldErrors.rpc.internal({
-                    message: "Failed to add update network",
-                    error: e,
-                }).message,
-            )
+            return rejectWithValue("Failed to add update network")
         }
     },
 )
@@ -147,10 +132,7 @@ export const handleRemoveCustomNode =
         const selectedNetwork = selectSelectedNetwork(getState())
         const customNodeExists = customNetworks.some(net => net.id === id)
 
-        if (!customNodeExists)
-            throw veWorldErrors.rpc.invalidRequest({
-                message: "Network does not exist",
-            })
+        if (!customNodeExists) throw new Error("Network does not exist")
 
         //if the selected network is the one being removed, change the selected network to the default network
         if (selectedNetwork.id === id) {

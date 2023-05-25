@@ -12,15 +12,10 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ScrollView, StyleSheet } from "react-native"
-import {
-    DateUtils,
-    SCREEN_WIDTH,
-    useBottomSheetModal,
-    useTheme,
-    valueToHP,
-} from "~Common"
+import { SCREEN_WIDTH, useBottomSheetModal, useTheme, valueToHP } from "~Common"
+import { DateUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { getActivityTitle } from "./utils"
+import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"
 import {
     ActivityType,
@@ -35,10 +30,10 @@ import {
     DappTransactionDetails,
 } from "./Components"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { LinearGradient } from "expo-linear-gradient"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { useAppDispatch } from "~Storage/Redux"
+import LinearGradient from "react-native-linear-gradient"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -162,7 +157,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     {/* Transfer card shows the Address/Addresses involved in the given activity */}
                     <TransferCard
                         fromAddress={activity.from}
-                        toAddresses={activity.to}
+                        toAddresses={[...new Set(activity.to)]}
                         onAddContactPress={onAddContactPress}
                     />
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import {
+    BackButtonHeader,
     BaseButton,
     BaseIcon,
     BaseSafeArea,
@@ -10,13 +11,8 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import {
-    CryptoUtils,
-    error,
-    SeedUtils,
-    useDeviceUtils,
-    useTheme,
-} from "~Common"
+import { error, useDeviceUtils, useTheme } from "~Common"
+import { CryptoUtils, SeedUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
@@ -104,7 +100,7 @@ export const ImportMnemonicScreen = () => {
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
-                <BaseSpacer height={20} />
+                <BackButtonHeader />
                 <BaseView
                     alignItems="center"
                     justifyContent="space-between"

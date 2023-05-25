@@ -1,4 +1,4 @@
-import { Device } from "~Model/Device"
+import { BaseDevice, LedgerDevice, LocalDevice } from "~Model/Device"
 
 /**
  * The model for an Account in the wallet
@@ -21,11 +21,20 @@ export interface WalletAccount extends Account {
     visible: boolean
 }
 
+export interface AccountWithDevice extends WalletAccount {
+    device: LedgerDevice | LocalDevice
+}
+
 /**
  * Used on the account management screens
  * Grouping accounts by their device
  */
 export interface GroupedAccounts {
-    device: Device
+    device: BaseDevice
     accounts: WalletAccount[]
+}
+
+export type LedgerAccount = {
+    address: string
+    balance?: Connex.Thor.Account
 }

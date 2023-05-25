@@ -46,6 +46,7 @@ const en: BaseTranslation = {
     BTN_CREATE_CONTACT: "Create contact",
     BTN_EDIT_PIN: "Edit Pin",
     BTN_BACKUP_MENMONIC: "Backup phrase",
+    BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_WALLET_CONNECT: "WC",
    
 
@@ -127,6 +128,8 @@ const en: BaseTranslation = {
     BD_ANALYTICS_TRACKING: "I accept to be tracked by Analytics and for research and service quality purposes",
     BD_MNEMONIC_COPIED_TO_CLIPBOARD: "Mnemonic copied to clipboard",
     BD_SECURITY_DOWNGRADE: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
+    BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
+    BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -137,7 +140,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_TUTORIAL_SLIDE_01: "Secret recovery phrase",
     TITLE_WALLET_TUTORIAL_SLIDE_02: "The key to your crypto",
     TITLE_WALLET_TUTORIAL_SLIDE_03: "Keep your phrase safe",
-    TITLE_CREATE_WALLET_TYPE: "Create Wallet",
+    TITLE_CREATE_WALLET_TYPE: "Wallet Setup",
     TITLE_IMPORT_WALLET_TYPE: "Import Wallet",
     TITLE_MNEMONIC: "Your Mnemonic",
     TITLE_CONFIRM_MNEMONIC: "Confirm your mnemonic",
@@ -172,6 +175,7 @@ const en: BaseTranslation = {
     TITLE_DISCOVER: "Discover",
 
     // SUBTITLES
+    SB_IMPORT_WALLET_TYPE: "Which kind of wallet do you want to import?",
     SB_IMPORT_WALLET_TYPE_SEED: "Local wallet",
     SB_IMPORT_WALLET_TYPE_HARDWARE: "Hardware Wallet",
     SB_UNLOCK_WALLET_PIN: "Insert the pin you created in order to unlock your wallet.",
@@ -196,6 +200,7 @@ const en: BaseTranslation = {
     SB_SECURITY_METHOD: "Security method",
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
+    SB_NO_TRANSACTIONS: "Your activities will appear here",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -223,6 +228,7 @@ const en: BaseTranslation = {
     COMMON_BTN_NEXT: "NEXT",
 
     // Common Labels
+    COMMON_LBL_AND: "and",
     COMMON_LBL_NAME: "name",
     COMMON_LBL_URL: "URL",
     COMMON_LBL_ADDRESS: "Address",
@@ -236,10 +242,13 @@ const en: BaseTranslation = {
     COMMON_LBL_NO_TOKEN_DATA: "No available price history for {tokenName: string}",
     COMMON_LBL_DATA: "Data",
     COMMON_LBL_COMMENT: "Comment",
+    COMMON_LBL_PRIVACY_POLICY: "Privacy Policy",
+    COMMON_LBL_TERMS_AND_CONDITIONS: "Terms and Conditions",
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
     COMMON_PRICE: "Price",
     COMMON_TODAY: "Today",
+    COMMON_SELECT_ACCOUNT: "Select account",
     COMMON_MARKET_CAP: "Market Cap",
     COMMON_TOTAL_SUPPLY: "Total Supply",
     COMMON_24H_VOLUME: "24h Volume",
@@ -278,6 +287,11 @@ const en: BaseTranslation = {
     SUCCESS_GENERIC: "Success!",
     SUCCESS_GENERIC_OPERATION: "The operation went well!",
     SUCCESS_GENERIC_VIEW_DETAIL_LINK: "View operation detail.",
+
+    // Warning
+    HEADS_UP: "Heads up!",
+    ACTIVITIES_NOT_UP_TO_DATE: "Activities might not be up-to-date. Check your internet connection or try later",
+
 
     // Placeholders
     PLACEHOLDER_SEARCH_TOKEN: "Search a token",
@@ -357,8 +371,11 @@ const en: BaseTranslation = {
     SEND_RANGE_ZERO: "0%",
     SEND_RANGE_MAX: "MAX",
     SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
-    SEND_INSERT_ADDRESS: "Recipient Address",
-    SEND_INSERT_ADDRESS_DESCRIPTION: "Insert the recipient address ",
+    SEND_INSERT_ADDRESS: "Send your token",
+    SEND_INSERT_ADDRESS_DESCRIPTION: "Select a contact below or paste/scan an address",
+    SEND_ENTER_AN_ADDRESS: "Enter or scan an address",
+    SEND_INSERT_CONTACTS: "Contacts",
+    SEND_INSERT_ACCOUNTS: "Accounts",
     SEND_FROM: "From",
     SEND_TO: "To",
     SEND_DETAILS: "Details",
@@ -366,7 +383,21 @@ const en: BaseTranslation = {
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",
-
+    SEND_DELEGATION_TITLE: "Select delegation",
+    SEND_DELEGATION_NONE: "None",
+    SEND_DELEGATION_ACCOUNT: "Account",
+    SEND_DELEGATION_URL: "URL",
+    SEND_DELEGATION_SELECT_URL: "Select URL",
+    SEND_DELEGATION_ADD_URL: "Add delegation URL",
+    SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
+    SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",
+    SEND_DELEGATION_ERROR_SIGNATURE: "Failed to reach this URL. Please try again.",
+    SEND_CREATE_CONTACT_TITLE: "Create contact",
+    SEND_CREATE_CONTACT_SUBTITLE: "We noticed that the address you entered is not associated with any saved contacts, would you like to create one?",
+    SEND_CREATE_CONTACT_CREATE_BUTTON: "CREATE CONTACT",
+    SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: "PROCEED ANYWAY",
+    SEND_CREATE_CONTACT_NAME: "Contact name",
+    SEND_CREATE_CONTACT_ADDRESS: "Contact address",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",
@@ -382,7 +413,9 @@ const en: BaseTranslation = {
 
     // Wallet Titles
 
-    // Wallet Ledger
+    // Wallet 
+    WALLET_LEDGER_SELECT_DEVICE_TITLE: "Import ledger",
+    WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked and the bluetooth enabled",
 
     // Transaction Labels
 

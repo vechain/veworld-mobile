@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { useAppState } from "../useAppState"
-import { BiometricsUtils } from "~Common/Utils"
+import BiometricsUtils from "~Utils/BiometricsUtils" // TODO: remove this circular dependency
 import { AppStateType, BiometricState, SecurityLevelType } from "~Model"
 import { isEqual } from "lodash"
 
@@ -19,17 +19,18 @@ export const useBiometrics = () => {
     const [biometrics, setBiometrics] = useState<BiometricState | undefined>()
 
     const init = useCallback(async () => {
-        let level = await getDeviceEnrolledLevel()
-        let isHardware = await getDeviceHasHardware()
-        let isEnrolled = await getIsDeviceEnrolled()
-        let typeAvalable = await getBiometricTypeAvailable()
+        const level = await getDeviceEnrolledLevel()
 
-        let accessControl =
+        const isHardware = await getDeviceHasHardware()
+        const isEnrolled = await getIsDeviceEnrolled()
+        const typeAvailable = await getBiometricTypeAvailable()
+
+        const accessControl =
             isEnrolled && isHardware && level === SecurityLevelType.BIOMETRIC
 
-        const obj = {
+        const obj: BiometricState = {
             currentSecurityLevel: level,
-            authtypeAvailable: typeAvalable,
+            authTypeAvailable: typeAvailable,
             isDeviceEnrolled: isEnrolled,
             isHardwareAvailable: isHardware,
             accessControl: accessControl,

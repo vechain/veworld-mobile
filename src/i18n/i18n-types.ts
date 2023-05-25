@@ -179,6 +179,10 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_MENMONIC: string
 	/**
+	 * L​e​t​'​s​ ​g​e​t​ ​s​e​n​d​i​n​g​!
+	 */
+	BTN_LETS_GET_SENDING: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -440,6 +444,14 @@ type RootTranslation = {
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​i​m​p​o​r​t​ ​y​o​u​r​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​,​ ​a​n​d​ ​r​e​t​a​i​n​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​a​n​d​ ​r​e​l​a​t​e​d​ ​t​r​a​n​s​a​c​t​i​o​n​ ​k​e​y​s​.
+	 */
+	BD_CREATE_WALLET_TYPE: string
+	/**
+	 * C​r​e​a​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s
+	 */
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -472,7 +484,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: string
 	/**
-	 * C​r​e​a​t​e​ ​W​a​l​l​e​t
+	 * W​a​l​l​e​t​ ​S​e​t​u​p
 	 */
 	TITLE_CREATE_WALLET_TYPE: string
 	/**
@@ -604,6 +616,10 @@ type RootTranslation = {
 	 */
 	TITLE_DISCOVER: string
 	/**
+	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
+	 */
+	SB_IMPORT_WALLET_TYPE: string
+	/**
 	 * L​o​c​a​l​ ​w​a​l​l​e​t
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: string
@@ -703,6 +719,10 @@ type RootTranslation = {
 	 */
 	SB_ANALYTICS_TRACKING: string
 	/**
+	 * Y​o​u​r​ ​a​c​t​i​v​i​t​i​e​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
+	 */
+	SB_NO_TRANSACTIONS: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -783,6 +803,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_NEXT: string
 	/**
+	 * a​n​d
+	 */
+	COMMON_LBL_AND: string
+	/**
 	 * n​a​m​e
 	 */
 	COMMON_LBL_NAME: string
@@ -837,6 +861,14 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_COMMENT: string
 	/**
+	 * P​r​i​v​a​c​y​ ​P​o​l​i​c​y
+	 */
+	COMMON_LBL_PRIVACY_POLICY: string
+	/**
+	 * T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s
+	 */
+	COMMON_LBL_TERMS_AND_CONDITIONS: string
+	/**
 	 * A​s​s​e​t​s
 	 */
 	COMMON_ASSETS: string
@@ -852,6 +884,10 @@ type RootTranslation = {
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
+	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t
+	 */
+	COMMON_SELECT_ACCOUNT: string
 	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
@@ -965,6 +1001,14 @@ type RootTranslation = {
 	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
 	 */
 	SUCCESS_GENERIC_VIEW_DETAIL_LINK: string
+	/**
+	 * H​e​a​d​s​ ​u​p​!
+	 */
+	HEADS_UP: string
+	/**
+	 * A​c​t​i​v​i​t​i​e​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​u​p​-​t​o​-​d​a​t​e​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
+	 */
+	ACTIVITIES_NOT_UP_TO_DATE: string
 	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
@@ -1166,13 +1210,25 @@ type RootTranslation = {
 	 */
 	SEND_INSUFFICIENT_BALANCE: string
 	/**
-	 * R​e​c​i​p​i​e​n​t​ ​A​d​d​r​e​s​s
+	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
 	SEND_INSERT_ADDRESS: string
 	/**
-	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​c​i​p​i​e​n​t​ ​a​d​d​r​e​s​s​ 
+	 * S​e​l​e​c​t​ ​a​ ​c​o​n​t​a​c​t​ ​b​e​l​o​w​ ​o​r​ ​p​a​s​t​e​/​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
+	/**
+	 * E​n​t​e​r​ ​o​r​ ​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
+	 */
+	SEND_ENTER_AN_ADDRESS: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	SEND_INSERT_CONTACTS: string
+	/**
+	 * A​c​c​o​u​n​t​s
+	 */
+	SEND_INSERT_ACCOUNTS: string
 	/**
 	 * F​r​o​m
 	 */
@@ -1202,6 +1258,66 @@ type RootTranslation = {
 	 */
 	SEND_LESS_THAN_1_MIN: string
 	/**
+	 * S​e​l​e​c​t​ ​d​e​l​e​g​a​t​i​o​n
+	 */
+	SEND_DELEGATION_TITLE: string
+	/**
+	 * N​o​n​e
+	 */
+	SEND_DELEGATION_NONE: string
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	SEND_DELEGATION_ACCOUNT: string
+	/**
+	 * U​R​L
+	 */
+	SEND_DELEGATION_URL: string
+	/**
+	 * S​e​l​e​c​t​ ​U​R​L
+	 */
+	SEND_DELEGATION_SELECT_URL: string
+	/**
+	 * A​d​d​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​U​R​L​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​o​ ​u​s​e​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: string
+	/**
+	 * E​n​t​e​r​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​r​e​a​c​h​ ​t​h​i​s​ ​U​R​L​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	SEND_DELEGATION_ERROR_SIGNATURE: string
+	/**
+	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 */
+	SEND_CREATE_CONTACT_TITLE: string
+	/**
+	 * W​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​t​h​e​ ​a​d​d​r​e​s​s​ ​y​o​u​ ​e​n​t​e​r​e​d​ ​i​s​ ​n​o​t​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​a​n​y​ ​s​a​v​e​d​ ​c​o​n​t​a​c​t​s​,​ ​w​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​c​r​e​a​t​e​ ​o​n​e​?
+	 */
+	SEND_CREATE_CONTACT_SUBTITLE: string
+	/**
+	 * C​R​E​A​T​E​ ​C​O​N​T​A​C​T
+	 */
+	SEND_CREATE_CONTACT_CREATE_BUTTON: string
+	/**
+	 * P​R​O​C​E​E​D​ ​A​N​Y​W​A​Y
+	 */
+	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	SEND_CREATE_CONTACT_NAME: string
+	/**
+	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_CREATE_CONTACT_ADDRESS: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -1209,6 +1325,14 @@ type RootTranslation = {
 	 * W​a​l​l​e​t
 	 */
 	WALLET_LABEL_WALLET: string
+	/**
+	 * I​m​p​o​r​t​ ​l​e​d​g​e​r
+	 */
+	WALLET_LEDGER_SELECT_DEVICE_TITLE: string
+	/**
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​a​n​d​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d
+	 */
+	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -1493,6 +1617,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
 	/**
+	 * Let's get sending!
+	 */
+	BTN_LETS_GET_SENDING: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -1753,6 +1881,14 @@ export type TranslationFunctions = {
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
+	 * You can import your existing wallet, and retain all of your accounts and related transaction keys.
+	 */
+	BD_CREATE_WALLET_TYPE: () => LocalizedString
+	/**
+	 * Creating the wallet the user accepts
+	 */
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -1785,7 +1921,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
 	/**
-	 * Create Wallet
+	 * Wallet Setup
 	 */
 	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
@@ -1917,6 +2053,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_DISCOVER: () => LocalizedString
 	/**
+	 * Which kind of wallet do you want to import?
+	 */
+	SB_IMPORT_WALLET_TYPE: () => LocalizedString
+	/**
 	 * Local wallet
 	 */
 	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
@@ -2013,6 +2153,10 @@ export type TranslationFunctions = {
 	 */
 	SB_ANALYTICS_TRACKING: () => LocalizedString
 	/**
+	 * Your activities will appear here
+	 */
+	SB_NO_TRANSACTIONS: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -2093,6 +2237,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_NEXT: () => LocalizedString
 	/**
+	 * and
+	 */
+	COMMON_LBL_AND: () => LocalizedString
+	/**
 	 * name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
@@ -2145,6 +2293,14 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_COMMENT: () => LocalizedString
 	/**
+	 * Privacy Policy
+	 */
+	COMMON_LBL_PRIVACY_POLICY: () => LocalizedString
+	/**
+	 * Terms and Conditions
+	 */
+	COMMON_LBL_TERMS_AND_CONDITIONS: () => LocalizedString
+	/**
 	 * Assets
 	 */
 	COMMON_ASSETS: () => LocalizedString
@@ -2160,6 +2316,10 @@ export type TranslationFunctions = {
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
+	/**
+	 * Select account
+	 */
+	COMMON_SELECT_ACCOUNT: () => LocalizedString
 	/**
 	 * Market Cap
 	 */
@@ -2273,6 +2433,14 @@ Please, try again later.
 	 * View operation detail.
 	 */
 	SUCCESS_GENERIC_VIEW_DETAIL_LINK: () => LocalizedString
+	/**
+	 * Heads up!
+	 */
+	HEADS_UP: () => LocalizedString
+	/**
+	 * Activities might not be up-to-date. Check your internet connection or try later
+	 */
+	ACTIVITIES_NOT_UP_TO_DATE: () => LocalizedString
 	/**
 	 * Search a token
 	 */
@@ -2470,13 +2638,25 @@ Please, try again later.
 	 */
 	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
 	/**
-	 * Recipient Address
+	 * Send your token
 	 */
 	SEND_INSERT_ADDRESS: () => LocalizedString
 	/**
-	 * Insert the recipient address 
+	 * Select a contact below or paste/scan an address
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
+	/**
+	 * Enter or scan an address
+	 */
+	SEND_ENTER_AN_ADDRESS: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	SEND_INSERT_CONTACTS: () => LocalizedString
+	/**
+	 * Accounts
+	 */
+	SEND_INSERT_ACCOUNTS: () => LocalizedString
 	/**
 	 * From
 	 */
@@ -2506,6 +2686,66 @@ Please, try again later.
 	 */
 	SEND_LESS_THAN_1_MIN: () => LocalizedString
 	/**
+	 * Select delegation
+	 */
+	SEND_DELEGATION_TITLE: () => LocalizedString
+	/**
+	 * None
+	 */
+	SEND_DELEGATION_NONE: () => LocalizedString
+	/**
+	 * Account
+	 */
+	SEND_DELEGATION_ACCOUNT: () => LocalizedString
+	/**
+	 * URL
+	 */
+	SEND_DELEGATION_URL: () => LocalizedString
+	/**
+	 * Select URL
+	 */
+	SEND_DELEGATION_SELECT_URL: () => LocalizedString
+	/**
+	 * Add delegation URL
+	 */
+	SEND_DELEGATION_ADD_URL: () => LocalizedString
+	/**
+	 * Insert the URL you want to to use to delegate this transaction
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: () => LocalizedString
+	/**
+	 * Enter URL
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Failed to reach this URL. Please try again.
+	 */
+	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
+	/**
+	 * Create contact
+	 */
+	SEND_CREATE_CONTACT_TITLE: () => LocalizedString
+	/**
+	 * We noticed that the address you entered is not associated with any saved contacts, would you like to create one?
+	 */
+	SEND_CREATE_CONTACT_SUBTITLE: () => LocalizedString
+	/**
+	 * CREATE CONTACT
+	 */
+	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
+	/**
+	 * PROCEED ANYWAY
+	 */
+	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: () => LocalizedString
+	/**
+	 * Contact name
+	 */
+	SEND_CREATE_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Contact address
+	 */
+	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
+	/**
 	 * Account
 	 */
 	WALLET_LABEL_ACCOUNT: () => LocalizedString
@@ -2513,6 +2753,14 @@ Please, try again later.
 	 * Wallet
 	 */
 	WALLET_LABEL_WALLET: () => LocalizedString
+	/**
+	 * Import ledger
+	 */
+	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
+	/**
+	 * Please make sure your Ledger is unlocked and the bluetooth enabled
+	 */
+	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**
 	 * Date not available
 	 */

@@ -1,10 +1,6 @@
 import React, { memo, useMemo } from "react"
-import {
-    FormattingUtils,
-    VTHO,
-    currencySymbolMap,
-    useCopyClipboard,
-} from "~Common"
+import { VTHO, currencySymbolMap, useCopyClipboard } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import {
     selectCurrency,
@@ -69,8 +65,8 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         }, [activity.id])
 
         const blockNumber = useMemo(() => {
-            return activity.txReceipt?.meta.blockNumber
-        }, [activity.txReceipt?.meta.blockNumber])
+            return activity.blockNumber
+        }, [activity.blockNumber])
 
         // Details List
         const details: Array<ActivityDetail> = [

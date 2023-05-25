@@ -25,7 +25,8 @@ describe("successToastStyles", () => {
         expect(styles.contentContainer.flexDirection).toBe("row")
         expect(styles.contentContainer.alignItems).toBe("center")
         expect(styles.contentContainer.justifyContent).toBe("flex-start")
-        expect(styles.contentContainer.paddingHorizontal).toBe(16)
+        expect(styles.contentContainer.paddingLeft).toBe(16)
+        expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
             lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
@@ -57,7 +58,8 @@ describe("successToastStyles", () => {
         expect(styles.contentContainer.flexDirection).toBe("row")
         expect(styles.contentContainer.alignItems).toBe("center")
         expect(styles.contentContainer.justifyContent).toBe("flex-start")
-        expect(styles.contentContainer.paddingHorizontal).toBe(16)
+        expect(styles.contentContainer.paddingLeft).toBe(16)
+        expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
             darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
@@ -91,7 +93,8 @@ describe("errorToastStyles", () => {
         expect(styles.contentContainer.flexDirection).toBe("row")
         expect(styles.contentContainer.alignItems).toBe("center")
         expect(styles.contentContainer.justifyContent).toBe("flex-start")
-        expect(styles.contentContainer.paddingHorizontal).toBe(16)
+        expect(styles.contentContainer.paddingLeft).toBe(16)
+        expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
             lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
@@ -123,7 +126,8 @@ describe("errorToastStyles", () => {
         expect(styles.contentContainer.flexDirection).toBe("row")
         expect(styles.contentContainer.alignItems).toBe("center")
         expect(styles.contentContainer.justifyContent).toBe("flex-start")
-        expect(styles.contentContainer.paddingHorizontal).toBe(16)
+        expect(styles.contentContainer.paddingLeft).toBe(16)
+        expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
             darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
@@ -157,7 +161,8 @@ describe("warningToastStyles", () => {
         expect(styles.contentContainer.flexDirection).toBe("row")
         expect(styles.contentContainer.alignItems).toBe("center")
         expect(styles.contentContainer.justifyContent).toBe("flex-start")
-        expect(styles.contentContainer.paddingHorizontal).toBe(16)
+        expect(styles.contentContainer.paddingLeft).toBe(16)
+        expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
             lightTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
@@ -189,7 +194,8 @@ describe("warningToastStyles", () => {
         expect(styles.contentContainer.flexDirection).toBe("row")
         expect(styles.contentContainer.alignItems).toBe("center")
         expect(styles.contentContainer.justifyContent).toBe("flex-start")
-        expect(styles.contentContainer.paddingHorizontal).toBe(16)
+        expect(styles.contentContainer.paddingLeft).toBe(16)
+        expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
             darkTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
@@ -223,7 +229,8 @@ describe("infoToastStyles", () => {
         expect(styles.contentContainer.flexDirection).toBe("row")
         expect(styles.contentContainer.alignItems).toBe("center")
         expect(styles.contentContainer.justifyContent).toBe("flex-start")
-        expect(styles.contentContainer.paddingHorizontal).toBe(16)
+        expect(styles.contentContainer.paddingLeft).toBe(16)
+        expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
             lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
@@ -255,7 +262,8 @@ describe("infoToastStyles", () => {
         expect(styles.contentContainer.flexDirection).toBe("row")
         expect(styles.contentContainer.alignItems).toBe("center")
         expect(styles.contentContainer.justifyContent).toBe("flex-start")
-        expect(styles.contentContainer.paddingHorizontal).toBe(16)
+        expect(styles.contentContainer.paddingLeft).toBe(16)
+        expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
         expect(styles.contentContainer.backgroundColor).toBe(
             darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,

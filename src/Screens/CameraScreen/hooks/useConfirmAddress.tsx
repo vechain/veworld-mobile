@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { AddressUtils } from "~Common"
+import { AddressUtils } from "~Utils"
 import { BarCodeScanningResult } from "expo-camera"
 
 export const useConfirmAddress = () => {

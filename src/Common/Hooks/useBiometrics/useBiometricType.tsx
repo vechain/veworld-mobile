@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { PlatformUtils } from "~Common/Utils"
+import { PlatformUtils } from "~Utils"
 import { AuthenticationType, SecurityLevelType } from "~Model"
 import { useI18nContext } from "~i18n"
 import { useBiometrics } from "./useBiometrics"
@@ -15,13 +15,13 @@ export const useBiometricType = () => {
                 biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
             ) {
                 if (
-                    biometrics?.authtypeAvailable ===
+                    biometrics?.authTypeAvailable ===
                     AuthenticationType.FACIAL_RECOGNITION
                 ) {
                     return LL.FACE_ID()
                 }
                 if (
-                    biometrics?.authtypeAvailable ===
+                    biometrics?.authTypeAvailable ===
                     AuthenticationType.FINGERPRINT
                 ) {
                     return LL.TOUCH_ID()
@@ -34,13 +34,13 @@ export const useBiometricType = () => {
                 biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
             ) {
                 if (
-                    biometrics?.authtypeAvailable ===
+                    biometrics?.authTypeAvailable ===
                     AuthenticationType.FACIAL_RECOGNITION
                 ) {
                     return LL.FACE_ID()
                 }
                 if (
-                    biometrics?.authtypeAvailable ===
+                    biometrics?.authTypeAvailable ===
                     AuthenticationType.FINGERPRINT
                 ) {
                     return LL.FINGERPRINT()

@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { AddressUtils, useScrollableList, info, useTheme } from "~Common"
+import { useScrollableList, info, useTheme } from "~Common"
+import { AddressUtils } from "~Utils"
 import {
     BaseIcon,
     BaseSpacer,
@@ -11,7 +12,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
-import { Device } from "~Model"
+import { BaseDevice } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import {
     selectAccountsByDevice,
@@ -21,7 +22,7 @@ import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
-    device?: Device
+    device?: BaseDevice
     onClose: () => void
 }
 
@@ -91,7 +92,7 @@ export const AccountMgmtBottomSheet = React.forwardRef<
                         viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => {
                             const isSelected = AddressUtils.compareAddresses(
-                                selectedAccount?.address,
+                                selectedAccount.address,
                                 item.address,
                             )
 

@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from "react"
-import { FormattingUtils, useCopyClipboard } from "~Common"
+import { useCopyClipboard } from "~Common"
+import { FormattingUtils } from "~Utils"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { SignCertActivity } from "~Model"

@@ -1,10 +1,10 @@
 import { renderHook } from "@testing-library/react-hooks"
-import BiometricsUtils from "~Common/Utils/BiometricsUtils"
+import { BiometricsUtils } from "~Utils"
 import { useBiometrics } from "./useBiometrics"
 import { AppStateType, SecurityLevelType } from "~Model"
 
 // mock delle funzioni di BiometricsUtils
-jest.mock("~Common/Utils/BiometricsUtils", () => ({
+jest.mock("~Utils/BiometricsUtils", () => ({
     getDeviceEnrolledLevel: jest.fn(),
     getDeviceHasHardware: jest.fn(),
     getIsDeviceEnrolled: jest.fn(),
@@ -34,7 +34,7 @@ describe("useBiometrics", () => {
 
         expect(result.current).toEqual({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-            authtypeAvailable: "touch",
+            authTypeAvailable: "touch",
             isDeviceEnrolled: true,
             isHardwareAvailable: true,
             accessControl: true,
@@ -72,7 +72,7 @@ describe("useBiometrics", () => {
 
         expect(result.current).toEqual({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-            authtypeAvailable: "touch",
+            authTypeAvailable: "touch",
             isDeviceEnrolled: true,
             isHardwareAvailable: true,
             accessControl: true,

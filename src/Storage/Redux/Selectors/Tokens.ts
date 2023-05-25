@@ -3,13 +3,8 @@ import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"
 import { Balance, FungibleToken, TokenWithCompleteInfo } from "~Model"
 import { selectAllExchangeRates } from "./Currency"
-import {
-    DEFAULT_VECHAIN_TOKENS,
-    LocaleUtils,
-    TokenUtils,
-    VET,
-    VTHO,
-} from "~Common"
+import { DEFAULT_VECHAIN_TOKENS, VET, VTHO } from "~Common"
+import { LocaleUtils, TokenUtils } from "~Utils"
 import { uniqBy } from "lodash"
 import {
     selectVetTokenWithBalance,
@@ -209,7 +204,7 @@ export const selectTokenWithInfoWithID = createSelector(
             if (foundToken) foundTokens.push(foundToken)
         })
 
-        return foundTokens
+        return foundTokens || [VET, VTHO]
     },
 )
 

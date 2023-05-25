@@ -28,7 +28,6 @@ jest.mock("expo-secure-store", () => ({
     getItemAsync: jest.fn(),
     setItemAsync: jest.fn(),
 }))
-jest.mock("expo-local-authentication")
 jest.mock("expo-haptics", () => ({
     ImpactFeedbackStyle: {
         Light: "light",
@@ -41,7 +40,7 @@ jest.mock("expo-localization", () => ({
     getLocales: jest.fn(() => [{ languageCode: "en", languageTag: "en-US" }]),
 }))
 jest.mock("expo-clipboard", () => {})
-jest.mock("expo-linear-gradient", () => {})
+jest.mock("react-native-linear-gradient", () => {})
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,
@@ -71,3 +70,12 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
 ;(global as any).ReanimatedDataMock = {
     now: () => 0,
 }
+
+jest.mock("@gorhom/bottom-sheet", () => ({
+    ...jest.requireActual("@gorhom/bottom-sheet"),
+    BottomSheetFlatList: ({ data, renderItem }: any) => {
+        return data.map((row: any) => renderItem({ item: row }))
+    },
+}))
+
+jest.mock("react-native-skeleton-content-nonexpo", () => {})
