@@ -1,1 +1,1 @@
-export * from "./Ledger/nanox"
+export * from "./Ledger"
