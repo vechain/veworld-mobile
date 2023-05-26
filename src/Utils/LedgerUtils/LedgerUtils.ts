@@ -2,10 +2,12 @@ import { LedgerDevice, Network } from "~Model"
 import { Mutex } from "async-mutex"
 import { Certificate, Transaction, HDNode } from "thor-devkit"
 import { AddressUtils, BalanceUtils } from "~Utils"
-import VETLedgerApp, {
+import {
     VETLedgerAccount,
+    VETLedgerApp,
     VET_DERIVATION_PATH,
-} from "~Common/Ledger/VetLedgerApp"
+    LEDGER_ERROR_CODES,
+} from "~Common/Ledger"
 import { debug, error, warn } from "~Common/Logger"
 import { Buffer } from "buffer"
 
@@ -24,25 +26,20 @@ export enum LedgerConfig {
 }
 
 /**
- * Common Ledger Error Codes
- */
-export enum LEDGER_ERROR_CODES {
-    OFF_OR_LOCKED = "off_or_locked",
-    NO_VET_APP = "no_vet_app",
-    UNKNOWN = "unknown",
-    DISCONNECTED = "disconnected",
-}
-
-/**
  * Parses ledger errors based on common issues
  */
 export const ledgerErrorHandler = (err: Error) => {
-    if (err.message.includes("0x6d02")) {
+    //0x6d02 - user in homescreen?
+    //0x6a15 - user in another app
+    if (err.message.includes("0x6d02") || err.message.includes("0x6a15")) {
         return LEDGER_ERROR_CODES.NO_VET_APP
     }
+    // 0x6b0c - device is locked or off
+    // 0x5515 - LockedDeviceError
     if (
         err.name.includes("BleError") ||
         err.message.includes("0x6b0c") ||
+        err.message.includes("0x5515") ||
         err.message.includes("busy")
     ) {
         return LEDGER_ERROR_CODES.OFF_OR_LOCKED
@@ -67,9 +64,12 @@ export const checkLedgerConnection = async ({
 }) => {
     try {
         const app = new VETLedgerApp(transport)
-        // const appConfig = await app.getAppConfiguration()
-        // const appConfigHex = appConfig.toString("hex")
-        const rootAccount = await app.getAccount(
+
+        // In order to detecting if the app is opened
+        await app.getAppConfiguration()
+        // const _appConfigHex = appConfig.toString("hex")
+
+        const rootAccount = await app.getAddress(
             VET_DERIVATION_PATH,
             false,
             true,
@@ -225,7 +225,7 @@ const validateRootAddress = async (
     vetLedger: VETLedgerApp,
 ) => {
     debug("Validating root address")
-    const rootAccount = await vetLedger.getAccount(
+    const rootAccount = await vetLedger.getAddress(
         VET_DERIVATION_PATH,
         false,
         false,

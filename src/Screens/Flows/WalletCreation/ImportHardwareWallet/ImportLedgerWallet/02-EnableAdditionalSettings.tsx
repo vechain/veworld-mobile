@@ -43,9 +43,31 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
-    const { rootAccount, errorCode } = useLedger(device.id)
+    const onConnectionError = useCallback(() => {
+        // Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+        onOpen()
+    }, [onOpen])
 
-    const onConfirm = useCallback(async () => {}, [])
+    const {
+        rootAccount,
+        errorCode,
+        openOrFinalizeConnection,
+        isConnecting,
+        setTimerEnabled,
+    } = useLedger({
+        deviceId: device.id,
+        waitFirstManualConnection: true,
+        onConnectionError,
+    })
+
+    const onConnectionErrorDismiss = useCallback(() => {
+        setTimerEnabled(false)
+    }, [setTimerEnabled])
+
+    const onConfirm = useCallback(async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        await openOrFinalizeConnection()
+    }, [openOrFinalizeConnection])
 
     /**
      * Whenever we are able to get the root account from ledger, we can navigate to the next screen
@@ -66,17 +88,13 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
     }, [rootAccount, device, nav])
 
     /**
-     * open/close the bottom sheet modal based on connection status error
+     * close the bottom sheet modal when error disappears
      */
     useEffect(() => {
-        if (errorCode) {
-            onOpen()
-        }
-
         if (!errorCode) {
             onClose()
         }
-    }, [errorCode, onOpen, onClose])
+    }, [errorCode, onClose])
 
     const Steps: Step[] = [
         {
@@ -131,7 +149,11 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
 
     return (
         <BaseSafeArea grow={1}>
-            <ConnectionErrorBottomSheet ref={ref} error={errorCode} />
+            <ConnectionErrorBottomSheet
+                onDismiss={onConnectionErrorDismiss}
+                ref={ref}
+                error={errorCode}
+            />
             <BackButtonHeader />
             <BaseView
                 alignItems="center"
@@ -163,6 +185,8 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
                 <BaseView w={100}>
                     <BaseButton
                         action={onConfirm}
+                        isLoading={isConnecting}
+                        disabled={isConnecting}
                         w={100}
                         title={LL.COMMON_LBL_IMPORT()}
                     />

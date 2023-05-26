@@ -18,7 +18,9 @@ import { LedgerDeviceBox } from "../components"
 import { FlatList } from "react-native-gesture-handler"
 import { Routes } from "~Navigation"
 import { ConnectedLedgerDevice } from "~Model"
-import { ImportLedgerSvg } from "~Assets"
+import Lottie from "lottie-react-native"
+import { BlePairingDark } from "~Assets/Lottie"
+import * as Haptics from "expo-haptics"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
@@ -36,6 +38,7 @@ export const SelectLedgerDevice = () => {
 
     const onImportClick = useCallback(() => {
         if (selectedDevice) {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
             nav.navigate(Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS, {
                 device: selectedDevice,
             })
@@ -69,6 +72,7 @@ export const SelectLedgerDevice = () => {
                             if (prev.find(d => d.id === device.id)) return prev
                             return [...prev, device]
                         })
+                    if (!selectedDevice) setSelectedDevice(device)
                 }
             },
             error: error => {
@@ -79,7 +83,7 @@ export const SelectLedgerDevice = () => {
         return () => {
             subscription.unsubscribe()
         }
-    }, [])
+    }, [selectedDevice])
 
     const renderItem = useCallback(
         ({ item }: { item: ConnectedLedgerDevice }) => {
@@ -115,9 +119,21 @@ export const SelectLedgerDevice = () => {
                         </BaseText>
 
                         <BaseSpacer height={20} />
-                        {!availableDevices.length && (
-                            <ImportLedgerSvg width={"100%"} />
-                        )}
+                        <Lottie
+                            source={BlePairingDark}
+                            autoPlay
+                            loop
+                            style={styles.lottie}
+                        />
+                        <BaseSpacer height={20} />
+                        <BaseText
+                            align="center"
+                            typographyFont="subTitleBold"
+                            my={10}>
+                            {availableDevices.length > 0
+                                ? `${availableDevices.length} devices found`
+                                : "No devices found"}
+                        </BaseText>
                         {availableDevices.length > 0 && (
                             <FlatList
                                 style={styles.container}
@@ -153,5 +169,9 @@ const styles = StyleSheet.create({
     backIcon: { marginHorizontal: 20, alignSelf: "flex-start" },
     container: {
         width: "100%",
+    },
+    lottie: {
+        width: "100%",
+        height: 100,
     },
 })

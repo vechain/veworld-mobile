@@ -4,6 +4,7 @@ import {
     TouchableOpacityProps,
     FlexAlignType,
     StyleSheet,
+    ActivityIndicator,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
 import { typography, TFonts } from "~Common/Theme"
@@ -157,7 +158,11 @@ export const BaseButton = ({
                 fontWeight={fontWeight}
                 fontSize={fontSize}
                 style={themedStyles.text}>
-                {!isLoading ? otherProps.title : "..."}
+                {!isLoading ? (
+                    otherProps.title
+                ) : (
+                    <ActivityIndicator size={"small"} />
+                )}
                 {children}
             </BaseText>
             {rightIcon}
