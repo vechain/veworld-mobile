@@ -1,9 +1,6 @@
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { Device } from "react-native-ble-plx"
-import VETLedgerApp, {
-    StatusCodes,
-    VETLedgerAccount,
-} from "~Common/Ledger/VetLedgerApp"
+import { StatusCodes, VETLedgerAccount, VETLedgerApp } from "~Common/Ledger"
 
 /*eslint-disable no-console*/
 export const mockLedgerAccount = {
