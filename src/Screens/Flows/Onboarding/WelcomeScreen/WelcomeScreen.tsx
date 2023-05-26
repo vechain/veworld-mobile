@@ -10,7 +10,18 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
-import { fetchTokensWithInfo, useAppDispatch } from "~Storage/Redux"
+import {
+    addDeviceAndAccounts,
+    fetchTokensWithInfo,
+    selectAccount,
+    setAppLockStatus,
+    setMnemonic,
+    setPinValidationString,
+    useAppDispatch,
+} from "~Storage/Redux"
+import { CryptoUtils, PasswordUtils, SeedUtils } from "~Utils"
+import { SettingsConstants, useDeviceUtils } from "~Common"
+import { WALLET_STATUS } from "~Model"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -28,6 +39,48 @@ export const WelcomeScreen = () => {
     useEffect(() => {
         dispatch(fetchTokensWithInfo())
     }, [dispatch])
+
+    /**
+     * onboarding with the demo account and password 111111 for TDD purposes
+     */
+    const { getDeviceFromMnemonic } = useDeviceUtils()
+    const onDemoOnboarding = async () => {
+        const DEMO_MNEMONIC =
+            "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+        const FAKE_PIN = "111111"
+        const sanitisedMnemonic = SeedUtils.sanifySeed(DEMO_MNEMONIC).join(" ")
+        dispatch(setMnemonic(sanitisedMnemonic))
+        const pinValidationString = CryptoUtils.encrypt<string>(
+            SettingsConstants.VALIDATION_STRING,
+            FAKE_PIN,
+        )
+        dispatch(setPinValidationString(pinValidationString))
+        const { device, wallet } = getDeviceFromMnemonic(DEMO_MNEMONIC)
+        dispatch(setMnemonic(undefined))
+
+        const { encryptedWallet } = await CryptoUtils.encryptWallet({
+            wallet,
+            rootAddress: device.rootAddress,
+            accessControl: false,
+            hashEncryptionKey: PasswordUtils.hash(FAKE_PIN),
+        })
+
+        const newAccount = dispatch(
+            addDeviceAndAccounts({
+                ...device,
+                wallet: encryptedWallet,
+            }),
+        )
+
+        dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
+        dispatch(selectAccount({ address: newAccount.address }))
+        const parent = nav.getParent()
+        if (parent) {
+            if (parent.canGoBack()) {
+                parent.goBack()
+            }
+        }
+    }
 
     return (
         <BaseSafeArea grow={1}>
@@ -71,7 +124,14 @@ export const WelcomeScreen = () => {
                         haptics="medium"
                     />
                 </BaseView>
-
+                {__DEV__ && (
+                    <BaseButton
+                        size="md"
+                        variant="link"
+                        action={onDemoOnboarding}
+                        title="DEV:DEMO"
+                    />
+                )}
                 <BaseSpacer height={40} />
             </BaseView>
         </BaseSafeArea>

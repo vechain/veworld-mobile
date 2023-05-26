@@ -16,10 +16,6 @@ export const goToContactsManagement = async () => {
 }
 
 export const goToTokensManagementScreen = async () => {
-    await waitFor(element(by.id("EditTokensBar_BaseIcon_manageToken")))
-        .toExist()
-        .withTimeout(LONG_TIMEOUT)
-
     await element(by.id("EditTokensBar_BaseIcon_manageToken")).tap()
 }
 

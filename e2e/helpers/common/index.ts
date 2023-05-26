@@ -9,9 +9,11 @@ const clickBy = async ({
     selector: string
     timeout?: number
 }) => {
-    await waitFor(element(by[byWhat](selector)))
-        .toExist()
-        .withTimeout(timeout)
+    if (timeout) {
+        await waitFor(element(by[byWhat](selector)))
+            .toExist()
+            .withTimeout(timeout)
+    }
 
     await element(by[byWhat](selector)).tap()
 }
@@ -23,7 +25,7 @@ export const clickByText = async (
 ) =>
     await clickBy({
         selector: text,
-        timeout: options?.timeout || DEFAULT_TIMEOUT,
+        timeout: options?.timeout,
         byWhat: "text",
     })
 
@@ -36,7 +38,7 @@ export const clickById = async (
 ) =>
     await clickBy({
         selector: id,
-        timeout: options?.timeout || DEFAULT_TIMEOUT,
+        timeout: options?.timeout,
         byWhat: "id",
     })
 
@@ -51,6 +53,14 @@ export const textShouldExist = async (
         .toExist()
         .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
 
+export const textShouldNotExist = async (
+    text: string,
+    options?: { timeout?: number },
+) =>
+    await waitFor(element(by.text(text)))
+        .not.toExist()
+        .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+
 export const textShouldBeVisible = async (
     text: string,
     options?: { timeout?: number },
@@ -58,3 +68,25 @@ export const textShouldBeVisible = async (
     await waitFor(element(by.text(text)))
         .toBeVisible()
         .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+
+type Direction = "down" | "left" | "right" | "up"
+
+export const scrollUntilTextVisible = async (
+    text: string,
+    containerID: string,
+    direction: Direction = "down",
+    scrollStep: number = 50,
+) => {
+    await waitFor(element(by.text(text)))
+        .toBeVisible()
+        .whileElement(by.id(containerID))
+        .scroll(scrollStep, direction)
+}
+
+export const insertTextById = async (text: string, id: string) => {
+    await element(by.id(id)).replaceText(text)
+}
+
+export const swipeLeftByText = async (text: string) => {
+    await element(by.text(text)).swipe("left", "slow", 0.4)
+}
