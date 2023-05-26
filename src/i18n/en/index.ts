@@ -129,6 +129,7 @@ const en: BaseTranslation = {
     BD_SECURITY_DOWNGRADE: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
     BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
+    BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",

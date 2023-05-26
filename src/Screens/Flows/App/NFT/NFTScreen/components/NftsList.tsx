@@ -79,7 +79,9 @@ export const NftsList = ({ nfts }: Props) => {
                                 ]}>
                                 <BaseIcon name={_item.image} size={46} />
                                 <BaseSpacer height={4} />
-                                <BaseText typographyFont="bodyMedium">
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    color={COLORS.DARK_PURPLE}>
                                     {_item.title}
                                 </BaseText>
                             </BaseView>

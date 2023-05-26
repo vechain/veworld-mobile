@@ -23,6 +23,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { PlatformUtils } from "~Utils"
 import DropShadow from "react-native-drop-shadow"
+import { isEmpty } from "lodash"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -81,19 +82,19 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                     </BaseText>
                 </BaseView>
 
-                {collection?.description && (
-                    <>
-                        <BaseSpacer height={24} />
-                        <BaseText mb={12}>{LL.SB_DESCRIPTION()}</BaseText>
-                        <BaseText typographyFont="bodyBold">
-                            {collection.description}
-                        </BaseText>
-                        <BaseSpacer height={24} />
-                        <BaseText typographyFont="biggerTitle">
-                            {LL.SB_COLLECTIBLES()}
-                        </BaseText>
-                    </>
-                )}
+                <>
+                    <BaseSpacer height={24} />
+                    <BaseText mb={12}>{LL.SB_DESCRIPTION()}</BaseText>
+                    <BaseText typographyFont="bodyBold">
+                        {!isEmpty(collection?.description)
+                            ? collection?.description
+                            : LL.BD_NFT_DESC_PLACEHOLDER()}
+                    </BaseText>
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="biggerTitle">
+                        {LL.SB_COLLECTIBLES()}
+                    </BaseText>
+                </>
 
                 <BaseSpacer height={12} />
             </BaseView>

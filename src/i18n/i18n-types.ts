@@ -448,6 +448,10 @@ type RootTranslation = {
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
 	/**
+	 * R​a​n​d​o​m​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​e​s​c​r​i​p​t​i​o​n​ ​p​l​a​c​e​h​o​l​d​e​r​ ​i​n​ ​c​a​s​e​ ​t​h​e​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​o​e​s​n​'​t​ ​h​a​v​e​ ​o​n​e
+	 */
+	BD_NFT_DESC_PLACEHOLDER: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -1909,6 +1913,10 @@ export type TranslationFunctions = {
 	 * Creating the wallet the user accepts
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
+	/**
+	 * Random NFT collection description placeholder in case the NFT collection doesn't have one
+	 */
+	BD_NFT_DESC_PLACEHOLDER: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
