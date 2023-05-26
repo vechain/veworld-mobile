@@ -200,6 +200,8 @@ const en: BaseTranslation = {
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
     SB_NO_TRANSACTIONS: "Your activities will appear here",
+    SB_DESCRIPTION: "Description",
+    SB_COLLECTIBLES: "Collectibles",
 
     // ELEMENTS
     FACE_ID: "Face ID",

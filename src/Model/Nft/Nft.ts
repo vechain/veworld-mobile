@@ -25,6 +25,7 @@ export interface NonFungibleToken extends TokenMetadata {
     owner: string
     tokenId: number
     tokenURI?: string
+    belongsToCollectionAddress: string
 }
 
 export interface TokenMetadata {

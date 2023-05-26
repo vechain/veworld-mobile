@@ -719,6 +719,14 @@ type RootTranslation = {
 	 */
 	SB_NO_TRANSACTIONS: string
 	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	SB_DESCRIPTION: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	SB_COLLECTIBLES: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -2169,6 +2177,14 @@ export type TranslationFunctions = {
 	 * Your activities will appear here
 	 */
 	SB_NO_TRANSACTIONS: () => LocalizedString
+	/**
+	 * Description
+	 */
+	SB_DESCRIPTION: () => LocalizedString
+	/**
+	 * Collectibles
+	 */
+	SB_COLLECTIBLES: () => LocalizedString
 	/**
 	 * Face ID
 	 */

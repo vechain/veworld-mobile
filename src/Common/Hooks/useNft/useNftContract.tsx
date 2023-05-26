@@ -42,10 +42,12 @@ export const useNftContract = () => {
 
             // Get nftsData for each contract address
             const nftPromises: Promise<NftForContractResponse[]>[] = []
+            const resultsPerPage = 5
             for (const contractAddress of contractAddresses) {
                 const nfts = getNftsForContract(
                     contractAddress,
                     selectedAccount?.address!,
+                    resultsPerPage,
                 )
                 nftPromises.push(nfts)
             }
@@ -135,6 +137,7 @@ export const useNftContract = () => {
                         owner: ownerOf,
                         tokenURI,
                         image: "",
+                        belongsToCollectionAddress: item.contractAddress,
                     }
 
                     nftCollection.nfts.push(nft)

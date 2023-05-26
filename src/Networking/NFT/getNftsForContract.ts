@@ -14,9 +14,16 @@ export type NftForContractResponse = {
 export const getNftsForContract = async (
     contractAddress: string,
     ownerAddress: string,
+    resultsPerPage: number = 20,
+    page: number = 0,
 ): Promise<NftForContractResponse[]> => {
     const response = await axios.get(
-        NFTS_OWNED_PER_CONTRACT(ownerAddress, contractAddress),
+        NFTS_OWNED_PER_CONTRACT(
+            ownerAddress,
+            contractAddress,
+            resultsPerPage,
+            page,
+        ),
     )
     return response.data || []
 }

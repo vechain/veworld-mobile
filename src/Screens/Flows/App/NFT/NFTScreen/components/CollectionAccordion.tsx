@@ -53,7 +53,17 @@ export const CollectionAccordion = ({ collection }: Props) => {
     ])
 
     const bodyComponent = useMemo(() => {
-        return <NftsList nfts={collection.nfts} />
+        const seeAllButton =
+            collection.nfts.length > 1
+                ? {
+                      title: "See All",
+                      image: "arrow-right",
+                      tokenId: "see-all",
+                      collectionAddress: collection.address,
+                  }
+                : undefined
+
+        return <NftsList nfts={[...collection.nfts, seeAllButton]} />
     }, [collection])
 
     return (

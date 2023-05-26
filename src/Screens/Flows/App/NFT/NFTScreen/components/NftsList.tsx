@@ -1,11 +1,17 @@
 import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
-import { isEmpty } from "lodash"
 import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
-import { BaseImage, BaseView } from "~Components"
+import { COLORS } from "~Common/Theme"
+import {
+    BaseIcon,
+    BaseImage,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import { NonFungibleToken } from "~Model"
 import { Routes } from "~Navigation"
 
@@ -13,8 +19,18 @@ const ITEM_SIZE: number = 152
 const ITEM_SPACING: number = 16
 const LIST_HEIGHT: number = 184
 
+type SeeAllButton =
+    | {
+          title: string
+          image: string
+          tokenId: string
+          collectionAddress: string
+      }
+    | undefined
+
+type TokenArray = Array<NonFungibleToken | SeeAllButton>
 type Props = {
-    nfts: NonFungibleToken[]
+    nfts: TokenArray
 }
 
 export const NftsList = ({ nfts }: Props) => {
@@ -32,15 +48,52 @@ export const NftsList = ({ nfts }: Props) => {
         [nav],
     )
 
+    const onSeeAllPress = useCallback(
+        (collectionAddress: string) =>
+            nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
+                collectionAddress,
+            }),
+        [nav],
+    )
+
     const renderNft = useCallback(
-        ({ item }: { item: NonFungibleToken }) => {
-            if (!isEmpty(item.image)) {
+        ({ item }: { item: NonFungibleToken | SeeAllButton }) => {
+            if (!item) return null
+
+            if (item.tokenId === "see-all") {
+                let _item = item as SeeAllButton
+                if (!_item) return null
+
                 return (
                     <DropShadow style={themedStyles.cardShadow}>
-                        <TouchableOpacity onPress={() => onNftPress(item)}>
+                        <TouchableOpacity
+                            onPress={() =>
+                                onSeeAllPress(_item!.collectionAddress)
+                            }>
+                            <BaseView
+                                style={[
+                                    themedStyles.nftCard,
+                                    {
+                                        backgroundColor: COLORS.LIME_GREEN,
+                                    },
+                                ]}>
+                                <BaseIcon name={_item.image} size={46} />
+                                <BaseSpacer height={4} />
+                                <BaseText typographyFont="bodyMedium">
+                                    {_item.title}
+                                </BaseText>
+                            </BaseView>
+                        </TouchableOpacity>
+                    </DropShadow>
+                )
+            } else {
+                let _item = item as NonFungibleToken
+                return (
+                    <DropShadow style={themedStyles.cardShadow}>
+                        <TouchableOpacity onPress={() => onNftPress(_item)}>
                             <BaseView style={[themedStyles.nftCard]}>
                                 <BaseImage
-                                    uri={item.image}
+                                    uri={_item.image}
                                     w={ITEM_SIZE}
                                     h={ITEM_SIZE}
                                 />
@@ -48,18 +101,21 @@ export const NftsList = ({ nfts }: Props) => {
                         </TouchableOpacity>
                     </DropShadow>
                 )
-            } else {
-                return null
             }
         },
-        [onNftPress, themedStyles.cardShadow, themedStyles.nftCard],
+        [
+            onNftPress,
+            onSeeAllPress,
+            themedStyles.cardShadow,
+            themedStyles.nftCard,
+        ],
     )
 
     return (
         <BaseView w={100} style={{ height: LIST_HEIGHT }}>
             <FlashList
                 data={nfts}
-                keyExtractor={item => String(item.tokenId)}
+                keyExtractor={item => String(item?.tokenId)}
                 ItemSeparatorComponent={renderSeparator}
                 contentContainerStyle={themedStyles.listContainer}
                 renderItem={renderNft}

@@ -4,6 +4,8 @@ import { TokenMetadata } from "~Model/Nft/Nft"
 
 const toID = (_tokenUri: string) => _tokenUri.split("://")[1]
 
+// loop
+
 export const getTokenMetaIpfs = async (
     tokenUri: string,
 ): Promise<TokenMetadata> => {

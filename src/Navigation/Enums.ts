@@ -26,6 +26,7 @@ export enum Routes {
     HISTORY = "History",
     NFTS = "NFTs",
     NFT_DETAILS = "NFT_Details",
+    NFT_COLLECTION_DETAILS = "NFT_Collection_Details",
     WALLET_MANAGEMENT = "Wallet_Management",
     SETTINGS_GENERAL = "Settings_General",
     SETTINGS_ADVANCED = "Settings_Advanced",

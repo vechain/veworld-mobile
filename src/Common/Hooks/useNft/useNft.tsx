@@ -11,6 +11,7 @@ import {
 } from "~Networking"
 import { setNfts, useAppDispatch } from "../../../Storage/Redux"
 import { NFTPlaceholder } from "~Assets"
+import { isEmpty } from "lodash"
 
 enum URIProtocol {
     IPFS = "ipfs",
@@ -75,6 +76,10 @@ export const useNft = () => {
                         }
 
                         _nftFinal.push(_nft)
+
+                        if (isEmpty(collection.icon))
+                            collection.icon =
+                                nftMeta?.imageUrl ?? NFTPlaceholder
                     }
                 }
 
