@@ -1,11 +1,12 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useMemo } from "react"
 import { LEDGER_ERROR_CODES } from "~Common/Ledger"
-import { BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
+import { BaseBottomSheet, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import Lottie from "lottie-react-native"
 import { BlePairingDark, EnterPinCodeDark, OpenAppDark } from "~Assets/Lottie"
-import { StyleSheet } from "react-native"
+import { ActivityIndicator, StyleSheet } from "react-native"
+import { useTheme } from "~Common"
 
 /**
  * error: LEDGER_ERROR_CODES - the error code to display the message for
@@ -30,6 +31,7 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
     Props
 >(({ error, onDismiss }, ref) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
 
     const data: DataToDisplay = useMemo(() => {
         switch (error) {
@@ -91,11 +93,21 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
             snapPoints={snapPoints}
             onDismiss={onDismiss}
             ref={ref}>
-            <BaseText typographyFont="subTitleBold">{data.title}</BaseText>
-            <BaseSpacer height={16} />
-            <BaseText typographyFont="body">{data.desc}</BaseText>
-            <BaseSpacer height={24} />
-            {data.image}
+            <BaseView flexGrow={1}>
+                <BaseView flexDirection="row">
+                    <BaseText typographyFont="subTitleBold">
+                        {data.title}
+                    </BaseText>
+                    <ActivityIndicator
+                        size="small"
+                        color={theme.colors.primary}
+                    />
+                </BaseView>
+                <BaseSpacer height={16} />
+                <BaseText typographyFont="body">{data.desc}</BaseText>
+                <BaseSpacer height={72} />
+                {data.image}
+            </BaseView>
         </BaseBottomSheet>
     )
 })
