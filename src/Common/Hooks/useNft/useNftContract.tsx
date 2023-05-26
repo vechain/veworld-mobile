@@ -52,7 +52,7 @@ export const useNftContract = () => {
                 nftPromises.push(nfts)
             }
 
-            // resolve promisses
+            // resolve promises
             const nftResults = await allSettled(nftPromises)
 
             const nftData: NftForContractResponse[][] = nftResults.map(
@@ -151,7 +151,7 @@ export const useNftContract = () => {
             error(e)
             throw e
         }
-    }, [network.type, selectedAccount?.address, thor])
+    }, [network.type, selectedAccount.address, thor])
 
     useEffect(() => {
         getNFTsFor()
