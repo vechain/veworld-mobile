@@ -34,7 +34,7 @@ export const useNftContract = () => {
         try {
             // Get contract addresses for nfts owned by ownerAddress
             const contractAddresses = await getContractAddresses(
-                selectedAccount?.address!,
+                selectedAccount.address,
             )
 
             // get nft collection info from GitHub registry
@@ -46,7 +46,7 @@ export const useNftContract = () => {
             for (const contractAddress of contractAddresses) {
                 const nfts = getNftsForContract(
                     contractAddress,
-                    selectedAccount?.address!,
+                    selectedAccount.address,
                     resultsPerPage,
                 )
                 nftPromises.push(nfts)
@@ -115,7 +115,7 @@ export const useNftContract = () => {
 
                     if (!nftCollection.balanceOf)
                         nftCollection.balanceOf = await getNftBalanceOf(
-                            selectedAccount?.address!,
+                            selectedAccount.address,
                             item.contractAddress,
                             thor,
                         )

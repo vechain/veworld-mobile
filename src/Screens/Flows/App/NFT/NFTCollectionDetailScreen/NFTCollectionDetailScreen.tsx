@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native"
-import React, { useCallback, useMemo } from "react"
+import { FlatList, StyleSheet, TouchableOpacity } from "react-native"
+import React, { useCallback, useMemo, useState } from "react"
 import {
     selectCollectionWithContractAddres,
     useAppSelector,
@@ -18,7 +18,6 @@ import {
 import { useTheme } from "~Common"
 import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
-import { FlashList } from "@shopify/flash-list"
 import { NonFungibleToken } from "~Model"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
@@ -46,6 +45,13 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
         ),
     )
 
+    // To prevent fetching next page of activities on FlashList mount
+    const [hasScrolled, setHasScrolled] = useState(false)
+
+    const onScroll = useCallback(() => {
+        if (!hasScrolled) setHasScrolled(true)
+    }, [hasScrolled])
+
     const contactsListSeparator = useCallback(
         () => <BaseSpacer height={16} />,
         [],
@@ -62,7 +68,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                     action={goBack}
                 />
 
-                <BaseSpacer height={24} />
+                <BaseSpacer height={18} />
 
                 <BaseView flexDirection="row" alignItems="flex-end">
                     <BaseImage
@@ -102,22 +108,33 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
         ],
     )
 
+    const onNftPress = useCallback(
+        (nft: NonFungibleToken) =>
+            nav.navigate(Routes.NFT_DETAILS, { collectionData: {}, nft }),
+        [nav],
+    )
+
     const renderItem = useCallback(
         ({ item, index }: { item: NonFungibleToken; index: number }) => (
-            <BaseView
-                w={100}
-                flexDirection="row"
-                justifyContent={index % 2 === 0 ? "flex-start" : "flex-end"}
-                alignItems="center">
+            <TouchableOpacity
+                onPress={() => onNftPress(item)}
+                style={[
+                    baseStyles.nftContainer,
+                    // eslint-disable-next-line react-native/no-inline-styles
+                    {
+                        justifyContent:
+                            index % 2 === 0 ? "flex-start" : "flex-end",
+                    },
+                ]}>
                 <DropShadow style={theme.shadows.nftCard}>
                     <BaseImage
                         uri={item.image}
                         style={baseStyles.nftPreviewImage}
                     />
                 </DropShadow>
-            </BaseView>
+            </TouchableOpacity>
         ),
-        [theme.shadows.nftCard],
+        [onNftPress, theme.shadows.nftCard],
     )
 
     const calculateBottomPadding = useMemo(
@@ -138,21 +155,21 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                 style={{
                     marginBottom: calculateBottomPadding,
                 }}>
-                <FlashList
+                <FlatList
                     data={collection?.nfts ?? []}
                     ItemSeparatorComponent={contactsListSeparator}
                     numColumns={2}
-                    keyExtractor={item => String(item?.tokenId)}
+                    keyExtractor={(item: NonFungibleToken) =>
+                        String(item?.tokenId)
+                    }
                     extraData={collection?.nfts ?? []}
                     renderItem={renderItem}
                     contentContainerStyle={baseStyles.listContainer}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
-                    estimatedItemSize={48}
-                    estimatedListSize={{
-                        height: 48 * 4,
-                        width: 400,
-                    }}
+                    onScroll={onScroll}
+                    onEndReachedThreshold={1}
+                    // onEndReached={hasScrolled ? fetchActivities : undefined}
                 />
             </BaseView>
         </BaseSafeArea>
@@ -171,6 +188,7 @@ const baseStyles = StyleSheet.create({
         flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "space-between",
+        width: "50%",
     },
     nftHeaderImage: {
         width: 48,
