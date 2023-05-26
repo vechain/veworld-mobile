@@ -14,6 +14,7 @@ import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useTheme } from "~Common"
 import { ImportWalletBottomSheet } from "./components"
 import { WalletSetupSvg } from "~Assets"
+import * as Haptics from "expo-haptics"
 
 export const WalletSetupScreen = () => {
     const nav = useNavigation()
@@ -23,8 +24,14 @@ export const WalletSetupScreen = () => {
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     const onCreateWallet = useCallback(() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         nav.navigate(Routes.NEW_MNEMONIC)
     }, [nav])
+
+    const onImportWallet = useCallback(() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        onOpen()
+    }, [onOpen])
 
     return (
         <BaseSafeArea grow={1}>
@@ -75,7 +82,7 @@ export const WalletSetupScreen = () => {
                     </BaseTouchableBox>
                     <BaseSpacer height={16} />
                     <BaseTouchableBox
-                        action={onOpen}
+                        action={onImportWallet}
                         py={16}
                         justifyContent="space-between">
                         <BaseIcon
