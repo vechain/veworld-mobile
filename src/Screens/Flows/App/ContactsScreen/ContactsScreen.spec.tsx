@@ -1,16 +1,16 @@
 import React from "react"
 import { TestWrapper } from "~Test"
-import { NFTScreen } from "./NFTScreen"
+import { ContactsScreen } from "./ContactsScreen"
 import { render, screen } from "@testing-library/react-native"
 
 const findElement = async () =>
-    await screen.findByText("NFTs", {}, { timeout: 10000 })
+    await screen.findByText("Contacts", {}, { timeout: 5000 })
 
-describe("NFTScreen", () => {
+describe("ContactsScreen", () => {
     it("should render correctly", async () => {
-        render(<NFTScreen />, {
+        render(<ContactsScreen />, {
             wrapper: TestWrapper,
         })
         await findElement()
-    }, 10000)
+    })
 })
