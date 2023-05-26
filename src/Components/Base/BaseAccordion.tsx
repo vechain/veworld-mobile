@@ -11,7 +11,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { useTheme } from "~Common"
 import { BaseIcon } from "~Components"
-
+import * as Haptics from "expo-haptics"
 type Props = {
     headerComponent: React.ReactNode
     headerStyle?: StyleProp<ViewStyle>
@@ -63,9 +63,10 @@ export const BaseAccordion = ({
         if (height.value === 0) {
             runOnUI(() => {
                 "worklet"
-                height.value = measure(aref)!.height
+                height.value = measure(aref)?.height ?? 0
             })()
         }
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         open.value = !open.value
     }, [aref, height, open])
 
@@ -122,6 +123,9 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
     },
-    bodyContainer: { width: "100%", overflow: "hidden" },
+    bodyContainer: {
+        width: "100%",
+        overflow: "hidden",
+    },
     bodyContent: { width: "100%" },
 })

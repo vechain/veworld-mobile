@@ -6,6 +6,7 @@ jest.mock("axios")
 import axios from "axios"
 import crypto from "react-native-quick-crypto"
 ;(axios.get as jest.Mock).mockImplementation(url => {
+    // getBalancesHook
     if (url.includes("market_chart")) {
         return {
             data: {
@@ -33,6 +34,29 @@ import crypto from "react-native-quick-crypto"
     if (url.includes("vechain.github.io/token-registry")) {
         return {
             data: JSON.stringify(TestHelpers.data.tokensMock),
+        }
+    }
+
+    // getNftsHook
+    if (url.includes("nfts/contracts?owner")) {
+        return {
+            data: [
+                "0x2a5c0083937fe7efa9c9c3f099d6e73efe2a6c35",
+                "0xc8ebcecb1438b9a00ea1003c956c3e0b83aa0ec3",
+                "0xe0ab6916048ee208154bd76f1343d84b726fa62a",
+            ],
+        }
+    }
+
+    if (url.includes("vechain.github.io/nft-registry")) {
+        return {
+            data: TestHelpers.data.nftRegistryItem,
+        }
+    }
+
+    if (url.includes("nfts?address=")) {
+        return {
+            data: TestHelpers.data.nftItemsPerContract,
         }
     }
 })

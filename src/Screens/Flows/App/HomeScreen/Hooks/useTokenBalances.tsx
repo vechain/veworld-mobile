@@ -36,7 +36,6 @@ export const useTokenBalances = () => {
     const balances = useAppSelector(selectSelectedAccountBalances)
     const thorClient = useThor()
     const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
-    const balancesKey = balances?.map(balance => balance.tokenAddress).join("-")
 
     // fetch official tokens from github
     useEffect(() => {
@@ -52,11 +51,11 @@ export const useTokenBalances = () => {
      * init default balances if no balances found on redux
      */
     useEffect(() => {
-        if (balances?.length === 0 && selectedAccount) {
+        if (balances.length === 0 && selectedAccount) {
             dispatch(resetTokenBalances)
             dispatch(updateAccountBalances(thorClient, selectedAccount.address))
         }
-    }, [dispatch, thorClient, balances, network, selectedAccount])
+    }, [dispatch, thorClient, network, selectedAccount, balances.length])
 
     /**
      * keep balances up to date
@@ -64,15 +63,12 @@ export const useTokenBalances = () => {
     useEffect(() => {
         const updateBalances = () => {
             // Update balances
-            if (selectedAccount)
-                dispatch(
-                    updateAccountBalances(thorClient, selectedAccount.address),
-                )
+            dispatch(updateAccountBalances(thorClient, selectedAccount.address))
         }
         updateBalances()
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
         return () => clearInterval(interval)
-    }, [dispatch, thorClient, balancesKey, network.genesis.id, selectedAccount])
+    }, [dispatch, thorClient, network.genesis.id, selectedAccount])
 
     /**
      * fetch tokens with info

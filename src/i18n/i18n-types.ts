@@ -448,6 +448,10 @@ type RootTranslation = {
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
 	/**
+	 * R​a​n​d​o​m​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​e​s​c​r​i​p​t​i​o​n​ ​p​l​a​c​e​h​o​l​d​e​r​ ​i​n​ ​c​a​s​e​ ​t​h​e​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​o​e​s​n​'​t​ ​h​a​v​e​ ​o​n​e
+	 */
+	BD_NFT_DESC_PLACEHOLDER: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -719,6 +723,14 @@ type RootTranslation = {
 	 */
 	SB_NO_TRANSACTIONS: string
 	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	SB_DESCRIPTION: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	SB_COLLECTIBLES: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -985,6 +997,27 @@ type RootTranslation = {
 	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_GENERIC_OPERATION: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​U​R​I​ ​f​r​o​m​ ​T​h​o​r
+	 */
+	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​I​P​F​S
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​A​r​w​e​a​v​e
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: string
+	/**
+	 * T​h​e​ ​t​o​k​e​n​ ​U​R​I​ ​p​r​o​t​o​c​o​l​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​(​{​p​r​o​t​o​c​o​l​}​)
+	 * @param {unknown} protocol
+	 */
+	ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: RequiredParams<'protocol'>
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​m​e​t​a​d​a​t​a
+	 */
+	ERROR_NFT_FAILED_TO_GET_METADATA: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -1945,6 +1978,10 @@ export type TranslationFunctions = {
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
 	/**
+	 * Random NFT collection description placeholder in case the NFT collection doesn't have one
+	 */
+	BD_NFT_DESC_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -2213,6 +2250,14 @@ export type TranslationFunctions = {
 	 */
 	SB_NO_TRANSACTIONS: () => LocalizedString
 	/**
+	 * Description
+	 */
+	SB_DESCRIPTION: () => LocalizedString
+	/**
+	 * Collectibles
+	 */
+	SB_COLLECTIBLES: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -2477,6 +2522,26 @@ Please, try again later.
 	 * The operation went wrong. Please, try again.
 	 */
 	ERROR_GENERIC_OPERATION: () => LocalizedString
+	/**
+	 * Failed to get token URI from Thor
+	 */
+	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: () => LocalizedString
+	/**
+	 * Failed to get token data from IPFS
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: () => LocalizedString
+	/**
+	 * Failed to get token data from Arweave
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: () => LocalizedString
+	/**
+	 * The token URI protocol is not supported ({protocol})
+	 */
+	ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: (arg: { protocol: unknown }) => LocalizedString
+	/**
+	 * Failed to get token metadata
+	 */
+	ERROR_NFT_FAILED_TO_GET_METADATA: () => LocalizedString
 	/**
 	 * Success!
 	 */

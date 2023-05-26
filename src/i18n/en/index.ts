@@ -129,6 +129,7 @@ const en: BaseTranslation = {
     BD_SECURITY_DOWNGRADE: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
     BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
+    BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -200,6 +201,8 @@ const en: BaseTranslation = {
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
     SB_NO_TRANSACTIONS: "Your activities will appear here",
+    SB_DESCRIPTION: "Description",
+    SB_COLLECTIBLES: "Collectibles",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -280,6 +283,11 @@ const en: BaseTranslation = {
     ERROR_ADDRESS_INVALID: "Please enter a valid Vechain address",
     ERROR: "Error!",
     ERROR_GENERIC_OPERATION: "The operation went wrong. Please, try again.",
+    ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: "Failed to get token URI from Thor",
+    ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: "Failed to get token data from IPFS",
+    ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: "Failed to get token data from Arweave",
+    ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: "The token URI protocol is not supported ({protocol})",
+    ERROR_NFT_FAILED_TO_GET_METADATA: "Failed to get token metadata",
 
     // Success
 
