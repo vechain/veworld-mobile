@@ -2364,6 +2364,14 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-6.12.6.tgz#f89c82c91c2930f34bc3e0d86a27ec7b6e6e4f5f"
   integrity sha512-D+r2B09vaRO06wfGoss+rNgwqWSoK0bCtsaJWzlD2hv1zxTtucqVtSztbRFypIqxWTCb3ix5Nh2dWHEJVTp2Xw==
 
+"@ledgerhq/hw-transport-mocker@^6.27.15":
+  version "6.27.15"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-mocker/-/hw-transport-mocker-6.27.15.tgz#48062a0b146ba147499bb73033d760cfb20a573f"
+  integrity sha512-lE6BioJqkcdeF7ugyIcXVV3QUdXnW8j69u40aK+VTXm5PgGVbpZEW3gtdLsvVUuigX1mu7Hk2pvYFG1nJbni2g==
+  dependencies:
+    "@ledgerhq/hw-transport" "^6.28.4"
+    "@ledgerhq/logs" "^6.10.1"
+
 "@ledgerhq/hw-transport@^6.28.4":
   version "6.28.4"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-6.28.4.tgz#c2fc5bff4fca71ac44f069b775d33d0b1b5d9000"
