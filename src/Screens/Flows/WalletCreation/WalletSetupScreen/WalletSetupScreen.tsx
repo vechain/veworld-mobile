@@ -23,13 +23,13 @@ export const WalletSetupScreen = () => {
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
-    const onCreateWallet = useCallback(() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    const onCreateWallet = useCallback(async () => {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         nav.navigate(Routes.NEW_MNEMONIC)
     }, [nav])
 
-    const onImportWallet = useCallback(() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    const onImportWallet = useCallback(async () => {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         onOpen()
     }, [onOpen])
 
