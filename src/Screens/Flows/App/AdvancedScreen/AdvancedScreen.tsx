@@ -22,6 +22,7 @@ export const AdvancedScreen = () => {
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const onDownloadLogs = useCallback(() => {
+        // Todo: implement download logs
         info("Download logs")
     }, [])
 
