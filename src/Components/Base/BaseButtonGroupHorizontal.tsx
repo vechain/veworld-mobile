@@ -62,9 +62,9 @@ export const BaseButtonGroupHorizontal = ({
                             style={styles.buttonStyle}
                             testID={`button-${id}`}>
                             <BaseView
+                                flexDirection="row"
                                 justifyContent="center"
                                 alignItems="center"
-                                flexDirection="row"
                                 style={{
                                     marginBottom: -5,
                                 }}>

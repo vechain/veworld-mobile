@@ -22,9 +22,9 @@ export const ChangeCurrency: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const handleSelectCurrency = useCallback(
-        (button: BaseButtonGroupHorizontalType) => {
+        async (button: BaseButtonGroupHorizontalType) => {
             dispatch(setCurrency(button.id as CURRENCY))
-            dispatch(fetchExchangeRates({ coinGeckoTokens }))
+            await dispatch(fetchExchangeRates({ coinGeckoTokens }))
         },
         [coinGeckoTokens, dispatch],
     )
