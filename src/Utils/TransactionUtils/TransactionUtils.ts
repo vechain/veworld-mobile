@@ -387,6 +387,13 @@ export const interpretContractCall = (
     return result
 }
 
+/**
+ * Decodes a contract call clause by attempting to interpret it as various actions.
+ * It sequentially tries to interpret the clause as a variety of token swap actions.
+ *
+ * @param clause - The contract call clause to be decoded.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded as any of the specified swap actions.
+ */
 export const decodeContractCall = (clause: ConnexClause) => {
     let decodedClause =
         decodeSwapExactVETForTokensClause(clause) ??
