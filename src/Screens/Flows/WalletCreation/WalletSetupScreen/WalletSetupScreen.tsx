@@ -13,6 +13,8 @@ import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useTheme } from "~Common"
 import { ImportWalletBottomSheet } from "./components"
+import { WalletSetupSvg } from "~Assets"
+import * as Haptics from "expo-haptics"
 
 export const WalletSetupScreen = () => {
     const nav = useNavigation()
@@ -21,9 +23,15 @@ export const WalletSetupScreen = () => {
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
-    const onCreateWallet = useCallback(() => {
+    const onCreateWallet = useCallback(async () => {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         nav.navigate(Routes.NEW_MNEMONIC)
     }, [nav])
+
+    const onImportWallet = useCallback(async () => {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        onOpen()
+    }, [onOpen])
 
     return (
         <BaseSafeArea grow={1}>
@@ -33,7 +41,7 @@ export const WalletSetupScreen = () => {
                 justifyContent="space-between"
                 flexGrow={1}
                 mx={20}>
-                <BaseView alignSelf="flex-start">
+                <BaseView alignSelf="flex-start" w={100}>
                     <BaseText
                         typographyFont="title"
                         testID="wallet-setup-title-id">
@@ -42,6 +50,8 @@ export const WalletSetupScreen = () => {
                     <BaseText typographyFont="body" my={10}>
                         {LL.BD_CREATE_WALLET_TYPE()}
                     </BaseText>
+                    <BaseSpacer height={48} />
+                    <WalletSetupSvg width={"100%"} />
                 </BaseView>
 
                 <BaseView alignItems="center" w={100}>
@@ -72,7 +82,7 @@ export const WalletSetupScreen = () => {
                     </BaseTouchableBox>
                     <BaseSpacer height={16} />
                     <BaseTouchableBox
-                        action={onOpen}
+                        action={onImportWallet}
                         py={16}
                         justifyContent="space-between">
                         <BaseIcon

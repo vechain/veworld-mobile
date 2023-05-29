@@ -2,12 +2,14 @@ import { renderHook } from "@testing-library/react-hooks"
 import { waitFor } from "@testing-library/react-native"
 import {
     addDeviceAndAccounts,
+    addLedgerDeviceAndAccounts,
     setAppLockStatus,
     setMnemonic,
 } from "~Storage/Redux"
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
 import { WALLET_STATUS } from "~Model"
+
 const device = {
     alias: "Wallet 1",
     index: 0,
@@ -40,6 +42,17 @@ const wallet = {
     nonce: "0x37a9d367c3d4889cde7d5dd940d0be489bbc9ff0db60c6ac1c37f1b8cec99f878c82496287efd1580be497ddd557a56ce920b8e8270acee0ab5f9c231ee6b63692f78db8e8e9cc0c8bdb2819083c84ae6b9d93bf5aac9f59119722739c15dad2a86d17841793c352585875d07e8a8477f446f66f05de987b4536b07834158fff",
     rootAddress: "0xec954b8e81777354d0a35111d83373b9ec171c64",
 }
+
+const ledger = {
+    rootAccount: {
+        publicKey: "string",
+        address: "string",
+        chainCode: "string",
+    },
+    alias: "string",
+    accounts: [1, 3, 4],
+}
+
 jest.mock("../useDeviceUtils", () => ({
     useDeviceUtils: jest.fn(() => ({
         getDeviceFromMnemonic: jest.fn(() => ({
@@ -72,6 +85,9 @@ jest.mock("~Storage/Redux/Actions", () => ({
     setAppLockStatus: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").setAppLockStatus,
     ),
+    addLedgerDeviceAndAccounts: jest.fn(
+        jest.requireActual("~Storage/Redux/Actions").addLedgerDeviceAndAccounts,
+    ),
 }))
 
 jest.mock("~Storage/Redux/Selectors", () => ({
@@ -86,7 +102,7 @@ describe("useCreateWallet", () => {
                 () => useCreateWallet(),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 2000 })
             const { onCreateWallet } = result.current
 
             await onCreateWallet({ mnemonic: mnemonic.join(" ") })
@@ -116,7 +132,7 @@ describe("useCreateWallet", () => {
                 () => useCreateWallet(),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 2000 })
             const onCreateWallet = result.current.onCreateWallet
             await onCreateWallet({
                 mnemonic: mnemonic.join(" "),
@@ -140,6 +156,26 @@ describe("useCreateWallet", () => {
             expect(setAppLockStatus).toBeCalledWith(WALLET_STATUS.UNLOCKED)
             expect(setMnemonic).toBeCalledWith(undefined)
             expect(result.current.isComplete).toBe(true)
+        })
+    })
+
+    describe("onCreateLedgerWallet", () => {
+        it("should create wallet with Ledger", async () => {
+            const { result, waitForNextUpdate } = renderHook(
+                () => useCreateWallet(),
+                { wrapper: TestWrapper },
+            )
+            await waitForNextUpdate({ timeout: 2000 })
+            const { onCreateLedgerWallet } = result.current
+
+            await onCreateLedgerWallet({
+                newLedger: ledger,
+                onError: undefined,
+            })
+
+            expect(addLedgerDeviceAndAccounts).toBeCalledWith(ledger)
+
+            expect(setAppLockStatus).toBeCalledWith(WALLET_STATUS.UNLOCKED)
         })
     })
 })

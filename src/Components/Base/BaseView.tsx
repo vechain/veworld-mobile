@@ -76,7 +76,7 @@ export const BaseView = memo(
 
         const computedJustifyContent = useMemo(() => {
             if (justifyContent) return justifyContent
-            if (flexDirection === "row") return "space-between"
+            if (flexDirection === "row") return "flex-start"
             return "flex-start"
         }, [flexDirection, justifyContent])
 

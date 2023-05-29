@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
-import { VET, VTHO } from "~Common/Constant"
+import { VET, VET_BY_NETWORK, VTHO } from "~Common/Constant"
 import { RootState } from "~Storage/Redux/Types"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
@@ -13,6 +13,15 @@ import {
 } from "./TokenBalances"
 
 export const selectBalancesState = (state: RootState) => state.balances
+
+/**
+ * Get all balances of the selected network
+ */
+export const selectSelectedNetworkBalances = createSelector(
+    [selectBalancesState, selectSelectedNetwork],
+    (balances, network) =>
+        balances.filter(balance => network.genesis.id === balance?.genesisId),
+)
 
 /**
  * Get all balances of the selected account
@@ -179,6 +188,53 @@ export const selectFiatBalance = createSelector(
 
 export const selectVetBalance = createSelector(
     [selectVetTokenWithBalance],
+    vetBalance => {
+        return new BigNumber(
+            FormattingUtils.convertToFiatBalance(
+                vetBalance?.balance.balance || "0",
+                1,
+                VET.decimals,
+            ),
+        ).toString()
+    },
+)
+
+export const selectVetTokenWithBalanceByAccount = createSelector(
+    [
+        selectSelectedNetworkBalances,
+        selectSelectedNetwork,
+        (_state, accountAddress) => accountAddress,
+    ],
+    (balances, network, accountAddress) => {
+        const vetToken = VET_BY_NETWORK[network.type]
+
+        const balance = balances.find(
+            _balance =>
+                _balance.accountAddress === accountAddress &&
+                _balance.tokenAddress === vetToken.address,
+        )
+
+        if (!balance) {
+            return {
+                ...vetToken,
+                balance: {
+                    balance: "0",
+                    accountAddress,
+                    tokenAddress: vetToken.address,
+                    genesisId: network.genesis.id,
+                },
+            }
+        }
+
+        return {
+            ...vetToken,
+            balance,
+        }
+    },
+)
+
+export const selectVetBalanceByAccount = createSelector(
+    [selectVetTokenWithBalanceByAccount],
     vetBalance => {
         return new BigNumber(
             FormattingUtils.convertToFiatBalance(
