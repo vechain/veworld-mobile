@@ -1,23 +1,34 @@
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { Device } from "react-native-ble-plx"
-import VETLedgerApp, {
-    StatusCodes,
-    VETLedgerAccount,
-} from "~Common/Ledger/VetLedgerApp"
-
+import { StatusCodes, VETLedgerAccount, VETLedgerApp } from "~Common/Ledger"
+import { AddressUtils, CryptoUtils } from "~Utils"
+import { hdnode1 } from "./wallets"
+import { Characteristic } from "@ledgerhq/react-native-hw-transport-ble/lib/types"
+import { DeviceModel, DeviceModelId } from "@ledgerhq/devices"
 /*eslint-disable no-console*/
+const publicKey =
+    "042e7f024c8af943a41af6b74a8be59c57daf978282fb0118674cba85cac0fe68eeca595a4a84f93f76ab8d648e40e5ec880691787cbfe6607de578a4217d4c15c"
+const chainCode =
+    "9f2e11c29c3838b32cc4160acb8c163db2d85e8a795af8844210ad81edd3eaef"
+const address = AddressUtils.getAddressFromXPub(
+    CryptoUtils.xPubFromHdNode(hdnode1),
+    0,
+)
 export const mockLedgerAccount = {
-    publicKey:
-        "042e7f024c8af943a41af6b74a8be59c57daf978282fb0118674cba85cac0fe68eeca595a4a84f93f76ab8d648e40e5ec880691787cbfe6607de578a4217d4c15c",
-    address: "0x2749808b9d2d2ec0aef731a357cac6f2f468a58d",
-    chainCode:
-        "9f2e11c29c3838b32cc4160acb8c163db2d85e8a795af8844210ad81edd3eaef",
+    publicKey,
+    address,
+    chainCode,
 }
 
-export const mockDeviceModel = {
-    id: "nanoX",
+export const mockDeviceModel: DeviceModel = {
+    id: DeviceModelId.nanoX,
     productName: "Ledger Nano X",
     usbOnly: false,
+    productIdMM: 0x0004,
+    legacyUsbProductId: 0x0001,
+    memorySize: 0x100000,
+    masks: [0x0000, 0x0000],
+    getBlockSize: () => 0x1000,
 }
 
 export const mockedDevice = {
@@ -45,40 +56,27 @@ export const mockTransport = {
     },
 }
 
-// @ts-ignore
-export const mockedTransport: BleTransport = {
-    // @ts-ignore
-    deviceModel: mockDeviceModel, // @ts-ignore
-    device: mockedDevice,
-    close(): Promise<void> {
-        console.log("Closed transport")
-        return Promise.resolve()
-    },
-    open(_deviceOrId: string | Device): Promise<BleTransport> {
-        return Promise.resolve(mockedTransport)
-    },
-
-    on(eventName: string) {
-        console.log("Created event for: " + eventName)
-    },
-    exchange(): Promise<any> {
-        return Promise.resolve()
-    },
-    exchangeAtomicImpl(): Promise<any> {
-        return Promise.resolve()
-    },
-    exchangeBusyPromise: null,
-    exchangeTimeout: 30000,
-    id: "4418A927-A5E6-5743-8F64-895250CC29F9",
-    isConnected: true,
-    mtuSize: 153,
-    notYetDisconnected: true,
+const characteristics: Characteristic = {
+    uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e",
+    isWritableWithResponse: true,
+    isWritableWithoutResponse: true,
+    isNotifiable: false,
+    isNotifying: false,
+    value: null,
 }
+
+export const mockedTransport = new BleTransport(
+    mockedDevice as Device,
+    characteristics,
+    characteristics,
+    null as any,
+    mockDeviceModel,
+)
 
 export const mockLedgerApp: VETLedgerApp = {
     // @ts-ignore
     transport: mockTransport,
-    getAccount: async (
+    getAddress: async (
         _path: string,
         _display?: boolean | undefined,
         _chainCode?: boolean | undefined,

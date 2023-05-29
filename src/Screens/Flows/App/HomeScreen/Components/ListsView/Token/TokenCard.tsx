@@ -42,7 +42,10 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit }: Props) => {
                 <BaseText typographyFont="subTitleBold">
                     {tokenWithBalance.name}
                 </BaseText>
-                <BaseView flexDirection="row" alignItems="baseline">
+                <BaseView
+                    flexDirection="row"
+                    alignItems="baseline"
+                    justifyContent="flex-start">
                     <BaseText
                         typographyFont="bodyMedium"
                         color={tokenValueLabelColor}>

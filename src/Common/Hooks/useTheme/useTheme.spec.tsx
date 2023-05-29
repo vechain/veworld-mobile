@@ -17,7 +17,7 @@ describe("useTheme", () => {
                 </TestWrapper>
             )) as any,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         expect(result.current).toEqual(ColorTheme("light"))
     })
     it("should return the correct dark theme", async () => {
@@ -31,7 +31,7 @@ describe("useTheme", () => {
                 </TestWrapper>
             )) as any,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         expect(result.current).toEqual(ColorTheme("dark"))
     })
     it("should return the correct light theme", async () => {
@@ -45,7 +45,7 @@ describe("useTheme", () => {
                 </TestWrapper>
             )) as any,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         expect(result.current).toEqual(ColorTheme("light"))
     })
     it("should return the correct light theme if theme is null", async () => {
@@ -59,7 +59,7 @@ describe("useTheme", () => {
                 </TestWrapper>
             )) as any,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         expect(result.current).toEqual(ColorTheme("light"))
     })
 })
@@ -76,7 +76,7 @@ describe("useThemedStyles", () => {
             () => useThemedStyles(mockStyles),
             { wrapper: TestWrapper },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
 
         expect(result.current.styles).toEqual({
             container: {

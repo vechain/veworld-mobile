@@ -66,7 +66,10 @@ export const VechainTokenCard = memo(
                         <BaseText typographyFont="subTitleBold">
                             {tokenWithInfo.name}
                         </BaseText>
-                        <BaseView flexDirection="row" alignItems="baseline">
+                        <BaseView
+                            flexDirection="row"
+                            alignItems="baseline"
+                            justifyContent="flex-start">
                             <BaseText
                                 typographyFont="bodyMedium"
                                 color={tokenValueLabelColor}>

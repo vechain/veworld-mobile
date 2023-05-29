@@ -7,7 +7,7 @@ export const mergeTokens = (a: FungibleToken[], b: FungibleToken[]) =>
             aa =>
                 !b.find(
                     bb =>
-                        aa.symbol === bb.symbol &&
+                        aa.symbol.toLowerCase() === bb.symbol.toLowerCase() &&
                         aa.genesisId === bb.genesisId,
                 ),
         )

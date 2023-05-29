@@ -16,10 +16,11 @@ export const BaseImage = (props: Props) => {
             style={[{ width: w, height: h }, style]}
             source={{
                 uri,
-                priority: FastImage.priority.normal,
+                priority: FastImage.priority.high,
+                cache: FastImage.cacheControl.immutable,
             }}
             {...rest}
-            resizeMode={FastImage.resizeMode.contain}
+            resizeMode={FastImage.resizeMode.cover}
         />
     )
 }

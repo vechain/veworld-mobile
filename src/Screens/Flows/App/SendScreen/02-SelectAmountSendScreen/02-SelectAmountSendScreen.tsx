@@ -40,6 +40,7 @@ type Props = NativeStackScreenProps<
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const { token, initialRoute } = route.params
+
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
     const [isInputInFiat, setIsInputInFiat] = useState(false)
@@ -118,7 +119,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text
     return (
-        <BaseSafeArea grow={1} style={styles.safeArea}>
+        <BaseSafeArea
+            grow={1}
+            style={styles.safeArea}
+            testID="Select_Amount_Send_Screen">
             <BaseView>
                 <BackButtonHeader />
                 <BaseView mx={24}>
