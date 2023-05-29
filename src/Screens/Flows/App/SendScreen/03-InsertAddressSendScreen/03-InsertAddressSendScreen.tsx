@@ -90,7 +90,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     }
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="Insert_Address_Send_Screen">
             <BackButtonHeader />
             <ScrollViewWithFooter
                 footer={
@@ -139,7 +139,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 </BaseView>
                 <BaseView mx={24}>
                     <BaseAccordion
-                        defaultIsOpen
+                        defaultIsOpen={!!contacts.length}
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>

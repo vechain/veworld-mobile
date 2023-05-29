@@ -14,6 +14,7 @@ import {
     BaseTouchableBox,
     BaseView,
     OfficialTokenCard,
+    useThor,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
@@ -27,7 +28,11 @@ import {
     selectSuggestedTokens,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    updateAccountBalances,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import {
@@ -81,8 +86,9 @@ export const ManageTokenScreen = () => {
     const unselectedTokens = filteredTokens.filter(
         token => !selectedTokenSymbols.includes(token.symbol),
     )
+    const thorClient = useThor()
 
-    const selectToken = (token: FungibleToken) => {
+    const selectToken = async (token: FungibleToken) => {
         setSelectedTokenSymbols(tokenSymbols => [...tokenSymbols, token.symbol])
         dispatch(
             addTokenBalance({
@@ -94,6 +100,7 @@ export const ManageTokenScreen = () => {
                 genesisId: currentNetwork.genesis.id,
             }),
         )
+        await dispatch(updateAccountBalances(thorClient, account.address))
     }
     const unselectToken = (token: FungibleToken) => {
         setSelectedTokenSymbols(tokenSymbols =>

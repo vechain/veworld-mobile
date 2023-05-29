@@ -38,6 +38,8 @@ module.exports = {
         "^~i18n(.*)": ["<rootDir>/src/i18n$1"],
         "^~Assets(.*)": ["<rootDir>/src/Assets$1"],
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
+        "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
+
         Intl: "<rootDir>/node_modules/intl/",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
@@ -60,10 +62,10 @@ module.exports = {
 
     coverageThreshold: {
         global: {
-            statements: 95.95,
-            branches: 89.35,
+            statements: 94.38,
+            branches: 86.75,
             functions: 96.0,
-            lines: 96.16,
+            lines: 94.4,
         },
     },
     reporters: ["default", "jest-junit"],

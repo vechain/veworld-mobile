@@ -49,7 +49,7 @@ describe("BaseView component", () => {
 
         expect(baseView).toHaveStyle({
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "flex-start",
             alignItems: "center",
         })
     })
