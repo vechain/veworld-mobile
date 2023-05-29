@@ -7,7 +7,7 @@ export const getTokenURI = async (
 ) => {
     const res = await thor
         .account(contractAddress)
-        .method(abis.vip181.tokenURI)
+        .method(abis.VIP181.tokenURI)
         .call(tokenId)
     return res.decoded[0]
 }

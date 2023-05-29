@@ -1,6 +1,5 @@
 import type { abi } from "thor-devkit"
-import vip180 from "./abis/VIP180.abi"
-import vip181 from "./abis/VIP181.abi"
+import { VIP180, VIP181, RouterV2, UniswapRouterV2 } from "./abis"
 import { Network, NETWORK_TYPE } from "~Model"
 
 const THOR_MAIN_URLS = [
@@ -31,8 +30,10 @@ const paramsGet: abi.Function.Definition = {
 }
 
 export const abis = {
-    vip180,
-    vip181,
+    VIP180,
+    VIP181,
+    RouterV2,
+    UniswapRouterV2,
     paramsGet,
 }
 
