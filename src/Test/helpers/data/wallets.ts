@@ -8,6 +8,7 @@ const defaultWallet =
 //defaultMnemonicPhrase should have VET/VTHO on test networks
 export const defaultMnemonicPhrase = defaultWallet.split(" ")
 export const hdnode1 = HDNode.fromMnemonic(defaultMnemonicPhrase)
+
 export const wallet1: Wallet = {
     mnemonic: defaultMnemonicPhrase,
     rootAddress: hdnode1.address,

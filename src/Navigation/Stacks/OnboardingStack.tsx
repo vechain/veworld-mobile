@@ -11,9 +11,11 @@ import {
     WalletSuccessScreen,
     SelectLedgerDevice,
     SelectLedgerAccounts,
+    EnableAdditionalSettings,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
+import { VETLedgerAccount } from "~Common"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
@@ -24,8 +26,12 @@ export type RootStackParamListOnboarding = {
     [Routes.USER_CREATE_PASSWORD]: undefined
     [Routes.APP_SECURITY]: undefined
     [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
+    [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {
+        device: ConnectedLedgerDevice
+    }
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
+        rootAccount: VETLedgerAccount
     }
     [Routes.WALLET_SUCCESS]:
         | {
@@ -85,9 +91,16 @@ export const OnboardingStack = () => {
                     component={UserCreatePasswordScreen}
                     options={{ headerShown: false }}
                 />
+
                 <Onboarding.Screen
                     name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}
                     component={SelectLedgerDevice}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS}
+                    component={EnableAdditionalSettings}
                     options={{ headerShown: false }}
                 />
 
