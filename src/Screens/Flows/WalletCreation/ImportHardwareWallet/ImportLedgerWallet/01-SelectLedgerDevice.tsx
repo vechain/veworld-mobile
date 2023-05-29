@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import {
+    BackButtonHeader,
     BaseButton,
-    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -9,7 +9,7 @@ import {
     DismissKeyboardView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { debug, useTheme } from "~Common"
+import { debug } from "~Common"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
@@ -18,11 +18,13 @@ import { LedgerDeviceBox } from "../components"
 import { FlatList } from "react-native-gesture-handler"
 import { Routes } from "~Navigation"
 import { ConnectedLedgerDevice } from "~Model"
+import Lottie from "lottie-react-native"
+import { BlePairingDark } from "~Assets/Lottie"
+import * as Haptics from "expo-haptics"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const theme = useTheme()
 
     const [availableDevices, setAvailableDevices] = useState<
         ConnectedLedgerDevice[]
@@ -30,15 +32,14 @@ export const SelectLedgerDevice = () => {
     const [selectedDevice, setSelectedDevice] =
         useState<ConnectedLedgerDevice>()
 
-    const goBack = () => nav.goBack()
-
     const onDeviceSelect = useCallback((device: ConnectedLedgerDevice) => {
         setSelectedDevice(device)
     }, [])
 
     const onImportClick = useCallback(() => {
         if (selectedDevice) {
-            nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS, {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+            nav.navigate(Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS, {
                 device: selectedDevice,
             })
         }
@@ -71,6 +72,7 @@ export const SelectLedgerDevice = () => {
                             if (prev.find(d => d.id === device.id)) return prev
                             return [...prev, device]
                         })
+                    if (!selectedDevice) setSelectedDevice(device)
                 }
             },
             error: error => {
@@ -81,7 +83,7 @@ export const SelectLedgerDevice = () => {
         return () => {
             subscription.unsubscribe()
         }
-    }, [])
+    }, [selectedDevice])
 
     const renderItem = useCallback(
         ({ item }: { item: ConnectedLedgerDevice }) => {
@@ -102,42 +104,49 @@ export const SelectLedgerDevice = () => {
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
-                <BaseIcon
-                    style={styles.backIcon}
-                    mx={8}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-                <BaseSpacer height={22} />
+                <BackButtonHeader />
                 <BaseView
                     alignItems="center"
                     justifyContent="space-between"
                     flexGrow={1}
                     mx={20}>
                     <BaseView alignSelf="flex-start" w={100}>
-                        <BaseView flexDirection="row" w={100}>
-                            <BaseText typographyFont="title">
-                                {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
-                            </BaseText>
-                        </BaseView>
+                        <BaseText typographyFont="title">
+                            {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
+                        </BaseText>
                         <BaseText typographyFont="body" my={10}>
                             {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                         </BaseText>
 
                         <BaseSpacer height={20} />
-                        <FlatList
-                            style={styles.container}
-                            data={availableDevices}
-                            numColumns={1}
-                            horizontal={false}
-                            renderItem={renderItem}
-                            nestedScrollEnabled={false}
-                            showsVerticalScrollIndicator={false}
-                            ItemSeparatorComponent={renderSeparator}
-                            keyExtractor={item => item.id}
+                        <Lottie
+                            source={BlePairingDark}
+                            autoPlay
+                            loop
+                            style={styles.lottie}
                         />
+                        <BaseSpacer height={20} />
+                        <BaseText
+                            align="center"
+                            typographyFont="subTitleBold"
+                            my={10}>
+                            {availableDevices.length > 0
+                                ? `${availableDevices.length} devices found`
+                                : "No devices found"}
+                        </BaseText>
+                        {availableDevices.length > 0 && (
+                            <FlatList
+                                style={styles.container}
+                                data={availableDevices}
+                                numColumns={1}
+                                horizontal={false}
+                                renderItem={renderItem}
+                                nestedScrollEnabled={false}
+                                showsVerticalScrollIndicator={false}
+                                ItemSeparatorComponent={renderSeparator}
+                                keyExtractor={item => item.id}
+                            />
+                        )}
                     </BaseView>
 
                     <BaseView w={100}>
@@ -160,5 +169,9 @@ const styles = StyleSheet.create({
     backIcon: { marginHorizontal: 20, alignSelf: "flex-start" },
     container: {
         width: "100%",
+    },
+    lottie: {
+        width: "100%",
+        height: 100,
     },
 })

@@ -31,6 +31,8 @@ type Props = {
     pr?: number
     w?: number
     h?: number
+    bg?: string
+    borderRadius?: number
     alignContainer?: FlexAlignType
     justifyContainer?:
         | "flex-start"
@@ -99,6 +101,8 @@ export const BaseText = (props: Props) => {
             pl={props.pl}
             pr={props.pr}
             w={props.w}
+            borderRadius={props.borderRadius}
+            bg={props.bg}
             h={props.h}>
             <Text
                 style={[

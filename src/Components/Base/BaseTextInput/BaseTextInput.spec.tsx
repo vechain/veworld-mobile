@@ -15,6 +15,12 @@ const customLabel = "Custom label"
 const findTextInput = async (placeholder = mandatoryProps.placeholder) =>
     await screen.findByPlaceholderText(placeholder, {}, { timeout: 5000 })
 
+const findErrorMessage = async (errorMessage = customErrorMessage) =>
+    await screen.findByText(errorMessage, {}, { timeout: 5000 })
+
+const findLabel = async (label = customLabel) =>
+    await screen.findByText(label, {}, { timeout: 5000 })
+
 describe("BaseTextInput", () => {
     it("renders correctly with mandatory props", async () => {
         render(<BaseTextInput {...mandatoryProps} />, {
@@ -74,7 +80,7 @@ describe("BaseTextInput", () => {
             { wrapper: TestWrapper },
         )
 
-        const errorMessage = await screen.findByText(customErrorMessage)
+        const errorMessage = await findErrorMessage()
         expect(errorMessage).toBeVisible()
     })
 
@@ -118,7 +124,7 @@ describe("BaseTextInput", () => {
             { wrapper: TestWrapper },
         )
 
-        const errorMessage = await screen.findByText(customErrorMessage)
+        const errorMessage = await findErrorMessage()
         expect(errorMessage).toBeVisible()
     })
 
@@ -127,7 +133,7 @@ describe("BaseTextInput", () => {
             wrapper: TestWrapper,
         })
 
-        const label = await screen.findByText(customLabel)
+        const label = await findLabel()
         expect(label).toBeVisible()
     })
 

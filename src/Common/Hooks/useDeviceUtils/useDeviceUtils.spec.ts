@@ -31,7 +31,7 @@ describe("useDeviceUtils", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         const mnemonic =
             "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry"
         const { device, wallet } =
@@ -65,7 +65,7 @@ describe("useDeviceUtils", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         const mnemonic =
             "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry"
         expect(() => {

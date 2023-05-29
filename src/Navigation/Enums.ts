@@ -4,6 +4,7 @@ export enum Routes {
     WALLET_TUTORIAL = "Wallet_Tutorial",
     WALLET_SETUP = "Wallet_Setup",
     IMPORT_HW_LEDGER_SELECT_DEVICE = "Import_Ledger_Select_Device",
+    IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS = "Import_Ledger_Enable_Additional_Settings",
     IMPORT_HW_LEDGER_SELECT_ACCOUNTS = "Import_Ledger_Select_Accounts",
     NEW_MNEMONIC = "New_Mnemonic",
     CONFIRM_MNEMONIC = "Confirm_Mnemonic",
