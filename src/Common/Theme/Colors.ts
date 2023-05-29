@@ -27,6 +27,8 @@ export type Colors = {
     switcher: string
     skeletonBoneColor: string
     skeletonHighlightColor: string
+    alertOrangeMedium: string
+    alertRedMedium: string
 }
 
 export enum COLORS {
@@ -90,6 +92,8 @@ const light: Colors = {
     switcher: COLORS.DARK_PURPLE_DISABLED,
     skeletonBoneColor: COLORS.DARK_PURPLE_DISABLED,
     skeletonHighlightColor: COLORS.LIGHT_GRAY,
+    alertOrangeMedium: COLORS.MEDIUM_ORANGE,
+    alertRedMedium: COLORS.MEDIUM_RED,
 }
 
 const dark: Colors = {
@@ -121,6 +125,8 @@ const dark: Colors = {
     switcher: COLORS.DARK_PURPLE_DISABLED,
     skeletonBoneColor: COLORS.PURPLE,
     skeletonHighlightColor: COLORS.LIGHT_PURPLE,
+    alertOrangeMedium: COLORS.PASTEL_ORANGE,
+    alertRedMedium: COLORS.PASTEL_RED,
 }
 
 export const colors = { light, dark }
