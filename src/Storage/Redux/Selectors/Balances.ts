@@ -199,47 +199,49 @@ export const selectVetBalance = createSelector(
     },
 )
 
-export const selectVetTokenWithBalanceByAccount = (accountAddress: string) =>
-    createSelector(
-        [selectSelectedNetworkBalances, selectSelectedNetwork],
-        (balances, network) => {
-            const vetToken = VET_BY_NETWORK[network.type]
+export const selectVetTokenWithBalanceByAccount = createSelector(
+    [
+        selectSelectedNetworkBalances,
+        selectSelectedNetwork,
+        (_state, accountAddress) => accountAddress,
+    ],
+    (balances, network, accountAddress) => {
+        const vetToken = VET_BY_NETWORK[network.type]
 
-            const balance = balances.find(
-                _balance =>
-                    _balance.accountAddress === accountAddress &&
-                    _balance.tokenAddress === vetToken.address,
-            )
+        const balance = balances.find(
+            _balance =>
+                _balance.accountAddress === accountAddress &&
+                _balance.tokenAddress === vetToken.address,
+        )
 
-            if (!balance) {
-                return {
-                    ...vetToken,
-                    balance: {
-                        balance: "0",
-                        accountAddress,
-                        tokenAddress: vetToken.address,
-                        genesisId: network.genesis.id,
-                    },
-                }
-            }
-
+        if (!balance) {
             return {
                 ...vetToken,
-                balance,
+                balance: {
+                    balance: "0",
+                    accountAddress,
+                    tokenAddress: vetToken.address,
+                    genesisId: network.genesis.id,
+                },
             }
-        },
-    )
+        }
 
-export const selectVetBalanceByAccount = (accountAddress: string) =>
-    createSelector(
-        [selectVetTokenWithBalanceByAccount(accountAddress)],
-        vetBalance => {
-            return new BigNumber(
-                FormattingUtils.convertToFiatBalance(
-                    vetBalance?.balance.balance || "0",
-                    1,
-                    VET.decimals,
-                ),
-            ).toString()
-        },
-    )
+        return {
+            ...vetToken,
+            balance,
+        }
+    },
+)
+
+export const selectVetBalanceByAccount = createSelector(
+    [selectVetTokenWithBalanceByAccount],
+    vetBalance => {
+        return new BigNumber(
+            FormattingUtils.convertToFiatBalance(
+                vetBalance?.balance.balance || "0",
+                1,
+                VET.decimals,
+            ),
+        ).toString()
+    },
+)

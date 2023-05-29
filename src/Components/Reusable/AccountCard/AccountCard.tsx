@@ -21,8 +21,8 @@ type Props = {
 export const AccountCard: React.FC<Props> = memo(
     ({ account, onPress, selected, containerStyle }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
-        const vetBalance = useAppSelector(
-            selectVetBalanceByAccount(account.address),
+        const vetBalance = useAppSelector(state =>
+            selectVetBalanceByAccount(state, account.address),
         )
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
