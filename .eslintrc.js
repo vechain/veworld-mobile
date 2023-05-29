@@ -1,6 +1,6 @@
 module.exports = {
     root: true,
-    extends: "@react-native-community",
+    extends: ["@react-native-community", "plugin:prettier/recommended"],
     parser: "@typescript-eslint/parser",
     plugins: ["@typescript-eslint", "i18next"],
     ignorePatterns: ["src/i18n/*", "coverage/*"],
@@ -8,6 +8,7 @@ module.exports = {
         {
             files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
             rules: {
+                "prettier/prettier": ["error", { semi: false }],
                 "@typescript-eslint/no-shadow": ["error"],
                 "no-shadow": "off",
                 "no-undef": "off",
