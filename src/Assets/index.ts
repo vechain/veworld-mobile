@@ -1,5 +1,5 @@
 export * from "./Icons"
 export * from "./Fonts"
 export * from "./IconComponents"
-export * from "./temp"
+export * from "./Img"
 export * from "./Lottie"
