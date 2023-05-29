@@ -35,6 +35,7 @@ import {
     setIsAppLockActive,
 } from "~Storage/Redux/Actions"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useEditPin } from "./Hooks/useEditPin"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -89,6 +90,16 @@ export const PrivacyScreen = () => {
         devices,
         isWalletSecurityBiometrics,
     })
+
+    const {
+        onEditPinPress,
+        isEditPinPromptOpen,
+        closeEditPinPrompt,
+        onOldPinSuccess,
+        lockScreenScenario,
+        isValidatePassword,
+    } = useEditPin()
+
     // [END] - Hooks setup
 
     // [START] - Internal Methods
@@ -108,6 +119,7 @@ export const PrivacyScreen = () => {
         },
         [dispatch],
     )
+
     // [END] - Internal Methods
 
     return (
@@ -149,7 +161,7 @@ export const PrivacyScreen = () => {
                         <>
                             <BaseSpacer height={16} />
                             <BaseTouchable
-                                action={() => {}}
+                                action={onEditPinPress}
                                 title={LL.BTN_EDIT_PIN()}
                                 underlined
                             />
@@ -198,6 +210,14 @@ export const PrivacyScreen = () => {
                         isOpen={isPasswordPromptOpen}
                         onClose={closePasswordPrompt}
                         onSuccess={onPasswordSuccess}
+                    />
+
+                    <RequireUserPassword
+                        isOpen={isEditPinPromptOpen}
+                        onClose={closeEditPinPrompt}
+                        onSuccess={onOldPinSuccess}
+                        scenario={lockScreenScenario}
+                        isValidatePassword={isValidatePassword}
                     />
                 </BaseView>
                 <BaseSpacer height={20} />

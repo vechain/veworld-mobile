@@ -636,6 +636,14 @@ type RootTranslation = {
 	 */
 	SB_CONFIRM_PIN: string
 	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​o​l​d​ ​p​i​n
+	 */
+	SB_EDIT_OLD_PIN: string
+	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​n​e​w​ ​p​i​n
+	 */
+	SB_EDIT_NEW_PIN: string
+	/**
 	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
 	 */
 	SB_ACCOUNT_MANAGEMENT: string
@@ -2185,6 +2193,14 @@ export type TranslationFunctions = {
 	 * Insert the pin you created in order to perform the requested operation.
 	 */
 	SB_CONFIRM_PIN: () => LocalizedString
+	/**
+	 * Insert your old pin
+	 */
+	SB_EDIT_OLD_PIN: () => LocalizedString
+	/**
+	 * Insert your new pin
+	 */
+	SB_EDIT_NEW_PIN: () => LocalizedString
 	/**
 	 * Account management
 	 */

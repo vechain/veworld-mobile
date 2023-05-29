@@ -13,17 +13,13 @@ import { SecurityLevelType } from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
-import { SettingsConstants, valueToHP } from "~Common"
-import { CryptoUtils } from "~Utils"
-import { useAppDispatch } from "~Storage/Redux"
-import { setPinValidationString } from "~Storage/Redux/Actions"
+import { usePasswordValidation, valueToHP } from "~Common"
 
 const digitNumber = 6
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
-
+    const { updatePassword } = usePasswordValidation()
     const nav = useNavigation()
-    const dispatch = useAppDispatch()
 
     /**
      * Called by `useOnDigitPressWithConfirmation` when the user has finished typing the pin
@@ -32,17 +28,13 @@ export const UserCreatePasswordScreen = () => {
      */
     const onFinishCallback = useCallback(
         (insertedPin: string) => {
-            const pinValidationString = CryptoUtils.encrypt<string>(
-                SettingsConstants.VALIDATION_STRING,
-                insertedPin,
-            )
-            dispatch(setPinValidationString(pinValidationString))
+            updatePassword(insertedPin)
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.SECRET,
                 userPin: insertedPin,
             })
         },
-        [nav, dispatch],
+        [updatePassword, nav],
     )
 
     const [isConfirmationError, setIsConfirmationError] =
