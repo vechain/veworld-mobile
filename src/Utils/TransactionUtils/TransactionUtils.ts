@@ -89,6 +89,15 @@ export const decodeTokenTransferClause = (
     return null
 }
 
+/**
+ * Decodes a clause from a contract that implements an Automated Market Maker (AMM) interface.
+ *
+ * @param clause - The clause to decode.
+ * @param parameters - The parameters of the contract function being called.
+ * @param methodSignature - The method signature of the contract function being called.
+ * @param clauseType - The type of clause being interpreted.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
 export const decodeAMMClause = (
     clause: Connex.VM.Clause,
     paramters: abi.Function.Parameter[],
@@ -115,6 +124,12 @@ export const decodeAMMClause = (
     return null
 }
 
+/**
+ * Decodes a clause that represents a swap of VET for tokens.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
 export const decodeSwapExactVETForTokensClause = (
     clause: Connex.VM.Clause,
 ): ClauseWithMetadata | null => {
@@ -126,6 +141,12 @@ export const decodeSwapExactVETForTokensClause = (
     )
 }
 
+/**
+ * Decodes a clause that represents a swap of VET for a specified number of tokens.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
 export const decodeSwapVETForExactTokensClause = (
     clause: Connex.VM.Clause,
 ): ClauseWithMetadata | null => {
@@ -137,6 +158,12 @@ export const decodeSwapVETForExactTokensClause = (
     )
 }
 
+/**
+ * Decodes a clause that represents a swap of tokens for a specified amount of VET.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
 export const decodeSwapTokensForExactVETClause = (
     clause: Connex.VM.Clause,
 ): ClauseWithMetadata | null => {
@@ -148,6 +175,12 @@ export const decodeSwapTokensForExactVETClause = (
     )
 }
 
+/**
+ * Decodes a clause that represents a swap of tokens for VET.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
 export const decodeSwapExactTokensForVETClause = (
     clause: Connex.VM.Clause,
 ): ClauseWithMetadata | null => {
@@ -159,6 +192,12 @@ export const decodeSwapExactTokensForVETClause = (
     )
 }
 
+/**
+ * Decodes a clause that represents a swap of one type of tokens for another type of tokens.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
 export const decodeSwapExactTokensForTokensClause = (
     clause: Connex.VM.Clause,
 ): ClauseWithMetadata | null => {
@@ -170,6 +209,12 @@ export const decodeSwapExactTokensForTokensClause = (
     )
 }
 
+/**
+ * Decodes a clause that represents a swap of VET for tokens but with ETH method signature.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
 export const decodeSwapExactETHForTokensClause = (
     clause: Connex.VM.Clause,
 ): ClauseWithMetadata | null => {
@@ -181,6 +226,12 @@ export const decodeSwapExactETHForTokensClause = (
     )
 }
 
+/**
+ * Decodes a clause that represents a swap of tokens for VET but with ETH method signature.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
 export const decodeSwapExactTokensForETHClause = (
     clause: Connex.VM.Clause,
 ): ClauseWithMetadata | null => {
