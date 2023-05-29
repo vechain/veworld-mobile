@@ -346,7 +346,7 @@ export const decodeContractCall = (clause: ConnexClause) => {
         decodeSwapExactTokensForETHClause(clause) ??
         decodeSwapExactTokensForTokensClause(clause)
 
-    return decodedClause ? decodedClause : null
+    return decodedClause
 }
 
 export const toDelegation = (txBody: Transaction.Body) => {
