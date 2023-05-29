@@ -60,7 +60,6 @@ export const BalanceSlice = createSlice({
                 .map(balance => {
                     //recalculate positions
                     if (
-                        balance.tokenAddress === tokenAddress &&
                         balance.accountAddress === accountAddress &&
                         !AddressUtils.compareAddresses(
                             balance.tokenAddress,
