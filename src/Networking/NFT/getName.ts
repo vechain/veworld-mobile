@@ -7,7 +7,7 @@ export const getName = async (
 ): Promise<string> => {
     const name = await thor
         .account(contractAddress)
-        .method(abis.vip181.name)
+        .method(abis.VIP181.name)
         .call()
 
     return isEmpty(name.decoded[0]) ? "N/A" : name.decoded[0]
