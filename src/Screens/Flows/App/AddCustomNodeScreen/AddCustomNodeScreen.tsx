@@ -54,11 +54,15 @@ export const AddCustomNodeScreen = () => {
                 }),
             ).unwrap()
 
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success,
+            )
             goBack()
         } catch (e) {
             error(e)
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Error,
+            )
             showErrorToast(e as string)
         }
         setIsSubmitting(false)

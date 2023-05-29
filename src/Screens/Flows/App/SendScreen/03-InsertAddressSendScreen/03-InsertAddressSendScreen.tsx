@@ -1,15 +1,14 @@
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { debug, useBottomSheetModal, useTheme } from "~Common"
+import { useBottomSheetModal } from "~Common"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
     BackButtonHeader,
     BaseAccordion,
     BaseButton,
-    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -39,50 +38,113 @@ type Props = NativeStackScreenProps<
 export const InsertAddressSendScreen = ({ route }: Props) => {
     const { token, amount, initialRoute } = route.params
     const { LL } = useI18nContext()
-    const [address, setAddress] = useState("")
+    const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
-    const [isValid, setIsValid] = useState(false)
-    const theme = useTheme()
+    const [selectedAddress, setSelectedAddress] = useState("")
     const nav = useNavigation()
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
-    const foundInContactsOrAccounts = !!(
-        contacts.find(
-            contact => contact.address.toLowerCase() === address.toLowerCase(),
-        ) ||
-        accounts.find(
-            account => account.address.toLowerCase() === address.toLowerCase(),
-        )
-    )
+
     const {
         ref: refCreateContactBottomSheet,
         onOpen: openCreateContactSheet,
         onClose: closeCreateContactSheet,
     } = useBottomSheetModal()
 
-    const handleAddressChange = (addressRaw: string) => {
-        const newAddress = addressRaw.toLowerCase()
+    const accountsAndContacts = useMemo(() => {
+        return [...accounts, ...contacts]
+    }, [accounts, contacts])
+
+    const filteredContacts = useMemo(() => {
+        if (!searchText) return contacts
+        return contacts.filter(
+            contact =>
+                contact.alias
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase()) ||
+                contact.address
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase()),
+        )
+    }, [contacts, searchText])
+
+    const filteredAccounts = useMemo(() => {
+        if (!searchText) return accounts
+        return accounts.filter(
+            account =>
+                account.alias
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase()) ||
+                account.address
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase()),
+        )
+    }, [accounts, searchText])
+
+    const isAddressInContactsOrAccounts = useMemo(() => {
+        return accountsAndContacts.some(accountOrContact =>
+            AddressUtils.compareAddresses(
+                accountOrContact.address,
+                selectedAddress,
+            ),
+        )
+    }, [accountsAndContacts, selectedAddress])
+
+    const handleSearchChange = useCallback((text: string) => {
+        const lowerCaseText = text.toLowerCase()
         setErrorMessage("")
-        setIsValid(false)
-        setAddress(newAddress.toLowerCase())
-        if (AddressUtils.isValid(newAddress)) {
-            debug("Valid address")
-            setIsValid(true)
+        setSearchText(lowerCaseText)
+    }, [])
+
+    const onSuccessfullScan = (address: string) => {
+        setSelectedAddress(address)
+        const addressExists = accountsAndContacts.some(accountOrContact =>
+            AddressUtils.compareAddresses(accountOrContact.address, address),
+        )
+        if (addressExists) {
+            nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
+                token,
+                amount,
+                address,
+                initialRoute: initialRoute ?? "",
+            })
+        } else {
+            openCreateContactSheet()
         }
     }
+
+    //Whenever search changes, we check if it's a valid address, eventually opening the create bottomsheet
+    useEffect(() => {
+        if (AddressUtils.isValid(searchText)) {
+            setSelectedAddress(searchText)
+        }
+    }, [searchText, openCreateContactSheet])
+
+    useEffect(() => {
+        if (selectedAddress && !isAddressInContactsOrAccounts)
+            openCreateContactSheet()
+    }, [selectedAddress, isAddressInContactsOrAccounts, openCreateContactSheet])
+
     const onOpenCamera = () => {
-        nav.navigate(Routes.CAMERA, { onScan: handleAddressChange })
+        nav.navigate(Routes.CAMERA, { onScan: onSuccessfullScan })
     }
+
+    const onTextReset = () => {
+        setSearchText("")
+        setErrorMessage("")
+    }
+
     const goToResumeStep = () => {
         nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
             token,
             amount,
-            address,
+            address: selectedAddress,
             initialRoute: initialRoute ?? "",
         })
     }
-    const checkIfContactExist = () => {
-        if (foundInContactsOrAccounts) {
+
+    const onNext = () => {
+        if (isAddressInContactsOrAccounts) {
             goToResumeStep()
         } else {
             openCreateContactSheet()
@@ -99,8 +161,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             style={styles.nextButton}
                             mx={24}
                             title={LL.COMMON_BTN_NEXT()}
-                            disabled={!isValid}
-                            action={checkIfContactExist}
+                            disabled={!selectedAddress}
+                            action={onNext}
                         />
                         <BaseSpacer height={96} />
                     </>
@@ -121,20 +183,15 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     <BaseView flexDirection="row" w={100}>
                         <BaseTextInput
                             containerStyle={styles.inputContainer}
-                            value={address}
-                            setValue={handleAddressChange}
+                            value={searchText}
+                            setValue={handleSearchChange}
                             placeholder={LL.SEND_ENTER_AN_ADDRESS()}
                             errorMessage={errorMessage}
+                            rightIcon={searchText ? "close" : "flip-horizontal"}
+                            onIconPress={
+                                searchText ? onTextReset : onOpenCamera
+                            }
                         />
-                        {!address && (
-                            <BaseIcon
-                                name={"flip-horizontal"}
-                                size={24}
-                                color={theme.colors.primary}
-                                action={onOpenCamera}
-                                style={styles.icon}
-                            />
-                        )}
                     </BaseView>
                 </BaseView>
                 <BaseView mx={24}>
@@ -144,26 +201,31 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             <BaseView flexDirection="row">
                                 <BaseText>
                                     {LL.SEND_INSERT_CONTACTS()} (
-                                    {contacts.length})
+                                    {filteredContacts.length})
                                 </BaseText>
                             </BaseView>
                         }
                         bodyComponent={
                             <BaseView>
-                                {contacts.map(contact => (
-                                    <ContactCard
-                                        key={contact.address}
-                                        containerStyle={styles.contactCard}
-                                        contact={contact}
-                                        onPress={() =>
-                                            handleAddressChange(contact.address)
-                                        }
-                                        selected={
-                                            contact.address.toLowerCase() ===
-                                            address.toLowerCase()
-                                        }
-                                    />
-                                ))}
+                                {filteredContacts.map(contact => {
+                                    const isSelected =
+                                        AddressUtils.compareAddresses(
+                                            contact.address,
+                                            selectedAddress,
+                                        )
+                                    const onPress = () =>
+                                        setSelectedAddress(contact.address)
+
+                                    return (
+                                        <ContactCard
+                                            key={contact.address}
+                                            containerStyle={styles.contactCard}
+                                            contact={contact}
+                                            onPress={onPress}
+                                            selected={isSelected}
+                                        />
+                                    )
+                                })}
                             </BaseView>
                         }
                     />
@@ -173,27 +235,31 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             <BaseView flexDirection="row">
                                 <BaseText>
                                     {LL.SEND_INSERT_ACCOUNTS()} (
-                                    {accounts.length})
+                                    {filteredAccounts.length})
                                 </BaseText>
                             </BaseView>
                         }
                         /*TODO: fix accordions with dynamic content */
                         bodyComponent={
                             <BaseView>
-                                {accounts.map(account => (
-                                    <AccountCard
-                                        key={account.address}
-                                        containerStyle={styles.accountCard}
-                                        account={account}
-                                        onPress={() =>
-                                            handleAddressChange(account.address)
-                                        }
-                                        selected={
-                                            account.address.toLowerCase() ===
-                                            address.toLowerCase()
-                                        }
-                                    />
-                                ))}
+                                {filteredAccounts.map(account => {
+                                    const isSelected =
+                                        AddressUtils.compareAddresses(
+                                            account.address,
+                                            selectedAddress,
+                                        )
+                                    const onPress = () =>
+                                        setSelectedAddress(account.address)
+                                    return (
+                                        <AccountCard
+                                            key={account.address}
+                                            containerStyle={styles.accountCard}
+                                            account={account}
+                                            onPress={onPress}
+                                            selected={isSelected}
+                                        />
+                                    )
+                                })}
                             </BaseView>
                         }
                     />
@@ -203,7 +269,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 ref={refCreateContactBottomSheet}
                 handleClose={closeCreateContactSheet}
                 goToResumeStep={goToResumeStep}
-                address={address}
+                address={selectedAddress}
             />
         </BaseSafeArea>
     )
