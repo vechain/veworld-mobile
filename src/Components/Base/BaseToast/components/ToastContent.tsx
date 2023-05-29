@@ -11,6 +11,7 @@ type Props = {
     text3?: string
     onPress?: () => void
     hideToast?: () => void
+    testID?: string
 }
 
 export const ToastContent = ({
@@ -20,6 +21,7 @@ export const ToastContent = ({
     text2,
     text3,
     onPress,
+    testID,
 }: Props) => {
     const theme = useTheme()
 
@@ -47,6 +49,7 @@ export const ToastContent = ({
                             {text2}{" "}
                         </BaseText>
                         <BaseText
+                            testID={testID}
                             disabled={!onPress}
                             underline={onPress ? true : false}
                             onPress={handleOnPress}

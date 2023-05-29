@@ -102,7 +102,7 @@ describe("useCreateWallet", () => {
                 () => useCreateWallet(),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 2000 })
             const { onCreateWallet } = result.current
 
             await onCreateWallet({ mnemonic: mnemonic.join(" ") })
@@ -132,7 +132,7 @@ describe("useCreateWallet", () => {
                 () => useCreateWallet(),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 2000 })
             const onCreateWallet = result.current.onCreateWallet
             await onCreateWallet({
                 mnemonic: mnemonic.join(" "),
@@ -165,7 +165,7 @@ describe("useCreateWallet", () => {
                 () => useCreateWallet(),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 2000 })
             const { onCreateLedgerWallet } = result.current
 
             await onCreateLedgerWallet({

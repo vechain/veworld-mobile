@@ -12,6 +12,7 @@ import { useI18nContext } from "~i18n"
 import { useTheme, debug } from "~Common"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import * as Haptics from "expo-haptics"
 
 type Props = {
     onClose: () => void
@@ -31,11 +32,13 @@ export const ImportWalletBottomSheet = React.forwardRef<
     }, [])
 
     const navigateToImportLocalWallet = useCallback(() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         onClose()
         nav.navigate(Routes.IMPORT_MNEMONIC)
     }, [nav, onClose])
 
     const navigateToImportHardwareWallet = useCallback(() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         onClose()
         nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_DEVICE)
     }, [onClose, nav])

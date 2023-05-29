@@ -346,7 +346,7 @@ export function numberToLocaleStringWorklet(
         mapMatch(transformForLocale, locale)
     ))(sNum, options)
 
-    if (options && options.currency && options.style === "currency") {
+    if (options?.currency && options?.style === "currency") {
         const format =
             currencyFormats[<string>mapMatch(currencyFormatMap, locale)]
         const symbol = currencySymbols[options.currency.toLowerCase()]
