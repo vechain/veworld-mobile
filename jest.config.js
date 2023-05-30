@@ -68,7 +68,7 @@ module.exports = {
             lines: 94.4,
         },
     },
-    coverageProvider: "v8",
+    // coverageProvider: "v8",
     maxWorkers: 4,
     workerIdleMemoryLimit: "1GB",
     reporters: ["default", "jest-junit"],
