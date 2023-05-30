@@ -145,9 +145,7 @@ export const fetchTokensWithInfo = () => async (dispatch: AppThunkDispatch) => {
 
         dispatch(setCoinGeckoTokens(coinGeckoTokens))
         dispatch(fetchExchangeRates({ coinGeckoTokens }))
-    } catch (e) {
-        error(e)
-    }
+    } catch (e) {}
 }
 
 const TOKEN_URL = "https://vechain.github.io/token-registry/"

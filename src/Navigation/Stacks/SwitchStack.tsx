@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
-import { CameraScreen, ResetAppScreen } from "~Screens"
+import { CameraScreen } from "~Screens"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 
 export type RootStackParamListSwitch = {
@@ -21,52 +21,43 @@ export const SwitchStack = () => {
     const state = useAppInitState()
 
     const RenderStacks = useMemo(() => {
-        switch (state) {
-            case AppInitState.INIT_STATE:
-                return (
+        if (state === AppInitState.INIT_STATE) {
+            return (
+                <Switch.Screen
+                    name="OnboardingStack"
+                    component={OnboardingStack}
+                    options={{ headerShown: false }}
+                />
+            )
+        } else {
+            return (
+                <>
                     <Switch.Screen
-                        name="OnboardingStack"
-                        component={OnboardingStack}
+                        name="TabStack"
+                        component={TabStack}
                         options={{ headerShown: false }}
                     />
-                )
-            case AppInitState.RESETTING_STATE:
-                return (
-                    <Switch.Screen
-                        name="ResetAppScreen"
-                        component={ResetAppScreen}
-                        options={{ headerShown: false }}
-                    />
-                )
-            default:
-                return (
-                    <>
+                    {/* Full screen modals */}
+                    <Switch.Group
+                        screenOptions={{
+                            headerShown: false,
+                        }}>
                         <Switch.Screen
-                            name="TabStack"
-                            component={TabStack}
-                            options={{ headerShown: false }}
+                            name={Routes.CREATE_WALLET_FLOW}
+                            component={CreateWalletAppStack}
                         />
-                        {/* Full screen modals */}
-                        <Switch.Group
-                            screenOptions={{
-                                headerShown: false,
-                            }}>
-                            <Switch.Screen
-                                name={Routes.CREATE_WALLET_FLOW}
-                                component={CreateWalletAppStack}
-                            />
 
-                            <Switch.Screen
-                                name={Routes.CAMERA}
-                                component={CameraScreen}
-                                options={{
-                                    headerShown: false,
-                                    presentation: "modal",
-                                }}
-                            />
-                        </Switch.Group>
-                    </>
-                )
+                        <Switch.Screen
+                            name={Routes.CAMERA}
+                            component={CameraScreen}
+                            options={{
+                                headerShown: false,
+                                presentation: "modal",
+                            }}
+                        />
+                    </Switch.Group>
+                </>
+            )
         }
     }, [state])
 
