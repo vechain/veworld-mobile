@@ -13,6 +13,7 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    DismissKeyboardView,
     OfficialTokenCard,
     useThor,
 } from "~Components"
@@ -127,132 +128,140 @@ export const ManageTokenScreen = () => {
     }
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <BaseView mx={20}>
-                <BaseText typographyFont="title">
-                    {LL.MANAGE_TOKEN_TITLE()}
-                </BaseText>
-                <BaseSpacer height={24} />
-                <BaseText typographyFont="button">
-                    {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE()}
-                </BaseText>
-                <BaseSpacer height={8} />
-                <BaseText typographyFont="body">
-                    {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}
-                </BaseText>
-                <BaseSpacer height={16} />
-                {customTokens.length ? (
-                    <BaseTouchableBox
-                        action={navigateManageCustomTokenScreen}
-                        justifyContent="center">
-                        <BaseIcon name="tune" color={theme.colors.primary} />
-                        <BaseSpacer width={8} />
-                        <BaseText typographyFont="bodyMedium">
-                            {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
-                        </BaseText>
-                        <BaseSpacer width={8} />
-                        <BaseView
-                            bg={theme.colors.primary}
-                            style={styles.counter}>
-                            <BaseText
-                                color={theme.colors.textReversed}
-                                typographyFont="smallCaptionMedium">
-                                {customTokens.length}
+        <DismissKeyboardView>
+            <BaseSafeArea grow={1}>
+                <BackButtonHeader />
+                <BaseView mx={20}>
+                    <BaseText typographyFont="title">
+                        {LL.MANAGE_TOKEN_TITLE()}
+                    </BaseText>
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="button">
+                        {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE()}
+                    </BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="body">
+                        {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    {customTokens.length ? (
+                        <BaseTouchableBox
+                            action={navigateManageCustomTokenScreen}
+                            justifyContent="center">
+                            <BaseIcon
+                                name="tune"
+                                color={theme.colors.primary}
+                            />
+                            <BaseSpacer width={8} />
+                            <BaseText typographyFont="bodyMedium">
+                                {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
                             </BaseText>
-                        </BaseView>
-                    </BaseTouchableBox>
-                ) : (
-                    <BaseTouchableBox
-                        action={openAddCustomTokenSheet}
-                        justifyContent="center">
-                        <BaseIcon name="plus" color={theme.colors.primary} />
-                        <BaseSpacer width={8} />
-                        <BaseText py={3} typographyFont="bodyMedium">
-                            {LL.MANAGE_TOKEN_ADD_CUSTOM()}
-                        </BaseText>
-                    </BaseTouchableBox>
-                )}
-                <BaseSpacer height={16} />
-                <BaseSearchInput
-                    value={tokenQuery}
-                    setValue={setTokenQuery}
-                    placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
-                />
-                {!!missingSuggestedTokens.length && (
-                    <>
-                        <BaseSpacer height={16} />
-                        <BaseCard>
-                            <BaseView>
-                                <BaseText typographyFont="body">
-                                    {LL.MANAGE_TOKEN_SUGGESTED_TOKENS()}
+                            <BaseSpacer width={8} />
+                            <BaseView
+                                bg={theme.colors.primary}
+                                style={styles.counter}>
+                                <BaseText
+                                    color={theme.colors.textReversed}
+                                    typographyFont="smallCaptionMedium">
+                                    {customTokens.length}
                                 </BaseText>
-                                <BaseButton
-                                    variant="link"
-                                    action={openAddSuggestedBottomSheet}
-                                    px={0}
-                                    size="md"
-                                    title={LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
-                                />
                             </BaseView>
-                        </BaseCard>
-                    </>
-                )}
-            </BaseView>
-            <BaseSpacer height={24} />
-            <BaseScrollView
-                containerStyle={styles.scrollViewContainer}
-                style={styles.scrollView}>
-                {filteredTokens.length ? (
-                    <>
-                        {!!selectedTokens.length && (
-                            <>
-                                <BaseText typographyFont="subSubTitle">
-                                    {LL.MANAGE_TOKEN_SELECTED()}
-                                </BaseText>
-                                <BaseSpacer height={16} />
-                                {selectedTokens.map(token => (
-                                    <OfficialTokenCard
-                                        selected
-                                        key={token.address}
-                                        token={token}
-                                        action={handleClickToken(token)}
+                        </BaseTouchableBox>
+                    ) : (
+                        <BaseTouchableBox
+                            action={openAddCustomTokenSheet}
+                            justifyContent="center">
+                            <BaseIcon
+                                name="plus"
+                                color={theme.colors.primary}
+                            />
+                            <BaseSpacer width={8} />
+                            <BaseText py={3} typographyFont="bodyMedium">
+                                {LL.MANAGE_TOKEN_ADD_CUSTOM()}
+                            </BaseText>
+                        </BaseTouchableBox>
+                    )}
+                    <BaseSpacer height={16} />
+                    <BaseSearchInput
+                        value={tokenQuery}
+                        setValue={setTokenQuery}
+                        placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
+                    />
+                    {!!missingSuggestedTokens.length && (
+                        <>
+                            <BaseSpacer height={16} />
+                            <BaseCard>
+                                <BaseView>
+                                    <BaseText typographyFont="body">
+                                        {LL.MANAGE_TOKEN_SUGGESTED_TOKENS()}
+                                    </BaseText>
+                                    <BaseButton
+                                        variant="link"
+                                        action={openAddSuggestedBottomSheet}
+                                        px={0}
+                                        size="md"
+                                        title={LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
                                     />
-                                ))}
-                                <BaseSpacer height={17} />
-                            </>
-                        )}
-                        {!!unselectedTokens.length && (
-                            <>
-                                <BaseText typographyFont="subSubTitle">
-                                    {LL.MANAGE_TOKEN_UNSELECTED()}
-                                </BaseText>
-                                <BaseSpacer height={16} />
-                                {unselectedTokens.map(token => (
-                                    <OfficialTokenCard
-                                        key={token.address}
-                                        token={token}
-                                        action={handleClickToken(token)}
-                                    />
-                                ))}
-                            </>
-                        )}
-                    </>
-                ) : (
-                    <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
-                )}
-            </BaseScrollView>
-            <AddCustomTokenBottomSheet
-                ref={addCustomTokenSheetRef}
-                onClose={closeAddCustomTokenSheet}
-            />
-            <AddSuggestedBottomSheet
-                setSelectedTokenSymbols={setSelectedTokenSymbols}
-                missingSuggestedTokens={missingSuggestedTokens}
-                ref={addSuggestedBottomSheet}
-                onClose={closeAddSuggestedBottomSheet}
-            />
-        </BaseSafeArea>
+                                </BaseView>
+                            </BaseCard>
+                        </>
+                    )}
+                </BaseView>
+                <BaseSpacer height={24} />
+                <BaseScrollView
+                    containerStyle={styles.scrollViewContainer}
+                    style={styles.scrollView}>
+                    {filteredTokens.length ? (
+                        <>
+                            {!!selectedTokens.length && (
+                                <>
+                                    <BaseText typographyFont="subSubTitle">
+                                        {LL.MANAGE_TOKEN_SELECTED()}
+                                    </BaseText>
+                                    <BaseSpacer height={16} />
+                                    {selectedTokens.map(token => (
+                                        <OfficialTokenCard
+                                            selected
+                                            key={token.address}
+                                            token={token}
+                                            action={handleClickToken(token)}
+                                        />
+                                    ))}
+                                    <BaseSpacer height={17} />
+                                </>
+                            )}
+                            {!!unselectedTokens.length && (
+                                <>
+                                    <BaseText typographyFont="subSubTitle">
+                                        {LL.MANAGE_TOKEN_UNSELECTED()}
+                                    </BaseText>
+                                    <BaseSpacer height={16} />
+                                    {unselectedTokens.map(token => (
+                                        <OfficialTokenCard
+                                            key={token.address}
+                                            token={token}
+                                            action={handleClickToken(token)}
+                                        />
+                                    ))}
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
+                    )}
+                </BaseScrollView>
+                <AddCustomTokenBottomSheet
+                    ref={addCustomTokenSheetRef}
+                    onClose={closeAddCustomTokenSheet}
+                />
+                <AddSuggestedBottomSheet
+                    setSelectedTokenSymbols={setSelectedTokenSymbols}
+                    missingSuggestedTokens={missingSuggestedTokens}
+                    ref={addSuggestedBottomSheet}
+                    onClose={closeAddSuggestedBottomSheet}
+                />
+            </BaseSafeArea>
+        </DismissKeyboardView>
     )
 }
 
