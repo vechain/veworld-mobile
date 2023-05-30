@@ -33,10 +33,10 @@ jobs:
             - name: Lint & Format Check
               run: yarn lint && yarn format:check
 
-            - name: Test with Coverage
+            - name: Unit tests 
               env:
                   NODE_OPTIONS: "--max_old_space_size=8192"
-              run: yarn test:coverage
+              run: yarn test
 
             - name: Sonar Args
               id: sonar-args
