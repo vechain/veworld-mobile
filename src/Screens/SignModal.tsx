@@ -64,7 +64,7 @@ export default function SignModal({
         case VECHAIN_SIGNING_METHODS.IDENTIFY:
             message = params.payload.content
             break
-        case VECHAIN_SIGNING_METHODS.TEST_DELEGATE:
+        case VECHAIN_SIGNING_METHODS.REQUEST_TRANSACTION:
             message = params.comment
             break
         default:
@@ -267,7 +267,7 @@ export default function SignModal({
                 case VECHAIN_SIGNING_METHODS.IDENTIFY:
                     await signIdentityCertificate(id, privateKey)
                     break
-                case VECHAIN_SIGNING_METHODS.TEST_DELEGATE:
+                case VECHAIN_SIGNING_METHODS.REQUEST_TRANSACTION:
                     await onTestDelegate(id, privateKey)
                     break
                 default:
