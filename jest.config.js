@@ -59,8 +59,6 @@ module.exports = {
         "<rootDir>/src/Common/Hooks/useAppReset/useAppReset.tsx",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
     ],
-    coverageProvider: "v8",
-    maxWorkers: 2,
     coverageThreshold: {
         global: {
             statements: 94.38,
@@ -69,5 +67,7 @@ module.exports = {
             lines: 94.4,
         },
     },
+    maxWorkers: 4,
+    workerIdleMemoryLimit: "1GB",
     reporters: ["default", "jest-junit"],
 }
