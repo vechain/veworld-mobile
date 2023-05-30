@@ -22,8 +22,8 @@ export const Balance: React.FC<Props> = memo(
         const theme = useTheme()
         const { LL } = useI18nContext()
 
-        const vetTokenWithBalance = useAppSelector(
-            selectVetTokenWithBalanceByAccount(account.address),
+        const vetTokenWithBalance = useAppSelector(state =>
+            selectVetTokenWithBalanceByAccount(state, account.address),
         )
         const balance = new BigNumber(
             FormattingUtils.convertToFiatBalance(
