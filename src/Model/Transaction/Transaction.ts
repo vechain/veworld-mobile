@@ -5,6 +5,10 @@ export enum ClauseType {
     DEPLOY_CONTRACT = "deploy_contract",
     TRANSFER = "transfer",
     CONTRACT_CALL = "contract_call",
+    NFT_APPROVE = "nft_approve",
+    SWAP_VET_FOR_TOKENS = "swap_vet_for_tokens",
+    SWAP_TOKENS_FOR_VET = "swap_tokens_for_vet",
+    SWAP_TOKENS_FOR_TOKENS = "swap_tokens_for_tokens",
 }
 
 export type TransactionOutcomes = ClauseWithMetadata[]
@@ -13,6 +17,7 @@ export interface ClauseWithMetadata extends Transaction.Clause {
     type: ClauseType
     amount?: number
     tokenSymbol?: string
+    tokenId?: string
     comment?: string
     abi?: object
 }

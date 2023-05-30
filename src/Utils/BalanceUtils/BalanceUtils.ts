@@ -76,7 +76,7 @@ const getTokenBalanceFromBlockchain = async (
     try {
         const res = await thor
             .account(tokenAddress)
-            .method(abis.vip180.balanceOf)
+            .method(abis.VIP180.balanceOf)
             .call(accountAddress)
 
         return res.decoded[0]
