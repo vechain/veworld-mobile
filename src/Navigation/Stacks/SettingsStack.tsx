@@ -11,6 +11,7 @@ import {
     SettingsScreen,
     WalletManagementScreen,
     ManageCustomNodesScreen,
+    ResetAppScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
@@ -25,6 +26,7 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_CONTACTS]: undefined
     [Routes.SETTINGS_ADD_CONTACT]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
+    [Routes.RESET_APP]: undefined
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -88,6 +90,12 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.SETTINGS_ADD_CONTACT}
                     component={AddContactScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.RESET_APP}
+                    component={ResetAppScreen}
                     options={{ headerShown: false }}
                 />
             </Settings.Group>
