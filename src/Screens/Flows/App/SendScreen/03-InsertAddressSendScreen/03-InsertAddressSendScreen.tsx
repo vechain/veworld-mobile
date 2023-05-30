@@ -96,22 +96,35 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         setSearchText(lowerCaseText)
     }, [])
 
-    const onSuccessfullScan = (address: string) => {
-        setSelectedAddress(address)
-        const addressExists = accountsAndContacts.some(accountOrContact =>
-            AddressUtils.compareAddresses(accountOrContact.address, address),
-        )
-        if (addressExists) {
-            nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
-                token,
-                amount,
-                address,
-                initialRoute: initialRoute ?? "",
-            })
-        } else {
-            openCreateContactSheet()
-        }
-    }
+    const onSuccessfullScan = useCallback(
+        (address: string) => {
+            setSelectedAddress(address)
+            const addressExists = accountsAndContacts.some(accountOrContact =>
+                AddressUtils.compareAddresses(
+                    accountOrContact.address,
+                    address,
+                ),
+            )
+            if (addressExists) {
+                nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
+                    token,
+                    amount,
+                    address,
+                    initialRoute: initialRoute ?? "",
+                })
+            } else {
+                openCreateContactSheet()
+            }
+        },
+        [
+            accountsAndContacts,
+            amount,
+            initialRoute,
+            nav,
+            openCreateContactSheet,
+            token,
+        ],
+    )
 
     //Whenever search changes, we check if it's a valid address, eventually opening the create bottomsheet
     useEffect(() => {
