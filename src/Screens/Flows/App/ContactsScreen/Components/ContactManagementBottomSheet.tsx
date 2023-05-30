@@ -44,8 +44,8 @@ export const ContactManagementBottomSheet = React.forwardRef<
         const [address, setAddress] = useState<string>(contact?.address || "")
 
         useEffect(() => {
-            setAlias(contact?.alias || "")
-            setAddress(contact?.address || "")
+            setAlias(contact?.alias ?? "")
+            setAddress(contact?.address ?? "")
         }, [contact])
 
         const { validateName, validateAddress } = useContactValidation(
@@ -69,8 +69,12 @@ export const ContactManagementBottomSheet = React.forwardRef<
         return (
             <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
                 {/* <DismissKeyboardView> */}
-                <BaseView h={100} justifyContent="space-between">
-                    <BaseView alignSelf="flex-start">
+                <BaseView
+                    w={100}
+                    h={100}
+                    flexGrow={1}
+                    justifyContent="space-between">
+                    <BaseView>
                         <BaseView
                             flexDirection="row"
                             justifyContent="space-between"

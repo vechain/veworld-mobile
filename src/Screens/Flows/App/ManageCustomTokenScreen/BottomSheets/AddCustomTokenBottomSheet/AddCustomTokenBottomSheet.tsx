@@ -5,7 +5,6 @@ import {
     BaseText,
     BaseBottomSheet,
     BaseView,
-    BaseIcon,
     useThor,
     BaseButton,
     CustomTokenCard,
@@ -25,7 +24,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import { debug, error, info, useTheme } from "~Common"
+import { debug, error, info } from "~Common"
 import { AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
 import { Routes } from "~Navigation"
@@ -45,7 +44,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const thorClient = useThor()
     const [newCustomToken, setNewCustomToken] = useState<FungibleToken>()
     const [value, setValue] = useState("")
-    const theme = useTheme()
     const [errorMessage, setErrorMessage] = useState("")
     const officialTokens = useAppSelector(selectFungibleTokens)
     const customTokens = useAppSelector(selectAccountCustomTokens)
@@ -166,16 +164,9 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                         setValue={handleValueChange}
                         placeholder={LL.MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS()}
                         errorMessage={errorMessage}
+                        rightIcon={value ? "close" : "flip-horizontal"}
+                        onIconPress={!value ? onOpenCamera : () => setValue("")}
                     />
-                    {!value && (
-                        <BaseIcon
-                            name={"flip-horizontal"}
-                            size={24}
-                            color={theme.colors.primary}
-                            action={onOpenCamera}
-                            style={styles.icon}
-                        />
-                    )}
                 </BaseView>
             )}
             <BaseSpacer height={24} />

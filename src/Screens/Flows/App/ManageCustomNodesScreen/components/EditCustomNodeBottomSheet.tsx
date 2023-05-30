@@ -61,11 +61,15 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
                 }),
             ).unwrap()
 
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success,
+            )
             onClose()
         } catch (e) {
             error(e)
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Error,
+            )
             showErrorToast(e as string)
         }
         setIsSubmitting(false)
@@ -96,8 +100,8 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
     )
 
     useEffect(() => {
-        setNodeName(network?.name || "")
-        setNodeUrl(network?.currentUrl || "")
+        setNodeName(network?.name ?? "")
+        setNodeUrl(network?.currentUrl ?? "")
     }, [network])
 
     useEffect(() => {

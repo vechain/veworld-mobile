@@ -3,8 +3,8 @@ import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Common"
 import {
+    BackButtonHeader,
     BaseButton,
-    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -24,8 +24,6 @@ export const AddContactScreen = () => {
     const nav = useNavigation()
 
     const theme = useTheme()
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const { LL } = useI18nContext()
 
@@ -63,27 +61,15 @@ export const AddContactScreen = () => {
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-
-                <BaseSpacer height={22} />
-
-                <BaseView
-                    alignItems="center"
-                    justifyContent="space-between"
-                    mx={20}
-                    flexGrow={1}>
-                    <BaseView alignSelf="flex-start">
+                <BackButtonHeader />
+                <BaseSpacer height={12} />
+                <BaseView mx={20} flexGrow={1} justifyContent="space-between">
+                    <BaseView>
                         <BaseText typographyFont="title">
                             {LL.TITLE_ADD_CONTACT()}
                         </BaseText>
 
-                        <BaseSpacer height={20} />
+                        <BaseSpacer height={24} />
 
                         <BaseText typographyFont="bodyMedium" my={8}>
                             {LL.BD_ADD_CONTACT()}
@@ -110,18 +96,16 @@ export const AddContactScreen = () => {
 
                     <BaseSpacer height={20} />
 
-                    <BaseView alignItems="center" w={100}>
-                        <BaseButton
-                            action={onCreateContact}
-                            w={100}
-                            px={20}
-                            title={LL.BTN_ADD_CONTACT().toUpperCase()}
-                            disabled={!isFormValid}
-                            bgColor={theme.colors.primary}
-                            style={baseStyles.primaryButton}
-                            testID="add-contact-button"
-                        />
-                    </BaseView>
+                    <BaseButton
+                        action={onCreateContact}
+                        w={100}
+                        px={20}
+                        title={LL.BTN_ADD_CONTACT().toUpperCase()}
+                        disabled={!isFormValid}
+                        bgColor={theme.colors.primary}
+                        style={baseStyles.primaryButton}
+                        testID="add-contact-button"
+                    />
                 </BaseView>
             </BaseSafeArea>
         </DismissKeyboardView>

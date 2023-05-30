@@ -1,9 +1,8 @@
-import { StyleSheet } from "react-native"
 import React, { useCallback, useEffect, useState } from "react"
 import { useI18nContext } from "~i18n"
 import {
+    BackButtonHeader,
     BaseButton,
-    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -12,7 +11,7 @@ import {
     hideToast,
     showErrorToast,
 } from "~Components"
-import { error, useTheme } from "~Common"
+import { error } from "~Common"
 import { URLUtils } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
@@ -26,7 +25,6 @@ import * as Haptics from "expo-haptics"
 
 export const AddCustomNodeScreen = () => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
     const nav = useNavigation()
     const tabBarHeight = useBottomTabBarHeight()
     const customNodes = useAppSelector(selectCustomNetworks)
@@ -54,11 +52,15 @@ export const AddCustomNodeScreen = () => {
                 }),
             ).unwrap()
 
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success,
+            )
             goBack()
         } catch (e) {
             error(e)
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Error,
+            )
             showErrorToast(e as string)
         }
         setIsSubmitting(false)
@@ -88,13 +90,7 @@ export const AddCustomNodeScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
+            <BackButtonHeader />
             <BaseSpacer height={12} />
             <BaseView
                 mx={20}
@@ -146,10 +142,3 @@ export const AddCustomNodeScreen = () => {
         </BaseSafeArea>
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-})
