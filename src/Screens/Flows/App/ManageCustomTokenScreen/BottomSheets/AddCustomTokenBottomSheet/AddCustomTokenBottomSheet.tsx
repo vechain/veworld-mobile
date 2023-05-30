@@ -151,9 +151,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             ref={ref}
             contentStyle={styles.contentStyle}
             footerStyle={styles.footerStyle}
-            onDismiss={handleOnDismissModal}
-            keyboardBehavior="interactive"
-            keyboardBlurBehavior="restore">
+            onDismiss={handleOnDismissModal}>
             <BaseText typographyFont="subTitleBold">
                 {LL.MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE()}
             </BaseText>

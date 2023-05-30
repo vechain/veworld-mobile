@@ -5,6 +5,7 @@ import { useBottomSheetInternal } from "@gorhom/bottom-sheet"
 import { BottomSheetTextInputProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetTextInput"
 import { TextInput } from "react-native-gesture-handler"
 import { NativeSyntheticEvent, TextInputFocusEventData } from "react-native"
+import { runOnUI } from "react-native-reanimated"
 
 const BottomSheetTextInputComponent = forwardRef<
     TextInput,
@@ -17,7 +18,9 @@ const BottomSheetTextInputComponent = forwardRef<
     //#region callbacks
     const handleOnFocus = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-            shouldHandleKeyboardEvents.value = true
+            runOnUI(() => {
+                shouldHandleKeyboardEvents.value = true
+            })()
             if (onFocus) {
                 onFocus(e)
             }
@@ -26,7 +29,9 @@ const BottomSheetTextInputComponent = forwardRef<
     )
     const handleOnBlur = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-            shouldHandleKeyboardEvents.value = false
+            runOnUI(() => {
+                shouldHandleKeyboardEvents.value = false
+            })()
             if (onBlur) {
                 onBlur(e)
             }

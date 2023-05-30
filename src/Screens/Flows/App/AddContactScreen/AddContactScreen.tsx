@@ -93,7 +93,6 @@ export const AddContactScreen = () => {
                         </BaseText>
 
                         <BaseSpacer height={20} />
-
                         <ContactForm
                             placeholderName={LL.PLACEHOLDER_ENTER_NAME()}
                             placeholderAddress={LL.PLACEHOLDER_ENTER_ADDRESS()}

@@ -6,7 +6,6 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    DismissKeyboardView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { ContactForm } from "../../AddContactScreen/Components"
@@ -69,52 +68,49 @@ export const ContactManagementBottomSheet = React.forwardRef<
 
         return (
             <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-                <DismissKeyboardView>
-                    <BaseView
-                        h={100}
-                        alignItems="center"
-                        justifyContent="space-between"
-                        flexDirection="column">
-                        <BaseView alignSelf="flex-start">
-                            <BaseView
-                                flexDirection="row"
-                                justifyContent="space-between"
-                                w={100}
-                                alignItems="center">
-                                <BaseText typographyFont="subTitleBold">
-                                    {title}
-                                </BaseText>
-                            </BaseView>
-
-                            <BaseSpacer height={16} />
-
-                            <ContactForm
-                                titleName={LL.BD_CONTACT_NAME()}
-                                titleAddress={LL.BD_CONTACT_ADDRESS()}
-                                nameError={nameError}
-                                addressError={addressError}
-                                setName={setAlias}
-                                setAddress={setAddress}
-                                valueName={alias}
-                                valueAddress={address}
-                                addressFieldDisabled={isAddingContact}
-                                checkTouched={checkTouched}
-                            />
-
-                            <BaseSpacer height={16} />
+                {/* <DismissKeyboardView> */}
+                <BaseView h={100} justifyContent="space-between">
+                    <BaseView alignSelf="flex-start">
+                        <BaseView
+                            flexDirection="row"
+                            justifyContent="space-between"
+                            w={100}
+                            alignItems="center">
+                            <BaseText typographyFont="subTitleBold">
+                                {title}
+                            </BaseText>
                         </BaseView>
 
-                        <BaseView flexDirection="row" pb={32}>
-                            <BaseButton
-                                action={() => onSaveContact(alias, address)}
-                                w={100}
-                                disabled={!isFormValid}
-                                title={LL.COMMON_BTN_SAVE().toUpperCase()}
-                                bgColor={theme.colors.primary}
-                            />
-                        </BaseView>
+                        <BaseSpacer height={16} />
+
+                        <ContactForm
+                            titleName={LL.BD_CONTACT_NAME()}
+                            titleAddress={LL.BD_CONTACT_ADDRESS()}
+                            nameError={nameError}
+                            addressError={addressError}
+                            inBottomSheet={true}
+                            setName={setAlias}
+                            setAddress={setAddress}
+                            valueName={alias}
+                            valueAddress={address}
+                            addressFieldDisabled={isAddingContact}
+                            checkTouched={checkTouched}
+                        />
+
+                        <BaseSpacer height={16} />
                     </BaseView>
-                </DismissKeyboardView>
+
+                    <BaseView flexDirection="row" pb={32}>
+                        <BaseButton
+                            action={() => onSaveContact(alias, address)}
+                            w={100}
+                            disabled={!isFormValid}
+                            title={LL.COMMON_BTN_SAVE().toUpperCase()}
+                            bgColor={theme.colors.primary}
+                        />
+                    </BaseView>
+                </BaseView>
+                {/* </DismissKeyboardView> */}
             </BaseBottomSheet>
         )
     },

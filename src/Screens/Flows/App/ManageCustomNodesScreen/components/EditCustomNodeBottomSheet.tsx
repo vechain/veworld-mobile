@@ -5,14 +5,14 @@ import {
     BaseText,
     BaseView,
     BaseBottomSheet,
-    BaseTextInput,
     BaseButton,
     hideToast,
     showErrorToast,
+    BaseBottomSheetTextInput,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
-import { error } from "~Common"
+import { error, isSmallScreen } from "~Common"
 import { URLUtils } from "~Utils"
 import { Network } from "~Model"
 import {
@@ -28,7 +28,7 @@ type Props = {
     network?: Network
 }
 
-const snapPoints = ["70%"]
+const snapPoints = [isSmallScreen ? "60%" : "52%"]
 
 export const EditCustomNodeBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -112,8 +112,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
                 w={100}
                 h={100}
                 flexGrow={1}
-                justifyContent="space-between"
-                alignItems="center">
+                justifyContent="space-between">
                 <BaseView>
                     <BaseView flexDirection="row" w={100}>
                         <BaseText typographyFont="subTitleBold">
@@ -122,7 +121,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
                     </BaseView>
 
                     <BaseSpacer height={16} />
-                    <BaseTextInput
+                    <BaseBottomSheetTextInput
                         placeholder={LL.COMMON_LBL_ENTER_THE({
                             name: LL.COMMON_LBL_NAME(),
                         })}
@@ -131,7 +130,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
                         setValue={setNodeName}
                     />
                     <BaseSpacer height={16} />
-                    <BaseTextInput
+                    <BaseBottomSheetTextInput
                         placeholder={LL.COMMON_LBL_ENTER_THE({
                             name: LL.COMMON_LBL_URL(),
                         })}
