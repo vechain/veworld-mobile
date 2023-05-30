@@ -777,6 +777,90 @@ describe("TransactionUtils", () => {
             ).toEqual(expected)
         })
     })
+
+    describe("getTokenAddressFromClause", () => {
+        it("should return token address from VET transfer clause", () => {
+            const clause = {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x123456",
+                data: "0x",
+            }
+
+            const expected = "VET"
+
+            expect(TransactionUtils.getTokenAddressFromClause(clause)).toEqual(
+                expected,
+            )
+        })
+        it("should return token address from fungible token transfer clause", () => {
+            const clause = {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x",
+                data: "0xa9059cbb0000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db004800000000000000000000000000000000000000000000000340aad21b3b700000",
+            }
+
+            const expected = "0x576da7124c7bb65a692d95848276367e5a844d95"
+
+            expect(TransactionUtils.getTokenAddressFromClause(clause)).toEqual(
+                expected,
+            )
+        })
+        it("should return undefined if clause is not a token transfer", () => {
+            const clause = {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x",
+                data: "0x",
+            }
+
+            const expected = undefined
+
+            expect(TransactionUtils.getTokenAddressFromClause(clause)).toEqual(
+                expected,
+            )
+        })
+    })
+
+    describe("getAmountFromClause", () => {
+        it("should return amount from VET transfer clause", () => {
+            const clause = {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x123456",
+                data: "0x",
+            }
+
+            const expected = "1193046"
+
+            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(
+                expected,
+            )
+        })
+        it("should return amount from fungible token transfer clause", () => {
+            const clause = {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x",
+                data: "0xa9059cbb0000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db004800000000000000000000000000000000000000000000000340aad21b3b700000",
+            }
+
+            const expected = "60000000000000000000"
+
+            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(
+                expected,
+            )
+        })
+        it("should return undefined if clause is not a token transfer", () => {
+            const clause = {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x",
+                data: "0x",
+            }
+
+            const expected = undefined
+
+            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(
+                expected,
+            )
+        })
+    })
 })
 
 describe("toDelegation", () => {
