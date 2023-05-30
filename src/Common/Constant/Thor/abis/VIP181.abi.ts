@@ -1,9 +1,7 @@
 import { abi } from "thor-devkit"
 
-/**
- * EVENTS
- */
-const ApprovalEvent: abi.Event.Definition = {
+/* EVENTS */
+export const ApprovalEvent: abi.Event.Definition = {
     anonymous: false,
     inputs: [
         {
@@ -15,7 +13,7 @@ const ApprovalEvent: abi.Event.Definition = {
         {
             indexed: true,
             internalType: "address",
-            name: "approved",
+            name: "spender",
             type: "address",
         },
         {
@@ -29,33 +27,7 @@ const ApprovalEvent: abi.Event.Definition = {
     type: "event",
 }
 
-const ApprovalForAllEvent: abi.Event.Definition = {
-    anonymous: false,
-    inputs: [
-        {
-            indexed: true,
-            internalType: "address",
-            name: "owner",
-            type: "address",
-        },
-        {
-            indexed: true,
-            internalType: "address",
-            name: "operator",
-            type: "address",
-        },
-        {
-            indexed: false,
-            internalType: "bool",
-            name: "approved",
-            type: "bool",
-        },
-    ],
-    name: "ApprovalForAll",
-    type: "event",
-}
-
-const TransferEvent: abi.Event.Definition = {
+export const TrasferEvent: abi.Event.Definition = {
     anonymous: false,
     inputs: [
         {
@@ -81,29 +53,76 @@ const TransferEvent: abi.Event.Definition = {
     type: "event",
 }
 
-/**
- * FUNCTIONS
- */
-const approve: abi.Function.Definition = {
+export const ApprovalForAllEvent: abi.Event.Definition = {
+    anonymous: false,
     inputs: [
         {
+            indexed: true,
             internalType: "address",
-            name: "to",
+            name: "owner",
             type: "address",
         },
         {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
+            indexed: true,
+            internalType: "address",
+            name: "operator",
+            type: "address",
+        },
+        {
+            indexed: false,
+            internalType: "bool",
+            name: "approved",
+            type: "bool",
         },
     ],
-    name: "approve",
-    outputs: [],
-    stateMutability: "nonpayable",
+    name: "ApprovalForAll",
+    type: "event",
+}
+
+/* GETTER FUNCTIONS (contract calls) */
+export const name: abi.Function.Definition = {
+    inputs: [],
+    name: "name",
+    outputs: [
+        {
+            internalType: "string",
+            name: "",
+            type: "string",
+        },
+    ],
+    stateMutability: "view",
     type: "function",
 }
 
-const balanceOf: abi.Function.Definition = {
+export const symbol: abi.Function.Definition = {
+    inputs: [],
+    name: "symbol",
+    outputs: [
+        {
+            internalType: "string",
+            name: "",
+            type: "string",
+        },
+    ],
+    stateMutability: "view",
+    type: "function",
+}
+
+export const totalSupply: abi.Function.Definition = {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [
+        {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+        },
+    ],
+    stateMutability: "view",
+    type: "function",
+}
+
+export const balanceOf: abi.Function.Definition = {
     inputs: [
         {
             internalType: "address",
@@ -123,35 +142,7 @@ const balanceOf: abi.Function.Definition = {
     type: "function",
 }
 
-const mint: abi.Function.Definition = {
-    inputs: [
-        {
-            internalType: "address",
-            name: "to",
-            type: "address",
-        },
-    ],
-    name: "mint",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-}
-
-const name: abi.Function.Definition = {
-    inputs: [],
-    name: "name",
-    outputs: [
-        {
-            internalType: "string",
-            name: "",
-            type: "string",
-        },
-    ],
-    stateMutability: "view",
-    type: "function",
-}
-
-const ownerOf: abi.Function.Definition = {
+export const ownerOf: abi.Function.Definition = {
     inputs: [
         {
             internalType: "uint256",
@@ -171,7 +162,52 @@ const ownerOf: abi.Function.Definition = {
     type: "function",
 }
 
-const supportsInterface: abi.Function.Definition = {
+export const getApproved: abi.Function.Definition = {
+    inputs: [
+        {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+        },
+    ],
+    name: "getApproved",
+    outputs: [
+        {
+            internalType: "address",
+            name: "",
+            type: "address",
+        },
+    ],
+    stateMutability: "view",
+    type: "function",
+}
+
+export const isApprovedForAll: abi.Function.Definition = {
+    inputs: [
+        {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+        },
+        {
+            internalType: "address",
+            name: "operator",
+            type: "address",
+        },
+    ],
+    name: "isApprovedForAll",
+    outputs: [
+        {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+        },
+    ],
+    stateMutability: "view",
+    type: "function",
+}
+
+export const supportsInterface: abi.Function.Definition = {
     inputs: [
         {
             internalType: "bytes4",
@@ -191,21 +227,7 @@ const supportsInterface: abi.Function.Definition = {
     type: "function",
 }
 
-const symbol: abi.Function.Definition = {
-    inputs: [],
-    name: "symbol",
-    outputs: [
-        {
-            internalType: "string",
-            name: "",
-            type: "string",
-        },
-    ],
-    stateMutability: "view",
-    type: "function",
-}
-
-const tokenURI: abi.Function.Definition = {
+export const tokenURI: abi.Function.Definition = {
     inputs: [
         {
             internalType: "uint256",
@@ -225,21 +247,8 @@ const tokenURI: abi.Function.Definition = {
     type: "function",
 }
 
-const totalSupply: abi.Function.Definition = {
-    inputs: [],
-    name: "totalSupply",
-    outputs: [
-        {
-            internalType: "uint256",
-            name: "",
-            type: "uint256",
-        },
-    ],
-    stateMutability: "view",
-    type: "function",
-}
-
-const transferFrom: abi.Function.Definition = {
+/* STATE CHANING FUNCTIONS (transactions) */
+export const transferFrom: abi.Function.Definition = {
     inputs: [
         {
             internalType: "address",
@@ -258,23 +267,77 @@ const transferFrom: abi.Function.Definition = {
         },
     ],
     name: "transferFrom",
-    outputs: [],
+    outputs: [
+        {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+        },
+    ],
     stateMutability: "nonpayable",
     type: "function",
 }
 
-export default {
-    ApprovalEvent,
-    TransferEvent,
-    ApprovalForAllEvent,
-    approve,
-    balanceOf,
-    name,
-    supportsInterface,
-    symbol,
-    totalSupply,
-    transferFrom,
-    mint,
-    tokenURI,
-    ownerOf,
+export const approve: abi.Function.Definition = {
+    inputs: [
+        {
+            internalType: "address",
+            name: "to",
+            type: "address",
+        },
+        {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+        },
+    ],
+    name: "approve",
+    outputs: [
+        {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+        },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+}
+
+export const setApprovalForAll: abi.Function.Definition = {
+    inputs: [
+        {
+            internalType: "address",
+            name: "operator",
+            type: "address",
+        },
+        {
+            internalType: "bool",
+            name: "approved",
+            type: "bool",
+        },
+    ],
+    name: "setApprovalForAll",
+    outputs: [
+        {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+        },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+}
+
+export const mint: abi.Function.Definition = {
+    inputs: [
+        {
+            internalType: "address",
+            name: "to",
+            type: "address",
+        },
+    ],
+    name: "mint",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
 }

@@ -8,7 +8,7 @@ export const getNftBalanceOf = async (
 ) => {
     const res = await thor
         .account(contractAddress)
-        .method(abis.vip181.balanceOf)
+        .method(abis.VIP181.balanceOf)
         .call(ownerAddress)
     return isEmpty(res.decoded[0]) ? 0 : res.decoded[0]
 }
