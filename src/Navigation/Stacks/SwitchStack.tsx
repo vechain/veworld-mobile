@@ -5,7 +5,6 @@ import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
 import { CameraScreen, ResetAppScreen } from "~Screens"
 import { CreateWalletAppStack, Routes } from "~Navigation"
-import BlockListener from "../../BlockListener"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -74,7 +73,7 @@ export const SwitchStack = () => {
     return (
         <Switch.Navigator
             screenOptions={{
-                header: BlockListener,
+                headerShown: false,
             }}>
             {RenderStacks}
         </Switch.Navigator>
