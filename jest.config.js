@@ -68,5 +68,6 @@ module.exports = {
             lines: 94.4,
         },
     },
+    coverageProvider: "v8",
     reporters: ["default", "jest-junit"],
 }
