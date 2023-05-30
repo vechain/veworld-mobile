@@ -3,7 +3,7 @@ import { abi } from "thor-devkit"
 /**
  * EVENTS
  */
-const ApprovalEvent: abi.Event.Definition = {
+export const ApprovalEvent: abi.Event.Definition = {
     anonymous: false,
     inputs: [
         {
@@ -28,7 +28,7 @@ const ApprovalEvent: abi.Event.Definition = {
     name: "Approval",
     type: "event",
 }
-const TransferEvent: abi.Event.Definition = {
+export const TransferEvent: abi.Event.Definition = {
     anonymous: false,
     inputs: [
         {
@@ -57,7 +57,7 @@ const TransferEvent: abi.Event.Definition = {
 /**
  * FUNCTIONS
  */
-const allowance: abi.Function.Definition = {
+export const allowance: abi.Function.Definition = {
     inputs: [
         {
             internalType: "address",
@@ -81,7 +81,7 @@ const allowance: abi.Function.Definition = {
     stateMutability: "view",
     type: "function",
 }
-const approve: abi.Function.Definition = {
+export const approve: abi.Function.Definition = {
     inputs: [
         {
             internalType: "address",
@@ -105,7 +105,7 @@ const approve: abi.Function.Definition = {
     stateMutability: "nonpayable",
     type: "function",
 }
-const balanceOf: abi.Function.Definition = {
+export const balanceOf: abi.Function.Definition = {
     inputs: [
         {
             internalType: "address",
@@ -124,7 +124,7 @@ const balanceOf: abi.Function.Definition = {
     stateMutability: "view",
     type: "function",
 }
-const decimals: abi.Function.Definition = {
+export const decimals: abi.Function.Definition = {
     inputs: [],
     name: "decimals",
     outputs: [
@@ -137,7 +137,7 @@ const decimals: abi.Function.Definition = {
     stateMutability: "view",
     type: "function",
 }
-const name: abi.Function.Definition = {
+export const name: abi.Function.Definition = {
     inputs: [],
     name: "name",
     outputs: [
@@ -150,7 +150,7 @@ const name: abi.Function.Definition = {
     stateMutability: "view",
     type: "function",
 }
-const supportsInterface = {
+export const supportsInterface = {
     inputs: [
         {
             internalType: "bytes4",
@@ -169,7 +169,7 @@ const supportsInterface = {
     stateMutability: "view",
     type: "function",
 }
-const symbol: abi.Function.Definition = {
+export const symbol: abi.Function.Definition = {
     inputs: [],
     name: "symbol",
     outputs: [
@@ -182,7 +182,7 @@ const symbol: abi.Function.Definition = {
     stateMutability: "view",
     type: "function",
 }
-const totalSupply: abi.Function.Definition = {
+export const totalSupply: abi.Function.Definition = {
     inputs: [],
     name: "totalSupply",
     outputs: [
@@ -195,7 +195,7 @@ const totalSupply: abi.Function.Definition = {
     stateMutability: "view",
     type: "function",
 }
-const transfer: abi.Function.Definition = {
+export const transfer: abi.Function.Definition = {
     inputs: [
         {
             internalType: "address",
@@ -219,7 +219,7 @@ const transfer: abi.Function.Definition = {
     stateMutability: "nonpayable",
     type: "function",
 }
-const transferFrom: abi.Function.Definition = {
+export const transferFrom: abi.Function.Definition = {
     inputs: [
         {
             internalType: "address",
@@ -247,19 +247,4 @@ const transferFrom: abi.Function.Definition = {
     ],
     stateMutability: "nonpayable",
     type: "function",
-}
-
-export default {
-    ApprovalEvent,
-    TransferEvent,
-    allowance,
-    approve,
-    balanceOf,
-    decimals,
-    name,
-    supportsInterface,
-    symbol,
-    totalSupply,
-    transfer,
-    transferFrom,
 }

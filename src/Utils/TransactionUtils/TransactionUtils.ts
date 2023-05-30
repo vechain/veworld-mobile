@@ -1,11 +1,45 @@
 import { abi, Transaction } from "thor-devkit"
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 import { debug } from "~Common/Logger"
-import { ClauseType, ConnexClause, Token, TransactionOutcomes } from "~Model"
+import {
+    ClauseType,
+    ClauseWithMetadata,
+    ConnexClause,
+    Token,
+    TransactionOutcomes,
+} from "~Model"
 import { BigNumber } from "bignumber.js"
 import { VET } from "~Common/Constant"
 
-export const TRANSFER_SIG = new abi.Function(abis.vip180.transfer).signature
+export const TRANSFER_SIG = new abi.Function(abis.VIP180.transfer).signature
+
+export const SWAP_EXACT_VET_FOR_TOKENS_SIG = new abi.Function(
+    abis.RouterV2.swapExactVETForTokens,
+).signature
+
+export const SWAP_VET_FOR_EXACT_TOKENS_SIG = new abi.Function(
+    abis.RouterV2.swapVETForExactTokens,
+).signature
+
+export const SWAP_EXACT_TOKENS_FOR_TOKENS_SIG = new abi.Function(
+    abis.RouterV2.swapExactTokensForTokens,
+).signature
+
+export const SWAP_TOKENS_FOR_EXACT_VET = new abi.Function(
+    abis.RouterV2.swapTokensForExactVET,
+).signature
+
+export const SWAP_EXACT_TOKENS_FOR_VET = new abi.Function(
+    abis.RouterV2.swapExactTokensForVET,
+).signature
+
+export const SWAP_EXACT_ETH_FOR_TOKENS_SIG = new abi.Function(
+    abis.UniswapRouterV2.swapExactETHForTokens,
+).signature
+
+export const SWAP_EXACT_TOKENS_FOR_ETH = new abi.Function(
+    abis.UniswapRouterV2.swapExactTokensForETH,
+).signature
 
 /**
  * Checks if a clause represents a VET transfer.
@@ -25,10 +59,7 @@ export const isVETtransferClause = (clause: Connex.VM.Clause): boolean => {
  * @returns true if the clause represents a token transfer, false otherwise.
  */
 export const isTokenTransferClause = (clause: Connex.VM.Clause): boolean => {
-    let { data } = clause
-    data = data || ""
-
-    return data.startsWith(TRANSFER_SIG)
+    return clause.data?.startsWith(TRANSFER_SIG) || false
 }
 
 /**
@@ -40,14 +71,11 @@ export const isTokenTransferClause = (clause: Connex.VM.Clause): boolean => {
 export const decodeTokenTransferClause = (
     clause: Connex.VM.Clause,
 ): { to: string; amount: string } | null => {
-    let { data } = clause
-    data = data || ""
-
-    if (data.startsWith(TRANSFER_SIG)) {
+    if (clause.data?.startsWith(TRANSFER_SIG)) {
         try {
             const decoded = abi.decodeParameters(
-                abis.vip180.transfer.inputs,
-                "0x" + data.slice(TRANSFER_SIG.length),
+                abis.VIP180.transfer.inputs,
+                "0x" + clause.data.slice(TRANSFER_SIG.length),
             )
             return {
                 to: decoded.to,
@@ -59,6 +87,160 @@ export const decodeTokenTransferClause = (
     }
 
     return null
+}
+
+/**
+ * Decodes a clause from a contract that implements an Automated Market Maker (AMM) interface.
+ *
+ * @param clause - The clause to decode.
+ * @param parameters - The parameters of the contract function being called.
+ * @param methodSignature - The method signature of the contract function being called.
+ * @param clauseType - The type of clause being interpreted.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
+export const decodeAMMClause = (
+    clause: Connex.VM.Clause,
+    paramters: abi.Function.Parameter[],
+    methodSignature: string,
+    clauseType: ClauseType,
+): ClauseWithMetadata | null => {
+    if (clause.data?.startsWith(methodSignature)) {
+        try {
+            const decoded = abi.decodeParameters(
+                paramters,
+                "0x" + clause.data.slice(methodSignature.length),
+            )
+            return {
+                ...clause,
+                type: clauseType,
+                to: decoded.to,
+                data: clause.data,
+            }
+        } catch (e) {
+            debug("Failed to decode parameters", e)
+        }
+    }
+
+    return null
+}
+
+/**
+ * Decodes a clause that represents a swap of VET for tokens.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
+export const decodeSwapExactVETForTokensClause = (
+    clause: Connex.VM.Clause,
+): ClauseWithMetadata | null => {
+    return decodeAMMClause(
+        clause,
+        abis.RouterV2.swapExactVETForTokens.inputs,
+        SWAP_EXACT_VET_FOR_TOKENS_SIG,
+        ClauseType.SWAP_VET_FOR_TOKENS,
+    )
+}
+
+/**
+ * Decodes a clause that represents a swap of VET for a specified number of tokens.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
+export const decodeSwapVETForExactTokensClause = (
+    clause: Connex.VM.Clause,
+): ClauseWithMetadata | null => {
+    return decodeAMMClause(
+        clause,
+        abis.RouterV2.swapVETForExactTokens.inputs,
+        SWAP_VET_FOR_EXACT_TOKENS_SIG,
+        ClauseType.SWAP_VET_FOR_TOKENS,
+    )
+}
+
+/**
+ * Decodes a clause that represents a swap of tokens for a specified amount of VET.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
+export const decodeSwapTokensForExactVETClause = (
+    clause: Connex.VM.Clause,
+): ClauseWithMetadata | null => {
+    return decodeAMMClause(
+        clause,
+        abis.RouterV2.swapTokensForExactVET.inputs,
+        SWAP_TOKENS_FOR_EXACT_VET,
+        ClauseType.SWAP_TOKENS_FOR_VET,
+    )
+}
+
+/**
+ * Decodes a clause that represents a swap of tokens for VET.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
+export const decodeSwapExactTokensForVETClause = (
+    clause: Connex.VM.Clause,
+): ClauseWithMetadata | null => {
+    return decodeAMMClause(
+        clause,
+        abis.RouterV2.swapExactTokensForVET.inputs,
+        SWAP_EXACT_TOKENS_FOR_VET,
+        ClauseType.SWAP_TOKENS_FOR_VET,
+    )
+}
+
+/**
+ * Decodes a clause that represents a swap of one type of tokens for another type of tokens.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
+export const decodeSwapExactTokensForTokensClause = (
+    clause: Connex.VM.Clause,
+): ClauseWithMetadata | null => {
+    return decodeAMMClause(
+        clause,
+        abis.RouterV2.swapExactTokensForTokens.inputs,
+        SWAP_EXACT_TOKENS_FOR_TOKENS_SIG,
+        ClauseType.SWAP_TOKENS_FOR_TOKENS,
+    )
+}
+
+/**
+ * Decodes a clause that represents a swap of VET for tokens but with ETH method signature.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
+export const decodeSwapExactETHForTokensClause = (
+    clause: Connex.VM.Clause,
+): ClauseWithMetadata | null => {
+    return decodeAMMClause(
+        clause,
+        abis.UniswapRouterV2.swapExactETHForTokens.inputs,
+        SWAP_EXACT_ETH_FOR_TOKENS_SIG,
+        ClauseType.SWAP_VET_FOR_TOKENS,
+    )
+}
+
+/**
+ * Decodes a clause that represents a swap of tokens for VET but with ETH method signature.
+ *
+ * @param clause - The clause to decode.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
+ */
+export const decodeSwapExactTokensForETHClause = (
+    clause: Connex.VM.Clause,
+): ClauseWithMetadata | null => {
+    return decodeAMMClause(
+        clause,
+        abis.UniswapRouterV2.swapExactTokensForETH.inputs,
+        SWAP_EXACT_TOKENS_FOR_ETH,
+        ClauseType.SWAP_TOKENS_FOR_VET,
+    )
 }
 
 /**
@@ -179,8 +361,20 @@ export const interpretContractCall = (
                 break
             }
         }
-        // If it's not a KNOWN token transfer, then it's an UNKNOWN contract call
+
+        // Check if the clause is a known contract call defined by a decoder mVETod
+        let isDecodedClause = false
         if (!isTokenTransfer) {
+            const decodedClause = decodeContractCall(clause)
+
+            if (decodedClause) {
+                isDecodedClause = true
+                result.push(decodedClause)
+            }
+        }
+
+        // If the clause has not been decoded, add as a contract call
+        if (!isDecodedClause && !isTokenTransfer) {
             result.push({
                 ...clause,
                 type: ClauseType.CONTRACT_CALL,
@@ -191,6 +385,26 @@ export const interpretContractCall = (
     }
 
     return result
+}
+
+/**
+ * Decodes a contract call clause by attempting to interpret it as various actions.
+ * It sequentially tries to interpret the clause as a variety of token swap actions.
+ *
+ * @param clause - The contract call clause to be decoded.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded as any of the specified swap actions.
+ */
+export const decodeContractCall = (clause: ConnexClause) => {
+    let decodedClause =
+        decodeSwapExactVETForTokensClause(clause) ??
+        decodeSwapVETForExactTokensClause(clause) ??
+        decodeSwapTokensForExactVETClause(clause) ??
+        decodeSwapExactTokensForVETClause(clause) ??
+        decodeSwapExactETHForTokensClause(clause) ??
+        decodeSwapExactTokensForETHClause(clause) ??
+        decodeSwapExactTokensForTokensClause(clause)
+
+    return decodedClause
 }
 
 export const toDelegation = (txBody: Transaction.Body) => {
