@@ -76,7 +76,8 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
 }
 
 jest.mock("@gorhom/bottom-sheet", () => ({
-    ...jest.requireActual("@gorhom/bottom-sheet"),
+    __esModule: true,
+    ...require("@gorhom/bottom-sheet/mock"),
     BottomSheetFlatList: ({ data, renderItem }: any) => {
         return data.map((row: any) => renderItem({ item: row }))
     },
