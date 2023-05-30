@@ -89,6 +89,7 @@ export const AddUrl = ({
                 value={newUrl}
                 onChangeText={setNewUrl}
                 placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
+                testID="AddUrl_input"
             />
         </ScrollViewWithFooter>
     )

@@ -29,7 +29,7 @@ export const UrlList = ({
     }
 
     return (
-        <BaseView>
+        <BaseView h={100}>
             <BaseView
                 flexDirection="row"
                 justifyContent="space-between"
@@ -42,6 +42,7 @@ export const UrlList = ({
                     name={"plus"}
                     bg={theme.colors.secondary}
                     action={() => setAddUrlMode(true)}
+                    testID="UrlList_addUrlButton"
                 />
             </BaseView>
             <BaseSpacer height={16} />
