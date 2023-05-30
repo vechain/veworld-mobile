@@ -39,13 +39,6 @@ export const LockScreen: React.FC<Props> = memo(
 
         const isOldPinSameAsNewPin = useCallback(
             async (pin: string) => {
-                /*
-                    If this (isValidatePassword) prop is false means that the user is trying to 
-                    edit an existing pin, so we need to validate that the new pin is not the same as the old one.
-                    If "validatePassword()" succeeeds means that the new pin is the same as the old one and
-                    we can throw an error
-                */
-
                 const isValid = await validatePassword(pin)
                 if (isValid) {
                     setIsError({
@@ -67,6 +60,12 @@ export const LockScreen: React.FC<Props> = memo(
          */
         const validateUserPin = useCallback(
             async (userPin: string) => {
+                /*
+                    If this (isValidatePassword) prop is false means that the user is trying to 
+                    edit an existing pin, and we should not validate against the old password, but validate that the password is not the same.
+                    If "validatePassword()" succeeeds means that the new pin is the same as the old one and
+                    we can throw an error
+                */
                 if (!isValidatePassword) {
                     await isOldPinSameAsNewPin(userPin)
                     return

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { ColorThemeType, useThemedStyles, valueToHP } from "~Common"
 import { COLORS } from "~Common/Theme"
 import { BaseText, BaseView } from "~Components"
-import { PinVerificationErrorType } from "~Model"
+import { PinVerificationErrorType, PinVerificationError } from "~Model"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -21,9 +21,7 @@ export const PasswordPins: FC<Props> = memo(
         const { LL } = useI18nContext()
 
         const isMessageVisible = useMemo(() => {
-            if (isPINRetype) return true
-            if (errorValue) return true
-
+            if (isPINRetype || errorValue) return true
             return false
         }, [errorValue, isPINRetype])
 
@@ -34,10 +32,10 @@ export const PasswordPins: FC<Props> = memo(
         const getMessageText = useMemo(() => {
             if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
 
-            if (errorType === "VALIDATE_PIN" && errorValue)
+            if (errorType === PinVerificationError.VALIDATE_PIN && errorValue)
                 return LL.BD_USER_PASSWORD_ERROR()
 
-            if (errorType === "EDIT_PIN" && errorValue)
+            if (errorType === PinVerificationError.EDIT_PIN && errorValue)
                 return LL.BD_USER_EDIT_PASSWORD_ERROR()
 
             return MESSAGE_FAKE_PLACEHOLDER

@@ -231,7 +231,7 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
-	 * O​l​d​ ​P​I​N​ ​c​a​n​'​t​ ​b​e​ ​t​h​e​ ​s​a​m​e​ ​a​s​ ​n​e​w​ ​P​I​N​.​ ​T​r​y​ ​a​g​a​i​n​.
+	 * O​l​d​ ​P​I​N​ ​c​a​n​'​t​ ​b​e​ ​t​h​e​ ​s​a​m​e​ ​a​s​ ​n​e​w​ ​P​I​N
 	 */
 	BD_USER_EDIT_PASSWORD_ERROR: string
 	/**
@@ -1794,7 +1794,7 @@ export type TranslationFunctions = {
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
-	 * Old PIN can't be the same as new PIN. Try again.
+	 * Old PIN can't be the same as new PIN
 	 */
 	BD_USER_EDIT_PASSWORD_ERROR: () => LocalizedString
 	/**

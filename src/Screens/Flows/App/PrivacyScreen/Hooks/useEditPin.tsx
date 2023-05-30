@@ -168,9 +168,6 @@ export const useEditPin = () => {
                             throw new Error("Test error")
                     */
 
-                    if (localOperationFinishedCounter === 2)
-                        throw new Error("Test error")
-
                     const updatedDevice = {
                         ..._operation?.data?.device,
                         wallet: encryptedWallet,
