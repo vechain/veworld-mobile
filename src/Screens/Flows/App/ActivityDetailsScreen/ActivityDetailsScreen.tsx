@@ -18,6 +18,7 @@ import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"
 import {
+    ActivityStatus,
     ActivityType,
     ConnectedAppTxActivity,
     ContactType,
@@ -28,11 +29,12 @@ import {
     FungibleTokenTransferDetails,
     SignCertificateDetails,
     DappTransactionDetails,
+    ActivityStatusBox,
 } from "./Components"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
-import { useAppDispatch } from "~Storage/Redux"
+import { selectActivity, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import LinearGradient from "react-native-linear-gradient"
 
 type Props = NativeStackScreenProps<
@@ -58,6 +60,8 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
+    const activityFromStore = useAppSelector(selectActivity(activity.id))
+
     const {
         ref: addContactSheet,
         onOpen: openAddContactSheet,
@@ -71,6 +75,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
         )
     }, [activity.timestamp, locale])
+
+    const isPendingOrFailedActivity =
+        activityFromStore?.status !== ActivityStatus.SUCCESS
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
@@ -153,6 +160,17 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     </BaseText>
 
                     <BaseSpacer height={16} />
+
+                    {isPendingOrFailedActivity && (
+                        <>
+                            <ActivityStatusBox
+                                status={
+                                    activityFromStore?.status || activity.status
+                                }
+                            />
+                            <BaseSpacer height={16} />
+                        </>
+                    )}
 
                     {/* Transfer card shows the Address/Addresses involved in the given activity */}
                     <TransferCard
