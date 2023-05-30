@@ -95,7 +95,7 @@ export const PrivacyScreen = () => {
         onEditPinPress,
         isEditPinPromptOpen,
         closeEditPinPrompt,
-        onOldPinSuccess,
+        onPinSuccess,
         lockScreenScenario,
         isValidatePassword,
     } = useEditPin()
@@ -215,7 +215,7 @@ export const PrivacyScreen = () => {
                     <RequireUserPassword
                         isOpen={isEditPinPromptOpen}
                         onClose={closeEditPinPrompt}
-                        onSuccess={onOldPinSuccess}
+                        onSuccess={onPinSuccess}
                         scenario={lockScreenScenario}
                         isValidatePassword={isValidatePassword}
                     />

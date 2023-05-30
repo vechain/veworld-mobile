@@ -9,7 +9,11 @@ import {
     BackButtonHeader,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { SecurityLevelType } from "~Model"
+import {
+    PinVerificationError,
+    PinVerificationErrorType,
+    SecurityLevelType,
+} from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
@@ -38,18 +42,22 @@ export const UserCreatePasswordScreen = () => {
     )
 
     const [isConfirmationError, setIsConfirmationError] =
-        useState<boolean>(false)
+        useState<PinVerificationErrorType>({ type: undefined, value: false })
 
     const { pin, isPinRetype, onDigitPress, onDigitDelete } =
         useOnDigitPressWithConfirmation({
             digitNumber,
             onFinishCallback,
-            onConfirmationError: () => setIsConfirmationError(true),
+            onConfirmationError: () =>
+                setIsConfirmationError({
+                    type: PinVerificationError.VALIDATE_PIN,
+                    value: true,
+                }),
         })
 
     const handleOnDigitPress = useCallback(
         (digit: string) => {
-            setIsConfirmationError(false)
+            setIsConfirmationError({ type: undefined, value: false })
             onDigitPress(digit)
         },
         [onDigitPress],

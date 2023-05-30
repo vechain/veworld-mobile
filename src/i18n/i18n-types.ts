@@ -231,6 +231,10 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
+	 * O​l​d​ ​P​I​N​ ​c​a​n​'​t​ ​b​e​ ​t​h​e​ ​s​a​m​e​ ​a​s​ ​n​e​w​ ​P​I​N​.​ ​T​r​y​ ​a​g​a​i​n​.
+	 */
+	BD_USER_EDIT_PASSWORD_ERROR: string
+	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​y​p​e​ ​o​f​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t
 	 */
 	BD_IMPORT_WALLET_TYPE: string
@@ -1789,6 +1793,10 @@ export type TranslationFunctions = {
 	 *   PIN doesn't match. Try again.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
+	/**
+	 * Old PIN can't be the same as new PIN. Try again.
+	 */
+	BD_USER_EDIT_PASSWORD_ERROR: () => LocalizedString
 	/**
 	 * Select the type of wallet you want to import
 	 */
