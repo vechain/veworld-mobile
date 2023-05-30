@@ -191,9 +191,9 @@ export const ManageTokenScreen = () => {
                                     variant="link"
                                     action={openAddSuggestedBottomSheet}
                                     px={0}
-                                    size="md">
-                                    {LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
-                                </BaseButton>
+                                    size="md"
+                                    title={LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
+                                />
                             </BaseView>
                         </BaseCard>
                     </>
