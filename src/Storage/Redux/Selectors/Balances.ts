@@ -74,7 +74,11 @@ export const selectAccountCustomTokens = createSelector(
  * Get all account balances with related token data
  */
 export const selectAllAccountsTokensWithBalances = createSelector(
-    [selectBalancesState, selectFungibleTokensAll, selectAccountCustomTokens],
+    [
+        selectBalancesState,
+        selectFungibleTokensAll,
+        selectCustomTokensForNetwork,
+    ],
     (balances, tokens, customTokens): FungibleTokenWithBalance[] =>
         balances.map(balance => {
             const balanceToken = [...tokens, ...customTokens].find(token =>
@@ -95,7 +99,7 @@ export const selectAllAccountsTokensWithBalances = createSelector(
         }),
 )
 /**
- * Get all account balances with related token data
+ * Get balances with related token data for selected account
  */
 export const selectTokensWithBalances = createSelector(
     [
@@ -139,7 +143,7 @@ export const selectNonVechainTokensWithBalances = createSelector(
 )
 
 /**
- * Get just vet token and related balance
+ * Get just vet token and related balance for selected account
  */
 export const selectVetTokenWithBalance = createSelector(
     [selectTokensWithBalances],
@@ -150,7 +154,7 @@ export const selectVetTokenWithBalance = createSelector(
 )
 
 /**
- * Get just vtho balance
+ * Get just vtho balance for selected account
  */
 export const selectVthoTokenWithBalance = createSelector(
     [selectTokensWithBalances],
