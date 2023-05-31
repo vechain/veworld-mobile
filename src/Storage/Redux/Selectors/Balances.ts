@@ -74,7 +74,11 @@ export const selectAccountCustomTokens = createSelector(
  * Get all account balances with related token data
  */
 export const selectAllAccountsTokensWithBalances = createSelector(
-    [selectBalancesState, selectFungibleTokensAll, selectAccountCustomTokens],
+    [
+        selectBalancesState,
+        selectFungibleTokensAll,
+        selectCustomTokensForNetwork,
+    ],
     (balances, tokens, customTokens): FungibleTokenWithBalance[] =>
         balances.map(balance => {
             const balanceToken = [...tokens, ...customTokens].find(token =>
