@@ -55,17 +55,17 @@ export const selectCurrentTransactionActivities = createSelector(
     selectSelectedAccount,
     (activitiesState, network, account) => {
         if (account.address && activitiesState[account.address.toLowerCase()]) {
-            if (network?.genesis.id === ThorConstants.genesisesId.main)
+            if (network.genesis.id === ThorConstants.genesisesId.main)
                 return activitiesState[
                     account.address.toLowerCase()
                 ].transactionActivitiesMainnet.filter(
-                    act => act.genesisId === network?.genesis.id,
+                    act => act.genesisId === network.genesis.id,
                 )
             else
                 return activitiesState[
                     account.address.toLowerCase()
                 ].transactionActivitiesTestnet.filter(
-                    act => act.genesisId === network?.genesis.id,
+                    act => act.genesisId === network.genesis.id,
                 )
         }
 
@@ -83,18 +83,18 @@ export const selectCurrentActivities = createSelector(
     selectCurrentTransactionActivities,
     (activitiesState, network, account, currentTransactionActivities) => {
         if (account.address && activitiesState[account.address.toLowerCase()]) {
-            if (network?.genesis.id === ThorConstants.genesisesId.main)
+            if (network.genesis.id === ThorConstants.genesisesId.main)
                 return activitiesState[
                     account.address.toLowerCase()
                 ].nonTransactionActivitiesMainnet
-                    .filter(act => act.genesisId === network?.genesis.id)
+                    .filter(act => act.genesisId === network.genesis.id)
                     .concat(currentTransactionActivities)
                     .sort((a, b) => b.timestamp - a.timestamp)
             else
                 return activitiesState[
                     account.address.toLowerCase()
                 ].nonTransactionActivitiesTestnet
-                    .filter(act => act.genesisId === network?.genesis.id)
+                    .filter(act => act.genesisId === network.genesis.id)
                     .concat(currentTransactionActivities)
                     .sort((a, b) => b.timestamp - a.timestamp)
         }
