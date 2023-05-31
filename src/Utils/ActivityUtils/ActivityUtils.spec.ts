@@ -154,6 +154,7 @@ describe("isTransactionActivity", () => {
     test("should return false for a non-transaction activity", () => {
         const activity: Activity = {
             ...BASE_SAMPLE_ACTIVITY,
+            isTransaction: false,
             type: ActivityType.SIGN_CERT,
         }
         const isTransaction = ActivityUtils.isTransactionActivity(activity)

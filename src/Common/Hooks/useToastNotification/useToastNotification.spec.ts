@@ -25,7 +25,7 @@ describe("useToastNotification", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         const { showFoundTokenTransfer } = result.current
         showFoundTokenTransfer(token, amount)
         expect(showSuccessToast).toHaveBeenCalledWith(
@@ -34,18 +34,19 @@ describe("useToastNotification", () => {
     })
 
     it("should show transaction reverted notification", async () => {
-        const txId = "0x123abc"
+        const txId =
+            "0x42bae575cc1a83914a60de2da1806de9ca6b2726c6274ee467ef16911daa1e2f"
         const { result, waitForNextUpdate } = renderHook(
             () => useToastNotification(),
             {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         const { showTransactionReverted } = result.current
         showTransactionReverted(txId)
         expect(showErrorToast).toHaveBeenCalledWith(
-            "Transaction 0x123abc was reverted.",
+            "Transaction 0x42ba…1daa1e2f was reverted.",
         )
     })
 })

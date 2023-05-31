@@ -37,7 +37,9 @@ export const useToastNotification = () => {
      */
 
     const showTransactionReverted = (txId: string) => {
-        const message = LL.NOTIFICATION_transaction_reverted({ txId })
+        const message = LL.NOTIFICATION_transaction_reverted({
+            txId: FormattingUtils.humanAddress(txId, 6, 8),
+        })
         showErrorToast(message)
     }
 

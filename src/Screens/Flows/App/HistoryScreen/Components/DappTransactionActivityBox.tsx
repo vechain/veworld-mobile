@@ -5,9 +5,10 @@ import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
 import { DateUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { Activity, ConnectedAppTxActivity } from "~Model"
+import { Activity, ActivityStatus, ConnectedAppTxActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
+import { ActivityStatusIndicator } from "."
 
 type Props = {
     activity: ConnectedAppTxActivity
@@ -58,9 +59,22 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
                         </DropShadow>
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseView pl={12}>
-                                <BaseText typographyFont="buttonPrimary" pb={5}>
-                                    {LL.DAPP_TRANSACTION()}
-                                </BaseText>
+                                <BaseView
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    justifyContent="flex-start">
+                                    <BaseText
+                                        typographyFont="buttonPrimary"
+                                        pb={5}>
+                                        {LL.DAPP_TRANSACTION()}
+                                    </BaseText>
+                                    {activity.status !==
+                                        ActivityStatus.SUCCESS && (
+                                        <ActivityStatusIndicator
+                                            activityStatus={activity.status}
+                                        />
+                                    )}
+                                </BaseView>
                                 <BaseText typographyFont="smallCaptionRegular">
                                     {dateTimeActivity}
                                 </BaseText>

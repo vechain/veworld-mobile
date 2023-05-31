@@ -36,9 +36,9 @@ export const selectDevices = (type?: DEVICE_TYPE) =>
     })
 
 export const selectLedgerDevices = createSelector(selectDevicesState, state => {
-    return state.filter(device => device.type === DEVICE_TYPE.LOCAL_MNEMONIC)
+    return state.filter(device => device.type === DEVICE_TYPE.LEDGER)
 })
 
 export const selectLocalDevices = createSelector(selectDevicesState, state => {
-    return state.filter(device => device.type === DEVICE_TYPE.LEDGER)
+    return state.filter(device => device.type === DEVICE_TYPE.LOCAL_MNEMONIC)
 })

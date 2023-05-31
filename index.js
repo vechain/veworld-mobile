@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
-import { AppRegistry } from "react-native"
+import { AppRegistry, LogBox } from "react-native"
 import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
@@ -41,6 +41,11 @@ enableAllPlugins()
 
 const isHermes = () => !!global.HermesInternal
 info("is Hermes active : ", isHermes())
+
+if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
+    // hide all ui logs
+    LogBox.ignoreAllLogs()
+}
 
 const Main = () => {
     const [fontsLoaded] = useFonts({

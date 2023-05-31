@@ -9,7 +9,7 @@ export const getTransactionsOrigin = (
     pageSize: number,
     direction: ORDER,
 ) => {
-    return `${process.env.REACT_APP_INDEXER_URL}/transactions/origin?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
+    return `${process.env.REACT_APP_INDEXER_URL}/transactions?origin=${address}&size=${pageSize}&page=${page}&direction=${direction}`
 }
 
 export const getBlock = (blockId: string) => {

@@ -160,11 +160,11 @@ export const BaseButton = ({
                     fontSize={fontSize}
                     style={themedStyles.text}>
                     {otherProps.title}
+                    {children}
                 </BaseText>
             ) : (
                 <ActivityIndicator style={themedStyles.activityIndicator} />
             )}
-            {children}
 
             {rightIcon}
         </TouchableOpacity>

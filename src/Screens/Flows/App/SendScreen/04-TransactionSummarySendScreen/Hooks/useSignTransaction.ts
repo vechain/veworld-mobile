@@ -9,6 +9,7 @@ import {
     useThor,
 } from "~Components"
 import {
+    addPendingTransferTransactionActivity,
     selectDevice,
     selectSelectedAccount,
     selectSelectedNetwork,
@@ -157,6 +158,10 @@ export const useSignTransaction = ({
                 : senderSignature
 
             const id = await sendSignedTransaction(tx, network.currentUrl)
+
+            // Add pending transaction activity
+            dispatch(addPendingTransferTransactionActivity(tx, thorClient))
+
             showSuccessToast(
                 LL.SUCCESS_GENERIC(),
                 LL.SUCCESS_GENERIC_OPERATION(),
