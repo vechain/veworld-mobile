@@ -45,4 +45,5 @@ export enum Routes {
     DISCOVER = "Discover",
     TOKEN_DETAILS = "Token_Details",
     ACTIVITY_DETAILS = "Activity_Details",
+    RESET_APP = "Reset_App",
 }
