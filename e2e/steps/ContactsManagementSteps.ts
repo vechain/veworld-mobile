@@ -6,6 +6,7 @@ import {
     ContactsScreen,
     HomeFlows,
     ContactsManagementFlows,
+    clickByText,
 } from "../helpers"
 import { waitFor, element } from "detox"
 
@@ -90,6 +91,17 @@ Then("The user should see the address exists error message", async () => {
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 })
+
+Then(
+    "The user should see the address exists error message and click outside",
+    async () => {
+        await waitFor(element(by.text("Address already exists in contacts")))
+            .toBeVisible()
+            .withTimeout(DEFAULT_TIMEOUT)
+        // dismiss the modal clicking outside of it (the title)
+        await clickByText("Contacts")
+    },
+)
 
 Then("The user should see the address invalid error message", async () => {
     await waitFor(element(by.text("Please enter a valid Vechain address")))
