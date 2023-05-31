@@ -91,6 +91,7 @@ export const useNft = () => {
                 _collectionFinal.push(col)
             }
 
+            // todo.vas -> this should fail if there is an error any time on the flow if getting nfts
             disptach(setNfts(_collectionFinal))
         }
 
