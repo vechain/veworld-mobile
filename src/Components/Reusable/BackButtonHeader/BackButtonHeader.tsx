@@ -12,7 +12,9 @@ type Props = {
     iconTestID?: string
 }
 
-export const BackButtonHeader = ({ iconTestID }: Props) => {
+export const BackButtonHeader = ({
+    iconTestID = "BackButtonHeader-BaseIcon-backButton",
+}: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
     return (

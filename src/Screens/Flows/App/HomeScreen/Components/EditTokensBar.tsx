@@ -48,6 +48,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                         color={COLORS.DARK_PURPLE}
                         action={handleManageToken}
                         size={24}
+                        testID="EditTokensBar_BaseIcon_manageToken"
                     />
                 </BaseView>
             )
