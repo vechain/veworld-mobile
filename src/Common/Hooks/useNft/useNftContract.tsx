@@ -42,7 +42,8 @@ export const useNftContract = () => {
 
             // Get nftsData for each contract address
             const nftPromises: Promise<NftForContractResponse[]>[] = []
-            const resultsPerPage = 5
+
+            let resultsPerPage = 20
             for (const contractAddress of contractAddresses) {
                 const nfts = getNftsForContract(
                     contractAddress,
