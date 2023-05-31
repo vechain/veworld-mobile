@@ -23,3 +23,17 @@ export const goToTokensManagementScreen = async () => {
 export const goToSettings = async () => {
     await clickById("settings-tab")
 }
+
+export const goToAdvancedSettings = async () => {
+    await waitFor(element(by.id("settings-tab")))
+        .toExist()
+        .withTimeout(LONG_TIMEOUT)
+
+    await element(by.id("settings-tab")).tap()
+
+    await waitFor(element(by.text("Advanced")))
+        .toExist()
+        .withTimeout(DEFAULT_TIMEOUT)
+
+    await element(by.text("Advanced")).tap()
+}

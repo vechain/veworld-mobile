@@ -231,6 +231,10 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
+	 * O​l​d​ ​P​I​N​ ​c​a​n​'​t​ ​b​e​ ​t​h​e​ ​s​a​m​e​ ​a​s​ ​n​e​w​ ​P​I​N
+	 */
+	BD_USER_EDIT_PASSWORD_ERROR: string
+	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​y​p​e​ ​o​f​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t
 	 */
 	BD_IMPORT_WALLET_TYPE: string
@@ -639,6 +643,14 @@ type RootTranslation = {
 	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​e​ ​r​e​q​u​e​s​t​e​d​ ​o​p​e​r​a​t​i​o​n​.
 	 */
 	SB_CONFIRM_PIN: string
+	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​o​l​d​ ​p​i​n
+	 */
+	SB_EDIT_OLD_PIN: string
+	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​n​e​w​ ​p​i​n
+	 */
+	SB_EDIT_NEW_PIN: string
 	/**
 	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
 	 */
@@ -1539,6 +1551,18 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_reverted: string
 	/**
+	 * F​a​i​l​e​d
+	 */
+	ACTIVITIES_STATUS_failed: string
+	/**
+	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​p​e​n​d​i​n​g​,​ ​d​e​t​a​i​l​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​f​u​l​l​y​ ​a​c​c​u​r​a​t​e
+	 */
+	ACTIVITIES_PENDING_DESCRIPTION: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​i​n​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	ACTIVITIES_FAILED_DESCRIPTION: string
+	/**
 	 * T​o​k​e​n​ ​t​r​a​n​s​f​e​r
 	 */
 	CONNECTED_APP_token_transfer: string
@@ -1813,6 +1837,10 @@ export type TranslationFunctions = {
 	 *   PIN doesn't match. Try again.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
+	/**
+	 * Old PIN can't be the same as new PIN
+	 */
+	BD_USER_EDIT_PASSWORD_ERROR: () => LocalizedString
 	/**
 	 * Select the type of wallet you want to import
 	 */
@@ -2221,6 +2249,14 @@ export type TranslationFunctions = {
 	 * Insert the pin you created in order to perform the requested operation.
 	 */
 	SB_CONFIRM_PIN: () => LocalizedString
+	/**
+	 * Insert your old pin
+	 */
+	SB_EDIT_OLD_PIN: () => LocalizedString
+	/**
+	 * Insert your new pin
+	 */
+	SB_EDIT_NEW_PIN: () => LocalizedString
 	/**
 	 * Account management
 	 */
@@ -3110,6 +3146,18 @@ Please, try again later.
 	 * Reverted
 	 */
 	ACTIVITIES_STATUS_reverted: () => LocalizedString
+	/**
+	 * Failed
+	 */
+	ACTIVITIES_STATUS_failed: () => LocalizedString
+	/**
+	 * This transaction is pending, details might not be fully accurate
+	 */
+	ACTIVITIES_PENDING_DESCRIPTION: () => LocalizedString
+	/**
+	 * There was an error in executing the transaction
+	 */
+	ACTIVITIES_FAILED_DESCRIPTION: () => LocalizedString
 	/**
 	 * Token transfer
 	 */

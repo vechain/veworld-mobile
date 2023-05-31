@@ -69,7 +69,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
         {
             id: 2,
             title: LL.ORIGIN(),
-            value: `${activity.linkUrl}`,
+            value: activity.linkUrl || "",
             typographyFont: "subSubTitleLight",
             underline: true,
             //TODO onValuePress opens browser or in-app browser
@@ -97,7 +97,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
         {
             id: 5,
             title: LL.BLOCK_NUMBER(),
-            value: `${blockNumber}`,
+            value: blockNumber ? `${blockNumber}` : "",
             typographyFont: "subSubTitle",
             underline: false,
         },

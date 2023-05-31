@@ -73,6 +73,30 @@ export const selectAccountCustomTokens = createSelector(
 /**
  * Get all account balances with related token data
  */
+export const selectAllAccountsTokensWithBalances = createSelector(
+    [selectBalancesState, selectFungibleTokensAll, selectAccountCustomTokens],
+    (balances, tokens, customTokens): FungibleTokenWithBalance[] =>
+        balances.map(balance => {
+            const balanceToken = [...tokens, ...customTokens].find(token =>
+                AddressUtils.compareAddresses(
+                    token.address,
+                    balance.tokenAddress,
+                ),
+            )
+            if (!balanceToken) {
+                throw new Error(
+                    `Unable to find token with this address: ${balance.tokenAddress}`,
+                )
+            }
+            return {
+                ...balanceToken,
+                balance,
+            }
+        }),
+)
+/**
+ * Get all account balances with related token data
+ */
 export const selectTokensWithBalances = createSelector(
     [
         selectSelectedAccountBalances,

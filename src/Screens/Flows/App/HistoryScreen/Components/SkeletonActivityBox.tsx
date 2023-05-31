@@ -1,5 +1,5 @@
 import React from "react"
-import { useTheme } from "~Common"
+import { SCREEN_WIDTH, useTheme } from "~Common"
 import { StyleSheet } from "react-native"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
@@ -29,7 +29,7 @@ export const SkeletonActivityBox = () => {
                             children: [
                                 // Line
                                 {
-                                    width: "80%",
+                                    width: SCREEN_WIDTH - 100,
                                     height: 20,
                                     marginLeft: 10,
                                 },
