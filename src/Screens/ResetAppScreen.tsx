@@ -1,5 +1,8 @@
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useAppReset, useTheme } from "~Common"
 import {
     BaseButton,
@@ -10,25 +13,25 @@ import {
     BaseView,
     CheckBoxWithText,
 } from "~Components"
-import { useAppDispatch } from "~Storage/Redux"
-import { setIsResettingApp } from "~Storage/Redux/Actions"
 import { useI18nContext } from "~i18n"
 
 export const ResetAppScreen = () => {
     const appReset = useAppReset()
     const { LL } = useI18nContext()
+    const nav = useNavigation()
     const theme = useTheme()
-    const dispatch = useAppDispatch()
+    const tabbarHeight = useBottomTabBarHeight()
+    const insets = useSafeAreaInsets()
+
+    const bottomPadding = tabbarHeight - insets.bottom
 
     const [IsChecked, setIsChecked] = useState(false)
 
-    const onBackPress = useCallback(
-        () => dispatch(setIsResettingApp(false)),
-        [dispatch],
-    )
+    // navigate to reset app screen
+    const onBackPress = useCallback(() => nav.goBack(), [nav])
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} style={{ paddingBottom: bottomPadding }}>
             <BaseIcon
                 style={baseStyles.backIcon}
                 size={36}
