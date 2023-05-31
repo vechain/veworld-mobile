@@ -120,13 +120,10 @@ const WalletConnectContextProvider = ({
             requestEvent: SignClientTypes.EventArguments["session_request"],
         ) => {
             const { topic } = requestEvent
-            // const { request } = params
-            // console.log("new request")
 
             const requestSessionData =
                 web3Wallet?.engine.signClient.session.get(topic)
 
-            // console.log("request session data found for topic: ", topic)
             setRequestSession(requestSessionData)
             setRequestEventData(requestEvent)
             setSignModalVisible(true)

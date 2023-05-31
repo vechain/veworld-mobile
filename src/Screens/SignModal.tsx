@@ -57,15 +57,13 @@ export default function SignModal({
     const requestIcon = requestSession?.peer?.metadata?.icons[0]
     const requestURL = requestSession?.peer?.metadata?.url
 
-    // console.log("params", params);
-
     let message: string = ""
     switch (method) {
         case VECHAIN_SIGNING_METHODS.IDENTIFY:
             message = params.payload.content
             break
         case VECHAIN_SIGNING_METHODS.REQUEST_TRANSACTION:
-            message = params.comment
+            message = params.comment || params.txMessage[0].comment
             break
         default:
             break
