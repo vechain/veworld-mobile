@@ -29,7 +29,7 @@ describe("usePasswordValidation", () => {
 
         const { result } = renderHook(() => usePasswordValidation())
 
-        const validatePassword = result.current
+        const { validatePassword } = result.current
         const isValid = await validatePassword(userPassword)
         expect(isValid).toBeTruthy()
         expect(mockedUseAppSelector).toHaveBeenCalledWith(
@@ -47,7 +47,7 @@ describe("usePasswordValidation", () => {
 
         const { result } = renderHook(() => usePasswordValidation())
 
-        const validatePassword = result.current
+        const { validatePassword } = result.current
         const isValid = await validatePassword(userPassword)
 
         expect(isValid).toBeFalsy()
@@ -71,7 +71,7 @@ describe("usePasswordValidation", () => {
 
         const { result } = renderHook(() => usePasswordValidation())
 
-        const validatePassword = result.current
+        const { validatePassword } = result.current
         const isValid = await validatePassword(userPassword)
 
         expect(isValid).toBeFalsy()

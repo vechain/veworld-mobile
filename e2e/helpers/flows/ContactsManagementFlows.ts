@@ -1,6 +1,7 @@
 import { waitFor, element } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../constants"
 import { ContactsScreen } from "../screens"
+import { clickByText } from "../common"
 
 export const goToAddContactScreen = async () => {
     if (await ContactsScreen.isContactsListEmpty()) {
@@ -97,6 +98,7 @@ export const verifyContactExists = async (name: string, address: string) => {
     await waitFor(element(by.text(address)))
         .toExist()
         .withTimeout(DEFAULT_TIMEOUT)
+    await clickByText("SAVE")
 }
 
 export const isInEditContactScreen = async () => {

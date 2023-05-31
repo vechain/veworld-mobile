@@ -118,7 +118,7 @@ const encryptWallet = async ({
 
 /**
  *  Decrypt wallet, pass password if the authentication is password
- * @param  {Device} device
+ * @param  {LocalDevice} device
  * @param  {string} password? if the authentication is password
  * @returns Wallet
  */
@@ -134,11 +134,7 @@ const decryptWallet = async (device: LocalDevice, userPassword?: string) => {
         )
     let encryptionKey
     if (userPassword) {
-        const hashedUserPassword = PasswordUtils.hash(userPassword)
-        encryptionKey = decrypt<string>(
-            encryptedEncryptionKey,
-            hashedUserPassword,
-        )
+        encryptionKey = decrypt<string>(encryptedEncryptionKey, userPassword)
     } else encryptionKey = encryptedEncryptionKey
 
     const decryptedWallet = decrypt<Wallet>(device.wallet, encryptionKey)

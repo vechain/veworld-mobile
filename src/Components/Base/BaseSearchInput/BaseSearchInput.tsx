@@ -10,10 +10,11 @@ type Props = {
     placeholder?: string
     value?: string
     setValue?: (s: string) => void
+    testID?: string
 }
 
 export const BaseSearchInput = memo(
-    ({ placeholder = "Search", value, setValue }: Props) => {
+    ({ placeholder = "Search", value, setValue, testID }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const theme = useTheme()
@@ -27,6 +28,7 @@ export const BaseSearchInput = memo(
                         placeholderTextColor={theme.colors.text}
                         onChangeText={setValue}
                         value={value}
+                        testID={testID}
                     />
                     <BaseIcon
                         name="magnify"
