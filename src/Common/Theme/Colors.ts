@@ -34,12 +34,12 @@ export enum COLORS {
     WHITE = "#FFFFFF",
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
-    LIGHT_GRAY = "#FAFAFA",
+    LIGHT_GRAY = "#f2f2f7",
     LIGHT_GRAY_TRANSPARENT = "rgba(250, 250, 250, 0.0)",
     LIME_GREEN = "#E2F895",
     LIME_GREEN_LIGHT = "#E6F5B2",
     LIME_GREEN_DISABLED = "#B7C685",
-    DARK_PURPLE = "#0B0043",
+    DARK_PURPLE = "#09022f",
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.6)",
     PURPLE = "#30265F",
@@ -88,7 +88,7 @@ const light: Colors = {
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.DARK_PURPLE_RBGA,
     switcher: COLORS.DARK_PURPLE_DISABLED,
-    skeletonBoneColor: COLORS.GRAY,
+    skeletonBoneColor: COLORS.DARK_PURPLE_DISABLED,
     skeletonHighlightColor: COLORS.LIGHT_GRAY,
 }
 

@@ -43,7 +43,7 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
         })
     }
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea grow={1} testID="Select_Token_Send_Screen">
             <BackButtonHeader />
             <BaseView mx={24}>
                 <BaseText typographyFont="title">

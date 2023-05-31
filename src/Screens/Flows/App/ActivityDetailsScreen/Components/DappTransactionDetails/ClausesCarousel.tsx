@@ -8,6 +8,11 @@ import { useI18nContext } from "~i18n"
 import { TransferClause } from "./Clauses/TransferClause"
 import { DeployContractClause } from "./Clauses/DeployContractClause"
 import { ContractCallClause } from "./Clauses/ContractCallClause"
+import {
+    SwapTokensForTokensClause,
+    SwapTokensForVetClause,
+    SwapVetForTokensClause,
+} from "./Clauses"
 
 type Props = {
     clausesMetadata: ClauseWithMetadata[]
@@ -29,6 +34,12 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
                     return <ContractCallClause clause={item} />
                 case ClauseType.DEPLOY_CONTRACT:
                     return <DeployContractClause clause={item} />
+                case ClauseType.SWAP_VET_FOR_TOKENS:
+                    return <SwapVetForTokensClause clause={item} />
+                case ClauseType.SWAP_TOKENS_FOR_VET:
+                    return <SwapTokensForVetClause clause={item} />
+                case ClauseType.SWAP_TOKENS_FOR_TOKENS:
+                    return <SwapTokensForTokensClause clause={item} />
                 default:
                     return <></>
             }

@@ -2,6 +2,9 @@ import "@testing-library/jest-native/extend-expect"
 import { ReactNode } from "react"
 import "whatwg-fetch"
 
+import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
+jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
+
 const componentMock = ({ children }: { children: ReactNode }) => children
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
 jest.mock("react-native-quick-crypto", () => ({
@@ -38,9 +41,10 @@ jest.mock("expo-haptics", () => ({
 }))
 jest.mock("expo-localization", () => ({
     getLocales: jest.fn(() => [{ languageCode: "en", languageTag: "en-US" }]),
+    getCalendars: jest.fn(() => [{ timeZone: "America/New_York" }]),
 }))
 jest.mock("expo-clipboard", () => {})
-jest.mock("react-native-linear-gradient", () => {})
+jest.mock("react-native-linear-gradient", () => "LinearGradient")
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,
@@ -78,4 +82,4 @@ jest.mock("@gorhom/bottom-sheet", () => ({
     },
 }))
 
-jest.mock("react-native-skeleton-content-nonexpo", () => {})
+jest.mock("react-native-skeleton-content-nonexpo", () => "SkeletonContent")

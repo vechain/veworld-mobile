@@ -49,6 +49,7 @@ export const AccountSlice = createSlice({
                 if (!accountExists) accountsToInsert.push(newAcc)
             })
             state.accounts.push(...accountsToInsert)
+            state.selectedAccount = accountsToInsert[0].address
         },
         removeAccountsByDevice: (
             state,

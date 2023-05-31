@@ -4,6 +4,7 @@ export enum Routes {
     WALLET_TUTORIAL = "Wallet_Tutorial",
     WALLET_SETUP = "Wallet_Setup",
     IMPORT_HW_LEDGER_SELECT_DEVICE = "Import_Ledger_Select_Device",
+    IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS = "Import_Ledger_Enable_Additional_Settings",
     IMPORT_HW_LEDGER_SELECT_ACCOUNTS = "Import_Ledger_Select_Accounts",
     NEW_MNEMONIC = "New_Mnemonic",
     CONFIRM_MNEMONIC = "Confirm_Mnemonic",
@@ -26,6 +27,8 @@ export enum Routes {
     WALLET_CONNECT = "Wallet_Connect",
     HISTORY = "History",
     NFTS = "NFTs",
+    NFT_DETAILS = "NFT_Details",
+    NFT_COLLECTION_DETAILS = "NFT_Collection_Details",
     WALLET_MANAGEMENT = "Wallet_Management",
     SETTINGS_GENERAL = "Settings_General",
     SETTINGS_ADVANCED = "Settings_Advanced",
@@ -43,4 +46,5 @@ export enum Routes {
     DISCOVER = "Discover",
     TOKEN_DETAILS = "Token_Details",
     ACTIVITY_DETAILS = "Activity_Details",
+    RESET_APP = "Reset_App",
 }

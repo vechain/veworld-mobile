@@ -452,6 +452,10 @@ type RootTranslation = {
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
 	/**
+	 * R​a​n​d​o​m​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​e​s​c​r​i​p​t​i​o​n​ ​p​l​a​c​e​h​o​l​d​e​r​ ​i​n​ ​c​a​s​e​ ​t​h​e​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​o​e​s​n​'​t​ ​h​a​v​e​ ​o​n​e
+	 */
+	BD_NFT_DESC_PLACEHOLDER: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -723,6 +727,14 @@ type RootTranslation = {
 	 */
 	SB_NO_TRANSACTIONS: string
 	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	SB_DESCRIPTION: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	SB_COLLECTIBLES: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -989,6 +1001,27 @@ type RootTranslation = {
 	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_GENERIC_OPERATION: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​U​R​I​ ​f​r​o​m​ ​T​h​o​r
+	 */
+	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​I​P​F​S
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​A​r​w​e​a​v​e
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: string
+	/**
+	 * T​h​e​ ​t​o​k​e​n​ ​U​R​I​ ​p​r​o​t​o​c​o​l​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​(​{​p​r​o​t​o​c​o​l​}​)
+	 * @param {unknown} protocol
+	 */
+	ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: RequiredParams<'protocol'>
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​m​e​t​a​d​a​t​a
+	 */
+	ERROR_NFT_FAILED_TO_GET_METADATA: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -1339,6 +1372,70 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
+	 * E​n​a​b​l​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: string
+	/**
+	 * i​n​ ​o​r​d​e​r​ ​t​o​ ​g​i​v​e​ ​y​o​u​ ​t​h​e​ ​b​e​s​t​ ​u​s​e​r​ ​e​x​p​e​r​i​e​n​c​e​,​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​e​n​a​b​l​e​ ​s​o​m​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s​ ​i​n​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​(​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​a​n​d​ ​M​u​l​t​i​-​c​l​a​u​s​e​)​.​ ​P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​p​r​o​c​e​e​d
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB: string
+	/**
+	 * O​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1: string
+	/**
+	 * U​n​l​o​c​k​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​a​n​d​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​.​ ​I​f​ ​y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​i​t​ ​i​n​s​t​a​l​l​e​d​,​ ​p​l​e​a​s​e​ ​i​n​s​t​a​l​l​ ​i​t​ ​f​r​o​m​ ​t​h​e​ ​L​e​d​g​e​r​ ​L​i​v​e​ ​a​p​p​.
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1_DESC: string
+	/**
+	 * N​a​v​i​g​a​t​e​ ​t​o​ ​S​e​t​t​i​n​g​s
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_2: string
+	/**
+	 * U​s​e​ ​t​h​e​ ​b​u​t​t​o​n​s​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​t​o​ ​n​a​v​i​g​a​t​e​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​t​e​r​ ​t​h​e​ ​m​e​n​u​.
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_2_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​C​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_3: string
+	/**
+	 * N​a​v​i​g​a​t​e​ ​t​o​ ​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_3_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​M​u​l​t​i​-​c​l​a​u​s​e
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4: string
+	/**
+	 * N​a​v​i​g​a​t​e​ ​t​o​ ​M​u​l​t​i​-​c​l​a​u​s​e​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: string
+	/**
+	 * U​n​l​o​c​k​ ​l​e​d​g​e​r
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER: string
+	/**
+	 * P​l​e​a​s​e​,​ ​t​u​r​n​ ​o​n​ ​a​n​d​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​d​e​v​i​c​e​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: string
+	/**
+	 * O​p​e​n​ ​V​E​T​ ​a​p​p
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
+	/**
+	 * U​n​k​n​o​w​n​ ​e​r​r​o​r
+	 */
+	WALLET_LEDGER_ERROR_UNKNOWN: string
+	/**
+	 * A​n​ ​u​n​k​n​o​w​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n
+	 */
+	WALLET_LEDGER_ERROR_UNKNOWN_DESC: string
+	/**
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
@@ -1431,6 +1528,22 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_deploy_contract: string
 	/**
+	 * A​p​p​r​o​v​e​ ​N​F​T
+	 */
+	CONNECTED_APP_approve_nft: string
+	/**
+	 * S​w​a​p​ ​V​E​T​ ​f​o​r​ ​t​o​k​e​n​s
+	 */
+	CONNECTED_APP_swap_vet_for_tokens: string
+	/**
+	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​V​E​T
+	 */
+	CONNECTED_APP_swap_tokens_for_vet: string
+	/**
+	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​t​o​k​e​n​s
+	 */
+	CONNECTED_APP_swap_tokens_for_tokens: string
+	/**
 	 * O​u​t​c​o​m​e​s
 	 */
 	OUTCOMES: string
@@ -1454,6 +1567,10 @@ type RootTranslation = {
 	 * C​l​i​c​k​ ​t​o​ ​c​o​p​y​ ​A​B​I
 	 */
 	COPY_ABI: string
+	/**
+	 * T​o​k​e​n​ ​I​D
+	 */
+	TOKEN_ID: string
 }
 
 export type TranslationFunctions = {
@@ -1894,6 +2011,10 @@ export type TranslationFunctions = {
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
 	/**
+	 * Random NFT collection description placeholder in case the NFT collection doesn't have one
+	 */
+	BD_NFT_DESC_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -2162,6 +2283,14 @@ export type TranslationFunctions = {
 	 */
 	SB_NO_TRANSACTIONS: () => LocalizedString
 	/**
+	 * Description
+	 */
+	SB_DESCRIPTION: () => LocalizedString
+	/**
+	 * Collectibles
+	 */
+	SB_COLLECTIBLES: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -2426,6 +2555,26 @@ Please, try again later.
 	 * The operation went wrong. Please, try again.
 	 */
 	ERROR_GENERIC_OPERATION: () => LocalizedString
+	/**
+	 * Failed to get token URI from Thor
+	 */
+	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: () => LocalizedString
+	/**
+	 * Failed to get token data from IPFS
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: () => LocalizedString
+	/**
+	 * Failed to get token data from Arweave
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: () => LocalizedString
+	/**
+	 * The token URI protocol is not supported ({protocol})
+	 */
+	ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: (arg: { protocol: unknown }) => LocalizedString
+	/**
+	 * Failed to get token metadata
+	 */
+	ERROR_NFT_FAILED_TO_GET_METADATA: () => LocalizedString
 	/**
 	 * Success!
 	 */
@@ -2775,6 +2924,70 @@ Please, try again later.
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**
+	 * Enable additional settings
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: () => LocalizedString
+	/**
+	 * in order to give you the best user experience, you need to enable some additional settings in your ledger (Contract data and Multi-clause). Please follow the instructions below to proceed
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB: () => LocalizedString
+	/**
+	 * Open the VET app on your Ledger
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1: () => LocalizedString
+	/**
+	 * Unlock your Ledger and open the VET app. If you don't have it installed, please install it from the Ledger Live app.
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1_DESC: () => LocalizedString
+	/**
+	 * Navigate to Settings
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_2: () => LocalizedString
+	/**
+	 * Use the buttons on your Ledger to navigate to Settings and press both buttons to enter the menu.
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_2_DESC: () => LocalizedString
+	/**
+	 * Enable Contract data
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_3: () => LocalizedString
+	/**
+	 * Navigate to Contract data and press both buttons to enable it.
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_3_DESC: () => LocalizedString
+	/**
+	 * Enable Multi-clause
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4: () => LocalizedString
+	/**
+	 * Navigate to Multi-clause and press both buttons to enable it.
+	 */
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: () => LocalizedString
+	/**
+	 * Unlock ledger
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER: () => LocalizedString
+	/**
+	 * Please, turn on and unlock your ledger device to continue
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: () => LocalizedString
+	/**
+	 * Open VET app
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP: () => LocalizedString
+	/**
+	 * Please, open the VET app to continue
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
+	/**
+	 * Unknown error
+	 */
+	WALLET_LEDGER_ERROR_UNKNOWN: () => LocalizedString
+	/**
+	 * An unknown error occurred. Please try again
+	 */
+	WALLET_LEDGER_ERROR_UNKNOWN_DESC: () => LocalizedString
+	/**
 	 * Date not available
 	 */
 	DATE_NOT_AVAILABLE: () => LocalizedString
@@ -2867,6 +3080,22 @@ Please, try again later.
 	 */
 	CONNECTED_APP_deploy_contract: () => LocalizedString
 	/**
+	 * Approve NFT
+	 */
+	CONNECTED_APP_approve_nft: () => LocalizedString
+	/**
+	 * Swap VET for tokens
+	 */
+	CONNECTED_APP_swap_vet_for_tokens: () => LocalizedString
+	/**
+	 * Swap tokens for VET
+	 */
+	CONNECTED_APP_swap_tokens_for_vet: () => LocalizedString
+	/**
+	 * Swap tokens for tokens
+	 */
+	CONNECTED_APP_swap_tokens_for_tokens: () => LocalizedString
+	/**
 	 * Outcomes
 	 */
 	OUTCOMES: () => LocalizedString
@@ -2890,6 +3119,10 @@ Please, try again later.
 	 * Click to copy ABI
 	 */
 	COPY_ABI: () => LocalizedString
+	/**
+	 * Token ID
+	 */
+	TOKEN_ID: () => LocalizedString
 }
 
 export type Formatters = {}

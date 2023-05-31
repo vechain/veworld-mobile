@@ -17,7 +17,7 @@ describe("useBiometricType", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         await waitFor(() => {
             return expect(result.current).toBeTruthy()
         })
@@ -35,7 +35,7 @@ describe("useBiometricType", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         await waitFor(() => {
             return expect(result.current).toBeTruthy()
         })
@@ -52,7 +52,7 @@ describe("useBiometricType", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         await waitFor(() => {
             return expect(result.current).toBeTruthy()
         })
@@ -70,7 +70,7 @@ describe("useBiometricType", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         await waitFor(() => {
             return expect(result.current).toBeTruthy()
         })
