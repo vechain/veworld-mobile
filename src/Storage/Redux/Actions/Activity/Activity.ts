@@ -106,7 +106,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                 .transaction(updatedActivity.id)
                 .getReceipt()
 
-            updatedActivity.blockNumber = tx?.meta.blockNumber ?? 0
+            updatedActivity.blockNumber = txReceipt?.meta.blockNumber ?? 0
 
             if (!txReceipt) updatedActivity.status = ActivityStatus.PENDING
             else
