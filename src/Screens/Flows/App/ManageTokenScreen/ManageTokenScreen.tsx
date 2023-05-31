@@ -186,6 +186,7 @@ export const ManageTokenScreen = () => {
                         value={tokenQuery}
                         setValue={setTokenQuery}
                         placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
+                        testID="ManageTokenScreen_SearchInput_searchTokenInput"
                     />
                     {!!missingSuggestedTokens.length && (
                         <>
@@ -210,7 +211,8 @@ export const ManageTokenScreen = () => {
                 <BaseSpacer height={24} />
                 <BaseScrollView
                     containerStyle={styles.scrollViewContainer}
-                    style={styles.scrollView}>
+                    style={styles.scrollView}
+                    testID="ManageTokenScreen_ScrollView_tokensScrollView">
                     {filteredTokens.length ? (
                         <>
                             {!!selectedTokens.length && (

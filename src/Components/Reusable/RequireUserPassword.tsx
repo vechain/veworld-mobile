@@ -7,9 +7,11 @@ import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
 interface IRequireUserPassword extends Omit<IBaseModal, "children"> {
     onSuccess: (password: string) => void
+    scenario?: LOCKSCREEN_SCENARIO
+    isValidatePassword?: boolean
 }
 export const RequireUserPassword: React.FC<IRequireUserPassword> = memo(
-    ({ isOpen, onClose, onSuccess }) => {
+    ({ isOpen, onClose, onSuccess, scenario, isValidatePassword = true }) => {
         const theme = useTheme()
 
         return (
@@ -23,7 +25,8 @@ export const RequireUserPassword: React.FC<IRequireUserPassword> = memo(
                 />
                 <LockScreen
                     onSuccess={onSuccess}
-                    scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
+                    scenario={scenario ?? LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
+                    isValidatePassword={isValidatePassword}
                 />
             </BaseModal>
         )

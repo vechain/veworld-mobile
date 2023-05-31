@@ -127,6 +127,7 @@ export const ManageCustomTokenScreen = () => {
                     name={"plus"}
                     bg={theme.colors.secondary}
                     action={openAddCustomTokenSheet}
+                    testID="ManageCustomTokenScreen_plusIcon"
                 />
             </BaseView>
             <View style={styles.flatListContainer}>

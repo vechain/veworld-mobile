@@ -28,6 +28,7 @@ export const useSecurityUpgrade = () => {
 
             const updatedDevices: LocalDevice[] = []
 
+            // todo -> use atomic commit to update all devices at once #567
             try {
                 for (const device of devices) {
                     const { decryptedWallet } = await CryptoUtils.decryptWallet(
@@ -54,7 +55,7 @@ export const useSecurityUpgrade = () => {
 
                 dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRIC))
 
-                onSuccessCallback && onSuccessCallback()
+                onSuccessCallback?.()
             } catch (e) {
                 error("SECURITY UPGRADE ERROR", e)
             }

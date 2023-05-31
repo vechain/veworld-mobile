@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { Given } from "@cucumber/cucumber"
-import { HomeScreen, OnboardingFlows } from "../helpers"
+import { HomeScreen, OnboardingFlows, clickByText } from "../helpers"
 
 Given("The app is opened", { timeout: -1 }, async () => {
     let retries: number = 5
@@ -19,4 +19,8 @@ Given("The app is opened", { timeout: -1 }, async () => {
 Given("The user has previously onboarded", { timeout: -1 }, async function () {
     if (!(await HomeScreen.isActive()))
         await OnboardingFlows.completeOnboarding()
+})
+
+Given("Open with demo account", { timeout: -1 }, async function () {
+    if (!(await HomeScreen.isActive())) await clickByText("DEV:DEMO")
 })
