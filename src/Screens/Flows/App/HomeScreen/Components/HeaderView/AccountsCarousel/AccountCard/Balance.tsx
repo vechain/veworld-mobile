@@ -4,28 +4,41 @@ import { useTheme, VET } from "~Common"
 import { FormattingUtils } from "~Utils"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
+import BigNumber from "bignumber.js"
+import {
+    selectVetTokenWithBalanceByAccount,
+    useAppSelector,
+} from "~Storage/Redux"
+import { WalletAccount } from "~Model"
 
 type Props = {
-    balance: string
     isVisible: boolean
     toggleVisible: () => void
+    account: WalletAccount
 }
 
-const getBalanceText = (balance: string, isVisible: boolean) => {
-    if (isVisible) return FormattingUtils.humanNumber(balance, balance)
-    return Array.from(
-        Array(FormattingUtils.humanNumber(balance).length).keys(),
-    ).map(_value => "*")
-}
 export const Balance: React.FC<Props> = memo(
-    ({ balance, isVisible, toggleVisible }) => {
+    ({ isVisible, toggleVisible, account }) => {
         const theme = useTheme()
         const { LL } = useI18nContext()
 
-        const renderBalance = useMemo(
-            () => getBalanceText(balance, isVisible),
-            [balance, isVisible],
+        const vetTokenWithBalance = useAppSelector(state =>
+            selectVetTokenWithBalanceByAccount(state, account.address),
         )
+        const balance = new BigNumber(
+            FormattingUtils.convertToFiatBalance(
+                vetTokenWithBalance?.balance.balance || "0",
+                1,
+                VET.decimals,
+            ),
+        ).toString()
+
+        const renderBalance = useMemo(() => {
+            if (isVisible) return FormattingUtils.humanNumber(balance, balance)
+            return Array.from(
+                Array(FormattingUtils.humanNumber(balance).length).keys(),
+            ).map(_value => "*")
+        }, [balance, isVisible])
 
         return (
             <>
