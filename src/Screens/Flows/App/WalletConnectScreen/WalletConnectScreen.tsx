@@ -53,22 +53,6 @@ export const WalletConnectScreen = () => {
         }
     }
 
-    // async function disconnectAll() {
-    //     for (const session of activeSessions) {
-    //         // console.log("Disconnecting session with topic: ", session.topic)
-    //         try {
-    //             await web3Wallet.disconnectSession({
-    //                 topic: session.topic,
-    //                 reason: getSdkError("USER_DISCONNECTED"),
-    //             })
-
-    //             dispatch(removeSession(topic))
-    //         } catch (e) {
-    //             // console.log("error while disconnecting session", e)
-    //         }
-    //     }
-    // }
-
     return (
         <BaseSafeArea>
             <BackButtonHeader />
@@ -109,10 +93,6 @@ export const WalletConnectScreen = () => {
                     <BaseButton action={disconnect} title="Disconnect" />
                 </BaseView>
             )}
-
-            {/* <BaseView alignItems="center" justifyContent="center">
-                <BaseButton action={disconnectAll} title="Disconnect all" />
-            </BaseView> */}
         </BaseSafeArea>
     )
 }
