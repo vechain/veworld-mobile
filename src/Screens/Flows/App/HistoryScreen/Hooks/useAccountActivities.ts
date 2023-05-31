@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { error } from "~Common"
+import { error, info } from "~Common"
 import { showWarningToast, useThor } from "~Components"
 import { Activity } from "~Model"
 import {
@@ -49,6 +49,7 @@ export const useAccountActivities = (address: string) => {
      * Utilizes useCallback for memoization to prevent unnecessary re-renders.
      */
     const fetchActivities = useCallback(async () => {
+        info("Fetching activities on page", page)
         // Reset hasFetched flag
         setHasFetched(false)
         // Proceed if address exists
@@ -63,7 +64,9 @@ export const useAccountActivities = (address: string) => {
 
                 // If first page, update Redux state and set activities state
                 if (page === 0) {
-                    dispatch(updateAccountTransactionActivities(txActivities))
+                    dispatch(
+                        updateAccountTransactionActivities(txActivities, thor),
+                    )
 
                     setActivities(txActivities)
                     incrementPageAndSetFetchedFlag()
@@ -105,6 +108,7 @@ export const useAccountActivities = (address: string) => {
 
                 // Set fetched flag
                 setHasFetched(true)
+                if (page === 0) setPage(prevPage => prevPage + 1)
             }
         }
     }, [address, page, thor, dispatch, LL])
@@ -115,25 +119,30 @@ export const useAccountActivities = (address: string) => {
         setHasFetched(true)
     }
 
+    // Update activities when saved activities in Redux state changes
+    useEffect(() => {
+        setActivities(activitiesSaved)
+    }, [activitiesSaved])
+
     // Fetch activities on initial component mount
     useEffect(() => {
         const fetchOnMount = async () => {
             await fetchActivities()
         }
 
-        fetchOnMount()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        if (page === 0) fetchOnMount()
+    }, [fetchActivities, page])
 
-    // Update activities when saved activities in Redux state changes
+    // Reset page number on network change
     useEffect(() => {
-        setActivities(activitiesSaved)
-    }, [activitiesSaved])
+        setPage(0)
+    }, [thor.genesis.id])
 
     return {
         fetchActivities,
         activities,
         hasFetched,
         page,
+        setPage,
     }
 }

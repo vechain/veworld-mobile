@@ -62,6 +62,30 @@ export const isTokenTransferClause = (clause: Connex.VM.Clause): boolean => {
     return clause.data?.startsWith(TRANSFER_SIG) || false
 }
 
+export const getTokenAddressFromClause = (
+    clause: Connex.VM.Clause,
+): string | undefined => {
+    if (isVETtransferClause(clause)) return VET.address
+    if (isTokenTransferClause(clause)) {
+        const tokenAddress = clause.to?.toLowerCase()
+        return tokenAddress
+    }
+
+    return undefined
+}
+
+export const getAmountFromClause = (
+    clause: Connex.VM.Clause,
+): string | undefined => {
+    if (isVETtransferClause(clause)) return Number(clause.value).toString()
+    if (isTokenTransferClause(clause)) {
+        const decoded = decodeTokenTransferClause(clause)
+        return decoded?.amount
+    }
+
+    return undefined
+}
+
 /**
  * Decodes a clause as a token transfer clause.
  *

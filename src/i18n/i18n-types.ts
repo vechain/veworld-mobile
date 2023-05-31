@@ -1519,6 +1519,18 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_reverted: string
 	/**
+	 * F​a​i​l​e​d
+	 */
+	ACTIVITIES_STATUS_failed: string
+	/**
+	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​p​e​n​d​i​n​g​,​ ​d​e​t​a​i​l​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​f​u​l​l​y​ ​a​c​c​u​r​a​t​e
+	 */
+	ACTIVITIES_PENDING_DESCRIPTION: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​i​n​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	ACTIVITIES_FAILED_DESCRIPTION: string
+	/**
 	 * T​o​k​e​n​ ​t​r​a​n​s​f​e​r
 	 */
 	CONNECTED_APP_token_transfer: string
@@ -3070,6 +3082,18 @@ Please, try again later.
 	 * Reverted
 	 */
 	ACTIVITIES_STATUS_reverted: () => LocalizedString
+	/**
+	 * Failed
+	 */
+	ACTIVITIES_STATUS_failed: () => LocalizedString
+	/**
+	 * This transaction is pending, details might not be fully accurate
+	 */
+	ACTIVITIES_PENDING_DESCRIPTION: () => LocalizedString
+	/**
+	 * There was an error in executing the transaction
+	 */
+	ACTIVITIES_FAILED_DESCRIPTION: () => LocalizedString
 	/**
 	 * Token transfer
 	 */

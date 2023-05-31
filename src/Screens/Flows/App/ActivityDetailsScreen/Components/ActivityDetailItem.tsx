@@ -13,6 +13,8 @@ export const ActivityDetailItem: React.FC<Props> = memo(
     ({ activityDetail, border = true }) => {
         const theme = useTheme()
 
+        if (!activityDetail.value) return <></>
+
         return (
             <BaseView
                 key={activityDetail.id}
