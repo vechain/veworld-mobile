@@ -52,6 +52,7 @@ export const isTransactionActivity = (activity: Activity) => {
         type === ActivityType.CONNECTED_APP_TRANSACTION ||
         type === ActivityType.FUNGIBLE_TOKEN ||
         type === ActivityType.VET_TRANSFER ||
-        type === ActivityType.DELEGATED_TRANSACTION
+        type === ActivityType.DELEGATED_TRANSACTION ||
+        activity.isTransaction
     )
 }

@@ -145,7 +145,6 @@ const BlockListener: React.FC = () => {
         accounts: Account[],
     ) => {
         //Update the pending transaction cache, check for reverted
-
         const updatedActivities = await updateActivities(pendingActivities)
         for (const updatedAct of updatedActivities) {
             if (updatedAct.status === ActivityStatus.REVERTED) {
