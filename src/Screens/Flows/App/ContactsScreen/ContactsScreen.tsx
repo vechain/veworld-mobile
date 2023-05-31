@@ -285,7 +285,7 @@ export const ContactsScreen = () => {
                             size={24}
                             bg={theme.colors.secondary}
                             action={onAddContactPress}
-                            testID="add-contact-button"
+                            testID="Add_Contact_Button"
                         />
                     )}
                 </BaseView>

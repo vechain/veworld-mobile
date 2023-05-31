@@ -67,7 +67,7 @@ export const ContactForm: React.FC<Props> = memo(
                 value: valueName,
                 onTouchStart: () => setNameTouched(true),
                 editable: !nameFieldDisabled,
-                testID: "contact-name-input",
+                testID: "Contact-Name-Input",
             }
             if (inBottomSheet)
                 return <BaseBottomSheetTextInput {...commonProps} />
@@ -96,7 +96,7 @@ export const ContactForm: React.FC<Props> = memo(
                 onTouchStart: () => setAddressTouched(true),
                 rightIcon: !addressFieldDisabled ? "flip-horizontal" : "",
                 onIconPress: onOpenCamera,
-                testID: "contact-address-input",
+                testID: "Contact-Address-Input",
                 editable: !addressFieldDisabled,
             }
 

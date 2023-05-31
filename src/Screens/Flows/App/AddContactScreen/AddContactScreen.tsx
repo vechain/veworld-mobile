@@ -104,7 +104,7 @@ export const AddContactScreen = () => {
                         disabled={!isFormValid}
                         bgColor={theme.colors.primary}
                         style={baseStyles.primaryButton}
-                        testID="add-contact-button"
+                        testID="Add_Contact_Button"
                     />
                 </BaseView>
             </BaseSafeArea>
