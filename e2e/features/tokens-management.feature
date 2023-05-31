@@ -46,7 +46,7 @@ Feature: The user can manage tokens
       | address                                    | token     |
       | 0x34149f8da92222af599ba936d9089f5ce460b522 | CarpToken |
 
-  Scenario: User add multiple custom tokens and delete one of them
+  Scenario: User add multiple custom tokens
     When The user add multiple custom tokens with address "<address1>" and "<address2>"
     Then The user should see "<token1>" and "<token2>" balances in home screen
 
