@@ -16,7 +16,7 @@ describe("ToastContent", () => {
     it("should render correctly - no onPress", async () => {
         render(
             <ToastContent
-                icon={"edit"}
+                icon={"close"}
                 styles={successStyles}
                 testID={testID}
             />,
@@ -30,7 +30,7 @@ describe("ToastContent", () => {
     it("should render correctly - onPress", async () => {
         render(
             <ToastContent
-                icon={"edit"}
+                icon={"close"}
                 styles={successStyles}
                 onPress={onPress}
                 testID={testID}
