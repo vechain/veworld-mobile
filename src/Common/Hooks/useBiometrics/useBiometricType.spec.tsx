@@ -10,70 +10,110 @@ jest.mock("./useBiometrics", () => ({
 }))
 
 describe("useBiometricType", () => {
-    it("should returns Biometrics", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useBiometricType(),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-        await waitForNextUpdate({ timeout: 2000 })
-        await waitFor(() => {
-            return expect(result.current).toBeTruthy()
+    describe("iOS", () => {
+        it("should returns Biometrics", async () => {
+            const { result, waitForNextUpdate } = renderHook(
+                () => useBiometricType(),
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+            await waitForNextUpdate({ timeout: 2000 })
+            await waitFor(() => {
+                return expect(result.current).toBeTruthy()
+            })
+            expect(result.current.currentSecurityLevel).toEqual("Biometrics")
         })
-        expect(result.current.currentSecurityLevel).toEqual("Biometrics")
+        it("should returns Face ID", async () => {
+            ;(useBiometrics as jest.Mock).mockReturnValueOnce({
+                currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+                authTypeAvailable: AuthenticationType.FACIAL_RECOGNITION,
+            })
+
+            const { result, waitForNextUpdate } = renderHook(
+                () => useBiometricType(),
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+            await waitForNextUpdate({ timeout: 2000 })
+            await waitFor(() => {
+                return expect(result.current).toBeTruthy()
+            })
+            expect(result.current.currentSecurityLevel).toEqual("Face ID")
+        })
+        it("should returns Touch ID", async () => {
+            ;(useBiometrics as jest.Mock).mockReturnValueOnce({
+                currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+                authTypeAvailable: AuthenticationType.FINGERPRINT,
+            })
+            const { result, waitForNextUpdate } = renderHook(
+                () => useBiometricType(),
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+            await waitForNextUpdate({ timeout: 2000 })
+            await waitFor(() => {
+                return expect(result.current).toBeTruthy()
+            })
+            expect(result.current.currentSecurityLevel).toEqual("Touch ID")
+        })
     })
-    it("should returns Face ID", async () => {
-        ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-            authTypeAvailable: AuthenticationType.FACIAL_RECOGNITION,
+    describe("Android", () => {
+        beforeEach(() => {
+            setPlatform("android")
         })
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useBiometricType(),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-        await waitForNextUpdate({ timeout: 2000 })
-        await waitFor(() => {
-            return expect(result.current).toBeTruthy()
+        it("should returns FingerPrint", async () => {
+            ;(useBiometrics as jest.Mock).mockReturnValueOnce({
+                currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+                authTypeAvailable: AuthenticationType.FINGERPRINT,
+            })
+            const { result, waitForNextUpdate } = renderHook(
+                () => useBiometricType(),
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+            await waitForNextUpdate({ timeout: 2000 })
+            await waitFor(() => {
+                return expect(result.current).toBeTruthy()
+            })
+            expect(result.current.currentSecurityLevel).toEqual("Fingerprint")
         })
-        expect(result.current.currentSecurityLevel).toEqual("Face ID")
-    })
-    it("should returns Touch ID", async () => {
-        ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-            authTypeAvailable: AuthenticationType.FINGERPRINT,
+        it("should returns Face Recognition", async () => {
+            ;(useBiometrics as jest.Mock).mockReturnValueOnce({
+                currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+                authTypeAvailable: AuthenticationType.FACIAL_RECOGNITION,
+            })
+            const { result, waitForNextUpdate } = renderHook(
+                () => useBiometricType(),
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+            await waitForNextUpdate({ timeout: 2000 })
+            await waitFor(() => {
+                return expect(result.current).toBeTruthy()
+            })
+            expect(result.current.currentSecurityLevel).toEqual("Face ID")
         })
-        const { result, waitForNextUpdate } = renderHook(
-            () => useBiometricType(),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-        await waitForNextUpdate({ timeout: 2000 })
-        await waitFor(() => {
-            return expect(result.current).toBeTruthy()
+        it("should returns Biometrics", async () => {
+            ;(useBiometrics as jest.Mock).mockReturnValueOnce({
+                currentSecurityLevel: SecurityLevelType.SECRET,
+            })
+            const { result, waitForNextUpdate } = renderHook(
+                () => useBiometricType(),
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+            await waitForNextUpdate({ timeout: 2000 })
+            await waitFor(() => {
+                return expect(result.current).toBeTruthy()
+            })
+            expect(result.current.currentSecurityLevel).toEqual("Biometrics")
         })
-        expect(result.current.currentSecurityLevel).toEqual("Touch ID")
-    })
-    it("should returns FingerPrint when android", async () => {
-        setPlatform("android")
-        ;(useBiometrics as jest.Mock).mockReturnValueOnce({
-            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-            authTypeAvailable: AuthenticationType.FINGERPRINT,
-        })
-        const { result, waitForNextUpdate } = renderHook(
-            () => useBiometricType(),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-        await waitForNextUpdate({ timeout: 2000 })
-        await waitFor(() => {
-            return expect(result.current).toBeTruthy()
-        })
-        expect(result.current.currentSecurityLevel).toEqual("Fingerprint")
     })
 })
