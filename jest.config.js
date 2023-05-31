@@ -2,7 +2,7 @@ const { defaults: tsjPreset } = require("ts-jest/presets")
 
 module.exports = {
     ...tsjPreset,
-    preset: "react-native",
+    preset: "jest-expo",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
     transform: {
@@ -67,7 +67,7 @@ module.exports = {
             lines: 94.4,
         },
     },
-    maxWorkers: 4,
+    maxWorkers: 2,
     workerIdleMemoryLimit: "1GB",
     reporters: ["default", "jest-junit"],
 }

@@ -4,7 +4,6 @@ import "whatwg-fetch"
 
 import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
-
 const componentMock = ({ children }: { children: ReactNode }) => children
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
 jest.mock("react-native-quick-crypto", () => ({
