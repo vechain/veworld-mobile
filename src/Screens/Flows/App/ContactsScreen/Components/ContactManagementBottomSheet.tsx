@@ -68,7 +68,6 @@ export const ContactManagementBottomSheet = React.forwardRef<
 
         return (
             <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-                {/* <DismissKeyboardView> */}
                 <BaseView
                     w={100}
                     h={100}
@@ -114,7 +113,6 @@ export const ContactManagementBottomSheet = React.forwardRef<
                         />
                     </BaseView>
                 </BaseView>
-                {/* </DismissKeyboardView> */}
             </BaseBottomSheet>
         )
     },

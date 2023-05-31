@@ -21,9 +21,7 @@ const BottomSheetTextInputComponent = forwardRef<
             runOnUI(() => {
                 shouldHandleKeyboardEvents.value = true
             })()
-            if (onFocus) {
-                onFocus(e)
-            }
+            onFocus?.(e)
         },
         [onFocus, shouldHandleKeyboardEvents],
     )
@@ -32,9 +30,7 @@ const BottomSheetTextInputComponent = forwardRef<
             runOnUI(() => {
                 shouldHandleKeyboardEvents.value = false
             })()
-            if (onBlur) {
-                onBlur(e)
-            }
+            onBlur?.(e)
         },
         [onBlur, shouldHandleKeyboardEvents],
     )
