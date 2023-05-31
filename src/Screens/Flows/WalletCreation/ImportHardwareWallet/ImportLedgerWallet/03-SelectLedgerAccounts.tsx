@@ -9,7 +9,6 @@ import {
     BaseTouchableBox,
     BaseView,
     showErrorToast,
-    showWarningToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, useThemedStyles } from "~Common"
@@ -25,7 +24,6 @@ import {
     Routes,
 } from "~Navigation"
 
-import { LedgerStatus, useLedger } from "~Common/Hooks"
 import {
     selectHasOnboarded,
     selectSelectedNetwork,
@@ -43,7 +41,7 @@ type Props = {} & NativeStackScreenProps<
 >
 
 export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
-    const { device } = route.params
+    const { device, rootAccount } = route.params
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -51,11 +49,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
-    const onDisconnect = useCallback(() => {
-        showWarningToast("Device disconnected")
-    }, [])
-
-    const { status, rootAccount, connect } = useLedger(device.id, onDisconnect)
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<
@@ -204,14 +197,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                     </BaseText>
 
                     <BaseSpacer height={20} />
-                    {status !== LedgerStatus.READY && (
-                        <BaseView flexDirection="row" w={100}>
-                            <BaseText typographyFont="body" my={10}>
-                                {status}
-                            </BaseText>
-                            <BaseButton title="Refresh" action={connect} />
-                        </BaseView>
-                    )}
                     <BaseView style={themedStyles.container} pb={20}>
                         {!!ledgerAccounts.length && (
                             <FlashList

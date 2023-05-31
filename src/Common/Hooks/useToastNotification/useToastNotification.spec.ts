@@ -25,7 +25,7 @@ describe("useToastNotification", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         const { showFoundTokenTransfer } = result.current
         showFoundTokenTransfer(token, amount)
         expect(showSuccessToast).toHaveBeenCalledWith(
@@ -41,7 +41,7 @@ describe("useToastNotification", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 2000 })
         const { showTransactionReverted } = result.current
         showTransactionReverted(txId)
         expect(showErrorToast).toHaveBeenCalledWith(

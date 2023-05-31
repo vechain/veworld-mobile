@@ -90,3 +90,31 @@ export const insertTextById = async (text: string, id: string) => {
 export const swipeLeftByText = async (text: string) => {
     await element(by.text(text)).swipe("left", "slow", 0.4)
 }
+
+export const isPresentText = async (
+    text: string,
+    options?: { timeout?: number },
+) => {
+    try {
+        await waitFor(element(by.text(text)))
+            .toExist()
+            .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+        return true
+    } catch (error) {
+        return false
+    }
+}
+
+export const isPresentId = async (
+    id: string,
+    options?: { timeout?: number },
+) => {
+    try {
+        await waitFor(element(by.id(id)))
+            .toExist()
+            .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+        return true
+    } catch (error) {
+        return false
+    }
+}

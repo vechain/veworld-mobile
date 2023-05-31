@@ -435,6 +435,24 @@ const en: BaseTranslation = {
     // Wallet 
     WALLET_LEDGER_SELECT_DEVICE_TITLE: "Import ledger",
     WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked and the bluetooth enabled",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: "Enable additional settings",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB: "in order to give you the best user experience, you need to enable some additional settings in your ledger (Contract data and Multi-clause). Please follow the instructions below to proceed",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1: "Open the VET app on your Ledger",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1_DESC: "Unlock your Ledger and open the VET app. If you don't have it installed, please install it from the Ledger Live app.",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_2: "Navigate to Settings",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_2_DESC: "Use the buttons on your Ledger to navigate to Settings and press both buttons to enter the menu.",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_3: "Enable Contract data",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_3_DESC: "Navigate to Contract data and press both buttons to enable it.",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4: "Enable Multi-clause",
+    WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: "Navigate to Multi-clause and press both buttons to enable it.",
+
+    WALLET_LEDGER_ERROR_UNLOCK_LEDGER: "Unlock ledger",
+    WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: "Please, turn on and unlock your ledger device to continue",
+    WALLET_LEDGER_ERROR_OPEN_APP: "Open VET app",
+    WALLET_LEDGER_ERROR_OPEN_APP_DESC: "Please, open the VET app to continue",
+    WALLET_LEDGER_ERROR_UNKNOWN: "Unknown error",
+    WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
+
 
     // Transaction Labels
 
@@ -470,12 +488,17 @@ const en: BaseTranslation = {
     CONNECTED_APP_token_transfer: "Token transfer",
     CONNECTED_APP_contract_call: "Contract call",
     CONNECTED_APP_deploy_contract: "Contract deployment",
+    CONNECTED_APP_approve_nft: "Approve NFT",
+    CONNECTED_APP_swap_vet_for_tokens: "Swap VET for tokens",
+    CONNECTED_APP_swap_tokens_for_vet: "Swap tokens for VET",
+    CONNECTED_APP_swap_tokens_for_tokens: "Swap tokens for tokens",
     OUTCOMES: "Outcomes",
     TYPE: "Type",
     TOKEN_SYMBOL: "Token symbol",
     CONTRACT_DATA: "Contract data",
     CONTRACT_ABI: "Contract ABI",
     COPY_ABI: "Click to copy ABI",
+    TOKEN_ID: "Token ID",
 
 
     // Transfers

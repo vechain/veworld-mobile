@@ -1,19 +1,89 @@
-import { LedgerAccount, LedgerDevice, Network } from "~Model"
+import { LedgerDevice, Network } from "~Model"
 import { Mutex } from "async-mutex"
 import { Certificate, Transaction, HDNode } from "thor-devkit"
-import AddressUtils from "../AddressUtils"
-import BalanceUtils from "../BalanceUtils"
-import VETLedgerApp, {
+import { AddressUtils, BalanceUtils } from "~Utils"
+import {
     VETLedgerAccount,
+    VETLedgerApp,
     VET_DERIVATION_PATH,
-} from "~Common/Ledger/VetLedgerApp"
-import { debug, error, warn } from "~Common"
+    LEDGER_ERROR_CODES,
+} from "~Common/Ledger"
+import { debug, error, warn } from "~Common/Logger"
 import { Buffer } from "buffer"
+
+import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 
 const ledgerMutex = new Mutex()
 
 /**
- * Request a cwertificate signature to the ledger device
+ * Codes to detect if the leder has the clause and contract enabled
+ */
+export enum LedgerConfig {
+    CLAUSE_AND_CONTRACT_ENABLED = "03010007",
+    CLAUSE_ONLY_ENABLED = "02010007",
+    CONTRACT_ONLY_ENABLED = "01010007",
+    CLAUSE_AND_CONTRACT_DISABLED = "00010007",
+}
+
+/**
+ * Parses ledger errors based on common issues
+ */
+export const ledgerErrorHandler = (err: Error) => {
+    //0x6d02 - user in homescreen?
+    //0x6a15 - user in another app
+    if (err.message.includes("0x6d02") || err.message.includes("0x6a15")) {
+        return LEDGER_ERROR_CODES.NO_VET_APP
+    }
+    // 0x6b0c - device is locked or off
+    // 0x5515 - LockedDeviceError
+    if (
+        err.name.includes("BleError") ||
+        err.message.includes("0x6b0c") ||
+        err.message.includes("0x5515") ||
+        err.message.includes("busy")
+    ) {
+        return LEDGER_ERROR_CODES.OFF_OR_LOCKED
+    }
+    if (err.name.includes("Disconnected")) {
+        // error("[Ledger] - Disconnected Error")
+        return LEDGER_ERROR_CODES.DISCONNECTED
+    }
+
+    error("[Ledger] - Unknown Error", err)
+    return LEDGER_ERROR_CODES.UNKNOWN
+}
+
+export const checkLedgerConnection = async ({
+    transport,
+    successCallback,
+    errorCallback,
+}: {
+    transport: BleTransport
+    successCallback?: (app: VETLedgerApp, rootAccount: VETLedgerAccount) => void
+    errorCallback?: (errorType: LEDGER_ERROR_CODES) => void
+}) => {
+    try {
+        const app = new VETLedgerApp(transport)
+
+        // In order to detecting if the app is opened
+        await app.getAppConfiguration()
+        // const _appConfigHex = appConfig.toString("hex")
+
+        const rootAccount = await app.getAddress(
+            VET_DERIVATION_PATH,
+            false,
+            true,
+        )
+        successCallback?.(app, rootAccount)
+    } catch (e) {
+        error(e)
+        error(ledgerErrorHandler(e as Error))
+        errorCallback?.(ledgerErrorHandler(e as Error))
+    }
+}
+
+/**
+ * Request a certificate signature to the ledger device
  * @category Ledger
  * @param index  The index of the account to sign the certificate with
  * @param cert  The certificate to sign
@@ -90,6 +160,11 @@ const signTransaction = async (
     })
 }
 
+export type LedgerAccount = {
+    address: string
+    balance?: Connex.Thor.Account
+}
+
 /**
  * Get a number of accounts and their balances
  *
@@ -150,7 +225,7 @@ const validateRootAddress = async (
     vetLedger: VETLedgerApp,
 ) => {
     debug("Validating root address")
-    const rootAccount = await vetLedger.getAccount(
+    const rootAccount = await vetLedger.getAddress(
         VET_DERIVATION_PATH,
         false,
         false,
@@ -164,6 +239,8 @@ const validateRootAddress = async (
 }
 
 export default {
+    ledgerErrorHandler,
+    checkLedgerConnection,
     getAccountsWithBalances,
     signCertificate,
     signTransaction,

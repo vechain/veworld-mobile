@@ -4,6 +4,7 @@ import {
     TouchableOpacityProps,
     FlexAlignType,
     StyleSheet,
+    ActivityIndicator,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
 import { typography, TFonts } from "~Common/Theme"
@@ -145,21 +146,26 @@ export const BaseButton = ({
             ]}
             {...otherProps}>
             {leftIcon}
-            <BaseText
-                color={
-                    textColor ||
-                    (isSolidButton
-                        ? theme.colors.background
-                        : theme.colors.text)
-                }
-                typographyFont={computedTypographyFont}
-                fontFamily={fontFamily}
-                fontWeight={fontWeight}
-                fontSize={fontSize}
-                style={themedStyles.text}>
-                {!isLoading ? otherProps.title : "..."}
-                {children}
-            </BaseText>
+            {!isLoading ? (
+                <BaseText
+                    color={
+                        textColor ||
+                        (isSolidButton
+                            ? theme.colors.background
+                            : theme.colors.text)
+                    }
+                    typographyFont={computedTypographyFont}
+                    fontFamily={fontFamily}
+                    fontWeight={fontWeight}
+                    fontSize={fontSize}
+                    style={themedStyles.text}>
+                    {otherProps.title}
+                </BaseText>
+            ) : (
+                <ActivityIndicator style={themedStyles.activityIndicator} />
+            )}
+            {children}
+
             {rightIcon}
         </TouchableOpacity>
     )
@@ -170,5 +176,8 @@ const baseStyles = (isLink: boolean) => (theme: ColorThemeType) =>
         text: {
             textDecorationLine: isLink ? "underline" : "none",
             textDecorationColor: theme.colors.text,
+        },
+        activityIndicator: {
+            transform: [{ scale: 1.2 }],
         },
     })

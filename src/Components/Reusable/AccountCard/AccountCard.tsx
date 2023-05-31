@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { ColorThemeType, VET, useThemedStyles } from "~Common"
 import { FormattingUtils } from "~Utils"
 import {
     AccountIcon,
@@ -10,6 +10,7 @@ import {
     BaseView,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
+import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     account: AccountWithDevice
@@ -20,6 +21,9 @@ type Props = {
 export const AccountCard: React.FC<Props> = memo(
     ({ account, onPress, selected, containerStyle }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
+        const vetBalance = useAppSelector(state =>
+            selectVetBalanceByAccount(state, account.address),
+        )
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
@@ -48,9 +52,9 @@ export const AccountCard: React.FC<Props> = memo(
                             )}
                         </BaseText>
                         <BaseSpacer height={4} />
-                        {/** TODO: change with a real budget */}
-                        {/* eslint-disable-next-line i18next/no-literal-string  */}
-                        <BaseText fontSize={10}>1.2235 VET</BaseText>
+                        <BaseText fontSize={10}>
+                            {vetBalance} {VET.symbol}
+                        </BaseText>
                     </BaseView>
                 </BaseTouchableBox>
             </BaseView>
