@@ -8,7 +8,7 @@ import {
     ITestCaseHookParameter,
 } from "@cucumber/cucumber"
 import detox from "detox/internals"
-import { AdvancedSettingsFlow, HomeFlows } from "../helpers"
+import { AdvancedSettingsFlow, HomeFlows, isPresentId } from "../helpers"
 
 BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")
@@ -40,8 +40,12 @@ After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
         status: result ? "passed" : "failed",
     })
     // reset app after each test
-    await HomeFlows.goToAdvancedSettings()
-    await AdvancedSettingsFlow.resetApp()
+    if (await isPresentId("settings-tab")) {
+        await HomeFlows.goToAdvancedSettings()
+        await AdvancedSettingsFlow.resetApp()
+    } else {
+        console.log("Cannot reset app for test: " + pickle.name)
+    }
 })
 
 AfterAll({ timeout: 600 * 1000 }, async () => {
