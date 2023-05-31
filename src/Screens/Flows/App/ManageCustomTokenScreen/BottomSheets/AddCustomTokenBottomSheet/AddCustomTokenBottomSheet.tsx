@@ -166,6 +166,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                         setValue={handleValueChange}
                         placeholder={LL.MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS()}
                         errorMessage={errorMessage}
+                        testID="AddCustomTokenBottomSheet-TextInput-Address"
                     />
                     {!value && (
                         <BaseIcon
