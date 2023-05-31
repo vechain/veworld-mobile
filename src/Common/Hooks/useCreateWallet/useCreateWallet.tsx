@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { CryptoUtils, PasswordUtils } from "~Utils"
+import { CryptoUtils } from "~Utils"
 import { NewLedgerDevice, WALLET_STATUS } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -53,10 +53,8 @@ export const useCreateWallet = () => {
                 const { encryptedWallet } = await CryptoUtils.encryptWallet({
                     wallet,
                     rootAddress: device.rootAddress,
-                    accessControl: biometrics?.accessControl || false,
-                    hashEncryptionKey: userPassword
-                        ? PasswordUtils.hash(userPassword)
-                        : undefined,
+                    accessControl: biometrics?.accessControl ?? false,
+                    hashEncryptionKey: userPassword,
                 })
 
                 const newAccount = dispatch(
