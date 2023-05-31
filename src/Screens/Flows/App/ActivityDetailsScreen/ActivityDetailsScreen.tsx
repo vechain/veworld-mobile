@@ -85,7 +85,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.VET_TRANSFER: {
                 return (
                     <FungibleTokenTransferDetails
-                        activity={activityFromStore as FungibleTokenActivity}
+                        activity={
+                            (activityFromStore ??
+                                activity) as FungibleTokenActivity
+                        }
                         token={token}
                     />
                 )
@@ -93,21 +96,26 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.SIGN_CERT: {
                 return (
                     <SignCertificateDetails
-                        activity={activityFromStore as SignCertActivity}
+                        activity={
+                            (activityFromStore ?? activity) as SignCertActivity
+                        }
                     />
                 )
             }
             case ActivityType.CONNECTED_APP_TRANSACTION: {
                 return (
                     <DappTransactionDetails
-                        activity={activityFromStore as ConnectedAppTxActivity}
+                        activity={
+                            (activityFromStore ??
+                                activity) as ConnectedAppTxActivity
+                        }
                     />
                 )
             }
             default:
                 return <></>
         }
-    }, [activity.type, activityFromStore, token])
+    }, [activity, activityFromStore, token])
 
     const onAddContactPress = useCallback(
         (address: string) => {
