@@ -2,11 +2,9 @@ import { Core } from "@walletconnect/core"
 import { ICore } from "@walletconnect/types"
 import { Web3Wallet, IWeb3Wallet } from "@walletconnect/web3wallet"
 
-const ENV_PROJECT_ID = "1027c14ea7cddc2ecd2941924e62c9a1"
-
 let web3wallet: IWeb3Wallet
 export const core: ICore = new Core({
-    projectId: ENV_PROJECT_ID,
+    projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
 })
 
 export async function getWeb3Wallet() {
