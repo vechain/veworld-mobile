@@ -2,8 +2,8 @@
 import React, { useCallback } from "react"
 import { useTheme } from "~Common"
 import { BaseButton } from "./BaseButton"
-import DropShadow from "react-native-drop-shadow"
 import { TFonts } from "~Common/Theme"
+import { BaseView } from "./BaseView"
 
 export type Button = {
     id: string
@@ -41,7 +41,7 @@ export const BaseButtonGroup = ({
     )
 
     return (
-        <DropShadow style={theme.shadows.card} testID={buttonGroupTestID}>
+        <BaseView testID={buttonGroupTestID}>
             {buttons.map((button, index) => {
                 const { id, label, disabled } = button
                 const selected = selectedButtonIds.includes(id)
@@ -76,6 +76,6 @@ export const BaseButtonGroup = ({
                     />
                 )
             })}
-        </DropShadow>
+        </BaseView>
     )
 }

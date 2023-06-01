@@ -7,7 +7,6 @@ import {
 import Animated from "react-native-reanimated"
 import { BaseIcon } from "~Components"
 import { ColorThemeType, useThemedStyles } from "~Common"
-import DropShadow from "react-native-drop-shadow"
 import { TokenCard } from "./TokenCard"
 import { useTokenAnimations } from "./useTokenAnimations"
 import { FungibleTokenWithBalance } from "~Model"
@@ -26,26 +25,24 @@ export const AnimatedTokenCard = memo(
             <ShadowDecorator>
                 <View style={styles.outerContainer}>
                     <Animated.View>
-                        <DropShadow style={styles.cardShadow}>
-                            <Pressable
-                                onPressIn={isEdit ? drag : undefined}
-                                disabled={isActive}
-                                style={styles.pressable}>
-                                <View style={styles.animatedOuterContainer}>
-                                    <Animated.View
-                                        style={[
-                                            animatedOpacity,
-                                            styles.animatedInnerContainer,
-                                        ]}>
-                                        <BaseIcon name={"drag"} size={28} />
-                                    </Animated.View>
-                                    <TokenCard
-                                        tokenWithBalance={item}
-                                        isEdit={isEdit}
-                                    />
-                                </View>
-                            </Pressable>
-                        </DropShadow>
+                        <Pressable
+                            onPressIn={isEdit ? drag : undefined}
+                            disabled={isActive}
+                            style={styles.pressable}>
+                            <View style={styles.animatedOuterContainer}>
+                                <Animated.View
+                                    style={[
+                                        animatedOpacity,
+                                        styles.animatedInnerContainer,
+                                    ]}>
+                                    <BaseIcon name={"drag"} size={28} />
+                                </Animated.View>
+                                <TokenCard
+                                    tokenWithBalance={item}
+                                    isEdit={isEdit}
+                                />
+                            </View>
+                        </Pressable>
                     </Animated.View>
                 </View>
             </ShadowDecorator>
@@ -80,5 +77,4 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         deleteIconColor: {
             backgroundColor: theme.colors.secondary,
         },
-        cardShadow: theme.shadows.card,
     })

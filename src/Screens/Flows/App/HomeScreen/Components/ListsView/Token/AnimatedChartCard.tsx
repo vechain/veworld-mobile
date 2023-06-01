@@ -1,7 +1,6 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useTheme } from "~Common"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
@@ -10,6 +9,7 @@ import { TokenWithCompleteInfo, VeChainToken } from "~Model"
 import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { BaseView } from "~Components"
 
 const HEIGHT = 100
 
@@ -21,9 +21,7 @@ export type NativeTokenProps = {
 export const AnimatedChartCard = memo(
     ({ tokenWithInfo, isEdit }: NativeTokenProps) => {
         const nav = useNavigation()
-
-        const { styles, theme } = useThemedStyles(baseStyles)
-
+        const theme = useTheme()
         usePollingChartData(tokenWithInfo.symbol as VeChainToken)
 
         const chartData = useAppSelector(state =>
@@ -63,7 +61,7 @@ export const AnimatedChartCard = memo(
         }, [isEdit, nav, tokenWithInfo])
 
         return (
-            <DropShadow style={styles.cardShadow}>
+            <BaseView>
                 <TouchableOpacity
                     activeOpacity={isEdit ? 1 : 0.6}
                     onPress={onVechainTokenPress}>
@@ -89,20 +87,18 @@ export const AnimatedChartCard = memo(
                         </Animated.View>
                     </Animated.View>
                 </TouchableOpacity>
-            </DropShadow>
+            </BaseView>
         )
     },
 )
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        nativeTokenContainer: {
-            justifyContent: "flex-end",
-            alignItems: "center",
-            marginBottom: 10,
-            borderRadius: 16,
-            overflow: "hidden",
-            marginHorizontal: 20,
-        },
-        cardShadow: theme.shadows.card,
-    })
+const styles = StyleSheet.create({
+    nativeTokenContainer: {
+        justifyContent: "flex-end",
+        alignItems: "center",
+        marginBottom: 10,
+        borderRadius: 16,
+        overflow: "hidden",
+        marginHorizontal: 20,
+    },
+})
