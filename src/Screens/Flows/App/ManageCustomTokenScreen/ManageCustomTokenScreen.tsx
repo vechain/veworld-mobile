@@ -115,7 +115,11 @@ export const ManageCustomTokenScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
-            <BaseView flexDirection="row" mx={20}>
+            <BaseView
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                mx={20}>
                 <BaseText typographyFont="subTitleBold">
                     {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
                 </BaseText>
