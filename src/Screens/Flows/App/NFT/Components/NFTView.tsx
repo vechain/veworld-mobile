@@ -11,9 +11,15 @@ type Props = {
     item: NonFungibleTokenCollection | NonFungibleToken
     index: number
     isCollection?: boolean
+    collection?: NonFungibleTokenCollection
 }
 
-export const NFTView = ({ item, index, isCollection = false }: Props) => {
+export const NFTView = ({
+    item,
+    index,
+    isCollection = false,
+    collection,
+}: Props) => {
     const nav = useNavigation()
 
     const collectionItem = isCollection
@@ -23,8 +29,11 @@ export const NFTView = ({ item, index, isCollection = false }: Props) => {
 
     const onNftPress = useCallback(
         (nft: NonFungibleToken) =>
-            nav.navigate(Routes.NFT_DETAILS, { collectionData: {}, nft }),
-        [nav],
+            nav.navigate(Routes.NFT_DETAILS, {
+                collection,
+                nft,
+            }),
+        [collection, nav],
     )
 
     const onCollectionPress = useCallback(

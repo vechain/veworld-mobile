@@ -23,7 +23,7 @@ export interface NonFungibleTokenCollection {
 
 export interface NonFungibleToken extends TokenMetadata {
     owner: string
-    tokenId: number
+    tokenId: string
     tokenURI?: string
     belongsToCollectionAddress: string
 }
@@ -33,7 +33,7 @@ export interface TokenMetadata {
     description?: string
     image: string
     edition?: number
-    tokenId?: number
+    tokenId?: string
     rank?: number
     rarity?: number
     attributes?: { trait_type: string; value: string }[]

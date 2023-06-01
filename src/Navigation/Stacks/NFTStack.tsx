@@ -2,11 +2,14 @@ import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { NFTCollectionDetailScreen, NFTDetailScreen, NFTScreen } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { NonFungibleToken } from "~Model"
+import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 
 export type RootStackParamListNFT = {
     [Routes.NFTS]: undefined
-    [Routes.NFT_DETAILS]: { collectionData: any; nft: NonFungibleToken }
+    [Routes.NFT_DETAILS]: {
+        collection?: NonFungibleTokenCollection
+        nft: NonFungibleToken
+    }
     [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string }
 }
 

@@ -131,6 +131,7 @@ const en: BaseTranslation = {
     BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
+    BD_COLLECTION: "Collection",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -330,6 +331,9 @@ const en: BaseTranslation = {
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
     // Accounts
+    CONTRACT_ADDRESS: "Contract address",
+    NFT_ATTRIBUTES: "Attributes",
+
 
     // Onboarding
 

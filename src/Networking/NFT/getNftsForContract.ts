@@ -3,7 +3,7 @@ import { NFTS_OWNED_PER_CONTRACT } from "~Common"
 
 export type NftForContractResponse = {
     id?: "string"
-    tokenId: 0
+    tokenId: "string"
     contractAddress: "string"
     owner: "string"
     txId: "string"

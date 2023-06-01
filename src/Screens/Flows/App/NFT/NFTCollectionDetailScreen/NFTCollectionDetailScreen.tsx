@@ -91,9 +91,9 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
 
     const renderItem = useCallback(
         ({ item, index }: { item: NonFungibleToken; index: number }) => (
-            <NFTView item={item} index={index} />
+            <NFTView item={item} index={index} collection={collection} />
         ),
-        [],
+        [collection],
     )
 
     if (!collection) return null
