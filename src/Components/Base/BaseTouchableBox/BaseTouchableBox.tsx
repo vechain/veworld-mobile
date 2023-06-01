@@ -6,7 +6,6 @@ import {
     ViewStyle,
 } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import DropShadow from "react-native-drop-shadow"
 import {
     AlignItems,
     ColorThemeType,
@@ -15,6 +14,7 @@ import {
     useThemedStyles,
 } from "~Common"
 import { GenericTouchableProps } from "./Types"
+import { BaseView } from "../BaseView"
 
 type Props = {
     children: React.ReactNode
@@ -48,7 +48,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
     flex,
     ...props
 }) => {
-    const { styles, theme } = useThemedStyles(
+    const { styles } = useThemedStyles(
         baseStyles({
             bg,
             w,
@@ -63,8 +63,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
     )
 
     return (
-        <DropShadow
-            style={[theme.shadows.card, styles.container, containerStyle]}>
+        <BaseView style={[styles.container, containerStyle]}>
             <TouchableOpacity
                 onPress={action}
                 style={[styles.innerContainer, innerContainerStyle]}
@@ -72,7 +71,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
                 {...props}>
                 {children}
             </TouchableOpacity>
-        </DropShadow>
+        </BaseView>
     )
 }
 
@@ -101,7 +100,6 @@ const baseStyles =
     }: BaseStyles) =>
     (theme: ColorThemeType) =>
         StyleSheet.create({
-            shadow: theme.shadows.card,
             container: {
                 flex,
                 width: w || "100%",

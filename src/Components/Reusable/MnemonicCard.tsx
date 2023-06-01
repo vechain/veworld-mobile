@@ -5,7 +5,6 @@ import { BlurView } from "./BlurView"
 import { useDisclosure, useTheme } from "~Common"
 import { PlatformUtils } from "~Utils"
 import { HideView } from "./HideView"
-import DropShadow from "react-native-drop-shadow"
 
 type Props = {
     mnemonicArray: string[]
@@ -21,7 +20,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
         [theme],
     )
     return (
-        <DropShadow style={[theme.shadows.card]}>
+        <BaseView>
             <TouchableWithoutFeedback onPress={toggleShow}>
                 <BaseView
                     flexDirection="row"
@@ -71,7 +70,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                     </BaseView>
                 </BaseView>
             </TouchableWithoutFeedback>
-        </DropShadow>
+        </BaseView>
     )
 }
 
