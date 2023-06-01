@@ -56,6 +56,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         return [...accounts, ...contacts]
     }, [accounts, contacts])
 
+    //We filter the accounts and contacts based on the search text and the selected address
     const filteredContacts = useMemo(() => {
         if (!searchText) return contacts
         return contacts.filter(
@@ -101,34 +102,32 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         setSearchText(lowerCaseText)
     }, [])
 
+    const navigateNext = useCallback(
+        (address: string) => {
+            nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
+                token,
+                amount,
+                address,
+                initialRoute: initialRoute ?? "",
+            })
+        },
+        [nav, token, amount, initialRoute],
+    )
+
     const onSuccessfullScan = useCallback(
         (address: string) => {
-            setSelectedAddress(address)
             const addressExists = accountsAndContacts.some(accountOrContact =>
                 AddressUtils.compareAddresses(
                     accountOrContact.address,
                     address,
                 ),
             )
-            if (addressExists) {
-                nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
-                    token,
-                    amount,
-                    address,
-                    initialRoute: initialRoute ?? "",
-                })
-            } else {
-                openCreateContactSheet()
-            }
+            if (addressExists) return navigateNext(address)
+
+            setSelectedAddress(address)
+            openCreateContactSheet()
         },
-        [
-            accountsAndContacts,
-            amount,
-            initialRoute,
-            nav,
-            openCreateContactSheet,
-            token,
-        ],
+        [accountsAndContacts, openCreateContactSheet, navigateNext],
     )
 
     //Whenever search changes, we check if it's a valid address, eventually opening the create bottomsheet
@@ -153,22 +152,18 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         setErrorMessage("")
     }
 
-    const goToResumeStep = () => {
-        nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
-            token,
-            amount,
-            address: selectedAddress,
-            initialRoute: initialRoute ?? "",
-        })
-    }
-
-    const onNext = () => {
-        if (isAddressInContactsOrAccounts) {
-            goToResumeStep()
+    const onNext = useCallback(() => {
+        if (isAddressInContactsOrAccounts && selectedAddress) {
+            navigateNext(selectedAddress)
         } else {
             openCreateContactSheet()
         }
-    }
+    }, [
+        isAddressInContactsOrAccounts,
+        selectedAddress,
+        navigateNext,
+        openCreateContactSheet,
+    ])
 
     return (
         <BaseSafeArea grow={1} testID="Insert_Address_Send_Screen">
@@ -286,9 +281,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             </ScrollViewWithFooter>
             <CreateContactBottomSheet
                 ref={refCreateContactBottomSheet}
-                handleClose={closeCreateContactSheet}
-                goToResumeStep={goToResumeStep}
                 address={selectedAddress}
+                onClose={closeCreateContactSheet}
+                onSubmit={navigateNext}
             />
         </BaseSafeArea>
     )
