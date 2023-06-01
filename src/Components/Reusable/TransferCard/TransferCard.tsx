@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, SCREEN_WIDTH, useThemedStyles } from "~Common"
 import { FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
@@ -208,7 +207,7 @@ export const TransferCard = memo(
         )
 
         return (
-            <DropShadow style={[theme.shadows.card, styles.container]}>
+            <BaseView style={[styles.container]}>
                 <BaseView bg={theme.colors.card} style={styles.view}>
                     {/* FROM View */}
                     {renderFromAccount()}
@@ -276,7 +275,7 @@ export const TransferCard = memo(
                         </>
                     )}
                 </BaseView>
-            </DropShadow>
+            </BaseView>
         )
     },
 )

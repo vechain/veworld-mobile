@@ -22,7 +22,6 @@ import { NonFungibleToken } from "~Model"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { PlatformUtils } from "~Utils"
-import DropShadow from "react-native-drop-shadow"
 import { isEmpty } from "lodash"
 
 type Props = NativeStackScreenProps<
@@ -127,15 +126,15 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                             index % 2 === 0 ? "flex-start" : "flex-end",
                     },
                 ]}>
-                <DropShadow style={theme.shadows.nftCard}>
+                <BaseView>
                     <BaseImage
                         uri={item.image}
                         style={baseStyles.nftPreviewImage}
                     />
-                </DropShadow>
+                </BaseView>
             </TouchableOpacity>
         ),
-        [onNftPress, theme.shadows.nftCard],
+        [onNftPress],
     )
 
     const calculateBottomPadding = useMemo(

@@ -1,6 +1,5 @@
 import React, { forwardRef, memo } from "react"
-import { StyleSheet, StyleProp, ViewStyle, TextInputProps } from "react-native"
-import DropShadow from "react-native-drop-shadow"
+import { StyleSheet, TextInputProps, StyleProp, ViewStyle } from "react-native"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { COLORS, typography } from "~Common/Theme"
 import { BaseIcon, BaseText } from "~Components"
@@ -48,7 +47,7 @@ const BaseTextInputComponent = forwardRef<TextInput, Props>(
             : COLORS.DARK_PURPLE_DISABLED
 
         return (
-            <DropShadow style={containerStyle}>
+            <BaseView style={containerStyle}>
                 {label && (
                     <BaseText typographyFont="bodyMedium" mb={8}>
                         {label}
@@ -103,7 +102,7 @@ const BaseTextInputComponent = forwardRef<TextInput, Props>(
                         {errorMessage || " "}
                     </BaseText>
                 </BaseView>
-            </DropShadow>
+            </BaseView>
         )
     },
 )
@@ -111,7 +110,6 @@ const BaseTextInputComponent = forwardRef<TextInput, Props>(
 const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            ...theme.shadows.card,
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
