@@ -1,9 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { NonFungibleTokenCollection } from "~Model"
 
-type NftSliceState = NonFungibleTokenCollection[]
+type NftSliceState = {
+    collections: NonFungibleTokenCollection[]
+    blackListCollections: string[]
+    blackListNFTs: string[]
+}
 
-export const initialStateNft: NftSliceState = []
+export const initialStateNft: NftSliceState = {
+    blackListCollections: [],
+    blackListNFTs: [],
+    collections: [],
+}
 
 export const NftSlice = createSlice({
     name: "nft",
@@ -14,7 +22,7 @@ export const NftSlice = createSlice({
             action: PayloadAction<NonFungibleTokenCollection[]>,
         ) => {
             const nftCollection = action.payload
-            state = nftCollection
+            state.collections = nftCollection
             return state
         },
 
@@ -26,7 +34,7 @@ export const NftSlice = createSlice({
                 isHidden: boolean
             }>,
         ) => {
-            return state.forEach(nftCollection => {
+            return state.collections.forEach(nftCollection => {
                 if (
                     nftCollection.address ===
                     action.payload.contractAddress.toLowerCase()

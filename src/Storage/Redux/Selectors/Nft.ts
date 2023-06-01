@@ -4,8 +4,8 @@ import { NonFungibleToken } from "~Model"
 
 const selectNftState = (state: RootState) => state.nft
 
-export const selectNftCollections = createSelector(selectNftState, nfts => {
-    return [...nfts]
+export const selectNftCollections = createSelector(selectNftState, state => {
+    return state.collections
 })
 
 export const selectCollectionWithContractAddres = createSelector(
@@ -40,33 +40,12 @@ export const selectNFTWithAddressAndTokenId = createSelector(
     },
 )
 
-/*
+//   return collections.map(collection => {
+//             return collection.nfts.map(nft => {
+//                 if (!nft.isHidden) {
+//                     return nft
+//                 }
+//             })
+//         })
 
-
-    export const getSuggestedMovie = createSelector(
-    [
-        (state: RootState) => state.moviesSlice.movies,
-        (_, movieTitle) => movieTitle,
-    ],
-    (movies, movieTitle) => {
-        let movie: IMovie | undefined
-        if (movieTitle.length) {
-            movie = movies.find((mv: IMovie) => mv.title.includes(movieTitle))
-        }
-        return movie
-    },
-)
-
-
-
-
-
-  return collections.map(collection => {
-            return collection.nfts.map(nft => {
-                if (!nft.isHidden) {
-                    return nft
-                }
-            })
-        })
-
-*/
+// */
