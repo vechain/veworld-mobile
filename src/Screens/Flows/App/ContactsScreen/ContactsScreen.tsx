@@ -269,7 +269,11 @@ export const ContactsScreen = () => {
 
             <BaseSpacer height={12} />
             <BaseView mx={20}>
-                <BaseView flexDirection="row" w={100}>
+                <BaseView
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    w={100}>
                     <BaseText
                         typographyFont="title"
                         testID="contacts-screen-title">
@@ -277,12 +281,11 @@ export const ContactsScreen = () => {
                     </BaseText>
                     {contacts.length > 0 && (
                         <BaseIcon
-                            style={baseStyles.addContactIcon}
                             name={"plus"}
                             size={24}
                             bg={theme.colors.secondary}
                             action={onAddContactPress}
-                            testID="add-contact-button"
+                            testID="Add_Contact_Button"
                         />
                     )}
                 </BaseView>
@@ -348,10 +351,6 @@ const baseStyles = StyleSheet.create({
     backIcon: {
         marginHorizontal: 8,
         alignSelf: "flex-start",
-    },
-    addContactIcon: {
-        marginHorizontal: 2,
-        alignSelf: "flex-end",
     },
     plusContactButton: {
         justifyContent: "center",

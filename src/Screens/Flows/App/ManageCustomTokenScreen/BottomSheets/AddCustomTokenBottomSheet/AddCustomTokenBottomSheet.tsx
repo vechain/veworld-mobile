@@ -4,12 +4,11 @@ import {
     BaseSpacer,
     BaseText,
     BaseBottomSheet,
-    BaseTextInput,
     BaseView,
-    BaseIcon,
     useThor,
     BaseButton,
     CustomTokenCard,
+    BaseBottomSheetTextInput,
 } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
@@ -25,7 +24,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import { debug, error, info, useKeyboard, useTheme } from "~Common"
+import { debug, error, info } from "~Common"
 import { AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
 import { Routes } from "~Navigation"
@@ -45,14 +44,13 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const thorClient = useThor()
     const [newCustomToken, setNewCustomToken] = useState<FungibleToken>()
     const [value, setValue] = useState("")
-    const theme = useTheme()
     const [errorMessage, setErrorMessage] = useState("")
     const officialTokens = useAppSelector(selectFungibleTokens)
     const customTokens = useAppSelector(selectAccountCustomTokens)
     const account = useAppSelector(selectSelectedAccount)
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-    const { visible } = useKeyboard()
-    const snapPoints = [visible ? "80%" : "35%"]
+    // const snapPoints = [visible ? "80%" : "35%"]
+    const snapPoints = ["35%"]
     const nav = useNavigation()
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
@@ -160,23 +158,16 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                 <CustomTokenCard token={newCustomToken} />
             ) : (
                 <BaseView flexDirection="row" w={100}>
-                    <BaseTextInput
+                    <BaseBottomSheetTextInput
                         containerStyle={styles.inputContainer}
                         value={value}
                         setValue={handleValueChange}
                         placeholder={LL.MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS()}
                         errorMessage={errorMessage}
                         testID="AddCustomTokenBottomSheet-TextInput-Address"
+                        rightIcon={value ? "close" : "flip-horizontal"}
+                        onIconPress={!value ? onOpenCamera : () => setValue("")}
                     />
-                    {!value && (
-                        <BaseIcon
-                            name={"flip-horizontal"}
-                            size={24}
-                            color={theme.colors.primary}
-                            action={onOpenCamera}
-                            style={styles.icon}
-                        />
-                    )}
                 </BaseView>
             )}
             <BaseSpacer height={24} />
