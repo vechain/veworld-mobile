@@ -45,6 +45,22 @@ export const clickById = async (
 export const goBack = async () =>
     await clickById("BackButtonHeader-BaseIcon-backButton")
 
+export const idShouldExist = async (
+    id: string,
+    options?: { timeout?: number },
+) =>
+    await waitFor(element(by.id(id)))
+        .toExist()
+        .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+
+export const idShouldNotExist = async (
+    id: string,
+    options?: { timeout?: number },
+) =>
+    await waitFor(element(by.id(id)))
+        .not.toExist()
+        .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+
 export const textShouldExist = async (
     text: string,
     options?: { timeout?: number },

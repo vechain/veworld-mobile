@@ -3,7 +3,7 @@ Feature: The user can manage tokens
   Background:
     * The app is opened
     * Open with demo account
-    * The user is in the tokens management screen
+    * The user go to tokens management screen
 
   Scenario: User select an official token
     When The user select "<token>" token from the unselected tokens list
@@ -62,3 +62,21 @@ Feature: The user can manage tokens
     Examples:
       | address1                                   | token1    | address2                                   | token2  |
       | 0x34149f8da92222af599ba936d9089f5ce460b522 | CarpToken | 0xbd0e5d86fdd4bd6d249ceea1336594f6d959c099 | DavMain |
+
+  Scenario: When the user add an official token and then it change network (bug #570) it should not throw the error
+    When The user select "<token>" token from the unselected tokens list
+    And The user click back button
+    And The user select the test network
+    And The user click back button
+    And The user go to home tab
+    And The user go to tokens management screen
+    And The user select "<token2>" token from the unselected tokens list
+    And The user click back button
+    And The user select the main network
+    And The user click back button
+    And The user go to home tab
+    Then The user is in home screen
+
+    Examples:
+      | token | token2     |
+      | Plair | Decent.bet |
