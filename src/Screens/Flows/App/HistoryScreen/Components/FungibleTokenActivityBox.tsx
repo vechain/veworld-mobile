@@ -1,6 +1,5 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, DIRECTIONS, useTheme, useThemedStyles } from "~Common"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
@@ -106,20 +105,16 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                     style={styles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
-                        <DropShadow style={[theme.shadows.card]}>
-                            <BaseView
-                                flexDirection="column"
-                                alignItems="center">
-                                <BaseIcon
-                                    name={directionIcon}
-                                    size={20}
-                                    color={COLORS.DARK_PURPLE}
-                                    testID="magnify"
-                                    bg={COLORS.WHITE}
-                                    iconPadding={4}
-                                />
-                            </BaseView>
-                        </DropShadow>
+                        <BaseView flexDirection="column" alignItems="center">
+                            <BaseIcon
+                                name={directionIcon}
+                                size={20}
+                                color={COLORS.DARK_PURPLE}
+                                testID="magnify"
+                                bg={COLORS.WHITE}
+                                iconPadding={4}
+                            />
+                        </BaseView>
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseView pl={12}>
                                 <BaseView

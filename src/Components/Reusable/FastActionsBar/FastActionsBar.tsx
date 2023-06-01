@@ -1,13 +1,11 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useTheme } from "~Common"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { FastAction } from "~Model"
 
 export const FastActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
-    const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
-
+    const theme = useTheme()
     const renderAction = useCallback((action: FastAction) => {
         return (
             <BaseTouchable
@@ -26,7 +24,7 @@ export const FastActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
     }, [])
 
     return (
-        <DropShadow style={themedStyles.shadowContainer}>
+        <BaseView style={baseStyles.shadowContainer}>
             <BaseView
                 flexDirection="row"
                 justifyContent="space-between"
@@ -37,16 +35,14 @@ export const FastActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
                 py={12}>
                 {actions.map(renderAction)}
             </BaseView>
-        </DropShadow>
+        </BaseView>
     )
 })
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        shadowContainer: {
-            ...theme.shadows.card,
-            paddingHorizontal: 20,
-            justifyContent: "center",
-            minWidth: 273,
-        },
-    })
+const baseStyles = StyleSheet.create({
+    shadowContainer: {
+        paddingHorizontal: 20,
+        justifyContent: "center",
+        minWidth: 273,
+    },
+})

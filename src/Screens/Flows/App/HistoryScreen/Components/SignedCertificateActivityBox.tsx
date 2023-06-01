@@ -1,6 +1,5 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
 import { DateUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
@@ -42,20 +41,16 @@ export const SignedCertificateActivityBox: React.FC<Props> = memo(
                     style={styles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
-                        <DropShadow style={[theme.shadows.card]}>
-                            <BaseView
-                                flexDirection="column"
-                                alignItems="center">
-                                <BaseIcon
-                                    name="text-box-check-outline"
-                                    size={20}
-                                    color={COLORS.DARK_PURPLE}
-                                    testID="magnify"
-                                    bg={COLORS.WHITE}
-                                    iconPadding={4}
-                                />
-                            </BaseView>
-                        </DropShadow>
+                        <BaseView flexDirection="column" alignItems="center">
+                            <BaseIcon
+                                name="text-box-check-outline"
+                                size={20}
+                                color={COLORS.DARK_PURPLE}
+                                testID="magnify"
+                                bg={COLORS.WHITE}
+                                iconPadding={4}
+                            />
+                        </BaseView>
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseView pl={12}>
                                 <BaseText typographyFont="buttonPrimary" pb={5}>
