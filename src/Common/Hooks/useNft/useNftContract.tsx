@@ -138,6 +138,7 @@ export const useNftContract = () => {
                         owner: ownerOf,
                         tokenURI,
                         image: "",
+                        isHidden: false,
                         belongsToCollectionAddress: item.contractAddress,
                     }
 

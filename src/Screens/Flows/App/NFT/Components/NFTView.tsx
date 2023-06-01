@@ -30,8 +30,8 @@ export const NFTView = ({
     const onNftPress = useCallback(
         (nft: NonFungibleToken) =>
             nav.navigate(Routes.NFT_DETAILS, {
-                collection,
-                nft,
+                collectionAddress: collection!.address,
+                nftTokenId: nft.tokenId,
             }),
         [collection, nav],
     )

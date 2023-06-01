@@ -1,18 +1,18 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
-    BaseButton,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    FadeoutButton,
     TransferCard,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ScrollView, StyleSheet } from "react-native"
-import { SCREEN_WIDTH, useBottomSheetModal, useTheme, valueToHP } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Common"
 import { DateUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
@@ -35,7 +35,6 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { selectActivity, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import LinearGradient from "react-native-linear-gradient"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -202,32 +201,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 </BaseView>
             </ScrollView>
 
-            {/* Linear gradient fades the elements below the child button */}
-            <LinearGradient
-                style={[
-                    baseStyles.explorerButton,
-                    {
-                        bottom: tabBarHeight,
-                    },
-                ]}
-                colors={[
-                    theme.colors.backgroundTransparent,
-                    theme.colors.background,
-                ]}>
-                <BaseView
-                    mx={20}
-                    style={{ width: SCREEN_WIDTH - 40 }}
-                    py={valueToHP[16]}>
-                    {/* TODO action click opens in-app browser or system browser. TBD with others */}
-                    <BaseButton
-                        action={() => {}}
-                        w={100}
-                        title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                        haptics="medium"
-                        typographyFont="buttonPrimary"
-                    />
-                </BaseView>
-            </LinearGradient>
+            <FadeoutButton
+                title={LL.VIEW_ON_EXPLORER().toUpperCase()}
+                action={() => {}}
+            />
 
             <ContactManagementBottomSheet
                 ref={addContactSheet}

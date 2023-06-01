@@ -17,7 +17,29 @@ export const NftSlice = createSlice({
             state = nftCollection
             return state
         },
+
+        setNFTIsHidden: (
+            state,
+            action: PayloadAction<{
+                contractAddress: string
+                tokenId: string
+                isHidden: boolean
+            }>,
+        ) => {
+            return state.forEach(nftCollection => {
+                if (
+                    nftCollection.address ===
+                    action.payload.contractAddress.toLowerCase()
+                ) {
+                    nftCollection.nfts.forEach(nft => {
+                        if (nft.tokenId === action.payload.tokenId) {
+                            nft.isHidden = action.payload.isHidden
+                        }
+                    })
+                }
+            })
+        },
     },
 })
 
-export const { setNfts } = NftSlice.actions
+export const { setNfts, setNFTIsHidden } = NftSlice.actions

@@ -2,7 +2,13 @@ import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
-import { BaseIcon, BaseSafeArea, BaseSpacer, BaseView } from "~Components"
+import {
+    BaseIcon,
+    BaseSafeArea,
+    BaseSpacer,
+    BaseView,
+    FadeoutButton,
+} from "~Components"
 import { ScrollView, StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useTheme } from "~Common"
 import { useNavigation } from "@react-navigation/native"
@@ -10,6 +16,11 @@ import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
 import { FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
+import {
+    selectCollectionWithContractAddres,
+    selectNFTWithAddressAndTokenId,
+    useAppSelector,
+} from "~Storage/Redux"
 
 interface NFTAttributeData {
     trait_type: string
@@ -24,7 +35,24 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const { calculateBottomInsets } = usePlatformBottomInsets()
 
+    const collection = useAppSelector(state =>
+        selectCollectionWithContractAddres(
+            state,
+            route.params.collectionAddress!,
+        ),
+    )
+
+    const nft = useAppSelector(state =>
+        selectNFTWithAddressAndTokenId(
+            state,
+            route.params.collectionAddress!,
+            route.params.nftTokenId!,
+        ),
+    )
+
     const onGoBack = useCallback(() => nav.goBack(), [nav])
+
+    const onSendPress = useCallback(() => {}, [])
 
     return (
         <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
@@ -40,33 +68,35 @@ export const NFTDetailScreen = ({ route }: Props) => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
-                        paddingBottom: calculateBottomInsets,
+                        paddingBottom: calculateBottomInsets + 80,
                     }}>
                     <BaseSpacer height={26} />
 
                     <NFTDetailImage
-                        image={route.params.nft.image ?? ""}
-                        name={route.params.nft.name ?? ""}
-                        tokenId={route.params.nft.tokenId ?? ""}
+                        image={nft?.image ?? ""}
+                        name={nft?.name ?? ""}
+                        tokenId={nft?.tokenId ?? ""}
+                        hidden={nft?.isHidden ?? false}
+                        collectionAddress={collection?.address ?? ""}
                     />
 
                     <BaseSpacer height={26} />
 
                     <InfoSectionView<NFTAttributeData[]>
                         title={LL.NFT_ATTRIBUTES()}
-                        data={route.params.nft.attributes ?? []}
+                        data={nft?.attributes ?? []}
                     />
 
                     <InfoSectionView<string>
                         title={LL.BD_COLLECTION()}
-                        data={route.params.collection?.name ?? ""}
+                        data={collection?.name ?? ""}
                     />
 
                     <InfoSectionView<string>
                         title={LL.SB_DESCRIPTION()}
                         data={
-                            !isEmpty(route.params.collection?.description)
-                                ? route.params.collection?.description ?? ""
+                            !isEmpty(collection?.description ?? "")
+                                ? collection?.description ?? ""
                                 : LL.BD_NFT_DESC_PLACEHOLDER()
                         }
                     />
@@ -75,13 +105,18 @@ export const NFTDetailScreen = ({ route }: Props) => {
                         isLastInList
                         title={LL.CONTRACT_ADDRESS()}
                         data={FormattingUtils.humanAddress(
-                            route.params.collection?.address!,
+                            collection?.address ?? "",
                             5,
                             4,
                         )}
                     />
                 </ScrollView>
             </BaseView>
+
+            <FadeoutButton
+                title={LL.SEND_TOKEN_TITLE().toUpperCase()}
+                action={onSendPress}
+            />
         </BaseSafeArea>
     )
 }
@@ -105,5 +140,10 @@ const baseStyles = StyleSheet.create({
 
     border: {
         height: 1,
+    },
+
+    explorerButton: {
+        position: "absolute",
+        width: "100%",
     },
 })

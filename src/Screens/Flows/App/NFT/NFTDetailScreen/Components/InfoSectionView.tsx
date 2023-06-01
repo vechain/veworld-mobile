@@ -28,22 +28,21 @@ export const InfoSectionView = <
     const renderData = useMemo(() => {
         if (isArray(data)) {
             return (
-                <BaseText typographyFont="subSubTitle">
+                <>
                     {data.map(_data => (
                         <BaseView
                             key={_data.trait_type}
                             w={100}
                             my={4}
                             flexDirection="row"
-                            justifyContent="space-between"
-                            alignItems="center">
+                            justifyContent="space-between">
                             <BaseText typographyFont="subSubTitle">
                                 {_data.trait_type}
                             </BaseText>
                             <BaseText>{_data.value}</BaseText>
                         </BaseView>
                     ))}
-                </BaseText>
+                </>
             )
         } else if (isString(data)) {
             return <BaseText typographyFont="subSubTitle">{data}</BaseText>

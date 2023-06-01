@@ -26,6 +26,7 @@ export interface NonFungibleToken extends TokenMetadata {
     tokenId: string
     tokenURI?: string
     belongsToCollectionAddress: string
+    isHidden: boolean
 }
 
 export interface TokenMetadata {
