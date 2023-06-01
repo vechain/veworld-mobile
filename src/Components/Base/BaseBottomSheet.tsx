@@ -50,6 +50,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 backgroundStyle={[styles.backgroundStyle]}
                 backdropComponent={renderBackdrop}
                 handleComponent={renderHandle}
+                keyboardBehavior="interactive"
+                keyboardBlurBehavior="restore"
                 {...props}>
                 <BaseView
                     w={100}

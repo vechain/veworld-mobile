@@ -5,9 +5,9 @@ import {
     BaseButton,
     BaseSpacer,
     BaseText,
-    BaseTextInput,
     BaseView,
     ScrollViewWithFooter,
+    BaseBottomSheetTextInput,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { insertContact, useAppDispatch } from "~Storage/Redux"
@@ -77,7 +77,7 @@ export const CreateContactBottomSheet = React.forwardRef<
                             {LL.SEND_CREATE_CONTACT_NAME()}
                         </BaseText>
                         <BaseSpacer height={16} />
-                        <BaseTextInput
+                        <BaseBottomSheetTextInput
                             value={name}
                             setValue={setName}
                             placeholder={LL.SEND_CREATE_CONTACT_NAME()}
@@ -87,7 +87,7 @@ export const CreateContactBottomSheet = React.forwardRef<
                             {LL.SEND_CREATE_CONTACT_ADDRESS()}
                         </BaseText>
                         <BaseSpacer height={16} />
-                        <BaseTextInput disabled value={address} />
+                        <BaseBottomSheetTextInput disabled value={address} />
                     </BaseView>
                 </ScrollViewWithFooter>
             ) : (

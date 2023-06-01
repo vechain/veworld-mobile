@@ -17,6 +17,7 @@
         "start:reset": "react-native start --reset-cache",
         "start:i18n": "yarn i18n & react-native start & wait",
         "test": "jest",
+        "test:troubleshoot": "jest --detectOpenHandles",
         "test:coverage:debug": "yarn test --forceExit --coverage",
         "test:coverage": "yarn test:coverage:debug --silent",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -46,7 +47,7 @@
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
-        "@gorhom/bottom-sheet": "^4.4.5",
+        "@gorhom/bottom-sheet": "4.4.5",
         "@klarna/react-native-vector-drawable": "^0.4.0",
         "@ledgerhq/react-native-hw-transport-ble": "^6.28.5",
         "@react-native-community/blur": "^4.3.0",
