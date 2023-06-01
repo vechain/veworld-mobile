@@ -7,8 +7,8 @@ import {
     useAppDispatch,
     selectAccountsState,
 } from "~Storage/Redux"
-import { PairingModalBottomSheet } from "../../Screens/PairingModal"
-import SignModal from "../../Screens/SignModal"
+import { PairingModalBottomSheet } from "./Modals/PairingModal"
+import SignModal from "./Modals/SignModal"
 import { removeSession } from "~Storage/Redux/Actions/WalletConnect"
 import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
