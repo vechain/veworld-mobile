@@ -6,15 +6,18 @@ import { BaseView } from "~Components/Base"
 
 type AccountIconProps = {
     address: string
+    size: number
 }
 
-export const AccountIcon: React.FC<AccountIconProps> = memo(({ address }) => {
-    return (
-        <BaseView>
-            <PicassoAddressIcon address={address} />
-        </BaseView>
-    )
-})
+export const AccountIcon: React.FC<AccountIconProps> = memo(
+    ({ address, size }) => {
+        return (
+            <BaseView>
+                <PicassoAddressIcon address={address} size={size} />
+            </BaseView>
+        )
+    },
+)
 
 type PicassoAddressIconProps = {
     address: string
