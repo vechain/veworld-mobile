@@ -4,16 +4,16 @@ import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SignClientTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
 import {
-    selectSelectedAccount,
     useAppSelector,
     useAppDispatch,
     selectAccountsState,
 } from "~Storage/Redux"
-import PairingModal from "../../Screens/PairingModal"
+import { PairingModalBottomSheet } from "../../Screens/PairingModal"
 import SignModal from "../../Screens/SignModal"
 import { addSession, removeSession } from "~Storage/Redux/Actions/WalletConnect"
 import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
+import { useBottomSheetModal } from "~Common"
 
 type WalletConnectContextProviderProps = { children: React.ReactNode }
 const WalletConnectContext = React.createContext<IWeb3Wallet | undefined>(
@@ -24,9 +24,15 @@ const WalletConnectContextProvider = ({
 }: WalletConnectContextProviderProps) => {
     //For session proposal
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
-    const [pairingModalVisible, setPairingModalVisible] = useState(false)
     const [currentProposal, setCurrentProposal] =
         useState<SignClientTypes.EventArguments["session_proposal"]>()
+
+    /* Bottom Sheets */
+    const {
+        ref: pairingModalBottomSheet,
+        onOpen: openPairingModalBottomSheet,
+        onClose: closePairingModalBottomSheet,
+    } = useBottomSheetModal()
 
     // For session request
     const [signModalVisible, setSignModalVisible] = useState(false)
@@ -36,6 +42,7 @@ const WalletConnectContextProvider = ({
 
     // General
     const selectedAccount = useAppSelector(selectAccountsState).selectedAccount
+
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
@@ -50,7 +57,7 @@ const WalletConnectContextProvider = ({
      */
     const onSessionProposal = useCallback(
         (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
-            setPairingModalVisible(true)
+            openPairingModalBottomSheet()
             setCurrentProposal(proposal)
         },
         [],
@@ -90,7 +97,7 @@ const WalletConnectContextProvider = ({
 
             // console.log("Finalizing session")
             dispatch(addSession(session))
-            setPairingModalVisible(false)
+            closePairingModalBottomSheet()
             setCurrentProposal(undefined)
 
             showSuccessToast(
@@ -108,7 +115,7 @@ const WalletConnectContextProvider = ({
                 reason: getSdkError("USER_REJECTED_METHODS"),
             })
 
-            setPairingModalVisible(false)
+            closePairingModalBottomSheet()
             setCurrentProposal(undefined)
         }
     }
@@ -181,8 +188,6 @@ const WalletConnectContextProvider = ({
                     <PairingModalBottomSheet
                         handleAccept={handleProposalAccept}
                         handleReject={handleProposalReject}
-                visible={pairingModalVisible}
-                setModalVisible={setPairingModalVisible}
                         currentProposal={currentProposal}
                         ref={pairingModalBottomSheet}
                     />

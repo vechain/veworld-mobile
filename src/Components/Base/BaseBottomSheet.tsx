@@ -10,27 +10,41 @@ import {
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
 import { ColorThemeType, useThemedStyles } from "~Common"
+import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 
 type Props = BottomSheetModalProps & {
     children: React.ReactNode
     contentStyle?: StyleProp<ViewStyle>
     footerStyle?: StyleProp<ViewStyle>
     footer?: React.ReactNode
+    onPressOutside?: BackdropPressBehavior
 }
 
 export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ contentStyle, footerStyle, footer, children, ...props }, ref) => {
+    (
+        {
+            contentStyle,
+            footerStyle,
+            footer,
+            children,
+            onPressOutside = "close",
+            ...props
+        },
+        ref,
+    ) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const renderBackdrop = useCallback(
-            (props_: BottomSheetBackdropProps) => (
-                <BottomSheetBackdrop
-                    {...props_}
-                    pressBehavior="close"
-                    opacity={0.5}
-                    disappearsOnIndex={-1}
-                />
-            ),
+            (pressBehaviour?: BackdropPressBehavior) =>
+                (props_: BottomSheetBackdropProps) =>
+                    (
+                        <BottomSheetBackdrop
+                            {...props_}
+                            pressBehavior={pressBehaviour}
+                            opacity={0.5}
+                            disappearsOnIndex={-1}
+                        />
+                    ),
             [],
         )
 
@@ -48,7 +62,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 enablePanDownToClose={true}
                 index={0}
                 backgroundStyle={[styles.backgroundStyle]}
-                backdropComponent={renderBackdrop}
+                backdropComponent={renderBackdrop(onPressOutside)}
                 handleComponent={renderHandle}
                 {...props}>
                 <BaseView

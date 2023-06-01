@@ -5,13 +5,12 @@ import {
     BaseText,
     BaseButton,
     BaseView,
-    BaseModal,
     BaseSpacer,
+    BaseBottomSheet,
 } from "~Components"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
-interface PairingModalProps {
-    visible: boolean
-    setModalVisible: (arg1: boolean) => void
+interface Props {
     currentProposal:
         | SignClientTypes.EventArguments["session_proposal"]
         | undefined
@@ -19,12 +18,12 @@ interface PairingModalProps {
     handleReject: () => void
 }
 
-export default function PairingModal({
-    visible,
-    currentProposal,
-    handleAccept,
-    handleReject,
-}: PairingModalProps) {
+const snapPoints = ["50%"]
+
+export const PairingModalBottomSheet = React.forwardRef<
+    BottomSheetModalMethods,
+    Props
+>(({ currentProposal, handleAccept, handleReject }, ref) => {
     const name = currentProposal?.params?.proposer?.metadata?.name
     const url = currentProposal?.params?.proposer?.metadata.url
     const methods = currentProposal?.params?.requiredNamespaces.vechain.methods
@@ -33,7 +32,12 @@ export default function PairingModal({
     const icon = currentProposal?.params.proposer.metadata.icons[0]
 
     return (
-        <BaseModal isOpen={visible} onClose={() => {}}>
+        <BaseBottomSheet
+            enablePanDownToClose={false}
+            snapPoints={snapPoints}
+            ref={ref}
+            onPressOutside={"none"}
+            onDismiss={handleReject}>
             <BaseView>
                 <BaseView>
                     <BaseView alignItems="center" justifyContent="center">
@@ -82,9 +86,9 @@ export default function PairingModal({
                     </BaseView>
                 </BaseView>
             </BaseView>
-        </BaseModal>
+        </BaseBottomSheet>
     )
-}
+})
 
 const styles = StyleSheet.create({
     dappLogo: {

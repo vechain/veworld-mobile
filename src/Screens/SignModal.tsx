@@ -1,5 +1,5 @@
 import { SignClientTypes } from "@walletconnect/types"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Image, Modal, StyleSheet } from "react-native"
 import {
     BaseText,
@@ -57,17 +57,16 @@ export default function SignModal({
     const requestIcon = requestSession?.peer?.metadata?.icons[0]
     const requestURL = requestSession?.peer?.metadata?.url
 
-    let message: string = ""
-    switch (method) {
-        case VECHAIN_SIGNING_METHODS.IDENTIFY:
-            message = params.payload.content
-            break
-        case VECHAIN_SIGNING_METHODS.REQUEST_TRANSACTION:
-            message = params.comment || params.txMessage[0].comment
-            break
-        default:
-            break
-    }
+    const message = useMemo(() => {
+        switch (method) {
+            case VECHAIN_SIGNING_METHODS.IDENTIFY:
+                return params.payload.content
+            case VECHAIN_SIGNING_METHODS.REQUEST_TRANSACTION:
+                return params.comment || params.txMessage[0].comment
+            default:
+                return ""
+        }
+    }, [method, params])
 
     const { topic } = requestEvent ? requestEvent : { topic: "" }
     // console.log("SignModal topic", topic)
