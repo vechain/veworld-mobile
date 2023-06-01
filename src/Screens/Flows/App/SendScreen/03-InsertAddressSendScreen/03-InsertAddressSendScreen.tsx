@@ -136,11 +136,12 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         if (AddressUtils.isValid(searchText)) {
             setSelectedAddress(searchText)
         }
-    }, [searchText, openCreateContactSheet])
+    }, [searchText])
 
     useEffect(() => {
-        if (selectedAddress && !isAddressInContactsOrAccounts)
+        if (selectedAddress && !isAddressInContactsOrAccounts) {
             openCreateContactSheet()
+        }
     }, [selectedAddress, isAddressInContactsOrAccounts, openCreateContactSheet])
 
     const onOpenCamera = () => {
