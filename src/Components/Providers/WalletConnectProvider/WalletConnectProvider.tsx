@@ -8,7 +8,7 @@ import {
     selectAccountsState,
 } from "~Storage/Redux"
 import { PairingModalBottomSheet } from "./Modals/PairingModal"
-import SignModal from "./Modals/SignModal"
+import { SignModalBottomSheet } from "./Modals/SignModal"
 import { removeSession } from "~Storage/Redux/Actions/WalletConnect"
 import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -33,8 +33,13 @@ const WalletConnectContextProvider = ({
         onClose: closePairingModalBottomSheet,
     } = useBottomSheetModal()
 
+    const {
+        ref: signModalBottomSheet,
+        onOpen: openSignModalBottomSheet,
+        onClose: closeSignModalBottomSheet,
+    } = useBottomSheetModal()
+
     // For session request
-    const [signModalVisible, setSignModalVisible] = useState(false)
     const [requestSession, setRequestSession] = useState()
     const [requestEventData, setRequestEventData] =
         useState<SignClientTypes.EventArguments["session_request"]>()
@@ -81,9 +86,9 @@ const WalletConnectContextProvider = ({
 
             setRequestSession(requestSessionData)
             setRequestEventData(requestEvent)
-            setSignModalVisible(true)
+            openSignModalBottomSheet()
         },
-        [web3Wallet],
+        [web3Wallet, openSignModalBottomSheet],
     )
 
     /**
@@ -138,9 +143,9 @@ const WalletConnectContextProvider = ({
                         ref={pairingModalBottomSheet}
                     />
 
-                    <SignModal
-                        visible={signModalVisible}
-                        setModalVisible={setSignModalVisible}
+                    <SignModalBottomSheet
+                        onClose={closeSignModalBottomSheet}
+                        ref={signModalBottomSheet}
                         requestEvent={requestEventData}
                         requestSession={requestSession}
                     />

@@ -8,6 +8,8 @@ import {
     useThor,
     useWalletConnect,
     showErrorToast,
+    BaseBottomSheet,
+    BaseSpacer,
 } from "~Components"
 import {
     HDNode,
@@ -29,20 +31,20 @@ import axios from "axios"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { VECHAIN_SIGNING_METHODS } from "~Utils/WalletConnectUtils/Lib"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
-interface SignModalProps {
-    visible: boolean
-    setModalVisible: (arg1: boolean) => void
+interface Props {
     requestSession: any
     requestEvent: SignClientTypes.EventArguments["session_request"] | undefined
+    onClose: () => void
 }
 
-export default function SignModal({
-    visible,
-    setModalVisible,
-    requestEvent,
-    requestSession,
-}: SignModalProps) {
+const snapPoints = ["60%"]
+
+export const SignModalBottomSheet = React.forwardRef<
+    BottomSheetModalMethods,
+    Props
+>(({ requestEvent, requestSession, onClose }, ref) => {
     const web3Wallet = useWalletConnect()
     const thorClient = useThor()
     const network = useAppSelector(selectSelectedNetwork)
@@ -99,8 +101,10 @@ export default function SignModal({
                     },
                 },
             })
+
+            onClose()
         },
-        [account, params, requestURL, topic, web3Wallet],
+        [account, params, requestURL, topic, web3Wallet, onClose],
     )
 
     const onTestDelegate = useCallback(
@@ -227,8 +231,10 @@ export default function SignModal({
                             : "An unexpected error occurred while executing transaction",
                     )
                 })
+
+            onClose()
         },
-        [account, network, params, thorClient, topic, web3Wallet],
+        [account, network, params, thorClient, topic, web3Wallet, onClose],
     )
 
     const onApprove = useCallback(
@@ -260,13 +266,10 @@ export default function SignModal({
                 default:
                     break
             }
-
-            setModalVisible(false)
         },
         [
             account,
             requestEvent,
-            setModalVisible,
             signIdentityCertificate,
             onTestDelegate,
             method,
@@ -285,8 +288,9 @@ export default function SignModal({
                 topic,
                 response,
             })
-            setModalVisible(false)
         }
+
+        onClose()
     }
 
     const onIdentityConfirmed = useCallback(
@@ -311,84 +315,68 @@ export default function SignModal({
         })
 
     return (
-        <Modal visible={visible} animationType="slide" transparent>
-            <BaseView style={styles.container}>
-                <BaseView style={styles.modalContentContainer}>
+        <BaseBottomSheet
+            enablePanDownToClose={false}
+            snapPoints={snapPoints}
+            ref={ref}
+            onPressOutside={"none"}
+            onDismiss={onReject}>
+            <BaseView>
+                <BaseView alignItems="center" justifyContent="center">
                     <Image
                         style={styles.dappLogo}
                         source={{
                             uri: requestIcon,
                         }}
                     />
-
                     <BaseText>{requestName}</BaseText>
                     <BaseText>{requestURL}</BaseText>
+                </BaseView>
 
-                    <BaseText>
-                        {"Chains: "}
-                        {chainID}
-                    </BaseText>
+                <BaseSpacer height={24} />
 
-                    <BaseView style={styles.marginVertical8}>
-                        <BaseText style={styles.subHeading}>
-                            {"Method:"}
-                        </BaseText>
-                        <BaseText>{method}</BaseText>
-                    </BaseView>
+                <BaseText>
+                    {"Chains: "}
+                    {chainID}
+                </BaseText>
 
-                    <BaseView style={styles.marginVertical8}>
-                        <BaseText style={styles.subHeading}>
-                            {"Message:"}
-                        </BaseText>
-                        <BaseText>{message}</BaseText>
-                    </BaseView>
+                <BaseSpacer height={24} />
 
-                    <BaseView
-                        alignItems="center"
-                        justifyContent="center"
-                        flexDirection="row">
-                        <BaseButton action={onReject} title="Cancel" />
-                        <BaseButton
-                            title="Accept"
-                            action={checkIdentityBeforeOpening}
-                        />
-                    </BaseView>
+                <BaseView>
+                    <BaseText>{"Method:"}</BaseText>
+                    <BaseText>{method}</BaseText>
+                </BaseView>
+
+                <BaseSpacer height={24} />
+
+                <BaseView>
+                    <BaseText>{"Message:"}</BaseText>
+                    <BaseText>{message}</BaseText>
+                </BaseView>
+
+                <BaseSpacer height={24} />
+
+                <BaseView
+                    alignItems="center"
+                    justifyContent="center"
+                    flexDirection="row">
+                    <BaseButton action={onReject} title="Cancel" />
+                    <BaseButton
+                        title="Accept"
+                        action={checkIdentityBeforeOpening}
+                    />
                 </BaseView>
             </BaseView>
             <ConfirmIdentityBottomSheet />
-        </Modal>
+        </BaseBottomSheet>
     )
-}
+})
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    modalContentContainer: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 34,
-        borderWidth: 1,
-        width: "100%",
-        height: "70%",
-        position: "absolute",
-        backgroundColor: "white",
-        bottom: 0,
-    },
     dappLogo: {
         width: 50,
         height: 50,
         borderRadius: 8,
         marginVertical: 4,
-    },
-    marginVertical8: {
-        marginVertical: 8,
-    },
-    subHeading: {
-        textAlign: "center",
-        fontWeight: "600",
     },
 })
