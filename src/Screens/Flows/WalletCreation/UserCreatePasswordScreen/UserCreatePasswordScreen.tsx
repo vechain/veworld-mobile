@@ -31,8 +31,8 @@ export const UserCreatePasswordScreen = () => {
      * and navigate to the success screen
      */
     const onFinishCallback = useCallback(
-        (insertedPin: string) => {
-            updatePassword(insertedPin)
+        async (insertedPin: string) => {
+            await updatePassword(insertedPin)
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.SECRET,
                 userPin: insertedPin,
