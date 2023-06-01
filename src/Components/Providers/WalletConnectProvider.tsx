@@ -7,6 +7,7 @@ import {
     selectSelectedAccount,
     useAppSelector,
     useAppDispatch,
+    selectAccountsState,
 } from "~Storage/Redux"
 import PairingModal from "../../Screens/PairingModal"
 import SignModal from "../../Screens/SignModal"
@@ -34,7 +35,7 @@ const WalletConnectContextProvider = ({
         useState<SignClientTypes.EventArguments["session_request"]>()
 
     // General
-    const account = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectAccountsState).selectedAccount
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
@@ -67,7 +68,7 @@ const WalletConnectContextProvider = ({
             Object.keys(requiredNamespaces).forEach(key => {
                 const accounts: string[] = []
                 requiredNamespaces[key].chains.map((chain: string) => {
-                    ;[account?.address].map(acc =>
+                    ;[selectedAccount?.address].map(acc =>
                         accounts.push(`${chain}:${acc}`),
                     )
                 })
@@ -175,20 +176,25 @@ const WalletConnectContextProvider = ({
     return (
         <WalletConnectContext.Provider value={value}>
             {children}
-            <PairingModal
-                handleAccept={handleProposalAccept}
-                handleReject={handleProposalReject}
+            {selectedAccount && (
+                <>
+                    <PairingModalBottomSheet
+                        handleAccept={handleProposalAccept}
+                        handleReject={handleProposalReject}
                 visible={pairingModalVisible}
                 setModalVisible={setPairingModalVisible}
-                currentProposal={currentProposal}
-            />
+                        currentProposal={currentProposal}
+                        ref={pairingModalBottomSheet}
+                    />
 
-            <SignModal
-                visible={signModalVisible}
-                setModalVisible={setSignModalVisible}
-                requestEvent={requestEventData}
-                requestSession={requestSession}
-            />
+                    <SignModal
+                        visible={signModalVisible}
+                        setModalVisible={setSignModalVisible}
+                        requestEvent={requestEventData}
+                        requestSession={requestSession}
+                    />
+                </>
+            )}
         </WalletConnectContext.Provider>
     )
 }
