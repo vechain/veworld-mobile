@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { WalletConnectUtils } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
-import { SignClientTypes, SessionTypes } from "@walletconnect/types"
-import { getSdkError } from "@walletconnect/utils"
+import { SignClientTypes } from "@walletconnect/types"
 import {
     useAppSelector,
     useAppDispatch,
@@ -10,7 +9,7 @@ import {
 } from "~Storage/Redux"
 import { PairingModalBottomSheet } from "../../Screens/PairingModal"
 import SignModal from "../../Screens/SignModal"
-import { addSession, removeSession } from "~Storage/Redux/Actions/WalletConnect"
+import { removeSession } from "~Storage/Redux/Actions/WalletConnect"
 import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal } from "~Common"
@@ -60,65 +59,13 @@ const WalletConnectContextProvider = ({
             openPairingModalBottomSheet()
             setCurrentProposal(proposal)
         },
-        [],
+        [openPairingModalBottomSheet],
     )
 
-    const handleProposalAccept = async () => {
-        const { id, params } = currentProposal
-        const { requiredNamespaces, relays } = params
-
-        // console.log("Accepting request to pair")
-
-        if (currentProposal) {
-            const namespaces: SessionTypes.Namespaces = {}
-
-            Object.keys(requiredNamespaces).forEach(key => {
-                const accounts: string[] = []
-                requiredNamespaces[key].chains.map((chain: string) => {
-                    ;[selectedAccount?.address].map(acc =>
-                        accounts.push(`${chain}:${acc}`),
-                    )
-                })
-
-                namespaces[key] = {
-                    accounts,
-                    methods: requiredNamespaces[key].methods,
-                    events: requiredNamespaces[key].events,
-                }
-            })
-
-            // console.log("Returning approve session")
-
-            let session = await web3Wallet?.approveSession({
-                id,
-                relayProtocol: relays[0].protocol,
-                namespaces,
-            })
-
-            // console.log("Finalizing session")
-            dispatch(addSession(session))
-            closePairingModalBottomSheet()
-            setCurrentProposal(undefined)
-
-            showSuccessToast(
-                LL.NOTIFICATION_wallet_connect_successfull_pairing(),
-            )
-        }
-    }
-
-    async function handleProposalReject() {
-        const { id } = currentProposal
-
-        if (currentProposal) {
-            await web3Wallet?.rejectSession({
-                id,
-                reason: getSdkError("USER_REJECTED_METHODS"),
-            })
-
-            closePairingModalBottomSheet()
-            setCurrentProposal(undefined)
-        }
-    }
+    const onSessionProposalClose = useCallback(() => {
+        setCurrentProposal(undefined)
+        closePairingModalBottomSheet()
+    }, [closePairingModalBottomSheet])
 
     /**
      * Handle session request
@@ -186,8 +133,7 @@ const WalletConnectContextProvider = ({
             {selectedAccount && (
                 <>
                     <PairingModalBottomSheet
-                        handleAccept={handleProposalAccept}
-                        handleReject={handleProposalReject}
+                        onClose={onSessionProposalClose}
                         currentProposal={currentProposal}
                         ref={pairingModalBottomSheet}
                     />

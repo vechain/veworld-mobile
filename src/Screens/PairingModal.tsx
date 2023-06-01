@@ -1,5 +1,5 @@
 import { Image, StyleSheet } from "react-native"
-import { SignClientTypes } from "@walletconnect/types"
+import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import React from "react"
 import {
     BaseText,
@@ -7,29 +7,89 @@ import {
     BaseView,
     BaseSpacer,
     BaseBottomSheet,
+    showSuccessToast,
+    useWalletConnect,
 } from "~Components"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { addSession } from "~Storage/Redux/Actions/WalletConnect"
+import { getSdkError } from "@walletconnect/utils"
+import {
+    selectAccountsState,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 
 interface Props {
     currentProposal:
         | SignClientTypes.EventArguments["session_proposal"]
         | undefined
-    handleAccept: () => void
-    handleReject: () => void
+    onClose: () => void
 }
 
-const snapPoints = ["50%"]
+const snapPoints = ["60%"]
 
 export const PairingModalBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ currentProposal, handleAccept, handleReject }, ref) => {
+>(({ currentProposal, onClose }, ref) => {
+    const dispatch = useAppDispatch()
+    const selectedAccount = useAppSelector(selectAccountsState).selectedAccount
+    const web3Wallet = useWalletConnect()
+
     const name = currentProposal?.params?.proposer?.metadata?.name
     const url = currentProposal?.params?.proposer?.metadata.url
     const methods = currentProposal?.params?.requiredNamespaces.vechain.methods
     const events = currentProposal?.params?.requiredNamespaces.vechain.events
     const chains = currentProposal?.params?.requiredNamespaces.vechain.chains
     const icon = currentProposal?.params.proposer.metadata.icons[0]
+
+    const handleAccept = async () => {
+        const { id, params } = currentProposal
+        const { requiredNamespaces, relays } = params
+
+        if (currentProposal) {
+            const namespaces: SessionTypes.Namespaces = {}
+
+            Object.keys(requiredNamespaces).forEach(key => {
+                const accounts: string[] = []
+                requiredNamespaces[key].chains.map((chain: string) => {
+                    ;[selectedAccount?.address].map(acc =>
+                        accounts.push(`${chain}:${acc}`),
+                    )
+                })
+
+                namespaces[key] = {
+                    accounts,
+                    methods: requiredNamespaces[key].methods,
+                    events: requiredNamespaces[key].events,
+                }
+            })
+
+            let session = await web3Wallet?.approveSession({
+                id,
+                relayProtocol: relays[0].protocol,
+                namespaces,
+            })
+
+            dispatch(addSession(session))
+            onClose()
+
+            showSuccessToast('Successfull connected to "' + name + '"')
+        }
+    }
+
+    async function handleReject() {
+        const { id } = currentProposal
+
+        if (currentProposal) {
+            await web3Wallet?.rejectSession({
+                id,
+                reason: getSdkError("USER_REJECTED_METHODS"),
+            })
+
+            onClose()
+        }
+    }
 
     return (
         <BaseBottomSheet

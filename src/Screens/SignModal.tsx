@@ -18,9 +18,9 @@ import {
 } from "thor-devkit"
 import {
     selectSelectedNetwork,
-    selectSelectedAccount,
     useAppSelector,
     selectDevice,
+    selectSelectedAccount,
 } from "~Storage/Redux"
 import { HexUtils, CryptoUtils, TransactionUtils } from "~Utils"
 import { useCheckIdentity, error } from "~Common"
@@ -47,7 +47,7 @@ export default function SignModal({
     const thorClient = useThor()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
-    const selectedDevice = useAppSelector(selectDevice(account?.rootAddress))
+    const selectedDevice = useAppSelector(selectDevice(account.rootAddress))
 
     // CurrentProposal values
     const chainID = requestEvent?.params?.chainId?.toUpperCase()
@@ -69,7 +69,6 @@ export default function SignModal({
     }, [method, params])
 
     const { topic } = requestEvent ? requestEvent : { topic: "" }
-    // console.log("SignModal topic", topic)
 
     const signIdentityCertificate = useCallback(
         async (id: number, privateKey: Buffer) => {
@@ -83,7 +82,6 @@ export default function SignModal({
             const hash = blake2b256(Certificate.encode(cert))
             const signature = secp256k1.sign(hash, privateKey)
 
-            // console.log("respondSessionRequest with topic", topic)
             await web3Wallet.respondSessionRequest({
                 topic,
                 response: {
@@ -107,13 +105,10 @@ export default function SignModal({
 
     const onTestDelegate = useCallback(
         async (id: number, privateKey: Buffer) => {
-            // console.log('Delegating Transaction')
-
             const clauses = params.txMessage
 
-            // calc intrinsic gas
+            // TODO: calc intrinsic gas
             // const gas = Transaction.intrinsicGas(clauses)
-            // console.log('Gas', gas)
 
             const transaction: Transaction.Body = {
                 chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
@@ -121,8 +116,8 @@ export default function SignModal({
                 expiration: 18,
                 clauses: clauses,
                 gasPriceCoef: 0,
-                gas: 8000000, //TODO: gas is not correct when calculate intrinsic gas
-                dependsOn: null, // TODO: in extension it is null
+                gas: 8000000,
+                dependsOn: null,
                 nonce: HexUtils.generateRandom(8),
             }
 
@@ -198,9 +193,6 @@ export default function SignModal({
                 }
             }
 
-            // console.log("encodedRawTx", encodedRawTx)
-            // console.log("network.currentUrl", network.currentUrl)
-
             await axios
                 .post(`${network.currentUrl}/transactions`, encodedRawTx)
                 .then(async response => {
@@ -241,7 +233,6 @@ export default function SignModal({
 
     const onApprove = useCallback(
         async (decryptedWallet: Wallet) => {
-            // console.log("onApprove")
             if (!requestEvent) return
 
             const { id } = requestEvent
@@ -259,7 +250,6 @@ export default function SignModal({
             const derivedNode = hdNode.derive(account.index)
             const privateKey = derivedNode.privateKey as Buffer
 
-            // console.log("decrypted wallet")
             switch (method) {
                 case VECHAIN_SIGNING_METHODS.IDENTIFY:
                     await signIdentityCertificate(id, privateKey)
@@ -302,7 +292,6 @@ export default function SignModal({
     const onIdentityConfirmed = useCallback(
         async (password?: string) => {
             if (!selectedDevice) return
-
             //local mnemonic, identity already verified via useCheckIdentity
             if ("wallet" in selectedDevice) {
                 const { decryptedWallet } = await CryptoUtils.decryptWallet(

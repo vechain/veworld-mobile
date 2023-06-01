@@ -8,6 +8,7 @@ import {
     BaseTextInput,
     BaseView,
     useWalletConnect,
+    showSuccessToast,
 } from "~Components"
 import { getSdkError } from "@walletconnect/utils"
 import {
@@ -33,6 +34,7 @@ export const WalletConnectScreen = () => {
                 activatePairing: true,
             })
             setUri("")
+            showSuccessToast("Pairing successful")
             return result
         } catch (err: unknown) {
             // console.log("Error for pairing", err)
