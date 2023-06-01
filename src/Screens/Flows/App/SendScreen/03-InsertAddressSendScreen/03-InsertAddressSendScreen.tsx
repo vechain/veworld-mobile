@@ -29,6 +29,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { CreateContactBottomSheet } from "./Components/CreateContactBottomSheet/CreateContactBottomSheet"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -59,6 +60,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         if (!searchText) return contacts
         return contacts.filter(
             contact =>
+                (!!selectedAddress &&
+                    compareAddresses(contact.address, selectedAddress)) ||
                 contact.alias
                     .toLowerCase()
                     .includes(searchText.toLowerCase()) ||
@@ -66,12 +69,14 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     .toLowerCase()
                     .includes(searchText.toLowerCase()),
         )
-    }, [contacts, searchText])
+    }, [selectedAddress, contacts, searchText])
 
     const filteredAccounts = useMemo(() => {
         if (!searchText) return accounts
         return accounts.filter(
             account =>
+                (!!selectedAddress &&
+                    compareAddresses(account.address, selectedAddress)) ||
                 account.alias
                     .toLowerCase()
                     .includes(searchText.toLowerCase()) ||
@@ -79,7 +84,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     .toLowerCase()
                     .includes(searchText.toLowerCase()),
         )
-    }, [accounts, searchText])
+    }, [selectedAddress, accounts, searchText])
 
     const isAddressInContactsOrAccounts = useMemo(() => {
         return accountsAndContacts.some(accountOrContact =>
