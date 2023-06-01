@@ -21,7 +21,7 @@ jest.mock("~Storage/Redux/Selectors", () => ({
 
 describe("useDeviceUtils", () => {
     it("should generate a new device from a given mnemonic", async () => {
-        ;(selectDevices as jest.Mock).mockImplementation(() => () => [
+        ;(selectDevices as jest.Mock).mockImplementation(() => [
             device1,
             device2,
         ])
@@ -45,7 +45,7 @@ describe("useDeviceUtils", () => {
     })
 
     it("should throw with the same device", async () => {
-        ;(selectDevices as jest.Mock).mockImplementation(() => () => [
+        ;(selectDevices as jest.Mock).mockImplementation(() => [
             {
                 alias: "Wallet 3",
                 xPub: {
