@@ -1,9 +1,9 @@
 import React, { memo } from "react"
-import { TextInput, View, StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
+import { TextInput, StyleSheet } from "react-native"
 import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
 import { typography } from "~Common/Theme"
 import { BaseIcon } from "../BaseIcon"
+import { BaseView } from "../BaseView"
 const { defaults: defaultTypography } = typography
 
 type Props = {
@@ -20,25 +20,23 @@ export const BaseSearchInput = memo(
         const theme = useTheme()
 
         return (
-            <DropShadow>
-                <View style={styles.container}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={placeholder}
-                        placeholderTextColor={theme.colors.text}
-                        onChangeText={setValue}
-                        value={value}
-                        testID={testID}
-                    />
-                    <BaseIcon
-                        name="magnify"
-                        size={24}
-                        color={theme.colors.text}
-                        style={styles.icon}
-                        testID="magnify"
-                    />
-                </View>
-            </DropShadow>
+            <BaseView style={styles.container}>
+                <TextInput
+                    style={styles.input}
+                    placeholder={placeholder}
+                    placeholderTextColor={theme.colors.text}
+                    onChangeText={setValue}
+                    value={value}
+                    testID={testID}
+                />
+                <BaseIcon
+                    name="magnify"
+                    size={24}
+                    color={theme.colors.text}
+                    style={styles.icon}
+                    testID="magnify"
+                />
+            </BaseView>
         )
     },
 )
@@ -46,7 +44,6 @@ export const BaseSearchInput = memo(
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            ...theme.shadows.card,
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
