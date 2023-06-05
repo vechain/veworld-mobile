@@ -144,6 +144,7 @@ export const useSignTransaction = ({
                 // TODO: support hardware wallet
                 showWarningToast("Hardware wallet not supported yet")
             }
+
             const { decryptedWallet: senderWallet } =
                 await CryptoUtils.decryptWallet(senderDevice, password)
 
@@ -177,7 +178,7 @@ export const useSignTransaction = ({
             )
             await dispatch(updateAccountBalances(thorClient, account.address))
         } catch (e) {
-            error(e)
+            error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
         }
 
