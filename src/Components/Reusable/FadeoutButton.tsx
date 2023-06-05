@@ -17,7 +17,7 @@ export const FadeoutButton = ({ title, action }: Props) => {
     return (
         <LinearGradient
             style={[
-                baseStyles.explorerButton,
+                baseStyles.container,
                 {
                     bottom: tabBarHeight,
                 },
@@ -44,7 +44,7 @@ export const FadeoutButton = ({ title, action }: Props) => {
 }
 
 const baseStyles = StyleSheet.create({
-    explorerButton: {
+    container: {
         position: "absolute",
         width: "100%",
     },

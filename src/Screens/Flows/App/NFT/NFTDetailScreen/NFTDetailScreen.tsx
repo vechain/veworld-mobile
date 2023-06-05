@@ -3,15 +3,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
 import {
-    BaseIcon,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseView,
     FadeoutButton,
 } from "~Components"
-import { ScrollView, StyleSheet } from "react-native"
-import { usePlatformBottomInsets, useTheme } from "~Common"
-import { useNavigation } from "@react-navigation/native"
+import { ScrollView } from "react-native"
+import { usePlatformBottomInsets } from "~Common"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
 import { FormattingUtils } from "~Utils"
@@ -30,8 +29,6 @@ interface NFTAttributeData {
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
 export const NFTDetailScreen = ({ route }: Props) => {
-    const theme = useTheme()
-    const nav = useNavigation()
     const { LL } = useI18nContext()
     const { calculateBottomInsets } = usePlatformBottomInsets()
 
@@ -50,21 +47,12 @@ export const NFTDetailScreen = ({ route }: Props) => {
         ),
     )
 
-    const onGoBack = useCallback(() => nav.goBack(), [nav])
-
     const onSendPress = useCallback(() => {}, [])
 
     return (
         <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
+            <BackButtonHeader hasBottomSpacer={false} />
             <BaseView flex={1} mx={20}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={onGoBack}
-                />
-
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
@@ -120,30 +108,3 @@ export const NFTDetailScreen = ({ route }: Props) => {
         </BaseSafeArea>
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: -12,
-        alignSelf: "flex-start",
-    },
-
-    nftImage: {
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
-    },
-
-    nftContainer: {
-        height: 72,
-        borderBottomLeftRadius: 16,
-        borderBottomRightRadius: 16,
-    },
-
-    border: {
-        height: 1,
-    },
-
-    explorerButton: {
-        position: "absolute",
-        width: "100%",
-    },
-})

@@ -233,8 +233,4 @@ const baseStyles = StyleSheet.create({
     scrollView: {
         width: "100%",
     },
-    explorerButton: {
-        position: "absolute",
-        width: "100%",
-    },
 })

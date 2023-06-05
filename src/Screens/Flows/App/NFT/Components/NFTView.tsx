@@ -25,6 +25,7 @@ export const NFTView = ({
     const collectionItem = isCollection
         ? (item as NonFungibleTokenCollection)
         : undefined
+
     const nftItem = !isCollection ? (item as NonFungibleToken) : undefined
 
     const onNftPress = useCallback(
@@ -49,7 +50,7 @@ export const NFTView = ({
         <TouchableOpacity
             onPress={() =>
                 isCollection
-                    ? onCollectionPress(collectionItem?.address ?? "")
+                    ? onCollectionPress(collectionItem!.address)
                     : onNftPress(nftItem!)
             }
             style={[
@@ -62,7 +63,7 @@ export const NFTView = ({
             {isCollection ? (
                 <BaseView style={baseStyles.nftCollectionNameBarRadius}>
                     <BaseImage
-                        uri={collectionItem?.icon ?? ""}
+                        uri={collectionItem!.icon}
                         style={baseStyles.nftPreviewImage}
                     />
                     <BaseView
@@ -76,14 +77,14 @@ export const NFTView = ({
                             justifyContent="center"
                             alignItems="center">
                             <BaseText color={COLORS.WHITE}>
-                                {collectionItem?.nfts.length ?? 0}
+                                {collectionItem!.nfts.length}
                             </BaseText>
                         </BaseView>
                     </BaseView>
                 </BaseView>
             ) : (
                 <BaseImage
-                    uri={nftItem?.image ?? ""}
+                    uri={nftItem!.image}
                     style={baseStyles.nftPreviewImage}
                 />
             )}
