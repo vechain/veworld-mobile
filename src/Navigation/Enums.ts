@@ -33,7 +33,6 @@ export enum Routes {
     MANAGE_DELEGATION_URLS = "Manage_Delegation_URLs",
     SETTINGS_GENERAL = "Settings_General",
     SETTINGS_ADVANCED = "Settings_Advanced",
-    SETTINGS_NFT = "Settings_NFT",
     SETTINGS_NETWORK = "Settings_Network",
     SETTINGS_CONTACTS = "Settings_Contacts",
     SETTINGS_ADD_CONTACT = "Settings_Add_Contact",
