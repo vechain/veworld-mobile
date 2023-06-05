@@ -1,11 +1,15 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, DIRECTIONS, useTheme, useThemedStyles } from "~Common"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { Activity, FungibleToken, FungibleTokenActivity } from "~Model"
+import {
+    Activity,
+    ActivityStatus,
+    FungibleToken,
+    FungibleTokenActivity,
+} from "~Model"
 import {
     selectCurrency,
     selectCustomTokens,
@@ -16,6 +20,7 @@ import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { RootState } from "~Storage/Redux/Types"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
+import { ActivityStatusIndicator } from "."
 
 type Props = {
     activity: FungibleTokenActivity
@@ -92,7 +97,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
 
         return (
             <BaseTouchable
-                action={() => onPress(activity, token)}
+                onPress={() => onPress(activity, token)}
                 style={styles.container}>
                 <BaseView
                     w={100}
@@ -100,25 +105,34 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                     style={styles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
-                        <DropShadow style={[theme.shadows.card]}>
-                            <BaseView
-                                flexDirection="column"
-                                alignItems="center">
-                                <BaseIcon
-                                    name={directionIcon}
-                                    size={20}
-                                    color={COLORS.DARK_PURPLE}
-                                    testID="magnify"
-                                    bg={COLORS.WHITE}
-                                    iconPadding={4}
-                                />
-                            </BaseView>
-                        </DropShadow>
+                        <BaseView flexDirection="column" alignItems="center">
+                            <BaseIcon
+                                name={directionIcon}
+                                size={20}
+                                color={COLORS.DARK_PURPLE}
+                                testID="magnify"
+                                bg={COLORS.WHITE}
+                                iconPadding={4}
+                            />
+                        </BaseView>
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseView pl={12}>
-                                <BaseText typographyFont="buttonPrimary" pb={5}>
-                                    {transferDirectionText}
-                                </BaseText>
+                                <BaseView
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    justifyContent="flex-start">
+                                    <BaseText
+                                        typographyFont="buttonPrimary"
+                                        pb={5}>
+                                        {transferDirectionText}
+                                    </BaseText>
+                                    {activity.status !==
+                                        ActivityStatus.SUCCESS && (
+                                        <ActivityStatusIndicator
+                                            activityStatus={activity.status}
+                                        />
+                                    )}
+                                </BaseView>
                                 <BaseText typographyFont="smallCaptionRegular">
                                     {dateTimeTransfer}
                                 </BaseText>

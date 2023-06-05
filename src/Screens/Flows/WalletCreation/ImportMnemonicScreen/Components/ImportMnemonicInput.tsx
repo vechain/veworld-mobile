@@ -3,7 +3,6 @@ import React from "react"
 
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { typography } from "~Common/Theme"
-import DropShadow from "react-native-drop-shadow"
 
 const { defaults: defaultTypography } = typography
 type Props = {
@@ -19,28 +18,23 @@ export const ImportMnemonicInput = ({
 }: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles(isError))
     return (
-        <DropShadow style={themedStyles.shadow}>
-            <TextInput
-                style={themedStyles.container}
-                autoCapitalize="none"
-                autoComplete="off"
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={onChangeText}
-                value={mnemonic}
-                testID="import-mnemonic-input"
-            />
-        </DropShadow>
+        <TextInput
+            style={themedStyles.container}
+            autoCapitalize="none"
+            autoComplete="off"
+            multiline={true}
+            numberOfLines={4}
+            onChangeText={onChangeText}
+            value={mnemonic}
+            testID="import-mnemonic-input"
+        />
     )
 }
 
 const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
-        shadow: {
-            ...theme.shadows.card,
-            width: "100%",
-        },
         container: {
+            width: "100%",
             color: theme.colors.text,
             backgroundColor: theme.colors.card,
             borderColor: isError

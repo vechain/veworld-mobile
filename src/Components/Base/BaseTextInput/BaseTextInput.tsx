@@ -1,19 +1,13 @@
-import React, { memo } from "react"
-import {
-    TextInput,
-    StyleSheet,
-    TextInputProps,
-    StyleProp,
-    ViewStyle,
-} from "react-native"
-import DropShadow from "react-native-drop-shadow"
+import React, { forwardRef, memo } from "react"
+import { StyleSheet, TextInputProps, StyleProp, ViewStyle } from "react-native"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { COLORS, typography } from "~Common/Theme"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "../BaseView"
+import { TextInput } from "react-native-gesture-handler"
 const { defaults: defaultTypography } = typography
 
-type Props = {
+export type Props = {
     placeholder?: string
     label?: string
     value?: string
@@ -25,23 +19,27 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>
     setValue?: (s: string) => void
     disabled?: boolean
+    inBottomSheet?: boolean
 } & TextInputProps
 
-export const BaseTextInput = memo(
-    ({
-        placeholder,
-        label,
-        value,
-        errorMessage,
-        testID,
-        rightIcon,
-        rightIconTestID,
-        onIconPress,
-        setValue,
-        containerStyle,
-        disabled,
-        ...otherProps
-    }: Props) => {
+const BaseTextInputComponent = forwardRef<TextInput, Props>(
+    (
+        {
+            placeholder,
+            label,
+            value,
+            errorMessage,
+            testID,
+            rightIcon,
+            rightIconTestID,
+            onIconPress,
+            setValue,
+            containerStyle,
+            disabled,
+            ...otherProps
+        },
+        ref,
+    ) => {
         const { styles, theme } = useThemedStyles(baseStyles(!!errorMessage))
 
         const placeholderColor = theme.isDark
@@ -49,7 +47,7 @@ export const BaseTextInput = memo(
             : COLORS.DARK_PURPLE_DISABLED
 
         return (
-            <DropShadow style={containerStyle}>
+            <BaseView style={containerStyle}>
                 {label && (
                     <BaseText typographyFont="bodyMedium" mb={8}>
                         {label}
@@ -57,6 +55,7 @@ export const BaseTextInput = memo(
                 )}
                 <BaseView style={styles.container}>
                     <TextInput
+                        ref={ref}
                         style={[
                             styles.input,
                             {
@@ -103,7 +102,7 @@ export const BaseTextInput = memo(
                         {errorMessage || " "}
                     </BaseText>
                 </BaseView>
-            </DropShadow>
+            </BaseView>
         )
     },
 )
@@ -111,7 +110,6 @@ export const BaseTextInput = memo(
 const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            ...theme.shadows.card,
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
@@ -141,3 +139,6 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             opacity: isError ? 1 : 0,
         },
     })
+
+export const BaseTextInput = memo(BaseTextInputComponent)
+BaseTextInput.displayName = "BaseTextInput"

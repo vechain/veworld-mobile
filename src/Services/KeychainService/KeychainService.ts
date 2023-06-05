@@ -44,12 +44,12 @@ const getDeviceEncryptionKey = async (
 
 /**
  *  Set the encryption key for the device. Used to decrypt the wallet
- * @param encriptionKey  the encryption key to store
+ * @param encryptionKey  the encryption key to store
  * @param rootAddress  rootAddress of device
  * @param accessControl  if true, the user will be prompted to authenticate with biometrics
  */
 const setDeviceEncryptionKey = async (
-    encriptionKey: string,
+    encryptionKey: string,
     rootAddress: string,
     accessControl?: boolean,
 ) => {
@@ -72,15 +72,7 @@ const setDeviceEncryptionKey = async (
         }
     }
 
-    try {
-        await Keychain.set(
-            encriptionKey,
-            options,
-            `${WALLET_KEY}_${rootAddress}`,
-        )
-    } catch (err) {
-        error(err)
-    }
+    await Keychain.set(encryptionKey, options, `${WALLET_KEY}_${rootAddress}`)
 }
 
 /**

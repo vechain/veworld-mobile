@@ -15,7 +15,7 @@ import {
 import {
     selectActivitiesWithoutFinality,
     selectSelectedNetwork,
-    selectTokensWithBalances,
+    selectAllAccountsTokensWithBalances,
     selectVisibleAccounts,
     updateAccountBalances,
     updateNodeError,
@@ -52,7 +52,9 @@ export interface Beat {
 const BlockListener: React.FC = () => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
-    const allTokensWithBalance = useAppSelector(selectTokensWithBalances)
+    const allTokensWithBalance = useAppSelector(
+        selectAllAccountsTokensWithBalances,
+    )
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const thor = useThor()
     const pendingActivities = useAppSelector(selectActivitiesWithoutFinality)
@@ -145,7 +147,6 @@ const BlockListener: React.FC = () => {
         accounts: Account[],
     ) => {
         //Update the pending transaction cache, check for reverted
-
         const updatedActivities = await updateActivities(pendingActivities)
         for (const updatedAct of updatedActivities) {
             if (updatedAct.status === ActivityStatus.REVERTED) {

@@ -3,6 +3,7 @@ import { RootState } from "../Types"
 import { Activity, ActivityStatus, ActivityType } from "~Model"
 import { selectSelectedNetwork } from "./Network"
 import { selectSelectedAccount } from "./Account"
+import { ThorConstants } from "~Common"
 
 export const selectActivitiesState = (state: RootState) => state.activities
 
@@ -15,8 +16,10 @@ export const selectAllActivities = (state: RootState) => {
     Object.values(state.activities).forEach(activities => {
         allActivities = [
             ...allActivities,
-            ...activities.transactionActivities,
-            ...activities.nonTransactionActivities,
+            ...activities.transactionActivitiesMainnet,
+            ...activities.nonTransactionActivitiesMainnet,
+            ...activities.transactionActivitiesTestnet,
+            ...activities.nonTransactionActivitiesTestnet,
         ]
     })
     return allActivities
@@ -51,15 +54,19 @@ export const selectCurrentTransactionActivities = createSelector(
     selectSelectedNetwork,
     selectSelectedAccount,
     (activitiesState, network, account) => {
-        if (
-            account.address &&
-            activitiesState[account.address]?.transactionActivities
-        ) {
-            return activitiesState[
-                account.address
-            ].transactionActivities.filter(
-                act => act.genesisId === network?.genesis.id,
-            )
+        if (account.address && activitiesState[account.address.toLowerCase()]) {
+            if (network.genesis.id === ThorConstants.genesisesId.main)
+                return activitiesState[
+                    account.address.toLowerCase()
+                ].transactionActivitiesMainnet.filter(
+                    act => act.genesisId === network.genesis.id,
+                )
+            else
+                return activitiesState[
+                    account.address.toLowerCase()
+                ].transactionActivitiesTestnet.filter(
+                    act => act.genesisId === network.genesis.id,
+                )
         }
 
         return []
@@ -75,14 +82,21 @@ export const selectCurrentActivities = createSelector(
     selectSelectedAccount,
     selectCurrentTransactionActivities,
     (activitiesState, network, account, currentTransactionActivities) => {
-        if (
-            account.address &&
-            activitiesState[account.address]?.nonTransactionActivities
-        ) {
-            return activitiesState[account.address].nonTransactionActivities
-                .filter(act => act.genesisId === network?.genesis.id)
-                .concat(currentTransactionActivities)
-                .sort((a, b) => b.timestamp - a.timestamp)
+        if (account.address && activitiesState[account.address.toLowerCase()]) {
+            if (network.genesis.id === ThorConstants.genesisesId.main)
+                return activitiesState[
+                    account.address.toLowerCase()
+                ].nonTransactionActivitiesMainnet
+                    .filter(act => act.genesisId === network.genesis.id)
+                    .concat(currentTransactionActivities)
+                    .sort((a, b) => b.timestamp - a.timestamp)
+            else
+                return activitiesState[
+                    account.address.toLowerCase()
+                ].nonTransactionActivitiesTestnet
+                    .filter(act => act.genesisId === network.genesis.id)
+                    .concat(currentTransactionActivities)
+                    .sort((a, b) => b.timestamp - a.timestamp)
         }
 
         return []
