@@ -15,10 +15,10 @@ import {
     selectSelectedAccount,
     useAppSelector,
     useAppDispatch,
+    removeSession,
+    selectSessions,
 } from "~Storage/Redux"
-import { selectSessions } from "~Storage/Redux/Selectors"
 import { ISession } from "@walletconnect/types"
-import { removeSession } from "~Storage/Redux/Actions"
 
 export const WalletConnectScreen = () => {
     const web3Wallet = useWalletConnect()

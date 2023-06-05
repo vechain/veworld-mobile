@@ -24,13 +24,17 @@ import {
     selectDevice,
     selectSelectedAccount,
 } from "~Storage/Redux"
-import { HexUtils, CryptoUtils, TransactionUtils } from "~Utils"
+import {
+    HexUtils,
+    CryptoUtils,
+    TransactionUtils,
+    WalletConnectUtils,
+} from "~Utils"
 import { useCheckIdentity, error } from "~Common"
 import { Wallet } from "~Model"
 import axios from "axios"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
-import { VECHAIN_SIGNING_METHODS } from "~Utils/WalletConnectUtils/Lib"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 interface Props {
@@ -59,9 +63,10 @@ export const SignBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
         const message = useMemo(() => {
             switch (method) {
-                case VECHAIN_SIGNING_METHODS.IDENTIFY:
+                case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
                     return params.payload.content
-                case VECHAIN_SIGNING_METHODS.REQUEST_TRANSACTION:
+                case WalletConnectUtils.VECHAIN_SIGNING_METHODS
+                    .REQUEST_TRANSACTION:
                     return params.comment || params.txMessage[0].comment
                 default:
                     return ""
@@ -263,10 +268,11 @@ export const SignBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 const privateKey = derivedNode.privateKey as Buffer
 
                 switch (method) {
-                    case VECHAIN_SIGNING_METHODS.IDENTIFY:
+                    case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
                         await signIdentityCertificate(id, privateKey)
                         break
-                    case VECHAIN_SIGNING_METHODS.REQUEST_TRANSACTION:
+                    case WalletConnectUtils.VECHAIN_SIGNING_METHODS
+                        .REQUEST_TRANSACTION:
                         await onTestDelegate(id, privateKey)
                         break
                     default:

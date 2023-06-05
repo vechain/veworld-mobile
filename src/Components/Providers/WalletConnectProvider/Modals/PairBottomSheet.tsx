@@ -11,12 +11,12 @@ import {
     useWalletConnect,
 } from "~Components"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { addSession } from "~Storage/Redux/Actions/WalletConnect"
 import { getSdkError } from "@walletconnect/utils"
 import {
     selectAccountsState,
     useAppDispatch,
     useAppSelector,
+    addSession,
 } from "~Storage/Redux"
 
 interface Props {
@@ -77,9 +77,9 @@ export const PairBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 })
 
                 dispatch(addSession(session))
-                onClose()
 
                 showSuccessToast('Successfull connected to "' + name + '"')
+                onClose()
             }
         }
 

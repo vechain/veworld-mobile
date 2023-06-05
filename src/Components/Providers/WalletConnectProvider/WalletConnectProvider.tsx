@@ -6,10 +6,10 @@ import {
     useAppSelector,
     useAppDispatch,
     selectAccountsState,
+    removeSession,
 } from "~Storage/Redux"
 import { PairBottomSheet } from "./Modals/PairBottomSheet"
 import { SignBottomSheet } from "./Modals/SignBottomSheet"
-import { removeSession } from "~Storage/Redux/Actions/WalletConnect"
 import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal } from "~Common"
