@@ -23,7 +23,7 @@ export const CameraHeader = () => {
 
 const baseStyles = StyleSheet.create({
     container: {
-        marginTop: 20,
+        marginTop: PlatformUtils.isIOS() ? 60 : 20,
     },
     icon: {
         position: "absolute",

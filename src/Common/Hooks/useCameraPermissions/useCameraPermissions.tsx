@@ -26,7 +26,7 @@ export const useCameraPermissions = ({
             return
         }
 
-        if (!status?.granted && !status?.canAskAgain) {
+        if (!status?.canAskAgain) {
             return onCanceled()
         }
     }, [onCanceled])
@@ -39,7 +39,7 @@ export const useCameraPermissions = ({
             return
         }
 
-        if (!status?.granted && !status?.canAskAgain) {
+        if (!status?.canAskAgain) {
             let title = LL.TITLE_ALERT_CAMERA_PERMISSION()
             let msg = LL.SB_ALERT_CAMERA_PERMISSION()
 
@@ -58,7 +58,6 @@ export const useCameraPermissions = ({
 
         if (status.canAskAgain) {
             await requestPermissions()
-            return
         }
     }, [LL, requestPermissions, onCanceled])
 

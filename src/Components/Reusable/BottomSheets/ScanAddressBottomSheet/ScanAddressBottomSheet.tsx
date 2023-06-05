@@ -16,7 +16,7 @@ type Props = {
     onClose: () => void
 }
 
-const snapPoints = ["90%"]
+const snapPoints = ["100%"]
 
 export const ScanAddressBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
