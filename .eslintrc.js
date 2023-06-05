@@ -21,7 +21,6 @@ module.exports = {
                 "@typescript-eslint/no-unused-vars": "error",
                 "no-useless-escape": "error",
                 "react-native/no-inline-styles": "error",
-                "prettier/prettier": ["error", { semi: false }],
             },
         },
     ],
