@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
-import { CameraScreen } from "~Screens"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 
 export type RootStackParamListSwitch = {
@@ -11,9 +10,6 @@ export type RootStackParamListSwitch = {
     TabStack: undefined
     ResetAppScreen: undefined
     Create_Wallet_Flow: undefined
-    [Routes.CAMERA]: {
-        onScan: (str: string) => void
-    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -45,15 +41,6 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CREATE_WALLET_FLOW}
                             component={CreateWalletAppStack}
-                        />
-
-                        <Switch.Screen
-                            name={Routes.CAMERA}
-                            component={CameraScreen}
-                            options={{
-                                headerShown: false,
-                                presentation: "modal",
-                            }}
                         />
                     </Switch.Group>
                 </>

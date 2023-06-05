@@ -15,6 +15,7 @@ import {
     BaseTextInput,
     BaseView,
     ContactCard,
+    ScanAddressBottomSheet,
     ScrollViewWithFooter,
 } from "~Components"
 import {
@@ -50,6 +51,12 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         ref: refCreateContactBottomSheet,
         onOpen: openCreateContactSheet,
         onClose: closeCreateContactSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: scanAddressSheetRef,
+        onOpen: openScanAddressSheet,
+        onClose: closeScanAddressSheetRef,
     } = useBottomSheetModal()
 
     const accountsAndContacts = useMemo(() => {
@@ -144,10 +151,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         }
     }, [selectedAddress, isAddressInContactsOrAccounts, openCreateContactSheet])
 
-    const onOpenCamera = () => {
-        nav.navigate(Routes.CAMERA, { onScan: onSuccessfullScan })
-    }
-
     const onTextReset = () => {
         setSearchText("")
         setErrorMessage("")
@@ -204,7 +207,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             errorMessage={errorMessage}
                             rightIcon={searchText ? "close" : "flip-horizontal"}
                             onIconPress={
-                                searchText ? onTextReset : onOpenCamera
+                                searchText ? onTextReset : openScanAddressSheet
                             }
                         />
                     </BaseView>
@@ -287,6 +290,11 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 address={selectedAddress}
                 onClose={closeCreateContactSheet}
                 onSubmit={navigateNext}
+            />
+            <ScanAddressBottomSheet
+                ref={scanAddressSheetRef}
+                onClose={closeScanAddressSheetRef}
+                onScan={onSuccessfullScan}
             />
         </BaseSafeArea>
     )
