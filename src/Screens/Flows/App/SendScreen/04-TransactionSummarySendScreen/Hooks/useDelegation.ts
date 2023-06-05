@@ -1,13 +1,20 @@
 import { DelegationType } from "~Model/Delegation"
 import { AccountWithDevice } from "~Model"
-import { useState } from "react"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { useEffect, useState } from "react"
+import {
+    getDefaultDelegationAccount,
+    getDefaultDelegationOption,
+    getDefaultDelegationUrl,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 import { Transaction } from "thor-devkit"
 import { error, info } from "~Common"
 import { HexUtils, TransactionUtils } from "~Utils"
 import axios from "axios"
 import { showErrorToast } from "~Components"
 import { useI18nContext } from "~i18n"
+import { useSelector } from "react-redux"
 
 type Props = {
     transaction: Transaction.Body
@@ -24,6 +31,9 @@ export const useDelegation = ({ transaction }: Props) => {
     const [urlDelegationSignature, setUrlDelegationSignature] =
         useState<Buffer>()
     const isDelegated = selectedDelegationOption !== DelegationType.NONE
+    const defaultDelegationOption = useSelector(getDefaultDelegationOption)
+    const defaultDelegationAccount = useSelector(getDefaultDelegationAccount)
+    const defaultDelegationUrl = useSelector(getDefaultDelegationUrl)
 
     /**
      * TODO: Can be used later on to delegation in-extension transactions
@@ -80,6 +90,18 @@ export const useDelegation = ({ transaction }: Props) => {
             setUrlDelegationSignature(undefined)
         }
     }
+
+    useEffect(() => {
+        if (defaultDelegationOption === DelegationType.URL) {
+            setSelectedDelegationOption(defaultDelegationOption)
+            handleSetSelectedDelegationUrl(defaultDelegationUrl)
+        }
+        if (defaultDelegationOption === DelegationType.ACCOUNT) {
+            setSelectedDelegationOption(defaultDelegationOption)
+            setSelectedDelegationAccount(defaultDelegationAccount)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return {
         selectedDelegationOption,

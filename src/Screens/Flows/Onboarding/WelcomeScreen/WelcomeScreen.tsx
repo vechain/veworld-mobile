@@ -15,13 +15,13 @@ import {
     fetchTokensWithInfo,
     selectAccount,
     setAppLockStatus,
-    setMnemonic,
     setPinValidationString,
+    setUserSelectedSecurity,
     useAppDispatch,
 } from "~Storage/Redux"
-import { CryptoUtils, PasswordUtils, SeedUtils } from "~Utils"
+import { CryptoUtils } from "~Utils"
 import { SettingsConstants, useDeviceUtils } from "~Common"
-import { WALLET_STATUS } from "~Model"
+import { SecurityLevelType, WALLET_STATUS } from "~Model"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -45,24 +45,22 @@ export const WelcomeScreen = () => {
      */
     const { getDeviceFromMnemonic } = useDeviceUtils()
     const onDemoOnboarding = async () => {
-        const DEMO_MNEMONIC =
-            "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
         const FAKE_PIN = "111111"
-        const sanitisedMnemonic = SeedUtils.sanifySeed(DEMO_MNEMONIC).join(" ")
-        dispatch(setMnemonic(sanitisedMnemonic))
         const pinValidationString = CryptoUtils.encrypt<string>(
             SettingsConstants.VALIDATION_STRING,
             FAKE_PIN,
         )
         dispatch(setPinValidationString(pinValidationString))
-        const { device, wallet } = getDeviceFromMnemonic(DEMO_MNEMONIC)
-        dispatch(setMnemonic(undefined))
+        dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
 
+        const DEMO_MNEMONIC =
+            "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+        const { device, wallet } = getDeviceFromMnemonic(DEMO_MNEMONIC)
         const { encryptedWallet } = await CryptoUtils.encryptWallet({
             wallet,
             rootAddress: device.rootAddress,
             accessControl: false,
-            hashEncryptionKey: PasswordUtils.hash(FAKE_PIN),
+            hashEncryptionKey: FAKE_PIN,
         })
 
         const newAccount = dispatch(

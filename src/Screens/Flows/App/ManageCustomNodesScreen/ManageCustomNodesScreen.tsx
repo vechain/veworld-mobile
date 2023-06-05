@@ -211,7 +211,10 @@ export const ManageCustomNodesScreen = () => {
     return (
         <BaseSafeArea grow={1} onTouchStart={() => closeOtherSwipeableItems()}>
             <BackButtonHeader />
-            <BaseView flexDirection="row" mx={20}>
+            <BaseView
+                flexDirection="row"
+                justifyContent="space-between"
+                mx={20}>
                 <BaseText typographyFont="subTitleBold">
                     {LL.BD_CUSTOM_NODES()}
                 </BaseText>

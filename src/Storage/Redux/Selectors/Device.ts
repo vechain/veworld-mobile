@@ -19,26 +19,30 @@ export const selectHasOnboarded = createSelector(selectAll, state => {
  * @param rootAddress rootAddress of device to get
  * @returns the device with the given rootAddress
  */
-export const selectDevice = (rootAddress?: string) =>
-    createSelector(selectDevicesState, state => {
+export const selectDevice = createSelector(
+    [selectDevicesState, (_: RootState, rootAddress?: string) => rootAddress],
+    (state, rootAddress) => {
         return state.find(device => device.rootAddress === rootAddress)
-    })
+    },
+)
 
 /**
  *
  * @param type optional type to filter devices by
  * @returns all devices of the given type or all devices if no type is given
  */
-export const selectDevices = (type?: DEVICE_TYPE) =>
-    createSelector(selectDevicesState, state => {
+export const selectDevices = createSelector(
+    [selectDevicesState, (_: RootState, type?: DEVICE_TYPE) => type],
+    (state, type) => {
         if (!type) return state
         return state.filter(device => device.type === type)
-    })
+    },
+)
 
 export const selectLedgerDevices = createSelector(selectDevicesState, state => {
-    return state.filter(device => device.type === DEVICE_TYPE.LOCAL_MNEMONIC)
+    return state.filter(device => device.type === DEVICE_TYPE.LEDGER)
 })
 
 export const selectLocalDevices = createSelector(selectDevicesState, state => {
-    return state.filter(device => device.type === DEVICE_TYPE.LEDGER)
+    return state.filter(device => device.type === DEVICE_TYPE.LOCAL_MNEMONIC)
 })

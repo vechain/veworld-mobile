@@ -6,8 +6,7 @@ import {
     ViewProps,
     ViewStyle,
 } from "react-native"
-import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseView } from "../BaseView"
 
 type Props = {
@@ -25,12 +24,10 @@ export const BaseCard = memo(
         selected,
         onPress,
     }: ViewProps & Props) => {
-        const theme = useTheme()
         const { styles } = useThemedStyles(baseStyles)
         return (
-            <DropShadow
+            <BaseView
                 style={[
-                    theme.shadows.card,
                     selected ? styles.selectedContainer : {},
                     styles.container,
                     containerStyle,
@@ -40,7 +37,7 @@ export const BaseCard = memo(
                         {children}
                     </BaseView>
                 </Pressable>
-            </DropShadow>
+            </BaseView>
         )
     },
 )

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { FlatList, StyleSheet } from "react-native"
-import { useTheme } from "~Common"
+import { FlatList, RefreshControl, StyleSheet } from "react-native"
+import { SCREEN_WIDTH, useTheme } from "~Common"
 import { FormattingUtils, PlatformUtils } from "~Utils"
 import {
     BaseText,
@@ -42,8 +42,11 @@ export const HistoryScreen = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const { fetchActivities, activities, hasFetched, page } =
-        useAccountActivities(selectedAccount?.address ?? "")
+    // Pull down to refresh
+    const [refreshing, setRefreshing] = React.useState(false)
+
+    const { fetchActivities, activities, hasFetched, page, setPage } =
+        useAccountActivities(selectedAccount.address)
 
     const nav = useNavigation()
 
@@ -79,8 +82,23 @@ export const HistoryScreen = () => {
     )
 
     const onScroll = useCallback(() => {
-        if (!hasScrolled) setHasScrolled(true)
-    }, [hasScrolled])
+        setHasScrolled(true)
+    }, [])
+
+    const onEndReached = useCallback(async () => {
+        if (hasScrolled) {
+            await fetchActivities()
+        }
+    }, [fetchActivities, hasScrolled])
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+
+        setHasScrolled(false)
+        setPage(0)
+
+        setRefreshing(false)
+    }, [setPage])
 
     const renderActivity = useCallback(
         (activity: Activity, index: number) => {
@@ -146,23 +164,32 @@ export const HistoryScreen = () => {
                         estimatedItemSize={80}
                         estimatedListSize={{
                             height: 80 * activities.length,
-                            width: 400,
+                            width: SCREEN_WIDTH - 40,
                         }}
                         onScroll={onScroll}
                         onEndReachedThreshold={1}
-                        onEndReached={hasScrolled ? fetchActivities : undefined}
+                        onEndReached={onEndReached}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                                tintColor={theme.colors.border}
+                            />
+                        }
                     />
                 </BaseView>
             </>
         )
     }, [
         activities,
-        fetchActivities,
         hasFetched,
-        hasScrolled,
+        onEndReached,
+        onRefresh,
         onScroll,
+        refreshing,
         renderActivity,
         styles.list,
+        theme.colors.border,
     ])
 
     const renderSkeletonList = useMemo(() => {
@@ -212,7 +239,10 @@ export const HistoryScreen = () => {
             />
 
             <BaseSpacer height={12} />
-            <BaseView flexDirection="row" mx={20}>
+            <BaseView
+                flexDirection="row"
+                mx={20}
+                justifyContent="space-between">
                 <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
 
                 <ChangeAccountButtonPill

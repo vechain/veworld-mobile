@@ -1,13 +1,13 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
 import { DateUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { Activity, ConnectedAppTxActivity } from "~Model"
+import { Activity, ActivityStatus, ConnectedAppTxActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
+import { ActivityStatusIndicator } from "."
 
 type Props = {
     activity: ConnectedAppTxActivity
@@ -42,25 +42,34 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
                     style={styles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
-                        <DropShadow style={[theme.shadows.card]}>
-                            <BaseView
-                                flexDirection="column"
-                                alignItems="center">
-                                <BaseIcon
-                                    name="view-grid-outline"
-                                    size={20}
-                                    color={COLORS.DARK_PURPLE}
-                                    testID="magnify"
-                                    bg={COLORS.WHITE}
-                                    iconPadding={4}
-                                />
-                            </BaseView>
-                        </DropShadow>
+                        <BaseView flexDirection="column" alignItems="center">
+                            <BaseIcon
+                                name="view-grid-outline"
+                                size={20}
+                                color={COLORS.DARK_PURPLE}
+                                testID="magnify"
+                                bg={COLORS.WHITE}
+                                iconPadding={4}
+                            />
+                        </BaseView>
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseView pl={12}>
-                                <BaseText typographyFont="buttonPrimary" pb={5}>
-                                    {LL.DAPP_TRANSACTION()}
-                                </BaseText>
+                                <BaseView
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    justifyContent="flex-start">
+                                    <BaseText
+                                        typographyFont="buttonPrimary"
+                                        pb={5}>
+                                        {LL.DAPP_TRANSACTION()}
+                                    </BaseText>
+                                    {activity.status !==
+                                        ActivityStatus.SUCCESS && (
+                                        <ActivityStatusIndicator
+                                            activityStatus={activity.status}
+                                        />
+                                    )}
+                                </BaseView>
                                 <BaseText typographyFont="smallCaptionRegular">
                                     {dateTimeActivity}
                                 </BaseText>

@@ -20,7 +20,7 @@ import SwipeableItem, {
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
 
-interface Props {
+type Props = {
     openAddUrl: () => void
 }
 
@@ -43,7 +43,6 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
             return (
                 <SwipeableItem
                     ref={el => (swipeableItemRef.current[index] = el)}
-                    key={item}
                     item={item}
                     renderUnderlayLeft={() => (
                         <SwipeableUnderlay

@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react"
 import { BaseScrollView, BaseSpacer, BaseView } from "~Components/Base"
 
-interface Props {
+type Props = {
     children: ReactNode
     footer: ReactNode
 }

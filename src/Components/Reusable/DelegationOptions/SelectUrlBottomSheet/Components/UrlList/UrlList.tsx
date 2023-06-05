@@ -5,7 +5,7 @@ import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { selectDelegationUrls, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
-interface Props {
+type Props = {
     setAddUrlMode: (s: boolean) => void
     setSelectedDelegationUrl: (s?: string) => void
     selectedDelegationUrl?: string

@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { COLORS } from "~Common/Theme"
 import {
@@ -65,7 +64,7 @@ export const NftsList = ({ nfts }: Props) => {
                 if (!_item) return null
 
                 return (
-                    <DropShadow style={themedStyles.cardShadow}>
+                    <BaseView>
                         <TouchableOpacity
                             onPress={() =>
                                 onSeeAllPress(_item!.collectionAddress)
@@ -86,12 +85,12 @@ export const NftsList = ({ nfts }: Props) => {
                                 </BaseText>
                             </BaseView>
                         </TouchableOpacity>
-                    </DropShadow>
+                    </BaseView>
                 )
             } else {
                 let _item = item as NonFungibleToken
                 return (
-                    <DropShadow style={themedStyles.cardShadow}>
+                    <BaseView>
                         <TouchableOpacity onPress={() => onNftPress(_item)}>
                             <BaseView style={[themedStyles.nftCard]}>
                                 <BaseImage
@@ -101,16 +100,11 @@ export const NftsList = ({ nfts }: Props) => {
                                 />
                             </BaseView>
                         </TouchableOpacity>
-                    </DropShadow>
+                    </BaseView>
                 )
             }
         },
-        [
-            onNftPress,
-            onSeeAllPress,
-            themedStyles.cardShadow,
-            themedStyles.nftCard,
-        ],
+        [onNftPress, onSeeAllPress, themedStyles.nftCard],
     )
 
     return (

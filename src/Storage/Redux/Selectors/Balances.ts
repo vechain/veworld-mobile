@@ -73,6 +73,34 @@ export const selectAccountCustomTokens = createSelector(
 /**
  * Get all account balances with related token data
  */
+export const selectAllAccountsTokensWithBalances = createSelector(
+    [
+        selectBalancesState,
+        selectFungibleTokensAll,
+        selectCustomTokensForNetwork,
+    ],
+    (balances, tokens, customTokens): FungibleTokenWithBalance[] =>
+        balances.map(balance => {
+            const balanceToken = [...tokens, ...customTokens].find(token =>
+                AddressUtils.compareAddresses(
+                    token.address,
+                    balance.tokenAddress,
+                ),
+            )
+            if (!balanceToken) {
+                throw new Error(
+                    `Unable to find token with this address: ${balance.tokenAddress}`,
+                )
+            }
+            return {
+                ...balanceToken,
+                balance,
+            }
+        }),
+)
+/**
+ * Get balances with related token data for selected account
+ */
 export const selectTokensWithBalances = createSelector(
     [
         selectSelectedAccountBalances,
@@ -115,7 +143,7 @@ export const selectNonVechainTokensWithBalances = createSelector(
 )
 
 /**
- * Get just vet token and related balance
+ * Get just vet token and related balance for selected account
  */
 export const selectVetTokenWithBalance = createSelector(
     [selectTokensWithBalances],
@@ -126,7 +154,7 @@ export const selectVetTokenWithBalance = createSelector(
 )
 
 /**
- * Get just vtho balance
+ * Get just vtho balance for selected account
  */
 export const selectVthoTokenWithBalance = createSelector(
     [selectTokensWithBalances],
