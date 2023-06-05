@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ThorConstants, debug } from "~Common"
+import { ThorConstants, debug, info } from "~Common"
 import {
     ActivityEndpoints,
     FetchTransactionsResponse,
@@ -30,7 +30,8 @@ export const fetchTransactions = async (
 
     // Indexer doesn't support testnet transaction indexing
     if (thor.genesis.id === ThorConstants.genesises.test.id) {
-        throw new Error("Testnet transaction indexing is not supported")
+        info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
+        return []
     }
 
     try {

@@ -1,6 +1,5 @@
 import React, { memo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { useTheme } from "~Common"
 import { BaseView } from "../BaseView"
 
@@ -13,8 +12,7 @@ export const BaseCardGroup = memo(
     ({ containerStyle, views }: ViewProps & Props) => {
         const theme = useTheme()
         return (
-            <DropShadow
-                style={[theme.shadows.card, styles.container, containerStyle]}>
+            <BaseView style={[styles.container, containerStyle]}>
                 {views.map((view, index) => {
                     const { children, style, ...others } = view
                     const borderTopRadius = index === 0 ? 16 : 0
@@ -45,7 +43,7 @@ export const BaseCardGroup = memo(
                         </BaseView>
                     )
                 })}
-            </DropShadow>
+            </BaseView>
         )
     },
 )

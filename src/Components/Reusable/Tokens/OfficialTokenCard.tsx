@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo } from "react"
 import { TokenWithCompleteInfo } from "~Model"
-import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { CURRENCY, ColorThemeType, useThemedStyles } from "~Common"
 import { TokenImage } from "../TokenImage"
 
@@ -26,8 +26,8 @@ export const OfficialTokenCard = memo(
     }: OfficialTokenCardProps & ViewProps) => {
         const { styles, theme } = useThemedStyles(baseStyles(selected))
         return (
-            <BaseTouchableBox
-                action={action}
+            <BaseCard
+                onPress={action}
                 containerStyle={[styles.container, style]}>
                 <BaseView flexDirection="row" justifyContent="space-between">
                     <TokenImage icon={token.icon} />
@@ -67,7 +67,7 @@ export const OfficialTokenCard = memo(
                         </BaseView>
                     )}
                 </BaseView>
-            </BaseTouchableBox>
+            </BaseCard>
         )
     },
 )
@@ -84,10 +84,5 @@ const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
             borderWidth: selected ? 1 : 0,
             borderRadius: 16,
             borderColor: theme.colors.text,
-        },
-        card: {
-            borderRadius: 30,
-            padding: 10,
-            marginEnd: 16,
         },
     })

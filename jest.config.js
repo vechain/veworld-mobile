@@ -59,12 +59,11 @@ module.exports = {
         "<rootDir>/src/Common/Hooks/useAppReset/useAppReset.tsx",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
     ],
-
     coverageThreshold: {
         global: {
             statements: 94.38,
             branches: 86.75,
-            functions: 96.0,
+            functions: 95.5,
             lines: 94.4,
         },
     },

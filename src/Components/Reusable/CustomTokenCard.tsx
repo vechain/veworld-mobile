@@ -31,7 +31,7 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
                 )}
             </BaseCard>
             <BaseSpacer width={16} />
-            <BaseView flexDirection="column">
+            <BaseView flexDirection="column" justifyContent="center">
                 <BaseText typographyFont="buttonPrimary">{token.name}</BaseText>
                 <BaseText typographyFont="captionRegular">
                     {token.symbol}

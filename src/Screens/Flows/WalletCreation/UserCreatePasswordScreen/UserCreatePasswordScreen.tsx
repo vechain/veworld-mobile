@@ -9,21 +9,21 @@ import {
     BackButtonHeader,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { SecurityLevelType } from "~Model"
+import {
+    PinVerificationError,
+    PinVerificationErrorType,
+    SecurityLevelType,
+} from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
-import { SettingsConstants, valueToHP } from "~Common"
-import { CryptoUtils } from "~Utils"
-import { useAppDispatch } from "~Storage/Redux"
-import { setPinValidationString } from "~Storage/Redux/Actions"
+import { usePasswordValidation, valueToHP } from "~Common"
 
 const digitNumber = 6
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
-
+    const { updatePassword } = usePasswordValidation()
     const nav = useNavigation()
-    const dispatch = useAppDispatch()
 
     /**
      * Called by `useOnDigitPressWithConfirmation` when the user has finished typing the pin
@@ -31,33 +31,33 @@ export const UserCreatePasswordScreen = () => {
      * and navigate to the success screen
      */
     const onFinishCallback = useCallback(
-        (insertedPin: string) => {
-            const pinValidationString = CryptoUtils.encrypt<string>(
-                SettingsConstants.VALIDATION_STRING,
-                insertedPin,
-            )
-            dispatch(setPinValidationString(pinValidationString))
+        async (insertedPin: string) => {
+            await updatePassword(insertedPin)
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.SECRET,
                 userPin: insertedPin,
             })
         },
-        [nav, dispatch],
+        [updatePassword, nav],
     )
 
     const [isConfirmationError, setIsConfirmationError] =
-        useState<boolean>(false)
+        useState<PinVerificationErrorType>({ type: undefined, value: false })
 
     const { pin, isPinRetype, onDigitPress, onDigitDelete } =
         useOnDigitPressWithConfirmation({
             digitNumber,
             onFinishCallback,
-            onConfirmationError: () => setIsConfirmationError(true),
+            onConfirmationError: () =>
+                setIsConfirmationError({
+                    type: PinVerificationError.VALIDATE_PIN,
+                    value: true,
+                }),
         })
 
     const handleOnDigitPress = useCallback(
         (digit: string) => {
-            setIsConfirmationError(false)
+            setIsConfirmationError({ type: undefined, value: false })
             onDigitPress(digit)
         },
         [onDigitPress],

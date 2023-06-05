@@ -15,6 +15,7 @@ export type ToastStyles = {
  * @param {ColorThemeType} theme - The color theme object.
  * @param {string} darkColor - The color to be used in dark mode.
  * @param {string} lightColor - The color to be used in light mode.
+ * @param {string} iconColor - The color to be used for the icon.
  * @returns {ToastStyles} The generated toast styles object.
  */
 const generateToastStyles = (

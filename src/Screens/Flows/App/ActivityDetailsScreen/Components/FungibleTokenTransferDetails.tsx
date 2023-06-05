@@ -103,7 +103,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             {
                 id: 4,
                 title: LL.BLOCK_NUMBER(),
-                value: `${blockNumber}`,
+                value: blockNumber ? `${blockNumber}` : "",
                 typographyFont: "subSubTitle",
                 underline: false,
             },
