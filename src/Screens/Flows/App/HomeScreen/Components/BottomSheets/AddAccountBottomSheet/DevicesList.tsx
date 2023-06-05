@@ -24,7 +24,7 @@ export const DevicesList: React.FC<Props> = ({
     onDevicePress,
 }) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-    const devices = useAppSelector(selectDevices())
+    const devices = useAppSelector(selectDevices)
 
     const handleOnDevicePress = useCallback(
         (device: BaseDevice) => () => {
