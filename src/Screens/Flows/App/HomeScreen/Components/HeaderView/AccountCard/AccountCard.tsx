@@ -91,6 +91,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                             color={theme.colors.textReversed}
                             size={28}
                             action={openAccountManagement}
+                            testID="AccountCard_accountManagementButton"
                         />
                     </BaseView>
                     <BaseView
