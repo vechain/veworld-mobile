@@ -1,3 +1,4 @@
+import { DelegationType } from "~Model/Delegation"
 import {
     DelegationSlice,
     DelegationState,
@@ -10,6 +11,9 @@ describe("DelegationSlice", () => {
     beforeEach(() => {
         initialState = {
             urls: [],
+            defaultDelegationOption: DelegationType.NONE,
+            defaultDelegationAccount: undefined,
+            defaultDelegationUrl: undefined,
         }
     })
 

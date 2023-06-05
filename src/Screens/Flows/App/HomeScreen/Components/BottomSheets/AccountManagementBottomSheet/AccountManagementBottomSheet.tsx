@@ -54,6 +54,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
                     size={32}
                     bg={theme.colors.secondary}
                     action={onAddAccount}
+                    testID="AccountManagementBottomSheet_addAccountButton"
                 />
             </BaseView>
             <BaseSpacer height={24} />
