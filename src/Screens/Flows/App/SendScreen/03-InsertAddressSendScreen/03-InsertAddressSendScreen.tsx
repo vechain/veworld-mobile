@@ -88,6 +88,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     }, [selectedAddress, accounts, searchText])
 
     const isAddressInContactsOrAccounts = useMemo(() => {
+        if (!selectedAddress) return false
         return accountsAndContacts.some(accountOrContact =>
             AddressUtils.compareAddresses(
                 accountOrContact.address,
@@ -132,7 +133,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
 
     //Whenever search changes, we check if it's a valid address, eventually opening the create bottomsheet
     useEffect(() => {
-        if (AddressUtils.isValid(searchText)) {
+        if (searchText && AddressUtils.isValid(searchText)) {
             setSelectedAddress(searchText)
         }
     }, [searchText])
@@ -223,6 +224,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             <BaseView>
                                 {filteredContacts.map(contact => {
                                     const isSelected =
+                                        !!selectedAddress &&
                                         AddressUtils.compareAddresses(
                                             contact.address,
                                             selectedAddress,
@@ -258,6 +260,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             <BaseView>
                                 {filteredAccounts.map(account => {
                                     const isSelected =
+                                        !!selectedAddress &&
                                         AddressUtils.compareAddresses(
                                             account.address,
                                             selectedAddress,

@@ -20,6 +20,7 @@ import {
 } from "~Navigation"
 import { selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
+import * as Haptics from "expo-haptics"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -41,6 +42,7 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
             token,
             initialRoute: route.params.initialRoute ?? "",
         })
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     }
     return (
         <BaseSafeArea grow={1} testID="Select_Token_Send_Screen">

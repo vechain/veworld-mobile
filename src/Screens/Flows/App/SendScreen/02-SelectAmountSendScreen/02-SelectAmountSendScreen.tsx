@@ -31,6 +31,8 @@ import {
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
+import * as Haptics from "expo-haptics"
+
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<
@@ -116,6 +118,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             amount: isInputInFiat ? rawTokenInput : input,
             initialRoute: initialRoute ?? "",
         })
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     }
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text
