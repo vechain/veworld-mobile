@@ -16,12 +16,12 @@ const device2 = {
 //     "juice direct sell apart motion polar copper air novel dumb slender flash feature early feel"
 jest.mock("~Storage/Redux/Selectors", () => ({
     ...jest.requireActual("~Storage/Redux/Selectors"),
-    selectDevices: jest.fn(() => () => [device1, device2]),
+    selectDevices: jest.fn(() => [device1, device2]),
 }))
 
 describe("useDeviceUtils", () => {
     it("should generate a new device from a given mnemonic", async () => {
-        ;(selectDevices as jest.Mock).mockImplementation(() => [
+        ;(selectDevices as unknown as jest.Mock).mockImplementation(() => [
             device1,
             device2,
         ])
@@ -45,7 +45,7 @@ describe("useDeviceUtils", () => {
     })
 
     it("should throw with the same device", async () => {
-        ;(selectDevices as jest.Mock).mockImplementation(() => [
+        ;(selectDevices as unknown as jest.Mock).mockImplementation(() => [
             {
                 alias: "Wallet 3",
                 xPub: {
