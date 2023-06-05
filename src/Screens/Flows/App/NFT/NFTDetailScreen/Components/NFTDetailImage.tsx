@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { SCREEN_WIDTH, useTheme } from "~Common"
 import { COLORS } from "~Common/Theme"
 import { BaseIcon, BaseImage, BaseText, BaseView, BlurView } from "~Components"
-import { setNFTIsHidden, useAppDispatch } from "~Storage/Redux"
+import { setBlackListNFT, useAppDispatch } from "~Storage/Redux"
 
 type Props = {
     image: string
@@ -27,13 +27,12 @@ export const NFTDetailImage = ({
 
     const onHiddenPress = useCallback(() => {
         dispatch(
-            setNFTIsHidden({
+            setBlackListNFT({
                 contractAddress: collectionAddress,
                 tokenId,
-                isHidden: !hidden,
             }),
         )
-    }, [collectionAddress, dispatch, hidden, tokenId])
+    }, [collectionAddress, dispatch, tokenId])
 
     return (
         <BaseView>

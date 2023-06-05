@@ -1,15 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { NonFungibleTokenCollection } from "~Model"
 
+type NFTBlackListedItem = {
+    tokenId: string
+    collectionsAddress: string
+}
+
 type NftSliceState = {
     collections: NonFungibleTokenCollection[]
-    blackListCollections: string[]
-    blackListNFTs: string[]
+    blackListedCollections: string[]
+    blackListedNFTs: NFTBlackListedItem[]
 }
 
 export const initialStateNft: NftSliceState = {
-    blackListCollections: [],
-    blackListNFTs: [],
+    blackListedCollections: [],
+    blackListedNFTs: [],
     collections: [],
 }
 
@@ -26,28 +31,30 @@ export const NftSlice = createSlice({
             return state
         },
 
-        setNFTIsHidden: (
+        // TODO set here adjust Nfts from selectors
+        setBlackListNFT: (
             state,
             action: PayloadAction<{
                 contractAddress: string
                 tokenId: string
-                isHidden: boolean
             }>,
         ) => {
-            return state.collections.forEach(nftCollection => {
-                if (
-                    nftCollection.address ===
-                    action.payload.contractAddress.toLowerCase()
-                ) {
-                    nftCollection.nfts.forEach(nft => {
-                        if (nft.tokenId === action.payload.tokenId) {
-                            nft.isHidden = action.payload.isHidden
-                        }
-                    })
-                }
-            })
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const _action = action
+            return state
+        },
+
+        // TODO set here adjust collections from selectors
+        setBlackListCollection: (
+            state,
+            action: PayloadAction<{ contractAddress: string }>,
+        ) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const _action = action
+            return state
         },
     },
 })
 
-export const { setNfts, setNFTIsHidden } = NftSlice.actions
+export const { setNfts, setBlackListNFT, setBlackListCollection } =
+    NftSlice.actions

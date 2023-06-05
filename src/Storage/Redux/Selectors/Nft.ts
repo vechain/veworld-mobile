@@ -39,13 +39,3 @@ export const selectNFTWithAddressAndTokenId = createSelector(
         return nft
     },
 )
-
-//   return collections.map(collection => {
-//             return collection.nfts.map(nft => {
-//                 if (!nft.isHidden) {
-//                     return nft
-//                 }
-//             })
-//         })
-
-// */
