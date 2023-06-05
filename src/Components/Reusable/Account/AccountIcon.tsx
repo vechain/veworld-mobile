@@ -6,7 +6,7 @@ import { BaseView } from "~Components/Base"
 
 type AccountIconProps = {
     address: string
-    size: number
+    size?: number
 }
 
 export const AccountIcon: React.FC<AccountIconProps> = memo(
