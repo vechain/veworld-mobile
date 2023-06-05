@@ -160,6 +160,7 @@ const en: BaseTranslation = {
     TITLE_CONTACTS: "Contacts",
     TITLE_ADD_CONTACT: "Add Contact",
     TITLE_MANAGE_WALLET: "Manage Wallet",
+    TITLE_TRANSACTIONS: "Transactions",
     TITLE_NFT: "NFT",
     TITLE_NFTS: "NFTs",
     TITLE_NETWORK: "Network",
@@ -348,6 +349,16 @@ const en: BaseTranslation = {
     
     // Settings Languages
 
+    // Settings Transactions
+
+    SETTINGS_TRANSACTIONS_TITLE: "Transactions",
+    SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: "Default delegation",
+    SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION: "Select the default delegation for your transactions",
+    SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: "Delegation URLs",
+    SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: "Add or delete a delegation URL so you can select it when sending transactions",
+    SETTINGS_TRANSACTIONS_MANAGE_URLS: "Manage URLs",
+
+
     // Manage Token
     MANAGE_TOKEN_TITLE: "Manage Tokens",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
@@ -398,6 +409,7 @@ const en: BaseTranslation = {
     SEND_DELEGATION_ACCOUNT: "Account",
     SEND_DELEGATION_URL: "URL",
     SEND_DELEGATION_SELECT_URL: "Select URL",
+    SEND_DELEGATION_MANAGE_URL: "Manage URLs",
     SEND_DELEGATION_ADD_URL: "Add delegation URL",
     SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
     SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",

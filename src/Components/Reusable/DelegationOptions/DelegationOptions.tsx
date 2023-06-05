@@ -5,8 +5,8 @@ import { BaseButtonGroupHorizontalType, AccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useBottomSheetModal } from "~Common"
 import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
-import { SelectUrlBottomSheet } from "../SelectUrlBottomSheet"
-import { SelectDelegationAccountBottomSheet } from "../SelectDelegationAccountBottomSheet"
+import { SelectUrlBottomSheet } from "./SelectUrlBottomSheet"
+import { SelectDelegationAccountBottomSheet } from "./SelectDelegationAccountBottomSheet"
 
 type Props = {
     selectedDelegationUrl?: string

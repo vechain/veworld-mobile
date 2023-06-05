@@ -33,7 +33,6 @@ export const SelectUrlBottomSheet = React.forwardRef<
         const [addUrlMode, setAddUrlMode] = useState(false)
         const [newUrl, setNewUrl] = useState("")
         const delegationUrls = useAppSelector(selectDelegationUrls)
-
         const onDismiss = () => {
             setAddUrlMode(false)
             setNewUrl("")

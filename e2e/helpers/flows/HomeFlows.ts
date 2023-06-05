@@ -1,5 +1,6 @@
 import { waitFor, element } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../constants"
+import { clickById } from "../common"
 
 export const goToContactsManagement = async () => {
     await waitFor(element(by.id("settings-tab")))
@@ -17,6 +18,10 @@ export const goToContactsManagement = async () => {
 
 export const goToTokensManagementScreen = async () => {
     await element(by.id("EditTokensBar_BaseIcon_manageToken")).tap()
+}
+
+export const goToSettings = async () => {
+    await clickById("settings-tab")
 }
 
 export const goToAdvancedSettings = async () => {
