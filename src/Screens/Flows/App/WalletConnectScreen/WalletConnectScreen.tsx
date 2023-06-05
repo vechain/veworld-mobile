@@ -42,16 +42,18 @@ export const WalletConnectScreen = () => {
     }, [uri, web3Wallet])
 
     async function disconnect() {
-        const topic = activeSessions[0].topic
-
         if (activeSessions) {
-            // console.log("Disconnecting session with topic: ", topic)
-            await web3Wallet.disconnectSession({
-                topic,
-                reason: getSdkError("USER_DISCONNECTED"),
-            })
-
-            dispatch(removeSession(topic))
+            const topic = activeSessions[0].topic
+            try {
+                await web3Wallet.disconnectSession({
+                    topic,
+                    reason: getSdkError("USER_DISCONNECTED"),
+                })
+            } catch (err: unknown) {
+                // console.log("Error for disconnecting", err)
+            } finally {
+                dispatch(removeSession(topic))
+            }
         }
     }
 

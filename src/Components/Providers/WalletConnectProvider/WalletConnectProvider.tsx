@@ -7,8 +7,8 @@ import {
     useAppDispatch,
     selectAccountsState,
 } from "~Storage/Redux"
-import { PairingModalBottomSheet } from "./Modals/PairingModal"
-import { SignModalBottomSheet } from "./Modals/SignModal"
+import { PairBottomSheet } from "./Modals/PairBottomSheet"
+import { SignBottomSheet } from "./Modals/SignBottomSheet"
 import { removeSession } from "~Storage/Redux/Actions/WalletConnect"
 import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -28,15 +28,15 @@ const WalletConnectContextProvider = ({
 
     /* Bottom Sheets */
     const {
-        ref: pairingModalBottomSheet,
-        onOpen: openPairingModalBottomSheet,
-        onClose: closePairingModalBottomSheet,
+        ref: pairBottomSheet,
+        onOpen: openPairBottomSheet,
+        onClose: closePairBottomSheet,
     } = useBottomSheetModal()
 
     const {
-        ref: signModalBottomSheet,
-        onOpen: openSignModalBottomSheet,
-        onClose: closeSignModalBottomSheet,
+        ref: signBottomSheet,
+        onOpen: openSignBottomSheet,
+        onClose: closeSignBottomSheet,
     } = useBottomSheetModal()
 
     // For session request
@@ -61,16 +61,16 @@ const WalletConnectContextProvider = ({
      */
     const onSessionProposal = useCallback(
         (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
-            openPairingModalBottomSheet()
+            openPairBottomSheet()
             setCurrentProposal(proposal)
         },
-        [openPairingModalBottomSheet],
+        [openPairBottomSheet],
     )
 
     const onSessionProposalClose = useCallback(() => {
         setCurrentProposal(undefined)
-        closePairingModalBottomSheet()
-    }, [closePairingModalBottomSheet])
+        closePairBottomSheet()
+    }, [closePairBottomSheet])
 
     /**
      * Handle session request
@@ -86,9 +86,9 @@ const WalletConnectContextProvider = ({
 
             setRequestSession(requestSessionData)
             setRequestEventData(requestEvent)
-            openSignModalBottomSheet()
+            openSignBottomSheet()
         },
-        [web3Wallet, openSignModalBottomSheet],
+        [web3Wallet, openSignBottomSheet],
     )
 
     /**
@@ -137,15 +137,15 @@ const WalletConnectContextProvider = ({
             {children}
             {selectedAccount && (
                 <>
-                    <PairingModalBottomSheet
+                    <PairBottomSheet
                         onClose={onSessionProposalClose}
                         currentProposal={currentProposal}
-                        ref={pairingModalBottomSheet}
+                        ref={pairBottomSheet}
                     />
 
-                    <SignModalBottomSheet
-                        onClose={closeSignModalBottomSheet}
-                        ref={signModalBottomSheet}
+                    <SignBottomSheet
+                        onClose={closeSignBottomSheet}
+                        ref={signBottomSheet}
                         requestEvent={requestEventData}
                         requestSession={requestSession}
                     />
