@@ -11,6 +11,8 @@ import {
     SettingsScreen,
     WalletManagementScreen,
     ManageCustomNodesScreen,
+    SettingsTransactionsScreen,
+    ManageUrlsScreen,
     ResetAppScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
@@ -26,6 +28,8 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_CONTACTS]: undefined
     [Routes.SETTINGS_ADD_CONTACT]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
+    [Routes.SETTINGS_TRANSACTIONS]: undefined
+    [Routes.MANAGE_DELEGATION_URLS]: undefined
     [Routes.RESET_APP]: undefined
 }
 
@@ -84,6 +88,18 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.SETTINGS_CONTACTS}
                     component={ContactsScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.SETTINGS_TRANSACTIONS}
+                    component={SettingsTransactionsScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.MANAGE_DELEGATION_URLS}
+                    component={ManageUrlsScreen}
                     options={{ headerShown: false }}
                 />
 

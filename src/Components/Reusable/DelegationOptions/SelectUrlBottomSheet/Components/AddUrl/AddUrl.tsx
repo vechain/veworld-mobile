@@ -24,7 +24,7 @@ import { useI18nContext } from "~i18n"
  * @param addUrlMode {function} bottomsheet mode
  * @param setAddUrlMode {function} function to set bottomsheet mode
  */
-interface Props {
+type Props = {
     setSelectedDelegationUrl: (url: string) => void
     newUrl: string
     setNewUrl: (url: string) => void
@@ -89,6 +89,7 @@ export const AddUrl = ({
                 value={newUrl}
                 onChangeText={setNewUrl}
                 placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
+                testID="AddUrl_input"
             />
         </ScrollViewWithFooter>
     )
