@@ -42,7 +42,9 @@ export const useSignTransaction = ({
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(selectDevice(account.rootAddress))
+    const senderDevice = useAppSelector(state =>
+        selectDevice(state, account.rootAddress),
+    )
 
     const dispatch = useAppDispatch()
     const thorClient = useThor()
