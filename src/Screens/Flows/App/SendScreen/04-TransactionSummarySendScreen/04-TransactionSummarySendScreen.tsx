@@ -17,6 +17,7 @@ import {
     BaseText,
     BaseView,
     ScrollViewWithFooter,
+    DelegationOptions,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -33,7 +34,6 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { DelegationOptions } from "./Components"
 import { useDelegation, useSendTransaction, useSignTransaction } from "./Hooks"
 
 type Props = NativeStackScreenProps<

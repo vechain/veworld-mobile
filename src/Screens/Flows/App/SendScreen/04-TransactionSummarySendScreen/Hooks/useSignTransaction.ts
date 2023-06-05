@@ -22,7 +22,7 @@ import { Linking } from "react-native"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 
-interface Props {
+type Props = {
     transaction: Transaction.Body
     onTXFinish: () => void
     isDelegated: boolean
@@ -42,7 +42,9 @@ export const useSignTransaction = ({
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(selectDevice(account.rootAddress))
+    const senderDevice = useAppSelector(state =>
+        selectDevice(state, account.rootAddress),
+    )
 
     const dispatch = useAppDispatch()
     const thorClient = useThor()
@@ -144,6 +146,7 @@ export const useSignTransaction = ({
                 // TODO: support hardware wallet
                 showWarningToast("Hardware wallet not supported yet")
             }
+
             const { decryptedWallet: senderWallet } =
                 await CryptoUtils.decryptWallet(senderDevice, password)
 
@@ -177,7 +180,7 @@ export const useSignTransaction = ({
             )
             await dispatch(updateAccountBalances(thorClient, account.address))
         } catch (e) {
-            error(e)
+            error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
         }
 
