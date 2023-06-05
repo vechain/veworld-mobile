@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast, ConnexContextProvider } from "~Components"
+import {
+    BaseToast,
+    ConnexContextProvider,
+    WalletConnectContextProvider,
+} from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Common/Hooks"
@@ -107,9 +111,11 @@ export const TestWrapper = ({
                 <ConnexContextProvider>
                     <BottomSheetModalProvider>
                         <NavigationProvider>
-                            <TestTranslationProvider>
-                                {children}
-                            </TestTranslationProvider>
+                            <WalletConnectContextProvider>
+                                <TestTranslationProvider>
+                                    {children}
+                                </TestTranslationProvider>
+                            </WalletConnectContextProvider>
                         </NavigationProvider>
                     </BottomSheetModalProvider>
                     <BaseToast />
