@@ -5,7 +5,7 @@ import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { selectDelegationUrls, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
-interface Props {
+type Props = {
     setAddUrlMode: (s: boolean) => void
     setSelectedDelegationUrl: (s?: string) => void
     selectedDelegationUrl?: string
@@ -29,7 +29,7 @@ export const UrlList = ({
     }
 
     return (
-        <BaseView>
+        <BaseView h={100}>
             <BaseView
                 flexDirection="row"
                 justifyContent="space-between"
@@ -42,6 +42,7 @@ export const UrlList = ({
                     name={"plus"}
                     bg={theme.colors.secondary}
                     action={() => setAddUrlMode(true)}
+                    testID="UrlList_addUrlButton"
                 />
             </BaseView>
             <BaseSpacer height={16} />
