@@ -24,7 +24,7 @@ import { useI18nContext } from "~i18n"
  * @param addUrlMode {function} bottomsheet mode
  * @param setAddUrlMode {function} function to set bottomsheet mode
  */
-interface Props {
+type Props = {
     setSelectedDelegationUrl: (url: string) => void
     newUrl: string
     setNewUrl: (url: string) => void
