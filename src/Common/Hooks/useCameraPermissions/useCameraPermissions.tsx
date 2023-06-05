@@ -9,10 +9,13 @@ import { useI18nContext } from "~i18n"
 /**
  * hook to check and request camera permissions
  */
-export const useCameraPermissions = () => {
+export const useCameraPermissions = ({
+    onCanceled,
+}: {
+    onCanceled: () => void
+}) => {
     const { LL } = useI18nContext()
     const [hasPerms, setHasPerms] = useState(false)
-    const [isCanceled, setIsCanceled] = useState(false)
     const [previousState, currentState] = useAppState()
 
     const requestPermissions = useCallback(async () => {
@@ -24,10 +27,9 @@ export const useCameraPermissions = () => {
         }
 
         if (!status?.granted && !status?.canAskAgain) {
-            setIsCanceled(true)
-            return
+            return onCanceled()
         }
-    }, [])
+    }, [onCanceled])
 
     const checkPermissions = useCallback(async () => {
         const status = await Camera.getCameraPermissionsAsync()
@@ -45,8 +47,7 @@ export const useCameraPermissions = () => {
                 title,
                 msg,
                 () => {
-                    setIsCanceled(true)
-                    return
+                    return onCanceled()
                 },
                 async () => {
                     await Linking.openSettings()
@@ -59,7 +60,7 @@ export const useCameraPermissions = () => {
             await requestPermissions()
             return
         }
-    }, [LL, requestPermissions])
+    }, [LL, requestPermissions, onCanceled])
 
     useEffect(() => {
         async function init() {
@@ -73,5 +74,5 @@ export const useCameraPermissions = () => {
         init()
     }, [checkPermissions, currentState, previousState])
 
-    return { checkPermissions, hasPerms, isCanceled }
+    return { checkPermissions, hasPerms }
 }
