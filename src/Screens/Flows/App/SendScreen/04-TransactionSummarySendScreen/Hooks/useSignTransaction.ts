@@ -22,7 +22,7 @@ import { Linking } from "react-native"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 
-interface Props {
+type Props = {
     transaction: Transaction.Body
     onTXFinish: () => void
     isDelegated: boolean
