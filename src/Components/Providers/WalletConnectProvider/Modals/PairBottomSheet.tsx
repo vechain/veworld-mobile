@@ -49,6 +49,9 @@ export const PairBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             const { id, params } = currentProposal
             const { requiredNamespaces, relays } = params
 
+            //TODO: if user accepts but the chain is not the same as the selected in config
+            // then we need to ask user to change the chain
+
             if (currentProposal) {
                 const namespaces: SessionTypes.Namespaces = {}
 

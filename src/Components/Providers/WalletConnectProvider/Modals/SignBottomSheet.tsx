@@ -100,6 +100,8 @@ export const SignBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     },
                 })
 
+                //TODO: add to history?
+
                 onClose()
             },
             [account, params, requestURL, topic, web3Wallet, onClose],
@@ -123,12 +125,12 @@ export const SignBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     nonce: HexUtils.generateRandom(8),
                 }
 
-                let encodedRawTx
+                let encodedRawTx, tx: Transaction
                 if (
                     params.delegateUrl !== undefined &&
                     params.delegateUrl !== ""
                 ) {
-                    const tx = TransactionUtils.toDelegation(transaction)
+                    tx = TransactionUtils.toDelegation(transaction)
                     // build hex encoded version of the transaction for signing request
                     const rawTransaction = HexUtils.addPrefix(
                         tx.encode().toString("hex"),
@@ -187,7 +189,7 @@ export const SignBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                         raw: HexUtils.addPrefix(tx.encode().toString("hex")),
                     }
                 } else {
-                    const tx = new Transaction(transaction)
+                    tx = new Transaction(transaction)
 
                     const hash = tx.signingHash()
                     const senderSignature = secp256k1.sign(hash, privateKey)
@@ -213,6 +215,8 @@ export const SignBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                                 },
                             },
                         })
+
+                        //TODO: add to history
                     })
                     .catch(async e => {
                         const response = formatJsonRpcError(
