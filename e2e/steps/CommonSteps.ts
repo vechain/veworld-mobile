@@ -42,19 +42,24 @@ Given("The user has more than one account", { timeout: -1 }, async function () {
     await clickByText("Add account")
 })
 
-Given("The user select the test network", { timeout: -1 }, async function () {
+Given("The user selects Account 1", { timeout: -1 }, async function () {
+    await clickById("AccountCard_changeAccountButton")
+    await clickByText("Account 1")
+})
+
+Given("The user selects the test network", { timeout: -1 }, async function () {
     await HomeFlows.goToSettings()
     await SettingsFlows.goToNetworkSettings()
     await SettingsFlows.selectTestNetwork()
 })
 
-Given("The user select the main network", { timeout: -1 }, async function () {
+Given("The user selects the main network", { timeout: -1 }, async function () {
     await HomeFlows.goToSettings()
     await SettingsFlows.goToNetworkSettings()
     await SettingsFlows.selectMainNetwork()
 })
 
-Given("The user click back button", { timeout: -1 }, async function () {
+Given("The user clicks back button", { timeout: -1 }, async function () {
     await goBack()
 })
 
@@ -62,12 +67,12 @@ Given("The user is in home screen", { timeout: -1 }, async function () {
     await idShouldExist("veworld-homepage")
 })
 
-Given("The user go to home tab", { timeout: -1 }, async function () {
+Given("The user goes to home tab", { timeout: -1 }, async function () {
     await TabFlows.goBackToHomeTab()
 })
 
 When(
-    "The user insert password {string}",
+    "The user inserts password {string}",
     { timeout: -1 },
     async function (password: string) {
         for (let i = 0; i < password.length; i++) {

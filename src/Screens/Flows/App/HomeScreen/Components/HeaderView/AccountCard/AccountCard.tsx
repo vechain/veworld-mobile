@@ -103,6 +103,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                             color={theme.colors.textReversed}
                             size={28}
                             action={openSelectAccountBottomSheet}
+                            testID="AccountCard_changeAccountButton"
                         />
                     </BaseView>
                 </BaseView>

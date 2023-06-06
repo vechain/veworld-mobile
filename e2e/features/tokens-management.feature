@@ -6,7 +6,7 @@ Feature: The user can manage tokens
     * The user go to tokens management screen
 
   Scenario: User select an official token
-    When The user select "<token>" token from the unselected tokens list
+    When The user selects "<token>" token from the unselected tokens list
     Then The user should see "<token>" token balance in home screen
 
     Examples:
@@ -14,7 +14,7 @@ Feature: The user can manage tokens
       | Plair |
 
   Scenario: User select multiple official tokens
-    When The user select "<token>" and "<token2>" tokens from the unselected tokens list
+    When The user selects "<token>" and "<token2>" tokens from the unselected tokens list
     Then The user should see "<token>" and "<token2>" token balances in home screen
 
     Examples:
@@ -22,7 +22,7 @@ Feature: The user can manage tokens
       | Safe Haven | TicTalk |
 
   Scenario: User can unselect official tokens
-    When The user select "<token>" and "<token2>" tokens from the unselected tokens list
+    When The user selects "<token>" and "<token2>" tokens from the unselected tokens list
     And The user unselect "<token>"
     Then The user should not see "<token>" token balance in home screen
 
@@ -64,17 +64,17 @@ Feature: The user can manage tokens
       | 0x34149f8da92222af599ba936d9089f5ce460b522 | CarpToken | 0xbd0e5d86fdd4bd6d249ceea1336594f6d959c099 | DavMain |
 
   Scenario: When the user add an official token and then it change network (bug #570) it should not throw the error
-    When The user select "<token>" token from the unselected tokens list
-    And The user click back button
-    And The user select the test network
-    And The user click back button
-    And The user go to home tab
+    When The user selects "<token>" token from the unselected tokens list
+    And The user clicks back button
+    And The user selects the test network
+    And The user clicks back button
+    And The user goes to home tab
     And The user go to tokens management screen
-    And The user select "<token2>" token from the unselected tokens list
-    And The user click back button
-    And The user select the main network
-    And The user click back button
-    And The user go to home tab
+    And The user selects "<token2>" token from the unselected tokens list
+    And The user clicks back button
+    And The user selects the main network
+    And The user clicks back button
+    And The user goes to home tab
     Then The user is in home screen
 
     Examples:
