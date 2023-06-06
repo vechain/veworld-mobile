@@ -30,6 +30,7 @@ import {
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
+import { throttle } from "lodash"
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<
@@ -126,6 +127,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 : newTokenInput,
         )
     }
+
+    const throttleOnChangePercentage = throttle(onChangePercentage, 100)
+
     const handleChangeInput = (newValue: string) => {
         if (new BigNumber(newValue).gt(rawTokenBalance)) {
             setIsError(true)
@@ -289,7 +293,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                 {/** TODO: understand how to add percentage value label */}
                                 <BaseRange
                                     value={percentage}
-                                    onChange={onChangePercentage}
+                                    onChange={throttleOnChangePercentage}
                                 />
                                 <BaseSpacer width={8} />
                                 <BaseText
