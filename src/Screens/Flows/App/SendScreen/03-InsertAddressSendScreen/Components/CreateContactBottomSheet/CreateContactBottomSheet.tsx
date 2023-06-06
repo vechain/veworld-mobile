@@ -74,6 +74,7 @@ export const CreateContactBottomSheet = React.forwardRef<
                         <BaseView>
                             <BaseButton
                                 w={100}
+                                haptics="light"
                                 title={LL.COMMON_BTN_SAVE()}
                                 action={handleSaveButton}
                                 disabled={!isFormValid}
@@ -81,6 +82,7 @@ export const CreateContactBottomSheet = React.forwardRef<
                             <BaseSpacer height={16} />
                             <BaseButton
                                 w={100}
+                                haptics="light"
                                 variant="outline"
                                 title={LL.COMMON_BTN_CANCEL()}
                                 action={() => setCreationMode(false)}
@@ -115,12 +117,14 @@ export const CreateContactBottomSheet = React.forwardRef<
                         <BaseView>
                             <BaseButton
                                 w={100}
+                                haptics="light"
                                 title={LL.SEND_CREATE_CONTACT_CREATE_BUTTON()}
                                 action={() => setCreationMode(true)}
                             />
                             <BaseSpacer height={16} />
                             <BaseButton
                                 w={100}
+                                haptics="light"
                                 variant="outline"
                                 title={LL.SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON()}
                                 action={closeAndSubmit}
