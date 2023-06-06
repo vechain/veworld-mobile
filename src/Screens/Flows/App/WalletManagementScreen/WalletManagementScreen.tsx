@@ -18,7 +18,7 @@ import { AccountMgmtBottomSheet, WalletManagementHeader } from "./components"
 export const WalletManagementScreen = () => {
     const [isScrollable, setIsScrollable] = useState(false)
 
-    const devices = useAppSelector(selectDevices())
+    const devices = useAppSelector(selectDevices)
     const [selectedDevice, setSelectedDevice] = useState<BaseDevice>()
 
     const {

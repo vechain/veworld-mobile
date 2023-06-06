@@ -131,6 +131,7 @@ const en: BaseTranslation = {
     BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
+    BD_COLLECTION: "Collection",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -160,6 +161,7 @@ const en: BaseTranslation = {
     TITLE_CONTACTS: "Contacts",
     TITLE_ADD_CONTACT: "Add Contact",
     TITLE_MANAGE_WALLET: "Manage Wallet",
+    TITLE_TRANSACTIONS: "Transactions",
     TITLE_NFT: "NFT",
     TITLE_NFTS: "NFTs",
     TITLE_NETWORK: "Network",
@@ -330,6 +332,9 @@ const en: BaseTranslation = {
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
     // Accounts
+    CONTRACT_ADDRESS: "Contract address",
+    NFT_ATTRIBUTES: "Attributes",
+
 
     // Onboarding
 
@@ -347,6 +352,16 @@ const en: BaseTranslation = {
     SETTINGS_CURRENCIES_CONVERT_TO_FIAT: "Convert balances to fiat",
     
     // Settings Languages
+
+    // Settings Transactions
+
+    SETTINGS_TRANSACTIONS_TITLE: "Transactions",
+    SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: "Default delegation",
+    SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION: "Select the default delegation for your transactions",
+    SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: "Delegation URLs",
+    SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: "Add or delete a delegation URL so you can select it when sending transactions",
+    SETTINGS_TRANSACTIONS_MANAGE_URLS: "Manage URLs",
+
 
     // Manage Token
     MANAGE_TOKEN_TITLE: "Manage Tokens",
@@ -398,6 +413,7 @@ const en: BaseTranslation = {
     SEND_DELEGATION_ACCOUNT: "Account",
     SEND_DELEGATION_URL: "URL",
     SEND_DELEGATION_SELECT_URL: "Select URL",
+    SEND_DELEGATION_MANAGE_URL: "Manage URLs",
     SEND_DELEGATION_ADD_URL: "Add delegation URL",
     SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
     SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",

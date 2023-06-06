@@ -4,7 +4,7 @@ import { selectDevices } from "~Storage/Redux/Selectors"
 import { getNodes } from "../useCreateWallet/Helpers"
 
 export const useDeviceUtils = () => {
-    const devices = useAppSelector(selectDevices())
+    const devices = useAppSelector(selectDevices)
     /**
      * Generate a device from a given mnemonic, throwing an error if the device already exists
      * @param mnemonic

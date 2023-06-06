@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { BaseText, BaseView, PaginatedDot } from "~Components"
 import { ClauseType, ClauseWithMetadata } from "~Model"
@@ -57,7 +56,7 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
     )
 
     return (
-        <DropShadow style={[theme.shadows.card, styles.container]}>
+        <BaseView style={[styles.container]}>
             <BaseView bg={theme.colors.card} style={styles.view}>
                 <BaseView w={100} pt={16} pb={8} alignItems="center">
                     <BaseText typographyFont="subSubTitle">
@@ -94,7 +93,7 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
                     </BaseView>
                 )}
             </BaseView>
-        </DropShadow>
+        </BaseView>
     )
 })
 

@@ -1,10 +1,11 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
+import { NonFungibleToken } from "~Model"
 
 const selectNftState = (state: RootState) => state.nft
 
-export const selectNftCollections = createSelector(selectNftState, nfts => {
-    return [...nfts]
+export const selectNftCollections = createSelector(selectNftState, state => {
+    return state.collections
 })
 
 export const selectCollectionWithContractAddres = createSelector(
@@ -16,5 +17,25 @@ export const selectCollectionWithContractAddres = createSelector(
         return collections.find(
             collection => collection.address === contractAddress,
         )
+    },
+)
+
+export const selectNFTWithAddressAndTokenId = createSelector(
+    [
+        selectNftCollections,
+        (state: RootState, contractAddress: string) => contractAddress,
+        (state: RootState, contractAddress: string, tokenId: string) => tokenId,
+    ],
+    (collections, contractAddress, tokenId) => {
+        const foundColelction = collections.find(
+            collection => collection.address === contractAddress,
+        )
+
+        let nft: NonFungibleToken | undefined
+        if (foundColelction) {
+            nft = foundColelction.nfts.find(_nft => _nft.tokenId === tokenId)
+        }
+
+        return nft
     },
 )

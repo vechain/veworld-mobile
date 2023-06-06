@@ -14,12 +14,23 @@ import { ColorThemeType, useThemedStyles } from "~Common"
 type Props = BottomSheetModalProps & {
     children: React.ReactNode
     contentStyle?: StyleProp<ViewStyle>
+    noMargins?: boolean
     footerStyle?: StyleProp<ViewStyle>
     footer?: React.ReactNode
 }
 
 export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ contentStyle, footerStyle, footer, children, ...props }, ref) => {
+    (
+        {
+            contentStyle,
+            footerStyle,
+            noMargins = false,
+            footer,
+            children,
+            ...props
+        },
+        ref,
+    ) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const renderBackdrop = useCallback(
@@ -50,11 +61,13 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 backgroundStyle={[styles.backgroundStyle]}
                 backdropComponent={renderBackdrop}
                 handleComponent={renderHandle}
+                keyboardBehavior="interactive"
+                keyboardBlurBehavior="restore"
                 {...props}>
                 <BaseView
                     w={100}
-                    px={24}
-                    py={24}
+                    px={noMargins ? 0 : 24}
+                    py={noMargins ? 0 : 24}
                     flexGrow={1}
                     alignItems="stretch"
                     style={contentStyle}>

@@ -7,31 +7,31 @@ export const goToAddContactScreen = async () => {
     if (await ContactsScreen.isContactsListEmpty()) {
         await element(by.text("Create contact")).tap()
     } else {
-        await element(by.id("add-contact-button")).tap()
+        await element(by.id("Add_Contact_Button")).tap()
     }
 }
 
 export const addNewContact = async (name: string, address: string) => {
-    await waitFor(element(by.id("contact-name-input")))
+    await waitFor(element(by.id("Contact-Name-Input")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
-    await element(by.id("contact-name-input")).tap()
+    await element(by.id("Contact-Name-Input")).tap()
 
-    await element(by.id("contact-name-input")).replaceText(name)
+    await element(by.id("Contact-Name-Input")).replaceText(name)
 
-    await waitFor(element(by.id("contact-address-input")))
+    await waitFor(element(by.id("Contact-Address-Input")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
-    await element(by.id("contact-address-input")).tap()
+    await element(by.id("Contact-Address-Input")).tap()
 
-    await element(by.id("contact-address-input")).replaceText(address)
+    await element(by.id("Contact-Address-Input")).replaceText(address)
 
     //Close keyboard
     await element(by.text("Add Contact")).atIndex(0).tap()
 
-    await element(by.id("add-contact-button")).tap()
+    await element(by.id("Add_Contact_Button")).tap()
 }
 
 export const deleteContact = async (name: string) => {
@@ -59,24 +59,24 @@ export const editContact = async (
 
     await element(by.text(name)).tap()
 
-    await waitFor(element(by.id("contact-name-input")))
+    await waitFor(element(by.id("Contact-Name-Input")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
-    await element(by.id("contact-name-input")).tap()
+    await element(by.id("Contact-Name-Input")).tap()
 
-    await element(by.id("contact-name-input")).replaceText(newName)
+    await element(by.id("Contact-Name-Input")).replaceText(newName)
 
     //Hide keyboard
     await element(by.text("Edit contact")).tap()
 
-    await waitFor(element(by.id("contact-address-input")))
+    await waitFor(element(by.id("Contact-Address-Input")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
-    await element(by.id("contact-address-input")).tap()
+    await element(by.id("Contact-Address-Input")).tap()
 
-    await element(by.id("contact-address-input")).replaceText(newAddress)
+    await element(by.id("Contact-Address-Input")).replaceText(newAddress)
 
     //Hide keyboard
     await element(by.text("Edit contact")).tap()

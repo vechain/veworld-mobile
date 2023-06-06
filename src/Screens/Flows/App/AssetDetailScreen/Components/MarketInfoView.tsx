@@ -3,7 +3,6 @@ import { CoinMarketInfo } from "~Storage/Redux/Types"
 import { BaseText, BaseView } from "~Components"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
 import { useI18nContext } from "~i18n"
 import { useFormattedMarketInfo } from "../Hooks/useFormattedMarketInfo"
 
@@ -12,13 +11,13 @@ export const MarketInfoView = ({
 }: {
     marketInfo: CoinMarketInfo
 }) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { marketCap, totalSupply, totalVolume, circulatingSupply } =
         useFormattedMarketInfo(marketInfo)
 
     return (
-        <DropShadow style={theme.shadows.card}>
+        <BaseView>
             <BaseView
                 flexDirection="row"
                 flexWrap="wrap"
@@ -51,7 +50,7 @@ export const MarketInfoView = ({
                     </BaseText>
                 </BaseView>
             </BaseView>
-        </DropShadow>
+        </BaseView>
     )
 }
 
