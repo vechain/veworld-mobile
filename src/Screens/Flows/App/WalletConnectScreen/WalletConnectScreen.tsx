@@ -9,6 +9,7 @@ import {
     BaseView,
     useWalletConnect,
     showSuccessToast,
+    showErrorToast,
 } from "~Components"
 import { getSdkError } from "@walletconnect/utils"
 import {
@@ -19,6 +20,7 @@ import {
 } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { deleteSession } from "~Storage/Redux/Slices"
+import { error } from "~Common"
 
 export const WalletConnectScreen = () => {
     const web3Wallet = useWalletConnect()
@@ -27,21 +29,31 @@ export const WalletConnectScreen = () => {
     const account = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
 
+    /**
+     * The pair method initiates a WalletConnect pairing process with a dapp
+     * using the given uri (QR code from the dapps).
+     * After the pairing is established, the dapp will send a session_proposal
+     * asking the user permission to connect to the wallet.
+     */
     const onPair = useCallback(async () => {
         try {
-            let result = await web3Wallet.core.pairing.pair({
+            await web3Wallet.core.pairing.pair({
                 uri,
                 activatePairing: true,
             })
+
             setUri("")
             showSuccessToast("Pairing successful")
-            return result
         } catch (err: unknown) {
-            // console.log("Error for pairing", err)
+            error(err)
+
+            showErrorToast(
+                "Error pairing with Dapp, please generate a new QR CODE",
+            )
         }
     }, [uri, web3Wallet])
 
-    async function disconnect() {
+    const disconnect = useCallback(async () => {
         if (activeSessions) {
             const topic = activeSessions[0].topic
             try {
@@ -50,12 +62,12 @@ export const WalletConnectScreen = () => {
                     reason: getSdkError("USER_DISCONNECTED"),
                 })
             } catch (err: unknown) {
-                // console.log("Error for disconnecting", err)
+                error(err)
             } finally {
                 dispatch(deleteSession({ topic }))
             }
         }
-    }
+    }, [activeSessions, web3Wallet, dispatch])
 
     return (
         <BaseSafeArea>

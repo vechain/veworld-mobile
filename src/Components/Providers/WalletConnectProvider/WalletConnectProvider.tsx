@@ -13,6 +13,16 @@ import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { deleteSession } from "~Storage/Redux/Slices"
 
+/**
+ * Wallet Connect Flow:
+ * 1) A pairing needs to be established by scanning the QR code or by manually pasting the URI (this is done in WalletConnectScreen.tsx)
+ * 2) After pairing is established the dapp will send a session_propsal asking the user permission to connect to the wallet
+ * 3) Once the dapp and the wallet are connected the dapp can send a session_requests asking to sign certificates or execute transactions
+ *
+ * This provider was created to have a singleton web3wallet instance, so that all modals regarding session proposals and requests
+ * are handled by the provider can be shown no matter where we are inside the app.
+ */
+
 type WalletConnectContextProviderProps = { children: React.ReactNode }
 const WalletConnectContext = React.createContext<IWeb3Wallet | undefined>(
     undefined,
