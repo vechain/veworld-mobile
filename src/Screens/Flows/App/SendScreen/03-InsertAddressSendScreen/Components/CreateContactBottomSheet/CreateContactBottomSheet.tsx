@@ -67,7 +67,7 @@ export const CreateContactBottomSheet = React.forwardRef<
     }, [isFormValid, dispatch, contact, closeAndSubmit])
 
     return (
-        <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
+        <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
             {creationMode ? (
                 <ScrollViewWithFooter
                     footer={

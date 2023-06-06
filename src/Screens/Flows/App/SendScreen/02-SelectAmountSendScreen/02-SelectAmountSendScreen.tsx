@@ -120,13 +120,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         }
         setInput(newValue)
     }
-    const goToInsertAddress = () => {
+    const goToInsertAddress = async () => {
         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
             amount: isInputInFiat ? rawTokenInput : input,
             initialRoute: initialRoute ?? "",
         })
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     }
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text

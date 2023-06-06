@@ -398,7 +398,7 @@ const en: BaseTranslation = {
     SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
     SEND_INSERT_ADDRESS: "Send your token",
     SEND_INSERT_ADDRESS_DESCRIPTION: "Select a contact below or paste/scan an address",
-    SEND_ENTER_AN_ADDRESS: "Enter or scan an address",
+    SEND_ENTER_AN_ADDRESS: "Enter an address or search your contacts",
     SEND_INSERT_CONTACTS: "Contacts",
     SEND_INSERT_ACCOUNTS: "Accounts",
     SEND_FROM: "From",

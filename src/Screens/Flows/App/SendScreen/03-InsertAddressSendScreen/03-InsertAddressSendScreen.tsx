@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal } from "~Common"
+import { debug, useBottomSheetModal, useRenderCounter } from "~Common"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
@@ -47,8 +47,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
 
+    useRenderCounter("InsertAddressSendScreen")
     const {
-        ref: refCreateContactBottomSheet,
+        ref: createContactBottomSheetRef,
         onOpen: openCreateContactSheet,
         onClose: closeCreateContactSheet,
     } = useBottomSheetModal()
@@ -138,18 +139,15 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         [accountsAndContacts, openCreateContactSheet, navigateNext],
     )
 
-    //Whenever search changes, we check if it's a valid address, eventually opening the create bottomsheet
+    //Whenever search changes, we check if it's a valid address,
+    // eventually opening the create bottomsheet if needed
     useEffect(() => {
+        debug("useEffect")
         if (searchText && AddressUtils.isValid(searchText)) {
             setSelectedAddress(searchText)
+            if (!isAddressInContactsOrAccounts) openCreateContactSheet()
         }
-    }, [searchText])
-
-    useEffect(() => {
-        if (selectedAddress && !isAddressInContactsOrAccounts) {
-            openCreateContactSheet()
-        }
-    }, [selectedAddress, isAddressInContactsOrAccounts, openCreateContactSheet])
+    }, [searchText, isAddressInContactsOrAccounts, openCreateContactSheet])
 
     const onTextReset = () => {
         setSearchText("")
@@ -224,7 +222,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             </BaseView>
                         }
                         bodyComponent={
-                            <BaseView>
+                            <>
                                 {filteredContacts.map(contact => {
                                     const isSelected =
                                         !!selectedAddress &&
@@ -245,7 +243,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                         />
                                     )
                                 })}
-                            </BaseView>
+                            </>
                         }
                     />
                     <BaseAccordion
@@ -286,10 +284,10 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 </BaseView>
             </ScrollViewWithFooter>
             <CreateContactBottomSheet
-                ref={refCreateContactBottomSheet}
-                address={selectedAddress}
+                ref={createContactBottomSheetRef}
                 onClose={closeCreateContactSheet}
                 onSubmit={navigateNext}
+                address={selectedAddress}
             />
             <ScanAddressBottomSheet
                 ref={scanAddressSheetRef}
