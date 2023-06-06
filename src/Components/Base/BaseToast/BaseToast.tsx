@@ -21,7 +21,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
     success: ({ text1, text2, props }: ToastConfigParams<any>) => {
         const styles = successToastStyles(theme)
 
-        const { textLink, onPress } = props
+        const { textLink, onPress, testID } = props
 
         return (
             <ToastContent
@@ -32,6 +32,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
                 text3={textLink}
                 onPress={onPress}
                 hideToast={hideToast}
+                testID={testID}
             />
         )
     },
@@ -39,7 +40,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
     error: ({ text1, text2, props }: ToastConfigParams<any>) => {
         const styles = errorToastStyles(theme)
 
-        const { textLink, onPress } = props
+        const { textLink, onPress, testID } = props
 
         return (
             <ToastContent
@@ -50,6 +51,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
                 text3={textLink}
                 onPress={onPress}
                 hideToast={hideToast}
+                testID={testID}
             />
         )
     },
@@ -57,7 +59,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
     warning: ({ text1, text2, props }: ToastConfigParams<any>) => {
         const styles = warningToastStyles(theme)
 
-        const { textLink, onPress } = props
+        const { textLink, onPress, testID } = props
 
         return (
             <ToastContent
@@ -68,6 +70,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
                 text3={textLink}
                 onPress={onPress}
                 hideToast={hideToast}
+                testID={testID}
             />
         )
     },
@@ -75,7 +78,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
     info: ({ text1, text2, props }: ToastConfigParams<any>) => {
         const styles = infoToastStyles(theme)
 
-        const { textLink, onPress } = props
+        const { textLink, onPress, testID } = props
 
         return (
             <ToastContent
@@ -86,6 +89,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
                 text3={textLink}
                 onPress={onPress}
                 hideToast={hideToast}
+                testID={testID}
             />
         )
     },
@@ -131,12 +135,13 @@ export const showSuccessToast = (
     text2?: string,
     textLink?: string,
     onPress?: () => void,
+    testID?: string,
 ) => {
     Toast.show({
         type: "success",
         text1,
         text2,
-        props: { textLink: textLink, onPress: onPress },
+        props: { textLink: textLink, onPress: onPress, testID },
     })
 }
 

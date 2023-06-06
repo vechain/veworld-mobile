@@ -125,6 +125,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             setValue={handleAddressChange}
                             placeholder={LL.SEND_ENTER_AN_ADDRESS()}
                             errorMessage={errorMessage}
+                            testID="InsertAddressSendScreen_addressInput"
                         />
                         {!address && (
                             <BaseIcon

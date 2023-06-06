@@ -1,4 +1,4 @@
-Feature: The user can manage tokens
+Feature: The user send tokens in main net
 
   Background:
     * The app is opened

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { Given } from "@cucumber/cucumber"
+import { Given, When } from "@cucumber/cucumber"
 import {
     HomeFlows,
     HomeScreen,
@@ -38,7 +38,7 @@ Given("Open with demo account", { timeout: -1 }, async function () {
 Given("The user has more than one account", { timeout: -1 }, async function () {
     await clickById("AccountCard_accountManagementButton")
     await clickById("AccountManagementBottomSheet_addAccountButton")
-    await clickByText("Wallet 1")
+    await clickByText("Wallet 1", { index: 1 })
     await clickByText("Add account")
 })
 
@@ -65,3 +65,13 @@ Given("The user is in home screen", { timeout: -1 }, async function () {
 Given("The user go to home tab", { timeout: -1 }, async function () {
     await TabFlows.goBackToHomeTab()
 })
+
+When(
+    "The user insert password {string}",
+    { timeout: -1 },
+    async function (password: string) {
+        for (let i = 0; i < password.length; i++) {
+            await element(by.text(password.charAt(i))).tap()
+        }
+    },
+)
