@@ -15,14 +15,14 @@ import {
     selectSelectedAccount,
     useAppSelector,
     useAppDispatch,
-    removeSession,
     selectSessions,
 } from "~Storage/Redux"
-import { ISession } from "@walletconnect/types"
+import { SessionTypes } from "@walletconnect/types"
+import { deleteSession } from "~Storage/Redux/Slices"
 
 export const WalletConnectScreen = () => {
     const web3Wallet = useWalletConnect()
-    const activeSessions: ISession[] = useAppSelector(selectSessions)
+    const activeSessions: SessionTypes.Struct[] = useAppSelector(selectSessions)
     const [uri, setUri] = useState("")
     const account = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
@@ -52,7 +52,7 @@ export const WalletConnectScreen = () => {
             } catch (err: unknown) {
                 // console.log("Error for disconnecting", err)
             } finally {
-                dispatch(removeSession(topic))
+                dispatch(deleteSession({ topic }))
             }
         }
     }

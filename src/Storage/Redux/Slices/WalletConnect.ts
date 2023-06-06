@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { ISession } from "@walletconnect/types"
+import { SessionTypes } from "@walletconnect/types"
 
 type WalletConnectSessionsSliceState = {
-    sessions: ISession[]
+    sessions: SessionTypes.Struct[]
 }
 
 export const initialSessionsState: WalletConnectSessionsSliceState = {
@@ -13,7 +13,7 @@ export const WalletConnectSessionsSlice = createSlice({
     name: "sessions",
     initialState: initialSessionsState,
     reducers: {
-        insertSession: (state, action: PayloadAction<ISession>) => {
+        insertSession: (state, action: PayloadAction<SessionTypes.Struct>) => {
             const sessionExists = state.sessions.find(
                 session => session.topic === action.payload.topic,
             )

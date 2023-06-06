@@ -1,2 +1,2 @@
-export * from "./PairBottomSheet"
-export * from "./SignBottomSheet"
+export * from "./PairModal"
+export * from "./SignModal"
