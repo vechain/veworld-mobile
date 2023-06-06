@@ -133,7 +133,6 @@ export const HistoryScreen = () => {
                         />
                     )
                 case ActivityType.CONNECTED_APP_TRANSACTION:
-                    //TODO Check if the activity is an AMM swap first
                     const decodedClauses = TransactionUtils.interpretClauses(
                         activity.clauses,
                         tokens,
