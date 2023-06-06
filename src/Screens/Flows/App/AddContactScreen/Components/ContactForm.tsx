@@ -1,11 +1,11 @@
-import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback, useMemo, useState } from "react"
+import { useBottomSheetModal } from "~Common"
 import {
     BaseBottomSheetTextInput,
     BaseSpacer,
     BaseTextInput,
+    ScanAddressBottomSheet,
 } from "~Components"
-import { Routes } from "~Navigation"
 
 type Props = {
     titleName: string
@@ -45,12 +45,16 @@ export const ContactForm: React.FC<Props> = memo(
         const [nameTouched, setNameTouched] = useState(false)
         const [addressTouched, setAddressTouched] = useState(false)
 
-        const nav = useNavigation()
+        const {
+            ref: scanAddressSheetRef,
+            onOpen: openScanAddressSheet,
+            onClose: closeScanAddressSheetRef,
+        } = useBottomSheetModal()
 
         const onOpenCamera = useCallback(() => {
             setAddressTouched(true)
-            nav.navigate(Routes.CAMERA, { onScan: setAddress })
-        }, [nav, setAddress])
+            openScanAddressSheet()
+        }, [openScanAddressSheet])
 
         const canShowNameError = checkTouched ? nameTouched : true
 
@@ -123,6 +127,12 @@ export const ContactForm: React.FC<Props> = memo(
                 <BaseSpacer height={16} />
 
                 {componentInputAddress}
+
+                <ScanAddressBottomSheet
+                    ref={scanAddressSheetRef}
+                    onClose={closeScanAddressSheetRef}
+                    onScan={setAddress}
+                />
             </>
         )
     },
