@@ -103,6 +103,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         <BaseButton
                             style={styles.nextButton}
                             mx={24}
+                            haptics="light"
                             title={LL.COMMON_BTN_NEXT()}
                             disabled={!isValid}
                             action={checkIfContactExist}
@@ -206,8 +207,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             </ScrollViewWithFooter>
             <CreateContactBottomSheet
                 ref={refCreateContactBottomSheet}
-                handleClose={closeCreateContactSheet}
-                goToResumeStep={goToResumeStep}
+                onClose={closeCreateContactSheet}
+                onSubmit={goToResumeStep}
                 address={address}
             />
             <ScanAddressBottomSheet
