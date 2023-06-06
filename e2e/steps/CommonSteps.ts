@@ -1,7 +1,14 @@
 /* eslint-disable no-console */
 
 import { Given } from "@cucumber/cucumber"
-import { HomeScreen, OnboardingFlows, clickById, clickByText } from "../helpers"
+import {
+    HomeFlows,
+    HomeScreen,
+    OnboardingFlows,
+    SettingsFlows,
+    clickById,
+    clickByText,
+} from "../helpers"
 
 Given("The app is opened", { timeout: -1 }, async () => {
     let retries: number = 5
@@ -30,4 +37,11 @@ Given("The user has more than one account", { timeout: -1 }, async function () {
     await clickById("AccountManagementBottomSheet_addAccountButton")
     await clickByText("Wallet 1")
     await clickByText("Add account")
+})
+
+Given("The user is in the test network", { timeout: -1 }, async function () {
+    await HomeFlows.goToSettings()
+    await SettingsFlows.goToNetworkSettings()
+    await SettingsFlows.selectTestNetwork()
+    await SettingsFlows.goBackToHomeTab()
 })
