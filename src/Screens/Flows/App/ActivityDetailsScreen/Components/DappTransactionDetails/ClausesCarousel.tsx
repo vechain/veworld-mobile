@@ -64,7 +64,7 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
                         {LL.OUTCOMES()}
                     </BaseText>
                 </BaseView>
-                <BaseView mx={20} pb={6}>
+                <BaseView mx={20} pb={8}>
                     <BaseView
                         flexDirection="row"
                         style={styles.container}
