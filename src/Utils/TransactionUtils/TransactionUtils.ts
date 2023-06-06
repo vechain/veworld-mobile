@@ -462,6 +462,13 @@ export const decodeContractCall = (clause: ConnexClause) => {
     return decodedClause
 }
 
+/**
+ * Checks if a clause is of type "swap".
+ *
+ * @param clause - The clause object with metadata.
+ *
+ * @returns A boolean indicating whether the clause is of type "swap".
+ */
 export const isSwapClause = (clause: ClauseWithMetadata) => {
     return (
         clause.type === ClauseType.SWAP_TOKENS_FOR_VET ||
@@ -470,10 +477,24 @@ export const isSwapClause = (clause: ClauseWithMetadata) => {
     )
 }
 
+/**
+ * Checks if a transaction is a "swap" transaction.
+ *
+ * @param outcomes - The array of transaction outcomes.
+ *
+ * @returns A boolean indicating whether the transaction is a "swap" transaction.
+ */
 export const isSwapTransaction = (outcomes: TransactionOutcomes) => {
     return outcomes.filter(isSwapClause).length === 1
 }
 
+/**
+ * Decodes and finds swap events from an array of events.
+ *
+ * @param events - The array of VM events.
+ *
+ * @returns An array of decoded swap events.
+ */
 export const findAndDecodeSwapEvents = (events: Connex.VM.Event[]) => {
     const decodedEvents: SwapEvent[] = []
 
@@ -485,6 +506,13 @@ export const findAndDecodeSwapEvents = (events: Connex.VM.Event[]) => {
     return decodedEvents
 }
 
+/**
+ * Extracts paid and received amounts from a decoded swap event.
+ *
+ * @param decodedSwapEvent - The decoded swap event.
+ *
+ * @returns An object containing paid and received amounts.
+ */
 export const extractEventAmounts = (decodedSwapEvent: SwapEvent) => {
     const paidAmount =
         decodedSwapEvent.amount0In !== "0"
@@ -499,6 +527,14 @@ export const extractEventAmounts = (decodedSwapEvent: SwapEvent) => {
     return { paidAmount, receivedAmount }
 }
 
+/**
+ * Validates the length of decoded swap events.
+ *
+ * @param decodedSwapEvents - The array of decoded swap events.
+ * @param expectedLength - The expected length of the array.
+ *
+ * @throws Will throw an error if the length of decodedSwapEvents does not match the expectedLength.
+ */
 export const validateSwapEvents = (
     decodedSwapEvents: SwapEvent[],
     expectedLength: number,
@@ -507,6 +543,16 @@ export const validateSwapEvents = (
         throw new Error(`Invalid swap event count, expected ${expectedLength}`)
 }
 
+/**
+ * Decodes swap transfer amounts from decoded clauses.
+ *
+ * @param decodedClauses - The transaction outcomes.
+ * @param activity - The connected app transaction activity.
+ *
+ * @returns An object containing paid and received token addresses and their respective amounts, or null if the transaction is not a swap transaction.
+ *
+ * @throws Will throw an error under several circumstances, e.g., if the transaction is not a swap transaction, if no swap events could be found or decoded, or if the swap clause path is invalid.
+ */
 export const decodeSwapTransferAmounts = (
     decodedClauses: TransactionOutcomes,
     activity: ConnectedAppTxActivity,
