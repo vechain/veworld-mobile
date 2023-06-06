@@ -44,6 +44,7 @@ export const createBaseActivityFromTransaction = (
             ? ActivityStatus.REVERTED
             : ActivityStatus.SUCCESS,
         clauses,
+        outputs: transaction.outputs,
     }
 }
 
