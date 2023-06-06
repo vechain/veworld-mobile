@@ -7,9 +7,10 @@ import {
     BaseBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { debug, useBluetoothStatus, useBottomSheetModal } from "~Common"
+import { useBluetoothStatus, useBottomSheetModal } from "~Common"
 import { Linking } from "react-native"
 import { useNavigation } from "@react-navigation/native"
+import { PlatformUtils } from "~Utils"
 
 const snapPoints = ["55%"]
 
@@ -53,7 +54,6 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     // https://github.com/gorhom/react-native-bottom-sheet/issues/191
     // https://github.com/gorhom/react-native-bottom-sheet/issues/204
     useEffect(() => {
-        debug("useEffect", status)
         const timer = setTimeout(() => {
             if (isUnsupported || !isAuthorized || !isEnabled) {
                 onOpen()
@@ -69,7 +69,9 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
             Linking.openSettings()
             //TODO: Go to BLE settings
         } else if (!isEnabled) {
-            Linking.openSettings()
+            PlatformUtils.isIOS()
+                ? Linking.openURL("App-Prefs:Bluetooth")
+                : Linking.sendIntent("android.settings.BLUETOOTH_SETTINGS")
         } else if (isUnsupported) {
             nav.goBack()
         }
