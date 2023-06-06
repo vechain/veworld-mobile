@@ -15,6 +15,7 @@ import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/compo
 type Props = BottomSheetModalProps & {
     children: React.ReactNode
     contentStyle?: StyleProp<ViewStyle>
+    noMargins?: boolean
     footerStyle?: StyleProp<ViewStyle>
     footer?: React.ReactNode
     onPressOutside?: BackdropPressBehavior
@@ -25,6 +26,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         {
             contentStyle,
             footerStyle,
+            noMargins = false,
             footer,
             children,
             onPressOutside = "close",
@@ -69,8 +71,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 {...props}>
                 <BaseView
                     w={100}
-                    px={24}
-                    py={24}
+                    px={noMargins ? 0 : 24}
+                    py={noMargins ? 0 : 24}
                     flexGrow={1}
                     alignItems="stretch"
                     style={contentStyle}>

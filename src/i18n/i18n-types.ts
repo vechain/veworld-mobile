@@ -460,6 +460,10 @@ type RootTranslation = {
 	 */
 	BD_NFT_DESC_PLACEHOLDER: string
 	/**
+	 * C​o​l​l​e​c​t​i​o​n
+	 */
+	BD_COLLECTION: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -567,6 +571,10 @@ type RootTranslation = {
 	 * M​a​n​a​g​e​ ​W​a​l​l​e​t
 	 */
 	TITLE_MANAGE_WALLET: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	TITLE_TRANSACTIONS: string
 	/**
 	 * N​F​T
 	 */
@@ -1131,6 +1139,14 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_found_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
+	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	CONTRACT_ADDRESS: string
+	/**
+	 * A​t​t​r​i​b​u​t​e​s
+	 */
+	NFT_ATTRIBUTES: string
+	/**
 	 * 
 	 */
 	NOTIFICATION_wallet_connect_disconnected_from_remote: string
@@ -1151,6 +1167,30 @@ type RootTranslation = {
 	 * C​o​n​v​e​r​t​ ​b​a​l​a​n​c​e​s​ ​t​o​ ​f​i​a​t
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	SETTINGS_TRANSACTIONS_TITLE: string
+	/**
+	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
+	 */
+	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​d​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n​ ​f​o​r​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​U​R​L​s
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: string
+	/**
+	 * A​d​d​ ​o​r​ ​d​e​l​e​t​e​ ​a​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L​ ​s​o​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​i​t​ ​w​h​e​n​ ​s​e​n​d​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: string
+	/**
+	 * M​a​n​a​g​e​ ​U​R​L​s
+	 */
+	SETTINGS_TRANSACTIONS_MANAGE_URLS: string
 	/**
 	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
 	 */
@@ -1327,6 +1367,10 @@ type RootTranslation = {
 	 * S​e​l​e​c​t​ ​U​R​L
 	 */
 	SEND_DELEGATION_SELECT_URL: string
+	/**
+	 * M​a​n​a​g​e​ ​U​R​L​s
+	 */
+	SEND_DELEGATION_MANAGE_URL: string
 	/**
 	 * A​d​d​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L
 	 */
@@ -2043,6 +2087,10 @@ export type TranslationFunctions = {
 	 */
 	BD_NFT_DESC_PLACEHOLDER: () => LocalizedString
 	/**
+	 * Collection
+	 */
+	BD_COLLECTION: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -2150,6 +2198,10 @@ export type TranslationFunctions = {
 	 * Manage Wallet
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
+	/**
+	 * Transactions
+	 */
+	TITLE_TRANSACTIONS: () => LocalizedString
 	/**
 	 * NFT
 	 */
@@ -2712,6 +2764,14 @@ Please, try again later.
 	 */
 	NOTIFICATION_found_token_transfer: (arg: { amount: unknown, token: unknown }) => LocalizedString
 	/**
+	 * Contract address
+	 */
+	CONTRACT_ADDRESS: () => LocalizedString
+	/**
+	 * Attributes
+	 */
+	NFT_ATTRIBUTES: () => LocalizedString
+	/**
 	 * Light
 	 */
 	LIGHT_THEME: () => LocalizedString
@@ -2727,6 +2787,30 @@ Please, try again later.
 	 * Convert balances to fiat
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: () => LocalizedString
+	/**
+	 * Transactions
+	 */
+	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
+	/**
+	 * Default delegation
+	 */
+	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: () => LocalizedString
+	/**
+	 * Select the default delegation for your transactions
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION: () => LocalizedString
+	/**
+	 * Delegation URLs
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: () => LocalizedString
+	/**
+	 * Add or delete a delegation URL so you can select it when sending transactions
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: () => LocalizedString
+	/**
+	 * Manage URLs
+	 */
+	SETTINGS_TRANSACTIONS_MANAGE_URLS: () => LocalizedString
 	/**
 	 * Manage Tokens
 	 */
@@ -2903,6 +2987,10 @@ Please, try again later.
 	 * Select URL
 	 */
 	SEND_DELEGATION_SELECT_URL: () => LocalizedString
+	/**
+	 * Manage URLs
+	 */
+	SEND_DELEGATION_MANAGE_URL: () => LocalizedString
 	/**
 	 * Add delegation URL
 	 */

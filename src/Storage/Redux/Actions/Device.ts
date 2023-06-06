@@ -71,7 +71,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
     ) => {
         debug("Adding a ledger device")
 
-        const devices = selectDevices()(getState())
+        const devices = selectDevices(getState())
 
         try {
             if (!rootAccount.chainCode)

@@ -22,7 +22,7 @@ import { Linking } from "react-native"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 
-interface Props {
+type Props = {
     transaction: Transaction.Body
     onTXFinish: () => void
     isDelegated: boolean
@@ -42,7 +42,9 @@ export const useSignTransaction = ({
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(selectDevice(account.rootAddress))
+    const senderDevice = useAppSelector(state =>
+        selectDevice(state, account.rootAddress),
+    )
 
     const dispatch = useAppDispatch()
     const thorClient = useThor()

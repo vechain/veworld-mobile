@@ -1,5 +1,6 @@
 import { waitFor, element } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../constants"
+import { clickById, clickByText } from "../common"
 
 export const goToContactsManagement = async () => {
     await waitFor(element(by.id("settings-tab")))
@@ -19,16 +20,10 @@ export const goToTokensManagementScreen = async () => {
     await element(by.id("EditTokensBar_BaseIcon_manageToken")).tap()
 }
 
-export const goToAdvancedSettings = async () => {
-    await waitFor(element(by.id("settings-tab")))
-        .toExist()
-        .withTimeout(LONG_TIMEOUT)
+export const goToSettings = async () => {
+    await clickById("settings-tab")
+}
 
-    await element(by.id("settings-tab")).tap()
-
-    await waitFor(element(by.text("Advanced")))
-        .toExist()
-        .withTimeout(DEFAULT_TIMEOUT)
-
-    await element(by.text("Advanced")).tap()
+export const goToSend = async () => {
+    await clickByText("Send")
 }

@@ -9,6 +9,7 @@ import {
     LONG_TIMEOUT,
     MnemonicScreen,
     OnboardingFlows,
+    SettingsFlows,
     WalletSuccessScreen,
     WelcomeScreen,
 } from "../helpers"
@@ -79,7 +80,8 @@ Given(
     { timeout: -1 },
     async () => {
         if (!(await WelcomeScreen.isActive())) {
-            await HomeFlows.goToAdvancedSettings()
+            await HomeFlows.goToSettings()
+            await SettingsFlows.goToAdvancedSettings()
             await AdvancedSettingsFlow.resetApp()
         }
     },

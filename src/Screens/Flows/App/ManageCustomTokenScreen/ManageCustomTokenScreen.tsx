@@ -69,14 +69,12 @@ export const ManageCustomTokenScreen = () => {
             return (
                 <SwipeableItem
                     ref={el => (swipeableItemRef.current[index] = el)}
-                    key={item.address}
                     item={item}
                     renderUnderlayLeft={() => <UnderlayLeft index={index} />}
                     snapPointsLeft={[50]}
                     onChange={handleSwipe(item, index)}>
                     <CustomTokenCard
                         token={item}
-                        key={item.address}
                         containerStyle={[styles.card, customStyle]}
                     />
                 </SwipeableItem>

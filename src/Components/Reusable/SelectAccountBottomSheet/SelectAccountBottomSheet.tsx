@@ -11,7 +11,6 @@ import {
     BaseView,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
-import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 const snapPoints = ["40%"]
 
@@ -24,10 +23,10 @@ const snapPoints = ["40%"]
  * @prop {AccountWithDevice} [selectedAccount] - the selected account
  */
 type Props = {
-    onDismiss: () => void
+    onDismiss?: () => void
     closeBottomSheet: () => void
     accounts: AccountWithDevice[]
-    setSelectedAccount: (account?: AccountWithDevice) => void
+    setSelectedAccount: (account: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
 }
 
@@ -39,11 +38,16 @@ export const SelectAccountBottomSheet = React.forwardRef<
     Props
 >(
     (
-        { closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss },
+        {
+            closeBottomSheet,
+            setSelectedAccount,
+            selectedAccount,
+            onDismiss,
+            accounts,
+        },
         ref,
     ) => {
         const { LL } = useI18nContext()
-        const accounts = useAppSelector(selectAccountsButSelected)
         const handlePress = (account: AccountWithDevice) => {
             setSelectedAccount(account)
             closeBottomSheet()
