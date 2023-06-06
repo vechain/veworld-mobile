@@ -468,6 +468,7 @@ const en: BaseTranslation = {
     VIEW_ON_EXPLORER: "View on explorer",
     BLOCK_NUMBER: "Block number",
     DAPP_TRANSACTION: "DApp Transaction",
+    SWAP: "Swap",
     SIGN_CERTIFICATE: "Sign certificate",
     SIGNED_CERTIFICATE: "Signed certificate",
     ORIGIN: "Origin",
@@ -493,6 +494,8 @@ const en: BaseTranslation = {
     CONTRACT_ABI: "Contract ABI",
     COPY_ABI: "Click to copy ABI",
     TOKEN_ID: "Token ID",
+    PAID: "Paid",
+    RECEIVED: "Received",
 
 
     // Transfers

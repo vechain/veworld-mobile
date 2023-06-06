@@ -1487,6 +1487,10 @@ type RootTranslation = {
 	 */
 	DAPP_TRANSACTION: string
 	/**
+	 * S​w​a​p
+	 */
+	SWAP: string
+	/**
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	SIGN_CERTIFICATE: string
@@ -1586,6 +1590,14 @@ type RootTranslation = {
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
+	/**
+	 * P​a​i​d
+	 */
+	PAID: string
+	/**
+	 * R​e​c​e​i​v​e​d
+	 */
+	RECEIVED: string
 }
 
 export type TranslationFunctions = {
@@ -3051,6 +3063,10 @@ Please, try again later.
 	 */
 	DAPP_TRANSACTION: () => LocalizedString
 	/**
+	 * Swap
+	 */
+	SWAP: () => LocalizedString
+	/**
 	 * Sign certificate
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
@@ -3150,6 +3166,14 @@ Please, try again later.
 	 * Token ID
 	 */
 	TOKEN_ID: () => LocalizedString
+	/**
+	 * Paid
+	 */
+	PAID: () => LocalizedString
+	/**
+	 * Received
+	 */
+	RECEIVED: () => LocalizedString
 }
 
 export type Formatters = {}
