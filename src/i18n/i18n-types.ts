@@ -456,6 +456,10 @@ type RootTranslation = {
 	 */
 	BD_NFT_DESC_PLACEHOLDER: string
 	/**
+	 * C​o​l​l​e​c​t​i​o​n
+	 */
+	BD_COLLECTION: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -1130,6 +1134,14 @@ type RootTranslation = {
 	 * @param {unknown} token
 	 */
 	NOTIFICATION_found_token_transfer: RequiredParams<'amount' | 'token'>
+	/**
+	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	CONTRACT_ADDRESS: string
+	/**
+	 * A​t​t​r​i​b​u​t​e​s
+	 */
+	NFT_ATTRIBUTES: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -2062,6 +2074,10 @@ export type TranslationFunctions = {
 	 */
 	BD_NFT_DESC_PLACEHOLDER: () => LocalizedString
 	/**
+	 * Collection
+	 */
+	BD_COLLECTION: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -2726,6 +2742,14 @@ Please, try again later.
 	 * Found {token} transfer: {amount}
 	 */
 	NOTIFICATION_found_token_transfer: (arg: { amount: unknown, token: unknown }) => LocalizedString
+	/**
+	 * Contract address
+	 */
+	CONTRACT_ADDRESS: () => LocalizedString
+	/**
+	 * Attributes
+	 */
+	NFT_ATTRIBUTES: () => LocalizedString
 	/**
 	 * Light
 	 */

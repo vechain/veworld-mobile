@@ -72,7 +72,6 @@ export const WelcomeScreen = () => {
 
         dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
         dispatch(selectAccount({ address: newAccount.address }))
-
         const parent = nav.getParent()
         if (parent) {
             if (parent.canGoBack()) {

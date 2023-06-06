@@ -41,6 +41,7 @@ type Props = {
     rightIcon?: React.ReactNode
     isLoading?: boolean
     flex?: number
+    activeOpacity?: number
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -53,6 +54,7 @@ export const BaseButton = ({
     leftIcon,
     rightIcon,
     isLoading = false,
+    activeOpacity = 0.7,
     flex,
     ...otherProps
 }: Props) => {
@@ -117,7 +119,7 @@ export const BaseButton = ({
     return (
         <TouchableOpacity
             onPress={onButtonPress}
-            activeOpacity={0.7}
+            activeOpacity={activeOpacity}
             disabled={disabled}
             style={[
                 {

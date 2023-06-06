@@ -2,7 +2,7 @@ import { abis } from "~Common/Constant/Thor/ThorConstants"
 import { isEmpty } from "lodash"
 
 export const getOwnerOf = async (
-    tokenId: number,
+    tokenId: string,
     contractAddress: string,
     thor: Connex.Thor,
 ): Promise<string> => {

@@ -28,7 +28,7 @@ export const useSecurityUpgrade = () => {
 
             const updatedDevices: LocalDevice[] = []
 
-            // todo -> use atomic commit to update all devices at once #567
+            // todo -> use atomic commit to update all devices at once #579
             try {
                 for (const device of devices) {
                     const { decryptedWallet } = await CryptoUtils.decryptWallet(

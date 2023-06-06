@@ -54,7 +54,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         token.balance.balance,
         token.decimals,
     )
-    const formattedTokenBalance = FormattingUtils.humanNumber(rawTokenBalance)
+    const formattedTokenBalance = FormattingUtils.humanNumber(
+        rawTokenBalance,
+        rawTokenBalance,
+    )
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
@@ -80,12 +83,17 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         setInput(isInputInFiat ? formattedTokenInput : formattedFiatInput)
         setIsInputInFiat(s => !s)
     }
-    const percentage = isInputInFiat
-        ? new BigNumber(rawTokenInput).toNumber()
+
+    const isRawTokenBalanceZero = new BigNumber(rawTokenBalance).isZero()
+    const percentageIfInputInTokenUnit = isRawTokenBalanceZero
+        ? 0
         : new BigNumber(input)
               .div(rawTokenBalance)
               .multipliedBy(100)
               .toNumber() || 0
+    const percentage = isInputInFiat
+        ? new BigNumber(rawTokenInput).toNumber()
+        : percentageIfInputInTokenUnit
 
     const onChangePercentage = (value: number) => {
         const newTokenInput = new BigNumber(rawTokenBalance)
@@ -122,6 +130,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     }
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text
+
     return (
         <BaseSafeArea testID="Select_Amount_Send_Screen" grow={1}>
             <DismissKeyboardView>
@@ -218,6 +227,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                         handleChangeInput
                                                     }
                                                     maxLength={10}
+                                                    testID="SendScreen_amountInput"
                                                 />
                                             </BaseView>
                                             {isExchangeRateAvailable && (

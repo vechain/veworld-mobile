@@ -1,9 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { NonFungibleTokenCollection } from "~Model"
 
-type NftSliceState = NonFungibleTokenCollection[]
+type NFTBlackListedItem = {
+    tokenId: string
+    collectionsAddress: string
+}
 
-export const initialStateNft: NftSliceState = []
+type NftSliceState = {
+    collections: NonFungibleTokenCollection[]
+    blackListedCollections: string[]
+    blackListedNFTs: NFTBlackListedItem[]
+}
+
+export const initialStateNft: NftSliceState = {
+    blackListedCollections: [],
+    blackListedNFTs: [],
+    collections: [],
+}
 
 export const NftSlice = createSlice({
     name: "nft",
@@ -14,10 +27,34 @@ export const NftSlice = createSlice({
             action: PayloadAction<NonFungibleTokenCollection[]>,
         ) => {
             const nftCollection = action.payload
-            state = nftCollection
+            state.collections = nftCollection
+            return state
+        },
+
+        // TODO set here adjust Nfts from selectors
+        setBlackListNFT: (
+            state,
+            action: PayloadAction<{
+                contractAddress: string
+                tokenId: string
+            }>,
+        ) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const _action = action
+            return state
+        },
+
+        // TODO set here adjust collections from selectors
+        setBlackListCollection: (
+            state,
+            action: PayloadAction<{ contractAddress: string }>,
+        ) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const _action = action
             return state
         },
     },
 })
 
-export const { setNfts } = NftSlice.actions
+export const { setNfts, setBlackListNFT, setBlackListCollection } =
+    NftSlice.actions
