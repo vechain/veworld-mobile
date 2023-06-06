@@ -5,6 +5,7 @@ import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
 import { CameraScreen } from "~Screens"
 import { CreateWalletAppStack, Routes } from "~Navigation"
+import BlockListener from "../../BlockListener"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -34,9 +35,10 @@ export const SwitchStack = () => {
                 <>
                     <Switch.Screen
                         name="TabStack"
-                        component={TabStack}
+                        component={AppContainer}
                         options={{ headerShown: false }}
                     />
+
                     {/* Full screen modals */}
                     <Switch.Group
                         screenOptions={{
@@ -68,5 +70,14 @@ export const SwitchStack = () => {
             }}>
             {RenderStacks}
         </Switch.Navigator>
+    )
+}
+
+const AppContainer = () => {
+    return (
+        <>
+            <BlockListener />
+            <TabStack />
+        </>
     )
 }
