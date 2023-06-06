@@ -58,7 +58,7 @@ const baseStyles = (theme: ColorThemeType) =>
             width: "100%",
             flexDirection: "column",
             marginLeft: -1,
-            borderBottomColor: theme.colors.skeletonHighlightColor,
+            borderBottomColor: theme.colors.skeletonBoneColor,
             borderBottomWidth: 0.5,
         },
     })
