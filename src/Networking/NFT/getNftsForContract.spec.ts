@@ -8,6 +8,8 @@ describe("getNftsForContract", () => {
     it("should return the NFTs owned by the contract address", async () => {
         const contractAddress = "0xContractAddress"
         const ownerAddress = "0xOwnerAddress"
+        const resultsPerPage = 99999999
+        const page = 0
 
         const responseData = [
             {
@@ -23,12 +25,22 @@ describe("getNftsForContract", () => {
         ]
         ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: responseData })
 
-        const nfts = await getNftsForContract(contractAddress, ownerAddress)
+        const nfts = await getNftsForContract(
+            contractAddress,
+            ownerAddress,
+            resultsPerPage,
+            page,
+        )
 
         expect(nfts).toEqual(responseData)
 
         expect(axios.get).toHaveBeenCalledWith(
-            NFTS_OWNED_PER_CONTRACT(ownerAddress, contractAddress),
+            NFTS_OWNED_PER_CONTRACT(
+                ownerAddress,
+                contractAddress,
+                resultsPerPage,
+                page,
+            ),
         )
     })
 })

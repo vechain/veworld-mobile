@@ -10,10 +10,12 @@ const backButtonHeaderStyle = StyleSheet.create({
 
 type Props = {
     iconTestID?: string
+    hasBottomSpacer?: boolean
 }
 
 export const BackButtonHeader = ({
     iconTestID = "BackButtonHeader-BaseIcon-backButton",
+    hasBottomSpacer = true,
 }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
@@ -27,7 +29,7 @@ export const BackButtonHeader = ({
                 action={nav.goBack}
                 testID={iconTestID}
             />
-            <BaseSpacer height={16} />
+            {hasBottomSpacer && <BaseSpacer height={16} />}
         </>
     )
 }

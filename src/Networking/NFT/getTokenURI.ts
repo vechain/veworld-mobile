@@ -1,7 +1,7 @@
 import { abis } from "~Common/Constant/Thor/ThorConstants"
 
 export const getTokenURI = async (
-    tokenId: number,
+    tokenId: string,
     contractAddress: string,
     thor: Connex.Thor,
 ) => {
