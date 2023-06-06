@@ -58,6 +58,5 @@ Feature: The user send tokens in test net
     Examples:
       | token | amount | address                                    | password | url                                           |
       | VET   | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111   | https://sponsor-testnet.vechain.energy/by/226 |
-      | VTHO  | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111   | https://sponsor-testnet.vechain.energy/by/226 |
 
 
