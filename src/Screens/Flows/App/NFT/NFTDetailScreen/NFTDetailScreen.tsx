@@ -1,35 +1,110 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
 import {
-    BaseImage,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
-    BaseText,
     BaseView,
+    FadeoutButton,
 } from "~Components"
+import { ScrollView } from "react-native"
+import { usePlatformBottomInsets } from "~Common"
+import { useI18nContext } from "~i18n"
+import { isEmpty } from "lodash"
+import { FormattingUtils } from "~Utils"
+import { InfoSectionView, NFTDetailImage } from "./Components"
+import {
+    selectCollectionWithContractAddres,
+    selectNFTWithAddressAndTokenId,
+    useAppSelector,
+} from "~Storage/Redux"
+
+interface NFTAttributeData {
+    trait_type: string
+    value: string | number
+}
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
 export const NFTDetailScreen = ({ route }: Props) => {
+    const { LL } = useI18nContext()
+    const { calculateBottomInsets } = usePlatformBottomInsets()
+
+    const collection = useAppSelector(state =>
+        selectCollectionWithContractAddres(
+            state,
+            route.params.collectionAddress!,
+        ),
+    )
+
+    const nft = useAppSelector(state =>
+        selectNFTWithAddressAndTokenId(
+            state,
+            route.params.collectionAddress!,
+            route.params.nftTokenId!,
+        ),
+    )
+
+    const onSendPress = useCallback(() => {}, [])
+
     return (
         <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
-            <BaseText>{route.params.nft.name}</BaseText>
-            <BaseText>{route.params.nft.description}</BaseText>
-            <BaseImage uri={route.params.nft.image ?? ""} w={200} h={200} />
+            <BackButtonHeader hasBottomSpacer={false} />
+            <BaseView flex={1} mx={20}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{
+                        paddingBottom: calculateBottomInsets + 80,
+                    }}>
+                    <BaseSpacer height={26} />
 
-            <BaseView>
-                {route.params.nft.attributes?.map(attr => (
-                    <BaseView flexDirection="row" key={attr.trait_type}>
-                        <BaseText typographyFont="bodyBold">
-                            {attr.trait_type}
-                        </BaseText>
-                        <BaseSpacer width={8} />
-                        <BaseText>{attr.value}</BaseText>
-                    </BaseView>
-                ))}
+                    <NFTDetailImage
+                        image={nft?.image ?? ""}
+                        name={nft?.name ?? ""}
+                        tokenId={nft?.tokenId ?? ""}
+                        hidden={nft?.isHidden ?? false}
+                        collectionAddress={collection?.address ?? ""}
+                    />
+
+                    <BaseSpacer height={26} />
+
+                    <InfoSectionView<NFTAttributeData[]>
+                        title={LL.NFT_ATTRIBUTES()}
+                        data={nft?.attributes ?? []}
+                    />
+
+                    <InfoSectionView<string>
+                        title={LL.BD_COLLECTION()}
+                        data={collection?.name ?? ""}
+                    />
+
+                    <InfoSectionView<string>
+                        title={LL.SB_DESCRIPTION()}
+                        data={
+                            !isEmpty(collection?.description ?? "")
+                                ? collection?.description ?? ""
+                                : LL.BD_NFT_DESC_PLACEHOLDER()
+                        }
+                    />
+
+                    <InfoSectionView<string>
+                        isLastInList
+                        title={LL.CONTRACT_ADDRESS()}
+                        data={FormattingUtils.humanAddress(
+                            collection?.address ?? "",
+                            5,
+                            4,
+                        )}
+                    />
+                </ScrollView>
             </BaseView>
+
+            <FadeoutButton
+                title={LL.SEND_TOKEN_TITLE().toUpperCase()}
+                action={onSendPress}
+            />
         </BaseSafeArea>
     )
 }

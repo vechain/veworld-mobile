@@ -114,7 +114,7 @@ export const useEditPin = () => {
 
                 info("Rolling back successful")
             } catch (e) {
-                // todo -> handle error how?
+                // todo -> handle error how? -> reset app
                 error("Rollback failed", e)
             }
         },
