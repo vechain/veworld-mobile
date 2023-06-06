@@ -21,6 +21,7 @@ import {
     FungibleToken,
     FungibleTokenWithBalance,
     TokenWithCompleteInfo,
+    TransactionOutcomes,
 } from "~Model"
 
 export type RootStackParamListHome = {
@@ -48,7 +49,12 @@ export type RootStackParamListHome = {
     [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.ACTIVITY_DETAILS]: { activity: Activity; token?: FungibleToken }
+    [Routes.ACTIVITY_DETAILS]: {
+        activity: Activity
+        token?: FungibleToken
+        isSwap?: boolean
+        decodedClauses?: TransactionOutcomes
+    }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
 }
 
