@@ -1,5 +1,4 @@
 export * from "./ListsView/Token/TokenList"
-export * from "../../NFT/NFTScreen/components/CollectionsList"
 export * from "./HeaderView"
 export * from "./EditTokensBar"
 export * from "./BottomSheets"
