@@ -1,4 +1,4 @@
-import { Alert as RNAlert, Linking } from "react-native"
+import { Alert as RNAlert } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import * as i18n from "~i18n"
 import { AlertButtonStyle, AlertContent } from "./enums"
@@ -56,30 +56,6 @@ const showGoToSettingsAlert = (
     Alert(title, msg, ok, buttonAction, cancel, cancelAction, "destructive")
 }
 
-const showUnauthorizedBluetoothAlert = (cancelAction?: () => void) => {
-    const locale = i18n.detectLocale()
-    const title = i18n.i18n()[locale].ALERT_TITLE_AUTHORIZE_BLUETOOTH()
-    const msg = i18n.i18n()[locale].ALERT_MSG_AUTHORIZE_BLUETOOTH()
-    const cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
-    const ok = i18n.i18n()[locale].BTN_GO_TO_SETTINGS()
-
-    const buttonAction = () => Linking.openSettings()
-
-    Alert(title, msg, ok, buttonAction, cancel, cancelAction, "destructive")
-}
-
-const showDisabledBluetoothAlert = (cancelAction?: () => void) => {
-    const locale = i18n.detectLocale()
-    const title = i18n.i18n()[locale].ALERT_TITLE_ENABLE_BLUETOOTH()
-    const msg = i18n.i18n()[locale].ALERT_MSG_ENABLE_BLUETOOTH()
-    const cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
-    const ok = i18n.i18n()[locale].BTN_GO_TO_SETTINGS()
-
-    const buttonAction = () => Linking.openSettings()
-
-    Alert(title, msg, ok, buttonAction, cancel, cancelAction, "destructive")
-}
-
 const showDefaultAlert = (
     title: LocalizedString,
     msg: LocalizedString,
@@ -95,6 +71,4 @@ export {
     showCancelledFaceIdAlert,
     showGoToSettingsAlert,
     showDefaultAlert,
-    showUnauthorizedBluetoothAlert,
-    showDisabledBluetoothAlert,
 }
