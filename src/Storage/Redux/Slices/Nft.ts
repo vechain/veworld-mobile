@@ -1,13 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { uniqBy } from "lodash"
 import { NonFungibleTokenCollection } from "~Model"
+import { PaginationResponse } from "~Networking"
 
 type NFTBlackListedItem = {
     tokenId: string
     collectionsAddress: string
 }
 
-type NftSliceState = {
+type CollectionWithPagination = {
     collections: NonFungibleTokenCollection[]
+    pagination: PaginationResponse
+}
+
+type NftSliceState = {
+    collections: CollectionWithPagination
     blackListedCollections: string[]
     blackListedNFTs: NFTBlackListedItem[]
 }
@@ -15,19 +22,33 @@ type NftSliceState = {
 export const initialStateNft: NftSliceState = {
     blackListedCollections: [],
     blackListedNFTs: [],
-    collections: [],
+    collections: {
+        collections: [],
+        pagination: {
+            totalElements: 0,
+            totalPages: 0,
+        },
+    },
 }
 
 export const NftSlice = createSlice({
     name: "nft",
     initialState: initialStateNft,
     reducers: {
-        setNfts: (
+        setCollections: (
             state,
-            action: PayloadAction<NonFungibleTokenCollection[]>,
+            action: PayloadAction<CollectionWithPagination>,
         ) => {
-            const nftCollection = action.payload
-            state.collections = nftCollection
+            let uniqueCollections = [
+                ...state.collections.collections,
+                ...action.payload.collections,
+            ]
+
+            state.collections = {
+                collections: uniqBy(uniqueCollections, "address"),
+                pagination: action.payload.pagination,
+            }
+
             return state
         },
 
@@ -56,5 +77,5 @@ export const NftSlice = createSlice({
     },
 })
 
-export const { setNfts, setBlackListNFT, setBlackListCollection } =
+export const { setBlackListNFT, setBlackListCollection, setCollections } =
     NftSlice.actions

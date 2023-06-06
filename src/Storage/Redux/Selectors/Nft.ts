@@ -14,7 +14,7 @@ export const selectCollectionWithContractAddres = createSelector(
         (state: RootState, contractAddress: string) => contractAddress,
     ],
     (collections, contractAddress) => {
-        return collections.find(
+        return collections.collections.find(
             collection => collection.address === contractAddress,
         )
     },
@@ -27,7 +27,7 @@ export const selectNFTWithAddressAndTokenId = createSelector(
         (state: RootState, contractAddress: string, tokenId: string) => tokenId,
     ],
     (collections, contractAddress, tokenId) => {
-        const foundColelction = collections.find(
+        const foundColelction = collections.collections.find(
             collection => collection.address === contractAddress,
         )
 

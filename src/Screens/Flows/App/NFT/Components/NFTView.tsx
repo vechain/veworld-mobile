@@ -77,7 +77,7 @@ export const NFTView = ({
                             justifyContent="center"
                             alignItems="center">
                             <BaseText color={COLORS.WHITE}>
-                                {collectionItem!.nfts.length}
+                                {collectionItem!.balanceOf}
                             </BaseText>
                         </BaseView>
                     </BaseView>
