@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useState } from "react"
-import { StyleSheet, TextInput, KeyboardAvoidingView } from "react-native"
+import React, { useMemo, useState } from "react"
+import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native"
 import { CURRENCY_SYMBOLS, useAmountInput, useTheme } from "~Common"
 import { FormattingUtils } from "~Utils"
 import {
@@ -31,6 +31,7 @@ import {
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
+import { throttle } from "lodash"
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<
@@ -39,15 +40,20 @@ type Props = NativeStackScreenProps<
 >
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
-    const { LL } = useI18nContext()
     const { token, initialRoute } = route.params
 
+    const theme = useTheme()
+    const { LL } = useI18nContext()
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
+    const exchangeRate = useAppSelector(state =>
+        selectCurrencyExchangeRate(state, token.symbol),
+    )
+    const currency = useAppSelector(selectCurrency)
+
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
-    const currency = useAppSelector(selectCurrency)
-    const theme = useTheme()
+
     const rawTokenBalance = FormattingUtils.scaleNumberDown(
         token.balance.balance,
         token.decimals,
@@ -56,9 +62,12 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         rawTokenBalance,
         rawTokenBalance,
     )
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol),
+    const rawTokenBalanceinFiat = FormattingUtils.convertToFiatBalance(
+        rawTokenBalance || "0",
+        exchangeRate?.rate || 1,
+        0,
     )
+
     const isExchangeRateAvailable = !!exchangeRate?.rate
     const formattedFiatInput = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -77,21 +86,30 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         rawTokenInput,
         input,
     )
+
+    const percentage = useMemo(() => {
+        const isRawTokenBalanceZero = new BigNumber(rawTokenBalance).isZero()
+        if (isRawTokenBalanceZero) return 0
+
+        if (isInputInFiat)
+            return (
+                new BigNumber(input)
+                    .div(rawTokenBalanceinFiat)
+                    .multipliedBy(100)
+                    .toNumber() || 0
+            )
+        return (
+            new BigNumber(input)
+                .div(rawTokenBalance)
+                .multipliedBy(100)
+                .toNumber() || 0
+        )
+    }, [input, rawTokenBalance, rawTokenBalanceinFiat, isInputInFiat])
+
     const handleToggleInputInFiat = () => {
         setInput(isInputInFiat ? formattedTokenInput : formattedFiatInput)
         setIsInputInFiat(s => !s)
     }
-
-    const isRawTokenBalanceZero = new BigNumber(rawTokenBalance).isZero()
-    const percentageIfInputInTokenUnit = isRawTokenBalanceZero
-        ? 0
-        : new BigNumber(input)
-              .div(rawTokenBalance)
-              .multipliedBy(100)
-              .toNumber() || 0
-    const percentage = isInputInFiat
-        ? new BigNumber(rawTokenInput).toNumber()
-        : percentageIfInputInTokenUnit
 
     const onChangePercentage = (value: number) => {
         const newTokenInput = new BigNumber(rawTokenBalance)
@@ -110,6 +128,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 : newTokenInput,
         )
     }
+
+    const throttleOnChangePercentage = throttle(onChangePercentage, 100)
+
     const handleChangeInput = (newValue: string) => {
         if (new BigNumber(newValue).gt(rawTokenBalance)) {
             setIsError(true)
@@ -282,7 +303,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                         {/** TODO: understand how to add percentage value label */}
                                         <BaseRange
                                             value={percentage}
-                                            onChange={onChangePercentage}
+                                            onChange={
+                                                throttleOnChangePercentage
+                                            }
                                         />
                                         <BaseSpacer width={8} />
                                         <BaseText
