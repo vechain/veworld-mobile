@@ -40,7 +40,7 @@ export const SignTransactionModal = ({
     onClose,
     isOpen,
 }: Props) => {
-    const web3Wallet = useWalletConnect()
+    const { web3Wallet } = useWalletConnect()
     const thorClient = useThor()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)

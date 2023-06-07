@@ -13,6 +13,8 @@ import { SignTransactionModal } from "./Modals/SignTransactionModal"
 import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { deleteSession } from "~Storage/Redux/Slices"
+import { getSdkError } from "@walletconnect/utils"
+import { error } from "~Common"
 
 /**
  * Wallet Connect Flow:
@@ -25,9 +27,11 @@ import { deleteSession } from "~Storage/Redux/Slices"
  */
 
 type WalletConnectContextProviderProps = { children: React.ReactNode }
-const WalletConnectContext = React.createContext<IWeb3Wallet | undefined>(
-    undefined,
-)
+const WalletConnectContext = React.createContext<{
+    web3Wallet: IWeb3Wallet | undefined
+    disconnect: (topic: string) => Promise<void>
+}>({ web3Wallet: undefined, disconnect: async () => {} })
+
 const WalletConnectContextProvider = ({
     children,
 }: WalletConnectContextProviderProps) => {
@@ -50,12 +54,6 @@ const WalletConnectContextProvider = ({
     const [sessionRequest, setSessionRequest] = useState<SessionTypes.Struct>()
     const [requestEventData, setRequestEventData] =
         useState<SignClientTypes.EventArguments["session_request"]>()
-
-    // Needed for the context
-    const value = useMemo(
-        () => (web3Wallet ? web3Wallet : undefined),
-        [web3Wallet],
-    )
 
     /**
      * Handle session proposal
@@ -117,15 +115,35 @@ const WalletConnectContextProvider = ({
     /**
      * Handle session delete
      */
+    const disconnect = useCallback(
+        async (topic: string) => {
+            if (!web3Wallet) return
+
+            try {
+                await web3Wallet.disconnectSession({
+                    topic,
+                    reason: getSdkError("USER_DISCONNECTED"),
+                })
+            } catch (err: unknown) {
+                error(err)
+            } finally {
+                dispatch(deleteSession({ topic }))
+
+                showSuccessToast(
+                    LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
+                )
+            }
+        },
+        [web3Wallet, dispatch, LL],
+    )
+
     const onSessionDelete = useCallback(
         (payload: { id: number; topic: string }) => {
-            dispatch(deleteSession({ topic: payload.topic }))
+            if (!selectedAccount) return
 
-            showSuccessToast(
-                LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
-            )
+            disconnect(payload.topic)
         },
-        [dispatch, LL],
+        [selectedAccount, disconnect],
     )
 
     /**
@@ -152,6 +170,15 @@ const WalletConnectContextProvider = ({
             web3Wallet?.off("session_delete", onSessionDelete)
         }
     }, [web3Wallet, onSessionRequest, onSessionProposal, onSessionDelete])
+
+    // Needed for the context
+    const value = useMemo(
+        () => ({
+            web3Wallet: web3Wallet ? web3Wallet : undefined,
+            disconnect,
+        }),
+        [web3Wallet, disconnect],
+    )
 
     if (!value) {
         return <></>

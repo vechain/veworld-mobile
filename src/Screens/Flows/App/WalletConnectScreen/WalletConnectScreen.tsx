@@ -11,23 +11,21 @@ import {
     showErrorToast,
     showInfoToast,
 } from "~Components"
-import { getSdkError } from "@walletconnect/utils"
-import {
-    selectSelectedAccount,
-    useAppSelector,
-    useAppDispatch,
-    selectSessions,
-} from "~Storage/Redux"
+import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
-import { deleteSession } from "~Storage/Redux/Slices"
 import { error } from "~Common"
+import { FlatList } from "react-native-gesture-handler"
+import { isEmpty } from "lodash"
+import { Session } from "./components"
 
 export const WalletConnectScreen = () => {
-    const web3Wallet = useWalletConnect()
-    const activeSessions: SessionTypes.Struct[] = useAppSelector(selectSessions)
+    const { web3Wallet } = useWalletConnect()
+    const activeSessions: Record<string, SessionTypes.Struct[]> =
+        useAppSelector(selectSessions)
+    // console.log("activeSessions", activeSessions)
+
     const [uri, setUri] = useState("")
-    const account = useAppSelector(selectSelectedAccount)
-    const dispatch = useAppDispatch()
+    const accounts = useAppSelector(selectAccounts)
     const [isPairing, setIsPairing] = useState(false)
 
     /**
@@ -39,7 +37,7 @@ export const WalletConnectScreen = () => {
     const onPair = useCallback(async () => {
         setIsPairing(true)
         try {
-            await web3Wallet.core.pairing.pair({
+            await web3Wallet?.core.pairing.pair({
                 uri,
                 activatePairing: true,
             })
@@ -57,66 +55,67 @@ export const WalletConnectScreen = () => {
         }
     }, [uri, web3Wallet])
 
-    const disconnect = useCallback(async () => {
-        if (activeSessions) {
-            const topic = activeSessions[0].topic
-            try {
-                await web3Wallet.disconnectSession({
-                    topic,
-                    reason: getSdkError("USER_DISCONNECTED"),
-                })
-            } catch (err: unknown) {
-                error(err)
-            } finally {
-                dispatch(deleteSession({ topic }))
+    const renderSeparator = useCallback(() => <BaseSpacer height={5} />, [])
+
+    const renderSession = useCallback(({ item }) => {
+        return <Session item={item} />
+    }, [])
+
+    const renderSessionGroup = useCallback(
+        ({ item }) => {
+            if (
+                item.address in activeSessions &&
+                !isEmpty(activeSessions[item.address])
+            ) {
+                return (
+                    <BaseSafeArea>
+                        <BaseText>{item.alias}</BaseText>
+                        <FlatList
+                            data={activeSessions[item.address]}
+                            // contentContainerStyle={styles.listContainer}
+                            numColumns={1}
+                            keyExtractor={session => String(session.topic)}
+                            renderItem={renderSession}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </BaseSafeArea>
+                )
             }
-        }
-    }, [activeSessions, web3Wallet, dispatch])
+        },
+        [renderSession, activeSessions],
+    )
 
     return (
         <BaseSafeArea>
             <BackButtonHeader />
             <BaseText>{"Wallet Connect Screen"}</BaseText>
 
-            <BaseSpacer height={24} />
-            <BaseText>
-                {"Address: "} {account?.address || "Loading..."}
-            </BaseText>
-            <BaseSpacer height={24} />
+            <BaseView alignItems="center" justifyContent="center">
+                <BaseTextInput
+                    placeholder={"Place here the WC URI"}
+                    label={"WC URI"}
+                    setValue={setUri}
+                    value={uri}
+                    testID="wc-uri"
+                />
+                <BaseButton
+                    title="Connect"
+                    action={onPair}
+                    disabled={isPairing}
+                />
+            </BaseView>
 
-            <BaseText>
-                {"Active Sessions: "} {activeSessions.length || 0}
-            </BaseText>
-            <BaseSpacer height={24} />
-
-            <BaseText>
-                {"Current Session Topic: "}{" "}
-                {activeSessions?.length > 0
-                    ? activeSessions[0]?.topic
-                    : "No active sessions"}
-            </BaseText>
-            <BaseSpacer height={24} />
-
-            {activeSessions?.length < 1 ? (
-                <BaseView alignItems="center" justifyContent="center">
-                    <BaseTextInput
-                        placeholder={"Place here the WC URI"}
-                        label={"WC URI"}
-                        setValue={setUri}
-                        value={uri}
-                        testID="wc-uri"
-                    />
-                    <BaseButton
-                        title="Connect"
-                        action={onPair}
-                        disabled={isPairing}
-                    />
-                </BaseView>
-            ) : (
-                <BaseView alignItems="center" justifyContent="center">
-                    <BaseButton action={disconnect} title="Disconnect" />
-                </BaseView>
-            )}
+            <FlatList
+                data={accounts}
+                // contentContainerStyle={styles.listContainer}
+                numColumns={1}
+                keyExtractor={item => String(item.address)}
+                ItemSeparatorComponent={renderSeparator}
+                renderItem={renderSessionGroup}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+            />
         </BaseSafeArea>
     )
 }

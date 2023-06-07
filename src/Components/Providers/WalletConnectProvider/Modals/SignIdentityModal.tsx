@@ -36,7 +36,7 @@ export const SignIdentityModal = ({
     onClose,
     isOpen,
 }: Props) => {
-    const web3Wallet = useWalletConnect()
+    const { web3Wallet } = useWalletConnect()
     const account = useAppSelector(selectSelectedAccount)
     // const selectedDevice = useAppSelector(selectDevice(account.rootAddress))
     const selectedDevice = useAppSelector(state =>

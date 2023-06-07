@@ -1,33 +1,59 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { SessionTypes } from "@walletconnect/types"
 
-type WalletConnectSessionsSliceState = {
-    sessions: SessionTypes.Struct[]
-}
+// type WalletConnectSessionsSliceState = {
+//     sessions: SessionTypes.Struct[]
+// }
 
-export const initialSessionsState: WalletConnectSessionsSliceState = {
-    sessions: [],
-}
+/**
+ * One account can have multiple sessions.
+ *
+ * Mapping account address => Sessions
+ */
+type WalletConnectSessionsSliceState = Record<string, SessionTypes.Struct[]>
+
+export const initialSessionsState: WalletConnectSessionsSliceState = {}
 
 export const WalletConnectSessionsSlice = createSlice({
     name: "sessions",
     initialState: initialSessionsState,
     reducers: {
-        insertSession: (state, action: PayloadAction<SessionTypes.Struct>) => {
-            const sessionExists = state.sessions.find(
-                session => session.topic === action.payload.topic,
+        insertSession: (
+            state: Draft<WalletConnectSessionsSliceState>,
+            action: PayloadAction<{
+                address: string
+                session: SessionTypes.Struct
+            }>,
+        ) => {
+            const { address, session } = action.payload
+
+            if (!state[address]) {
+                state[address] = []
+            }
+
+            const sessionExists = state[address].find(
+                currentSession => currentSession.topic === session.topic,
             )
             if (!sessionExists) {
-                state.sessions.push(action.payload)
+                state[address].push(session)
             }
         },
-        deleteSession: (state, action: PayloadAction<{ topic: string }>) => {
-            const sessionExistsIndex = state.sessions.findIndex(
-                session => session.topic === action.payload.topic,
-            )
+        deleteSession: (
+            state,
+            action: PayloadAction<{
+                topic: string
+            }>,
+        ) => {
+            const { topic } = action.payload
 
-            if (sessionExistsIndex !== -1) {
-                state.sessions.splice(sessionExistsIndex, 1)
+            for (const address in state) {
+                const sessionExistsIndex = state[address].findIndex(
+                    currentSession => currentSession.topic === topic,
+                )
+
+                if (sessionExistsIndex !== -1) {
+                    state[address].splice(sessionExistsIndex, 1)
+                }
             }
         },
     },

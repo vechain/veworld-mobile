@@ -33,7 +33,13 @@ interface Props {
 export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
-    const web3Wallet = useWalletConnect()
+    const { web3Wallet } = useWalletConnect()
+
+    if (!selectedAccount) {
+        onClose()
+        showErrorToast("No account selected.")
+        return <></>
+    }
 
     // check if the DApp is connecting to Vechain
     if (!currentProposal?.params?.requiredNamespaces?.vechain) {
@@ -82,7 +88,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                 },
             )
 
-            dispatch(insertSession(session))
+            dispatch(insertSession({ address: selectedAccount, session }))
 
             showSuccessToast('Successfull connected to "' + name + '"')
             onClose()
