@@ -17,7 +17,7 @@ export const WalletManagementHeader = () => {
     }, [nav])
 
     return (
-        <BaseView flexDirection="row" w={100}>
+        <BaseView flexDirection="row" justifyContent="space-between" w={100}>
             <BaseText typographyFont="title">
                 {LL.TITLE_WALLET_MANAGEMENT()}
             </BaseText>
