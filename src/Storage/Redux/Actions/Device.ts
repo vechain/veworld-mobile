@@ -106,7 +106,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
                 AccountUtils.getAccountForIndex(
                     accountIndex,
                     newDevice,
-                    accountIndex,
+                    accountIndex + 1,
                 ),
             )
 
