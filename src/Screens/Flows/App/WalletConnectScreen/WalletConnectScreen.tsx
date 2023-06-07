@@ -8,8 +8,8 @@ import {
     BaseTextInput,
     BaseView,
     useWalletConnect,
-    showSuccessToast,
     showErrorToast,
+    showInfoToast,
 } from "~Components"
 import { getSdkError } from "@walletconnect/utils"
 import {
@@ -28,6 +28,7 @@ export const WalletConnectScreen = () => {
     const [uri, setUri] = useState("")
     const account = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
+    const [isPairing, setIsPairing] = useState(false)
 
     /**
      * The pair method initiates a WalletConnect pairing process with a dapp
@@ -36,6 +37,7 @@ export const WalletConnectScreen = () => {
      * asking the user permission to connect to the wallet.
      */
     const onPair = useCallback(async () => {
+        setIsPairing(true)
         try {
             await web3Wallet.core.pairing.pair({
                 uri,
@@ -43,13 +45,15 @@ export const WalletConnectScreen = () => {
             })
 
             setUri("")
-            showSuccessToast("Pairing successful")
+            showInfoToast("Connecting may take a few seconds.")
         } catch (err: unknown) {
             error(err)
 
             showErrorToast(
                 "Error pairing with Dapp, please generate a new QR CODE",
             )
+        } finally {
+            setIsPairing(false)
         }
     }, [uri, web3Wallet])
 
@@ -102,7 +106,11 @@ export const WalletConnectScreen = () => {
                         value={uri}
                         testID="wc-uri"
                     />
-                    <BaseButton title="Connect" action={onPair} />
+                    <BaseButton
+                        title="Connect"
+                        action={onPair}
+                        disabled={isPairing}
+                    />
                 </BaseView>
             ) : (
                 <BaseView alignItems="center" justifyContent="center">
