@@ -70,7 +70,6 @@ export const useSendTransaction = ({
 
     useEffect(() => {
         if (account) {
-            // eslint-disable-next-line no-extra-semi
             ;(async () => {
                 const estimatedGas = await GasUtils.estimateGas(
                     thorClient,
