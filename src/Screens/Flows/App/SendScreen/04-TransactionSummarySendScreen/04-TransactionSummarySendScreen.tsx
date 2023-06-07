@@ -1,8 +1,8 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import { VTHO, useCheckIdentity, useTheme } from "~Common"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils, FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import {
     AccountCard,
@@ -29,8 +29,8 @@ import {
     selectCurrency,
     selectSelectedAccount,
     useAppSelector,
-    selectAccountsButSelected,
     selectKnownContacts,
+    selectAccounts,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -51,8 +51,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
-    const accounts = useAppSelector(selectAccountsButSelected)
+    const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
+
+    const accountsAndContacts = useMemo(
+        () => [...accounts, ...contacts],
+        [accounts, contacts],
+    )
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -110,42 +115,23 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         : "N.A."
 
     const receiverDetails = () => {
-        const contact = contacts.find(
-            _contact =>
-                _contact.address.toLowerCase() === address.toLowerCase(),
+        const receiverExists = accountsAndContacts.find(_account =>
+            AddressUtils.compareAddresses(_account.address, address),
         )
 
-        if (contact) {
+        if (receiverExists)
             return (
                 <BaseView>
                     <BaseText typographyFont="subSubTitle">
-                        {contact.alias}
-                    </BaseText>
-                    <BaseText typographyFont="captionRegular">
-                        {FormattingUtils.humanAddress(contact.address || "")}
-                    </BaseText>
-                </BaseView>
-            )
-        }
-
-        const receiverAccount = accounts.find(
-            _account =>
-                _account.address.toLowerCase() === address.toLowerCase(),
-        )
-        if (receiverAccount) {
-            return (
-                <BaseView>
-                    <BaseText typographyFont="subSubTitle">
-                        {receiverAccount.alias}
+                        {receiverExists.alias}
                     </BaseText>
                     <BaseText typographyFont="captionRegular">
                         {FormattingUtils.humanAddress(
-                            receiverAccount.address || "",
+                            receiverExists.address || "",
                         )}
                     </BaseText>
                 </BaseView>
             )
-        }
 
         return (
             <BaseView>

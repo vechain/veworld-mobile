@@ -6,10 +6,11 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    BluetoothStatusBottomSheet,
     DismissKeyboardView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { debug } from "~Common"
+import { debug, useBluetoothStatus } from "~Common"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
@@ -25,6 +26,8 @@ import * as Haptics from "expo-haptics"
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
+
+    const { isEnabled, isAuthorized } = useBluetoothStatus()
 
     const [availableDevices, setAvailableDevices] = useState<
         ConnectedLedgerDevice[]
@@ -46,9 +49,11 @@ export const SelectLedgerDevice = () => {
     }, [nav, selectedDevice])
 
     /**
-     * Listen for new ledger (nanox) devices
+     * Listen for new ledger (nanox) devices if bluetooth is enabled
      */
     useEffect(() => {
+        if (!isEnabled || !isAuthorized) return
+
         const subscription = BleTransport.listen({
             complete: () => {
                 debug("complete")
@@ -83,7 +88,7 @@ export const SelectLedgerDevice = () => {
         return () => {
             subscription.unsubscribe()
         }
-    }, [selectedDevice])
+    }, [selectedDevice, isEnabled, isAuthorized])
 
     const renderItem = useCallback(
         ({ item }: { item: ConnectedLedgerDevice }) => {
@@ -126,26 +131,30 @@ export const SelectLedgerDevice = () => {
                             style={styles.lottie}
                         />
                         <BaseSpacer height={20} />
-                        <BaseText
-                            align="center"
-                            typographyFont="subTitleBold"
-                            my={10}>
-                            {availableDevices.length > 0
-                                ? `${availableDevices.length} devices found`
-                                : "No devices found"}
-                        </BaseText>
-                        {availableDevices.length > 0 && (
-                            <FlatList
-                                style={styles.container}
-                                data={availableDevices}
-                                numColumns={1}
-                                horizontal={false}
-                                renderItem={renderItem}
-                                nestedScrollEnabled={false}
-                                showsVerticalScrollIndicator={false}
-                                ItemSeparatorComponent={renderSeparator}
-                                keyExtractor={item => item.id}
-                            />
+                        {isAuthorized && isEnabled && (
+                            <>
+                                <BaseText
+                                    align="center"
+                                    typographyFont="subTitleBold"
+                                    my={10}>
+                                    {availableDevices.length > 0
+                                        ? `${availableDevices.length} devices found`
+                                        : "No devices found"}
+                                </BaseText>
+                                {availableDevices.length > 0 && (
+                                    <FlatList
+                                        style={styles.container}
+                                        data={availableDevices}
+                                        numColumns={1}
+                                        horizontal={false}
+                                        renderItem={renderItem}
+                                        nestedScrollEnabled={false}
+                                        showsVerticalScrollIndicator={false}
+                                        ItemSeparatorComponent={renderSeparator}
+                                        keyExtractor={item => item.id}
+                                    />
+                                )}
+                            </>
                         )}
                     </BaseView>
 
@@ -160,6 +169,7 @@ export const SelectLedgerDevice = () => {
                 </BaseView>
 
                 <BaseSpacer height={40} />
+                <BluetoothStatusBottomSheet />
             </BaseSafeArea>
         </DismissKeyboardView>
     )
