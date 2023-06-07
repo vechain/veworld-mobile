@@ -37,7 +37,8 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
             token.symbol?.toLowerCase().includes(tokenQuery.toLowerCase()),
     )
     const nav = useNavigation()
-    const handleClickToken = (token: FungibleTokenWithBalance) => () => {
+    const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         nav.navigate(Routes.SELECT_AMOUNT_SEND, {
             token,
             initialRoute: route.params.initialRoute ?? "",

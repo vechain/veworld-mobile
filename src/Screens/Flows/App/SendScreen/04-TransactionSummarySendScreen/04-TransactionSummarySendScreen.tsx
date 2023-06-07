@@ -119,7 +119,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             AddressUtils.compareAddresses(_account.address, address),
         )
 
-        if (receiverExists) {
+        if (receiverExists)
             return (
                 <BaseView>
                     <BaseText typographyFont="subSubTitle">
@@ -132,7 +132,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                 </BaseView>
             )
-        }
 
         return (
             <BaseView>

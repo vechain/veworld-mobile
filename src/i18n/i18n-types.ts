@@ -151,6 +151,10 @@ type RootTranslation = {
 	 */
 	BTN_GO_TO_SETTINGS: string
 	/**
+	 * G​o​ ​b​a​c​k
+	 */
+	BTN_GO_BACK: string
+	/**
 	 * P​a​s​t​e​ ​A​d​d​r​e​s​s
 	 */
 	BTN_PASTE_ADDRESS: string
@@ -527,10 +531,6 @@ type RootTranslation = {
 	 * C​a​m​e​r​a​ ​P​e​r​m​i​s​s​i​o​n​s
 	 */
 	TITLE_ALERT_CAMERA_PERMISSION: string
-	/**
-	 * C​a​m​e​r​a​ ​U​n​a​v​a​i​l​a​b​l​e
-	 */
-	TITLE_ALERT_CAMERA_UNAVAILABLE: string
 	/**
 	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
 	 */
@@ -948,6 +948,30 @@ type RootTranslation = {
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
 	 */
 	ALERT_MSG_BIO_PREVIOUSLY_DENIED: string
+	/**
+	 * A​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h
+	 */
+	ALERT_TITLE_AUTHORIZE_BLUETOOTH: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​a​p​p​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h​ ​t​o​ ​c​o​n​t​i​n​u​e​.
+	 */
+	ALERT_MSG_AUTHORIZE_BLUETOOTH: string
+	/**
+	 * E​n​a​b​l​e​ ​b​l​u​e​t​o​o​t​h
+	 */
+	ALERT_TITLE_ENABLE_BLUETOOTH: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​e​n​a​b​l​e​ ​t​o​ ​c​o​n​t​i​n​u​e​.
+	 */
+	ALERT_MSG_ENABLE_BLUETOOTH: string
+	/**
+	 * B​l​u​e​t​o​o​t​h​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d
+	 */
+	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: string
+	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​B​l​u​e​t​o​o​t​h​,​ ​w​h​i​c​h​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​u​s​e​ ​t​h​i​s​ ​f​e​a​t​u​r​e​.
+	 */
+	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
 	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
@@ -1770,6 +1794,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
 	/**
+	 * Go back
+	 */
+	BTN_GO_BACK: () => LocalizedString
+	/**
 	 * Paste Address
 	 */
 	BTN_PASTE_ADDRESS: () => LocalizedString
@@ -2145,10 +2173,6 @@ export type TranslationFunctions = {
 	 * Camera Permissions
 	 */
 	TITLE_ALERT_CAMERA_PERMISSION: () => LocalizedString
-	/**
-	 * Camera Unavailable
-	 */
-	TITLE_ALERT_CAMERA_UNAVAILABLE: () => LocalizedString
 	/**
 	 * You're finally one of us!
 	 */
@@ -2561,6 +2585,30 @@ export type TranslationFunctions = {
 	 * You have previously denied biometric authentication. Please enable it in your device settings.
 	 */
 	ALERT_MSG_BIO_PREVIOUSLY_DENIED: () => LocalizedString
+	/**
+	 * Authorize Bluetooth
+	 */
+	ALERT_TITLE_AUTHORIZE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Please, open app settings and authorize Bluetooth to continue.
+	 */
+	ALERT_MSG_AUTHORIZE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Enable bluetooth
+	 */
+	ALERT_TITLE_ENABLE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Please, open the device settings and enable to continue.
+	 */
+	ALERT_MSG_ENABLE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Bluetooth is not supported
+	 */
+	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: () => LocalizedString
+	/**
+	 * Your device does not support Bluetooth, which is required to use this feature.
+	 */
+	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */

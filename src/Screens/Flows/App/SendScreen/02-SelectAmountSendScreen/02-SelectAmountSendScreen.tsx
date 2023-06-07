@@ -31,8 +31,6 @@ import {
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
-import * as Haptics from "expo-haptics"
-
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<
@@ -41,15 +39,20 @@ type Props = NativeStackScreenProps<
 >
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
-    const { LL } = useI18nContext()
     const { token, initialRoute } = route.params
 
+    const theme = useTheme()
+    const { LL } = useI18nContext()
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
+    const exchangeRate = useAppSelector(state =>
+        selectCurrencyExchangeRate(state, token.symbol),
+    )
+    const currency = useAppSelector(selectCurrency)
+
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
-    const currency = useAppSelector(selectCurrency)
-    const theme = useTheme()
+
     const rawTokenBalance = FormattingUtils.scaleNumberDown(
         token.balance.balance,
         token.decimals,
@@ -58,9 +61,12 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         rawTokenBalance,
         rawTokenBalance,
     )
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol),
+    const rawTokenBalanceinFiat = FormattingUtils.convertToFiatBalance(
+        rawTokenBalance || "0",
+        exchangeRate?.rate || 1,
+        0,
     )
+
     const isExchangeRateAvailable = !!exchangeRate?.rate
     const formattedFiatInput = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -79,21 +85,30 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         rawTokenInput,
         input,
     )
+
+    const percentage = useMemo(() => {
+        const isRawTokenBalanceZero = new BigNumber(rawTokenBalance).isZero()
+        if (isRawTokenBalanceZero) return 0
+
+        if (isInputInFiat)
+            return (
+                new BigNumber(input)
+                    .div(rawTokenBalanceinFiat)
+                    .multipliedBy(100)
+                    .toNumber() || 0
+            )
+        return (
+            new BigNumber(input)
+                .div(rawTokenBalance)
+                .multipliedBy(100)
+                .toNumber() || 0
+        )
+    }, [input, rawTokenBalance, rawTokenBalanceinFiat, isInputInFiat])
+
     const handleToggleInputInFiat = () => {
         setInput(isInputInFiat ? formattedTokenInput : formattedFiatInput)
         setIsInputInFiat(s => !s)
     }
-
-    const isRawTokenBalanceZero = new BigNumber(rawTokenBalance).isZero()
-    const percentageIfInputInTokenUnit = isRawTokenBalanceZero
-        ? 0
-        : new BigNumber(input)
-              .div(rawTokenBalance)
-              .multipliedBy(100)
-              .toNumber() || 0
-    const percentage = isInputInFiat
-        ? new BigNumber(rawTokenInput).toNumber()
-        : percentageIfInputInTokenUnit
 
     const onChangePercentage = (value: number) => {
         const newTokenInput = new BigNumber(rawTokenBalance)
@@ -112,6 +127,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 : newTokenInput,
         )
     }
+
+    const throttleOnChangePercentage = throttle(onChangePercentage, 100)
+
     const handleChangeInput = (newValue: string) => {
         if (new BigNumber(newValue).gt(rawTokenBalance)) {
             setIsError(true)
@@ -132,7 +150,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const inputColor = isError ? theme.colors.danger : theme.colors.text
 
     return (
-        <BaseSafeArea testID="Select_Amount_Send_Screen" grow={1}>
+        <BaseSafeArea grow={1} testID="Select_Amount_Send_Screen">
             <DismissKeyboardView>
                 <KeyboardAvoidingView
                     behavior="padding"
@@ -285,7 +303,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                         {/** TODO: understand how to add percentage value label */}
                                         <BaseRange
                                             value={percentage}
-                                            onChange={onChangePercentage}
+                                            onChange={
+                                                throttleOnChangePercentage
+                                            }
                                         />
                                         <BaseSpacer width={8} />
                                         <BaseText
@@ -298,10 +318,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                             </BaseCard>
                         </BaseView>
                     </BaseView>
-
                     <BaseButton
                         style={styles.nextButton}
                         mx={24}
+                        haptics="light"
                         title={LL.COMMON_BTN_NEXT()}
                         disabled={
                             isError ||
