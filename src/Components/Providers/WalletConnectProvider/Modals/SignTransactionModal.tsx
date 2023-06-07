@@ -1,5 +1,5 @@
 import { SignClientTypes } from "@walletconnect/types"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { Image, StyleSheet } from "react-native"
 import {
     BaseText,
@@ -13,25 +13,14 @@ import {
     BaseModal,
     showSuccessToast,
 } from "~Components"
-import {
-    HDNode,
-    secp256k1,
-    Certificate,
-    blake2b256,
-    Transaction,
-} from "thor-devkit"
+import { HDNode, secp256k1, Transaction } from "thor-devkit"
 import {
     selectSelectedNetwork,
     useAppSelector,
     selectDevice,
     selectSelectedAccount,
 } from "~Storage/Redux"
-import {
-    HexUtils,
-    CryptoUtils,
-    TransactionUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { HexUtils, CryptoUtils, TransactionUtils } from "~Utils"
 import { useCheckIdentity, error } from "~Common"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import axios from "axios"
@@ -45,7 +34,7 @@ interface Props {
     isOpen: boolean
 }
 
-export const SignModal = ({
+export const SignTransactionModal = ({
     requestEvent,
     sessionRequest,
     onClose,
@@ -68,56 +57,9 @@ export const SignModal = ({
     const requestIcon = sessionRequest?.peer?.metadata?.icons[0]
     const requestURL = sessionRequest?.peer?.metadata?.url
 
-    const message = useMemo(() => {
-        switch (method) {
-            case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
-                return params.payload.content
-            case WalletConnectUtils.VECHAIN_SIGNING_METHODS.REQUEST_TRANSACTION:
-                return params.comment || params.txMessage[0].comment
-            default:
-                return ""
-        }
-    }, [method, params])
+    const message = params.comment || params.txMessage[0].comment
 
     const { topic } = requestEvent ? requestEvent : { topic: "" }
-
-    const signIdentityCertificate = useCallback(
-        async (id: number, privateKey: Buffer) => {
-            const cert: Certificate = {
-                ...params,
-                timestamp: Math.round(Date.now() / 1000),
-                domain: new URL(requestURL),
-                signer: account ? account.address : "",
-            }
-
-            const hash = blake2b256(Certificate.encode(cert))
-            const signature = secp256k1.sign(hash, privateKey)
-
-            await web3Wallet.respondSessionRequest({
-                topic,
-                response: {
-                    id,
-                    jsonrpc: "2.0",
-                    result: {
-                        annex: {
-                            timestamp: cert.timestamp,
-                            domain: cert.domain,
-                            signer: cert.signer,
-                        },
-                        signature: HexUtils.addPrefix(
-                            signature.toString("hex"),
-                        ),
-                    },
-                },
-            })
-
-            //TODO: add to history?
-
-            onClose()
-            showSuccessToast("Identity certificate signed correctly")
-        },
-        [account, params, requestURL, topic, web3Wallet, onClose],
-    )
 
     const onSignTransaction = useCallback(
         async (id: number, privateKey: Buffer) => {
@@ -273,25 +215,9 @@ export const SignModal = ({
             const derivedNode = hdNode.derive(account.index)
             const privateKey = derivedNode.privateKey as Buffer
 
-            switch (method) {
-                case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
-                    await signIdentityCertificate(id, privateKey)
-                    break
-                case WalletConnectUtils.VECHAIN_SIGNING_METHODS
-                    .REQUEST_TRANSACTION:
-                    await onSignTransaction(id, privateKey)
-                    break
-                default:
-                    break
-            }
+            await onSignTransaction(id, privateKey)
         },
-        [
-            account,
-            requestEvent,
-            signIdentityCertificate,
-            onSignTransaction,
-            method,
-        ],
+        [account, requestEvent, onSignTransaction],
     )
 
     async function onReject() {
@@ -349,7 +275,7 @@ export const SignModal = ({
             presentationStyle="overFullScreen">
             <BaseView alignItems="center" justifyContent="center">
                 <BaseText typographyFont="subTitleBold">
-                    {"Session Request"}
+                    {"Sign Transaction Re"}
                 </BaseText>
             </BaseView>
             <BaseView>

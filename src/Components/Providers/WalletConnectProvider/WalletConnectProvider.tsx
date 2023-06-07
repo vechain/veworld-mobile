@@ -8,7 +8,8 @@ import {
     selectAccountsState,
 } from "~Storage/Redux"
 import { PairModal } from "./Modals/PairModal"
-import { SignModal } from "./Modals/SignModal"
+import { SignIdentityModal } from "./Modals/SignIdentityModal"
+import { SignTransactionModal } from "./Modals/SignTransactionModal"
 import { showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { deleteSession } from "~Storage/Redux/Slices"
@@ -42,7 +43,10 @@ const WalletConnectContextProvider = ({
         useState<SignClientTypes.EventArguments["session_proposal"]>()
 
     // For session request
-    const [signModalVisible, setSignModalVisible] = useState(false)
+    const [signIdentityModalVisible, setSignIdentityModalVisible] =
+        useState(false)
+    const [signTransactionModalVisible, setSignTransactionModalVisible] =
+        useState(false)
     const [sessionRequest, setSessionRequest] = useState<SessionTypes.Struct>()
     const [requestEventData, setRequestEventData] =
         useState<SignClientTypes.EventArguments["session_request"]>()
@@ -86,7 +90,19 @@ const WalletConnectContextProvider = ({
 
             setSessionRequest(sessionRequestData)
             setRequestEventData(requestEvent)
-            setSignModalVisible(true)
+
+            //TODO: check if the request is a sign identity or sign transaction
+            switch (requestEvent?.params?.request?.method) {
+                case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
+                    setSignIdentityModalVisible(true)
+                    break
+                case WalletConnectUtils.VECHAIN_SIGNING_METHODS
+                    .REQUEST_TRANSACTION:
+                    setSignTransactionModalVisible(true)
+                    break
+                default:
+                    return ""
+            }
         },
         [web3Wallet],
     )
@@ -94,7 +110,8 @@ const WalletConnectContextProvider = ({
     const onSessionRequestClose = useCallback(() => {
         setSessionRequest(undefined)
         setRequestEventData(undefined)
-        setSignModalVisible(false)
+        setSignIdentityModalVisible(false)
+        setSignTransactionModalVisible(false)
     }, [])
 
     /**
@@ -153,10 +170,19 @@ const WalletConnectContextProvider = ({
                         />
                     )}
 
-                    {requestEventData && (
-                        <SignModal
+                    {requestEventData && signIdentityModalVisible && (
+                        <SignIdentityModal
                             onClose={onSessionRequestClose}
-                            isOpen={signModalVisible}
+                            isOpen={signIdentityModalVisible}
+                            requestEvent={requestEventData}
+                            sessionRequest={sessionRequest}
+                        />
+                    )}
+
+                    {requestEventData && signTransactionModalVisible && (
+                        <SignTransactionModal
+                            onClose={onSessionRequestClose}
+                            isOpen={signTransactionModalVisible}
                             requestEvent={requestEventData}
                             sessionRequest={sessionRequest}
                         />

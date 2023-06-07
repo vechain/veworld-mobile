@@ -41,7 +41,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
         showErrorToast(
             "The requested chain is not compatible with this wallet.",
         )
-        return
+        return <></>
     }
 
     const name = currentProposal?.params?.proposer?.metadata?.name
