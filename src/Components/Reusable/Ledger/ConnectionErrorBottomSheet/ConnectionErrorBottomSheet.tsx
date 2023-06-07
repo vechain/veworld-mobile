@@ -94,7 +94,10 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
             onDismiss={onDismiss}
             ref={ref}>
             <BaseView flexGrow={1}>
-                <BaseView flexDirection="row">
+                <BaseView
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center">
                     <BaseText typographyFont="subTitleBold">
                         {data.title}
                     </BaseText>

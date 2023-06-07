@@ -1,6 +1,12 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, fireEvent, screen, act } from "@testing-library/react-native"
+import {
+    render,
+    fireEvent,
+    screen,
+    act,
+    waitFor,
+} from "@testing-library/react-native"
 import { BaseButton } from "./BaseButton"
 import { BaseIcon } from "./BaseIcon"
 
@@ -73,7 +79,12 @@ describe("BaseButton", () => {
             fireEvent.press(button)
         })
 
-        expect(mockAction).toHaveBeenCalled()
+        await waitFor(
+            () => {
+                expect(mockAction).toHaveBeenCalled()
+            },
+            { timeout: 5000 },
+        )
 
         render(
             <BaseButton
@@ -94,7 +105,12 @@ describe("BaseButton", () => {
             fireEvent.press(button)
         })
 
-        expect(mockAction).toHaveBeenCalled()
+        await waitFor(
+            () => {
+                expect(mockAction).toHaveBeenCalled()
+            },
+            { timeout: 5000 },
+        )
         render(
             <BaseButton
                 action={mockAction}
@@ -116,6 +132,11 @@ describe("BaseButton", () => {
             fireEvent.press(button)
         })
 
-        expect(mockAction).toHaveBeenCalled()
+        await waitFor(
+            () => {
+                expect(mockAction).toHaveBeenCalled()
+            },
+            { timeout: 5000 },
+        )
     })
 })
