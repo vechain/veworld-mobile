@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { debug, useBottomSheetModal, useRenderCounter } from "~Common"
+import { useBottomSheetModal, useRenderCounter } from "~Common"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
@@ -140,9 +140,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     )
 
     //Whenever search changes, we check if it's a valid address,
-    // eventually opening the create bottomsheet if needed
+    // eventually opening the create contact bottomsheet if needed
     useEffect(() => {
-        debug("useEffect")
         if (searchText && AddressUtils.isValid(searchText)) {
             setSelectedAddress(searchText)
             if (!isAddressInContactsOrAccounts) openCreateContactSheet()
