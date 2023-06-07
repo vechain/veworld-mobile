@@ -1,7 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useTheme } from "~Common"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { debug, useBottomSheetModal, useTheme } from "~Common"
+import {
+    BaseIcon,
+    BaseText,
+    BaseView,
+    ScanAddressBottomSheet,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 
@@ -14,11 +19,16 @@ export const Header = memo(() => {
         nav.navigate(Routes.WALLET_MANAGEMENT)
     }, [nav])
 
-    const onOpenCamera = useCallback(() => {
-        nav.navigate(Routes.CAMERA, {
-            onScan: () => {},
-        })
-    }, [nav])
+    const {
+        ref: scanAddressSheetRef,
+        onOpen: openScanAddressSheet,
+        onClose: closeScanAddressSheetRef,
+    } = useBottomSheetModal()
+
+    //TODO: What do we do here ?
+    const onScan = useCallback((address: string) => {
+        debug("Scanned", address)
+    }, [])
 
     return (
         <BaseView
@@ -37,8 +47,8 @@ export const Header = memo(() => {
                 <BaseIcon
                     name={"flip-horizontal"}
                     size={24}
-                    color={theme.colors.primary}
-                    action={onOpenCamera}
+                    color={theme.colors.text}
+                    action={openScanAddressSheet}
                     mx={12}
                 />
 
@@ -49,6 +59,11 @@ export const Header = memo(() => {
                     action={goToWalletManagement}
                 />
             </BaseView>
+            <ScanAddressBottomSheet
+                ref={scanAddressSheetRef}
+                onClose={closeScanAddressSheetRef}
+                onScan={onScan}
+            />
         </BaseView>
     )
 })

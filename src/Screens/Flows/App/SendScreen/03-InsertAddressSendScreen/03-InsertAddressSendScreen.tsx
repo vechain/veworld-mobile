@@ -16,6 +16,7 @@ import {
     BaseTextInput,
     BaseView,
     ContactCard,
+    ScanAddressBottomSheet,
     ScrollViewWithFooter,
 } from "~Components"
 import {
@@ -60,6 +61,12 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         onClose: closeCreateContactSheet,
     } = useBottomSheetModal()
 
+    const {
+        ref: scanAddressSheetRef,
+        onOpen: openScanAddressSheet,
+        onClose: closeScanAddressSheetRef,
+    } = useBottomSheetModal()
+
     const handleAddressChange = (addressRaw: string) => {
         const newAddress = addressRaw.toLowerCase()
         setErrorMessage("")
@@ -70,9 +77,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             setIsValid(true)
         }
     }
-    const onOpenCamera = () => {
-        nav.navigate(Routes.CAMERA, { onScan: handleAddressChange })
-    }
+
     const goToResumeStep = () => {
         nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
             token,
@@ -98,6 +103,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         <BaseButton
                             style={styles.nextButton}
                             mx={24}
+                            haptics="light"
                             title={LL.COMMON_BTN_NEXT()}
                             disabled={!isValid}
                             action={checkIfContactExist}
@@ -131,7 +137,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                 name={"flip-horizontal"}
                                 size={24}
                                 color={theme.colors.primary}
-                                action={onOpenCamera}
+                                action={openScanAddressSheet}
                                 style={styles.icon}
                             />
                         )}
@@ -201,9 +207,14 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             </ScrollViewWithFooter>
             <CreateContactBottomSheet
                 ref={refCreateContactBottomSheet}
-                handleClose={closeCreateContactSheet}
-                goToResumeStep={goToResumeStep}
+                onClose={closeCreateContactSheet}
+                onSubmit={goToResumeStep}
                 address={address}
+            />
+            <ScanAddressBottomSheet
+                ref={scanAddressSheetRef}
+                onClose={closeScanAddressSheetRef}
+                onScan={handleAddressChange}
             />
         </BaseSafeArea>
     )
