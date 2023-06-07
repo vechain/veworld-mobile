@@ -17,7 +17,7 @@ export const BalanceSlice = createSlice({
         ) => {
             state.push(action.payload)
         },
-        updateTokenBalances: (
+        upsertTokenBalances: (
             state: Draft<BalanceState>,
             action: PayloadAction<Balance[]>,
         ) => {
@@ -39,6 +39,27 @@ export const BalanceSlice = createSlice({
             )
             newState.push(...newBalances)
             return newState
+        },
+        updateTokenBalances: (
+            state: Draft<BalanceState>,
+            action: PayloadAction<Balance[]>,
+        ) => {
+            const newBalances = action.payload
+            return state.map(oldBalance => {
+                const newBalance = newBalances.find(
+                    _newBalance =>
+                        AddressUtils.compareAddresses(
+                            _newBalance.accountAddress,
+                            oldBalance.accountAddress,
+                        ) &&
+                        AddressUtils.compareAddresses(
+                            _newBalance.tokenAddress,
+                            oldBalance.tokenAddress,
+                        ) &&
+                        _newBalance.genesisId === oldBalance.genesisId,
+                )
+                return newBalance ? newBalance : oldBalance
+            })
         },
         removeTokenBalance: (
             state: Draft<BalanceState>,
@@ -101,6 +122,7 @@ export const BalanceSlice = createSlice({
 
 export const {
     addTokenBalance,
+    upsertTokenBalances,
     updateTokenBalances,
     removeTokenBalance,
     changeBalancePosition,

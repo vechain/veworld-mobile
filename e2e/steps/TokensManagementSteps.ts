@@ -7,7 +7,6 @@ import {
     scrollUntilTextVisible,
     textShouldNotExist,
     insertTextById,
-    textShouldBeVisible,
     clickById,
     swipeLeftByText,
 } from "../helpers"
@@ -98,6 +97,7 @@ When(
             address,
             "AddCustomTokenBottomSheet-TextInput-Address",
         )
+        await clickByText("Add")
     },
 )
 
@@ -105,10 +105,6 @@ Then(
     "The user should see {string} custom token balance in home screen",
     { timeout: -1 },
     async (token: string) => {
-        await textShouldBeVisible(token)
-        await clickByText("Add")
-        await textShouldBeVisible("Manage custom tokens")
-        await goBack()
         await textShouldExist(token)
     },
 )

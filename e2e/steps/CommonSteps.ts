@@ -47,6 +47,11 @@ Given("The user selects Account 1", { timeout: -1 }, async function () {
     await clickByText("Account 1")
 })
 
+Given("The user selects Account 2", { timeout: -1 }, async function () {
+    await clickById("AccountCard_changeAccountButton")
+    await clickByText("Account 2")
+})
+
 Given("The user selects the test network", { timeout: -1 }, async function () {
     await HomeFlows.goToSettings()
     await SettingsFlows.goToNetworkSettings()

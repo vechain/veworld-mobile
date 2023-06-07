@@ -8,7 +8,7 @@ import { Dispatch } from "@reduxjs/toolkit"
 import { error } from "~Common/Logger"
 import { BalanceUtils } from "~Utils"
 import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Common/Constant"
-import { updateTokenBalances } from "~Storage/Redux/Slices"
+import { updateTokenBalances, upsertTokenBalances } from "~Storage/Redux/Slices"
 import { Balance } from "~Model"
 
 /**
@@ -55,7 +55,7 @@ export const resetTokenBalances = async (
     const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(network.type)
     if (account) {
         dispatch(
-            updateTokenBalances(
+            upsertTokenBalances(
                 defaultTokens!!.map(token => ({
                     accountAddress: account.address,
                     tokenAddress: token.address,

@@ -40,6 +40,7 @@ Feature: The user can manage tokens
 
   Scenario: User add a custom token
     When The user add a custom token with address "<address>"
+    And The user clicks back button
     Then The user should see "<token>" custom token balance in home screen
 
     Examples:
