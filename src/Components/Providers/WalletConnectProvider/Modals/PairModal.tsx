@@ -14,6 +14,7 @@ import {
     showSuccessToast,
     useWalletConnect,
     BaseModal,
+    showErrorToast,
 } from "~Components"
 import { getSdkError } from "@walletconnect/utils"
 import {
@@ -32,8 +33,16 @@ interface Props {
 export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
-
     const web3Wallet = useWalletConnect()
+
+    // check if the DApp is connecting to Vechain
+    if (!currentProposal?.params?.requiredNamespaces?.vechain) {
+        onClose()
+        showErrorToast(
+            "The requested chain is not compatible with this wallet.",
+        )
+        return
+    }
 
     const name = currentProposal?.params?.proposer?.metadata?.name
     const url = currentProposal?.params?.proposer?.metadata.url
@@ -47,9 +56,6 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
         const requiredNamespaces: ProposalTypes.RequiredNamespaces =
             params.requiredNamespaces
         const relays: RelayerTypes.ProtocolOptions[] = params.relays
-
-        //TODO: if user accepts but the chain is not the same as the selected in config
-        // then we need to ask user to change the chain
 
         if (currentProposal && requiredNamespaces) {
             const namespaces: SessionTypes.Namespaces = {}
