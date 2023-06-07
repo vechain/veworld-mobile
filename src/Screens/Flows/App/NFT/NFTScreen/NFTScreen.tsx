@@ -1,18 +1,23 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { BaseSafeArea, BaseSpacer, BaseView } from "~Components"
-import { NftScreenHeader } from "./components"
-import { selectNftCollections, useAppSelector } from "~Storage/Redux"
+import React, { useCallback } from "react"
+import {
+    BaseIcon,
+    BaseSafeArea,
+    BaseSpacer,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+} from "~Components"
+import { NftScreenHeader } from "./Components"
 import { NonFungibleTokenCollection } from "~Model"
 import { isEmpty } from "lodash"
-import { NftSkeleton } from "./components/NftSkeleton"
-import { StyleSheet, FlatList } from "react-native"
-import {
-    useNFTCollections,
-    usePlatformBottomInsets,
-    useThemedStyles,
-} from "~Common"
+import { NftSkeleton } from "./Components/NftSkeleton"
+import { StyleSheet, FlatList, ActivityIndicator } from "react-native"
+import { usePlatformBottomInsets, useThemedStyles } from "~Common"
 import { NFTView } from "../Components"
-import { usePagination } from "../usePagination"
+import { useFetchCollections } from "./useFetchCollections"
+import { useI18nContext } from "~i18n"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type NFTListProps = {
     item: NonFungibleTokenCollection
@@ -22,38 +27,11 @@ type NFTListProps = {
 export const NFTScreen = () => {
     const { calculateBottomInsets } = usePlatformBottomInsets()
 
-    // To prevent fetching next page of activities on FlashList mount
-    const [hasScrolled, setHasScrolled] = useState(false)
+    const nav = useNavigation()
+    const { LL } = useI18nContext()
 
-    const onScroll = useCallback(() => {
-        if (!hasScrolled) setHasScrolled(true)
-    }, [hasScrolled])
-
-    const nftCollections = useAppSelector(selectNftCollections)
-
-    const { getCollections } = useNFTCollections()
-
-    const { fetchwithPagination } = usePagination()
-
-    useEffect(() => {
-        getCollections(0, 1)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const fetchActivities = useCallback(() => {
-        fetchwithPagination(
-            nftCollections.pagination.totalElements,
-            nftCollections.collections.length,
-            page => {
-                getCollections(page, 1)
-            },
-        )
-    }, [
-        fetchwithPagination,
-        getCollections,
-        nftCollections.collections.length,
-        nftCollections.pagination.totalElements,
-    ])
+    const { fetchMoreCollections, isLoading, collections } =
+        useFetchCollections()
 
     const { styles } = useThemedStyles(baseStyles(calculateBottomInsets))
 
@@ -63,14 +41,51 @@ export const NFTScreen = () => {
         return <NFTView item={item} index={index} isCollection />
     }, [])
 
+    const onGoToBlackListed = useCallback(
+        () => nav.navigate(Routes.BLACKLISTED_COLLECTIONS),
+        [nav],
+    )
+
+    const renderFooterComponent = useCallback(() => {
+        if (isLoading) {
+            return <ActivityIndicator style={styles.activityIndicator} />
+        }
+
+        return (
+            <>
+                <BaseSpacer height={18} />
+                <BaseTouchableBox
+                    action={onGoToBlackListed}
+                    children={
+                        <>
+                            <BaseView
+                                w={100}
+                                h={100}
+                                flexDirection="row"
+                                justifyContent="center"
+                                alignItems="center">
+                                <BaseText typographyFont="bodyBold">
+                                    {LL.HIDDEN_COLLECTIONS()}
+                                </BaseText>
+                                <BaseIcon name="chevron-down" />
+                            </BaseView>
+                        </>
+                    }
+                />
+                <BaseSpacer height={18} />
+            </>
+        )
+    }, [LL, isLoading, styles.activityIndicator, onGoToBlackListed])
+
     return (
         <BaseSafeArea grow={1} testID="NFT_Screen">
             <NftScreenHeader />
 
-            <BaseView flex={1} mx={20} justifyContent="center">
-                {!isEmpty(nftCollections.collections) ? (
+            <BaseView flex={1} justifyContent="center">
+                {!isEmpty(collections) ? (
                     <FlatList
-                        data={nftCollections.collections}
+                        data={collections}
+                        extraData={collections}
                         contentContainerStyle={styles.listContainer}
                         numColumns={2}
                         keyExtractor={item => String(item.address)}
@@ -78,10 +93,9 @@ export const NFTScreen = () => {
                         renderItem={renderNftCollection}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
-                        onScroll={onScroll}
                         onEndReachedThreshold={1}
-                        // onEndReached={fetchActivities}
-                        onEndReached={hasScrolled ? fetchActivities : undefined}
+                        onEndReached={fetchMoreCollections}
+                        ListFooterComponent={renderFooterComponent}
                     />
                 ) : (
                     <NftSkeleton />
@@ -94,7 +108,12 @@ export const NFTScreen = () => {
 const baseStyles = (calculateBottomInsets: number) => () =>
     StyleSheet.create({
         listContainer: {
+            marginHorizontal: 20,
             paddingTop: 24,
             paddingBottom: calculateBottomInsets,
+        },
+        activityIndicator: {
+            marginVertical: 36,
+            transform: [{ scale: 1.2 }],
         },
     })

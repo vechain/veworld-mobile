@@ -334,6 +334,7 @@ const en: BaseTranslation = {
     // Accounts
     CONTRACT_ADDRESS: "Contract address",
     NFT_ATTRIBUTES: "Attributes",
+    HIDDEN_COLLECTIONS: "Hidden collections",
 
 
     // Onboarding

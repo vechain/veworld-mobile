@@ -1,6 +1,11 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { NFTCollectionDetailScreen, NFTDetailScreen, NFTScreen } from "~Screens"
+import {
+    BlackListedCollectionsScreen,
+    NFTCollectionDetailScreen,
+    NFTDetailScreen,
+    NFTScreen,
+} from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
 export type RootStackParamListNFT = {
@@ -10,6 +15,7 @@ export type RootStackParamListNFT = {
         nftTokenId: string
     }
     [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string }
+    [Routes.BLACKLISTED_COLLECTIONS]: undefined
 }
 
 const { Navigator, Group, Screen } =
@@ -35,6 +41,15 @@ export const NFTStack = () => {
                     name={Routes.NFT_COLLECTION_DETAILS}
                     component={NFTCollectionDetailScreen}
                     options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.BLACKLISTED_COLLECTIONS}
+                    component={BlackListedCollectionsScreen}
+                    options={{
+                        headerShown: false,
+                        presentation: "modal",
+                    }}
                 />
             </Group>
         </Navigator>

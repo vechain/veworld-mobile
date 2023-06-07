@@ -13,22 +13,22 @@ type CollectionWithPagination = {
     pagination: PaginationResponse
 }
 
+type Collections = Record<string, CollectionWithPagination>
+
 type NftSliceState = {
-    collections: CollectionWithPagination
-    blackListedCollections: string[]
+    collectionsPerAccount: Collections
+    blackListedCollections: NonFungibleTokenCollection[]
     blackListedNFTs: NFTBlackListedItem[]
+    isLoading: boolean
+    error: string | undefined
 }
 
 export const initialStateNft: NftSliceState = {
     blackListedCollections: [],
     blackListedNFTs: [],
-    collections: {
-        collections: [],
-        pagination: {
-            totalElements: 0,
-            totalPages: 0,
-        },
-    },
+    collectionsPerAccount: {},
+    isLoading: false,
+    error: undefined,
 }
 
 export const NftSlice = createSlice({
@@ -37,17 +37,60 @@ export const NftSlice = createSlice({
     reducers: {
         setCollections: (
             state,
-            action: PayloadAction<CollectionWithPagination>,
+            action: PayloadAction<{
+                address: string
+                collectiondata: CollectionWithPagination
+            }>,
         ) => {
+            if (!state.collectionsPerAccount[action.payload.address]) {
+                state.collectionsPerAccount[action.payload.address] = {
+                    collections: [],
+                    pagination: {
+                        totalElements: 0,
+                        totalPages: 0,
+                    },
+                }
+            }
+
             let uniqueCollections = [
-                ...state.collections.collections,
-                ...action.payload.collections,
+                ...state.collectionsPerAccount[action.payload.address]
+                    .collections,
+                ...action.payload.collectiondata.collections,
             ]
 
-            state.collections = {
-                collections: uniqBy(uniqueCollections, "address"),
-                pagination: action.payload.pagination,
+            const allUnique = uniqBy(uniqueCollections, "address")
+            state.collectionsPerAccount[action.payload.address] = {
+                collections: allUnique,
+                pagination: action.payload.collectiondata.pagination,
             }
+
+            return state
+        },
+
+        setNetworkingSideEffects: (
+            state,
+            action: PayloadAction<{
+                isLoading: boolean
+                error: string | undefined
+            }>,
+        ) => {
+            state.isLoading = action.payload.isLoading
+            state.error = action.payload.error
+            return state
+        },
+
+        // TODO set here adjust collections from selectors
+        setBlackListCollection: (
+            state,
+            action: PayloadAction<NonFungibleTokenCollection>,
+        ) => {
+            const allCollections = [
+                ...state.blackListedCollections,
+                action.payload,
+            ]
+            const uniqueCollections = uniqBy(allCollections, "address")
+
+            state.blackListedCollections = uniqueCollections
 
             return state
         },
@@ -64,18 +107,12 @@ export const NftSlice = createSlice({
             const _action = action
             return state
         },
-
-        // TODO set here adjust collections from selectors
-        setBlackListCollection: (
-            state,
-            action: PayloadAction<{ contractAddress: string }>,
-        ) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const _action = action
-            return state
-        },
     },
 })
 
-export const { setBlackListNFT, setBlackListCollection, setCollections } =
-    NftSlice.actions
+export const {
+    setBlackListNFT,
+    setBlackListCollection,
+    setCollections,
+    setNetworkingSideEffects,
+} = NftSlice.actions

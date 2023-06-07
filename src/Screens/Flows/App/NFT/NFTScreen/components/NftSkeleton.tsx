@@ -21,6 +21,7 @@ export const NftSkeleton = () => {
                             flexWrap: "wrap",
                             flexDirection: "row",
                             justifyContent: "space-between",
+                            marginHorizontal: 20,
                             children: [
                                 {
                                     width: SCREEN_WIDTH / 2 - 30,

@@ -13,9 +13,10 @@ import {
     getTokenURI,
 } from "~Networking"
 import {
-    selectSelectedAccount,
+    // selectSelectedAccount,
     selectSelectedNetwork,
     setCollections,
+    setNetworkingSideEffects,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -26,16 +27,22 @@ import { error } from "~Common/Logger"
 export const useNFTCollections = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    // const selectedAccount = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
 
     const getCollections = useCallback(
-        async (_page: number, _resultsPerPage: number = 20) => {
+        async (_page: number, _resultsPerPage: number = 10) => {
+            dispatch(
+                setNetworkingSideEffects({ isLoading: true, error: undefined }),
+            )
+
             try {
                 // Get contract addresses for nfts owned by ownerAddress
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
-                        selectedAccount.address,
+                        // selectedAccount.address,
+                        "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
+
                         _resultsPerPage,
                         _page,
                     )
@@ -48,7 +55,8 @@ export const useNFTCollections = () => {
                 // Get nfts for each contract address
                 const { nftData } = await getNFTdataForContract(
                     contractsForNFTs,
-                    selectedAccount.address,
+                    // selectedAccount.address,
+                    "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
                     _resultsPerPage,
                 )
 
@@ -64,7 +72,8 @@ export const useNFTCollections = () => {
                     const { nftCollection } = await prepareCollectionData(
                         nft,
                         foundCollection,
-                        selectedAccount.address,
+                        // selectedAccount.address,
+                        "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
                         thor,
                     )
 
@@ -74,15 +83,33 @@ export const useNFTCollections = () => {
                 // set collections to store
                 dispatch(
                     setCollections({
-                        collections: _nftCollections,
-                        pagination,
+                        // address: selectedAccount.address,
+                        address: "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
+                        collectiondata: {
+                            collections: _nftCollections,
+                            pagination,
+                        },
+                    }),
+                )
+
+                dispatch(
+                    setNetworkingSideEffects({
+                        isLoading: false,
+                        error: undefined,
                     }),
                 )
             } catch (e) {
+                dispatch(
+                    setNetworkingSideEffects({
+                        isLoading: false,
+                        error: e as unknown as string,
+                    }),
+                )
                 error("useNFTCollections", e)
             }
         },
-        [dispatch, network.type, selectedAccount.address, thor],
+        [dispatch, network.type, thor],
+        // [dispatch, network.type, selectedAccount.address, thor],
     )
 
     return { getCollections }
@@ -130,6 +157,7 @@ const prepareCollectionData = async (
     const _nft = nft.data[0]
 
     const tokenURI = await getTokenURI(_nft.tokenId, _nft.contractAddress, thor)
+
     const nftMeta = await fetchMetadata(tokenURI)
 
     const nftCollection: NonFungibleTokenCollection = {

@@ -1143,6 +1143,10 @@ type RootTranslation = {
 	 */
 	NFT_ATTRIBUTES: string
 	/**
+	 * H​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n​s
+	 */
+	HIDDEN_COLLECTIONS: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -2750,6 +2754,10 @@ Please, try again later.
 	 * Attributes
 	 */
 	NFT_ATTRIBUTES: () => LocalizedString
+	/**
+	 * Hidden collections
+	 */
+	HIDDEN_COLLECTIONS: () => LocalizedString
 	/**
 	 * Light
 	 */
