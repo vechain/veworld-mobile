@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react"
 import { ViewProps, StyleSheet } from "react-native"
-import { useTheme, CURRENCY } from "~Common"
+import { CURRENCY, ColorThemeType, useThemedStyles } from "~Common"
 import { PlatformUtils } from "~Utils"
 import {
     AccountIcon,
@@ -9,8 +9,9 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    LedgerBadge,
 } from "~Components"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { useAppDispatch } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
@@ -31,8 +32,10 @@ export const AccountCard: React.FC<Props> = memo(props => {
         openSelectAccountBottomSheet,
         balanceVisible,
     } = props
-    const theme = useTheme()
+
     const dispatch = useAppDispatch()
+
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     const toggleBalanceVisibility = useCallback(() => {
         dispatch(setBalanceVisible(!balanceVisible))
@@ -62,11 +65,25 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                     {account.alias}
                                 </BaseText>
                                 <BaseSpacer height={4} />
-                                <BaseText
-                                    typographyFont="captionMedium"
-                                    color={theme.colors.textReversed}>
-                                    {account.device?.alias}
-                                </BaseText>
+                                <BaseView flexDirection="row">
+                                    {account.device?.type ===
+                                        DEVICE_TYPE.LEDGER && (
+                                        <LedgerBadge
+                                            containerStyle={
+                                                styles.ledgerBadgeContainer
+                                            }
+                                            logoStyle={{
+                                                color: theme.colors.text,
+                                            }}
+                                        />
+                                    )}
+                                    <BaseText
+                                        typographyFont="captionMedium"
+                                        color={theme.colors.textReversed}>
+                                        {account.device?.alias}
+                                    </BaseText>
+                                </BaseView>
+
                                 <BaseSpacer height={8} />
                                 <AddressButton address={account.address} />
                             </BaseView>
@@ -111,14 +128,19 @@ export const AccountCard: React.FC<Props> = memo(props => {
     )
 })
 
-const styles = StyleSheet.create({
-    container: {},
-    borderRight: {
-        borderRightColor: COLORS.WHITE,
-        borderRightWidth: 1,
-    },
-    borderBottom: {
-        borderBottomColor: COLORS.WHITE,
-        borderBottomWidth: 1,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {},
+        borderRight: {
+            borderRightColor: COLORS.WHITE,
+            borderRightWidth: 1,
+        },
+        ledgerBadgeContainer: {
+            marginRight: 8,
+            bg: theme.colors.textReversed,
+        },
+        borderBottom: {
+            borderBottomColor: COLORS.WHITE,
+            borderBottomWidth: 1,
+        },
+    })

@@ -10,7 +10,7 @@ import {
     useThemedStyles,
 } from "~Common"
 
-type Props = {
+export type Props = {
     w?: number // NOTE: this is a number in percentage
     h?: number // NOTE: this is a number in percentage
     bg?: string
