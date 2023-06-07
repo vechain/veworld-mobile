@@ -45,7 +45,10 @@ export const AccountManagementBottomSheet = React.forwardRef<
             snapPoints={snapPoints}
             onChange={handleSheetChanges}
             ref={ref}>
-            <BaseView flexDirection="row" w={100}>
+            <BaseView
+                flexDirection="row"
+                w={100}
+                justifyContent="space-between">
                 <BaseText typographyFont="subTitleBold">
                     {LL.SB_ACCOUNT_MANAGEMENT()}
                 </BaseText>
