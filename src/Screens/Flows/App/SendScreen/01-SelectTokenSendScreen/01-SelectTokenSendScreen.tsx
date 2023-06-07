@@ -43,7 +43,6 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
             token,
             initialRoute: route.params.initialRoute ?? "",
         })
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     }
     return (
         <BaseSafeArea grow={1} testID="Select_Token_Send_Screen">
