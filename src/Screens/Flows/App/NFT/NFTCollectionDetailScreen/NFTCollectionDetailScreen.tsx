@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native"
+import { FlatList, StyleSheet } from "react-native"
 import React, { useCallback, useMemo, useState } from "react"
 import {
     selectCollectionWithContractAddres,
@@ -15,14 +15,12 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { useTheme } from "~Common"
+import { usePlatformBottomInsets, useTheme } from "~Common"
 import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
 import { NonFungibleToken } from "~Model"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { PlatformUtils } from "~Utils"
 import { isEmpty } from "lodash"
+import { NFTView } from "../Components"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -33,8 +31,8 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const insets = useSafeAreaInsets()
-    const tabBarHeight = useBottomTabBarHeight()
+
+    const { calculateBottomInsets } = usePlatformBottomInsets()
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
@@ -59,17 +57,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
 
     const remderHeaderComponent = useMemo(
         () => (
-            <BaseView mx={20}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-
-                <BaseSpacer height={18} />
-
+            <>
                 <BaseView flexDirection="row" alignItems="flex-end">
                     <BaseImage
                         uri={collection?.icon ?? ""}
@@ -96,81 +84,55 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                 </>
 
                 <BaseSpacer height={12} />
-            </BaseView>
+            </>
         ),
-        [
-            LL,
-            collection?.description,
-            collection?.icon,
-            collection?.name,
-            goBack,
-            theme.colors.text,
-        ],
-    )
-
-    const onNftPress = useCallback(
-        (nft: NonFungibleToken) =>
-            nav.navigate(Routes.NFT_DETAILS, { collectionData: {}, nft }),
-        [nav],
+        [LL, collection?.description, collection?.icon, collection?.name],
     )
 
     const renderItem = useCallback(
         ({ item, index }: { item: NonFungibleToken; index: number }) => (
-            <TouchableOpacity
-                onPress={() => onNftPress(item)}
-                style={[
-                    baseStyles.nftContainer,
-                    // eslint-disable-next-line react-native/no-inline-styles
-                    {
-                        justifyContent:
-                            index % 2 === 0 ? "flex-start" : "flex-end",
-                    },
-                ]}>
-                <BaseView>
-                    <BaseImage
-                        uri={item.image}
-                        style={baseStyles.nftPreviewImage}
-                    />
-                </BaseView>
-            </TouchableOpacity>
+            <NFTView item={item} index={index} collection={collection} />
         ),
-        [onNftPress],
-    )
-
-    const calculateBottomPadding = useMemo(
-        () => (PlatformUtils.isIOS() ? tabBarHeight - insets.bottom : 0),
-        [insets.bottom, tabBarHeight],
+        [collection],
     )
 
     if (!collection) return null
 
     return (
         <BaseSafeArea grow={1} testID="NFT_Collection_Detail_Screen">
-            {remderHeaderComponent}
-
-            <BaseView
-                flex={1}
-                mx={20}
-                justifyContent="center"
-                style={{
-                    marginBottom: calculateBottomPadding,
-                }}>
-                <FlatList
-                    data={collection?.nfts ?? []}
-                    ItemSeparatorComponent={contactsListSeparator}
-                    numColumns={2}
-                    keyExtractor={(item: NonFungibleToken) =>
-                        String(item?.tokenId)
-                    }
-                    extraData={collection?.nfts ?? []}
-                    renderItem={renderItem}
-                    contentContainerStyle={baseStyles.listContainer}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    onScroll={onScroll}
-                    onEndReachedThreshold={1}
-                    // onEndReached={hasScrolled ? fetchActivities : undefined}
+            <BaseView flex={1} mx={20}>
+                <BaseIcon
+                    style={baseStyles.backIcon}
+                    size={36}
+                    name="chevron-left"
+                    color={theme.colors.text}
+                    action={goBack}
                 />
+
+                <BaseView
+                    flex={1}
+                    justifyContent="center"
+                    style={{
+                        marginBottom: calculateBottomInsets,
+                    }}>
+                    <FlatList
+                        ListHeaderComponent={remderHeaderComponent}
+                        data={collection?.nfts ?? []}
+                        ItemSeparatorComponent={contactsListSeparator}
+                        numColumns={2}
+                        keyExtractor={(item: NonFungibleToken) =>
+                            String(item?.tokenId)
+                        }
+                        extraData={collection?.nfts ?? []}
+                        renderItem={renderItem}
+                        contentContainerStyle={baseStyles.listContainer}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        onScroll={onScroll}
+                        onEndReachedThreshold={1}
+                        // onEndReached={hasScrolled ? fetchActivities : undefined}
+                    />
+                </BaseView>
             </BaseView>
         </BaseSafeArea>
     )
