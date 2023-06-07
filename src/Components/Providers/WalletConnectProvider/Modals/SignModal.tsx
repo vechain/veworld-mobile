@@ -11,6 +11,7 @@ import {
     BaseSpacer,
     showWarningToast,
     BaseModal,
+    showSuccessToast,
 } from "~Components"
 import {
     HDNode,
@@ -113,11 +114,12 @@ export const SignModal = ({
             //TODO: add to history?
 
             onClose()
+            showSuccessToast("Identity certificate signed correctly")
         },
         [account, params, requestURL, topic, web3Wallet, onClose],
     )
 
-    const onTestDelegate = useCallback(
+    const onSignTransaction = useCallback(
         async (id: number, privateKey: Buffer) => {
             const clauses = params.txMessage
 
@@ -223,6 +225,8 @@ export const SignModal = ({
                         },
                     })
 
+                    showSuccessToast("Transaction broadcasted correctly")
+
                     //TODO: add to history
                 })
                 .catch(async e => {
@@ -275,7 +279,7 @@ export const SignModal = ({
                     break
                 case WalletConnectUtils.VECHAIN_SIGNING_METHODS
                     .REQUEST_TRANSACTION:
-                    await onTestDelegate(id, privateKey)
+                    await onSignTransaction(id, privateKey)
                     break
                 default:
                     break
@@ -285,7 +289,7 @@ export const SignModal = ({
             account,
             requestEvent,
             signIdentityCertificate,
-            onTestDelegate,
+            onSignTransaction,
             method,
         ],
     )
