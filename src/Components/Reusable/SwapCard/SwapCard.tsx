@@ -1,27 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo } from "react"
-import { Image, StyleSheet, ImageStyle } from "react-native"
+import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import {
-    ColorThemeType,
-    SCREEN_WIDTH,
-    VET,
-    currencySymbolMap,
-    useThemedStyles,
-} from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
-import { BaseCard, BaseIcon, BaseText, BaseView } from "~Components"
-import { Token } from "~Model"
-import {
-    selectAccountCustomTokens,
-    selectCurrency,
-    selectCurrencyExchangeRate,
-    useAppSelector,
-} from "~Storage/Redux"
-import { useI18nContext } from "~i18n"
+import { BaseIcon, BaseView } from "~Components"
+import { selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { useSwappedTokens } from "./Hooks"
+import { TokenBox } from "./Components"
 
 type Props = {
     paidTokenAddress: string
@@ -31,7 +19,7 @@ type Props = {
     onAddCustomToken: (tokenAddress: string) => void
 }
 
-enum SWAP_SIDE {
+export enum SWAP_SIDE {
     PAID = "PAID",
     RECEIVED = "RECEIVED",
 }
@@ -44,15 +32,9 @@ export const SwapCard = memo(
         receivedTokenAmount,
         onAddCustomToken,
     }: Props) => {
-        const { LL } = useI18nContext()
-
         const { styles, theme } = useThemedStyles(baseStyles)
 
-        const currency = useAppSelector(selectCurrency)
-
-        const customTokens = useAppSelector(selectAccountCustomTokens)
-
-        const { paidToken, receivedToken, tokens } = useSwappedTokens(
+        const { paidToken, receivedToken } = useSwappedTokens(
             receivedTokenAddress,
             paidTokenAddress,
         )
@@ -105,7 +87,6 @@ export const SwapCard = memo(
                     ),
                     paidAmount,
                 )
-            return undefined
         }, [exchangeRatePaid?.rate, paidAmount, paidToken, paidTokenAmount])
 
         const fiatValueReceived = useMemo(() => {
@@ -118,7 +99,6 @@ export const SwapCard = memo(
                     ),
                     receivedAmount,
                 )
-            return undefined
         }, [
             exchangeRateReceived?.rate,
             receivedAmount,
@@ -126,166 +106,46 @@ export const SwapCard = memo(
             receivedTokenAmount,
         ])
 
-        const renderToken = useCallback(
-            (
-                provenance: SWAP_SIDE,
-                addressShort: string,
-                addressFull: string,
-                amount: string,
-                fiatValue?: string,
-                token?: Token,
-            ) => {
-                const provenanceText =
-                    provenance === SWAP_SIDE.PAID ? LL.PAID() : LL.RECEIVED()
-
-                const isTokenAdded = [...customTokens, ...tokens, VET]
-                    .map(tkn => tkn.address.toLowerCase())
-                    .includes(addressFull.toLowerCase())
-
-                const tokenIcon = (
-                    <DropShadow style={[theme.shadows.card]}>
-                        <BaseView flexDirection="column" alignItems="center">
-                            {token?.icon ? (
-                                <BaseCard
-                                    style={[
-                                        styles.imageContainer,
-                                        { backgroundColor: COLORS.WHITE },
-                                    ]}
-                                    containerStyle={styles.imageShadow}>
-                                    <Image
-                                        source={{ uri: token.icon }}
-                                        style={styles.tokenIcon as ImageStyle}
-                                    />
-                                </BaseCard>
-                            ) : (
-                                <BaseIcon
-                                    name="help"
-                                    size={22}
-                                    color={COLORS.DARK_PURPLE}
-                                    bg={COLORS.WHITE}
-                                    iconPadding={4}
-                                />
-                            )}
-                        </BaseView>
-                    </DropShadow>
-                )
-
-                return (
-                    <BaseView
-                        py={12}
-                        px={16}
-                        style={{ width: SCREEN_WIDTH - 40 }}
-                        alignItems="flex-start">
-                        <BaseText typographyFont="buttonPrimary">
-                            {provenanceText}
-                        </BaseText>
-                        <BaseView flexDirection="row" py={8}>
-                            {tokenIcon}
-                            <BaseView flexDirection="column" pl={12}>
-                                {token ? (
-                                    <>
-                                        <BaseView flexDirection="row">
-                                            <BaseText typographyFont="subSubTitle">
-                                                {token.name}
-                                            </BaseText>
-                                            <BaseText typographyFont="subSubTitleLight">
-                                                {" ("}
-                                                {token.symbol}
-                                                {")"}
-                                            </BaseText>
-                                        </BaseView>
-                                        <BaseView pt={3} flexDirection="row">
-                                            <BaseText typographyFont="captionRegular">
-                                                {amount}
-                                            </BaseText>
-                                            <BaseText typographyFont="captionRegular">
-                                                {" "}
-                                                {token.symbol}
-                                            </BaseText>
-                                            {fiatValue && (
-                                                <BaseText typographyFont="captionRegular">
-                                                    {" ≈ "}
-                                                    {fiatValue}{" "}
-                                                    {
-                                                        currencySymbolMap[
-                                                            currency
-                                                        ]
-                                                    }
-                                                </BaseText>
-                                            )}
-                                        </BaseView>
-                                    </>
-                                ) : (
-                                    <BaseText typographyFont="button">
-                                        {addressShort}
-                                    </BaseText>
-                                )}
-                            </BaseView>
-                            {!isTokenAdded && (
-                                <BaseView pl={12}>
-                                    <BaseIcon
-                                        name={"plus"}
-                                        size={20}
-                                        bg={COLORS.LIME_GREEN}
-                                        iconPadding={3}
-                                        color={COLORS.DARK_PURPLE}
-                                        action={() =>
-                                            onAddCustomToken(addressFull)
-                                        }
-                                    />
-                                </BaseView>
-                            )}
-                        </BaseView>
-                    </BaseView>
-                )
-            },
-            [
-                LL,
-                currency,
-                customTokens,
-                onAddCustomToken,
-                styles.imageContainer,
-                styles.imageShadow,
-                styles.tokenIcon,
-                theme.shadows.card,
-                tokens,
-            ],
-        )
-
         const renderPaidToken = useCallback(() => {
-            return renderToken(
-                SWAP_SIDE.PAID,
-                paidTokenAddressShort,
-                paidTokenAddress,
-                paidAmount,
-                fiatValuePaid,
-                paidToken,
+            return (
+                <TokenBox
+                    provenance={SWAP_SIDE.PAID}
+                    addressFull={paidTokenAddress}
+                    addressShort={paidTokenAddressShort}
+                    amount={paidAmount}
+                    fiatValue={fiatValuePaid}
+                    token={paidToken}
+                    onAddCustomToken={onAddCustomToken}
+                />
             )
         }, [
             fiatValuePaid,
+            onAddCustomToken,
             paidAmount,
             paidToken,
             paidTokenAddress,
             paidTokenAddressShort,
-            renderToken,
         ])
 
         const renderReceivedToken = useCallback(() => {
-            return renderToken(
-                SWAP_SIDE.RECEIVED,
-                receivedTokenAddressShort,
-                receivedTokenAddress,
-                receivedAmount,
-                fiatValueReceived,
-                receivedToken,
+            return (
+                <TokenBox
+                    provenance={SWAP_SIDE.RECEIVED}
+                    addressFull={receivedTokenAddress}
+                    addressShort={receivedTokenAddressShort}
+                    amount={receivedAmount}
+                    fiatValue={fiatValueReceived}
+                    token={receivedToken}
+                    onAddCustomToken={onAddCustomToken}
+                />
             )
         }, [
             fiatValueReceived,
+            onAddCustomToken,
             receivedAmount,
             receivedToken,
             receivedTokenAddress,
             receivedTokenAddressShort,
-            renderToken,
         ])
 
         return (
@@ -332,16 +192,5 @@ const baseStyles = (theme: ColorThemeType) =>
             position: "absolute",
             top: "50%",
             right: 20,
-        },
-        tokenIcon: {
-            width: 20,
-            height: 20,
-        },
-        imageContainer: {
-            borderRadius: 30,
-            padding: 10,
-        },
-        imageShadow: {
-            width: "auto",
         },
     })
