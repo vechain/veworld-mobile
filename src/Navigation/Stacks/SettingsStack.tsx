@@ -14,6 +14,8 @@ import {
     SettingsTransactionsScreen,
     ManageUrlsScreen,
     ResetAppScreen,
+    SessionDetailsScreen,
+    WalletConnectScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
@@ -31,6 +33,8 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_TRANSACTIONS]: undefined
     [Routes.MANAGE_DELEGATION_URLS]: undefined
     [Routes.RESET_APP]: undefined
+    [Routes.SETTINGS_CONNECTED_APPS]: undefined
+    [Routes.SETTINGS_CONNECTED_APP_DETAILS]: undefined
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -112,6 +116,18 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.RESET_APP}
                     component={ResetAppScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.SETTINGS_CONNECTED_APPS}
+                    component={WalletConnectScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.SETTINGS_CONNECTED_APP_DETAILS}
+                    component={SessionDetailsScreen}
                     options={{ headerShown: false }}
                 />
             </Settings.Group>

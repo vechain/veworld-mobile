@@ -15,6 +15,7 @@ import {
     ActivityDetailsScreen,
     AssetDetailScreen,
     WalletConnectScreen,
+    SessionDetailsScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
@@ -52,6 +53,7 @@ export type RootStackParamListHome = {
     [Routes.ACTIVITY_DETAILS]: { activity: Activity; token?: FungibleToken }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.WALLET_CONNECT]: undefined
+    [Routes.SETTINGS_CONNECTED_APP_DETAILS]: undefined
 }
 
 const { Navigator, Group, Screen } =
@@ -125,6 +127,12 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.TOKEN_DETAILS}
                     component={AssetDetailScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.SETTINGS_CONNECTED_APP_DETAILS}
+                    component={SessionDetailsScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

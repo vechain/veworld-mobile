@@ -21,7 +21,6 @@ export const WalletConnectScreen = () => {
     const { web3Wallet } = useWalletConnect()
     const activeSessions: Record<string, SessionTypes.Struct[]> =
         useAppSelector(selectSessions)
-    // console.log("activeSessions", activeSessions)
 
     const [uri, setUri] = useState("")
     const accounts = useAppSelector(selectAccounts)
@@ -57,46 +56,52 @@ export const WalletConnectScreen = () => {
     return (
         <BaseSafeArea>
             <BackButtonHeader />
-            <BaseText>{"Wallet Connect Screen"}</BaseText>
+            <BaseView mx={20}>
+                <BaseText typographyFont="title">{"Connected Apps"}</BaseText>
+                <BaseSpacer height={24} />
 
-            <BaseView alignItems="center" justifyContent="center">
-                <BaseTextInput
-                    placeholder={"Place here the WC URI"}
-                    label={"WC URI"}
-                    setValue={setUri}
-                    value={uri}
-                    testID="wc-uri"
-                />
-                <BaseButton
-                    title="Connect"
-                    action={onPair}
-                    disabled={isPairing}
-                />
+                <BaseView alignItems="center" justifyContent="center">
+                    <BaseTextInput
+                        placeholder={"Place here the WC URI"}
+                        label={"WC URI"}
+                        setValue={setUri}
+                        value={uri}
+                        testID="wc-uri"
+                    />
+                    <BaseButton
+                        title="Connect"
+                        action={onPair}
+                        disabled={isPairing}
+                    />
+                </BaseView>
+
+                {accounts.map(account => {
+                    if (
+                        account.address in activeSessions &&
+                        !isEmpty(activeSessions[account.address])
+                    ) {
+                        return (
+                            <BaseSafeArea key={account.address}>
+                                <BaseText typographyFont="subSubTitleLight">
+                                    {account.alias}
+                                </BaseText>
+                                <BaseSpacer height={16} />
+                                {activeSessions[account.address].map(
+                                    session => {
+                                        return (
+                                            <Session
+                                                session={session}
+                                                key={session.topic}
+                                                account={account}
+                                            />
+                                        )
+                                    },
+                                )}
+                            </BaseSafeArea>
+                        )
+                    }
+                })}
             </BaseView>
-
-            {accounts.map(account => {
-                if (
-                    account.address in activeSessions &&
-                    !isEmpty(activeSessions[account.address])
-                ) {
-                    return (
-                        <BaseSafeArea key={account.address}>
-                            <BaseText typographyFont="subSubTitleLight">
-                                {account.alias}
-                            </BaseText>
-                            <BaseSpacer height={16} />
-                            {activeSessions[account.address].map(session => {
-                                return (
-                                    <Session
-                                        item={session}
-                                        key={session.topic}
-                                    />
-                                )
-                            })}
-                        </BaseSafeArea>
-                    )
-                }
-            })}
         </BaseSafeArea>
     )
 }

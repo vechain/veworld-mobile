@@ -9,20 +9,30 @@ import {
 } from "~Components"
 import { StyleSheet } from "react-native"
 import { useTheme, useThemedStyles } from "~Common"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
+import { AccountWithDevice } from "~Model"
 
 type Props = {
-    item: SessionTypes.Struct
+    session: SessionTypes.Struct
+    account: AccountWithDevice
 }
 
-export const Session: React.FC<Props> = memo(({ item }) => {
+export const Session: React.FC<Props> = memo(({ session, account }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const theme = useTheme()
+    const nav = useNavigation()
+
+    const onPress = () => {
+        nav.navigate(Routes.SETTINGS_CONNECTED_APP_DETAILS, {
+            session,
+            account,
+        })
+    }
 
     return (
         <>
-            <BaseTouchable
-                // action={() => onPress(activity)}
-                style={styles.container}>
+            <BaseTouchable action={() => onPress()} style={styles.container}>
                 <BaseView
                     w={100}
                     flexDirection="row"
@@ -31,7 +41,7 @@ export const Session: React.FC<Props> = memo(({ item }) => {
                     <BaseView flexDirection="row">
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseImage
-                                uri={item.peer.metadata.icons[0]}
+                                uri={session.peer.metadata.icons[0]}
                                 style={styles.image}
                             />
                         </BaseView>
@@ -42,11 +52,11 @@ export const Session: React.FC<Props> = memo(({ item }) => {
                                     alignItems="center"
                                     justifyContent="flex-start">
                                     <BaseText typographyFont="button" pb={5}>
-                                        {item.peer?.metadata?.name}
+                                        {session.peer?.metadata?.name}
                                     </BaseText>
                                 </BaseView>
                                 <BaseText typographyFont="smallButtonPrimary">
-                                    {item.peer?.metadata?.url}
+                                    {session.peer?.metadata?.url}
                                 </BaseText>
                             </BaseView>
                         </BaseView>

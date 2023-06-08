@@ -155,7 +155,7 @@ export const SignTransactionModal = ({
             await axios
                 .post(`${network.currentUrl}/transactions`, encodedRawTx)
                 .then(async response => {
-                    await web3Wallet.respondSessionRequest({
+                    await web3Wallet?.respondSessionRequest({
                         topic,
                         response: {
                             id,
