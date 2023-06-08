@@ -19,9 +19,14 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit }: Props) => {
     const tokenValueLabelColor = theme.isDark
         ? COLORS.WHITE_DISABLED
         : COLORS.DARK_PURPLE_DISABLED
-    const tokenBalance = FormattingUtils.scaleNumberDown(
+    const tokenBalanceRaw = FormattingUtils.scaleNumberDown(
         tokenWithBalance.balance.balance,
         tokenWithBalance.decimals,
+        4,
+    )
+    const tokenBalance = FormattingUtils.humanNumber(
+        tokenBalanceRaw,
+        tokenBalanceRaw,
     )
     return (
         <BaseView style={styles.innerRow}>

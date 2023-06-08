@@ -57,6 +57,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const rawTokenBalance = FormattingUtils.scaleNumberDown(
         token.balance.balance,
         token.decimals,
+        8,
     )
     const formattedTokenBalance = FormattingUtils.humanNumber(
         rawTokenBalance,
@@ -125,7 +126,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                           0,
                       ),
                   ).toFixed(2)
-                : newTokenInput,
+                : new BigNumber(newTokenInput).decimalPlaces(4).toString(),
         )
     }
 
