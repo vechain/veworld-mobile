@@ -13,6 +13,10 @@ type SafeAreaProps = {
     style: StyleProp<ViewStyle>
 } & SafeAreaViewProps
 
+/**
+ * This component will fix the issue with the SafeAreaView
+ * https://github.com/th3rdwave/react-native-safe-area-context/issues/114
+ */
 export const SafeAreaView = (props: SafeAreaProps) => {
     const {
         disableBottomSafeArea = false,
