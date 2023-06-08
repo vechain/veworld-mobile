@@ -23,6 +23,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { insertSession } from "~Storage/Redux/Slices"
+import { error } from "~Common"
 
 interface Props {
     currentProposal: SignClientTypes.EventArguments["session_proposal"]
@@ -58,6 +59,12 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     const icon = currentProposal?.params.proposer.metadata.icons[0]
 
     const handleAccept = async () => {
+        if (!web3Wallet) {
+            onClose()
+            showErrorToast("Wallet connect not initialized.")
+            return
+        }
+
         const { id, params } = currentProposal
         const requiredNamespaces: ProposalTypes.RequiredNamespaces =
             params.requiredNamespaces
@@ -80,18 +87,16 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                 }
             })
 
-            let session: SessionTypes.Struct = await web3Wallet?.approveSession(
-                {
-                    id,
-                    relayProtocol: relays[0].protocol,
-                    namespaces,
-                },
-            )
+            let session: SessionTypes.Struct = await web3Wallet.approveSession({
+                id,
+                relayProtocol: relays[0].protocol,
+                namespaces,
+            })
 
             dispatch(insertSession({ address: selectedAccount, session }))
 
-            showSuccessToast('Successfull connected to "' + name + '"')
             onClose()
+            showSuccessToast('Successfull connected to "' + name + '"')
         }
     }
 
@@ -99,12 +104,16 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
         const { id } = currentProposal
 
         if (currentProposal) {
-            await web3Wallet?.rejectSession({
-                id,
-                reason: getSdkError("USER_REJECTED_METHODS"),
-            })
-
-            onClose()
+            try {
+                await web3Wallet?.rejectSession({
+                    id,
+                    reason: getSdkError("USER_REJECTED_METHODS"),
+                })
+            } catch (err: unknown) {
+                error(err)
+            } finally {
+                onClose()
+            }
         }
     }
 

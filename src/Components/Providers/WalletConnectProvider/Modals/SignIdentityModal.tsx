@@ -38,7 +38,6 @@ export const SignIdentityModal = ({
 }: Props) => {
     const { web3Wallet } = useWalletConnect()
     const account = useAppSelector(selectSelectedAccount)
-    // const selectedDevice = useAppSelector(selectDevice(account.rootAddress))
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, account.rootAddress),
     )
@@ -56,6 +55,8 @@ export const SignIdentityModal = ({
 
     const signIdentityCertificate = useCallback(
         async (id: number, privateKey: Buffer) => {
+            if (!web3Wallet) return
+
             const cert: Certificate = {
                 ...params,
                 timestamp: Math.round(Date.now() / 1000),
@@ -124,10 +125,14 @@ export const SignIdentityModal = ({
                 getSdkError("USER_REJECTED_METHODS").message,
             )
 
-            await web3Wallet.respondSessionRequest({
-                topic,
-                response,
-            })
+            try {
+                await web3Wallet?.respondSessionRequest({
+                    topic,
+                    response,
+                })
+            } catch (err: unknown) {
+                error(err)
+            }
         }
 
         onClose()

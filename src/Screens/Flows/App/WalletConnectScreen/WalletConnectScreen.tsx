@@ -3,7 +3,6 @@ import {
     BaseText,
     BackButtonHeader,
     BaseSafeArea,
-    BaseSpacer,
     BaseButton,
     BaseTextInput,
     BaseView,
@@ -17,6 +16,10 @@ import { error } from "~Common"
 import { FlatList } from "react-native-gesture-handler"
 import { isEmpty } from "lodash"
 import { Session } from "./components"
+
+type SessionsListProps = {
+    item: SessionTypes.Struct
+}
 
 export const WalletConnectScreen = () => {
     const { web3Wallet } = useWalletConnect()
@@ -55,36 +58,9 @@ export const WalletConnectScreen = () => {
         }
     }, [uri, web3Wallet])
 
-    const renderSeparator = useCallback(() => <BaseSpacer height={5} />, [])
-
-    const renderSession = useCallback(({ item }) => {
+    const renderSession = useCallback(({ item }: SessionsListProps) => {
         return <Session item={item} />
     }, [])
-
-    const renderSessionGroup = useCallback(
-        ({ item }) => {
-            if (
-                item.address in activeSessions &&
-                !isEmpty(activeSessions[item.address])
-            ) {
-                return (
-                    <BaseSafeArea>
-                        <BaseText>{item.alias}</BaseText>
-                        <FlatList
-                            data={activeSessions[item.address]}
-                            // contentContainerStyle={styles.listContainer}
-                            numColumns={1}
-                            keyExtractor={session => String(session.topic)}
-                            renderItem={renderSession}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                        />
-                    </BaseSafeArea>
-                )
-            }
-        },
-        [renderSession, activeSessions],
-    )
 
     return (
         <BaseSafeArea>
@@ -106,16 +82,27 @@ export const WalletConnectScreen = () => {
                 />
             </BaseView>
 
-            <FlatList
-                data={accounts}
-                // contentContainerStyle={styles.listContainer}
-                numColumns={1}
-                keyExtractor={item => String(item.address)}
-                ItemSeparatorComponent={renderSeparator}
-                renderItem={renderSessionGroup}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-            />
+            {accounts.map(account => {
+                if (
+                    account.address in activeSessions &&
+                    !isEmpty(activeSessions[account.address])
+                ) {
+                    return (
+                        <BaseSafeArea key={account.address}>
+                            <BaseText>{account.alias}</BaseText>
+                            <FlatList
+                                data={activeSessions[account.address]}
+                                // contentContainerStyle={styles.listContainer}
+                                numColumns={1}
+                                keyExtractor={session => String(session.topic)}
+                                renderItem={renderSession}
+                                showsVerticalScrollIndicator={false}
+                                showsHorizontalScrollIndicator={false}
+                            />
+                        </BaseSafeArea>
+                    )
+                }
+            })}
         </BaseSafeArea>
     )
 }

@@ -103,7 +103,7 @@ export const SignTransactionModal = ({
                                 : "Unexpected error while executing transaction",
                         )
 
-                        await web3Wallet.respondSessionRequest({
+                        await web3Wallet?.respondSessionRequest({
                             topic,
                             response: formattedResponse,
                         })
