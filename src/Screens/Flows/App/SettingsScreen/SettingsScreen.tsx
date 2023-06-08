@@ -112,11 +112,6 @@ const getList = (LL: TranslationFunctions) => [
         icon: "currency-usd",
     },
     {
-        title: LL.TITLE_NFT(),
-        screenName: Routes.SETTINGS_NFT,
-        icon: "image-multiple-outline",
-    },
-    {
         title: LL.TITLE_NETWORKS(),
         screenName: Routes.SETTINGS_NETWORK,
         icon: "web",

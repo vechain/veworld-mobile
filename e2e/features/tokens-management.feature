@@ -64,7 +64,7 @@ Feature: The user can manage tokens
       | address1                                   | token1    | address2                                   | token2  |
       | 0x34149f8da92222af599ba936d9089f5ce460b522 | CarpToken | 0xbd0e5d86fdd4bd6d249ceea1336594f6d959c099 | DavMain |
 
-  Scenario: When the user add an official token and then it change network (bug #570) it should not throw the error
+  Scenario: When the user add an official token and then it change network it should not throw the error
     When The user selects "<token>" token from the unselected tokens list
     And The user clicks back button
     And The user selects the test network

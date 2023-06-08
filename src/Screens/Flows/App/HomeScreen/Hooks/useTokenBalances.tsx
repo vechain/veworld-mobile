@@ -10,7 +10,7 @@ import {
     selectCoinGeckoTokens,
     selectSelectedAccount,
     getTokensFromGithub,
-    upsertOfficialTokens,
+    addOfficialTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useEffect } from "react"
@@ -43,7 +43,7 @@ export const useTokenBalances = () => {
             const tokens = await getTokensFromGithub({
                 network,
             })
-            dispatch(upsertOfficialTokens(tokens))
+            dispatch(addOfficialTokens(tokens))
         })()
     }, [network, dispatch])
 

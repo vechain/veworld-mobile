@@ -1,19 +1,20 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
-    BaseButton,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    SwapCard,
+    FadeoutButton,
     TransferCard,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ScrollView, StyleSheet } from "react-native"
-import { SCREEN_WIDTH, useBottomSheetModal, useTheme, valueToHP } from "~Common"
-import { DateUtils } from "~Utils"
+import { useBottomSheetModal, useTheme } from "~Common"
+import { DateUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"
@@ -35,7 +36,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { selectActivity, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import LinearGradient from "react-native-linear-gradient"
+import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -43,7 +44,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const ActivityDetailsScreen = ({ route }: Props) => {
-    const { activity, token } = route.params
+    const { activity, token, isSwap, decodedClauses } = route.params
 
     const nav = useNavigation()
 
@@ -58,15 +59,37 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     const [selectedContactAddress, setSelectedContactAddress] =
         useState<string>()
 
+    const [customTokenAddress, setCustomTokenAddress] = useState<string>()
+
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const activityFromStore = useAppSelector(selectActivity(activity.id))
+
+    const {
+        ref: addCustomTokenSheetRef,
+        onOpen: openAddCustomTokenSheet,
+        onClose: closeAddCustomTokenSheet,
+    } = useBottomSheetModal()
 
     const {
         ref: addContactSheet,
         onOpen: openAddContactSheet,
         onClose: closeAddContactSheet,
     } = useBottomSheetModal()
+
+    const swapResult = useMemo(() => {
+        if (
+            !isSwap ||
+            !decodedClauses ||
+            activity.type !== ActivityType.CONNECTED_APP_TRANSACTION
+        )
+            return undefined
+
+        return TransactionUtils.decodeSwapTransferAmounts(
+            decodedClauses,
+            activity as ConnectedAppTxActivity,
+        )
+    }, [activity, decodedClauses, isSwap])
 
     const dateTimeActivity = useMemo(() => {
         return DateUtils.formatDateTime(
@@ -76,8 +99,11 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         )
     }, [activity.timestamp, locale])
 
-    const isPendingOrFailedActivity =
-        activityFromStore?.status !== ActivityStatus.SUCCESS
+    const isPendingOrFailedActivity = useMemo(() => {
+        return activityFromStore
+            ? activityFromStore.status !== ActivityStatus.SUCCESS
+            : activity.status !== ActivityStatus.SUCCESS
+    }, [activity, activityFromStore])
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
@@ -126,6 +152,15 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         [openAddContactSheet],
     )
 
+    const onAddCustomToken = useCallback(
+        (tokenAddress: string) => {
+            setCustomTokenAddress(tokenAddress)
+
+            openAddCustomTokenSheet()
+        },
+        [openAddCustomTokenSheet],
+    )
+
     const handleSaveContact = useCallback(
         (_alias: string, _address: string) => {
             if (selectedContactAddress) {
@@ -158,7 +193,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 </BaseView>
                 <BaseView mx={20}>
                     <BaseText typographyFont="title">
-                        {getActivityTitle(activity, LL)}
+                        {getActivityTitle(activity, LL, isSwap)}
                     </BaseText>
 
                     <BaseSpacer height={16} />
@@ -181,11 +216,24 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     )}
 
                     {/* Transfer card shows the Address/Addresses involved in the given activity */}
-                    <TransferCard
-                        fromAddress={activity.from}
-                        toAddresses={[...new Set(activity.to)]}
-                        onAddContactPress={onAddContactPress}
-                    />
+                    {activity.isTransaction &&
+                        (isSwap && swapResult ? (
+                            <SwapCard
+                                paidTokenAddress={swapResult.paidTokenAddress}
+                                paidTokenAmount={swapResult.paidAmount}
+                                receivedTokenAddress={
+                                    swapResult.receivedTokenAddress
+                                }
+                                receivedTokenAmount={swapResult.receivedAmount}
+                                onAddCustomToken={onAddCustomToken}
+                            />
+                        ) : (
+                            <TransferCard
+                                fromAddress={activity.from}
+                                toAddresses={[...new Set(activity.to)]}
+                                onAddContactPress={onAddContactPress}
+                            />
+                        ))}
 
                     <BaseSpacer height={20} />
 
@@ -202,32 +250,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 </BaseView>
             </ScrollView>
 
-            {/* Linear gradient fades the elements below the child button */}
-            <LinearGradient
-                style={[
-                    baseStyles.explorerButton,
-                    {
-                        bottom: tabBarHeight,
-                    },
-                ]}
-                colors={[
-                    theme.colors.backgroundTransparent,
-                    theme.colors.background,
-                ]}>
-                <BaseView
-                    mx={20}
-                    style={{ width: SCREEN_WIDTH - 40 }}
-                    py={valueToHP[16]}>
-                    {/* TODO action click opens in-app browser or system browser. TBD with others */}
-                    <BaseButton
-                        action={() => {}}
-                        w={100}
-                        title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                        haptics="medium"
-                        typographyFont="buttonPrimary"
-                    />
-                </BaseView>
-            </LinearGradient>
+            <FadeoutButton
+                title={LL.VIEW_ON_EXPLORER().toUpperCase()}
+                action={() => {}}
+            />
 
             <ContactManagementBottomSheet
                 ref={addContactSheet}
@@ -240,6 +266,12 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 onSaveContact={handleSaveContact}
                 isAddingContact={true}
                 checkTouched={false}
+            />
+
+            <AddCustomTokenBottomSheet
+                ref={addCustomTokenSheetRef}
+                onClose={closeAddCustomTokenSheet}
+                tokenAddress={customTokenAddress}
             />
         </BaseSafeArea>
     )
@@ -254,10 +286,6 @@ const baseStyles = StyleSheet.create({
         width: "100%",
     },
     scrollView: {
-        width: "100%",
-    },
-    explorerButton: {
-        position: "absolute",
         width: "100%",
     },
 })

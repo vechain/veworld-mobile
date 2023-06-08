@@ -41,6 +41,7 @@ type Props = {
     rightIcon?: React.ReactNode
     isLoading?: boolean
     flex?: number
+    activeOpacity?: number
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -53,6 +54,7 @@ export const BaseButton = ({
     leftIcon,
     rightIcon,
     isLoading = false,
+    activeOpacity = 0.7,
     flex,
     ...otherProps
 }: Props) => {
@@ -63,19 +65,21 @@ export const BaseButton = ({
         baseStyles(variant === "link"),
     )
 
-    const onButtonPress = useCallback(() => {
+    const onButtonPress = useCallback(async () => {
         if (otherProps.haptics) {
             switch (otherProps.haptics) {
                 case Haptics.ImpactFeedbackStyle.Light:
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                     break
 
                 case Haptics.ImpactFeedbackStyle.Medium:
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                    await Haptics.impactAsync(
+                        Haptics.ImpactFeedbackStyle.Medium,
+                    )
                     break
 
                 case Haptics.ImpactFeedbackStyle.Heavy:
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
                     break
             }
         }
@@ -115,7 +119,7 @@ export const BaseButton = ({
     return (
         <TouchableOpacity
             onPress={onButtonPress}
-            activeOpacity={0.7}
+            activeOpacity={activeOpacity}
             disabled={disabled}
             style={[
                 {

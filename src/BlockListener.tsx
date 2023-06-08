@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import useWebSocket from "react-use-websocket"
-import { debug, error, info, warn } from "~Common"
+import { error, info, warn } from "~Common"
 import { VET } from "~Common/Constant/Token"
 import { useCounter, useToastNotification } from "~Common/Hooks"
 import { AddressUtils, BloomUtils, TransfersUtils, URLUtils } from "~Utils"
@@ -91,7 +91,7 @@ const BlockListener: React.FC = () => {
     )
 
     const onOpen = () => {
-        // info("Beat WS open on: ", beatUrl)
+        info("Beat WS open on: ", beatUrl)
         dispatch(updateNodeError(false))
     }
 
@@ -159,11 +159,6 @@ const BlockListener: React.FC = () => {
             BloomUtils.testBloomForAddress(beat.bloom, beat.k, acc.address),
         )
         if (relevantAccounts.length === 0) return
-
-        debug(
-            "Possible relevant accounts found in this bloom",
-            relevantAccounts,
-        )
 
         // Detect transfer events for all accounts and alert the user
         await attemptAlertOnVetTransfer(beat.number, relevantAccounts)

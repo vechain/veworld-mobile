@@ -71,7 +71,7 @@ export const TokenSlice = createSlice({
             )
         },
 
-        upsertOfficialTokens: (
+        addOfficialTokens: (
             state,
             action: PayloadAction<TokenWithCompleteInfo[]>,
         ) => {
@@ -103,7 +103,7 @@ export const TokenSlice = createSlice({
 export const {
     addOrUpdateCustomToken,
     setDashboardChartData,
-    upsertOfficialTokens,
+    addOfficialTokens,
     setAssertDetailChartData,
     setCoinGeckoTokens,
     setSuggestedTokens,

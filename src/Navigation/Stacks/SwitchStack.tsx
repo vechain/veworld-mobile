@@ -3,17 +3,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
-import { CameraScreen } from "~Screens"
 import { CreateWalletAppStack, Routes } from "~Navigation"
+import BlockListener from "../../BlockListener"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
     TabStack: undefined
     ResetAppScreen: undefined
     Create_Wallet_Flow: undefined
-    [Routes.CAMERA]: {
-        onScan: (str: string) => void
-    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -34,9 +31,10 @@ export const SwitchStack = () => {
                 <>
                     <Switch.Screen
                         name="TabStack"
-                        component={TabStack}
+                        component={AppContainer}
                         options={{ headerShown: false }}
                     />
+
                     {/* Full screen modals */}
                     <Switch.Group
                         screenOptions={{
@@ -45,15 +43,6 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CREATE_WALLET_FLOW}
                             component={CreateWalletAppStack}
-                        />
-
-                        <Switch.Screen
-                            name={Routes.CAMERA}
-                            component={CameraScreen}
-                            options={{
-                                headerShown: false,
-                                presentation: "modal",
-                            }}
                         />
                     </Switch.Group>
                 </>
@@ -68,5 +57,14 @@ export const SwitchStack = () => {
             }}>
             {RenderStacks}
         </Switch.Navigator>
+    )
+}
+
+const AppContainer = () => {
+    return (
+        <>
+            <BlockListener />
+            <TabStack />
+        </>
     )
 }
