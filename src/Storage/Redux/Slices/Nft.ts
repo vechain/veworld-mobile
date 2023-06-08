@@ -79,7 +79,6 @@ export const NftSlice = createSlice({
             return state
         },
 
-        // TODO set here adjust collections from selectors
         setBlackListCollection: (
             state,
             action: PayloadAction<NonFungibleTokenCollection>,
@@ -91,6 +90,19 @@ export const NftSlice = createSlice({
             const uniqueCollections = uniqBy(allCollections, "address")
 
             state.blackListedCollections = uniqueCollections
+
+            return state
+        },
+
+        removeBlackListCollection: (
+            state,
+            action: PayloadAction<NonFungibleTokenCollection>,
+        ) => {
+            const filteredCollections = state.blackListedCollections.filter(
+                collection => collection.address !== action.payload.address,
+            )
+
+            state.blackListedCollections = filteredCollections
 
             return state
         },
@@ -115,4 +127,5 @@ export const {
     setBlackListCollection,
     setCollections,
     setNetworkingSideEffects,
+    removeBlackListCollection,
 } = NftSlice.actions

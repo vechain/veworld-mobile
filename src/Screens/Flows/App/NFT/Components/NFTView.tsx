@@ -1,18 +1,23 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { SCREEN_WIDTH, info } from "~Common"
 import { COLORS } from "~Common/Theme"
 import { BaseImage, BaseText, BaseView, LongPressProvider } from "~Components"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { Routes } from "~Navigation"
-import { setBlackListCollection, useAppDispatch } from "~Storage/Redux"
+import {
+    removeBlackListCollection,
+    setBlackListCollection,
+    useAppDispatch,
+} from "~Storage/Redux"
 
 type Props = {
     item: NonFungibleTokenCollection | NonFungibleToken
     index: number
     isCollection?: boolean
     collection?: NonFungibleTokenCollection
+    isHidden?: boolean
 }
 
 enum ItemTitle {
@@ -22,17 +27,31 @@ enum ItemTitle {
     SHOW_NFT = "Show NFT",
 }
 
-const CollectionItem = [{ title: ItemTitle.HIDE_COLLECTION }]
-const NFTItems = [{ title: ItemTitle.HIDE_NFT }]
-
 export const NFTView = ({
     item,
     index,
     isCollection = false,
     collection,
+    isHidden = false,
 }: Props) => {
     const nav = useNavigation()
     const disptatch = useAppDispatch()
+
+    const CollectionItem = useMemo(
+        () => [
+            {
+                title: isHidden
+                    ? ItemTitle.SHOW_COLLECTION
+                    : ItemTitle.HIDE_COLLECTION,
+            },
+        ],
+        [isHidden],
+    )
+
+    const NFTItems = useMemo(
+        () => [{ title: isHidden ? ItemTitle.SHOW_NFT : ItemTitle.HIDE_NFT }],
+        [isHidden],
+    )
 
     const collectionItem = isCollection
         ? (item as NonFungibleTokenCollection)
@@ -62,23 +81,21 @@ export const NFTView = ({
         (_index: number) => {
             let itemAction = ""
 
-            if (isCollection) {
-                itemAction = CollectionItem[_index].title
-            }
+            if (isCollection) itemAction = CollectionItem[_index].title
 
-            if (!isCollection) {
-                itemAction = NFTItems[_index].title
-            }
+            if (!isCollection) itemAction = NFTItems[_index].title
 
-            if (itemAction === ItemTitle.HIDE_COLLECTION) {
+            if (itemAction === ItemTitle.HIDE_COLLECTION)
                 disptatch(setBlackListCollection(collectionItem!))
-            }
 
-            if (itemAction === ItemTitle.HIDE_NFT) {
-                info("Hide NFT")
-            }
+            if (itemAction === ItemTitle.HIDE_NFT) info("Hide NFT")
+
+            if (itemAction === ItemTitle.SHOW_COLLECTION)
+                disptatch(removeBlackListCollection(collectionItem!))
+
+            if (itemAction === ItemTitle.SHOW_NFT) info("Show NFT")
         },
-        [collectionItem, disptatch, isCollection],
+        [CollectionItem, NFTItems, collectionItem, disptatch, isCollection],
     )
 
     return (

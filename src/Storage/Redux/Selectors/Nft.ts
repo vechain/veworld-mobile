@@ -2,6 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { selectSelectedAccount } from "./Account"
+import { isEmpty } from "lodash"
 
 const selectNftState = (state: RootState) => state.nft
 
@@ -12,31 +13,22 @@ export const selectBlackListedCollections = createSelector(
     },
 )
 
-function removeMatchingElements<T extends NonFungibleTokenCollection>(
-    elLeft?: T[],
-    elRight?: T[],
-) {
-    const elementsToRemove = elRight?.map(obj => obj.address)
-    return elLeft?.filter(obj => !elementsToRemove?.includes(obj.address))
-}
-
+/**
+ * selectNftCollections
+ * @description In order to test this selector together with the "useNFTCollections" hook, you need to change everywhere "account.address" with "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048" in order to get an account with a lot of NFT collections and NFTs
+ * @returns
+ */
 export const selectNftCollections = createSelector(
     selectNftState,
     selectSelectedAccount,
     selectBlackListedCollections,
     (state, account, blackListedCollections) => {
-        // return state.collectionsPerAccount[account.address]
-
         const collections =
-            state.collectionsPerAccount[
-                "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048"
-            ]?.collections
+            state.collectionsPerAccount[account.address]?.collections
 
         if (collections && blackListedCollections) {
             const pagination =
-                state.collectionsPerAccount[
-                    "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048"
-                ]?.pagination
+                state.collectionsPerAccount[account.address]?.pagination
 
             const filteredCollections = removeMatchingElements(
                 collections,
@@ -66,6 +58,18 @@ export const selectNftNetworkingSideEffects = createSelector(
             isLoading: state.isLoading,
             error: state.error,
         }
+    },
+)
+
+export const selectCollectionListIsEmpty = createSelector(
+    selectNftNetworkingSideEffects,
+    selectNftCollections,
+    (sideEffects, collections) => {
+        return (
+            !sideEffects.error &&
+            !sideEffects.isLoading &&
+            isEmpty(collections.collections)
+        )
     },
 )
 
@@ -100,3 +104,12 @@ export const selectNFTWithAddressAndTokenId = createSelector(
         return nft
     },
 )
+
+// HELPERS
+function removeMatchingElements<T extends NonFungibleTokenCollection>(
+    elLeft?: T[],
+    elRight?: T[],
+) {
+    const elementsToRemove = elRight?.map(obj => obj.address)
+    return elLeft?.filter(obj => !elementsToRemove?.includes(obj.address))
+}

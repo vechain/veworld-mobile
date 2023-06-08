@@ -4,6 +4,7 @@ import { usePagination } from "../usePagination"
 import {
     selectNftCollections,
     selectNftNetworkingSideEffects,
+    selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
 
@@ -11,6 +12,8 @@ export const useFetchCollections = () => {
     const { getCollections } = useNFTCollections()
 
     const { fetchWithPagination } = usePagination()
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const nftCollections = useAppSelector(selectNftCollections)
     const nftNetworkingSideEffects = useAppSelector(
@@ -28,7 +31,7 @@ export const useFetchCollections = () => {
     useEffect(() => {
         getCollections(0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [selectedAccount])
 
     const fetchMoreCollections = useCallback(() => {
         fetchWithPagination(

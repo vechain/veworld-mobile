@@ -1,59 +1,32 @@
-import React from "react"
-import { StyleSheet } from "react-native"
-import { useTheme } from "~Common"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import React, { useMemo } from "react"
+import { BaseText, BaseView, ChangeAccountButtonPill } from "~Components"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { FormattingUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
-export const NftScreenHeader = () => {
+type Props = {
+    openSelectAccountBottomSheet: () => void
+}
+
+export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const humanAddress = useMemo(
+        () => FormattingUtils.humanAddress(selectedAccount.address ?? "", 5, 4),
+        [selectedAccount.address],
+    )
+
     return (
-        <BaseView flexDirection="row" mx={20}>
+        <BaseView flexDirection="row" justifyContent="space-between" mx={20}>
             <BaseText typographyFont="largeTitle">{LL.TITLE_NFTS()}</BaseText>
-            <BaseView flexDirection="row">
-                <BaseIcon
-                    color={theme.colors.text}
-                    name="tray-arrow-up"
-                    size={24}
-                />
 
-                <BaseIcon
-                    action={() => {}}
-                    style={baseStyles.sendIcon}
-                    bg={theme.colors.secondary}
-                    name="send-outline"
-                    size={24}
-                />
-
-                <BaseIcon
-                    action={() => {}}
-                    style={baseStyles.receiveIcon}
-                    bg={theme.colors.secondary}
-                    name="arrow-down"
-                    size={24}
-                />
-            </BaseView>
+            <ChangeAccountButtonPill
+                title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
+                text={humanAddress}
+                action={openSelectAccountBottomSheet}
+            />
         </BaseView>
     )
 }
-
-const baseStyles = StyleSheet.create({
-    sendIcon: {
-        borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
-        marginLeft: 16,
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-    },
-    receiveIcon: {
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-        borderTopRightRadius: 20,
-        borderBottomRightRadius: 20,
-        marginLeft: 2,
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-    },
-})

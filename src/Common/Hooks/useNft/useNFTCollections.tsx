@@ -13,7 +13,7 @@ import {
     getTokenURI,
 } from "~Networking"
 import {
-    // selectSelectedAccount,
+    selectSelectedAccount,
     selectSelectedNetwork,
     setCollections,
     setNetworkingSideEffects,
@@ -24,10 +24,17 @@ import { fetchMetadata } from "./fetchMeta"
 import { NFTPlaceholder } from "~Assets"
 import { error } from "~Common/Logger"
 
+/**
+ * useNFTCollections
+ * @description In order to test this hook, you need to change everywhere "selectedAccount.address" with "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048" in order to get
+ * an account with a lot of NFT collections and NFTs
+ * @returns
+ */
+
 export const useNFTCollections = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
-    // const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
 
     const getCollections = useCallback(
@@ -40,9 +47,7 @@ export const useNFTCollections = () => {
                 // Get contract addresses for nfts owned by ownerAddress
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
-                        // selectedAccount.address,
-                        "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
-
+                        selectedAccount.address,
                         _resultsPerPage,
                         _page,
                     )
@@ -55,8 +60,7 @@ export const useNFTCollections = () => {
                 // Get nfts for each contract address
                 const { nftData } = await getNFTdataForContract(
                     contractsForNFTs,
-                    // selectedAccount.address,
-                    "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
+                    selectedAccount.address,
                     _resultsPerPage,
                 )
 
@@ -72,8 +76,7 @@ export const useNFTCollections = () => {
                     const { nftCollection } = await prepareCollectionData(
                         nft,
                         foundCollection,
-                        // selectedAccount.address,
-                        "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
+                        selectedAccount.address,
                         thor,
                     )
 
@@ -83,8 +86,7 @@ export const useNFTCollections = () => {
                 // set collections to store
                 dispatch(
                     setCollections({
-                        // address: selectedAccount.address,
-                        address: "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
+                        address: selectedAccount.address,
                         collectiondata: {
                             collections: _nftCollections,
                             pagination,
@@ -108,8 +110,7 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [dispatch, network.type, thor],
-        // [dispatch, network.type, selectedAccount.address, thor],
+        [dispatch, network.type, selectedAccount.address, thor],
     )
 
     return { getCollections }
