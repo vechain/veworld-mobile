@@ -21,13 +21,14 @@ type Props =
           p?: number
           px?: number
           py?: number
+          borderRadius?: number
           iconPadding?: number
       } & IconProps &
           TouchableOpacityProps &
           ViewProps
 
 export const BaseIcon: React.FC<Props> = memo(props => {
-    const { color, style, testID, ...otherProps } = props
+    const { color, style, borderRadius, testID, ...otherProps } = props
     const theme = useTheme()
 
     const iconColor = useMemo(
@@ -41,6 +42,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
             testID={`${testID}-wrapper`}
             style={style}
             color={color}
+            borderRadius={borderRadius}
             {...otherProps}>
             <Icon
                 size={props.size ?? 22}
@@ -55,7 +57,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
 
 type BaseIconWrapperProps = Props & { children: React.ReactNode }
 const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
-    ({ style, bg, size, children, action, ...props }) => {
+    ({ style, bg, borderRadius, size, children, action, ...props }) => {
         if (action)
             return (
                 <TouchableOpacity
@@ -65,7 +67,8 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
                             justifyContent: "center",
                             alignItems: "center",
                             backgroundColor: bg,
-                            borderRadius: size ? size + 10 / 2 : 50,
+                            borderRadius:
+                                borderRadius || (size ? size + 10 / 2 : 50),
                             opacity: props.disabled ? 0.5 : 1,
                             margin: props.m,
                             marginVertical: props.my,
@@ -88,7 +91,8 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
                         alignItems: "center",
                         backgroundColor: bg,
                         padding: bg ? 5 : 0,
-                        borderRadius: size ? size + 10 / 2 : 50,
+                        borderRadius:
+                            borderRadius || (size ? size + 10 / 2 : 50),
                         opacity: props.disabled ? 0.5 : 1,
                     },
                     style,

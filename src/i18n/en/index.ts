@@ -431,6 +431,7 @@ const en: BaseTranslation = {
     SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: "PROCEED ANYWAY",
     SEND_CREATE_CONTACT_NAME: "Contact name",
     SEND_CREATE_CONTACT_ADDRESS: "Contact address",
+    SEND_LEDGER_VALIDATE_TRANSACTION: "Validate transaction",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",
