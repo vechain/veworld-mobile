@@ -9,17 +9,13 @@ import {
     useWalletConnect,
     showErrorToast,
     showInfoToast,
+    BaseSpacer,
 } from "~Components"
 import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { error } from "~Common"
-import { FlatList } from "react-native-gesture-handler"
 import { isEmpty } from "lodash"
 import { Session } from "./components"
-
-type SessionsListProps = {
-    item: SessionTypes.Struct
-}
 
 export const WalletConnectScreen = () => {
     const { web3Wallet } = useWalletConnect()
@@ -58,10 +54,6 @@ export const WalletConnectScreen = () => {
         }
     }, [uri, web3Wallet])
 
-    const renderSession = useCallback(({ item }: SessionsListProps) => {
-        return <Session item={item} />
-    }, [])
-
     return (
         <BaseSafeArea>
             <BackButtonHeader />
@@ -89,16 +81,18 @@ export const WalletConnectScreen = () => {
                 ) {
                     return (
                         <BaseSafeArea key={account.address}>
-                            <BaseText>{account.alias}</BaseText>
-                            <FlatList
-                                data={activeSessions[account.address]}
-                                // contentContainerStyle={styles.listContainer}
-                                numColumns={1}
-                                keyExtractor={session => String(session.topic)}
-                                renderItem={renderSession}
-                                showsVerticalScrollIndicator={false}
-                                showsHorizontalScrollIndicator={false}
-                            />
+                            <BaseText typographyFont="subSubTitleLight">
+                                {account.alias}
+                            </BaseText>
+                            <BaseSpacer height={16} />
+                            {activeSessions[account.address].map(session => {
+                                return (
+                                    <Session
+                                        item={session}
+                                        key={session.topic}
+                                    />
+                                )
+                            })}
                         </BaseSafeArea>
                     )
                 }
