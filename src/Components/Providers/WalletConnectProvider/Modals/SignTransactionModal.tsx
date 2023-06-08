@@ -179,7 +179,7 @@ export const SignTransactionModal = ({
                             : "An unexpected error occurred while executing transaction",
                     )
 
-                    await web3Wallet.respondSessionRequest({
+                    await web3Wallet?.respondSessionRequest({
                         topic,
                         response,
                     })
@@ -228,7 +228,7 @@ export const SignTransactionModal = ({
                 getSdkError("USER_REJECTED_METHODS").message,
             )
 
-            await web3Wallet.respondSessionRequest({
+            await web3Wallet?.respondSessionRequest({
                 topic,
                 response,
             })

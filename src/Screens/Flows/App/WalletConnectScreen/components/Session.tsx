@@ -7,11 +7,12 @@ import {
     BaseIcon,
     BaseImage,
 } from "~Components"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet } from "react-native"
 import { useTheme, useThemedStyles } from "~Common"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { AccountWithDevice } from "~Model"
+import { ImageStyle } from "react-native-fast-image"
 
 type Props = {
     session: SessionTypes.Struct
@@ -42,7 +43,7 @@ export const Session: React.FC<Props> = memo(({ session, account }: Props) => {
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseImage
                                 uri={session.peer.metadata.icons[0]}
-                                style={styles.image}
+                                style={styles.image as StyleProp<ImageStyle>}
                             />
                         </BaseView>
                         <BaseView flexDirection="column" alignItems="center">
@@ -82,5 +83,5 @@ const baseStyles = () =>
         container: {
             width: "100%",
         },
-        image: { width: 40, height: 40, marginLeft: 5, borderRadius: 24 },
+        image: { width: 40, height: 40, borderRadius: 24 },
     })

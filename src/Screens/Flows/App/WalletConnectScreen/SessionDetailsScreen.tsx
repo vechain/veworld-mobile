@@ -44,8 +44,6 @@ export const SessionDetailsScreen = ({ route }: Props) => {
                 <BaseSpacer height={8} />
                 <BaseText>{session.peer.metadata.icons[0]}</BaseText>
                 <BaseSpacer height={8} />
-                <BaseText>{session.peer.metadata.chainId}</BaseText>
-                <BaseSpacer height={8} />
 
                 <BaseText>
                     {"Selected account: "} {account.alias}

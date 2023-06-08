@@ -19,11 +19,13 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
+    AccountWithDevice,
     Activity,
     FungibleToken,
     FungibleTokenWithBalance,
     TokenWithCompleteInfo,
 } from "~Model"
+import { SessionTypes } from "@walletconnect/types"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -53,7 +55,10 @@ export type RootStackParamListHome = {
     [Routes.ACTIVITY_DETAILS]: { activity: Activity; token?: FungibleToken }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.WALLET_CONNECT]: undefined
-    [Routes.SETTINGS_CONNECTED_APP_DETAILS]: undefined
+    [Routes.SETTINGS_CONNECTED_APP_DETAILS]: {
+        session: SessionTypes.Struct
+        account: AccountWithDevice
+    }
 }
 
 const { Navigator, Group, Screen } =
