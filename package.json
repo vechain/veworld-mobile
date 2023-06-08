@@ -7,6 +7,7 @@
         "purge:android": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build",
         "install:all": "yarn install && npx pod-install",
         "reinstall": "yarn purge && yarn install:all",
+        "reinstall:android": "yarn purge:android && yarn install:all",
         "postinstall": "patch-package",
         "pods": "cd ios && pod install && cd ..",
         "doctor": "react-native doctor",

@@ -209,7 +209,7 @@ const WalletConnectContextProvider = ({
     // Needed for the context
     const value = useMemo(
         () => ({
-            web3Wallet: web3Wallet ? web3Wallet : undefined,
+            web3Wallet: web3Wallet ?? undefined,
             disconnect,
             onPair,
         }),

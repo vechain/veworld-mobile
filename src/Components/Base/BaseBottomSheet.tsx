@@ -37,12 +37,12 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const { styles } = useThemedStyles(baseStyles)
 
         const renderBackdrop = useCallback(
-            (pressBehaviour?: BackdropPressBehavior) =>
+            (pressBehavior?: BackdropPressBehavior) =>
                 (props_: BottomSheetBackdropProps) =>
                     (
                         <BottomSheetBackdrop
                             {...props_}
-                            pressBehavior={pressBehaviour}
+                            pressBehavior={pressBehavior}
                             opacity={0.5}
                             disappearsOnIndex={-1}
                         />

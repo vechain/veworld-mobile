@@ -25,7 +25,7 @@ import { getSdkError } from "@walletconnect/utils"
 
 interface Props {
     sessionRequest: any
-    requestEvent: SignClientTypes.EventArguments["session_request"]
+    requestEvent?: SignClientTypes.EventArguments["session_request"]
     onClose: () => void
     isOpen: boolean
 }
@@ -51,7 +51,7 @@ export const SignIdentityModal = ({
     const requestURL = sessionRequest?.peer?.metadata?.url
     const message = params.payload.content
 
-    const { topic } = requestEvent ? requestEvent : { topic: "" }
+    const { topic } = requestEvent ?? { topic: "" }
 
     const signIdentityCertificate = useCallback(
         async (id: number, privateKey: Buffer) => {
@@ -61,7 +61,7 @@ export const SignIdentityModal = ({
                 ...params,
                 timestamp: Math.round(Date.now() / 1000),
                 domain: new URL(requestURL),
-                signer: account ? account.address : "",
+                signer: account?.address ?? "",
             }
 
             const hash = blake2b256(Certificate.encode(cert))

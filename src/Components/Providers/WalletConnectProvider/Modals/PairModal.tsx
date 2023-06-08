@@ -25,7 +25,7 @@ import {
 import { insertSession } from "~Storage/Redux/Slices"
 import { error } from "~Common"
 
-interface Props {
+type Props = {
     currentProposal: SignClientTypes.EventArguments["session_proposal"]
     onClose: () => void
     isOpen: boolean
@@ -96,7 +96,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
             dispatch(insertSession({ address: selectedAccount, session }))
 
             onClose()
-            showSuccessToast('Successfull connected to "' + name + '"')
+            showSuccessToast('Successfully connected to "' + name + '"')
         }
     }
 
