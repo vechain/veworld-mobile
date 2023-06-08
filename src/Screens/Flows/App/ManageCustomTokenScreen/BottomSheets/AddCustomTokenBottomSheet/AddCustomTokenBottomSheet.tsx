@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseSpacer,
@@ -30,13 +30,14 @@ import { AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
 
 type Props = {
+    tokenAddress?: string
     onClose: () => void
 }
 
 export const AddCustomTokenBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose }, ref) => {
+>(({ tokenAddress, onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
@@ -124,6 +125,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     )
 
     const handleOnDismissModal = () => {
+        //don't reset if we are adding a token from SwapCard screen
+        if (tokenAddress) return
         setErrorMessage("")
         setValue("")
         setNewCustomToken(undefined)
@@ -143,6 +146,11 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
         )
         onClose()
     }
+
+    // if we are adding a token from SwapCard screen, we need to set the token address
+    useEffect(() => {
+        if (tokenAddress) handleValueChange(tokenAddress)
+    }, [handleValueChange, tokenAddress])
 
     return (
         <>

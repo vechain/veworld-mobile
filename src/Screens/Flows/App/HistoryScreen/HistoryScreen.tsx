@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import { SCREEN_WIDTH, useTheme } from "~Common"
-import { FormattingUtils, PlatformUtils } from "~Utils"
+import { FormattingUtils, PlatformUtils, TransactionUtils } from "~Utils"
 import {
     BaseText,
     BaseSafeArea,
@@ -11,7 +11,11 @@ import {
     BaseIcon,
     BaseSpacer,
 } from "~Components"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import {
+    selectSelectedAccount,
+    selectTokensWithInfo,
+    useAppSelector,
+} from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { FlashList } from "@shopify/flash-list"
 import {
@@ -20,6 +24,7 @@ import {
     NoActivitiesButton,
     SignedCertificateActivityBox,
     SkeletonActivityBox,
+    SwapTransactionActivityBox,
 } from "./Components"
 import {
     Activity,
@@ -28,6 +33,7 @@ import {
     FungibleToken,
     FungibleTokenActivity,
     SignCertActivity,
+    TransactionOutcomes,
 } from "~Model"
 import { Routes } from "~Navigation"
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context"
@@ -58,6 +64,8 @@ export const HistoryScreen = () => {
 
     const styles = baseStyles(insets, tabBarHeight)
 
+    const tokens = useAppSelector(selectTokensWithInfo)
+
     // To prevent fetching next page of activities on FlashList mount
     const [hasScrolled, setHasScrolled] = useState(false)
 
@@ -75,8 +83,18 @@ export const HistoryScreen = () => {
     )
 
     const onActivityPress = useCallback(
-        (activity: Activity, token?: FungibleToken) => {
-            nav.navigate(Routes.ACTIVITY_DETAILS, { activity, token })
+        (
+            activity: Activity,
+            token?: FungibleToken,
+            isSwap?: boolean,
+            decodedClauses?: TransactionOutcomes,
+        ) => {
+            nav.navigate(Routes.ACTIVITY_DETAILS, {
+                activity,
+                token,
+                isSwap,
+                decodedClauses,
+            })
         },
         [nav],
     )
@@ -115,7 +133,22 @@ export const HistoryScreen = () => {
                         />
                     )
                 case ActivityType.CONNECTED_APP_TRANSACTION:
-                    return (
+                    const decodedClauses = TransactionUtils.interpretClauses(
+                        activity.clauses,
+                        tokens,
+                    )
+
+                    const isSwap =
+                        TransactionUtils.isSwapTransaction(decodedClauses)
+
+                    return isSwap ? (
+                        <SwapTransactionActivityBox
+                            key={id}
+                            activity={activity as ConnectedAppTxActivity}
+                            decodedClauses={decodedClauses}
+                            onPress={onActivityPress}
+                        />
+                    ) : (
                         <DappTransactionActivityBox
                             key={id}
                             activity={activity as ConnectedAppTxActivity}
@@ -132,7 +165,7 @@ export const HistoryScreen = () => {
                     )
             }
         },
-        [onActivityPress],
+        [onActivityPress, tokens],
     )
 
     const renderActivitiesList = useMemo(() => {
@@ -164,7 +197,7 @@ export const HistoryScreen = () => {
                         estimatedItemSize={80}
                         estimatedListSize={{
                             height: 80 * activities.length,
-                            width: SCREEN_WIDTH - 40,
+                            width: SCREEN_WIDTH,
                         }}
                         onScroll={onScroll}
                         onEndReachedThreshold={1}
@@ -195,7 +228,7 @@ export const HistoryScreen = () => {
     const renderSkeletonList = useMemo(() => {
         return (
             <>
-                <BaseSpacer height={40} />
+                <BaseSpacer height={30} />
                 <BaseView flexDirection="row" style={styles.list}>
                     <FlatList
                         data={[...Array(SKELETON_COUNT)]}

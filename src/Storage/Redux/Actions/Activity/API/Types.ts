@@ -1,10 +1,5 @@
 import { Transaction } from "thor-devkit"
-
-type OutputResponse = {
-    contractAddress: string
-    events: Connex.VM.Event[]
-    transfers: Connex.VM.Transfer[]
-}
+import { OutputResponse } from "~Model"
 
 export type FetchTransactionsResponse = {
     id: string

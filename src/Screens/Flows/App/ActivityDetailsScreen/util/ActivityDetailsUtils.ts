@@ -5,6 +5,7 @@ import { TranslationFunctions } from "~i18n"
 export const getActivityTitle = (
     activity: Activity,
     LL: TranslationFunctions,
+    isSwap?: boolean,
 ) => {
     switch (activity.type) {
         case ActivityType.FUNGIBLE_TOKEN:
@@ -17,7 +18,7 @@ export const getActivityTitle = (
         case ActivityType.SIGN_CERT:
             return LL.SIGNED_CERTIFICATE()
         case ActivityType.CONNECTED_APP_TRANSACTION:
-            return LL.DAPP_TRANSACTION()
+            return isSwap ? LL.SWAP() : LL.DAPP_TRANSACTION()
         default:
             warn("Unknown activity type")
     }

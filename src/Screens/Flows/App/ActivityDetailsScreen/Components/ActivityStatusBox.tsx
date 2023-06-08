@@ -45,7 +45,10 @@ export const ActivityStatusBox: React.FC<Props> = memo(({ status }) => {
                         </BaseText>
                     </BaseView>
                 </BaseView>
-                <BaseText typographyFont="buttonSecondary" pt={8}>
+                <BaseText
+                    typographyFont="buttonSecondary"
+                    pt={8}
+                    color={COLORS.DARK_PURPLE}>
                     {statusDescription}
                 </BaseText>
             </BaseView>
