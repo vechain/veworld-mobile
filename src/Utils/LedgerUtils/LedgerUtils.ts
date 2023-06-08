@@ -150,7 +150,7 @@ const signTransaction = async (
                 onProgressUpdate,
             )
         } catch (e) {
-            error(e)
+            error("signTransaction", e)
             throw new Error("Failed to sign the message")
         } finally {
             vetLedger.transport.close().catch(e => {
