@@ -9,7 +9,7 @@ import {
 import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
-import { ConnectedApp } from "./components"
+import { ConnectAppButton, ConnectedApp } from "./components"
 
 export const ConnectedAppsScreen = () => {
     const activeSessions: Record<string, SessionTypes.Struct[]> =
@@ -28,6 +28,9 @@ export const ConnectedAppsScreen = () => {
             <BackButtonHeader />
             <BaseView mx={20}>
                 <BaseText typographyFont="title">{"Connected Apps"}</BaseText>
+
+                <BaseSpacer height={40} />
+                <ConnectAppButton />
 
                 {totalSessions === 0 && (
                     <>

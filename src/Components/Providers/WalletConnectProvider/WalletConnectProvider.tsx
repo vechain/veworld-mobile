@@ -10,7 +10,7 @@ import {
 import { PairModal } from "./Modals/PairModal"
 import { SignIdentityModal } from "./Modals/SignIdentityModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
-import { showSuccessToast } from "~Components"
+import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { deleteSession } from "~Storage/Redux/Slices"
 import { getSdkError } from "@walletconnect/utils"
@@ -32,7 +32,12 @@ type WalletConnectContextProviderProps = { children: React.ReactNode }
 const WalletConnectContext = React.createContext<{
     web3Wallet: IWeb3Wallet | undefined
     disconnect: (topic: string) => Promise<void>
-}>({ web3Wallet: undefined, disconnect: async () => {} })
+    onPair: (uri: string) => Promise<void>
+}>({
+    web3Wallet: undefined,
+    disconnect: async () => {},
+    onPair: async () => {},
+})
 
 const WalletConnectContextProvider = ({
     children,
@@ -57,6 +62,32 @@ const WalletConnectContextProvider = ({
     const [sessionRequest, setSessionRequest] = useState<SessionTypes.Struct>()
     const [requestEventData, setRequestEventData] =
         useState<SignClientTypes.EventArguments["session_request"]>()
+
+    /**
+     * The pair method initiates a WalletConnect pairing process with a dapp
+     * using the given uri (QR code from the dapps).
+     * After the pairing is established, the dapp will send a session_proposal
+     * asking the user permission to connect to the wallet.
+     */
+    const onPair = useCallback(
+        async (uri: string) => {
+            try {
+                await web3Wallet?.core.pairing.pair({
+                    uri,
+                    activatePairing: true,
+                })
+
+                showInfoToast("Connecting may take a few seconds.")
+            } catch (err: unknown) {
+                error(err)
+
+                showErrorToast(
+                    "Error pairing with Dapp, please generate a new QR CODE",
+                )
+            }
+        },
+        [web3Wallet],
+    )
 
     /**
      * Handle session proposal
@@ -180,8 +211,9 @@ const WalletConnectContextProvider = ({
         () => ({
             web3Wallet: web3Wallet ? web3Wallet : undefined,
             disconnect,
+            onPair,
         }),
-        [web3Wallet, disconnect],
+        [web3Wallet, disconnect, onPair],
     )
 
     if (!value) {
