@@ -19,6 +19,13 @@ export const selectTestNetwork = async () => {
     }
 }
 
+export const selectMainNetwork = async () => {
+    if (await isPresentText("Testnet")) {
+        await clickByText("Testnet")
+        await clickByText("Mainnet")
+    }
+}
+
 export const goBackToHomeTab = async () => {
     // go back to home page
     await clickById("wallet-tab")

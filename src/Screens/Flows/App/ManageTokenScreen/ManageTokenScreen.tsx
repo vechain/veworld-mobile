@@ -165,6 +165,13 @@ export const ManageTokenScreen = () => {
                                     typographyFont="smallCaptionMedium">
                                     {customTokens.length}
                                 </BaseText>
+                                <BaseButton
+                                    variant="link"
+                                    action={openAddSuggestedBottomSheet}
+                                    px={0}
+                                    size="md"
+                                    title={LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
+                                />
                             </BaseView>
                         </BaseTouchableBox>
                     ) : (
