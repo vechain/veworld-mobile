@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useMemo, useState } from "react"
+import React, { useState, useMemo } from "react"
 import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native"
 import { CURRENCY_SYMBOLS, useAmountInput, useTheme } from "~Common"
 import { FormattingUtils } from "~Utils"
@@ -72,14 +72,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const formattedFiatInput = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
             input || "0",
-            exchangeRate?.rate || 1,
+            exchangeRate?.rate ?? 1,
             0,
         ),
         input,
     )
     const rawTokenInput = FormattingUtils.convertToFiatBalance(
         input || "0",
-        1 / (exchangeRate?.rate || 1),
+        1 / (exchangeRate?.rate ?? 1),
         0,
     )
     const formattedTokenInput = FormattingUtils.humanNumber(
@@ -121,7 +121,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 ? Number(
                       FormattingUtils.convertToFiatBalance(
                           newTokenInput || "0",
-                          exchangeRate?.rate || 1,
+                          exchangeRate?.rate ?? 1,
                           0,
                       ),
                   ).toFixed(2)
@@ -139,7 +139,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         }
         setInput(newValue)
     }
-    const goToInsertAddress = () => {
+    const goToInsertAddress = async () => {
         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
             amount: isInputInFiat ? rawTokenInput : input,
