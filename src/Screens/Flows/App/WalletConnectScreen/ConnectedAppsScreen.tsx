@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import {
     BaseText,
     BackButtonHeader,
@@ -16,11 +16,29 @@ export const ConnectedAppsScreen = () => {
         useAppSelector(selectSessions)
     const accounts = useAppSelector(selectAccounts)
 
+    const totalSessions = useMemo(() => {
+        return Object.values(activeSessions).reduce(
+            (acc, curr) => acc + curr.length,
+            0,
+        )
+    }, [activeSessions])
+
     return (
         <BaseSafeArea>
             <BackButtonHeader />
             <BaseView mx={20}>
                 <BaseText typographyFont="title">{"Connected Apps"}</BaseText>
+
+                {totalSessions === 0 && (
+                    <>
+                        <BaseSpacer height={24} />
+                        <BaseText typographyFont="subTitleLight" mt={50}>
+                            {
+                                "You have no connected apps. Once you have some, they will displayed here."
+                            }
+                        </BaseText>
+                    </>
+                )}
 
                 {accounts.map(account => {
                     if (
