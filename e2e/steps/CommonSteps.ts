@@ -6,8 +6,11 @@ import {
     HomeScreen,
     OnboardingFlows,
     SettingsFlows,
+    TabFlows,
     clickById,
     clickByText,
+    goBack,
+    idShouldExist,
 } from "../helpers"
 
 Given("The app is opened", { timeout: -1 }, async () => {
@@ -39,9 +42,26 @@ Given("The user has more than one account", { timeout: -1 }, async function () {
     await clickByText("Add account")
 })
 
-Given("The user is in the test network", { timeout: -1 }, async function () {
+Given("The user select the test network", { timeout: -1 }, async function () {
     await HomeFlows.goToSettings()
     await SettingsFlows.goToNetworkSettings()
     await SettingsFlows.selectTestNetwork()
-    await SettingsFlows.goBackToHomeTab()
+})
+
+Given("The user select the main network", { timeout: -1 }, async function () {
+    await HomeFlows.goToSettings()
+    await SettingsFlows.goToNetworkSettings()
+    await SettingsFlows.selectMainNetwork()
+})
+
+Given("The user click back button", { timeout: -1 }, async function () {
+    await goBack()
+})
+
+Given("The user is in home screen", { timeout: -1 }, async function () {
+    await idShouldExist("veworld-homepage")
+})
+
+Given("The user go to home tab", { timeout: -1 }, async function () {
+    await TabFlows.goBackToHomeTab()
 })
