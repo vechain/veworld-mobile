@@ -1,8 +1,18 @@
-import { ClauseType, Token } from "~Model"
+import {
+    ActivityStatus,
+    ActivityType,
+    ClauseType,
+    ClauseWithMetadata,
+    ConnectedAppTxActivity,
+    SwapEvent,
+    Token,
+    TransactionOutcomes,
+} from "~Model"
 import TransactionUtils from "."
 import * as logger from "~Common/Logger/Logger"
 import { toDelegation } from "./TransactionUtils"
 import { Transaction } from "thor-devkit"
+import { ThorConstants, VET } from "~Common"
 
 const YEET_TOKEN: Token = {
     name: "Yeet Coin",
@@ -21,6 +31,91 @@ const SHA_TOKEN: Token = {
     icon: "735a5e4a70116463649aa9c508b5d18361f10ab7.png",
     custom: true,
 }
+
+const BASE_SAMPLE_ACTIVITY = {
+    //Send
+    from: "0x",
+    to: ["0x"],
+    id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaf01",
+    blockNumber: 123456,
+    isTransaction: true,
+    genesisId: ThorConstants.genesises.main.id,
+    timestamp: 1382337919000,
+    gasUsed: 21000,
+    gasPayer: "0x",
+    delegated: true,
+    status: ActivityStatus.SUCCESS,
+}
+
+const swapTxOutcomes: TransactionOutcomes = [
+    {
+        data: "0x095ea7b30000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb0000000000000000000000000000000000000000000001b34d96867d86f63ced",
+        to: "0x0000000000000000000000000000456e65726779",
+        value: "0x",
+        type: ClauseType.DEPLOY_CONTRACT,
+    },
+    {
+        data: "0xe0ce249c00000000000000000000000000000000000000000000001bf8f0421d659000000000000000000000000000000000000000000000000001b34d96867d86f63ced00000000000000000000000000000000000000000000000000000000000000a00000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db004800000000000000000000000000000000000000000000000000000000635a94ab0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000170f4ba8e7acf6510f55db26047c83d13498af8a000000000000000000000000d8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+        to: "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
+        value: "0x",
+        type: ClauseType.SWAP_TOKENS_FOR_VET,
+        path: [
+            "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+            "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+        ],
+    },
+    {
+        data: "0x9b60cc9700000000000000000000000000000000000000000000000000000000773751940000000000000000000000004167d527340afa546bb88d5d83afb6272e48b40e00000000000000000000000000000000000000000000000000000000000003c2",
+        to: "0x0000000000000000000000000000456e65726779",
+        value: "0x",
+        type: ClauseType.CONTRACT_CALL,
+    },
+]
+
+const txEventsIncludingSwap: Connex.VM.Event[] = [
+    {
+        address: "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+        topics: [
+            "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c",
+            "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+        ],
+        data: "0x0000000000000000000000000000000000000000000000000de0b6b3a7640000",
+    },
+    {
+        address: "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+        topics: [
+            "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+            "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+            "0x00000000000000000000000025491130a43d43ab0951d66cdf7ddac7b1db681b",
+        ],
+        data: "0x0000000000000000000000000000000000000000000000000de0b6b3a7640000",
+    },
+    {
+        address: "0x4e17357053da4b473e2daa2c65c2c949545724b8",
+        topics: [
+            "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+            "0x00000000000000000000000025491130a43d43ab0951d66cdf7ddac7b1db681b",
+            "0x0000000000000000000000004f4e906d3de39a7f2952d3d9cf84c0ca4cb476b1",
+        ],
+        data: "0x000000000000000000000000000000000000000000000000000000000000513e",
+    },
+    {
+        address: "0x25491130a43d43ab0951d66cdf7ddac7b1db681b",
+        topics: [
+            "0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1",
+        ],
+        data: "0x0000000000000000000000000000000000000000000000000000001b9044f3c700000000000000000000000000000000000000000004b41c0178a834ac695906",
+    },
+    {
+        address: "0x25491130a43d43ab0951d66cdf7ddac7b1db681b",
+        topics: [
+            "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+            "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+            "0x0000000000000000000000004f4e906d3de39a7f2952d3d9cf84c0ca4cb476b1",
+        ],
+        data: "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000de0b6b3a7640000000000000000000000000000000000000000000000000000000000000000513e0000000000000000000000000000000000000000000000000000000000000000",
+    },
+]
 
 describe("TransactionUtils", () => {
     describe("isVETtransferClause", () => {
@@ -183,6 +278,10 @@ describe("TransactionUtils", () => {
                 to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                 type: ClauseType.SWAP_VET_FOR_TOKENS,
                 data: clauseData,
+                path: [
+                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+                ],
             })
         })
 
@@ -245,6 +344,10 @@ describe("TransactionUtils", () => {
                 to: "0x4f4e906d3de39a7f2952d3d9cf84c0ca4cb476b1",
                 type: ClauseType.SWAP_VET_FOR_TOKENS,
                 data: clauseData,
+                path: [
+                    "0x45429a2255e7248e57fce99e7239aed3f84b7a53",
+                    "0x89827f7bb951fd8a56f8ef13c5bfee38522f2e1f",
+                ],
             })
         })
 
@@ -309,6 +412,10 @@ describe("TransactionUtils", () => {
                 to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                 type: ClauseType.SWAP_TOKENS_FOR_VET,
                 data: clauseData,
+                path: [
+                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                ],
             })
         })
 
@@ -371,6 +478,10 @@ describe("TransactionUtils", () => {
                 to: "0xb42cd3d05ab10be78ef9165661ff11cd6f29b313",
                 type: ClauseType.SWAP_TOKENS_FOR_VET,
                 data: clauseData,
+                path: [
+                    "0x0000000000000000000000000000456e65726779",
+                    "0x45429a2255e7248e57fce99e7239aed3f84b7a53",
+                ],
             })
         })
 
@@ -435,6 +546,11 @@ describe("TransactionUtils", () => {
                 to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                 type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
                 data: clauseData,
+                path: [
+                    "0x23368c20c16f64ecbb30164a08666867be22f216",
+                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                    "0x5db3c8a942333f6468176a870db36eef120a34dc",
+                ],
             })
         })
 
@@ -499,6 +615,10 @@ describe("TransactionUtils", () => {
                 to: "0x4f4e906d3de39a7f2952d3d9cf84c0ca4cb476b1",
                 type: ClauseType.SWAP_VET_FOR_TOKENS,
                 data: clauseData,
+                path: [
+                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+                ],
             })
         })
 
@@ -563,6 +683,10 @@ describe("TransactionUtils", () => {
                 to: "0xc8be491cf06b53fd5e401d2d57cb58b84b478836",
                 type: ClauseType.SWAP_TOKENS_FOR_VET,
                 data: clauseData,
+                path: [
+                    "0x0000000000000000000000000000456e65726779",
+                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                ],
             })
         })
 
@@ -642,6 +766,11 @@ describe("TransactionUtils", () => {
                     to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                     type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
                     data: swapTokensForTokensClauseData,
+                    path: [
+                        "0x23368c20c16f64ecbb30164a08666867be22f216",
+                        "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                        "0x5db3c8a942333f6468176a870db36eef120a34dc",
+                    ],
                 },
             ]
             expect(TransactionUtils.interpretClauses(clause, tokens)).toEqual(
@@ -684,6 +813,11 @@ describe("TransactionUtils", () => {
                     to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                     value: "0x",
                     type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
+                    path: [
+                        "0x23368c20c16f64ecbb30164a08666867be22f216",
+                        "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                        "0x5db3c8a942333f6468176a870db36eef120a34dc",
+                    ],
                 },
             ]
 
@@ -860,6 +994,423 @@ describe("TransactionUtils", () => {
                 expected,
             )
         })
+    })
+
+    describe("isSwapClause", () => {
+        it("should return true if clause is a swap tokens for tokens clause", () => {
+            const clauseWithMetadata: ClauseWithMetadata = {
+                to: "0x0000000000000000000000000000456e65726779",
+                value: "0x1234",
+                data: "0x1352",
+                type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
+            }
+
+            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(
+                true,
+            )
+        })
+        it("should return true if clause is a swap tokens for vet clause", () => {
+            const clauseWithMetadata: ClauseWithMetadata = {
+                to: "0x0000000000000000000000000000456e65726779",
+                value: "0x1234",
+                data: "0x1352",
+                type: ClauseType.SWAP_TOKENS_FOR_VET,
+            }
+
+            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(
+                true,
+            )
+        })
+        it("should return true if clause is a swap vet for tokens clause", () => {
+            const clauseWithMetadata: ClauseWithMetadata = {
+                to: "0x0000000000000000000000000000456e65726779",
+                value: "0x1234",
+                data: "0x1352",
+                type: ClauseType.SWAP_VET_FOR_TOKENS,
+            }
+
+            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(
+                true,
+            )
+        })
+        it("should return false if clause is not a swap clause", () => {
+            const clauseWithMetadata: ClauseWithMetadata = {
+                to: "0x0000000000000000000000000000456e65726779",
+                value: "0x1234",
+                data: "0x1352",
+                type: ClauseType.NFT_APPROVE,
+            }
+
+            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(
+                false,
+            )
+        })
+    })
+
+    describe("isSwapTransaction", () => {
+        it("should return true if transaction is a swap transaction", () => {
+            expect(TransactionUtils.isSwapTransaction(swapTxOutcomes)).toEqual(
+                true,
+            )
+        })
+        it("should return false if transaction is not a swap transaction", () => {
+            const txOutcomes: TransactionOutcomes = [
+                {
+                    data: "0x095ea7b30000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb0000000000000000000000000000000000000000000001b34d96867d86f63ced",
+                    to: "0x0000000000000000000000000000456e65726779",
+                    value: "0x",
+                    type: ClauseType.DEPLOY_CONTRACT,
+                },
+                {
+                    data: "0x9b60cc9700000000000000000000000000000000000000000000000000000000773751940000000000000000000000004167000000000000000000000000000000000000000000000000003c2",
+                    to: "0x0000000000000000000000000000456e65726779",
+                    value: "0x",
+                    type: ClauseType.CONTRACT_CALL,
+                },
+                {
+                    data: "0x9b60cc9700000000000000000000000000000000000000000000000000000000773751940000000000000000000000004167d527340afa546bb88d5d83afb6272e48b40e00000000000000000000000000000000000000000000000000000000000003c2",
+                    to: "0x0000000000000000000000000000456e65726779",
+                    value: "0x",
+                    type: ClauseType.CONTRACT_CALL,
+                },
+            ]
+
+            expect(TransactionUtils.isSwapTransaction(txOutcomes)).toEqual(
+                false,
+            )
+        })
+    })
+
+    describe("findAndDecodeSwapEvents", () => {
+        it("should return decoded swap event if events include swap event", () => {
+            const decodedSwapEvent: SwapEvent[] = [
+                {
+                    sender: "0x6c0a6e1d922e0e63901301573370b932ae20dadb",
+                    amount0In: "0",
+                    amount1In: "1000000000000000000",
+                    amount0Out: "20798",
+                    amount1Out: "0",
+                    to: "0x4f4e906d3de39a7f2952d3d9cf84c0ca4cb476b1",
+                },
+            ]
+
+            expect(
+                TransactionUtils.findAndDecodeSwapEvents(txEventsIncludingSwap),
+            ).toEqual(decodedSwapEvent)
+        })
+
+        it("should return decoded swap event for swap tokens for tokens", () => {
+            const decodedSwapEvent: SwapEvent[] = [
+                {
+                    sender: "0x6c0a6e1d922e0e63901301573370b932ae20dadb",
+                    amount0In: "7647547119928357448394",
+                    amount1In: "0",
+                    amount0Out: "0",
+                    amount1Out: "516000000000000000000",
+                    to: "0x6c0a6e1d922e0e63901301573370b932ae20dadb",
+                },
+            ]
+
+            const txEventsWithSwapEvent = [
+                {
+                    address: "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
+                    topics: [
+                        "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+                        "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                        "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                    ],
+                    data: "0x00000000000000000000000000000000000000000000019e9309432237646aca0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001bf8f0421d65900000",
+                },
+            ]
+
+            expect(
+                TransactionUtils.findAndDecodeSwapEvents(txEventsWithSwapEvent),
+            ).toEqual(decodedSwapEvent)
+        })
+
+        it("should throw if decoding swap event fails", () => {
+            const debugSpy = jest.spyOn(logger, "debug")
+
+            const txEventsIncludingCorruptedSwapEvent = [
+                {
+                    address: "0x25491130a43d43ab0951d66cdf7ddac7b1db681b",
+                    topics: [
+                        "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+                        "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                        "0x0000000000000000000000004f4e906d3de39a7f2952d3d9cf84c0ca4cb476b1",
+                    ],
+                    data: "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000de00000000000000000000000000000000",
+                },
+            ]
+
+            expect(
+                TransactionUtils.decodeSwapEvent(
+                    txEventsIncludingCorruptedSwapEvent[0],
+                ),
+            ).toBe(null)
+
+            expect(debugSpy).toHaveBeenCalledWith(
+                "Failed to decode parameters",
+                expect.any(Error),
+            )
+
+            // Restore the original function
+            debugSpy.mockRestore()
+        })
+
+        it("should return empty array if events do not include swap event", () => {
+            const txEventsWithSwapEvent = [
+                {
+                    address: "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
+                    topics: [
+                        "0x2",
+                        "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                        "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                    ],
+                    data: "0x00000000000000000000000000000000000000000000019e9",
+                },
+            ]
+
+            expect(
+                TransactionUtils.findAndDecodeSwapEvents(txEventsWithSwapEvent),
+            ).toEqual([])
+        })
+    })
+
+    describe("decodeSwapTransferAmounts", () => {
+        const decodedClauses = [
+            {
+                to: "0x0000000000000000000000000000456e65726779",
+                value: "0x1234",
+                data: "0x1352",
+                type: ClauseType.SWAP_VET_FOR_TOKENS,
+                path: [
+                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+                ],
+            },
+        ]
+
+        const activity: ConnectedAppTxActivity = {
+            ...BASE_SAMPLE_ACTIVITY,
+            type: ActivityType.CONNECTED_APP_TRANSACTION,
+            clauses: decodedClauses,
+            outputs: [
+                {
+                    contractAddress:
+                        "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
+                    events: [
+                        {
+                            address:
+                                "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
+                            topics: [
+                                "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+                                "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                                "0x0000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db0048",
+                            ],
+                            data: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014588f0b5ac7de34a600000000000000000000000000000000000000000000017da381afcfc5b1b4160000000000000000000000000000000000000000000000000000000000000000",
+                        },
+                    ],
+                    transfers: [],
+                },
+            ],
+        }
+
+        const activitySwapTokensForTokens: ConnectedAppTxActivity = {
+            ...BASE_SAMPLE_ACTIVITY,
+            type: ActivityType.CONNECTED_APP_TRANSACTION,
+            clauses: decodedClauses,
+            outputs: [
+                {
+                    contractAddress:
+                        "0x0000000000000000000000000000456e65726779",
+                    events: [
+                        {
+                            address:
+                                "0xae4c53b120cba91a44832f875107cbc8fbee185c",
+                            topics: [
+                                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                                "0x0000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db0048",
+                                "0x000000000000000000000000516eca119f673f6747c81189bef4f14367c0c2b7",
+                            ],
+                            data: "0x00000000000000000000000000000000000000000000008cf23f909c0fa00000",
+                        },
+                        {
+                            address:
+                                "0x516eCA119f673f6747c81189Bef4F14367c0c2B7",
+                            topics: [
+                                "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+                                "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                                "0x000000000000000000000000a14a5bdd5ab3d51062c5b243a2e6fb0949fee2f3",
+                            ],
+                            data: "0x00000000000000000000000000000000000000000000008cf23f909c0fa000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c376359de51004678",
+                        },
+                        {
+                            address:
+                                "0xa14A5bDD5AB3D51062c5B243a2e6Fb0949fee2F3",
+                            topics: [
+                                "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+                                "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                                "0x0000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db0048",
+                            ],
+                            data: "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c376359de5100467800000000000000000000000000000000000000000000018ee9b2bf88f5dfda830000000000000000000000000000000000000000000000000000000000000000",
+                        },
+                    ],
+                    transfers: [],
+                },
+            ],
+        }
+
+        it("should return decoded swap transfer amounts if transaction is a swap tokens for vet transaction", () => {
+            const decodedClausesSwapTokensForVet = [
+                {
+                    to: "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
+                    value: "0x",
+                    data: "0xfa64746f00000000000000000000000000000000000000000000006c6b935b8bbd400000000000000000000000000000000000000000000000000009f0ee3e6a913c48e100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db004800000000000000000000000000000000000000000000000000000000633107dc0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000170f4ba8e7acf6510f55db26047c83d13498af8a000000000000000000000000d8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                    type: ClauseType.SWAP_TOKENS_FOR_VET,
+                    path: [
+                        "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+                        "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                    ],
+                },
+            ]
+
+            const activitySwapTokensForVet: ConnectedAppTxActivity = {
+                ...BASE_SAMPLE_ACTIVITY,
+                type: ActivityType.CONNECTED_APP_TRANSACTION,
+                clauses: decodedClauses,
+                outputs: [
+                    {
+                        contractAddress:
+                            "0x0000000000000000000000000000456e65726779",
+                        events: [
+                            {
+                                address:
+                                    "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
+                                topics: [
+                                    "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+                                    "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                                    "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
+                                ],
+                                data: "0x00000000000000000000000000000000000000000000006c6b935b8bbd40000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009fda7c149d1f62fa5",
+                            },
+                        ],
+                        transfers: [],
+                    },
+                ],
+            }
+
+            const decodedTransferAmounts =
+                TransactionUtils.decodeSwapTransferAmounts(
+                    decodedClausesSwapTokensForVet,
+                    activitySwapTokensForVet,
+                )
+
+            expect(decodedTransferAmounts).toEqual({
+                paidAmount: "2000000000000000000000",
+                paidTokenAddress: "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+                receivedAmount: "184298486798891757477",
+                receivedTokenAddress: VET.address,
+            })
+        })
+
+        it("should return decoded swap transfer amounts if transaction is a swap tokens for tokens transaction", () => {
+            const decodedClausesSwapTokensForVet = [
+                {
+                    to: "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
+                    value: "0x",
+                    data: "0x38ed173900000000000000000000000000000000000000000000008cf23f909c0fa0000000000000000000000000000000000000000000000000018ceda14d3a966704ba00000000000000000000000000000000000000000000000000000000000000a00000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db0048000000000000000000000000000000000000000000000000000000006371a7c40000000000000000000000000000000000000000000000000000000000000003000000000000000000000000ae4c53b120cba91a44832f875107cbc8fbee185c000000000000000000000000d8ccdd85abdbf68dfec95f06c973e87b1b5a99970000000000000000000000005db3c8a942333f6468176a870db36eef120a34dc",
+                    type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
+                    path: [
+                        "0xae4c53b120cba91a44832f875107cbc8fbee185c",
+                        "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
+                        "0x5db3c8a942333f6468176a870db36eef120a34dc",
+                    ],
+                },
+            ]
+
+            const decodedTransferAmounts =
+                TransactionUtils.decodeSwapTransferAmounts(
+                    decodedClausesSwapTokensForVet,
+                    activitySwapTokensForTokens,
+                )
+
+            expect(decodedTransferAmounts).toEqual({
+                paidAmount: "2600000000000000000000",
+                paidTokenAddress: "0xae4c53b120cba91a44832f875107cbc8fbee185c",
+                receivedAmount: "7358643873888054794883",
+                receivedTokenAddress:
+                    "0x5db3c8a942333f6468176a870db36eef120a34dc",
+            })
+        })
+
+        it("should return decoded swap transfer amounts if transaction is a swap transaction", () => {
+            const decodedTransferAmounts =
+                TransactionUtils.decodeSwapTransferAmounts(
+                    decodedClauses,
+                    activity,
+                )
+
+            expect(decodedTransferAmounts).toEqual({
+                paidAmount: "375316213155726505126",
+                paidTokenAddress: VET.address,
+                receivedAmount: "7039991383490426942486",
+                receivedTokenAddress:
+                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+            })
+        })
+
+        it("should throw an error if transaction is not a swap transaction", () => {
+            let clausesWithoutSwap = JSON.parse(JSON.stringify(decodedClauses))
+            clausesWithoutSwap[0].type = ClauseType.TRANSFER
+
+            expect(() =>
+                TransactionUtils.decodeSwapTransferAmounts(
+                    clausesWithoutSwap,
+                    activity,
+                ),
+            ).toThrow("Transaction is not a swap transaction")
+        })
+
+        it("should throw an error if no swap event was found or decoded", () => {
+            let activityWithoutSwap = JSON.parse(JSON.stringify(activity))
+            activityWithoutSwap.outputs = []
+
+            expect(() =>
+                TransactionUtils.decodeSwapTransferAmounts(
+                    decodedClauses,
+                    activityWithoutSwap,
+                ),
+            ).toThrow("Could not find or decode swap event")
+        })
+
+        it("should throw an error if path inputs is invalid", () => {
+            const clauseWithInvalidPath = [
+                {
+                    to: "0x0000000000000000000000000000456e65726779",
+                    value: "0x1234",
+                    data: "0x1352",
+                    type: ClauseType.SWAP_VET_FOR_TOKENS,
+                    path: ["0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997"],
+                },
+            ]
+            expect(() =>
+                TransactionUtils.decodeSwapTransferAmounts(
+                    clauseWithInvalidPath,
+                    activity,
+                ),
+            ).toThrow("Invalid swap clause path")
+        })
+
+        it("should throw an error if decodedSwaps length is invalid", () => {
+            expect(() =>
+                TransactionUtils.decodeSwapTransferAmounts(
+                    decodedClauses,
+                    activitySwapTokensForTokens,
+                ),
+            ).toThrow("Invalid swap event count, expected 1")
+        })
+        // Add more test cases for other edge cases and error cases...
     })
 })
 

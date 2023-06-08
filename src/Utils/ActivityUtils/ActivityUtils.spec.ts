@@ -66,6 +66,7 @@ const BASE_SAMPLE_ACTIVITY = {
     delegated: true,
     status: ActivityStatus.SUCCESS,
     clauses: [vetTransferClause, contractCallClause],
+    outputs: [],
 }
 
 describe("getActivityTypeFromClause", () => {
