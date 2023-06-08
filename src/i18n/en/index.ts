@@ -40,6 +40,7 @@ const en: BaseTranslation = {
     BTN_SWAP: "Swap",
     BTN_HISTORY: "History",
     BTN_GO_TO_SETTINGS: "Go to settings",
+    BTN_GO_BACK: "Go back",
     BTN_PASTE_ADDRESS: "Paste Address",
     BTN_SCAN_QR_CODE: "Scan QR Code",
     BTN_ADD_CONTACT: "Add contact",
@@ -151,7 +152,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
-    TITLE_ALERT_CAMERA_UNAVAILABLE: "Camera Unavailable",
+
     TITLE_WALLET_SUCCESS: "You're finally one of us!",
     TITLE_RESET_APP: "VeWorld reset",
     TITLE_WALLET_MANAGEMENT: "Wallet management",
@@ -262,11 +263,17 @@ const en: BaseTranslation = {
     COMMON_CIRCULATING_SUPPLY: "Circulating Supply",
 
 
-    // Common Titles
+    // Alerts
     ALERT_TITLE_NOT_ENROLLED: "Biometrics not available",
     ALERT_MSG_NOT_ENROLLED: "You have not enrolled any biometric authentication method.",
     ALERT_TITLE_BIO_PREVIOUSLY_DENIED: "Biometrics previously denied",
     ALERT_MSG_BIO_PREVIOUSLY_DENIED: "You have previously denied biometric authentication. Please enable it in your device settings.",
+    ALERT_TITLE_AUTHORIZE_BLUETOOTH: "Authorize Bluetooth",
+    ALERT_MSG_AUTHORIZE_BLUETOOTH: "Please, open app settings and authorize Bluetooth to continue.",
+    ALERT_TITLE_ENABLE_BLUETOOTH: "Enable bluetooth",
+    ALERT_MSG_ENABLE_BLUETOOTH: "Please, open the device settings and enable to continue.",
+    ALERT_TITLE_UNSUPPORTED_BLUETOOTH: "Bluetooth is not supported",
+    ALERT_MSG_UNSUPPORTED_BLUETOOTH: "Your device does not support Bluetooth, which is required to use this feature.",
 
 
     // Errors
@@ -398,7 +405,7 @@ const en: BaseTranslation = {
     SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
     SEND_INSERT_ADDRESS: "Send your token",
     SEND_INSERT_ADDRESS_DESCRIPTION: "Select a contact below or paste/scan an address",
-    SEND_ENTER_AN_ADDRESS: "Enter or scan an address",
+    SEND_ENTER_AN_ADDRESS: "Enter an address or search your contacts",
     SEND_INSERT_CONTACTS: "Contacts",
     SEND_INSERT_ACCOUNTS: "Accounts",
     SEND_FROM: "From",
