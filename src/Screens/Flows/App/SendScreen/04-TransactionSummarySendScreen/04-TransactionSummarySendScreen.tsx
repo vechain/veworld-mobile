@@ -36,7 +36,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { useDelegation, useSendTransaction, useSignTransaction } from "./Hooks"
-import { DEVICE_TYPE } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -112,6 +112,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         useCheckIdentity({
             onIdentityConfirmed: signTransaction,
         })
+
     const gasFees = gas?.gas
         ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
         : "N.A."
@@ -144,6 +145,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         )
     }
 
+    const handleOnConfirm = () => {
+        if (account.device.type === DEVICE_TYPE.LEDGER) {
+            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
+                accountWithDevice: account as LedgerAccountWithDevice,
+                transaction,
+                initialRoute,
+            })
+        } else checkIdentityBeforeOpening()
+    }
+
     return (
         <BaseSafeArea grow={1} testID="Transaction_Summary_Send_Screen">
             <ScrollViewWithFooter
@@ -152,7 +163,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         style={styles.nextButton}
                         mx={24}
                         title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                        action={checkIdentityBeforeOpening}
+                        action={handleOnConfirm}
                     />
                 }>
                 <BackButtonHeader />

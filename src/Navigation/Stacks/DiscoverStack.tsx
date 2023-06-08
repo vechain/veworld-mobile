@@ -5,13 +5,19 @@ import {
     BuyScreen,
     DiscoverScreen,
     InsertAddressSendScreen,
+    LedgerSignTransaction,
     SelectAmountSendScreen,
     SelectTokenSendScreen,
     SwapScreen,
     TransactionSummarySendScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { FungibleTokenWithBalance, TokenWithCompleteInfo } from "~Model"
+import {
+    FungibleTokenWithBalance,
+    LedgerAccountWithDevice,
+    TokenWithCompleteInfo,
+} from "~Model"
+import { Transaction } from "thor-devkit"
 
 export type RootStackParamListDiscover = {
     [Routes.DISCOVER]: undefined
@@ -32,6 +38,11 @@ export type RootStackParamListDiscover = {
         token: FungibleTokenWithBalance
         amount: string
         address: string
+        initialRoute: string
+    }
+    [Routes.LEDGER_SIGN_TRANSACTION]: {
+        accountWithDevice: LedgerAccountWithDevice
+        transaction: Transaction.Body
         initialRoute: string
     }
 }
@@ -87,6 +98,11 @@ export const DiscoverStack = () => {
                 <Screen
                     name={Routes.TRANSACTION_SUMMARY_SEND}
                     component={TransactionSummarySendScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.LEDGER_SIGN_TRANSACTION}
+                    component={LedgerSignTransaction}
                     options={{ headerShown: false }}
                 />
             </Group>

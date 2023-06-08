@@ -14,14 +14,17 @@ import {
     TransactionSummarySendScreen,
     ActivityDetailsScreen,
     AssetDetailScreen,
+    LedgerSignTransaction,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
     Activity,
     FungibleToken,
     FungibleTokenWithBalance,
+    LedgerAccountWithDevice,
     TokenWithCompleteInfo,
 } from "~Model"
+import { Transaction } from "thor-devkit"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -40,6 +43,11 @@ export type RootStackParamListHome = {
         token: FungibleTokenWithBalance
         amount: string
         address: string
+        initialRoute: string
+    }
+    [Routes.LEDGER_SIGN_TRANSACTION]: {
+        accountWithDevice: LedgerAccountWithDevice
+        transaction: Transaction.Body
         initialRoute: string
     }
     [Routes.SWAP]: undefined
@@ -87,6 +95,11 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.TRANSACTION_SUMMARY_SEND}
                     component={TransactionSummarySendScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.LEDGER_SIGN_TRANSACTION}
+                    component={LedgerSignTransaction}
                     options={{ headerShown: false }}
                 />
                 <Screen
