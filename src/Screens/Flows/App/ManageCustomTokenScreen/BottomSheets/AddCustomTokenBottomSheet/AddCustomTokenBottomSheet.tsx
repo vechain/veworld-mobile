@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseSpacer,
@@ -9,6 +9,7 @@ import {
     BaseButton,
     CustomTokenCard,
     BaseBottomSheetTextInput,
+    ScanAddressBottomSheet,
 } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
@@ -24,20 +25,19 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import { debug, error, info } from "~Common"
+import { debug, error, info, useBottomSheetModal } from "~Common"
 import { AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
-import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
 
 type Props = {
+    tokenAddress?: string
     onClose: () => void
 }
 
 export const AddCustomTokenBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose }, ref) => {
+>(({ tokenAddress, onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
@@ -51,7 +51,13 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
     // const snapPoints = [visible ? "80%" : "35%"]
     const snapPoints = ["35%"]
-    const nav = useNavigation()
+
+    const {
+        ref: scanAddressSheetRef,
+        onOpen: openScanAddressSheet,
+        onClose: closeScanAddressSheetRef,
+    } = useBottomSheetModal()
+
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
             const address = addressRaw.toLowerCase()
@@ -119,6 +125,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     )
 
     const handleOnDismissModal = () => {
+        //don't reset if we are adding a token from SwapCard screen
+        if (tokenAddress) return
         setErrorMessage("")
         setValue("")
         setNewCustomToken(undefined)
@@ -139,45 +147,57 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
         onClose()
     }
 
-    const onOpenCamera = () => {
-        nav.navigate(Routes.CAMERA, { onScan: handleValueChange })
-    }
+    // if we are adding a token from SwapCard screen, we need to set the token address
+    useEffect(() => {
+        if (tokenAddress) handleValueChange(tokenAddress)
+    }, [handleValueChange, tokenAddress])
 
     return (
-        <BaseBottomSheet
-            snapPoints={snapPoints}
-            ref={ref}
-            contentStyle={styles.contentStyle}
-            footerStyle={styles.footerStyle}
-            onDismiss={handleOnDismissModal}>
-            <BaseText typographyFont="subTitleBold">
-                {LL.MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE()}
-            </BaseText>
-            <BaseSpacer height={24} />
-            {newCustomToken ? (
-                <CustomTokenCard token={newCustomToken} />
-            ) : (
-                <BaseView flexDirection="row" w={100}>
-                    <BaseBottomSheetTextInput
-                        containerStyle={styles.inputContainer}
-                        value={value}
-                        setValue={handleValueChange}
-                        placeholder={LL.MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS()}
-                        errorMessage={errorMessage}
-                        testID="AddCustomTokenBottomSheet-TextInput-Address"
-                        rightIcon={value ? "close" : "flip-horizontal"}
-                        onIconPress={!value ? onOpenCamera : () => setValue("")}
-                    />
-                </BaseView>
-            )}
-            <BaseSpacer height={24} />
-            <BaseButton
-                w={100}
-                title={LL.COMMON_BTN_ADD()}
-                action={handleAddCustomToken}
-                disabled={!newCustomToken}
+        <>
+            <BaseBottomSheet
+                snapPoints={snapPoints}
+                ref={ref}
+                contentStyle={styles.contentStyle}
+                footerStyle={styles.footerStyle}
+                onDismiss={handleOnDismissModal}>
+                <BaseText typographyFont="subTitleBold">
+                    {LL.MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE()}
+                </BaseText>
+                <BaseSpacer height={24} />
+                {newCustomToken ? (
+                    <CustomTokenCard token={newCustomToken} />
+                ) : (
+                    <BaseView flexDirection="row" w={100}>
+                        <BaseBottomSheetTextInput
+                            containerStyle={styles.inputContainer}
+                            value={value}
+                            setValue={handleValueChange}
+                            placeholder={LL.MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS()}
+                            errorMessage={errorMessage}
+                            testID="AddCustomTokenBottomSheet-TextInput-Address"
+                            rightIcon={value ? "close" : "flip-horizontal"}
+                            onIconPress={
+                                !value
+                                    ? openScanAddressSheet
+                                    : () => setValue("")
+                            }
+                        />
+                    </BaseView>
+                )}
+                <BaseSpacer height={24} />
+                <BaseButton
+                    w={100}
+                    title={LL.COMMON_BTN_ADD()}
+                    action={handleAddCustomToken}
+                    disabled={!newCustomToken}
+                />
+            </BaseBottomSheet>
+            <ScanAddressBottomSheet
+                ref={scanAddressSheetRef}
+                onClose={closeScanAddressSheetRef}
+                onScan={handleValueChange}
             />
-        </BaseBottomSheet>
+        </>
     )
 })
 

@@ -62,19 +62,20 @@ export const HomeScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <HeaderView
-                openAccountManagementSheet={openAccountManagementSheet}
-                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-            />
-            <BaseSpacer height={24} />
-            <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-            <BaseSpacer height={24} />
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom }}
                 onContentSizeChange={visibleHeight => {
                     visibleHeightRef.current = visibleHeight
                 }}>
+                <HeaderView
+                    openAccountManagementSheet={openAccountManagementSheet}
+                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+                />
+                <BaseSpacer height={24} />
+                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                <BaseSpacer height={24} />
+
                 <TokenList
                     isEdit={isEdit}
                     visibleHeightRef={visibleHeightRef.current}

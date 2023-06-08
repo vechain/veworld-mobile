@@ -9,10 +9,13 @@ import { useI18nContext } from "~i18n"
 /**
  * hook to check and request camera permissions
  */
-export const useCameraPermissions = () => {
+export const useCameraPermissions = ({
+    onCanceled,
+}: {
+    onCanceled: () => void
+}) => {
     const { LL } = useI18nContext()
     const [hasPerms, setHasPerms] = useState(false)
-    const [isCanceled, setIsCanceled] = useState(false)
     const [previousState, currentState] = useAppState()
 
     const requestPermissions = useCallback(async () => {
@@ -23,11 +26,10 @@ export const useCameraPermissions = () => {
             return
         }
 
-        if (!status?.granted && !status?.canAskAgain) {
-            setIsCanceled(true)
-            return
+        if (!status?.canAskAgain) {
+            return onCanceled()
         }
-    }, [])
+    }, [onCanceled])
 
     const checkPermissions = useCallback(async () => {
         const status = await Camera.getCameraPermissionsAsync()
@@ -37,7 +39,7 @@ export const useCameraPermissions = () => {
             return
         }
 
-        if (!status?.granted && !status?.canAskAgain) {
+        if (!status?.canAskAgain) {
             let title = LL.TITLE_ALERT_CAMERA_PERMISSION()
             let msg = LL.SB_ALERT_CAMERA_PERMISSION()
 
@@ -45,8 +47,7 @@ export const useCameraPermissions = () => {
                 title,
                 msg,
                 () => {
-                    setIsCanceled(true)
-                    return
+                    return onCanceled()
                 },
                 async () => {
                     await Linking.openSettings()
@@ -57,9 +58,8 @@ export const useCameraPermissions = () => {
 
         if (status.canAskAgain) {
             await requestPermissions()
-            return
         }
-    }, [LL, requestPermissions])
+    }, [LL, requestPermissions, onCanceled])
 
     useEffect(() => {
         async function init() {
@@ -73,5 +73,5 @@ export const useCameraPermissions = () => {
         init()
     }, [checkPermissions, currentState, previousState])
 
-    return { checkPermissions, hasPerms, isCanceled }
+    return { checkPermissions, hasPerms }
 }

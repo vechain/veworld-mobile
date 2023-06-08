@@ -46,10 +46,16 @@ export const TransferCard = memo(
         )
 
         const toContacts = useAppSelector(
-            selectContactsByAddresses(toAddresses?.map(address.toChecksumed)),
+            selectContactsByAddresses(
+                toAddresses?.map((addr: string) =>
+                    addr !== "" ? address.toChecksumed(addr) : "",
+                ),
+            ),
         )
 
         const [activeIndex, setActiveIndex] = useState(0)
+
+        const isDeployContract = toAddresses?.[0] === ""
 
         const fromContactName = useMemo(() => {
             if (fromContact) return fromContact.alias
@@ -213,7 +219,7 @@ export const TransferCard = memo(
                     {renderFromAccount()}
 
                     {/* TO View */}
-                    {toAddresses && (
+                    {toAddresses && !isDeployContract && (
                         <>
                             {/* SEPARATOR */}
                             <BaseView style={styles.separator} />
