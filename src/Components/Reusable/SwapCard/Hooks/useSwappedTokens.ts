@@ -96,5 +96,5 @@ export const useSwappedTokens = (
         vetToken,
     ])
 
-    return { paidToken, receivedToken, tokens }
+    return { paidToken, receivedToken }
 }
