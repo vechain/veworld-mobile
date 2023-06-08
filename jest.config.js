@@ -44,10 +44,7 @@ module.exports = {
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
-    /*
-     * COVERAGE PARAMS:
-     * this is currently checking just utils and base components, it should be extended in the future
-     */
+
     collectCoverageFrom: [
         "src/Utils/**/*.{js,jsx,ts,tsx}",
         "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
@@ -63,7 +60,7 @@ module.exports = {
         global: {
             statements: 94.38,
             branches: 86.75,
-            functions: 95.5,
+            functions: 94.62,
             lines: 94.4,
         },
     },

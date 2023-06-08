@@ -54,3 +54,5 @@
 //         init()
 //     }, [disptach, nftCollections])
 // }
+
+export {}

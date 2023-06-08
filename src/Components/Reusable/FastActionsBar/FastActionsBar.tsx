@@ -32,7 +32,7 @@ export const FastActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
                 justifyContent="center"
                 bg={theme.colors.card}
                 borderRadius={34}
-                px={28}
+                px={24}
                 py={12}>
                 {actions.map(renderAction)}
             </BaseView>
@@ -47,6 +47,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     action: {
-        marginHorizontal: 10,
+        marginHorizontal: 14,
     },
 })

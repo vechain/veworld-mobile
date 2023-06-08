@@ -1,6 +1,6 @@
 import axios from "axios"
 import { getNftsForContract } from "./getNftsForContract"
-import { NFTS_OWNED_PER_CONTRACT } from "~Common"
+import { NFTS_OWNED_PER_CONTRACT } from "./VechainIndexer"
 
 jest.mock("axios")
 

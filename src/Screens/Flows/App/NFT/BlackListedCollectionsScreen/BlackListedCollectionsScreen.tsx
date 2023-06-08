@@ -81,7 +81,7 @@ export const BlackListedCollectionsScreen = () => {
                 </BaseView>
 
                 <BaseView mx={20}>
-                    <BaseSpacer height={32} />
+                    <BaseSpacer height={20} />
                     <BaseText typographyFont="title">
                         {LL.TITLE_NFTS()}
                     </BaseText>
@@ -125,7 +125,7 @@ const baseStyles = (calculateBottomInsets: number) => () =>
     StyleSheet.create({
         collectionlistContainer: {
             marginHorizontal: 20,
-            paddingTop: 24,
+            paddingVertical: 24,
         },
         activityIndicator: {
             marginVertical: 36,
@@ -134,6 +134,6 @@ const baseStyles = (calculateBottomInsets: number) => () =>
         nftListContainer: {
             paddingBottom: calculateBottomInsets,
             marginHorizontal: 20,
-            paddingTop: 24,
+            paddingVertical: 24,
         },
     })

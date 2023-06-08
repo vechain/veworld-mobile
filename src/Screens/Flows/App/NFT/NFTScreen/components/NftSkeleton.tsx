@@ -14,6 +14,20 @@ export const NftSkeleton = () => {
             highlightColor={theme.colors.skeletonHighlightColor}
             layout={[
                 {
+                    marginTop: 24,
+                    width: SCREEN_WIDTH,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    children: [
+                        {
+                            width: 245,
+                            marginHorizontal: 20,
+                            height: 68,
+                            borderRadius: 34,
+                        },
+                    ],
+                },
+                {
                     flexDirection: "row",
                     paddingTop: 24,
                     children: [

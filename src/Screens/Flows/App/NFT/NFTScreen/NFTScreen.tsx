@@ -128,10 +128,7 @@ export const NFTScreen = () => {
             },
             {
                 name: LL.BTN_SEND(),
-                action: () =>
-                    nav.navigate(Routes.SELECT_TOKEN_SEND, {
-                        initialRoute: Routes.HOME,
-                    }),
+                action: () => {},
                 icon: (
                     <BaseIcon color={theme.colors.text} name="send-outline" />
                 ),
@@ -139,12 +136,12 @@ export const NFTScreen = () => {
             },
             {
                 name: LL.COMMON_RECEIVE(),
-                action: () => nav.navigate(Routes.SWAP),
+                action: () => {},
                 icon: <BaseIcon color={theme.colors.text} name="arrow-down" />,
                 testID: "receiveButton",
             },
         ],
-        [LL, nav, theme.colors.text],
+        [LL, theme.colors.text],
     )
 
     const renderListHeaderComponent = useMemo(() => {
@@ -152,9 +149,7 @@ export const NFTScreen = () => {
     }, [Actions])
 
     const renderContent = useMemo(() => {
-        if (isLoading && isEmpty(collections)) {
-            return <NftSkeleton />
-        }
+        if (isLoading && isEmpty(collections)) return <NftSkeleton />
 
         if (isShowImportNFTs) {
             return (

@@ -1364,7 +1364,7 @@ type RootTranslation = {
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
 	/**
-	 * E​n​t​e​r​ ​o​r​ ​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
+	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​s​e​a​r​c​h​ ​y​o​u​r​ ​c​o​n​t​a​c​t​s
 	 */
 	SEND_ENTER_AN_ADDRESS: string
 	/**
@@ -3048,7 +3048,7 @@ Please, try again later.
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
 	/**
-	 * Enter or scan an address
+	 * Enter an address or search your contacts
 	 */
 	SEND_ENTER_AN_ADDRESS: () => LocalizedString
 	/**
