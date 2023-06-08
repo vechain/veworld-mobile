@@ -41,6 +41,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         tokenAddress: VET.address,
         direction: DIRECTIONS.UP,
         amount: 1345434553453455434525.3452452,
+        outputs: [],
     },
     {
         //Receive
@@ -68,6 +69,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         tokenAddress: VTHO.address,
         direction: DIRECTIONS.DOWN,
         amount: 111463463463454534534511.3452452,
+        outputs: [],
     },
     {
         //Receive
@@ -95,6 +97,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         tokenAddress: VTHO.address,
         direction: DIRECTIONS.DOWN,
         amount: 111463463463454534534511.3452452,
+        outputs: [],
     },
     {
         //Send
@@ -122,6 +125,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         tokenAddress: "0x107a0b0faeb58c1fdef97f37f50e319833ad1b94",
         direction: DIRECTIONS.UP,
         amount: 1345434553453455434525.3452452,
+        outputs: [],
     },
     {
         //Receive
@@ -149,6 +153,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         tokenAddress: VET.address,
         direction: DIRECTIONS.DOWN,
         amount: 34534554354346743636.3452452,
+        outputs: [],
     },
     {
         //Send
@@ -176,6 +181,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         tokenAddress: "0x89827f7bb951fd8a56f8ef13c5bfee38522f2e1f",
         direction: DIRECTIONS.UP,
         amount: 1345434553453455434525.3452452,
+        outputs: [],
     },
     {
         //Send
@@ -203,6 +209,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         tokenAddress: "0x1b8ec6c2a45cca481da6f243df0d7a5744afc1f8",
         direction: DIRECTIONS.UP,
         amount: 1345434553453455434525.3452452,
+        outputs: [],
     },
 ]
 
@@ -266,6 +273,7 @@ const CONNECTED_APP_ACTIVITIES: ConnectedAppTxActivity[] = [
                 data: "0x23421234525252525235454354324324235",
             },
         ],
+        outputs: [],
     },
     {
         // Connected App
@@ -326,6 +334,7 @@ const CONNECTED_APP_ACTIVITIES: ConnectedAppTxActivity[] = [
                 data: "0x23421234525252525235454354324324235",
             },
         ],
+        outputs: [],
     },
 ]
 
@@ -365,6 +374,7 @@ const SIGN_CERT_ACTIVITIES: SignCertActivity[] = [
                 content: "Sign in to use VeRocket",
             },
         },
+        outputs: [],
     },
     {
         // Sign certificate
@@ -401,6 +411,7 @@ const SIGN_CERT_ACTIVITIES: SignCertActivity[] = [
                 content: "Sign in to use VeRocket",
             },
         },
+        outputs: [],
     },
 ]
 
@@ -421,6 +432,7 @@ const DELEGATED_TRANSACTION_ACTIVITIES: DelegatedTransactionActivity[] = [
         delegated: false,
         status: ActivityStatus.SUCCESS,
         clauses: [],
+        outputs: [],
     },
     {
         // Delegated transaction
@@ -438,6 +450,7 @@ const DELEGATED_TRANSACTION_ACTIVITIES: DelegatedTransactionActivity[] = [
         delegated: false,
         status: ActivityStatus.SUCCESS,
         clauses: [],
+        outputs: [],
     },
 ]
 
