@@ -1,14 +1,14 @@
 import React from "react"
-import { SCREEN_WIDTH, useTheme } from "~Common"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import { StyleSheet } from "react-native"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 export const SkeletonActivityBox = () => {
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     return (
         <SkeletonContent
-            containerStyle={baseStyles.container}
+            containerStyle={styles.container}
             animationDirection="horizontalLeft"
             boneColor={theme.colors.skeletonBoneColor}
             highlightColor={theme.colors.skeletonHighlightColor}
@@ -18,6 +18,7 @@ export const SkeletonActivityBox = () => {
                 {
                     flexDirection: "row",
                     alignItems: "center",
+                    height: 65,
                     children: [
                         // Circle
                         { width: 40, height: 40, borderRadius: 20 },
@@ -29,15 +30,15 @@ export const SkeletonActivityBox = () => {
                             children: [
                                 // Line
                                 {
-                                    width: SCREEN_WIDTH - 100,
-                                    height: 20,
+                                    width: "40%",
+                                    height: 18,
                                     marginLeft: 10,
                                 },
                                 // Short line
                                 {
                                     marginTop: 6,
-                                    width: "20%",
-                                    height: 20,
+                                    width: "30%",
+                                    height: 14,
                                     marginLeft: 10,
                                 },
                             ],
@@ -50,12 +51,14 @@ export const SkeletonActivityBox = () => {
     )
 }
 
-const baseStyles = StyleSheet.create({
-    container: {
-        flex: 1,
-        width: "100%",
-        flexDirection: "column",
-        marginLeft: -1,
-        paddingBottom: 18,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            flex: 1,
+            width: "100%",
+            flexDirection: "column",
+            marginLeft: -1,
+            borderBottomColor: theme.colors.skeletonBoneColor,
+            borderBottomWidth: 0.5,
+        },
+    })

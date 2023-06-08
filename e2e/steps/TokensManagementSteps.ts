@@ -12,13 +12,9 @@ import {
     swipeLeftByText,
 } from "../helpers"
 
-Given(
-    "The user is in the tokens management screen",
-    { timeout: -1 },
-    async () => {
-        await HomeFlows.goToTokensManagementScreen()
-    },
-)
+Given("The user go to tokens management screen", { timeout: -1 }, async () => {
+    await HomeFlows.goToTokensManagementScreen()
+})
 
 When(
     "The user select {string} token from the unselected tokens list",

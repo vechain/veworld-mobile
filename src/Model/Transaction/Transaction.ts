@@ -18,6 +18,7 @@ export interface ClauseWithMetadata extends Transaction.Clause {
     amount?: number
     tokenSymbol?: string
     tokenId?: string
+    path?: string[]
     comment?: string
     abi?: object
 }
@@ -66,4 +67,26 @@ export interface TransferData {
     senderAddress: string
     destinationAddress: string
     amountToTransfer: string | number
+}
+
+export type SwapEvent = {
+    sender: string
+    amount0In: string
+    amount1In: string
+    amount0Out: string
+    amount1Out: string
+    to: string
+}
+
+export type TransferEvent = {
+    from: string
+    to: string
+    value: string
+}
+
+export type SwapResult = {
+    paidAmount: string
+    paidTokenAddress: string
+    receivedAmount: string
+    receivedTokenAddress: string
 }

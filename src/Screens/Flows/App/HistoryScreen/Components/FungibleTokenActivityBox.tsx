@@ -67,15 +67,16 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
         }, [activity.amount, token?.decimals])
 
         const fiatValueTransferred = useMemo(() => {
+            if (!token || !exchangeRate?.rate) return undefined
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     activity.amount as string,
-                    exchangeRate?.rate ?? 0,
-                    token?.decimals ?? 0,
+                    exchangeRate.rate,
+                    token.decimals,
                 ),
                 activity.amount,
             )
-        }, [activity.amount, exchangeRate?.rate, token?.decimals])
+        }, [activity.amount, exchangeRate, token])
 
         const dateTimeTransfer = useMemo(() => {
             return activity.timestamp
@@ -159,11 +160,14 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                                                 </BaseText>
                                             </BaseView>
                                         </BaseView>
-                                        <BaseText
-                                            typographyFont="smallCaptionMedium"
-                                            color={theme.colors.success}>
-                                            {fiatValueTransferred} {currency}
-                                        </BaseText>
+                                        {fiatValueTransferred && (
+                                            <BaseText
+                                                typographyFont="smallCaptionMedium"
+                                                color={theme.colors.success}>
+                                                {fiatValueTransferred}{" "}
+                                                {currency}
+                                            </BaseText>
+                                        )}
                                     </BaseView>
                                 </BaseView>
                             </>
