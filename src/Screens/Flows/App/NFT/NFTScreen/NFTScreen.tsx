@@ -10,14 +10,14 @@ import {
     FastActionsBar,
     SelectAccountBottomSheet,
 } from "~Components"
-import { NftScreenHeader } from "./Component"
+import { NftScreenHeader } from "./Components"
 import {
     AccountWithDevice,
     FastAction,
     NonFungibleTokenCollection,
 } from "~Model"
 import { isEmpty } from "lodash"
-import { NftSkeleton } from "./Component/NftSkeleton"
+import { NftSkeleton } from "./Components/NftSkeleton"
 import { StyleSheet, FlatList, ActivityIndicator } from "react-native"
 import {
     useBottomSheetModal,
