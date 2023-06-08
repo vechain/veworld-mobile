@@ -100,11 +100,11 @@ export const useNFTCollections = () => {
                         error: undefined,
                     }),
                 )
-            } catch (e) {
+            } catch (e: unknown) {
                 dispatch(
                     setNetworkingSideEffects({
                         isLoading: false,
-                        error: e as unknown as string,
+                        error: e?.toString() as string,
                     }),
                 )
                 error("useNFTCollections", e)
