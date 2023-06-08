@@ -15,10 +15,12 @@ import { useI18nContext } from "~i18n"
 import { deleteSession } from "~Storage/Redux/Slices"
 import { getSdkError } from "@walletconnect/utils"
 import { error } from "~Common"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
 
 /**
  * Wallet Connect Flow:
- * 1) A pairing needs to be established by scanning the QR code or by manually pasting the URI (this is done in WalletConnectScreen.tsx)
+ * 1) A pairing needs to be established by scanning the QR code or by manually pasting the URI
  * 2) After pairing is established the dapp will send a session_propsal asking the user permission to connect to the wallet
  * 3) Once the dapp and the wallet are connected the dapp can send a session_requests asking to sign certificates or execute transactions
  *
@@ -40,6 +42,7 @@ const WalletConnectContextProvider = ({
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
+    const nav = useNavigation()
 
     //For session proposal
     const [pairModalVisible, setPairModalVisible] = useState(false)
@@ -69,7 +72,8 @@ const WalletConnectContextProvider = ({
     const onSessionProposalClose = useCallback(() => {
         setCurrentProposal(undefined)
         setPairModalVisible(false)
-    }, [])
+        nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
+    }, [nav])
 
     /**
      * Handle session request

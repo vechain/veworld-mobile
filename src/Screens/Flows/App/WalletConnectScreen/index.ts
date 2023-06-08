@@ -1,2 +1,2 @@
-export * from "./WalletConnectScreen"
-export * from "./SessionDetailsScreen"
+export * from "./ConnectedAppsScreen"
+export * from "./ConnectedAppDetailsScreen"

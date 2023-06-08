@@ -14,8 +14,8 @@ import {
     TransactionSummarySendScreen,
     ActivityDetailsScreen,
     AssetDetailScreen,
-    WalletConnectScreen,
-    SessionDetailsScreen,
+    ConnectedAppsScreen,
+    ConnectedAppDetailsScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
@@ -60,7 +60,7 @@ export type RootStackParamListHome = {
         decodedClauses?: TransactionOutcomes
     }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
-    [Routes.WALLET_CONNECT]: undefined
+    [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.SETTINGS_CONNECTED_APP_DETAILS]: {
         session: SessionTypes.Struct
         account: AccountWithDevice
@@ -110,8 +110,8 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.WALLET_CONNECT}
-                    component={WalletConnectScreen}
+                    name={Routes.SETTINGS_CONNECTED_APPS}
+                    component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
@@ -143,7 +143,7 @@ export const HomeStack = () => {
 
                 <Screen
                     name={Routes.SETTINGS_CONNECTED_APP_DETAILS}
-                    component={SessionDetailsScreen}
+                    component={ConnectedAppDetailsScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

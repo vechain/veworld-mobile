@@ -14,8 +14,8 @@ import {
     SettingsTransactionsScreen,
     ManageUrlsScreen,
     ResetAppScreen,
-    SessionDetailsScreen,
-    WalletConnectScreen,
+    ConnectedAppDetailsScreen,
+    ConnectedAppsScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { SessionTypes } from "@walletconnect/types"
@@ -126,13 +126,13 @@ export const SettingsStack = () => {
 
                 <Settings.Screen
                     name={Routes.SETTINGS_CONNECTED_APPS}
-                    component={WalletConnectScreen}
+                    component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
 
                 <Settings.Screen
                     name={Routes.SETTINGS_CONNECTED_APP_DETAILS}
-                    component={SessionDetailsScreen}
+                    component={ConnectedAppDetailsScreen}
                     options={{ headerShown: false }}
                 />
             </Settings.Group>

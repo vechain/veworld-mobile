@@ -1,3 +1,4 @@
 export * from "./DeleteConfirmationBottomSheet"
-export * from "./ScanAddressBottomSheet/ScanAddressBottomSheet"
+export * from "./ScanBottomSheet/ScanAddressBottomSheet"
+export * from "./ScanBottomSheet/ScanWalletConnectBottomSheet"
 export * from "./BluetoothStatusBottomSheet"

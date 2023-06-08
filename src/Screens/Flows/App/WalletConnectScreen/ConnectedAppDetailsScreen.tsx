@@ -17,7 +17,7 @@ type Props = NativeStackScreenProps<
     Routes.SETTINGS_CONNECTED_APP_DETAILS
 >
 
-export const SessionDetailsScreen = ({ route }: Props) => {
+export const ConnectedAppDetailsScreen = ({ route }: Props) => {
     const { session, account } = route.params
 
     const nav = useNavigation()

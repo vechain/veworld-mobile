@@ -52,6 +52,7 @@
         "@json-rpc-tools/utils": "^1.7.6",
         "@klarna/react-native-vector-drawable": "^0.4.0",
         "@ledgerhq/react-native-hw-transport-ble": "^6.28.5",
+        "@react-native-clipboard/clipboard": "^1.11.2",
         "@react-native-community/blur": "^4.3.0",
         "@react-native-community/slider": "^4.4.2",
         "@react-navigation/bottom-tabs": "^6.5.2",
