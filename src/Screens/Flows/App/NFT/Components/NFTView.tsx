@@ -100,6 +100,8 @@ export const NFTView = ({
 
     return (
         <TouchableOpacity
+            // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
+            onLongPress={() => {}}
             onPress={() =>
                 isCollection
                     ? onCollectionPress(collectionItem!.address)
