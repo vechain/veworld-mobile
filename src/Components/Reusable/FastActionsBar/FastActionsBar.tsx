@@ -11,7 +11,8 @@ export const FastActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
             <BaseTouchable
                 key={action.name}
                 action={action.action}
-                testID={action.testID}>
+                testID={action.testID}
+                style={styles.action}>
                 <BaseView flexDirection="column" alignItems="center">
                     {action.icon}
                     <BaseSpacer height={6} />
@@ -24,11 +25,11 @@ export const FastActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
     }, [])
 
     return (
-        <BaseView style={baseStyles.shadowContainer}>
+        <BaseView style={styles.container}>
             <BaseView
                 flexDirection="row"
-                justifyContent="space-between"
                 alignItems="center"
+                justifyContent="center"
                 bg={theme.colors.card}
                 borderRadius={34}
                 px={28}
@@ -39,10 +40,13 @@ export const FastActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
     )
 })
 
-const baseStyles = StyleSheet.create({
-    shadowContainer: {
+const styles = StyleSheet.create({
+    container: {
         paddingHorizontal: 20,
         justifyContent: "center",
-        minWidth: 273,
+        alignItems: "center",
+    },
+    action: {
+        marginHorizontal: 10,
     },
 })

@@ -33,17 +33,6 @@ export const HeaderView = memo(
         const Actions: FastAction[] = useMemo(
             () => [
                 {
-                    name: LL.BTN_BUY(),
-                    action: () => nav.navigate(Routes.BUY),
-                    icon: (
-                        <BaseIcon
-                            color={theme.colors.text}
-                            name="cart-outline"
-                        />
-                    ),
-                    testID: "buyButton",
-                },
-                {
                     name: LL.BTN_SEND(),
                     action: () =>
                         nav.navigate(Routes.SELECT_TOKEN_SEND, {
@@ -56,17 +45,6 @@ export const HeaderView = memo(
                         />
                     ),
                     testID: "sendButton",
-                },
-                {
-                    name: LL.BTN_SWAP(),
-                    action: () => nav.navigate(Routes.SWAP),
-                    icon: (
-                        <BaseIcon
-                            color={theme.colors.text}
-                            name="swap-horizontal"
-                        />
-                    ),
-                    testID: "swapButton",
                 },
                 {
                     name: LL.BTN_WALLET_CONNECT(),

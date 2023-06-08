@@ -24,6 +24,7 @@ import {
     FungibleToken,
     FungibleTokenWithBalance,
     TokenWithCompleteInfo,
+    TransactionOutcomes,
 } from "~Model"
 import { SessionTypes } from "@walletconnect/types"
 
@@ -52,7 +53,12 @@ export type RootStackParamListHome = {
     [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.ACTIVITY_DETAILS]: { activity: Activity; token?: FungibleToken }
+    [Routes.ACTIVITY_DETAILS]: {
+        activity: Activity
+        token?: FungibleToken
+        isSwap?: boolean
+        decodedClauses?: TransactionOutcomes
+    }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.WALLET_CONNECT]: undefined
     [Routes.SETTINGS_CONNECTED_APP_DETAILS]: {
