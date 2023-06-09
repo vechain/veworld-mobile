@@ -29,7 +29,10 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
 
             <View style={themedStyles.seperator} />
 
-            <BaseIcon name="cached" color={theme.colors.textReversed} />
+            <BaseIcon
+                name="account-sync-outline"
+                color={theme.colors.textReversed}
+            />
         </TouchableOpacity>
     )
 }

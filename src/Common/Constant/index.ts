@@ -5,6 +5,5 @@ export * from "./axios"
 export * from "./coinGecko"
 export * from "./CurrencyConfig"
 export * from "./Screen"
-export * from "./VechainIndexer"
 
 export { SettingsConstants, ThorConstants }

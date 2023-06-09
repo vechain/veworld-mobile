@@ -937,6 +937,14 @@ type RootTranslation = {
 	 */
 	COMMON_NOT_AVAILABLE: string
 	/**
+	 * I​m​p​o​r​t
+	 */
+	COMMON_IMPORT: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	COMMON_RECEIVE: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1170,6 +1178,43 @@ type RootTranslation = {
 	 * A​t​t​r​i​b​u​t​e​s
 	 */
 	NFT_ATTRIBUTES: string
+	/**
+	 * H​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n​s
+	 */
+	HIDDEN_COLLECTIONS: string
+	/**
+	 * M​a​n​a​g​e​ ​N​F​T​s
+	 */
+	MANAGE_NFTS: string
+	/**
+	 * R​e​s​t​o​r​e​ ​y​o​u​r​ ​C​o​l​l​e​c​t​i​o​n​s​ ​o​r​ ​N​F​T​s
+	 */
+	RESTORE_NFTS: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​s
+	 */
+	COLLECTIONS: string
+	/**
+	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
+	 * @param {string} name
+	 */
+	NO_HIDDEN_COLLECTIONS: RequiredParams<'name'>
+	/**
+	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
+	 */
+	DONT_SEE_NFTS: string
+	/**
+	 * I​m​p​o​r​t​ ​N​F​T
+	 */
+	IMPORT_NFT: string
+	/**
+	 * R​e​c​e​i​v​e​ ​N​F​T
+	 */
+	RECEIVE_NFT: string
+	/**
+	 * W​o​o​p​s​!​ ​T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
+	 */
+	NFT_DOWNLOAD_ERROR: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -2598,6 +2643,14 @@ export type TranslationFunctions = {
 	 */
 	COMMON_NOT_AVAILABLE: () => LocalizedString
 	/**
+	 * Import
+	 */
+	COMMON_IMPORT: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	COMMON_RECEIVE: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -2826,6 +2879,42 @@ Please, try again later.
 	 * Attributes
 	 */
 	NFT_ATTRIBUTES: () => LocalizedString
+	/**
+	 * Hidden collections
+	 */
+	HIDDEN_COLLECTIONS: () => LocalizedString
+	/**
+	 * Manage NFTs
+	 */
+	MANAGE_NFTS: () => LocalizedString
+	/**
+	 * Restore your Collections or NFTs
+	 */
+	RESTORE_NFTS: () => LocalizedString
+	/**
+	 * Collections
+	 */
+	COLLECTIONS: () => LocalizedString
+	/**
+	 * You don't have any hidden {name}
+	 */
+	NO_HIDDEN_COLLECTIONS: (arg: { name: string }) => LocalizedString
+	/**
+	 * Don't see your NFTs?
+	 */
+	DONT_SEE_NFTS: () => LocalizedString
+	/**
+	 * Import NFT
+	 */
+	IMPORT_NFT: () => LocalizedString
+	/**
+	 * Receive NFT
+	 */
+	RECEIVE_NFT: () => LocalizedString
+	/**
+	 * Woops! There was an error trying to get your NFTs. Please try again in a while.
+	 */
+	NFT_DOWNLOAD_ERROR: () => LocalizedString
 	/**
 	 * Light
 	 */

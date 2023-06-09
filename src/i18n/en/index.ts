@@ -262,6 +262,8 @@ const en: BaseTranslation = {
     COMMON_24H_VOLUME: "24h Volume",
     COMMON_CIRCULATING_SUPPLY: "Circulating Supply",
     COMMON_NOT_AVAILABLE: "N.A.",
+    COMMON_IMPORT: "Import",
+    COMMON_RECEIVE: "Receive",
 
 
     // Alerts
@@ -339,10 +341,18 @@ const en: BaseTranslation = {
     NOTIFICATION_transaction_reverted: "Transaction {txId} was reverted.",
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
-    // Accounts
+    // NFT
     CONTRACT_ADDRESS: "Contract address",
     NFT_ATTRIBUTES: "Attributes",
-
+    HIDDEN_COLLECTIONS: "Hidden collections",
+    MANAGE_NFTS: "Manage NFTs",
+    RESTORE_NFTS: "Restore your Collections or NFTs",
+    COLLECTIONS: "Collections",
+    NO_HIDDEN_COLLECTIONS: "You don't have any hidden {name: string}",
+    DONT_SEE_NFTS: "Don't see your NFTs?",
+    IMPORT_NFT: "Import NFT",
+    RECEIVE_NFT: "Receive NFT",
+    NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
 
     // Onboarding
 

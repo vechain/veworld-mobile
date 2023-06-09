@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet } from "react-native"
 import React, { useCallback, useMemo, useState } from "react"
 import {
-    selectCollectionWithContractAddres,
+    selectCollectionWithContractAddress,
     useAppSelector,
 } from "~Storage/Redux"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -37,7 +37,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const collection = useAppSelector(state =>
-        selectCollectionWithContractAddres(
+        selectCollectionWithContractAddress(
             state,
             route.params.collectionAddress,
         ),
