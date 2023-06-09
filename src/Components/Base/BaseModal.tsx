@@ -1,6 +1,6 @@
 import React from "react"
 import { Modal, ModalProps } from "react-native"
-import { BaseSafeArea } from "./BaseSafeArea"
+import { BaseSafeArea } from "./BaseSafeArea/BaseSafeArea"
 import { BaseView } from "./BaseView"
 import { BaseSpacer } from "./BaseSpacer"
 
