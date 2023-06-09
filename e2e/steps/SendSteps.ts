@@ -2,6 +2,7 @@ import { Given, Then, When } from "@cucumber/cucumber"
 import {
     HomeFlows,
     clickByText,
+    idShouldExist,
     insertTextById,
     textShouldExist,
 } from "../helpers"
@@ -11,7 +12,7 @@ Given("The user is in the send screen", { timeout: -1 }, async function () {
 })
 
 Given(
-    "The user select {string} token to be sent",
+    "The user selects {string} token to be sent",
     { timeout: -1 },
     async function (token: string) {
         await clickByText(token)
@@ -19,10 +20,26 @@ Given(
 )
 
 When(
-    "The user insert a very small amount to be sent",
+    "The user inserts a very small amount to be sent",
     { timeout: -1 },
     async function () {
         await insertTextById("0.00001", "SendScreen_amountInput")
+    },
+)
+
+When(
+    "The user inserts the amount {string} to be sent",
+    { timeout: -1 },
+    async function (amount: string) {
+        await insertTextById(amount, "SendScreen_amountInput")
+    },
+)
+
+When(
+    "The user inserts the address {string} of the receiver",
+    { timeout: -1 },
+    async function (address: string) {
+        await insertTextById(address, "InsertAddressSendScreen_addressInput")
     },
 )
 
@@ -34,8 +51,12 @@ Then(
     },
 )
 
+When("The user can click confirm button", { timeout: -1 }, async function () {
+    await clickByText("CONFIRM")
+})
+
 When(
-    "The user insert a comma on the amount to be sent",
+    "The user inserts a comma on the amount to be sent",
     { timeout: -1 },
     async function () {
         await insertTextById("0,1", "SendScreen_amountInput")
@@ -43,9 +64,13 @@ When(
 )
 
 Then(
-    "The user see the amount with the comma converted to a dot",
+    "The user sees the amount with the comma converted to a dot",
     { timeout: -1 },
     async function () {
         await textShouldExist("0.1")
     },
 )
+
+Then("The user should see success message", { timeout: -1 }, async function () {
+    await idShouldExist("SendScreen_transactionSuccessToast")
+})

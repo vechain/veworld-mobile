@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react"
-import { ViewProps, StyleSheet } from "react-native"
 import { useTheme, CURRENCY, ColorThemeType, useThemedStyles } from "~Common"
+import { ViewProps, StyleSheet, Pressable } from "react-native"
 import { PlatformUtils } from "~Utils"
 import {
     AccountIcon,
@@ -80,31 +80,39 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     />
                 </BaseView>
                 <BaseView>
-                    <BaseView
-                        style={styles.borderBottom}
-                        px={14}
-                        justifyContent="center"
-                        alignItems="center"
-                        flex={1}>
-                        <BaseIcon
-                            name="account-cog-outline"
-                            color={theme.colors.textReversed}
-                            size={28}
-                            action={openAccountManagement}
-                            testID="AccountCard_accountManagementButton"
-                        />
-                    </BaseView>
-                    <BaseView
-                        justifyContent="center"
-                        alignItems="center"
-                        flex={1}>
-                        <BaseIcon
-                            name="account-sync-outline"
-                            color={theme.colors.textReversed}
-                            size={28}
-                            action={openSelectAccountBottomSheet}
-                        />
-                    </BaseView>
+                    <Pressable
+                        onPress={openAccountManagement}
+                        style={styles.pressable}>
+                        <BaseView
+                            style={styles.borderBottom}
+                            px={14}
+                            justifyContent="center"
+                            alignItems="center"
+                            flex={1}>
+                            <BaseIcon
+                                name="account-cog-outline"
+                                color={theme.colors.textReversed}
+                                size={28}
+                                action={openAccountManagement}
+                                testID="AccountCard_accountManagementButton"
+                            />
+                        </BaseView>
+                    </Pressable>
+                    <Pressable
+                        onPress={openSelectAccountBottomSheet}
+                        style={styles.pressable}>
+                        <BaseView
+                            justifyContent="center"
+                            alignItems="center"
+                            flex={1}>
+                            <BaseIcon
+                                name="account-switch-outline"
+                                color={theme.colors.textReversed}
+                                size={28}
+                                testID="AccountCard_changeAccountButton"
+                            />
+                        </BaseView>
+                    </Pressable>
                 </BaseView>
             </BaseView>
         </BaseView>
@@ -120,5 +128,10 @@ const baseStyles = (theme: ColorThemeType) =>
         borderBottom: {
             borderBottomColor: theme.colors.info,
             borderBottomWidth: 1,
+        },
+        pressable: {
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 1,
         },
     })
