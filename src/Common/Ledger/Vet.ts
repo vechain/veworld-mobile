@@ -120,7 +120,7 @@ export class VETLedgerApp {
     public async signTransaction(
         path: string,
         rawTx: Buffer,
-        onIsAwaitingForSignature: () => void,
+        onIsAwaitingForSignature?: () => void,
         onProgressUpdate?: (percent: number) => void,
     ) {
         return this.sign(
@@ -150,32 +150,39 @@ export class VETLedgerApp {
         const buffers = splitRaw(path, raw, isTransaction)
         const responses = [] as Buffer[]
 
+        debug(`Ledger sign: ${buffers.length} chunks`)
+
         for (let i = 0; i < buffers.length; i++) {
-            const isAfterSecondLast = i >= buffers.length - 2
+            const isAfterSecondLast = i >= buffers.length - 1
             if (isAfterSecondLast && onIsAwaitingForSignature)
                 onIsAwaitingForSignature()
 
             const percent = Math.round((i / buffers.length) * 100)
             debug(`Ledger progress: ${percent}%`)
-            if (onProgressUpdate) onProgressUpdate(percent)
+            onProgressUpdate?.(percent)
 
             //this point could exit the loop way before. Here i am building the transaction data
             const data = buffers[i]
+            const p1 = i === 0 ? 0x00 : 0x80
+            const p2 = 0x00
+
             responses.push(
                 await this.transport
-                    .send(cla, ins, i === 0 ? 0x00 : 0x80, 0x00, data, [
-                        StatusCodes.OK,
-                    ])
+                    .send(cla, ins, p1, p2, data, [StatusCodes.OK])
                     .catch(e => {
                         throw remapTransactionRelatedErrors(e)
                     }),
             )
         }
 
+        debug("Ledger progress: 100%")
+
         const lastResponse = responses[responses.length - 1]
         if (lastResponse.length < 65) {
             throw new Error("invalid signature")
         }
+
+        debug("Device signature received")
 
         return lastResponse.subarray(0, 65)
     }
