@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react"
 import { ActivityIndicator, StyleSheet } from "react-native"
 import { useTheme } from "~Common"
+import { COLORS } from "~Common/Theme"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 
 export type Step = {
     isActiveText: string
     isNextText: string
     isDoneText: string
+    progressPercentage: number
+    title: string
+    subtitle: string
 }
 type Props = {
     steps: Step[]
@@ -24,21 +28,22 @@ export const StepsProgressBar: React.FC<Props> = ({
     const [progress, setProgress] = useState(0)
 
     useEffect(() => {
+        let percentage = 0
+        const _currentStep = steps[currentStep]
+
+        percentage = _currentStep?.progressPercentage || 100
+
         // Animated.timing(progress, {
         //     toValue: (currentStep + 1) * (100 / steps.length),
         //     duration: 300,
         //     useNativeDriver: false,
         // }).start()
-        setProgress((currentStep + 1) * (100 / steps.length))
-    }, [currentStep, steps.length])
+        setProgress(percentage)
+    }, [currentStep, steps.length, steps])
 
+    const trackColor = theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE
     return (
-        <BaseView
-            bg={theme.colors.textDisabled}
-            w={100}
-            h={2}
-            mt={20}
-            borderRadius={8}>
+        <BaseView bg={trackColor} w={100} h={2} mt={20} borderRadius={8}>
             <BaseView
                 w={progress}
                 flexDirection="row"
@@ -60,9 +65,9 @@ export const StepsProgressBar: React.FC<Props> = ({
                     const bgColor = isError
                         ? theme.colors.danger
                         : isNext
-                        ? theme.colors.textDisabled
+                        ? trackColor
                         : isActive
-                        ? theme.colors.primaryLight
+                        ? theme.colors.primary
                         : theme.colors.primary
 
                     const text = isNext
@@ -104,7 +109,10 @@ export const StepsProgressBar: React.FC<Props> = ({
                                 />
                             )}
 
-                            <BaseText typographyFont="body" pt={8}>
+                            <BaseText
+                                typographyFont={isNext ? "body" : "bodyBold"}
+                                color={isNext ? theme.colors.text : bgColor}
+                                pt={8}>
                                 {text}
                             </BaseText>
                         </BaseView>
