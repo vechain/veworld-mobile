@@ -933,6 +933,10 @@ type RootTranslation = {
 	 */
 	COMMON_CIRCULATING_SUPPLY: string
 	/**
+	 * N​.​A​.
+	 */
+	COMMON_NOT_AVAILABLE: string
+	/**
 	 * I​m​p​o​r​t
 	 */
 	COMMON_IMPORT: string
@@ -1407,6 +1411,14 @@ type RootTranslation = {
 	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
 	 */
 	SEND_LESS_THAN_1_MIN: string
+	/**
+	 * N​o​n​e​,​ ​p​a​i​d​ ​b​y​ ​d​e​l​e​g​a​t​o​r
+	 */
+	SEND_DELEGATED_FEES: string
+	/**
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​G​a​s​ ​-
+	 */
+	SEND_INSUFFICIENT_VTHO: string
 	/**
 	 * S​e​l​e​c​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
@@ -2627,6 +2639,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
 	/**
+	 * N.A.
+	 */
+	COMMON_NOT_AVAILABLE: () => LocalizedString
+	/**
 	 * Import
 	 */
 	COMMON_IMPORT: () => LocalizedString
@@ -3095,6 +3111,14 @@ Please, try again later.
 	 * Less than 1 min
 	 */
 	SEND_LESS_THAN_1_MIN: () => LocalizedString
+	/**
+	 * None, paid by delegator
+	 */
+	SEND_DELEGATED_FEES: () => LocalizedString
+	/**
+	 * Insufficient Gas -
+	 */
+	SEND_INSUFFICIENT_VTHO: () => LocalizedString
 	/**
 	 * Select delegation
 	 */
