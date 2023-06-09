@@ -71,11 +71,17 @@ export const TokenSlice = createSlice({
             )
         },
 
-        setOfficialTokens: (
+        addOfficialTokens: (
             state,
             action: PayloadAction<TokenWithCompleteInfo[]>,
         ) => {
-            state.officialTokens = action.payload
+            const tokensToInsert = action.payload.filter(
+                token =>
+                    state.officialTokens
+                        .map(t => t.address)
+                        .includes(token.address) === false,
+            )
+            state.officialTokens.push(...tokensToInsert)
         },
 
         setSuggestedTokens: (
@@ -97,7 +103,7 @@ export const TokenSlice = createSlice({
 export const {
     addOrUpdateCustomToken,
     setDashboardChartData,
-    setOfficialTokens,
+    addOfficialTokens,
     setAssertDetailChartData,
     setCoinGeckoTokens,
     setSuggestedTokens,

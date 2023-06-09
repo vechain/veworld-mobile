@@ -1,14 +1,14 @@
 import { ScrollView, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
 import {
-    BaseIcon,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseView,
     EnableFeature,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import { useBottomSheetModal, useTheme } from "~Common"
+import { useBottomSheetModal } from "~Common"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -30,7 +30,6 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
-    const theme = useTheme()
     const { LL } = useI18nContext()
 
     const dispatch = useAppDispatch()
@@ -50,8 +49,6 @@ export const ChangeNetworkScreen = () => {
         onOpen: openSelectNetworkBottomSheet,
         onClose: closeSelectNetworkBottonSheet,
     } = useBottomSheetModal()
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const toggleConversionSwitch = useCallback(
         (_newValue: boolean) => {
@@ -82,13 +79,7 @@ export const ChangeNetworkScreen = () => {
                     { paddingBottom: tabBarHeight },
                 ]}
                 style={baseStyles.scrollView}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
+                <BackButtonHeader />
                 <BaseSpacer height={12} />
 
                 <BaseView mx={20}>

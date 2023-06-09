@@ -76,6 +76,7 @@ const createPendingTransferActivityFromTx = (
         amount,
         tokenAddress,
         direction: DIRECTIONS.UP,
+        outputs: [],
     }
 }
 
