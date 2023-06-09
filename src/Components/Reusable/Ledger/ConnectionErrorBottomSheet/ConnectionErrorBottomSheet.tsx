@@ -4,7 +4,12 @@ import { LEDGER_ERROR_CODES } from "~Common/Ledger"
 import { BaseBottomSheet, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import Lottie from "lottie-react-native"
-import { BlePairingDark, EnterPinCodeDark, OpenAppDark } from "~Assets/Lottie"
+import {
+    BlePairingDark,
+    EnterPinCodeDark,
+    OpenAppDark,
+    ValidateDark,
+} from "~Assets/Lottie"
 import { ActivityIndicator, StyleSheet } from "react-native"
 import { useTheme } from "~Common"
 
@@ -54,6 +59,18 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                     image: (
                         <Lottie
                             source={OpenAppDark}
+                            autoPlay
+                            style={styles.lottie}
+                        />
+                    ),
+                }
+            case LEDGER_ERROR_CODES.WAITING_SIGNATURE:
+                return {
+                    title: LL.WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE(),
+                    desc: LL.WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC(),
+                    image: (
+                        <Lottie
+                            source={ValidateDark}
                             autoPlay
                             style={styles.lottie}
                         />

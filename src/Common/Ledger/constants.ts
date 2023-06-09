@@ -11,6 +11,7 @@ export enum LEDGER_ERROR_CODES {
     NO_VET_APP = "no_vet_app",
     UNKNOWN = "unknown",
     DISCONNECTED = "disconnected",
+    WAITING_SIGNATURE = "waiting_signature",
 }
 
 export enum StatusCodes {
