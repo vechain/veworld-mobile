@@ -351,6 +351,7 @@ const en: BaseTranslation = {
     DONT_SEE_NFTS: "Don't see your NFTs?",
     IMPORT_NFT: "Import NFT",
     RECEIVE_NFT: "Receive NFT",
+    NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
 
     // Onboarding
 

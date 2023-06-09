@@ -53,6 +53,7 @@ export const useFetchCollections = () => {
     return {
         fetchMoreCollections,
         isLoading: nftNetworkingSideEffects.isLoading,
+        error: nftNetworkingSideEffects.error,
         collections,
     }
 }

@@ -20,7 +20,7 @@ export const NftSkeleton = () => {
                     alignItems: "center",
                     children: [
                         {
-                            width: 245,
+                            width: 247,
                             marginHorizontal: 20,
                             height: 68,
                             borderRadius: 34,

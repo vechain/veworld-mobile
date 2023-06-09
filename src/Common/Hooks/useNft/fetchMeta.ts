@@ -4,7 +4,7 @@ import {
     getTokenMetaArweave,
     getTokenMetaIpfs,
 } from "~Networking"
-import { error as logError } from "~Common/Logger"
+import { error } from "~Common/Logger"
 
 enum URIProtocol {
     IPFS = "ipfs",
@@ -32,6 +32,6 @@ export const fetchMetadata = async (uri: string) => {
                 return {}
         }
     } catch (e) {
-        logError(e)
+        error(e)
     }
 }

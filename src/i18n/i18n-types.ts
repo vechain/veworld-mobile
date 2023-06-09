@@ -1208,6 +1208,10 @@ type RootTranslation = {
 	 */
 	RECEIVE_NFT: string
 	/**
+	 * W​o​o​p​s​!​ ​T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
+	 */
+	NFT_DOWNLOAD_ERROR: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -2891,6 +2895,10 @@ Please, try again later.
 	 * Receive NFT
 	 */
 	RECEIVE_NFT: () => LocalizedString
+	/**
+	 * Woops! There was an error trying to get your NFTs. Please try again in a while.
+	 */
+	NFT_DOWNLOAD_ERROR: () => LocalizedString
 	/**
 	 * Light
 	 */
