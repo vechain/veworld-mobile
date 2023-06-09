@@ -35,6 +35,8 @@ export const useGasFee = (activity: Activity) => {
      * The gas fee is calculated once the transaction receipt is available.
      */
     useEffect(() => {
+        if (!activity.gasUsed) return
+
         const gasBn = new BigNumber(activity.gasUsed)
         GasUtils.calculateFee(thor, gasBn, DEFAULT_GAS_COEFFICIENT)
             .then(res => {
@@ -51,25 +53,24 @@ export const useGasFee = (activity: Activity) => {
      * Converts the gas fee from wei to a human-readable format in VTHO.
      */
     const gasFeeInVTHOHumanReadable = useMemo(() => {
+        if (!gasFeeInVTHO) return undefined
         return FormattingUtils.scaleNumberDown(
-            gasFeeInVTHO ?? 0,
+            gasFeeInVTHO,
             VTHO.decimals,
             FormattingUtils.ROUND_DECIMAL_DEFAULT,
         )
     }, [gasFeeInVTHO])
 
     const fiatValueGasFeeSpent = useMemo(() => {
-        if (VTHOexchangeRate?.rate)
+        if (VTHOexchangeRate?.rate && gasFeeInVTHOHumanReadable)
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     gasFeeInVTHOHumanReadable,
-                    VTHOexchangeRate?.rate ?? 0,
+                    VTHOexchangeRate.rate,
                     VTHO.decimals,
                 ),
                 gasFeeInVTHOHumanReadable,
             )
-
-        return undefined
     }, [VTHOexchangeRate?.rate, gasFeeInVTHOHumanReadable])
 
     return { gasFeeInVTHO, gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent }
