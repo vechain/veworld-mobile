@@ -8,6 +8,7 @@ import {
 import { error, info, warn, debug } from "~Common/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerUtils } from "~Utils"
+import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 
 /**
  * useLedger is a custom react hook for interacting with ledger devices
@@ -28,9 +29,11 @@ export const useLedger = ({
     deviceId,
     waitFirstManualConnection = false,
     onConnectionError: handleOnConnectionError,
+    reloadAppConfigTimeout,
 }: {
     deviceId: string
     waitFirstManualConnection: boolean
+    reloadAppConfigTimeout?: number
     onConnectionError?: (err: LEDGER_ERROR_CODES) => void
 }): UseLedgerProps => {
     const transport = useRef<BleTransport | undefined>()
@@ -41,6 +44,10 @@ export const useLedger = ({
     const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(
         undefined,
     )
+    // used to determine if the user has enabled clauses/ contracts
+    const [config, setConfig] = useState<string>()
+    const [clausesEnabled, setClausesEnabled] = useState<boolean>(false)
+    const [contractEnabled, setContractEnabled] = useState<boolean>(false)
 
     const timer = useRef<NodeJS.Timeout | undefined>(undefined)
     const [timerEnabled, setTimerEnabled] = useState<boolean>(
@@ -84,10 +91,13 @@ export const useLedger = ({
     )
 
     const onConnectionSuccess = useCallback(
-        (app: VETLedgerApp, account: VETLedgerAccount) => {
+        async (app: VETLedgerApp, account: VETLedgerAccount) => {
             info("[ledger] - connected succesfully")
             setVetApp(app)
             setRootAccount(account)
+            const appConfig = await app.getAppConfiguration()
+            const appConfigHex = appConfig.toString("hex")
+            setConfig(appConfigHex)
             setErrorCode(undefined)
         },
         [],
@@ -120,9 +130,33 @@ export const useLedger = ({
         }
     }, [openOrFinalizeConnection, isReady, timerEnabled])
 
+    //check config for clauses/ contract enabled
+    useEffect(() => {
+        const _timer = setTimeout(() => {
+            if (config) {
+                const _clausesAndContractEnabled =
+                    config === LedgerConfig.CLAUSE_AND_CONTRACT_DISABLED
+                const _clausesEnabled =
+                    config === LedgerConfig.CLAUSE_ONLY_ENABLED ||
+                    _clausesAndContractEnabled
+                const _contractEnabled =
+                    config === LedgerConfig.CONTRACT_ONLY_ENABLED ||
+                    _clausesAndContractEnabled
+
+                setClausesEnabled(_clausesEnabled)
+                setContractEnabled(_contractEnabled)
+            }
+        }, reloadAppConfigTimeout || 0)
+
+        return () => clearTimeout(_timer)
+    }, [config, reloadAppConfigTimeout])
+
     return {
         vetApp,
         rootAccount,
+        config,
+        clausesEnabled,
+        contractEnabled,
         errorCode,
         openOrFinalizeConnection,
         isConnecting,
@@ -133,6 +167,9 @@ export const useLedger = ({
 /**
  * @field vetApp - a {@link VET} instance that can be used to make requests to the ledger
  * @field rootAccount - The root VET account on the ledger (with chaincode). This can be used to derive further accounts
+ * @field config - the configuration of the VET app on the ledger
+ * @field clausesEnabled - a boolean that indicates if the user has enabled clauses
+ * @field contractEnabled - a boolean that indicates if the user has enabled contracts
  * @field errorCode - the last error code that was encountered when attempting to connect to the ledger
  * @field openOrFinalizeConnection - a function that can be used to manually attempt to connect to the ledger
  * @field isConnecting - a boolean that indicates if the ledger is currently attempting to connect
@@ -141,6 +178,9 @@ export const useLedger = ({
 interface UseLedgerProps {
     vetApp?: VETLedgerApp
     rootAccount?: VETLedgerAccount
+    config?: string
+    clausesEnabled: boolean
+    contractEnabled: boolean
     errorCode: LEDGER_ERROR_CODES | undefined
     openOrFinalizeConnection: () => Promise<void>
     isConnecting: boolean

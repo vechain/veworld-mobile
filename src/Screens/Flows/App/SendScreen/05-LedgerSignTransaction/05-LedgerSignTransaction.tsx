@@ -28,8 +28,11 @@ import {
     RootStackParamListHome,
     Routes,
 } from "~Navigation"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { useSendTransaction } from "../04-TransactionSummarySendScreen/Hooks"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -37,8 +40,17 @@ type Props = NativeStackScreenProps<
 >
 
 export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, transaction } = route.params
+    const { accountWithDevice, transaction, initialRoute } = route.params
+
     const { LL } = useI18nContext()
+    const nav = useNavigation()
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
+    const { sendTransactionAndPerformUpdates } = useSendTransaction(
+        selectedNetwork,
+        accountWithDevice,
+    )
 
     const [signature, setSignature] = useState<Buffer>()
 
@@ -57,11 +69,21 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         openConnectionErrorSheet()
     }, [openConnectionErrorSheet])
 
-    const { errorCode, setTimerEnabled, vetApp } = useLedger({
+    const {
+        errorCode,
+        setTimerEnabled,
+        vetApp,
+        clausesEnabled,
+        contractEnabled,
+    } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
         waitFirstManualConnection: false,
         onConnectionError,
     })
+
+    useEffect(() => {
+        debug({ clausesEnabled, contractEnabled })
+    }, [clausesEnabled, contractEnabled])
 
     // errorCode + validate signature
     const ledgerErrorCode = useMemo(() => {
@@ -99,8 +121,13 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         return 2
     }, [vetApp, signature])
 
+    /** Effects */
+
+    /**
+     * Sign the transaction when the device is connected and the clauses are enabled
+     */
     useEffect(() => {
-        if (!vetApp) return
+        if (!vetApp || !clausesEnabled || !contractEnabled) return
 
         const signTransaction = async () => {
             try {
@@ -112,7 +139,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     () => setIsAwaitingSignature(true),
                 )
                 debug("Signature OK")
-
                 setSignature(_signature)
             } catch (e) {
                 error(e)
@@ -122,13 +148,17 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             }
         }
         signTransaction()
-    }, [vetApp, accountWithDevice, transaction])
-    const handleOnConfirm = () => {}
+    }, [
+        vetApp,
+        accountWithDevice,
+        transaction,
+        contractEnabled,
+        clausesEnabled,
+    ])
 
-    const onConnectionErrorDismiss = useCallback(() => {
-        setTimerEnabled(false)
-    }, [setTimerEnabled])
-
+    /**
+     * Open the connection error sheet when the error code is not null
+     */
     useEffect(() => {
         if (ledgerErrorCode) {
             openConnectionErrorSheet()
@@ -137,6 +167,37 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             closeConnectionErrorSheet()
         }
     }, [ledgerErrorCode, closeConnectionErrorSheet, openConnectionErrorSheet])
+
+    /** Effects */
+
+    const navigateOnFinish = useCallback(() => {
+        switch (initialRoute) {
+            case Routes.DISCOVER:
+                nav.navigate(Routes.DISCOVER)
+                break
+            case Routes.HOME:
+            default:
+                nav.navigate(Routes.HOME)
+                break
+        }
+    }, [initialRoute, nav])
+
+    const handleOnConfirm = useCallback(async () => {
+        if (!signature) return
+        const tx = new Transaction(transaction)
+        tx.signature = signature
+        await sendTransactionAndPerformUpdates(tx)
+        navigateOnFinish()
+    }, [
+        signature,
+        transaction,
+        sendTransactionAndPerformUpdates,
+        navigateOnFinish,
+    ])
+
+    const onConnectionErrorDismiss = useCallback(() => {
+        setTimerEnabled(false)
+    }, [setTimerEnabled])
 
     return (
         <BaseSafeArea grow={1}>
