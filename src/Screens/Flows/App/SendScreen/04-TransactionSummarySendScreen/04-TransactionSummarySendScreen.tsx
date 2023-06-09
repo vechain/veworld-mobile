@@ -35,7 +35,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { useDelegation, useSendTransaction, useSignTransaction } from "./Hooks"
+import { useDelegation, useSignTransaction, useTransaction } from "./Hooks"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 
 type Props = NativeStackScreenProps<
@@ -82,7 +82,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         }
     }, [initialRoute, nav])
 
-    const { gas, transaction } = useSendTransaction({
+    //build transaction
+    const { gas, transaction } = useTransaction({
         token,
         amount,
         address,
@@ -99,7 +100,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         urlDelegationSignature,
     } = useDelegation({ transaction })
 
-    const { signTransaction } = useSignTransaction({
+    const { signAndSendTransaction } = useSignTransaction({
         transaction,
         onTXFinish,
         isDelegated,
@@ -110,7 +111,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed: signTransaction,
+            onIdentityConfirmed: signAndSendTransaction,
         })
 
     const gasFees = gas?.gas

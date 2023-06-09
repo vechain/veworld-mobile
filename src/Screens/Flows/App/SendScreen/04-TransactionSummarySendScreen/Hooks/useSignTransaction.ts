@@ -1,26 +1,17 @@
-import axios from "axios"
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
-import { ThorConstants, error } from "~Common"
-import { HexUtils, CryptoUtils, TransactionUtils } from "~Utils"
+import { error } from "~Common"
+import { CryptoUtils, TransactionUtils } from "~Utils"
+import { showErrorToast, showWarningToast } from "~Components"
 import {
-    showErrorToast,
-    showSuccessToast,
-    showWarningToast,
-    useThor,
-} from "~Components"
-import {
-    addPendingTransferTransactionActivity,
     selectDevice,
     selectSelectedAccount,
     selectSelectedNetwork,
-    updateAccountBalances,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { Linking } from "react-native"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
+import { useSendTransaction } from "./useSendTransaction"
 
 type Props = {
     transaction: Transaction.Body
@@ -46,26 +37,10 @@ export const useSignTransaction = ({
         selectDevice(state, account.rootAddress),
     )
 
-    const dispatch = useAppDispatch()
-    const thorClient = useThor()
-    /**
-     * send signed transaction with thorest apis
-     */
-    const sendSignedTransaction = async (
-        tx: Transaction,
-        networkUrl: string,
-    ) => {
-        const encodedRawTx = {
-            raw: HexUtils.addPrefix(tx.encode().toString("hex")),
-        }
-
-        const response = await axios.post(
-            `${networkUrl}/transactions`,
-            encodedRawTx,
-        )
-
-        return response.data.id
-    }
+    const { sendTransactionAndPerformUpdates } = useSendTransaction(
+        network,
+        account,
+    )
 
     const getSignature = async (
         tx: Transaction,
@@ -128,10 +103,11 @@ export const useSignTransaction = ({
                 ])
         }
     }
+
     /**
      * sign transaction with user's wallet
      */
-    const signTransaction = async (password?: string) => {
+    const signAndSendTransaction = async (password?: string) => {
         try {
             if (!senderDevice) return
 
@@ -160,25 +136,7 @@ export const useSignTransaction = ({
                 ? await getDelegationSignature(tx, senderSignature, password)
                 : senderSignature
 
-            const id = await sendSignedTransaction(tx, network.currentUrl)
-
-            // Add pending transaction activity
-            dispatch(addPendingTransferTransactionActivity(tx, thorClient))
-
-            showSuccessToast(
-                LL.SUCCESS_GENERIC(),
-                LL.SUCCESS_GENERIC_OPERATION(),
-                LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-                async () => {
-                    await Linking.openURL(
-                        `${
-                            network.explorerUrl ||
-                            ThorConstants.defaultMainNetwork.explorerUrl
-                        }/transactions/${id}`,
-                    )
-                },
-            )
-            await dispatch(updateAccountBalances(thorClient, account.address))
+            await sendTransactionAndPerformUpdates(tx)
         } catch (e) {
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
@@ -187,5 +145,5 @@ export const useSignTransaction = ({
         onTXFinish()
     }
 
-    return { signTransaction }
+    return { signAndSendTransaction, sendTransactionAndPerformUpdates }
 }
