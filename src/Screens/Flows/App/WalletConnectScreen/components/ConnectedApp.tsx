@@ -3,9 +3,9 @@ import React, { memo } from "react"
 import {
     BaseText,
     BaseView,
-    BaseTouchable,
     BaseIcon,
     BaseImage,
+    BaseTouchableBox,
 } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
 import { useTheme, useThemedStyles } from "~Common"
@@ -34,9 +34,9 @@ export const ConnectedApp: React.FC<Props> = memo(
 
         return (
             <>
-                <BaseTouchable
+                <BaseTouchableBox
                     action={() => onPress()}
-                    style={styles.container}>
+                    innerContainerStyle={styles.container}>
                     <BaseView
                         w={100}
                         flexDirection="row"
@@ -84,7 +84,7 @@ export const ConnectedApp: React.FC<Props> = memo(
                             />
                         </BaseView>
                     </BaseView>
-                </BaseTouchable>
+                </BaseTouchableBox>
             </>
         )
     },
@@ -93,7 +93,7 @@ export const ConnectedApp: React.FC<Props> = memo(
 const baseStyles = () =>
     StyleSheet.create({
         innerContainer: {
-            height: 65,
+            height: 45,
         },
         container: {
             width: "100%",
