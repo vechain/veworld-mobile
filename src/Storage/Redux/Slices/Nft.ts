@@ -1,19 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { uniqBy } from "lodash"
 import { NonFungibleTokenCollection } from "~Model"
-import { PaginationResponse } from "~Networking"
-
-type NFTBlackListedItem = {
-    tokenId: string
-    collectionsAddress: string
-}
-
-type CollectionWithPagination = {
-    collections: NonFungibleTokenCollection[]
-    pagination: PaginationResponse
-}
-
-type Collections = Record<string, CollectionWithPagination>
+import {
+    Collections,
+    CollectionWithPagination,
+    NFTBlackListedItem,
+} from "../Types/Nft"
 
 type NftSliceState = {
     collectionsPerAccount: Collections

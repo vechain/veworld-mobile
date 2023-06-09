@@ -73,7 +73,7 @@ export const selectCollectionListIsEmpty = createSelector(
     },
 )
 
-export const selectCollectionWithContractAddres = createSelector(
+export const selectCollectionWithContractAddress = createSelector(
     [
         selectNftCollections,
         (state: RootState, contractAddress: string) => contractAddress,
