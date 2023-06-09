@@ -32,6 +32,8 @@ export const ConnectedApp: React.FC<Props> = memo(
             })
         }
 
+        //TODO: Implement "disconnect" functionality on long press
+
         return (
             <>
                 <BaseTouchableBox
