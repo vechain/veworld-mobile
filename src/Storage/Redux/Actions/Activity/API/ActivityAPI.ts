@@ -2,30 +2,68 @@ import axios from "axios"
 import { ThorConstants, debug, info } from "~Common"
 import {
     ActivityEndpoints,
+    FetchIncomingTransfersResponse,
     FetchTransactionsResponse,
-    createBaseActivityFromTransaction,
-    enrichActivityWithTokenData,
-    enrichActivityWithVetTransfer,
+    getActivitiesFromIncomingTransfers,
+    getActivitiesFromTransactions,
 } from "."
 import { ORDER } from "./ActivityEndpoints"
-import { Activity, ActivityType } from "~Model"
+import { Activity } from "~Model"
 
 export const DEFAULT_PAGE_SIZE: number = 25
 const TIMEOUT = 15000
 
+// Create an instance of axios with common configurations
+const axiosInstance = axios.create({
+    timeout: TIMEOUT,
+})
+
+/**
+ * Fetches data from a specific URL endpoint using axios HTTP client.
+ *
+ * @template T The expected return type from the HTTP request.
+ * @param {string} url - The URL of the HTTP endpoint.
+ *
+ * @returns {Promise<T>} A promise that resolves to the data from the response.
+ *
+ * @throws Will throw an error if the HTTP request fails or if the error is not an instance of Error.
+ */
+export const fetchFromEndpoint = async <T>(url: string) => {
+    try {
+        const response = await axiosInstance.get<T>(url)
+        return response.data
+    } catch (error) {
+        // Verify if 'error' is an instance of an Error before accessing 'error.message'
+        if (error instanceof Error) {
+            throw new Error(
+                `Failed to fetch from endpoint ${url}: ${error.message}`,
+            )
+        } else {
+            throw new Error(
+                `Failed to fetch from endpoint ${url}: ${JSON.stringify(
+                    error,
+                )}`,
+            )
+        }
+    }
+}
+
 /**
  * Fetches transactions for a given address.
- * @param address The address for which to fetch transactions.
- * @param page The page number to fetch.
- * @param thor The Thor instance to use.
- * @returns A promise that resolves to an array of transactions.
+ *
+ * @param {string} address - The address for which to fetch transactions.
+ * @param {number} page - The page number to fetch.
+ * @param {Connex.Thor} thor - The Thor instance to use.
+ *
+ * @returns {Promise<FetchTransactionsResponse[]>} A promise that resolves to an array of transactions.
+ *
  * @throws Will throw an error if the network request fails.
  */
 export const fetchTransactions = async (
     address: string,
     page: number,
     thor: Connex.Thor,
-) => {
+): Promise<FetchTransactionsResponse[]> => {
     debug(`Fetching transactions for ${address}`)
 
     // Indexer doesn't support testnet transaction indexing
@@ -35,21 +73,54 @@ export const fetchTransactions = async (
     }
 
     try {
-        const response = await axios.get<FetchTransactionsResponse[]>(
+        return await fetchFromEndpoint<FetchTransactionsResponse[]>(
             ActivityEndpoints.getTransactionsOrigin(
                 address,
                 page,
                 DEFAULT_PAGE_SIZE,
                 ORDER.DESC,
             ),
-            {
-                timeout: TIMEOUT,
-            },
         )
-
-        return response.data
     } catch (error) {
         throw new Error(`Failed to fetch transactions: ${error}`)
+    }
+}
+
+/**
+ * Fetches incoming transfers for a given address.
+ *
+ * @param {string} address - The address for which to fetch incoming transfers.
+ * @param {number} page - The page number to fetch.
+ * @param {Connex.Thor} thor - The Thor instance to use.
+ *
+ * @returns {Promise<FetchIncomingTransfersResponse[]>} A promise that resolves to an array of incoming transfers.
+ *
+ * @throws Will throw an error if the network request fails.
+ */
+export const fetchIncomingTransfers = async (
+    address: string,
+    page: number,
+    thor: Connex.Thor,
+): Promise<FetchIncomingTransfersResponse[]> => {
+    debug(`Fetching incoming transfers for ${address}`)
+
+    // Indexer doesn't support testnet transaction indexing
+    if (thor.genesis.id === ThorConstants.genesises.test.id) {
+        info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
+        return []
+    }
+
+    try {
+        return await fetchFromEndpoint<FetchIncomingTransfersResponse[]>(
+            ActivityEndpoints.getIncomingTransfersOrigin(
+                address,
+                page,
+                DEFAULT_PAGE_SIZE,
+                ORDER.DESC,
+            ),
+        )
+    } catch (error) {
+        throw new Error(`Failed to fetch incoming transfers: ${error}`)
     }
 }
 
@@ -72,11 +143,11 @@ export const fetchBlock = async (blockId: string, thor: Connex.Thor) => {
 /**
  * Fetches activities from an account's transactions on the Thor blockchain.
  *
- * @param address - The unique address of the account on the blockchain.
- * @param page - The page number to fetch. This is used for pagination purposes, where each page returns DEFAULT_PAGE_SIZE activities.
- * @param thor - An instance of the Connex.Thor blockchain interface.
+ * @param {string} address - The unique address of the account on the blockchain.
+ * @param {number} page - The page number to fetch. This is used for pagination purposes, where each page returns DEFAULT_PAGE_SIZE activities.
+ * @param {Connex.Thor} thor - An instance of the Connex.Thor blockchain interface.
  *
- * @returns A Promise that resolves to an array of Activity objects. These represent the transaction activities of the specified account.
+ * @returns {Promise<Activity[]>} A Promise that resolves to an array of Activity objects. These represent the transaction activities of the specified account.
  */
 export const fetchAccountTransactionActivities = async (
     address: string,
@@ -90,30 +161,22 @@ export const fetchAccountTransactionActivities = async (
         thor,
     )
 
-    const activitiesFetched: Activity[] = []
+    const incomingTransfers: FetchIncomingTransfersResponse[] =
+        await fetchIncomingTransfers(address, page, thor)
 
-    for (const transaction of transactions) {
-        // Create a base activity from the transaction
-        let activity: Activity = createBaseActivityFromTransaction(transaction)
+    let activitiesFetched: Activity[] = []
 
-        // Enrich the activity with token data if it is a fungible token transfer
-        if (activity.type === ActivityType.FUNGIBLE_TOKEN) {
-            activity = enrichActivityWithTokenData(
-                activity,
-                transaction.clauses[0],
-            )
-        }
+    const transactionActivities = getActivitiesFromTransactions(transactions)
 
-        // Enrich the activity with VET transfer data if it is a VET transfer
-        if (activity.type === ActivityType.VET_TRANSFER) {
-            activity = enrichActivityWithVetTransfer(
-                activity,
-                transaction.clauses[0],
-            )
-        }
+    const incomingTransferActivities = getActivitiesFromIncomingTransfers(
+        incomingTransfers,
+        thor,
+    )
 
-        activitiesFetched.push(activity)
-    }
+    activitiesFetched = [
+        ...transactionActivities,
+        ...incomingTransferActivities,
+    ]
 
-    return activitiesFetched
+    return activitiesFetched.sort((a, b) => b.timestamp - a.timestamp)
 }
