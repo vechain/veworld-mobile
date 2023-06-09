@@ -25,6 +25,7 @@ import {
 import { insertSession } from "~Storage/Redux/Slices"
 import { error } from "~Common"
 import { WalletConnectUtils } from "~Utils"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     currentProposal: SignClientTypes.EventArguments["session_proposal"]
@@ -36,19 +37,17 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     const dispatch = useAppDispatch()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const { web3Wallet } = useWalletConnect()
+    const { LL } = useI18nContext()
 
     if (!selectedAccountAddress) {
         onClose()
-        showErrorToast("No account selected.")
         return <></>
     }
 
     // check if the DApp is connecting to Vechain
     if (!currentProposal.params.requiredNamespaces.vechain) {
         onClose()
-        showErrorToast(
-            "The requested chain is not compatible with this wallet.",
-        )
+        showErrorToast(LL.NOTIFICATION_wallet_connect_incompatible_dapp())
         return <></>
     }
 
@@ -58,7 +57,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     const handleAccept = async () => {
         if (!web3Wallet) {
             onClose()
-            showErrorToast("Wallet connect not initialized.")
+            showErrorToast(LL.NOTIFICATION_wallet_connect_not_initialized())
             return
         }
 
@@ -95,7 +94,9 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
             )
 
             onClose()
-            showSuccessToast('Successfully connected to "' + name + '"')
+            showSuccessToast(
+                LL.NOTIFICATION_wallet_connect_successfull_connection({ name }),
+            )
         }
     }
 

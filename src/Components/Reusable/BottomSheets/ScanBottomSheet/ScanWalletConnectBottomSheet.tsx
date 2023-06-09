@@ -48,10 +48,10 @@ export const ScanWalletConnectBottomSheet = React.forwardRef<
             if (isValid) {
                 onScan(result.data)
             } else {
-                showErrorToast("Invalid Wallet Connect URI, please try again.")
+                showErrorToast(LL.NOTIFICATION_wallet_connect_invalid_uri())
             }
         },
-        [onScan, onClose],
+        [onScan, onClose, LL],
     )
 
     const onQrCodePasted = useCallback(
@@ -63,10 +63,10 @@ export const ScanWalletConnectBottomSheet = React.forwardRef<
             if (isValid) {
                 onScan(result)
             } else {
-                showErrorToast("Invalid Wallet Connect URI, please try again.")
+                showErrorToast(LL.NOTIFICATION_wallet_connect_invalid_uri())
             }
         },
-        [onScan, onClose],
+        [onScan, onClose, LL],
     )
 
     // do not render camera when component unmounts

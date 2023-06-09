@@ -22,6 +22,7 @@ import { useCheckIdentity, error } from "~Common"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
+import { useI18nContext } from "~i18n"
 
 interface Props {
     sessionRequest: SessionTypes.Struct
@@ -41,6 +42,7 @@ export const SignIdentityModal = ({
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, account.rootAddress),
     )
+    const { LL } = useI18nContext()
 
     // Request values
     const { chainId, method, params, topic } =
@@ -84,9 +86,9 @@ export const SignIdentityModal = ({
             //TODO: add to history?
 
             onClose()
-            showSuccessToast("Identity certificate signed correctly")
+            showSuccessToast(LL.NOTIFICATION_wallet_connect_identity_signed())
         },
-        [account, params, requestURL, topic, web3Wallet, onClose],
+        [account, params, requestURL, topic, web3Wallet, onClose, LL],
     )
 
     const onApprove = useCallback(

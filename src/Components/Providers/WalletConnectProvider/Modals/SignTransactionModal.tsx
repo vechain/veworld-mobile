@@ -32,6 +32,7 @@ import axios from "axios"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
+import { useI18nContext } from "~i18n"
 
 interface Props {
     sessionRequest: any
@@ -53,6 +54,7 @@ export const SignTransactionModal = ({
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, account.rootAddress),
     )
+    const { LL } = useI18nContext()
 
     // Session request values
     const { chainId, method, params, topic } =
@@ -134,7 +136,7 @@ export const SignTransactionModal = ({
                     !response.data.signature
                 ) {
                     showErrorToast(
-                        "An error occurred while asking delegator to sign the transaction",
+                        LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
                     )
                     onClose()
                     return
@@ -175,7 +177,9 @@ export const SignTransactionModal = ({
                         },
                     })
 
-                    showSuccessToast("Transaction broadcasted correctly")
+                    showSuccessToast(
+                        LL.NOTIFICATION_wallet_connect_transaction_broadcasted(),
+                    )
 
                     //TODO: add to history
                 })
@@ -184,7 +188,7 @@ export const SignTransactionModal = ({
                         id,
                         e.message
                             ? e.message
-                            : "An unexpected error occurred while executing transaction",
+                            : LL.NOTIFICATION_wallet_connect_error_on_transaction(),
                     )
 
                     await web3Wallet?.respondSessionRequest({
@@ -195,13 +199,13 @@ export const SignTransactionModal = ({
                     showErrorToast(
                         e.message
                             ? e.message
-                            : "An unexpected error occurred while executing transaction",
+                            : LL.NOTIFICATION_wallet_connect_error_on_transaction(),
                     )
                 })
 
             onClose()
         },
-        [account, network, params, thorClient, topic, web3Wallet, onClose],
+        [account, network, params, thorClient, topic, web3Wallet, onClose, LL],
     )
 
     const onApprove = useCallback(

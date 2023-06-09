@@ -77,16 +77,16 @@ const WalletConnectContextProvider = ({
                     activatePairing: true,
                 })
 
-                showInfoToast("Connecting may take a few seconds.")
+                showInfoToast(
+                    LL.NOTIFICATION_warning_wallet_connect_connection_could_delay(),
+                )
             } catch (err: unknown) {
                 error(err)
 
-                showErrorToast(
-                    "Error pairing with Dapp, please generate a new QR CODE",
-                )
+                showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
             }
         },
-        [web3Wallet],
+        [web3Wallet, LL],
     )
 
     /**
@@ -124,7 +124,6 @@ const WalletConnectContextProvider = ({
             setSessionRequest(sessionRequestData)
             setRequestEventData(requestEvent)
 
-            //TODO: check if the request is a sign identity or sign transaction
             switch (requestEvent.params.request.method) {
                 case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
                     setSignIdentityModalVisible(true)
