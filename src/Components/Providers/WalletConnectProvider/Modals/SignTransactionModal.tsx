@@ -80,10 +80,26 @@ export const SignTransactionModal = ({
             }
 
             let encodedRawTx, tx: Transaction
+
             if (
-                !isUndefined(params.delegateUrl) &&
-                !isEmpty(params.delegateUrl)
+                isUndefined(params.delegateUrl) ||
+                isEmpty(params.delegateUrl)
             ) {
+                // if the dapp doesn't provide a delegateUrl, we sign the transaction locally
+
+                tx = new Transaction(transaction)
+
+                const hash = tx.signingHash()
+                const senderSignature = secp256k1.sign(hash, privateKey)
+                const signature = Buffer.concat([senderSignature])
+                tx.signature = signature
+
+                encodedRawTx = {
+                    raw: HexUtils.addPrefix(tx.encode().toString("hex")),
+                }
+            } else {
+                // if the dapp provides a delegateUrl, we ask the delegator to sign the transaction
+
                 tx = TransactionUtils.toDelegation(transaction)
                 // build hex encoded version of the transaction for signing request
                 const rawTransaction = HexUtils.addPrefix(
@@ -138,17 +154,6 @@ export const SignTransactionModal = ({
                 ])
 
                 tx.signature = delegationSignature
-
-                encodedRawTx = {
-                    raw: HexUtils.addPrefix(tx.encode().toString("hex")),
-                }
-            } else {
-                tx = new Transaction(transaction)
-
-                const hash = tx.signingHash()
-                const senderSignature = secp256k1.sign(hash, privateKey)
-                const signature = Buffer.concat([senderSignature])
-                tx.signature = signature
 
                 encodedRawTx = {
                     raw: HexUtils.addPrefix(tx.encode().toString("hex")),

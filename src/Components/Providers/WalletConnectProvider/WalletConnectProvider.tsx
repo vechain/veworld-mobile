@@ -125,7 +125,7 @@ const WalletConnectContextProvider = ({
             setRequestEventData(requestEvent)
 
             //TODO: check if the request is a sign identity or sign transaction
-            switch (requestEvent?.params?.request?.method) {
+            switch (requestEvent.params.request.method) {
                 case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
                     setSignIdentityModalVisible(true)
                     break
