@@ -151,6 +151,10 @@ type RootTranslation = {
 	 */
 	BTN_GO_TO_SETTINGS: string
 	/**
+	 * G​o​ ​b​a​c​k
+	 */
+	BTN_GO_BACK: string
+	/**
 	 * P​a​s​t​e​ ​A​d​d​r​e​s​s
 	 */
 	BTN_PASTE_ADDRESS: string
@@ -527,10 +531,6 @@ type RootTranslation = {
 	 * C​a​m​e​r​a​ ​P​e​r​m​i​s​s​i​o​n​s
 	 */
 	TITLE_ALERT_CAMERA_PERMISSION: string
-	/**
-	 * C​a​m​e​r​a​ ​U​n​a​v​a​i​l​a​b​l​e
-	 */
-	TITLE_ALERT_CAMERA_UNAVAILABLE: string
 	/**
 	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
 	 */
@@ -933,6 +933,18 @@ type RootTranslation = {
 	 */
 	COMMON_CIRCULATING_SUPPLY: string
 	/**
+	 * N​.​A​.
+	 */
+	COMMON_NOT_AVAILABLE: string
+	/**
+	 * I​m​p​o​r​t
+	 */
+	COMMON_IMPORT: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	COMMON_RECEIVE: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -948,6 +960,30 @@ type RootTranslation = {
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
 	 */
 	ALERT_MSG_BIO_PREVIOUSLY_DENIED: string
+	/**
+	 * A​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h
+	 */
+	ALERT_TITLE_AUTHORIZE_BLUETOOTH: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​a​p​p​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h​ ​t​o​ ​c​o​n​t​i​n​u​e​.
+	 */
+	ALERT_MSG_AUTHORIZE_BLUETOOTH: string
+	/**
+	 * E​n​a​b​l​e​ ​b​l​u​e​t​o​o​t​h
+	 */
+	ALERT_TITLE_ENABLE_BLUETOOTH: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​e​n​a​b​l​e​ ​t​o​ ​c​o​n​t​i​n​u​e​.
+	 */
+	ALERT_MSG_ENABLE_BLUETOOTH: string
+	/**
+	 * B​l​u​e​t​o​o​t​h​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d
+	 */
+	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: string
+	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​B​l​u​e​t​o​o​t​h​,​ ​w​h​i​c​h​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​u​s​e​ ​t​h​i​s​ ​f​e​a​t​u​r​e​.
+	 */
+	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
 	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
@@ -1143,6 +1179,43 @@ type RootTranslation = {
 	 */
 	NFT_ATTRIBUTES: string
 	/**
+	 * H​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n​s
+	 */
+	HIDDEN_COLLECTIONS: string
+	/**
+	 * M​a​n​a​g​e​ ​N​F​T​s
+	 */
+	MANAGE_NFTS: string
+	/**
+	 * R​e​s​t​o​r​e​ ​y​o​u​r​ ​C​o​l​l​e​c​t​i​o​n​s​ ​o​r​ ​N​F​T​s
+	 */
+	RESTORE_NFTS: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​s
+	 */
+	COLLECTIONS: string
+	/**
+	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
+	 * @param {string} name
+	 */
+	NO_HIDDEN_COLLECTIONS: RequiredParams<'name'>
+	/**
+	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
+	 */
+	DONT_SEE_NFTS: string
+	/**
+	 * I​m​p​o​r​t​ ​N​F​T
+	 */
+	IMPORT_NFT: string
+	/**
+	 * R​e​c​e​i​v​e​ ​N​F​T
+	 */
+	RECEIVE_NFT: string
+	/**
+	 * W​o​o​p​s​!​ ​T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
+	 */
+	NFT_DOWNLOAD_ERROR: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -1299,7 +1372,7 @@ type RootTranslation = {
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
 	/**
-	 * E​n​t​e​r​ ​o​r​ ​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
+	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​s​e​a​r​c​h​ ​y​o​u​r​ ​c​o​n​t​a​c​t​s
 	 */
 	SEND_ENTER_AN_ADDRESS: string
 	/**
@@ -1338,6 +1411,14 @@ type RootTranslation = {
 	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
 	 */
 	SEND_LESS_THAN_1_MIN: string
+	/**
+	 * N​o​n​e​,​ ​p​a​i​d​ ​b​y​ ​d​e​l​e​g​a​t​o​r
+	 */
+	SEND_DELEGATED_FEES: string
+	/**
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​G​a​s​ ​-
+	 */
+	SEND_INSUFFICIENT_VTHO: string
 	/**
 	 * S​e​l​e​c​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
@@ -1782,6 +1863,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
 	/**
+	 * Go back
+	 */
+	BTN_GO_BACK: () => LocalizedString
+	/**
 	 * Paste Address
 	 */
 	BTN_PASTE_ADDRESS: () => LocalizedString
@@ -2157,10 +2242,6 @@ export type TranslationFunctions = {
 	 * Camera Permissions
 	 */
 	TITLE_ALERT_CAMERA_PERMISSION: () => LocalizedString
-	/**
-	 * Camera Unavailable
-	 */
-	TITLE_ALERT_CAMERA_UNAVAILABLE: () => LocalizedString
 	/**
 	 * You're finally one of us!
 	 */
@@ -2558,6 +2639,18 @@ export type TranslationFunctions = {
 	 */
 	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
 	/**
+	 * N.A.
+	 */
+	COMMON_NOT_AVAILABLE: () => LocalizedString
+	/**
+	 * Import
+	 */
+	COMMON_IMPORT: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	COMMON_RECEIVE: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -2573,6 +2666,30 @@ export type TranslationFunctions = {
 	 * You have previously denied biometric authentication. Please enable it in your device settings.
 	 */
 	ALERT_MSG_BIO_PREVIOUSLY_DENIED: () => LocalizedString
+	/**
+	 * Authorize Bluetooth
+	 */
+	ALERT_TITLE_AUTHORIZE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Please, open app settings and authorize Bluetooth to continue.
+	 */
+	ALERT_MSG_AUTHORIZE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Enable bluetooth
+	 */
+	ALERT_TITLE_ENABLE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Please, open the device settings and enable to continue.
+	 */
+	ALERT_MSG_ENABLE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Bluetooth is not supported
+	 */
+	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: () => LocalizedString
+	/**
+	 * Your device does not support Bluetooth, which is required to use this feature.
+	 */
+	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */
@@ -2763,6 +2880,42 @@ Please, try again later.
 	 */
 	NFT_ATTRIBUTES: () => LocalizedString
 	/**
+	 * Hidden collections
+	 */
+	HIDDEN_COLLECTIONS: () => LocalizedString
+	/**
+	 * Manage NFTs
+	 */
+	MANAGE_NFTS: () => LocalizedString
+	/**
+	 * Restore your Collections or NFTs
+	 */
+	RESTORE_NFTS: () => LocalizedString
+	/**
+	 * Collections
+	 */
+	COLLECTIONS: () => LocalizedString
+	/**
+	 * You don't have any hidden {name}
+	 */
+	NO_HIDDEN_COLLECTIONS: (arg: { name: string }) => LocalizedString
+	/**
+	 * Don't see your NFTs?
+	 */
+	DONT_SEE_NFTS: () => LocalizedString
+	/**
+	 * Import NFT
+	 */
+	IMPORT_NFT: () => LocalizedString
+	/**
+	 * Receive NFT
+	 */
+	RECEIVE_NFT: () => LocalizedString
+	/**
+	 * Woops! There was an error trying to get your NFTs. Please try again in a while.
+	 */
+	NFT_DOWNLOAD_ERROR: () => LocalizedString
+	/**
 	 * Light
 	 */
 	LIGHT_THEME: () => LocalizedString
@@ -2919,7 +3072,7 @@ Please, try again later.
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
 	/**
-	 * Enter or scan an address
+	 * Enter an address or search your contacts
 	 */
 	SEND_ENTER_AN_ADDRESS: () => LocalizedString
 	/**
@@ -2958,6 +3111,14 @@ Please, try again later.
 	 * Less than 1 min
 	 */
 	SEND_LESS_THAN_1_MIN: () => LocalizedString
+	/**
+	 * None, paid by delegator
+	 */
+	SEND_DELEGATED_FEES: () => LocalizedString
+	/**
+	 * Insufficient Gas -
+	 */
+	SEND_INSUFFICIENT_VTHO: () => LocalizedString
 	/**
 	 * Select delegation
 	 */

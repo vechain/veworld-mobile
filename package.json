@@ -47,7 +47,7 @@
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
-        "@gorhom/bottom-sheet": "4.4.5",
+        "@gorhom/bottom-sheet": "4.4.7",
         "@klarna/react-native-vector-drawable": "^0.4.0",
         "@ledgerhq/react-native-hw-transport-ble": "^6.28.5",
         "@react-native-community/blur": "^4.3.0",
@@ -93,6 +93,7 @@
         "react-native-ble-plx": "^2.0.3",
         "react-native-bootsplash": "4.6.0",
         "react-native-bouncy-checkbox": "^3.0.6",
+        "react-native-context-menu-view": "^1.9.1",
         "react-native-draggable-flatlist": "4.0.1",
         "react-native-drop-shadow": "^0.0.6",
         "react-native-exception-handler": "^2.10.10",

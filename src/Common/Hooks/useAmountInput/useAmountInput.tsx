@@ -9,6 +9,7 @@ export const useAmountInput = (initialValue: string = "") => {
 
     const handleChangeInput = (text: string) => {
         const filteredText = text
+            .replace(",", ".") // Replace comma with dot
             .replace(new RegExp("[^\\d\\.]", "g"), "") // Filter out non-numeric characters except for decimal separator
             .replace(new RegExp("\\.(?=.*\\.)", "g"), "") // Filter out duplicate decimal separators
         setInput(filteredText)

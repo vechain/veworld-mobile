@@ -61,8 +61,6 @@ describe("HistoryScreen", () => {
             wrapper: TestWrapper,
         })
 
-        screen.debug()
-
         await findElement()
     }, 10000)
 })

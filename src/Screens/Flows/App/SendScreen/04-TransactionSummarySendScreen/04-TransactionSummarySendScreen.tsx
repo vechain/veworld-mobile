@@ -1,8 +1,8 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import { VTHO, useCheckIdentity, useTheme } from "~Common"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils, FormattingUtils } from "~Utils"
 import { COLORS } from "~Common/Theme"
 import {
     AccountCard,
@@ -29,12 +29,15 @@ import {
     selectCurrency,
     selectSelectedAccount,
     useAppSelector,
-    selectAccountsButSelected,
     selectKnownContacts,
+    selectAccounts,
+    selectVthoTokenWithBalanceByAccount,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { useDelegation, useSendTransaction, useSignTransaction } from "./Hooks"
+import { BigNumber } from "bignumber.js"
+import { DelegationType } from "~Model/Delegation"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -51,8 +54,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
-    const accounts = useAppSelector(selectAccountsButSelected)
+    const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
+
+    const accountsAndContacts = useMemo(
+        () => [...accounts, ...contacts],
+        [accounts, contacts],
+    )
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
@@ -92,6 +100,18 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         urlDelegationSignature,
     } = useDelegation({ transaction })
 
+    const vtho = useAppSelector(state =>
+        selectVthoTokenWithBalanceByAccount(
+            state,
+            selectedDelegationAccount?.address || account.address,
+        ),
+    )
+    const vthoBalance = FormattingUtils.scaleNumberDown(
+        vtho.balance.balance,
+        vtho.decimals,
+        2,
+    )
+
     const { signTransaction } = useSignTransaction({
         transaction,
         onTXFinish,
@@ -105,47 +125,38 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         useCheckIdentity({
             onIdentityConfirmed: signTransaction,
         })
-    const gasFees = gas?.gas
-        ? FormattingUtils.convertToFiatBalance(gas.gas.toString(), 1, 5) // TODO: understand if there is a better way to do that
-        : "N.A."
+    const vthoGas = FormattingUtils.convertToFiatBalance(
+        gas?.gas?.toString() || "0",
+        1,
+        5,
+    )
+
+    const isThereEnoughGas = useMemo(() => {
+        let leftVtho = new BigNumber(vthoBalance)
+        if (token.symbol === VTHO.symbol) {
+            leftVtho = leftVtho.minus(amount)
+        }
+        return vthoGas && leftVtho.gte(vthoGas)
+    }, [amount, vthoGas, token.symbol, vthoBalance])
 
     const receiverDetails = () => {
-        const contact = contacts.find(
-            _contact =>
-                _contact.address.toLowerCase() === address.toLowerCase(),
+        const receiverExists = accountsAndContacts.find(_account =>
+            AddressUtils.compareAddresses(_account.address, address),
         )
 
-        if (contact) {
+        if (receiverExists)
             return (
                 <BaseView>
                     <BaseText typographyFont="subSubTitle">
-                        {contact.alias}
-                    </BaseText>
-                    <BaseText typographyFont="captionRegular">
-                        {FormattingUtils.humanAddress(contact.address || "")}
-                    </BaseText>
-                </BaseView>
-            )
-        }
-
-        const receiverAccount = accounts.find(
-            _account =>
-                _account.address.toLowerCase() === address.toLowerCase(),
-        )
-        if (receiverAccount) {
-            return (
-                <BaseView>
-                    <BaseText typographyFont="subSubTitle">
-                        {receiverAccount.alias}
+                        {receiverExists.alias}
                     </BaseText>
                     <BaseText typographyFont="captionRegular">
                         {FormattingUtils.humanAddress(
-                            receiverAccount.address || "",
+                            receiverExists.address || "",
                         )}
                     </BaseText>
                 </BaseView>
             )
-        }
 
         return (
             <BaseView>
@@ -156,6 +167,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         )
     }
 
+    const continueButtonDisabled =
+        !isThereEnoughGas && selectedDelegationOption !== DelegationType.URL
+
     return (
         <BaseSafeArea grow={1} testID="Transaction_Summary_Send_Screen">
             <ScrollViewWithFooter
@@ -165,6 +179,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         mx={24}
                         title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                         action={checkIdentityBeforeOpening}
+                        disabled={continueButtonDisabled}
                     />
                 }>
                 <BackButtonHeader />
@@ -288,9 +303,37 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         {LL.SEND_GAS_FEE()}
                     </BaseText>
                     <BaseSpacer height={6} />
-                    <BaseText typographyFont="subSubTitle">
-                        {gasFees} {VTHO.symbol}
-                    </BaseText>
+                    {selectedDelegationOption === DelegationType.URL ? (
+                        <BaseText typographyFont="subSubTitle">
+                            {LL.SEND_DELEGATED_FEES()}
+                        </BaseText>
+                    ) : (
+                        <>
+                            <BaseText typographyFont="subSubTitle">
+                                {vthoGas || LL.COMMON_NOT_AVAILABLE()}{" "}
+                                {VTHO.symbol}
+                            </BaseText>
+                            {!isThereEnoughGas && (
+                                <>
+                                    <BaseSpacer height={8} />
+                                    <BaseView flexDirection="row">
+                                        <BaseIcon
+                                            name="alert-circle-outline"
+                                            color={COLORS.DARK_RED}
+                                            size={16}
+                                        />
+                                        <BaseSpacer width={4} />
+                                        <BaseText
+                                            typographyFont="buttonSecondary"
+                                            color={COLORS.DARK_RED}>
+                                            {LL.SEND_INSUFFICIENT_VTHO()}{" "}
+                                            {vthoBalance} {VTHO.symbol}
+                                        </BaseText>
+                                    </BaseView>
+                                </>
+                            )}
+                        </>
+                    )}
                     <BaseSpacer height={12} />
                     <BaseSpacer
                         height={0.5}

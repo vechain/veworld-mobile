@@ -18,7 +18,7 @@ Given(
 )
 
 When(
-    "The user select Account as delegation method",
+    "The user selects Account as delegation method",
     { timeout: -1 },
     async () => {
         await clickByText("Account")
@@ -26,7 +26,7 @@ When(
 )
 
 When(
-    "The user select the account {string} from the list",
+    "The user selects the account {string} from the list",
     { timeout: -1 },
     async (account: string) => {
         await clickByText(account)
@@ -41,12 +41,12 @@ Then(
     },
 )
 
-When("The user select URL as delegation method", { timeout: -1 }, async () => {
+When("The user selects URL as delegation method", { timeout: -1 }, async () => {
     await clickByText("URL")
 })
 
 When(
-    "The user insert a new url {string}",
+    "The user inserts a new url {string}",
     { timeout: -1 },
     async (url: string) => {
         await insertTextById(url, "AddUrl_input")

@@ -10,7 +10,7 @@ import {
     selectCoinGeckoTokens,
     selectSelectedAccount,
     getTokensFromGithub,
-    setOfficialTokens,
+    addOfficialTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useEffect } from "react"
@@ -43,7 +43,7 @@ export const useTokenBalances = () => {
             const tokens = await getTokensFromGithub({
                 network,
             })
-            dispatch(setOfficialTokens(tokens))
+            dispatch(addOfficialTokens(tokens))
         })()
     }, [network, dispatch])
 
@@ -68,7 +68,7 @@ export const useTokenBalances = () => {
         updateBalances()
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
         return () => clearInterval(interval)
-    }, [dispatch, thorClient, network.genesis.id, selectedAccount])
+    }, [dispatch, thorClient, network, selectedAccount])
 
     /**
      * fetch tokens with info

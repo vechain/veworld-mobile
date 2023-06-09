@@ -1,33 +1,101 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { uniqBy } from "lodash"
 import { NonFungibleTokenCollection } from "~Model"
-
-type NFTBlackListedItem = {
-    tokenId: string
-    collectionsAddress: string
-}
+import {
+    Collections,
+    CollectionWithPagination,
+    NFTBlackListedItem,
+} from "../Types/Nft"
 
 type NftSliceState = {
-    collections: NonFungibleTokenCollection[]
-    blackListedCollections: string[]
+    collectionsPerAccount: Collections
+    blackListedCollections: NonFungibleTokenCollection[]
     blackListedNFTs: NFTBlackListedItem[]
+    isLoading: boolean
+    error: string | undefined
 }
 
 export const initialStateNft: NftSliceState = {
     blackListedCollections: [],
     blackListedNFTs: [],
-    collections: [],
+    collectionsPerAccount: {},
+    isLoading: false,
+    error: undefined,
 }
 
 export const NftSlice = createSlice({
     name: "nft",
     initialState: initialStateNft,
     reducers: {
-        setNfts: (
+        setCollections: (
             state,
-            action: PayloadAction<NonFungibleTokenCollection[]>,
+            action: PayloadAction<{
+                address: string
+                collectiondata: CollectionWithPagination
+            }>,
         ) => {
-            const nftCollection = action.payload
-            state.collections = nftCollection
+            if (!state.collectionsPerAccount[action.payload.address]) {
+                state.collectionsPerAccount[action.payload.address] = {
+                    collections: [],
+                    pagination: {
+                        totalElements: 0,
+                        totalPages: 0,
+                    },
+                }
+            }
+
+            let uniqueCollections = [
+                ...state.collectionsPerAccount[action.payload.address]
+                    .collections,
+                ...action.payload.collectiondata.collections,
+            ]
+
+            const allUnique = uniqBy(uniqueCollections, "address")
+            state.collectionsPerAccount[action.payload.address] = {
+                collections: allUnique,
+                pagination: action.payload.collectiondata.pagination,
+            }
+
+            return state
+        },
+
+        setNetworkingSideEffects: (
+            state,
+            action: PayloadAction<{
+                isLoading: boolean
+                error: string | undefined
+            }>,
+        ) => {
+            state.isLoading = action.payload.isLoading
+            state.error = action.payload.error
+            return state
+        },
+
+        setBlackListCollection: (
+            state,
+            action: PayloadAction<NonFungibleTokenCollection>,
+        ) => {
+            const allCollections = [
+                ...state.blackListedCollections,
+                action.payload,
+            ]
+            const uniqueCollections = uniqBy(allCollections, "address")
+
+            state.blackListedCollections = uniqueCollections
+
+            return state
+        },
+
+        removeBlackListCollection: (
+            state,
+            action: PayloadAction<NonFungibleTokenCollection>,
+        ) => {
+            const filteredCollections = state.blackListedCollections.filter(
+                collection => collection.address !== action.payload.address,
+            )
+
+            state.blackListedCollections = filteredCollections
+
             return state
         },
 
@@ -43,18 +111,13 @@ export const NftSlice = createSlice({
             const _action = action
             return state
         },
-
-        // TODO set here adjust collections from selectors
-        setBlackListCollection: (
-            state,
-            action: PayloadAction<{ contractAddress: string }>,
-        ) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const _action = action
-            return state
-        },
     },
 })
 
-export const { setNfts, setBlackListNFT, setBlackListCollection } =
-    NftSlice.actions
+export const {
+    setBlackListNFT,
+    setBlackListCollection,
+    setCollections,
+    setNetworkingSideEffects,
+    removeBlackListCollection,
+} = NftSlice.actions

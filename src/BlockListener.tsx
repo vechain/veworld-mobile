@@ -92,7 +92,7 @@ const BlockListener: React.FC = () => {
     )
 
     const onOpen = () => {
-        // info("Beat WS open on: ", beatUrl)
+        info("Beat WS open on: ", beatUrl)
         dispatch(updateNodeError(false))
     }
 

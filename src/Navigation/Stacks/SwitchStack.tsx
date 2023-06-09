@@ -4,12 +4,15 @@ import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { AppInitState, useAppInitState } from "~Common"
 import { CreateWalletAppStack, Routes } from "~Navigation"
+import BlockListener from "../../BlockListener"
+import { BlackListedCollectionsScreen } from "~Screens"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
     TabStack: undefined
     ResetAppScreen: undefined
     Create_Wallet_Flow: undefined
+    Blacklisted_Collections: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -30,9 +33,10 @@ export const SwitchStack = () => {
                 <>
                     <Switch.Screen
                         name="TabStack"
-                        component={TabStack}
+                        component={AppContainer}
                         options={{ headerShown: false }}
                     />
+
                     {/* Full screen modals */}
                     <Switch.Group
                         screenOptions={{
@@ -41,6 +45,14 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CREATE_WALLET_FLOW}
                             component={CreateWalletAppStack}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.BLACKLISTED_COLLECTIONS}
+                            component={BlackListedCollectionsScreen}
+                            options={{
+                                presentation: "modal",
+                            }}
                         />
                     </Switch.Group>
                 </>
@@ -55,5 +67,14 @@ export const SwitchStack = () => {
             }}>
             {RenderStacks}
         </Switch.Navigator>
+    )
+}
+
+const AppContainer = () => {
+    return (
+        <>
+            <BlockListener />
+            <TabStack />
+        </>
     )
 }

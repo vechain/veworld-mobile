@@ -6,7 +6,7 @@ import {
     AccountManagementBottomSheet,
     EditTokensBar,
 } from "./Components"
-import { useBottomSheetModal, useMemoizedAnimation, useNft } from "~Common"
+import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { BaseSafeArea, BaseSpacer, SelectAccountBottomSheet } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
@@ -23,7 +23,6 @@ import { AccountWithDevice } from "~Model"
 
 export const HomeScreen = () => {
     useTokenBalances()
-    useNft()
 
     const {
         ref: accountManagementBottomSheetRef,
@@ -36,11 +35,13 @@ export const HomeScreen = () => {
         onOpen: openAddAccountSheet,
         onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
+
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
+
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const dispatch = useDispatch()
@@ -61,19 +62,20 @@ export const HomeScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <HeaderView
-                openAccountManagementSheet={openAccountManagementSheet}
-                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-            />
-            <BaseSpacer height={24} />
-            <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-            <BaseSpacer height={24} />
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom }}
                 onContentSizeChange={visibleHeight => {
                     visibleHeightRef.current = visibleHeight
                 }}>
+                <HeaderView
+                    openAccountManagementSheet={openAccountManagementSheet}
+                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+                />
+                <BaseSpacer height={24} />
+                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                <BaseSpacer height={24} />
+
                 <TokenList
                     isEdit={isEdit}
                     visibleHeightRef={visibleHeightRef.current}

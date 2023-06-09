@@ -40,6 +40,7 @@ const en: BaseTranslation = {
     BTN_SWAP: "Swap",
     BTN_HISTORY: "History",
     BTN_GO_TO_SETTINGS: "Go to settings",
+    BTN_GO_BACK: "Go back",
     BTN_PASTE_ADDRESS: "Paste Address",
     BTN_SCAN_QR_CODE: "Scan QR Code",
     BTN_ADD_CONTACT: "Add contact",
@@ -151,7 +152,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
-    TITLE_ALERT_CAMERA_UNAVAILABLE: "Camera Unavailable",
+
     TITLE_WALLET_SUCCESS: "You're finally one of us!",
     TITLE_RESET_APP: "VeWorld reset",
     TITLE_WALLET_MANAGEMENT: "Wallet management",
@@ -260,13 +261,22 @@ const en: BaseTranslation = {
     COMMON_TOTAL_SUPPLY: "Total Supply",
     COMMON_24H_VOLUME: "24h Volume",
     COMMON_CIRCULATING_SUPPLY: "Circulating Supply",
+    COMMON_NOT_AVAILABLE: "N.A.",
+    COMMON_IMPORT: "Import",
+    COMMON_RECEIVE: "Receive",
 
 
-    // Common Titles
+    // Alerts
     ALERT_TITLE_NOT_ENROLLED: "Biometrics not available",
     ALERT_MSG_NOT_ENROLLED: "You have not enrolled any biometric authentication method.",
     ALERT_TITLE_BIO_PREVIOUSLY_DENIED: "Biometrics previously denied",
     ALERT_MSG_BIO_PREVIOUSLY_DENIED: "You have previously denied biometric authentication. Please enable it in your device settings.",
+    ALERT_TITLE_AUTHORIZE_BLUETOOTH: "Authorize Bluetooth",
+    ALERT_MSG_AUTHORIZE_BLUETOOTH: "Please, open app settings and authorize Bluetooth to continue.",
+    ALERT_TITLE_ENABLE_BLUETOOTH: "Enable bluetooth",
+    ALERT_MSG_ENABLE_BLUETOOTH: "Please, open the device settings and enable to continue.",
+    ALERT_TITLE_UNSUPPORTED_BLUETOOTH: "Bluetooth is not supported",
+    ALERT_MSG_UNSUPPORTED_BLUETOOTH: "Your device does not support Bluetooth, which is required to use this feature.",
 
 
     // Errors
@@ -331,10 +341,18 @@ const en: BaseTranslation = {
     NOTIFICATION_transaction_reverted: "Transaction {txId} was reverted.",
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
-    // Accounts
+    // NFT
     CONTRACT_ADDRESS: "Contract address",
     NFT_ATTRIBUTES: "Attributes",
-
+    HIDDEN_COLLECTIONS: "Hidden collections",
+    MANAGE_NFTS: "Manage NFTs",
+    RESTORE_NFTS: "Restore your Collections or NFTs",
+    COLLECTIONS: "Collections",
+    NO_HIDDEN_COLLECTIONS: "You don't have any hidden {name: string}",
+    DONT_SEE_NFTS: "Don't see your NFTs?",
+    IMPORT_NFT: "Import NFT",
+    RECEIVE_NFT: "Receive NFT",
+    NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
 
     // Onboarding
 
@@ -398,7 +416,7 @@ const en: BaseTranslation = {
     SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
     SEND_INSERT_ADDRESS: "Send your token",
     SEND_INSERT_ADDRESS_DESCRIPTION: "Select a contact below or paste/scan an address",
-    SEND_ENTER_AN_ADDRESS: "Enter or scan an address",
+    SEND_ENTER_AN_ADDRESS: "Enter an address or search your contacts",
     SEND_INSERT_CONTACTS: "Contacts",
     SEND_INSERT_ACCOUNTS: "Accounts",
     SEND_FROM: "From",
@@ -408,6 +426,8 @@ const en: BaseTranslation = {
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",
+    SEND_DELEGATED_FEES: "None, paid by delegator",
+    SEND_INSUFFICIENT_VTHO: "Insufficient Gas -",
     SEND_DELEGATION_TITLE: "Select delegation",
     SEND_DELEGATION_NONE: "None",
     SEND_DELEGATION_ACCOUNT: "Account",
