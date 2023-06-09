@@ -202,52 +202,45 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
-            <BaseView
-                alignItems="center"
-                justifyContent="space-between"
-                flexGrow={1}
-                mx={20}>
-                <BaseView alignSelf="flex-start" w={100}>
-                    <BaseText typographyFont="title">
-                        {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
-                    </BaseText>
-                    <BaseText typographyFont="body" my={10}>
-                        {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
-                    </BaseText>
+            <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
+                <BaseText typographyFont="title">
+                    {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
+                </BaseText>
+                <BaseText typographyFont="body" my={10}>
+                    {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
+                </BaseText>
 
-                    <BaseSpacer height={20} />
-                    <Lottie
-                        source={BlePairingDark}
-                        autoPlay
-                        loop
-                        style={styles.lottie}
-                    />
-                    <BaseSpacer height={20} />
-                    <StepsProgressBar
-                        steps={Steps}
-                        currentStep={currentStep}
-                        isCurrentStepError={!!signingError}
-                    />
-                    <BaseSpacer height={96} />
-                    <BaseText typographyFont="bodyBold">
-                        {Steps[currentStep]?.title || LL.SEND_LEDGER_TX_READY()}
-                    </BaseText>
-                    <BaseText typographyFont="body" mt={8}>
-                        {Steps[currentStep]?.subtitle ||
-                            LL.SEND_LEDGER_TX_READY_SB()}
-                    </BaseText>
-                </BaseView>
-
-                <BaseView w={100}>
-                    <BaseButton
-                        action={handleOnConfirm}
-                        title={LL.COMMON_BTN_CONFIRM()}
-                        disabled={!signature}
-                    />
-                </BaseView>
+                <BaseSpacer height={20} />
+                <Lottie
+                    source={BlePairingDark}
+                    autoPlay
+                    loop
+                    style={styles.lottie}
+                />
+                <BaseSpacer height={20} />
+                <StepsProgressBar
+                    steps={Steps}
+                    currentStep={currentStep}
+                    isCurrentStepError={!!signingError}
+                />
+                <BaseSpacer height={96} />
+                <BaseText typographyFont="bodyBold">
+                    {Steps[currentStep]?.title || LL.SEND_LEDGER_TX_READY()}
+                </BaseText>
+                <BaseText typographyFont="body" mt={8}>
+                    {Steps[currentStep]?.subtitle ||
+                        LL.SEND_LEDGER_TX_READY_SB()}
+                </BaseText>
             </BaseView>
+            <BaseButton
+                style={styles.button}
+                mx={24}
+                haptics="light"
+                title={LL.COMMON_BTN_CONFIRM()}
+                disabled={!signature}
+                action={handleOnConfirm}
+            />
 
-            <BaseSpacer height={40} />
             <BluetoothStatusBottomSheet />
             <ConnectionErrorBottomSheet
                 ref={connectionErrorSheetRef}
@@ -266,5 +259,8 @@ const styles = StyleSheet.create({
     lottie: {
         width: "100%",
         height: 100,
+    },
+    button: {
+        marginBottom: 70,
     },
 })
