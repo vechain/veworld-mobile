@@ -1323,7 +1323,7 @@ type RootTranslation = {
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
 	/**
-	 * E​n​t​e​r​ ​o​r​ ​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
+	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​s​e​a​r​c​h​ ​y​o​u​r​ ​c​o​n​t​a​c​t​s
 	 */
 	SEND_ENTER_AN_ADDRESS: string
 	/**
@@ -1427,6 +1427,34 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
 	/**
+	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_LEDGER_VALIDATE_TRANSACTION: string
+	/**
+	 * W​e​ ​a​r​e​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​c​o​n​n​e​c​t​i​o​n
+	 */
+	SEND_LEDGER_CHECK_CONNECTION: string
+	/**
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​i​s​ ​o​p​e​n
+	 */
+	SEND_LEDGER_CHECK_CONNECTION_SB: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_LEDGER_SIGN_DATA: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	SEND_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
+	 */
+	SEND_LEDGER_TX_READY: string
+	/**
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​s​e​n​d​ ​i​t​ ​t​o​ ​t​h​e​ ​n​e​t​w​o​r​k
+	 */
+	SEND_LEDGER_TX_READY_SB: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -1498,6 +1526,14 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
+	/**
+	 * V​a​l​i​d​a​t​e​ ​s​i​g​n​a​t​u​r​e
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: string
+	/**
+	 * W​e​'​v​e​ ​s​e​n​t​ ​a​ ​s​i​g​n​a​t​u​r​e​ ​r​e​q​u​e​s​t​ ​t​o​ ​y​o​u​r​ ​l​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​v​a​l​i​d​a​t​e​ ​i​t​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: string
 	/**
 	 * U​n​k​n​o​w​n​ ​e​r​r​o​r
 	 */
@@ -2955,7 +2991,7 @@ Please, try again later.
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
 	/**
-	 * Enter or scan an address
+	 * Enter an address or search your contacts
 	 */
 	SEND_ENTER_AN_ADDRESS: () => LocalizedString
 	/**
@@ -3059,6 +3095,34 @@ Please, try again later.
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
 	/**
+	 * Validate transaction
+	 */
+	SEND_LEDGER_VALIDATE_TRANSACTION: () => LocalizedString
+	/**
+	 * We are checking your ledger connection
+	 */
+	SEND_LEDGER_CHECK_CONNECTION: () => LocalizedString
+	/**
+	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open
+	 */
+	SEND_LEDGER_CHECK_CONNECTION_SB: () => LocalizedString
+	/**
+	 * We are signing your transaction
+	 */
+	SEND_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * We are signing your transaction with your Ledger, please confirm the transaction on your device when required
+	 */
+	SEND_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * Transaction is ready
+	 */
+	SEND_LEDGER_TX_READY: () => LocalizedString
+	/**
+	 * The transaction is ready to be sent, press confirm to send it to the network
+	 */
+	SEND_LEDGER_TX_READY_SB: () => LocalizedString
+	/**
 	 * Account
 	 */
 	WALLET_LABEL_ACCOUNT: () => LocalizedString
@@ -3130,6 +3194,14 @@ Please, try again later.
 	 * Please, open the VET app to continue
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
+	/**
+	 * Validate signature
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: () => LocalizedString
+	/**
+	 * We've sent a signature request to your ledger, please validate it to continue
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: () => LocalizedString
 	/**
 	 * Unknown error
 	 */

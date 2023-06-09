@@ -4,7 +4,13 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { Transaction } from "thor-devkit"
 import { BlePairingDark } from "~Assets"
-import { debug, error, useBottomSheetModal, useLedger } from "~Common"
+import {
+    LEDGER_ERROR_CODES,
+    debug,
+    error,
+    useBottomSheetModal,
+    useLedger,
+} from "~Common"
 import {
     BackButtonHeader,
     BaseButton,
@@ -35,6 +41,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
 
     const [signature, setSignature] = useState<Buffer>()
+
+    // If the tx is ready and the signature has been requested to the device
+    const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
+
     const [signingError, setSigningError] = useState<boolean>()
 
     const {
@@ -52,6 +62,34 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         waitFirstManualConnection: false,
         onConnectionError,
     })
+
+    // errorCode + validate signature
+    const ledgerErrorCode = useMemo(() => {
+        if (isAwaitingSignature) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
+        return errorCode
+    }, [errorCode, isAwaitingSignature])
+
+    const Steps: Step[] = useMemo(
+        () => [
+            {
+                isActiveText: "Connecting",
+                isNextText: "Connect",
+                isDoneText: "Connected",
+                progressPercentage: 25,
+                title: LL.SEND_LEDGER_CHECK_CONNECTION(),
+                subtitle: LL.SEND_LEDGER_CHECK_CONNECTION_SB(),
+            },
+            {
+                isActiveText: "Signing",
+                isNextText: "Sign data",
+                isDoneText: "Data Signed",
+                progressPercentage: 75,
+                title: LL.SEND_LEDGER_SIGN_DATA(),
+                subtitle: LL.SEND_LEDGER_SIGN_DATA_SB(),
+            },
+        ],
+        [LL],
+    )
 
     const currentStep = useMemo(() => {
         if (!vetApp) return 0
@@ -71,13 +109,16 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     new Transaction(transaction),
                     accountWithDevice.device,
                     vetApp,
-                    () => {},
+                    () => setIsAwaitingSignature(true),
                 )
                 debug("Signature OK")
+
                 setSignature(_signature)
             } catch (e) {
                 error(e)
                 setSigningError(true)
+            } finally {
+                setIsAwaitingSignature(false)
             }
         }
         signTransaction()
@@ -89,23 +130,13 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     }, [setTimerEnabled])
 
     useEffect(() => {
-        if (!errorCode) {
+        if (ledgerErrorCode) {
+            openConnectionErrorSheet()
+        }
+        if (!ledgerErrorCode) {
             closeConnectionErrorSheet()
         }
-    }, [errorCode, closeConnectionErrorSheet])
-
-    const Steps: Step[] = [
-        {
-            isActiveText: "Connecting",
-            isNextText: "Connect",
-            isDoneText: "Connected",
-        },
-        {
-            isActiveText: "Signing",
-            isNextText: "Sign data",
-            isDoneText: "Data Signed",
-        },
-    ]
+    }, [ledgerErrorCode, closeConnectionErrorSheet, openConnectionErrorSheet])
 
     return (
         <BaseSafeArea grow={1}>
@@ -136,6 +167,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         currentStep={currentStep}
                         isCurrentStepError={!!signingError}
                     />
+                    <BaseSpacer height={96} />
+                    <BaseText typographyFont="bodyBold">
+                        {Steps[currentStep]?.title || LL.SEND_LEDGER_TX_READY()}
+                    </BaseText>
+                    <BaseText typographyFont="body" mt={8}>
+                        {Steps[currentStep]?.subtitle ||
+                            LL.SEND_LEDGER_TX_READY_SB()}
+                    </BaseText>
                 </BaseView>
 
                 <BaseView w={100}>
@@ -152,7 +191,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             <ConnectionErrorBottomSheet
                 ref={connectionErrorSheetRef}
                 onDismiss={onConnectionErrorDismiss}
-                error={errorCode}
+                error={ledgerErrorCode}
             />
         </BaseSafeArea>
     )

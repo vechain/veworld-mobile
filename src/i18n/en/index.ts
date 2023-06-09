@@ -432,6 +432,12 @@ const en: BaseTranslation = {
     SEND_CREATE_CONTACT_NAME: "Contact name",
     SEND_CREATE_CONTACT_ADDRESS: "Contact address",
     SEND_LEDGER_VALIDATE_TRANSACTION: "Validate transaction",
+    SEND_LEDGER_CHECK_CONNECTION: "We are checking your ledger connection",
+    SEND_LEDGER_CHECK_CONNECTION_SB: "Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open",
+    SEND_LEDGER_SIGN_DATA: "We are signing your transaction",
+    SEND_LEDGER_SIGN_DATA_SB: "We are signing your transaction with your Ledger, please confirm the transaction on your device when required",
+    SEND_LEDGER_TX_READY: "Transaction is ready",
+    SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",
@@ -465,6 +471,8 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: "Please, turn on and unlock your ledger device to continue",
     WALLET_LEDGER_ERROR_OPEN_APP: "Open VET app",
     WALLET_LEDGER_ERROR_OPEN_APP_DESC: "Please, open the VET app to continue",
+    WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: "Validate signature",
+    WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: "We've sent a signature request to your ledger, please validate it to continue",
     WALLET_LEDGER_ERROR_UNKNOWN: "Unknown error",
     WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
 
