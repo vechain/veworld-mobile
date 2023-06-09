@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseText, BaseView, BaseBottomSheet } from "~Components"
+import {
+    BaseText,
+    BaseView,
+    BaseBottomSheet,
+    showErrorToast,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { useCameraPermissions, useDisclosure } from "~Common"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
@@ -10,6 +15,7 @@ import { StyleSheet } from "react-native"
 import { QrScannerLayout } from "./components/QrScannerLayout"
 import { CameraHeader } from "./components/CameraHeader"
 import { CameraFooter } from "./components/CameraFooter"
+import { WalletConnectUtils } from "~Utils"
 
 type Props = {
     onScan: (address: string) => void
@@ -35,25 +41,30 @@ export const ScanWalletConnectBottomSheet = React.forwardRef<
     //called when the camera detects a qr code
     const onQrScanned = useCallback(
         (result: BarCodeScanningResult) => {
-            //TODO: Check that it's valid wallet connect uri
-            // const isValidAddress = AddressUtils.isValid(result.data)
-            // if (isValidAddress) {
-            //     onClose()
-            //     onScan(result.data)
-            // }
+            const isValid = WalletConnectUtils.isValidURI(result.data)
 
             onClose()
-            onScan(result.data)
+
+            if (isValid) {
+                onScan(result.data)
+            } else {
+                showErrorToast("Invalid Wallet Connect URI, please try again.")
+            }
         },
         [onScan, onClose],
     )
 
     const onQrCodePasted = useCallback(
         (result: string) => {
-            //TODO: Check that it's valid wallet connect uri
+            const isValid = WalletConnectUtils.isValidURI(result)
 
             onClose()
-            onScan(result)
+
+            if (isValid) {
+                onScan(result)
+            } else {
+                showErrorToast("Invalid Wallet Connect URI, please try again.")
+            }
         },
         [onScan, onClose],
     )

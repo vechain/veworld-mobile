@@ -44,7 +44,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     }
 
     // check if the DApp is connecting to Vechain
-    if (!currentProposal?.params?.requiredNamespaces?.vechain) {
+    if (!currentProposal.params.requiredNamespaces.vechain) {
         onClose()
         showErrorToast(
             "The requested chain is not compatible with this wallet.",

@@ -1,6 +1,7 @@
 import { Core } from "@walletconnect/core"
 import { ICore, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { Web3Wallet, IWeb3Wallet } from "@walletconnect/web3wallet"
+import { isEmpty, isNull } from "lodash"
 
 export const VECHAIN_SIGNING_METHODS = {
     IDENTIFY: "identify",
@@ -81,4 +82,47 @@ export function getSessionRequestAttributes(
         requestURL,
     }
     return attributes
+}
+
+/**
+ * WalletConnect V2 URI is based on [eip-1328](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1328.md)
+ * uri         = "wc" ":" topic [ "@" version ][ "?" parameters ]
+ * topic       = STRING
+ * version     = 1*DIGIT
+ * parameters  = parameter *( "&" parameter )
+ * parameter   = key "=" value
+ * key         = STRING
+ * value       = STRING
+ *
+ * Required parameters:
+ * symKey (STRING) = symmetric key used for pairing encryption
+ * relay-protocol (STRING) = protocol name used for relay
+ *
+ * @returns boolean
+ */
+export function isValidURI(uri: string) {
+    if (isNull(uri) || isEmpty(uri)) return false
+
+    // Split string by : and check if the first element is wc
+    const uriArray = uri.split(":")
+    if (uriArray[0] !== "wc") return false
+
+    // Split the string between @ and ? and check if the first element is the correct version
+    const version = uriArray[1].split("@")[1].split("?")[0]
+    if (version !== "2") return false
+
+    // Split the string between @ and ? and retrieve the parameters
+    const parameters = uriArray[1].split("@")[1].split("?")[1].split("&")
+
+    // Iterate over the parameters and check if the required parameters are present
+    let hasSymKey = false
+    let hasRelayProtocol = false
+    parameters.forEach(parameter => {
+        const key = parameter.split("=")[0]
+        if (key === "symKey") hasSymKey = true
+        if (key === "relay-protocol") hasRelayProtocol = true
+    })
+    if (!hasSymKey || !hasRelayProtocol) return false
+
+    return true
 }
