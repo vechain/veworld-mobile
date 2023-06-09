@@ -10,6 +10,8 @@ import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
 import { ConnectAppButton, ConnectedApp } from "./components"
+import { ScrollView } from "react-native-gesture-handler"
+import { StyleSheet } from "react-native"
 
 export const ConnectedAppsScreen = () => {
     const activeSessions: Record<string, SessionTypes.Struct[]> =
@@ -25,51 +27,74 @@ export const ConnectedAppsScreen = () => {
 
     return (
         <BaseSafeArea>
-            <BackButtonHeader />
-            <BaseView mx={20}>
-                <BaseText typographyFont="title">{"Connected Apps"}</BaseText>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentInsetAdjustmentBehavior="automatic"
+                contentContainerStyle={[baseStyles.scrollViewContainer]}
+                style={baseStyles.scrollView}>
+                <BackButtonHeader />
+                <BaseView mx={20}>
+                    <BaseText typographyFont="title">
+                        {"Connected Apps"}
+                    </BaseText>
 
-                <BaseSpacer height={40} />
-                <ConnectAppButton />
+                    <BaseSpacer height={40} />
+                    <ConnectAppButton />
 
-                {totalSessions === 0 && (
-                    <>
-                        <BaseSpacer height={24} />
-                        <BaseText typographyFont="subTitleLight" mt={50}>
-                            {
-                                "You have no connected apps. Once you have some, they will displayed here."
-                            }
-                        </BaseText>
-                    </>
-                )}
+                    {totalSessions === 0 && (
+                        <>
+                            <BaseSpacer height={24} />
+                            <BaseText typographyFont="subTitleLight" mt={50}>
+                                {
+                                    "You have no connected apps. Once you have some, they will displayed here."
+                                }
+                            </BaseText>
+                        </>
+                    )}
 
-                {accounts.map(account => {
-                    if (
-                        account.address in activeSessions &&
-                        !isEmpty(activeSessions[account.address])
-                    ) {
-                        return (
-                            <BaseSafeArea key={account.address}>
-                                <BaseText typographyFont="subSubTitleLight">
-                                    {account.alias}
-                                </BaseText>
-                                <BaseSpacer height={16} />
-                                {activeSessions[account.address].map(
-                                    session => {
-                                        return (
-                                            <ConnectedApp
-                                                session={session}
-                                                key={session.topic}
-                                                account={account}
-                                            />
-                                        )
-                                    },
-                                )}
-                            </BaseSafeArea>
-                        )
-                    }
-                })}
-            </BaseView>
+                    {accounts.map(account => {
+                        if (
+                            account.address in activeSessions &&
+                            !isEmpty(activeSessions[account.address])
+                        ) {
+                            return (
+                                <BaseSafeArea key={account.address}>
+                                    <BaseText typographyFont="subSubTitleLight">
+                                        {account.alias}
+                                    </BaseText>
+                                    <BaseSpacer height={16} />
+                                    {activeSessions[account.address].map(
+                                        session => {
+                                            return (
+                                                <ConnectedApp
+                                                    session={session}
+                                                    key={session.topic}
+                                                    account={account}
+                                                />
+                                            )
+                                        },
+                                    )}
+                                </BaseSafeArea>
+                            )
+                        }
+                    })}
+                </BaseView>
+            </ScrollView>
         </BaseSafeArea>
     )
 }
+
+const baseStyles = StyleSheet.create({
+    backIcon: {
+        marginHorizontal: 8,
+        alignSelf: "flex-start",
+    },
+    scrollViewContainer: {
+        width: "100%",
+        height: "100%",
+    },
+    scrollView: {
+        width: "100%",
+    },
+})
