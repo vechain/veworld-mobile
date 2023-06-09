@@ -5,7 +5,7 @@ import { SignClientTypes, SessionTypes } from "@walletconnect/types"
 import {
     useAppSelector,
     useAppDispatch,
-    selectAccountsState,
+    selectSelectedAccountAddress,
 } from "~Storage/Redux"
 import { PairModal } from "./Modals/PairModal"
 import { SignIdentityModal } from "./Modals/SignIdentityModal"
@@ -43,7 +43,7 @@ const WalletConnectContextProvider = ({
     children,
 }: WalletConnectContextProviderProps) => {
     // General
-    const selectedAccount = useAppSelector(selectAccountsState).selectedAccount
+    const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
@@ -174,11 +174,11 @@ const WalletConnectContextProvider = ({
 
     const onSessionDelete = useCallback(
         (payload: { id: number; topic: string }) => {
-            if (!selectedAccount) return
+            if (!selectedAccountAddress) return
 
             disconnect(payload.topic)
         },
-        [selectedAccount, disconnect],
+        [selectedAccountAddress, disconnect],
     )
 
     /**
@@ -223,7 +223,7 @@ const WalletConnectContextProvider = ({
     return (
         <WalletConnectContext.Provider value={value}>
             {children}
-            {selectedAccount && (
+            {selectedAccountAddress && (
                 <>
                     {currentProposal && (
                         <PairModal

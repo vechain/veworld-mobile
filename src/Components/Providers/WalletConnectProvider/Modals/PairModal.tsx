@@ -18,7 +18,7 @@ import {
 } from "~Components"
 import { getSdkError } from "@walletconnect/utils"
 import {
-    selectAccountsState,
+    selectSelectedAccountAddress,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -34,10 +34,10 @@ type Props = {
 
 export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     const dispatch = useAppDispatch()
-    const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
+    const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const { web3Wallet } = useWalletConnect()
 
-    if (!selectedAccount) {
+    if (!selectedAccountAddress) {
         onClose()
         showErrorToast("No account selected.")
         return <></>
@@ -74,7 +74,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                 const accounts: string[] = []
 
                 requiredNamespaces[key].chains?.map((chain: string) => {
-                    accounts.push(`${chain}:${selectedAccount}`)
+                    accounts.push(`${chain}:${selectedAccountAddress}`)
                 })
 
                 namespaces[key] = {
@@ -90,7 +90,9 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                 namespaces,
             })
 
-            dispatch(insertSession({ address: selectedAccount, session }))
+            dispatch(
+                insertSession({ address: selectedAccountAddress, session }),
+            )
 
             onClose()
             showSuccessToast('Successfully connected to "' + name + '"')
