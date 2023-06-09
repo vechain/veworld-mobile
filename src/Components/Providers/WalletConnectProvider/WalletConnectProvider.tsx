@@ -233,23 +233,27 @@ const WalletConnectContextProvider = ({
                         />
                     )}
 
-                    {requestEventData && signIdentityModalVisible && (
-                        <SignIdentityModal
-                            onClose={onSessionRequestClose}
-                            isOpen={signIdentityModalVisible}
-                            requestEvent={requestEventData}
-                            sessionRequest={sessionRequest}
-                        />
-                    )}
+                    {requestEventData &&
+                        sessionRequest &&
+                        signIdentityModalVisible && (
+                            <SignIdentityModal
+                                onClose={onSessionRequestClose}
+                                isOpen={signIdentityModalVisible}
+                                requestEvent={requestEventData}
+                                sessionRequest={sessionRequest}
+                            />
+                        )}
 
-                    {requestEventData && signTransactionModalVisible && (
-                        <SignTransactionModal
-                            onClose={onSessionRequestClose}
-                            isOpen={signTransactionModalVisible}
-                            requestEvent={requestEventData}
-                            sessionRequest={sessionRequest}
-                        />
-                    )}
+                    {requestEventData &&
+                        sessionRequest &&
+                        signTransactionModalVisible && (
+                            <SignTransactionModal
+                                onClose={onSessionRequestClose}
+                                isOpen={signTransactionModalVisible}
+                                requestEvent={requestEventData}
+                                sessionRequest={sessionRequest}
+                            />
+                        )}
                 </>
             )}
         </WalletConnectContext.Provider>

@@ -1,5 +1,5 @@
 import { Core } from "@walletconnect/core"
-import { ICore } from "@walletconnect/types"
+import { ICore, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { Web3Wallet, IWeb3Wallet } from "@walletconnect/web3wallet"
 
 export const VECHAIN_SIGNING_METHODS = {
@@ -28,4 +28,57 @@ export async function getWeb3Wallet() {
     })
 
     return web3wallet
+}
+
+export function getPairAttributes(
+    proposal: SignClientTypes.EventArguments["session_proposal"],
+) {
+    const name = proposal.params?.proposer?.metadata?.name
+    const url = proposal.params?.proposer?.metadata.url
+    const methods = proposal.params?.requiredNamespaces.vechain.methods
+    const events = proposal.params?.requiredNamespaces.vechain.events
+    const chains = proposal.params?.requiredNamespaces.vechain.chains
+    const icon = proposal.params.proposer.metadata.icons[0]
+
+    const attributes = {
+        name,
+        url,
+        methods,
+        events,
+        chains,
+        icon,
+    }
+    return attributes
+}
+
+export function getRequestEventAttributes(
+    requestEvent: SignClientTypes.EventArguments["session_request"],
+) {
+    const chainId = requestEvent.params.chainId.toUpperCase()
+    const method = requestEvent.params.request.method
+    const params = requestEvent.params.request.params[0]
+    const topic = requestEvent.topic
+
+    const attributes = {
+        chainId,
+        method,
+        params,
+        topic,
+    }
+    return attributes
+}
+
+export function getSessionRequestAttributes(
+    sessionRequest: SessionTypes.Struct,
+) {
+    const requestName = sessionRequest.peer.metadata.name
+    const requestIcon = sessionRequest.peer.metadata.icons[0]
+    const requestURL = sessionRequest.peer.metadata.url
+
+    const attributes = {
+        requestName,
+        requestIcon,
+        requestURL,
+    }
+    return attributes
 }

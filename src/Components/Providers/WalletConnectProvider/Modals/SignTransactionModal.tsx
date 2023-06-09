@@ -20,7 +20,12 @@ import {
     selectDevice,
     selectSelectedAccount,
 } from "~Storage/Redux"
-import { HexUtils, CryptoUtils, TransactionUtils } from "~Utils"
+import {
+    HexUtils,
+    CryptoUtils,
+    TransactionUtils,
+    WalletConnectUtils,
+} from "~Utils"
 import { useCheckIdentity, error } from "~Common"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import axios from "axios"
@@ -44,22 +49,16 @@ export const SignTransactionModal = ({
     const thorClient = useThor()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
-    // const selectedDevice = useAppSelector(selectDevice(account.rootAddress))
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, account.rootAddress),
     )
 
-    // CurrentProposal values
-    const chainID = requestEvent?.params?.chainId?.toUpperCase()
-    const method = requestEvent?.params?.request?.method
-    const params = requestEvent?.params?.request?.params[0]
-    const requestName = sessionRequest?.peer?.metadata?.name
-    const requestIcon = sessionRequest?.peer?.metadata?.icons[0]
-    const requestURL = sessionRequest?.peer?.metadata?.url
-
+    // Session request values
+    const { chainId, method, params, topic } =
+        WalletConnectUtils.getRequestEventAttributes(requestEvent)
+    const { requestName, requestIcon, requestURL } =
+        WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
     const message = params.comment || params.txMessage[0].comment
-
-    const { topic } = requestEvent ? requestEvent : { topic: "" }
 
     const onSignTransaction = useCallback(
         async (id: number, privateKey: Buffer) => {
@@ -294,7 +293,7 @@ export const SignTransactionModal = ({
 
                 <BaseText>
                     {"Chains: "}
-                    {chainID}
+                    {chainId}
                 </BaseText>
 
                 <BaseSpacer height={24} />

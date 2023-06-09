@@ -24,6 +24,7 @@ import {
 } from "~Storage/Redux"
 import { insertSession } from "~Storage/Redux/Slices"
 import { error } from "~Common"
+import { WalletConnectUtils } from "~Utils"
 
 type Props = {
     currentProposal: SignClientTypes.EventArguments["session_proposal"]
@@ -51,12 +52,8 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
         return <></>
     }
 
-    const name = currentProposal?.params?.proposer?.metadata?.name
-    const url = currentProposal?.params?.proposer?.metadata.url
-    const methods = currentProposal?.params?.requiredNamespaces.vechain.methods
-    const events = currentProposal?.params?.requiredNamespaces.vechain.events
-    const chains = currentProposal?.params?.requiredNamespaces.vechain.chains
-    const icon = currentProposal?.params.proposer.metadata.icons[0]
+    const { name, url, methods, events, chains, icon } =
+        WalletConnectUtils.getPairAttributes(currentProposal)
 
     const handleAccept = async () => {
         if (!web3Wallet) {

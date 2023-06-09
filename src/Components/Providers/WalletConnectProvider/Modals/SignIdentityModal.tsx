@@ -1,4 +1,4 @@
-import { SignClientTypes } from "@walletconnect/types"
+import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import React, { useCallback } from "react"
 import { Image, StyleSheet } from "react-native"
 import {
@@ -17,15 +17,15 @@ import {
     selectDevice,
     selectSelectedAccount,
 } from "~Storage/Redux"
-import { HexUtils, CryptoUtils } from "~Utils"
+import { HexUtils, CryptoUtils, WalletConnectUtils } from "~Utils"
 import { useCheckIdentity, error } from "~Common"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 
 interface Props {
-    sessionRequest: any
-    requestEvent?: SignClientTypes.EventArguments["session_request"]
+    sessionRequest: SessionTypes.Struct
+    requestEvent: SignClientTypes.EventArguments["session_request"]
     onClose: () => void
     isOpen: boolean
 }
@@ -42,16 +42,12 @@ export const SignIdentityModal = ({
         selectDevice(state, account.rootAddress),
     )
 
-    // CurrentProposal values
-    const chainID = requestEvent?.params?.chainId?.toUpperCase()
-    const method = requestEvent?.params?.request?.method
-    const params = requestEvent?.params?.request?.params[0]
-    const requestName = sessionRequest?.peer?.metadata?.name
-    const requestIcon = sessionRequest?.peer?.metadata?.icons[0]
-    const requestURL = sessionRequest?.peer?.metadata?.url
+    // Request values
+    const { chainId, method, params, topic } =
+        WalletConnectUtils.getRequestEventAttributes(requestEvent)
+    const { requestName, requestIcon, requestURL } =
+        WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
     const message = params.payload.content
-
-    const { topic } = requestEvent ?? { topic: "" }
 
     const signIdentityCertificate = useCallback(
         async (id: number, privateKey: Buffer) => {
@@ -195,7 +191,7 @@ export const SignIdentityModal = ({
 
                 <BaseText>
                     {"Chains: "}
-                    {chainID}
+                    {chainId}
                 </BaseText>
 
                 <BaseSpacer height={24} />
