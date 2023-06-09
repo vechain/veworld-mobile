@@ -21,6 +21,7 @@ import {
     selectNonVechainTokensWithBalances,
     selectSelectedAccount,
     selectSelectedNetwork,
+    updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -144,6 +145,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                 genesisId: network.genesis.id,
             }),
         )
+        dispatch(updateAccountBalances(thorClient, account.address))
         onClose()
     }
 

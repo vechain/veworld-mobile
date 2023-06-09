@@ -109,6 +109,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                 name="account-switch-outline"
                                 color={theme.colors.textReversed}
                                 size={28}
+                                testID="AccountCard_changeAccountButton"
                             />
                         </BaseView>
                     </Pressable>

@@ -7,7 +7,6 @@ import {
     scrollUntilTextVisible,
     textShouldNotExist,
     insertTextById,
-    textShouldBeVisible,
     clickById,
     swipeLeftByText,
 } from "../helpers"
@@ -17,7 +16,7 @@ Given("The user go to tokens management screen", { timeout: -1 }, async () => {
 })
 
 When(
-    "The user select {string} token from the unselected tokens list",
+    "The user selects {string} token from the unselected tokens list",
     { timeout: -1 },
     async (token: string) => {
         await clickByText(token)
@@ -34,7 +33,7 @@ Then(
 )
 
 When(
-    "The user select {string} and {string} tokens from the unselected tokens list",
+    "The user selects {string} and {string} tokens from the unselected tokens list",
     { timeout: -1 },
     async (token: string, token2: string) => {
         await clickByText(token)
@@ -98,6 +97,7 @@ When(
             address,
             "AddCustomTokenBottomSheet-TextInput-Address",
         )
+        await clickByText("Add")
     },
 )
 
@@ -105,10 +105,6 @@ Then(
     "The user should see {string} custom token balance in home screen",
     { timeout: -1 },
     async (token: string) => {
-        await textShouldBeVisible(token)
-        await clickByText("Add")
-        await textShouldBeVisible("Manage custom tokens")
-        await goBack()
         await textShouldExist(token)
     },
 )

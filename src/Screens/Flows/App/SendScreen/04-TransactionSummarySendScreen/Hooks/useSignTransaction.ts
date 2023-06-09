@@ -177,6 +177,7 @@ export const useSignTransaction = ({
                         }/transactions/${id}`,
                     )
                 },
+                "SendScreen_transactionSuccessToast",
             )
             await dispatch(updateAccountBalances(thorClient, account.address))
         } catch (e) {
