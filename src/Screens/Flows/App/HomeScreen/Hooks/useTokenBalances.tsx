@@ -68,7 +68,7 @@ export const useTokenBalances = () => {
         updateBalances()
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
         return () => clearInterval(interval)
-    }, [dispatch, thorClient, network.genesis.id, selectedAccount])
+    }, [dispatch, thorClient, network, selectedAccount])
 
     /**
      * fetch tokens with info

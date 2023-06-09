@@ -937,6 +937,10 @@ type RootTranslation = {
 	 */
 	COMMON_CIRCULATING_SUPPLY: string
 	/**
+	 * N​.​A​.
+	 */
+	COMMON_NOT_AVAILABLE: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1332,7 +1336,7 @@ type RootTranslation = {
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
 	/**
-	 * E​n​t​e​r​ ​o​r​ ​s​c​a​n​ ​a​n​ ​a​d​d​r​e​s​s
+	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​s​e​a​r​c​h​ ​y​o​u​r​ ​c​o​n​t​a​c​t​s
 	 */
 	SEND_ENTER_AN_ADDRESS: string
 	/**
@@ -1371,6 +1375,14 @@ type RootTranslation = {
 	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
 	 */
 	SEND_LESS_THAN_1_MIN: string
+	/**
+	 * N​o​n​e​,​ ​p​a​i​d​ ​b​y​ ​d​e​l​e​g​a​t​o​r
+	 */
+	SEND_DELEGATED_FEES: string
+	/**
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​G​a​s​ ​-
+	 */
+	SEND_INSUFFICIENT_VTHO: string
 	/**
 	 * S​e​l​e​c​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
@@ -2595,6 +2607,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
 	/**
+	 * N.A.
+	 */
+	COMMON_NOT_AVAILABLE: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -2988,7 +3004,7 @@ Please, try again later.
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
 	/**
-	 * Enter or scan an address
+	 * Enter an address or search your contacts
 	 */
 	SEND_ENTER_AN_ADDRESS: () => LocalizedString
 	/**
@@ -3027,6 +3043,14 @@ Please, try again later.
 	 * Less than 1 min
 	 */
 	SEND_LESS_THAN_1_MIN: () => LocalizedString
+	/**
+	 * None, paid by delegator
+	 */
+	SEND_DELEGATED_FEES: () => LocalizedString
+	/**
+	 * Insufficient Gas -
+	 */
+	SEND_INSUFFICIENT_VTHO: () => LocalizedString
 	/**
 	 * Select delegation
 	 */

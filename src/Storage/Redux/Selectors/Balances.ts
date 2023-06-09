@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
-import { VET, VET_BY_NETWORK, VTHO } from "~Common/Constant"
+import { VET, VET_BY_NETWORK, VTHO, VTHO_BY_NETWORK } from "~Common/Constant"
 import { RootState } from "~Storage/Redux/Types"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
@@ -271,5 +271,39 @@ export const selectVetBalanceByAccount = createSelector(
                 VET.decimals,
             ),
         ).toString()
+    },
+)
+
+export const selectVthoTokenWithBalanceByAccount = createSelector(
+    [
+        selectSelectedNetworkBalances,
+        selectSelectedNetwork,
+        (_state, accountAddress) => accountAddress,
+    ],
+    (balances, network, accountAddress) => {
+        const vthoToken = VTHO_BY_NETWORK[network.type]
+
+        const balance = balances.find(
+            _balance =>
+                _balance.accountAddress === accountAddress &&
+                _balance.tokenAddress === vthoToken.address,
+        )
+
+        if (!balance) {
+            return {
+                ...vthoToken,
+                balance: {
+                    balance: "0",
+                    accountAddress,
+                    tokenAddress: vthoToken.address,
+                    genesisId: network.genesis.id,
+                },
+            }
+        }
+
+        return {
+            ...vthoToken,
+            balance,
+        }
     },
 )

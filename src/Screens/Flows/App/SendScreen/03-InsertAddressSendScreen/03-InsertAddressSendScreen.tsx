@@ -202,6 +202,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             setValue={handleSearchChange}
                             placeholder={LL.SEND_ENTER_AN_ADDRESS()}
                             errorMessage={errorMessage}
+                            testID="InsertAddressSendScreen_addressInput"
                             rightIcon={searchText ? "close" : "flip-horizontal"}
                             onIconPress={
                                 searchText ? onTextReset : openScanAddressSheet

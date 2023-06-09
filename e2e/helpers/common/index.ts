@@ -4,10 +4,12 @@ const clickBy = async ({
     byWhat,
     selector,
     timeout = DEFAULT_TIMEOUT,
+    index = 0,
 }: {
     byWhat: "text" | "id"
     selector: string
     timeout?: number
+    index?: number
 }) => {
     if (timeout) {
         await waitFor(element(by[byWhat](selector)))
@@ -15,31 +17,34 @@ const clickBy = async ({
             .withTimeout(timeout)
     }
 
-    await element(by[byWhat](selector)).tap()
+    await element(by[byWhat](selector)).atIndex(index).tap()
 }
 export const clickByText = async (
     text: string,
     options?: {
         timeout?: number
+        index?: number
     },
 ) =>
     await clickBy({
         selector: text,
         timeout: options?.timeout,
         byWhat: "text",
+        index: options?.index,
     })
 
 export const clickById = async (
     id: string,
     options?: {
-        id: string
         timeout?: number
+        index?: number
     },
 ) =>
     await clickBy({
         selector: id,
         timeout: options?.timeout,
         byWhat: "id",
+        index: options?.index,
     })
 
 export const goBack = async () =>
