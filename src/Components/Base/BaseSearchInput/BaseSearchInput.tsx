@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { TextInput, StyleSheet } from "react-native"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
-import { typography } from "~Common/Theme"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { typography, ColorThemeType } from "~Constants"
 import { BaseIcon } from "../BaseIcon"
 import { BaseView } from "../BaseView"
 const { defaults: defaultTypography } = typography

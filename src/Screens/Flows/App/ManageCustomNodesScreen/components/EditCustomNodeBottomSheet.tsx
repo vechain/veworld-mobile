@@ -12,8 +12,8 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
-import { error, isSmallScreen } from "~Common"
-import { URLUtils } from "~Utils"
+import { isSmallScreen } from "~Constants"
+import { URLUtils, error } from "~Utils"
 import { Network } from "~Model"
 import {
     selectCustomNetworks,

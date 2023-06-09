@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
-import { SCREEN_WIDTH, useTheme } from "~Common"
+import { useTheme } from "~Hooks"
+import { SCREEN_WIDTH } from "~Constants"
 import { FormattingUtils, PlatformUtils, TransactionUtils } from "~Utils"
 import {
     BaseText,

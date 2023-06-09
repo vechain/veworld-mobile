@@ -8,7 +8,7 @@ import {
     EnableFeature,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import { useBottomSheetModal } from "~Common"
+import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {

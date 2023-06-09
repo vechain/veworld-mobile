@@ -26,6 +26,7 @@ import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
 import ReanimatedUtils from "./ReanimatedUtils"
+export * from "./Logger"
 
 export {
     AddressUtils,

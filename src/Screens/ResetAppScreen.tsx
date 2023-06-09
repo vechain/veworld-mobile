@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useAppReset, useTheme } from "~Common"
+import { useAppReset, useTheme } from "~Hooks"
 import {
     BaseButton,
     BaseIcon,

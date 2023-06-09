@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import RNRestart from "react-native-restart"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import {
     BaseButton,
     BaseIcon,

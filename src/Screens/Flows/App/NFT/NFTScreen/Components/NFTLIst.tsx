@@ -1,6 +1,6 @@
 import { StyleSheet, FlatList } from "react-native"
 import React, { memo, useCallback, useMemo } from "react"
-import { usePlatformBottomInsets, useThemedStyles } from "~Common"
+import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
 import { BaseIcon, BaseSpacer, FastActionsBar } from "~Components"
 import { NFTView } from "../../Components"
 import { FastAction, NonFungibleTokenCollection } from "~Model"

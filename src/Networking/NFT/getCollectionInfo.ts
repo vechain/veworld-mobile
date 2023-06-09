@@ -1,6 +1,6 @@
 import axios from "axios"
+import { GH_NFT_REGISTRY } from "~Constants"
 import { NETWORK_TYPE } from "~Model"
-import { GH_NFT_REGISTRY } from "./NftRegistry"
 
 export type GithubCollectionResponse = {
     address: string

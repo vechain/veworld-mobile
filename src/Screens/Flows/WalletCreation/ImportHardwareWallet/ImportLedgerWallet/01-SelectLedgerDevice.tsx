@@ -10,7 +10,8 @@ import {
     DismissKeyboardView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { debug, useBluetoothStatus } from "~Common"
+import { useBluetoothStatus } from "~Hooks"
+import { debug } from "~Utils"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 

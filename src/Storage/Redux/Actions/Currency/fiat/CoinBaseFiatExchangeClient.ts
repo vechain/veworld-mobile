@@ -1,5 +1,5 @@
 import axios from "axios"
-import { EXCHANGE_CLIENT_AXIOS_OPTS } from "~Common"
+import { EXCHANGE_CLIENT_AXIOS_OPTS } from "~Constants"
 import { CurrencyExchangeRate } from "~Model"
 
 const COINBASE_URL = process.env.REACT_APP_COINBASE_URL

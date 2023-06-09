@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useFormattedMarketInfo } from "./useFormattedMarketInfo"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { TestWrapper } from "~Test"
-import { CURRENCY } from "~Common"
+import { CURRENCY } from "~Constants"
 
 const marketInfo = {
     ath: 0.280991,

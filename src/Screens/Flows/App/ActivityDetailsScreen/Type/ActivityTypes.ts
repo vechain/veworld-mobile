@@ -1,4 +1,4 @@
-import { TFonts } from "~Common/Theme"
+import { TFonts } from "~Constants"
 
 export type ActivityDetail = {
     id: number

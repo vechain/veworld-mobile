@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react"
 import { Transaction, abi } from "thor-devkit"
-import { VET } from "~Common"
+import { VET, abis } from "~Constants"
 import { HexUtils, FormattingUtils, GasUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult, FungibleTokenWithBalance } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
-import { abis } from "~Common/Constant/Thor/ThorConstants"
 
 export const useSendTransaction = ({
     amount,

@@ -2,7 +2,7 @@ import * as React from "react"
 import { StyleSheet, View } from "react-native"
 import Slider from "@react-native-community/slider"
 import { BaseView } from "../BaseView"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 
 type Props = {
     value: number

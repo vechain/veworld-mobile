@@ -1,9 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import useWebSocket from "react-use-websocket"
-import { error, info, warn } from "~Common"
-import { VET } from "~Common/Constant/Token"
-import { useCounter, useToastNotification } from "~Common/Hooks"
-import { AddressUtils, BloomUtils, TransfersUtils, URLUtils } from "~Utils"
+import { VET } from "~Constants"
+import { useCounter, useToastNotification } from "~Hooks"
+import {
+    AddressUtils,
+    BloomUtils,
+    TransfersUtils,
+    URLUtils,
+    error,
+    info,
+    warn,
+} from "~Utils"
 
 import { useThor } from "~Components"
 import {

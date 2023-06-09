@@ -1,5 +1,5 @@
 import { Balance } from "~Model/Balance"
-import { DIRECTIONS } from "~Common"
+import { DIRECTIONS } from "~Constants"
 
 export type VeChainToken = "VET" | "VTHO"
 

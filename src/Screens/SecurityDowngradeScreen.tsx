@@ -9,7 +9,7 @@ import {
 import { SecurityDowngradeSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
-import { useAppReset } from "~Common"
+import { useAppReset } from "~Hooks"
 
 export const SecurityDowngradeScreen = () => {
     const { LL } = useI18nContext()

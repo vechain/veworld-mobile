@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { BaseText, BaseView, PaginatedDot } from "~Components"
 import { ClauseType, ClauseWithMetadata } from "~Model"
 import { useI18nContext } from "~i18n"

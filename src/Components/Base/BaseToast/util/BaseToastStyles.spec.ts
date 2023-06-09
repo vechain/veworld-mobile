@@ -4,7 +4,7 @@ import {
     successToastStyles,
     warningToastStyles,
 } from "./BaseToastStyles"
-import { COLORS, ColorTheme } from "~Common/Theme"
+import { COLORS, ColorTheme } from "~Constants"
 import { Dimensions } from "react-native"
 
 describe("successToastStyles", () => {

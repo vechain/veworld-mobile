@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleSheet, ScrollView } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import {
     BaseIcon,
     BaseSafeArea,

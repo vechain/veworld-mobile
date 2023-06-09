@@ -16,7 +16,8 @@ import {
     ChangeLanguage,
     SelectLanguageBottomSheet,
 } from "./Components"
-import { LANGUAGE, useBottomSheetModal } from "~Common"
+import { useBottomSheetModal } from "~Hooks"
+import { LANGUAGE } from "~Constants"
 import {
     useAppDispatch,
     useAppSelector,

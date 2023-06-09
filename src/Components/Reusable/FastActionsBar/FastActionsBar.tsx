@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { FastAction } from "~Model"
 

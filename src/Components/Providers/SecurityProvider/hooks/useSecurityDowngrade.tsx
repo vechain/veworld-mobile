@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { useBiometrics } from "~Common"
+import { useBiometrics } from "~Hooks"
 import { BiometricsUtils } from "~Utils"
 import { SecurityLevelType } from "~Model"
 import {

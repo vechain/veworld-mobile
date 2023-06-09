@@ -1,7 +1,7 @@
 import { Driver, SimpleNet } from "@vechain/connex-driver"
 import { newThor } from "@vechain/connex-framework/dist/thor"
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { error } from "~Common/Logger"
+import { error } from "~Utils/Logger"
 import { useAppSelector } from "~Storage/Redux"
 import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
 

@@ -2,7 +2,7 @@ import React, { FC, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
-import { useDisclosure, useTheme } from "~Common"
+import { useDisclosure, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { HideView } from "./HideView"
 

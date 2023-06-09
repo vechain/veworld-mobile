@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
 import { PlaceholderSVG } from "~Assets"
-import { COLORS } from "~Common/Theme"
+import { COLORS } from "~Constants"
 import { BaseText, BaseCard, BaseSpacer, BaseView } from "~Components"
 import { FungibleToken } from "~Model"
 

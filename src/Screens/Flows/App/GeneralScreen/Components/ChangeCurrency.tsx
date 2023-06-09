@@ -1,13 +1,12 @@
 import React, { useCallback } from "react"
-import { CURRENCY } from "~Common/Enums"
-import CurrencyConfig from "~Common/Constant/CurrencyConfig/CurrencyConfig"
+import { CURRENCY, currencyConfig } from "~Constants"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectCoinGeckoTokens, selectCurrency } from "~Storage/Redux/Selectors"
 import { fetchExchangeRates, setCurrency } from "~Storage/Redux/Actions"
 import { BaseButtonGroupHorizontalType } from "~Model"
 
-const currencies: Array<BaseButtonGroupHorizontalType> = CurrencyConfig.map(
+const currencies: Array<BaseButtonGroupHorizontalType> = currencyConfig.map(
     currency => ({
         id: currency.currency,
         label: currency.currency,

@@ -1,8 +1,8 @@
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs"
 import React from "react"
 import { Pressable, StyleSheet, Animated } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { useThemedStyles } from "~Hooks"
+import { COLORS, ColorThemeType } from "~Constants"
 import { BaseText, BaseView } from "~Components"
 
 export const TopTabbar = ({

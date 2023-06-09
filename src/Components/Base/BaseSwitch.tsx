@@ -1,6 +1,6 @@
 import { Switch, SwitchProps } from "react-native"
 import React, { useMemo } from "react"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 
 type Props = SwitchProps
 

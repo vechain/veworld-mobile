@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react"
 import { FlatList, StyleSheet, View, ListRenderItem } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import {
     BaseCard,
     BaseIcon,

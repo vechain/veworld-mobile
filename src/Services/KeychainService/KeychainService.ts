@@ -1,5 +1,5 @@
 import { Keychain } from "~Storage"
-import { error } from "~Common/Logger"
+import { error } from "~Utils/Logger"
 import * as SecureStore from "expo-secure-store"
 import * as i18n from "~i18n"
 
