@@ -1,67 +1,96 @@
-import React, { useCallback } from "react"
-import { BaseSafeArea, BaseSpacer, BaseView } from "~Components"
-import { NftScreenHeader } from "./components"
-import { selectNftCollections, useAppSelector } from "~Storage/Redux"
-import { NonFungibleTokenCollection } from "~Model"
+import React, { useCallback, useMemo } from "react"
+import { BaseSafeArea, BaseView, SelectAccountBottomSheet } from "~Components"
+import { NftScreenHeader } from "./Components"
+import { AccountWithDevice } from "~Model"
 import { isEmpty } from "lodash"
-import { NftSkeleton } from "./components/NftSkeleton"
-import { StyleSheet, FlatList } from "react-native"
-import { usePlatformBottomInsets, useThemedStyles } from "~Common"
-import { NFTView } from "../Components"
-
-type NFTListProps = {
-    item: NonFungibleTokenCollection
-    index: number
-}
+import { NftSkeleton } from "./Components/NftSkeleton"
+import { useBottomSheetModal } from "~Common"
+import { useFetchCollections } from "./useFetchCollections"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import {
+    selectAccount,
+    selectCollectionListIsEmpty,
+    selectSelectedAccount,
+    selectVisibleAccounts,
+    useAppSelector,
+} from "~Storage/Redux"
+import { useDispatch } from "react-redux"
+import { ImportNFTView } from "./Components/ImportNFTView"
+import { NetworkErrorView } from "./Components/NetworkErrorView"
+import { NFTLIst } from "./Components/NFTLIst"
 
 export const NFTScreen = () => {
-    const { calculateBottomInsets } = usePlatformBottomInsets()
-    const nftCollections = useAppSelector(selectNftCollections)
+    const nav = useNavigation()
 
-    const { styles } = useThemedStyles(baseStyles(calculateBottomInsets))
+    const { fetchMoreCollections, isLoading, collections, error } =
+        useFetchCollections()
 
-    const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
+    const accounts = useAppSelector(selectVisibleAccounts)
 
-    const renderNftCollection = useCallback(({ item, index }: NFTListProps) => {
-        const collectionWithMissingNftData = item.nfts.filter(
-            nft => !isEmpty(nft.image),
-        )
+    const isShowImportNFTs = useAppSelector(selectCollectionListIsEmpty)
 
-        if (collectionWithMissingNftData.length) {
-            return <NFTView item={item} index={index} isCollection />
-        } else {
-            return null
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const dispatch = useDispatch()
+
+    const setSelectedAccount = (account: AccountWithDevice) => {
+        dispatch(selectAccount({ address: account.address }))
+    }
+
+    const onGoToBlackListed = useCallback(
+        () => nav.navigate(Routes.BLACKLISTED_COLLECTIONS),
+        [nav],
+    )
+
+    const {
+        ref: selectAccountBottomSheetRef,
+        onOpen: openSelectAccountBottomSheet,
+        onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
+
+    const renderContent = useMemo(() => {
+        if (!isEmpty(error) && isEmpty(collections)) return <NetworkErrorView />
+
+        if (isLoading && isEmpty(collections)) return <NftSkeleton />
+
+        if (isShowImportNFTs) return <ImportNFTView />
+
+        if (!isEmpty(collections)) {
+            return (
+                <NFTLIst
+                    collections={collections}
+                    isLoading={isLoading}
+                    onGoToBlackListed={onGoToBlackListed}
+                    fetchMoreCollections={fetchMoreCollections}
+                />
+            )
         }
-    }, [])
+    }, [
+        collections,
+        error,
+        fetchMoreCollections,
+        isLoading,
+        isShowImportNFTs,
+        onGoToBlackListed,
+    ])
 
     return (
         <BaseSafeArea grow={1} testID="NFT_Screen">
-            <NftScreenHeader />
+            <NftScreenHeader
+                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+            />
 
-            <BaseView flex={1} mx={20} justifyContent="center">
-                {!isEmpty(nftCollections) ? (
-                    <FlatList
-                        data={nftCollections}
-                        contentContainerStyle={styles.listContainer}
-                        numColumns={2}
-                        keyExtractor={item => String(item.address)}
-                        ItemSeparatorComponent={renderSeparator}
-                        renderItem={renderNftCollection}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                    />
-                ) : (
-                    <NftSkeleton />
-                )}
+            <BaseView flex={1} justifyContent="center">
+                {renderContent}
             </BaseView>
+
+            <SelectAccountBottomSheet
+                closeBottomSheet={closeSelectAccountBottonSheet}
+                accounts={accounts}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBottomSheetRef}
+            />
         </BaseSafeArea>
     )
 }
-
-const baseStyles = (calculateBottomInsets: number) => () =>
-    StyleSheet.create({
-        listContainer: {
-            paddingTop: 24,
-            paddingBottom: calculateBottomInsets,
-        },
-    })

@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, memo } from "react"
 import { ViewProps } from "react-native"
 import { useTheme } from "~Common"
 import { BaseView } from "./BaseView"
@@ -9,7 +9,7 @@ type Props = {
     background?: string
 } & ViewProps
 
-export const BaseSpacer: FC<Props> = (props: Props) => {
+export const BaseSpacer: FC<Props> = memo((props: Props) => {
     const { style, ...otherProps } = props
     const theme = useTheme()
     if (!props.height && !props.width) {
@@ -22,4 +22,4 @@ export const BaseSpacer: FC<Props> = (props: Props) => {
             {...otherProps}
         />
     )
-}
+})

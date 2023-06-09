@@ -6,7 +6,7 @@ import {
     AccountManagementBottomSheet,
     EditTokensBar,
 } from "./Components"
-import { useBottomSheetModal, useMemoizedAnimation, useNft } from "~Common"
+import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
 import { BaseSafeArea, BaseSpacer, SelectAccountBottomSheet } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
@@ -23,7 +23,6 @@ import { AccountWithDevice } from "~Model"
 
 export const HomeScreen = () => {
     useTokenBalances()
-    useNft()
 
     const {
         ref: accountManagementBottomSheetRef,
@@ -36,11 +35,13 @@ export const HomeScreen = () => {
         onOpen: openAddAccountSheet,
         onClose: closeAddAccountSheet,
     } = useBottomSheetModal()
+
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
+
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const dispatch = useDispatch()
