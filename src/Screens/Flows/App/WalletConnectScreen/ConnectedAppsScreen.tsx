@@ -41,10 +41,10 @@ export const ConnectedAppsScreen = () => {
 
                     <BaseSpacer height={40} />
                     <ConnectAppButton />
+                    <BaseSpacer height={40} />
 
                     {totalSessions === 0 && (
                         <>
-                            <BaseSpacer height={24} />
                             <BaseText typographyFont="subTitleLight" mt={50}>
                                 {
                                     "You have no connected apps. Once you have some, they will displayed here."
@@ -59,7 +59,7 @@ export const ConnectedAppsScreen = () => {
                             !isEmpty(activeSessions[account.address])
                         ) {
                             return (
-                                <BaseSafeArea key={account.address}>
+                                <BaseView key={account.address}>
                                     <BaseText typographyFont="subSubTitleLight">
                                         {account.alias}
                                     </BaseText>
@@ -75,7 +75,7 @@ export const ConnectedAppsScreen = () => {
                                             )
                                         },
                                     )}
-                                </BaseSafeArea>
+                                </BaseView>
                             )
                         }
                     })}

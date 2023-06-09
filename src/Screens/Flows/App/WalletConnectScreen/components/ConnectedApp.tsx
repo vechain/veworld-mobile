@@ -35,7 +35,7 @@ export const ConnectedApp: React.FC<Props> = memo(
         return (
             <>
                 <BaseTouchableBox
-                    action={() => onPress()}
+                    action={onPress}
                     innerContainerStyle={styles.container}>
                     <BaseView
                         w={100}
