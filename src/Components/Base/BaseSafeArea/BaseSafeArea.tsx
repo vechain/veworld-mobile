@@ -2,10 +2,11 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useNavigation } from "@react-navigation/native"
 import React, { useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
-import { SafeAreaView, SafeAreaViewProps } from "react-native-safe-area-context"
+import { SafeAreaViewProps } from "react-native-safe-area-context"
 import { ColorThemeType, useThemedStyles } from "~Common"
 import { PlatformUtils } from "~Utils"
-import { getTabbar } from "./Helpers/getTabbar"
+import { getTabbar } from "../Helpers/getTabbar"
+import { SafeAreaView } from "./SafeAreaView"
 
 type Props = {
     bg?: string
