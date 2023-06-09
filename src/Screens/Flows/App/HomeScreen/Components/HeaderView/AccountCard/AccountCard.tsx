@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react"
+import { useTheme, CURRENCY, ColorThemeType, useThemedStyles } from "~Common"
 import { ViewProps, StyleSheet, Pressable } from "react-native"
-import { useTheme, CURRENCY } from "~Common"
 import { PlatformUtils } from "~Utils"
 import {
     AccountIcon,
@@ -14,7 +14,6 @@ import { AccountWithDevice } from "~Model"
 import { useAppDispatch } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
-import { COLORS } from "~Common/Theme"
 
 interface Props extends ViewProps {
     account: AccountWithDevice
@@ -37,6 +36,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
     const toggleBalanceVisibility = useCallback(() => {
         dispatch(setBalanceVisible(!balanceVisible))
     }, [balanceVisible, dispatch])
+    const { styles } = useThemedStyles(baseStyles)
 
     return (
         <BaseView px={20} w={100} flexDirection="row">
@@ -119,19 +119,19 @@ export const AccountCard: React.FC<Props> = memo(props => {
     )
 })
 
-const styles = StyleSheet.create({
-    container: {},
-    borderRight: {
-        borderRightColor: COLORS.WHITE,
-        borderRightWidth: 1,
-    },
-    borderBottom: {
-        borderBottomColor: COLORS.WHITE,
-        borderBottomWidth: 1,
-    },
-    pressable: {
-        justifyContent: "center",
-        alignItems: "center",
-        flex: 1,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        borderRight: {
+            borderRightColor: theme.colors.info,
+            borderRightWidth: 1,
+        },
+        borderBottom: {
+            borderBottomColor: theme.colors.info,
+            borderBottomWidth: 1,
+        },
+        pressable: {
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 1,
+        },
+    })
