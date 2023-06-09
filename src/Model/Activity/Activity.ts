@@ -20,12 +20,12 @@ export interface Activity {
     genesisId: string
     type: ActivityType
     timestamp: number
-    gasUsed: number
-    gasPayer: string
-    delegated: boolean
     status: ActivityStatus
     clauses: Connex.VM.Clause[]
-    outputs: OutputResponse[]
+    gasUsed?: number
+    gasPayer?: string
+    delegated?: boolean
+    outputs?: OutputResponse[]
 }
 
 /**
