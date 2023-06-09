@@ -10,6 +10,7 @@ export type RootStackParamListNFT = {
         nftTokenId: string
     }
     [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string }
+    [Routes.BLACKLISTED_COLLECTIONS]: undefined
 }
 
 const { Navigator, Group, Screen } =
