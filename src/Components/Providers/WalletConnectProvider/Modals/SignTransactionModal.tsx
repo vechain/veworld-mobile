@@ -31,6 +31,7 @@ import { DEVICE_TYPE, Wallet } from "~Model"
 import axios from "axios"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
+import { isEmpty, isUndefined } from "lodash"
 
 interface Props {
     sessionRequest: any
@@ -79,7 +80,10 @@ export const SignTransactionModal = ({
             }
 
             let encodedRawTx, tx: Transaction
-            if (params.delegateUrl !== undefined && params.delegateUrl !== "") {
+            if (
+                !isUndefined(params.delegateUrl) &&
+                !isEmpty(params.delegateUrl)
+            ) {
                 tx = TransactionUtils.toDelegation(transaction)
                 // build hex encoded version of the transaction for signing request
                 const rawTransaction = HexUtils.addPrefix(
@@ -207,8 +211,8 @@ export const SignTransactionModal = ({
             if (decryptedWallet && !decryptedWallet.mnemonic)
                 error("Mnemonic wallet can't have an empty mnemonic")
 
-            if (!account?.index && account?.index !== 0)
-                throw new Error("account index is empty")
+            if (!account.index && account.index !== 0)
+                throw new Error("Account index is empty")
 
             const hdNode = HDNode.fromMnemonic(decryptedWallet.mnemonic)
             const derivedNode = hdNode.derive(account.index)

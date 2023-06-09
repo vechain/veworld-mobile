@@ -101,8 +101,8 @@ export const SignIdentityModal = ({
             if (decryptedWallet && !decryptedWallet.mnemonic)
                 error("Mnemonic wallet can't have an empty mnemonic")
 
-            if (!account?.index && account?.index !== 0)
-                throw new Error("account index is empty")
+            if (!account.index && account.index !== 0)
+                throw new Error("Account index is empty")
 
             const hdNode = HDNode.fromMnemonic(decryptedWallet.mnemonic)
             const derivedNode = hdNode.derive(account.index)
