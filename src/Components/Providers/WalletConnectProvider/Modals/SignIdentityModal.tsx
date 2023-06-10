@@ -89,7 +89,7 @@ export const SignIdentityModal = ({
             //TODO: add to history?
 
             onClose()
-            showSuccessToast(LL.NOTIFICATION_wallet_connect_identity_signed())
+            showSuccessToast(LL.NOTIFICATION_wallet_connect_sign_success())
         },
         [account, params, url, topic, web3Wallet, onClose, LL],
     )

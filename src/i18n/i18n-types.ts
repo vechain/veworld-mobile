@@ -1174,13 +1174,12 @@ type RootTranslation = {
 	 * Wallet Connect notifications
 	 */
 	NOTIFICATION_wallet_connect_disconnected_from_remote: string
-	NOTIFICATION_wallet_connect_successfull_pairing: string
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
 	NOTIFICATION_wallet_connect_error_pairing: string
 	NOTIFICATION_wallet_connect_incompatible_dapp: string
 	NOTIFICATION_wallet_connect_not_initialized: string
 	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
-	NOTIFICATION_wallet_connect_identity_signed: string
+	NOTIFICATION_wallet_connect_sign_success: string
 	NOTIFICATION_wallet_connect_error_delegating_transaction: string
 	NOTIFICATION_wallet_connect_transaction_broadcasted: string
 	NOTIFICATION_wallet_connect_error_on_transaction: string
@@ -2830,10 +2829,6 @@ Please, try again later.
 	 */
 	NOTIFICATION_wallet_connect_disconnected_from_remote: () => LocalizedString
 	/*
-	 * Wallet connect has paired successfully to the DApp.
-	 */
-	NOTIFICATION_wallet_connect_successfull_pairing: () => LocalizedString
-	/*
 	 * Connecting may take a few seconds.
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
@@ -2854,9 +2849,9 @@ Please, try again later.
 	 */
 	NOTIFICATION_wallet_connect_successfull_connection: (arg: { name: string }) => LocalizedString
 	/*
-	 * Identity certificate signed correctly.
+	 * Certificate signed correctly.
 	 */
-	NOTIFICATION_wallet_connect_identity_signed: () => LocalizedString
+	NOTIFICATION_wallet_connect_sign_success: () => LocalizedString
 	/*
 	 * An error occurred while asking delegator to sign the transaction.
 	 */

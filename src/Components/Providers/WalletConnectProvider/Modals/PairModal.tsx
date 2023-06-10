@@ -131,6 +131,8 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     }
 
     return (
+        // animationType="fade"
+        //     presentationStyle="overFullScreen"
         <BaseModal isOpen={isOpen} onClose={() => onClose(false)}>
             <CloseModalButton onPress={onClose} />
 

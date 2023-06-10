@@ -340,18 +340,17 @@ const en: BaseTranslation = {
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
     // Wallet connect notifications
-    NOTIFICATION_wallet_connect_disconnected_from_remote: "Connection to DApp closed.",
-    NOTIFICATION_wallet_connect_successfull_pairing: "DApp connected successfully.",
+    NOTIFICATION_wallet_connect_disconnected_from_remote: "Connection to app closed successfully.",
     NOTIFICATION_warning_wallet_connect_connection_could_delay: "Connecting may take a few seconds.",
-    NOTIFICATION_wallet_connect_error_pairing: "Error pairing with the DApp, please try with a new QR CODE.",
-    NOTIFICATION_wallet_connect_incompatible_dapp: "The requested chain is not compatible with this wallet.",
-    NOTIFICATION_wallet_connect_not_initialized: "Walletconnect not initialized.",
+    NOTIFICATION_wallet_connect_error_pairing: "Error pairing with the app, please generate a new QR CODE.",
+    NOTIFICATION_wallet_connect_incompatible_dapp: "The requested dapp is not compatible with VeWorld.",
+    NOTIFICATION_wallet_connect_not_initialized: "Wallet Connect not initialized.",
     NOTIFICATION_wallet_connect_successfull_connection: "Successfully connected to {name}.",
-    NOTIFICATION_wallet_connect_identity_signed: "Identity certificate signed correctly.",
-    NOTIFICATION_wallet_connect_error_delegating_transaction: "An error occurred while asking delegator to sign the transaction.",
-    NOTIFICATION_wallet_connect_transaction_broadcasted: "Transaction broadcasted correctly.",
-    NOTIFICATION_wallet_connect_error_on_transaction: "An unexpected error occurred while executing transaction.",
-    NOTIFICATION_wallet_connect_invalid_uri: "Invalid Walletconnect URI, please try again.",
+    NOTIFICATION_wallet_connect_sign_success: "Certificate signed successfully.",
+    NOTIFICATION_wallet_connect_error_delegating_transaction: "There was a proble contacting the delegator.",
+    NOTIFICATION_wallet_connect_transaction_broadcasted: "Transaction broadcasted successfully.",
+    NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",
+    NOTIFICATION_wallet_connect_invalid_uri: "Invalid Wallet Connect URI.",
    
     // Accounts
     CONTRACT_ADDRESS: "Contract address",

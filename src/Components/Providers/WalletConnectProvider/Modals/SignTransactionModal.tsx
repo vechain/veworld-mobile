@@ -12,6 +12,7 @@ import {
     showWarningToast,
     BaseModal,
     showSuccessToast,
+    CloseModalButton,
 } from "~Components"
 import { HDNode, secp256k1, Transaction } from "thor-devkit"
 import {
@@ -33,6 +34,7 @@ import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
+import { ScrollView } from "react-native-gesture-handler"
 
 interface Props {
     sessionRequest: any
@@ -59,7 +61,7 @@ export const SignTransactionModal = ({
     // Session request values
     const { chainId, method, params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
-    const { requestName, requestIcon, requestURL } =
+    const { name, icon, url } =
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
     const message = params.comment || params.txMessage[0].comment
 
@@ -285,56 +287,71 @@ export const SignTransactionModal = ({
             onClose={onClose}
             animationType="fade"
             presentationStyle="overFullScreen">
-            <BaseView alignItems="center" justifyContent="center">
-                <BaseText typographyFont="subTitleBold">
-                    {"Sign Transaction Re"}
-                </BaseText>
-            </BaseView>
-            <BaseView>
-                <BaseView alignItems="center" justifyContent="center">
+            <CloseModalButton onPress={onClose} />
+
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentInsetAdjustmentBehavior="never"
+                contentContainerStyle={[styles.scrollViewContainer]}
+                style={styles.scrollView}>
+                <BaseView mx={20} style={styles.alignLeft}>
+                    <BaseText typographyFont="title">
+                        {"Send Transaction"}
+                    </BaseText>
+
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="subSubTitleLight">
+                        {
+                            "Your Signature is being requested to send a transaction"
+                        }
+                    </BaseText>
+
+                    <BaseSpacer height={24} />
                     <Image
                         style={styles.dappLogo}
                         source={{
-                            uri: requestIcon,
+                            uri: icon,
                         }}
                     />
-                    <BaseText>{requestName}</BaseText>
-                    <BaseText>{requestURL}</BaseText>
-                </BaseView>
+                    <BaseSpacer height={8} />
+                    <BaseText>{name}</BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText>{url}</BaseText>
 
-                <BaseSpacer height={24} />
+                    <BaseSpacer height={24} />
+                    <BaseText>
+                        {"Chains: "}
+                        {chainId}
+                    </BaseText>
 
-                <BaseText>
-                    {"Chains: "}
-                    {chainId}
-                </BaseText>
+                    <BaseSpacer height={24} />
 
-                <BaseSpacer height={24} />
-
-                <BaseView>
                     <BaseText>{"Method:"}</BaseText>
                     <BaseText>{method}</BaseText>
-                </BaseView>
 
-                <BaseSpacer height={24} />
+                    <BaseSpacer height={24} />
 
-                <BaseView>
                     <BaseText>{"Message:"}</BaseText>
                     <BaseText>{message}</BaseText>
                 </BaseView>
-
-                <BaseSpacer height={24} />
-
-                <BaseView
-                    alignItems="center"
-                    justifyContent="center"
-                    flexDirection="row">
-                    <BaseButton action={onReject} title="Cancel" />
-                    <BaseButton
-                        title="Accept"
-                        action={checkIdentityBeforeOpening}
-                    />
-                </BaseView>
+            </ScrollView>
+            <BaseSpacer height={24} />
+            <BaseView style={styles.footer}>
+                <BaseButton
+                    w={100}
+                    haptics="light"
+                    title={"ACCEPT"}
+                    action={checkIdentityBeforeOpening}
+                />
+                <BaseSpacer height={16} />
+                <BaseButton
+                    w={100}
+                    haptics="light"
+                    variant="outline"
+                    title={"REJECT"}
+                    action={onReject}
+                />
             </BaseView>
             <ConfirmIdentityBottomSheet />
         </BaseModal>
@@ -343,9 +360,30 @@ export const SignTransactionModal = ({
 
 const styles = StyleSheet.create({
     dappLogo: {
-        width: 50,
-        height: 50,
+        width: 100,
+        height: 100,
         borderRadius: 8,
         marginVertical: 4,
+    },
+    alignLeft: {
+        alignSelf: "flex-start",
+    },
+    scrollViewContainer: {
+        width: "100%",
+        height: "60%",
+    },
+    scrollView: {
+        width: "100%",
+    },
+    footer: {
+        width: "100%",
+        alignItems: "center",
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    separator: {
+        borderWidth: 0.5,
+        borderColor: "#0B0043",
+        opacity: 0.56,
     },
 })
