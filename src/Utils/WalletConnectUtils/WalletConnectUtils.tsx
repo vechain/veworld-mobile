@@ -72,14 +72,14 @@ export function getRequestEventAttributes(
 export function getSessionRequestAttributes(
     sessionRequest: SessionTypes.Struct,
 ) {
-    const requestName = sessionRequest.peer.metadata.name
-    const requestIcon = sessionRequest.peer.metadata.icons[0]
-    const requestURL = sessionRequest.peer.metadata.url
+    const name = sessionRequest.peer.metadata.name
+    const icon = sessionRequest.peer.metadata.icons[0]
+    const url = sessionRequest.peer.metadata.url
 
     const attributes = {
-        requestName,
-        requestIcon,
-        requestURL,
+        name,
+        icon,
+        url,
     }
     return attributes
 }

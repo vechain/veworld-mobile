@@ -1,6 +1,6 @@
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import React, { useCallback } from "react"
-import { Image, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import {
     BaseText,
     BaseButton,
@@ -10,6 +10,7 @@ import {
     showWarningToast,
     BaseModal,
     showSuccessToast,
+    CloseModalButton,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
 import {
@@ -23,6 +24,8 @@ import { DEVICE_TYPE, Wallet } from "~Model"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
+import { ScrollView } from "react-native-gesture-handler"
+import { capitalize } from "lodash"
 
 interface Props {
     sessionRequest: SessionTypes.Struct
@@ -45,9 +48,9 @@ export const SignIdentityModal = ({
     const { LL } = useI18nContext()
 
     // Request values
-    const { chainId, method, params, topic } =
+    const { method, params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
-    const { requestName, requestIcon, requestURL } =
+    const { name, url } =
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
     const message = params.payload.content
 
@@ -58,7 +61,7 @@ export const SignIdentityModal = ({
             const cert: Certificate = {
                 ...params,
                 timestamp: Math.round(Date.now() / 1000),
-                domain: new URL(requestURL),
+                domain: new URL(url),
                 signer: account?.address ?? "",
             }
 
@@ -88,7 +91,7 @@ export const SignIdentityModal = ({
             onClose()
             showSuccessToast(LL.NOTIFICATION_wallet_connect_identity_signed())
         },
-        [account, params, requestURL, topic, web3Wallet, onClose, LL],
+        [account, params, url, topic, web3Wallet, onClose, LL],
     )
 
     const onApprove = useCallback(
@@ -172,56 +175,70 @@ export const SignIdentityModal = ({
             onClose={onClose}
             animationType="fade"
             presentationStyle="overFullScreen">
-            <BaseView alignItems="center" justifyContent="center">
-                <BaseText typographyFont="subTitleBold">
-                    {"Session Request"}
-                </BaseText>
-            </BaseView>
-            <BaseView>
-                <BaseView alignItems="center" justifyContent="center">
-                    <Image
-                        style={styles.dappLogo}
-                        source={{
-                            uri: requestIcon,
-                        }}
-                    />
-                    <BaseText>{requestName}</BaseText>
-                    <BaseText>{requestURL}</BaseText>
+            <CloseModalButton onPress={onClose} />
+
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentInsetAdjustmentBehavior="never"
+                contentContainerStyle={[styles.scrollViewContainer]}
+                style={styles.scrollView}>
+                <BaseView mx={20} style={styles.alignLeft}>
+                    <BaseText typographyFont="title">
+                        {"Connected app"}
+                    </BaseText>
+
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="subSubTitleLight">
+                        {
+                            "Your Signature is being requested to sign a certificate"
+                        }
+                    </BaseText>
+
+                    <BaseSpacer height={24} />
+                    <BaseView>
+                        <BaseText typographyFont="subTitleBold">
+                            {LL.SEND_DETAILS()}
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="subTitleLight">
+                            {"From"}
+                        </BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText>{name}</BaseText>
+
+                        <BaseSpacer height={24} />
+                        <BaseText typographyFont="subTitleLight">
+                            {"Purpose"}
+                        </BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText>{capitalize(method)}</BaseText>
+
+                        <BaseSpacer height={24} />
+                        <BaseText typographyFont="subTitleLight">
+                            {"Content:"}
+                        </BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText>{message}</BaseText>
+                    </BaseView>
                 </BaseView>
-
-                <BaseSpacer height={24} />
-
-                <BaseText>
-                    {"Chains: "}
-                    {chainId}
-                </BaseText>
-
-                <BaseSpacer height={24} />
-
-                <BaseView>
-                    <BaseText>{"Method:"}</BaseText>
-                    <BaseText>{method}</BaseText>
-                </BaseView>
-
-                <BaseSpacer height={24} />
-
-                <BaseView>
-                    <BaseText>{"Message:"}</BaseText>
-                    <BaseText>{message}</BaseText>
-                </BaseView>
-
-                <BaseSpacer height={24} />
-
-                <BaseView
-                    alignItems="center"
-                    justifyContent="center"
-                    flexDirection="row">
-                    <BaseButton action={onReject} title="Cancel" />
-                    <BaseButton
-                        title="Accept"
-                        action={checkIdentityBeforeOpening}
-                    />
-                </BaseView>
+            </ScrollView>
+            <BaseSpacer height={24} />
+            <BaseView style={styles.footer}>
+                <BaseButton
+                    w={100}
+                    haptics="light"
+                    title={"ACCEPT"}
+                    action={checkIdentityBeforeOpening}
+                />
+                <BaseSpacer height={16} />
+                <BaseButton
+                    w={100}
+                    haptics="light"
+                    variant="outline"
+                    title={"REJECT"}
+                    action={onReject}
+                />
             </BaseView>
             <ConfirmIdentityBottomSheet />
         </BaseModal>
@@ -230,9 +247,30 @@ export const SignIdentityModal = ({
 
 const styles = StyleSheet.create({
     dappLogo: {
-        width: 50,
-        height: 50,
+        width: 100,
+        height: 100,
         borderRadius: 8,
         marginVertical: 4,
+    },
+    alignLeft: {
+        alignSelf: "flex-start",
+    },
+    scrollViewContainer: {
+        width: "100%",
+        height: "60%",
+    },
+    scrollView: {
+        width: "100%",
+    },
+    footer: {
+        width: "100%",
+        alignItems: "center",
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    separator: {
+        borderWidth: 0.5,
+        borderColor: "#0B0043",
+        opacity: 0.56,
     },
 })
