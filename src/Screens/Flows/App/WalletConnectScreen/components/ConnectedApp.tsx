@@ -85,9 +85,9 @@ export const ConnectedApp: React.FC<Props> = memo(
                                 alignItems="center"
                                 pl={5}>
                                 <BaseIcon
+                                    color={theme.colors.primary}
                                     size={24}
-                                    name="chevron-right"
-                                    color={theme.colors.text}
+                                    name={"pencil"}
                                 />
                             </BaseView>
                         )}
