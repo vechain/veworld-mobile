@@ -59,7 +59,7 @@ export const ConnectedAppsScreen = () => {
                             !isEmpty(activeSessions[account.address])
                         ) {
                             return (
-                                <BaseView key={account.address}>
+                                <BaseView key={account.alias}>
                                     <BaseText typographyFont="subSubTitleLight">
                                         {account.alias}
                                     </BaseText>
@@ -67,11 +67,14 @@ export const ConnectedAppsScreen = () => {
                                     {activeSessions[account.address].map(
                                         session => {
                                             return (
-                                                <ConnectedApp
-                                                    session={session}
-                                                    key={session.topic}
-                                                    account={account}
-                                                />
+                                                <>
+                                                    <BaseSpacer height={16} />
+                                                    <ConnectedApp
+                                                        session={session}
+                                                        key={session.topic}
+                                                        account={account}
+                                                    />
+                                                </>
                                             )
                                         },
                                     )}

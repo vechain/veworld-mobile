@@ -198,7 +198,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                             <BaseSpacer height={8} />
                             <BaseText>
                                 {
-                                    "\u25CF Request your signature on certificates or identification and agreement"
+                                    "\u25CF Request your signature on certificates or identification and agreements"
                                 }
                             </BaseText>
                         </>
