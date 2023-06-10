@@ -42,6 +42,7 @@ export const useSendTransaction = (
                     }/transactions/${id}`,
                 )
             },
+            "transactionSuccessToast",
         )
         await dispatch(updateAccountBalances(thorClient, account.address))
     }
