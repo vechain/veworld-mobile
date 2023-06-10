@@ -22,6 +22,7 @@ import {
     ConnectionErrorBottomSheet,
     Step,
     StepsProgressBar,
+    showErrorToast,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -33,6 +34,7 @@ import { LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useSendTransaction } from "../04-TransactionSummarySendScreen/Hooks"
 import { useNavigation } from "@react-navigation/native"
+import * as Haptics from "expo-haptics"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -58,6 +60,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
 
     const [signingError, setSigningError] = useState<boolean>()
+    const [isSending, setIsSending] = useState(false)
 
     const {
         ref: connectionErrorSheetRef,
@@ -183,12 +186,28 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     }, [initialRoute, nav])
 
     const handleOnConfirm = useCallback(async () => {
-        if (!signature) return
-        const tx = new Transaction(transaction)
-        tx.signature = signature
-        await sendTransactionAndPerformUpdates(tx)
-        navigateOnFinish()
+        try {
+            if (!signature) return
+            setIsSending(true)
+            const tx = new Transaction(transaction)
+            tx.signature = signature
+
+            await sendTransactionAndPerformUpdates(tx)
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success,
+            )
+            navigateOnFinish()
+        } catch (e) {
+            error(e)
+            showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Error,
+            )
+        } finally {
+            setIsSending(false)
+        }
     }, [
+        LL,
         signature,
         transaction,
         sendTransactionAndPerformUpdates,
@@ -237,7 +256,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 mx={24}
                 haptics="light"
                 title={LL.COMMON_BTN_CONFIRM()}
-                disabled={!signature}
+                disabled={!signature || isSending}
+                isLoading={isSending}
                 action={handleOnConfirm}
             />
 
