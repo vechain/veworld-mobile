@@ -11,6 +11,7 @@ import {
     BaseModal,
     showSuccessToast,
     CloseModalButton,
+    showErrorToast,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
 import {
@@ -26,6 +27,7 @@ import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
 import { ScrollView } from "react-native-gesture-handler"
 import { capitalize } from "lodash"
+import { ConnectedApp } from "~Screens/Flows/App/WalletConnectScreen/components"
 
 interface Props {
     sessionRequest: SessionTypes.Struct
@@ -50,7 +52,7 @@ export const SignIdentityModal = ({
     // Request values
     const { method, params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
-    const { name, url } =
+    const { url } =
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
     const message = params.payload.content
 
@@ -68,28 +70,35 @@ export const SignIdentityModal = ({
             const hash = blake2b256(Certificate.encode(cert))
             const signature = secp256k1.sign(hash, privateKey)
 
-            await web3Wallet.respondSessionRequest({
-                topic,
-                response: {
-                    id,
-                    jsonrpc: "2.0",
-                    result: {
-                        annex: {
-                            timestamp: cert.timestamp,
-                            domain: cert.domain,
-                            signer: cert.signer,
+            try {
+                await web3Wallet.respondSessionRequest({
+                    topic,
+                    response: {
+                        id,
+                        jsonrpc: "2.0",
+                        result: {
+                            annex: {
+                                timestamp: cert.timestamp,
+                                domain: cert.domain,
+                                signer: cert.signer,
+                            },
+                            signature: HexUtils.addPrefix(
+                                signature.toString("hex"),
+                            ),
                         },
-                        signature: HexUtils.addPrefix(
-                            signature.toString("hex"),
-                        ),
                     },
-                },
-            })
+                })
+                showSuccessToast(LL.NOTIFICATION_wallet_connect_sign_success())
+            } catch (err: unknown) {
+                error(err)
+                showErrorToast(LL.NOTIFICATION_wallet_connect_sign_error())
+            } finally {
+                onClose()
+            }
 
             //TODO: add to history?
 
             onClose()
-            showSuccessToast(LL.NOTIFICATION_wallet_connect_sign_success())
         },
         [account, params, url, topic, web3Wallet, onClose, LL],
     )
@@ -184,9 +193,7 @@ export const SignIdentityModal = ({
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
                 <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">
-                        {"Connected app"}
-                    </BaseText>
+                    <BaseText typographyFont="title">{"Sign"}</BaseText>
 
                     <BaseSpacer height={8} />
                     <BaseText typographyFont="subSubTitleLight">
@@ -196,26 +203,31 @@ export const SignIdentityModal = ({
                     </BaseText>
 
                     <BaseSpacer height={24} />
+                    <BaseText typographyFont="subTitleBold">
+                        {"Connected app"}
+                    </BaseText>
+                    <BaseSpacer height={8} />
+                    <ConnectedApp
+                        clickable={false}
+                        session={sessionRequest}
+                        account={account}
+                    />
+
+                    <BaseSpacer height={24} />
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">
                             {LL.SEND_DETAILS()}
                         </BaseText>
-                        <BaseSpacer height={16} />
-                        <BaseText typographyFont="subTitleLight">
-                            {"From"}
-                        </BaseText>
-                        <BaseSpacer height={8} />
-                        <BaseText>{name}</BaseText>
 
-                        <BaseSpacer height={24} />
-                        <BaseText typographyFont="subTitleLight">
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="subSubTitleLight">
                             {"Purpose"}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{capitalize(method)}</BaseText>
 
                         <BaseSpacer height={24} />
-                        <BaseText typographyFont="subTitleLight">
+                        <BaseText typographyFont="subSubTitleLight">
                             {"Content:"}
                         </BaseText>
                         <BaseSpacer height={8} />
@@ -228,7 +240,7 @@ export const SignIdentityModal = ({
                 <BaseButton
                     w={100}
                     haptics="light"
-                    title={"ACCEPT"}
+                    title={"SIGN"}
                     action={checkIdentityBeforeOpening}
                 />
                 <BaseSpacer height={16} />

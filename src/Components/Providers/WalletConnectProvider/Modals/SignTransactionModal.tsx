@@ -1,6 +1,6 @@
 import { SignClientTypes } from "@walletconnect/types"
 import React, { useCallback } from "react"
-import { Image, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import {
     BaseText,
     BaseButton,
@@ -35,6 +35,7 @@ import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
 import { ScrollView } from "react-native-gesture-handler"
+import { ConnectedApp } from "~Screens/Flows/App/WalletConnectScreen/components"
 
 interface Props {
     sessionRequest: any
@@ -61,8 +62,6 @@ export const SignTransactionModal = ({
     // Session request values
     const { chainId, method, params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
-    const { name, icon, url } =
-        WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
     const message = params.comment || params.txMessage[0].comment
 
     const onSignTransaction = useCallback(
@@ -167,23 +166,29 @@ export const SignTransactionModal = ({
             await axios
                 .post(`${network.currentUrl}/transactions`, encodedRawTx)
                 .then(async response => {
-                    await web3Wallet?.respondSessionRequest({
-                        topic,
-                        response: {
-                            id,
-                            jsonrpc: "2.0",
-                            result: {
-                                txid: response.data.id,
-                                signer: account?.address,
+                    try {
+                        await web3Wallet?.respondSessionRequest({
+                            topic,
+                            response: {
+                                id,
+                                jsonrpc: "2.0",
+                                result: {
+                                    txid: response.data.id,
+                                    signer: account?.address,
+                                },
                             },
-                        },
-                    })
+                        })
 
-                    showSuccessToast(
-                        LL.NOTIFICATION_wallet_connect_transaction_broadcasted(),
-                    )
-
-                    //TODO: add to history
+                        showSuccessToast(
+                            LL.NOTIFICATION_wallet_connect_transaction_broadcasted(),
+                        )
+                    } catch (e) {
+                        showErrorToast(
+                            "Transaction broadcasted correctly but an error occurred while responding to the dapp",
+                        )
+                    } finally {
+                        //TODO: add to history
+                    }
                 })
                 .catch(async e => {
                     const response = formatJsonRpcError(
@@ -308,16 +313,15 @@ export const SignTransactionModal = ({
                     </BaseText>
 
                     <BaseSpacer height={24} />
-                    <Image
-                        style={styles.dappLogo}
-                        source={{
-                            uri: icon,
-                        }}
+                    <BaseText typographyFont="subTitleBold">
+                        {"Connected app"}
+                    </BaseText>
+                    <BaseSpacer height={8} />
+                    <ConnectedApp
+                        clickable={false}
+                        session={sessionRequest}
+                        account={account}
                     />
-                    <BaseSpacer height={8} />
-                    <BaseText>{name}</BaseText>
-                    <BaseSpacer height={8} />
-                    <BaseText>{url}</BaseText>
 
                     <BaseSpacer height={24} />
                     <BaseText>
@@ -341,7 +345,7 @@ export const SignTransactionModal = ({
                 <BaseButton
                     w={100}
                     haptics="light"
-                    title={"ACCEPT"}
+                    title={"SIGN AND SEND"}
                     action={checkIdentityBeforeOpening}
                 />
                 <BaseSpacer height={16} />

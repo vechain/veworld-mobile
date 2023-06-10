@@ -347,6 +347,7 @@ const en: BaseTranslation = {
     NOTIFICATION_wallet_connect_not_initialized: "Wallet Connect not initialized.",
     NOTIFICATION_wallet_connect_successfull_connection: "Successfully connected to {name}.",
     NOTIFICATION_wallet_connect_sign_success: "Certificate signed successfully.",
+    NOTIFICATION_wallet_connect_sign_error: "Something went wrong with the app communication.",
     NOTIFICATION_wallet_connect_error_delegating_transaction: "There was a proble contacting the delegator.",
     NOTIFICATION_wallet_connect_transaction_broadcasted: "Transaction broadcasted successfully.",
     NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",

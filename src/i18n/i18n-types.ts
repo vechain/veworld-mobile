@@ -1180,6 +1180,7 @@ type RootTranslation = {
 	NOTIFICATION_wallet_connect_not_initialized: string
 	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
 	NOTIFICATION_wallet_connect_sign_success: string
+	NOTIFICATION_wallet_connect_sign_error: string
 	NOTIFICATION_wallet_connect_error_delegating_transaction: string
 	NOTIFICATION_wallet_connect_transaction_broadcasted: string
 	NOTIFICATION_wallet_connect_error_on_transaction: string
@@ -2852,6 +2853,7 @@ Please, try again later.
 	 * Certificate signed correctly.
 	 */
 	NOTIFICATION_wallet_connect_sign_success: () => LocalizedString
+	NOTIFICATION_wallet_connect_sign_error: () => LocalizedString
 	/*
 	 * An error occurred while asking delegator to sign the transaction.
 	 */

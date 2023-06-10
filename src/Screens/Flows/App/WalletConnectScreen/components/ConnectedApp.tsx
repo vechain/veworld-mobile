@@ -16,14 +16,17 @@ import { ConnectedAppDetailsBottomSheet } from "./ConnectedAppDetailsBottomSheet
 type Props = {
     session: SessionTypes.Struct
     account: AccountWithDevice
+    clickable?: boolean
 }
 
 export const ConnectedApp: React.FC<Props> = memo(
-    ({ session, account }: Props) => {
+    ({ session, account, clickable = true }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
         const theme = useTheme()
 
         const onPress = () => {
+            if (!clickable) return
+
             openConnectedAppDetailsSheet()
         }
 
@@ -76,16 +79,18 @@ export const ConnectedApp: React.FC<Props> = memo(
                                 </BaseView>
                             </BaseView>
                         </BaseView>
-                        <BaseView
-                            flexDirection="column"
-                            alignItems="center"
-                            pl={5}>
-                            <BaseIcon
-                                size={24}
-                                name="chevron-right"
-                                color={theme.colors.text}
-                            />
-                        </BaseView>
+                        {clickable && (
+                            <BaseView
+                                flexDirection="column"
+                                alignItems="center"
+                                pl={5}>
+                                <BaseIcon
+                                    size={24}
+                                    name="chevron-right"
+                                    color={theme.colors.text}
+                                />
+                            </BaseView>
+                        )}
                     </BaseView>
                     <ConnectedAppDetailsBottomSheet
                         ref={connectedAppDetailsBottomSheetRef}
