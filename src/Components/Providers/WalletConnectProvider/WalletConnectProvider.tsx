@@ -64,10 +64,12 @@ const WalletConnectContextProvider = ({
         useState<SignClientTypes.EventArguments["session_request"]>()
 
     /**
-     * The pair method initiates a WalletConnect pairing process with a dapp
-     * using the given uri (QR code from the dapps).
-     * After the pairing is established, the dapp will send a session_proposal
-     * asking the user permission to connect to the wallet.
+     * A pairing between the DApp and the wallet needs to be established in order to make
+     * them communicate through the Wallet Connect Relay Server. This is done by generating
+     * a QR code on the DApp (containing a URI) and by scanning it with the mobile wallet.
+     *
+     * After a pairing is established the DApp will be able to send a session_proposal
+     * to the wallet asking for permission to connect and create a session.
      */
     const onPair = useCallback(
         async (uri: string) => {
@@ -100,11 +102,17 @@ const WalletConnectContextProvider = ({
         [],
     )
 
-    const onSessionProposalClose = useCallback(() => {
-        setCurrentProposal(undefined)
-        setPairModalVisible(false)
-        nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
-    }, [nav])
+    const onSessionProposalClose = useCallback(
+        (success: boolean) => {
+            setCurrentProposal(undefined)
+            setPairModalVisible(false)
+
+            if (success) {
+                nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
+            }
+        },
+        [nav],
+    )
 
     /**
      * Handle session request

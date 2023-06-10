@@ -5,7 +5,7 @@ import {
     ProposalTypes,
     RelayerTypes,
 } from "@walletconnect/types"
-import React from "react"
+import React, { useMemo } from "react"
 import {
     BaseText,
     BaseButton,
@@ -15,6 +15,7 @@ import {
     useWalletConnect,
     BaseModal,
     showErrorToast,
+    CloseModalButton,
 } from "~Components"
 import { getSdkError } from "@walletconnect/utils"
 import {
@@ -26,10 +27,11 @@ import { insertSession } from "~Storage/Redux/Slices"
 import { error } from "~Common"
 import { WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { ScrollView } from "react-native-gesture-handler"
 
 type Props = {
     currentProposal: SignClientTypes.EventArguments["session_proposal"]
-    onClose: () => void
+    onClose: (success: boolean) => void
     isOpen: boolean
 }
 
@@ -39,24 +41,35 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     const { web3Wallet } = useWalletConnect()
     const { LL } = useI18nContext()
 
+    const { name, url, methods, chains, icon } =
+        WalletConnectUtils.getPairAttributes(currentProposal)
+
+    const chainsToConnect = useMemo(() => {
+        let string = ""
+        chains?.forEach((chain, index) => {
+            if (index > 0) {
+                string += " and "
+            }
+            string += chain.split(":")[1]
+        })
+        return string
+    }, [chains])
+
     if (!selectedAccountAddress) {
-        onClose()
+        onClose(false)
         return <></>
     }
 
     // check if the DApp is connecting to Vechain
     if (!currentProposal.params.requiredNamespaces.vechain) {
-        onClose()
+        onClose(false)
         showErrorToast(LL.NOTIFICATION_wallet_connect_incompatible_dapp())
         return <></>
     }
 
-    const { name, url, methods, events, chains, icon } =
-        WalletConnectUtils.getPairAttributes(currentProposal)
-
     const handleAccept = async () => {
         if (!web3Wallet) {
-            onClose()
+            onClose(false)
             showErrorToast(LL.NOTIFICATION_wallet_connect_not_initialized())
             return
         }
@@ -93,7 +106,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                 insertSession({ address: selectedAccountAddress, session }),
             )
 
-            onClose()
+            onClose(true)
             showSuccessToast(
                 LL.NOTIFICATION_wallet_connect_successfull_connection({ name }),
             )
@@ -112,72 +125,103 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
             } catch (err: unknown) {
                 error(err)
             } finally {
-                onClose()
+                onClose(false)
             }
         }
     }
 
     return (
-        <BaseModal isOpen={isOpen} onClose={onClose}>
-            <BaseView alignItems="center" justifyContent="center">
-                <BaseText typographyFont="subTitleBold">
-                    {"Session Proposal"}
-                </BaseText>
-            </BaseView>
+        <BaseModal isOpen={isOpen} onClose={() => onClose(false)}>
+            <CloseModalButton onPress={onClose} />
 
-            <BaseSpacer height={24} />
-
-            <BaseView>
-                <BaseView>
-                    <BaseView alignItems="center" justifyContent="center">
-                        <Image
-                            style={styles.dappLogo}
-                            source={{
-                                uri: icon,
-                            }}
-                        />
-                        <BaseText>{name}</BaseText>
-                        <BaseText>{url}</BaseText>
-                    </BaseView>
-
-                    <BaseSpacer height={24} />
-
-                    <BaseText>
-                        {"Chain: "} {chains}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentInsetAdjustmentBehavior="never"
+                contentContainerStyle={[styles.scrollViewContainer]}
+                style={styles.scrollView}>
+                <BaseView mx={20} style={styles.alignLeft}>
+                    <BaseText typographyFont="title">
+                        {"Connect to app"}
+                    </BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="subSubTitleLight">
+                        {name + " wants to connect to your wallet"}
                     </BaseText>
 
                     <BaseSpacer height={24} />
-
-                    <BaseView>
-                        <BaseText>{"Methods: "}</BaseText>
-                        {methods?.map((method, index) => (
-                            <BaseText key={method + index}>{method}</BaseText>
-                        ))}
-                    </BaseView>
-
+                    <Image
+                        style={styles.dappLogo}
+                        source={{
+                            uri: icon,
+                        }}
+                    />
                     <BaseSpacer height={24} />
+                    <BaseText typographyFont="subTitleBold">{name}</BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText>{url}</BaseText>
 
-                    {events && events.length > 0 && (
+                    <BaseSpacer height={30} />
+                    <BaseView style={styles.separator} />
+
+                    <BaseSpacer height={30} />
+                    <BaseText typographyFont="subTitle">
+                        {"Connection request"}
+                    </BaseText>
+
+                    <BaseSpacer height={15} />
+                    <BaseText>{name + " is asking for access to:"}</BaseText>
+
+                    <BaseSpacer height={8} />
+                    <BaseText>
+                        {"\u25CF Connect to Vechain " +
+                            chainsToConnect +
+                            " network"}
+                    </BaseText>
+
+                    {methods.find(
+                        method => method === "request_transaction",
+                    ) && (
                         <>
-                            <BaseView>
-                                <BaseText>{"Events: "}</BaseText>
-                                {events?.map(event => (
-                                    <BaseText key={event}>{event}</BaseText>
-                                ))}
-                            </BaseView>
-
-                            <BaseSpacer height={24} />
+                            <BaseSpacer height={8} />
+                            <BaseText>
+                                {
+                                    "\u25CF Request transactions to send to Vechain Thor"
+                                }
+                            </BaseText>
                         </>
                     )}
-
-                    <BaseView
-                        alignItems="center"
-                        justifyContent="center"
-                        flexDirection="row">
-                        <BaseButton action={handleReject} title="Cancel" />
-                        <BaseButton action={handleAccept} title="Accept" />
-                    </BaseView>
+                    {methods.find(
+                        method => method === "identify" || method === "sign",
+                    ) && (
+                        <>
+                            <BaseSpacer height={8} />
+                            <BaseText>
+                                {
+                                    "\u25CF Request your signature on certificates or identification and agreement"
+                                }
+                            </BaseText>
+                        </>
+                    )}
                 </BaseView>
+            </ScrollView>
+
+            <BaseSpacer height={24} />
+            <BaseView style={styles.footer}>
+                <BaseButton
+                    w={100}
+                    haptics="light"
+                    title={"APPROVE"}
+                    action={handleAccept}
+                />
+                <BaseSpacer height={16} />
+                <BaseButton
+                    w={100}
+                    haptics="light"
+                    variant="outline"
+                    title={"REJECT"}
+                    action={handleReject}
+                />
             </BaseView>
         </BaseModal>
     )
@@ -185,9 +229,30 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
 
 const styles = StyleSheet.create({
     dappLogo: {
-        width: 50,
-        height: 50,
+        width: 100,
+        height: 100,
         borderRadius: 8,
         marginVertical: 4,
+    },
+    alignLeft: {
+        alignSelf: "flex-start",
+    },
+    scrollViewContainer: {
+        width: "100%",
+        height: "60%",
+    },
+    scrollView: {
+        width: "100%",
+    },
+    footer: {
+        width: "100%",
+        alignItems: "center",
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    separator: {
+        borderWidth: 0.5,
+        borderColor: "#0B0043",
+        opacity: 0.56,
     },
 })
