@@ -100,6 +100,18 @@ export const StepsProgressBar: React.FC<Props> = ({
                                         }}
                                     />
                                 </BaseView>
+                            ) : isNext ? (
+                                <BaseView
+                                    bg={bgColor}
+                                    borderRadius={100}
+                                    py={5}
+                                    px={10}>
+                                    <BaseText
+                                        color={theme.colors.textReversed}
+                                        typographyFont="bodyBold">
+                                        {index + 1}
+                                    </BaseText>
+                                </BaseView>
                             ) : (
                                 <BaseIcon
                                     bg={bgColor}
