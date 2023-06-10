@@ -1,4 +1,4 @@
-import { clickById, clickByText, isPresentText } from "../common"
+import { clickByText, isPresentText } from "../common"
 
 export const goToAdvancedSettings = async () => {
     await clickByText("Advanced")
@@ -19,7 +19,9 @@ export const selectTestNetwork = async () => {
     }
 }
 
-export const goBackToHomeTab = async () => {
-    // go back to home page
-    await clickById("wallet-tab")
+export const selectMainNetwork = async () => {
+    if (await isPresentText("Testnet")) {
+        await clickByText("Testnet")
+        await clickByText("Mainnet")
+    }
 }

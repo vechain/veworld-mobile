@@ -45,6 +45,13 @@ export const VTHO_TEST: FungibleToken = {
     genesisId: genesises.test.id,
 }
 
+export const VTHO_BY_NETWORK = {
+    [NETWORK_TYPE.MAIN]: VTHO_MAIN,
+    [NETWORK_TYPE.TEST]: VTHO_TEST,
+    [NETWORK_TYPE.OTHER]: VTHO,
+    [NETWORK_TYPE.SOLO]: VTHO,
+}
+
 export const VECHAIN_TOKEN_MAIN: FungibleToken[] = [VET_MAIN, VTHO_MAIN]
 export const VECHAIN_TOKEN_TEST: FungibleToken[] = [VET_TEST, VTHO_TEST]
 

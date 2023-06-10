@@ -1,6 +1,6 @@
 import axios from "axios"
-import { GH_NFT_REGISTRY } from "~Common/Constant/NftRegistry"
 import { NETWORK_TYPE } from "~Model"
+import { GH_NFT_REGISTRY } from "./NftRegistry"
 
 export type GithubCollectionResponse = {
     address: string
@@ -49,7 +49,7 @@ export const getCollectionInfo = async (
             return resTest.data
         default:
             const resDefault = await axios.get<GithubCollectionResponse[]>(
-                GH_NFT_REGISTRY(net),
+                GH_NFT_REGISTRY(NETWORK_TYPE.MAIN),
             )
             return resDefault.data
     }

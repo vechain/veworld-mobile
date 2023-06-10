@@ -23,6 +23,7 @@ import {
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
     TokenWithCompleteInfo,
+    TransactionOutcomes,
 } from "~Model"
 import { Transaction } from "thor-devkit"
 
@@ -56,7 +57,12 @@ export type RootStackParamListHome = {
     [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.ACTIVITY_DETAILS]: { activity: Activity; token?: FungibleToken }
+    [Routes.ACTIVITY_DETAILS]: {
+        activity: Activity
+        token?: FungibleToken
+        isSwap?: boolean
+        decodedClauses?: TransactionOutcomes
+    }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
 }
 

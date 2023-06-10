@@ -4,7 +4,10 @@ import { debug } from "~Common/Logger"
 import {
     ClauseType,
     ClauseWithMetadata,
+    ConnectedAppTxActivity,
     ConnexClause,
+    SwapEvent,
+    SwapResult,
     Token,
     TransactionOutcomes,
 } from "~Model"
@@ -27,11 +30,11 @@ export const SWAP_EXACT_TOKENS_FOR_TOKENS_SIG = new abi.Function(
     abis.RouterV2.swapExactTokensForTokens,
 ).signature
 
-export const SWAP_TOKENS_FOR_EXACT_VET = new abi.Function(
+export const SWAP_TOKENS_FOR_EXACT_VET_SIG = new abi.Function(
     abis.RouterV2.swapTokensForExactVET,
 ).signature
 
-export const SWAP_EXACT_TOKENS_FOR_VET = new abi.Function(
+export const SWAP_EXACT_TOKENS_FOR_VET_SIG = new abi.Function(
     abis.RouterV2.swapExactTokensForVET,
 ).signature
 
@@ -39,9 +42,12 @@ export const SWAP_EXACT_ETH_FOR_TOKENS_SIG = new abi.Function(
     abis.UniswapRouterV2.swapExactETHForTokens,
 ).signature
 
-export const SWAP_EXACT_TOKENS_FOR_ETH = new abi.Function(
+export const SWAP_EXACT_TOKENS_FOR_ETH_SIG = new abi.Function(
     abis.UniswapRouterV2.swapExactTokensForETH,
 ).signature
+
+export const SWAP_EVENT_SIG = new abi.Event(abis.UniswapPairV2.SwapEvent)
+    .signature
 
 /**
  * Checks if a clause represents a VET transfer.
@@ -141,6 +147,31 @@ export const decodeAMMClause = (
                 type: clauseType,
                 to: decoded.to,
                 data: clause.data,
+                path: decoded.path,
+            }
+        } catch (e) {
+            debug("Failed to decode parameters", e)
+        }
+    }
+
+    return null
+}
+
+export const decodeSwapEvent = (event: Connex.VM.Event): SwapEvent | null => {
+    if (event.topics[0]?.startsWith(SWAP_EVENT_SIG)) {
+        try {
+            const decoded = new abi.Event(abis.UniswapPairV2.SwapEvent).decode(
+                event.data,
+                event.topics,
+            )
+
+            return {
+                sender: decoded.sender,
+                amount0In: decoded.amount0In,
+                amount1In: decoded.amount1In,
+                amount0Out: decoded.amount0Out,
+                amount1Out: decoded.amount1Out,
+                to: decoded.to,
             }
         } catch (e) {
             debug("Failed to decode parameters", e)
@@ -196,7 +227,7 @@ export const decodeSwapTokensForExactVETClause = (
     return decodeAMMClause(
         clause,
         abis.RouterV2.swapTokensForExactVET.inputs,
-        SWAP_TOKENS_FOR_EXACT_VET,
+        SWAP_TOKENS_FOR_EXACT_VET_SIG,
         ClauseType.SWAP_TOKENS_FOR_VET,
     )
 }
@@ -213,7 +244,7 @@ export const decodeSwapExactTokensForVETClause = (
     return decodeAMMClause(
         clause,
         abis.RouterV2.swapExactTokensForVET.inputs,
-        SWAP_EXACT_TOKENS_FOR_VET,
+        SWAP_EXACT_TOKENS_FOR_VET_SIG,
         ClauseType.SWAP_TOKENS_FOR_VET,
     )
 }
@@ -264,7 +295,7 @@ export const decodeSwapExactTokensForETHClause = (
     return decodeAMMClause(
         clause,
         abis.UniswapRouterV2.swapExactTokensForETH.inputs,
-        SWAP_EXACT_TOKENS_FOR_ETH,
+        SWAP_EXACT_TOKENS_FOR_ETH_SIG,
         ClauseType.SWAP_TOKENS_FOR_VET,
     )
 }
@@ -431,6 +462,164 @@ export const decodeContractCall = (clause: ConnexClause) => {
         decodeSwapExactTokensForTokensClause(clause)
 
     return decodedClause
+}
+
+/**
+ * Checks if a clause is of type "swap".
+ *
+ * @param clause - The clause object with metadata.
+ *
+ * @returns A boolean indicating whether the clause is of type "swap".
+ */
+export const isSwapClause = (clause: ClauseWithMetadata) => {
+    return (
+        clause.type === ClauseType.SWAP_TOKENS_FOR_VET ||
+        clause.type === ClauseType.SWAP_VET_FOR_TOKENS ||
+        clause.type === ClauseType.SWAP_TOKENS_FOR_TOKENS
+    )
+}
+
+/**
+ * Checks if a transaction is a "swap" transaction.
+ *
+ * @param outcomes - The array of transaction outcomes.
+ *
+ * @returns A boolean indicating whether the transaction is a "swap" transaction.
+ */
+export const isSwapTransaction = (outcomes: TransactionOutcomes) => {
+    return outcomes.filter(isSwapClause).length === 1
+}
+
+/**
+ * Decodes and finds swap events from an array of events.
+ *
+ * @param events - The array of VM events.
+ *
+ * @returns An array of decoded swap events.
+ */
+export const findAndDecodeSwapEvents = (events: Connex.VM.Event[]) => {
+    const decodedEvents: SwapEvent[] = []
+
+    for (const event of events) {
+        const decodedEvent = decodeSwapEvent(event)
+        if (decodedEvent) decodedEvents.push(decodedEvent)
+    }
+
+    return decodedEvents
+}
+
+/**
+ * Extracts paid and received amounts from a decoded swap event.
+ *
+ * @param decodedSwapEvent - The decoded swap event.
+ *
+ * @returns An object containing paid and received amounts.
+ */
+export const extractEventAmounts = (decodedSwapEvent: SwapEvent) => {
+    const paidAmount =
+        decodedSwapEvent.amount0In !== "0"
+            ? decodedSwapEvent.amount0In
+            : decodedSwapEvent.amount1In
+
+    const receivedAmount =
+        decodedSwapEvent.amount0Out !== "0"
+            ? decodedSwapEvent.amount0Out
+            : decodedSwapEvent.amount1Out
+
+    return { paidAmount, receivedAmount }
+}
+
+/**
+ * Validates the length of decoded swap events.
+ *
+ * @param decodedSwapEvents - The array of decoded swap events.
+ * @param expectedLength - The expected length of the array.
+ *
+ * @throws Will throw an error if the length of decodedSwapEvents does not match the expectedLength.
+ */
+export const validateSwapEvents = (
+    decodedSwapEvents: SwapEvent[],
+    expectedLength: number,
+) => {
+    if (decodedSwapEvents.length !== expectedLength)
+        throw new Error(`Invalid swap event count, expected ${expectedLength}`)
+}
+
+/**
+ * Decodes swap transfer amounts from decoded clauses.
+ *
+ * @param decodedClauses - The transaction outcomes.
+ * @param activity - The connected app transaction activity.
+ *
+ * @returns An object containing paid and received token addresses and their respective amounts, or null if the transaction is not a swap transaction.
+ *
+ * @throws Will throw an error under several circumstances, e.g., if the transaction is not a swap transaction, if no swap events could be found or decoded, or if the swap clause path is invalid.
+ */
+export const decodeSwapTransferAmounts = (
+    decodedClauses: TransactionOutcomes,
+    activity: ConnectedAppTxActivity,
+): SwapResult | null => {
+    if (!isSwapTransaction(decodedClauses))
+        throw new Error("Transaction is not a swap transaction")
+
+    const events = activity.outputs.flatMap(output => output.events)
+    const decodedSwapEvents = findAndDecodeSwapEvents(events)
+
+    if (decodedSwapEvents.length === 0)
+        throw new Error("Could not find or decode swap events")
+
+    const swapClause = decodedClauses.find(isSwapClause)
+
+    if (!swapClause?.path || swapClause.path.length < 2)
+        throw new Error("Invalid swap clause path")
+
+    let paidTokenAddress, receivedTokenAddress, paidAmount, receivedAmount
+
+    const firstTokenAddress = swapClause.path[0]
+    const secondTokenAddress = swapClause.path[swapClause.path.length - 1]
+
+    switch (swapClause?.type) {
+        case ClauseType.SWAP_TOKENS_FOR_VET:
+            validateSwapEvents(decodedSwapEvents, 1)
+            ;({ paidAmount, receivedAmount } = extractEventAmounts(
+                decodedSwapEvents[0],
+            ))
+
+            paidTokenAddress = firstTokenAddress
+            receivedTokenAddress = VET.address
+
+            break
+        case ClauseType.SWAP_VET_FOR_TOKENS:
+            validateSwapEvents(decodedSwapEvents, 1)
+            ;({ paidAmount, receivedAmount } = extractEventAmounts(
+                decodedSwapEvents[0],
+            ))
+
+            paidTokenAddress = VET.address
+            receivedTokenAddress = secondTokenAddress
+
+            break
+        case ClauseType.SWAP_TOKENS_FOR_TOKENS:
+            validateSwapEvents(decodedSwapEvents, 2)
+
+            paidAmount = extractEventAmounts(decodedSwapEvents[0]).paidAmount
+
+            receivedAmount = extractEventAmounts(
+                decodedSwapEvents[1],
+            ).receivedAmount
+
+            paidTokenAddress = firstTokenAddress
+            receivedTokenAddress = secondTokenAddress
+
+            break
+    }
+
+    return {
+        paidAmount: paidAmount ?? "",
+        paidTokenAddress: paidTokenAddress ?? "",
+        receivedAmount: receivedAmount ?? "",
+        receivedTokenAddress: receivedTokenAddress ?? "",
+    }
 }
 
 export const toDelegation = (txBody: Transaction.Body) => {

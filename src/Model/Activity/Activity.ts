@@ -2,6 +2,12 @@ import { DIRECTIONS } from "~Common"
 import { Certificate } from "thor-devkit"
 import { ActivityStatus, ActivityType } from "./enum"
 
+export type OutputResponse = {
+    contractAddress: string
+    events: Connex.VM.Event[]
+    transfers: Connex.VM.Transfer[]
+}
+
 /**
  * The Activity interface represents a blockchain activity with necessary transaction metadata.
  */
@@ -19,6 +25,7 @@ export interface Activity {
     delegated: boolean
     status: ActivityStatus
     clauses: Connex.VM.Clause[]
+    outputs: OutputResponse[]
 }
 
 /**
