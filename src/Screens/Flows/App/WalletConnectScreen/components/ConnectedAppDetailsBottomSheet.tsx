@@ -9,8 +9,10 @@ import {
     BaseSpacer,
     useWalletConnect,
     BaseBottomSheet,
+    AccountIcon,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
+import { FormattingUtils } from "~Utils"
 
 const snapPoints = ["65%"]
 
@@ -49,7 +51,7 @@ export const ConnectedAppDetailsBottomSheet = React.forwardRef<
                 />
 
                 <BaseSpacer height={24} />
-                <BaseText typographyFont="subTitleBold">
+                <BaseText typographyFont="subSubTitle">
                     {session.peer.metadata.name}
                 </BaseText>
 
@@ -57,12 +59,22 @@ export const ConnectedAppDetailsBottomSheet = React.forwardRef<
                 <BaseText>{session.peer.metadata.description}</BaseText>
 
                 <BaseSpacer height={24} />
-                <BaseText>
-                    {"Selected account: "} {account.alias}
+                <BaseText typographyFont="subSubTitle">
+                    {"Connected with"}
                 </BaseText>
-                <BaseText>
-                    {"Address: "} {account.address}
-                </BaseText>
+                <BaseSpacer height={8} />
+                <BaseView flexDirection="row">
+                    <AccountIcon address={account.address} />
+                    <BaseSpacer width={8} />
+                    <BaseView>
+                        <BaseText typographyFont="subSubTitle">
+                            {account.alias}
+                        </BaseText>
+                        <BaseText typographyFont="captionRegular">
+                            {FormattingUtils.humanAddress(account.address)}
+                        </BaseText>
+                    </BaseView>
+                </BaseView>
 
                 <BaseSpacer height={24} />
                 <BaseButton action={disconnectSession} title="Disconnect" />
@@ -84,5 +96,19 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 8,
         marginVertical: 4,
+    },
+    rightSubContainer: {
+        width: "50%",
+        flexDirection: "column",
+        alignItems: "flex-end",
+    },
+    wallet: {
+        opacity: 0.7,
+    },
+    address: {
+        opacity: 0.7,
+    },
+    walletContainer: {
+        flex: 1,
     },
 })

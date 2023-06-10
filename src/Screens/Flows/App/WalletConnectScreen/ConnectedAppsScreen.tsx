@@ -63,7 +63,6 @@ export const ConnectedAppsScreen = () => {
                                     <BaseText typographyFont="subSubTitleLight">
                                         {account.alias}
                                     </BaseText>
-                                    <BaseSpacer height={16} />
                                     {activeSessions[account.address].map(
                                         session => {
                                             return (
