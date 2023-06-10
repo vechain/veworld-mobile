@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Common"
-import { BaseIcon, BaseModal, IBaseModal } from "~Components"
+import { BaseIcon, BaseModal, BaseView, IBaseModal } from "~Components"
 import { LockScreen } from "~Screens"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
@@ -16,18 +16,20 @@ export const RequireUserPassword: React.FC<IRequireUserPassword> = memo(
 
         return (
             <BaseModal isOpen={isOpen} onClose={onClose}>
-                <BaseIcon
-                    style={backButtonHeaderStyle.backButton}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={onClose}
-                />
-                <LockScreen
-                    onSuccess={onSuccess}
-                    scenario={scenario ?? LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
-                    isValidatePassword={isValidatePassword}
-                />
+                <BaseView justifyContent="flex-start">
+                    <BaseIcon
+                        style={backButtonHeaderStyle.backButton}
+                        size={36}
+                        name="chevron-left"
+                        color={theme.colors.text}
+                        action={onClose}
+                    />
+                    <LockScreen
+                        onSuccess={onSuccess}
+                        scenario={scenario ?? LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
+                        isValidatePassword={isValidatePassword}
+                    />
+                </BaseView>
             </BaseModal>
         )
     },
