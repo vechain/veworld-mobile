@@ -14,12 +14,9 @@ import {
     SettingsTransactionsScreen,
     ManageUrlsScreen,
     ResetAppScreen,
-    ConnectedAppDetailsScreen,
     ConnectedAppsScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { SessionTypes } from "@walletconnect/types"
-import { AccountWithDevice } from "~Model"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -36,10 +33,6 @@ export type RootStackParamListSettings = {
     [Routes.MANAGE_DELEGATION_URLS]: undefined
     [Routes.RESET_APP]: undefined
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
-    [Routes.SETTINGS_CONNECTED_APP_DETAILS]: {
-        session: SessionTypes.Struct
-        account: AccountWithDevice
-    }
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -127,12 +120,6 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.SETTINGS_CONNECTED_APPS}
                     component={ConnectedAppsScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Settings.Screen
-                    name={Routes.SETTINGS_CONNECTED_APP_DETAILS}
-                    component={ConnectedAppDetailsScreen}
                     options={{ headerShown: false }}
                 />
             </Settings.Group>

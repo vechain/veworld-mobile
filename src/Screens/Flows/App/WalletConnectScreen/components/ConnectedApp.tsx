@@ -8,11 +8,10 @@ import {
     BaseTouchableBox,
 } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
-import { useTheme, useThemedStyles } from "~Common"
-import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
+import { useBottomSheetModal, useTheme, useThemedStyles } from "~Common"
 import { AccountWithDevice } from "~Model"
 import { ImageStyle } from "react-native-fast-image"
+import { ConnectedAppDetailsBottomSheet } from "./ConnectedAppDetailsBottomSheet"
 
 type Props = {
     session: SessionTypes.Struct
@@ -23,14 +22,16 @@ export const ConnectedApp: React.FC<Props> = memo(
     ({ session, account }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
         const theme = useTheme()
-        const nav = useNavigation()
 
         const onPress = () => {
-            nav.navigate(Routes.SETTINGS_CONNECTED_APP_DETAILS, {
-                session,
-                account,
-            })
+            openConnectedAppDetailsSheet()
         }
+
+        const {
+            ref: connectedAppDetailsBottomSheetRef,
+            onOpen: openConnectedAppDetailsSheet,
+            onClose: closeConnectedAppDetailsSheet,
+        } = useBottomSheetModal()
 
         //TODO: Implement "disconnect" functionality on long press
 
@@ -86,6 +87,12 @@ export const ConnectedApp: React.FC<Props> = memo(
                             />
                         </BaseView>
                     </BaseView>
+                    <ConnectedAppDetailsBottomSheet
+                        ref={connectedAppDetailsBottomSheetRef}
+                        onClose={closeConnectedAppDetailsSheet}
+                        session={session}
+                        account={account}
+                    />
                 </BaseTouchableBox>
             </>
         )

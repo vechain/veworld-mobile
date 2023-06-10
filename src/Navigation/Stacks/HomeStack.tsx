@@ -15,18 +15,15 @@ import {
     ActivityDetailsScreen,
     AssetDetailScreen,
     ConnectedAppsScreen,
-    ConnectedAppDetailsScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
-    AccountWithDevice,
     Activity,
     FungibleToken,
     FungibleTokenWithBalance,
     TokenWithCompleteInfo,
     TransactionOutcomes,
 } from "~Model"
-import { SessionTypes } from "@walletconnect/types"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -61,10 +58,6 @@ export type RootStackParamListHome = {
     }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
-    [Routes.SETTINGS_CONNECTED_APP_DETAILS]: {
-        session: SessionTypes.Struct
-        account: AccountWithDevice
-    }
 }
 
 const { Navigator, Group, Screen } =
@@ -138,12 +131,6 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.TOKEN_DETAILS}
                     component={AssetDetailScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.SETTINGS_CONNECTED_APP_DETAILS}
-                    component={ConnectedAppDetailsScreen}
                     options={{ headerShown: false }}
                 />
             </Group>
