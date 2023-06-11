@@ -1,6 +1,6 @@
 import axios from "axios"
 import { getContractAddresses } from "./getContractAddresses"
-import { NFT_CONTRACTS_FOR_ADDRESS } from "~Common"
+import { NFT_CONTRACTS_FOR_ADDRESS } from "./VechainIndexer"
 
 jest.mock("axios")
 
@@ -11,11 +11,15 @@ describe("getContractAddresses", () => {
         const responseData = ["0xContract1", "0xContract2"]
         ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: responseData })
 
-        const contractAddresses = await getContractAddresses(ownerAddress)
+        const contractAddresses = await getContractAddresses(
+            ownerAddress,
+            10,
+            0,
+        )
 
         expect(contractAddresses).toEqual(responseData)
         expect(axios.get).toHaveBeenCalledWith(
-            NFT_CONTRACTS_FOR_ADDRESS(ownerAddress),
+            NFT_CONTRACTS_FOR_ADDRESS(ownerAddress, 10, 0),
         )
     })
 })

@@ -1,1 +1,2 @@
-export * from "./useNft"
+export * from "./useNFTs"
+export * from "./useNFTCollections"

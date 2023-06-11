@@ -16,7 +16,7 @@ import { isEmpty } from "lodash"
 import { FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
 import {
-    selectCollectionWithContractAddres,
+    selectCollectionWithContractAddress,
     selectNFTWithAddressAndTokenId,
     useAppSelector,
 } from "~Storage/Redux"
@@ -33,7 +33,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const { calculateBottomInsets } = usePlatformBottomInsets()
 
     const collection = useAppSelector(state =>
-        selectCollectionWithContractAddres(
+        selectCollectionWithContractAddress(
             state,
             route.params.collectionAddress!,
         ),

@@ -1,9 +1,19 @@
 import axios from "axios"
-import { NFT_CONTRACTS_FOR_ADDRESS } from "~Common"
+import { NFT_CONTRACTS_FOR_ADDRESS } from "./VechainIndexer"
 
-export const getContractAddresses = async (ownerAddress: string) => {
-    const response = await axios.get<string[]>(
-        NFT_CONTRACTS_FOR_ADDRESS(ownerAddress),
+export type NFTContractAddresses = {
+    data: string[]
+    pagination: { totalElements: number; totalPages: number }
+}
+
+export const getContractAddresses = async (
+    ownerAddress: string,
+    resultsPerPage: number,
+    page: number,
+) => {
+    const response = await axios.get<NFTContractAddresses>(
+        NFT_CONTRACTS_FOR_ADDRESS(ownerAddress, resultsPerPage, page),
     )
+
     return response.data
 }

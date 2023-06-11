@@ -4,10 +4,6 @@ import { BaseIcon, BaseSpacer } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "~Common"
 
-const backButtonHeaderStyle = StyleSheet.create({
-    backButton: { paddingHorizontal: 16, alignSelf: "flex-start" },
-})
-
 type Props = {
     iconTestID?: string
     hasBottomSpacer?: boolean
@@ -33,3 +29,7 @@ export const BackButtonHeader = ({
         </>
     )
 }
+
+const backButtonHeaderStyle = StyleSheet.create({
+    backButton: { paddingHorizontal: 8, alignSelf: "flex-start" },
+})

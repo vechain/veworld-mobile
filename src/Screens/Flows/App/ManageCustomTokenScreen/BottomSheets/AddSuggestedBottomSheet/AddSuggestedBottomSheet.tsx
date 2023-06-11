@@ -7,6 +7,7 @@ import {
     OfficialTokenCard,
     BaseScrollView,
     BaseButton,
+    useThor,
 } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
@@ -16,6 +17,7 @@ import {
     selectNonVechainTokensWithBalances,
     selectSelectedAccount,
     selectSelectedNetwork,
+    updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -38,6 +40,7 @@ export const AddSuggestedBottomSheet = React.forwardRef<
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+    const thorClient = useThor()
 
     const toggleToken = (token: FungibleTokenWithBalance) => () => {
         if (selectedTokens.includes(token.symbol)) {
@@ -54,7 +57,7 @@ export const AddSuggestedBottomSheet = React.forwardRef<
         onClose()
     }
 
-    const handleAddSelectedTokens = () => {
+    const handleAddSelectedTokens = async () => {
         for (const tokenAddress of selectedTokens) {
             const token = missingSuggestedTokens.find(
                 (missingToken: FungibleTokenWithBalance) =>
@@ -76,6 +79,8 @@ export const AddSuggestedBottomSheet = React.forwardRef<
                     genesisId: network.genesis.id,
                 }),
             )
+            await dispatch(updateAccountBalances(thorClient, account.address))
+
             handleDismiss()
         }
         setSelectedTokenSymbols((s: string[]) => [...s, ...selectedTokens])
