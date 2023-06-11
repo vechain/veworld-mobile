@@ -357,6 +357,7 @@ export const SignTransactionModal = ({
                     action={onReject}
                 />
             </BaseView>
+            <BaseSpacer height={40} />
             <ConfirmIdentityBottomSheet />
         </BaseModal>
     )

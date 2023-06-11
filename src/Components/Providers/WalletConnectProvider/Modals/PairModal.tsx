@@ -225,6 +225,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                     action={handleReject}
                 />
             </BaseView>
+            <BaseSpacer height={40} />
         </BaseModal>
     )
 }
