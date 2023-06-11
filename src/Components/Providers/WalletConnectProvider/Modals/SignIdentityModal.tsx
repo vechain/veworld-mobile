@@ -12,6 +12,7 @@ import {
     showSuccessToast,
     CloseModalButton,
     showErrorToast,
+    BaseScrollView,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
 import {
@@ -25,7 +26,6 @@ import { DEVICE_TYPE, Wallet } from "~Model"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
-import { ScrollView } from "react-native-gesture-handler"
 import { capitalize } from "lodash"
 import { ConnectedApp } from "~Screens/Flows/App/WalletConnectScreen/components"
 
@@ -186,7 +186,7 @@ export const SignIdentityModal = ({
             presentationStyle="overFullScreen">
             <CloseModalButton onPress={onClose} />
 
-            <ScrollView
+            <BaseScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="never"
@@ -234,25 +234,24 @@ export const SignIdentityModal = ({
                         <BaseText>{message}</BaseText>
                     </BaseView>
                 </BaseView>
-            </ScrollView>
-            <BaseSpacer height={24} />
-            <BaseView style={styles.footer}>
-                <BaseButton
-                    w={100}
-                    haptics="light"
-                    title={"SIGN"}
-                    action={checkIdentityBeforeOpening}
-                />
-                <BaseSpacer height={16} />
-                <BaseButton
-                    w={100}
-                    haptics="light"
-                    variant="outline"
-                    title={"REJECT"}
-                    action={onReject}
-                />
-            </BaseView>
-            <BaseSpacer height={40} />
+                <BaseSpacer height={80} />
+                <BaseView style={styles.footer}>
+                    <BaseButton
+                        w={100}
+                        haptics="light"
+                        title={"SIGN"}
+                        action={checkIdentityBeforeOpening}
+                    />
+                    <BaseSpacer height={16} />
+                    <BaseButton
+                        w={100}
+                        haptics="light"
+                        variant="outline"
+                        title={"REJECT"}
+                        action={onReject}
+                    />
+                </BaseView>
+            </BaseScrollView>
             <ConfirmIdentityBottomSheet />
         </BaseModal>
     )
@@ -270,7 +269,7 @@ const styles = StyleSheet.create({
     },
     scrollViewContainer: {
         width: "100%",
-        height: "60%",
+        height: "100%",
     },
     scrollView: {
         width: "100%",

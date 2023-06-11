@@ -53,15 +53,16 @@ export const ConnectedAppsScreen = () => {
                         </>
                     )}
 
-                    {accounts.map(account => {
+                    {accounts.map((account, index) => {
                         if (
                             account.address in activeSessions &&
                             !isEmpty(activeSessions[account.address])
                         ) {
                             return (
-                                <BaseView key={account.alias}>
-                                    <BaseText typographyFont="subSubTitleLight">
-                                        {account.alias}
+                                <BaseView key={account.address}>
+                                    {index > 0 && <BaseSpacer height={16} />}
+                                    <BaseText typographyFont="subSubTitle">
+                                        {account.device?.alias}
                                     </BaseText>
                                     {activeSessions[account.address].map(
                                         session => {

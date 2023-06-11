@@ -342,7 +342,7 @@ const en: BaseTranslation = {
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
     // Wallet connect notifications
-    NOTIFICATION_wallet_connect_disconnected_from_remote: "Connection to app closed successfully.",
+    NOTIFICATION_wallet_connect_disconnected_from_remote: "A connected app successfully disconnected from this wallet.",
     NOTIFICATION_warning_wallet_connect_connection_could_delay: "Connecting may take a few seconds.",
     NOTIFICATION_wallet_connect_error_pairing: "Error pairing with the app, please generate a new QR CODE.",
     NOTIFICATION_wallet_connect_incompatible_dapp: "The requested dapp is not compatible with VeWorld.",

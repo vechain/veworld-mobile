@@ -50,13 +50,18 @@ export const ConnectedAppDetailsBottomSheet = React.forwardRef<
                     }}
                 />
 
-                <BaseSpacer height={24} />
+                <BaseSpacer height={14} />
                 <BaseText typographyFont="subSubTitle">
                     {session.peer.metadata.name}
                 </BaseText>
 
                 <BaseSpacer height={8} />
                 <BaseText>{session.peer.metadata.description}</BaseText>
+
+                <BaseSpacer height={8} />
+                <BaseText typographyFont="caption">
+                    {session.peer.metadata.url}
+                </BaseText>
 
                 <BaseSpacer height={24} />
                 <BaseText typographyFont="subSubTitle">

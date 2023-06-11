@@ -16,6 +16,7 @@ import {
     BaseModal,
     showErrorToast,
     CloseModalButton,
+    BaseScrollView,
 } from "~Components"
 import { getSdkError } from "@walletconnect/utils"
 import {
@@ -27,7 +28,6 @@ import { insertSession } from "~Storage/Redux/Slices"
 import { error } from "~Common"
 import { WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { ScrollView } from "react-native-gesture-handler"
 
 type Props = {
     currentProposal: SignClientTypes.EventArguments["session_proposal"]
@@ -96,20 +96,28 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                 }
             })
 
-            let session: SessionTypes.Struct = await web3Wallet.approveSession({
-                id,
-                relayProtocol: relays[0].protocol,
-                namespaces,
-            })
+            try {
+                let session: SessionTypes.Struct =
+                    await web3Wallet.approveSession({
+                        id,
+                        relayProtocol: relays[0].protocol,
+                        namespaces,
+                    })
 
-            dispatch(
-                insertSession({ address: selectedAccountAddress, session }),
-            )
+                dispatch(
+                    insertSession({ address: selectedAccountAddress, session }),
+                )
 
-            onClose(true)
-            showSuccessToast(
-                LL.NOTIFICATION_wallet_connect_successfull_connection({ name }),
-            )
+                onClose(true)
+                showSuccessToast(
+                    LL.NOTIFICATION_wallet_connect_successfull_connection({
+                        name,
+                    }),
+                )
+            } catch (err: unknown) {
+                onClose(true)
+                showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
+            }
         }
     }
 
@@ -136,7 +144,7 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
         <BaseModal isOpen={isOpen} onClose={() => onClose(false)}>
             <CloseModalButton onPress={onClose} />
 
-            <ScrollView
+            <BaseScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="never"
@@ -206,26 +214,26 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                         </>
                     )}
                 </BaseView>
-            </ScrollView>
 
-            <BaseSpacer height={24} />
-            <BaseView style={styles.footer}>
-                <BaseButton
-                    w={100}
-                    haptics="light"
-                    title={"APPROVE"}
-                    action={handleAccept}
-                />
-                <BaseSpacer height={16} />
-                <BaseButton
-                    w={100}
-                    haptics="light"
-                    variant="outline"
-                    title={"REJECT"}
-                    action={handleReject}
-                />
-            </BaseView>
-            <BaseSpacer height={40} />
+                <BaseSpacer height={80} />
+
+                <BaseView style={styles.footer} mx={20}>
+                    <BaseButton
+                        w={100}
+                        haptics="light"
+                        title={"APPROVE"}
+                        action={handleAccept}
+                    />
+                    <BaseSpacer height={16} />
+                    <BaseButton
+                        w={100}
+                        haptics="light"
+                        variant="outline"
+                        title={"REJECT"}
+                        action={handleReject}
+                    />
+                </BaseView>
+            </BaseScrollView>
         </BaseModal>
     )
 }
@@ -242,17 +250,12 @@ const styles = StyleSheet.create({
     },
     scrollViewContainer: {
         width: "100%",
-        height: "60%",
+        height: "100%",
     },
     scrollView: {
         width: "100%",
     },
-    footer: {
-        width: "100%",
-        alignItems: "center",
-        paddingLeft: 20,
-        paddingRight: 20,
-    },
+    footer: {},
     separator: {
         borderWidth: 0.5,
         borderColor: "#0B0043",

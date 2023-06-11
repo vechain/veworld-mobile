@@ -10,7 +10,7 @@ import {
 import { PairModal } from "./Modals/PairModal"
 import { SignIdentityModal } from "./Modals/SignIdentityModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
-import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
+import { showErrorToast, showInfoToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { deleteSession } from "~Storage/Redux/Slices"
 import { getSdkError } from "@walletconnect/utils"
@@ -171,7 +171,7 @@ const WalletConnectContextProvider = ({
             } finally {
                 dispatch(deleteSession({ topic }))
 
-                showSuccessToast(
+                showInfoToast(
                     LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
                 )
             }
