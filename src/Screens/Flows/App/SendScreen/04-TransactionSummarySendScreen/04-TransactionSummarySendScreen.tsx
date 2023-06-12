@@ -1,7 +1,12 @@
 import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { useCheckIdentity, useTheme, useTransaction } from "~Hooks"
+import {
+    useCheckIdentity,
+    useTheme,
+    useTransaction,
+    useSignTransaction,
+} from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { VTHO, COLORS } from "~Constants"
 import {
@@ -35,7 +40,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { useDelegation, useSignTransaction } from "./Hooks"
+import { useDelegation } from "./Hooks"
 import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
 
