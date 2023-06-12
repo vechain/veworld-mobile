@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { Transaction } from "thor-devkit"
 import { BlePairingDark } from "~Assets"
-import { useBottomSheetModal, useLedger } from "~Hooks"
+import { useBottomSheetModal, useLedger, useLegderConfig } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,
@@ -67,28 +67,38 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         openConnectionErrorSheet()
     }, [openConnectionErrorSheet])
 
-    const {
-        errorCode,
-        setTimerEnabled,
-        vetApp,
-        clausesEnabled,
-        contractEnabled,
-    } = useLedger({
-        deviceId: accountWithDevice.device.deviceId,
-        waitFirstManualConnection: false,
-        onConnectionError,
-    })
+    const { errorCode, setTimerEnabled, vetApp, openOrFinalizeConnection } =
+        useLedger({
+            deviceId: accountWithDevice.device.deviceId,
+            waitFirstManualConnection: false,
+            onConnectionError,
+        })
 
-    useEffect(() => {
-        debug({ clausesEnabled, contractEnabled })
-    }, [clausesEnabled, contractEnabled])
+    const { config, clausesEnabled, contractEnabled } = useLegderConfig({
+        app: vetApp,
+        onGetLedgerConfigError: openOrFinalizeConnection,
+    })
 
     // errorCode + validate signature
     const ledgerErrorCode = useMemo(() => {
+        if (errorCode) return errorCode
+        if (config) {
+            if (!clausesEnabled && !contractEnabled)
+                return LEDGER_ERROR_CODES.CONTRACT_AND_CLAUSES_DISABLED
+            if (!clausesEnabled) return LEDGER_ERROR_CODES.CLAUSES_DISABLED
+            if (!contractEnabled) return LEDGER_ERROR_CODES.CONTRACT_DISABLED
+        }
+
         if (isAwaitingSignature && !signingError)
             return LEDGER_ERROR_CODES.WAITING_SIGNATURE
-        return errorCode
-    }, [errorCode, isAwaitingSignature, signingError])
+    }, [
+        errorCode,
+        config,
+        isAwaitingSignature,
+        signingError,
+        clausesEnabled,
+        contractEnabled,
+    ])
 
     const Steps: Step[] = useMemo(
         () => [
@@ -97,6 +107,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 isNextText: "Connect",
                 isDoneText: "Connected",
                 progressPercentage: 25,
+                title: LL.SEND_LEDGER_CHECK_CONNECTION(),
+                subtitle: LL.SEND_LEDGER_CHECK_CONNECTION_SB(),
+            },
+            {
+                isActiveText: "Checking",
+                isNextText: "Check status",
+                isDoneText: "Status OK",
+                progressPercentage: 50,
                 title: LL.SEND_LEDGER_CHECK_CONNECTION(),
                 subtitle: LL.SEND_LEDGER_CHECK_CONNECTION_SB(),
             },
@@ -115,10 +133,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const currentStep = useMemo(() => {
         if (!vetApp) return 0
 
-        if (!signature) return 1
+        if (!clausesEnabled || !contractEnabled) return 1
 
-        return 2
-    }, [vetApp, signature])
+        if (!signature) return 2
+
+        return 3
+    }, [vetApp, signature, clausesEnabled, contractEnabled])
 
     /** Effects */
 
@@ -159,6 +179,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
      * Open the connection error sheet when the error code is not null
      */
     useEffect(() => {
+        debug({ ledgerErrorCode })
         if (ledgerErrorCode) {
             openConnectionErrorSheet()
         } else {

@@ -31,9 +31,6 @@ describe("useLedger", () => {
             )
 
             expect(result.current).toEqual({
-                config: undefined,
-                clausesEnabled: false,
-                contractEnabled: false,
                 vetApp: undefined,
                 rootAccount: undefined,
                 isConnecting: false,
@@ -65,9 +62,6 @@ describe("useLedger", () => {
             )
 
             expect(result.current).toEqual({
-                config: undefined,
-                clausesEnabled: false,
-                contractEnabled: false,
                 vetApp: undefined,
                 rootAccount: undefined,
                 isConnecting: false,
@@ -97,9 +91,6 @@ describe("useLedger", () => {
                 LEDGER_ERROR_CODES.UNKNOWN,
             )
             expect(result.current).toEqual({
-                config: undefined,
-                clausesEnabled: false,
-                contractEnabled: false,
                 vetApp: undefined,
                 rootAccount: undefined,
                 isConnecting: false,
