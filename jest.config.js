@@ -48,8 +48,7 @@ module.exports = {
 
     collectCoverageFrom: [
         "src/Utils/**/*.{js,jsx,ts,tsx}",
-        "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
-        "src/Common/Hooks/**/*.{js,jsx,ts,tsx}",
+        "src/Hooks/**/*.{js,jsx,ts,tsx}",
         "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
     coveragePathIgnorePatterns: [

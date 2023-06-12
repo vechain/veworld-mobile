@@ -8,13 +8,14 @@ import {
     updateAccountBalances,
     useAppDispatch,
 } from "~Storage/Redux"
-import { sendSignedTransaction } from "~Utils/TransactionUtils/TransactionUtils"
+import { sendTransaction } from "~Networking"
 import { useI18nContext } from "~i18n"
 
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
  * @param network the network to send the transaction to
- * @returns
+ * @param account the account to send the transaction from
+ * @returns {sendTransactionAndPerformUpdates} the function to send the transaction and perform updates
  */
 export const useSendTransaction = (
     network: Network,
@@ -25,7 +26,7 @@ export const useSendTransaction = (
     const thorClient = useThor()
 
     const sendTransactionAndPerformUpdates = async (tx: Transaction) => {
-        const id = await sendSignedTransaction(tx, network.currentUrl)
+        const id = await sendTransaction(tx, network.currentUrl)
 
         // Add pending transaction activity
         dispatch(addPendingTransferTransactionActivity(tx, thorClient))
