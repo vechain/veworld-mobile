@@ -1,16 +1,15 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { SessionTypes } from "@walletconnect/types"
 
-// type WalletConnectSessionsSliceState = {
-//     sessions: SessionTypes.Struct[]
-// }
-
 /**
  * One account can have multiple sessions.
  *
  * Mapping account address => Sessions
  */
-type WalletConnectSessionsSliceState = Record<string, SessionTypes.Struct[]>
+type WalletConnectSessionsSliceState = Record<
+    string,
+    Array<SessionTypes.Struct>
+>
 
 export const initialSessionsState: WalletConnectSessionsSliceState = {}
 

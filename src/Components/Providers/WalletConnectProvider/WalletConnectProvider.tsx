@@ -10,7 +10,7 @@ import {
 import { PairModal } from "./Modals/PairModal"
 import { SignIdentityModal } from "./Modals/SignIdentityModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
-import { showErrorToast, showInfoToast } from "~Components"
+import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { deleteSession } from "~Storage/Redux/Slices"
 import { getSdkError } from "@walletconnect/utils"
@@ -157,7 +157,7 @@ const WalletConnectContextProvider = ({
      * Handle session delete
      */
     const disconnect = useCallback(
-        async (topic: string) => {
+        async (topic: string, fromRemote = false) => {
             if (!web3Wallet) return
 
             try {
@@ -170,9 +170,15 @@ const WalletConnectContextProvider = ({
             } finally {
                 dispatch(deleteSession({ topic }))
 
-                showInfoToast(
-                    LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
-                )
+                if (fromRemote) {
+                    showInfoToast(
+                        LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
+                    )
+                } else {
+                    showSuccessToast(
+                        LL.NOTIFICATION_wallet_connect_disconnected_success(),
+                    )
+                }
             }
         },
         [web3Wallet, dispatch, LL],
@@ -182,7 +188,7 @@ const WalletConnectContextProvider = ({
         (payload: { id: number; topic: string }) => {
             if (!selectedAccountAddress) return
 
-            disconnect(payload.topic)
+            disconnect(payload.topic, true)
         },
         [selectedAccountAddress, disconnect],
     )
