@@ -154,11 +154,7 @@ export const SignMessageModal = ({
         })
 
     return (
-        <BaseModal
-            isOpen={isOpen}
-            onClose={onClose}
-            animationType="fade"
-            presentationStyle="overFullScreen">
+        <BaseModal isOpen={isOpen} onClose={onClose}>
             <CloseModalButton onPress={onClose} />
 
             <BaseScrollView
