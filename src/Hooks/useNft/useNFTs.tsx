@@ -19,7 +19,7 @@ export const useNFTs = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const thor = useThor()
 
-    const getNFTsFotCollection = useCallback(
+    const getNFTsForCollection = useCallback(
         async (
             contractAddress: string,
             _page: number,
@@ -102,5 +102,5 @@ export const useNFTs = () => {
         [dispatch, selectedAccount.address, thor],
     )
 
-    return { getNFTsFotCollection }
+    return { getNFTsForCollection }
 }
