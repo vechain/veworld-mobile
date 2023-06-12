@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { DEFAULT_VECHAIN_TOKENS } from "~Common"
+import { DEFAULT_VECHAIN_TOKENS } from "~Constants"
 import { TokenUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"

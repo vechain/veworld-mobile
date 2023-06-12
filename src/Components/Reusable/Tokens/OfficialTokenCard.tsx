@@ -2,7 +2,8 @@ import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo } from "react"
 import { TokenWithCompleteInfo } from "~Model"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
-import { CURRENCY, ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { CURRENCY, ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"
 
 type OfficialTokenCardProps = {

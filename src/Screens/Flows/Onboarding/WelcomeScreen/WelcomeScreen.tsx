@@ -20,7 +20,8 @@ import {
     useAppDispatch,
 } from "~Storage/Redux"
 import { CryptoUtils } from "~Utils"
-import { SettingsConstants, useDeviceUtils } from "~Common"
+import { useDeviceUtils } from "~Hooks"
+import { SettingsConstants } from "~Constants"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
 
 export const WelcomeScreen = () => {

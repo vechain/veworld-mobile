@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState, useMemo } from "react"
 import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native"
-import { CURRENCY_SYMBOLS, useAmountInput, useTheme } from "~Common"
+import { useAmountInput, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
     BaseText,
@@ -23,7 +23,7 @@ import {
     Routes,
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { COLORS, typography } from "~Common/Theme"
+import { CURRENCY_SYMBOLS, COLORS, typography } from "~Constants"
 import {
     selectCurrencyExchangeRate,
     selectCurrency,

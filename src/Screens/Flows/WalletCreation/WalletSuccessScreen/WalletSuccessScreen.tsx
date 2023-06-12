@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native"
 import { VeChainVetLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { SecurityLevelType } from "~Model"
-import { useCheckIdentity, useCreateWallet, useTheme } from "~Common"
+import { useCheckIdentity, useCreateWallet, useTheme } from "~Hooks"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
     RootStackParamListCreateWalletApp,

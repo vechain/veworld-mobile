@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback } from "react"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseButton } from "./BaseButton"
-import { TFonts } from "~Common/Theme"
+import { TFonts } from "~Constants"
 import { BaseView } from "./BaseView"
 
 export type Button = {

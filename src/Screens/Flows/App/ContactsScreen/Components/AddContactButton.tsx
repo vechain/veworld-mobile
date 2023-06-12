@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { useTheme } from "~Hooks"
+import { COLORS } from "~Constants"
 import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 

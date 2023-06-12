@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react"
-import { useBiometricsValidation, useWalletSecurity } from "~Common"
+import { useBiometricsValidation, useWalletSecurity } from "~Hooks"
 import { BaseButtonGroupHorizontalType, SecurityLevelType } from "~Model"
 
 export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {

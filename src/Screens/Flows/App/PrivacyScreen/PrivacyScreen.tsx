@@ -6,7 +6,7 @@ import {
     useDisclosure,
     useTheme,
     useWalletSecurity,
-} from "~Common"
+} from "~Hooks"
 import {
     BaseIcon,
     BaseSafeArea,

@@ -1,7 +1,7 @@
 import { address, HDNode } from "thor-devkit"
 import { XPub } from "~Model"
-import { error } from "~Common/Logger"
-import { VET, VTHO } from "~Common/Constant"
+import { error } from "~Utils/Logger"
+import { VET, VTHO } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
 import HexUtils from "../HexUtils"
 

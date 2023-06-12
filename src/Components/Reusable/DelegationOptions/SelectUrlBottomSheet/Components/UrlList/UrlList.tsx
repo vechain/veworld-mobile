@@ -1,6 +1,6 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import React from "react"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { selectDelegationUrls, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"

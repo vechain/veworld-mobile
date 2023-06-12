@@ -15,9 +15,12 @@ import {
     selectCurrentTransactionActivities,
     selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
-import { DEFAULT_PAGE_SIZE } from "./API"
+import {
+    DEFAULT_PAGE_SIZE,
+    createTransferClauseFromIncomingTransfer,
+} from "./API"
 import { Transaction } from "thor-devkit"
-import { DIRECTIONS, ThorConstants } from "~Common"
+import { DIRECTIONS, VET, chainTagToGenesisId, genesisesId } from "~Constants"
 import { ActivityUtils, TransactionUtils } from "~Utils"
 
 /**
@@ -63,7 +66,7 @@ const createPendingTransferActivityFromTx = (
                 ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
         ),
         id: id ?? "",
-        genesisId: ThorConstants.chainTagToGenesisId[chainTag],
+        genesisId: chainTagToGenesisId[chainTag],
         gasUsed: Number(gas),
         clauses,
         delegated,
@@ -77,6 +80,66 @@ const createPendingTransferActivityFromTx = (
         tokenAddress,
         direction: DIRECTIONS.UP,
         outputs: [],
+    }
+}
+
+/**
+ * Creates a new incoming FungibleTokenActivity.
+ *
+ * @param meta - Metadata about the transaction, which includes the transaction ID, block number, and block timestamp.
+ * @param amount - The amount of tokens involved in the transaction.
+ * @param recipient - The address of the recipient of the tokens.
+ * @param sender - The address of the sender of the tokens.
+ * @param tokenAddress - The address of the token contract.
+ * @param thor - The Connex.Thor instance used for querying the chain.
+ *
+ * @returns A new FungibleTokenActivity object based on the given parameters.
+ * @throws {Error} If an encoded clause cannot be created from the incoming transfer log.
+ */
+export const createIncomingTransfer = (
+    meta: Connex.Thor.Filter.WithMeta["meta"],
+    amount: string,
+    recipient: string,
+    sender: string,
+    tokenAddress: string,
+    thor: Connex.Thor,
+): FungibleTokenActivity => {
+    const { txID, blockNumber, blockTimestamp } = meta
+
+    const activityType =
+        tokenAddress === VET.address
+            ? ActivityType.VET_TRANSFER
+            : ActivityType.FUNGIBLE_TOKEN
+
+    const encodedClause = createTransferClauseFromIncomingTransfer(
+        recipient,
+        Number(amount),
+        tokenAddress,
+        activityType,
+    )
+
+    if (!encodedClause) {
+        throw new Error(
+            "Invalid encoded clause. Can't create incoming transfer activity from TransferLog",
+        )
+    }
+
+    const clauses: Connex.VM.Clause[] = [encodedClause]
+
+    return {
+        from: sender,
+        to: [recipient],
+        id: txID,
+        blockNumber,
+        isTransaction: true,
+        genesisId: thor.genesis.id,
+        type: activityType,
+        timestamp: blockTimestamp * 1000, // Convert to milliseconds
+        status: ActivityStatus.SUCCESS,
+        clauses,
+        direction: DIRECTIONS.DOWN,
+        amount: Number(amount),
+        tokenAddress: tokenAddress,
     }
 }
 
@@ -116,7 +179,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                     : ActivityStatus.SUCCESS
         }
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   upsertActivityMainnet({
                       address: updatedActivity.from.toLowerCase(),
@@ -134,6 +197,13 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
     },
 )
 
+/**
+ * Adds a pending transfer activity to the Redux store.
+ *
+ * @param outgoingTx - The outgoing transaction.
+ * @param thor - The Connex.Thor instance used for querying the chain.
+ * @returns An asynchronous thunk action that, when dispatched, upserts a pending transfer activity to the Redux store.
+ */
 export const addPendingTransferTransactionActivity =
     (outgoingTx: Transaction, thor: Connex.Thor): AppThunk<void> =>
     (dispatch, getState) => {
@@ -145,7 +215,7 @@ export const addPendingTransferTransactionActivity =
         const pendingActivity: FungibleTokenActivity =
             createPendingTransferActivityFromTx(outgoingTx)
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   upsertActivityMainnet({
                       address: selectedAccount.address.toLowerCase(),
@@ -156,6 +226,52 @@ export const addPendingTransferTransactionActivity =
                   upsertActivityTestnet({
                       address: selectedAccount.address.toLowerCase(),
                       activity: pendingActivity,
+                  }),
+              )
+    }
+
+/**
+ * Adds an incoming transfer activity to the Redux store.
+ *
+ * @param meta - Metadata about the transaction, which includes the transaction ID, block number, and block timestamp.
+ * @param amount - The amount of tokens involved in the transaction.
+ * @param recipient - The address of the recipient of the tokens.
+ * @param sender - The address of the sender of the tokens.
+ * @param tokenAddress - The address of the token contract.
+ * @param thor - The Connex.Thor instance used for querying the chain.
+ *
+ * @returns An asynchronous thunk action that, when dispatched, upserts an incoming transfer activity to the Redux store.
+ */
+export const addIncomingTransfer =
+    (
+        meta: Connex.Thor.Filter.WithMeta["meta"],
+        amount: string,
+        recipient: string,
+        sender: string,
+        tokenAddress: string,
+        thor: Connex.Thor,
+    ): AppThunk<void> =>
+    dispatch => {
+        const incomingTransferActivity = createIncomingTransfer(
+            meta,
+            amount,
+            recipient,
+            sender,
+            tokenAddress,
+            thor,
+        )
+
+        thor.genesis.id === genesisesId.main
+            ? dispatch(
+                  upsertActivityMainnet({
+                      address: recipient.toLowerCase(),
+                      activity: incomingTransferActivity,
+                  }),
+              )
+            : dispatch(
+                  upsertActivityTestnet({
+                      address: recipient.toLowerCase(),
+                      activity: incomingTransferActivity,
                   }),
               )
     }
@@ -197,10 +313,10 @@ export const updateAccountTransactionActivities =
         newTransactionActivities.sort((a, b) => b.timestamp - a.timestamp)
         newTransactionActivities = newTransactionActivities.slice(
             0,
-            DEFAULT_PAGE_SIZE,
+            DEFAULT_PAGE_SIZE * 2,
         )
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   updateTransactionActivitiesMainnet({
                       address: selectedAccount.address.toLowerCase(),

@@ -6,7 +6,7 @@ import {
     View,
     ViewProps,
 } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
 

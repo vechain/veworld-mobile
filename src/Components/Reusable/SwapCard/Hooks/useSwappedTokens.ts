@@ -5,7 +5,7 @@ import {
     useEffect,
     useState,
 } from "react"
-import { VET } from "~Common"
+import { VET } from "~Constants"
 import { useThor } from "~Components"
 import { FungibleToken, Token } from "~Model"
 import { getCustomTokenInfo } from "~Screens/Flows/App/ManageCustomTokenScreen/Utils"
@@ -96,5 +96,5 @@ export const useSwappedTokens = (
         vetToken,
     ])
 
-    return { paidToken, receivedToken }
+    return { paidToken, receivedToken, tokens }
 }

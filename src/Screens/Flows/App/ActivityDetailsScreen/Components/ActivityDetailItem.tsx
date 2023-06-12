@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { ActivityDetail } from "../Type"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
 
 type Props = {

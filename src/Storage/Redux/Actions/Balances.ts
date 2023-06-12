@@ -5,9 +5,9 @@ import {
 } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
-import { error } from "~Common/Logger"
+import { error } from "~Utils/Logger"
 import { BalanceUtils } from "~Utils"
-import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Common/Constant"
+import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Constants"
 import { updateTokenBalances, upsertTokenBalances } from "~Storage/Redux/Slices"
 import { Balance } from "~Model"
 

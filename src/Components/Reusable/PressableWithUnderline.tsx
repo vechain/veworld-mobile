@@ -1,8 +1,8 @@
 import { StyleSheet, View, Pressable } from "react-native"
 import React, { useCallback, useState } from "react"
 import { BaseText, BaseView } from "~Components/Base"
-import { ColorThemeType, useThemedStyles } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { useThemedStyles } from "~Hooks"
+import { COLORS, ColorThemeType } from "~Constants"
 
 type Props = {
     onPress: (button: string) => void

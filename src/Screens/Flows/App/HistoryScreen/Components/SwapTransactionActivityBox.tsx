@@ -1,9 +1,9 @@
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { DateUtils } from "~Utils"
-import { COLORS } from "~Common/Theme"
+import { COLORS, ColorThemeType } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import {
     Activity,
@@ -45,12 +45,12 @@ export const SwapTransactionActivityBox: React.FC<Props> = memo(
                 : LL.DATE_NOT_AVAILABLE()
         }, [LL, activity.timestamp, locale])
 
-        const handleOnPress = useCallback(() => {
-            onPress(activity, undefined, true, decodedClauses)
-        }, [activity, decodedClauses, onPress])
-
         return (
-            <BaseTouchable action={handleOnPress} style={styles.container}>
+            <BaseTouchable
+                action={() =>
+                    onPress(activity, undefined, true, decodedClauses)
+                }
+                style={styles.container}>
                 <BaseView
                     w={100}
                     flexDirection="row"

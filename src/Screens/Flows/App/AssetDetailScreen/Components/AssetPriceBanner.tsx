@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -11,7 +11,7 @@ import {
     useLineChartRelativeChange,
 } from "../Hooks/usePrice"
 
-import { typography } from "~Common/Theme"
+import { typography, ColorThemeType } from "~Constants"
 import { TokenWithCompleteInfo } from "~Model"
 import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
 import { BaseAnimatedText } from "./AnimatedTextInput"

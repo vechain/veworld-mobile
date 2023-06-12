@@ -11,7 +11,7 @@ import {
 } from "~Components"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { useBottomSheetModal, useTheme } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import { ImportWalletBottomSheet } from "./components"
 import { WalletSetupSvg } from "~Assets"
 import * as Haptics from "expo-haptics"

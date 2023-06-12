@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from "react"
-import { info, useNFTs } from "~Common"
 import {
     selectNFTsForCollection,
     selectNftNetworkingSideEffects,
@@ -7,6 +6,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { usePagination } from "../../usePagination"
+import { useNFTs } from "~Hooks"
 
 export const useNFTWithMetadata = (collectionAddress: string) => {
     const nftForCollection = useAppSelector(state =>
@@ -29,7 +29,6 @@ export const useNFTWithMetadata = (collectionAddress: string) => {
             nftForCollection?.NFTs?.length,
             nftNetworkingSideEffects.isLoading,
             page => {
-                info("fetchMoreNFTs", page)
                 getNFTsFotCollection(collectionAddress, page, 10)
             },
         )

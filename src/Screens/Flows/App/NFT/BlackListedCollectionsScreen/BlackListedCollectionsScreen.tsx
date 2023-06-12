@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { FlatList, StyleSheet } from "react-native"
-import { usePlatformBottomInsets, useThemedStyles } from "~Common"
+import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
 import { BackButtonHeader, BaseSpacer, BaseText, BaseView } from "~Components"
 import { selectBlackListedCollections, useAppSelector } from "~Storage/Redux"
 import { NFTView } from "../Components"

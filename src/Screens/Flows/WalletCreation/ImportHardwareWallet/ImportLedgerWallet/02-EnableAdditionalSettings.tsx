@@ -20,7 +20,7 @@ import {
     Routes,
 } from "~Navigation"
 
-import { useBottomSheetModal, useLedger, useTheme } from "~Common/Hooks"
+import { useBottomSheetModal, useLedger, useTheme } from "~Hooks"
 
 import * as Haptics from "expo-haptics"
 import { FlatList } from "react-native-gesture-handler"

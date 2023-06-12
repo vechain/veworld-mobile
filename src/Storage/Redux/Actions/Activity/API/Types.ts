@@ -1,16 +1,18 @@
-import { Transaction } from "thor-devkit"
 import { OutputResponse } from "~Model"
 
-export type FetchTransactionsResponse = {
+export interface BaseTransactionResponse {
     id: string
     blockId: string
     blockNumber: number
     blockTimestamp: number
+}
+
+export interface FetchTransactionsResponse extends BaseTransactionResponse {
     size: number
     chainTag: number
     blockRef: string
     expiration: number
-    clauses: Transaction.Clause[]
+    clauses: Connex.VM.Clause[]
     gasPriceCoef: number
     gas: number
     dependsOn: string
@@ -22,6 +24,22 @@ export type FetchTransactionsResponse = {
     reverted: true
     origin: string
     outputs: OutputResponse[]
+}
+
+export enum EventTypeResponse {
+    FUNGIBLE_TOKEN = "FUNGIBLE_TOKEN",
+    VET = "VET",
+}
+
+export interface FetchIncomingTransfersResponse
+    extends BaseTransactionResponse {
+    txId: string
+    from: string
+    to: string
+    value: number
+    tokenAddress: string
+    topics: string[]
+    eventType: EventTypeResponse
 }
 
 export type FetchBlockResponse = {

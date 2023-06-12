@@ -21,7 +21,7 @@ import {
     SectionListRenderItemInfo,
     StyleSheet,
 } from "react-native"
-import { info } from "~Common"
+import { info } from "~Utils"
 
 type Props = {
     onClose: () => void

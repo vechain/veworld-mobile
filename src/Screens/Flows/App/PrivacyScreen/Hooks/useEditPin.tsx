@@ -1,12 +1,6 @@
 import { isEmpty } from "lodash"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import {
-    info,
-    useDisclosure,
-    usePasswordValidation,
-    useWalletSecurity,
-    error,
-} from "~Common"
+import { useDisclosure, usePasswordValidation, useWalletSecurity } from "~Hooks"
 import { LocalDevice, Wallet } from "~Model"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 import {
@@ -15,7 +9,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { CryptoUtils } from "~Utils"
+import { CryptoUtils, info, error } from "~Utils"
 
 type Operation = {
     operation: Function

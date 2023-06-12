@@ -1,6 +1,6 @@
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { Device } from "react-native-ble-plx"
-import { StatusCodes, VETLedgerAccount, VETLedgerApp } from "~Common/Ledger"
+import { StatusCodes, VETLedgerAccount, VETLedgerApp } from "~Constants"
 import { AddressUtils, CryptoUtils } from "~Utils"
 import { hdnode1 } from "./wallets"
 import { Characteristic } from "@ledgerhq/react-native-hw-transport-ble/lib/types"

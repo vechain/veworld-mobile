@@ -4,7 +4,8 @@ import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { ColorThemeType, VET, VTHO, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType, VET, VTHO } from "~Constants"
 import {
     changeBalancePosition,
     useAppDispatch,
