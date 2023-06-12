@@ -108,15 +108,15 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
                     insertSession({ address: selectedAccountAddress, session }),
                 )
 
-                onClose(true)
                 showSuccessToast(
                     LL.NOTIFICATION_wallet_connect_successfull_connection({
                         name,
                     }),
                 )
-            } catch (err: unknown) {
                 onClose(true)
+            } catch (err: unknown) {
                 showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
+                onClose(true)
             }
         }
     }
@@ -139,9 +139,11 @@ export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
     }
 
     return (
-        // animationType="fade"
-        //     presentationStyle="overFullScreen"
-        <BaseModal isOpen={isOpen} onClose={() => onClose(false)}>
+        <BaseModal
+            isOpen={isOpen}
+            onClose={() => onClose(false)}
+            animationType="fade"
+            presentationStyle="overFullScreen">
             <CloseModalButton onPress={onClose} />
 
             <BaseScrollView
