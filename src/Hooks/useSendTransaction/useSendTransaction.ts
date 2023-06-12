@@ -38,7 +38,7 @@ export const useSendTransaction = (
             async () => {
                 await Linking.openURL(
                     `${
-                        network.explorerUrl || defaultMainNetwork.explorerUrl
+                        network.explorerUrl ?? defaultMainNetwork.explorerUrl
                     }/transactions/${id}`,
                 )
             },

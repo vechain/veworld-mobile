@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useSendTransaction } from "./useSendTransaction"
 import { TestHelpers, TestWrapper } from "~Test"
-import { defaultMainNetwork } from "~Constants"
+import { defaultTestNetwork } from "~Constants"
 import axios from "axios"
 jest.mock("axios")
 
@@ -11,7 +11,7 @@ describe("useSendTransaction", () => {
         const { result, waitForNextUpdate } = renderHook(
             () =>
                 useSendTransaction(
-                    { ...defaultMainNetwork, explorerUrl: undefined },
+                    { ...defaultTestNetwork, explorerUrl: undefined },
                     account1D1,
                 ),
             { wrapper: TestWrapper },
@@ -27,7 +27,7 @@ describe("useSendTransaction", () => {
 
     it("sendTransactionAndPerformUpdates should works as expected", async () => {
         const { result, waitForNextUpdate } = renderHook(
-            () => useSendTransaction(defaultMainNetwork, account1D1),
+            () => useSendTransaction(defaultTestNetwork, account1D1),
             { wrapper: TestWrapper },
         )
         await waitForNextUpdate({
