@@ -1,3 +1,4 @@
+import axios from "axios"
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
 import { HexUtils, CryptoUtils, TransactionUtils, error } from "~Utils"
 import {
@@ -20,7 +21,6 @@ import { Linking } from "react-native"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { defaultMainNetwork } from "~Constants"
-import { executeTransactionRequest } from "~Networking"
 
 type Props = {
     transaction: Transaction.Body
@@ -59,8 +59,8 @@ export const useSignTransaction = ({
             raw: HexUtils.addPrefix(tx.encode().toString("hex")),
         }
 
-        const response = await executeTransactionRequest(
-            networkUrl,
+        const response = await axios.post(
+            `${networkUrl}/transactions`,
             encodedRawTx,
         )
 

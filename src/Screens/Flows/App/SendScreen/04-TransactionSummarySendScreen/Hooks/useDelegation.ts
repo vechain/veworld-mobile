@@ -10,10 +10,10 @@ import {
 } from "~Storage/Redux"
 import { Transaction } from "thor-devkit"
 import { error, info, HexUtils, TransactionUtils } from "~Utils"
+import axios from "axios"
 import { showErrorToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useSelector } from "react-redux"
-import { signSponsorRequest } from "~Networking"
 
 type Props = {
     transaction: Transaction.Body
@@ -64,10 +64,7 @@ export const useDelegation = ({ transaction }: Props) => {
                 raw: rawTransaction,
             }
 
-            const response = await signSponsorRequest(
-                delegationUrl,
-                sponsorRequest,
-            )
+            const response = await axios.post(delegationUrl, sponsorRequest)
 
             if (response.data.error || !response.data.signature) {
                 onError(response.data.error)
