@@ -91,7 +91,7 @@ export const SignIdentityModal = ({
                 showSuccessToast(LL.NOTIFICATION_wallet_connect_sign_success())
             } catch (err: unknown) {
                 error(err)
-                showErrorToast(LL.NOTIFICATION_wallet_connect_sign_error())
+                showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
             } finally {
                 onClose()
             }

@@ -6,6 +6,7 @@ import {
     BaseIcon,
     BaseImage,
     BaseTouchableBox,
+    BaseSpacer,
 } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
 import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
@@ -40,6 +41,7 @@ export const ConnectedApp: React.FC<Props> = memo(
 
         return (
             <>
+                <BaseSpacer height={16} />
                 <BaseTouchableBox
                     action={onPress}
                     innerContainerStyle={styles.container}>

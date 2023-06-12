@@ -72,16 +72,13 @@ export const ConnectedAppsScreen = () => {
                                         {account.alias}
                                     </BaseText>
                                     {activeSessions[account.address].map(
-                                        (session, i) => {
+                                        session => {
                                             return (
-                                                <>
-                                                    <BaseSpacer height={16} />
-                                                    <ConnectedApp
-                                                        session={session}
-                                                        key={session.topic + i}
-                                                        account={account}
-                                                    />
-                                                </>
+                                                <ConnectedApp
+                                                    session={session}
+                                                    key={session.topic}
+                                                    account={account}
+                                                />
                                             )
                                         },
                                     )}

@@ -31,11 +31,11 @@ import {
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
 import { DEVICE_TYPE, Wallet } from "~Model"
-import axios from "axios"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
+import { executeTransactionRequest, signSponsorRequest } from "~Networking"
 
 interface Props {
     sessionRequest: any
@@ -115,27 +115,33 @@ export const SignTransactionModal = ({
                     raw: rawTransaction,
                 }
 
-                const response = await axios
-                    .post(params.delegateUrl, sponsorRequest)
-                    .catch(async e => {
-                        const formattedResponse = formatJsonRpcError(
-                            id,
-                            e.message
-                                ? e.message
-                                : "Unexpected error while executing transaction",
-                        )
+                const onSignSponsorRequestError = async (e: any) => {
+                    const formattedResponse = formatJsonRpcError(
+                        id,
+                        e.message
+                            ? e.message
+                            : "Unexpected error while executing transaction",
+                    )
 
+                    try {
                         await web3Wallet?.respondSessionRequest({
                             topic,
                             response: formattedResponse,
                         })
-                    })
+                    } catch {
+                        showErrorToast(
+                            LL.NOTIFICATION_wallet_connect_error_pairing(),
+                        )
+                    }
+                }
 
-                if (
-                    !response ||
-                    response.data.error ||
-                    !response.data.signature
-                ) {
+                const response = await signSponsorRequest(
+                    params.delegateUrl,
+                    sponsorRequest,
+                    onSignSponsorRequestError,
+                )
+
+                if (!response || !response.data || !response.data?.signature) {
                     showErrorToast(
                         LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
                     )
@@ -163,52 +169,55 @@ export const SignTransactionModal = ({
                 }
             }
 
-            await axios
-                .post(`${network.currentUrl}/transactions`, encodedRawTx)
-                .then(async response => {
-                    try {
-                        await web3Wallet?.respondSessionRequest({
-                            topic,
-                            response: {
-                                id,
-                                jsonrpc: "2.0",
-                                result: {
-                                    txid: response.data.id,
-                                    signer: account?.address,
-                                },
-                            },
-                        })
+            const onExecuteTransactioRequestFail = async (e: any) => {
+                const response = formatJsonRpcError(
+                    id,
+                    e.message
+                        ? e.message
+                        : LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+                )
 
-                        showSuccessToast(
-                            LL.NOTIFICATION_wallet_connect_transaction_broadcasted(),
-                        )
-                    } catch (e) {
-                        showErrorToast(
-                            "Transaction broadcasted correctly but an error occurred while responding to the dapp",
-                        )
-                    } finally {
-                        //TODO: add to history
-                    }
+                await web3Wallet?.respondSessionRequest({
+                    topic,
+                    response,
                 })
-                .catch(async e => {
-                    const response = formatJsonRpcError(
-                        id,
-                        e.message
-                            ? e.message
-                            : LL.NOTIFICATION_wallet_connect_error_on_transaction(),
-                    )
 
+                showErrorToast(
+                    e.message
+                        ? e.message
+                        : LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+                )
+            }
+
+            const response = await executeTransactionRequest(
+                network.currentUrl,
+                encodedRawTx,
+                onExecuteTransactioRequestFail,
+            )
+
+            if (response.data?.id) {
+                try {
                     await web3Wallet?.respondSessionRequest({
                         topic,
-                        response,
+                        response: {
+                            id,
+                            jsonrpc: "2.0",
+                            result: {
+                                txid: response.data.id,
+                                signer: account?.address,
+                            },
+                        },
                     })
 
-                    showErrorToast(
-                        e.message
-                            ? e.message
-                            : LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+                    showSuccessToast(
+                        LL.NOTIFICATION_wallet_connect_transaction_broadcasted(),
                     )
-                })
+                } catch (e) {
+                    showErrorToast(
+                        LL.NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error(),
+                    )
+                }
+            }
 
             onClose()
         },
