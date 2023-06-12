@@ -56,7 +56,7 @@ export const useSignTransaction = ({
         delegateFor?: string,
     ) => {
         if (!wallet.mnemonic)
-            error("Mnemonic wallet can't have an empty mnemonic")
+            throw new Error("Mnemonic wallet can't have an empty mnemonic")
 
         if (!account.index && account.index !== 0)
             throw new Error("account index is empty")
