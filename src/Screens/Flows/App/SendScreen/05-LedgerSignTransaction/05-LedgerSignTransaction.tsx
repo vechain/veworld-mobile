@@ -4,7 +4,12 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { Transaction } from "thor-devkit"
 import { BlePairingDark } from "~Assets"
-import { useBottomSheetModal, useLedger, useLegderConfig } from "~Hooks"
+import {
+    useBottomSheetModal,
+    useLedger,
+    useLegderConfig,
+    useSendTransaction,
+} from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,
@@ -26,7 +31,6 @@ import {
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { LedgerUtils, debug, error } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useSendTransaction } from "../04-TransactionSummarySendScreen/Hooks"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
