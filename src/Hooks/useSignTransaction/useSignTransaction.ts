@@ -20,7 +20,16 @@ type Props = {
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
 }
-
+/**
+ * Hooks that expose a function to sign and send a transaction performing updates on success
+ * @param transaction the transaction to sign and send
+ * @param onTXFinish callback to call when the transaction is finished
+ * @param isDelegated whether the transaction is a delegation
+ * @param urlDelegationSignature the signature of the delegation url
+ * @param selectedDelegationAccount the account to delegate to
+ * @param selectedDelegationOption the delegation option
+ * @returns {signAndSendTransaction} the function to sign and send the transaction
+ */
 export const useSignTransaction = ({
     transaction,
     onTXFinish,

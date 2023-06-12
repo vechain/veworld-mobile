@@ -14,7 +14,8 @@ import { useI18nContext } from "~i18n"
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
  * @param network the network to send the transaction to
- * @returns
+ * @param account the account to send the transaction from
+ * @returns {sendTransactionAndPerformUpdates} the function to send the transaction and perform updates
  */
 export const useSendTransaction = (
     network: Network,

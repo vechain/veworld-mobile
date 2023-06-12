@@ -8,19 +8,16 @@ import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { VET, abis } from "~Constants"
 
-/**
- * @param amount - the amount to send
- * @param token - the token to send
- * @param address - the address to send to
- */
 type Props = {
     token: FungibleTokenWithBalance
     amount: string
     address: string
 }
-
 /**
  * Hook to calculate gas and generate the transaction body based on token, amount and address
+ * @param amount - the amount to send
+ * @param token - the token to send
+ * @param address - the address to send to
  */
 export const useTransaction = ({
     amount,
