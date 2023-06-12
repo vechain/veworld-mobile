@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { SecurityLevelType } from "~Model"
-import { SettingsConstants } from "~Common/Constant"
+import { SettingsConstants } from "~Constants"
 
 export interface ConfigState {
     userSelectedSecurity: SecurityLevelType

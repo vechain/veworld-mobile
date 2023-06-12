@@ -5,7 +5,8 @@ import { useI18nContext } from "~i18n"
 import { BaseDevice } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-import { useScrollableList, info } from "~Common"
+import { info } from "~Utils"
+import { useScrollableList } from "~Hooks"
 import { DeviceBox } from "../DeviceBox"
 
 // Redecalare forwardRef in order to support additional generics

@@ -9,10 +9,10 @@ import {
     TransactionOutcomes,
 } from "~Model"
 import TransactionUtils from "."
-import * as logger from "~Common/Logger/Logger"
+import * as logger from "~Utils/Logger/Logger"
 import { toDelegation } from "./TransactionUtils"
 import { Transaction } from "thor-devkit"
-import { ThorConstants, VET } from "~Common"
+import { VET, genesises } from "~Constants"
 
 const YEET_TOKEN: Token = {
     name: "Yeet Coin",
@@ -39,7 +39,7 @@ const BASE_SAMPLE_ACTIVITY = {
     id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaf01",
     blockNumber: 123456,
     isTransaction: true,
-    genesisId: ThorConstants.genesises.main.id,
+    genesisId: genesises.main.id,
     timestamp: 1382337919000,
     gasUsed: 21000,
     gasPayer: "0x",

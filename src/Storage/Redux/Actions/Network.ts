@@ -6,9 +6,8 @@ import {
     removeCustomNetwork,
     updateCustomNetwork,
 } from "../Slices/Network"
-import { debug } from "~Common"
-import { ConnectionUtils, URLUtils } from "~Utils"
-import { genesises } from "~Common/Constant/Thor/ThorConstants"
+import { debug, ConnectionUtils, URLUtils } from "~Utils"
+import { genesises } from "~Constants"
 import axios from "axios"
 import {
     selectCustomNetworks,

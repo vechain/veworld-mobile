@@ -1,7 +1,7 @@
 import React from "react"
 import Toast, { ToastConfigParams } from "react-native-toast-message"
-import { ColorThemeType } from "~Common/Theme"
-import { useTheme } from "~Common/Hooks"
+import { ColorThemeType } from "~Constants"
+import { useTheme } from "~Hooks"
 import PlatformUtils from "~Utils/PlatformUtils" // TODO: remove this circular dependency
 import {
     errorToastStyles,

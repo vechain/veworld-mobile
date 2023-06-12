@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ThorConstants, debug, info } from "~Common"
+import { debug, info } from "~Utils"
 import {
     ActivityEndpoints,
     FetchIncomingTransfersResponse,
@@ -9,6 +9,7 @@ import {
 } from "."
 import { ORDER } from "./ActivityEndpoints"
 import { Activity } from "~Model"
+import { genesises } from "~Constants"
 
 export const DEFAULT_PAGE_SIZE: number = 25
 const TIMEOUT = 15000
@@ -67,7 +68,7 @@ export const fetchTransactions = async (
     debug(`Fetching transactions for ${address}`)
 
     // Indexer doesn't support testnet transaction indexing
-    if (thor.genesis.id === ThorConstants.genesises.test.id) {
+    if (thor.genesis.id === genesises.test.id) {
         info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
         return []
     }
@@ -105,7 +106,7 @@ export const fetchIncomingTransfers = async (
     debug(`Fetching incoming transfers for ${address}`)
 
     // Indexer doesn't support testnet transaction indexing
-    if (thor.genesis.id === ThorConstants.genesises.test.id) {
+    if (thor.genesis.id === genesises.test.id) {
         info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
         return []
     }

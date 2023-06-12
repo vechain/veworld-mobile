@@ -3,7 +3,8 @@ import { BaseView } from "~Components"
 import { ClauseWithMetadata } from "~Model"
 import { ClauseDetail } from "../ClauseDetail"
 import { useI18nContext } from "~i18n"
-import { SCREEN_WIDTH, useCopyClipboard } from "~Common"
+import { useCopyClipboard } from "~Hooks"
+import { SCREEN_WIDTH } from "~Constants"
 import { FormattingUtils } from "~Utils"
 
 type Props = {

@@ -2,7 +2,7 @@ import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useState } from "react"
 
 import { ViewToken, StyleSheet } from "react-native"
-import { useBottomSheetModal } from "~Common"
+import { useBottomSheetModal } from "~Hooks"
 import {
     BackButtonHeader,
     BaseSpacer,

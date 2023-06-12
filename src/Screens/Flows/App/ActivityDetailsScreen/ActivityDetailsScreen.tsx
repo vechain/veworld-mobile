@@ -13,7 +13,7 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ScrollView, StyleSheet } from "react-native"
-import { useBottomSheetModal, useTheme } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import { DateUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"

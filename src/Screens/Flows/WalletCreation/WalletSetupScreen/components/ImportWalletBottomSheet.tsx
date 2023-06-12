@@ -9,7 +9,8 @@ import {
     BaseTouchableBox,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useTheme, debug } from "~Common"
+import { useTheme } from "~Hooks"
+import { debug } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import * as Haptics from "expo-haptics"

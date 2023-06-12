@@ -3,7 +3,7 @@ import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"
 import { Balance, FungibleToken, TokenWithCompleteInfo } from "~Model"
 import { selectAllExchangeRates } from "./Currency"
-import { DEFAULT_VECHAIN_TOKENS, VET, VTHO } from "~Common"
+import { DEFAULT_VECHAIN_TOKENS, VET, VTHO } from "~Constants"
 import { LocaleUtils, TokenUtils } from "~Utils"
 import { uniqBy } from "lodash"
 import {

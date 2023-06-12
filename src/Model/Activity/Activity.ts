@@ -1,4 +1,4 @@
-import { DIRECTIONS } from "~Common"
+import { DIRECTIONS } from "~Constants"
 import { Certificate } from "thor-devkit"
 import { ActivityStatus, ActivityType } from "./enum"
 

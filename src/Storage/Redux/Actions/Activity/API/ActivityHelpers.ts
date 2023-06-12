@@ -1,5 +1,5 @@
-import { DIRECTIONS, ThorConstants, VET, debug } from "~Common"
-import { ActivityUtils, TransactionUtils } from "~Utils"
+import { DIRECTIONS, VET, chainTagToGenesisId } from "~Constants"
+import { ActivityUtils, TransactionUtils, debug } from "~Utils"
 import {
     Activity,
     ActivityStatus,
@@ -43,7 +43,7 @@ export const createBaseActivityFromTransaction = (
         id,
         blockNumber,
         isTransaction: true,
-        genesisId: ThorConstants.chainTagToGenesisId[chainTag],
+        genesisId: chainTagToGenesisId[chainTag],
         type: ActivityUtils.getActivityTypeFromClause(clauses),
         timestamp: blockTimestamp * 1000, // Convert to milliseconds
         gasUsed,

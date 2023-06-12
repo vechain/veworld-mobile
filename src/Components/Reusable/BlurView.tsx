@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BlurView as BV, BlurViewProps } from "@react-native-community/blur"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 
 type Props = { blurAmount?: number } & BlurViewProps
 

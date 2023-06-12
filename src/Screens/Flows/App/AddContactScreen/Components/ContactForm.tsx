@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { useBottomSheetModal } from "~Common"
+import { useBottomSheetModal } from "~Hooks"
 import {
     BaseBottomSheetTextInput,
     BaseSpacer,

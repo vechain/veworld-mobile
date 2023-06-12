@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { BaseIcon, BaseText, BaseView, hideToast } from "~Components"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { ToastStyles } from "../util"
 
 type Props = {

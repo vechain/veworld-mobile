@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from "react"
-import { VTHO, currencySymbolMap, useCopyClipboard } from "~Common"
+import { VTHO, currencySymbolMap } from "~Constants"
+import { useCopyClipboard } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import {

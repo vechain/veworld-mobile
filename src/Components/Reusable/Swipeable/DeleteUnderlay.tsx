@@ -1,6 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { BaseIcon, BaseTouchable, BaseView } from "~Components/Base"
 
 type Props = { onPress?: () => void }

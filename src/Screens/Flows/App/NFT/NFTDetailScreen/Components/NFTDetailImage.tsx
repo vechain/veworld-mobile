@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { SCREEN_WIDTH, useTheme } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { useTheme } from "~Hooks"
+import { SCREEN_WIDTH, COLORS } from "~Constants"
 import { BaseIcon, BaseImage, BaseText, BaseView, BlurView } from "~Components"
 import { setBlackListNFT, useAppDispatch } from "~Storage/Redux"
 

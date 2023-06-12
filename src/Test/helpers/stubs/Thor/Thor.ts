@@ -1,4 +1,4 @@
-import { genesises } from "~Common/Constant/Thor/ThorConstants"
+import { genesises } from "~Constants"
 import { accountStub } from "./AccountStub"
 import { blockStub } from "./BlockStub"
 import { explainStub } from "./ExplainStub/ExplainStub"

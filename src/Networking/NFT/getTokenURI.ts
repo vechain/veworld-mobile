@@ -1,4 +1,4 @@
-import { abis } from "~Common/Constant/Thor/ThorConstants"
+import { abis } from "~Constants"
 
 export const getTokenURI = async (
     tokenId: string,

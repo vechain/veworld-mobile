@@ -1,7 +1,6 @@
 import { FungibleTokenWithBalance, Token } from "~Model"
 import { account1D1 } from "./accounts"
-import { VET, VTHO } from "~Common"
-import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
+import { VET, VTHO, defaultMainNetwork } from "~Constants"
 
 export const VETWithBalance: FungibleTokenWithBalance = {
     ...VET,

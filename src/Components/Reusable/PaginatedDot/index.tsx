@@ -8,7 +8,7 @@ import {
 } from "react-native"
 import Dot from "./Dot"
 import EmptyDot, { defaultEmptyDotSize } from "./EmptyDot"
-import { usePrevious } from "~Common"
+import { usePrevious } from "~Hooks"
 import { BaseView } from "~Components"
 
 type Props = {

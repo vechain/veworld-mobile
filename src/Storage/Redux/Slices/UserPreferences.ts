@@ -1,6 +1,6 @@
-import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
+import { LANGUAGE } from "../../../Constants/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { CURRENCY, ThemeEnum } from "~Common/Enums"
+import { CURRENCY, ThemeEnum } from "~Constants"
 export interface UserPreferenceState {
     theme: ThemeEnum
     hideTokensWithNoBalance: boolean

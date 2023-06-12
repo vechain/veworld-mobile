@@ -1,5 +1,5 @@
 import React from "react"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 
 import {
     BaseIcon,

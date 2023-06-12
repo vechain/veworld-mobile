@@ -8,10 +8,10 @@ import {
     selectTokensWithInfo,
     useAppSelector,
 } from "~Storage/Redux"
-import { SCREEN_WIDTH, VET, currencySymbolMap, useTheme } from "~Common"
+import { SCREEN_WIDTH, VET, currencySymbolMap, COLORS } from "~Constants"
 import DropShadow from "react-native-drop-shadow"
 import { BaseCard, BaseIcon, BaseText, BaseView } from "~Components/Base"
-import { COLORS } from "~Common/Theme"
+import { useTheme } from "~Hooks"
 import { Image, ImageStyle, StyleSheet } from "react-native"
 
 type Props = {

@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
-import { VET, VET_BY_NETWORK, VTHO, VTHO_BY_NETWORK } from "~Common/Constant"
+import { VET, VET_BY_NETWORK, VTHO, VTHO_BY_NETWORK } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"

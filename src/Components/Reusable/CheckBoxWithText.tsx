@@ -1,9 +1,9 @@
 import React, { FC } from "react"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 import { BaseText } from "~Components/Base"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { LocalizedString } from "typesafe-i18n"
-import { TFonts } from "~Common/Theme"
+import { TFonts } from "~Constants"
 
 type Props = {
     font?: TFonts

@@ -1,6 +1,5 @@
 import { abi, Transaction } from "thor-devkit"
-import { abis } from "~Common/Constant/Thor/ThorConstants"
-import { debug } from "~Common/Logger"
+import { debug } from "~Utils/Logger"
 import {
     ClauseType,
     ClauseWithMetadata,
@@ -12,7 +11,7 @@ import {
     TransactionOutcomes,
 } from "~Model"
 import { BigNumber } from "bignumber.js"
-import { VET } from "~Common/Constant"
+import { abis, VET } from "~Constants"
 
 export const TRANSFER_SIG = new abi.Function(abis.VIP180.transfer).signature
 

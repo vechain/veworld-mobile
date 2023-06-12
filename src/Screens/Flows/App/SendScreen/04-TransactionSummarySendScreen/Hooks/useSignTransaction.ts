@@ -1,7 +1,6 @@
 import axios from "axios"
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
-import { ThorConstants, error } from "~Common"
-import { HexUtils, CryptoUtils, TransactionUtils } from "~Utils"
+import { HexUtils, CryptoUtils, TransactionUtils, error } from "~Utils"
 import {
     showErrorToast,
     showSuccessToast,
@@ -21,6 +20,7 @@ import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
+import { defaultMainNetwork } from "~Constants"
 
 type Props = {
     transaction: Transaction.Body
@@ -173,7 +173,7 @@ export const useSignTransaction = ({
                     await Linking.openURL(
                         `${
                             network.explorerUrl ||
-                            ThorConstants.defaultMainNetwork.explorerUrl
+                            defaultMainNetwork.explorerUrl
                         }/transactions/${id}`,
                     )
                 },

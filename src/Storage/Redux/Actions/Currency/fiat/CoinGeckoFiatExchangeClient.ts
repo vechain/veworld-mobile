@@ -1,10 +1,10 @@
 import axios from "axios"
-import { CURRENCY } from "~Common"
 import {
     COINGECKO_MARKET_CHART_ENDPOINT,
     COINGECKO_SUPPORTED_CURRENCIES_ENDPOINT,
     EXCHANGE_CLIENT_AXIOS_OPTS,
-} from "~Common/Constant"
+    CURRENCY,
+} from "~Constants"
 import { CurrencyExchangeRate } from "~Model"
 
 const getCurrencies = async (): Promise<string[]> => {

@@ -20,7 +20,7 @@ import {
     createTransferClauseFromIncomingTransfer,
 } from "./API"
 import { Transaction } from "thor-devkit"
-import { DIRECTIONS, ThorConstants, VET } from "~Common"
+import { DIRECTIONS, VET, chainTagToGenesisId, genesisesId } from "~Constants"
 import { ActivityUtils, TransactionUtils } from "~Utils"
 
 /**
@@ -66,7 +66,7 @@ const createPendingTransferActivityFromTx = (
                 ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
         ),
         id: id ?? "",
-        genesisId: ThorConstants.chainTagToGenesisId[chainTag],
+        genesisId: chainTagToGenesisId[chainTag],
         gasUsed: Number(gas),
         clauses,
         delegated,
@@ -179,7 +179,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                     : ActivityStatus.SUCCESS
         }
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   upsertActivityMainnet({
                       address: updatedActivity.from.toLowerCase(),
@@ -215,7 +215,7 @@ export const addPendingTransferTransactionActivity =
         const pendingActivity: FungibleTokenActivity =
             createPendingTransferActivityFromTx(outgoingTx)
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   upsertActivityMainnet({
                       address: selectedAccount.address.toLowerCase(),
@@ -261,7 +261,7 @@ export const addIncomingTransfer =
             thor,
         )
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   upsertActivityMainnet({
                       address: recipient.toLowerCase(),
@@ -316,7 +316,7 @@ export const updateAccountTransactionActivities =
             DEFAULT_PAGE_SIZE * 2,
         )
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   updateTransactionActivitiesMainnet({
                       address: selectedAccount.address.toLowerCase(),

@@ -1,7 +1,8 @@
 import React, { memo, useMemo } from "react"
-import { VTHO, currencySymbolMap, useCopyClipboard } from "~Common"
+import { VTHO, currencySymbolMap } from "~Constants"
 import { FormattingUtils, TransactionUtils } from "~Utils"
 import { BaseSpacer } from "~Components"
+import { useCopyClipboard } from "~Hooks"
 import {
     selectCurrency,
     selectSelectedNetwork,

@@ -1,4 +1,4 @@
-import { debug } from "~Common/Logger"
+import { debug } from "~Utils/Logger"
 import { BaseDevice, WalletAccount } from "~Model"
 import AddressUtils from "../AddressUtils"
 
