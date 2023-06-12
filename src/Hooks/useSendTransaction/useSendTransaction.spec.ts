@@ -9,7 +9,11 @@ const { vetTransaction1, account1D1 } = TestHelpers.data
 describe("useSendTransaction", () => {
     it("should render correctly", async () => {
         const { result, waitForNextUpdate } = renderHook(
-            () => useSendTransaction(defaultMainNetwork, account1D1),
+            () =>
+                useSendTransaction(
+                    { ...defaultMainNetwork, explorerUrl: undefined },
+                    account1D1,
+                ),
             { wrapper: TestWrapper },
         )
         await waitForNextUpdate({
