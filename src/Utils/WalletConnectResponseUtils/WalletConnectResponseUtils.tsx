@@ -1,4 +1,3 @@
-import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { SignClientTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
@@ -6,6 +5,7 @@ import { Certificate } from "thor-devkit"
 import { showErrorToast, showSuccessToast } from "~Components"
 import HexUtils from "~Utils/HexUtils"
 import { error } from "~Utils/Logger"
+import WalletConnectUtils from "~Utils/WalletConnectUtils"
 import { TranslationFunctions } from "~i18n"
 
 type BaseProps = {
@@ -85,7 +85,7 @@ export const transactionRequestFailedResponse = async ({
     web3Wallet,
     LL,
 }: BaseProps) => {
-    const response = formatJsonRpcError(
+    const response = WalletConnectUtils.formatJsonRpcError(
         request.id,
         LL.NOTIFICATION_wallet_connect_error_on_transaction(),
     )
@@ -107,12 +107,12 @@ export const sponsorSignRequestFailedResponse = async ({
     web3Wallet,
     LL,
 }: BaseProps) => {
-    const formattedResponse = formatJsonRpcError(
-        request.id,
-        LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
-    )
-
     try {
+        const formattedResponse = WalletConnectUtils.formatJsonRpcError(
+            request.id,
+            LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
+        )
+
         await web3Wallet?.respondSessionRequest({
             topic: request.topic,
             response: formattedResponse,
@@ -128,7 +128,7 @@ export const userRejectedMethodsResponse = async ({
     LL,
 }: BaseProps) => {
     try {
-        const response = formatJsonRpcError(
+        const response = WalletConnectUtils.formatJsonRpcError(
             request.id,
             getSdkError("USER_REJECTED_METHODS").message,
         )

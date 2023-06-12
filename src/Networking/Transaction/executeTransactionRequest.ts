@@ -12,10 +12,10 @@ export const executeTransactionRequest = async (
         .post(`${networkUrl}/transactions`, encodedRawTx)
         .catch(async e => {
             error(e)
+
             if (onFail) {
                 onFail()
             }
-            throw e
         })
 
     return response

@@ -11,14 +11,12 @@ export const signSponsorRequest = async (
 ) => {
     const response = await axios
         .post(delegateUrl, sponsorRequest)
-        .catch((e: unknown) => {
+        .catch(async e => {
             error(e)
 
             if (onFail) {
                 onFail()
             }
-
-            throw e
         })
     return response
 }

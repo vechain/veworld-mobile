@@ -11,7 +11,6 @@ import {
     BaseSpacer,
     showWarningToast,
     BaseModal,
-    showSuccessToast,
     CloseModalButton,
     BaseScrollView,
 } from "~Components"
@@ -27,6 +26,7 @@ import {
     CryptoUtils,
     TransactionUtils,
     WalletConnectUtils,
+    WalletConnectResponseUtils,
 } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
@@ -64,7 +64,7 @@ export const SignTransactionModal = ({
     const message = params.comment || params.txMessage[0].comment
 
     const onSignTransaction = useCallback(
-        async (id: number, privateKey: Buffer) => {
+        async (privateKey: Buffer) => {
             const clauses = params.txMessage
 
             // TODO: calc intrinsic gas
@@ -118,19 +118,9 @@ export const SignTransactionModal = ({
                     params.delegateUrl,
                     sponsorRequest,
                     async () => {
-                        try {
-                            await web3Wallet?.respondSessionRequest({
-                                topic,
-                                response: WalletConnectUtils.formatJsonRpcError(
-                                    id,
-                                    "Unexpected error while executing transaction",
-                                ),
-                            })
-                        } catch {
-                            showErrorToast(
-                                LL.NOTIFICATION_wallet_connect_error_pairing(),
-                            )
-                        }
+                        await WalletConnectResponseUtils.sponsorSignRequestFailedResponse(
+                            { request: requestEvent, web3Wallet, LL },
+                        )
                     },
                 )
 
@@ -162,59 +152,44 @@ export const SignTransactionModal = ({
                 }
             }
 
-            const response = await executeTransactionRequest(
+            const res = await executeTransactionRequest(
                 network.currentUrl,
                 encodedRawTx,
                 async () => {
-                    await web3Wallet?.respondSessionRequest({
-                        topic,
-                        response: WalletConnectUtils.formatJsonRpcError(
-                            id,
-                            LL.NOTIFICATION_wallet_connect_error_on_transaction(),
-                        ),
-                    })
-
-                    showErrorToast(
-                        LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+                    await WalletConnectResponseUtils.transactionRequestFailedResponse(
+                        { request: requestEvent, web3Wallet, LL },
                     )
                 },
             )
 
-            if (response.data?.id) {
-                try {
-                    await web3Wallet?.respondSessionRequest({
-                        topic,
-                        response: {
-                            id,
-                            jsonrpc: "2.0",
-                            result: {
-                                txid: response.data.id,
-                                signer: account?.address,
-                            },
-                        },
-                    })
-
-                    showSuccessToast(
-                        LL.NOTIFICATION_wallet_connect_transaction_broadcasted(),
-                    )
-                } catch (e) {
-                    showErrorToast(
-                        LL.NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error(),
-                    )
-                }
+            if (!res || !res.data || !res.data.id) {
+                await WalletConnectResponseUtils.transactionRequestFailedResponse(
+                    { request: requestEvent, web3Wallet, LL },
+                )
             }
+
+            await WalletConnectResponseUtils.transactionRequestSuccessResponse(
+                { request: requestEvent, web3Wallet, LL },
+                res?.data.id,
+                account.address,
+            )
 
             onClose()
         },
-        [account, network, params, thorClient, topic, web3Wallet, onClose, LL],
+        [
+            account,
+            network,
+            params,
+            thorClient,
+            web3Wallet,
+            onClose,
+            LL,
+            requestEvent,
+        ],
     )
 
     const onApprove = useCallback(
         async (decryptedWallet: Wallet) => {
-            if (!requestEvent) return
-
-            const { id } = requestEvent
-
             if (!decryptedWallet)
                 throw new Error("Mnemonic wallet can't be empty")
 
@@ -228,9 +203,9 @@ export const SignTransactionModal = ({
             const derivedNode = hdNode.derive(account.index)
             const privateKey = derivedNode.privateKey as Buffer
 
-            await onSignTransaction(id, privateKey)
+            await onSignTransaction(privateKey)
         },
-        [account, requestEvent, onSignTransaction],
+        [account, onSignTransaction],
     )
 
     async function onReject() {
