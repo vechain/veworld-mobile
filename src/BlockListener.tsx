@@ -215,15 +215,15 @@ const BlockListener: React.FC = () => {
             .apply(0, 5)
 
         // send toast notification for each transfer
-        transfers.forEach(tran => {
-            showFoundTokenTransfer(VET, tran.amount)
+        transfers.forEach(transfer => {
+            showFoundTokenTransfer(VET, transfer.amount)
 
             dispatch(
                 addIncomingTransfer(
-                    tran.meta,
-                    tran.amount,
-                    tran.recipient,
-                    tran.sender,
+                    transfer.meta,
+                    transfer.amount,
+                    transfer.recipient,
+                    transfer.sender,
                     VET.address,
                     thor,
                 ),
