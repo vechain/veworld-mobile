@@ -1219,6 +1219,7 @@ type RootTranslation = {
 	 * Wallet Connect notifications
 	 */
 	NOTIFICATION_wallet_connect_disconnected_from_remote: string
+	NOTIFICATION_wallet_connect_disconnected_success: string
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
 	NOTIFICATION_wallet_connect_error_pairing: string
 	NOTIFICATION_wallet_connect_incompatible_dapp: string
@@ -2882,6 +2883,10 @@ Please, try again later.
 	 * Wallet connect has been disconnected from remote.
 	 */
 	NOTIFICATION_wallet_connect_disconnected_from_remote: () => LocalizedString
+	/*
+	 * You disconnected successfully from dapp.
+	 */
+	NOTIFICATION_wallet_connect_disconnected_success: () => LocalizedString
 	/*
 	 * Connecting may take a few seconds.
 	 */
