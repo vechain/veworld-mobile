@@ -54,7 +54,7 @@ export const ScanWalletConnectBottomSheet = React.forwardRef<
         [onScan, onClose, LL],
     )
 
-    const onQrCodePasted = useCallback(
+    const onPasteFromClipboard = useCallback(
         (result: string) => {
             const isValid = WalletConnectUtils.isValidURI(result)
 
@@ -116,7 +116,7 @@ export const ScanWalletConnectBottomSheet = React.forwardRef<
                             <QrScannerLayout color={COLORS.DARK_PURPLE_RBGA} />
                         )}
                         <CameraHeader />
-                        <CameraFooter onPaste={onQrCodePasted} />
+                        <CameraFooter onPaste={onPasteFromClipboard} />
                     </Camera>
                 )
             )}

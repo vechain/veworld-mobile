@@ -1,7 +1,7 @@
 import React from "react"
 import { BaseText, BaseTouchable, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
-import Clipboard from "@react-native-clipboard/clipboard"
+import * as Clipboard from "expo-clipboard"
 import PlatformUtils from "~Utils/PlatformUtils" // TODO: remove this circular dependency
 
 interface Props {
@@ -9,11 +9,12 @@ interface Props {
 }
 
 export const CameraFooter = ({ onPaste }: Props) => {
-    // const { LL } = useI18nContext()
-
     const onPress = async () => {
-        const text = await Clipboard.getString()
-        onPaste(text)
+        let isString = await Clipboard.hasStringAsync()
+        if (isString) {
+            let text = await Clipboard.getStringAsync()
+            onPaste(text)
+        }
     }
 
     return (
