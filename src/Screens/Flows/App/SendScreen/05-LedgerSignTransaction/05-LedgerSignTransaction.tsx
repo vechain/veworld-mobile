@@ -90,9 +90,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     // errorCode + validate signature
     const ledgerErrorCode = useMemo(() => {
-        if (isAwaitingSignature) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
+        if (isAwaitingSignature && !signingError)
+            return LEDGER_ERROR_CODES.WAITING_SIGNATURE
         return errorCode
-    }, [errorCode, isAwaitingSignature])
+    }, [errorCode, isAwaitingSignature, signingError])
 
     const Steps: Step[] = useMemo(
         () => [
@@ -165,8 +166,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     useEffect(() => {
         if (ledgerErrorCode) {
             openConnectionErrorSheet()
-        }
-        if (!ledgerErrorCode) {
+        } else {
             closeConnectionErrorSheet()
         }
     }, [ledgerErrorCode, closeConnectionErrorSheet, openConnectionErrorSheet])

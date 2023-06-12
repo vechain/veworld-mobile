@@ -88,6 +88,7 @@ export const StepsProgressBar: React.FC<Props> = ({
 
                     return (
                         <BaseView
+                            key={index}
                             justifyContent="flex-start"
                             alignItems="center">
                             {isActive && !isError ? (
