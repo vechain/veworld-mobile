@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { useNFTCollections } from "~Common"
+import { useNFTCollections } from "~Hooks"
 import { usePagination } from "../usePagination"
 import {
     selectNftCollections,

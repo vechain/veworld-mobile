@@ -1,6 +1,6 @@
 import axios from "axios"
 import { getContractAddresses } from "./getContractAddresses"
-import { NFT_CONTRACTS_FOR_ADDRESS } from "./VechainIndexer"
+import { NFT_CONTRACTS_FOR_ADDRESS } from "~Constants"
 
 jest.mock("axios")
 

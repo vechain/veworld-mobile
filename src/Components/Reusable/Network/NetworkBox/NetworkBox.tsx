@@ -1,6 +1,7 @@
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { StringUtils } from "~Utils"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { Network } from "~Model"

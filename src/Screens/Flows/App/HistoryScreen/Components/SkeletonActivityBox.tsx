@@ -1,5 +1,6 @@
 import React from "react"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
 

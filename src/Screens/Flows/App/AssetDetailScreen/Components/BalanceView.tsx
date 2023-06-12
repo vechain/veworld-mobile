@@ -1,5 +1,5 @@
 import React from "react"
-import { useBalances } from "~Common"
+import { useBalances } from "~Hooks"
 import { TokenWithCompleteInfo } from "~Model"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"

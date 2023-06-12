@@ -54,7 +54,7 @@ describe("BaseSafeArea", () => {
     })
 
     it("android", async () => {
-        jest.mock("~Common", () => ({
+        jest.mock("~Constants", () => ({
             PlatformUtils: {
                 isAndroid: () => true,
             },

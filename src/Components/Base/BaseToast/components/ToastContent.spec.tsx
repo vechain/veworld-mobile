@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react-native"
 import { TestWrapper } from "~Test"
 import { ToastContent } from "./ToastContent"
 import { successToastStyles } from "../util"
-import { ColorTheme } from "~Common"
+import { ColorTheme } from "~Constants"
 
 const successStyles = successToastStyles(ColorTheme("light"))
 const onPress = jest.fn()

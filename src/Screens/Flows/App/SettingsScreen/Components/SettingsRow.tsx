@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet, Pressable } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 
 export type RowProps = {

@@ -7,8 +7,8 @@ import {
     VETLedgerApp,
     VET_DERIVATION_PATH,
     LEDGER_ERROR_CODES,
-} from "~Common/Ledger"
-import { debug, error, warn } from "~Common/Logger"
+} from "~Constants"
+import { debug, error, warn } from "~Utils/Logger"
 import { Buffer } from "buffer"
 
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"

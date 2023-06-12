@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useMemo } from "react"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { BaseButton } from "./BaseButton"
 import { BaseView } from "./BaseView"
 import { BaseIcon, BaseText } from "~Components"

@@ -15,7 +15,7 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useGenerateMnemonic } from "./useGenerateMnemonic"
-import { useCopyClipboard, useTheme } from "~Common"
+import { useCopyClipboard, useTheme } from "~Hooks"
 import { useAppDispatch } from "~Storage/Redux"
 import { setMnemonic } from "~Storage/Redux/Actions"
 

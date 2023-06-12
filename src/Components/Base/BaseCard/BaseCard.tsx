@@ -6,7 +6,8 @@ import {
     ViewProps,
     ViewStyle,
 } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { BaseView } from "../BaseView"
 
 type Props = {

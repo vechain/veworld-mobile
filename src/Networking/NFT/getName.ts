@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash"
-import { abis } from "~Common/Constant/Thor/ThorConstants"
+import { abis } from "~Constants"
 
 export const getName = async (
     contractAddress: string,

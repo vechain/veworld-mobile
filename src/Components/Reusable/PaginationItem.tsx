@@ -5,7 +5,8 @@ import Animated, {
     useAnimatedStyle,
     withTiming,
 } from "react-native-reanimated"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 
 const LONG_WIDTH = 28
 const WIDTH = 10

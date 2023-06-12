@@ -1,9 +1,9 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
-import { COLORS } from "~Common/Theme"
+import { COLORS } from "~Constants"
 import { PlaceholderSVG } from "~Assets"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 

@@ -1,9 +1,7 @@
 import { abi, address } from "thor-devkit"
-import { VET } from "~Common/Constant"
+import { VET, DIRECTIONS, abis } from "~Constants"
 import { FungibleToken, TransferLog } from "~Model"
 import AddressUtils from "../AddressUtils"
-import { DIRECTIONS } from "~Common/Enums"
-import { abis } from "~Common/Constant/Thor/ThorConstants"
 
 export interface IQueryParams {
     thor: Connex.Thor

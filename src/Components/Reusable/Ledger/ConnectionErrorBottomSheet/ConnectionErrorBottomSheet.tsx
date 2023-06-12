@@ -1,12 +1,12 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useMemo } from "react"
-import { LEDGER_ERROR_CODES } from "~Common/Ledger"
+import { LEDGER_ERROR_CODES } from "~Constants"
 import { BaseBottomSheet, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import Lottie from "lottie-react-native"
 import { BlePairingDark, EnterPinCodeDark, OpenAppDark } from "~Assets/Lottie"
 import { ActivityIndicator, StyleSheet } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 
 /**
  * error: LEDGER_ERROR_CODES - the error code to display the message for

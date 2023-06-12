@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native"
 import React from "react"
 import { BaseCard, BaseImage, BaseText, BaseView } from "~Components"
-import { COLORS } from "~Common/Theme"
+import { COLORS } from "~Constants"
 
 type Props = {
     name: string

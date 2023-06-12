@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, DIRECTIONS, useTheme, useThemedStyles } from "~Common"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { DateUtils, FormattingUtils } from "~Utils"
-import { COLORS } from "~Common/Theme"
+import { COLORS, ColorThemeType, DIRECTIONS } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import {
     Activity,

@@ -1,6 +1,6 @@
 import { FungibleToken } from "~Model"
 import { isVechainToken, mergeTokens } from "./TokenUtils"
-import { VET, VTHO } from "~Common/Constant"
+import { VET, VTHO } from "~Constants"
 
 describe("mergeTokens", () => {
     it("mergeTokens should merge two token arrays and remove duplicates based on symbol and genesisId", () => {

@@ -6,7 +6,7 @@ import {
     StyleSheet,
     ViewStyle,
 } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseView } from "./BaseView"
 
 type Props = {

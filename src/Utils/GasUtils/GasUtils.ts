@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js"
 import { Transaction } from "thor-devkit"
-import { abis, BASE_GAS_PRICE } from "~Common/Constant/Thor/ThorConstants"
+import { abis, BASE_GAS_PRICE } from "~Constants"
 import { EstimateGasResult } from "~Model"
 
 const paramsCache: Record<string, string> = {}

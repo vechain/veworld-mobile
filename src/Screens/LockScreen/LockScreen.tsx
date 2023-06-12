@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { usePasswordValidation } from "~Common"
+import { usePasswordValidation } from "~Hooks"
 import {
     BaseSpacer,
     BaseText,

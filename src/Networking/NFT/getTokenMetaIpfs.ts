@@ -1,5 +1,5 @@
 import axios from "axios"
-import { error } from "~Common/Logger"
+import { error } from "~Utils/Logger"
 import { TokenMetadata } from "~Model/Nft/Nft"
 
 const toID = (_tokenUri: string) => _tokenUri.split("://")[1]

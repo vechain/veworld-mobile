@@ -1,6 +1,6 @@
 import { TestHelpers } from "~Test"
 import TransfersUtils from "./"
-import { VET, VTHO } from "~Common/Constant"
+import { VET, VTHO } from "~Constants"
 
 const thor = TestHelpers.thor.mockThorInstance({})
 

@@ -26,8 +26,8 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import { debug, error, info, useBottomSheetModal } from "~Common"
-import { AddressUtils } from "~Utils"
+import { useBottomSheetModal } from "~Hooks"
+import { debug, error, info, AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
 
 type Props = {

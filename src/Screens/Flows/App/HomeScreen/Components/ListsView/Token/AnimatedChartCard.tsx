@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"

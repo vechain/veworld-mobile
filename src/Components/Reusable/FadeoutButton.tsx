@@ -2,7 +2,8 @@ import { StyleSheet } from "react-native"
 import React from "react"
 import LinearGradient from "react-native-linear-gradient"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { SCREEN_WIDTH, useTheme, valueToHP } from "~Common"
+import { SCREEN_WIDTH, valueToHP } from "~Constants"
+import { useTheme } from "~Hooks"
 import { BaseButton, BaseView } from "~Components/Base"
 
 type Props = {

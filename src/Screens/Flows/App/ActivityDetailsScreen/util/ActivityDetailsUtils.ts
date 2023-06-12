@@ -1,4 +1,5 @@
-import { DIRECTIONS, warn } from "~Common"
+import { DIRECTIONS } from "~Constants"
+import { warn } from "~Utils"
 import { Activity, ActivityType, FungibleTokenActivity } from "~Model"
 import { TranslationFunctions } from "~i18n"
 

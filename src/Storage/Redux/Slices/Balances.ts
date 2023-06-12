@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { VET, VTHO } from "~Common"
+import { VET, VTHO } from "~Constants"
 import { AddressUtils } from "~Utils"
 import { Balance } from "~Model"
 

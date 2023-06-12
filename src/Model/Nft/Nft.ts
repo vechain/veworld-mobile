@@ -1,4 +1,4 @@
-import { DIRECTIONS } from "~Common"
+import { DIRECTIONS } from "~Constants"
 
 export interface NFTContract {
     name: string

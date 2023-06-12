@@ -1,6 +1,6 @@
 import { Activity, ActivityStatus, ActivityType, Token } from "~Model"
 import ActivityUtils from "."
-import { ThorConstants } from "~Common/Constant"
+import { genesises } from "~Constants"
 
 const SHA_TOKEN: Token = {
     name: "Safe Haven",
@@ -59,7 +59,7 @@ const BASE_SAMPLE_ACTIVITY = {
     id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaf01",
     blockNumber: 123456,
     isTransaction: true,
-    genesisId: ThorConstants.genesises.main.id,
+    genesisId: genesises.main.id,
     timestamp: 1382337919000,
     gasUsed: 21000,
     gasPayer: SAMPLE_ACCOUNT,
