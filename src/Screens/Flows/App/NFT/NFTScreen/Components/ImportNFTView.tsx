@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { usePlatformBottomInsets } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { usePlatformBottomInsets } from "~Hooks"
+import { COLORS } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 

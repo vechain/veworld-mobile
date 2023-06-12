@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import { PlaceholderSVG } from "~Assets"
-import { COLORS } from "~Common/Theme"
+import { COLORS } from "~Constants"
 import { BaseCard, BaseImage } from "~Components/Base"
 
 type Props = {

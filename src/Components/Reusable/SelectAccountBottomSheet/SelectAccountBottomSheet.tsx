@@ -2,7 +2,7 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React from "react"
 import { StyleSheet } from "react-native"
-import { useScrollableList } from "~Common"
+import { useScrollableList } from "~Hooks"
 import {
     AccountCard,
     BaseBottomSheet,

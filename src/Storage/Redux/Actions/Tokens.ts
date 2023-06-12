@@ -3,15 +3,14 @@ import axios from "axios"
 import {
     COINGECKO_LIST,
     COINGECKO_MARKET_CHART_ENDPOINT,
-    error,
     EXCHANGE_CLIENT_AXIOS_OPTS,
     COINGECKO_TOKEN_ENDPOINT,
     getCoinGeckoIdBySymbol,
     COINGECKO_MARKET_INFO_ENDPOINT,
     VET,
     VTHO,
-} from "~Common"
-import { TokenUtils } from "~Utils"
+} from "~Constants"
+import { TokenUtils, error } from "~Utils"
 import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
 import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
 import {

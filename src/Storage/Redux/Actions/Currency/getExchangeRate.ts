@@ -1,4 +1,5 @@
-import { CURRENCY, error } from "~Common"
+import { CURRENCY } from "~Constants"
+import { error } from "~Utils"
 import { CurrencyExchangeRate } from "~Model"
 import FiatExchangeClients from "./fiat"
 

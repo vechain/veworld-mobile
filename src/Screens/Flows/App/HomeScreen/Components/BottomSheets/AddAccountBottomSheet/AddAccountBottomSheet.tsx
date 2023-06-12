@@ -7,7 +7,7 @@ import { useI18nContext } from "~i18n"
 import { useAppDispatch } from "~Storage/Redux"
 import { addAccountForDevice } from "~Storage/Redux/Actions"
 import { BaseDevice } from "~Model"
-import { info } from "~Common"
+import { info } from "~Utils"
 
 type Props = {
     onClose: () => void

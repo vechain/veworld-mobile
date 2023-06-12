@@ -1,6 +1,7 @@
 import React from "react"
 import { StyleSheet, View } from "react-native"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { BaseIcon, BaseSpacer } from "~Components"
 
 type Props = {

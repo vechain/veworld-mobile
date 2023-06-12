@@ -1,6 +1,7 @@
-import { error, ThorConstants } from "~Common"
+import { error } from "~Utils"
 import { address } from "thor-devkit"
 import { Network } from "~Model"
+import { abis } from "~Constants"
 
 export const getCustomTokenInfo = async ({
     tokenAddress,
@@ -17,15 +18,9 @@ export const getCustomTokenInfo = async ({
         const addr = address.toChecksumed(tokenAddress)
         const contract = thorClient.account(addr)
 
-        const tokenName = await contract
-            .method(ThorConstants.abis.VIP180.name)
-            .call()
-        const tokenSymbol = await contract
-            .method(ThorConstants.abis.VIP180.symbol)
-            .call()
-        const decimals = await contract
-            .method(ThorConstants.abis.VIP180.decimals)
-            .call()
+        const tokenName = await contract.method(abis.VIP180.name).call()
+        const tokenSymbol = await contract.method(abis.VIP180.symbol).call()
+        const decimals = await contract.method(abis.VIP180.decimals).call()
 
         return {
             genesisId: network.genesis.id,

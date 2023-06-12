@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import PlatformUtils from "~Utils/PlatformUtils" // TODO: remove this circular dependency
 import { HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"

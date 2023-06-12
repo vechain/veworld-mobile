@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { useTheme } from "~Common/Hooks"
+import { useTheme } from "~Hooks"
 import { CryptoUtils } from "~Utils"
 import {
     BackButtonHeader,
@@ -22,7 +22,7 @@ import { useAppSelector } from "~Storage/Redux"
 import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import * as Haptics from "expo-haptics"
 
-import { isSmallScreen, valueToHP } from "~Common"
+import { isSmallScreen, valueToHP } from "~Constants"
 import { ScrollView, StyleSheet } from "react-native"
 
 export const ConfirmMnemonicScreen = () => {

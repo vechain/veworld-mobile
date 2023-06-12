@@ -1,5 +1,5 @@
 import MockAdapter from "axios-mock-adapter"
-import { VTHO } from "~Common"
+import { VTHO } from "~Constants"
 import { Action } from "./consts"
 
 export const mockTokenRegistry = (

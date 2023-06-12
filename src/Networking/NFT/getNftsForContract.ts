@@ -1,5 +1,5 @@
 import axios from "axios"
-import { NFTS_OWNED_PER_CONTRACT } from "./VechainIndexer"
+import { NFTS_OWNED_PER_CONTRACT } from "~Constants"
 
 export type NftItemResponse = {
     id?: string

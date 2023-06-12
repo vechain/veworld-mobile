@@ -1,8 +1,8 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { isArray, isString } from "lodash"
-import { useTheme } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { useTheme } from "~Hooks"
+import { COLORS } from "~Constants"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 
 interface NFTAttributeData {

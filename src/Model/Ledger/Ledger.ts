@@ -1,5 +1,5 @@
 // import { DeviceModel } from "@ledgerhq/devices"
-import { VETLedgerAccount } from "~Common"
+import { VETLedgerAccount } from "~Constants"
 
 /**
  * Represent a ledger device that is connected to the device via bluetooth

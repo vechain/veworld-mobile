@@ -10,7 +10,8 @@ import {
 import { useI18nContext } from "~i18n"
 import { ContactForm } from "../../AddContactScreen/Components"
 import { useContactValidation } from "./Hooks"
-import { isSmallScreen, useTheme } from "~Common"
+import { useTheme } from "~Hooks"
+import { isSmallScreen } from "~Constants"
 import { Contact } from "~Model"
 
 type Props = {

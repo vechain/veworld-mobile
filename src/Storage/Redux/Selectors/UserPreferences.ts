@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { CURRENCY, CURRENCY_SYMBOLS } from "~Common"
+import { CURRENCY, CURRENCY_SYMBOLS } from "~Constants"
 
 const reducer = (state: RootState) => state.userPreferences
 

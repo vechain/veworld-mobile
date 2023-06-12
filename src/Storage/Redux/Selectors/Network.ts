@@ -1,8 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import {
-    defaultMainNetwork,
-    defaultNetworks,
-} from "~Common/Constant/Thor/ThorConstants"
+import { defaultMainNetwork, defaultNetworks } from "~Constants"
 import { RootState } from "../Types"
 import { NETWORK_TYPE } from "~Model"
 

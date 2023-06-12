@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from "react"
-import { useCopyClipboard, useTheme } from "~Common"
+import { useCopyClipboard, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { BaseButton, BaseIcon } from "~Components/Base"
 import { StyleSheet } from "react-native"

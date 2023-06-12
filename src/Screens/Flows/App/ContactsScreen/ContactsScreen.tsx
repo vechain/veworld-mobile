@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useScrollableList, useTheme } from "~Common"
+import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
     BaseIcon,

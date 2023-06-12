@@ -1,7 +1,6 @@
 import { TestHelpers } from "~Test"
 import LedgerUtils from "./LedgerUtils"
-import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
-import { LEDGER_ERROR_CODES } from "~Common"
+import { LEDGER_ERROR_CODES, defaultMainNetwork } from "~Constants"
 import { BleError } from "react-native-ble-plx"
 import { DisconnectedDeviceDuringOperation } from "@ledgerhq/errors"
 

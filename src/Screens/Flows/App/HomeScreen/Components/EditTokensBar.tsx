@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useTheme } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { useTheme } from "~Hooks"
+import { COLORS } from "~Constants"
 import {
     BaseButton,
     BaseIcon,

@@ -11,8 +11,8 @@ import {
     ColorThemeType,
     FlexDirection,
     JustifyContent,
-    useThemedStyles,
-} from "~Common"
+} from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { GenericTouchableProps } from "./Types"
 import { BaseView } from "../BaseView"
 

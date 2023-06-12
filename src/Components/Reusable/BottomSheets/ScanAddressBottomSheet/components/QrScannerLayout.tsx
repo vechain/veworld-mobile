@@ -1,7 +1,7 @@
 import React from "react"
 import { Dimensions, StyleSheet, View } from "react-native"
 import { Mask, Rect, Svg, Defs } from "react-native-svg"
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Common"
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 
 const deviceWidth = SCREEN_WIDTH
 const deviceHeight = SCREEN_HEIGHT

@@ -15,7 +15,7 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { usePlatformBottomInsets, useTheme } from "~Common"
+import { usePlatformBottomInsets, useTheme } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
 import { NonFungibleToken } from "~Model"

@@ -1,6 +1,7 @@
 import React, { memo, useCallback } from "react"
 import { ViewProps, StyleSheet, Pressable } from "react-native"
-import { CURRENCY, ColorThemeType, useThemedStyles } from "~Common"
+import { CURRENCY, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import {
     AccountIcon,

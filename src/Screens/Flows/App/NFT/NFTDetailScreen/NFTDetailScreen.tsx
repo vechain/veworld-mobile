@@ -10,7 +10,7 @@ import {
     FadeoutButton,
 } from "~Components"
 import { ScrollView } from "react-native"
-import { usePlatformBottomInsets } from "~Common"
+import { usePlatformBottomInsets } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
 import { FormattingUtils } from "~Utils"

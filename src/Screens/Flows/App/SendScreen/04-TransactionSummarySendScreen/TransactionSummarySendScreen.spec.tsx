@@ -73,7 +73,7 @@ const createTestProps = (): unknown & NavigationScreenPropAlias => ({
     route: route as unknown as RouteType,
 })
 
-jest.mock("~Common/Hooks/useCheckIdentity/useCheckIdentity", () => ({
+jest.mock("~Hooks/useCheckIdentity/useCheckIdentity", () => ({
     useCheckIdentity: () => ({
         ConfirmIdentityBottomSheet: "ConfirmIdentityBottomSheet",
         checkIdentityBeforeOpening: jest.fn(),

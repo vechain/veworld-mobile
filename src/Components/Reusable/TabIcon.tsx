@@ -1,7 +1,8 @@
 import React, { FC, memo } from "react"
 import { StyleSheet, TextStyle, View } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { BaseView } from "~Components/Base"
 
 type Props = {

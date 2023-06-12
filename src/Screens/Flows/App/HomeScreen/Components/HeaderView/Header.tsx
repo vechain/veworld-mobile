@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { debug, useBottomSheetModal, useTheme } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Hooks"
+import { debug } from "~Utils"
 import {
     BaseIcon,
     BaseText,

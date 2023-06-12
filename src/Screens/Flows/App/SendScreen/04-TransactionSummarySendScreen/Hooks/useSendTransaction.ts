@@ -1,7 +1,7 @@
 import { Linking } from "react-native"
 import { Transaction } from "thor-devkit"
-import { ThorConstants } from "~Common"
 import { showSuccessToast, useThor } from "~Components"
+import { defaultMainNetwork } from "~Constants"
 import { Network, WalletAccount } from "~Model"
 import {
     addPendingTransferTransactionActivity,
@@ -37,8 +37,7 @@ export const useSendTransaction = (
             async () => {
                 await Linking.openURL(
                     `${
-                        network.explorerUrl ||
-                        ThorConstants.defaultMainNetwork.explorerUrl
+                        network.explorerUrl || defaultMainNetwork.explorerUrl
                     }/transactions/${id}`,
                 )
             },

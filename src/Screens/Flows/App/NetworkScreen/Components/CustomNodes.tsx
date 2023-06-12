@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal } from "~Common"
+import { useBottomSheetModal } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,

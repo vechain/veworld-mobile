@@ -1,6 +1,7 @@
 import React, { memo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { ColorThemeType, VET, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType, VET } from "~Constants"
 import { FormattingUtils } from "~Utils"
 import {
     AccountIcon,

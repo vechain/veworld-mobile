@@ -1,4 +1,4 @@
-import { debug, error, warn } from "~Common/Logger"
+import { debug, error, warn } from "~Utils/Logger"
 import URLUtils from "../URLUtils"
 
 /**

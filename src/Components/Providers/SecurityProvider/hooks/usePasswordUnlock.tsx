@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react"
-import { useAppLock, useWalletSecurity } from "~Common"
+import { useAppLock, useWalletSecurity } from "~Hooks"
 import { LockScreenUtils } from "~Utils"
 import RNBootSplash from "react-native-bootsplash"
 import { LockScreen } from "~Screens"

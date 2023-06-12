@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
+
 import {
     AlignItems,
     AlignSelf,
@@ -7,8 +8,8 @@ import {
     FlexDirection,
     JustifyContent,
     ColorThemeType,
-    useThemedStyles,
-} from "~Common"
+} from "~Constants"
+import { useThemedStyles } from "~Hooks"
 
 export type Props = {
     w?: number // NOTE: this is a number in percentage

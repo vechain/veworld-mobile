@@ -2,7 +2,7 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 
 type Props = {
     iconTestID?: string

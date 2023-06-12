@@ -1,5 +1,5 @@
 import { Transaction } from "thor-devkit"
-import { DIRECTIONS, ThorConstants, VET } from "~Common"
+import { DIRECTIONS, VET, chainTagToGenesisId } from "~Constants"
 import { ActivityUtils, TransactionUtils } from "~Utils"
 import { Activity, ActivityStatus, FungibleTokenActivity } from "~Model"
 import { FetchTransactionsResponse } from "./Types"
@@ -34,7 +34,7 @@ export const createBaseActivityFromTransaction = (
         id,
         blockNumber,
         isTransaction: true,
-        genesisId: ThorConstants.chainTagToGenesisId[chainTag],
+        genesisId: chainTagToGenesisId[chainTag],
         type: ActivityUtils.getActivityTypeFromClause(clauses),
         timestamp: blockTimestamp * 1000, // Convert to milliseconds
         gasUsed,

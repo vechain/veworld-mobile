@@ -1,5 +1,6 @@
 import React from "react"
-import { LANGUAGE, useTheme } from "~Common"
+import { useTheme } from "~Hooks"
+import { LANGUAGE } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchableBox } from "~Components"
 
 type Props = {

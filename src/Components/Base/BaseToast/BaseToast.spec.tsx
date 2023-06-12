@@ -8,7 +8,7 @@ import {
     toastConfig,
 } from "./BaseToast"
 import Toast from "react-native-toast-message"
-import { ColorTheme, ColorThemeType } from "~Common"
+import { ColorTheme, ColorThemeType } from "~Constants"
 
 jest.mock("react-native-toast-message", () => ({
     show: jest.fn(),

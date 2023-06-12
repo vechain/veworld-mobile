@@ -7,7 +7,7 @@ import {
     BaseBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useBluetoothStatus, useBottomSheetModal } from "~Common"
+import { useBluetoothStatus, useBottomSheetModal } from "~Hooks"
 import { Linking } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { PlatformUtils } from "~Utils"

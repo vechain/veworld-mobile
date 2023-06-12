@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StatusBar, StatusBarProps } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { computeBarStyle } from "./Helpers/ComputeBarStyle"
 
 type Props = {
