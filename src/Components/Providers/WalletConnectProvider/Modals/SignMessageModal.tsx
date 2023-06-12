@@ -36,7 +36,7 @@ interface Props {
     isOpen: boolean
 }
 
-export const SignIdentityModal = ({
+export const SignMessageModal = ({
     requestEvent,
     sessionRequest,
     onClose,

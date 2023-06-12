@@ -8,7 +8,7 @@ import {
     selectSelectedAccountAddress,
 } from "~Storage/Redux"
 import { PairModal } from "./Modals/PairModal"
-import { SignIdentityModal } from "./Modals/SignIdentityModal"
+import { SignMessageModal } from "./Modals/SignMessageModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
 import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -54,7 +54,7 @@ const WalletConnectContextProvider = ({
         useState<SignClientTypes.EventArguments["session_proposal"]>()
 
     // For session request
-    const [signIdentityModalVisible, setSignIdentityModalVisible] =
+    const [signMessageModalVisible, setSignMessageModalVisible] =
         useState(false)
     const [signTransactionModalVisible, setSignTransactionModalVisible] =
         useState(false)
@@ -133,7 +133,7 @@ const WalletConnectContextProvider = ({
 
             switch (requestEvent.params.request.method) {
                 case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
-                    setSignIdentityModalVisible(true)
+                    setSignMessageModalVisible(true)
                     break
                 case WalletConnectUtils.VECHAIN_SIGNING_METHODS
                     .REQUEST_TRANSACTION:
@@ -149,7 +149,7 @@ const WalletConnectContextProvider = ({
     const onSessionRequestClose = useCallback(() => {
         setSessionRequest(undefined)
         setRequestEventData(undefined)
-        setSignIdentityModalVisible(false)
+        setSignMessageModalVisible(false)
         setSignTransactionModalVisible(false)
     }, [])
 
@@ -247,10 +247,10 @@ const WalletConnectContextProvider = ({
 
                     {requestEventData &&
                         sessionRequest &&
-                        signIdentityModalVisible && (
-                            <SignIdentityModal
+                        signMessageModalVisible && (
+                            <SignMessageModal
                                 onClose={onSessionRequestClose}
-                                isOpen={signIdentityModalVisible}
+                                isOpen={signMessageModalVisible}
                                 requestEvent={requestEventData}
                                 sessionRequest={sessionRequest}
                             />

@@ -1,3 +1,3 @@
 export * from "./PairModal"
-export * from "./SignIdentityModal"
+export * from "./SignMessageModal"
 export * from "./SignTransactionModal"
