@@ -1,6 +1,5 @@
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
-import { error } from "~Common"
-import { CryptoUtils, TransactionUtils } from "~Utils"
+import { CryptoUtils, TransactionUtils, error } from "~Utils"
 import { showErrorToast, showWarningToast } from "~Components"
 import {
     selectDevice,
