@@ -10,7 +10,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { useSendTransaction } from "./useSendTransaction"
+import { useSendTransaction } from "~Hooks"
 
 type Props = {
     transaction: Transaction.Body
