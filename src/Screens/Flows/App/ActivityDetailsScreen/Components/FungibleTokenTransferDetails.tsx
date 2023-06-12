@@ -48,7 +48,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         )
 
         const fiatValueTransferred = useMemo(() => {
-            if (exchangeRate?.rate && token)
+            if (exchangeRate?.rate && token) {
                 return FormattingUtils.humanNumber(
                     FormattingUtils.convertToFiatBalance(
                         activity.amount as string,
@@ -57,6 +57,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
                     ),
                     activity.amount,
                 )
+            }
         }, [activity.amount, exchangeRate?.rate, token])
 
         const transactionIDshort = useMemo(() => {

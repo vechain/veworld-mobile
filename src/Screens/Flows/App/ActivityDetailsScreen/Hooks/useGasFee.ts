@@ -54,6 +54,7 @@ export const useGasFee = (activity: Activity) => {
      */
     const gasFeeInVTHOHumanReadable = useMemo(() => {
         if (!gasFeeInVTHO) return undefined
+
         return FormattingUtils.scaleNumberDown(
             gasFeeInVTHO,
             VTHO.decimals,
@@ -62,7 +63,7 @@ export const useGasFee = (activity: Activity) => {
     }, [gasFeeInVTHO])
 
     const fiatValueGasFeeSpent = useMemo(() => {
-        if (VTHOexchangeRate?.rate && gasFeeInVTHOHumanReadable)
+        if (VTHOexchangeRate?.rate && gasFeeInVTHOHumanReadable) {
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     gasFeeInVTHOHumanReadable,
@@ -71,6 +72,7 @@ export const useGasFee = (activity: Activity) => {
                 ),
                 gasFeeInVTHOHumanReadable,
             )
+        }
     }, [VTHOexchangeRate?.rate, gasFeeInVTHOHumanReadable])
 
     return { gasFeeInVTHO, gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent }
