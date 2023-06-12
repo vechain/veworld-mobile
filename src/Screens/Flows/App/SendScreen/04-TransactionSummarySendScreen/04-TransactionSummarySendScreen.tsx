@@ -146,17 +146,31 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             AddressUtils.compareAddresses(_account.address, address),
         )
 
+        const receiverIsAccount = accounts.find(_account =>
+            AddressUtils.compareAddresses(_account.address, address),
+        )
+
         if (receiverExists)
             return (
                 <BaseView>
                     <BaseText typographyFont="subSubTitle">
                         {receiverExists.alias}
                     </BaseText>
-                    <BaseText typographyFont="captionRegular">
-                        {FormattingUtils.humanAddress(
-                            receiverExists.address || "",
+                    <BaseView flexDirection="row" mt={3}>
+                        {receiverIsAccount?.device.type ===
+                            DEVICE_TYPE.LEDGER && (
+                            <LedgerBadge //eslint-disable-next-line react-native/no-inline-styles
+                                containerStyle={{
+                                    mr: 8,
+                                }}
+                            />
                         )}
-                    </BaseText>
+                        <BaseText typographyFont="captionRegular">
+                            {FormattingUtils.humanAddress(
+                                receiverExists.address || "",
+                            )}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
             )
 

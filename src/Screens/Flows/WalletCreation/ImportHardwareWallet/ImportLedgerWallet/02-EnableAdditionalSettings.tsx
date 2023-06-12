@@ -65,7 +65,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
     }, [setTimerEnabled])
 
     const onConfirm = useCallback(async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         await openOrFinalizeConnection()
     }, [openOrFinalizeConnection])
 
