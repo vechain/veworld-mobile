@@ -28,7 +28,6 @@ import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
 import { capitalize } from "lodash"
-import { ConnectedApp } from "~Screens/Flows/App/WalletConnectScreen/components"
 
 interface Props {
     sessionRequest: SessionTypes.Struct
@@ -204,21 +203,18 @@ export const SignIdentityModal = ({
                     </BaseText>
 
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="subTitleBold">
-                        {"Connected app"}
-                    </BaseText>
-                    <BaseSpacer height={8} />
-                    <ConnectedApp
-                        clickable={false}
-                        session={sessionRequest}
-                        account={account}
-                    />
-
-                    <BaseSpacer height={24} />
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">
                             {LL.SEND_DETAILS()}
                         </BaseText>
+
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="subSubTitleLight">
+                            {"Origin"}
+                        </BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
+                        <BaseText>{sessionRequest.peer.metadata.url}</BaseText>
 
                         <BaseSpacer height={16} />
                         <BaseText typographyFont="subSubTitleLight">

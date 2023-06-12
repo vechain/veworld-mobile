@@ -36,7 +36,6 @@ import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
-import { ConnectedApp } from "~Screens/Flows/App/WalletConnectScreen/components"
 
 interface Props {
     sessionRequest: any
@@ -314,15 +313,10 @@ export const SignTransactionModal = ({
                     </BaseText>
 
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="subTitleBold">
-                        {"Connected app"}
+                    <BaseText>
+                        {"Origin: "}
+                        {sessionRequest.peer.metadata.name}
                     </BaseText>
-                    <BaseSpacer height={8} />
-                    <ConnectedApp
-                        clickable={false}
-                        session={sessionRequest}
-                        account={account}
-                    />
 
                     <BaseSpacer height={24} />
                     <BaseText>

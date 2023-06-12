@@ -9,7 +9,7 @@ import {
 import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
-import { ConnectAppButton, ConnectedApp } from "./components"
+import { ConnectAppButton, ConnectedApp } from "./Components"
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 
@@ -69,7 +69,7 @@ export const ConnectedAppsScreen = () => {
                                 <BaseView key={account.address}>
                                     {index > 0 && <BaseSpacer height={16} />}
                                     <BaseText typographyFont="subSubTitle">
-                                        {account.device?.alias}
+                                        {account.alias}
                                     </BaseText>
                                     {activeSessions[account.address].map(
                                         session => {
