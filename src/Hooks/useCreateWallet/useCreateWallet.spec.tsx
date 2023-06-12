@@ -8,7 +8,7 @@ import {
 } from "~Storage/Redux"
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
-import { WALLET_STATUS } from "~Model"
+import { NewLedgerDevice, WALLET_STATUS } from "~Model"
 
 const device = {
     alias: "Wallet 1",
@@ -43,12 +43,13 @@ const wallet = {
     rootAddress: "0xec954b8e81777354d0a35111d83373b9ec171c64",
 }
 
-const ledger = {
+const ledger: NewLedgerDevice = {
     rootAccount: {
         publicKey: "string",
         address: "string",
         chainCode: "string",
     },
+    deviceId: "test",
     alias: "string",
     accounts: [1, 3, 4],
 }
@@ -167,7 +168,6 @@ describe("useCreateWallet", () => {
             )
             await waitForNextUpdate({ timeout: 2000 })
             const { onCreateLedgerWallet } = result.current
-
             await onCreateLedgerWallet({
                 newLedger: ledger,
                 onError: undefined,

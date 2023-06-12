@@ -1,5 +1,4 @@
-import { debug, error } from "~Common"
-import { AddressUtils, AccountUtils } from "~Utils"
+import { AddressUtils, AccountUtils, debug, error } from "~Utils"
 import {
     DEVICE_TYPE,
     LocalDevice,

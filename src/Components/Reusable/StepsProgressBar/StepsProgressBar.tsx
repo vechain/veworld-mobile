@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { ActivityIndicator, StyleSheet } from "react-native"
-import { useTheme } from "~Common"
-import { COLORS } from "~Common/Theme"
+import { useTheme } from "~Hooks"
+import { COLORS } from "~Constants"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 
 export type Step = {

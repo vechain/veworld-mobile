@@ -2,7 +2,7 @@ import React from "react"
 import { SvgProps } from "react-native-svg"
 import { LedgerLogo } from "~Assets"
 import { BaseView } from "~Components/Base"
-import { Props as BaseViewProps } from "~Components/Base/BaseView"
+import { BaseViewProps } from "~Components/Base/BaseView"
 import { useTheme } from "~Hooks"
 
 type Props = {
