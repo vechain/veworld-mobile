@@ -40,7 +40,14 @@ export const ConnectedAppsScreen = () => {
                     </BaseText>
 
                     <BaseSpacer height={40} />
+                    <BaseText typographyFont="subTitle">
+                        {
+                            "Connect your wallet with WalletConnect to make transactions."
+                        }
+                    </BaseText>
+                    <BaseSpacer height={14} />
                     <ConnectAppButton />
+
                     <BaseSpacer height={40} />
 
                     {totalSessions === 0 && (

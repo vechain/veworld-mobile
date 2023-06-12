@@ -9,7 +9,7 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from "react-native-reanimated"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseIcon } from "~Components"
 import * as Haptics from "expo-haptics"
 type Props = {

@@ -17,7 +17,7 @@ import {
 } from "~Storage/Redux/Selectors"
 import { DEFAULT_PAGE_SIZE } from "./API"
 import { Transaction } from "thor-devkit"
-import { DIRECTIONS, ThorConstants } from "~Common"
+import { DIRECTIONS, chainTagToGenesisId, genesisesId } from "~Constants"
 import { ActivityUtils, TransactionUtils } from "~Utils"
 
 /**
@@ -63,7 +63,7 @@ const createPendingTransferActivityFromTx = (
                 ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
         ),
         id: id ?? "",
-        genesisId: ThorConstants.chainTagToGenesisId[chainTag],
+        genesisId: chainTagToGenesisId[chainTag],
         gasUsed: Number(gas),
         clauses,
         delegated,
@@ -116,7 +116,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                     : ActivityStatus.SUCCESS
         }
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   upsertActivityMainnet({
                       address: updatedActivity.from.toLowerCase(),
@@ -145,7 +145,7 @@ export const addPendingTransferTransactionActivity =
         const pendingActivity: FungibleTokenActivity =
             createPendingTransferActivityFromTx(outgoingTx)
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   upsertActivityMainnet({
                       address: selectedAccount.address.toLowerCase(),
@@ -200,7 +200,7 @@ export const updateAccountTransactionActivities =
             DEFAULT_PAGE_SIZE,
         )
 
-        thor.genesis.id === ThorConstants.genesisesId.main
+        thor.genesis.id === genesisesId.main
             ? dispatch(
                   updateTransactionActivitiesMainnet({
                       address: selectedAccount.address.toLowerCase(),

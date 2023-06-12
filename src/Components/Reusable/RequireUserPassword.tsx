@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseIcon, BaseModal, BaseView, IBaseModal } from "~Components"
 import { LockScreen } from "~Screens"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"

@@ -11,7 +11,7 @@ import {
     useBiometricType,
     useBiometrics,
     useBiometricsValidation,
-} from "~Common"
+} from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"

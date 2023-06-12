@@ -8,7 +8,7 @@ import {
     BaseBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 
 type Props = {
     title: string

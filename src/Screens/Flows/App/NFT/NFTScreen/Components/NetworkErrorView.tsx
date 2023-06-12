@@ -1,5 +1,5 @@
 import React from "react"
-import { usePlatformBottomInsets } from "~Common"
+import { usePlatformBottomInsets } from "~Hooks"
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 

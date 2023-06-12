@@ -15,7 +15,7 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
-import { VETLedgerAccount } from "~Common"
+import { VETLedgerAccount } from "~Constants"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined

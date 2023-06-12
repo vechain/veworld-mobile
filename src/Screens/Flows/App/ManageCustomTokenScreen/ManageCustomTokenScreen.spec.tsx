@@ -3,7 +3,7 @@ import { TestWrapper } from "~Test"
 import { ManageCustomTokenScreen } from "./ManageCustomTokenScreen"
 import { render } from "@testing-library/react-native"
 import { Driver, Net, Wallet } from "@vechain/connex-driver"
-import { genesises } from "~Common/Constant/Thor/ThorConstants"
+import { genesises } from "~Constants"
 
 const net: Net = {
     baseURL: "https://sync-testnet.vechain.org/",

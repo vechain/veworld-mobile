@@ -21,7 +21,8 @@ import {
     selectSelectedAccount,
 } from "~Storage/Redux"
 import { HexUtils, CryptoUtils, WalletConnectUtils } from "~Utils"
-import { useCheckIdentity, error } from "~Common"
+import { useCheckIdentity } from "~Hooks"
+import { error } from "~Utils/Logger"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"

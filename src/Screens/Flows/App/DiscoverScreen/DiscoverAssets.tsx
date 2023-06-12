@@ -8,7 +8,8 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { StyleSheet, ScrollView } from "react-native"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import {
     fetchExchangeRates,

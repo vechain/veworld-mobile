@@ -6,7 +6,7 @@ import {
     AccountManagementBottomSheet,
     EditTokensBar,
 } from "./Components"
-import { useBottomSheetModal, useMemoizedAnimation } from "~Common"
+import { useBottomSheetModal, useMemoizedAnimation } from "~Hooks"
 import { BaseSafeArea, BaseSpacer, SelectAccountBottomSheet } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"

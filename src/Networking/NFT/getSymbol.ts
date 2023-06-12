@@ -1,4 +1,4 @@
-import { abis } from "~Common/Constant/Thor/ThorConstants"
+import { abis } from "~Constants"
 import { isEmpty } from "lodash"
 
 export const getSymbol = async (

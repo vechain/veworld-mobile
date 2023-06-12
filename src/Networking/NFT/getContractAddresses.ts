@@ -1,5 +1,5 @@
 import axios from "axios"
-import { NFT_CONTRACTS_FOR_ADDRESS } from "./VechainIndexer"
+import { NFT_CONTRACTS_FOR_ADDRESS } from "~Constants"
 
 export type NFTContractAddresses = {
     data: string[]

@@ -1,4 +1,4 @@
-import { VET, VTHO } from "~Common/Constant"
+import { VET, VTHO } from "~Constants"
 import { FungibleToken } from "~Model"
 
 export const mergeTokens = (a: FungibleToken[], b: FungibleToken[]) =>

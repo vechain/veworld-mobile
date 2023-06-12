@@ -1,7 +1,8 @@
 import React from "react"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 
 type Props = {
     title: string

@@ -11,8 +11,8 @@ import {
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { ColorThemeType, useThemedStyles } from "~Common"
-import { VET } from "~Common/Constant/Token"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType, VET } from "~Constants"
 import { FormattingUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"

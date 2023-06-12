@@ -2,13 +2,13 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { useBalances, useTheme } from "~Common"
+import { useBalances, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { TokenWithCompleteInfo } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
-import { COLORS } from "~Common/Theme"
+import { COLORS } from "~Constants"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo

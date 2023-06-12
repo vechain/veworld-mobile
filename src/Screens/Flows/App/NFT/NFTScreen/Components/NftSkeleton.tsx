@@ -1,6 +1,7 @@
 import React from "react"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
-import { SCREEN_WIDTH, useTheme } from "~Common"
+import { useTheme } from "~Hooks"
+import { SCREEN_WIDTH } from "~Constants"
 import { StyleSheet } from "react-native"
 
 export const NftSkeleton = () => {

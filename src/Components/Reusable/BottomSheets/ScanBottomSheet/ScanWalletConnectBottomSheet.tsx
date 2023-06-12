@@ -7,9 +7,9 @@ import {
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useCameraPermissions, useDisclosure } from "~Common"
+import { useCameraPermissions, useDisclosure } from "~Hooks"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
-import { COLORS } from "~Common/Theme"
+import { COLORS } from "~Constants"
 import { BarCodeScanner } from "expo-barcode-scanner"
 import { StyleSheet } from "react-native"
 import { QrScannerLayout } from "./components/QrScannerLayout"

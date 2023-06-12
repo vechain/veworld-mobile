@@ -25,7 +25,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { insertSession } from "~Storage/Redux/Slices"
-import { error } from "~Common"
+import { error } from "~Utils/Logger"
 import { WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 

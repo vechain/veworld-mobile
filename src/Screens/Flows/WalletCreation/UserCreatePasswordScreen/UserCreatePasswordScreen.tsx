@@ -17,7 +17,8 @@ import {
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
-import { usePasswordValidation, valueToHP } from "~Common"
+import { usePasswordValidation } from "~Hooks"
+import { valueToHP } from "~Constants"
 
 const digitNumber = 6
 export const UserCreatePasswordScreen = () => {

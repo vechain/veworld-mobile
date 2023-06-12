@@ -1,5 +1,5 @@
 import Arweave from "arweave"
-import { error } from "~Common/Logger"
+import { error } from "~Utils/Logger"
 import { TokenMetadata } from "~Model/Nft/Nft"
 
 const arweave = Arweave.init({

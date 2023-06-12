@@ -2,7 +2,8 @@ import { Dimensions, Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
 import * as Haptics from "expo-haptics"
-import { ColorThemeType, useThemedStyles, valueToHP } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType, valueToHP } from "~Constants"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
 

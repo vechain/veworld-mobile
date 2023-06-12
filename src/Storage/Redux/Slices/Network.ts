@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
+import { defaultMainNetwork } from "~Constants"
 import { Network } from "~Model"
 
 /**

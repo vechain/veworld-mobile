@@ -1,6 +1,7 @@
 import React from "react"
 import { BaseSpacer, BaseText, BaseTouchableBox } from "~Components"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 import { ConnectedLedgerDevice } from "~Model"
 

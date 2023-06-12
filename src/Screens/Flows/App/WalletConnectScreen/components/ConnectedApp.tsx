@@ -8,7 +8,7 @@ import {
     BaseTouchableBox,
 } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
-import { useBottomSheetModal, useTheme, useThemedStyles } from "~Common"
+import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { AccountWithDevice } from "~Model"
 import { ImageStyle } from "react-native-fast-image"
 import { ConnectedAppDetailsBottomSheet } from "./ConnectedAppDetailsBottomSheet"

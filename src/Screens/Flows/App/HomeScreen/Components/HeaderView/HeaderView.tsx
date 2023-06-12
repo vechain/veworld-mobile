@@ -2,7 +2,7 @@ import React, { memo, useMemo } from "react"
 import { BaseIcon, BaseSpacer, BaseView, FastActionsBar } from "~Components"
 import { Header } from "./Header"
 
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { useAppSelector } from "~Storage/Redux"
 import {
     getBalanceVisible,

@@ -9,7 +9,7 @@ import { PersistGate } from "redux-persist/integration/react"
 import { Provider } from "react-redux"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { info, useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import {
     WalletConnectContextProvider,
     ConnexContextProvider,
@@ -28,8 +28,8 @@ import {
     Mono_Light,
     Mono_Regular,
 } from "~Assets"
-import { typography } from "~Common/Theme/Typography"
-
+import { typography } from "~Constants"
+import { info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { useInitStore } from "~Storage/Redux"

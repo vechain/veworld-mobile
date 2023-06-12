@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { COLORS } from "~Common/Theme"
+import { COLORS } from "~Constants"
 import { BaseText, BaseView } from "~Components"
 import { ActivityStatus } from "~Model"
 import { useI18nContext } from "~i18n"

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { Animated } from "react-native"
-import { usePrevious } from "~Common"
+import { usePrevious } from "~Hooks"
 import EmptyDot from "./EmptyDot"
 import { getDotStyle } from "./DotUtils"
 

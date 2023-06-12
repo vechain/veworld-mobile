@@ -28,7 +28,8 @@ import {
     TransactionUtils,
     WalletConnectUtils,
 } from "~Utils"
-import { useCheckIdentity, error } from "~Common"
+import { useCheckIdentity } from "~Hooks"
+import { error } from "~Utils/Logger"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import axios from "axios"
 import { formatJsonRpcError } from "@json-rpc-tools/utils"

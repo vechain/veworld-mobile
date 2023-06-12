@@ -1,7 +1,8 @@
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { AddressUtils } from "~Utils"
 import {
     BaseSpacer,

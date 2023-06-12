@@ -1,9 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
-import { ColorThemeType, SCREEN_WIDTH, useThemedStyles } from "~Common"
+import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
 import { FormattingUtils } from "~Utils"
-import { COLORS } from "~Common/Theme"
+import { useThemedStyles } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,

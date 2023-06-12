@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { WalletConnectUtils } from "~Utils"
+import { WalletConnectUtils, error } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SignClientTypes, SessionTypes } from "@walletconnect/types"
 import {
@@ -14,7 +14,6 @@ import { showErrorToast, showInfoToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { deleteSession } from "~Storage/Redux/Slices"
 import { getSdkError } from "@walletconnect/utils"
-import { error } from "~Common"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 

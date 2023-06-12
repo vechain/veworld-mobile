@@ -1,6 +1,6 @@
 import React, { FC, memo } from "react"
 import { ViewProps } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseView } from "./BaseView"
 
 type Props = {

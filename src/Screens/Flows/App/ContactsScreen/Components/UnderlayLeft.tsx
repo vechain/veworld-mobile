@@ -1,7 +1,9 @@
 import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { useSwipeableItemParams } from "react-native-swipeable-item"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
+
 import { BaseIcon, BaseView } from "~Components"
 import { Contact } from "~Model"
 

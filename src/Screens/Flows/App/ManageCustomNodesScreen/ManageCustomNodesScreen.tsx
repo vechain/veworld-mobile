@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { error, useBottomSheetModal, useTheme } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Hooks"
+import { error } from "~Utils"
 import {
     BackButtonHeader,
     BaseIcon,

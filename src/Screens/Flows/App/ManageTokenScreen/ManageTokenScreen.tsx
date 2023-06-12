@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useTheme } from "~Common"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,

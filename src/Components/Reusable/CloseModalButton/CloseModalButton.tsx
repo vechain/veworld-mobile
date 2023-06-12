@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer } from "~Components/Base"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 
 const style = StyleSheet.create({
     backButton: { paddingHorizontal: 16, alignSelf: "flex-start" },

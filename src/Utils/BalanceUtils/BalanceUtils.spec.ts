@@ -1,7 +1,6 @@
-import { VET, VTHO } from "~Common/Constant"
+import { VET, VTHO, defaultMainNetwork } from "~Constants"
 import BalanceUtils from "./BalanceUtils"
 import { TestHelpers } from "~Test"
-import { defaultMainNetwork } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
 import MockAdapter from "axios-mock-adapter"
 

@@ -1,6 +1,7 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, SCREEN_WIDTH, useThemedStyles } from "~Common"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 
 type Props = {

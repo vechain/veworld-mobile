@@ -10,7 +10,7 @@ import {
     BaseBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useCopyClipboard, useThemedStyles } from "~Common"
+import { useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
 
 type Props = {

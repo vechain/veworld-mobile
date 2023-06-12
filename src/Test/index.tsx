@@ -6,7 +6,7 @@ import {
 } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
-import { useTheme } from "~Common/Hooks"
+import { useTheme } from "~Hooks"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
 import { reducer } from "~Storage/Redux"

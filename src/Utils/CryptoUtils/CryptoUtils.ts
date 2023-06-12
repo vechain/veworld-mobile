@@ -6,7 +6,7 @@ import PasswordUtils from "../PasswordUtils"
 import { LocalDevice, Wallet } from "~Model"
 import KeychainService from "~Services/KeychainService"
 import stringify from "json-stringify-safe"
-import { error } from "~Common/Logger"
+import { error } from "~Utils/Logger"
 
 const xPubFromHdNode = (hdNode: HDNode): XPub => {
     return {

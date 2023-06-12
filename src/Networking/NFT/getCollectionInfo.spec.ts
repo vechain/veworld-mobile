@@ -1,7 +1,7 @@
 import axios from "axios"
 import { getCollectionInfo } from "./getCollectionInfo"
 import { NETWORK_TYPE } from "~Model"
-import { GH_NFT_REGISTRY } from "./NftRegistry"
+import { GH_NFT_REGISTRY } from "~Constants"
 
 jest.mock("axios")
 

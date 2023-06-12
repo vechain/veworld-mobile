@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,

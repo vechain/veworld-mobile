@@ -1,5 +1,5 @@
 import React from "react"
-import { useTheme } from "~Common"
+import { useTheme } from "~Hooks"
 import { BaseText, BaseView } from "~Components"
 import { ActivityStatus } from "~Model"
 import { useI18nContext } from "~i18n"

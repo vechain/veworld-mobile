@@ -10,7 +10,8 @@ import {
 } from "~Components"
 import { Reset } from "./Components/Reset"
 import { useI18nContext } from "~i18n"
-import { info, useTheme } from "~Common"
+import { info } from "~Utils"
+import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
