@@ -1,9 +1,10 @@
-import { Dimensions, Pressable, StyleSheet } from "react-native"
+import { Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
 import { BaseText, BaseView } from "~Components"
 import * as Haptics from "expo-haptics"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, valueToHP } from "~Constants"
+import { widthPercentageToDP as wp } from "react-native-responsive-screen"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
 
@@ -32,20 +33,18 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
                 return (
                     <BaseView style={styles.width} key={index}>
                         {digit !== "blank" ? (
-                            <BaseView>
-                                <Pressable
-                                    style={({ pressed }) => [
-                                        styles.pressable,
-                                        { opacity: pressed ? 0.5 : 1.0 },
-                                    ]}
-                                    onPress={onPress}>
-                                    <BaseText
-                                        typographyFont="largeTitleAccent"
-                                        alignContainer="center">
-                                        {digit}
-                                    </BaseText>
-                                </Pressable>
-                            </BaseView>
+                            <Pressable
+                                style={({ pressed }) => [
+                                    styles.pressable,
+                                    { opacity: pressed ? 0.5 : 1.0 },
+                                ]}
+                                onPress={onPress}>
+                                <BaseText
+                                    typographyFont="largeTitleAccent"
+                                    alignContainer="center">
+                                    {digit}
+                                </BaseText>
+                            </Pressable>
                         ) : null}
                     </BaseView>
                 )
@@ -63,9 +62,11 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingVertical: valueToHP[22],
         },
         pressable: {
-            paddingVertical: valueToHP[12],
-            paddingHorizontal: valueToHP[24],
+            width: wp("18%"),
+            height: wp("18%"),
+            justifyContent: "center",
+            alignItems: "center",
             backgroundColor: theme.colors.card,
-            borderRadius: Dimensions.get("window").width * 0.5,
+            borderRadius: wp("9%"),
         },
     })
