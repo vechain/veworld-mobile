@@ -8,7 +8,7 @@ import axios from "axios"
 
 jest.mock("axios")
 
-const { vetTransaction1, wallet1 } = TestHelpers.data
+const { vetTransaction1, wallet1, device1, account1D1 } = TestHelpers.data
 
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     ...jest.requireActual("~Components/Base/BaseToast/BaseToast"),
@@ -18,6 +18,10 @@ jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
 }))
 
 describe("useSignTransaction", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
     it("should render correctly", async () => {
         const { result, waitForNextUpdate } = renderHook(
             () =>
@@ -79,20 +83,143 @@ describe("useSignTransaction", () => {
             signAndSendTransaction: expect.any(Function),
             sendTransactionAndPerformUpdates: expect.any(Function),
         })
-
-        jest.spyOn(CryptoUtils, "decryptWallet").mockImplementationOnce(
-            () =>
-                new Promise(resolve =>
-                    resolve({
-                        encryptionKey: "fdfgfdd",
-                        decryptedWallet: wallet1,
-                    }),
-                ),
-        )
+        jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
+            decryptedWallet: wallet1,
+            encryptionKey: "encryptionKey",
+        })
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: vetTransaction1.id },
         })
 
         await result.current.signAndSendTransaction()
+    })
+
+    it("signAndSendTransaction - account delegation works as expected", async () => {
+        const { result, waitForNextUpdate } = renderHook(
+            () =>
+                useSignTransaction({
+                    transaction: vetTransaction1.body,
+                    isDelegated: true,
+                    onTXFinish: jest.fn(),
+                    selectedDelegationOption: DelegationType.ACCOUNT,
+                    selectedDelegationAccount: {
+                        ...account1D1,
+                        device: device1,
+                    },
+                }),
+            { wrapper: TestWrapper },
+        )
+        await waitForNextUpdate({
+            timeout: 5000,
+        })
+
+        expect(result.current).toEqual({
+            signAndSendTransaction: expect.any(Function),
+            sendTransactionAndPerformUpdates: expect.any(Function),
+        })
+        jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
+            decryptedWallet: wallet1,
+            encryptionKey: "encryptionKey",
+        })
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: vetTransaction1.id },
+        })
+
+        await result.current.signAndSendTransaction()
+    })
+
+    it("signAndSendTransaction - account delegation - no account throws error", async () => {
+        const { result, waitForNextUpdate } = renderHook(
+            () =>
+                useSignTransaction({
+                    transaction: vetTransaction1.body,
+                    isDelegated: true,
+                    onTXFinish: jest.fn(),
+                    selectedDelegationOption: DelegationType.ACCOUNT,
+                }),
+            { wrapper: TestWrapper },
+        )
+        await waitForNextUpdate({
+            timeout: 5000,
+        })
+
+        expect(result.current).toEqual({
+            signAndSendTransaction: expect.any(Function),
+            sendTransactionAndPerformUpdates: expect.any(Function),
+        })
+        jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
+            decryptedWallet: wallet1,
+            encryptionKey: "encryptionKey",
+        })
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: vetTransaction1.id },
+        })
+
+        await result.current.signAndSendTransaction()
+        expect(showErrorToast).toHaveBeenCalled()
+    })
+
+    it("signAndSendTransaction - url delegation works as expected", async () => {
+        const { result, waitForNextUpdate } = renderHook(
+            () =>
+                useSignTransaction({
+                    transaction: vetTransaction1.body,
+                    isDelegated: true,
+                    onTXFinish: jest.fn(),
+                    selectedDelegationOption: DelegationType.URL,
+                    urlDelegationSignature: Buffer.from(
+                        "https://vechainstats.com",
+                    ),
+                }),
+            { wrapper: TestWrapper },
+        )
+        await waitForNextUpdate({
+            timeout: 5000,
+        })
+
+        expect(result.current).toEqual({
+            signAndSendTransaction: expect.any(Function),
+            sendTransactionAndPerformUpdates: expect.any(Function),
+        })
+        jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
+            decryptedWallet: wallet1,
+            encryptionKey: "encryptionKey",
+        })
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: vetTransaction1.id },
+        })
+
+        await result.current.signAndSendTransaction()
+    })
+
+    it("signAndSendTransaction - url delegation - no url throws error", async () => {
+        const { result, waitForNextUpdate } = renderHook(
+            () =>
+                useSignTransaction({
+                    transaction: vetTransaction1.body,
+                    isDelegated: true,
+                    onTXFinish: jest.fn(),
+                    selectedDelegationOption: DelegationType.URL,
+                }),
+            { wrapper: TestWrapper },
+        )
+        await waitForNextUpdate({
+            timeout: 5000,
+        })
+
+        expect(result.current).toEqual({
+            signAndSendTransaction: expect.any(Function),
+            sendTransactionAndPerformUpdates: expect.any(Function),
+        })
+        jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
+            decryptedWallet: wallet1,
+            encryptionKey: "encryptionKey",
+        })
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: vetTransaction1.id },
+        })
+
+        await result.current.signAndSendTransaction()
+        expect(showErrorToast).toHaveBeenCalled()
     })
 })
