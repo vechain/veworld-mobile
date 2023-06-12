@@ -76,6 +76,42 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                         />
                     ),
                 }
+            case LEDGER_ERROR_CODES.CONTRACT_AND_CLAUSES_DISABLED:
+                return {
+                    title: LL.WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED(),
+                    desc: LL.WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC(),
+                    image: (
+                        <Lottie
+                            source={OpenAppDark}
+                            autoPlay
+                            style={styles.lottie}
+                        />
+                    ),
+                }
+            case LEDGER_ERROR_CODES.CONTRACT_DISABLED:
+                return {
+                    title: LL.WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED(),
+                    desc: LL.WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC(),
+                    image: (
+                        <Lottie
+                            source={OpenAppDark}
+                            autoPlay
+                            style={styles.lottie}
+                        />
+                    ),
+                }
+            case LEDGER_ERROR_CODES.CLAUSES_DISABLED:
+                return {
+                    title: LL.WALLET_LEDGER_ERROR_CLAUSES_DISABLED(),
+                    desc: LL.WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC(),
+                    image: (
+                        <Lottie
+                            source={OpenAppDark}
+                            autoPlay
+                            style={styles.lottie}
+                        />
+                    ),
+                }
             case LEDGER_ERROR_CODES.UNKNOWN:
                 return {
                     title: LL.WALLET_LEDGER_ERROR_UNKNOWN(),

@@ -486,6 +486,12 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ERROR_OPEN_APP_DESC: "Please, open the VET app to continue",
     WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: "Validate signature",
     WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: "We've sent a signature request to your ledger, please validate it to continue",
+    WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: "Enable additional settings",
+    WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: "Multi-clauses and contract data are needed to sign transactions. Navigate to Settings inside your VET app and press both buttons to enable them.",
+    WALLET_LEDGER_ERROR_CLAUSES_DISABLED: "Enable multi-clauses",
+    WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: "Multi-clauses are needed to sign transactions. Navigate to Multi-clauses inside your VET app and press both buttons to enable it.",
+    WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: "Enable contract data",
+    WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: "Contract data is needed to sign transactions. Navigate to Contract data inside your VET app and press both buttons to enable it.",
     WALLET_LEDGER_ERROR_UNKNOWN: "Unknown error",
     WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
 

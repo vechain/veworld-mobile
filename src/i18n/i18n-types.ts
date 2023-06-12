@@ -1592,6 +1592,30 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: string
 	/**
+	 * E​n​a​b​l​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: string
+	/**
+	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​n​d​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​t​h​e​m​.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​m​u​l​t​i​-​c​l​a​u​s​e​s
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED: string
+	/**
+	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​M​u​l​t​i​-​c​l​a​u​s​e​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​s​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: string
+	/**
 	 * U​n​k​n​o​w​n​ ​e​r​r​o​r
 	 */
 	WALLET_LEDGER_ERROR_UNKNOWN: string
@@ -3327,6 +3351,30 @@ Please, try again later.
 	 * We've sent a signature request to your ledger, please validate it to continue
 	 */
 	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: () => LocalizedString
+	/**
+	 * Enable additional settings
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: () => LocalizedString
+	/**
+	 * Multi-clauses and contract data are needed to sign transactions. Navigate to Settings inside your VET app and press both buttons to enable them.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
+	/**
+	 * Enable multi-clauses
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED: () => LocalizedString
+	/**
+	 * Multi-clauses are needed to sign transactions. Navigate to Multi-clauses inside your VET app and press both buttons to enable it.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: () => LocalizedString
+	/**
+	 * Enable contract data
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: () => LocalizedString
+	/**
+	 * Contract data is needed to sign transactions. Navigate to Contract data inside your VET app and press both buttons to enable it.
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
 	/**
 	 * Unknown error
 	 */
