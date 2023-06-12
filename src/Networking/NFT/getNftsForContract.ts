@@ -2,7 +2,7 @@ import axios from "axios"
 import { NFTS_OWNED_PER_CONTRACT } from "./VechainIndexer"
 
 export type NftItemResponse = {
-    id?: string
+    id: string
     tokenId: string
     contractAddress: string
     owner: string
@@ -11,7 +11,13 @@ export type NftItemResponse = {
     blockId: string
 }
 
-export type PaginationResponse = { totalElements: number; totalPages: number }
+export type PaginationResponse = {
+    countLimit: number
+    hasNext: boolean
+    isExactCount: boolean
+    totalElements: number
+    totalPages: number
+}
 
 export type NftForContractResponse = {
     data: NftItemResponse[]

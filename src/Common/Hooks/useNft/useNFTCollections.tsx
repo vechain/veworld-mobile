@@ -16,7 +16,7 @@ import { useI18nContext } from "~i18n"
 
 /**
  * useNFTCollections
- * @description In order to test this hook, you need to change everywhere "selectedAccount.address" with "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048" in order to get
+ * @description In order to test this hook, you need to change everywhere "selectedAccount.address" with ACCOUNT_WITH_NFTS in order to get
  * an account with a lot of NFT collections and NFTs
  * @returns
  */
@@ -49,10 +49,11 @@ export const useNFTCollections = () => {
                 )
 
                 // Get nfts for each contract address
+                const nftResultsPerPage = 1
                 const { nftData } = await getNFTdataForContract(
                     contractsForNFTs,
                     selectedAccount.address,
-                    _resultsPerPage,
+                    nftResultsPerPage,
                 )
 
                 const _nftCollections: NonFungibleTokenCollection[] = []

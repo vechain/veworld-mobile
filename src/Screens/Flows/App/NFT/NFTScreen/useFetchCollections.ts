@@ -16,6 +16,7 @@ export const useFetchCollections = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const nftCollections = useAppSelector(selectNftCollections)
+
     const nftNetworkingSideEffects = useAppSelector(
         selectNftNetworkingSideEffects,
     )
@@ -35,9 +36,9 @@ export const useFetchCollections = () => {
 
     const fetchMoreCollections = useCallback(() => {
         fetchWithPagination(
-            nftCollections?.pagination.totalElements,
+            nftCollections?.pagination?.totalElements,
             nftCollections?.collections?.length,
-            nftNetworkingSideEffects.isLoading,
+            nftNetworkingSideEffects?.isLoading,
             page => {
                 getCollections(page)
             },
@@ -46,8 +47,8 @@ export const useFetchCollections = () => {
         fetchWithPagination,
         getCollections,
         nftCollections?.collections?.length,
-        nftCollections?.pagination.totalElements,
-        nftNetworkingSideEffects.isLoading,
+        nftCollections?.pagination?.totalElements,
+        nftNetworkingSideEffects?.isLoading,
     ])
 
     return {

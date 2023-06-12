@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet } from "react-native"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import {
     selectCollectionWithContractAddress,
     useAppSelector,
@@ -21,6 +21,7 @@ import { useI18nContext } from "~i18n"
 import { NonFungibleToken } from "~Model"
 import { isEmpty } from "lodash"
 import { NFTView } from "../Components"
+import { useNFTWithMetadata } from "./Hooks/useNFTWithMetadata"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -43,12 +44,11 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
         ),
     )
 
-    // To prevent fetching next page of activities on FlashList mount
-    const [hasScrolled, setHasScrolled] = useState(false)
-
-    const onScroll = useCallback(() => {
-        if (!hasScrolled) setHasScrolled(true)
-    }, [hasScrolled])
+    // todo -> remove ts ignore
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { NFTs, fetchMoreNFTs, isLoading, error } = useNFTWithMetadata(
+        route.params.collectionAddress,
+    )
 
     const contactsListSeparator = useCallback(
         () => <BaseSpacer height={16} />,
@@ -117,7 +117,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                     }}>
                     <FlatList
                         ListHeaderComponent={remderHeaderComponent}
-                        data={collection?.nfts ?? []}
+                        data={NFTs}
                         ItemSeparatorComponent={contactsListSeparator}
                         numColumns={2}
                         keyExtractor={(item: NonFungibleToken) =>
@@ -128,9 +128,8 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                         contentContainerStyle={baseStyles.listContainer}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
-                        onScroll={onScroll}
                         onEndReachedThreshold={1}
-                        // onEndReached={hasScrolled ? fetchActivities : undefined}
+                        onEndReached={fetchMoreNFTs}
                     />
                 </BaseView>
             </BaseView>

@@ -21,12 +21,15 @@ export interface NonFungibleTokenCollection {
     nfts: NonFungibleToken[]
 }
 
-export interface NonFungibleToken extends TokenMetadata {
+export interface NonFungibleToken extends TokenMetadata, WithID {
     owner: string
     tokenId: string
     tokenURI?: string
     belongsToCollectionAddress: string
-    isHidden: boolean
+}
+
+export interface WithID {
+    id: string
 }
 
 export interface TokenMetadata {
