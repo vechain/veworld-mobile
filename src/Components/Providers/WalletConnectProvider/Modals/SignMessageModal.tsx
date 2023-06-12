@@ -9,9 +9,7 @@ import {
     BaseSpacer,
     showWarningToast,
     BaseModal,
-    showSuccessToast,
     CloseModalButton,
-    showErrorToast,
     BaseScrollView,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
@@ -20,11 +18,14 @@ import {
     selectDevice,
     selectSelectedAccount,
 } from "~Storage/Redux"
-import { HexUtils, CryptoUtils, WalletConnectUtils } from "~Utils"
+import {
+    CryptoUtils,
+    WalletConnectUtils,
+    WalletConnectResponseUtils,
+} from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
 import { DEVICE_TYPE, Wallet } from "~Model"
-import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
 import { capitalize } from "lodash"
 
@@ -49,7 +50,7 @@ export const SignMessageModal = ({
     const { LL } = useI18nContext()
 
     // Request values
-    const { method, params, topic } =
+    const { method, params } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const { url } =
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
@@ -69,37 +70,21 @@ export const SignMessageModal = ({
             const hash = blake2b256(Certificate.encode(cert))
             const signature = secp256k1.sign(hash, privateKey)
 
-            try {
-                await web3Wallet.respondSessionRequest({
-                    topic,
-                    response: {
-                        id,
-                        jsonrpc: "2.0",
-                        result: {
-                            annex: {
-                                timestamp: cert.timestamp,
-                                domain: cert.domain,
-                                signer: cert.signer,
-                            },
-                            signature: HexUtils.addPrefix(
-                                signature.toString("hex"),
-                            ),
-                        },
-                    },
-                })
-                showSuccessToast(LL.NOTIFICATION_wallet_connect_sign_success())
-            } catch (err: unknown) {
-                error(err)
-                showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
-            } finally {
-                onClose()
-            }
+            await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
+                {
+                    request: requestEvent,
+                    web3Wallet,
+                    LL,
+                },
+                signature,
+                cert,
+            )
 
             //TODO: add to history?
 
             onClose()
         },
-        [account, params, url, topic, web3Wallet, onClose, LL],
+        [account, params, url, web3Wallet, onClose, LL, requestEvent],
     )
 
     const onApprove = useCallback(
@@ -128,20 +113,11 @@ export const SignMessageModal = ({
 
     async function onReject() {
         if (requestEvent) {
-            const { id } = requestEvent
-            const response = WalletConnectUtils.formatJsonRpcError(
-                id,
-                getSdkError("USER_REJECTED_METHODS").message,
-            )
-
-            try {
-                await web3Wallet?.respondSessionRequest({
-                    topic,
-                    response,
-                })
-            } catch (err: unknown) {
-                error(err)
-            }
+            await WalletConnectResponseUtils.userRejectedMethodsResponse({
+                request: requestEvent,
+                web3Wallet,
+                LL,
+            })
         }
 
         onClose()
