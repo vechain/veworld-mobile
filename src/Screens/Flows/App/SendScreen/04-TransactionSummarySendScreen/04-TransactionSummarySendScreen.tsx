@@ -35,7 +35,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { useDelegation, useSendTransaction, useSignTransaction } from "./Hooks"
+import { useDelegation, useTransaction, useSignTransaction } from "./Hooks"
 import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
 
@@ -83,7 +83,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         }
     }, [initialRoute, nav])
 
-    const { gas, transaction } = useSendTransaction({
+    const { gas, transaction } = useTransaction({
         token,
         amount,
         address,

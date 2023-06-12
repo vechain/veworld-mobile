@@ -1,3 +1,3 @@
 export * from "./useSignTransaction"
-export * from "./useSendTransaction"
+export * from "./useTransaction"
 export * from "./useDelegation"

@@ -1,21 +1,32 @@
 import { useEffect, useMemo, useState } from "react"
 import { Transaction, abi } from "thor-devkit"
-import { VET, abis } from "~Constants"
+
 import { HexUtils, FormattingUtils, GasUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult, FungibleTokenWithBalance } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
+import { VET, abis } from "~Constants"
 
-export const useSendTransaction = ({
-    amount,
-    token,
-    address,
-}: {
+/**
+ * @param amount - the amount to send
+ * @param token - the token to send
+ * @param address - the address to send to
+ */
+type Props = {
     token: FungibleTokenWithBalance
     amount: string
     address: string
-}) => {
+}
+
+/**
+ * Hook to calculate gas and generate the transaction body based on token, amount and address
+ */
+export const useTransaction = ({
+    amount,
+    token,
+    address,
+}: Props): UseTransactionReturnProps => {
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
     const thorClient = useThor()
@@ -83,4 +94,10 @@ export const useSendTransaction = ({
     }, [account, clauses, thorClient])
 
     return { gas, setGas, transaction }
+}
+
+type UseTransactionReturnProps = {
+    gas?: EstimateGasResult
+    setGas: (gas: EstimateGasResult) => void
+    transaction: Transaction.Body
 }
