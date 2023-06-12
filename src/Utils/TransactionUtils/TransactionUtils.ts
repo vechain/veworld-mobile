@@ -92,6 +92,44 @@ export const getAmountFromClause = (
 }
 
 /**
+ * Encodes a transaction clause for a fungible token transfer operation.
+ *
+ * This function takes the token details (address, receiver, and value), constructs
+ * the payload, and returns an encoded transaction clause object.
+ *
+ * @param {string} tokenAddress - The blockchain address of the token contract.
+ * @param {string} to - The blockchain address of the recipient of the token transfer.
+ * @param {number} value - The value of token to transfer.
+ *
+ * @returns {Connex.VM.Clause} The encoded clause representing the token transfer operation.
+ */
+export const encodeTransferFungibleTokenClause = (
+    to: string,
+    value: number,
+    tokenAddress: string,
+): Connex.VM.Clause => {
+    const hexValue = "0x" + new BigNumber(value).toString(16)
+
+    if (tokenAddress === VET.address)
+        return {
+            to,
+            value: hexValue,
+            data: "0x",
+        }
+
+    const clauseData = new abi.Function(abis.VIP180.transfer).encode(
+        to,
+        hexValue,
+    )
+
+    return {
+        to: tokenAddress,
+        value: "0x0",
+        data: clauseData,
+    }
+}
+
+/**
  * Decodes a clause as a token transfer clause.
  *
  * @param clause - The clause to decode.
@@ -558,6 +596,8 @@ export const decodeSwapTransferAmounts = (
 ): SwapResult | null => {
     if (!isSwapTransaction(decodedClauses))
         throw new Error("Transaction is not a swap transaction")
+
+    if (!activity.outputs) throw new Error("Could not find transaction outputs")
 
     const events = activity.outputs.flatMap(output => output.events)
     const decodedSwapEvents = findAndDecodeSwapEvents(events)

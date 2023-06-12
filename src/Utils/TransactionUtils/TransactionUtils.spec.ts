@@ -1412,6 +1412,50 @@ describe("TransactionUtils", () => {
         })
         // Add more test cases for other edge cases and error cases...
     })
+
+    describe("encodeTransferFungibleTokenClause", () => {
+        it("should encode a transfer VET clause", () => {
+            const to = "0x058D4C951AA24CA012cEf3408B259aC1C69D1258"
+            const value = 1559
+            const tokenAddress = VET.address
+
+            const result = {
+                to,
+                value: "0x617",
+                data: "0x",
+            }
+
+            const encodedClause =
+                TransactionUtils.encodeTransferFungibleTokenClause(
+                    to,
+                    value,
+                    tokenAddress,
+                )
+
+            expect(encodedClause).toEqual(result)
+        })
+
+        it("should encode a fungible token transfer clause", () => {
+            const to = "0x63792F9BAeF181e44Fc5F81918809FB98e4F71c5"
+            const value = 216800000000000000000000
+            const tokenAddress = "0x5db3C8A942333f6468176a870dB36eEf120a34DC"
+
+            const result = {
+                to: tokenAddress,
+                value: "0x0",
+                data: "0xa9059cbb00000000000000000000000063792f9baef181e44fc5f81918809fb98e4f71c5000000000000000000000000000000000000000000002de8c065905eef800000",
+            }
+
+            const encodedClause =
+                TransactionUtils.encodeTransferFungibleTokenClause(
+                    to,
+                    value,
+                    tokenAddress,
+                )
+
+            expect(encodedClause).toEqual(result)
+        })
+    })
 })
 
 describe("toDelegation", () => {

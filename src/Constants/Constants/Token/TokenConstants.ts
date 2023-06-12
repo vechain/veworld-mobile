@@ -1,5 +1,5 @@
 import { FungibleToken, Network, NETWORK_TYPE } from "~Model"
-import { defaultMainNetwork, genesises } from "../Thor"
+import { defaultMainNetwork, genesises } from "../Thor/ThorConstants"
 
 export const getDefaultSelectedNetwork = (): Network => {
     // TODO: create a switch for both main net and solo networks (e2e)

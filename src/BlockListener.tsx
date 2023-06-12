@@ -29,6 +29,7 @@ import {
     useAppDispatch,
     useAppSelector,
     validateAndUpsertActivity,
+    addIncomingTransfer,
 } from "~Storage/Redux"
 // import { useI18nContext } from "~i18n"
 
@@ -221,7 +222,20 @@ const BlockListener: React.FC = () => {
             .apply(0, 5)
 
         // send toast notification for each transfer
-        transfers.forEach(tran => showFoundTokenTransfer(VET, tran.amount))
+        transfers.forEach(transfer => {
+            showFoundTokenTransfer(VET, transfer.amount)
+
+            dispatch(
+                addIncomingTransfer(
+                    transfer.meta,
+                    transfer.amount,
+                    transfer.recipient,
+                    transfer.sender,
+                    VET.address,
+                    thor,
+                ),
+            )
+        })
     }
 
     const [processedTransactionIds, setProcessedTransactionIds] = useState<
@@ -258,6 +272,17 @@ const BlockListener: React.FC = () => {
                     showFoundTokenTransfer(token, evt.amount)
                     setProcessedTransactionIds(
                         prev => new Set([...prev, evt.transactionId]),
+                    )
+
+                    dispatch(
+                        addIncomingTransfer(
+                            evt.meta,
+                            evt.amount,
+                            evt.recipient,
+                            evt.sender,
+                            evt.token.address,
+                            thor,
+                        ),
                     )
                 }
             })

@@ -1,12 +1,21 @@
-import { Transaction } from "thor-devkit"
 import { DIRECTIONS, VET, chainTagToGenesisId } from "~Constants"
-import { ActivityUtils, TransactionUtils } from "~Utils"
-import { Activity, ActivityStatus, FungibleTokenActivity } from "~Model"
-import { FetchTransactionsResponse } from "./Types"
+import { ActivityUtils, TransactionUtils, debug } from "~Utils"
+import {
+    Activity,
+    ActivityStatus,
+    ActivityType,
+    FungibleTokenActivity,
+} from "~Model"
+import {
+    EventTypeResponse,
+    FetchIncomingTransfersResponse,
+    FetchTransactionsResponse,
+} from "./Types"
 
 /**
  * Function to create a base activity from a transaction response.
  * This function extracts the needed properties from the transaction response to create the base activity.
+ *
  * @param transaction - The transaction response from which to create the activity.
  * @returns An activity created from the transaction response.
  */
@@ -28,7 +37,7 @@ export const createBaseActivityFromTransaction = (
     return {
         from: origin,
         to: clauses.map(
-            (clause: Transaction.Clause) =>
+            (clause: Connex.VM.Clause) =>
                 ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
         ),
         id,
@@ -49,6 +58,117 @@ export const createBaseActivityFromTransaction = (
 }
 
 /**
+ * Creates a transfer clause from an incoming transfer.
+ *
+ * @param to - The recipient's address.
+ * @param value - The number of tokens to transfer.
+ * @param tokenAddress - The contract address of the token.
+ * @param type - The type of activity, either a VET_TRANSFER or a FUNGIBLE_TOKEN transfer.
+ *
+ * @returns A Connex.VM.Clause object for a transfer, or undefined if the activity type does not match known types.
+ */
+export const createTransferClauseFromIncomingTransfer = (
+    to: string,
+    value: number,
+    tokenAddress: string,
+    type: ActivityType,
+): Connex.VM.Clause | undefined => {
+    if (type === ActivityType.VET_TRANSFER) {
+        return TransactionUtils.encodeTransferFungibleTokenClause(
+            to,
+            value,
+            VET.address,
+        )
+    }
+
+    if (type === ActivityType.FUNGIBLE_TOKEN) {
+        return TransactionUtils.encodeTransferFungibleTokenClause(
+            to,
+            value,
+            tokenAddress,
+        )
+    }
+}
+
+/**
+ * Maps the incoming EventTypeResponse to the corresponding ActivityType.
+ *
+ * @param eventType - The type of event.
+ *
+ * @returns The corresponding ActivityType, or undefined if the eventType does not map to any known ActivityType.
+ */
+export const eventTypeToActivityType = (
+    eventType: EventTypeResponse,
+): ActivityType | undefined => {
+    switch (eventType) {
+        case EventTypeResponse.VET:
+            return ActivityType.VET_TRANSFER
+
+        case EventTypeResponse.FUNGIBLE_TOKEN:
+            return ActivityType.FUNGIBLE_TOKEN
+
+        default:
+            debug(
+                "Received not yet supported incoming transfer event type: ",
+                eventType,
+            )
+    }
+}
+
+/**
+ * Creates a base activity from an incoming transfer.
+ *
+ * @param incomingTransfer - The incoming transfer from which to create the activity.
+ * @param thor - An instance of the Connex.Thor blockchain interface.
+ *
+ * @returns The Activity created from the incoming transfer, or null if unable to create activity.
+ */
+export const createBaseActivityFromIncomingTransfer = (
+    incomingTransfer: FetchIncomingTransfersResponse,
+    thor: Connex.Thor,
+): Activity | null => {
+    // Destructure needed properties from transaction
+    const {
+        blockNumber,
+        blockTimestamp,
+        from,
+        txId,
+        to,
+        value,
+        tokenAddress,
+        eventType,
+    } = incomingTransfer
+
+    const activityType = eventTypeToActivityType(eventType)
+
+    if (!activityType) return null
+
+    const encodedClause = createTransferClauseFromIncomingTransfer(
+        to,
+        value,
+        tokenAddress,
+        activityType,
+    )
+
+    if (!encodedClause) return null
+
+    const clauses: Connex.VM.Clause[] = [encodedClause]
+
+    return {
+        from,
+        to: [to],
+        id: txId,
+        blockNumber,
+        isTransaction: true,
+        genesisId: thor.genesis.id,
+        type: ActivityUtils.getActivityTypeFromClause(clauses),
+        timestamp: blockTimestamp * 1000, // Convert to milliseconds
+        status: ActivityStatus.SUCCESS,
+        clauses,
+    }
+}
+
+/**
  * Function to create a FungibleTokenActivity.
  * This type of activity involves the transfer of a fungible token from one address to another.
  * @param activity - Base activity to be enriched with fungible token data.
@@ -60,12 +180,13 @@ export const createFungibleTokenActivity = (
     activity: FungibleTokenActivity,
     tokenAddress: string,
     amount: number,
+    direction: DIRECTIONS,
 ): FungibleTokenActivity => {
     return {
         ...activity,
         amount,
         tokenAddress,
-        direction: DIRECTIONS.UP,
+        direction,
     }
 }
 
@@ -78,7 +199,8 @@ export const createFungibleTokenActivity = (
  */
 export const enrichActivityWithTokenData = (
     activity: Activity,
-    clause: Transaction.Clause,
+    clause: Connex.VM.Clause,
+    direction: DIRECTIONS,
 ): FungibleTokenActivity => {
     // Decode token transfer clause
     const tokenData = TransactionUtils.decodeTokenTransferClause(clause)
@@ -87,6 +209,7 @@ export const enrichActivityWithTokenData = (
         activity as FungibleTokenActivity,
         clause.to ?? "",
         Number(tokenData?.amount),
+        direction,
     )
 }
 
@@ -99,11 +222,86 @@ export const enrichActivityWithTokenData = (
  */
 export const enrichActivityWithVetTransfer = (
     activity: Activity,
-    clause: Transaction.Clause,
+    clause: Connex.VM.Clause,
+    direction: DIRECTIONS,
 ): FungibleTokenActivity => {
     return createFungibleTokenActivity(
         activity as FungibleTokenActivity,
         VET.address,
         Number(clause.value),
+        direction,
+    )
+}
+
+/**
+ * Process an activity based on its type.
+ *
+ * @param activity - The activity to be processed.
+ * @param clause - The transaction clause from which to decode the data.
+ * @param direction - The direction of the transaction.
+ * @returns A FungibleTokenActivity processed based on its type.
+ */
+const processActivity = (
+    activity: Activity,
+    clause: Connex.VM.Clause,
+    direction: DIRECTIONS,
+): FungibleTokenActivity => {
+    switch (activity.type) {
+        case ActivityType.FUNGIBLE_TOKEN:
+            return enrichActivityWithTokenData(activity, clause, direction)
+        case ActivityType.VET_TRANSFER:
+            return enrichActivityWithVetTransfer(activity, clause, direction)
+        default:
+            return activity as FungibleTokenActivity
+    }
+}
+
+/**
+ * Retrieves activities from given transactions.
+ * It creates a base activity from the transaction and processes the activity based on its type.
+ *
+ * @param transactions - An array of transactions from which to create activities.
+ * @returns An array of activities created from the transactions.
+ */
+export const getActivitiesFromTransactions = (
+    transactions: FetchTransactionsResponse[],
+): Activity[] => {
+    return transactions.map(transaction => {
+        let activity: Activity = createBaseActivityFromTransaction(transaction)
+
+        return processActivity(activity, transaction.clauses[0], DIRECTIONS.UP)
+    })
+}
+
+/**
+ * Retrieves activities from incoming transfers.
+ * It creates a base activity from the incoming transfer and processes the activity based on its type.
+ * @param incomingTransfers - An array of incoming transfers from which to create activities.
+ *
+ * @param thor - The thor instance for creating activities from incoming transfers.
+ * @returns An array of activities created from the incoming transfers.
+ */
+export const getActivitiesFromIncomingTransfers = (
+    incomingTransfers: FetchIncomingTransfersResponse[],
+    thor: Connex.Thor,
+): Activity[] => {
+    return incomingTransfers.reduce(
+        (activities: Activity[], incomingTransfer) => {
+            let activity: Activity | null =
+                createBaseActivityFromIncomingTransfer(incomingTransfer, thor)
+
+            if (activity) {
+                activities.push(
+                    processActivity(
+                        activity,
+                        activity.clauses[0],
+                        DIRECTIONS.DOWN,
+                    ),
+                )
+            }
+
+            return activities
+        },
+        [],
     )
 }
