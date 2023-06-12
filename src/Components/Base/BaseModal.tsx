@@ -2,7 +2,7 @@ import React from "react"
 import { Modal, ModalProps } from "react-native"
 import { BaseSafeArea } from "./BaseSafeArea/BaseSafeArea"
 import { BaseView } from "./BaseView"
-import { BaseSpacer } from "./BaseSpacer"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 export interface IBaseModal extends ModalProps {
     isOpen: boolean
@@ -27,17 +27,18 @@ export const BaseModal: React.FC<IBaseModal> = ({
                 onDismiss={onClose}
                 onRequestClose={onClose}
                 {...otherProps}>
-                <BaseSafeArea
-                    bg={transparent ? "transparent" : undefined}
-                    grow={1}>
-                    <BaseSpacer height={40} />
-                    <BaseView
-                        alignItems="center"
-                        justifyContent="flex-start"
-                        flexGrow={1}>
-                        {children}
-                    </BaseView>
-                </BaseSafeArea>
+                <SafeAreaProvider>
+                    <BaseSafeArea
+                        bg={transparent ? "transparent" : undefined}
+                        grow={1}>
+                        <BaseView
+                            alignItems="center"
+                            justifyContent="flex-start"
+                            flexGrow={1}>
+                            {children}
+                        </BaseView>
+                    </BaseSafeArea>
+                </SafeAreaProvider>
             </Modal>
         </>
     )

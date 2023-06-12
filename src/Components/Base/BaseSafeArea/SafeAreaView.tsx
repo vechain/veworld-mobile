@@ -31,23 +31,23 @@ export const SafeAreaView = (props: SafeAreaProps) => {
 
     const baseStyle: Partial<StyleProp<ViewStyle>> = {
         flex: 1,
-        marginBottom: 0,
-        marginTop: 0,
-        marginRight: 0,
-        marginLeft: 0,
+        paddingBottom: 0,
+        paddingTop: 0,
+        paddingRight: 0,
+        paddingLeft: 0,
     }
 
     if (!disableBottomSafeArea) {
-        baseStyle.marginBottom = insets.bottom
+        baseStyle.paddingBottom = insets.bottom
     }
 
     if (!disableTopSafeArea) {
-        baseStyle.marginTop = insets.top
+        baseStyle.paddingTop = insets.top
     }
 
     if (!disableSidesSafeArea) {
-        baseStyle.marginRight = insets.right
-        baseStyle.marginLeft = insets.left
+        baseStyle.paddingRight = insets.right
+        baseStyle.paddingLeft = insets.left
     }
 
     return (
