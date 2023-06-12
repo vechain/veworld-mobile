@@ -1,4 +1,4 @@
-import { genesises } from "~Constants"
+import { genesises } from "~Constants/Constants/Thor/ThorConstants"
 import { NETWORK_TYPE } from "./enums"
 
 /**
