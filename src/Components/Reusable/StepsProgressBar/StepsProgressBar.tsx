@@ -58,7 +58,7 @@ export const StepsProgressBar: React.FC<Props> = ({
                 justifyContent="space-around">
                 {steps.map((step, index) => {
                     const isActive = index === currentStep
-                    const isNext = index === currentStep + 1
+                    const isNext = index > currentStep
                     const isDone = index < currentStep
                     const isError = isCurrentStepError && isActive
 
