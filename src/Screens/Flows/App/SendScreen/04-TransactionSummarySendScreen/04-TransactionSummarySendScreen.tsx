@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { useCheckIdentity, useTheme } from "~Hooks"
+import { useCheckIdentity, useTheme, useTransaction } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { VTHO, COLORS } from "~Constants"
 import {
@@ -35,7 +35,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { useDelegation, useTransaction, useSignTransaction } from "./Hooks"
+import { useDelegation, useSignTransaction } from "./Hooks"
 import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
 
@@ -112,7 +112,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         2,
     )
 
-    const { signTransaction } = useSignTransaction({
+    const { signAndSendTransaction } = useSignTransaction({
         transaction,
         onTXFinish,
         isDelegated,
@@ -123,7 +123,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed: signTransaction,
+            onIdentityConfirmed: signAndSendTransaction,
         })
     const vthoGas = FormattingUtils.convertToFiatBalance(
         gas?.gas?.toString() || "0",
