@@ -24,7 +24,6 @@ import { HexUtils, CryptoUtils, WalletConnectUtils } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
 import { DEVICE_TYPE, Wallet } from "~Model"
-import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
 import { capitalize } from "lodash"
@@ -130,7 +129,7 @@ export const SignMessageModal = ({
     async function onReject() {
         if (requestEvent) {
             const { id } = requestEvent
-            const response = formatJsonRpcError(
+            const response = WalletConnectUtils.formatJsonRpcError(
                 id,
                 getSdkError("USER_REJECTED_METHODS").message,
             )

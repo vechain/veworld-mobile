@@ -31,7 +31,6 @@ import {
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
 import { DEVICE_TYPE, Wallet } from "~Model"
-import { formatJsonRpcError } from "@json-rpc-tools/utils"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
@@ -115,30 +114,24 @@ export const SignTransactionModal = ({
                     raw: rawTransaction,
                 }
 
-                const onSignSponsorRequestError = async (e: any) => {
-                    const formattedResponse = formatJsonRpcError(
-                        id,
-                        e.message
-                            ? e.message
-                            : "Unexpected error while executing transaction",
-                    )
-
-                    try {
-                        await web3Wallet?.respondSessionRequest({
-                            topic,
-                            response: formattedResponse,
-                        })
-                    } catch {
-                        showErrorToast(
-                            LL.NOTIFICATION_wallet_connect_error_pairing(),
-                        )
-                    }
-                }
-
                 const response = await signSponsorRequest(
                     params.delegateUrl,
                     sponsorRequest,
-                    onSignSponsorRequestError,
+                    async () => {
+                        try {
+                            await web3Wallet?.respondSessionRequest({
+                                topic,
+                                response: WalletConnectUtils.formatJsonRpcError(
+                                    id,
+                                    "Unexpected error while executing transaction",
+                                ),
+                            })
+                        } catch {
+                            showErrorToast(
+                                LL.NOTIFICATION_wallet_connect_error_pairing(),
+                            )
+                        }
+                    },
                 )
 
                 if (!response || !response.data || !response.data?.signature) {
@@ -169,30 +162,22 @@ export const SignTransactionModal = ({
                 }
             }
 
-            const onExecuteTransactioRequestFail = async (e: any) => {
-                const response = formatJsonRpcError(
-                    id,
-                    e.message
-                        ? e.message
-                        : LL.NOTIFICATION_wallet_connect_error_on_transaction(),
-                )
-
-                await web3Wallet?.respondSessionRequest({
-                    topic,
-                    response,
-                })
-
-                showErrorToast(
-                    e.message
-                        ? e.message
-                        : LL.NOTIFICATION_wallet_connect_error_on_transaction(),
-                )
-            }
-
             const response = await executeTransactionRequest(
                 network.currentUrl,
                 encodedRawTx,
-                onExecuteTransactioRequestFail,
+                async () => {
+                    await web3Wallet?.respondSessionRequest({
+                        topic,
+                        response: WalletConnectUtils.formatJsonRpcError(
+                            id,
+                            LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+                        ),
+                    })
+
+                    showErrorToast(
+                        LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+                    )
+                },
             )
 
             if (response.data?.id) {
@@ -251,15 +236,19 @@ export const SignTransactionModal = ({
     async function onReject() {
         if (requestEvent) {
             const { id } = requestEvent
-            const response = formatJsonRpcError(
-                id,
-                getSdkError("USER_REJECTED_METHODS").message,
-            )
+            try {
+                const response = WalletConnectUtils.formatJsonRpcError(
+                    id,
+                    getSdkError("USER_REJECTED_METHODS").message,
+                )
 
-            await web3Wallet?.respondSessionRequest({
-                topic,
-                response,
-            })
+                await web3Wallet?.respondSessionRequest({
+                    topic,
+                    response,
+                })
+            } catch (e) {
+                showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+            }
         }
 
         onClose()

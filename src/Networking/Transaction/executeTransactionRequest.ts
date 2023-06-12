@@ -6,14 +6,14 @@ export const executeTransactionRequest = async (
     encodedRawTx: {
         raw: string
     },
-    onFail?: (e: unknown) => void,
+    onFail?: () => void,
 ) => {
     const response = await axios
         .post(`${networkUrl}/transactions`, encodedRawTx)
         .catch(async e => {
             error(e)
             if (onFail) {
-                onFail(e)
+                onFail()
             }
             throw e
         })

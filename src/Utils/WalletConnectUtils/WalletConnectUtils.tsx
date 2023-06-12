@@ -126,3 +126,11 @@ export function isValidURI(uri: string) {
 
     return true
 }
+
+export function formatJsonRpcError(id: number, error: any) {
+    return {
+        id,
+        jsonrpc: "2.0",
+        error: error,
+    }
+}

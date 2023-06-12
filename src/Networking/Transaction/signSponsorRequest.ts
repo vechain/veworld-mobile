@@ -7,7 +7,7 @@ export const signSponsorRequest = async (
         origin: string
         raw: string
     },
-    onFail?: (e: unknown) => void,
+    onFail?: () => void,
 ) => {
     const response = await axios
         .post(delegateUrl, sponsorRequest)
@@ -15,7 +15,7 @@ export const signSponsorRequest = async (
             error(e)
 
             if (onFail) {
-                onFail(e)
+                onFail()
             }
 
             throw e
