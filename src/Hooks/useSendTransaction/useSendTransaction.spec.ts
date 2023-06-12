@@ -11,7 +11,7 @@ describe("useSendTransaction", () => {
         const { result, waitForNextUpdate } = renderHook(
             () =>
                 useSendTransaction(
-                    { ...defaultTestNetwork, explorerUrl: undefined },
+                    { ...defaultMainNetwork, explorerUrl: undefined },
                     account1D1,
                 ),
             { wrapper: TestWrapper },
