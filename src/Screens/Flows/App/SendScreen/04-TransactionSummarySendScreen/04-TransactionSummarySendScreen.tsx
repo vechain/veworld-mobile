@@ -4,8 +4,8 @@ import { StyleSheet } from "react-native"
 import {
     useCheckIdentity,
     useTheme,
-    useSignTransaction,
     useTransaction,
+    useSignTransaction,
 } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { VTHO, COLORS } from "~Constants"
