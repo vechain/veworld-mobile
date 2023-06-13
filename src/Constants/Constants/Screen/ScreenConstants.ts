@@ -8,7 +8,12 @@ export const SCREEN_WIDTH = Dimensions.get("window").width
 // https://worship.agency/mobile-screen-sizes-for-2021
 export const isSmallScreen = SCREEN_HEIGHT <= 667
 
-// Values to height percentages of the screen
+/** Values to height percentages of the screen
+ * to calculate percentages is used the following formula:
+ * pixel_value * 100 / 852
+ * this refers to the height 852 px of the iPhone 14
+ * */
+
 export const valueToHP: Record<number, number> = {
     12: hp("1.40%"),
     16: hp("1.87%"),
