@@ -34,7 +34,7 @@ import { DEVICE_TYPE, Wallet } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
-import { executeTransactionRequest, signSponsorRequest } from "~Networking"
+import { signSponsorRequest, sendTransaction } from "~Networking"
 
 interface Props {
     sessionRequest: any
@@ -70,7 +70,7 @@ export const SignTransactionModal = ({
             // TODO: calc intrinsic gas
             // const gas = Transaction.intrinsicGas(clauses)
 
-            const transaction: Transaction.Body = {
+            const transactionBody: Transaction.Body = {
                 chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
                 blockRef: thorClient.status.head.id.slice(0, 18),
                 expiration: 18,
@@ -81,7 +81,7 @@ export const SignTransactionModal = ({
                 nonce: HexUtils.generateRandom(8),
             }
 
-            let encodedRawTx, tx: Transaction
+            let transaction: Transaction
 
             if (
                 isUndefined(params.delegateUrl) ||
@@ -89,23 +89,19 @@ export const SignTransactionModal = ({
             ) {
                 // if the dapp doesn't provide a delegateUrl, we sign the transaction locally
 
-                tx = new Transaction(transaction)
+                transaction = new Transaction(transactionBody)
 
-                const hash = tx.signingHash()
+                const hash = transaction.signingHash()
                 const senderSignature = secp256k1.sign(hash, privateKey)
                 const signature = Buffer.concat([senderSignature])
-                tx.signature = signature
-
-                encodedRawTx = {
-                    raw: HexUtils.addPrefix(tx.encode().toString("hex")),
-                }
+                transaction.signature = signature
             } else {
                 // if the dapp provides a delegateUrl, we ask the delegator to sign the transaction
 
-                tx = TransactionUtils.toDelegation(transaction)
+                transaction = TransactionUtils.toDelegation(transactionBody)
                 // build hex encoded version of the transaction for signing request
                 const rawTransaction = HexUtils.addPrefix(
-                    tx.encode().toString("hex"),
+                    transaction.encode().toString("hex"),
                 )
 
                 // request to send for sponsorship/fee delegation
@@ -137,7 +133,7 @@ export const SignTransactionModal = ({
                     "hex",
                 )
 
-                const hash = tx.signingHash()
+                const hash = transaction.signingHash()
                 const senderSignature = secp256k1.sign(hash, privateKey)
 
                 const delegationSignature = Buffer.concat([
@@ -145,34 +141,25 @@ export const SignTransactionModal = ({
                     urlDelegationSignature,
                 ])
 
-                tx.signature = delegationSignature
-
-                encodedRawTx = {
-                    raw: HexUtils.addPrefix(tx.encode().toString("hex")),
-                }
+                transaction.signature = delegationSignature
             }
 
-            const res = await executeTransactionRequest(
-                network.currentUrl,
-                encodedRawTx,
-                async () => {
-                    await WalletConnectResponseUtils.transactionRequestFailedResponse(
-                        { request: requestEvent, web3Wallet, LL },
-                    )
-                },
-            )
+            try {
+                const id = await sendTransaction(
+                    transaction,
+                    network.currentUrl,
+                )
 
-            if (!res || !res.data || !res.data.id) {
+                await WalletConnectResponseUtils.transactionRequestSuccessResponse(
+                    { request: requestEvent, web3Wallet, LL },
+                    id,
+                    account.address,
+                )
+            } catch (e) {
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
                     { request: requestEvent, web3Wallet, LL },
                 )
             }
-
-            await WalletConnectResponseUtils.transactionRequestSuccessResponse(
-                { request: requestEvent, web3Wallet, LL },
-                res?.data.id,
-                account.address,
-            )
 
             onClose()
         },
