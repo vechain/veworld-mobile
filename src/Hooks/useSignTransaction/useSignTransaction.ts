@@ -1,26 +1,16 @@
-import axios from "axios"
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
-import { HexUtils, CryptoUtils, TransactionUtils, error } from "~Utils"
+import { CryptoUtils, TransactionUtils, error } from "~Utils"
+import { showErrorToast, showWarningToast } from "~Components"
 import {
-    showErrorToast,
-    showSuccessToast,
-    showWarningToast,
-    useThor,
-} from "~Components"
-import {
-    addPendingTransferTransactionActivity,
     selectDevice,
     selectSelectedAccount,
     selectSelectedNetwork,
-    updateAccountBalances,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { Linking } from "react-native"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { defaultMainNetwork } from "~Constants"
+import { useSendTransaction } from "~Hooks"
 
 type Props = {
     transaction: Transaction.Body
@@ -30,7 +20,16 @@ type Props = {
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
 }
-
+/**
+ * Hooks that expose a function to sign and send a transaction performing updates on success
+ * @param transaction the transaction to sign and send
+ * @param onTXFinish callback to call when the transaction is finished
+ * @param isDelegated whether the transaction is a delegation
+ * @param urlDelegationSignature the signature of the delegation url
+ * @param selectedDelegationAccount the account to delegate to
+ * @param selectedDelegationOption the delegation option
+ * @returns {signAndSendTransaction} the function to sign and send the transaction
+ */
 export const useSignTransaction = ({
     transaction,
     onTXFinish,
@@ -46,26 +45,10 @@ export const useSignTransaction = ({
         selectDevice(state, account.rootAddress),
     )
 
-    const dispatch = useAppDispatch()
-    const thorClient = useThor()
-    /**
-     * send signed transaction with thorest apis
-     */
-    const sendSignedTransaction = async (
-        tx: Transaction,
-        networkUrl: string,
-    ) => {
-        const encodedRawTx = {
-            raw: HexUtils.addPrefix(tx.encode().toString("hex")),
-        }
-
-        const response = await axios.post(
-            `${networkUrl}/transactions`,
-            encodedRawTx,
-        )
-
-        return response.data.id
-    }
+    const { sendTransactionAndPerformUpdates } = useSendTransaction(
+        network,
+        account,
+    )
 
     const getSignature = async (
         tx: Transaction,
@@ -73,7 +56,7 @@ export const useSignTransaction = ({
         delegateFor?: string,
     ) => {
         if (!wallet.mnemonic)
-            error("Mnemonic wallet can't have an empty mnemonic")
+            throw new Error("Mnemonic wallet can't have an empty mnemonic")
 
         if (!account.index && account.index !== 0)
             throw new Error("account index is empty")
@@ -128,10 +111,11 @@ export const useSignTransaction = ({
                 ])
         }
     }
+
     /**
      * sign transaction with user's wallet
      */
-    const signTransaction = async (password?: string) => {
+    const signAndSendTransaction = async (password?: string) => {
         try {
             if (!senderDevice) return
 
@@ -160,26 +144,7 @@ export const useSignTransaction = ({
                 ? await getDelegationSignature(tx, senderSignature, password)
                 : senderSignature
 
-            const id = await sendSignedTransaction(tx, network.currentUrl)
-
-            // Add pending transaction activity
-            dispatch(addPendingTransferTransactionActivity(tx, thorClient))
-
-            showSuccessToast(
-                LL.SUCCESS_GENERIC(),
-                LL.SUCCESS_GENERIC_OPERATION(),
-                LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-                async () => {
-                    await Linking.openURL(
-                        `${
-                            network.explorerUrl ||
-                            defaultMainNetwork.explorerUrl
-                        }/transactions/${id}`,
-                    )
-                },
-                "SendScreen_transactionSuccessToast",
-            )
-            await dispatch(updateAccountBalances(thorClient, account.address))
+            await sendTransactionAndPerformUpdates(tx)
         } catch (e) {
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
@@ -188,5 +153,5 @@ export const useSignTransaction = ({
         onTXFinish()
     }
 
-    return { signTransaction }
+    return { signAndSendTransaction, sendTransactionAndPerformUpdates }
 }
