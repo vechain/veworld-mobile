@@ -35,7 +35,7 @@ type Props = {
     isOpen: boolean
 }
 
-export const PairModal = ({ currentProposal, onClose, isOpen }: Props) => {
+export const ConnectModal = ({ currentProposal, onClose, isOpen }: Props) => {
     const dispatch = useAppDispatch()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const { web3Wallet } = useWalletConnect()

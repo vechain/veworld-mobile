@@ -7,7 +7,7 @@ import {
     useAppDispatch,
     selectSelectedAccountAddress,
 } from "~Storage/Redux"
-import { PairModal } from "./Modals/PairModal"
+import { ConnectModal } from "./Modals/ConnectModal"
 import { SignMessageModal } from "./Modals/SignMessageModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
 import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
@@ -238,7 +238,7 @@ const WalletConnectContextProvider = ({
             {selectedAccountAddress && (
                 <>
                     {currentProposal && (
-                        <PairModal
+                        <ConnectModal
                             onClose={onSessionProposalClose}
                             currentProposal={currentProposal}
                             isOpen={pairModalVisible}
