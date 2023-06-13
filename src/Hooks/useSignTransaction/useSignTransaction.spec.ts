@@ -60,6 +60,7 @@ describe("useSignTransaction", () => {
             signAndSendTransaction: expect.any(Function),
             sendTransactionAndPerformUpdates: expect.any(Function),
         })
+
         await result.current.signAndSendTransaction()
         expect(showErrorToast).toHaveBeenCalled()
     })
