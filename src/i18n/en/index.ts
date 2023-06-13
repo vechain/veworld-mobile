@@ -351,7 +351,7 @@ const en: BaseTranslation = {
     NOTIFICATION_wallet_connect_successfull_connection: "Successfully connected to {name}.",
     NOTIFICATION_wallet_connect_sign_success: "Certificate signed successfully.",
     NOTIFICATION_wallet_connect_matching_error: "Something went wrong while communicating with app, try again.",
-    NOTIFICATION_wallet_connect_error_delegating_transaction: "There was a problem contacting the delegator.",
+    NOTIFICATION_wallet_connect_error_delegating_transaction: "There was a problem delegating the request.",
     NOTIFICATION_wallet_connect_transaction_broadcasted: "Transaction broadcasted successfully.",
     NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: "Transaction broadcasted correctly but an error occurred while communicating to the dapp.",
     NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",

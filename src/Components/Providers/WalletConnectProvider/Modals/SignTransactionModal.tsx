@@ -34,7 +34,7 @@ import { DEVICE_TYPE, Wallet } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
-import { signSponsorRequest, sendTransaction } from "~Networking"
+import { sponsorTransaction, sendTransaction } from "~Networking"
 
 interface Props {
     sessionRequest: any
@@ -110,38 +110,34 @@ export const SignTransactionModal = ({
                     raw: rawTransaction,
                 }
 
-                const response = await signSponsorRequest(
-                    params.delegateUrl,
-                    sponsorRequest,
-                    async () => {
-                        await WalletConnectResponseUtils.sponsorSignRequestFailedResponse(
-                            { request: requestEvent, web3Wallet, LL },
-                        )
-                    },
-                )
-
-                if (!response || !response.data || !response.data?.signature) {
-                    showErrorToast(
-                        LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
+                try {
+                    const response = await sponsorTransaction(
+                        params.delegateUrl,
+                        sponsorRequest,
                     )
+
+                    const urlDelegationSignature = Buffer.from(
+                        response.data.signature.substr(2),
+                        "hex",
+                    )
+
+                    const hash = transaction.signingHash()
+                    const senderSignature = secp256k1.sign(hash, privateKey)
+
+                    const delegationSignature = Buffer.concat([
+                        senderSignature,
+                        urlDelegationSignature,
+                    ])
+
+                    transaction.signature = delegationSignature
+                } catch (e) {
+                    await WalletConnectResponseUtils.sponsorSignRequestFailedResponse(
+                        { request: requestEvent, web3Wallet, LL },
+                    )
+
                     onClose()
                     return
                 }
-
-                const urlDelegationSignature = Buffer.from(
-                    response.data.signature.substr(2),
-                    "hex",
-                )
-
-                const hash = transaction.signingHash()
-                const senderSignature = secp256k1.sign(hash, privateKey)
-
-                const delegationSignature = Buffer.concat([
-                    senderSignature,
-                    urlDelegationSignature,
-                ])
-
-                transaction.signature = delegationSignature
             }
 
             try {
