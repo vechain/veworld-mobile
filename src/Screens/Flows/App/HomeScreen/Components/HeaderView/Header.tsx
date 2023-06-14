@@ -10,7 +10,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { ScanType } from "~Constants"
+import { ScanTarget } from "~Constants"
 
 export const Header = memo(() => {
     const theme = useTheme()
@@ -68,7 +68,7 @@ export const Header = memo(() => {
                 ref={scanAddressSheetRef}
                 onClose={closeScanAddressSheetRef}
                 onScan={onScan}
-                scanType={ScanType.WALLET_CONNECT}
+                target={ScanTarget.WALLET_CONNECT}
             />
         </BaseView>
     )

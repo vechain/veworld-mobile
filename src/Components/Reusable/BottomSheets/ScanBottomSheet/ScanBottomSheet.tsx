@@ -9,7 +9,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useCameraPermissions, useDisclosure } from "~Hooks"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
-import { COLORS, ScanType } from "~Constants"
+import { COLORS, ScanTarget } from "~Constants"
 import { BarCodeScanner } from "expo-barcode-scanner"
 import { StyleSheet } from "react-native"
 import { AddressUtils, WalletConnectUtils } from "~Utils"
@@ -20,13 +20,13 @@ import { CameraFooter } from "./components/CameraFooter"
 type Props = {
     onScan: (address: string) => void
     onClose: () => void
-    scanType: ScanType
+    target: ScanTarget
 }
 
 const snapPoints = ["100%"]
 
 export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onClose, onScan, scanType }, ref) => {
+    ({ onClose, onScan, target }, ref) => {
         const { LL } = useI18nContext()
 
         const { checkPermissions, hasPerms } = useCameraPermissions({
@@ -40,13 +40,13 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         //called when the camera detects a qr code
         const onQrScanned = useCallback(
             (result: BarCodeScanningResult) => {
-                if (scanType === ScanType.ADDRESS) {
+                if (target === ScanTarget.ADDRESS) {
                     const isValidAddress = AddressUtils.isValid(result.data)
                     if (isValidAddress) {
                         onClose()
                         onScan(result.data)
                     }
-                } else if (scanType === ScanType.WALLET_CONNECT) {
+                } else if (target === ScanTarget.WALLET_CONNECT) {
                     const isValidWalletConnectUri =
                         WalletConnectUtils.isValidURI(result.data)
 
@@ -61,18 +61,18 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     }
                 }
             },
-            [onScan, onClose, LL, scanType],
+            [onScan, onClose, LL, target],
         )
 
         const onPasteFromClipboard = useCallback(
             (result: string) => {
-                if (scanType === ScanType.ADDRESS) {
+                if (target === ScanTarget.ADDRESS) {
                     const isValidAddress = AddressUtils.isValid(result)
                     if (isValidAddress) {
                         onClose()
                         onScan(result)
                     }
-                } else if (scanType === ScanType.WALLET_CONNECT) {
+                } else if (target === ScanTarget.WALLET_CONNECT) {
                     const isValidWalletConnectUri =
                         WalletConnectUtils.isValidURI(result)
 
@@ -87,7 +87,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     }
                 }
             },
-            [onScan, onClose, LL, scanType],
+            [onScan, onClose, LL, target],
         )
 
         // do not render camera when component unmounts
@@ -141,7 +141,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                                 />
                             )}
                             <CameraHeader />
-                            {scanType === ScanType.WALLET_CONNECT && (
+                            {target === ScanTarget.WALLET_CONNECT && (
                                 <CameraFooter onPaste={onPasteFromClipboard} />
                             )}
                         </Camera>

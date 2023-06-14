@@ -6,7 +6,7 @@ import {
     BaseTextInput,
     ScanBottomSheet,
 } from "~Components"
-import { ScanType } from "~Constants"
+import { ScanTarget } from "~Constants"
 
 type Props = {
     titleName: string
@@ -133,7 +133,7 @@ export const ContactForm: React.FC<Props> = memo(
                     ref={scanAddressSheetRef}
                     onClose={closeScanAddressSheetRef}
                     onScan={setAddress}
-                    scanType={ScanType.ADDRESS}
+                    target={ScanTarget.ADDRESS}
                 />
             </>
         )

@@ -15,7 +15,7 @@ import {
     BaseTextInput,
     BaseView,
     ContactCard,
-    ScanAddressBottomSheet,
+    ScanBottomSheet,
     ScrollViewWithFooter,
 } from "~Components"
 import {
@@ -31,6 +31,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { CreateContactBottomSheet } from "./Components/CreateContactBottomSheet/CreateContactBottomSheet"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { ScanTarget } from "~Constants"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -289,10 +290,11 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 onSubmit={navigateNext}
                 address={selectedAddress}
             />
-            <ScanAddressBottomSheet
+            <ScanBottomSheet
                 ref={scanAddressSheetRef}
                 onClose={closeScanAddressSheetRef}
                 onScan={onSuccessfullScan}
+                target={ScanTarget.ADDRESS}
             />
         </BaseSafeArea>
     )
