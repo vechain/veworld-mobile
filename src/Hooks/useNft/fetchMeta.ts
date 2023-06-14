@@ -12,18 +12,14 @@ enum URIProtocol {
     ARWEAVE = "ar",
 }
 
-export type NFTMeta =
-    | {
-          tokenMetadata: TokenMetadata
-          imageUrl: string
-      }
-    | {
-          tokenMetadata?: undefined
-          imageUrl?: undefined
-      }
-    | undefined
+export type NFTMeta = {
+    tokenMetadata: TokenMetadata
+    imageUrl: string
+}
 
-export const fetchMetadata = async (uri: string): Promise<NFTMeta> => {
+export const fetchMetadata = async (
+    uri: string,
+): Promise<NFTMeta | undefined> => {
     try {
         const protocol = uri.split(":")[0]
 
@@ -41,7 +37,7 @@ export const fetchMetadata = async (uri: string): Promise<NFTMeta> => {
             }
 
             default:
-                return {}
+                return undefined
         }
     } catch (e) {
         error(e)
