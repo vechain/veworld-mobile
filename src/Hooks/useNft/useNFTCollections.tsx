@@ -15,12 +15,25 @@ import { getNFTdataForContract, prepareCollectionData } from "./Helpers"
 import { useI18nContext } from "~i18n"
 
 /**
- * useNFTCollections
- * @description In order to test this hook, you need to change everywhere "selectedAccount.address" with ACCOUNT_WITH_NFTS in order to get
- * an account with a lot of NFT collections and NFTs
- * @returns
+ * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
+ * It fetches the contract addresses for the NFTs owned by the selected account and retrieves additional details about each NFT collection from a registry.
+ * The results are stored in a Redux store and can be accessed throughout the application.
+ *
+ * Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
+ *
+ * @returns {object} The object returned contains a `getCollections` function that can be invoked to fetch NFT collections.
+ *
+ * @example
+ * const { getCollections } = useNFTCollections();
+ * getCollections(1, 10);  // fetches the first 10 NFT collections
+ *
+ * @method
+ * getCollections(_page: number, _resultsPerPage: number = 10)
+ * An async function that fetches the NFT collections for the selected account.
+ *
+ * @param {number} _page - The page number for pagination purposes.
+ * @param {number} _resultsPerPage - The number of results to fetch per page. Default value is `10`.
  */
-
 export const useNFTCollections = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
