@@ -9,7 +9,7 @@ import {
     BaseButton,
     CustomTokenCard,
     BaseBottomSheetTextInput,
-    ScanAddressBottomSheet,
+    ScanBottomSheet,
 } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
@@ -29,6 +29,7 @@ import { FungibleToken } from "~Model"
 import { useBottomSheetModal } from "~Hooks"
 import { debug, error, info, AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
+import { ScanTarget } from "~Constants"
 
 type Props = {
     tokenAddress?: string
@@ -194,10 +195,11 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     disabled={!newCustomToken}
                 />
             </BaseBottomSheet>
-            <ScanAddressBottomSheet
+            <ScanBottomSheet
                 ref={scanAddressSheetRef}
                 onClose={closeScanAddressSheetRef}
                 onScan={handleValueChange}
+                target={ScanTarget.ADDRESS}
             />
         </>
     )

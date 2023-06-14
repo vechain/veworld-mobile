@@ -87,7 +87,7 @@ export const SignTransactionModal = ({
                 isUndefined(params.delegateUrl) ||
                 isEmpty(params.delegateUrl)
             ) {
-                // if the dapp doesn't provide a delegateUrl, we sign the transaction locally
+                //  sign the transaction locally
 
                 transaction = new Transaction(transactionBody)
 
@@ -96,10 +96,9 @@ export const SignTransactionModal = ({
                 const signature = Buffer.concat([senderSignature])
                 transaction.signature = signature
             } else {
-                // if the dapp provides a delegateUrl, we ask the delegator to sign the transaction
+                // ask the delegator to sign the transaction
 
                 transaction = TransactionUtils.toDelegation(transactionBody)
-                // build hex encoded version of the transaction for signing request
                 const rawTransaction = HexUtils.addPrefix(
                     transaction.encode().toString("hex"),
                 )
