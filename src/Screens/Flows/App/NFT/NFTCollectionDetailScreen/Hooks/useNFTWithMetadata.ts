@@ -8,6 +8,8 @@ import {
 import { usePagination } from "../../usePagination"
 import { useNFTs } from "~Hooks"
 
+const COLLECTIONS_PAGE_SIZE = 10
+
 export const useNFTWithMetadata = (collectionAddress: string) => {
     const nftForCollection = useAppSelector(state =>
         selectNFTsForCollection(state, collectionAddress),
@@ -29,7 +31,11 @@ export const useNFTWithMetadata = (collectionAddress: string) => {
             nftForCollection?.NFTs?.length,
             nftNetworkingSideEffects.isLoading,
             page => {
-                getNFTsForCollection(collectionAddress, page, 10)
+                getNFTsForCollection(
+                    collectionAddress,
+                    page,
+                    COLLECTIONS_PAGE_SIZE,
+                )
             },
         )
     }, [
@@ -42,7 +48,7 @@ export const useNFTWithMetadata = (collectionAddress: string) => {
     ])
 
     useEffect(() => {
-        getNFTsForCollection(collectionAddress, 0, 10)
+        getNFTsForCollection(collectionAddress, 0, COLLECTIONS_PAGE_SIZE)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedAccount])
 
