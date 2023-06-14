@@ -4,8 +4,9 @@ import {
     BaseBottomSheetTextInput,
     BaseSpacer,
     BaseTextInput,
-    ScanAddressBottomSheet,
+    ScanBottomSheet,
 } from "~Components"
+import { ScanType } from "~Constants"
 
 type Props = {
     titleName: string
@@ -128,10 +129,11 @@ export const ContactForm: React.FC<Props> = memo(
 
                 {componentInputAddress}
 
-                <ScanAddressBottomSheet
+                <ScanBottomSheet
                     ref={scanAddressSheetRef}
                     onClose={closeScanAddressSheetRef}
                     onScan={setAddress}
+                    scanType={ScanType.ADDRESS}
                 />
             </>
         )

@@ -1,10 +1,7 @@
 import React, { useCallback } from "react"
 import { useBottomSheetModal } from "~Hooks"
-import {
-    BaseButton,
-    ScanWalletConnectBottomSheet,
-    useWalletConnect,
-} from "~Components"
+import { BaseButton, ScanBottomSheet, useWalletConnect } from "~Components"
+import { ScanType } from "~Constants"
 
 export const ConnectAppButton = () => {
     const { onPair } = useWalletConnect()
@@ -25,10 +22,11 @@ export const ConnectAppButton = () => {
     return (
         <>
             <BaseButton action={openScanAddressSheet} title="New Connection" />
-            <ScanWalletConnectBottomSheet
+            <ScanBottomSheet
                 ref={scanAddressSheetRef}
                 onClose={closeScanAddressSheetRef}
                 onScan={onScan}
+                scanType={ScanType.WALLET_CONNECT}
             />
         </>
     )

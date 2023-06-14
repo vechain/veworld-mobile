@@ -5,11 +5,12 @@ import {
     BaseIcon,
     BaseText,
     BaseView,
-    ScanWalletConnectBottomSheet,
+    ScanBottomSheet,
     useWalletConnect,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { ScanType } from "~Constants"
 
 export const Header = memo(() => {
     const theme = useTheme()
@@ -63,10 +64,11 @@ export const Header = memo(() => {
                     action={goToWalletManagement}
                 />
             </BaseView>
-            <ScanWalletConnectBottomSheet
+            <ScanBottomSheet
                 ref={scanAddressSheetRef}
                 onClose={closeScanAddressSheetRef}
                 onScan={onScan}
+                scanType={ScanType.WALLET_CONNECT}
             />
         </BaseView>
     )
