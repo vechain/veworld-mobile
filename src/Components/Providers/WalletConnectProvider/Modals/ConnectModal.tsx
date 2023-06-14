@@ -28,6 +28,7 @@ import { insertSession } from "~Storage/Redux/Slices"
 import { error } from "~Utils/Logger"
 import { WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { RequestMethods } from "~Constants"
 
 type Props = {
     currentProposal: SignClientTypes.EventArguments["session_proposal"]
@@ -200,7 +201,9 @@ export const ConnectModal = ({ currentProposal, onClose, isOpen }: Props) => {
                         </>
                     )}
                     {methods.find(
-                        method => method === "identify" || method === "sign",
+                        method =>
+                            method === RequestMethods.IDENTIFY ||
+                            method === RequestMethods.SIGN,
                     ) && (
                         <>
                             <BaseSpacer height={8} />

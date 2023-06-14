@@ -16,6 +16,7 @@ import { deleteSession } from "~Storage/Redux/Slices"
 import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import { RequestMethods } from "~Constants"
 
 /**
  * Wallet Connect Flow:
@@ -132,11 +133,10 @@ const WalletConnectContextProvider = ({
             setRequestEventData(requestEvent)
 
             switch (requestEvent.params.request.method) {
-                case WalletConnectUtils.VECHAIN_SIGNING_METHODS.IDENTIFY:
+                case RequestMethods.IDENTIFY:
                     setSignMessageModalVisible(true)
                     break
-                case WalletConnectUtils.VECHAIN_SIGNING_METHODS
-                    .REQUEST_TRANSACTION:
+                case RequestMethods.REQUEST_TRANSACTION:
                     setSignTransactionModalVisible(true)
                     break
                 default:

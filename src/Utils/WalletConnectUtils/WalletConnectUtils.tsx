@@ -3,11 +3,6 @@ import { ICore, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { Web3Wallet, IWeb3Wallet } from "@walletconnect/web3wallet"
 import { isEmpty, isNull } from "lodash"
 
-export const VECHAIN_SIGNING_METHODS = {
-    IDENTIFY: "identify",
-    REQUEST_TRANSACTION: "request_transaction",
-}
-
 let web3wallet: IWeb3Wallet
 export const core: ICore = new Core({
     projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
