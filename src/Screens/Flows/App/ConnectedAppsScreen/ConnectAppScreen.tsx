@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ProposalTypes, RelayerTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
 import React, { FC, useCallback } from "react"
-import { StyleSheet, Image } from "react-native"
+import { StyleSheet } from "react-native"
 import {
     BaseSafeArea,
     BaseScrollView,
@@ -17,7 +17,6 @@ import {
     AccountCard,
     CloseModalButton,
 } from "~Components"
-import { RequestMethods } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { AccountWithDevice } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
@@ -31,6 +30,7 @@ import {
 } from "~Storage/Redux"
 import { WalletConnectUtils, error } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { AppConnectionRequests, AppInfo } from "./Components"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -127,9 +127,14 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         }
     }, [currentProposal, nav, web3Wallet])
 
+    const onPressBack = useCallback(async () => {
+        await handleReject()
+        nav.goBack()
+    }, [nav, handleReject])
+
     return (
         <BaseSafeArea>
-            <CloseModalButton onPress={nav.goBack} />
+            <CloseModalButton onPress={onPressBack} />
             <BaseScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -140,62 +145,22 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     <BaseText typographyFont="title">
                         {"Connected app"}
                     </BaseText>
+
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="subTitle">
                         {"External app connection"}
                     </BaseText>
 
                     <BaseSpacer height={16} />
-                    <Image
-                        style={styles.dappLogo}
-                        source={{
-                            uri: icon,
-                        }}
+                    <AppInfo
+                        name={name}
+                        url={url}
+                        icon={icon}
+                        description={description}
                     />
-                    <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitleBold">{name}</BaseText>
-
-                    <BaseSpacer height={8} />
-                    <BaseText typographyFont="bodyMedium">
-                        {description}
-                    </BaseText>
-                    <BaseSpacer height={8} />
-                    <BaseText>{url}</BaseText>
 
                     <BaseSpacer height={30} />
-                    <BaseText typographyFont="subTitle">
-                        {"Connection request"}
-                    </BaseText>
-
-                    <BaseSpacer height={15} />
-                    <BaseText>{name + " is asking for access to:"}</BaseText>
-
-                    {methods.find(
-                        method => method === "request_transaction",
-                    ) && (
-                        <>
-                            <BaseSpacer height={8} />
-                            <BaseText>
-                                {
-                                    "\u25CF Request transactions to send to Vechain Thor"
-                                }
-                            </BaseText>
-                        </>
-                    )}
-                    {methods.find(
-                        method =>
-                            method === RequestMethods.IDENTIFY ||
-                            method === RequestMethods.SIGN,
-                    ) && (
-                        <>
-                            <BaseSpacer height={8} />
-                            <BaseText>
-                                {
-                                    "\u25CF Request your signature on certificates or identification and agreements"
-                                }
-                            </BaseText>
-                        </>
-                    )}
+                    <AppConnectionRequests name={name} methods={methods} />
                 </BaseView>
 
                 <BaseView mx={20}>
@@ -241,12 +206,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 }
 
 const styles = StyleSheet.create({
-    dappLogo: {
-        width: 82,
-        height: 82,
-        borderRadius: 8,
-        marginVertical: 4,
-    },
     alignLeft: {
         alignSelf: "flex-start",
     },
@@ -256,17 +215,5 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         width: "100%",
-    },
-    footer: {
-        position: "absolute",
-        bottom: 0,
-        paddingBottom: 50,
-        width: "100%",
-        alignSelf: "center",
-    },
-    separator: {
-        borderWidth: 0.5,
-        borderColor: "#0B0043",
-        opacity: 0.56,
     },
 })
