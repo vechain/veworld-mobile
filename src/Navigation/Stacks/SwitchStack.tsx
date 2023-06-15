@@ -5,7 +5,9 @@ import { OnboardingStack } from "./OnboardingStack"
 import { useAppInitState, AppInitState } from "~Hooks"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import BlockListener from "../../BlockListener"
-import { BlackListedCollectionsScreen } from "~Screens"
+import { BlackListedCollectionsScreen, ConnectAppScreen } from "~Screens"
+import { SignClientTypes } from "@walletconnect/types"
+import { IWeb3Wallet } from "@walletconnect/web3wallet"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -13,6 +15,11 @@ export type RootStackParamListSwitch = {
     ResetAppScreen: undefined
     Create_Wallet_Flow: undefined
     Blacklisted_Collections: undefined
+    Connect_App_Screen: {
+        sessionProposal: SignClientTypes.EventArguments["session_proposal"]
+        web3Wallet: IWeb3Wallet
+        selectedAccountAddress: string
+    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -52,6 +59,14 @@ export const SwitchStack = () => {
                             component={BlackListedCollectionsScreen}
                             options={{
                                 presentation: "modal",
+                            }}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.CONNECT_APP_SCREEN}
+                            component={ConnectAppScreen}
+                            options={{
+                                presentation: "fullScreenModal",
                             }}
                         />
                     </Switch.Group>

@@ -1,45 +1,37 @@
-import { Image, StyleSheet } from "react-native"
-import {
-    SessionTypes,
-    SignClientTypes,
-    ProposalTypes,
-    RelayerTypes,
-} from "@walletconnect/types"
-import React, { useMemo } from "react"
-import {
-    BaseText,
-    BaseButton,
-    BaseView,
-    BaseSpacer,
-    showSuccessToast,
-    useWalletConnect,
-    BaseModal,
-    showErrorToast,
-    CloseModalButton,
-    BaseScrollView,
-} from "~Components"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { ProposalTypes, RelayerTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
+import React, { FC, useCallback, useMemo } from "react"
+import { StyleSheet, Image } from "react-native"
 import {
-    selectSelectedAccountAddress,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { insertSession } from "~Storage/Redux/Slices"
-import { error } from "~Utils/Logger"
-import { WalletConnectUtils } from "~Utils"
-import { useI18nContext } from "~i18n"
+    BaseSafeArea,
+    BaseScrollView,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    showErrorToast,
+    showSuccessToast,
+    BaseButton,
+} from "~Components"
 import { RequestMethods } from "~Constants"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { insertSession, useAppDispatch } from "~Storage/Redux"
+import { WalletConnectUtils, error } from "~Utils"
+import { useI18nContext } from "~i18n"
 
-type Props = {
-    currentProposal: SignClientTypes.EventArguments["session_proposal"]
-    onClose: (success: boolean) => void
-    isOpen: boolean
-}
+type Props = NativeStackScreenProps<
+    RootStackParamListSwitch,
+    Routes.CONNECT_APP_SCREEN
+>
 
-export const ConnectModal = ({ currentProposal, onClose, isOpen }: Props) => {
+export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
+    const currentProposal = route.params.sessionProposal
+    const web3Wallet = route.params.web3Wallet
+    const selectedAccountAddress = route.params.selectedAccountAddress
+
+    const nav = useNavigation()
     const dispatch = useAppDispatch()
-    const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
-    const { web3Wallet } = useWalletConnect()
     const { LL } = useI18nContext()
 
     const { name, url, methods, chains, icon } =
@@ -56,25 +48,7 @@ export const ConnectModal = ({ currentProposal, onClose, isOpen }: Props) => {
         return string
     }, [chains])
 
-    if (!selectedAccountAddress) {
-        onClose(false)
-        return <></>
-    }
-
-    // check if the DApp is connecting to Vechain
-    if (!currentProposal.params.requiredNamespaces.vechain) {
-        onClose(false)
-        showErrorToast(LL.NOTIFICATION_wallet_connect_incompatible_dapp())
-        return <></>
-    }
-
-    const handleAccept = async () => {
-        if (!web3Wallet) {
-            onClose(false)
-            showErrorToast(LL.NOTIFICATION_wallet_connect_not_initialized())
-            return
-        }
-
+    const handleAccept = useCallback(async () => {
         const { id, params } = currentProposal
         const requiredNamespaces: ProposalTypes.RequiredNamespaces =
             params.requiredNamespaces
@@ -114,13 +88,21 @@ export const ConnectModal = ({ currentProposal, onClose, isOpen }: Props) => {
                         name,
                     }),
                 )
-                onClose(true)
+                nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
             } catch (err: unknown) {
                 showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
-                onClose(true)
+                nav.goBack()
             }
         }
-    }
+    }, [
+        currentProposal,
+        dispatch,
+        LL,
+        nav,
+        selectedAccountAddress,
+        web3Wallet,
+        name,
+    ])
 
     async function handleReject() {
         const { id } = currentProposal
@@ -134,15 +116,13 @@ export const ConnectModal = ({ currentProposal, onClose, isOpen }: Props) => {
             } catch (err: unknown) {
                 error(err)
             } finally {
-                onClose(false)
+                nav.goBack()
             }
         }
     }
 
     return (
-        <BaseModal isOpen={isOpen} onClose={() => onClose(false)}>
-            <CloseModalButton onPress={onClose} />
-
+        <BaseSafeArea>
             <BaseScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -215,14 +195,12 @@ export const ConnectModal = ({ currentProposal, onClose, isOpen }: Props) => {
                         </>
                     )}
                 </BaseView>
-
-                <BaseSpacer height={80} />
-
+                {/* <BaseSpacer height={50} />
                 <BaseView style={styles.footer} mx={20}>
                     <BaseButton
                         w={100}
                         haptics="light"
-                        title={"APPROVE"}
+                        title={"CONNECT"}
                         action={handleAccept}
                     />
                     <BaseSpacer height={16} />
@@ -233,9 +211,25 @@ export const ConnectModal = ({ currentProposal, onClose, isOpen }: Props) => {
                         title={"REJECT"}
                         action={handleReject}
                     />
-                </BaseView>
+                </BaseView> */}
             </BaseScrollView>
-        </BaseModal>
+            <BaseView style={styles.footer} px={10}>
+                <BaseButton
+                    w={100}
+                    haptics="light"
+                    title={"CONNECT"}
+                    action={handleAccept}
+                />
+                <BaseSpacer height={16} />
+                <BaseButton
+                    w={100}
+                    haptics="light"
+                    variant="outline"
+                    title={"REJECT"}
+                    action={handleReject}
+                />
+            </BaseView>
+        </BaseSafeArea>
     )
 }
 
@@ -256,7 +250,13 @@ const styles = StyleSheet.create({
     scrollView: {
         width: "100%",
     },
-    footer: {},
+    footer: {
+        position: "absolute",
+        bottom: 0,
+        paddingBottom: 50,
+        width: "100%",
+        alignSelf: "center",
+    },
     separator: {
         borderWidth: 0.5,
         borderColor: "#0B0043",

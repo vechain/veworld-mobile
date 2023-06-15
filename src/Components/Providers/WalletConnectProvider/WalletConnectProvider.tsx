@@ -7,7 +7,6 @@ import {
     useAppDispatch,
     selectSelectedAccountAddress,
 } from "~Storage/Redux"
-import { ConnectModal } from "./Modals/ConnectModal"
 import { SignMessageModal } from "./Modals/SignMessageModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
 import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
@@ -48,11 +47,6 @@ const WalletConnectContextProvider = ({
     const { LL } = useI18nContext()
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
     const nav = useNavigation()
-
-    //For session proposal
-    const [pairModalVisible, setPairModalVisible] = useState(false)
-    const [currentProposal, setCurrentProposal] =
-        useState<SignClientTypes.EventArguments["session_proposal"]>()
 
     // For session request
     const [signMessageModalVisible, setSignMessageModalVisible] =
@@ -96,22 +90,22 @@ const WalletConnectContextProvider = ({
      */
     const onSessionProposal = useCallback(
         (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
-            setPairModalVisible(true)
-            setCurrentProposal(proposal)
-        },
-        [],
-    )
-
-    const onSessionProposalClose = useCallback(
-        (success: boolean) => {
-            setCurrentProposal(undefined)
-            setPairModalVisible(false)
-
-            if (success) {
-                nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
+            if (!selectedAccountAddress) return
+            if (!web3Wallet) return
+            if (!proposal.params.requiredNamespaces.vechain) {
+                showErrorToast(
+                    LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
+                )
+                return
             }
+
+            nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                sessionProposal: proposal,
+                web3Wallet,
+                selectedAccountAddress,
+            })
         },
-        [nav],
+        [nav, selectedAccountAddress, web3Wallet, LL],
     )
 
     /**
@@ -237,14 +231,6 @@ const WalletConnectContextProvider = ({
             {children}
             {selectedAccountAddress && (
                 <>
-                    {currentProposal && (
-                        <ConnectModal
-                            onClose={onSessionProposalClose}
-                            currentProposal={currentProposal}
-                            isOpen={pairModalVisible}
-                        />
-                    )}
-
                     {requestEventData &&
                         sessionRequest &&
                         signMessageModalVisible && (
