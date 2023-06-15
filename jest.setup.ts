@@ -83,3 +83,10 @@ jest.mock("@gorhom/bottom-sheet", () => ({
 }))
 
 jest.mock("react-native-skeleton-content-nonexpo", () => "SkeletonContent")
+
+jest.mock("@walletconnect/web3wallet", () => ({
+    __esModule: true,
+    init: jest.fn(),
+    on: jest.fn(),
+    off: jest.fn(),
+}))

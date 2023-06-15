@@ -29,11 +29,11 @@ export async function getWeb3Wallet() {
 export function getPairAttributes(
     proposal: SignClientTypes.EventArguments["session_proposal"],
 ) {
-    const name = proposal.params?.proposer?.metadata?.name
-    const url = proposal.params?.proposer?.metadata.url
-    const methods = proposal.params?.requiredNamespaces.vechain.methods
-    const events = proposal.params?.requiredNamespaces.vechain.events
-    const chains = proposal.params?.requiredNamespaces.vechain.chains
+    const name = proposal.params.proposer.metadata.name
+    const url = proposal.params.proposer.metadata.url
+    const methods = proposal.params.requiredNamespaces.vechain.methods
+    const events = proposal.params.requiredNamespaces.vechain.events
+    const chains = proposal.params.requiredNamespaces.vechain.chains
     const icon = proposal.params.proposer.metadata.icons[0]
 
     const attributes = {
