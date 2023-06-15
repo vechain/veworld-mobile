@@ -26,3 +26,5 @@ Use the following template to create a new Unreleased change log.
 ### Fixed
 
 ### Removed
+
+## [v0.100.0]
