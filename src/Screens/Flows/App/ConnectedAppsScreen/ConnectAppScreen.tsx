@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ProposalTypes, RelayerTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
-import React, { FC, useCallback, useMemo } from "react"
+import React, { FC, useCallback } from "react"
 import { StyleSheet, Image } from "react-native"
 import {
     BaseSafeArea,
@@ -13,10 +13,22 @@ import {
     showErrorToast,
     showSuccessToast,
     BaseButton,
+    SelectAccountBottomSheet,
+    AccountCard,
+    CloseModalButton,
 } from "~Components"
 import { RequestMethods } from "~Constants"
+import { useBottomSheetModal } from "~Hooks"
+import { AccountWithDevice } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { insertSession, useAppDispatch } from "~Storage/Redux"
+import {
+    insertSession,
+    selectAccount,
+    selectSelectedAccount,
+    selectVisibleAccounts,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { WalletConnectUtils, error } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -28,25 +40,24 @@ type Props = NativeStackScreenProps<
 export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const currentProposal = route.params.sessionProposal
     const web3Wallet = route.params.web3Wallet
-    const selectedAccountAddress = route.params.selectedAccountAddress
 
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
-    const { name, url, methods, chains, icon } =
-        WalletConnectUtils.getPairAttributes(currentProposal)
+    const visibleAccounts = useAppSelector(selectVisibleAccounts)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const {
+        ref: selectAccountBottomSheetRef,
+        onOpen: openSelectAccountBottomSheet,
+        onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
+    const setSelectedAccount = (account: AccountWithDevice) => {
+        dispatch(selectAccount({ address: account.address }))
+    }
 
-    const chainsToConnect = useMemo(() => {
-        let string = ""
-        chains?.forEach((chain, index) => {
-            if (index > 0) {
-                string += " and "
-            }
-            string += chain.split(":")[1]
-        })
-        return string
-    }, [chains])
+    const { name, url, methods, icon, description } =
+        WalletConnectUtils.getPairAttributes(currentProposal)
 
     const handleAccept = useCallback(async () => {
         const { id, params } = currentProposal
@@ -61,7 +72,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 const accounts: string[] = []
 
                 requiredNamespaces[key].chains?.map((chain: string) => {
-                    accounts.push(`${chain}:${selectedAccountAddress}`)
+                    accounts.push(`${chain}:${selectedAccount.address}`)
                 })
 
                 namespaces[key] = {
@@ -80,7 +91,10 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     })
 
                 dispatch(
-                    insertSession({ address: selectedAccountAddress, session }),
+                    insertSession({
+                        address: selectedAccount.address,
+                        session,
+                    }),
                 )
 
                 showSuccessToast(
@@ -94,17 +108,9 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 nav.goBack()
             }
         }
-    }, [
-        currentProposal,
-        dispatch,
-        LL,
-        nav,
-        selectedAccountAddress,
-        web3Wallet,
-        name,
-    ])
+    }, [currentProposal, dispatch, LL, nav, web3Wallet, name, selectedAccount])
 
-    async function handleReject() {
+    const handleReject = useCallback(async () => {
         const { id } = currentProposal
 
         if (currentProposal) {
@@ -119,10 +125,11 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 nav.goBack()
             }
         }
-    }
+    }, [currentProposal, nav, web3Wallet])
 
     return (
         <BaseSafeArea>
+            <CloseModalButton onPress={nav.goBack} />
             <BaseScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -131,27 +138,29 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 style={styles.scrollView}>
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
-                        {"Connect to app"}
+                        {"Connected app"}
                     </BaseText>
-                    <BaseSpacer height={8} />
-                    <BaseText typographyFont="subSubTitleLight">
-                        {name + " wants to connect to your wallet"}
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="subTitle">
+                        {"External app connection"}
                     </BaseText>
 
-                    <BaseSpacer height={24} />
+                    <BaseSpacer height={16} />
                     <Image
                         style={styles.dappLogo}
                         source={{
                             uri: icon,
                         }}
                     />
-                    <BaseSpacer height={24} />
+                    <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitleBold">{name}</BaseText>
+
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="bodyMedium">
+                        {description}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText>{url}</BaseText>
-
-                    <BaseSpacer height={30} />
-                    <BaseView style={styles.separator} />
 
                     <BaseSpacer height={30} />
                     <BaseText typographyFont="subTitle">
@@ -160,13 +169,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
                     <BaseSpacer height={15} />
                     <BaseText>{name + " is asking for access to:"}</BaseText>
-
-                    <BaseSpacer height={8} />
-                    <BaseText>
-                        {"\u25CF Connect to Vechain " +
-                            chainsToConnect +
-                            " network"}
-                    </BaseText>
 
                     {methods.find(
                         method => method === "request_transaction",
@@ -195,8 +197,21 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         </>
                     )}
                 </BaseView>
-                {/* <BaseSpacer height={50} />
-                <BaseView style={styles.footer} mx={20}>
+
+                <BaseView mx={20}>
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="subTitleBold">
+                        {"Select account"}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <AccountCard
+                        account={selectedAccount}
+                        onPress={openSelectAccountBottomSheet}
+                    />
+                </BaseView>
+
+                <BaseView mx={20}>
+                    <BaseSpacer height={24} />
                     <BaseButton
                         w={100}
                         haptics="light"
@@ -208,35 +223,27 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="light"
                         variant="outline"
-                        title={"REJECT"}
+                        title={"CANCEL"}
                         action={handleReject}
                     />
-                </BaseView> */}
+                </BaseView>
             </BaseScrollView>
-            <BaseView style={styles.footer} px={10}>
-                <BaseButton
-                    w={100}
-                    haptics="light"
-                    title={"CONNECT"}
-                    action={handleAccept}
-                />
-                <BaseSpacer height={16} />
-                <BaseButton
-                    w={100}
-                    haptics="light"
-                    variant="outline"
-                    title={"REJECT"}
-                    action={handleReject}
-                />
-            </BaseView>
+
+            <SelectAccountBottomSheet
+                closeBottomSheet={closeSelectAccountBottonSheet}
+                accounts={visibleAccounts}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBottomSheetRef}
+            />
         </BaseSafeArea>
     )
 }
 
 const styles = StyleSheet.create({
     dappLogo: {
-        width: 100,
-        height: 100,
+        width: 82,
+        height: 82,
         borderRadius: 8,
         marginVertical: 4,
     },

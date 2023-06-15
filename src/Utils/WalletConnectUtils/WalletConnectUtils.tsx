@@ -31,6 +31,7 @@ export function getPairAttributes(
 ) {
     const name = proposal.params.proposer.metadata.name
     const url = proposal.params.proposer.metadata.url
+    const description = proposal.params.proposer.metadata.description
     const methods = proposal.params.requiredNamespaces.vechain.methods
     const events = proposal.params.requiredNamespaces.vechain.events
     const chains = proposal.params.requiredNamespaces.vechain.chains
@@ -43,6 +44,7 @@ export function getPairAttributes(
         events,
         chains,
         icon,
+        description,
     }
     return attributes
 }

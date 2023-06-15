@@ -18,7 +18,6 @@ export type RootStackParamListSwitch = {
     Connect_App_Screen: {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
         web3Wallet: IWeb3Wallet
-        selectedAccountAddress: string
     }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
@@ -65,9 +64,6 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CONNECT_APP_SCREEN}
                             component={ConnectAppScreen}
-                            options={{
-                                presentation: "fullScreenModal",
-                            }}
                         />
                     </Switch.Group>
                 </>
