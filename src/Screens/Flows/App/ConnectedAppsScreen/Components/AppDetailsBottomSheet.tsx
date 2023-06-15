@@ -22,7 +22,7 @@ type Props = {
     account: AccountWithDevice
 }
 
-export const ConnectedAppDetailsBottomSheet = React.forwardRef<
+export const AppDetailsBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose, session, account }, ref) => {
