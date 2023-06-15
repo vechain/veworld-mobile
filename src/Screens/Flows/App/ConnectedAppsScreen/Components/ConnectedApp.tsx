@@ -3,13 +3,12 @@ import React, { memo } from "react"
 import {
     BaseText,
     BaseView,
-    BaseIcon,
     BaseImage,
     BaseTouchableBox,
     BaseSpacer,
 } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
-import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { AccountWithDevice } from "~Model"
 import { ImageStyle } from "react-native-fast-image"
 import { AppDetailsBottomSheet } from "./AppDetailsBottomSheet"
@@ -23,7 +22,6 @@ type Props = {
 export const ConnectedApp: React.FC<Props> = memo(
     ({ session, account, clickable = true }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
-        const theme = useTheme()
 
         const onPress = () => {
             if (!clickable) return
@@ -85,13 +83,8 @@ export const ConnectedApp: React.FC<Props> = memo(
                             <BaseView
                                 flexDirection="column"
                                 alignItems="center"
-                                pl={5}>
-                                <BaseIcon
-                                    color={theme.colors.primary}
-                                    size={24}
-                                    name={"pencil"}
-                                />
-                            </BaseView>
+                                pl={5}
+                            />
                         )}
                     </BaseView>
                     <AppDetailsBottomSheet

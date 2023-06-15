@@ -72,11 +72,13 @@ export function getSessionRequestAttributes(
     const name = sessionRequest.peer.metadata.name
     const icon = sessionRequest.peer.metadata.icons[0]
     const url = sessionRequest.peer.metadata.url
+    const description = sessionRequest.peer.metadata.description
 
     const attributes = {
         name,
         icon,
         url,
+        description,
     }
     return attributes
 }
