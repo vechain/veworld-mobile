@@ -133,7 +133,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     }, [nav, handleReject])
 
     return (
-        <BaseSafeArea>
+        <BaseSafeArea grow={1}>
             <CloseModalButton onPress={onPressBack} />
             <BaseScrollView
                 showsVerticalScrollIndicator={false}

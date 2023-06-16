@@ -119,10 +119,10 @@ const WalletConnectContextProvider = ({
 
             const { topic } = requestEvent
 
-            const sessionRequestData: SessionTypes.Struct =
+            const session: SessionTypes.Struct =
                 web3Wallet.engine.signClient.session.get(topic)
 
-            setSessionRequest(sessionRequestData)
+            setSessionRequest(session)
             setRequestEventData(requestEvent)
 
             switch (requestEvent.params.request.method) {

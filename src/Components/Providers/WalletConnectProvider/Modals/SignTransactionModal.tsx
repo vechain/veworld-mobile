@@ -19,7 +19,9 @@ import {
     selectSelectedNetwork,
     useAppSelector,
     selectDevice,
-    selectSelectedAccount,
+    selectAccount,
+    useAppDispatch,
+    selectAccounts,
 } from "~Storage/Redux"
 import {
     HexUtils,
@@ -27,10 +29,11 @@ import {
     TransactionUtils,
     WalletConnectUtils,
     WalletConnectResponseUtils,
+    AddressUtils,
 } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
-import { DEVICE_TYPE, Wallet } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
@@ -52,16 +55,42 @@ export const SignTransactionModal = ({
     const { web3Wallet } = useWalletConnect()
     const thorClient = useThor()
     const network = useAppSelector(selectSelectedNetwork)
-    const account = useAppSelector(selectSelectedAccount)
-    const selectedDevice = useAppSelector(state =>
-        selectDevice(state, account.rootAddress),
-    )
+    const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
 
     // Session request values
     const { chainId, method, params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const message = params.comment || params.txMessage[0].comment
+
+    const setSelectedAccount = (account: AccountWithDevice) => {
+        dispatch(selectAccount({ address: account.address }))
+    }
+    // const allSessions = useAppSelector(selectSessions)
+
+    // Get the address used for this session
+    const pairedAddress =
+        sessionRequest.namespaces.vechain.accounts[0].split(":")[2]
+    //Double check that the session is paired with the selected address
+    // if (
+    //     !allSessions[pairedAddress].find(
+    //         session => session.topic === sessionRequest.topic,
+    //     )
+    // ) {
+    //     throw new Error("Session not found")
+    // }
+    const selectedAccount: AccountWithDevice | undefined = accounts.find(
+        acct => {
+            return AddressUtils.compareAddresses(pairedAddress, acct.address)
+        },
+    )
+    if (!selectedAccount) throw new Error("Account not found")
+
+    setSelectedAccount(selectedAccount)
+    const selectedDevice = useAppSelector(state =>
+        selectDevice(state, selectedAccount.rootAddress),
+    )
 
     const onSignTransaction = useCallback(
         async (privateKey: Buffer) => {
@@ -105,7 +134,7 @@ export const SignTransactionModal = ({
 
                 // request to send for sponsorship/fee delegation
                 const sponsorRequest = {
-                    origin: account.address.toLowerCase(),
+                    origin: selectedAccount.address.toLowerCase(),
                     raw: rawTransaction,
                 }
 
@@ -148,7 +177,7 @@ export const SignTransactionModal = ({
                 await WalletConnectResponseUtils.transactionRequestSuccessResponse(
                     { request: requestEvent, web3Wallet, LL },
                     id,
-                    account.address,
+                    selectedAccount.address,
                 )
             } catch (e) {
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
@@ -159,7 +188,7 @@ export const SignTransactionModal = ({
             onClose()
         },
         [
-            account,
+            selectedAccount,
             network,
             params,
             thorClient,
@@ -178,16 +207,16 @@ export const SignTransactionModal = ({
             if (decryptedWallet && !decryptedWallet.mnemonic)
                 error("Mnemonic wallet can't have an empty mnemonic")
 
-            if (!account.index && account.index !== 0)
+            if (!selectedAccount.index && selectedAccount.index !== 0)
                 throw new Error("Account index is empty")
 
             const hdNode = HDNode.fromMnemonic(decryptedWallet.mnemonic)
-            const derivedNode = hdNode.derive(account.index)
+            const derivedNode = hdNode.derive(selectedAccount.index)
             const privateKey = derivedNode.privateKey as Buffer
 
             await onSignTransaction(privateKey)
         },
-        [account, onSignTransaction],
+        [selectedAccount, onSignTransaction],
     )
 
     async function onReject() {

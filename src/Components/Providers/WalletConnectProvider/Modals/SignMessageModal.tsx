@@ -11,21 +11,25 @@ import {
     BaseModal,
     CloseModalButton,
     BaseScrollView,
+    AccountCard,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
 import {
     useAppSelector,
     selectDevice,
-    selectSelectedAccount,
+    selectAccounts,
+    selectAccount,
+    useAppDispatch,
 } from "~Storage/Redux"
 import {
     CryptoUtils,
     WalletConnectUtils,
     WalletConnectResponseUtils,
+    AddressUtils,
 } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
-import { DEVICE_TYPE, Wallet } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { useI18nContext } from "~i18n"
 import { capitalize } from "lodash"
 
@@ -43,11 +47,34 @@ export const SignMessageModal = ({
     isOpen,
 }: Props) => {
     const { web3Wallet } = useWalletConnect()
-    const account = useAppSelector(selectSelectedAccount)
-    const selectedDevice = useAppSelector(state =>
-        selectDevice(state, account.rootAddress),
-    )
+    const accounts = useAppSelector(selectAccounts)
+    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
+    const setSelectedAccount = (account: AccountWithDevice) => {
+        dispatch(selectAccount({ address: account.address }))
+    }
+    // const allSessions = useAppSelector(selectSessions)
+
+    // Get the address used for this session
+    const pairedAddress =
+        sessionRequest.namespaces.vechain.accounts[0].split(":")[2]
+    //Double check that the session is paired with the selected address
+    // if (
+    //     !allSessions[pairedAddress].find(
+    //         session => session.topic === sessionRequest.topic,
+    //     )
+    // ) {
+    //     throw new Error("Session not found")
+    // }
+    const selectedAccount = accounts.find(acct => {
+        return AddressUtils.compareAddresses(pairedAddress, acct.address)
+    })
+    if (!selectedAccount) throw new Error("Account not found")
+
+    setSelectedAccount(selectedAccount)
+    const selectedDevice = useAppSelector(state =>
+        selectDevice(state, selectedAccount.rootAddress),
+    )
 
     // Request values
     const { method, params } =
@@ -64,7 +91,7 @@ export const SignMessageModal = ({
                 ...params,
                 timestamp: Math.round(Date.now() / 1000),
                 domain: new URL(url),
-                signer: account?.address ?? "",
+                signer: selectedAccount?.address ?? "",
             }
 
             const hash = blake2b256(Certificate.encode(cert))
@@ -84,7 +111,7 @@ export const SignMessageModal = ({
 
             onClose()
         },
-        [account, params, url, web3Wallet, onClose, LL, requestEvent],
+        [selectedAccount, params, url, web3Wallet, onClose, LL, requestEvent],
     )
 
     const onApprove = useCallback(
@@ -99,16 +126,16 @@ export const SignMessageModal = ({
             if (decryptedWallet && !decryptedWallet.mnemonic)
                 error("Mnemonic wallet can't have an empty mnemonic")
 
-            if (!account.index && account.index !== 0)
+            if (!selectedAccount.index && selectedAccount.index !== 0)
                 throw new Error("Account index is empty")
 
             const hdNode = HDNode.fromMnemonic(decryptedWallet.mnemonic)
-            const derivedNode = hdNode.derive(account.index)
+            const derivedNode = hdNode.derive(selectedAccount.index)
             const privateKey = derivedNode.privateKey as Buffer
 
             await signIdentityCertificate(id, privateKey)
         },
-        [account, requestEvent, signIdentityCertificate],
+        [selectedAccount, requestEvent, signIdentityCertificate],
     )
 
     async function onReject() {
@@ -164,45 +191,57 @@ export const SignMessageModal = ({
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
                 <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">{"Sign"}</BaseText>
+                    <BaseText typographyFont="title">
+                        {"External app request"}
+                    </BaseText>
 
-                    <BaseSpacer height={8} />
-                    <BaseText typographyFont="subSubTitleLight">
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitle">
+                        {"Sign a certificate"}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText>
                         {
                             "Your Signature is being requested to sign a certificate"
                         }
                     </BaseText>
 
-                    <BaseSpacer height={24} />
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitleBold">
+                        {"Account"}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <AccountCard account={selectedAccount} />
+
+                    <BaseSpacer height={32} />
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">
                             {LL.SEND_DETAILS()}
                         </BaseText>
 
                         <BaseSpacer height={16} />
-                        <BaseText typographyFont="subSubTitleLight">
+                        <BaseText typographyFont="subTitle">
                             {"Origin"}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
-                        <BaseText>{sessionRequest.peer.metadata.url}</BaseText>
 
                         <BaseSpacer height={16} />
-                        <BaseText typographyFont="subSubTitleLight">
+                        <BaseText typographyFont="subTitle">
                             {"Purpose"}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{capitalize(method)}</BaseText>
 
                         <BaseSpacer height={24} />
-                        <BaseText typographyFont="subSubTitleLight">
-                            {"Content:"}
+                        <BaseText typographyFont="subTitle">
+                            {"Content"}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{message}</BaseText>
                     </BaseView>
                 </BaseView>
-                <BaseSpacer height={80} />
+                <BaseSpacer height={48} />
                 <BaseView style={styles.footer}>
                     <BaseButton
                         w={100}
