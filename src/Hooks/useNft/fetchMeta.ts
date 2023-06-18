@@ -5,13 +5,21 @@ import {
     getTokenMetaIpfs,
 } from "~Networking"
 import { error } from "~Utils"
+import { TokenMetadata } from "~Model"
 
 enum URIProtocol {
     IPFS = "ipfs",
     ARWEAVE = "ar",
 }
 
-export const fetchMetadata = async (uri: string) => {
+export type NFTMeta = {
+    tokenMetadata: TokenMetadata
+    imageUrl: string
+}
+
+export const fetchMetadata = async (
+    uri: string,
+): Promise<NFTMeta | undefined> => {
     try {
         const protocol = uri.split(":")[0]
 
@@ -29,7 +37,7 @@ export const fetchMetadata = async (uri: string) => {
             }
 
             default:
-                return {}
+                return undefined
         }
     } catch (e) {
         error(e)
