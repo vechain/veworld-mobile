@@ -21,11 +21,11 @@ Use the following template to create a new Unreleased change log.
 ### Added
 - [#668](https://github.com/vechainfoundation/veworld-mobile/issues/668) Add changelog to repository
 - [#598](https://github.com/vechainfoundation/veworld-mobile/pull/598) Integrated wallet connect 
-- [#664](https://github.com/vechainfoundation/veworld-mobile/pull/664) Added account handling for wallet connect connections
 
 ### Changed
 
 ### Fixed
+- [#664](https://github.com/vechainfoundation/veworld-mobile/pull/664) Added account handling for wallet connect connections
 
 ### Removed
 
