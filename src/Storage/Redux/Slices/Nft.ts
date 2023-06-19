@@ -1,16 +1,20 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { uniqBy } from "lodash"
-import { NonFungibleTokenCollection } from "~Model"
+import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import {
     Collections,
     CollectionWithPagination,
     NFTBlackListedItem,
+    NFTs,
 } from "../Types/Nft"
+import { PaginationResponse } from "~Networking"
 
 type NftSliceState = {
     collectionsPerAccount: Collections
     blackListedCollections: NonFungibleTokenCollection[]
     blackListedNFTs: NFTBlackListedItem[]
+    NFTsPerAccount: NFTs
     isLoading: boolean
     error: string | undefined
 }
@@ -19,6 +23,7 @@ export const initialStateNft: NftSliceState = {
     blackListedCollections: [],
     blackListedNFTs: [],
     collectionsPerAccount: {},
+    NFTsPerAccount: {},
     isLoading: false,
     error: undefined,
 }
@@ -38,6 +43,9 @@ export const NftSlice = createSlice({
                 state.collectionsPerAccount[action.payload.address] = {
                     collections: [],
                     pagination: {
+                        countLimit: 0,
+                        hasNext: false,
+                        isExactCount: true,
                         totalElements: 0,
                         totalPages: 0,
                     },
@@ -99,6 +107,62 @@ export const NftSlice = createSlice({
             return state
         },
 
+        setNFTs: (
+            state,
+            action: PayloadAction<{
+                address: string
+                collectionAddress: string
+                NFTs: NonFungibleToken[]
+                pagination: PaginationResponse
+            }>,
+        ) => {
+            const { address, collectionAddress, NFTs, pagination } =
+                action.payload
+
+            // comes the first time
+            if (!state.NFTsPerAccount[address]) {
+                state.NFTsPerAccount[address] = {
+                    [collectionAddress]: {
+                        NFTs: [],
+                        pagination: {
+                            countLimit: 0,
+                            hasNext: false,
+                            isExactCount: true,
+                            totalElements: 0,
+                            totalPages: 0,
+                        },
+                    },
+                }
+            }
+
+            // comes every time the users loads NFTs from a new collection
+            if (!state.NFTsPerAccount[address][collectionAddress]) {
+                state.NFTsPerAccount[address][collectionAddress] = {
+                    NFTs: [],
+                    pagination: {
+                        countLimit: 0,
+                        hasNext: false,
+                        isExactCount: true,
+                        totalElements: 0,
+                        totalPages: 0,
+                    },
+                }
+            }
+
+            let uniqueNFTs = [
+                ...state.NFTsPerAccount[address][collectionAddress].NFTs,
+                ...NFTs,
+            ]
+
+            const allUnique = uniqBy(uniqueNFTs, "id")
+            state.NFTsPerAccount[address][collectionAddress].NFTs = allUnique
+
+            state.NFTsPerAccount[address][collectionAddress].pagination =
+                pagination
+
+            return state
+        },
+
         // TODO set here adjust Nfts from selectors
         setBlackListNFT: (
             state,
@@ -120,4 +184,5 @@ export const {
     setCollections,
     setNetworkingSideEffects,
     removeBlackListCollection,
+    setNFTs,
 } = NftSlice.actions

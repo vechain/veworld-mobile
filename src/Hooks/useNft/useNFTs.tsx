@@ -1,58 +1,106 @@
-// import { useEffect } from "react"
-// import { NonFungibleTokenCollection, NonFungibleToken } from "~Model/Nft/Nft"
-// import {
-//     selectNftCollections,
-//     useAppDispatch,
-//     useAppSelector,
-// } from "../../../Storage/Redux"
-// import { NFTPlaceholder } from "~Assets"
-// import { isEmpty } from "lodash"
-// import { fetchMetadata } from "./fetchMeta"
+import { useCallback } from "react"
+import {
+    selectSelectedAccount,
+    setNFTs,
+    setNetworkingSideEffects,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { getNFTdataForContract } from "./Helpers"
+import { NonFungibleToken } from "~Model"
+import { getTokenURI } from "~Networking"
+import { useThor } from "~Components"
+import { NFTPlaceholder } from "~Assets"
+import { fetchMetadata } from "./fetchMeta"
+import { error } from "~Utils"
 
-// export const useNFTs = () => {
-//     const disptach = useAppDispatch()
-//     const nftCollections = useAppSelector(selectNftCollections)
+export const useNFTs = () => {
+    const dispatch = useAppDispatch()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const thor = useThor()
 
-//     useEffect(() => {
-//         const init = async () => {
-//             let _collectionFinal: NonFungibleTokenCollection[] = []
+    const getNFTsForCollection = useCallback(
+        async (
+            contractAddress: string,
+            _page: number,
+            _resultsPerPage: number = 10,
+        ) => {
+            dispatch(
+                setNetworkingSideEffects({
+                    isLoading: true,
+                    error: undefined,
+                }),
+            )
 
-//             for (const collection of nftCollections) {
-//                 let _nftFinal: NonFungibleToken[] = []
+            try {
+                const { nftData } = await getNFTdataForContract(
+                    [contractAddress],
+                    selectedAccount.address,
+                    _resultsPerPage,
+                    _page,
+                )
 
-//                 for (const nft of collection.nfts) {
-//                     if (nft.tokenURI) {
-//                         const nftMeta = await fetchMetadata(nft.tokenURI)
-//                         const _nft = {
-//                             ...nft,
-//                             ...nftMeta?.tokenMetadata,
-//                             image: nftMeta?.imageUrl ?? NFTPlaceholder,
-//                         }
+                const NFTs: NonFungibleToken[] = []
 
-//                         _nftFinal.push(_nft)
+                for (const nfts of nftData) {
+                    for (const nft of nfts.data) {
+                        const tokenURI = await getTokenURI(
+                            nft.tokenId,
+                            contractAddress,
+                            thor,
+                        )
 
-//                         if (isEmpty(collection.icon))
-//                             collection.icon =
-//                                 nftMeta?.imageUrl ?? NFTPlaceholder
-//                     }
-//                 }
+                        let _nft: NonFungibleToken
 
-//                 const col = {
-//                     ...collection,
-//                     nfts: _nftFinal,
-//                 }
+                        const nftMeta = await fetchMetadata(tokenURI)
 
-//                 _collectionFinal.push(col)
-//             }
+                        const id =
+                            contractAddress +
+                            nft.tokenId +
+                            selectedAccount.address
 
-//             // console.log("_collectionFinal", _collectionFinal)
+                        _nft = {
+                            id,
+                            tokenId: nft.tokenId,
+                            owner: selectedAccount.address,
+                            tokenURI,
+                            ...nftMeta?.tokenMetadata,
+                            image: nftMeta?.imageUrl ?? NFTPlaceholder,
+                            belongsToCollectionAddress: contractAddress,
+                        }
 
-//             // todo.vas -> this should fail if there is an error any time on the flow if getting nfts
-//             // disptach(setNfts(_collectionFinal))
-//         }
+                        NFTs.push(_nft)
+                    }
+                }
 
-//         init()
-//     }, [disptach, nftCollections])
-// }
+                dispatch(
+                    setNFTs({
+                        address: selectedAccount.address,
+                        collectionAddress: contractAddress,
+                        NFTs: NFTs,
+                        // taking first element because we are fetching only for one contract address
+                        pagination: nftData[0].pagination,
+                    }),
+                )
 
-export {}
+                dispatch(
+                    setNetworkingSideEffects({
+                        isLoading: false,
+                        error: undefined,
+                    }),
+                )
+            } catch (e) {
+                dispatch(
+                    setNetworkingSideEffects({
+                        isLoading: false,
+                        error: e?.toString() as string,
+                    }),
+                )
+                error("useNFTs", e)
+            }
+        },
+        [dispatch, selectedAccount.address, thor],
+    )
+
+    return { getNFTsForCollection }
+}

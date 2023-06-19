@@ -18,6 +18,7 @@ export const getNFTdataForContract = async (
     contractsForNFTs: string[],
     selectedAccountAddress: string,
     _resultsPerPage: number,
+    _page: number = 0,
 ) => {
     const NFTsForContractPromises: Promise<NftForContractResponse[]>[] = []
 
@@ -26,6 +27,7 @@ export const getNFTdataForContract = async (
             contractAddress,
             selectedAccountAddress,
             _resultsPerPage,
+            _page,
         )
         NFTsForContractPromises.push(nfts)
     }
