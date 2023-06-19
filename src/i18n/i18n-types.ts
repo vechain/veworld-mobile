@@ -945,6 +945,18 @@ type RootTranslation = {
 	 */
 	COMMON_RECEIVE: string
 	/**
+	 * Connect
+	 */
+	COMMON_BTN_CONNECT: string
+	/**
+	 * Disconnect
+	 */
+	COMMON_BTN_DISCONNECT: string
+	/**
+	 * CANCEL
+	 */
+	COMMON_BTN_CANCEL_CAPS_LOCK: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1232,6 +1244,15 @@ type RootTranslation = {
 	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: string
 	NOTIFICATION_wallet_connect_error_on_transaction: string
 	NOTIFICATION_wallet_connect_invalid_uri: string
+	/**
+	 * Connected Apps
+	 */
+	CONNECTED_APP_TITLE: string
+	CONNECTED_APP_REQUEST: string
+	CONNECTION_REQUEST_TITLE: string
+    CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
+	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: string
+	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -2668,6 +2689,18 @@ export type TranslationFunctions = {
 	 */
 	COMMON_RECEIVE: () => LocalizedString
 	/**
+	 * Connect
+	 */
+	COMMON_BTN_CONNECT: () => LocalizedString
+	/**
+	 * Disconnect
+	 */
+	COMMON_BTN_DISCONNECT: () => LocalizedString
+	/**
+	 * CANCEL
+	 */
+	COMMON_BTN_CANCEL_CAPS_LOCK: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -2941,6 +2974,13 @@ Please, try again later.
 	 * Found {token} transfer: {amount}
 	 */
 	NOTIFICATION_found_token_transfer: (arg: { amount: unknown, token: unknown }) => LocalizedString
+	
+	CONNECTED_APP_TITLE: () => LocalizedString
+	CONNECTED_APP_REQUEST: () => LocalizedString
+	CONNECTION_REQUEST_TITLE: () => LocalizedString
+	CONNECTION_REQUEST_SUBTITLE: (arg: { name: string }) => LocalizedString
+	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: () => LocalizedString
+	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
 	/**
 	 * Contract address
 	 */

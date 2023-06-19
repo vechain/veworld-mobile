@@ -234,6 +234,9 @@ const en: BaseTranslation = {
     COMMON_BTN_ADD: "Add",
     COMMON_BTN_SAVE: "Save",
     COMMON_BTN_NEXT: "NEXT",
+    COMMON_BTN_CONNECT: "CONNECT",
+    COMMON_BTN_DISCONNECT: "Disconnect",
+    COMMON_BTN_CANCEL_CAPS_LOCK: "CANCEL",
 
     // Common Labels
     COMMON_LBL_AND: "and",
@@ -357,6 +360,14 @@ const en: BaseTranslation = {
     NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",
     NOTIFICATION_wallet_connect_invalid_uri: "Invalid Wallet Connect URI.",
    
+    // Connected apps
+    CONNECTED_APP_TITLE: "Connected app",
+    CONNECTED_APP_REQUEST: "External app connection",
+    CONNECTION_REQUEST_TITLE: "Connection request",
+    CONNECTION_REQUEST_SUBTITLE: "{name} is asking for access to:",
+    CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: "\u25CF Request transactions to send to Vechain Thor",
+    CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
+    
     // NFT
     CONTRACT_ADDRESS: "Contract address",
     NFT_ATTRIBUTES: "Attributes",
