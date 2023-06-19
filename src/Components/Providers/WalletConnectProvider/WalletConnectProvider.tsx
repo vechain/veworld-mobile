@@ -21,7 +21,7 @@ import { RequestMethods } from "~Constants"
  * Wallet Connect Flow:
  * 1) A pairing needs to be established by scanning the QR code or by manually pasting the URI
  * 2) After pairing is established the dapp will send a session_propsal asking the user permission to connect to the wallet
- * 3) Once the dapp and the wallet are connected the dapp can send a session_requests asking to sign certificates or execute transactions
+ * 3) Once the dapp and the wallet are connected the dapp can send session_requests asking to sign certificates or execute transactions
  *
  * This provider was created to have a singleton web3wallet instance, so that all modals regarding session proposals and requests
  * are handled by the provider can be shown no matter where we are inside the app.
@@ -119,6 +119,7 @@ const WalletConnectContextProvider = ({
 
             const { topic } = requestEvent
 
+            // Get the session for this topic
             const session: SessionTypes.Struct =
                 web3Wallet.engine.signClient.session.get(topic)
 

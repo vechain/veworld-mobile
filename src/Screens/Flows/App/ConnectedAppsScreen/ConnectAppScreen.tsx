@@ -59,61 +59,76 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const { name, url, methods, icon, description } =
         WalletConnectUtils.getPairAttributes(currentProposal)
 
+    /**
+     * Handle session proposal
+     * 1) Approve session
+     * 2) Insert session into redux
+     * 3) Show success toast
+     * 4) Navigate to connected apps screen
+     */
     const handleAccept = useCallback(async () => {
         const { id, params } = currentProposal
         const requiredNamespaces: ProposalTypes.RequiredNamespaces =
             params.requiredNamespaces
         const relays: RelayerTypes.ProtocolOptions[] = params.relays
 
-        if (currentProposal && requiredNamespaces) {
-            const namespaces: SessionTypes.Namespaces = {}
+        if (!currentProposal || !requiredNamespaces) {
+            showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
+            return
+        }
 
-            Object.keys(requiredNamespaces).forEach(key => {
-                const accounts: string[] = []
+        const namespaces: SessionTypes.Namespaces = {}
 
-                requiredNamespaces[key].chains?.map((chain: string) => {
-                    accounts.push(`${chain}:${selectedAccount.address}`)
-                })
+        Object.keys(requiredNamespaces).forEach(key => {
+            const accounts: string[] = []
 
-                namespaces[key] = {
-                    accounts,
-                    methods: requiredNamespaces[key].methods,
-                    events: requiredNamespaces[key].events,
-                }
+            requiredNamespaces[key].chains?.map((chain: string) => {
+                accounts.push(`${chain}:${selectedAccount.address}`)
             })
 
-            try {
-                let session: SessionTypes.Struct =
-                    await web3Wallet.approveSession({
-                        id,
-                        relayProtocol: relays[0].protocol,
-                        namespaces,
-                    })
-
-                dispatch(
-                    insertSession({
-                        address: selectedAccount.address,
-                        session,
-                    }),
-                )
-
-                showSuccessToast(
-                    LL.NOTIFICATION_wallet_connect_successfull_connection({
-                        name,
-                    }),
-                )
-                nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
-            } catch (err: unknown) {
-                showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
-                nav.goBack()
+            namespaces[key] = {
+                accounts,
+                methods: requiredNamespaces[key].methods,
+                events: requiredNamespaces[key].events,
             }
+        })
+
+        try {
+            let session: SessionTypes.Struct = await web3Wallet.approveSession({
+                id,
+                relayProtocol: relays[0].protocol,
+                namespaces,
+            })
+
+            dispatch(
+                insertSession({
+                    address: selectedAccount.address,
+                    session,
+                }),
+            )
+
+            showSuccessToast(
+                LL.NOTIFICATION_wallet_connect_successfull_connection({
+                    name,
+                }),
+            )
+            nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
+        } catch (err: unknown) {
+            error(err)
+            showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
+            nav.goBack()
         }
     }, [currentProposal, dispatch, LL, nav, web3Wallet, name, selectedAccount])
 
+    /**
+     * Handle session rejection
+     * 1) Reject session
+     * 2) Go back
+     */
     const handleReject = useCallback(async () => {
-        const { id } = currentProposal
-
         if (currentProposal) {
+            const { id } = currentProposal
+
             try {
                 await web3Wallet?.rejectSession({
                     id,

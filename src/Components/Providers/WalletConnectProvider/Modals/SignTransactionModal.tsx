@@ -67,22 +67,14 @@ export const SignTransactionModal = ({
     const setSelectedAccount = (account: AccountWithDevice) => {
         dispatch(selectAccount({ address: account.address }))
     }
-    // const allSessions = useAppSelector(selectSessions)
 
     // Get the address used for this session
-    const pairedAddress =
-        sessionRequest.namespaces.vechain.accounts[0].split(":")[2]
-    //Double check that the session is paired with the selected address
-    // if (
-    //     !allSessions[pairedAddress].find(
-    //         session => session.topic === sessionRequest.topic,
-    //     )
-    // ) {
-    //     throw new Error("Session not found")
-    // }
+    // vechain:main:0f6t...98ty63z
+    const address = sessionRequest.namespaces.vechain.accounts[0].split(":")[2]
+
     const selectedAccount: AccountWithDevice | undefined = accounts.find(
         acct => {
-            return AddressUtils.compareAddresses(pairedAddress, acct.address)
+            return AddressUtils.compareAddresses(address, acct.address)
         },
     )
     if (!selectedAccount) throw new Error("Account not found")
