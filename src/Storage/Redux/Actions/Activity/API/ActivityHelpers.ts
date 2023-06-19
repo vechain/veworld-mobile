@@ -8,8 +8,8 @@ import {
 } from "~Model"
 import {
     EventTypeResponse,
-    FetchIncomingTransfersResponse,
-    FetchTransactionsResponse,
+    IncomingTransferResponse,
+    TransactionsResponse,
 } from "./Types"
 
 /**
@@ -20,7 +20,7 @@ import {
  * @returns An activity created from the transaction response.
  */
 export const createBaseActivityFromTransaction = (
-    transaction: FetchTransactionsResponse,
+    transaction: TransactionsResponse,
 ): Activity => {
     // Destructure needed properties from transaction
     const {
@@ -124,10 +124,11 @@ export const eventTypeToActivityType = (
  * @returns The Activity created from the incoming transfer, or null if unable to create activity.
  */
 export const createBaseActivityFromIncomingTransfer = (
-    incomingTransfer: FetchIncomingTransfersResponse,
+    incomingTransfer: IncomingTransferResponse,
     thor: Connex.Thor,
 ): Activity | null => {
     // Destructure needed properties from transaction
+
     const {
         blockNumber,
         blockTimestamp,
@@ -264,7 +265,7 @@ const processActivity = (
  * @returns An array of activities created from the transactions.
  */
 export const getActivitiesFromTransactions = (
-    transactions: FetchTransactionsResponse[],
+    transactions: TransactionsResponse[],
 ): Activity[] => {
     return transactions.map(transaction => {
         let activity: Activity = createBaseActivityFromTransaction(transaction)
@@ -282,7 +283,7 @@ export const getActivitiesFromTransactions = (
  * @returns An array of activities created from the incoming transfers.
  */
 export const getActivitiesFromIncomingTransfers = (
-    incomingTransfers: FetchIncomingTransfersResponse[],
+    incomingTransfers: IncomingTransferResponse[],
     thor: Connex.Thor,
 ): Activity[] => {
     return incomingTransfers.reduce(

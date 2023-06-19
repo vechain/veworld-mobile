@@ -94,9 +94,11 @@ export const selectAccountsButSelected = createSelector(
  * @param rootAddress rootAddress of device to get accounts for
  * @returns  all accounts for the given device
  */
-export const selectAccountsByDevice = (rootAddress?: string) =>
-    createSelector(selectAccounts, accounts => {
+export const selectAccountsByDevice = createSelector(
+    [selectAccounts, (state: RootState, rootAddress?: string) => rootAddress],
+    (accounts, rootAddress) => {
         return accounts.filter(account =>
             AddressUtils.compareAddresses(rootAddress, account.rootAddress),
         )
-    })
+    },
+)

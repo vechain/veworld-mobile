@@ -11,6 +11,7 @@ export const selectCurrencyExchangeRate = createSelector(
         ),
 )
 
-export const selectAllExchangeRates = createSelector(getCurrency, state => {
-    return state.exchangeRates
-})
+export const selectAllExchangeRates = createSelector(
+    getCurrency,
+    state => state.exchangeRates,
+)

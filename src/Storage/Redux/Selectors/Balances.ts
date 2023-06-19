@@ -146,8 +146,8 @@ export const selectNonVechainTokensWithBalances = createSelector(
  * Get just vet token and related balance for selected account
  */
 export const selectVetTokenWithBalance = createSelector(
-    [selectTokensWithBalances],
-    (tokensWithBalance): FungibleTokenWithBalance | undefined =>
+    selectTokensWithBalances,
+    tokensWithBalance =>
         tokensWithBalance.find(
             tokenWithBalance => tokenWithBalance.symbol === VET.symbol,
         ),
@@ -157,7 +157,7 @@ export const selectVetTokenWithBalance = createSelector(
  * Get just vtho balance for selected account
  */
 export const selectVthoTokenWithBalance = createSelector(
-    [selectTokensWithBalances],
+    selectTokensWithBalances,
     tokensWithBalance =>
         tokensWithBalance.find(
             tokenWithBalance => tokenWithBalance.symbol === VTHO.symbol,

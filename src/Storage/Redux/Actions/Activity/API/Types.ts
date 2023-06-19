@@ -1,4 +1,5 @@
 import { OutputResponse } from "~Model"
+import { PaginationResponse } from "~Networking"
 
 export interface BaseTransactionResponse {
     id: string
@@ -7,7 +8,7 @@ export interface BaseTransactionResponse {
     blockTimestamp: number
 }
 
-export interface FetchTransactionsResponse extends BaseTransactionResponse {
+export interface TransactionsResponse extends BaseTransactionResponse {
     size: number
     chainTag: number
     blockRef: string
@@ -26,13 +27,17 @@ export interface FetchTransactionsResponse extends BaseTransactionResponse {
     outputs: OutputResponse[]
 }
 
+export interface FetchTransactionsResponse {
+    data: TransactionsResponse[]
+    pagination: PaginationResponse
+}
+
 export enum EventTypeResponse {
     FUNGIBLE_TOKEN = "FUNGIBLE_TOKEN",
     VET = "VET",
 }
 
-export interface FetchIncomingTransfersResponse
-    extends BaseTransactionResponse {
+export interface IncomingTransferResponse extends BaseTransactionResponse {
     txId: string
     from: string
     to: string
@@ -40,6 +45,11 @@ export interface FetchIncomingTransfersResponse
     tokenAddress: string
     topics: string[]
     eventType: EventTypeResponse
+}
+
+export interface FetchIncomingTransfersResponse {
+    data: IncomingTransferResponse[]
+    pagination: PaginationResponse
 }
 
 export type FetchBlockResponse = {

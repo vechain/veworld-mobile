@@ -35,8 +35,8 @@ export const AccountMgmtBottomSheet = React.forwardRef<
 
     const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
 
-    const deviceAccounts = useAppSelector(
-        selectAccountsByDevice(device?.rootAddress),
+    const deviceAccounts = useAppSelector(state =>
+        selectAccountsByDevice(state, device?.rootAddress),
     )
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
