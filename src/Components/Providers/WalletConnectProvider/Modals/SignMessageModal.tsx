@@ -164,23 +164,21 @@ export const SignMessageModal = ({
                 <CloseModalButton onPress={onClose} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
-                        {"External app request"}
+                        {LL.CONNECTED_APP_REQUEST()}
                     </BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitle">
-                        {"Sign a certificate"}
+                        {LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>
-                        {
-                            "Your Signature is being requested to sign a certificate"
-                        }
+                        {LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}
                     </BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitleBold">
-                        {"Account"}
+                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard account={selectedAccount} />
@@ -193,21 +191,21 @@ export const SignMessageModal = ({
 
                         <BaseSpacer height={16} />
                         <BaseText typographyFont="subTitle">
-                            {"Origin"}
+                            {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
 
                         <BaseSpacer height={16} />
                         <BaseText typographyFont="subTitle">
-                            {"Purpose"}
+                            {LL.CONNECTED_APP_SELECTED_PURPOSE_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{capitalize(method)}</BaseText>
 
                         <BaseSpacer height={24} />
                         <BaseText typographyFont="subTitle">
-                            {"Content"}
+                            {LL.CONNECTED_APP_SELECTED_CONTENT_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{message}</BaseText>
@@ -218,7 +216,7 @@ export const SignMessageModal = ({
                     <BaseButton
                         w={100}
                         haptics="light"
-                        title={"SIGN"}
+                        title={LL.COMMON_BTN_SIGN()}
                         action={checkIdentityBeforeOpening}
                     />
                     <BaseSpacer height={16} />
@@ -226,7 +224,7 @@ export const SignMessageModal = ({
                         w={100}
                         haptics="light"
                         variant="outline"
-                        title={"REJECT"}
+                        title={LL.COMMON_BTN_REJECT()}
                         action={onReject}
                     />
                 </BaseView>

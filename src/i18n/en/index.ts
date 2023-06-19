@@ -237,6 +237,8 @@ const en: BaseTranslation = {
     COMMON_BTN_CONNECT: "CONNECT",
     COMMON_BTN_DISCONNECT: "Disconnect",
     COMMON_BTN_CANCEL_CAPS_LOCK: "CANCEL",
+    COMMON_BTN_SIGN: "SIGN",
+    COMMON_BTN_REJECT: "REJECT",
 
     // Common Labels
     COMMON_LBL_AND: "and",
@@ -367,7 +369,13 @@ const en: BaseTranslation = {
     CONNECTION_REQUEST_SUBTITLE: "{name} is asking for access to:",
     CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: "\u25CF Request transactions to send to Vechain Thor",
     CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
-    
+    CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
+    CONNECTED_APP_SIGN_REQUEST_DESCRIPTION:  "Your Signature is being requested to sign a certificate",
+    CONNECTED_APP_SELECTED_ACCOUNT_LABEL: "Account",
+    CONNECTED_APP_SELECTED_ORIGIN_LABEL: "Origin",
+    CONNECTED_APP_SELECTED_PURPOSE_LABEL: "Purpose",
+    CONNECTED_APP_SELECTED_CONTENT_LABEL: "Content",
+
     // NFT
     CONTRACT_ADDRESS: "Contract address",
     NFT_ATTRIBUTES: "Attributes",

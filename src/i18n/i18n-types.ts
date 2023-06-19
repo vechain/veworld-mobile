@@ -953,6 +953,14 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_DISCONNECT: string
 	/**
+	 * SIGN
+	 */
+	COMMON_BTN_SIGN: string
+	/**
+	 * SIGN
+	 */
+	COMMON_BTN_REJECT: string
+	/**
 	 * CANCEL
 	 */
 	COMMON_BTN_CANCEL_CAPS_LOCK: string
@@ -1253,6 +1261,13 @@ type RootTranslation = {
     CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
 	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: string
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
+	CONNECTED_APP_SIGN_REQUEST_TITLE: string
+	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
+	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: string
+	CONNECTED_APP_SELECTED_ORIGIN_LABEL: string
+	CONNECTED_APP_SELECTED_PURPOSE_LABEL: string
+	CONNECTED_APP_SELECTED_CONTENT_LABEL: string
+	
 	/**
 	 * L​i​g​h​t
 	 */
@@ -2701,6 +2716,14 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_CANCEL_CAPS_LOCK: () => LocalizedString
 	/**
+	 * SIGN
+	 */
+	COMMON_BTN_SIGN: () => LocalizedString
+	/**
+	 * REJECT
+	 */
+	COMMON_BTN_REJECT: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -2981,6 +3004,14 @@ Please, try again later.
 	CONNECTION_REQUEST_SUBTITLE: (arg: { name: string }) => LocalizedString
 	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: () => LocalizedString
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
+	CONNECTED_APP_SIGN_REQUEST_TITLE: () => LocalizedString
+	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
+	
+	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: () => LocalizedString
+	CONNECTED_APP_SELECTED_ORIGIN_LABEL: () => LocalizedString
+	CONNECTED_APP_SELECTED_PURPOSE_LABEL: () => LocalizedString
+	CONNECTED_APP_SELECTED_CONTENT_LABEL: () => LocalizedString
+
 	/**
 	 * Contract address
 	 */
