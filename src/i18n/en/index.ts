@@ -371,10 +371,16 @@ const en: BaseTranslation = {
     CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
     CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
     CONNECTED_APP_SIGN_REQUEST_DESCRIPTION:  "Your Signature is being requested to sign a certificate",
+    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign a transaction",
+    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to send a transaction",
+   
     CONNECTED_APP_SELECTED_ACCOUNT_LABEL: "Account",
     CONNECTED_APP_SELECTED_ORIGIN_LABEL: "Origin",
     CONNECTED_APP_SELECTED_PURPOSE_LABEL: "Purpose",
     CONNECTED_APP_SELECTED_CONTENT_LABEL: "Content",
+    CONNECTED_APP_SELECTED_METHOD_LABEL: "Method",
+    CONNECTED_APP_SELECTED_NETWORK_LABEL: "Network",
+    CONNECTED_APP_SELECTED_MESSAGE_LABEL: "Network",
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",

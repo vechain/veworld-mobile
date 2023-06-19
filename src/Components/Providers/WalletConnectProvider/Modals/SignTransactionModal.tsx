@@ -257,23 +257,21 @@ export const SignTransactionModal = ({
                 <CloseModalButton onPress={onClose} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
-                        {"External app request"}
+                        {LL.CONNECTED_APP_REQUEST()}
                     </BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitle">
-                        {"Send a transaction"}
+                        {LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>
-                        {
-                            "Your Signature is being requested to send a transaction"
-                        }
+                        {LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION()}
                     </BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitleBold">
-                        {"Account"}
+                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard account={selectedAccount} />
@@ -284,22 +282,30 @@ export const SignTransactionModal = ({
                     </BaseText>
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">{"Origin"}</BaseText>
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">{"Chain"}</BaseText>
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_NETWORK_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText>{chainId.split(":")[1]}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">{"Method"}</BaseText>
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_METHOD_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText>{method}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">{"Message"}</BaseText>
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_MESSAGE_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText numberOfLines={2} ellipsizeMode="tail">
                         {message}
@@ -311,7 +317,7 @@ export const SignTransactionModal = ({
                     <BaseButton
                         w={100}
                         haptics="light"
-                        title={"SIGN AND SEND"}
+                        title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={checkIdentityBeforeOpening}
                     />
                     <BaseSpacer height={16} />
@@ -319,7 +325,7 @@ export const SignTransactionModal = ({
                         w={100}
                         haptics="light"
                         variant="outline"
-                        title={"REJECT"}
+                        title={LL.COMMON_BTN_REJECT()}
                         action={onReject}
                     />
                 </BaseView>
