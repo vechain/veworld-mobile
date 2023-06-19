@@ -15,7 +15,7 @@ export const selectBlackListedCollections = createSelector(
 
 /**
  * selectNftCollections
- * @description In order to test this selector together with the "useNFTCollections" hook, you need to change everywhere "account.address" with "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048" in order to get an account with a lot of NFT collections and NFTs
+ * @description In order to test this selector together with the "useNFTCollections" hook, you need to change everywhere "account.address" with ACCOUNT_WITH_NFTS in order to get an account with a lot of NFT collections and NFTs
  * @returns
  */
 export const selectNftCollections = createSelector(
@@ -102,6 +102,27 @@ export const selectNFTWithAddressAndTokenId = createSelector(
         }
 
         return nft
+    },
+)
+
+export const selectNFTsForCollection = createSelector(
+    [
+        selectSelectedAccount,
+        selectNftState,
+        (state: RootState, collectionAddress: string) => collectionAddress,
+    ],
+    (account, nftState, collectionAddress) => {
+        if (nftState.NFTsPerAccount[account.address] !== undefined) {
+            return nftState.NFTsPerAccount[account.address][collectionAddress]
+        }
+
+        return {
+            NFTs: [],
+            pagination: {
+                totalElements: 0,
+                totalPages: 0,
+            },
+        }
     },
 )
 

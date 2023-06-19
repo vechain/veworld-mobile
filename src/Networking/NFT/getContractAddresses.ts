@@ -1,9 +1,10 @@
 import axios from "axios"
 import { NFT_CONTRACTS_FOR_ADDRESS } from "~Constants"
+import { PaginationResponse } from "./getNftsForContract"
 
 export type NFTContractAddresses = {
     data: string[]
-    pagination: { totalElements: number; totalPages: number }
+    pagination: PaginationResponse
 }
 
 export const getContractAddresses = async (
