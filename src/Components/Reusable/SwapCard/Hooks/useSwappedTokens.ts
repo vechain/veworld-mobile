@@ -39,8 +39,8 @@ export const useSwappedTokens = (
     paidTokenAddress: string,
 ) => {
     const vetToken = useAppSelector(state =>
-        selectTokenWithInfoWithID(state, [VET.symbol]),
-    )[0]
+        selectTokenWithInfoWithID(state, VET.symbol),
+    )
 
     const tokens = useAppSelector(selectTokensWithInfo)
 
