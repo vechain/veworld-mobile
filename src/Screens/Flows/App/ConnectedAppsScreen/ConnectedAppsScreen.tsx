@@ -12,11 +12,13 @@ import { isEmpty } from "lodash"
 import { ConnectAppButton, ConnectedApp } from "./Components"
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
+import { useI18nContext } from "~i18n"
 
 export const ConnectedAppsScreen = () => {
     const activeSessions: Record<string, SessionTypes.Struct[]> =
         useAppSelector(selectSessions)
     const accounts = useAppSelector(selectAccounts)
+    const { LL } = useI18nContext()
 
     const totalSessions = useMemo(() => {
         return Object.values(activeSessions).reduce(
@@ -36,14 +38,12 @@ export const ConnectedAppsScreen = () => {
                 <BackButtonHeader />
                 <BaseView mx={20}>
                     <BaseText typographyFont="title">
-                        {"Connected Apps"}
+                        {LL.CONNECTED_APPS_SCREEN_TITLE()}
                     </BaseText>
 
                     <BaseSpacer height={40} />
                     <BaseText typographyFont="subTitle">
-                        {
-                            "Connect your wallet with WalletConnect to make transactions."
-                        }
+                        {LL.CONNECTED_APPS_SCREEN_DESCRIPTION()}
                     </BaseText>
                     <BaseSpacer height={14} />
                     <ConnectAppButton />
@@ -53,9 +53,7 @@ export const ConnectedAppsScreen = () => {
                     {totalSessions === 0 && (
                         <>
                             <BaseText typographyFont="subTitleLight" mt={50}>
-                                {
-                                    "You have no connected apps. Once you have some, they will displayed here."
-                                }
+                                {LL.CONNECTED_APPS_SCREEN_NO_CONNECTED_APP()}
                             </BaseText>
                         </>
                     )}

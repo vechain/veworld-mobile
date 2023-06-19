@@ -239,6 +239,7 @@ const en: BaseTranslation = {
     COMMON_BTN_CANCEL_CAPS_LOCK: "CANCEL",
     COMMON_BTN_SIGN: "SIGN",
     COMMON_BTN_REJECT: "REJECT",
+    COMMON_BTN_SIGN_AND_SEND: "SIGN AND SEND",
 
     // Common Labels
     COMMON_LBL_AND: "and",
@@ -380,7 +381,14 @@ const en: BaseTranslation = {
     CONNECTED_APP_SELECTED_CONTENT_LABEL: "Content",
     CONNECTED_APP_SELECTED_METHOD_LABEL: "Method",
     CONNECTED_APP_SELECTED_NETWORK_LABEL: "Network",
-    CONNECTED_APP_SELECTED_MESSAGE_LABEL: "Network",
+    CONNECTED_APP_SELECTED_MESSAGE_LABEL: "Message",
+
+    CONNECTED_APPS_SCREEN_TITLE: "Connected apps",
+    CONNECTED_APPS_SCREEN_DESCRIPTION: "Connect your wallet with WalletConnect to make transactions.",
+    CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: "You have no connected apps. Once you have some, they will displayed here.",
+    
+    CONNECTED_APP_DETAILS_TITLE: "Connected app",   
+    CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",   
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",

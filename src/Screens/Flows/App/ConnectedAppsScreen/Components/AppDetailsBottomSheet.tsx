@@ -13,6 +13,7 @@ import {
 import { AccountWithDevice } from "~Model"
 import { FormattingUtils, WalletConnectUtils } from "~Utils"
 import { AppInfo } from "./AppInfo"
+import { useI18nContext } from "~i18n"
 
 const snapPoints = ["65%"]
 
@@ -27,6 +28,7 @@ export const AppDetailsBottomSheet = React.forwardRef<
     Props
 >(({ onClose, session, account }, ref) => {
     const { disconnect } = useWalletConnect()
+    const { LL } = useI18nContext()
 
     const { name, description, url, icon } =
         WalletConnectUtils.getSessionRequestAttributes(session)
@@ -39,7 +41,9 @@ export const AppDetailsBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onClose}>
             <BaseView mx={20}>
-                <BaseText typographyFont="title">{"Connected app"}</BaseText>
+                <BaseText typographyFont="title">
+                    {LL.CONNECTED_APP_DETAILS_TITLE()}
+                </BaseText>
 
                 <BaseSpacer height={16} />
                 <AppInfo
@@ -51,7 +55,7 @@ export const AppDetailsBottomSheet = React.forwardRef<
 
                 <BaseSpacer height={24} />
                 <BaseText typographyFont="subSubTitle">
-                    {"Connected with"}
+                    {LL.CONNECTED_APP_DETAILS_ACCOUNT_LABEL()}
                 </BaseText>
                 <BaseSpacer height={8} />
                 <BaseView flexDirection="row">
