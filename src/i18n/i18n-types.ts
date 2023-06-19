@@ -1216,6 +1216,23 @@ type RootTranslation = {
 	 */
 	NFT_DOWNLOAD_ERROR: string
 	/**
+	 * Wallet Connect notifications
+	 */
+	NOTIFICATION_wallet_connect_disconnected_from_remote: string
+	NOTIFICATION_wallet_connect_disconnected_success: string
+	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
+	NOTIFICATION_wallet_connect_error_pairing: string
+	NOTIFICATION_wallet_connect_incompatible_dapp: string
+	NOTIFICATION_wallet_connect_not_initialized: string
+	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
+	NOTIFICATION_wallet_connect_sign_success: string
+	NOTIFICATION_wallet_connect_matching_error: string
+	NOTIFICATION_wallet_connect_error_delegating_transaction: string
+	NOTIFICATION_wallet_connect_transaction_broadcasted: string
+	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: string
+	NOTIFICATION_wallet_connect_error_on_transaction: string
+	NOTIFICATION_wallet_connect_invalid_uri: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -2863,6 +2880,59 @@ Please, try again later.
 	 * {name} has been copied to the clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	/*
+	 * Wallet connect has been disconnected from remote.
+	 */
+	NOTIFICATION_wallet_connect_disconnected_from_remote: () => LocalizedString
+	/*
+	 * You disconnected successfully from dapp.
+	 */
+	NOTIFICATION_wallet_connect_disconnected_success: () => LocalizedString
+	/*
+	 * Connecting may take a few seconds.
+	 */
+	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
+	/*
+	 * Error pairing with Dapp, please generate a new QR CODE.
+	 */
+	NOTIFICATION_wallet_connect_error_pairing: () => LocalizedString
+	/*
+	 * The requested chain is not compatible with this wallet.
+	 */
+	NOTIFICATION_wallet_connect_incompatible_dapp: () => LocalizedString
+	/*
+	 * Wallet connect not initialized.
+	 */
+	NOTIFICATION_wallet_connect_not_initialized: () => LocalizedString
+	/*
+	 * Successfully connected to {name}.
+	 */
+	NOTIFICATION_wallet_connect_successfull_connection: (arg: { name: string }) => LocalizedString
+	/*
+	 * Certificate signed correctly.
+	 */
+	NOTIFICATION_wallet_connect_sign_success: () => LocalizedString
+	NOTIFICATION_wallet_connect_matching_error: () => LocalizedString
+	/*
+	 * An error occurred while asking delegator to sign the transaction.
+	 */
+	NOTIFICATION_wallet_connect_error_delegating_transaction: () => LocalizedString
+	/*
+	* Transaction broadcasted correctly
+	*/
+	NOTIFICATION_wallet_connect_transaction_broadcasted: () => LocalizedString
+	/*
+	 * Transaction broadcasted correctly but there is an issue communinicating with the connected app
+	 */
+	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: () => LocalizedString
+	/*
+	 * An unexpected error occurred while executing transaction
+	 */
+	NOTIFICATION_wallet_connect_error_on_transaction: () => LocalizedString
+	/*
+	 * Invalid Wallet Connect URI, please try again
+	 */
+	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
 	/**
 	 * Transaction {txId} was reverted.
 	 */

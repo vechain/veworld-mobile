@@ -26,6 +26,8 @@ import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
 import URLUtils from "./URLUtils"
 import ReanimatedUtils from "./ReanimatedUtils"
+import WalletConnectUtils from "./WalletConnectUtils"
+import WalletConnectResponseUtils from "./WalletConnectResponseUtils"
 export * from "./Logger"
 
 export {
@@ -57,4 +59,6 @@ export {
     TransfersUtils,
     URLUtils,
     ReanimatedUtils,
+    WalletConnectUtils,
+    WalletConnectResponseUtils,
 }

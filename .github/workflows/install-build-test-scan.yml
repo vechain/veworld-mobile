@@ -36,6 +36,7 @@ jobs:
             - name: Tests with Coverage
               env:
                   NODE_OPTIONS: "--max_old_space_size=8192"
+                  REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
               run: yarn test:coverage
 
             - name: Sonar Args

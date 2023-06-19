@@ -13,6 +13,7 @@ import {
     ContactsSlice,
     ActivitiesSlice,
     DelegationSlice,
+    WalletConnectSessionsSlice,
     // NftSlice,
 } from "./Slices"
 
@@ -43,6 +44,7 @@ export const getPersistorConfig = async () => {
             ContactsSlice.name,
             ActivitiesSlice.name,
             DelegationSlice.name,
+            WalletConnectSessionsSlice.name,
             // NftSlice.name,
         ],
         transforms: [encryptor],

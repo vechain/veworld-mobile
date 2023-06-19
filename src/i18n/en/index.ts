@@ -341,6 +341,22 @@ const en: BaseTranslation = {
     NOTIFICATION_transaction_reverted: "Transaction {txId} was reverted.",
     NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
 
+    // Wallet connect notifications
+    NOTIFICATION_wallet_connect_disconnected_from_remote: "A connected app successfully disconnected from this wallet.",
+    NOTIFICATION_wallet_connect_disconnected_success: "Successfully disconnected from app.",
+    NOTIFICATION_warning_wallet_connect_connection_could_delay: "Connecting may take a few seconds.",
+    NOTIFICATION_wallet_connect_error_pairing: "Error pairing with the app, please generate a new QR CODE.",
+    NOTIFICATION_wallet_connect_incompatible_dapp: "The requested dapp is not compatible with VeWorld.",
+    NOTIFICATION_wallet_connect_not_initialized: "Wallet Connect not initialized.",
+    NOTIFICATION_wallet_connect_successfull_connection: "Successfully connected to {name}.",
+    NOTIFICATION_wallet_connect_sign_success: "Certificate signed successfully.",
+    NOTIFICATION_wallet_connect_matching_error: "Something went wrong while communicating with app, try again.",
+    NOTIFICATION_wallet_connect_error_delegating_transaction: "There was a problem delegating the request.",
+    NOTIFICATION_wallet_connect_transaction_broadcasted: "Transaction broadcasted successfully.",
+    NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: "Transaction broadcasted correctly but an error occurred while communicating to the dapp.",
+    NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",
+    NOTIFICATION_wallet_connect_invalid_uri: "Invalid Wallet Connect URI.",
+   
     // NFT
     CONTRACT_ADDRESS: "Contract address",
     NFT_ATTRIBUTES: "Attributes",
