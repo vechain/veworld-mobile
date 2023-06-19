@@ -3,10 +3,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ProposalTypes, RelayerTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
 import React, { FC, useCallback } from "react"
-import { StyleSheet } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import {
     BaseSafeArea,
-    BaseScrollView,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -150,10 +149,10 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     return (
         <BaseSafeArea grow={1}>
             <CloseModalButton onPress={onPressBack} />
-            <BaseScrollView
+            <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="never"
+                contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
                 <BaseView mx={20} style={styles.alignLeft}>
@@ -207,7 +206,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         action={handleReject}
                     />
                 </BaseView>
-            </BaseScrollView>
+            </ScrollView>
 
             <SelectAccountBottomSheet
                 closeBottomSheet={closeSelectAccountBottonSheet}

@@ -28,6 +28,7 @@ export const AccountCard: React.FC<Props> = memo(
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
+                    disabled={onPress === undefined}
                     action={() => onPress?.(account)}
                     justifyContent="space-between"
                     containerStyle={[

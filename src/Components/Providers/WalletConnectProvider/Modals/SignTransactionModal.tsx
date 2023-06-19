@@ -12,7 +12,7 @@ import {
     showWarningToast,
     BaseModal,
     CloseModalButton,
-    BaseScrollView,
+    AccountCard,
 } from "~Components"
 import { HDNode, secp256k1, Transaction } from "thor-devkit"
 import {
@@ -38,6 +38,7 @@ import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
 import { sponsorTransaction, sendTransaction } from "~Networking"
+import { ScrollView } from "react-native-gesture-handler"
 
 interface Props {
     sessionRequest: any
@@ -264,50 +265,65 @@ export const SignTransactionModal = ({
 
     return (
         <BaseModal isOpen={isOpen} onClose={onClose}>
-            <CloseModalButton onPress={onClose} />
-
-            <BaseScrollView
+            <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="never"
+                contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
+                <CloseModalButton onPress={onClose} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
-                        {"Send Transaction"}
+                        {"External app request"}
                     </BaseText>
 
-                    <BaseSpacer height={8} />
-                    <BaseText typographyFont="subSubTitleLight">
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitle">
+                        {"Send a transaction"}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText>
                         {
                             "Your Signature is being requested to send a transaction"
                         }
                     </BaseText>
 
-                    <BaseSpacer height={24} />
-                    <BaseText>
-                        {"Origin: "}
-                        {sessionRequest.peer.metadata.name}
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitleBold">
+                        {"Account"}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <AccountCard account={selectedAccount} />
+
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitleBold">
+                        {LL.SEND_DETAILS()}
                     </BaseText>
 
-                    <BaseSpacer height={24} />
-                    <BaseText>
-                        {"Chains: "}
-                        {chainId}
-                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">{"Origin"}</BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
 
-                    <BaseSpacer height={24} />
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">{"Chain"}</BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText>{chainId.split(":")[1]}</BaseText>
 
-                    <BaseText>{"Method:"}</BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">{"Method"}</BaseText>
+                    <BaseSpacer height={8} />
                     <BaseText>{method}</BaseText>
 
-                    <BaseSpacer height={24} />
-
-                    <BaseText>{"Message:"}</BaseText>
-                    <BaseText>{message}</BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">{"Message"}</BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText numberOfLines={2} ellipsizeMode="tail">
+                        {message}
+                    </BaseText>
                 </BaseView>
 
-                <BaseSpacer height={80} />
+                <BaseSpacer height={40} />
                 <BaseView style={styles.footer}>
                     <BaseButton
                         w={100}
@@ -324,7 +340,7 @@ export const SignTransactionModal = ({
                         action={onReject}
                     />
                 </BaseView>
-            </BaseScrollView>
+            </ScrollView>
 
             <ConfirmIdentityBottomSheet />
         </BaseModal>

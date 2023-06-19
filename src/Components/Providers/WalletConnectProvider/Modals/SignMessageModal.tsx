@@ -173,14 +173,13 @@ export const SignMessageModal = ({
 
     return (
         <BaseModal isOpen={isOpen} onClose={onClose}>
-            <CloseModalButton onPress={onClose} />
-
             <BaseScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="never"
+                contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
+                <CloseModalButton onPress={onClose} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
                         {"External app request"}
