@@ -20,6 +20,7 @@ Use the following template to create a new Unreleased change log.
 ## [Unreleased]
 ### Added
 - [#668](https://github.com/vechainfoundation/veworld-mobile/issues/668) Add changelog to repository
+- [#598](https://github.com/vechainfoundation/veworld-mobile/pull/598) Integrated wallet connect 
 
 ### Changed
 
