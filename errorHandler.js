@@ -5,7 +5,7 @@ import {
 } from "react-native-exception-handler"
 import RNRestart from "react-native-restart"
 
-const allowInDevMode = true // is an optional parameter is a boolean.
+const allowInDevMode = false // is an optional parameter is a boolean.
 
 // unhandled JS errors
 // in this case is just possible to display an alert to the user and log the error to sentry
