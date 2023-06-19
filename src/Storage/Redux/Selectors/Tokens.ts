@@ -191,20 +191,25 @@ export const selectTokensWithInfo = createSelector(
 )
 
 export const selectTokenWithInfoWithID = createSelector(
-    [selectTokensWithInfo, (state: RootState, symbols: string[]) => symbols],
-    (tokens, symbols) => {
-        let foundTokens: TokenWithCompleteInfo[] = []
+    [selectTokensWithInfo, (state: RootState, symbol: string) => symbol],
+    (tokens, symbol) => {
+        const foundToken = tokens.find(
+            (token: TokenWithCompleteInfo) =>
+                token.symbol.toLowerCase() === symbol.toLowerCase(),
+        )
 
-        symbols.forEach(symbol => {
-            const foundToken = tokens.find(
-                (token: TokenWithCompleteInfo) =>
-                    token.symbol.toLowerCase() === symbol.toLowerCase(),
-            )
+        if (foundToken) {
+            return foundToken
+        } else {
+            // Fallback returns static token info
+            if (symbol.toLocaleLowerCase() === VET.symbol.toLocaleLowerCase())
+                return VET
 
-            if (foundToken) foundTokens.push(foundToken)
-        })
+            if (symbol.toLocaleLowerCase() === VTHO.symbol.toLocaleLowerCase())
+                return VTHO
 
-        return foundTokens || [VET, VTHO]
+            return VET
+        }
     },
 )
 

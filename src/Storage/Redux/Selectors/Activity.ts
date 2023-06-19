@@ -11,29 +11,34 @@ export const selectActivitiesState = (state: RootState) => state.activities
  * Gets all activities for ALL accounts
  * @param state
  */
-export const selectAllActivities = (state: RootState) => {
-    let allActivities: Activity[] = []
-    Object.values(state.activities).forEach(activities => {
-        allActivities = [
-            ...allActivities,
-            ...activities.transactionActivitiesMainnet,
-            ...activities.nonTransactionActivitiesMainnet,
-            ...activities.transactionActivitiesTestnet,
-            ...activities.nonTransactionActivitiesTestnet,
-        ]
-    })
-    return allActivities
-}
+export const selectAllActivities = createSelector(
+    selectActivitiesState,
+    state => {
+        let allActivities: Activity[] = []
+
+        Object.values(state).forEach(activities => {
+            allActivities = [
+                ...allActivities,
+                ...activities.transactionActivitiesMainnet,
+                ...activities.nonTransactionActivitiesMainnet,
+                ...activities.transactionActivitiesTestnet,
+                ...activities.nonTransactionActivitiesTestnet,
+            ]
+        })
+
+        return allActivities
+    },
+)
 
 /**
  * select a specific activity by txId
  * @param txId the txId of the activity to select
  * @returns {Activity | undefined} - The activity with the specified txId, or undefined if not found.
  */
-export const selectActivity = (txId: string) =>
-    createSelector(selectAllActivities, activities =>
-        activities.find(activity => activity.id === txId),
-    )
+export const selectActivity = createSelector(
+    [selectAllActivities, (state: RootState, txId: string) => txId],
+    (activities, txId) => activities.find(activity => activity.id === txId),
+)
 
 /**
  * Gets all activities for the current network
@@ -42,8 +47,9 @@ export const selectActivity = (txId: string) =>
 export const selectCurrentNetworkActivities = createSelector(
     selectAllActivities,
     selectSelectedNetwork,
-    (activities, network) =>
-        activities.filter(act => act.genesisId === network.genesis.id),
+    (activities, network) => {
+        return activities.filter(act => act.genesisId === network.genesis.id)
+    },
 )
 
 /**

@@ -78,8 +78,8 @@ export const ContactsScreen = () => {
     const [selectedContactAddress, setSelectedContactAddress] =
         useState<string>()
 
-    const selectedContact = useAppSelector(
-        selectContactByAddress(selectedContactAddress),
+    const selectedContact = useAppSelector(state =>
+        selectContactByAddress(state, selectedContactAddress),
     )
 
     // [End] Hooks
