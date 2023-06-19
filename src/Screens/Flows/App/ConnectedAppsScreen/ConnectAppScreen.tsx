@@ -15,6 +15,7 @@ import {
     SelectAccountBottomSheet,
     AccountCard,
     CloseModalButton,
+    useWalletConnect,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { AccountWithDevice } from "~Model"
@@ -38,7 +39,7 @@ type Props = NativeStackScreenProps<
 
 export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const currentProposal = route.params.sessionProposal
-    const web3Wallet = route.params.web3Wallet
+    const { web3Wallet } = useWalletConnect()
 
     const nav = useNavigation()
     const dispatch = useAppDispatch()
@@ -70,6 +71,11 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         const requiredNamespaces: ProposalTypes.RequiredNamespaces =
             params.requiredNamespaces
         const relays: RelayerTypes.ProtocolOptions[] = params.relays
+
+        if (!web3Wallet) {
+            showErrorToast(LL.NOTIFICATION_wallet_connect_not_initialized())
+            return
+        }
 
         if (!currentProposal || !requiredNamespaces) {
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())

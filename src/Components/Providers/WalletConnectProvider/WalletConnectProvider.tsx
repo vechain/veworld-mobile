@@ -101,7 +101,6 @@ const WalletConnectContextProvider = ({
 
             nav.navigate(Routes.CONNECT_APP_SCREEN, {
                 sessionProposal: proposal,
-                web3Wallet,
             })
         },
         [nav, selectedAccountAddress, web3Wallet, LL],

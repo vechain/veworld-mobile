@@ -7,7 +7,6 @@ import { CreateWalletAppStack, Routes } from "~Navigation"
 import BlockListener from "../../BlockListener"
 import { BlackListedCollectionsScreen, ConnectAppScreen } from "~Screens"
 import { SignClientTypes } from "@walletconnect/types"
-import { IWeb3Wallet } from "@walletconnect/web3wallet"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -17,7 +16,6 @@ export type RootStackParamListSwitch = {
     Blacklisted_Collections: undefined
     Connect_App_Screen: {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
-        web3Wallet: IWeb3Wallet
     }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
