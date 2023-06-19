@@ -64,17 +64,26 @@ export const fetchTransactions = async (
     address: string,
     page: number,
     thor: Connex.Thor,
-): Promise<FetchTransactionsResponse[]> => {
+): Promise<FetchTransactionsResponse> => {
     debug(`Fetching transactions for ${address}`)
 
     // Indexer doesn't support testnet transaction indexing
     if (thor.genesis.id === genesises.test.id) {
         info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
-        return []
+        return {
+            data: [],
+            pagination: {
+                isExactCount: false,
+                countLimit: 0,
+                totalPages: 0,
+                totalElements: 0,
+                hasNext: false,
+            },
+        }
     }
 
     try {
-        return await fetchFromEndpoint<FetchTransactionsResponse[]>(
+        return await fetchFromEndpoint<FetchTransactionsResponse>(
             ActivityEndpoints.getTransactionsOrigin(
                 address,
                 page,
@@ -102,17 +111,26 @@ export const fetchIncomingTransfers = async (
     address: string,
     page: number,
     thor: Connex.Thor,
-): Promise<FetchIncomingTransfersResponse[]> => {
+): Promise<FetchIncomingTransfersResponse> => {
     debug(`Fetching incoming transfers for ${address}`)
 
     // Indexer doesn't support testnet transaction indexing
     if (thor.genesis.id === genesises.test.id) {
         info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
-        return []
+        return {
+            data: [],
+            pagination: {
+                isExactCount: false,
+                countLimit: 0,
+                totalPages: 0,
+                totalElements: 0,
+                hasNext: false,
+            },
+        }
     }
 
     try {
-        return await fetchFromEndpoint<FetchIncomingTransfersResponse[]>(
+        return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
             ActivityEndpoints.getIncomingTransfersOrigin(
                 address,
                 page,
@@ -156,21 +174,23 @@ export const fetchAccountTransactionActivities = async (
     thor: Connex.Thor,
 ): Promise<Activity[]> => {
     // Fetch transactions for the account address
-    const transactions: FetchTransactionsResponse[] = await fetchTransactions(
+    const transactions: FetchTransactionsResponse = await fetchTransactions(
         address,
         page,
         thor,
     )
 
-    const incomingTransfers: FetchIncomingTransfersResponse[] =
+    const incomingTransfers: FetchIncomingTransfersResponse =
         await fetchIncomingTransfers(address, page, thor)
 
     let activitiesFetched: Activity[] = []
 
-    const transactionActivities = getActivitiesFromTransactions(transactions)
+    const transactionActivities = getActivitiesFromTransactions(
+        transactions.data,
+    )
 
     const incomingTransferActivities = getActivitiesFromIncomingTransfers(
-        incomingTransfers,
+        incomingTransfers.data,
         thor,
     )
 

@@ -102,7 +102,7 @@ export const useAccountActivities = (address: string) => {
                 incrementPageAndSetFetchedFlag()
             } catch (e) {
                 // In case of error, log and show warning toast
-                error(e)
+                error("fetchActivities", e)
 
                 showWarningToast(LL.HEADS_UP(), LL.ACTIVITIES_NOT_UP_TO_DATE())
 
