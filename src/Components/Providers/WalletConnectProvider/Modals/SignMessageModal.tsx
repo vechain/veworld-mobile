@@ -15,17 +15,14 @@ import {
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
 import {
-    useAppSelector,
     selectDevice,
-    selectAccounts,
-    selectAccount,
-    useAppDispatch,
+    selectSelectedAccount,
+    useAppSelector,
 } from "~Storage/Redux"
 import {
     CryptoUtils,
     WalletConnectUtils,
     WalletConnectResponseUtils,
-    AddressUtils,
 } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
@@ -47,26 +44,13 @@ export const SignMessageModal = ({
     isOpen,
 }: Props) => {
     const { web3Wallet } = useWalletConnect()
-    const accounts = useAppSelector(selectAccounts)
-    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
-    const setSelectedAccount = (account: AccountWithDevice) => {
-        dispatch(selectAccount({ address: account.address }))
-    }
-
-    // Get the address used for this session
-    // vechain:main:0f6t...98ty63z
-    const address = sessionRequest.namespaces.vechain.accounts[0].split(":")[2]
-    const selectedAccount = accounts.find(acct => {
-        return AddressUtils.compareAddresses(address, acct.address)
-    })
-    if (!selectedAccount) throw new Error("Account not found")
-
-    setSelectedAccount(selectedAccount)
+    const selectedAccount: AccountWithDevice = useAppSelector(
+        selectSelectedAccount,
+    )
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, selectedAccount.rootAddress),
     )
-
     // Request values
     const { method, params } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)

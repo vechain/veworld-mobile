@@ -1,21 +1,24 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { WalletConnectUtils, error } from "~Utils"
+import { AddressUtils, WalletConnectUtils, error } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SignClientTypes, SessionTypes } from "@walletconnect/types"
 import {
     useAppSelector,
     useAppDispatch,
     selectSelectedAccountAddress,
+    selectVisibleAccounts,
+    deleteSession,
+    selectAccount,
 } from "~Storage/Redux"
 import { SignMessageModal } from "./Modals/SignMessageModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
 import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
-import { deleteSession } from "~Storage/Redux/Slices"
 import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { RequestMethods } from "~Constants"
+import { AccountWithDevice } from "~Model"
 
 /**
  * Wallet Connect Flow:
@@ -47,6 +50,7 @@ const WalletConnectContextProvider = ({
     const { LL } = useI18nContext()
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
     const nav = useNavigation()
+    const accounts = useAppSelector(selectVisibleAccounts)
 
     // For session request
     const [signMessageModalVisible, setSignMessageModalVisible] =
@@ -122,6 +126,15 @@ const WalletConnectContextProvider = ({
             const session: SessionTypes.Struct =
                 web3Wallet.engine.signClient.session.get(topic)
 
+            // Get the address used for this session
+            const address = session.namespaces.vechain.accounts[0].split(":")[2]
+            const selectedAccount: AccountWithDevice | undefined =
+                accounts.find(acct => {
+                    return AddressUtils.compareAddresses(address, acct.address)
+                })
+            if (!selectedAccount) throw new Error("Account not found")
+            dispatch(selectAccount({ address: selectedAccount.address }))
+
             setSessionRequest(session)
             setRequestEventData(requestEvent)
 
@@ -137,7 +150,7 @@ const WalletConnectContextProvider = ({
                     break
             }
         },
-        [web3Wallet],
+        [web3Wallet, accounts, dispatch],
     )
 
     const onSessionRequestClose = useCallback(() => {
