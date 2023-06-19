@@ -75,8 +75,9 @@ export const SignMessageModal = ({
     const message = params.payload.content
 
     const signIdentityCertificate = useCallback(
-        async (id: number, privateKey: Buffer) => {
+        async (privateKey: Buffer) => {
             if (!web3Wallet) return
+            if (!requestEvent) return
 
             const cert: Certificate = {
                 ...params,
@@ -105,12 +106,8 @@ export const SignMessageModal = ({
         [selectedAccount, params, url, web3Wallet, onClose, LL, requestEvent],
     )
 
-    const onApprove = useCallback(
+    const onExtractPrivateKey = useCallback(
         async (decryptedWallet: Wallet) => {
-            if (!requestEvent) return
-
-            const { id } = requestEvent
-
             if (!decryptedWallet)
                 throw new Error("Mnemonic wallet can't be empty")
 
@@ -124,9 +121,9 @@ export const SignMessageModal = ({
             const derivedNode = hdNode.derive(selectedAccount.index)
             const privateKey = derivedNode.privateKey as Buffer
 
-            await signIdentityCertificate(id, privateKey)
+            return privateKey
         },
-        [selectedAccount, requestEvent, signIdentityCertificate],
+        [selectedAccount],
     )
 
     async function onReject() {
@@ -161,9 +158,10 @@ export const SignMessageModal = ({
                 password,
             )
 
-            onApprove(decryptedWallet)
+            const privateKey = await onExtractPrivateKey(decryptedWallet)
+            await signIdentityCertificate(privateKey)
         },
-        [onApprove, selectedDevice],
+        [onExtractPrivateKey, selectedDevice, signIdentityCertificate],
     )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =

@@ -133,7 +133,8 @@ const WalletConnectContextProvider = ({
                     setSignTransactionModalVisible(true)
                     break
                 default:
-                    return ""
+                    error("Wallet Connect Session Request Invalid Method")
+                    break
             }
         },
         [web3Wallet],

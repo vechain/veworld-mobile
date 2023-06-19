@@ -192,7 +192,7 @@ export const SignTransactionModal = ({
         ],
     )
 
-    const onApprove = useCallback(
+    const onExtractPrivateKey = useCallback(
         async (decryptedWallet: Wallet) => {
             if (!decryptedWallet)
                 throw new Error("Mnemonic wallet can't be empty")
@@ -207,9 +207,9 @@ export const SignTransactionModal = ({
             const derivedNode = hdNode.derive(selectedAccount.index)
             const privateKey = derivedNode.privateKey as Buffer
 
-            await onSignTransaction(privateKey)
+            return privateKey
         },
-        [selectedAccount, onSignTransaction],
+        [selectedAccount],
     )
 
     async function onReject() {
@@ -253,9 +253,10 @@ export const SignTransactionModal = ({
                 password,
             )
 
-            onApprove(decryptedWallet)
+            const privateKey = await onExtractPrivateKey(decryptedWallet)
+            await onSignTransaction(privateKey)
         },
-        [onApprove, selectedDevice],
+        [selectedDevice, onSignTransaction, onExtractPrivateKey],
     )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
