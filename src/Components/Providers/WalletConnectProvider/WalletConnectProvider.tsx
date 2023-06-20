@@ -9,6 +9,7 @@ import {
     selectVisibleAccounts,
     deleteSession,
     selectAccount,
+    changeSelectedNetwork,
 } from "~Storage/Redux"
 import { SignMessageModal } from "./Modals/SignMessageModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
@@ -18,7 +19,7 @@ import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { RequestMethods } from "~Constants"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, Network } from "~Model"
 
 /**
  * Wallet Connect Flow:
@@ -120,13 +121,11 @@ const WalletConnectContextProvider = ({
             if (!web3Wallet)
                 throw new Error("Web3Wallet is not initialized properly")
 
-            const { topic } = requestEvent
-
             // Get the session for this topic
             const session: SessionTypes.Struct =
-                web3Wallet.engine.signClient.session.get(topic)
+                web3Wallet.engine.signClient.session.get(requestEvent.topic)
 
-            // Get the address used for this session
+            // Switch to the requested account
             const address = session.namespaces.vechain.accounts[0].split(":")[2]
             const selectedAccount: AccountWithDevice | undefined =
                 accounts.find(acct => {
@@ -135,6 +134,13 @@ const WalletConnectContextProvider = ({
             if (!selectedAccount) throw new Error("Account not found")
             dispatch(selectAccount({ address: selectedAccount.address }))
 
+            // Switch to the requested network
+            const network: Network = WalletConnectUtils.getNetworkType(
+                requestEvent.params.chainId,
+            )
+            dispatch(changeSelectedNetwork(network))
+
+            // Set the session request and the request event data
             setSessionRequest(session)
             setRequestEventData(requestEvent)
 

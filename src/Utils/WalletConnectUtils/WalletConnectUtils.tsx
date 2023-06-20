@@ -2,6 +2,8 @@ import { Core } from "@walletconnect/core"
 import { ICore, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { Web3Wallet, IWeb3Wallet } from "@walletconnect/web3wallet"
 import { isEmpty, isNull } from "lodash"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
+import { NETWORK_TYPE, Network } from "~Model"
 
 let web3wallet: IWeb3Wallet
 export const core: ICore = new Core({
@@ -131,5 +133,17 @@ export function formatJsonRpcError(id: number, error: any) {
         id,
         jsonrpc: "2.0",
         error: error,
+    }
+}
+
+export function getNetworkType(chainId: string): Network {
+    let network = chainId.split(":")[1]
+
+    if (NETWORK_TYPE.MAIN.includes(network)) {
+        return defaultMainNetwork
+    } else if (NETWORK_TYPE.TEST.includes(network)) {
+        return defaultTestNetwork
+    } else {
+        return defaultMainNetwork
     }
 }

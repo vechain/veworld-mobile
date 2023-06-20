@@ -26,6 +26,7 @@ Use the following template to create a new Unreleased change log.
 ### Changed
 
 ### Fixed
+- [#663](https://github.com/vechainfoundation/veworld-mobile/pull/663) Switch to requested network during wallet connect session requests
 
 ### Removed
 

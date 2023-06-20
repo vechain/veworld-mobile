@@ -18,7 +18,7 @@ import {
     useWalletConnect,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, NETWORK_TYPE } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     insertSession,
@@ -82,21 +82,25 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             return
         }
 
+        // Setup vechain namespaces to return to the dapp
         const namespaces: SessionTypes.Namespaces = {}
-
-        Object.keys(requiredNamespaces).forEach(key => {
-            const accounts: string[] = []
-
-            requiredNamespaces[key].chains?.map((chain: string) => {
-                accounts.push(`${chain}:${selectedAccount.address}`)
-            })
-
-            namespaces[key] = {
-                accounts,
-                methods: requiredNamespaces[key].methods,
-                events: requiredNamespaces[key].events,
+        const connectedAccounts: string[] = []
+        requiredNamespaces.vechain.chains?.map((scope: string) => {
+            // Valid only for supported networks
+            // scope example: vechain:main, vechain:test
+            if (
+                NETWORK_TYPE.MAIN.includes(scope.split(":")[1]) ||
+                NETWORK_TYPE.TEST.includes(scope.split(":")[1])
+            ) {
+                connectedAccounts.push(`${scope}:${selectedAccount.address}`)
             }
         })
+
+        namespaces.vechain = {
+            accounts: connectedAccounts,
+            methods: requiredNamespaces.vechain.methods,
+            events: requiredNamespaces.vechain.events,
+        }
 
         try {
             let session: SessionTypes.Struct = await web3Wallet.approveSession({
