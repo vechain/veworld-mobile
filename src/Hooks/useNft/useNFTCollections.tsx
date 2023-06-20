@@ -3,7 +3,7 @@ import { useThor } from "~Components"
 import { NonFungibleTokenCollection } from "~Model"
 import { getCollectionInfo, getContractAddresses } from "~Networking"
 import {
-    selectSelectedAccount,
+    // selectSelectedAccount,
     selectSelectedNetwork,
     setCollections,
     setNetworkingSideEffects,
@@ -13,6 +13,7 @@ import {
 import { error } from "~Utils"
 import { getNFTdataForContract, prepareCollectionData } from "./Helpers"
 import { useI18nContext } from "~i18n"
+import { ACCOUNT_WITH_NFTS } from "~Constants/Constants/NFT"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -37,7 +38,7 @@ import { useI18nContext } from "~i18n"
 export const useNFTCollections = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    // const selectedAccount = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
@@ -51,7 +52,8 @@ export const useNFTCollections = () => {
                 // Get contract addresses for nfts owned by ownerAddress
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
-                        selectedAccount.address,
+                        // selectedAccount.address,
+                        ACCOUNT_WITH_NFTS,
                         _resultsPerPage,
                         _page,
                     )
@@ -65,7 +67,8 @@ export const useNFTCollections = () => {
                 const nftResultsPerPage = 1
                 const { nftData } = await getNFTdataForContract(
                     contractsForNFTs,
-                    selectedAccount.address,
+                    // selectedAccount.address,
+                    ACCOUNT_WITH_NFTS,
                     nftResultsPerPage,
                 )
 
@@ -91,7 +94,8 @@ export const useNFTCollections = () => {
                 // set collections to store
                 dispatch(
                     setCollections({
-                        address: selectedAccount.address,
+                        address: ACCOUNT_WITH_NFTS,
+                        // address: selectedAccount.address,
                         collectiondata: {
                             collections: _nftCollections,
                             pagination,
@@ -115,7 +119,8 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, network.type, selectedAccount.address, thor],
+        // [LL, dispatch, network.type, selectedAccount.address, thor],
+        [LL, dispatch, network.type, thor],
     )
 
     return { getCollections }

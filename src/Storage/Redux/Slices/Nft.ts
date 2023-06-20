@@ -12,18 +12,22 @@ import { PaginationResponse } from "~Networking"
 
 type NftSliceState = {
     collectionsPerAccount: Collections
+    NFTsPerAccount: NFTs
+
     blackListedCollections: NonFungibleTokenCollection[]
     blackListedNFTs: NFTBlackListedItem[]
-    NFTsPerAccount: NFTs
+
     isLoading: boolean
     error: string | undefined
 }
 
 export const initialStateNft: NftSliceState = {
-    blackListedCollections: [],
-    blackListedNFTs: [],
     collectionsPerAccount: {},
     NFTsPerAccount: {},
+
+    blackListedCollections: [],
+    blackListedNFTs: [],
+
     isLoading: false,
     error: undefined,
 }

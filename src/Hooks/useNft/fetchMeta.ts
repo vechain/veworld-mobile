@@ -6,10 +6,12 @@ import {
 } from "~Networking"
 import { error } from "~Utils"
 import { TokenMetadata } from "~Model"
+import axios from "axios"
 
 enum URIProtocol {
     IPFS = "ipfs",
     ARWEAVE = "ar",
+    HTTPS = "https",
 }
 
 export type NFTMeta = {
@@ -21,7 +23,7 @@ export const fetchMetadata = async (
     uri: string,
 ): Promise<NFTMeta | undefined> => {
     try {
-        const protocol = uri.split(":")[0]
+        let protocol = uri.split(":")[0]
 
         switch (protocol) {
             case URIProtocol.IPFS: {
@@ -32,8 +34,18 @@ export const fetchMetadata = async (
 
             case URIProtocol.ARWEAVE: {
                 const tokenMetadata = await getTokenMetaArweave(uri)
-                const imageUrl = await getImageUrlArweave(uri)
+                const imageUrl = await getImageUrlArweave(tokenMetadata.image)
+
                 return { tokenMetadata, imageUrl }
+            }
+
+            case URIProtocol.HTTPS: {
+                const tokenMetadata = await axios.get<TokenMetadata>(uri)
+
+                return {
+                    tokenMetadata: tokenMetadata.data,
+                    imageUrl: tokenMetadata.data.image,
+                }
             }
 
             default:

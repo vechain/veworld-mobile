@@ -41,6 +41,19 @@ export interface TokenMetadata {
     rank?: number
     rarity?: number
     attributes?: { trait_type: string; value: string }[]
+    contract_address?: string
+    token_id?: string
+    image_mime_type?: string
+    edition_count?: number
+    categories?: any[]
+    minted_at?: number
+    creator?: string
+    external_url?: string
+    scores?: { trait_type: string; value: number }[]
+    collection?: {
+        family: string
+        name: string
+    }
 }
 
 export interface SelectedNFT {

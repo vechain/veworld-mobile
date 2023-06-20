@@ -10,8 +10,9 @@ import {
 import { useI18nContext } from "~i18n"
 
 type Props = {
-    onGoToBlackListed: () => void
+    onGoToBlackListed?: () => void
     isLoading: boolean
+    isShowHiddenCollectioButton?: boolean
 }
 
 // TODO -> show button only if there are blacklisted collections or NFTs
@@ -21,31 +22,33 @@ export const ListFooterView = memo(
 
         return (
             <>
-                <BaseSpacer height={36} />
-                <BaseTouchableBox
-                    action={onGoToBlackListed}
-                    children={
-                        <>
-                            <BaseView
-                                w={100}
-                                h={100}
-                                flexDirection="row"
-                                justifyContent="center"
-                                alignItems="center">
-                                <BaseText typographyFont="bodyBold">
-                                    {LL.HIDDEN_COLLECTIONS()}
-                                </BaseText>
-                                <BaseIcon name="chevron-down" />
-                            </BaseView>
-                        </>
-                    }
-                />
-
-                {isLoading ? (
-                    <ActivityIndicator style={baseStyles.activityIndicator} />
-                ) : (
-                    <BaseSpacer height={18} />
+                {onGoToBlackListed && <BaseSpacer height={18} />}
+                {onGoToBlackListed && (
+                    <BaseTouchableBox
+                        action={onGoToBlackListed}
+                        children={
+                            <>
+                                <BaseView
+                                    w={100}
+                                    h={100}
+                                    flexDirection="row"
+                                    justifyContent="center"
+                                    alignItems="center">
+                                    <BaseText typographyFont="bodyBold">
+                                        {LL.HIDDEN_COLLECTIONS()}
+                                    </BaseText>
+                                    <BaseIcon name="chevron-down" />
+                                </BaseView>
+                            </>
+                        }
+                    />
                 )}
+
+                {isLoading && (
+                    <ActivityIndicator style={baseStyles.activityIndicator} />
+                )}
+
+                {onGoToBlackListed && !isLoading && <BaseSpacer height={18} />}
             </>
         )
     },

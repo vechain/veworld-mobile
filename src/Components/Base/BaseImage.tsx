@@ -1,19 +1,27 @@
-import React from "react"
+import React, { memo } from "react"
 import FastImage, { FastImageProps } from "react-native-fast-image"
 
 type Props = {
     uri: string
     w?: number
     h?: number
+    isNFT?: boolean
 } & FastImageProps
 
-export const BaseImage = (props: Props) => {
-    const { uri, w, h, style, testID, ...rest } = props
+export const BaseImage = memo((props: Props) => {
+    const { uri, w, h, style, testID, isNFT = false, ...rest } = props
 
     return (
         <FastImage
             testID={testID}
             style={[{ width: w, height: h }, style]}
+            fallback
+            // todo -> change fallback for not NFTs
+            defaultSource={
+                isNFT
+                    ? require("../../Assets/Img/NFTPlaceholder.png")
+                    : require("../../Assets/Img/NFTPlaceholder.png")
+            }
             source={{
                 uri,
                 priority: FastImage.priority.high,
@@ -23,4 +31,4 @@ export const BaseImage = (props: Props) => {
             resizeMode={FastImage.resizeMode.cover}
         />
     )
-}
+})

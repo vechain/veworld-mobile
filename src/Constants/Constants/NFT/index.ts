@@ -1,0 +1,1 @@
+export const ACCOUNT_WITH_NFTS = "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048"

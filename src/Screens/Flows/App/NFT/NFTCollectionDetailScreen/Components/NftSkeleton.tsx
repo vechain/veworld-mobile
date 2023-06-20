@@ -16,29 +16,68 @@ export const NftSkeleton = () => {
             layout={[
                 {
                     opacity: 0.3,
-                    marginTop: 24,
-                    width: SCREEN_WIDTH,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    flexDirection: "row",
+                    alignItems: "flex-end",
+                    marginHorizontal: 20,
                     children: [
                         {
-                            width: 247,
-                            marginHorizontal: 20,
-                            height: 68,
-                            borderRadius: 34,
+                            width: 48,
+                            height: 48,
+                            borderRadius: 24,
+                            marginRight: 12,
+                            marginTop: 12,
+                        },
+                        {
+                            width: SCREEN_WIDTH - 96,
+                            height: 24,
                         },
                     ],
                 },
+
+                {
+                    marginHorizontal: 20,
+                    children: [
+                        {
+                            opacity: 0.3,
+                            width: 128,
+                            height: 12,
+                            marginTop: 22,
+                        },
+
+                        {
+                            opacity: 0.3,
+                            width: SCREEN_WIDTH - 48,
+                            height: 12,
+                            marginTop: 22,
+                        },
+
+                        {
+                            opacity: 0.3,
+                            width: SCREEN_WIDTH - 48,
+                            height: 12,
+                            marginTop: 8,
+                        },
+
+                        {
+                            opacity: 0.3,
+                            width: 128,
+                            height: 22,
+                            marginTop: 24,
+                        },
+                    ],
+                },
+
                 {
                     opacity: 0.3,
                     flexDirection: "row",
-                    paddingTop: 24,
+                    paddingTop: 18,
+                    marginHorizontal: 20,
+
                     children: [
                         {
                             flexWrap: "wrap",
                             flexDirection: "row",
                             justifyContent: "space-between",
-                            marginHorizontal: 20,
                             children: [
                                 {
                                     width: SCREEN_WIDTH / 2 - 30,

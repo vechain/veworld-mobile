@@ -13,7 +13,9 @@ import { useThor } from "~Components"
 import { NFTPlaceholder } from "~Assets"
 import { fetchMetadata } from "./fetchMeta"
 import { error } from "~Utils"
+import { ACCOUNT_WITH_NFTS } from "~Constants/Constants/NFT"
 
+//  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -35,7 +37,8 @@ export const useNFTs = () => {
             try {
                 const { nftData } = await getNFTdataForContract(
                     [contractAddress],
-                    selectedAccount.address,
+                    // selectedAccount.address,
+                    ACCOUNT_WITH_NFTS,
                     _resultsPerPage,
                     _page,
                 )
@@ -57,7 +60,8 @@ export const useNFTs = () => {
                         const id =
                             contractAddress +
                             nft.tokenId +
-                            selectedAccount.address
+                            // selectedAccount.address
+                            ACCOUNT_WITH_NFTS
 
                         _nft = {
                             id,
@@ -75,7 +79,8 @@ export const useNFTs = () => {
 
                 dispatch(
                     setNFTs({
-                        address: selectedAccount.address,
+                        address: ACCOUNT_WITH_NFTS,
+                        // address: selectedAccount.address,
                         collectionAddress: contractAddress,
                         NFTs: NFTs,
                         // taking first element because we are fetching only for one contract address

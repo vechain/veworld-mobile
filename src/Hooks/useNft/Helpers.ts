@@ -63,7 +63,10 @@ export const prepareCollectionData = async (
         name: await getName(_nft.contractAddress, thor),
         symbol: await getSymbol(_nft.contractAddress, thor),
         creator: foundCollection?.creator ?? notAvailable,
-        description: foundCollection?.description ?? "",
+        description:
+            foundCollection?.description ??
+            nftMeta?.tokenMetadata.description ??
+            "",
         icon: foundCollection?.icon
             ? `https://vechain.github.io/nft-registry/${foundCollection?.icon}`
             : nftMeta?.imageUrl ?? NFTPlaceholder,
