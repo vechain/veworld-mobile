@@ -1,6 +1,7 @@
 import React from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { RequestMethods } from "~Constants"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     name: string
@@ -8,20 +9,22 @@ type Props = {
 }
 
 export const AppConnectionRequests = ({ name, methods }: Props) => {
+    const { LL } = useI18nContext()
+
     return (
         <BaseView>
             <BaseText typographyFont="subTitle">
-                {"Connection request"}
+                {LL.CONNECTION_REQUEST_TITLE()}
             </BaseText>
 
             <BaseSpacer height={15} />
-            <BaseText>{name + " is asking for access to:"}</BaseText>
+            <BaseText>{LL.CONNECTION_REQUEST_SUBTITLE({ name })}</BaseText>
 
             {methods.find(method => method === "request_transaction") && (
                 <>
                     <BaseSpacer height={8} />
                     <BaseText>
-                        {"\u25CF Request transactions to send to Vechain Thor"}
+                        {LL.CONNECTION_REQUEST_TRANSACTION_DESCRIPTION()}
                     </BaseText>
                 </>
             )}
@@ -33,9 +36,7 @@ export const AppConnectionRequests = ({ name, methods }: Props) => {
                 <>
                     <BaseSpacer height={8} />
                     <BaseText>
-                        {
-                            "\u25CF Request your signature on certificates or identification and agreements"
-                        }
+                        {LL.CONNECTION_REQUEST_SIGN_DESCRIPTION()}
                     </BaseText>
                 </>
             )}

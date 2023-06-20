@@ -1,6 +1,6 @@
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ScrollView } from "react-native"
 import {
     BaseText,
     BaseButton,
@@ -10,22 +10,18 @@ import {
     showWarningToast,
     BaseModal,
     CloseModalButton,
-    BaseScrollView,
     AccountCard,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
 import {
-    useAppSelector,
     selectDevice,
-    selectAccounts,
-    selectAccount,
-    useAppDispatch,
+    selectSelectedAccount,
+    useAppSelector,
 } from "~Storage/Redux"
 import {
     CryptoUtils,
     WalletConnectUtils,
     WalletConnectResponseUtils,
-    AddressUtils,
 } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
@@ -47,26 +43,13 @@ export const SignMessageModal = ({
     isOpen,
 }: Props) => {
     const { web3Wallet } = useWalletConnect()
-    const accounts = useAppSelector(selectAccounts)
-    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
-    const setSelectedAccount = (account: AccountWithDevice) => {
-        dispatch(selectAccount({ address: account.address }))
-    }
-
-    // Get the address used for this session
-    // vechain:main:0f6t...98ty63z
-    const address = sessionRequest.namespaces.vechain.accounts[0].split(":")[2]
-    const selectedAccount = accounts.find(acct => {
-        return AddressUtils.compareAddresses(address, acct.address)
-    })
-    if (!selectedAccount) throw new Error("Account not found")
-
-    setSelectedAccount(selectedAccount)
+    const selectedAccount: AccountWithDevice = useAppSelector(
+        selectSelectedAccount,
+    )
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, selectedAccount.rootAddress),
     )
-
     // Request values
     const { method, params } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
@@ -75,8 +58,9 @@ export const SignMessageModal = ({
     const message = params.payload.content
 
     const signIdentityCertificate = useCallback(
-        async (id: number, privateKey: Buffer) => {
+        async (privateKey: Buffer) => {
             if (!web3Wallet) return
+            if (!requestEvent) return
 
             const cert: Certificate = {
                 ...params,
@@ -105,12 +89,8 @@ export const SignMessageModal = ({
         [selectedAccount, params, url, web3Wallet, onClose, LL, requestEvent],
     )
 
-    const onApprove = useCallback(
+    const onExtractPrivateKey = useCallback(
         async (decryptedWallet: Wallet) => {
-            if (!requestEvent) return
-
-            const { id } = requestEvent
-
             if (!decryptedWallet)
                 throw new Error("Mnemonic wallet can't be empty")
 
@@ -124,9 +104,9 @@ export const SignMessageModal = ({
             const derivedNode = hdNode.derive(selectedAccount.index)
             const privateKey = derivedNode.privateKey as Buffer
 
-            await signIdentityCertificate(id, privateKey)
+            return privateKey
         },
-        [selectedAccount, requestEvent, signIdentityCertificate],
+        [selectedAccount],
     )
 
     async function onReject() {
@@ -161,9 +141,10 @@ export const SignMessageModal = ({
                 password,
             )
 
-            onApprove(decryptedWallet)
+            const privateKey = await onExtractPrivateKey(decryptedWallet)
+            await signIdentityCertificate(privateKey)
         },
-        [onApprove, selectedDevice],
+        [onExtractPrivateKey, selectedDevice, signIdentityCertificate],
     )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
@@ -173,7 +154,7 @@ export const SignMessageModal = ({
 
     return (
         <BaseModal isOpen={isOpen} onClose={onClose}>
-            <BaseScrollView
+            <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
@@ -182,23 +163,21 @@ export const SignMessageModal = ({
                 <CloseModalButton onPress={onClose} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
-                        {"External app request"}
+                        {LL.CONNECTED_APP_REQUEST()}
                     </BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitle">
-                        {"Sign a certificate"}
+                        {LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>
-                        {
-                            "Your Signature is being requested to sign a certificate"
-                        }
+                        {LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}
                     </BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitleBold">
-                        {"Account"}
+                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard account={selectedAccount} />
@@ -211,21 +190,21 @@ export const SignMessageModal = ({
 
                         <BaseSpacer height={16} />
                         <BaseText typographyFont="subTitle">
-                            {"Origin"}
+                            {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
 
                         <BaseSpacer height={16} />
                         <BaseText typographyFont="subTitle">
-                            {"Purpose"}
+                            {LL.CONNECTED_APP_SELECTED_PURPOSE_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{capitalize(method)}</BaseText>
 
                         <BaseSpacer height={24} />
                         <BaseText typographyFont="subTitle">
-                            {"Content"}
+                            {LL.CONNECTED_APP_SELECTED_CONTENT_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{message}</BaseText>
@@ -236,7 +215,7 @@ export const SignMessageModal = ({
                     <BaseButton
                         w={100}
                         haptics="light"
-                        title={"SIGN"}
+                        title={LL.COMMON_BTN_SIGN()}
                         action={checkIdentityBeforeOpening}
                     />
                     <BaseSpacer height={16} />
@@ -244,11 +223,11 @@ export const SignMessageModal = ({
                         w={100}
                         haptics="light"
                         variant="outline"
-                        title={"REJECT"}
+                        title={LL.COMMON_BTN_REJECT()}
                         action={onReject}
                     />
                 </BaseView>
-            </BaseScrollView>
+            </ScrollView>
             <ConfirmIdentityBottomSheet />
         </BaseModal>
     )

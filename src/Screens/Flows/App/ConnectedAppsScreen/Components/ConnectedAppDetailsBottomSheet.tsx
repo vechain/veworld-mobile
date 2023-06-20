@@ -1,6 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { SessionTypes } from "@walletconnect/types"
 import React, { useCallback } from "react"
+import { Image, StyleSheet } from "react-native"
 import {
     BaseButton,
     BaseView,
@@ -11,9 +12,7 @@ import {
     AccountIcon,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
-import { FormattingUtils, WalletConnectUtils } from "~Utils"
-import { AppInfo } from "./AppInfo"
-import { useI18nContext } from "~i18n"
+import { FormattingUtils } from "~Utils"
 
 const snapPoints = ["65%"]
 
@@ -23,15 +22,11 @@ type Props = {
     account: AccountWithDevice
 }
 
-export const AppDetailsBottomSheet = React.forwardRef<
+export const ConnectedAppDetailsBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose, session, account }, ref) => {
     const { disconnect } = useWalletConnect()
-    const { LL } = useI18nContext()
-
-    const { name, description, url, icon } =
-        WalletConnectUtils.getSessionRequestAttributes(session)
 
     const disconnectSession = useCallback(() => {
         disconnect(session.topic)
@@ -41,21 +36,36 @@ export const AppDetailsBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onClose}>
             <BaseView mx={20}>
-                <BaseText typographyFont="title">
-                    {LL.CONNECTED_APP_DETAILS_TITLE()}
+                <BaseText typographyFont="title">{"Connected app"}</BaseText>
+                <BaseSpacer height={8} />
+                <BaseText typographyFont="subSubTitleLight">
+                    {"External app connection"}
                 </BaseText>
 
-                <BaseSpacer height={16} />
-                <AppInfo
-                    name={name}
-                    url={url}
-                    icon={icon}
-                    description={description}
+                <BaseSpacer height={24} />
+                <Image
+                    style={styles.dappLogo}
+                    source={{
+                        uri: session.peer.metadata.icons[0],
+                    }}
                 />
+
+                <BaseSpacer height={14} />
+                <BaseText typographyFont="subSubTitle">
+                    {session.peer.metadata.name}
+                </BaseText>
+
+                <BaseSpacer height={8} />
+                <BaseText>{session.peer.metadata.description}</BaseText>
+
+                <BaseSpacer height={8} />
+                <BaseText typographyFont="caption">
+                    {session.peer.metadata.url}
+                </BaseText>
 
                 <BaseSpacer height={24} />
                 <BaseText typographyFont="subSubTitle">
-                    {LL.CONNECTED_APP_DETAILS_ACCOUNT_LABEL()}
+                    {"Connected with"}
                 </BaseText>
                 <BaseSpacer height={8} />
                 <BaseView flexDirection="row">
@@ -71,9 +81,39 @@ export const AppDetailsBottomSheet = React.forwardRef<
                     </BaseView>
                 </BaseView>
 
-                <BaseSpacer height={40} />
+                <BaseSpacer height={24} />
                 <BaseButton action={disconnectSession} title="Disconnect" />
             </BaseView>
         </BaseBottomSheet>
     )
+})
+
+const styles = StyleSheet.create({
+    innerContainer: {
+        height: 45,
+    },
+    container: {
+        width: "100%",
+    },
+    image: { width: 40, height: 40, borderRadius: 24 },
+    dappLogo: {
+        width: 100,
+        height: 100,
+        borderRadius: 8,
+        marginVertical: 4,
+    },
+    rightSubContainer: {
+        width: "50%",
+        flexDirection: "column",
+        alignItems: "flex-end",
+    },
+    wallet: {
+        opacity: 0.7,
+    },
+    address: {
+        opacity: 0.7,
+    },
+    walletContainer: {
+        flex: 1,
+    },
 })

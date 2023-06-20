@@ -19,9 +19,7 @@ import {
     selectSelectedNetwork,
     useAppSelector,
     selectDevice,
-    selectAccount,
-    useAppDispatch,
-    selectAccounts,
+    selectSelectedAccount,
 } from "~Storage/Redux"
 import {
     HexUtils,
@@ -29,7 +27,6 @@ import {
     TransactionUtils,
     WalletConnectUtils,
     WalletConnectResponseUtils,
-    AddressUtils,
 } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
@@ -56,31 +53,16 @@ export const SignTransactionModal = ({
     const { web3Wallet } = useWalletConnect()
     const thorClient = useThor()
     const network = useAppSelector(selectSelectedNetwork)
-    const accounts = useAppSelector(selectAccounts)
+    const selectedAccount: AccountWithDevice = useAppSelector(
+        selectSelectedAccount,
+    )
     const { LL } = useI18nContext()
-    const dispatch = useAppDispatch()
 
     // Session request values
     const { chainId, method, params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const message = params.comment || params.txMessage[0].comment
 
-    const setSelectedAccount = (account: AccountWithDevice) => {
-        dispatch(selectAccount({ address: account.address }))
-    }
-
-    // Get the address used for this session
-    // vechain:main:0f6t...98ty63z
-    const address = sessionRequest.namespaces.vechain.accounts[0].split(":")[2]
-
-    const selectedAccount: AccountWithDevice | undefined = accounts.find(
-        acct => {
-            return AddressUtils.compareAddresses(address, acct.address)
-        },
-    )
-    if (!selectedAccount) throw new Error("Account not found")
-
-    setSelectedAccount(selectedAccount)
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, selectedAccount.rootAddress),
     )
@@ -192,7 +174,7 @@ export const SignTransactionModal = ({
         ],
     )
 
-    const onApprove = useCallback(
+    const onExtractPrivateKey = useCallback(
         async (decryptedWallet: Wallet) => {
             if (!decryptedWallet)
                 throw new Error("Mnemonic wallet can't be empty")
@@ -207,9 +189,9 @@ export const SignTransactionModal = ({
             const derivedNode = hdNode.derive(selectedAccount.index)
             const privateKey = derivedNode.privateKey as Buffer
 
-            await onSignTransaction(privateKey)
+            return privateKey
         },
-        [selectedAccount, onSignTransaction],
+        [selectedAccount],
     )
 
     async function onReject() {
@@ -253,9 +235,10 @@ export const SignTransactionModal = ({
                 password,
             )
 
-            onApprove(decryptedWallet)
+            const privateKey = await onExtractPrivateKey(decryptedWallet)
+            await onSignTransaction(privateKey)
         },
-        [onApprove, selectedDevice],
+        [selectedDevice, onSignTransaction, onExtractPrivateKey],
     )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
@@ -274,23 +257,21 @@ export const SignTransactionModal = ({
                 <CloseModalButton onPress={onClose} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
-                        {"External app request"}
+                        {LL.CONNECTED_APP_REQUEST()}
                     </BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitle">
-                        {"Send a transaction"}
+                        {LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>
-                        {
-                            "Your Signature is being requested to send a transaction"
-                        }
+                        {LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION()}
                     </BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitleBold">
-                        {"Account"}
+                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard account={selectedAccount} />
@@ -301,22 +282,30 @@ export const SignTransactionModal = ({
                     </BaseText>
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">{"Origin"}</BaseText>
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">{"Chain"}</BaseText>
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_NETWORK_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText>{chainId.split(":")[1]}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">{"Method"}</BaseText>
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_METHOD_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText>{method}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">{"Message"}</BaseText>
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_MESSAGE_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
                     <BaseText numberOfLines={2} ellipsizeMode="tail">
                         {message}
@@ -328,7 +317,7 @@ export const SignTransactionModal = ({
                     <BaseButton
                         w={100}
                         haptics="light"
-                        title={"SIGN AND SEND"}
+                        title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={checkIdentityBeforeOpening}
                     />
                     <BaseSpacer height={16} />
@@ -336,7 +325,7 @@ export const SignTransactionModal = ({
                         w={100}
                         haptics="light"
                         variant="outline"
-                        title={"REJECT"}
+                        title={LL.COMMON_BTN_REJECT()}
                         action={onReject}
                     />
                 </BaseView>

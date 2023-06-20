@@ -154,21 +154,21 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea grow={1}>
-            <CloseModalButton onPress={onPressBack} />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
+                <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
-                        {"Connected app"}
+                        {LL.CONNECTED_APP_TITLE()}
                     </BaseText>
 
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="subTitle">
-                        {"External app connection"}
+                        {LL.CONNECTED_APP_REQUEST()}
                     </BaseText>
 
                     <BaseSpacer height={16} />
@@ -186,7 +186,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 <BaseView mx={20}>
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="subTitleBold">
-                        {"Select account"}
+                        {LL.COMMON_SELECT_ACCOUNT()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard
@@ -200,7 +200,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     <BaseButton
                         w={100}
                         haptics="light"
-                        title={"CONNECT"}
+                        title={LL.COMMON_BTN_CONNECT()}
                         action={handleAccept}
                     />
                     <BaseSpacer height={16} />
@@ -208,7 +208,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="light"
                         variant="outline"
-                        title={"CANCEL"}
+                        title={LL.COMMON_BTN_CANCEL_CAPS_LOCK()}
                         action={handleReject}
                     />
                 </BaseView>
