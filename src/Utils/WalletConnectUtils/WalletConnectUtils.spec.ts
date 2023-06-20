@@ -60,6 +60,7 @@ describe("getPairAttributes", () => {
             events: ["event1", "event2"],
             chains: ["chain1", "chain2"],
             icon: "https://example.com/icon.png",
+            description: "Test Description",
         })
     })
 })
