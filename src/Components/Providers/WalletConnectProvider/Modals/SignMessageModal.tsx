@@ -50,6 +50,7 @@ export const SignMessageModal = ({
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, selectedAccount.rootAddress),
     )
+
     // Request values
     const { method, params } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)

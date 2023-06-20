@@ -32,7 +32,7 @@ import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
-import { isEmpty, isUndefined } from "lodash"
+import { capitalize, isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
 import { sponsorTransaction, sendTransaction } from "~Networking"
 import { ScrollView } from "react-native-gesture-handler"
@@ -59,7 +59,7 @@ export const SignTransactionModal = ({
     const { LL } = useI18nContext()
 
     // Session request values
-    const { chainId, method, params, topic } =
+    const { method, params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const message = params.comment || params.txMessage[0].comment
 
@@ -293,7 +293,7 @@ export const SignTransactionModal = ({
                         {LL.CONNECTED_APP_SELECTED_NETWORK_LABEL()}
                     </BaseText>
                     <BaseSpacer height={8} />
-                    <BaseText>{chainId.split(":")[1]}</BaseText>
+                    <BaseText>{capitalize(network.name)}</BaseText>
 
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitle">

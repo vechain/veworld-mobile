@@ -1,11 +1,13 @@
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import {
     formatJsonRpcError,
+    getNetworkType,
     getPairAttributes,
     getRequestEventAttributes,
     getSessionRequestAttributes,
     isValidURI,
 } from "./WalletConnectUtils"
+import { NETWORK_TYPE } from "~Model"
 
 describe("getPairAttributes", () => {
     it("should return the pair attributes correctly", () => {
@@ -178,5 +180,51 @@ describe("formatJsonRpcError", () => {
                 message: "Error message",
             },
         })
+    })
+})
+
+describe("getNetworkType", () => {
+    it("should return defaultMainNetwork for a main network chainId", () => {
+        // Define the input
+        const chainId = "vechain:main"
+
+        // Call the function
+        const result = getNetworkType(chainId)
+
+        // Assertion
+        expect(result.type).toEqual(NETWORK_TYPE.MAIN)
+    })
+
+    it("should return defaultMainNetwork for a mainnet network chainId", () => {
+        // Define the input
+        const chainId = "vechain:mainnet"
+
+        // Call the function
+        const result = getNetworkType(chainId)
+
+        // Assertion
+        expect(result.type).toEqual(NETWORK_TYPE.MAIN)
+    })
+
+    it("should return defaultTestNetwork for a test network chainId", () => {
+        // Define the input
+        const chainId = "example:test"
+
+        // Call the function
+        const result = getNetworkType(chainId)
+
+        // Assertion
+        expect(result.type).toEqual(NETWORK_TYPE.TEST)
+    })
+
+    it("should return defaultMainNetwork for an unknown network chainId", () => {
+        // Define the input
+        const chainId = "example:unknown"
+
+        // Call the function
+        const result = getNetworkType(chainId)
+
+        // Assertion
+        expect(result.type).toEqual(NETWORK_TYPE.MAIN)
     })
 })
