@@ -1,6 +1,6 @@
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ScrollView } from "react-native"
 import {
     BaseText,
     BaseButton,
@@ -10,7 +10,6 @@ import {
     showWarningToast,
     BaseModal,
     CloseModalButton,
-    BaseScrollView,
     AccountCard,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
@@ -155,7 +154,7 @@ export const SignMessageModal = ({
 
     return (
         <BaseModal isOpen={isOpen} onClose={onClose}>
-            <BaseScrollView
+            <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
@@ -228,7 +227,7 @@ export const SignMessageModal = ({
                         action={onReject}
                     />
                 </BaseView>
-            </BaseScrollView>
+            </ScrollView>
             <ConfirmIdentityBottomSheet />
         </BaseModal>
     )

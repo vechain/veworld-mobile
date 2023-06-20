@@ -154,13 +154,13 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea grow={1}>
-            <CloseModalButton onPress={onPressBack} />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
+                <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
                         {LL.CONNECTED_APP_TITLE()}
