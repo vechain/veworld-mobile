@@ -21,15 +21,31 @@ export const NftSkeleton = () => {
                     marginHorizontal: 20,
                     children: [
                         {
-                            width: 48,
-                            height: 48,
-                            borderRadius: 24,
-                            marginRight: 12,
+                            width: 80,
+                            height: 80,
+                            borderRadius: 12,
+                            marginRight: 14,
                             marginTop: 12,
                         },
+
                         {
-                            width: SCREEN_WIDTH - 96,
-                            height: 24,
+                            children: [
+                                {
+                                    width: SCREEN_WIDTH / 1.7,
+                                    height: 18,
+                                    marginBottom: 4,
+                                },
+
+                                {
+                                    width: SCREEN_WIDTH / 2.2,
+                                    height: 18,
+                                    marginBottom: 4,
+                                },
+                                {
+                                    width: SCREEN_WIDTH / 3,
+                                    height: 32,
+                                },
+                            ],
                         },
                     ],
                 },

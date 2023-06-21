@@ -18,7 +18,9 @@ export interface NonFungibleTokenCollection {
     description: string
     icon: string
     balanceOf: number
+    isExactCount: boolean
     nfts: NonFungibleToken[]
+    isBlacklisted: boolean
 }
 
 export interface NonFungibleToken extends TokenMetadata, WithID {
@@ -26,6 +28,7 @@ export interface NonFungibleToken extends TokenMetadata, WithID {
     tokenId: string
     tokenURI?: string
     belongsToCollectionAddress: string
+    isBlacklisted: boolean
 }
 
 export interface WithID {

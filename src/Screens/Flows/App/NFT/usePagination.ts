@@ -17,7 +17,7 @@ export const usePagination = () => {
             const presentedElements =
                 totalElementsReceived + blackListedCollections.length
 
-            if (totalElements === presentedElements) {
+            if (presentedElements >= totalElements) {
                 return
             }
 

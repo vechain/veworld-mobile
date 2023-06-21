@@ -1,13 +1,26 @@
 import { StyleSheet } from "react-native"
 import React, { memo } from "react"
-import { BaseImage, BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseButton,
+    BaseIcon,
+    BaseImage,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import { isEmpty } from "lodash"
 import { useI18nContext } from "~i18n"
 import { NonFungibleTokenCollection } from "~Model"
 
+import { COLORS } from "~Constants"
+import { useToggleCollection } from "./Hooks/useToggleCollection"
+
 export const HeaderComponent = memo(
     ({ collection }: { collection: NonFungibleTokenCollection }) => {
         const { LL } = useI18nContext()
+
+        const { onToggleCollection, toggleCollectionUI } =
+            useToggleCollection(collection)
 
         return (
             <>
@@ -17,12 +30,46 @@ export const HeaderComponent = memo(
                         style={baseStyles.nftHeaderImage}
                     />
 
-                    <BaseText
-                        typographyFont="biggerTitle"
-                        numberOfLines={2}
-                        pr={24}>
-                        {collection?.name}
-                    </BaseText>
+                    <BaseView>
+                        <BaseText
+                            typographyFont="subTitleBold"
+                            numberOfLines={2}
+                            pr={96}>
+                            {collection?.name}
+                        </BaseText>
+
+                        <BaseView style={baseStyles.buttonWidth} mt={4}>
+                            <BaseButton
+                                action={onToggleCollection}
+                                size="sm"
+                                variant={
+                                    toggleCollectionUI ? "solid" : "outline"
+                                }
+                                radius={8}
+                                title={
+                                    toggleCollectionUI
+                                        ? "Show Collection"
+                                        : "Hide Collection"
+                                }
+                                leftIcon={
+                                    <BaseView mr={4}>
+                                        <BaseIcon
+                                            color={
+                                                toggleCollectionUI
+                                                    ? COLORS.WHITE
+                                                    : COLORS.DARK_PURPLE
+                                            }
+                                            name={
+                                                toggleCollectionUI
+                                                    ? "eye"
+                                                    : "eye-off"
+                                            }
+                                        />
+                                    </BaseView>
+                                }
+                            />
+                        </BaseView>
+                    </BaseView>
                 </BaseView>
 
                 <>
@@ -47,9 +94,13 @@ export const HeaderComponent = memo(
 
 const baseStyles = StyleSheet.create({
     nftHeaderImage: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
+        width: 80,
+        height: 80,
+        borderRadius: 12,
         marginRight: 12,
+    },
+    buttonWidth: {
+        width: 134,
+        height: 32,
     },
 })

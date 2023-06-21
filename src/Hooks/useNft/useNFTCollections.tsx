@@ -85,7 +85,7 @@ export const useNFTCollections = () => {
                         nft,
                         foundCollection,
                         thor,
-                        LL.DATE_NOT_AVAILABLE(),
+                        LL.COMMON_NOT_AVAILABLE(),
                     )
 
                     _nftCollections.push(nftCollection)

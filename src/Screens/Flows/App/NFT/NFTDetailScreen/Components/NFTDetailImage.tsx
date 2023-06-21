@@ -1,38 +1,19 @@
-import React, { useCallback } from "react"
+import React from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { SCREEN_WIDTH, COLORS } from "~Constants"
-import { BaseIcon, BaseImage, BaseText, BaseView, BlurView } from "~Components"
-import { setBlackListNFT, useAppDispatch } from "~Storage/Redux"
+import { BaseImage, BaseText, BaseView } from "~Components"
 
 type Props = {
     image: string
     name: string
     tokenId: string
-    hidden: boolean
-    collectionAddress: string
 }
 
 const IMAGE_SIZE = SCREEN_WIDTH - 40
 
-export const NFTDetailImage = ({
-    image,
-    name,
-    tokenId,
-    hidden,
-    collectionAddress,
-}: Props) => {
+export const NFTDetailImage = ({ image, name, tokenId }: Props) => {
     const theme = useTheme()
-    const dispatch = useAppDispatch()
-
-    const onHiddenPress = useCallback(() => {
-        dispatch(
-            setBlackListNFT({
-                contractAddress: collectionAddress,
-                tokenId,
-            }),
-        )
-    }, [collectionAddress, dispatch, tokenId])
 
     return (
         <BaseView>
@@ -43,8 +24,6 @@ export const NFTDetailImage = ({
                     h={IMAGE_SIZE}
                     style={baseStyles.nftImage}
                 />
-
-                {hidden && <BlurView blurAmount={30} />}
             </BaseView>
 
             <BaseView
@@ -64,14 +43,6 @@ export const NFTDetailImage = ({
                     </BaseText>
                     <BaseText color={COLORS.WHITE}># {tokenId}</BaseText>
                 </BaseView>
-
-                <BaseIcon
-                    name={hidden ? "eye-off-outline" : "eye-outline"}
-                    bg={COLORS.LIME_GREEN}
-                    color={COLORS.DARK_PURPLE}
-                    action={onHiddenPress}
-                    size={24}
-                />
             </BaseView>
         </BaseView>
     )

@@ -1,9 +1,5 @@
 import { StyleSheet } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import {
-    selectCollectionWithContractAddress,
-    useAppSelector,
-} from "~Storage/Redux"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
@@ -16,6 +12,7 @@ import { NFTList } from "./Components"
 import { isEmpty } from "lodash"
 import { NetworkErrorView } from "../NFTScreen/Components/NetworkErrorView"
 import { NftSkeleton } from "./Components/NftSkeleton"
+import { useCollectionSource } from "./Hooks/useCollectionSource"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -28,11 +25,8 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
-    const collection = useAppSelector(state =>
-        selectCollectionWithContractAddress(
-            state,
-            route.params.collectionAddress,
-        ),
+    const { anyCollection } = useCollectionSource(
+        route.params.collectionAddress,
     )
 
     const { NFTs, fetchMoreNFTs, isLoading, error } = useNFTWithMetadata(
@@ -44,17 +38,17 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
 
         if (isLoading && isEmpty(NFTs)) return <NftSkeleton />
 
-        if (!isEmpty(NFTs) && !isEmpty(collection)) {
+        if (!isEmpty(NFTs) && !isEmpty(anyCollection)) {
             return (
                 <NFTList
-                    collection={collection}
+                    collection={anyCollection}
                     isLoading={isLoading}
                     NFTs={NFTs}
                     fetchMoreNFTs={fetchMoreNFTs}
                 />
             )
         }
-    }, [NFTs, collection, error, fetchMoreNFTs, isLoading])
+    }, [NFTs, anyCollection, error, fetchMoreNFTs, isLoading])
 
     return (
         <BaseSafeArea grow={1} testID="NFT_Collection_Detail_Screen">

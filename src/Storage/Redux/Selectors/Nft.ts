@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { NonFungibleTokenCollection } from "~Model"
+import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { selectSelectedAccount } from "./Account"
 import { isEmpty } from "lodash"
 import { ACCOUNT_WITH_NFTS } from "~Constants/Constants/NFT"
@@ -105,10 +105,8 @@ export const selectNFTWithAddressAndTokenId = createSelector(
         if (state.NFTsPerAccount[ACCOUNT_WITH_NFTS] !== undefined) {
             return state.NFTsPerAccount[ACCOUNT_WITH_NFTS][
                 contractAddress
-            ].NFTs.find(nft => nft.tokenId === tokenId)
+            ].NFTs.find(nft => nft.tokenId === tokenId) as NonFungibleToken
         }
-
-        return {}
     },
 )
 
@@ -135,6 +133,14 @@ export const selectNFTsForCollection = createSelector(
             },
         }
     },
+)
+
+export const selectBlackListedCollectionByAddress = createSelector(
+    [selectNftState, (state, collectionAddress: string) => collectionAddress],
+    (state, collectionAddress: string) =>
+        state.blackListedCollections.find(
+            col => col.address === collectionAddress,
+        ),
 )
 
 // HELPERS

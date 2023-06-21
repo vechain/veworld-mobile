@@ -25,13 +25,13 @@ export const useNFTWithMetadata = (collectionAddress: string) => {
         selectNftNetworkingSideEffects,
     )
 
-    const fetchMoreNFTs = useCallback(async () => {
+    const fetchMoreNFTs = useCallback(() => {
         fetchWithPagination(
             nftForCollection?.pagination.totalElements,
             nftForCollection?.NFTs?.length,
             nftNetworkingSideEffects.isLoading,
-            page => {
-                getNFTsForCollection(
+            async page => {
+                await getNFTsForCollection(
                     collectionAddress,
                     page,
                     COLLECTIONS_PAGE_SIZE,
@@ -48,7 +48,16 @@ export const useNFTWithMetadata = (collectionAddress: string) => {
     ])
 
     useEffect(() => {
-        getNFTsForCollection(collectionAddress, 0, COLLECTIONS_PAGE_SIZE)
+        const init = async () => {
+            await getNFTsForCollection(
+                collectionAddress,
+                0,
+                COLLECTIONS_PAGE_SIZE,
+            )
+        }
+
+        init()
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedAccount])
 

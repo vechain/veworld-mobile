@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback, useMemo } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
-import { info } from "~Utils"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { BaseImage, BaseText, BaseView, LongPressProvider } from "~Components"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
@@ -23,8 +22,6 @@ type Props = {
 enum ItemTitle {
     HIDE_COLLECTION = "Hide collection",
     SHOW_COLLECTION = "Show collection",
-    HIDE_NFT = "Hide NFT",
-    SHOW_NFT = "Show NFT",
 }
 
 export const NFTView = memo(
@@ -36,7 +33,7 @@ export const NFTView = memo(
         isHidden = false,
     }: Props) => {
         const nav = useNavigation()
-        const disptatch = useAppDispatch()
+        const dispatch = useAppDispatch()
 
         const CollectionItem = useMemo(
             () => [
@@ -45,13 +42,6 @@ export const NFTView = memo(
                         ? ItemTitle.SHOW_COLLECTION
                         : ItemTitle.HIDE_COLLECTION,
                 },
-            ],
-            [isHidden],
-        )
-
-        const NFTItems = useMemo(
-            () => [
-                { title: isHidden ? ItemTitle.SHOW_NFT : ItemTitle.HIDE_NFT },
             ],
             [isHidden],
         )
@@ -86,19 +76,19 @@ export const NFTView = memo(
 
                 if (isCollection) itemAction = CollectionItem[_index].title
 
-                if (!isCollection) itemAction = NFTItems[_index].title
-
                 if (itemAction === ItemTitle.HIDE_COLLECTION)
-                    disptatch(setBlackListCollection(collectionItem!))
-
-                if (itemAction === ItemTitle.HIDE_NFT) info("Hide NFT")
+                    dispatch(
+                        setBlackListCollection({ collection: collectionItem! }),
+                    )
 
                 if (itemAction === ItemTitle.SHOW_COLLECTION)
-                    disptatch(removeBlackListCollection(collectionItem!))
-
-                if (itemAction === ItemTitle.SHOW_NFT) info("Show NFT")
+                    dispatch(
+                        removeBlackListCollection({
+                            collection: collectionItem!,
+                        }),
+                    )
             },
-            [CollectionItem, NFTItems, collectionItem, disptatch, isCollection],
+            [CollectionItem, collectionItem, dispatch, isCollection],
         )
 
         return (
@@ -119,7 +109,7 @@ export const NFTView = memo(
                     },
                 ]}>
                 <LongPressProvider
-                    items={isCollection ? CollectionItem : NFTItems}
+                    items={CollectionItem}
                     action={handleOnItemLongPress}>
                     {isCollection ? (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
@@ -143,16 +133,31 @@ export const NFTView = memo(
                                     justifyContent="center"
                                     alignItems="center">
                                     <BaseText color={COLORS.WHITE}>
+                                        {!collectionItem?.isExactCount && "+"}
                                         {collectionItem!.balanceOf}
                                     </BaseText>
                                 </BaseView>
                             </BaseView>
                         </BaseView>
                     ) : (
-                        <BaseImage
-                            uri={nftItem!.image}
-                            style={baseStyles.nftPreviewImage}
-                        />
+                        <BaseView style={baseStyles.nftCollectionNameBarRadius}>
+                            <BaseImage
+                                uri={nftItem!.image}
+                                style={baseStyles.nftPreviewImage}
+                            />
+                            <BaseView
+                                style={baseStyles.nftCollectionNameBar}
+                                flexDirection="row"
+                                alignItems="center"
+                                justifyContent="space-between">
+                                <BaseText
+                                    color={COLORS.WHITE}
+                                    numberOfLines={1}
+                                    w={80}>
+                                    #{nftItem?.tokenId}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
                     )}
                 </LongPressProvider>
             </TouchableOpacity>
@@ -180,15 +185,16 @@ const baseStyles = StyleSheet.create({
         left: 0,
         width: SCREEN_WIDTH / 2 - 30,
         backgroundColor: COLORS.DARK_PURPLE_RBGA,
-        paddingHorizontal: 8,
+        paddingHorizontal: 12,
     },
     nftCollectionNameBarRadius: {
         overflow: "hidden",
         borderRadius: 13,
     },
     nftCounterLabel: {
+        minWidth: 20,
         height: 20,
-        width: 20,
+        paddingHorizontal: 4,
         borderRadius: 13,
         backgroundColor: COLORS.DARK_PURPLE,
     },

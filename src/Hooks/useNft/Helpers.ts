@@ -71,7 +71,9 @@ export const prepareCollectionData = async (
             ? `https://vechain.github.io/nft-registry/${foundCollection?.icon}`
             : nftMeta?.imageUrl ?? NFTPlaceholder,
         balanceOf: nft.pagination.totalElements,
+        isExactCount: nft.pagination.isExactCount,
         nfts: [],
+        isBlacklisted: false,
     }
 
     return { nftCollection }

@@ -64,8 +64,6 @@ export const NFTDetailScreen = ({ route }: Props) => {
                         image={nft?.image ?? ""}
                         name={nft?.name ?? ""}
                         tokenId={nft?.tokenId ?? ""}
-                        hidden={false}
-                        collectionAddress={collection?.address ?? ""}
                     />
 
                     <BaseSpacer height={26} />
