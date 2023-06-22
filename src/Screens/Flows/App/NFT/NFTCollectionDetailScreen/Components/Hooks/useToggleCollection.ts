@@ -9,14 +9,12 @@ import {
 export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
     const dispatch = useAppDispatch()
 
-    const [toggleCollectionUI, setToggleCollectionUI] = useState(
-        collection.isBlacklisted,
-    )
+    const [isBlacklisted, setIsBlacklisted] = useState(collection.isBlacklisted)
 
     const onToggleCollection = useCallback(() => {
-        setToggleCollectionUI(prev => !prev)
+        setIsBlacklisted(prev => !prev)
 
-        if (toggleCollectionUI) {
+        if (isBlacklisted) {
             dispatch(
                 removeBlackListCollection({
                     collection,
@@ -25,7 +23,7 @@ export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
         } else {
             dispatch(setBlackListCollection({ collection }))
         }
-    }, [collection, dispatch, toggleCollectionUI])
+    }, [collection, dispatch, isBlacklisted])
 
-    return { onToggleCollection, toggleCollectionUI }
+    return { onToggleCollection, isBlacklisted }
 }

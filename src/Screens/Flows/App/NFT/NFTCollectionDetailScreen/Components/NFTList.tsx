@@ -39,6 +39,8 @@ export const NFTList = ({
             style={{ marginBottom: calculateBottomInsets }}
             ListHeaderComponent={<HeaderComponent collection={collection} />}
             data={NFTs}
+            initialNumToRender={6}
+            removeClippedSubviews
             ItemSeparatorComponent={contactsListSeparator}
             numColumns={2}
             keyExtractor={(item: NonFungibleToken) => String(item?.tokenId)}

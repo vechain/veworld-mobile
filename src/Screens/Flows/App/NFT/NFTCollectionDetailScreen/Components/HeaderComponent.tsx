@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import {
     BaseButton,
     BaseIcon,
@@ -10,25 +10,43 @@ import {
 } from "~Components"
 import { isEmpty } from "lodash"
 import { useI18nContext } from "~i18n"
-import { NonFungibleTokenCollection } from "~Model"
+import { NFTMediaType, NonFungibleTokenCollection } from "~Model"
 
 import { COLORS } from "~Constants"
 import { useToggleCollection } from "./Hooks/useToggleCollection"
+import { useTheme } from "~Hooks"
+import { MediaUtils } from "~Utils"
 
 export const HeaderComponent = memo(
     ({ collection }: { collection: NonFungibleTokenCollection }) => {
         const { LL } = useI18nContext()
+        const theme = useTheme()
 
-        const { onToggleCollection, toggleCollectionUI } =
+        const { onToggleCollection, isBlacklisted } =
             useToggleCollection(collection)
+
+        const deriveButtonColor = useMemo(() => {
+            if (!theme.isDark) {
+                if (isBlacklisted) return COLORS.WHITE
+                return COLORS.DARK_PURPLE
+            }
+
+            if (isBlacklisted) return COLORS.DARK_PURPLE
+            return COLORS.WHITE
+        }, [isBlacklisted, theme])
 
         return (
             <>
                 <BaseView flexDirection="row" alignItems="flex-end">
-                    <BaseImage
-                        uri={collection?.icon ?? ""}
-                        style={baseStyles.nftHeaderImage}
-                    />
+                    {MediaUtils.getMime(
+                        collection?.icon.mime!,
+                        NFTMediaType.IMAGE,
+                    ) && (
+                        <BaseImage
+                            uri={collection!.icon.url}
+                            style={baseStyles.nftHeaderImage}
+                        />
+                    )}
 
                     <BaseView>
                         <BaseText
@@ -42,27 +60,21 @@ export const HeaderComponent = memo(
                             <BaseButton
                                 action={onToggleCollection}
                                 size="sm"
-                                variant={
-                                    toggleCollectionUI ? "solid" : "outline"
-                                }
+                                variant={isBlacklisted ? "solid" : "outline"}
                                 radius={8}
                                 title={
-                                    toggleCollectionUI
-                                        ? "Show Collection"
-                                        : "Hide Collection"
+                                    isBlacklisted
+                                        ? LL.SHOW_COLLECTION()
+                                        : LL.HIDE_COLLECTION()
                                 }
                                 leftIcon={
                                     <BaseView mr={4}>
                                         <BaseIcon
-                                            color={
-                                                toggleCollectionUI
-                                                    ? COLORS.WHITE
-                                                    : COLORS.DARK_PURPLE
-                                            }
+                                            color={deriveButtonColor}
                                             name={
-                                                toggleCollectionUI
-                                                    ? "eye"
-                                                    : "eye-off"
+                                                isBlacklisted
+                                                    ? "eye-outline"
+                                                    : "eye-off-outline"
                                             }
                                         />
                                     </BaseView>

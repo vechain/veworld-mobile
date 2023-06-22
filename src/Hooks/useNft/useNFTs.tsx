@@ -72,6 +72,10 @@ export const useNFTs = () => {
                             owner: ACCOUNT_WITH_NFTS,
                             tokenURI,
                             ...nftMeta?.tokenMetadata,
+                            icon: {
+                                url: nftMeta?.imageUrl ?? NFTPlaceholder,
+                                mime: nftMeta?.imageType ?? "image/png",
+                            },
                             image: nftMeta?.imageUrl ?? NFTPlaceholder,
                             belongsToCollectionAddress: contractAddress,
                             isBlacklisted: false,

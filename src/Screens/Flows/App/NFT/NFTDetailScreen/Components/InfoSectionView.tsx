@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { isArray, isString } from "lodash"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 
 interface NFTAttributeData {
     trait_type: string
@@ -14,40 +14,55 @@ type Props<T> = {
     title: string
     data: T
     isLastInList?: boolean
+    action?: () => void
 }
 
-export const InfoSectionView = <
-    T extends NFTAttributeData[] | string | number,
->({
+export const InfoSectionView = <T extends NFTAttributeData[] | string>({
     title,
     data,
     isLastInList,
+    action,
 }: Props<T>) => {
     const theme = useTheme()
 
     const renderData = useMemo(() => {
+        if (action && isString(data)) {
+            return <BaseTouchable title={data} underlined action={action} />
+        }
+
         if (isArray(data)) {
             return (
-                <>
+                <BaseView w={100} flexWrap="wrap" flexDirection="row">
                     {data.map(_data => (
                         <BaseView
                             key={_data.trait_type}
-                            w={100}
-                            my={4}
-                            flexDirection="row"
+                            bg={
+                                theme.isDark
+                                    ? COLORS.DARK_PURPLE_DISABLED
+                                    : COLORS.WHITE
+                            }
+                            py={8}
+                            px={12}
+                            mr={8}
+                            mb={8}
+                            borderRadius={16}
                             justifyContent="space-between">
-                            <BaseText typographyFont="subSubTitle">
+                            <BaseText typographyFont="smallCaption">
                                 {_data.trait_type}
                             </BaseText>
-                            <BaseText>{_data.value}</BaseText>
+                            <BaseText typographyFont="captionBold">
+                                {_data.value}
+                            </BaseText>
                         </BaseView>
                     ))}
-                </>
+                </BaseView>
             )
-        } else if (isString(data)) {
+        }
+
+        if (isString(data)) {
             return <BaseText typographyFont="subSubTitle">{data}</BaseText>
         }
-    }, [data])
+    }, [data, theme, action])
 
     return (
         <BaseView>

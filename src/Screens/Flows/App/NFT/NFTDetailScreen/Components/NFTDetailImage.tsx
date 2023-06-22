@@ -1,29 +1,52 @@
-import React from "react"
+import React, { useRef } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { SCREEN_WIDTH, COLORS } from "~Constants"
 import { BaseImage, BaseText, BaseView } from "~Components"
+import { MediaUtils } from "~Utils"
+import { NFTMediaType } from "~Model"
+import { Video, ResizeMode } from "expo-av"
+import { NFTPlaceholder } from "~Assets"
 
 type Props = {
-    image: string
+    uri: string
+    mime: string
     name: string
     tokenId: string
 }
 
-const IMAGE_SIZE = SCREEN_WIDTH - 40
-
-export const NFTDetailImage = ({ image, name, tokenId }: Props) => {
+export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
     const theme = useTheme()
+    const video = useRef(null)
 
     return (
         <BaseView>
             <BaseView style={baseStyles.nftImage}>
-                <BaseImage
-                    uri={image}
-                    w={IMAGE_SIZE}
-                    h={IMAGE_SIZE}
-                    style={baseStyles.nftImage}
-                />
+                {MediaUtils.getMime(mime, NFTMediaType.IMAGE) && (
+                    <BaseImage uri={uri} style={baseStyles.nftImage} />
+                )}
+
+                {MediaUtils.getMime(mime, NFTMediaType.VIDEO) && (
+                    <BaseView style={baseStyles.nftImage}>
+                        <Video
+                            PosterComponent={() => (
+                                <BaseImage
+                                    uri={NFTPlaceholder}
+                                    style={baseStyles.nftImage}
+                                />
+                            )}
+                            usePoster
+                            ref={video}
+                            shouldPlay
+                            useNativeControls
+                            style={baseStyles.nftImage}
+                            source={{ uri: uri }}
+                            resizeMode={ResizeMode.COVER}
+                            isLooping
+                            isMuted
+                        />
+                    </BaseView>
+                )}
             </BaseView>
 
             <BaseView
@@ -52,6 +75,8 @@ const baseStyles = StyleSheet.create({
     nftImage: {
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
+        width: SCREEN_WIDTH - 40,
+        height: SCREEN_WIDTH - 40,
         overflow: "hidden",
     },
 

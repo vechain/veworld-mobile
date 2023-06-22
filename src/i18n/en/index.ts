@@ -369,6 +369,8 @@ const en: BaseTranslation = {
     IMPORT_NFT: "Import NFT",
     RECEIVE_NFT: "Receive NFT",
     NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
+    SHOW_COLLECTION: "Show collection",
+    HIDE_COLLECTION: "Hide collection",
 
     // Onboarding
 

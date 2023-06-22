@@ -1,15 +1,22 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, useCallback, useMemo, useRef } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { BaseImage, BaseText, BaseView, LongPressProvider } from "~Components"
-import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
+import {
+    NFTMediaType,
+    NonFungibleToken,
+    NonFungibleTokenCollection,
+} from "~Model"
 import { Routes } from "~Navigation"
 import {
     removeBlackListCollection,
     setBlackListCollection,
     useAppDispatch,
 } from "~Storage/Redux"
+import { MediaUtils } from "~Utils"
+import { Video, ResizeMode } from "expo-av"
+import { NFTPlaceholder } from "~Assets"
 
 type Props = {
     item: NonFungibleTokenCollection | NonFungibleToken
@@ -34,6 +41,7 @@ export const NFTView = memo(
     }: Props) => {
         const nav = useNavigation()
         const dispatch = useAppDispatch()
+        const video = useRef(null)
 
         const CollectionItem = useMemo(
             () => [
@@ -113,10 +121,16 @@ export const NFTView = memo(
                     action={handleOnItemLongPress}>
                     {isCollection ? (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            <BaseImage
-                                uri={collectionItem!.icon}
-                                style={baseStyles.nftPreviewImage}
-                            />
+                            {MediaUtils.getMime(
+                                collectionItem?.icon.mime!,
+                                NFTMediaType.IMAGE,
+                            ) && (
+                                <BaseImage
+                                    uri={collectionItem!.icon.url}
+                                    style={baseStyles.nftPreviewImage}
+                                />
+                            )}
+
                             <BaseView
                                 style={baseStyles.nftCollectionNameBar}
                                 flexDirection="row"
@@ -141,10 +155,42 @@ export const NFTView = memo(
                         </BaseView>
                     ) : (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            <BaseImage
-                                uri={nftItem!.image}
-                                style={baseStyles.nftPreviewImage}
-                            />
+                            {MediaUtils.getMime(
+                                nftItem?.icon.mime!,
+                                NFTMediaType.IMAGE,
+                            ) && (
+                                <BaseImage
+                                    uri={nftItem!.icon.url}
+                                    style={baseStyles.nftPreviewImage}
+                                />
+                            )}
+
+                            {MediaUtils.getMime(
+                                nftItem?.icon.mime!,
+                                NFTMediaType.VIDEO,
+                            ) && (
+                                <BaseView style={baseStyles.nftPreviewImage}>
+                                    <Video
+                                        PosterComponent={() => (
+                                            <BaseImage
+                                                uri={NFTPlaceholder}
+                                                style={
+                                                    baseStyles.nftPreviewImage
+                                                }
+                                            />
+                                        )}
+                                        usePoster
+                                        ref={video}
+                                        shouldPlay
+                                        style={baseStyles.nftPreviewImage}
+                                        source={{ uri: nftItem!.icon.url }}
+                                        resizeMode={ResizeMode.COVER}
+                                        isLooping
+                                        isMuted
+                                    />
+                                </BaseView>
+                            )}
+
                             <BaseView
                                 style={baseStyles.nftCollectionNameBar}
                                 flexDirection="row"
