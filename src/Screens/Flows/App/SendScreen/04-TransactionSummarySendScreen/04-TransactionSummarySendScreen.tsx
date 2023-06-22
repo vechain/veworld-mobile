@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import {
@@ -50,6 +50,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
+    const [loading, setLoading] = useState(false)
     const nav = useNavigation()
     const { token, amount, address, initialRoute } = route.params
     const { LL } = useI18nContext()
@@ -86,6 +87,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 nav.navigate(Routes.HOME)
                 break
         }
+        setLoading(false)
     }, [initialRoute, nav])
 
     const { gas, transaction } = useTransaction({
@@ -124,12 +126,19 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         urlDelegationSignature,
         selectedDelegationAccount,
         selectedDelegationOption,
+        onError: () => setLoading(false),
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: signAndSendTransaction,
+            onCancel: () => setLoading(false),
         })
+
+    const onConfirmClick = () => {
+        setLoading(true)
+        checkIdentityBeforeOpening()
+    }
     const vthoGas = FormattingUtils.convertToFiatBalance(
         gas?.gas?.toString() || "0",
         1,
@@ -183,8 +192,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         style={styles.nextButton}
                         mx={24}
                         title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                        action={checkIdentityBeforeOpening}
-                        disabled={continueButtonDisabled}
+                        action={onConfirmClick}
+                        disabled={continueButtonDisabled || loading}
+                        isLoading={loading}
                     />
                 }>
                 <BackButtonHeader />
@@ -260,6 +270,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}
                         setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        disabled={loading}
                     />
                     {selectedDelegationAccount && (
                         <>
