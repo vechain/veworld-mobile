@@ -1484,6 +1484,14 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
 	/**
+	 * L​e​d​g​e​r​ ​v​e​r​i​f​i​c​a​t​i​o​n
+	 */
+	SEND_LEDGER_TITLE: string
+	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	SEND_LEDGER_TITLE_SB: string
+	/**
 	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SEND_LEDGER_VALIDATE_TRANSACTION: string
@@ -3243,6 +3251,14 @@ Please, try again later.
 	 * Contact address
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
+	/**
+	 * Ledger verification
+	 */
+	SEND_LEDGER_TITLE: () => LocalizedString
+	/**
+	 * Please follow the instructions below to sign the transaction with your Ledger
+	 */
+	SEND_LEDGER_TITLE_SB: () => LocalizedString
 	/**
 	 * Validate transaction
 	 */

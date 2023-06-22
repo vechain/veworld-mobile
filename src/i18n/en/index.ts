@@ -444,6 +444,8 @@ const en: BaseTranslation = {
     SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: "PROCEED ANYWAY",
     SEND_CREATE_CONTACT_NAME: "Contact name",
     SEND_CREATE_CONTACT_ADDRESS: "Contact address",
+    SEND_LEDGER_TITLE: "Ledger verification",
+    SEND_LEDGER_TITLE_SB: "Please follow the instructions below to sign the transaction with your Ledger",
     SEND_LEDGER_VALIDATE_TRANSACTION: "Validate transaction",
     SEND_LEDGER_CHECK_CONNECTION: "We are checking your ledger connection",
     SEND_LEDGER_CHECK_CONNECTION_SB: "Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open",

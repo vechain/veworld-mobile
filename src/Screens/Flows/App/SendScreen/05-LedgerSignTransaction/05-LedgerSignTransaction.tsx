@@ -243,12 +243,11 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             <BackButtonHeader />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
                 <BaseText typographyFont="title">
-                    {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
+                    {LL.SEND_LEDGER_TITLE()}
                 </BaseText>
                 <BaseText typographyFont="body" my={10}>
-                    {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
+                    {LL.SEND_LEDGER_TITLE_SB()}
                 </BaseText>
-
                 <BaseSpacer height={20} />
                 <Lottie
                     source={BlePairingDark}
