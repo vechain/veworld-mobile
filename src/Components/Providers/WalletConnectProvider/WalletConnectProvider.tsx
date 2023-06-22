@@ -12,7 +12,6 @@ import {
     changeSelectedNetwork,
 } from "~Storage/Redux"
 import { SignMessageModal } from "./Modals/SignMessageModal"
-import { SignTransactionModal } from "./Modals/SignTransactionModal"
 import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { getSdkError } from "@walletconnect/utils"
@@ -55,8 +54,6 @@ const WalletConnectContextProvider = ({
 
     // For session request
     const [signMessageModalVisible, setSignMessageModalVisible] =
-        useState(false)
-    const [signTransactionModalVisible, setSignTransactionModalVisible] =
         useState(false)
     const [sessionRequest, setSessionRequest] = useState<SessionTypes.Struct>()
     const [requestEventData, setRequestEventData] =
@@ -149,21 +146,23 @@ const WalletConnectContextProvider = ({
                     setSignMessageModalVisible(true)
                     break
                 case RequestMethods.REQUEST_TRANSACTION:
-                    setSignTransactionModalVisible(true)
+                    nav.navigate(Routes.CONNECTED_APP_SIGN_TRANSACTION_SCREEN, {
+                        session,
+                        requestEvent,
+                    })
                     break
                 default:
                     error("Wallet Connect Session Request Invalid Method")
                     break
             }
         },
-        [web3Wallet, accounts, dispatch],
+        [web3Wallet, accounts, dispatch, nav],
     )
 
     const onSessionRequestClose = useCallback(() => {
         setSessionRequest(undefined)
         setRequestEventData(undefined)
         setSignMessageModalVisible(false)
-        setSignTransactionModalVisible(false)
     }, [])
 
     /**
@@ -256,17 +255,6 @@ const WalletConnectContextProvider = ({
                             <SignMessageModal
                                 onClose={onSessionRequestClose}
                                 isOpen={signMessageModalVisible}
-                                requestEvent={requestEventData}
-                                sessionRequest={sessionRequest}
-                            />
-                        )}
-
-                    {requestEventData &&
-                        sessionRequest &&
-                        signTransactionModalVisible && (
-                            <SignTransactionModal
-                                onClose={onSessionRequestClose}
-                                isOpen={signTransactionModalVisible}
                                 requestEvent={requestEventData}
                                 sessionRequest={sessionRequest}
                             />
