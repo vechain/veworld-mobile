@@ -30,7 +30,8 @@ import {
 } from "~Storage/Redux"
 import { WalletConnectUtils, error } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AppConnectionRequests, AppInfo } from "./Components"
+import { AppConnectionRequests } from "./Components"
+import { AppInfo } from "../Components"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -235,7 +236,6 @@ const styles = StyleSheet.create({
     },
     scrollViewContainer: {
         width: "100%",
-        height: "100%",
     },
     scrollView: {
         width: "100%",

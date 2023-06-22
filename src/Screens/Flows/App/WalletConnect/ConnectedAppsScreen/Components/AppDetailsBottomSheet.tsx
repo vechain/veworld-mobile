@@ -12,8 +12,8 @@ import {
 } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { FormattingUtils, WalletConnectUtils } from "~Utils"
-import { AppInfo } from "./AppInfo"
 import { useI18nContext } from "~i18n"
+import { AppInfo } from "../../Components"
 
 const snapPoints = ["65%"]
 

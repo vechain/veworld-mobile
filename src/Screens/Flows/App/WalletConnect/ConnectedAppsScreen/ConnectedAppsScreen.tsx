@@ -97,7 +97,6 @@ const baseStyles = StyleSheet.create({
     },
     scrollViewContainer: {
         width: "100%",
-        height: "100%",
     },
     scrollView: {
         width: "100%",
