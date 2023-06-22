@@ -75,6 +75,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         errorCode,
         setTimerEnabled,
         vetApp,
+        openBleConnection,
         openOrFinalizeConnection,
         transport,
     } = useLedger({
@@ -159,6 +160,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
         const signTransaction = async () => {
             try {
+                //recreate transport to avoid DisconnectedDeviceDuringOperation error
+                await openBleConnection()
                 if (!transport) {
                     throw new Error("Transport is not defined")
                 }
@@ -180,6 +183,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         }
         signTransaction()
     }, [
+        openBleConnection,
         vetApp,
         accountWithDevice,
         transaction,

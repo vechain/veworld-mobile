@@ -139,7 +139,8 @@ const signTransaction = async (
     debug("Signing transaction")
 
     return await ledgerMutex.runExclusive(async () => {
-        const vetLedger = new VETLedgerApp(transport as BleTransport)
+        // use a fresh transport to avoid possible device is disconnected errors
+        const vetLedger = new VETLedgerApp(transport)
         try {
             await validateRootAddress(device.rootAddress, vetLedger)
 

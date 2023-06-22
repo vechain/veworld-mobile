@@ -123,7 +123,7 @@ export class VETLedgerApp {
         onIsAwaitingForSignature?: () => void,
         onProgressUpdate?: (percent: number) => void,
     ) {
-        return this.sign(
+        return await this.sign(
             path,
             rawTx,
             true,
