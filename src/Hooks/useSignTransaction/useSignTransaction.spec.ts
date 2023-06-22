@@ -204,6 +204,7 @@ describe("useSignTransaction", () => {
                         urlDelegationSignature: Buffer.from(
                             "https://vechainstats.com",
                         ),
+                        selectedDelegationUrl: "https://vechainstats.com",
                     }),
                 { wrapper: TestWrapper },
             )
@@ -234,6 +235,7 @@ describe("useSignTransaction", () => {
                         isDelegated: true,
                         onTXFinish: jest.fn(),
                         selectedDelegationOption: DelegationType.URL,
+                        selectedDelegationUrl: undefined,
                     }),
                 { wrapper: TestWrapper },
             )

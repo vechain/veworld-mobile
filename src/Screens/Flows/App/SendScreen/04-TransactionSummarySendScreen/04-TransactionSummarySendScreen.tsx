@@ -124,6 +124,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         urlDelegationSignature,
         selectedDelegationAccount,
         selectedDelegationOption,
+        selectedDelegationUrl,
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
