@@ -20,13 +20,13 @@ Use the following template to create a new Unreleased change log.
 ## [Unreleased]
 ### Added
 - [#668](https://github.com/vechainfoundation/veworld-mobile/issues/668) Add changelog to repository
-- [#598](https://github.com/vechainfoundation/veworld-mobile/pull/598) Integrated wallet connect 
-- [#664](https://github.com/vechainfoundation/veworld-mobile/pull/664) Added account handling for wallet connect connections
+- [#598](https://github.com/vechainfoundation/veworld-mobile/issues/598) Integrated wallet connect 
+- [#664](https://github.com/vechainfoundation/veworld-mobile/issues/664) Added account handling for wallet connect connections
 
 ### Changed
 
 ### Fixed
-- [#663](https://github.com/vechainfoundation/veworld-mobile/pull/663) Switch to requested network during wallet connect session requests
+- [#663](https://github.com/vechainfoundation/veworld-mobile/issues/663) Switch to requested network during wallet connect session requests
 
 ### Removed
 
