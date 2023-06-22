@@ -73,6 +73,7 @@ export const useNFTCollections = () => {
                 )
 
                 const _nftCollections: NonFungibleTokenCollection[] = []
+                let isNetworkingEffect = true
 
                 // loop over the nnft collections
                 for (const nft of nftData) {
@@ -89,26 +90,29 @@ export const useNFTCollections = () => {
                     )
 
                     _nftCollections.push(nftCollection)
+
+                    // set collections to store one by one to make it feel faster
+                    dispatch(
+                        setCollections({
+                            address: ACCOUNT_WITH_NFTS,
+                            // address: selectedAccount.address,
+                            collectiondata: {
+                                collections: _nftCollections,
+                                pagination,
+                            },
+                        }),
+                    )
+
+                    if (isNetworkingEffect) {
+                        isNetworkingEffect = false
+                        dispatch(
+                            setNetworkingSideEffects({
+                                isLoading: false,
+                                error: undefined,
+                            }),
+                        )
+                    }
                 }
-
-                // set collections to store
-                dispatch(
-                    setCollections({
-                        address: ACCOUNT_WITH_NFTS,
-                        // address: selectedAccount.address,
-                        collectiondata: {
-                            collections: _nftCollections,
-                            pagination,
-                        },
-                    }),
-                )
-
-                dispatch(
-                    setNetworkingSideEffects({
-                        isLoading: false,
-                        error: undefined,
-                    }),
-                )
             } catch (e: unknown) {
                 dispatch(
                     setNetworkingSideEffects({

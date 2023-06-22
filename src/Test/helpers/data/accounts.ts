@@ -8,7 +8,7 @@ import { WalletAccount } from "~Model"
 import { AddressUtils, CryptoUtils } from "~Utils"
 
 // Testing account address on Mainnet with plenty of transactions & NFTs
-export const ACCOUNT_WITH_NFTS = "0xaee087732f2c4a81e13f08ced9933f825c1daf6a"
+export const ACCOUNT_WITH_NFTS = "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048"
 
 export const account1D1: WalletAccount = {
     alias: "Account 0",

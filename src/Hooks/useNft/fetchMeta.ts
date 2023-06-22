@@ -7,6 +7,7 @@ import {
 import { error } from "~Utils"
 import { TokenMetadata } from "~Model"
 import axios from "axios"
+import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 enum URIProtocol {
     IPFS = "ipfs",
@@ -46,7 +47,9 @@ export const fetchMetadata = async (
             }
 
             case URIProtocol.HTTPS: {
-                const tokenMetadata = await axios.get<TokenMetadata>(uri)
+                const tokenMetadata = await axios.get<TokenMetadata>(uri, {
+                    timeout: NFT_AXIOS_TIMEOUT,
+                })
                 const response = await fetch(tokenMetadata.data.image)
                 const blob = await response.blob()
 

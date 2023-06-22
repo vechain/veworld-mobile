@@ -46,6 +46,7 @@ export const useNFTs = () => {
                 )
 
                 const NFTs: NonFungibleToken[] = []
+                let isNetworkingEffect = true
 
                 for (const nfts of nftData) {
                     for (const nft of nfts.data) {
@@ -85,26 +86,29 @@ export const useNFTs = () => {
                         }
 
                         NFTs.push(_nft)
+
+                        dispatch(
+                            setNFTs({
+                                address: ACCOUNT_WITH_NFTS,
+                                // address: selectedAccount.address,
+                                collectionAddress: contractAddress,
+                                NFTs: NFTs,
+                                // taking first element because we are fetching only for one contract address
+                                pagination: nftData[0].pagination,
+                            }),
+                        )
+
+                        if (isNetworkingEffect) {
+                            isNetworkingEffect = false
+                            dispatch(
+                                setNetworkingSideEffects({
+                                    isLoading: false,
+                                    error: undefined,
+                                }),
+                            )
+                        }
                     }
                 }
-
-                dispatch(
-                    setNFTs({
-                        address: ACCOUNT_WITH_NFTS,
-                        // address: selectedAccount.address,
-                        collectionAddress: contractAddress,
-                        NFTs: NFTs,
-                        // taking first element because we are fetching only for one contract address
-                        pagination: nftData[0].pagination,
-                    }),
-                )
-
-                dispatch(
-                    setNetworkingSideEffects({
-                        isLoading: false,
-                        error: undefined,
-                    }),
-                )
             } catch (e) {
                 dispatch(
                     setNetworkingSideEffects({

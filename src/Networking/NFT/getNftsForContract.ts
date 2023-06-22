@@ -1,5 +1,6 @@
 import axios from "axios"
 import { NFTS_OWNED_PER_CONTRACT } from "~Constants"
+import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 export type NftItemResponse = {
     id: string
@@ -37,6 +38,7 @@ export const getNftsForContract = async (
             resultsPerPage,
             page,
         ),
+        { timeout: NFT_AXIOS_TIMEOUT },
     )
 
     return response.data || {}

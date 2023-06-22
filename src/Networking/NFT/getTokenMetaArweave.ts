@@ -1,12 +1,13 @@
 import Arweave from "arweave"
 import { error } from "~Utils/Logger"
 import { TokenMetadata } from "~Model/Nft/Nft"
+import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 const arweave = Arweave.init({
     host: "arweave.net",
     port: 443,
     protocol: "https",
-    timeout: 20000, // Network request timeouts in milliseconds
+    timeout: NFT_AXIOS_TIMEOUT, // Network request timeouts in milliseconds
     logging: false, // Disable network request logging
 })
 
