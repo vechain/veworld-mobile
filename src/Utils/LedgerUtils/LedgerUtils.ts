@@ -132,13 +132,14 @@ const signTransaction = async (
     index: number,
     transaction: Transaction,
     device: LedgerDevice,
-    vetLedger: VETLedgerApp,
+    transport: BleTransport,
     onIsAwaitingForSignature: () => void,
     onProgressUpdate?: (progress: number) => void,
 ): Promise<Buffer> => {
     debug("Signing transaction")
 
     return await ledgerMutex.runExclusive(async () => {
+        const vetLedger = new VETLedgerApp(transport as BleTransport)
         try {
             await validateRootAddress(device.rootAddress, vetLedger)
 

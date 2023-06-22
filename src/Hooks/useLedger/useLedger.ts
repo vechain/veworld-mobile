@@ -124,6 +124,7 @@ export const useLedger = ({
         openOrFinalizeConnection,
         isConnecting,
         setTimerEnabled,
+        transport: transport.current,
     }
 }
 
@@ -134,6 +135,7 @@ export const useLedger = ({
  * @field openOrFinalizeConnection - a function that can be used to manually attempt to connect to the ledger
  * @field isConnecting - a boolean that indicates if the ledger is currently attempting to connect
  * @field setTimerEnabled - a function that can be used to enable/disable the timer that attempts to connect to the ledger
+ * @field transport - the current transport that is being used to connect to the ledger
  */
 interface UseLedgerProps {
     vetApp?: VETLedgerApp
@@ -142,4 +144,5 @@ interface UseLedgerProps {
     openOrFinalizeConnection: () => Promise<void>
     isConnecting: boolean
     setTimerEnabled: (enabled: boolean) => void
+    transport: BleTransport | undefined
 }

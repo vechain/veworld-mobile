@@ -71,12 +71,17 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         openConnectionErrorSheet()
     }, [openConnectionErrorSheet])
 
-    const { errorCode, setTimerEnabled, vetApp, openOrFinalizeConnection } =
-        useLedger({
-            deviceId: accountWithDevice.device.deviceId,
-            waitFirstManualConnection: false,
-            onConnectionError,
-        })
+    const {
+        errorCode,
+        setTimerEnabled,
+        vetApp,
+        openOrFinalizeConnection,
+        transport,
+    } = useLedger({
+        deviceId: accountWithDevice.device.deviceId,
+        waitFirstManualConnection: false,
+        onConnectionError,
+    })
 
     const { config, clausesEnabled, contractEnabled } = useLegderConfig({
         app: vetApp,
@@ -154,11 +159,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
         const signTransaction = async () => {
             try {
+                if (!transport) {
+                    throw new Error("Transport is not defined")
+                }
                 const _signature = await LedgerUtils.signTransaction(
                     accountWithDevice.index,
                     new Transaction(transaction),
                     accountWithDevice.device,
-                    vetApp,
+                    transport,
                     () => setIsAwaitingSignature(true),
                 )
                 debug("Signature OK")
@@ -177,6 +185,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         transaction,
         contractEnabled,
         clausesEnabled,
+        transport,
     ])
 
     /**
