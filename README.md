@@ -36,6 +36,7 @@ The first time you clone the repo you need to do:
 ```js
 - yarn install
 - npx pod-install
+- cp .env.local.example .env.local
 ```
 
 then on every other time:

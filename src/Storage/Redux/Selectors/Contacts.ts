@@ -48,21 +48,29 @@ export const selectKnownContacts = createSelector(
  * @param {string} _address - The address of the contact to find.
  * @returns {Contact | undefined} - The contact with the specified address, or undefined if not found.
  */
-export const selectContactByAddress = (_address?: string) =>
-    createSelector(selectContactsState, state => {
-        return state.contacts.find(
-            (contact: Contact) => contact.address === _address,
-        )
-    })
+export const selectContactByAddress = createSelector(
+    [
+        (state: RootState) => state.contacts.contacts,
+        (_state, _address?: string) => _address,
+    ],
+    (contacts, _address) => {
+        return contacts.find((contact: Contact) => contact.address === _address)
+    },
+)
 
 /**
  * selectContactsByAddresses: A selector to get contacts by their addresses.
  * @param {string[]} _addresses - An array of addresses of the contacts to find.
  * @returns {Contact[]} - An array of contacts with the specified addresses. If a contact is not found for an address, it will be excluded from the result.
  */
-export const selectContactsByAddresses = (_addresses?: string[]) =>
-    createSelector(selectContactsState, state => {
-        return state.contacts.filter((contact: Contact) =>
+export const selectContactsByAddresses = createSelector(
+    [
+        (state: RootState) => state.contacts.contacts,
+        (_state, _addresses?: string[]) => _addresses,
+    ],
+    (contacts: Contact[], _addresses) => {
+        return contacts.filter((contact: Contact) =>
             _addresses?.includes(contact.address),
         )
-    })
+    },
+)

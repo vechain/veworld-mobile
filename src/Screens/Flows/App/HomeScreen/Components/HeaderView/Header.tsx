@@ -1,20 +1,22 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useBottomSheetModal, useTheme } from "~Hooks"
-import { debug } from "~Utils"
 import {
     BaseIcon,
     BaseText,
     BaseView,
-    ScanAddressBottomSheet,
+    ScanBottomSheet,
+    useWalletConnect,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { ScanTarget } from "~Constants"
 
 export const Header = memo(() => {
     const theme = useTheme()
     const nav = useNavigation()
     const { LL } = useI18nContext()
+    const { onPair } = useWalletConnect()
 
     const goToWalletManagement = useCallback(() => {
         nav.navigate(Routes.WALLET_MANAGEMENT)
@@ -26,10 +28,12 @@ export const Header = memo(() => {
         onClose: closeScanAddressSheetRef,
     } = useBottomSheetModal()
 
-    //TODO: What do we do here ?
-    const onScan = useCallback((address: string) => {
-        debug("Scanned", address)
-    }, [])
+    const onScan = useCallback(
+        (uri: string) => {
+            onPair(uri)
+        },
+        [onPair],
+    )
 
     return (
         <BaseView
@@ -60,10 +64,11 @@ export const Header = memo(() => {
                     action={goToWalletManagement}
                 />
             </BaseView>
-            <ScanAddressBottomSheet
+            <ScanBottomSheet
                 ref={scanAddressSheetRef}
                 onClose={closeScanAddressSheetRef}
                 onScan={onScan}
+                target={ScanTarget.WALLET_CONNECT}
             />
         </BaseView>
     )

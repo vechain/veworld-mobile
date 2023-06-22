@@ -15,6 +15,7 @@ import {
     ActivityDetailsScreen,
     AssetDetailScreen,
     LedgerSignTransaction,
+    ConnectedAppsScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
@@ -64,6 +65,7 @@ export type RootStackParamListHome = {
         decodedClauses?: TransactionOutcomes
     }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.SETTINGS_CONNECTED_APPS]: undefined
 }
 
 const { Navigator, Group, Screen } =
@@ -111,6 +113,11 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.SWAP}
                     component={SwapScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.SETTINGS_CONNECTED_APPS}
+                    component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen

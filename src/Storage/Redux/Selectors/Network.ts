@@ -36,18 +36,17 @@ export const selectCustomNetworks = createSelector(
 export const selectSelectedNetwork = createSelector(
     selectNetworksState,
     selectNetworks,
-    (state, networks) => {
-        return (
-            networks.find(net => net.id === state.selectedNetwork) ||
-            defaultMainNetwork
-        )
-    },
+    (state, networks) =>
+        networks.find(net => net.id === state.selectedNetwork) ||
+        defaultMainNetwork,
 )
 
-export const selectNetworkById = (id?: string) =>
-    createSelector(selectNetworks, networks => {
+export const selectNetworkById = createSelector(
+    [selectNetworks, (state: RootState, id?: string) => id],
+    (networks, id) => {
         return networks.find(net => net.id === id)
-    })
+    },
+)
 
 export const selectShowConversionOnOtherNets = createSelector(
     selectNetworksState,

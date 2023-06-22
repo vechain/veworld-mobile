@@ -41,12 +41,13 @@ export const TransferCard = memo(
 
         const accounts = useAppSelector(selectVisibleAccounts)
 
-        const fromContact = useAppSelector(
-            selectContactByAddress(address.toChecksumed(fromAddress)),
+        const fromContact = useAppSelector(state =>
+            selectContactByAddress(state, address.toChecksumed(fromAddress)),
         )
 
-        const toContacts = useAppSelector(
+        const toContacts = useAppSelector(state =>
             selectContactsByAddresses(
+                state,
                 toAddresses?.map((addr: string) =>
                     addr !== "" ? address.toChecksumed(addr) : "",
                 ),

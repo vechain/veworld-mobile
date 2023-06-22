@@ -13,6 +13,7 @@ import {
     ActivitiesSlice,
     DelegationSlice,
     NftSlice,
+    WalletConnectSessionsSlice,
 } from "./Slices"
 
 export const reducer = combineReducers({
@@ -29,4 +30,5 @@ export const reducer = combineReducers({
     [ActivitiesSlice.name]: ActivitiesSlice.reducer,
     [DelegationSlice.name]: DelegationSlice.reducer,
     [NftSlice.name]: NftSlice.reducer,
+    [WalletConnectSessionsSlice.name]: WalletConnectSessionsSlice.reducer,
 })

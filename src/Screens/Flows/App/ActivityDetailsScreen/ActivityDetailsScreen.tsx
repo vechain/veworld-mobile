@@ -63,7 +63,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
-    const activityFromStore = useAppSelector(selectActivity(activity.id))
+    const activityFromStore = useAppSelector(state =>
+        selectActivity(state, activity.id),
+    )
 
     const {
         ref: addCustomTokenSheetRef,

@@ -11,6 +11,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { BaseView } from "./BaseView"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
+import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 
 type Props = BottomSheetModalProps & {
     children: React.ReactNode
@@ -18,6 +19,7 @@ type Props = BottomSheetModalProps & {
     noMargins?: boolean
     footerStyle?: StyleProp<ViewStyle>
     footer?: React.ReactNode
+    onPressOutside?: BackdropPressBehavior
 }
 
 export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
@@ -28,6 +30,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             noMargins = false,
             footer,
             children,
+            onPressOutside = "close",
             ...props
         },
         ref,
@@ -35,14 +38,16 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const { styles } = useThemedStyles(baseStyles)
 
         const renderBackdrop = useCallback(
-            (props_: BottomSheetBackdropProps) => (
-                <BottomSheetBackdrop
-                    {...props_}
-                    pressBehavior="close"
-                    opacity={0.5}
-                    disappearsOnIndex={-1}
-                />
-            ),
+            (pressBehavior?: BackdropPressBehavior) =>
+                (props_: BottomSheetBackdropProps) =>
+                    (
+                        <BottomSheetBackdrop
+                            {...props_}
+                            pressBehavior={pressBehavior}
+                            opacity={0.5}
+                            disappearsOnIndex={-1}
+                        />
+                    ),
             [],
         )
 
@@ -60,7 +65,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 enablePanDownToClose={true}
                 index={0}
                 backgroundStyle={[styles.backgroundStyle]}
-                backdropComponent={renderBackdrop}
+                backdropComponent={renderBackdrop(onPressOutside)}
                 handleComponent={renderHandle}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"

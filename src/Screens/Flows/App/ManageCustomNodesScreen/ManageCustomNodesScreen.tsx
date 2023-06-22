@@ -44,8 +44,8 @@ export const ManageCustomNodesScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    const networkToEdit = useAppSelector(
-        selectNetworkById(networkToEditDeleteId),
+    const networkToEdit = useAppSelector(state =>
+        selectNetworkById(state, networkToEditDeleteId),
     )
 
     const customNetworks = useAppSelector(selectCustomNetworks)
