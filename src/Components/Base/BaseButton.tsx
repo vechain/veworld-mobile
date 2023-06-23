@@ -4,13 +4,15 @@ import {
     TouchableOpacityProps,
     FlexAlignType,
     StyleSheet,
-    ActivityIndicator,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
 import { ColorThemeType, typography, TFonts } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
 import * as Haptics from "expo-haptics"
+import Lottie from "lottie-react-native"
+import { LoaderDark, LoaderLight } from "~Assets"
+import { StyleProps } from "react-native-reanimated"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -40,6 +42,9 @@ type Props = {
     leftIcon?: React.ReactNode
     rightIcon?: React.ReactNode
     isLoading?: boolean
+    loaderStyle?: StyleProps
+    invertLoaderColor?: boolean
+    darkLoader?: boolean
     flex?: number
     activeOpacity?: number
 } & TouchableOpacityProps
@@ -56,11 +61,12 @@ export const BaseButton = ({
     isLoading = false,
     activeOpacity = 0.7,
     flex,
+    loaderStyle,
+    invertLoaderColor = false,
     ...otherProps
 }: Props) => {
     const { typographyFont, fontFamily, fontSize, fontWeight, children } =
         otherProps
-
     const { styles: themedStyles, theme } = useThemedStyles(
         baseStyles(variant === "link"),
     )
@@ -116,6 +122,14 @@ export const BaseButton = ({
         if (size === "lg") return "buttonPrimary"
     }, [size, typographyFont])
 
+    const lottieSource = useMemo(() => {
+        if (invertLoaderColor) {
+            return theme.isDark ? LoaderLight : LoaderDark
+        } else {
+            return theme.isDark ? LoaderDark : LoaderLight
+        }
+    }, [theme, invertLoaderColor])
+
     return (
         <TouchableOpacity
             onPress={onButtonPress}
@@ -167,7 +181,12 @@ export const BaseButton = ({
                     {children}
                 </BaseText>
             ) : (
-                <ActivityIndicator style={themedStyles.activityIndicator} />
+                <Lottie
+                    source={lottieSource}
+                    autoPlay
+                    loop
+                    style={{ ...themedStyles.lottie, ...loaderStyle }}
+                />
             )}
 
             {rightIcon}
@@ -181,7 +200,9 @@ const baseStyles = (isLink: boolean) => (theme: ColorThemeType) =>
             textDecorationLine: isLink ? "underline" : "none",
             textDecorationColor: theme.colors.text,
         },
-        activityIndicator: {
-            transform: [{ scale: 1.2 }],
+        // ratio width:hight is 2:1
+        lottie: {
+            width: 60,
+            height: 30,
         },
     })

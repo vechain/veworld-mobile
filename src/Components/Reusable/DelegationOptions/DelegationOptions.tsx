@@ -15,6 +15,7 @@ type Props = {
     setSelectedDelegationOption: (id: DelegationType) => void
     setSelectedAccount: (account?: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
+    disabled?: boolean
 }
 
 // this component shows delegation options
@@ -25,6 +26,7 @@ export const DelegationOptions = ({
     selectedAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
+    disabled,
 }: Props) => {
     const { LL } = useI18nContext()
     const accounts = useAppSelector(selectAccountsButSelected)
@@ -86,6 +88,7 @@ export const DelegationOptions = ({
                 selectedButtonIds={[selectedDelegationOption]}
                 buttons={options}
                 action={handleSelectDelegationOption}
+                disabled={disabled}
             />
             <SelectDelegationAccountBottomSheet
                 onClose={closeSelectAccountBottonSheet}

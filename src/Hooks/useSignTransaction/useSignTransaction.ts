@@ -21,6 +21,7 @@ type Props = {
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
+    onError?: (e: unknown) => void
 }
 /**
  * Hooks that expose a function to sign and send a transaction performing updates on success
@@ -31,6 +32,7 @@ type Props = {
  * @param selectedDelegationAccount the account to delegate to
  * @param selectedDelegationOption the delegation option
  * @param selectedDelegationUrl the delegation url
+ * @param onError on transaction error callback
  * @returns {signAndSendTransaction} the function to sign and send the transaction
  */
 export const useSignTransaction = ({
@@ -40,6 +42,7 @@ export const useSignTransaction = ({
     selectedDelegationAccount,
     selectedDelegationOption,
     selectedDelegationUrl,
+    onError,
 }: Props) => {
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
@@ -189,6 +192,7 @@ export const useSignTransaction = ({
         } catch (e) {
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
+            onError?.(e)
         }
 
         onTXFinish()

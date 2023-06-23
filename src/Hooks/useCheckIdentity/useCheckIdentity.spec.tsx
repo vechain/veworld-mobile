@@ -28,7 +28,11 @@ describe("useCheckIdentity", () => {
         it("does not call onIdentityConfirmed when biometric is wrong", async () => {
             const onIdentityConfirmed = jest.fn()
             const { result, waitForNextUpdate } = renderHook(
-                () => useCheckIdentity({ onIdentityConfirmed }),
+                () =>
+                    useCheckIdentity({
+                        onIdentityConfirmed,
+                        onCancel: jest.fn(),
+                    }),
                 { wrapper: TestWrapper },
             )
 
