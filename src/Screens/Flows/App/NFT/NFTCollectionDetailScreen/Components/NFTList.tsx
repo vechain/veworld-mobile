@@ -12,6 +12,8 @@ type Props = {
     NFTs: NonFungibleToken[]
     isLoading: boolean
     fetchMoreNFTs: () => void
+    onMomentumScrollBegin: () => void
+    hasNext: boolean
 }
 
 export const NFTList = ({
@@ -19,6 +21,8 @@ export const NFTList = ({
     NFTs,
     fetchMoreNFTs,
     isLoading,
+    onMomentumScrollBegin,
+    hasNext,
 }: Props) => {
     const { calculateBottomInsets } = usePlatformBottomInsets()
 
@@ -40,7 +44,6 @@ export const NFTList = ({
             ListHeaderComponent={<HeaderComponent collection={collection} />}
             data={NFTs}
             initialNumToRender={6}
-            removeClippedSubviews
             ItemSeparatorComponent={contactsListSeparator}
             numColumns={2}
             keyExtractor={(item: NonFungibleToken) => String(item?.tokenId)}
@@ -49,9 +52,12 @@ export const NFTList = ({
             contentContainerStyle={baseStyles.listContainer}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            onEndReachedThreshold={1}
+            onMomentumScrollBegin={onMomentumScrollBegin}
+            onEndReachedThreshold={0.2}
             onEndReached={fetchMoreNFTs}
-            ListFooterComponent={<ListFooterView isLoading={isLoading} />}
+            ListFooterComponent={
+                <ListFooterView isLoading={isLoading} hasNext={hasNext} />
+            }
         />
     )
 }

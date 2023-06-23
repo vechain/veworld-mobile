@@ -22,11 +22,14 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
     return (
         <BaseView>
             <BaseView style={baseStyles.nftImage}>
-                {MediaUtils.getMime(mime, NFTMediaType.IMAGE) && (
+                {MediaUtils.getMime(mime, [NFTMediaType.IMAGE]) && (
                     <BaseImage uri={uri} style={baseStyles.nftImage} />
                 )}
 
-                {MediaUtils.getMime(mime, NFTMediaType.VIDEO) && (
+                {MediaUtils.getMime(mime, [
+                    NFTMediaType.VIDEO,
+                    NFTMediaType.TEXT,
+                ]) && (
                     <BaseView style={baseStyles.nftImage}>
                         <Video
                             PosterComponent={() => (

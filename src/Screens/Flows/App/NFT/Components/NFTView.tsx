@@ -121,10 +121,9 @@ export const NFTView = memo(
                     action={handleOnItemLongPress}>
                     {isCollection ? (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            {MediaUtils.getMime(
-                                collectionItem?.icon.mime!,
+                            {MediaUtils.getMime(collectionItem?.icon.mime!, [
                                 NFTMediaType.IMAGE,
-                            ) && (
+                            ]) && (
                                 <BaseImage
                                     uri={collectionItem!.icon.url}
                                     style={baseStyles.nftPreviewImage}
@@ -155,20 +154,19 @@ export const NFTView = memo(
                         </BaseView>
                     ) : (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            {MediaUtils.getMime(
-                                nftItem?.icon.mime!,
+                            {MediaUtils.getMime(nftItem?.icon.mime!, [
                                 NFTMediaType.IMAGE,
-                            ) && (
+                            ]) && (
                                 <BaseImage
                                     uri={nftItem!.icon.url}
                                     style={baseStyles.nftPreviewImage}
                                 />
                             )}
 
-                            {MediaUtils.getMime(
-                                nftItem?.icon.mime!,
+                            {MediaUtils.getMime(nftItem?.icon.mime!, [
                                 NFTMediaType.VIDEO,
-                            ) && (
+                                NFTMediaType.TEXT,
+                            ]) && (
                                 <BaseView style={baseStyles.nftPreviewImage}>
                                     <Video
                                         PosterComponent={() => (

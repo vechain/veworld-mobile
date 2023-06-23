@@ -49,6 +49,9 @@ export const selectNftCollections = createSelector(
             pagination: {
                 totalElements: 0,
                 totalPages: 0,
+                countLimit: 0,
+                hasNext: false,
+                isExactCount: false,
             },
         }
     },
@@ -130,6 +133,9 @@ export const selectNFTsForCollection = createSelector(
             pagination: {
                 totalElements: 0,
                 totalPages: 0,
+                countLimit: 0,
+                hasNext: false,
+                isExactCount: false,
             },
         }
     },

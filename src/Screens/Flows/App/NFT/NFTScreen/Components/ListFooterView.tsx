@@ -12,18 +12,17 @@ import { useI18nContext } from "~i18n"
 type Props = {
     onGoToBlackListed?: () => void
     isLoading: boolean
-    isShowHiddenCollectioButton?: boolean
+    hasNext: boolean
 }
 
-// TODO -> show button only if there are blacklisted collections or NFTs
 export const ListFooterView = memo(
-    ({ onGoToBlackListed, isLoading }: Props) => {
+    ({ onGoToBlackListed, isLoading, hasNext }: Props) => {
         const { LL } = useI18nContext()
 
         return (
             <>
                 {onGoToBlackListed && <BaseSpacer height={18} />}
-                {onGoToBlackListed && (
+                {onGoToBlackListed && !hasNext && (
                     <BaseTouchableBox
                         action={onGoToBlackListed}
                         children={

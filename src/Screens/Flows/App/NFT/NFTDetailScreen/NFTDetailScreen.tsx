@@ -20,6 +20,7 @@ import {
     selectNFTWithAddressAndTokenId,
     useAppSelector,
 } from "~Storage/Redux"
+import { striptags } from "striptags"
 
 interface NFTAttributeData {
     trait_type: string
@@ -106,7 +107,9 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     {derivedDescription && (
                         <InfoSectionView<string>
                             title={LL.SB_DESCRIPTION()}
-                            data={derivedDescription.trim()}
+                            data={striptags(derivedDescription.trim(), {
+                                allowedTags: new Set(["strong"]),
+                            })}
                         />
                     )}
 

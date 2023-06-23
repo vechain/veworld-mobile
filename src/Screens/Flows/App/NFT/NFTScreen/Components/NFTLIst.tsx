@@ -17,6 +17,8 @@ type Props = {
     isLoading: boolean
     onGoToBlackListed: () => void
     fetchMoreCollections: () => void
+    onMomentumScrollBegin: () => void
+    hasNext: boolean
 }
 
 export const NFTLIst = memo(
@@ -25,6 +27,8 @@ export const NFTLIst = memo(
         fetchMoreCollections,
         isLoading,
         onGoToBlackListed,
+        onMomentumScrollBegin,
+        hasNext,
     }: Props) => {
         const { calculateBottomInsets } = usePlatformBottomInsets()
 
@@ -91,6 +95,7 @@ export const NFTLIst = memo(
                 keyExtractor={item => String(item.address)}
                 ItemSeparatorComponent={renderSeparator}
                 renderItem={renderNftCollection}
+                onMomentumScrollBegin={onMomentumScrollBegin}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 onEndReachedThreshold={1}
@@ -101,6 +106,7 @@ export const NFTLIst = memo(
                     <ListFooterView
                         onGoToBlackListed={onGoToBlackListed}
                         isLoading={isLoading}
+                        hasNext={hasNext}
                     />
                 }
             />

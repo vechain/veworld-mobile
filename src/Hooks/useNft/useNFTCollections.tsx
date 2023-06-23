@@ -31,10 +31,8 @@ import { ACCOUNT_WITH_NFTS } from "~Constants/Constants/NFT"
  * @method
  * getCollections(_page: number, _resultsPerPage: number = 10)
  * An async function that fetches the NFT collections for the selected account.
- *
- * @param {number} _page - The page number for pagination purposes.
- * @param {number} _resultsPerPage - The number of results to fetch per page. Default value is `10`.
  */
+
 export const useNFTCollections = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
@@ -58,6 +56,9 @@ export const useNFTCollections = () => {
                         _page,
                     )
 
+                // exit early if there are no more pages to fetch
+                if (_page >= pagination.totalPages) return
+
                 // get nft collection info from GitHub registry
                 const collectionRegistryInfo = await getCollectionInfo(
                     network.type,
@@ -73,7 +74,6 @@ export const useNFTCollections = () => {
                 )
 
                 const _nftCollections: NonFungibleTokenCollection[] = []
-                let isNetworkingEffect = true
 
                 // loop over the nnft collections
                 for (const nft of nftData) {
@@ -103,15 +103,12 @@ export const useNFTCollections = () => {
                         }),
                     )
 
-                    if (isNetworkingEffect) {
-                        isNetworkingEffect = false
-                        dispatch(
-                            setNetworkingSideEffects({
-                                isLoading: false,
-                                error: undefined,
-                            }),
-                        )
-                    }
+                    dispatch(
+                        setNetworkingSideEffects({
+                            isLoading: false,
+                            error: undefined,
+                        }),
+                    )
                 }
             } catch (e: unknown) {
                 dispatch(

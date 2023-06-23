@@ -60,7 +60,7 @@ export const prepareCollectionData = async (
     const nftMeta = await fetchMetadata(tokenURI)
 
     const nftCollection: NonFungibleTokenCollection = {
-        address: _nft.contractAddress,
+        address: foundCollection?.address ?? _nft.contractAddress,
         name: await getName(_nft.contractAddress, thor),
         symbol: await getSymbol(_nft.contractAddress, thor),
         creator: foundCollection?.creator ?? notAvailable,

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
@@ -23,15 +23,27 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
 
+    const [
+        onEndReachedCalledDuringMomentum,
+        setEndReachedCalledDuringMomentum,
+    ] = useState(true)
+
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const { anyCollection } = useCollectionSource(
         route.params.collectionAddress,
     )
 
-    const { NFTs, fetchMoreNFTs, isLoading, error } = useNFTWithMetadata(
-        route.params.collectionAddress,
-    )
+    const { NFTs, fetchMoreNFTs, isLoading, error, hasNext } =
+        useNFTWithMetadata(
+            route.params.collectionAddress,
+            onEndReachedCalledDuringMomentum,
+            setEndReachedCalledDuringMomentum,
+        )
+
+    const onMomentumScrollBegin = useCallback(() => {
+        setEndReachedCalledDuringMomentum(false)
+    }, [])
 
     const renderContent = useMemo(() => {
         if (!isEmpty(error) && isEmpty(NFTs)) return <NetworkErrorView />
@@ -45,10 +57,20 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                     isLoading={isLoading}
                     NFTs={NFTs}
                     fetchMoreNFTs={fetchMoreNFTs}
+                    onMomentumScrollBegin={onMomentumScrollBegin}
+                    hasNext={hasNext}
                 />
             )
         }
-    }, [NFTs, anyCollection, error, fetchMoreNFTs, isLoading])
+    }, [
+        NFTs,
+        anyCollection,
+        error,
+        fetchMoreNFTs,
+        isLoading,
+        hasNext,
+        onMomentumScrollBegin,
+    ])
 
     return (
         <BaseSafeArea grow={1} testID="NFT_Collection_Detail_Screen">

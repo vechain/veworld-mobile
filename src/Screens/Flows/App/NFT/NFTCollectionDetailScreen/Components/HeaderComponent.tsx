@@ -38,10 +38,9 @@ export const HeaderComponent = memo(
         return (
             <>
                 <BaseView flexDirection="row" alignItems="flex-end">
-                    {MediaUtils.getMime(
-                        collection?.icon.mime!,
+                    {MediaUtils.getMime(collection?.icon.mime!, [
                         NFTMediaType.IMAGE,
-                    ) && (
+                    ]) && (
                         <BaseImage
                             uri={collection!.icon.url}
                             style={baseStyles.nftHeaderImage}

@@ -1,9 +1,7 @@
 import { useCallback, useRef } from "react"
-import { selectBlackListedCollections, useAppSelector } from "~Storage/Redux"
 
 export const usePagination = () => {
     const counter = useRef(0)
-    const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
     const fetchWithPagination = useCallback(
         (
@@ -11,11 +9,13 @@ export const usePagination = () => {
             totalElementsReceived: number = 0,
             isLoading: boolean,
             cb: (page: number) => void,
+            blackListedCollections?: number,
         ) => {
             if (isLoading) return
 
-            const presentedElements =
-                totalElementsReceived + blackListedCollections.length
+            const presentedElements = blackListedCollections
+                ? totalElementsReceived + blackListedCollections
+                : totalElementsReceived
 
             if (presentedElements >= totalElements) {
                 return
@@ -25,7 +25,7 @@ export const usePagination = () => {
 
             cb(counter.current)
         },
-        [blackListedCollections.length],
+        [],
     )
 
     return { fetchWithPagination }

@@ -46,7 +46,6 @@ export const useNFTs = () => {
                 )
 
                 const NFTs: NonFungibleToken[] = []
-                let isNetworkingEffect = true
 
                 for (const nfts of nftData) {
                     for (const nft of nfts.data) {
@@ -98,15 +97,12 @@ export const useNFTs = () => {
                             }),
                         )
 
-                        if (isNetworkingEffect) {
-                            isNetworkingEffect = false
-                            dispatch(
-                                setNetworkingSideEffects({
-                                    isLoading: false,
-                                    error: undefined,
-                                }),
-                            )
-                        }
+                        dispatch(
+                            setNetworkingSideEffects({
+                                isLoading: false,
+                                error: undefined,
+                            }),
+                        )
                     }
                 }
             } catch (e) {

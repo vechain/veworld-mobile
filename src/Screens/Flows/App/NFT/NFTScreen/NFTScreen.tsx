@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { BaseSafeArea, BaseView, SelectAccountBottomSheet } from "~Components"
 import { NftScreenHeader } from "./Components"
 import { AccountWithDevice } from "~Model"
@@ -23,8 +23,16 @@ import { NFTLIst } from "./Components/NFTLIst"
 export const NFTScreen = () => {
     const nav = useNavigation()
 
-    const { fetchMoreCollections, isLoading, collections, error } =
-        useFetchCollections()
+    const [
+        onEndReachedCalledDuringMomentum,
+        setEndReachedCalledDuringMomentum,
+    ] = useState(true)
+
+    const { fetchMoreCollections, isLoading, collections, error, hasNext } =
+        useFetchCollections(
+            onEndReachedCalledDuringMomentum,
+            setEndReachedCalledDuringMomentum,
+        )
 
     const accounts = useAppSelector(selectVisibleAccounts)
 
@@ -36,6 +44,10 @@ export const NFTScreen = () => {
     const setSelectedAccount = (account: AccountWithDevice) => {
         dispatch(selectAccount({ address: account.address }))
     }
+
+    const onMomentumScrollBegin = useCallback(() => {
+        setEndReachedCalledDuringMomentum(false)
+    }, [])
 
     const onGoToBlackListed = useCallback(
         () => nav.navigate(Routes.BLACKLISTED_COLLECTIONS),
@@ -62,16 +74,20 @@ export const NFTScreen = () => {
                     isLoading={isLoading}
                     onGoToBlackListed={onGoToBlackListed}
                     fetchMoreCollections={fetchMoreCollections}
+                    onMomentumScrollBegin={onMomentumScrollBegin}
+                    hasNext={hasNext}
                 />
             )
         }
     }, [
         collections,
+        hasNext,
         error,
         fetchMoreCollections,
         isLoading,
         isShowImportNFTs,
         onGoToBlackListed,
+        onMomentumScrollBegin,
     ])
 
     return (

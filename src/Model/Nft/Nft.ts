@@ -92,4 +92,5 @@ export interface NFTTransferLog {
 export enum NFTMediaType {
     IMAGE = "image",
     VIDEO = "video",
+    TEXT = "text", // mp4 appears as text sometimes
 }

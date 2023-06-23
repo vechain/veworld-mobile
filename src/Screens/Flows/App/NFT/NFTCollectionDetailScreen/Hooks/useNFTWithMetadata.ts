@@ -10,7 +10,13 @@ import { useNFTs } from "~Hooks"
 
 const COLLECTIONS_PAGE_SIZE = 10
 
-export const useNFTWithMetadata = (collectionAddress: string) => {
+export const useNFTWithMetadata = (
+    collectionAddress: string,
+    onEndReachedCalledDuringMomentum: boolean,
+    setEndReachedCalledDuringMomentum: React.Dispatch<
+        React.SetStateAction<boolean>
+    >,
+) => {
     const nftForCollection = useAppSelector(state =>
         selectNFTsForCollection(state, collectionAddress),
     )
@@ -26,18 +32,22 @@ export const useNFTWithMetadata = (collectionAddress: string) => {
     )
 
     const fetchMoreNFTs = useCallback(() => {
-        fetchWithPagination(
-            nftForCollection?.pagination.totalElements,
-            nftForCollection?.NFTs?.length,
-            nftNetworkingSideEffects.isLoading,
-            async page => {
-                await getNFTsForCollection(
-                    collectionAddress,
-                    page,
-                    COLLECTIONS_PAGE_SIZE,
-                )
-            },
-        )
+        if (!onEndReachedCalledDuringMomentum) {
+            fetchWithPagination(
+                nftForCollection?.pagination.totalElements,
+                nftForCollection?.NFTs?.length,
+                nftNetworkingSideEffects.isLoading,
+                async page => {
+                    await getNFTsForCollection(
+                        collectionAddress,
+                        page,
+                        COLLECTIONS_PAGE_SIZE,
+                    )
+                },
+            )
+
+            setEndReachedCalledDuringMomentum(true)
+        }
     }, [
         collectionAddress,
         fetchWithPagination,
@@ -45,6 +55,8 @@ export const useNFTWithMetadata = (collectionAddress: string) => {
         nftForCollection?.NFTs?.length,
         nftForCollection?.pagination.totalElements,
         nftNetworkingSideEffects.isLoading,
+        onEndReachedCalledDuringMomentum,
+        setEndReachedCalledDuringMomentum,
     ])
 
     useEffect(() => {
@@ -66,5 +78,8 @@ export const useNFTWithMetadata = (collectionAddress: string) => {
         fetchMoreNFTs,
         isLoading: nftNetworkingSideEffects.isLoading,
         error: nftNetworkingSideEffects.error,
+        hasNext:
+            nftForCollection?.pagination?.totalElements !==
+            nftForCollection?.NFTs?.length,
     }
 }
