@@ -42,13 +42,13 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
 
     const { web3Wallet } = useWalletConnect()
     const { LL } = useI18nContext()
+    const nav = useNavigation()
     const selectedAccount: AccountWithDevice = useAppSelector(
         selectSelectedAccount,
     )
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, selectedAccount.rootAddress),
     )
-    const nav = useNavigation()
 
     // Request values
     const { params } =
@@ -186,6 +186,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     <BaseText typographyFont="subTitleBold">
                         {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
                     </BaseText>
+
                     <BaseSpacer height={16} />
                     <AccountCard account={selectedAccount} />
 
@@ -231,7 +232,6 @@ const styles = StyleSheet.create({
     },
     scrollViewContainer: {
         width: "100%",
-        height: "100%",
     },
     scrollView: {
         width: "100%",
