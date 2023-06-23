@@ -273,7 +273,10 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
                     </BaseText>
                     <BaseSpacer height={16} />
-                    <AccountCard account={selectedAccount} />
+                    <AccountCard
+                        account={selectedAccount}
+                        showOpacityWhenDisabled={false}
+                    />
                 </BaseView>
 
                 <BaseSpacer height={24} />

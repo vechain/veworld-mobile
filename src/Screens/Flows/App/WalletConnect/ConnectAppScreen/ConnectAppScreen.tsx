@@ -197,6 +197,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     <AccountCard
                         account={selectedAccount}
                         onPress={openSelectAccountBottomSheet}
+                        showSelectAccountIcon={true}
                     />
                 </BaseView>
 

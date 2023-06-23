@@ -151,7 +151,10 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     </BaseText>
 
                     <BaseSpacer height={16} />
-                    <AccountCard account={selectedAccount} />
+                    <AccountCard
+                        account={selectedAccount}
+                        showOpacityWhenDisabled={false}
+                    />
 
                     <BaseSpacer height={32} />
                     <MessageDetails

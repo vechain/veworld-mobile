@@ -7,10 +7,10 @@ import {
     BaseText,
     BaseSpacer,
     BaseBottomSheet,
-    AccountIcon,
+    AccountCard,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
-import { FormattingUtils, WalletConnectUtils } from "~Utils"
+import { WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppInfo } from "../../Components"
 
@@ -57,18 +57,10 @@ export const AppDetailsBottomSheet = React.forwardRef<
                     {LL.CONNECTED_APP_DETAILS_ACCOUNT_LABEL()}
                 </BaseText>
                 <BaseSpacer height={8} />
-                <BaseView flexDirection="row">
-                    <AccountIcon address={account.address} />
-                    <BaseSpacer width={8} />
-                    <BaseView>
-                        <BaseText typographyFont="subSubTitle">
-                            {account.alias}
-                        </BaseText>
-                        <BaseText typographyFont="captionRegular">
-                            {FormattingUtils.humanAddress(account.address)}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
+                <AccountCard
+                    account={account}
+                    showOpacityWhenDisabled={false}
+                />
 
                 <BaseSpacer height={40} />
                 <BaseButton action={disconnectSession} title="Disconnect" />
