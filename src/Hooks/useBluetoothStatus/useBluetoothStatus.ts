@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { BleManager, State } from "react-native-ble-plx"
 import { debug } from "~Utils/Logger"
 
-//An hook returning if BLE is supported and its current status, showing alerts if needed
+//An hook returning if BLE is supported and its current status
 export const useBluetoothStatus = () => {
     const [status, setStatus] = useState<State>(State.Unknown)
 
@@ -23,5 +23,6 @@ export const useBluetoothStatus = () => {
         isUnsupported: status === State.Unsupported,
         isAuthorized: status !== State.Unauthorized,
         isEnabled: status === State.PoweredOn,
+        isUpdating: status === State.Resetting || status === State.Unknown,
     }
 }

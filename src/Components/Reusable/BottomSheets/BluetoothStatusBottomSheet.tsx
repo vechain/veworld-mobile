@@ -10,7 +10,7 @@ import { useI18nContext } from "~i18n"
 import { useBluetoothStatus, useBottomSheetModal } from "~Hooks"
 import { Linking } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { PlatformUtils } from "~Utils"
+import { PlatformUtils, debug } from "~Utils"
 
 const snapPoints = ["55%"]
 
@@ -25,7 +25,7 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     const { ref, onOpen, onClose } = useBottomSheetModal()
     const nav = useNavigation()
 
-    const { status, isAuthorized, isEnabled, isUnsupported } =
+    const { status, isAuthorized, isEnabled, isUnsupported, isUpdating } =
         useBluetoothStatus()
 
     const content = useMemo(() => {
@@ -55,14 +55,23 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     // https://github.com/gorhom/react-native-bottom-sheet/issues/204
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (isUnsupported || !isAuthorized || !isEnabled) {
+            if (!isUpdating && (isUnsupported || !isAuthorized || !isEnabled)) {
                 onOpen()
             } else {
+                debug("Closing bluetooth bottom sheet")
                 onClose()
             }
         }, 100)
         return () => clearTimeout(timer)
-    }, [isUnsupported, isAuthorized, isEnabled, status, onOpen, onClose])
+    }, [
+        isUnsupported,
+        isAuthorized,
+        isEnabled,
+        status,
+        onOpen,
+        onClose,
+        isUpdating,
+    ])
 
     const handleOnPress = useCallback(() => {
         if (!isAuthorized) {

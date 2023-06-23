@@ -22,6 +22,7 @@ export const BaseButtonGroupHorizontal = ({
     action,
     selectedButtonIds,
     buttons,
+    disabled: disableAllButtons,
 }: Props) => {
     const theme = useTheme()
 
@@ -54,7 +55,7 @@ export const BaseButtonGroupHorizontal = ({
                     <BaseButton
                         key={id}
                         action={onPress(button)}
-                        disabled={disabled}
+                        disabled={disableAllButtons || disabled}
                         bgColor={bgColor}
                         typographyFont="bodyMedium"
                         w={buttonWidth}

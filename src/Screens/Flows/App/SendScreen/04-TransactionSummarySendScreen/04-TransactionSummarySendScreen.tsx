@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import {
@@ -23,6 +23,7 @@ import {
     BaseView,
     ScrollViewWithFooter,
     DelegationOptions,
+    LedgerBadge,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -41,6 +42,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { useDelegation } from "./Hooks"
+import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
 
@@ -50,6 +52,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
+    const [loading, setLoading] = useState(false)
     const nav = useNavigation()
     const { token, amount, address, initialRoute } = route.params
     const { LL } = useI18nContext()
@@ -86,8 +89,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 nav.navigate(Routes.HOME)
                 break
         }
+        setLoading(false)
     }, [initialRoute, nav])
 
+    //build transaction
     const { gas, transaction } = useTransaction({
         token,
         amount,
@@ -116,7 +121,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         vtho.decimals,
         2,
     )
-
     const { signAndSendTransaction } = useSignTransaction({
         transaction,
         onTXFinish,
@@ -124,12 +128,15 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         urlDelegationSignature,
         selectedDelegationAccount,
         selectedDelegationOption,
+        onError: () => setLoading(false),
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: signAndSendTransaction,
+            onCancel: () => setLoading(false),
         })
+
     const vthoGas = FormattingUtils.convertToFiatBalance(
         gas?.gas?.toString() || "0",
         1,
@@ -149,17 +156,31 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             AddressUtils.compareAddresses(_account.address, address),
         )
 
+        const receiverIsAccount = accounts.find(_account =>
+            AddressUtils.compareAddresses(_account.address, address),
+        )
+
         if (receiverExists)
             return (
                 <BaseView>
                     <BaseText typographyFont="subSubTitle">
                         {receiverExists.alias}
                     </BaseText>
-                    <BaseText typographyFont="captionRegular">
-                        {FormattingUtils.humanAddress(
-                            receiverExists.address || "",
+                    <BaseView flexDirection="row" mt={3}>
+                        {receiverIsAccount?.device.type ===
+                            DEVICE_TYPE.LEDGER && (
+                            <LedgerBadge //eslint-disable-next-line react-native/no-inline-styles
+                                containerStyle={{
+                                    mr: 8,
+                                }}
+                            />
                         )}
-                    </BaseText>
+                        <BaseText typographyFont="captionRegular">
+                            {FormattingUtils.humanAddress(
+                                receiverExists.address || "",
+                            )}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
             )
 
@@ -175,6 +196,17 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const continueButtonDisabled =
         !isThereEnoughGas && selectedDelegationOption !== DelegationType.URL
 
+    const handleOnConfirm = () => {
+        setLoading(true)
+        if (account.device.type === DEVICE_TYPE.LEDGER) {
+            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
+                accountWithDevice: account as LedgerAccountWithDevice,
+                transaction,
+                initialRoute,
+            })
+        } else checkIdentityBeforeOpening()
+    }
+
     return (
         <BaseSafeArea grow={1} testID="Transaction_Summary_Send_Screen">
             <ScrollViewWithFooter
@@ -183,8 +215,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         style={styles.nextButton}
                         mx={24}
                         title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                        action={checkIdentityBeforeOpening}
-                        disabled={continueButtonDisabled}
+                        action={handleOnConfirm}
+                        disabled={continueButtonDisabled || loading}
+                        isLoading={loading}
                     />
                 }>
                 <BackButtonHeader />
@@ -215,11 +248,24 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                             <BaseText typographyFont="subSubTitle">
                                                 {account.alias}
                                             </BaseText>
-                                            <BaseText typographyFont="captionRegular">
-                                                {FormattingUtils.humanAddress(
-                                                    account.address,
+                                            <BaseView
+                                                flexDirection="row"
+                                                mt={3}>
+                                                {account.device?.type ===
+                                                    DEVICE_TYPE.LEDGER && (
+                                                    <LedgerBadge
+                                                        //eslint-disable-next-line react-native/no-inline-styles
+                                                        containerStyle={{
+                                                            mr: 8,
+                                                        }}
+                                                    />
                                                 )}
-                                            </BaseText>
+                                                <BaseText typographyFont="captionRegular">
+                                                    {FormattingUtils.humanAddress(
+                                                        account.address,
+                                                    )}
+                                                </BaseText>
+                                            </BaseView>
                                         </BaseView>
                                     </BaseView>
                                     <BaseIcon
@@ -260,6 +306,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}
                         setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        disabled={loading}
                     />
                     {selectedDelegationAccount && (
                         <>

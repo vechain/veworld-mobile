@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useRenderCounter } from "~Hooks"
+import { useBottomSheetModal } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
@@ -48,7 +48,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
 
-    useRenderCounter("InsertAddressSendScreen")
     const {
         ref: createContactBottomSheetRef,
         onOpen: openCreateContactSheet,
