@@ -9,10 +9,15 @@ import {
 import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
-import { ConnectAppButton, ConnectedApp } from "./Components"
+import {
+    EmptyListView,
+    ConnectedAppBox,
+    ConnectedAppsHeader,
+} from "./Components"
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
+import { AccountWithDevice } from "~Model"
 
 export const ConnectedAppsScreen = () => {
     const activeSessions: Record<string, SessionTypes.Struct[]> =
@@ -27,6 +32,26 @@ export const ConnectedAppsScreen = () => {
         )
     }, [activeSessions])
 
+    const renderAppsOfAccount = (account: AccountWithDevice, index: number) => {
+        return (
+            <BaseView key={account.address}>
+                {index > 0 && <BaseSpacer height={16} />}
+                <BaseText typographyFont="subSubTitle">
+                    {account.alias}
+                </BaseText>
+                {activeSessions[account.address].map(session => {
+                    return (
+                        <ConnectedAppBox
+                            session={session}
+                            key={session.topic}
+                            account={account}
+                        />
+                    )
+                })}
+            </BaseView>
+        )
+    }
+
     return (
         <BaseSafeArea>
             <ScrollView
@@ -37,24 +62,23 @@ export const ConnectedAppsScreen = () => {
                 style={baseStyles.scrollView}>
                 <BackButtonHeader />
                 <BaseView mx={20}>
-                    <BaseText typographyFont="title">
-                        {LL.CONNECTED_APPS_SCREEN_TITLE()}
-                    </BaseText>
+                    <ConnectedAppsHeader showAddButton={totalSessions > 0} />
 
-                    <BaseSpacer height={40} />
+                    <BaseSpacer height={24} />
                     <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APPS_SCREEN_SUBTITLE()}
+                    </BaseText>
+                    <BaseSpacer height={12} />
+                    <BaseText typographyFont="buttonSecondary">
                         {LL.CONNECTED_APPS_SCREEN_DESCRIPTION()}
                     </BaseText>
-                    <BaseSpacer height={14} />
-                    <ConnectAppButton />
 
-                    <BaseSpacer height={40} />
+                    <BaseSpacer height={22} />
 
                     {totalSessions === 0 && (
                         <>
-                            <BaseText typographyFont="subTitleLight" mt={50}>
-                                {LL.CONNECTED_APPS_SCREEN_NO_CONNECTED_APP()}
-                            </BaseText>
+                            <BaseSpacer height={60} />
+                            <EmptyListView />
                         </>
                     )}
 
@@ -63,25 +87,7 @@ export const ConnectedAppsScreen = () => {
                             account.address in activeSessions &&
                             !isEmpty(activeSessions[account.address])
                         ) {
-                            return (
-                                <BaseView key={account.address}>
-                                    {index > 0 && <BaseSpacer height={16} />}
-                                    <BaseText typographyFont="subSubTitle">
-                                        {account.alias}
-                                    </BaseText>
-                                    {activeSessions[account.address].map(
-                                        session => {
-                                            return (
-                                                <ConnectedApp
-                                                    session={session}
-                                                    key={session.topic}
-                                                    account={account}
-                                                />
-                                            )
-                                        },
-                                    )}
-                                </BaseView>
-                            )
+                            return renderAppsOfAccount(account, index)
                         }
                     })}
                 </BaseView>

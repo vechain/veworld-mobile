@@ -1329,6 +1329,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: string
 	/**
+	 * Your connected apps list
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: string
+	/**
 	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
 	CONNECTED_APPS_SCREEN_DESCRIPTION: string
@@ -3269,6 +3273,10 @@ Please, try again later.
 	 * Connected apps
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
+	/**
+	 * Your connected apps list
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: () => LocalizedString
 	/**
 	 * Connect your wallet with WalletConnect to make transactions.
 	 */

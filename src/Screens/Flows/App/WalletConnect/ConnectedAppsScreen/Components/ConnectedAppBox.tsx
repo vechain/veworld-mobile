@@ -16,16 +16,13 @@ import { AppDetailsBottomSheet } from "./AppDetailsBottomSheet"
 type Props = {
     session: SessionTypes.Struct
     account: AccountWithDevice
-    clickable?: boolean
 }
 
-export const ConnectedApp: React.FC<Props> = memo(
-    ({ session, account, clickable = true }: Props) => {
+export const ConnectedAppBox: React.FC<Props> = memo(
+    ({ session, account }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const onPress = () => {
-            if (!clickable) return
-
             openConnectedAppDetailsSheet()
         }
 
@@ -59,6 +56,7 @@ export const ConnectedApp: React.FC<Props> = memo(
                                     }
                                 />
                             </BaseView>
+
                             <BaseView
                                 flexDirection="column"
                                 alignItems="center">
@@ -67,26 +65,15 @@ export const ConnectedApp: React.FC<Props> = memo(
                                         flexDirection="row"
                                         alignItems="center"
                                         justifyContent="flex-start">
-                                        <BaseText
-                                            typographyFont="button"
-                                            pb={5}>
+                                        <BaseText typographyFont="subSubTitle">
                                             {session.peer?.metadata?.name}
                                         </BaseText>
                                     </BaseView>
-                                    <BaseText typographyFont="smallButtonPrimary">
-                                        {session.peer?.metadata?.url}
-                                    </BaseText>
                                 </BaseView>
                             </BaseView>
                         </BaseView>
-                        {clickable && (
-                            <BaseView
-                                flexDirection="column"
-                                alignItems="center"
-                                pl={5}
-                            />
-                        )}
                     </BaseView>
+
                     <AppDetailsBottomSheet
                         ref={connectedAppDetailsBottomSheetRef}
                         onClose={closeConnectedAppDetailsSheet}

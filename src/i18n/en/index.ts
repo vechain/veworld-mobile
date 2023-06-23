@@ -385,7 +385,8 @@ const en: BaseTranslation = {
     CONNECTED_APP_SELECTED_MESSAGE_LABEL: "Message",
 
     CONNECTED_APPS_SCREEN_TITLE: "Connected apps",
-    CONNECTED_APPS_SCREEN_DESCRIPTION: "Connect your wallet with WalletConnect to make transactions.",
+    CONNECTED_APPS_SCREEN_SUBTITLE: "Your connected apps list",
+    CONNECTED_APPS_SCREEN_DESCRIPTION: "Connect your wallet with apps to make transactions and sign certificates.",
     CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: "You have no connected apps. Once you have some, they will displayed here.",
     
     CONNECTED_APP_DETAILS_TITLE: "Connected app",   
