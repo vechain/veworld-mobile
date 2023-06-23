@@ -234,6 +234,12 @@ const en: BaseTranslation = {
     COMMON_BTN_ADD: "Add",
     COMMON_BTN_SAVE: "Save",
     COMMON_BTN_NEXT: "NEXT",
+    COMMON_BTN_CONNECT: "CONNECT",
+    COMMON_BTN_DISCONNECT: "Disconnect",
+    COMMON_BTN_CANCEL_CAPS_LOCK: "CANCEL",
+    COMMON_BTN_SIGN: "SIGN",
+    COMMON_BTN_REJECT: "REJECT",
+    COMMON_BTN_SIGN_AND_SEND: "SIGN AND SEND",
 
     // Common Labels
     COMMON_LBL_AND: "and",
@@ -357,6 +363,33 @@ const en: BaseTranslation = {
     NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",
     NOTIFICATION_wallet_connect_invalid_uri: "Invalid Wallet Connect URI.",
    
+    // Connected apps
+    CONNECTED_APP_TITLE: "Connected app",
+    CONNECTED_APP_REQUEST: "External app connection",
+    CONNECTION_REQUEST_TITLE: "Connection request",
+    CONNECTION_REQUEST_SUBTITLE: "{name} is asking for access to:",
+    CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: "\u25CF Request transactions to send to Vechain Thor",
+    CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
+    CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
+    CONNECTED_APP_SIGN_REQUEST_DESCRIPTION:  "Your Signature is being requested to sign a certificate",
+    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign a transaction",
+    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to send a transaction",
+   
+    CONNECTED_APP_SELECTED_ACCOUNT_LABEL: "Account",
+    CONNECTED_APP_SELECTED_ORIGIN_LABEL: "Origin",
+    CONNECTED_APP_SELECTED_PURPOSE_LABEL: "Purpose",
+    CONNECTED_APP_SELECTED_CONTENT_LABEL: "Content",
+    CONNECTED_APP_SELECTED_METHOD_LABEL: "Method",
+    CONNECTED_APP_SELECTED_NETWORK_LABEL: "Network",
+    CONNECTED_APP_SELECTED_MESSAGE_LABEL: "Message",
+
+    CONNECTED_APPS_SCREEN_TITLE: "Connected apps",
+    CONNECTED_APPS_SCREEN_DESCRIPTION: "Connect your wallet with WalletConnect to make transactions.",
+    CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: "You have no connected apps. Once you have some, they will displayed here.",
+    
+    CONNECTED_APP_DETAILS_TITLE: "Connected app",   
+    CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",   
+
     // NFT
     CONTRACT_ADDRESS: "Contract address",
     NFT_ATTRIBUTES: "Attributes",
@@ -460,6 +493,15 @@ const en: BaseTranslation = {
     SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: "PROCEED ANYWAY",
     SEND_CREATE_CONTACT_NAME: "Contact name",
     SEND_CREATE_CONTACT_ADDRESS: "Contact address",
+    SEND_LEDGER_TITLE: "Ledger verification",
+    SEND_LEDGER_TITLE_SB: "Please follow the instructions below to sign the transaction with your Ledger",
+    SEND_LEDGER_VALIDATE_TRANSACTION: "Validate transaction",
+    SEND_LEDGER_CHECK_CONNECTION: "We are checking your ledger connection",
+    SEND_LEDGER_CHECK_CONNECTION_SB: "Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open",
+    SEND_LEDGER_SIGN_DATA: "We are signing your transaction",
+    SEND_LEDGER_SIGN_DATA_SB: "We are signing your transaction with your Ledger, please confirm the transaction on your device when required",
+    SEND_LEDGER_TX_READY: "Transaction is ready",
+    SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",
@@ -493,6 +535,14 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: "Please, turn on and unlock your ledger device to continue",
     WALLET_LEDGER_ERROR_OPEN_APP: "Open VET app",
     WALLET_LEDGER_ERROR_OPEN_APP_DESC: "Please, open the VET app to continue",
+    WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: "Validate signature",
+    WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: "We've sent a signature request to your ledger, please validate it to continue",
+    WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: "Enable additional settings",
+    WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: "Multi-clauses and contract data are needed to sign transactions. Navigate to Settings inside your VET app and press both buttons to enable them.",
+    WALLET_LEDGER_ERROR_CLAUSES_DISABLED: "Enable multi-clauses",
+    WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: "Multi-clauses are needed to sign transactions. Navigate to Multi-clauses inside your VET app and press both buttons to enable it.",
+    WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: "Enable contract data",
+    WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: "Contract data is needed to sign transactions. Navigate to Contract data inside your VET app and press both buttons to enable it.",
     WALLET_LEDGER_ERROR_UNKNOWN: "Unknown error",
     WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
 

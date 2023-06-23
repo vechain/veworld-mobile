@@ -12,7 +12,7 @@ import {
     showWarningToast,
     BaseModal,
     CloseModalButton,
-    BaseScrollView,
+    AccountCard,
 } from "~Components"
 import { HDNode, secp256k1, Transaction } from "thor-devkit"
 import {
@@ -30,11 +30,12 @@ import {
 } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
-import { DEVICE_TYPE, Wallet } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
-import { isEmpty, isUndefined } from "lodash"
+import { capitalize, isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
 import { sponsorTransaction, sendTransaction } from "~Networking"
+import { ScrollView } from "react-native-gesture-handler"
 
 interface Props {
     sessionRequest: any
@@ -52,16 +53,19 @@ export const SignTransactionModal = ({
     const { web3Wallet } = useWalletConnect()
     const thorClient = useThor()
     const network = useAppSelector(selectSelectedNetwork)
-    const account = useAppSelector(selectSelectedAccount)
-    const selectedDevice = useAppSelector(state =>
-        selectDevice(state, account.rootAddress),
+    const selectedAccount: AccountWithDevice = useAppSelector(
+        selectSelectedAccount,
     )
     const { LL } = useI18nContext()
 
     // Session request values
-    const { chainId, method, params, topic } =
+    const { method, params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const message = params.comment || params.txMessage[0].comment
+
+    const selectedDevice = useAppSelector(state =>
+        selectDevice(state, selectedAccount.rootAddress),
+    )
 
     const onSignTransaction = useCallback(
         async (privateKey: Buffer) => {
@@ -105,7 +109,7 @@ export const SignTransactionModal = ({
 
                 // request to send for sponsorship/fee delegation
                 const sponsorRequest = {
-                    origin: account.address.toLowerCase(),
+                    origin: selectedAccount.address.toLowerCase(),
                     raw: rawTransaction,
                 }
 
@@ -148,7 +152,7 @@ export const SignTransactionModal = ({
                 await WalletConnectResponseUtils.transactionRequestSuccessResponse(
                     { request: requestEvent, web3Wallet, LL },
                     id,
-                    account.address,
+                    selectedAccount.address,
                 )
             } catch (e) {
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
@@ -159,7 +163,7 @@ export const SignTransactionModal = ({
             onClose()
         },
         [
-            account,
+            selectedAccount,
             network,
             params,
             thorClient,
@@ -178,16 +182,16 @@ export const SignTransactionModal = ({
             if (decryptedWallet && !decryptedWallet.mnemonic)
                 error("Mnemonic wallet can't have an empty mnemonic")
 
-            if (!account.index && account.index !== 0)
+            if (!selectedAccount.index && selectedAccount.index !== 0)
                 throw new Error("Account index is empty")
 
             const hdNode = HDNode.fromMnemonic(decryptedWallet.mnemonic)
-            const derivedNode = hdNode.derive(account.index)
+            const derivedNode = hdNode.derive(selectedAccount.index)
             const privateKey = derivedNode.privateKey as Buffer
 
             return privateKey
         },
-        [account],
+        [selectedAccount],
     )
 
     async function onReject() {
@@ -244,55 +248,76 @@ export const SignTransactionModal = ({
 
     return (
         <BaseModal isOpen={isOpen} onClose={onClose}>
-            <CloseModalButton onPress={onClose} />
-
-            <BaseScrollView
+            <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="never"
+                contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
+                <CloseModalButton onPress={onClose} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
-                        {"Send Transaction"}
+                        {LL.CONNECTED_APP_REQUEST()}
                     </BaseText>
 
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText>
+                        {LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION()}
+                    </BaseText>
+
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitleBold">
+                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <AccountCard account={selectedAccount} />
+
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitleBold">
+                        {LL.SEND_DETAILS()}
+                    </BaseText>
+
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
+                    </BaseText>
                     <BaseSpacer height={8} />
-                    <BaseText typographyFont="subSubTitleLight">
-                        {
-                            "Your Signature is being requested to send a transaction"
-                        }
+                    <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
+
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_NETWORK_LABEL()}
                     </BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText>{capitalize(network.name)}</BaseText>
 
-                    <BaseSpacer height={24} />
-                    <BaseText>
-                        {"Origin: "}
-                        {sessionRequest.peer.metadata.name}
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_METHOD_LABEL()}
                     </BaseText>
-
-                    <BaseSpacer height={24} />
-                    <BaseText>
-                        {"Chains: "}
-                        {chainId}
-                    </BaseText>
-
-                    <BaseSpacer height={24} />
-
-                    <BaseText>{"Method:"}</BaseText>
+                    <BaseSpacer height={8} />
                     <BaseText>{method}</BaseText>
 
-                    <BaseSpacer height={24} />
-
-                    <BaseText>{"Message:"}</BaseText>
-                    <BaseText>{message}</BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SELECTED_MESSAGE_LABEL()}
+                    </BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText numberOfLines={2} ellipsizeMode="tail">
+                        {message}
+                    </BaseText>
                 </BaseView>
 
-                <BaseSpacer height={80} />
+                <BaseSpacer height={40} />
                 <BaseView style={styles.footer}>
                     <BaseButton
                         w={100}
                         haptics="light"
-                        title={"SIGN AND SEND"}
+                        title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={checkIdentityBeforeOpening}
                     />
                     <BaseSpacer height={16} />
@@ -300,11 +325,11 @@ export const SignTransactionModal = ({
                         w={100}
                         haptics="light"
                         variant="outline"
-                        title={"REJECT"}
+                        title={LL.COMMON_BTN_REJECT()}
                         action={onReject}
                     />
                 </BaseView>
-            </BaseScrollView>
+            </ScrollView>
 
             <ConfirmIdentityBottomSheet />
         </BaseModal>

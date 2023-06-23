@@ -11,7 +11,7 @@ import {
 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
-type Props = {
+export type BaseViewProps = {
     w?: number // NOTE: this is a number in percentage
     h?: number // NOTE: this is a number in percentage
     bg?: string
@@ -68,7 +68,7 @@ export const BaseView = memo(
         mb,
         mt,
         ...otherProps
-    }: Props) => {
+    }: BaseViewProps) => {
         const computedAlignItems = useMemo(() => {
             if (alignItems) return alignItems
             if (flexDirection === "row") return "center"

@@ -1,6 +1,6 @@
 import React, { memo, useCallback, forwardRef } from "react"
 
-import { BaseTextInput, Props as BaseTextInputProps } from "../BaseTextInput"
+import { BaseTextInput, BaseTextInputProps } from "../BaseTextInput"
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet"
 import { BottomSheetTextInputProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetTextInput"
 import { TextInput } from "react-native-gesture-handler"

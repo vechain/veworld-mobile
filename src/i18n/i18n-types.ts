@@ -831,6 +831,30 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_NEXT: string
 	/**
+	 * C​O​N​N​E​C​T
+	 */
+	COMMON_BTN_CONNECT: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t
+	 */
+	COMMON_BTN_DISCONNECT: string
+	/**
+	 * C​A​N​C​E​L
+	 */
+	COMMON_BTN_CANCEL_CAPS_LOCK: string
+	/**
+	 * S​I​G​N
+	 */
+	COMMON_BTN_SIGN: string
+	/**
+	 * R​E​J​E​C​T
+	 */
+	COMMON_BTN_REJECT: string
+	/**
+	 * S​I​G​N​ ​A​N​D​ ​S​E​N​D
+	 */
+	COMMON_BTN_SIGN_AND_SEND: string
+	/**
 	 * a​n​d
 	 */
 	COMMON_LBL_AND: string
@@ -1228,6 +1252,95 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: string
 	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_TITLE: string
+	/**
+	 * E​x​t​e​r​n​a​l​ ​a​p​p​ ​c​o​n​n​e​c​t​i​o​n
+	 */
+	CONNECTED_APP_REQUEST: string
+	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
+	 */
+	CONNECTION_REQUEST_TITLE: string
+	/**
+	 * {​n​a​m​e​}​ ​i​s​ ​a​s​k​i​n​g​ ​f​o​r​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {unknown} name
+	 */
+	CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
+	/**
+	 * ●​ ​R​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​c​h​a​i​n​ ​T​h​o​r
+	 */
+	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: string
+	/**
+	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s
+	 */
+	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
+	/**
+	 * S​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CONNECTED_APP_SIGN_REQUEST_TITLE: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
+	/**
+	 * S​i​g​n​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: string
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: string
+	/**
+	 * O​r​i​g​i​n
+	 */
+	CONNECTED_APP_SELECTED_ORIGIN_LABEL: string
+	/**
+	 * P​u​r​p​o​s​e
+	 */
+	CONNECTED_APP_SELECTED_PURPOSE_LABEL: string
+	/**
+	 * C​o​n​t​e​n​t
+	 */
+	CONNECTED_APP_SELECTED_CONTENT_LABEL: string
+	/**
+	 * M​e​t​h​o​d
+	 */
+	CONNECTED_APP_SELECTED_METHOD_LABEL: string
+	/**
+	 * N​e​t​w​o​r​k
+	 */
+	CONNECTED_APP_SELECTED_NETWORK_LABEL: string
+	/**
+	 * M​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SELECTED_MESSAGE_LABEL: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
+	 */
+	CONNECTED_APPS_SCREEN_TITLE: string
+	/**
+	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 */
+	CONNECTED_APPS_SCREEN_DESCRIPTION: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​n​o​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​.​ ​O​n​c​e​ ​y​o​u​ ​h​a​v​e​ ​s​o​m​e​,​ ​t​h​e​y​ ​w​i​l​l​ ​d​i​s​p​l​a​y​e​d​ ​h​e​r​e​.
+	 */
+	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_DETAILS_TITLE: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​w​i​t​h
+	 */
+	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -1541,6 +1654,42 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
 	/**
+	 * L​e​d​g​e​r​ ​v​e​r​i​f​i​c​a​t​i​o​n
+	 */
+	SEND_LEDGER_TITLE: string
+	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	SEND_LEDGER_TITLE_SB: string
+	/**
+	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_LEDGER_VALIDATE_TRANSACTION: string
+	/**
+	 * W​e​ ​a​r​e​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​c​o​n​n​e​c​t​i​o​n
+	 */
+	SEND_LEDGER_CHECK_CONNECTION: string
+	/**
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​i​s​ ​o​p​e​n
+	 */
+	SEND_LEDGER_CHECK_CONNECTION_SB: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_LEDGER_SIGN_DATA: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	SEND_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
+	 */
+	SEND_LEDGER_TX_READY: string
+	/**
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​s​e​n​d​ ​i​t​ ​t​o​ ​t​h​e​ ​n​e​t​w​o​r​k
+	 */
+	SEND_LEDGER_TX_READY_SB: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -1612,6 +1761,38 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
+	/**
+	 * V​a​l​i​d​a​t​e​ ​s​i​g​n​a​t​u​r​e
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: string
+	/**
+	 * W​e​'​v​e​ ​s​e​n​t​ ​a​ ​s​i​g​n​a​t​u​r​e​ ​r​e​q​u​e​s​t​ ​t​o​ ​y​o​u​r​ ​l​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​v​a​l​i​d​a​t​e​ ​i​t​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: string
+	/**
+	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​n​d​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​t​h​e​m​.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​m​u​l​t​i​-​c​l​a​u​s​e​s
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED: string
+	/**
+	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​M​u​l​t​i​-​c​l​a​u​s​e​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​s​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: string
 	/**
 	 * U​n​k​n​o​w​n​ ​e​r​r​o​r
 	 */
@@ -2596,6 +2777,30 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_NEXT: () => LocalizedString
 	/**
+	 * CONNECT
+	 */
+	COMMON_BTN_CONNECT: () => LocalizedString
+	/**
+	 * Disconnect
+	 */
+	COMMON_BTN_DISCONNECT: () => LocalizedString
+	/**
+	 * CANCEL
+	 */
+	COMMON_BTN_CANCEL_CAPS_LOCK: () => LocalizedString
+	/**
+	 * SIGN
+	 */
+	COMMON_BTN_SIGN: () => LocalizedString
+	/**
+	 * REJECT
+	 */
+	COMMON_BTN_REJECT: () => LocalizedString
+	/**
+	 * SIGN AND SEND
+	 */
+	COMMON_BTN_SIGN_AND_SEND: () => LocalizedString
+	/**
 	 * and
 	 */
 	COMMON_LBL_AND: () => LocalizedString
@@ -2985,6 +3190,94 @@ Please, try again later.
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
 	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_TITLE: () => LocalizedString
+	/**
+	 * External app connection
+	 */
+	CONNECTED_APP_REQUEST: () => LocalizedString
+	/**
+	 * Connection request
+	 */
+	CONNECTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * {name} is asking for access to:
+	 */
+	CONNECTION_REQUEST_SUBTITLE: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * ● Request transactions to send to Vechain Thor
+	 */
+	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: () => LocalizedString
+	/**
+	 * ● Request your signature on certificates or identification and agreements
+	 */
+	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sign a certificate
+	 */
+	CONNECTED_APP_SIGN_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign a certificate
+	 */
+	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sign a transaction
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Your Signature is being requested to send a transaction
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Account
+	 */
+	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: () => LocalizedString
+	/**
+	 * Origin
+	 */
+	CONNECTED_APP_SELECTED_ORIGIN_LABEL: () => LocalizedString
+	/**
+	 * Purpose
+	 */
+	CONNECTED_APP_SELECTED_PURPOSE_LABEL: () => LocalizedString
+	/**
+	 * Content
+	 */
+	CONNECTED_APP_SELECTED_CONTENT_LABEL: () => LocalizedString
+	/**
+	 * Method
+	 */
+	CONNECTED_APP_SELECTED_METHOD_LABEL: () => LocalizedString
+	/**
+	 * Network
+	 */
+	CONNECTED_APP_SELECTED_NETWORK_LABEL: () => LocalizedString
+	/**
+	 * Message
+	 */
+	CONNECTED_APP_SELECTED_MESSAGE_LABEL: () => LocalizedString
+	/**
+	 * Connected apps
+	 */
+	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
+	/**
+	 * Connect your wallet with WalletConnect to make transactions.
+	 */
+	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
+	/**
+	 * You have no connected apps. Once you have some, they will displayed here.
+	 */
+	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
+	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_DETAILS_TITLE: () => LocalizedString
+	/**
+	 * Connected with
+	 */
+	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: () => LocalizedString
+	/**
 	 * Contract address
 	 */
 	CONTRACT_ADDRESS: () => LocalizedString
@@ -3297,6 +3590,42 @@ Please, try again later.
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
 	/**
+	 * Ledger verification
+	 */
+	SEND_LEDGER_TITLE: () => LocalizedString
+	/**
+	 * Please follow the instructions below to sign the transaction with your Ledger
+	 */
+	SEND_LEDGER_TITLE_SB: () => LocalizedString
+	/**
+	 * Validate transaction
+	 */
+	SEND_LEDGER_VALIDATE_TRANSACTION: () => LocalizedString
+	/**
+	 * We are checking your ledger connection
+	 */
+	SEND_LEDGER_CHECK_CONNECTION: () => LocalizedString
+	/**
+	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open
+	 */
+	SEND_LEDGER_CHECK_CONNECTION_SB: () => LocalizedString
+	/**
+	 * We are signing your transaction
+	 */
+	SEND_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * We are signing your transaction with your Ledger, please confirm the transaction on your device when required
+	 */
+	SEND_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * Transaction is ready
+	 */
+	SEND_LEDGER_TX_READY: () => LocalizedString
+	/**
+	 * The transaction is ready to be sent, press confirm to send it to the network
+	 */
+	SEND_LEDGER_TX_READY_SB: () => LocalizedString
+	/**
 	 * Account
 	 */
 	WALLET_LABEL_ACCOUNT: () => LocalizedString
@@ -3368,6 +3697,38 @@ Please, try again later.
 	 * Please, open the VET app to continue
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
+	/**
+	 * Validate signature
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: () => LocalizedString
+	/**
+	 * We've sent a signature request to your ledger, please validate it to continue
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: () => LocalizedString
+	/**
+	 * Enable additional settings
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: () => LocalizedString
+	/**
+	 * Multi-clauses and contract data are needed to sign transactions. Navigate to Settings inside your VET app and press both buttons to enable them.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
+	/**
+	 * Enable multi-clauses
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED: () => LocalizedString
+	/**
+	 * Multi-clauses are needed to sign transactions. Navigate to Multi-clauses inside your VET app and press both buttons to enable it.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: () => LocalizedString
+	/**
+	 * Enable contract data
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: () => LocalizedString
+	/**
+	 * Contract data is needed to sign transactions. Navigate to Contract data inside your VET app and press both buttons to enable it.
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
 	/**
 	 * Unknown error
 	 */

@@ -25,6 +25,14 @@ export interface AccountWithDevice extends WalletAccount {
     device: LedgerDevice | LocalDevice
 }
 
+export interface LocalAccountWithDevice extends WalletAccount {
+    device: LocalDevice
+}
+
+export interface LedgerAccountWithDevice extends WalletAccount {
+    device: LedgerDevice
+}
+
 /**
  * Used on the account management screens
  * Grouping accounts by their device

@@ -71,7 +71,6 @@ export const signMessageRequestSuccessResponse = async (
     } catch (err: unknown) {
         error(err)
         showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
-    } finally {
     }
 }
 

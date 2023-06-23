@@ -1,6 +1,11 @@
-import { VETLedgerAccount } from "~Constants"
 import { AddressUtils, AccountUtils, debug, error } from "~Utils"
-import { DEVICE_TYPE, LocalDevice, LedgerDevice, WalletAccount } from "~Model"
+import {
+    DEVICE_TYPE,
+    LocalDevice,
+    LedgerDevice,
+    WalletAccount,
+    NewLedgerDevice,
+} from "~Model"
 import { selectDevices, selectSelectedAccount } from "../Selectors"
 import {
     addDevice,
@@ -58,15 +63,7 @@ const addDeviceAndAccounts =
 const addLedgerDeviceAndAccounts = createAppAsyncThunk(
     "device/addLedgerDeviceAndAccounts",
     async (
-        {
-            rootAccount,
-            alias,
-            accounts,
-        }: {
-            rootAccount: VETLedgerAccount
-            alias: string
-            accounts: number[]
-        },
+        { deviceId, rootAccount, alias, accounts }: NewLedgerDevice,
         { dispatch, getState, rejectWithValue },
     ) => {
         debug("Adding a ledger device")
@@ -90,6 +87,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
 
             //Create the new ledger device and persist it
             const newDevice: LedgerDevice = {
+                deviceId,
                 xPub: {
                     publicKey: rootAccount.publicKey,
                     chainCode: rootAccount.chainCode,
@@ -106,7 +104,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
                 AccountUtils.getAccountForIndex(
                     accountIndex,
                     newDevice,
-                    accountIndex,
+                    accountIndex + 1,
                 ),
             )
 

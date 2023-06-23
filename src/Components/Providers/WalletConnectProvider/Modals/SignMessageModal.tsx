@@ -1,6 +1,6 @@
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ScrollView } from "react-native"
 import {
     BaseText,
     BaseButton,
@@ -10,13 +10,13 @@ import {
     showWarningToast,
     BaseModal,
     CloseModalButton,
-    BaseScrollView,
+    AccountCard,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
 import {
-    useAppSelector,
     selectDevice,
     selectSelectedAccount,
+    useAppSelector,
 } from "~Storage/Redux"
 import {
     CryptoUtils,
@@ -25,7 +25,7 @@ import {
 } from "~Utils"
 import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
-import { DEVICE_TYPE, Wallet } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { useI18nContext } from "~i18n"
 import { capitalize } from "lodash"
 
@@ -43,11 +43,13 @@ export const SignMessageModal = ({
     isOpen,
 }: Props) => {
     const { web3Wallet } = useWalletConnect()
-    const account = useAppSelector(selectSelectedAccount)
-    const selectedDevice = useAppSelector(state =>
-        selectDevice(state, account.rootAddress),
-    )
     const { LL } = useI18nContext()
+    const selectedAccount: AccountWithDevice = useAppSelector(
+        selectSelectedAccount,
+    )
+    const selectedDevice = useAppSelector(state =>
+        selectDevice(state, selectedAccount.rootAddress),
+    )
 
     // Request values
     const { method, params } =
@@ -65,7 +67,7 @@ export const SignMessageModal = ({
                 ...params,
                 timestamp: Math.round(Date.now() / 1000),
                 domain: new URL(url),
-                signer: account?.address ?? "",
+                signer: selectedAccount?.address ?? "",
             }
 
             const hash = blake2b256(Certificate.encode(cert))
@@ -85,7 +87,7 @@ export const SignMessageModal = ({
 
             onClose()
         },
-        [account, params, url, web3Wallet, onClose, LL, requestEvent],
+        [selectedAccount, params, url, web3Wallet, onClose, LL, requestEvent],
     )
 
     const onExtractPrivateKey = useCallback(
@@ -96,16 +98,16 @@ export const SignMessageModal = ({
             if (decryptedWallet && !decryptedWallet.mnemonic)
                 error("Mnemonic wallet can't have an empty mnemonic")
 
-            if (!account.index && account.index !== 0)
+            if (!selectedAccount.index && selectedAccount.index !== 0)
                 throw new Error("Account index is empty")
 
             const hdNode = HDNode.fromMnemonic(decryptedWallet.mnemonic)
-            const derivedNode = hdNode.derive(account.index)
+            const derivedNode = hdNode.derive(selectedAccount.index)
             const privateKey = derivedNode.privateKey as Buffer
 
             return privateKey
         },
-        [account],
+        [selectedAccount],
     )
 
     async function onReject() {
@@ -153,59 +155,68 @@ export const SignMessageModal = ({
 
     return (
         <BaseModal isOpen={isOpen} onClose={onClose}>
-            <CloseModalButton onPress={onClose} />
-
-            <BaseScrollView
+            <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="never"
+                contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
+                <CloseModalButton onPress={onClose} />
                 <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">{"Sign"}</BaseText>
-
-                    <BaseSpacer height={8} />
-                    <BaseText typographyFont="subSubTitleLight">
-                        {
-                            "Your Signature is being requested to sign a certificate"
-                        }
+                    <BaseText typographyFont="title">
+                        {LL.CONNECTED_APP_REQUEST()}
                     </BaseText>
 
-                    <BaseSpacer height={24} />
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText>
+                        {LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}
+                    </BaseText>
+
+                    <BaseSpacer height={32} />
+                    <BaseText typographyFont="subTitleBold">
+                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <AccountCard account={selectedAccount} />
+
+                    <BaseSpacer height={32} />
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">
                             {LL.SEND_DETAILS()}
                         </BaseText>
 
                         <BaseSpacer height={16} />
-                        <BaseText typographyFont="subSubTitleLight">
-                            {"Origin"}
+                        <BaseText typographyFont="subTitle">
+                            {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
-                        <BaseText>{sessionRequest.peer.metadata.url}</BaseText>
 
                         <BaseSpacer height={16} />
-                        <BaseText typographyFont="subSubTitleLight">
-                            {"Purpose"}
+                        <BaseText typographyFont="subTitle">
+                            {LL.CONNECTED_APP_SELECTED_PURPOSE_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{capitalize(method)}</BaseText>
 
                         <BaseSpacer height={24} />
-                        <BaseText typographyFont="subSubTitleLight">
-                            {"Content:"}
+                        <BaseText typographyFont="subTitle">
+                            {LL.CONNECTED_APP_SELECTED_CONTENT_LABEL()}
                         </BaseText>
                         <BaseSpacer height={8} />
                         <BaseText>{message}</BaseText>
                     </BaseView>
                 </BaseView>
-                <BaseSpacer height={80} />
+                <BaseSpacer height={48} />
                 <BaseView style={styles.footer}>
                     <BaseButton
                         w={100}
                         haptics="light"
-                        title={"SIGN"}
+                        title={LL.COMMON_BTN_SIGN()}
                         action={checkIdentityBeforeOpening}
                     />
                     <BaseSpacer height={16} />
@@ -213,11 +224,11 @@ export const SignMessageModal = ({
                         w={100}
                         haptics="light"
                         variant="outline"
-                        title={"REJECT"}
+                        title={LL.COMMON_BTN_REJECT()}
                         action={onReject}
                     />
                 </BaseView>
-            </BaseScrollView>
+            </ScrollView>
             <ConfirmIdentityBottomSheet />
         </BaseModal>
     )
