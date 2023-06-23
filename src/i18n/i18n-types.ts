@@ -945,6 +945,30 @@ type RootTranslation = {
 	 */
 	COMMON_RECEIVE: string
 	/**
+	 * Connect
+	 */
+	COMMON_BTN_CONNECT: string
+	/**
+	 * Disconnect
+	 */
+	COMMON_BTN_DISCONNECT: string
+	/**
+	 * SIGN
+	 */
+	COMMON_BTN_SIGN: string
+	/**
+	 * REJECT
+	 */
+	COMMON_BTN_REJECT: string
+	/**
+	 * SIGN AND SEND
+	 */
+	COMMON_BTN_SIGN_AND_SEND: string
+	/**
+	 * CANCEL
+	 */
+	COMMON_BTN_CANCEL_CAPS_LOCK: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1171,63 +1195,6 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_found_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
-	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
-	 */
-	NOTIFICATION_wallet_connect_disconnected_from_remote: string
-	/**
-	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​a​p​p​.
-	 */
-	NOTIFICATION_wallet_connect_disconnected_success: string
-	/**
-	 * C​o​n​n​e​c​t​i​n​g​ ​m​a​y​ ​t​a​k​e​ ​a​ ​f​e​w​ ​s​e​c​o​n​d​s​.
-	 */
-	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
-	/**
-	 * E​r​r​o​r​ ​p​a​i​r​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​a​p​p​,​ ​p​l​e​a​s​e​ ​g​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​Q​R​ ​C​O​D​E​.
-	 */
-	NOTIFICATION_wallet_connect_error_pairing: string
-	/**
-	 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​d​a​p​p​ ​i​s​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​w​i​t​h​ ​V​e​W​o​r​l​d​.
-	 */
-	NOTIFICATION_wallet_connect_incompatible_dapp: string
-	/**
-	 * W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​n​o​t​ ​i​n​i​t​i​a​l​i​z​e​d​.
-	 */
-	NOTIFICATION_wallet_connect_not_initialized: string
-	/**
-	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​n​a​m​e​}​.
-	 * @param {unknown} name
-	 */
-	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
-	/**
-	 * C​e​r​t​i​f​i​c​a​t​e​ ​s​i​g​n​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
-	 */
-	NOTIFICATION_wallet_connect_sign_success: string
-	/**
-	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​w​i​t​h​ ​a​p​p​,​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	NOTIFICATION_wallet_connect_matching_error: string
-	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​ ​p​r​o​b​l​e​m​ ​d​e​l​e​g​a​t​i​n​g​ ​t​h​e​ ​r​e​q​u​e​s​t​.
-	 */
-	NOTIFICATION_wallet_connect_error_delegating_transaction: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
-	 */
-	NOTIFICATION_wallet_connect_transaction_broadcasted: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​c​o​r​r​e​c​t​l​y​ ​b​u​t​ ​a​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​t​o​ ​t​h​e​ ​d​a​p​p​.
-	 */
-	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: string
-	/**
-	 * E​r​r​o​r​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.
-	 */
-	NOTIFICATION_wallet_connect_error_on_transaction: string
-	/**
-	 * I​n​v​a​l​i​d​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​U​R​I​.
-	 */
-	NOTIFICATION_wallet_connect_invalid_uri: string
-	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -1272,6 +1239,150 @@ type RootTranslation = {
 	 * W​o​o​p​s​!​ ​T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
 	 */
 	NFT_DOWNLOAD_ERROR: string
+	/**
+	 * A connected app successfully disconnected from this wallet.
+	 */
+	NOTIFICATION_wallet_connect_disconnected_from_remote: string
+	/**
+	 * Successfully disconnected from app.
+	 */
+	NOTIFICATION_wallet_connect_disconnected_success: string
+	/**
+	 * Connecting may take a few seconds.
+	 */
+	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
+	/**
+	 * Error pairing with the app, please generate a new QR CODE.
+	 */
+	NOTIFICATION_wallet_connect_error_pairing: string
+	/**
+	 * The requested dapp is not compatible with VeWorld.
+	 */
+	NOTIFICATION_wallet_connect_incompatible_dapp: string
+	/**
+	 * Wallet Connect not initialized.
+	 */
+	NOTIFICATION_wallet_connect_not_initialized: string
+	/**
+	 * Successfully connected to {name}.
+	 */
+	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
+	/**
+	 * Certificate signed successfully.
+	 */
+	NOTIFICATION_wallet_connect_sign_success: string
+	/**
+	 * Something went wrong while communicating with app, try again.
+	 */
+	NOTIFICATION_wallet_connect_matching_error: string
+	/**
+	 * There was a problem delegating the request.
+	 */
+	NOTIFICATION_wallet_connect_error_delegating_transaction: string
+	/**
+	 * Transaction broadcasted successfully.
+	 */
+	NOTIFICATION_wallet_connect_transaction_broadcasted: string
+	/**
+	 * Transaction broadcasted correctly but an error occurred while communicating to the dapp.
+	 */
+	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: string
+	/**
+	 * Error executing the transaction.
+	 */
+	NOTIFICATION_wallet_connect_error_on_transaction: string
+	/**
+	 * Invalid Wallet Connect URI.
+	 */
+	NOTIFICATION_wallet_connect_invalid_uri: string
+	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_TITLE: string
+	/**
+	 * External app connection
+	 */
+	CONNECTED_APP_REQUEST: string
+	/**
+	 * Connection request
+	 */
+	CONNECTION_REQUEST_TITLE: string
+    /**
+	 * {name} is asking for access to:
+	 */
+	CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
+	/**
+	 * \u25CF Request transactions to send to Vechain Thor
+	 */
+	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: string
+	/**
+	 * \u25CF Request your signature on certificates or identification and agreements
+	 */
+	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
+	/**
+	 * Sign a certificate
+	 */
+	CONNECTED_APP_SIGN_REQUEST_TITLE: string
+	/**
+	 * Your Signature is being requested to sign a certificate
+	 */
+	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
+	/**
+	 * Sign a transaction
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: string
+	/**
+	 * Your Signature is being requested to send a transaction
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: string
+	/**
+	 * Account
+	 */
+	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: string
+	/**
+	 * Origin
+	 */
+	CONNECTED_APP_SELECTED_ORIGIN_LABEL: string
+	/**
+	 * Purpose
+	 */
+	CONNECTED_APP_SELECTED_PURPOSE_LABEL: string
+	/**
+	 * Content
+	 */
+	CONNECTED_APP_SELECTED_CONTENT_LABEL: string
+	/**
+	 * Method
+	 */
+	CONNECTED_APP_SELECTED_METHOD_LABEL: string
+	/**
+	 * Network
+	 */
+	CONNECTED_APP_SELECTED_NETWORK_LABEL: string
+	/**
+	 * Message
+	 */
+	CONNECTED_APP_SELECTED_MESSAGE_LABEL: string
+	/**
+	 * Connected apps
+	 */
+	CONNECTED_APPS_SCREEN_TITLE: string
+	/**
+	 * Connect your wallet with WalletConnect to make transactions.
+	 */
+	CONNECTED_APPS_SCREEN_DESCRIPTION: string
+	/**
+	 * You have no connected apps. Once you have some, they will displayed here.
+	 */
+	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
+	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_DETAILS_TITLE: string
+	/**
+	 * Connected with
+	 */
+	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -2776,6 +2887,30 @@ export type TranslationFunctions = {
 	 */
 	COMMON_RECEIVE: () => LocalizedString
 	/**
+	 * Connect
+	 */
+	COMMON_BTN_CONNECT: () => LocalizedString
+	/**
+	 * Disconnect
+	 */
+	COMMON_BTN_DISCONNECT: () => LocalizedString
+	/**
+	 * CANCEL
+	 */
+	COMMON_BTN_CANCEL_CAPS_LOCK: () => LocalizedString
+	/**
+	 * SIGN
+	 */
+	COMMON_BTN_SIGN: () => LocalizedString
+	/**
+	 * REJECT
+	 */
+	COMMON_BTN_REJECT: () => LocalizedString
+	/**
+	 * SIGN AND SEND
+	 */
+	COMMON_BTN_SIGN_AND_SEND: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -3028,7 +3163,7 @@ Please, try again later.
 	 * Certificate signed successfully.
 	 */
 	NOTIFICATION_wallet_connect_sign_success: () => LocalizedString
-	/**
+	/*
 	 * Something went wrong while communicating with app, try again.
 	 */
 	NOTIFICATION_wallet_connect_matching_error: () => LocalizedString
@@ -3052,6 +3187,94 @@ Please, try again later.
 	 * Invalid Wallet Connect URI.
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
+	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_TITLE: () => LocalizedString
+	/**
+	 * External app connection
+	 */
+	CONNECTED_APP_REQUEST: () => LocalizedString
+	/**
+	 * Connection request
+	 */
+	CONNECTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * {name} is asking access to: 
+	 */
+	CONNECTION_REQUEST_SUBTITLE: (arg: { name: string }) => LocalizedString
+	/**
+	 * \u25CF Request transactions to send to Vechain Thor
+	 */
+	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: () => LocalizedString
+	/**
+	 * \u25CF Request your signature on certificates or identification and agreements
+	 */
+	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sign a certificate
+	 */
+	CONNECTED_APP_SIGN_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign a certificate
+	 */
+	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sign a transaction
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Your Signature is being requested to send a transaction
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Account
+	 */
+	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: () => LocalizedString
+	/**
+	 * Origin
+	 */
+	CONNECTED_APP_SELECTED_ORIGIN_LABEL: () => LocalizedString
+	/**
+	 * Purpose
+	 */
+	CONNECTED_APP_SELECTED_PURPOSE_LABEL: () => LocalizedString
+	/**
+	 * Content
+	 */
+	CONNECTED_APP_SELECTED_CONTENT_LABEL: () => LocalizedString
+	/**
+	 * Method
+	 */
+	CONNECTED_APP_SELECTED_METHOD_LABEL: () => LocalizedString
+	/**
+	 * Network
+	 */
+	CONNECTED_APP_SELECTED_NETWORK_LABEL: () => LocalizedString
+	/**
+	 * Message
+	 */
+	CONNECTED_APP_SELECTED_MESSAGE_LABEL: () => LocalizedString
+	/**
+	 * Connected apps
+	 */
+	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
+	/**
+	 * Connect your wallet with WalletConnect to make transactions.
+	 */
+	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
+	/**
+	 * You have no connected apps. Once you have some, they will displayed here.
+	 */
+	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
+	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_DETAILS_TITLE: () => LocalizedString
+	/**
+	 *  Connected with
+	 */
+	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: () => LocalizedString
 	/**
 	 * Contract address
 	 */

@@ -1,28 +1,31 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { WalletConnectUtils, error } from "~Utils"
+import { AddressUtils, WalletConnectUtils, error } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SignClientTypes, SessionTypes } from "@walletconnect/types"
 import {
     useAppSelector,
     useAppDispatch,
     selectSelectedAccountAddress,
+    selectVisibleAccounts,
+    deleteSession,
+    selectAccount,
+    changeSelectedNetwork,
 } from "~Storage/Redux"
-import { ConnectModal } from "./Modals/ConnectModal"
 import { SignMessageModal } from "./Modals/SignMessageModal"
 import { SignTransactionModal } from "./Modals/SignTransactionModal"
 import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
-import { deleteSession } from "~Storage/Redux/Slices"
 import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { RequestMethods } from "~Constants"
+import { AccountWithDevice, Network } from "~Model"
 
 /**
  * Wallet Connect Flow:
  * 1) A pairing needs to be established by scanning the QR code or by manually pasting the URI
  * 2) After pairing is established the dapp will send a session_propsal asking the user permission to connect to the wallet
- * 3) Once the dapp and the wallet are connected the dapp can send a session_requests asking to sign certificates or execute transactions
+ * 3) Once the dapp and the wallet are connected the dapp can send session_requests asking to sign certificates or execute transactions
  *
  * This provider was created to have a singleton web3wallet instance, so that all modals regarding session proposals and requests
  * are handled by the provider can be shown no matter where we are inside the app.
@@ -48,11 +51,7 @@ const WalletConnectContextProvider = ({
     const { LL } = useI18nContext()
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
     const nav = useNavigation()
-
-    //For session proposal
-    const [pairModalVisible, setPairModalVisible] = useState(false)
-    const [currentProposal, setCurrentProposal] =
-        useState<SignClientTypes.EventArguments["session_proposal"]>()
+    const accounts = useAppSelector(selectVisibleAccounts)
 
     // For session request
     const [signMessageModalVisible, setSignMessageModalVisible] =
@@ -96,22 +95,20 @@ const WalletConnectContextProvider = ({
      */
     const onSessionProposal = useCallback(
         (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
-            setPairModalVisible(true)
-            setCurrentProposal(proposal)
-        },
-        [],
-    )
-
-    const onSessionProposalClose = useCallback(
-        (success: boolean) => {
-            setCurrentProposal(undefined)
-            setPairModalVisible(false)
-
-            if (success) {
-                nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
+            if (!selectedAccountAddress) return
+            if (!web3Wallet) return
+            if (!proposal.params.requiredNamespaces.vechain) {
+                showErrorToast(
+                    LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
+                )
+                return
             }
+
+            nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                sessionProposal: proposal,
+            })
         },
-        [nav],
+        [nav, selectedAccountAddress, web3Wallet, LL],
     )
 
     /**
@@ -124,12 +121,27 @@ const WalletConnectContextProvider = ({
             if (!web3Wallet)
                 throw new Error("Web3Wallet is not initialized properly")
 
-            const { topic } = requestEvent
+            // Get the session for this topic
+            const session: SessionTypes.Struct =
+                web3Wallet.engine.signClient.session.get(requestEvent.topic)
 
-            const sessionRequestData: SessionTypes.Struct =
-                web3Wallet.engine.signClient.session.get(topic)
+            // Switch to the requested account
+            const address = session.namespaces.vechain.accounts[0].split(":")[2]
+            const selectedAccount: AccountWithDevice | undefined =
+                accounts.find(acct => {
+                    return AddressUtils.compareAddresses(address, acct.address)
+                })
+            if (!selectedAccount) throw new Error("Account not found")
+            dispatch(selectAccount({ address: selectedAccount.address }))
 
-            setSessionRequest(sessionRequestData)
+            // Switch to the requested network
+            const network: Network = WalletConnectUtils.getNetworkType(
+                requestEvent.params.chainId,
+            )
+            dispatch(changeSelectedNetwork(network))
+
+            // Set the session request and the request event data
+            setSessionRequest(session)
             setRequestEventData(requestEvent)
 
             switch (requestEvent.params.request.method) {
@@ -144,7 +156,7 @@ const WalletConnectContextProvider = ({
                     break
             }
         },
-        [web3Wallet],
+        [web3Wallet, accounts, dispatch],
     )
 
     const onSessionRequestClose = useCallback(() => {
@@ -238,14 +250,6 @@ const WalletConnectContextProvider = ({
             {children}
             {selectedAccountAddress && (
                 <>
-                    {currentProposal && (
-                        <ConnectModal
-                            onClose={onSessionProposalClose}
-                            currentProposal={currentProposal}
-                            isOpen={pairModalVisible}
-                        />
-                    )}
-
                     {requestEventData &&
                         sessionRequest &&
                         signMessageModalVisible && (

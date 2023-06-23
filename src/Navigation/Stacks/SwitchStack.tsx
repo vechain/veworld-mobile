@@ -5,7 +5,8 @@ import { OnboardingStack } from "./OnboardingStack"
 import { useAppInitState, AppInitState } from "~Hooks"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import BlockListener from "../../BlockListener"
-import { BlackListedCollectionsScreen } from "~Screens"
+import { BlackListedCollectionsScreen, ConnectAppScreen } from "~Screens"
+import { SignClientTypes } from "@walletconnect/types"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -13,6 +14,9 @@ export type RootStackParamListSwitch = {
     ResetAppScreen: undefined
     Create_Wallet_Flow: undefined
     Blacklisted_Collections: undefined
+    Connect_App_Screen: {
+        sessionProposal: SignClientTypes.EventArguments["session_proposal"]
+    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -53,6 +57,11 @@ export const SwitchStack = () => {
                             options={{
                                 presentation: "modal",
                             }}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.CONNECT_APP_SCREEN}
+                            component={ConnectAppScreen}
                         />
                     </Switch.Group>
                 </>

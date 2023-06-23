@@ -22,10 +22,12 @@ Use the following template to create a new Unreleased change log.
 - [#658](https://github.com/vechainfoundation/veworld-mobile/pull/658) Ledger integration in the send flow, minors around import ledger logic and UI elements
 - [#669](https://github.com/vechainfoundation/veworld-mobile/pull/669) Add changelog to repository
 - [#598](https://github.com/vechainfoundation/veworld-mobile/pull/598) Integrated wallet connect 
+- [#664](https://github.com/vechainfoundation/veworld-mobile/pull/664) Added account handling for wallet connect connections
 
 ### Changed
 
 ### Fixed
+- [#663](https://github.com/vechainfoundation/veworld-mobile/pull/663) Switch to requested network during wallet connect session requests
 
 ### Removed
 
