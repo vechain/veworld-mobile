@@ -71,6 +71,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
                 dispatch(
                     setNewLedgerDevice({
+                        deviceId: device.id,
                         rootAccount,
                         alias: device.localName,
                         accounts: selectedAccountsIndex,

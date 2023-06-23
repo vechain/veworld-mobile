@@ -22,6 +22,7 @@ describe("useBluetoothStatus", () => {
             isUnsupported: false,
             isAuthorized: true,
             isEnabled: true,
+            isUpdating: false,
         })
     })
 })

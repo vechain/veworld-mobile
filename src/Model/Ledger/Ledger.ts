@@ -29,6 +29,7 @@ export type ConnectedLedgerDevice = {
  * @category Ledger
  */
 export type NewLedgerDevice = {
+    deviceId: string
     rootAccount: VETLedgerAccount
     alias: string
     accounts: number[]

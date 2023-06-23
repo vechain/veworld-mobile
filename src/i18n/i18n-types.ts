@@ -1195,6 +1195,63 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_found_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
+	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
+	 */
+	NOTIFICATION_wallet_connect_disconnected_from_remote: string
+	/**
+	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​a​p​p​.
+	 */
+	NOTIFICATION_wallet_connect_disconnected_success: string
+	/**
+	 * C​o​n​n​e​c​t​i​n​g​ ​m​a​y​ ​t​a​k​e​ ​a​ ​f​e​w​ ​s​e​c​o​n​d​s​.
+	 */
+	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
+	/**
+	 * E​r​r​o​r​ ​p​a​i​r​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​a​p​p​,​ ​p​l​e​a​s​e​ ​g​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​Q​R​ ​C​O​D​E​.
+	 */
+	NOTIFICATION_wallet_connect_error_pairing: string
+	/**
+	 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​d​a​p​p​ ​i​s​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​w​i​t​h​ ​V​e​W​o​r​l​d​.
+	 */
+	NOTIFICATION_wallet_connect_incompatible_dapp: string
+	/**
+	 * W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​n​o​t​ ​i​n​i​t​i​a​l​i​z​e​d​.
+	 */
+	NOTIFICATION_wallet_connect_not_initialized: string
+	/**
+	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​n​a​m​e​}​.
+	 * @param {unknown} name
+	 */
+	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
+	/**
+	 * C​e​r​t​i​f​i​c​a​t​e​ ​s​i​g​n​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
+	 */
+	NOTIFICATION_wallet_connect_sign_success: string
+	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​w​i​t​h​ ​a​p​p​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	NOTIFICATION_wallet_connect_matching_error: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​ ​p​r​o​b​l​e​m​ ​d​e​l​e​g​a​t​i​n​g​ ​t​h​e​ ​r​e​q​u​e​s​t​.
+	 */
+	NOTIFICATION_wallet_connect_error_delegating_transaction: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
+	 */
+	NOTIFICATION_wallet_connect_transaction_broadcasted: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​c​o​r​r​e​c​t​l​y​ ​b​u​t​ ​a​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​t​o​ ​t​h​e​ ​d​a​p​p​.
+	 */
+	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: string
+	/**
+	 * E​r​r​o​r​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.
+	 */
+	NOTIFICATION_wallet_connect_error_on_transaction: string
+	/**
+	 * I​n​v​a​l​i​d​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​U​R​I​.
+	 */
+	NOTIFICATION_wallet_connect_invalid_uri: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -1652,6 +1709,42 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
 	/**
+	 * L​e​d​g​e​r​ ​v​e​r​i​f​i​c​a​t​i​o​n
+	 */
+	SEND_LEDGER_TITLE: string
+	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	SEND_LEDGER_TITLE_SB: string
+	/**
+	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_LEDGER_VALIDATE_TRANSACTION: string
+	/**
+	 * W​e​ ​a​r​e​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​c​o​n​n​e​c​t​i​o​n
+	 */
+	SEND_LEDGER_CHECK_CONNECTION: string
+	/**
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​i​s​ ​o​p​e​n
+	 */
+	SEND_LEDGER_CHECK_CONNECTION_SB: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_LEDGER_SIGN_DATA: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	SEND_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
+	 */
+	SEND_LEDGER_TX_READY: string
+	/**
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​s​e​n​d​ ​i​t​ ​t​o​ ​t​h​e​ ​n​e​t​w​o​r​k
+	 */
+	SEND_LEDGER_TX_READY_SB: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -1723,6 +1816,38 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
+	/**
+	 * V​a​l​i​d​a​t​e​ ​s​i​g​n​a​t​u​r​e
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: string
+	/**
+	 * W​e​'​v​e​ ​s​e​n​t​ ​a​ ​s​i​g​n​a​t​u​r​e​ ​r​e​q​u​e​s​t​ ​t​o​ ​y​o​u​r​ ​l​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​v​a​l​i​d​a​t​e​ ​i​t​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: string
+	/**
+	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​n​d​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​t​h​e​m​.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​m​u​l​t​i​-​c​l​a​u​s​e​s
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED: string
+	/**
+	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​M​u​l​t​i​-​c​l​a​u​s​e​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: string
+	/**
+	 * E​n​a​b​l​e​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​s​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: string
 	/**
 	 * U​n​k​n​o​w​n​ ​e​r​r​o​r
 	 */
@@ -3055,60 +3180,68 @@ Please, try again later.
 	 * {name} has been copied to the clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
-	/*
-	 * Wallet connect has been disconnected from remote.
+	/**
+	 * Transaction {txId} was reverted.
+	 */
+	NOTIFICATION_transaction_reverted: (arg: { txId: unknown }) => LocalizedString
+	/**
+	 * Found {token} transfer: {amount}
+	 */
+	NOTIFICATION_found_token_transfer: (arg: { amount: unknown, token: unknown }) => LocalizedString
+	/**
+	 * A connected app successfully disconnected from this wallet.
 	 */
 	NOTIFICATION_wallet_connect_disconnected_from_remote: () => LocalizedString
-	/*
-	 * You disconnected successfully from dapp.
+	/**
+	 * Successfully disconnected from app.
 	 */
 	NOTIFICATION_wallet_connect_disconnected_success: () => LocalizedString
-	/*
+	/**
 	 * Connecting may take a few seconds.
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
-	/*
-	 * Error pairing with Dapp, please generate a new QR CODE.
+	/**
+	 * Error pairing with the app, please generate a new QR CODE.
 	 */
 	NOTIFICATION_wallet_connect_error_pairing: () => LocalizedString
-	/*
-	 * The requested chain is not compatible with this wallet.
+	/**
+	 * The requested dapp is not compatible with VeWorld.
 	 */
 	NOTIFICATION_wallet_connect_incompatible_dapp: () => LocalizedString
-	/*
-	 * Wallet connect not initialized.
+	/**
+	 * Wallet Connect not initialized.
 	 */
 	NOTIFICATION_wallet_connect_not_initialized: () => LocalizedString
-	/*
+	/**
 	 * Successfully connected to {name}.
 	 */
-	NOTIFICATION_wallet_connect_successfull_connection: (arg: { name: string }) => LocalizedString
-	/*
-	 * Certificate signed correctly.
+	NOTIFICATION_wallet_connect_successfull_connection: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Certificate signed successfully.
 	 */
 	NOTIFICATION_wallet_connect_sign_success: () => LocalizedString
 	/*
 	 * Something went wrong while communicating with app, try again.
 	 */
 	NOTIFICATION_wallet_connect_matching_error: () => LocalizedString
-	/*
-	 * An error occurred while asking delegator to sign the transaction.
+	/**
+	 * There was a problem delegating the request.
 	 */
 	NOTIFICATION_wallet_connect_error_delegating_transaction: () => LocalizedString
-	/*
-	* Transaction broadcasted correctly
-	*/
+	/**
+	 * Transaction broadcasted successfully.
+	 */
 	NOTIFICATION_wallet_connect_transaction_broadcasted: () => LocalizedString
-	/*
-	 * Transaction broadcasted correctly but there is an issue communinicating with the connected app
+	/**
+	 * Transaction broadcasted correctly but an error occurred while communicating to the dapp.
 	 */
 	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: () => LocalizedString
-	/*
-	 * An unexpected error occurred while executing transaction
+	/**
+	 * Error executing the transaction.
 	 */
 	NOTIFICATION_wallet_connect_error_on_transaction: () => LocalizedString
-	/*
-	 * Invalid Wallet Connect URI, please try again
+	/**
+	 * Invalid Wallet Connect URI.
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
 	/**
@@ -3520,6 +3653,42 @@ Please, try again later.
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
 	/**
+	 * Ledger verification
+	 */
+	SEND_LEDGER_TITLE: () => LocalizedString
+	/**
+	 * Please follow the instructions below to sign the transaction with your Ledger
+	 */
+	SEND_LEDGER_TITLE_SB: () => LocalizedString
+	/**
+	 * Validate transaction
+	 */
+	SEND_LEDGER_VALIDATE_TRANSACTION: () => LocalizedString
+	/**
+	 * We are checking your ledger connection
+	 */
+	SEND_LEDGER_CHECK_CONNECTION: () => LocalizedString
+	/**
+	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open
+	 */
+	SEND_LEDGER_CHECK_CONNECTION_SB: () => LocalizedString
+	/**
+	 * We are signing your transaction
+	 */
+	SEND_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * We are signing your transaction with your Ledger, please confirm the transaction on your device when required
+	 */
+	SEND_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * Transaction is ready
+	 */
+	SEND_LEDGER_TX_READY: () => LocalizedString
+	/**
+	 * The transaction is ready to be sent, press confirm to send it to the network
+	 */
+	SEND_LEDGER_TX_READY_SB: () => LocalizedString
+	/**
 	 * Account
 	 */
 	WALLET_LABEL_ACCOUNT: () => LocalizedString
@@ -3591,6 +3760,38 @@ Please, try again later.
 	 * Please, open the VET app to continue
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
+	/**
+	 * Validate signature
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: () => LocalizedString
+	/**
+	 * We've sent a signature request to your ledger, please validate it to continue
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: () => LocalizedString
+	/**
+	 * Enable additional settings
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: () => LocalizedString
+	/**
+	 * Multi-clauses and contract data are needed to sign transactions. Navigate to Settings inside your VET app and press both buttons to enable them.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
+	/**
+	 * Enable multi-clauses
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED: () => LocalizedString
+	/**
+	 * Multi-clauses are needed to sign transactions. Navigate to Multi-clauses inside your VET app and press both buttons to enable it.
+	 */
+	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: () => LocalizedString
+	/**
+	 * Enable contract data
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: () => LocalizedString
+	/**
+	 * Contract data is needed to sign transactions. Navigate to Contract data inside your VET app and press both buttons to enable it.
+	 */
+	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
 	/**
 	 * Unknown error
 	 */

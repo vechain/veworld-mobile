@@ -22,6 +22,7 @@ Use the following template to create a new Unreleased change log.
 - [#668](https://github.com/vechainfoundation/veworld-mobile/issues/668) Add changelog to repository
 - [#598](https://github.com/vechainfoundation/veworld-mobile/issues/598) Integrated wallet connect 
 - [#664](https://github.com/vechainfoundation/veworld-mobile/issues/664) Added account handling for wallet connect connections
+- [#658](https://github.com/vechainfoundation/veworld-mobile/issues/658) Ledger integration in the send flow, minors around import ledger logic and UI elements
 
 ### Changed
 

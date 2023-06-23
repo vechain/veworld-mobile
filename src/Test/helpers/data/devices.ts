@@ -23,6 +23,7 @@ export const device2 = {
 //Don't add this to default storage/ cache - For testing
 export const ledgerDevice: LedgerDevice = {
     alias: "Ledger Device 1",
+    deviceId: "testDeviceId",
     rootAddress: mockLedgerAccount.address,
     type: DEVICE_TYPE.LEDGER,
     xPub: {

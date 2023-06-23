@@ -30,5 +30,6 @@ export interface LocalDevice extends BaseDevice {
  * The ledger device
  */
 export interface LedgerDevice extends BaseDevice {
+    deviceId: string
     readonly type: DEVICE_TYPE.LEDGER
 }

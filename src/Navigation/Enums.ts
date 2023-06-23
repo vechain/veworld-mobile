@@ -23,6 +23,7 @@ export enum Routes {
     SELECT_AMOUNT_SEND = "Select_Amount_Send",
     INSERT_ADDRESS_SEND = "Insert_Address_Send",
     TRANSACTION_SUMMARY_SEND = "Transaction_Summary_Send",
+    LEDGER_SIGN_TRANSACTION = "Ledger_Sign_Transaction",
     SWAP = "Swap",
     HISTORY = "History",
     NFTS = "NFTs",

@@ -80,10 +80,11 @@ export const useLedger = ({
     )
 
     const onConnectionSuccess = useCallback(
-        (app: VETLedgerApp, account: VETLedgerAccount) => {
+        async (app: VETLedgerApp, account: VETLedgerAccount) => {
             info("[ledger] - connected succesfully")
             setVetApp(app)
             setRootAccount(account)
+            //config is calculated in useEffect
             setErrorCode(undefined)
         },
         [],
@@ -91,7 +92,7 @@ export const useLedger = ({
 
     const openOrFinalizeConnection = useCallback(async () => {
         setIsConnecting(true)
-        if (!transport.current) await openBleConnection()
+        await openBleConnection()
         if (transport.current)
             await LedgerUtils.checkLedgerConnection({
                 transport: transport.current,
@@ -121,8 +122,10 @@ export const useLedger = ({
         rootAccount,
         errorCode,
         openOrFinalizeConnection,
+        openBleConnection,
         isConnecting,
         setTimerEnabled,
+        transport: transport.current,
     }
 }
 
@@ -130,15 +133,19 @@ export const useLedger = ({
  * @field vetApp - a {@link VET} instance that can be used to make requests to the ledger
  * @field rootAccount - The root VET account on the ledger (with chaincode). This can be used to derive further accounts
  * @field errorCode - the last error code that was encountered when attempting to connect to the ledger
- * @field openOrFinalizeConnection - a function that can be used to manually attempt to connect to the ledger
+ * @field openOrFinalizeConnection - a function that can be used to manually attempt to connect to the ledger - does not recreate transport if already exists
+ * openBleConnection - a function that can be used to manually attempt to connect to the ledger - recreate transport if already exists
  * @field isConnecting - a boolean that indicates if the ledger is currently attempting to connect
  * @field setTimerEnabled - a function that can be used to enable/disable the timer that attempts to connect to the ledger
+ * @field transport - the current transport that is being used to connect to the ledger
  */
 interface UseLedgerProps {
     vetApp?: VETLedgerApp
     rootAccount?: VETLedgerAccount
     errorCode: LEDGER_ERROR_CODES | undefined
     openOrFinalizeConnection: () => Promise<void>
+    openBleConnection: () => Promise<void>
     isConnecting: boolean
     setTimerEnabled: (enabled: boolean) => void
+    transport: BleTransport | undefined
 }
