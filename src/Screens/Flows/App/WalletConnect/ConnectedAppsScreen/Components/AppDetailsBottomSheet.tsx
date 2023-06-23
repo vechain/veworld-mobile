@@ -6,7 +6,6 @@ import {
     BaseView,
     BaseText,
     BaseSpacer,
-    useWalletConnect,
     BaseBottomSheet,
     AccountIcon,
 } from "~Components"
@@ -21,22 +20,22 @@ type Props = {
     onClose: () => void
     session: SessionTypes.Struct
     account: AccountWithDevice
+    onDisconnect: () => void
 }
 
 export const AppDetailsBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, session, account }, ref) => {
-    const { disconnect } = useWalletConnect()
+>(({ onClose, session, account, onDisconnect }, ref) => {
     const { LL } = useI18nContext()
 
     const { name, description, url, icon } =
         WalletConnectUtils.getSessionRequestAttributes(session)
 
     const disconnectSession = useCallback(() => {
-        disconnect(session.topic)
         onClose()
-    }, [session, disconnect, onClose])
+        onDisconnect()
+    }, [onDisconnect, onClose])
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onClose}>

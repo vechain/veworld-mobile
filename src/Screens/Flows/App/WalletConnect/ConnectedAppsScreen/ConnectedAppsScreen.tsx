@@ -84,9 +84,11 @@ export const ConnectedAppsScreen = () => {
                 return (
                     <BaseView key={account.address}>
                         {index > 0 && <BaseSpacer height={16} />}
+
                         <BaseText typographyFont="subSubTitle">
                             {account.alias}
                         </BaseText>
+
                         {activeSessions[account.address].map(session => {
                             return (
                                 <BaseView key={session.topic}>

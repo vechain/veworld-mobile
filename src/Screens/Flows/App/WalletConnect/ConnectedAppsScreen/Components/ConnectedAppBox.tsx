@@ -6,12 +6,14 @@ import {
     BaseImage,
     BaseTouchableBox,
     BaseSpacer,
+    useWalletConnect,
 } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { AccountWithDevice } from "~Model"
 import { ImageStyle } from "react-native-fast-image"
 import { AppDetailsBottomSheet } from "./AppDetailsBottomSheet"
+import { ConfirmDisconnectBottomSheet } from "./ConfirmDisconnectBottomSheet"
 
 type Props = {
     session: SessionTypes.Struct
@@ -22,12 +24,19 @@ type Props = {
 export const ConnectedAppBox: React.FC<Props> = memo(
     ({ session, account, clickable = true }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
+        const { disconnect } = useWalletConnect()
 
         const onPress = () => {
             if (!clickable) return
 
             openConnectedAppDetailsSheet()
         }
+
+        const {
+            ref: confirmDisconnectBottomSheetRef,
+            onOpen: openConfirmDisconnectDetailsSheet,
+            onClose: closeConfirmDisconnectDetailsSheet,
+        } = useBottomSheetModal()
 
         const {
             ref: connectedAppDetailsBottomSheetRef,
@@ -87,6 +96,15 @@ export const ConnectedAppBox: React.FC<Props> = memo(
                     <AppDetailsBottomSheet
                         ref={connectedAppDetailsBottomSheetRef}
                         onClose={closeConnectedAppDetailsSheet}
+                        session={session}
+                        account={account}
+                        onDisconnect={openConfirmDisconnectDetailsSheet}
+                    />
+
+                    <ConfirmDisconnectBottomSheet
+                        ref={confirmDisconnectBottomSheetRef}
+                        onCancel={closeConfirmDisconnectDetailsSheet}
+                        onConfirm={topic => disconnect(topic)}
                         session={session}
                         account={account}
                     />
