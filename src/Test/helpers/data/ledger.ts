@@ -5,6 +5,7 @@ import { AddressUtils, CryptoUtils } from "~Utils"
 import { hdnode1 } from "./wallets"
 import { Characteristic } from "@ledgerhq/react-native-hw-transport-ble/lib/types"
 import { DeviceModel, DeviceModelId } from "@ledgerhq/devices"
+import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 /*eslint-disable no-console*/
 const publicKey =
     "042e7f024c8af943a41af6b74a8be59c57daf978282fb0118674cba85cac0fe68eeca595a4a84f93f76ab8d648e40e5ec880691787cbfe6607de578a4217d4c15c"
@@ -92,5 +93,10 @@ export const mockLedgerApp: VETLedgerApp = {
         rawTransaction: Buffer,
     ): Promise<Buffer> => {
         return Promise.resolve(Buffer.from(path + rawTransaction.toString()))
+    },
+    getAppConfiguration: (): Promise<Buffer> => {
+        return Promise.resolve(
+            Buffer.from(LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED, "hex"),
+        )
     },
 }

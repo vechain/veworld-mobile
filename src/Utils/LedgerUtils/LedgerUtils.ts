@@ -132,13 +132,15 @@ const signTransaction = async (
     index: number,
     transaction: Transaction,
     device: LedgerDevice,
-    vetLedger: VETLedgerApp,
+    transport: BleTransport,
     onIsAwaitingForSignature: () => void,
     onProgressUpdate?: (progress: number) => void,
 ): Promise<Buffer> => {
     debug("Signing transaction")
 
     return await ledgerMutex.runExclusive(async () => {
+        // use a fresh transport to avoid possible device is disconnected errors
+        const vetLedger = new VETLedgerApp(transport)
         try {
             await validateRootAddress(device.rootAddress, vetLedger)
 
@@ -150,7 +152,7 @@ const signTransaction = async (
                 onProgressUpdate,
             )
         } catch (e) {
-            error(e)
+            error("signTransaction", e)
             throw new Error("Failed to sign the message")
         } finally {
             vetLedger.transport.close().catch(e => {

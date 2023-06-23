@@ -7,7 +7,7 @@ import { BaseView } from "../BaseView"
 import { TextInput } from "react-native-gesture-handler"
 const { defaults: defaultTypography } = typography
 
-export type Props = {
+export type BaseTextInputProps = {
     placeholder?: string
     label?: string
     value?: string
@@ -22,7 +22,7 @@ export type Props = {
     inBottomSheet?: boolean
 } & TextInputProps
 
-const BaseTextInputComponent = forwardRef<TextInput, Props>(
+const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
     (
         {
             placeholder,

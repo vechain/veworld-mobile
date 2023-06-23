@@ -9,8 +9,9 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    LedgerBadge,
 } from "~Components"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = {
@@ -40,9 +41,18 @@ export const AccountCard: React.FC<Props> = memo(
                         <BaseSpacer width={12} />
                         <BaseView>
                             <BaseText>{account.alias}</BaseText>
-                            <BaseText style={styles.wallet}>
-                                {account.device.alias}
-                            </BaseText>
+                            <BaseView flexDirection="row" mt={3}>
+                                {account.device?.type ===
+                                    DEVICE_TYPE.LEDGER && (
+                                    <LedgerBadge
+                                        //eslint-disable-next-line react-native/no-inline-styles
+                                        containerStyle={{ mr: 8 }}
+                                    />
+                                )}
+                                <BaseText style={styles.wallet}>
+                                    {account.device.alias}
+                                </BaseText>
+                            </BaseView>
                         </BaseView>
                     </BaseView>
                     <BaseView style={styles.rightSubContainer}>
