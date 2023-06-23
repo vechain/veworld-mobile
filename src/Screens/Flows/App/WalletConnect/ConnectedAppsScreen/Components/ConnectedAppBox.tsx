@@ -5,7 +5,6 @@ import {
     BaseView,
     BaseImage,
     BaseTouchableBox,
-    BaseSpacer,
     useWalletConnect,
 } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
@@ -46,9 +45,9 @@ export const ConnectedAppBox: React.FC<Props> = memo(
 
         return (
             <>
-                <BaseSpacer height={16} />
                 <BaseTouchableBox
                     action={onPress}
+                    activeOpacity={1}
                     innerContainerStyle={styles.container}>
                     <BaseView
                         w={100}

@@ -88,7 +88,7 @@ export const ConnectedAppsScreen = () => {
                         <BaseText typographyFont="subSubTitle">
                             {account.alias}
                         </BaseText>
-
+                        <BaseSpacer height={16} />
                         {activeSessions[account.address].map(session => {
                             return (
                                 <BaseView key={session.topic}>
@@ -181,7 +181,7 @@ export const ConnectedAppsScreen = () => {
                         </>
                     )}
 
-                    {renderConnectedApps}
+                    <BaseView>{renderConnectedApps}</BaseView>
                 </BaseView>
             </ScrollView>
         </BaseSafeArea>
