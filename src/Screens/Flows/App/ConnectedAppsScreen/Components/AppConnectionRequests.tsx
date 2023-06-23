@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { RequestMethods } from "~Constants"
 import { useI18nContext } from "~i18n"
@@ -11,6 +11,38 @@ type Props = {
 export const AppConnectionRequests = ({ name, methods }: Props) => {
     const { LL } = useI18nContext()
 
+    const renderRequestTransactionDescription = useMemo(() => {
+        if (methods.find(method => method === "request_transaction")) {
+            return (
+                <>
+                    <BaseSpacer height={8} />
+                    <BaseText>
+                        {LL.CONNECTION_REQUEST_TRANSACTION_DESCRIPTION()}
+                    </BaseText>
+                </>
+            )
+        }
+    }, [methods, LL])
+
+    const renderRequestSignDescription = useMemo(() => {
+        if (
+            methods.find(
+                method =>
+                    method === RequestMethods.IDENTIFY ||
+                    method === RequestMethods.SIGN,
+            )
+        ) {
+            return (
+                <>
+                    <BaseSpacer height={8} />
+                    <BaseText>
+                        {LL.CONNECTION_REQUEST_SIGN_DESCRIPTION()}
+                    </BaseText>
+                </>
+            )
+        }
+    }, [methods, LL])
+
     return (
         <BaseView>
             <BaseText typographyFont="subTitle">
@@ -20,26 +52,8 @@ export const AppConnectionRequests = ({ name, methods }: Props) => {
             <BaseSpacer height={15} />
             <BaseText>{LL.CONNECTION_REQUEST_SUBTITLE({ name })}</BaseText>
 
-            {methods.find(method => method === "request_transaction") && (
-                <>
-                    <BaseSpacer height={8} />
-                    <BaseText>
-                        {LL.CONNECTION_REQUEST_TRANSACTION_DESCRIPTION()}
-                    </BaseText>
-                </>
-            )}
-            {methods.find(
-                method =>
-                    method === RequestMethods.IDENTIFY ||
-                    method === RequestMethods.SIGN,
-            ) && (
-                <>
-                    <BaseSpacer height={8} />
-                    <BaseText>
-                        {LL.CONNECTION_REQUEST_SIGN_DESCRIPTION()}
-                    </BaseText>
-                </>
-            )}
+            {renderRequestTransactionDescription}
+            {renderRequestSignDescription}
         </BaseView>
     )
 }
