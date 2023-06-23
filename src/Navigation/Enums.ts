@@ -51,4 +51,5 @@ export enum Routes {
     BLACKLISTED_COLLECTIONS = "Blacklisted_Collections",
     CONNECT_APP_SCREEN = "Connect_App_Screen",
     CONNECTED_APP_SIGN_TRANSACTION_SCREEN = "Connected_App_Sign_Transaction_Screen",
+    CONNECTED_APP_SIGN_MESSAGE_SCREEN = "Connected_App_Sign_Message_Screen",
 }

@@ -11,7 +11,6 @@ import {
     selectAccount,
     changeSelectedNetwork,
 } from "~Storage/Redux"
-import { SignMessageModal } from "./Modals/SignMessageModal"
 import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { getSdkError } from "@walletconnect/utils"
@@ -51,13 +50,6 @@ const WalletConnectContextProvider = ({
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
     const nav = useNavigation()
     const accounts = useAppSelector(selectVisibleAccounts)
-
-    // For session request
-    const [signMessageModalVisible, setSignMessageModalVisible] =
-        useState(false)
-    const [sessionRequest, setSessionRequest] = useState<SessionTypes.Struct>()
-    const [requestEventData, setRequestEventData] =
-        useState<SignClientTypes.EventArguments["session_request"]>()
 
     /**
      * A pairing between the DApp and the wallet needs to be established in order to make
@@ -137,18 +129,18 @@ const WalletConnectContextProvider = ({
             )
             dispatch(changeSelectedNetwork(network))
 
-            // Set the session request and the request event data
-            setSessionRequest(session)
-            setRequestEventData(requestEvent)
-
+            // Show the screen based on the request method
             switch (requestEvent.params.request.method) {
                 case RequestMethods.IDENTIFY:
-                    setSignMessageModalVisible(true)
+                    nav.navigate(Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN, {
+                        requestEvent,
+                        session,
+                    })
                     break
                 case RequestMethods.REQUEST_TRANSACTION:
                     nav.navigate(Routes.CONNECTED_APP_SIGN_TRANSACTION_SCREEN, {
-                        session,
                         requestEvent,
+                        session,
                     })
                     break
                 default:
@@ -158,12 +150,6 @@ const WalletConnectContextProvider = ({
         },
         [web3Wallet, accounts, dispatch, nav],
     )
-
-    const onSessionRequestClose = useCallback(() => {
-        setSessionRequest(undefined)
-        setRequestEventData(undefined)
-        setSignMessageModalVisible(false)
-    }, [])
 
     /**
      * Handle session delete
@@ -247,20 +233,6 @@ const WalletConnectContextProvider = ({
     return (
         <WalletConnectContext.Provider value={value}>
             {children}
-            {selectedAccountAddress && (
-                <>
-                    {requestEventData &&
-                        sessionRequest &&
-                        signMessageModalVisible && (
-                            <SignMessageModal
-                                onClose={onSessionRequestClose}
-                                isOpen={signMessageModalVisible}
-                                requestEvent={requestEventData}
-                                sessionRequest={sessionRequest}
-                            />
-                        )}
-                </>
-            )}
         </WalletConnectContext.Provider>
     )
 }

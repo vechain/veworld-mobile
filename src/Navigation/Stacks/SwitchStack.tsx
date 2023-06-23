@@ -9,6 +9,7 @@ import {
     BlackListedCollectionsScreen,
     ConnectAppScreen,
     SignTransactionScreen,
+    SignMessageScreen,
 } from "~Screens"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 
@@ -22,6 +23,10 @@ export type RootStackParamListSwitch = {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
     }
     Connected_App_Sign_Transaction_Screen: {
+        requestEvent: SignClientTypes.EventArguments["session_request"]
+        session: SessionTypes.Struct
+    }
+    Connected_App_Sign_Message_Screen: {
         requestEvent: SignClientTypes.EventArguments["session_request"]
         session: SessionTypes.Struct
     }
@@ -75,6 +80,11 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CONNECTED_APP_SIGN_TRANSACTION_SCREEN}
                             component={SignTransactionScreen}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN}
+                            component={SignMessageScreen}
                         />
                     </Switch.Group>
                 </>

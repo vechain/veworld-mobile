@@ -40,6 +40,7 @@ type Props = NativeStackScreenProps<
 
 export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const currentProposal = route.params.sessionProposal
+
     const { web3Wallet } = useWalletConnect()
 
     const nav = useNavigation()
@@ -62,10 +63,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     /**
      * Handle session proposal
-     * 1) Approve session
-     * 2) Insert session into redux
-     * 3) Show success toast
-     * 4) Navigate to connected apps screen
      */
     const handleAccept = useCallback(async () => {
         const { id, params } = currentProposal
@@ -103,6 +100,11 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             events: requiredNamespaces.vechain.events,
         }
 
+        // Doing this nav.navigate before approveSession because after approveSession the DApp
+        // is IMMEDIATELY sending a session_proposal and the nav.navigate is
+        // closing the session proposal screen instead of this one
+        nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
+
         try {
             let session: SessionTypes.Struct = await web3Wallet.approveSession({
                 id,
@@ -122,18 +124,14 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     name,
                 }),
             )
-            nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
         } catch (err: unknown) {
             error(err)
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
-            nav.goBack()
         }
     }, [currentProposal, dispatch, LL, nav, web3Wallet, name, selectedAccount])
 
     /**
      * Handle session rejection
-     * 1) Reject session
-     * 2) Go back
      */
     const handleReject = useCallback(async () => {
         if (currentProposal) {

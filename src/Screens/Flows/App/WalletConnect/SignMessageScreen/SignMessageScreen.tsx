@@ -1,5 +1,4 @@
-import { SessionTypes, SignClientTypes } from "@walletconnect/types"
-import React, { useCallback } from "react"
+import React, { FC, useCallback } from "react"
 import { StyleSheet, ScrollView } from "react-native"
 import {
     BaseText,
@@ -8,9 +7,9 @@ import {
     useWalletConnect,
     BaseSpacer,
     showWarningToast,
-    BaseModal,
     CloseModalButton,
     AccountCard,
+    BaseSafeArea,
 } from "~Components"
 import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
 import {
@@ -27,21 +26,20 @@ import { useCheckIdentity } from "~Hooks"
 import { error } from "~Utils/Logger"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { useI18nContext } from "~i18n"
-import { capitalize } from "lodash"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useNavigation } from "@react-navigation/native"
+import { MessageDetails } from "./Components"
 
-interface Props {
-    sessionRequest: SessionTypes.Struct
-    requestEvent: SignClientTypes.EventArguments["session_request"]
-    onClose: () => void
-    isOpen: boolean
-}
+type Props = NativeStackScreenProps<
+    RootStackParamListSwitch,
+    Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN
+>
 
-export const SignMessageModal = ({
-    requestEvent,
-    sessionRequest,
-    onClose,
-    isOpen,
-}: Props) => {
+export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
+    const requestEvent = route.params.requestEvent
+    const sessionRequest = route.params.session
+
     const { web3Wallet } = useWalletConnect()
     const { LL } = useI18nContext()
     const selectedAccount: AccountWithDevice = useAppSelector(
@@ -50,13 +48,17 @@ export const SignMessageModal = ({
     const selectedDevice = useAppSelector(state =>
         selectDevice(state, selectedAccount.rootAddress),
     )
+    const nav = useNavigation()
 
     // Request values
-    const { method, params } =
+    const { params } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const { url } =
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
-    const message = params.payload.content
+
+    const onClose = useCallback(() => {
+        nav.goBack()
+    }, [nav])
 
     const signIdentityCertificate = useCallback(
         async (privateKey: Buffer) => {
@@ -110,7 +112,7 @@ export const SignMessageModal = ({
         [selectedAccount],
     )
 
-    async function onReject() {
+    const onReject = useCallback(async () => {
         if (requestEvent) {
             await WalletConnectResponseUtils.userRejectedMethodsResponse({
                 request: requestEvent,
@@ -120,7 +122,7 @@ export const SignMessageModal = ({
         }
 
         onClose()
-    }
+    }, [requestEvent, web3Wallet, LL, onClose])
 
     const onIdentityConfirmed = useCallback(
         async (password?: string) => {
@@ -153,15 +155,19 @@ export const SignMessageModal = ({
             onIdentityConfirmed,
         })
 
+    const onPressBack = useCallback(async () => {
+        await onReject()
+    }, [onReject])
+
     return (
-        <BaseModal isOpen={isOpen} onClose={onClose}>
+        <BaseSafeArea>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
-                <CloseModalButton onPress={onClose} />
+                <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
                         {LL.CONNECTED_APP_REQUEST()}
@@ -184,33 +190,12 @@ export const SignMessageModal = ({
                     <AccountCard account={selectedAccount} />
 
                     <BaseSpacer height={32} />
-                    <BaseView>
-                        <BaseText typographyFont="subTitleBold">
-                            {LL.SEND_DETAILS()}
-                        </BaseText>
-
-                        <BaseSpacer height={16} />
-                        <BaseText typographyFont="subTitle">
-                            {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
-                        </BaseText>
-                        <BaseSpacer height={8} />
-                        <BaseText>{sessionRequest.peer.metadata.name}</BaseText>
-
-                        <BaseSpacer height={16} />
-                        <BaseText typographyFont="subTitle">
-                            {LL.CONNECTED_APP_SELECTED_PURPOSE_LABEL()}
-                        </BaseText>
-                        <BaseSpacer height={8} />
-                        <BaseText>{capitalize(method)}</BaseText>
-
-                        <BaseSpacer height={24} />
-                        <BaseText typographyFont="subTitle">
-                            {LL.CONNECTED_APP_SELECTED_CONTENT_LABEL()}
-                        </BaseText>
-                        <BaseSpacer height={8} />
-                        <BaseText>{message}</BaseText>
-                    </BaseView>
+                    <MessageDetails
+                        sessionRequest={sessionRequest}
+                        requestEvent={requestEvent}
+                    />
                 </BaseView>
+
                 <BaseSpacer height={48} />
                 <BaseView style={styles.footer}>
                     <BaseButton
@@ -230,7 +215,7 @@ export const SignMessageModal = ({
                 </BaseView>
             </ScrollView>
             <ConfirmIdentityBottomSheet />
-        </BaseModal>
+        </BaseSafeArea>
     )
 }
 
