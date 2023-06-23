@@ -1,10 +1,11 @@
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo, useRef } from "react"
 import {
     BaseText,
     BackButtonHeader,
     BaseSafeArea,
     BaseView,
     BaseSpacer,
+    useWalletConnect,
 } from "~Components"
 import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
@@ -13,17 +14,26 @@ import {
     EmptyListView,
     ConnectedAppBox,
     ConnectedAppsHeader,
+    ConfirmDisconnectBottomSheet,
 } from "./Components"
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice } from "~Model"
+import SwipeableItem, {
+    OpenDirection,
+    SwipeableItemImperativeRef,
+} from "react-native-swipeable-item"
+import { UnderlayLeft } from "../../ContactsScreen"
+import { useBottomSheetModal } from "~Hooks"
+
+const underlaySnapPoints = [58]
 
 export const ConnectedAppsScreen = () => {
     const activeSessions: Record<string, SessionTypes.Struct[]> =
         useAppSelector(selectSessions)
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
+    const { disconnect } = useWalletConnect()
 
     const totalSessions = useMemo(() => {
         return Object.values(activeSessions).reduce(
@@ -32,25 +42,112 @@ export const ConnectedAppsScreen = () => {
         )
     }, [activeSessions])
 
-    const renderAppsOfAccount = (account: AccountWithDevice, index: number) => {
-        return (
-            <BaseView key={account.address}>
-                {index > 0 && <BaseSpacer height={16} />}
-                <BaseText typographyFont="subSubTitle">
-                    {account.alias}
-                </BaseText>
-                {activeSessions[account.address].map(session => {
-                    return (
-                        <ConnectedAppBox
-                            session={session}
-                            key={session.topic}
-                            account={account}
-                        />
-                    )
-                })}
-            </BaseView>
-        )
-    }
+    const {
+        ref: confirmDisconnectBottomSheetRef,
+        onOpen: openConfirmDisconnectDetailsSheet,
+        onClose: closeConfirmDisconnectDetailsSheet,
+    } = useBottomSheetModal()
+
+    const closeOtherSwipeableItems = useCallback((currentTopic: string) => {
+        swipeableItemRefs?.current.forEach((ref, topic) => {
+            if (topic !== currentTopic) {
+                ref?.close()
+            }
+        })
+    }, [])
+
+    const onSwipeableItemChange = useCallback(() => {
+        // Close all the swipable items
+        closeOtherSwipeableItems("")
+        // Trigger the disconnect for the item that was swiped
+        openConfirmDisconnectDetailsSheet()
+    }, [closeOtherSwipeableItems, openConfirmDisconnectDetailsSheet])
+
+    // Keep track of the swipeable items refs
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
+        new Map(),
+    )
+
+    const registerSwipeableItemRef = useCallback(
+        (address: string, ref: SwipeableItemImperativeRef | null) => {
+            if (ref) swipeableItemRefs.current.set(address, ref)
+        },
+        [],
+    )
+
+    const renderConnectedApps = useMemo(() => {
+        return accounts.map((account, index) => {
+            if (
+                account.address in activeSessions &&
+                !isEmpty(activeSessions[account.address])
+            ) {
+                return (
+                    <BaseView key={account.address}>
+                        {index > 0 && <BaseSpacer height={16} />}
+                        <BaseText typographyFont="subSubTitle">
+                            {account.alias}
+                        </BaseText>
+                        {activeSessions[account.address].map(session => {
+                            return (
+                                <BaseView key={session.topic}>
+                                    <SwipeableItem
+                                        ref={ref =>
+                                            registerSwipeableItemRef(
+                                                session.topic,
+                                                ref,
+                                            )
+                                        }
+                                        key={session.topic}
+                                        item={session}
+                                        onChange={({ openDirection }) => {
+                                            if (
+                                                openDirection !==
+                                                OpenDirection.NONE
+                                            ) {
+                                                onSwipeableItemChange()
+                                            }
+                                        }}
+                                        renderUnderlayLeft={() => (
+                                            <UnderlayLeft
+                                                onDelete={() =>
+                                                    openConfirmDisconnectDetailsSheet()
+                                                }
+                                            />
+                                        )}
+                                        snapPointsLeft={underlaySnapPoints}>
+                                        <ConnectedAppBox
+                                            key={session.topic}
+                                            session={session}
+                                            account={account}
+                                        />
+                                    </SwipeableItem>
+
+                                    <ConfirmDisconnectBottomSheet
+                                        ref={confirmDisconnectBottomSheetRef}
+                                        onCancel={
+                                            closeConfirmDisconnectDetailsSheet
+                                        }
+                                        onConfirm={topic => disconnect(topic)}
+                                        session={session}
+                                        account={account}
+                                    />
+                                </BaseView>
+                            )
+                        })}
+                    </BaseView>
+                )
+            }
+        })
+    }, [
+        accounts,
+        activeSessions,
+        onSwipeableItemChange,
+        registerSwipeableItemRef,
+        confirmDisconnectBottomSheetRef,
+        closeConfirmDisconnectDetailsSheet,
+        disconnect,
+        openConfirmDisconnectDetailsSheet,
+    ])
 
     return (
         <BaseSafeArea>
@@ -82,14 +179,7 @@ export const ConnectedAppsScreen = () => {
                         </>
                     )}
 
-                    {accounts.map((account, index) => {
-                        if (
-                            account.address in activeSessions &&
-                            !isEmpty(activeSessions[account.address])
-                        ) {
-                            return renderAppsOfAccount(account, index)
-                        }
-                    })}
+                    {renderConnectedApps}
                 </BaseView>
             </ScrollView>
         </BaseSafeArea>

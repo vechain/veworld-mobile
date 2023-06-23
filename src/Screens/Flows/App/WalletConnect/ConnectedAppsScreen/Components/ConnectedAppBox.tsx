@@ -16,13 +16,16 @@ import { AppDetailsBottomSheet } from "./AppDetailsBottomSheet"
 type Props = {
     session: SessionTypes.Struct
     account: AccountWithDevice
+    clickable?: boolean
 }
 
 export const ConnectedAppBox: React.FC<Props> = memo(
-    ({ session, account }: Props) => {
+    ({ session, account, clickable = true }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
 
         const onPress = () => {
+            if (!clickable) return
+
             openConnectedAppDetailsSheet()
         }
 
@@ -31,8 +34,6 @@ export const ConnectedAppBox: React.FC<Props> = memo(
             onOpen: openConnectedAppDetailsSheet,
             onClose: closeConnectedAppDetailsSheet,
         } = useBottomSheetModal()
-
-        //TODO: Implement "disconnect" functionality on long press
 
         return (
             <>
@@ -65,13 +66,22 @@ export const ConnectedAppBox: React.FC<Props> = memo(
                                         flexDirection="row"
                                         alignItems="center"
                                         justifyContent="flex-start">
-                                        <BaseText typographyFont="subSubTitle">
+                                        <BaseText
+                                            typographyFont="subSubTitle"
+                                            fontSize={14}>
                                             {session.peer?.metadata?.name}
                                         </BaseText>
                                     </BaseView>
                                 </BaseView>
                             </BaseView>
                         </BaseView>
+                        {clickable && (
+                            <BaseView
+                                flexDirection="column"
+                                alignItems="center"
+                                pl={5}
+                            />
+                        )}
                     </BaseView>
 
                     <AppDetailsBottomSheet
@@ -94,5 +104,5 @@ const baseStyles = () =>
         container: {
             width: "100%",
         },
-        image: { width: 40, height: 40, borderRadius: 24 },
+        image: { width: 35, height: 35, borderRadius: 24 },
     })

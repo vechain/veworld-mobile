@@ -40,7 +40,7 @@ export const AppDetailsBottomSheet = React.forwardRef<
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onClose}>
-            <BaseView mx={20}>
+            <BaseView mx={10}>
                 <BaseText typographyFont="title">
                     {LL.CONNECTED_APP_DETAILS_TITLE()}
                 </BaseText>
