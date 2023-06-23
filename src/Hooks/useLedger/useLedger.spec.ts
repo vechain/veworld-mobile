@@ -37,6 +37,8 @@ describe("useLedger", () => {
                 errorCode: undefined,
                 openOrFinalizeConnection: expect.any(Function),
                 setTimerEnabled: expect.any(Function),
+                transport: undefined,
+                openBleConnection: expect.any(Function),
             })
         })
 
@@ -68,6 +70,8 @@ describe("useLedger", () => {
                 errorCode: LEDGER_ERROR_CODES.DISCONNECTED,
                 openOrFinalizeConnection: expect.any(Function),
                 setTimerEnabled: expect.any(Function),
+                transport: undefined,
+                openBleConnection: expect.any(Function),
             })
         })
         it("call openOrFinalizeConnection - unknown error on getAppConfig", async () => {
@@ -97,6 +101,8 @@ describe("useLedger", () => {
                 errorCode: LEDGER_ERROR_CODES.UNKNOWN,
                 openOrFinalizeConnection: expect.any(Function),
                 setTimerEnabled: expect.any(Function),
+                transport: TestHelpers.data.mockedTransport,
+                openBleConnection: expect.any(Function),
             })
         })
     })

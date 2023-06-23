@@ -12,6 +12,8 @@ import {
 } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { abis, VET } from "~Constants"
+import HexUtils from "~Utils/HexUtils"
+import axios from "axios"
 
 export const TRANSFER_SIG = new abi.Function(abis.VIP180.transfer).signature
 
@@ -663,4 +665,23 @@ export const toDelegation = (txBody: Transaction.Body) => {
     const tx = new Transaction(txBody)
     tx.body.reserved = { features: 1 }
     return tx
+}
+
+/**
+ * send signed transaction with thorest apis
+ */
+export const sendSignedTransaction = async (
+    tx: Transaction,
+    networkUrl: string,
+) => {
+    const encodedRawTx = {
+        raw: HexUtils.addPrefix(tx.encode().toString("hex")),
+    }
+
+    const response = await axios.post(
+        `${networkUrl}/transactions`,
+        encodedRawTx,
+    )
+
+    return response.data.id
 }

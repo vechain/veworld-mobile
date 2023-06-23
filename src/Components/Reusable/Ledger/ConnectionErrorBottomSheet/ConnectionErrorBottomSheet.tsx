@@ -4,7 +4,12 @@ import { LEDGER_ERROR_CODES } from "~Constants"
 import { BaseBottomSheet, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import Lottie from "lottie-react-native"
-import { BlePairingDark, EnterPinCodeDark, OpenAppDark } from "~Assets/Lottie"
+import {
+    BlePairingDark,
+    EnterPinCodeDark,
+    OpenAppDark,
+    ValidateDark,
+} from "~Assets/Lottie"
 import { ActivityIndicator, StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 
@@ -51,6 +56,54 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                 return {
                     title: LL.WALLET_LEDGER_ERROR_OPEN_APP(),
                     desc: LL.WALLET_LEDGER_ERROR_OPEN_APP_DESC(),
+                    image: (
+                        <Lottie
+                            source={OpenAppDark}
+                            autoPlay
+                            style={styles.lottie}
+                        />
+                    ),
+                }
+            case LEDGER_ERROR_CODES.WAITING_SIGNATURE:
+                return {
+                    title: LL.WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE(),
+                    desc: LL.WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC(),
+                    image: (
+                        <Lottie
+                            source={ValidateDark}
+                            autoPlay
+                            style={styles.lottie}
+                        />
+                    ),
+                }
+            case LEDGER_ERROR_CODES.CONTRACT_AND_CLAUSES_DISABLED:
+                return {
+                    title: LL.WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED(),
+                    desc: LL.WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC(),
+                    image: (
+                        <Lottie
+                            source={OpenAppDark}
+                            autoPlay
+                            style={styles.lottie}
+                        />
+                    ),
+                }
+            case LEDGER_ERROR_CODES.CONTRACT_DISABLED:
+                return {
+                    title: LL.WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED(),
+                    desc: LL.WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC(),
+                    image: (
+                        <Lottie
+                            source={OpenAppDark}
+                            autoPlay
+                            style={styles.lottie}
+                        />
+                    ),
+                }
+            case LEDGER_ERROR_CODES.CLAUSES_DISABLED:
+                return {
+                    title: LL.WALLET_LEDGER_ERROR_CLAUSES_DISABLED(),
+                    desc: LL.WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC(),
                     image: (
                         <Lottie
                             source={OpenAppDark}

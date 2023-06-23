@@ -72,5 +72,5 @@ Then(
 )
 
 Then("The user should see success message", { timeout: -1 }, async function () {
-    await idShouldExist("SendScreen_transactionSuccessToast")
+    await idShouldExist("transactionSuccessToast")
 })
