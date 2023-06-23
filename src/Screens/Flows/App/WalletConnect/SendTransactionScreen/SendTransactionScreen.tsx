@@ -30,6 +30,7 @@ import {
     WalletConnectResponseUtils,
     FormattingUtils,
     GasUtils,
+    error,
 } from "~Utils"
 import { useCheckIdentity, useSignTransaction } from "~Hooks"
 import { AccountWithDevice, EstimateGasResult } from "~Model"
@@ -48,10 +49,10 @@ import { TransactionDetails } from "./Components"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
-    Routes.CONNECTED_APP_SIGN_TRANSACTION_SCREEN
+    Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN
 >
 
-export const SignTransactionScreen: FC<Props> = ({ route }: Props) => {
+export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const requestEvent = route.params.requestEvent
     const sessionRequest = route.params.session
     const { params, topic } =
@@ -172,6 +173,8 @@ export const SignTransactionScreen: FC<Props> = ({ route }: Props) => {
             try {
                 const txId = await sendTransaction(tx, network.currentUrl)
 
+                //TODO: Add to history
+
                 await WalletConnectResponseUtils.transactionRequestSuccessResponse(
                     { request: requestEvent, web3Wallet, LL },
                     txId,
@@ -179,7 +182,7 @@ export const SignTransactionScreen: FC<Props> = ({ route }: Props) => {
                     network,
                 )
             } catch (e) {
-                // console.log("error submitting transaction to thor")
+                error(e)
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
                     { request: requestEvent, web3Wallet, LL },
                 )

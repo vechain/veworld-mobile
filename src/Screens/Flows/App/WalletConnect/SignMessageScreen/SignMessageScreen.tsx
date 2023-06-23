@@ -74,6 +74,8 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     throw new Error("Signature is empty")
                 }
 
+                //TODO: add to history
+
                 await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
                     {
                         request: requestEvent,
@@ -93,8 +95,6 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     },
                 )
             }
-
-            //TODO: add to history?
 
             onClose()
         },

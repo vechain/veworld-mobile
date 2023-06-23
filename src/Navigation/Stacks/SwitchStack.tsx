@@ -8,7 +8,7 @@ import BlockListener from "../../BlockListener"
 import {
     BlackListedCollectionsScreen,
     ConnectAppScreen,
-    SignTransactionScreen,
+    SendTransactionScreen,
     SignMessageScreen,
 } from "~Screens"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
@@ -22,7 +22,7 @@ export type RootStackParamListSwitch = {
     Connect_App_Screen: {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
     }
-    Connected_App_Sign_Transaction_Screen: {
+    Connected_App_Send_Transaction_Screen: {
         requestEvent: SignClientTypes.EventArguments["session_request"]
         session: SessionTypes.Struct
     }
@@ -78,8 +78,8 @@ export const SwitchStack = () => {
                         />
 
                         <Switch.Screen
-                            name={Routes.CONNECTED_APP_SIGN_TRANSACTION_SCREEN}
-                            component={SignTransactionScreen}
+                            name={Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN}
+                            component={SendTransactionScreen}
                         />
 
                         <Switch.Screen

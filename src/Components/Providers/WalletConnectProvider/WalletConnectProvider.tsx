@@ -138,7 +138,7 @@ const WalletConnectContextProvider = ({
                     })
                     break
                 case RequestMethods.REQUEST_TRANSACTION:
-                    nav.navigate(Routes.CONNECTED_APP_SIGN_TRANSACTION_SCREEN, {
+                    nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                         requestEvent,
                         session,
                     })

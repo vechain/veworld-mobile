@@ -1,5 +1,5 @@
 export * from "./ConnectAppScreen"
 export * from "./ConnectedAppsScreen"
 export * from "./Components"
-export * from "./SignTransactionScreen"
+export * from "./SendTransactionScreen"
 export * from "./SignMessageScreen"

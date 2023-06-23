@@ -119,6 +119,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 }),
             )
 
+            //TODO: add to history?
+
             showSuccessToast(
                 LL.NOTIFICATION_wallet_connect_successfull_connection({
                     name,
