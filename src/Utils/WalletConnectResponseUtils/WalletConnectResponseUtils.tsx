@@ -5,6 +5,7 @@ import { Linking } from "react-native"
 import { Certificate } from "thor-devkit"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { defaultMainNetwork } from "~Constants"
+import { Network } from "~Model"
 import HexUtils from "~Utils/HexUtils"
 import { error } from "~Utils/Logger"
 import WalletConnectUtils from "~Utils/WalletConnectUtils"
@@ -143,6 +144,26 @@ export const userRejectedMethodsResponse = async ({
         const response = WalletConnectUtils.formatJsonRpcError(
             request.id,
             getSdkError("USER_REJECTED_METHODS").message,
+        )
+
+        await web3Wallet?.respondSessionRequest({
+            topic: request.topic,
+            response,
+        })
+    } catch {
+        showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+    }
+}
+
+export const signMessageRequestErrorResponse = async ({
+    request,
+    web3Wallet,
+    LL,
+}: BaseProps) => {
+    try {
+        const response = WalletConnectUtils.formatJsonRpcError(
+            request.id,
+            LL.NOTIFICATION_wallet_connect_error_during_signing(),
         )
 
         await web3Wallet?.respondSessionRequest({

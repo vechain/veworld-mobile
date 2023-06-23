@@ -1296,6 +1296,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: string
 	/**
+	 * Something went wrong while signing the message.
+	 */
+	NOTIFICATION_wallet_connect_error_during_signing: string
+	/**
 	 * Connected app
 	 */
 	CONNECTED_APP_TITLE: string
@@ -3187,6 +3191,10 @@ Please, try again later.
 	 * Invalid Wallet Connect URI.
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
+	/**
+	 * Something went wrong while signing the message.
+	 */
+	NOTIFICATION_wallet_connect_error_during_signing: () => LocalizedString
 	/**
 	 * Connected app
 	 */

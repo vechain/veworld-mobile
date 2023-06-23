@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react"
+import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, ScrollView } from "react-native"
 import {
     BaseText,
@@ -6,25 +6,15 @@ import {
     BaseView,
     useWalletConnect,
     BaseSpacer,
-    showWarningToast,
     CloseModalButton,
     AccountCard,
     BaseSafeArea,
 } from "~Components"
-import { HDNode, secp256k1, Certificate, blake2b256 } from "thor-devkit"
-import {
-    selectDevice,
-    selectSelectedAccount,
-    useAppSelector,
-} from "~Storage/Redux"
-import {
-    CryptoUtils,
-    WalletConnectUtils,
-    WalletConnectResponseUtils,
-} from "~Utils"
-import { useCheckIdentity } from "~Hooks"
-import { error } from "~Utils/Logger"
-import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
+import { Certificate, blake2b256 } from "thor-devkit"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { WalletConnectUtils, WalletConnectResponseUtils, error } from "~Utils"
+import { useCheckIdentity, useSignMessage } from "~Hooks"
+import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -46,9 +36,6 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const selectedAccount: AccountWithDevice = useAppSelector(
         selectSelectedAccount,
     )
-    const selectedDevice = useAppSelector(state =>
-        selectDevice(state, selectedAccount.rootAddress),
-    )
 
     // Request values
     const { params } =
@@ -56,60 +43,62 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const { url } =
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
 
+    // Prepare certificate to sign
+    const cert: Certificate = useMemo(() => {
+        return {
+            ...params,
+            timestamp: Math.round(Date.now() / 1000),
+            domain: new URL(url),
+            signer: selectedAccount?.address ?? "",
+        }
+    }, [params, url, selectedAccount])
+
+    const payloadToSign = useMemo(() => {
+        return blake2b256(Certificate.encode(cert))
+    }, [cert])
+
+    // Sign
+    const { signMessage } = useSignMessage({
+        hash: payloadToSign,
+    })
+
     const onClose = useCallback(() => {
         nav.goBack()
     }, [nav])
 
-    const signIdentityCertificate = useCallback(
-        async (privateKey: Buffer) => {
-            if (!web3Wallet) return
-            if (!requestEvent) return
+    const handleAccept = useCallback(
+        async (password?: string) => {
+            try {
+                const signature = await signMessage(password)
+                if (!signature) {
+                    throw new Error("Signature is empty")
+                }
 
-            const cert: Certificate = {
-                ...params,
-                timestamp: Math.round(Date.now() / 1000),
-                domain: new URL(url),
-                signer: selectedAccount?.address ?? "",
+                await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
+                    {
+                        request: requestEvent,
+                        web3Wallet,
+                        LL,
+                    },
+                    signature,
+                    cert,
+                )
+            } catch (err: unknown) {
+                error(err)
+                await WalletConnectResponseUtils.signMessageRequestErrorResponse(
+                    {
+                        request: requestEvent,
+                        web3Wallet,
+                        LL,
+                    },
+                )
             }
-
-            const hash = blake2b256(Certificate.encode(cert))
-            const signature = secp256k1.sign(hash, privateKey)
-
-            await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
-                {
-                    request: requestEvent,
-                    web3Wallet,
-                    LL,
-                },
-                signature,
-                cert,
-            )
 
             //TODO: add to history?
 
             onClose()
         },
-        [selectedAccount, params, url, web3Wallet, onClose, LL, requestEvent],
-    )
-
-    const onExtractPrivateKey = useCallback(
-        async (decryptedWallet: Wallet) => {
-            if (!decryptedWallet)
-                throw new Error("Mnemonic wallet can't be empty")
-
-            if (decryptedWallet && !decryptedWallet.mnemonic)
-                error("Mnemonic wallet can't have an empty mnemonic")
-
-            if (!selectedAccount.index && selectedAccount.index !== 0)
-                throw new Error("Account index is empty")
-
-            const hdNode = HDNode.fromMnemonic(decryptedWallet.mnemonic)
-            const derivedNode = hdNode.derive(selectedAccount.index)
-            const privateKey = derivedNode.privateKey as Buffer
-
-            return privateKey
-        },
-        [selectedAccount],
+        [signMessage, requestEvent, web3Wallet, LL, cert, onClose],
     )
 
     const onReject = useCallback(async () => {
@@ -124,35 +113,9 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
         onClose()
     }, [requestEvent, web3Wallet, LL, onClose])
 
-    const onIdentityConfirmed = useCallback(
-        async (password?: string) => {
-            if (!selectedDevice) return
-
-            //TODO: support ledger
-            if (selectedDevice.type === DEVICE_TYPE.LEDGER) {
-                showWarningToast("Hardware wallet not supported yet")
-                return
-            }
-
-            //local mnemonic, identity already verified via useCheckIdentity
-            if (!selectedDevice.wallet) {
-                // TODO: support hardware wallet
-                showWarningToast("Hardware wallet not supported yet")
-            }
-            const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                selectedDevice,
-                password,
-            )
-
-            const privateKey = await onExtractPrivateKey(decryptedWallet)
-            await signIdentityCertificate(privateKey)
-        },
-        [onExtractPrivateKey, selectedDevice, signIdentityCertificate],
-    )
-
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed,
+            onIdentityConfirmed: handleAccept,
         })
 
     const onPressBack = useCallback(async () => {

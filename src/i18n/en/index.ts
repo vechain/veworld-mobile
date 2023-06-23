@@ -362,6 +362,7 @@ const en: BaseTranslation = {
     NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: "Transaction broadcasted correctly but an error occurred while communicating to the dapp.",
     NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",
     NOTIFICATION_wallet_connect_invalid_uri: "Invalid Wallet Connect URI.",
+    NOTIFICATION_wallet_connect_error_during_signing: "Something went wrong while signing the message",
    
     // Connected apps
     CONNECTED_APP_TITLE: "Connected app",
