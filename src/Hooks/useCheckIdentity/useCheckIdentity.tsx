@@ -5,11 +5,12 @@ import { RequireUserPassword } from "~Components"
 
 type Props = {
     onIdentityConfirmed: (password?: string) => void
+    onCancel?: () => void
 }
 /**
  * hook used to handle reusable identity flow
  */
-export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
+export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
     const {
@@ -49,10 +50,15 @@ export const useCheckIdentity = ({ onIdentityConfirmed }: Props) => {
         [closePasswordPrompt, onIdentityConfirmed],
     )
 
+    const handleClose = () => {
+        onCancel?.()
+        closePasswordPrompt()
+    }
+
     const ConfirmIdentityBottomSheet = () => (
         <RequireUserPassword
             isOpen={isPasswordPromptOpen}
-            onClose={closePasswordPrompt}
+            onClose={handleClose}
             onSuccess={onPasswordSuccess}
         />
     )

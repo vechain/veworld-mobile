@@ -50,6 +50,7 @@ describe("useSignTransaction", () => {
                     isDelegated: false,
                     onTXFinish: jest.fn(),
                     selectedDelegationOption: DelegationType.NONE,
+                    onError: jest.fn(),
                 }),
             { wrapper: TestWrapper },
         )

@@ -53,7 +53,7 @@ module.exports = {
     ],
     coveragePathIgnorePatterns: [
         "index.ts",
-        "<rootDir>/src/Common/Hooks/useAppReset/useAppReset.tsx",
+        "<rootDir>/src/Hooks/useAppReset/useAppReset.tsx",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
     ],
     coverageThreshold: {
