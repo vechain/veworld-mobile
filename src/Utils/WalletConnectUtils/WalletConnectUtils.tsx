@@ -143,7 +143,7 @@ export function getNetworkType(chainId: string): Network {
         return defaultMainNetwork
     } else if (NETWORK_TYPE.TEST.includes(network)) {
         return defaultTestNetwork
-    } else {
-        return defaultMainNetwork
     }
+
+    return defaultMainNetwork
 }
