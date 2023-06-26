@@ -1,29 +1,26 @@
 import React, { memo } from "react"
-import { ActivityIndicator, StyleSheet } from "react-native"
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-} from "~Components"
+import { StyleSheet } from "react-native"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
+import { NftSkeleton } from "./NftSkeleton"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
 type Props = {
     onGoToBlackListed?: () => void
     isLoading: boolean
     hasNext: boolean
+    renderExtraSkeleton?: boolean
 }
 
 export const ListFooterView = memo(
-    ({ onGoToBlackListed, isLoading, hasNext }: Props) => {
+    ({ onGoToBlackListed, isLoading, hasNext, renderExtraSkeleton }: Props) => {
         const { LL } = useI18nContext()
 
         return (
             <>
-                {onGoToBlackListed && <BaseSpacer height={18} />}
                 {onGoToBlackListed && !hasNext && (
                     <BaseTouchableBox
+                        containerStyle={baseStyles.marginVertical}
                         action={onGoToBlackListed}
                         children={
                             <>
@@ -44,18 +41,18 @@ export const ListFooterView = memo(
                 )}
 
                 {isLoading && (
-                    <ActivityIndicator style={baseStyles.activityIndicator} />
+                    <NftSkeleton
+                        numberOfChildren={NFT_PAGE_SIZE}
+                        renderExtra={renderExtraSkeleton}
+                    />
                 )}
-
-                {onGoToBlackListed && !isLoading && <BaseSpacer height={18} />}
             </>
         )
     },
 )
 
 const baseStyles = StyleSheet.create({
-    activityIndicator: {
-        marginVertical: 36,
-        transform: [{ scale: 1.2 }],
+    marginVertical: {
+        marginVertical: 18,
     },
 })

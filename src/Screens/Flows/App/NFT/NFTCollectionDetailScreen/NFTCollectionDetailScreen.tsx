@@ -11,8 +11,9 @@ import { useNFTWithMetadata } from "./Hooks/useNFTWithMetadata"
 import { NFTList } from "./Components"
 import { isEmpty } from "lodash"
 import { NetworkErrorView } from "../NFTScreen/Components/NetworkErrorView"
-import { NftSkeleton } from "./Components/NftSkeleton"
 import { useCollectionSource } from "./Hooks/useCollectionSource"
+import { NftSkeleton } from "../NFTScreen/Components/NftSkeleton"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -42,13 +43,20 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
         )
 
     const onMomentumScrollBegin = useCallback(() => {
-        setEndReachedCalledDuringMomentum(false)
+        setEndReachedCalledDuringMomentum(true)
     }, [])
 
     const renderContent = useMemo(() => {
         if (!isEmpty(error) && isEmpty(NFTs)) return <NetworkErrorView />
 
-        if (isLoading && isEmpty(NFTs)) return <NftSkeleton />
+        if (isLoading && isEmpty(NFTs))
+            return (
+                <NftSkeleton
+                    numberOfChildren={NFT_PAGE_SIZE}
+                    showMargin
+                    isNFT
+                />
+            )
 
         if (!isEmpty(NFTs) && !isEmpty(anyCollection)) {
             return (

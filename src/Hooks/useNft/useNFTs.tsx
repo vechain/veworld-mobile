@@ -13,7 +13,7 @@ import { useThor } from "~Components"
 import { NFTPlaceholder } from "~Assets"
 import { fetchMetadata } from "./fetchMeta"
 import { error } from "~Utils"
-import { ACCOUNT_WITH_NFTS } from "~Constants/Constants/NFT"
+import { ACCOUNT_WITH_NFTS, NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
@@ -27,7 +27,7 @@ export const useNFTs = () => {
         async (
             contractAddress: string,
             _page: number,
-            _resultsPerPage: number = 10,
+            _resultsPerPage: number = NFT_PAGE_SIZE,
         ) => {
             dispatch(
                 setNetworkingSideEffects({
@@ -48,6 +48,7 @@ export const useNFTs = () => {
                 const NFTs: NonFungibleToken[] = []
 
                 for (const nfts of nftData) {
+                    //
                     for (const nft of nfts.data) {
                         const tokenURI = await getTokenURI(
                             nft.tokenId,
@@ -85,26 +86,26 @@ export const useNFTs = () => {
                         }
 
                         NFTs.push(_nft)
-
-                        dispatch(
-                            setNFTs({
-                                address: ACCOUNT_WITH_NFTS,
-                                // address: selectedAccount.address,
-                                collectionAddress: contractAddress,
-                                NFTs: NFTs,
-                                // taking first element because we are fetching only for one contract address
-                                pagination: nftData[0].pagination,
-                            }),
-                        )
-
-                        dispatch(
-                            setNetworkingSideEffects({
-                                isLoading: false,
-                                error: undefined,
-                            }),
-                        )
                     }
                 }
+
+                dispatch(
+                    setNFTs({
+                        address: ACCOUNT_WITH_NFTS,
+                        // address: selectedAccount.address,
+                        collectionAddress: contractAddress,
+                        NFTs: NFTs,
+                        // taking first element because we are fetching only for one contract address
+                        pagination: nftData[0].pagination,
+                    }),
+                )
+
+                dispatch(
+                    setNetworkingSideEffects({
+                        isLoading: false,
+                        error: undefined,
+                    }),
+                )
             } catch (e) {
                 dispatch(
                     setNetworkingSideEffects({

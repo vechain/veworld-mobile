@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { SCREEN_WIDTH, COLORS } from "~Constants"
@@ -19,38 +19,39 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
     const theme = useTheme()
     const video = useRef(null)
 
+    const renderMedia = useMemo(() => {
+        if (MediaUtils.getMime(mime, [NFTMediaType.IMAGE]))
+            return <BaseImage uri={uri} style={baseStyles.nftImage} />
+
+        if (MediaUtils.getMime(mime, [NFTMediaType.VIDEO]))
+            return (
+                <BaseView style={baseStyles.nftImage}>
+                    <Video
+                        PosterComponent={() => (
+                            <BaseImage
+                                uri={NFTPlaceholder}
+                                style={baseStyles.nftImage}
+                            />
+                        )}
+                        usePoster
+                        ref={video}
+                        shouldPlay
+                        useNativeControls
+                        style={baseStyles.nftImage}
+                        source={{ uri: uri }}
+                        resizeMode={ResizeMode.COVER}
+                        isLooping
+                        isMuted
+                    />
+                </BaseView>
+            )
+
+        return <BaseImage uri={NFTPlaceholder} style={baseStyles.nftImage} />
+    }, [mime, uri])
+
     return (
         <BaseView>
-            <BaseView style={baseStyles.nftImage}>
-                {MediaUtils.getMime(mime, [NFTMediaType.IMAGE]) && (
-                    <BaseImage uri={uri} style={baseStyles.nftImage} />
-                )}
-
-                {MediaUtils.getMime(mime, [
-                    NFTMediaType.VIDEO,
-                    NFTMediaType.TEXT,
-                ]) && (
-                    <BaseView style={baseStyles.nftImage}>
-                        <Video
-                            PosterComponent={() => (
-                                <BaseImage
-                                    uri={NFTPlaceholder}
-                                    style={baseStyles.nftImage}
-                                />
-                            )}
-                            usePoster
-                            ref={video}
-                            shouldPlay
-                            useNativeControls
-                            style={baseStyles.nftImage}
-                            source={{ uri: uri }}
-                            resizeMode={ResizeMode.COVER}
-                            isLooping
-                            isMuted
-                        />
-                    </BaseView>
-                )}
-            </BaseView>
+            <BaseView style={baseStyles.nftImage}>{renderMedia}</BaseView>
 
             <BaseView
                 flexDirection="row"

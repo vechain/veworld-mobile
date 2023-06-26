@@ -82,7 +82,7 @@ export const NFTView = memo(
             (_index: number) => {
                 let itemAction = ""
 
-                if (isCollection) itemAction = CollectionItem[_index].title
+                if (isCollection) itemAction = CollectionItem[_index]?.title
 
                 if (itemAction === ItemTitle.HIDE_COLLECTION)
                     dispatch(
@@ -99,8 +99,15 @@ export const NFTView = memo(
             [CollectionItem, collectionItem, dispatch, isCollection],
         )
 
+        const getIsvalidMimeType = useCallback(
+            (itemUrl: string, type: NFTMediaType[]) =>
+                MediaUtils.getMime(itemUrl, type),
+            [],
+        )
+
         return (
             <TouchableOpacity
+                activeOpacity={0.6}
                 // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
                 onLongPress={() => {}}
                 onPress={() =>
@@ -121,14 +128,17 @@ export const NFTView = memo(
                     action={handleOnItemLongPress}>
                     {isCollection ? (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            {MediaUtils.getMime(collectionItem?.icon.mime!, [
-                                NFTMediaType.IMAGE,
-                            ]) && (
-                                <BaseImage
-                                    uri={collectionItem!.icon.url}
-                                    style={baseStyles.nftPreviewImage}
-                                />
-                            )}
+                            <BaseImage
+                                uri={
+                                    getIsvalidMimeType(
+                                        collectionItem?.icon.mime!,
+                                        [NFTMediaType.IMAGE],
+                                    )
+                                        ? collectionItem!.icon.url
+                                        : NFTPlaceholder
+                                }
+                                style={baseStyles.nftPreviewImage}
+                            />
 
                             <BaseView
                                 style={baseStyles.nftCollectionNameBar}
@@ -146,7 +156,7 @@ export const NFTView = memo(
                                     justifyContent="center"
                                     alignItems="center">
                                     <BaseText color={COLORS.WHITE}>
-                                        {!collectionItem?.isExactCount && "+"}
+                                        {!collectionItem?.hasCount && "+"}
                                         {collectionItem!.balanceOf}
                                     </BaseText>
                                 </BaseView>
@@ -154,7 +164,7 @@ export const NFTView = memo(
                         </BaseView>
                     ) : (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            {MediaUtils.getMime(nftItem?.icon.mime!, [
+                            {getIsvalidMimeType(nftItem?.icon.mime!, [
                                 NFTMediaType.IMAGE,
                             ]) && (
                                 <BaseImage
@@ -165,7 +175,6 @@ export const NFTView = memo(
 
                             {MediaUtils.getMime(nftItem?.icon.mime!, [
                                 NFTMediaType.VIDEO,
-                                NFTMediaType.TEXT,
                             ]) && (
                                 <BaseView style={baseStyles.nftPreviewImage}>
                                     <Video
@@ -188,6 +197,18 @@ export const NFTView = memo(
                                     />
                                 </BaseView>
                             )}
+
+                            {!MediaUtils.getMime(nftItem?.icon.mime!, [
+                                NFTMediaType.IMAGE,
+                            ]) &&
+                                !MediaUtils.getMime(nftItem?.icon.mime!, [
+                                    NFTMediaType.VIDEO,
+                                ]) && (
+                                    <BaseImage
+                                        uri={NFTPlaceholder}
+                                        style={baseStyles.nftPreviewImage}
+                                    />
+                                )}
 
                             <BaseView
                                 style={baseStyles.nftCollectionNameBar}
@@ -216,6 +237,7 @@ const baseStyles = StyleSheet.create({
         justifyContent: "space-between",
         width: "50%",
     },
+
     nftPreviewImage: {
         width: SCREEN_WIDTH / 2 - 30,
         height: 164,

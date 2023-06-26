@@ -51,7 +51,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const onSendPress = useCallback(() => {}, [])
 
     const onMarketPlacePress = useCallback(async () => {
-        const supported = await Linking.canOpenURL(nft?.external_url!)
+        const supported = await Linking.canOpenURL(nft?.external_url ?? "")
         if (supported) {
             await Linking.openURL(nft?.external_url!)
         } else {
@@ -76,11 +76,12 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     <BaseSpacer height={26} />
 
                     <NFTDetailImage
-                        uri={nft?.icon.url ?? ""}
-                        mime={nft?.icon.mime ?? ""}
+                        uri={nft?.icon?.url ?? ""}
+                        mime={nft?.icon?.mime ?? ""}
                         name={nft?.name ?? ""}
                         tokenId={nft?.tokenId ?? ""}
                     />
+
                     <BaseSpacer height={26} />
 
                     {!!nft?.attributes?.length && (
@@ -153,12 +154,12 @@ export const NFTDetailScreen = ({ route }: Props) => {
                         />
                     )}
 
-                    {nft?.rarity && (
+                    {nft && nft.rarity && nft.rarity !== 0 ? (
                         <InfoSectionView<string>
                             title={"Rarity"}
-                            data={nft?.rarity.toString()}
+                            data={nft?.rarity?.toString()}
                         />
-                    )}
+                    ) : null}
 
                     {!!nft?.scores?.length && (
                         <InfoSectionView<NFTAttributeData[]>

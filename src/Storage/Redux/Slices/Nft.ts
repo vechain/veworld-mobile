@@ -44,7 +44,7 @@ export const NftSlice = createSlice({
                     pagination: {
                         countLimit: 0,
                         hasNext: false,
-                        isExactCount: true,
+                        hasCount: true,
                         totalElements: 0,
                         totalPages: 0,
                     },
@@ -129,7 +129,7 @@ export const NftSlice = createSlice({
                         pagination: {
                             countLimit: 0,
                             hasNext: false,
-                            isExactCount: true,
+                            hasCount: true,
                             totalElements: 0,
                             totalPages: 0,
                         },
@@ -144,7 +144,7 @@ export const NftSlice = createSlice({
                     pagination: {
                         countLimit: 0,
                         hasNext: false,
-                        isExactCount: true,
+                        hasCount: true,
                         totalElements: 0,
                         totalPages: 0,
                     },

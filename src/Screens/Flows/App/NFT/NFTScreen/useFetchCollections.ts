@@ -10,6 +10,8 @@ import {
 } from "~Storage/Redux"
 import { isEmpty } from "lodash"
 
+const FIRST_TIME_COLLECITONS_TO_FETCH = 10
+
 export const useFetchCollections = (
     onEndReachedCalledDuringMomentum: boolean,
     setEndReachedCalledDuringMomentum: React.Dispatch<
@@ -44,14 +46,14 @@ export const useFetchCollections = (
             nftCollections.collections &&
             isEmpty(nftCollections.collections)
         ) {
-            getCollections(0)
+            getCollections(0, FIRST_TIME_COLLECITONS_TO_FETCH)
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedAccount, nftCollections?.collections?.length])
 
     const fetchMoreCollections = useCallback(() => {
-        if (!onEndReachedCalledDuringMomentum) {
+        if (onEndReachedCalledDuringMomentum) {
             fetchWithPagination(
                 nftCollections?.pagination?.totalElements,
                 nftCollections?.collections?.length,
@@ -62,7 +64,7 @@ export const useFetchCollections = (
                 blackListedCollections.length,
             )
 
-            setEndReachedCalledDuringMomentum(true)
+            setEndReachedCalledDuringMomentum(false)
         }
     }, [
         blackListedCollections.length,

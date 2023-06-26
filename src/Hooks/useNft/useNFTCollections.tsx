@@ -13,7 +13,7 @@ import {
 import { error } from "~Utils"
 import { getNFTdataForContract, prepareCollectionData } from "./Helpers"
 import { useI18nContext } from "~i18n"
-import { ACCOUNT_WITH_NFTS } from "~Constants/Constants/NFT"
+import { ACCOUNT_WITH_NFTS, NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -41,7 +41,7 @@ export const useNFTCollections = () => {
     const { LL } = useI18nContext()
 
     const getCollections = useCallback(
-        async (_page: number, _resultsPerPage: number = 10) => {
+        async (_page: number, _resultsPerPage: number = NFT_PAGE_SIZE) => {
             dispatch(
                 setNetworkingSideEffects({ isLoading: true, error: undefined }),
             )
@@ -90,26 +90,26 @@ export const useNFTCollections = () => {
                     )
 
                     _nftCollections.push(nftCollection)
-
-                    // set collections to store one by one to make it feel faster
-                    dispatch(
-                        setCollections({
-                            address: ACCOUNT_WITH_NFTS,
-                            // address: selectedAccount.address,
-                            collectiondata: {
-                                collections: _nftCollections,
-                                pagination,
-                            },
-                        }),
-                    )
-
-                    dispatch(
-                        setNetworkingSideEffects({
-                            isLoading: false,
-                            error: undefined,
-                        }),
-                    )
                 }
+
+                // set collections to store
+                dispatch(
+                    setCollections({
+                        address: ACCOUNT_WITH_NFTS,
+                        // address: selectedAccount.address,
+                        collectiondata: {
+                            collections: _nftCollections,
+                            pagination,
+                        },
+                    }),
+                )
+
+                dispatch(
+                    setNetworkingSideEffects({
+                        isLoading: false,
+                        error: undefined,
+                    }),
+                )
             } catch (e: unknown) {
                 dispatch(
                     setNetworkingSideEffects({

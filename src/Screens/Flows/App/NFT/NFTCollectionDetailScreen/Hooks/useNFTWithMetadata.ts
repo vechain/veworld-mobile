@@ -8,8 +8,6 @@ import {
 import { usePagination } from "../../usePagination"
 import { useNFTs } from "~Hooks"
 
-const COLLECTIONS_PAGE_SIZE = 10
-
 export const useNFTWithMetadata = (
     collectionAddress: string,
     onEndReachedCalledDuringMomentum: boolean,
@@ -32,21 +30,17 @@ export const useNFTWithMetadata = (
     )
 
     const fetchMoreNFTs = useCallback(() => {
-        if (!onEndReachedCalledDuringMomentum) {
+        if (onEndReachedCalledDuringMomentum) {
             fetchWithPagination(
                 nftForCollection?.pagination.totalElements,
                 nftForCollection?.NFTs?.length,
                 nftNetworkingSideEffects.isLoading,
                 async page => {
-                    await getNFTsForCollection(
-                        collectionAddress,
-                        page,
-                        COLLECTIONS_PAGE_SIZE,
-                    )
+                    await getNFTsForCollection(collectionAddress, page)
                 },
             )
 
-            setEndReachedCalledDuringMomentum(true)
+            setEndReachedCalledDuringMomentum(false)
         }
     }, [
         collectionAddress,
@@ -61,11 +55,7 @@ export const useNFTWithMetadata = (
 
     useEffect(() => {
         const init = async () => {
-            await getNFTsForCollection(
-                collectionAddress,
-                0,
-                COLLECTIONS_PAGE_SIZE,
-            )
+            await getNFTsForCollection(collectionAddress, 0)
         }
 
         init()

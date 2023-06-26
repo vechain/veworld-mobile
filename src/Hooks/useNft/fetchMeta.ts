@@ -4,7 +4,7 @@ import {
     getTokenMetaArweave,
     getTokenMetaIpfs,
 } from "~Networking"
-import { error } from "~Utils"
+import { error, info } from "~Utils"
 import { TokenMetadata } from "~Model"
 import axios from "axios"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
@@ -25,12 +25,12 @@ export const fetchMetadata = async (
     uri: string,
 ): Promise<NFTMeta | undefined> => {
     try {
-        let protocol = uri.split(":")[0]
+        let protocol = uri?.split(":")[0]
 
         switch (protocol) {
             case URIProtocol.IPFS: {
                 const tokenMetadata = await getTokenMetaIpfs(uri)
-                const imageUrl = getImageUrlIpfs(tokenMetadata.image ?? "")
+                const imageUrl = getImageUrlIpfs(tokenMetadata.image)
                 const response = await fetch(imageUrl)
                 const blob = await response.blob()
 
@@ -47,16 +47,21 @@ export const fetchMetadata = async (
             }
 
             case URIProtocol.HTTPS: {
-                const tokenMetadata = await axios.get<TokenMetadata>(uri, {
-                    timeout: NFT_AXIOS_TIMEOUT,
-                })
-                const response = await fetch(tokenMetadata.data.image)
-                const blob = await response.blob()
+                try {
+                    const tokenMetadata = await axios.get<TokenMetadata>(uri, {
+                        timeout: NFT_AXIOS_TIMEOUT,
+                    })
+                    const response = await fetch(tokenMetadata.data.image)
+                    const blob = await response.blob()
 
-                return {
-                    tokenMetadata: tokenMetadata.data,
-                    imageUrl: tokenMetadata.data.image,
-                    imageType: blob.type,
+                    return {
+                        tokenMetadata: tokenMetadata.data,
+                        imageUrl: tokenMetadata.data.image,
+                        imageType: blob.type,
+                    }
+                } catch (e) {
+                    info("fetchMetadata -- HTTPS", e)
+                    throw e
                 }
             }
 

@@ -1,11 +1,13 @@
 import { NFTMediaType } from "~Model"
 
 const getMime = (mime: string, type: NFTMediaType[]) => {
-    return type.find(t => {
-        if (mime.split("/")[0] === t) {
+    const found = type.find(t => {
+        if (mime?.split("/")[0] === t) {
             return true
         }
     })
+
+    return !!found
 }
 
 export default { getMime }

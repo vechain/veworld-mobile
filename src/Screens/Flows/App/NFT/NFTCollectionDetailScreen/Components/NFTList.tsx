@@ -52,8 +52,8 @@ export const NFTList = ({
             contentContainerStyle={baseStyles.listContainer}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            onMomentumScrollBegin={onMomentumScrollBegin}
-            onEndReachedThreshold={0.2}
+            onScroll={onMomentumScrollBegin}
+            onEndReachedThreshold={0.1}
             onEndReached={fetchMoreNFTs}
             ListFooterComponent={
                 <ListFooterView isLoading={isLoading} hasNext={hasNext} />

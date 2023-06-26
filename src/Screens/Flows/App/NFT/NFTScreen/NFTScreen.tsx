@@ -19,6 +19,8 @@ import { useDispatch } from "react-redux"
 import { ImportNFTView } from "./Components/ImportNFTView"
 import { NetworkErrorView } from "./Components/NetworkErrorView"
 import { NFTLIst } from "./Components/NFTLIst"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { MathUtils } from "~Utils"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
@@ -46,7 +48,7 @@ export const NFTScreen = () => {
     }
 
     const onMomentumScrollBegin = useCallback(() => {
-        setEndReachedCalledDuringMomentum(false)
+        setEndReachedCalledDuringMomentum(true)
     }, [])
 
     const onGoToBlackListed = useCallback(
@@ -63,7 +65,14 @@ export const NFTScreen = () => {
     const renderContent = useMemo(() => {
         if (!isEmpty(error) && isEmpty(collections)) return <NetworkErrorView />
 
-        if (isLoading && isEmpty(collections)) return <NftSkeleton />
+        if (isLoading && isEmpty(collections))
+            return (
+                <NftSkeleton
+                    numberOfChildren={NFT_PAGE_SIZE}
+                    showMargin
+                    renderExtra={MathUtils.getOdd(collections.length)}
+                />
+            )
 
         if (isShowImportNFTs) return <ImportNFTView />
 
@@ -80,14 +89,14 @@ export const NFTScreen = () => {
             )
         }
     }, [
-        collections,
-        hasNext,
         error,
-        fetchMoreCollections,
+        collections,
         isLoading,
         isShowImportNFTs,
         onGoToBlackListed,
+        fetchMoreCollections,
         onMomentumScrollBegin,
+        hasNext,
     ])
 
     return (

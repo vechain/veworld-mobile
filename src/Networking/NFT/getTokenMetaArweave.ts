@@ -11,7 +11,7 @@ const arweave = Arweave.init({
     logging: false, // Disable network request logging
 })
 
-const toID = (uri: string) => uri.split("://")[1]
+const toID = (uri: string) => uri?.split("://")[1]
 
 export const getTokenMetaArweave = async (uri: string) => {
     try {

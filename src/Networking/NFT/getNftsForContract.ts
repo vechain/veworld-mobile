@@ -15,7 +15,7 @@ export type NftItemResponse = {
 export type PaginationResponse = {
     countLimit: number
     hasNext: boolean
-    isExactCount: boolean
+    hasCount: boolean
     totalElements: number
     totalPages: number
 }

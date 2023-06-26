@@ -3,7 +3,7 @@ import { error } from "~Utils/Logger"
 import { TokenMetadata } from "~Model/Nft/Nft"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
-const toID = (_tokenUri: string) => _tokenUri.split("://")[1]
+const toID = (_tokenUri: string) => _tokenUri?.split("://")[1]
 
 // loop
 

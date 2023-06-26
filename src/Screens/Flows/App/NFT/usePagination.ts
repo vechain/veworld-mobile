@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react"
 
-export const usePagination = () => {
-    const counter = useRef(0)
+export const usePagination = (startPage: number = 0) => {
+    const counter = useRef(startPage)
 
     const fetchWithPagination = useCallback(
         (

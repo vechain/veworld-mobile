@@ -21,10 +21,10 @@ export interface NonFungibleTokenCollection {
         mime: string
     }
     balanceOf: number
-    isExactCount: boolean
+    hasCount: boolean
     nfts: NonFungibleToken[]
     isBlacklisted: boolean
-    totalSupply: number
+    totalSupply?: number
 }
 
 export interface NonFungibleToken extends TokenMetadata, WithID {

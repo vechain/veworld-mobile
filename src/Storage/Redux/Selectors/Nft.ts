@@ -51,7 +51,7 @@ export const selectNftCollections = createSelector(
                 totalPages: 0,
                 countLimit: 0,
                 hasNext: false,
-                isExactCount: false,
+                hasCount: false,
             },
         }
     },
@@ -135,7 +135,7 @@ export const selectNFTsForCollection = createSelector(
                 totalPages: 0,
                 countLimit: 0,
                 hasNext: false,
-                isExactCount: false,
+                hasCount: false,
             },
         }
     },

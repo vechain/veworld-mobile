@@ -59,6 +59,8 @@ export const prepareCollectionData = async (
 
     const nftMeta = await fetchMetadata(tokenURI)
 
+    const hasImage = foundCollection?.icon ? true : !!nftMeta?.imageUrl ?? false
+
     const nftCollection: NonFungibleTokenCollection = {
         address: foundCollection?.address ?? _nft.contractAddress,
         name: await getName(_nft.contractAddress, thor),
@@ -75,11 +77,11 @@ export const prepareCollectionData = async (
             mime: nftMeta?.imageType ?? "image/png",
         },
         balanceOf: nft.pagination.totalElements,
-        isExactCount: nft.pagination.isExactCount,
+        hasCount: nft.pagination.hasCount,
         nfts: [],
         isBlacklisted: false,
         totalSupply: await getTokenTotalSupply(_nft.contractAddress, thor),
     }
 
-    return { nftCollection }
+    return { nftCollection, hasImage }
 }
