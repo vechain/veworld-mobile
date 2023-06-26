@@ -1,4 +1,9 @@
-import { BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    CompressAndExpandBaseText,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import React from "react"
 import { capitalize } from "lodash"
@@ -63,12 +68,10 @@ export const MessageDetails = ({ sessionRequest, requestEvent }: Props) => {
                 {LL.CONNECTED_APP_SELECTED_CONTENT_LABEL()}
             </BaseText>
             <BaseSpacer height={6} />
-            <BaseText
+            <CompressAndExpandBaseText
+                text={message}
                 typographyFont="subSubTitle"
-                numberOfLines={2}
-                ellipsizeMode="tail">
-                {message}
-            </BaseText>
+            />
         </BaseView>
     )
 }

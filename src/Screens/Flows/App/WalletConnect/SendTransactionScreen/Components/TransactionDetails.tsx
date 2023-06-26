@@ -1,4 +1,10 @@
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    CompressAndExpandBaseText,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import React from "react"
 import { DelegationType } from "~Model/Delegation"
@@ -137,12 +143,10 @@ export const TransactionDetails = ({
                 {LL.CONNECTED_APP_SELECTED_MESSAGE_LABEL()}
             </BaseText>
             <BaseSpacer height={6} />
-            <BaseText
+            <CompressAndExpandBaseText
+                text={message}
                 typographyFont="subSubTitle"
-                numberOfLines={2}
-                ellipsizeMode="tail">
-                {message}
-            </BaseText>
+            />
         </>
     )
 }
