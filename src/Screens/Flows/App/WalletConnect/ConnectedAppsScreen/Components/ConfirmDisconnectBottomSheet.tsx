@@ -36,14 +36,14 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<
         <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onCancel}>
             <BaseView mx={10}>
                 <BaseText typographyFont="subTitleBold">
-                    {"Confirm the operation?"}
+                    {LL.SB_CONFIRM_OPERATION()}
                 </BaseText>
                 <BaseSpacer height={16} />
                 <BaseText typographyFont="body">
-                    {"Confirming this you will disconnect the " +
-                        name +
-                        " app from " +
-                        account.alias}
+                    {LL.CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE({
+                        name,
+                        alias: account.alias,
+                    })}
                 </BaseText>
 
                 <BaseSpacer height={24} />

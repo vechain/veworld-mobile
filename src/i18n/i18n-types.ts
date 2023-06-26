@@ -1341,6 +1341,12 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
 	/**
+	 * Confirming this you will disconnect the {name} app from {alias}
+	 * @param {string} name
+	 * @param {string} alias
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'name' | 'alias'>
+	/**
 	 * Add app​.
 	 */
 	ADD_APP: string
@@ -3289,6 +3295,10 @@ Please, try again later.
 	 * You have no connected apps. Once you have some, they will displayed here.
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
+	/**
+	 * Confirming this you will disconnect the {name} app from {alias}
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { name: string, alias: string }) => LocalizedString
 	/**
 	 * Add app​.
 	 */

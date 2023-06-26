@@ -389,6 +389,7 @@ const en: BaseTranslation = {
     CONNECTED_APPS_SCREEN_DESCRIPTION: "Connect your wallet with apps to make transactions and sign certificates.",
     CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: "You have no connected apps. Once you have some, they will displayed here.",
     ADD_APP: "Add app",
+    CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: "Confirming this you will disconnect the {name: string} app from {alias: string}",
     
     CONNECTED_APP_DETAILS_TITLE: "Connected app",   
     CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",   
