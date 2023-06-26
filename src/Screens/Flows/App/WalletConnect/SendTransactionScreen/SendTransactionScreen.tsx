@@ -23,6 +23,7 @@ import {
     selectDelegationUrls,
     useAppDispatch,
     addDelegationUrl,
+    selectTokensWithInfo,
 } from "~Storage/Redux"
 import {
     HexUtils,
@@ -31,6 +32,7 @@ import {
     FormattingUtils,
     GasUtils,
     error,
+    TransactionUtils,
 } from "~Utils"
 import { useCheckIdentity, useSignTransaction } from "~Hooks"
 import { AccountWithDevice, EstimateGasResult } from "~Model"
@@ -46,6 +48,7 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { TransactionDetails } from "./Components"
+import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -74,12 +77,17 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         nav.goBack()
     }, [nav])
 
+    // Decoding clauses
+    const clauses = useMemo(() => params.txMessage, [params])
+    const tokens = useAppSelector(selectTokensWithInfo)
+    const clausesMetadata = TransactionUtils.interpretClauses(clauses, tokens)
+
     // Prepare Transaction
     const transactionBody: Transaction.Body = {
         chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
         blockRef: thorClient.status.head.id.slice(0, 18),
         expiration: 18,
-        clauses: params.txMessage,
+        clauses: clauses,
         gasPriceCoef: 0,
         gas: gas?.gas?.toString() || "8000000",
         dependsOn: null,
@@ -232,7 +240,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             ;(async () => {
                 const estimatedGas = await GasUtils.estimateGas(
                     thorClient,
-                    params.txMessage, //clauses
+                    clauses,
                     0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
                     selectedAccount.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
@@ -240,7 +248,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 setGas(estimatedGas)
             })()
         }
-    }, [selectedAccount, params, thorClient])
+    }, [selectedAccount, clauses, thorClient])
 
     return (
         <BaseSafeArea>
@@ -318,6 +326,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         requestEvent={requestEvent}
                         network={network}
                     />
+
+                    <BaseSpacer height={44} />
+                    {!!clausesMetadata.length && (
+                        <ClausesCarousel clausesMetadata={clausesMetadata} />
+                    )}
                 </BaseView>
 
                 <BaseSpacer height={40} />
