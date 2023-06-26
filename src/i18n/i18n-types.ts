@@ -1341,6 +1341,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
 	/**
+	 * Add app​.
+	 */
+	ADD_APP: string
+	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
 	CONNECTED_APP_DETAILS_TITLE: string
@@ -3285,6 +3289,10 @@ Please, try again later.
 	 * You have no connected apps. Once you have some, they will displayed here.
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
+	/**
+	 * Add app​.
+	 */
+	ADD_APP: () => LocalizedString
 	/**
 	 * Connected app
 	 */

@@ -42,7 +42,7 @@ export const EmptyListView = () => {
                         borderRadius={16}
                         style={baseStyles.quickNFTActions}>
                         <BaseIcon name="plus" size={38} />
-                        <BaseText>{"Add App"}</BaseText>
+                        <BaseText>{LL.ADD_APP()}</BaseText>
                     </BaseView>
                 </BaseTouchable>
             </BaseView>
