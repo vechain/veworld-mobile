@@ -373,8 +373,8 @@ const en: BaseTranslation = {
     CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
     CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
     CONNECTED_APP_SIGN_REQUEST_DESCRIPTION:  "Your Signature is being requested to sign a certificate",
-    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign a transaction",
-    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to send a transaction",
+    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign and Send a transaction",
+    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to sign and send a transaction",
    
     CONNECTED_APP_SELECTED_ACCOUNT_LABEL: "Account",
     CONNECTED_APP_SELECTED_ORIGIN_LABEL: "Origin",

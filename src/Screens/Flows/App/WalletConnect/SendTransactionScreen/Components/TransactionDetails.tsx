@@ -32,7 +32,7 @@ export const TransactionDetails = ({
     const theme = useTheme()
 
     // Session request values
-    const { method, params } =
+    const { params } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const message = params.comment || params.txMessage[0].comment
 
@@ -41,7 +41,40 @@ export const TransactionDetails = ({
             <BaseText typographyFont="subTitleBold">
                 {LL.SEND_DETAILS()}
             </BaseText>
+
             <BaseSpacer height={24} />
+            <BaseText typographyFont="buttonSecondary">
+                {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
+            </BaseText>
+            <BaseSpacer height={6} />
+            <BaseText typographyFont="subSubTitle">
+                {sessionRequest.peer.metadata.name}
+            </BaseText>
+
+            <BaseSpacer height={12} />
+            <BaseSpacer
+                height={0.5}
+                width={"100%"}
+                background={theme.colors.textDisabled}
+            />
+
+            <BaseSpacer height={12} />
+            <BaseText typographyFont="buttonSecondary">
+                {LL.CONNECTED_APP_SELECTED_NETWORK_LABEL()}
+            </BaseText>
+            <BaseSpacer height={6} />
+            <BaseText typographyFont="subSubTitle">
+                {capitalize(network.name)}
+            </BaseText>
+
+            <BaseSpacer height={12} />
+            <BaseSpacer
+                height={0.5}
+                width={"100%"}
+                background={theme.colors.textDisabled}
+            />
+
+            <BaseSpacer height={12} />
             <BaseText typographyFont="buttonSecondary">
                 {LL.SEND_GAS_FEE()}
             </BaseText>
@@ -91,52 +124,6 @@ export const TransactionDetails = ({
                 {/** TODO: copied from extension, understand if it is fixed as "less than 1 min" */}
                 {LL.SEND_LESS_THAN_1_MIN()}
             </BaseText>
-
-            <BaseSpacer height={12} />
-            <BaseSpacer
-                height={0.5}
-                width={"100%"}
-                background={theme.colors.textDisabled}
-            />
-
-            <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
-            </BaseText>
-            <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">
-                {sessionRequest.peer.metadata.name}
-            </BaseText>
-
-            <BaseSpacer height={12} />
-            <BaseSpacer
-                height={0.5}
-                width={"100%"}
-                background={theme.colors.textDisabled}
-            />
-
-            <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.CONNECTED_APP_SELECTED_NETWORK_LABEL()}
-            </BaseText>
-            <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">
-                {capitalize(network.name)}
-            </BaseText>
-
-            <BaseSpacer height={12} />
-            <BaseSpacer
-                height={0.5}
-                width={"100%"}
-                background={theme.colors.textDisabled}
-            />
-
-            <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.CONNECTED_APP_SELECTED_METHOD_LABEL()}
-            </BaseText>
-            <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">{method}</BaseText>
 
             <BaseSpacer height={12} />
             <BaseSpacer
