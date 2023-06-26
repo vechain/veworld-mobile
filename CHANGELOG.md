@@ -31,6 +31,7 @@ Use the following template to create a new Unreleased change log.
 - [#663](https://github.com/vechainfoundation/veworld-mobile/issues/663) Switch to requested network during wallet connect session requests
 - [#666](https://github.com/vechainfoundation/veworld-mobile/issues/666) Wallet Connect: handle gas consumption when executing transactions
 - [#678](https://github.com/vechainfoundation/veworld-mobile/issues/678) Wallet Connect: use common useSignTransaction and useDelegate hooks
+- [#667](https://github.com/vechainfoundation/veworld-mobile/issues/667) Wallet Connect: updated UI in connected apps, sign transactions and sign message screens
 
 ### Removed
 
