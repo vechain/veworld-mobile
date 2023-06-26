@@ -1103,9 +1103,9 @@ type RootTranslation = {
 	 */
 	ERROR_NFT_FAILED_TO_GET_METADATA: string
 	/**
-	 * U​p​g​r​a​d​e​ ​t​o​ ​B​i​o​m​e​t​r​i​c​s​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 * S​e​c​u​r​i​t​y​ ​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
-	ERROR_SECURITY_UPGRADE: string
+	ERROR_SECURITY_ACTION: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -3054,9 +3054,9 @@ Please, try again later.
 	 */
 	ERROR_NFT_FAILED_TO_GET_METADATA: () => LocalizedString
 	/**
-	 * Upgrade to Biometrics failed. Please check your device and try again.
+	 * Security action failed. Please check your device and try again.
 	 */
-	ERROR_SECURITY_UPGRADE: () => LocalizedString
+	ERROR_SECURITY_ACTION: () => LocalizedString
 	/**
 	 * Success!
 	 */

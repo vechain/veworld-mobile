@@ -207,7 +207,7 @@ export const useSecurityTransactions = ({
                     } transactions`,
                 )
 
-                showErrorToast(LL.COMMON_OOPS(), LL.ERROR_SECURITY_UPGRADE())
+                showErrorToast(LL.COMMON_OOPS(), LL.ERROR_SECURITY_ACTION())
 
                 // if no operations were finished, no need to rollback
                 if (rollbackOperations.length === 0) return
