@@ -168,17 +168,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
      */
     const handleAccept = useCallback(
         async (password?: string) => {
-            let tx = await signTransaction(password)
-
-            if (!tx) {
-                await WalletConnectResponseUtils.transactionRequestFailedResponse(
-                    { request: requestEvent, web3Wallet, LL },
-                )
-                onClose()
-                return
-            }
-
             try {
+                let tx = await signTransaction(password)
                 const txId = await sendTransaction(tx, network.currentUrl)
 
                 //TODO: Add to history

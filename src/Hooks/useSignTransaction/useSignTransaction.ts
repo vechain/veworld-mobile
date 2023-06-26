@@ -127,7 +127,9 @@ export const useSignTransaction = ({
                     showWarningToast(
                         "Delegated hardware wallet not supported yet",
                     )
-                    return
+                    throw new Error(
+                        "Delegated hardware wallet not supported yet",
+                    )
                 }
 
                 const { decryptedWallet: delegationWallet } =
@@ -150,18 +152,19 @@ export const useSignTransaction = ({
      * sign transaction with user's wallet
      */
     const signTransaction = async (password?: string) => {
-        if (!senderDevice) return
+        if (!senderDevice) throw new Error("Sender device not found")
 
         //TODO: support ledger
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
             showWarningToast("Hardware wallet not supported yet")
-            return
+            throw new Error("Hardware wallet not supported yet")
         }
 
         //local mnemonic, identity already verified via useCheckIdentity
         if (!senderDevice.wallet) {
             // TODO: support hardware wallet
             showWarningToast("Hardware wallet not supported yet")
+            throw new Error("Hardware wallet not supported yet")
         }
 
         const { decryptedWallet: senderWallet } =
@@ -186,7 +189,6 @@ export const useSignTransaction = ({
     const signAndSendTransaction = async (password?: string) => {
         try {
             const tx = await signTransaction(password)
-            if (!tx) throw new Error("Error signing transaction")
 
             await sendTransactionAndPerformUpdates(tx)
         } catch (e) {
