@@ -1,141 +1,50 @@
 import { useCallback } from "react"
 import { useWalletSecurity } from "~Hooks"
-import { LocalDevice, SecurityLevelType, Wallet } from "~Model"
-import { CryptoUtils, error, info } from "~Utils"
+import { LocalDevice } from "~Model"
+import { CryptoUtils, error } from "~Utils"
+import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
 import {
-    selectLocalDevices,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import {
-    bulkUpdateDevices,
-    setUserSelectedSecurity,
-} from "~Storage/Redux/Actions"
-import { showErrorToast } from "~Components"
-import { useI18nContext } from "~i18n"
-
-type Operation = {
-    operation: Function
-    data: EncryptOperation
-}
-
-type EncryptOperation = {
-    device: LocalDevice
-    wallet: Wallet
-    rootAddress: string
-    accessControl: boolean
-    hashEncryptionKey?: string
-}
+    Operation,
+    OperationType,
+    useSecurityTransactions,
+} from "./useSecurityTransactions"
 
 /**
- *  hook to trigger the security upgrade by decrypting and re-encrypting the wallet with the new security level
- * @returns  a function to trigger the security upgrade
+ * `useSecurityUpgrade` is a custom hook that orchestrates a security upgrade of a wallet.
+ * This hook works by decrypting the wallet using the provided password and then re-encrypting it at the new security level.
+ *
+ * Note that if the current wallet security is biometric, this hook will not perform any operation.
+ *
+ * @returns {Function} runSecurityUpgrade - A function that can be invoked to trigger the security upgrade.
+ * This function takes a password and an optional callback function as arguments.
+ * The password is used to decrypt the wallet. The callback is invoked upon successful completion of the upgrade.
+ *
+ * @callback runSecurityUpgrade
+ * @param {string} password - The password that will be used to decrypt the wallet.
+ * @param {() => void} [onSuccessCallback] - An optional callback function that will be invoked when the security upgrade has successfully completed.
+ *
+ * @throws Will throw an error if the security upgrade process encounters any issues.
+ *
+ * @example
+ * ```
+ * const runSecurityUpgrade = useSecurityUpgrade();
+ *
+ * runSecurityUpgrade('password', () => {
+ *   console.log('Security upgrade completed');
+ * });
+ * ```
+ *
+ * @requires `useWalletSecurity` hook for determining the current security state of the wallet.
+ * @requires `useAppSelector` hook with `selectLocalDevices` selector for fetching the local devices where the wallet is stored.
+ * @requires `useSecurityTransactions` hook for orchestrating the series of encryption and decryption operations.
  */
 export const useSecurityUpgrade = () => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
-    const dispatch = useAppDispatch()
 
-    const { LL } = useI18nContext()
-
-    const rollbackTransactions = useCallback(
-        async (operations: Operation[]) => {
-            info("[START] - Rollback transactions")
-
-            try {
-                const updatedDevices: LocalDevice[] = []
-
-                for (const operation of operations) {
-                    // encrypt wallets with new pin and save new encryption keys to keychain
-                    const { encryptedWallet } = await operation.operation({
-                        wallet: operation.data.wallet,
-                        rootAddress: operation.data.rootAddress,
-                        accessControl: operation.data.accessControl,
-                        hashEncryptionKey: operation.data.hashEncryptionKey,
-                    })
-
-                    const updatedDevice = {
-                        ...operation.data.device,
-                        wallet: encryptedWallet,
-                    }
-
-                    updatedDevices.push(updatedDevice)
-                }
-
-                dispatch(bulkUpdateDevices(updatedDevices))
-
-                dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
-
-                info("[END] - Rollback transactions")
-            } catch (e) {
-                // todo -> handle error how? -> reset app
-                error("[FAILED] - Rollback transactions:", e)
-            }
-        },
-        [dispatch],
-    )
-
-    const executeTransactions = useCallback(
-        async (operations: Operation[], currentPassword: string) => {
-            if (operations.length === 0) return
-
-            const rollbackOperations: Operation[] = []
-
-            try {
-                info("[START] - Transactions for upgrading security")
-
-                const updatedDevices: LocalDevice[] = []
-
-                for (const operation of operations) {
-                    // set the old values in the rollback operations
-                    rollbackOperations.push({
-                        operation: CryptoUtils.encryptWallet,
-                        data: {
-                            wallet: operation.data.wallet,
-                            rootAddress: operation.data.rootAddress,
-                            accessControl: false,
-                            hashEncryptionKey: currentPassword,
-                            device: operation.data.device,
-                        },
-                    })
-
-                    // encrypt wallets with new pin and save new encryption keys to keychain
-                    const { encryptedWallet } = await operation.operation({
-                        wallet: operation.data.wallet,
-                        rootAddress: operation.data.rootAddress,
-                        accessControl: operation.data.accessControl,
-                    })
-
-                    const updatedDevice = {
-                        ...operation.data.device,
-                        wallet: encryptedWallet,
-                    }
-
-                    if (updatedDevices.length > 1)
-                        throw new Error("Test rollback")
-
-                    updatedDevices.push(updatedDevice)
-                }
-
-                dispatch(bulkUpdateDevices(updatedDevices))
-
-                dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRIC))
-
-                info("[END] - Transactions for upgrading security")
-            } catch (e) {
-                error("[FAILED] - Transactions for upgrading security:", e)
-
-                showErrorToast(LL.COMMON_OOPS(), LL.ERROR_SECURITY_UPGRADE())
-
-                // if no operations were finished, no need to rollback
-                if (rollbackOperations.length === 0) return
-
-                // rollback all operations
-                await rollbackTransactions(rollbackOperations)
-            }
-        },
-        [LL, dispatch, rollbackTransactions],
-    )
+    const { executeTransactions } = useSecurityTransactions({
+        operationType: OperationType.UPGRADE_SECURITY,
+    })
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
