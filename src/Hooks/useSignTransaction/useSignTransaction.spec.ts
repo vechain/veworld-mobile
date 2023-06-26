@@ -37,6 +37,7 @@ describe("useSignTransaction", () => {
             timeout: 5000,
         })
         expect(result.current).toEqual({
+            signTransaction: expect.any(Function),
             signAndSendTransaction: expect.any(Function),
             sendTransactionAndPerformUpdates: expect.any(Function),
         })
@@ -58,6 +59,7 @@ describe("useSignTransaction", () => {
             timeout: 5000,
         })
         expect(result.current).toEqual({
+            signTransaction: expect.any(Function),
             signAndSendTransaction: expect.any(Function),
             sendTransactionAndPerformUpdates: expect.any(Function),
         })
@@ -82,6 +84,7 @@ describe("useSignTransaction", () => {
         })
 
         expect(result.current).toEqual({
+            signTransaction: expect.any(Function),
             signAndSendTransaction: expect.any(Function),
             sendTransactionAndPerformUpdates: expect.any(Function),
         })
@@ -117,6 +120,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
@@ -147,6 +151,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
@@ -177,6 +182,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
@@ -214,6 +220,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
@@ -245,6 +252,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
