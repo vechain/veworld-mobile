@@ -66,7 +66,15 @@ export const AccountCard: React.FC<Props> = memo(
                             </BaseView>
                         </BaseView>
                     </BaseView>
-                    {!showSelectAccountIcon && (
+                    {showSelectAccountIcon ? (
+                        <BaseView style={styles.rightSubContainer}>
+                            <BaseIcon
+                                color={"primary"}
+                                size={24}
+                                name={"chevron-right"}
+                            />
+                        </BaseView>
+                    ) : (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseText style={styles.address} fontSize={10}>
                                 {FormattingUtils.humanAddress(
@@ -79,15 +87,6 @@ export const AccountCard: React.FC<Props> = memo(
                             <BaseText fontSize={10}>
                                 {vetBalance} {VET.symbol}
                             </BaseText>
-                        </BaseView>
-                    )}
-                    {showSelectAccountIcon && (
-                        <BaseView style={styles.rightSubContainer}>
-                            <BaseIcon
-                                color={"primary"}
-                                size={24}
-                                name={"chevron-right"}
-                            />
                         </BaseView>
                     )}
                 </BaseTouchableBox>
