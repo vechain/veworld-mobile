@@ -270,6 +270,7 @@ const en: BaseTranslation = {
     COMMON_NOT_AVAILABLE: "N.A.",
     COMMON_IMPORT: "Import",
     COMMON_RECEIVE: "Receive",
+    COMMON_OOPS: "Oops!",
 
 
     // Alerts
@@ -309,6 +310,7 @@ const en: BaseTranslation = {
     ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: "Failed to get token data from Arweave",
     ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: "The token URI protocol is not supported ({protocol})",
     ERROR_NFT_FAILED_TO_GET_METADATA: "Failed to get token metadata",
+    ERROR_SECURITY_UPGRADE: "Upgrade to Biometrics failed. Please check your device and try again.",
 
     // Success
 
