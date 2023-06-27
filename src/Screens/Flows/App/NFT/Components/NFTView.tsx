@@ -11,8 +11,10 @@ import {
 import { Routes } from "~Navigation"
 import {
     removeBlackListCollection,
+    selectSelectedAccount,
     setBlackListCollection,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import { MediaUtils } from "~Utils"
 import { Video, ResizeMode } from "expo-av"
@@ -42,6 +44,8 @@ export const NFTView = memo(
         const nav = useNavigation()
         const dispatch = useAppDispatch()
         const video = useRef(null)
+
+        const selectedAccoount = useAppSelector(selectSelectedAccount)
 
         const CollectionItem = useMemo(
             () => [
@@ -86,20 +90,30 @@ export const NFTView = memo(
 
                 if (itemAction === ItemTitle.HIDE_COLLECTION)
                     dispatch(
-                        setBlackListCollection({ collection: collectionItem! }),
+                        setBlackListCollection({
+                            collection: collectionItem!,
+                            accountAddress: selectedAccoount.address,
+                        }),
                     )
 
                 if (itemAction === ItemTitle.SHOW_COLLECTION)
                     dispatch(
                         removeBlackListCollection({
                             collection: collectionItem!,
+                            accountAddress: selectedAccoount.address,
                         }),
                     )
             },
-            [CollectionItem, collectionItem, dispatch, isCollection],
+            [
+                CollectionItem,
+                collectionItem,
+                dispatch,
+                isCollection,
+                selectedAccoount.address,
+            ],
         )
 
-        const getIsvalidMimeType = useCallback(
+        const getIsValidMimeType = useCallback(
             (itemUrl: string, type: NFTMediaType[]) =>
                 MediaUtils.getMime(itemUrl, type),
             [],
@@ -130,7 +144,7 @@ export const NFTView = memo(
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
                             <NFTImage
                                 uri={
-                                    getIsvalidMimeType(
+                                    getIsValidMimeType(
                                         collectionItem?.icon.mime!,
                                         [NFTMediaType.IMAGE],
                                     )
@@ -164,7 +178,7 @@ export const NFTView = memo(
                         </BaseView>
                     ) : (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            {getIsvalidMimeType(nftItem?.icon.mime!, [
+                            {getIsValidMimeType(nftItem?.icon.mime!, [
                                 NFTMediaType.IMAGE,
                             ]) && (
                                 <NFTImage

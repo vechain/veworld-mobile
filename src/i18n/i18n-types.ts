@@ -1420,6 +1420,10 @@ type RootTranslation = {
 	 */
 	HIDE_COLLECTION: string
 	/**
+	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
+	 */
+	NO_MARKETPLACE: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -3387,6 +3391,10 @@ Please, try again later.
 	 * Hide collection
 	 */
 	HIDE_COLLECTION: () => LocalizedString
+	/**
+	 * Unable to open marketplace
+	 */
+	NO_MARKETPLACE: () => LocalizedString
 	/**
 	 * Light
 	 */

@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 import {
-    // selectSelectedAccount,
+    selectSelectedAccount,
     setNFTs,
     setNetworkingSideEffects,
     useAppDispatch,
-    // useAppSelector,
+    useAppSelector,
 } from "~Storage/Redux"
 import { getNFTdataForContract } from "./Helpers"
 import { NonFungibleToken } from "~Model"
@@ -13,13 +13,13 @@ import { useThor } from "~Components"
 import { NFTPlaceholder } from "~Assets"
 import { fetchMetadata } from "./fetchMeta"
 import { error } from "~Utils"
-import { ACCOUNT_WITH_NFTS, NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
     const dispatch = useAppDispatch()
-    // const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const thor = useThor()
     const { LL } = useI18nContext()
 
@@ -39,8 +39,7 @@ export const useNFTs = () => {
             try {
                 const { nftData } = await getNFTdataForContract(
                     [contractAddress],
-                    // selectedAccount.address,
-                    ACCOUNT_WITH_NFTS,
+                    selectedAccount.address,
                     _resultsPerPage,
                     _page,
                 )
@@ -63,14 +62,12 @@ export const useNFTs = () => {
                         const id =
                             contractAddress +
                             nft.tokenId +
-                            // selectedAccount.address
-                            ACCOUNT_WITH_NFTS
+                            selectedAccount.address
 
                         _nft = {
                             id,
                             tokenId: nft.tokenId,
-                            // owner: selectedAccount.address,
-                            owner: ACCOUNT_WITH_NFTS,
+                            owner: selectedAccount.address,
                             tokenURI,
                             ...nftMeta?.tokenMetadata,
                             icon: {
@@ -91,8 +88,7 @@ export const useNFTs = () => {
 
                 dispatch(
                     setNFTs({
-                        address: ACCOUNT_WITH_NFTS,
-                        // address: selectedAccount.address,
+                        address: selectedAccount.address,
                         collectionAddress: contractAddress,
                         NFTs: NFTs,
                         // taking first element because we are fetching only for one contract address
@@ -116,8 +112,7 @@ export const useNFTs = () => {
                 error("useNFTs", e)
             }
         },
-        // [dispatch, selectedAccount.address, thor],
-        [LL, dispatch, thor],
+        [LL, dispatch, selectedAccount.address, thor],
     )
 
     return { getNFTsForCollection }

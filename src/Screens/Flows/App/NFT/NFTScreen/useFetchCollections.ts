@@ -41,11 +41,7 @@ export const useFetchCollections = (
     }, [nftCollections?.collections])
 
     useEffect(() => {
-        if (
-            nftCollections &&
-            nftCollections.collections &&
-            isEmpty(nftCollections.collections)
-        ) {
+        if (isEmpty(nftCollections?.collections)) {
             getCollections(0, FIRST_TIME_COLLECITONS_TO_FETCH)
         }
 
@@ -61,13 +57,13 @@ export const useFetchCollections = (
                 async page => {
                     await getCollections(page)
                 },
-                blackListedCollections.length,
+                blackListedCollections?.length,
             )
 
             setEndReachedCalledDuringMomentum(false)
         }
     }, [
-        blackListedCollections.length,
+        blackListedCollections?.length,
         fetchWithPagination,
         getCollections,
         nftCollections?.collections?.length,
@@ -81,7 +77,7 @@ export const useFetchCollections = (
         fetchMoreCollections,
         hasNext:
             nftCollections?.pagination.totalElements !==
-            collections.length + blackListedCollections.length,
+            collections.length + blackListedCollections?.length,
         isLoading: nftNetworkingSideEffects.isLoading,
         error: nftNetworkingSideEffects.error,
         collections,

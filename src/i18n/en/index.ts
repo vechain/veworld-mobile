@@ -411,6 +411,7 @@ const en: BaseTranslation = {
     NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
     SHOW_COLLECTION: "Show collection",
     HIDE_COLLECTION: "Hide collection",
+    NO_MARKETPLACE: "Unable to open marketplace",
 
     // Onboarding
 
