@@ -37,7 +37,7 @@ export const SplashScreen = ({
         if (playAnimation) {
             Animated.timing(loadingProgress, {
                 toValue: 100,
-                duration: 1000,
+                duration: 500,
                 useNativeDriver: false,
                 delay: 0,
             }).start(() => {
@@ -58,8 +58,8 @@ export const SplashScreen = ({
         transform: [
             {
                 scale: loadingProgress.interpolate({
-                    inputRange: [0, 15, 100],
-                    outputRange: [0.1, 0.06, 16],
+                    inputRange: [0, 14, 100],
+                    outputRange: [0.1, 0.01, 16],
                 }),
             },
         ],
