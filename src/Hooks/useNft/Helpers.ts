@@ -4,6 +4,7 @@ import {
     getName,
     getNftsForContract,
     getSymbol,
+    getTokenTotalSupply,
     getTokenURI,
 } from "~Networking"
 import { fetchMetadata } from "./fetchMeta"
@@ -58,18 +59,29 @@ export const prepareCollectionData = async (
 
     const nftMeta = await fetchMetadata(tokenURI)
 
+    const hasImage = foundCollection?.icon ? true : !!nftMeta?.imageUrl ?? false
+
     const nftCollection: NonFungibleTokenCollection = {
-        address: _nft.contractAddress,
+        address: foundCollection?.address ?? _nft.contractAddress,
         name: await getName(_nft.contractAddress, thor),
         symbol: await getSymbol(_nft.contractAddress, thor),
         creator: foundCollection?.creator ?? notAvailable,
-        description: foundCollection?.description ?? "",
-        icon: foundCollection?.icon
-            ? `https://vechain.github.io/nft-registry/${foundCollection?.icon}`
-            : nftMeta?.imageUrl ?? NFTPlaceholder,
+        description:
+            foundCollection?.description ??
+            nftMeta?.tokenMetadata.description ??
+            "",
+        icon: {
+            url: foundCollection?.icon
+                ? `https://vechain.github.io/nft-registry/${foundCollection?.icon}`
+                : nftMeta?.imageUrl ?? NFTPlaceholder,
+            mime: nftMeta?.imageType ?? "image/png",
+        },
         balanceOf: nft.pagination.totalElements,
+        hasCount: nft.pagination.hasCount,
         nfts: [],
+        isBlacklisted: false,
+        totalSupply: await getTokenTotalSupply(_nft.contractAddress, thor),
     }
 
-    return { nftCollection }
+    return { nftCollection, hasImage }
 }

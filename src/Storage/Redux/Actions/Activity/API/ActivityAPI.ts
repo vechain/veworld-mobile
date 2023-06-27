@@ -73,7 +73,7 @@ export const fetchTransactions = async (
         return {
             data: [],
             pagination: {
-                isExactCount: false,
+                hasCount: false,
                 countLimit: 0,
                 totalPages: 0,
                 totalElements: 0,
@@ -120,7 +120,7 @@ export const fetchIncomingTransfers = async (
         return {
             data: [],
             pagination: {
-                isExactCount: false,
+                hasCount: false,
                 countLimit: 0,
                 totalPages: 0,
                 totalElements: 0,

@@ -1,5 +1,6 @@
 import axios from "axios"
 import { GH_NFT_REGISTRY } from "~Constants"
+import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { NETWORK_TYPE } from "~Model"
 
 export type GithubCollectionResponse = {
@@ -40,16 +41,19 @@ export const getCollectionInfo = async (
         case NETWORK_TYPE.MAIN:
             const resMain = await axios.get<GithubCollectionResponse[]>(
                 GH_NFT_REGISTRY(net),
+                { timeout: NFT_AXIOS_TIMEOUT },
             )
             return resMain.data
         case NETWORK_TYPE.TEST:
             const resTest = await axios.get<GithubCollectionResponse[]>(
                 GH_NFT_REGISTRY(net),
+                { timeout: NFT_AXIOS_TIMEOUT },
             )
             return resTest.data
         default:
             const resDefault = await axios.get<GithubCollectionResponse[]>(
                 GH_NFT_REGISTRY(NETWORK_TYPE.MAIN),
+                { timeout: NFT_AXIOS_TIMEOUT },
             )
             return resDefault.data
     }

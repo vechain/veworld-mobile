@@ -1,6 +1,7 @@
 import axios from "axios"
 import { getContractAddresses } from "./getContractAddresses"
 import { NFT_CONTRACTS_FOR_ADDRESS } from "~Constants"
+import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 jest.mock("axios")
 
@@ -20,6 +21,7 @@ describe("getContractAddresses", () => {
         expect(contractAddresses).toEqual(responseData)
         expect(axios.get).toHaveBeenCalledWith(
             NFT_CONTRACTS_FOR_ADDRESS(ownerAddress, 10, 0),
+            { timeout: NFT_AXIOS_TIMEOUT },
         )
     })
 })

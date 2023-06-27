@@ -3,6 +3,7 @@ import { RootState } from "../Types"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { selectSelectedAccount } from "./Account"
 import { isEmpty } from "lodash"
+import { ACCOUNT_WITH_NFTS } from "~Constants/Constants/NFT"
 
 const selectNftState = (state: RootState) => state.nft
 
@@ -24,11 +25,13 @@ export const selectNftCollections = createSelector(
     selectBlackListedCollections,
     (state, account, blackListedCollections) => {
         const collections =
-            state.collectionsPerAccount[account.address]?.collections
+            state.collectionsPerAccount[ACCOUNT_WITH_NFTS]?.collections
+        // state.collectionsPerAccount[account.address]?.collections
 
         if (collections && blackListedCollections) {
             const pagination =
-                state.collectionsPerAccount[account.address]?.pagination
+                state.collectionsPerAccount[ACCOUNT_WITH_NFTS]?.pagination
+            // state.collectionsPerAccount[account.address]?.pagination
 
             const filteredCollections = removeMatchingElements(
                 collections,
@@ -46,6 +49,9 @@ export const selectNftCollections = createSelector(
             pagination: {
                 totalElements: 0,
                 totalPages: 0,
+                countLimit: 0,
+                hasNext: false,
+                hasCount: false,
             },
         }
     },
@@ -87,21 +93,23 @@ export const selectCollectionWithContractAddress = createSelector(
 
 export const selectNFTWithAddressAndTokenId = createSelector(
     [
-        selectNftCollections,
+        selectNftState,
+        selectSelectedAccount,
         (state: RootState, contractAddress: string) => contractAddress,
         (state: RootState, contractAddress: string, tokenId: string) => tokenId,
     ],
-    (collections, contractAddress, tokenId) => {
-        const foundColelction = collections?.collections?.find(
-            collection => collection.address === contractAddress,
-        )
+    (state, account, contractAddress, tokenId) => {
+        // if (state.NFTsPerAccount[account.address] !== undefined) {
+        //     return state.NFTsPerAccount[account.address][
+        //         contractAddress
+        //     ].NFTs.find(nft => nft.tokenId === tokenId)
+        // }
 
-        let nft: NonFungibleToken | undefined
-        if (foundColelction) {
-            nft = foundColelction.nfts.find(_nft => _nft.tokenId === tokenId)
+        if (state.NFTsPerAccount[ACCOUNT_WITH_NFTS] !== undefined) {
+            return state.NFTsPerAccount[ACCOUNT_WITH_NFTS][
+                contractAddress
+            ].NFTs.find(nft => nft.tokenId === tokenId) as NonFungibleToken
         }
-
-        return nft
     },
 )
 
@@ -112,8 +120,12 @@ export const selectNFTsForCollection = createSelector(
         (state: RootState, collectionAddress: string) => collectionAddress,
     ],
     (account, nftState, collectionAddress) => {
-        if (nftState.NFTsPerAccount[account.address] !== undefined) {
-            return nftState.NFTsPerAccount[account.address][collectionAddress]
+        // if (nftState.NFTsPerAccount[account.address] !== undefined) {
+        //     return nftState.NFTsPerAccount[account.address][collectionAddress]
+        // }
+
+        if (nftState.NFTsPerAccount[ACCOUNT_WITH_NFTS] !== undefined) {
+            return nftState.NFTsPerAccount[ACCOUNT_WITH_NFTS][collectionAddress]
         }
 
         return {
@@ -121,9 +133,20 @@ export const selectNFTsForCollection = createSelector(
             pagination: {
                 totalElements: 0,
                 totalPages: 0,
+                countLimit: 0,
+                hasNext: false,
+                hasCount: false,
             },
         }
     },
+)
+
+export const selectBlackListedCollectionByAddress = createSelector(
+    [selectNftState, (state, collectionAddress: string) => collectionAddress],
+    (state, collectionAddress: string) =>
+        state.blackListedCollections.find(
+            col => col.address === collectionAddress,
+        ),
 )
 
 // HELPERS
