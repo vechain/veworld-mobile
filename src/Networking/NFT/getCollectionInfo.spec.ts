@@ -2,6 +2,7 @@ import axios from "axios"
 import { getCollectionInfo } from "./getCollectionInfo"
 import { NETWORK_TYPE } from "~Model"
 import { GH_NFT_REGISTRY } from "~Constants"
+import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 jest.mock("axios")
 
@@ -19,7 +20,9 @@ describe("getCollectionInfo", () => {
         const collectionInfo = await getCollectionInfo(net)
 
         expect(collectionInfo).toEqual(responseData)
-        expect(axios.get).toHaveBeenCalledWith(GH_NFT_REGISTRY(net))
+        expect(axios.get).toHaveBeenCalledWith(GH_NFT_REGISTRY(net), {
+            timeout: NFT_AXIOS_TIMEOUT,
+        })
     })
 
     it("should return the collection info for the test network", async () => {
@@ -35,7 +38,9 @@ describe("getCollectionInfo", () => {
         const collectionInfo = await getCollectionInfo(net)
 
         expect(collectionInfo).toEqual(responseData)
-        expect(axios.get).toHaveBeenCalledWith(GH_NFT_REGISTRY(net))
+        expect(axios.get).toHaveBeenCalledWith(GH_NFT_REGISTRY(net), {
+            timeout: NFT_AXIOS_TIMEOUT,
+        })
     })
 
     it("should return the collection info for the default network", async () => {
@@ -53,6 +58,7 @@ describe("getCollectionInfo", () => {
         expect(collectionInfo).toEqual(responseData)
         expect(axios.get).toHaveBeenCalledWith(
             GH_NFT_REGISTRY(net as NETWORK_TYPE),
+            { timeout: NFT_AXIOS_TIMEOUT },
         )
     })
 })
