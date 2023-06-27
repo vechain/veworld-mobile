@@ -24,6 +24,7 @@ Use the following template to create a new Unreleased change log.
 - [#598](https://github.com/vechainfoundation/veworld-mobile/pull/598) Integrated wallet connect 
 - [#664](https://github.com/vechainfoundation/veworld-mobile/pull/664) Added account handling for wallet connect connections
 - [#620](https://github.com/vechainfoundation/veworld-mobile/pull/620) Add loading state for send flow
+- [#579](https://github.com/vechainfoundation/veworld-mobile/issues/579) Use atomic commit to update all devices at once for security operation
 
 ### Changed
 
