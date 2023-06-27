@@ -7036,9 +7036,9 @@ flatted@^3.1.0:
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
 
 flow-parser@0.*:
-  version "0.210.0"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.210.0.tgz#23bb5851fb45b40c4b51ff3ebcb9c5cd8fac40f7"
-  integrity sha512-ISI3YUsL/Z4cUl5ijYUO1LezjoljfnRS6QoFlqIqiazETt8EhkZKqQoksA47743OT3QxYFOPd2yIcRaH4DYX7g==
+  version "0.210.1"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.210.1.tgz#6e04775dc2ebd5bde6a37de38532836678a5ac3e"
+  integrity sha512-M0SdOwD0wZHhk6K/AOaPReBnw2vB7p9KUFUFZHJRsU3ZMl/+WVrMpmb8AfEM6GXZ5mEssCx9vHugxxJg1ieoew==
 
 flow-parser@^0.121.0:
   version "0.121.0"
