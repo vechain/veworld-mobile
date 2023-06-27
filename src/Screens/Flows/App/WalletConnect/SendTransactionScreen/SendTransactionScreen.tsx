@@ -220,6 +220,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             setSelectedDelegationOption(DelegationType.URL)
             setSelectedDelegationUrl(params.delegateUrl)
 
+            // Add delegation url to the list
             if (!delegationUrls.includes(params.delegateUrl)) {
                 dispatch(addDelegationUrl(params.delegateUrl))
             }
@@ -333,7 +334,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         haptics="light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={checkIdentityBeforeOpening}
-                        disabled={!isThereEnoughGas}
+                        disabled={!isThereEnoughGas && !isDelegated}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
