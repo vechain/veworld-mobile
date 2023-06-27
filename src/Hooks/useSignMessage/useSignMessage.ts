@@ -38,13 +38,14 @@ export const useSignMessage = ({ hash }: Props) => {
         //TODO: support ledger
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
             showWarningToast("Hardware wallet not supported yet")
-            return
+            throw new Error("Hardware wallet not supported yet")
         }
 
         //local mnemonic, identity already verified via useCheckIdentity
         if (!senderDevice.wallet) {
             // TODO: support hardware wallet
             showWarningToast("Hardware wallet not supported yet")
+            throw new Error("Hardware wallet not supported yet")
         }
 
         const { decryptedWallet: senderWallet } =
