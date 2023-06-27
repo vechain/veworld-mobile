@@ -19,6 +19,7 @@ export type Colors = {
     background: string
     backgroundReversed: string
     backgroundTransparent: string
+    splashBackground: string
     card: string
     border: string
     notification: string
@@ -61,6 +62,7 @@ export enum COLORS {
     PASTEL_ORANGE = "#fedbc0",
     DARK_ORANGE_ALERT = "#AF4F0A",
     MEDIUM_ORANGE = "#FA710E",
+    DARK_BLUE = "#28008c",
 }
 
 const light: Colors = {
@@ -84,6 +86,7 @@ const light: Colors = {
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
+    splashBackground: COLORS.DARK_BLUE,
     card: COLORS.WHITE,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
@@ -117,6 +120,7 @@ const dark: Colors = {
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
+    splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
