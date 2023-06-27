@@ -3,7 +3,7 @@ import { useThor } from "~Components"
 import { NonFungibleTokenCollection } from "~Model"
 import { getCollectionInfo, getContractAddresses } from "~Networking"
 import {
-    selectSelectedAccount,
+    // selectSelectedAccount,
     selectSelectedNetwork,
     setCollections,
     setNetworkingSideEffects,
@@ -13,6 +13,7 @@ import {
 import { error } from "~Utils"
 import { getNFTdataForContract, prepareCollectionData } from "./Helpers"
 import { useI18nContext } from "~i18n"
+import { ACCOUNT_WITH_NFTS, NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -30,19 +31,17 @@ import { useI18nContext } from "~i18n"
  * @method
  * getCollections(_page: number, _resultsPerPage: number = 10)
  * An async function that fetches the NFT collections for the selected account.
- *
- * @param {number} _page - The page number for pagination purposes.
- * @param {number} _resultsPerPage - The number of results to fetch per page. Default value is `10`.
  */
+
 export const useNFTCollections = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    // const selectedAccount = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
     const getCollections = useCallback(
-        async (_page: number, _resultsPerPage: number = 10) => {
+        async (_page: number, _resultsPerPage: number = NFT_PAGE_SIZE) => {
             dispatch(
                 setNetworkingSideEffects({ isLoading: true, error: undefined }),
             )
@@ -51,10 +50,14 @@ export const useNFTCollections = () => {
                 // Get contract addresses for nfts owned by ownerAddress
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
-                        selectedAccount.address,
+                        // selectedAccount.address,
+                        ACCOUNT_WITH_NFTS,
                         _resultsPerPage,
                         _page,
                     )
+
+                // exit early if there are no more pages to fetch
+                if (_page >= pagination.totalPages) return
 
                 // get nft collection info from GitHub registry
                 const collectionRegistryInfo = await getCollectionInfo(
@@ -65,7 +68,8 @@ export const useNFTCollections = () => {
                 const nftResultsPerPage = 1
                 const { nftData } = await getNFTdataForContract(
                     contractsForNFTs,
-                    selectedAccount.address,
+                    // selectedAccount.address,
+                    ACCOUNT_WITH_NFTS,
                     nftResultsPerPage,
                 )
 
@@ -82,7 +86,7 @@ export const useNFTCollections = () => {
                         nft,
                         foundCollection,
                         thor,
-                        LL.DATE_NOT_AVAILABLE(),
+                        LL.COMMON_NOT_AVAILABLE(),
                     )
 
                     _nftCollections.push(nftCollection)
@@ -91,7 +95,8 @@ export const useNFTCollections = () => {
                 // set collections to store
                 dispatch(
                     setCollections({
-                        address: selectedAccount.address,
+                        address: ACCOUNT_WITH_NFTS,
+                        // address: selectedAccount.address,
                         collectiondata: {
                             collections: _nftCollections,
                             pagination,
@@ -115,7 +120,8 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, network.type, selectedAccount.address, thor],
+        // [LL, dispatch, network.type, selectedAccount.address, thor],
+        [LL, dispatch, network.type, thor],
     )
 
     return { getCollections }

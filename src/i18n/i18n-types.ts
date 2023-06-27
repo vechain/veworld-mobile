@@ -1412,6 +1412,14 @@ type RootTranslation = {
 	 */
 	NFT_DOWNLOAD_ERROR: string
 	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	SHOW_COLLECTION: string
+	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	HIDE_COLLECTION: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -3371,6 +3379,14 @@ Please, try again later.
 	 * Woops! There was an error trying to get your NFTs. Please try again in a while.
 	 */
 	NFT_DOWNLOAD_ERROR: () => LocalizedString
+	/**
+	 * Show collection
+	 */
+	SHOW_COLLECTION: () => LocalizedString
+	/**
+	 * Hide collection
+	 */
+	HIDE_COLLECTION: () => LocalizedString
 	/**
 	 * Light
 	 */

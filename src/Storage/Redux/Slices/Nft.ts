@@ -2,28 +2,27 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { uniqBy } from "lodash"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
-import {
-    Collections,
-    CollectionWithPagination,
-    NFTBlackListedItem,
-    NFTs,
-} from "../Types/Nft"
+import { Collections, CollectionWithPagination, NFTs } from "../Types/Nft"
 import { PaginationResponse } from "~Networking"
 
 type NftSliceState = {
     collectionsPerAccount: Collections
-    blackListedCollections: NonFungibleTokenCollection[]
-    blackListedNFTs: NFTBlackListedItem[]
     NFTsPerAccount: NFTs
+
+    blackListedCollections: NonFungibleTokenCollection[]
+    blackListedNFTs: NonFungibleToken[]
+
     isLoading: boolean
     error: string | undefined
 }
 
 export const initialStateNft: NftSliceState = {
-    blackListedCollections: [],
-    blackListedNFTs: [],
     collectionsPerAccount: {},
     NFTsPerAccount: {},
+
+    blackListedCollections: [],
+    blackListedNFTs: [],
+
     isLoading: false,
     error: undefined,
 }
@@ -45,7 +44,7 @@ export const NftSlice = createSlice({
                     pagination: {
                         countLimit: 0,
                         hasNext: false,
-                        isExactCount: true,
+                        hasCount: true,
                         totalElements: 0,
                         totalPages: 0,
                     },
@@ -81,12 +80,13 @@ export const NftSlice = createSlice({
 
         setBlackListCollection: (
             state,
-            action: PayloadAction<NonFungibleTokenCollection>,
+            action: PayloadAction<{ collection: NonFungibleTokenCollection }>,
         ) => {
-            const allCollections = [
-                ...state.blackListedCollections,
-                action.payload,
-            ]
+            const { collection } = action.payload
+
+            collection.isBlacklisted = true
+
+            const allCollections = [...state.blackListedCollections, collection]
             const uniqueCollections = uniqBy(allCollections, "address")
 
             state.blackListedCollections = uniqueCollections
@@ -96,10 +96,12 @@ export const NftSlice = createSlice({
 
         removeBlackListCollection: (
             state,
-            action: PayloadAction<NonFungibleTokenCollection>,
+            action: PayloadAction<{ collection: NonFungibleTokenCollection }>,
         ) => {
+            const { collection } = action.payload
+
             const filteredCollections = state.blackListedCollections.filter(
-                collection => collection.address !== action.payload.address,
+                col => col.address !== collection.address,
             )
 
             state.blackListedCollections = filteredCollections
@@ -127,7 +129,7 @@ export const NftSlice = createSlice({
                         pagination: {
                             countLimit: 0,
                             hasNext: false,
-                            isExactCount: true,
+                            hasCount: true,
                             totalElements: 0,
                             totalPages: 0,
                         },
@@ -142,7 +144,7 @@ export const NftSlice = createSlice({
                     pagination: {
                         countLimit: 0,
                         hasNext: false,
-                        isExactCount: true,
+                        hasCount: true,
                         totalElements: 0,
                         totalPages: 0,
                     },
@@ -162,24 +164,10 @@ export const NftSlice = createSlice({
 
             return state
         },
-
-        // TODO set here adjust Nfts from selectors
-        setBlackListNFT: (
-            state,
-            action: PayloadAction<{
-                contractAddress: string
-                tokenId: string
-            }>,
-        ) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const _action = action
-            return state
-        },
     },
 })
 
 export const {
-    setBlackListNFT,
     setBlackListCollection,
     setCollections,
     setNetworkingSideEffects,
