@@ -6,14 +6,20 @@ import {
     CompressAndExpandBaseText,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import React from "react"
+import React, { useMemo } from "react"
 import { DelegationType } from "~Model/Delegation"
-import { COLORS, VTHO } from "~Constants"
+import { COLORS, VTHO, VET } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
-import { WalletConnectUtils } from "~Utils"
+import { FormattingUtils, WalletConnectUtils } from "~Utils"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { Network } from "~Model"
+import {
+    selectCurrency,
+    selectCurrencyExchangeRate,
+    useAppSelector,
+} from "~Storage/Redux"
+import { BigNumber } from "bignumber.js"
 
 type Props = {
     selectedDelegationOption: DelegationType
@@ -36,11 +42,33 @@ export const TransactionDetails = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const exchangeRate = useAppSelector(state =>
+        selectCurrencyExchangeRate(state, ""),
+    )
+    const currency = useAppSelector(selectCurrency)
 
     // Session request values
     const { params } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const message = params.comment || params.txMessage[0].comment
+
+    const spendingAmount = useMemo(() => {
+        return params.txMessage.reduce(
+            (acc: BigNumber, clause: Connex.VM.Clause) => {
+                return acc.plus(clause.value)
+            },
+            new BigNumber(0),
+        )
+    }, [params.txMessage])
+
+    const formattedFiatAmount = FormattingUtils.humanNumber(
+        FormattingUtils.convertToFiatBalance(
+            spendingAmount || "0",
+            exchangeRate?.rate || 1,
+            0,
+        ),
+        spendingAmount,
+    )
 
     return (
         <>
@@ -72,6 +100,30 @@ export const TransactionDetails = ({
             <BaseText typographyFont="subSubTitle">
                 {capitalize(network.name)}
             </BaseText>
+
+            <BaseSpacer height={12} />
+            <BaseSpacer
+                height={0.5}
+                width={"100%"}
+                background={theme.colors.textDisabled}
+            />
+
+            <BaseSpacer height={12} />
+            <BaseText typographyFont="buttonSecondary">
+                {LL.SEND_AMOUNT()}
+            </BaseText>
+            <BaseSpacer height={6} />
+            <BaseView flexDirection="row">
+                <BaseText typographyFont="subSubTitle">
+                    {spendingAmount.toString()} {VET.symbol}
+                </BaseText>
+                {exchangeRate && (
+                    <BaseText typographyFont="buttonSecondary">
+                        {" ≈ "}
+                        {formattedFiatAmount} {currency}
+                    </BaseText>
+                )}
+            </BaseView>
 
             <BaseSpacer height={12} />
             <BaseSpacer
