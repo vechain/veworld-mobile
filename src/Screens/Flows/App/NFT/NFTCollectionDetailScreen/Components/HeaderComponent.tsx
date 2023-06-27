@@ -85,12 +85,16 @@ export const HeaderComponent = memo(
 
                 <>
                     <BaseSpacer height={24} />
-                    <BaseText mb={12}>{LL.SB_DESCRIPTION()}</BaseText>
-                    <BaseText typographyFont="bodyBold">
-                        {!isEmpty(collection?.description)
-                            ? collection?.description
-                            : LL.BD_NFT_DESC_PLACEHOLDER()}
-                    </BaseText>
+
+                    {!isEmpty(collection?.description) ? (
+                        <>
+                            <BaseText mb={12}>{LL.SB_DESCRIPTION()}</BaseText>
+                            <BaseText typographyFont="bodyBold">
+                                {collection.description}
+                            </BaseText>
+                        </>
+                    ) : null}
+
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="biggerTitle">
                         {LL.SB_COLLECTIBLES()}
