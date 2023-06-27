@@ -37,7 +37,7 @@ export const SplashScreen = ({
         if (playAnimation) {
             Animated.timing(loadingProgress, {
                 toValue: 100,
-                duration: 500,
+                duration: 700,
                 useNativeDriver: false,
                 delay: 0,
             }).start(() => {
