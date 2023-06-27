@@ -28,6 +28,8 @@ import URLUtils from "./URLUtils"
 import ReanimatedUtils from "./ReanimatedUtils"
 import WalletConnectUtils from "./WalletConnectUtils"
 import WalletConnectResponseUtils from "./WalletConnectResponseUtils"
+import MediaUtils from "./MediaUtils"
+import MathUtils from "./MathUtils"
 export * from "./Logger"
 
 export {
@@ -61,4 +63,6 @@ export {
     ReanimatedUtils,
     WalletConnectUtils,
     WalletConnectResponseUtils,
+    MediaUtils,
+    MathUtils,
 }

@@ -1,50 +1,50 @@
 import React, { memo } from "react"
-import { ActivityIndicator, StyleSheet } from "react-native"
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-} from "~Components"
+import { StyleSheet } from "react-native"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
+import { NftSkeleton } from "./NftSkeleton"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
 type Props = {
-    onGoToBlackListed: () => void
+    onGoToBlackListed?: () => void
     isLoading: boolean
+    hasNext: boolean
+    renderExtraSkeleton?: boolean
 }
 
-// TODO -> show button only if there are blacklisted collections or NFTs
 export const ListFooterView = memo(
-    ({ onGoToBlackListed, isLoading }: Props) => {
+    ({ onGoToBlackListed, isLoading, hasNext, renderExtraSkeleton }: Props) => {
         const { LL } = useI18nContext()
 
         return (
             <>
-                <BaseSpacer height={36} />
-                <BaseTouchableBox
-                    action={onGoToBlackListed}
-                    children={
-                        <>
-                            <BaseView
-                                w={100}
-                                h={100}
-                                flexDirection="row"
-                                justifyContent="center"
-                                alignItems="center">
-                                <BaseText typographyFont="bodyBold">
-                                    {LL.HIDDEN_COLLECTIONS()}
-                                </BaseText>
-                                <BaseIcon name="chevron-down" />
-                            </BaseView>
-                        </>
-                    }
-                />
+                {onGoToBlackListed && !hasNext && (
+                    <BaseTouchableBox
+                        containerStyle={baseStyles.marginVertical}
+                        action={onGoToBlackListed}
+                        children={
+                            <>
+                                <BaseView
+                                    w={100}
+                                    h={100}
+                                    flexDirection="row"
+                                    justifyContent="center"
+                                    alignItems="center">
+                                    <BaseText typographyFont="bodyBold">
+                                        {LL.HIDDEN_COLLECTIONS()}
+                                    </BaseText>
+                                    <BaseIcon name="chevron-down" />
+                                </BaseView>
+                            </>
+                        }
+                    />
+                )}
 
-                {isLoading ? (
-                    <ActivityIndicator style={baseStyles.activityIndicator} />
-                ) : (
-                    <BaseSpacer height={18} />
+                {isLoading && (
+                    <NftSkeleton
+                        numberOfChildren={NFT_PAGE_SIZE}
+                        renderExtra={renderExtraSkeleton}
+                    />
                 )}
             </>
         )
@@ -52,8 +52,7 @@ export const ListFooterView = memo(
 )
 
 const baseStyles = StyleSheet.create({
-    activityIndicator: {
-        marginVertical: 36,
-        transform: [{ scale: 1.2 }],
+    marginVertical: {
+        marginVertical: 18,
     },
 })

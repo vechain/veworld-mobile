@@ -1,26 +1,33 @@
-import React from "react"
+import React, { memo } from "react"
 import FastImage, { FastImageProps } from "react-native-fast-image"
+import { BaseView } from "./BaseView"
 
 type Props = {
     uri: string
     w?: number
     h?: number
+    isNFT?: boolean
 } & FastImageProps
 
-export const BaseImage = (props: Props) => {
+export const BaseImage = memo((props: Props) => {
     const { uri, w, h, style, testID, ...rest } = props
 
     return (
-        <FastImage
-            testID={testID}
-            style={[{ width: w, height: h }, style]}
-            source={{
-                uri,
-                priority: FastImage.priority.high,
-                cache: FastImage.cacheControl.immutable,
-            }}
-            {...rest}
-            resizeMode={FastImage.resizeMode.cover}
-        />
+        <BaseView>
+            <FastImage
+                testID={testID}
+                style={[{ width: w, height: h }, style]}
+                fallback
+                // todo -> change fallback image
+                defaultSource={require("../../Assets/Img/NFTPlaceholder.png")}
+                source={{
+                    uri,
+                    priority: FastImage.priority.high,
+                    cache: FastImage.cacheControl.immutable,
+                }}
+                {...rest}
+                resizeMode={FastImage.resizeMode.cover}
+            />
+        </BaseView>
     )
-}
+})

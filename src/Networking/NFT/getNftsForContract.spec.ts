@@ -1,6 +1,7 @@
 import axios from "axios"
 import { getNftsForContract } from "./getNftsForContract"
 import { NFTS_OWNED_PER_CONTRACT } from "~Constants"
+import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 jest.mock("axios")
 
@@ -41,6 +42,7 @@ describe("getNftsForContract", () => {
                 resultsPerPage,
                 page,
             ),
+            { timeout: NFT_AXIOS_TIMEOUT },
         )
     })
 })

@@ -1,8 +1,9 @@
 import axios from "axios"
 import { error } from "~Utils/Logger"
 import { TokenMetadata } from "~Model/Nft/Nft"
+import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
-const toID = (_tokenUri: string) => _tokenUri.split("://")[1]
+const toID = (_tokenUri: string) => _tokenUri?.split("://")[1]
 
 // loop
 
@@ -13,6 +14,7 @@ export const getTokenMetaIpfs = async (
         const id = toID(tokenUri)
         const metadata = await axios.get<TokenMetadata>(
             `https://ipfs.io/ipfs/${id}`,
+            { timeout: NFT_AXIOS_TIMEOUT },
         )
 
         return metadata.data

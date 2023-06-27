@@ -1,5 +1,6 @@
 import { SignClientTypes } from "@walletconnect/types"
 import {
+    signMessageRequestErrorResponse,
     signMessageRequestSuccessResponse,
     sponsorSignRequestFailedResponse,
     transactionRequestFailedResponse,
@@ -8,6 +9,8 @@ import {
 } from "./WalletConnectResponseUtils"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { Certificate } from "thor-devkit"
+import { NETWORK_TYPE, Network } from "~Model"
+import { genesises } from "~Constants"
 
 // Mock the dependencies
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
@@ -28,7 +31,9 @@ describe("transactionRequestSuccessResponse", () => {
             respondSessionRequest: jest.fn().mockResolvedValue(undefined),
         }
         const LL = {
-            NOTIFICATION_wallet_connect_transaction_broadcasted: jest.fn(),
+            SUCCESS_GENERIC: jest.fn(),
+            SUCCESS_GENERIC_OPERATION: jest.fn(),
+            SUCCESS_GENERIC_VIEW_DETAIL_LINK: jest.fn(),
         }
         const request = {
             topic: "example-topic",
@@ -44,6 +49,17 @@ describe("transactionRequestSuccessResponse", () => {
         const transactionId = 456
         const signer = "example-signer"
 
+        const network: Network = {
+            id: "123",
+            defaultNet: true,
+            name: "Mock Network",
+            type: NETWORK_TYPE.TEST,
+            currentUrl: "https://mock-network.com",
+            urls: ["https://mock-network.com"],
+            explorerUrl: "https://mock-explorer.com",
+            genesis: genesises.test,
+        }
+
         // Call the function
         await transactionRequestSuccessResponse(
             { request, web3Wallet, LL } as {
@@ -53,6 +69,7 @@ describe("transactionRequestSuccessResponse", () => {
             },
             transactionId,
             signer,
+            network,
         )
 
         // Assertions
@@ -67,9 +84,6 @@ describe("transactionRequestSuccessResponse", () => {
                 },
             },
         })
-        expect(
-            LL.NOTIFICATION_wallet_connect_transaction_broadcasted,
-        ).toHaveBeenCalled()
         expect(showSuccessToast).toHaveBeenCalled()
         expect(showErrorToast).not.toHaveBeenCalled()
     })
@@ -92,6 +106,17 @@ describe("transactionRequestSuccessResponse", () => {
         const transactionId = 456
         const signer = "example-signer"
 
+        const network: Network = {
+            id: "123",
+            defaultNet: true,
+            name: "Mock Network",
+            type: NETWORK_TYPE.TEST,
+            currentUrl: "https://mock-network.com",
+            urls: ["https://mock-network.com"],
+            explorerUrl: "https://mock-explorer.com",
+            genesis: genesises.test,
+        }
+
         // Call the function
         await transactionRequestSuccessResponse(
             { request, web3Wallet, LL } as {
@@ -101,6 +126,7 @@ describe("transactionRequestSuccessResponse", () => {
             },
             transactionId,
             signer,
+            network,
         )
 
         // Assertions
@@ -456,6 +482,74 @@ describe("userRejectedMethodsResponse", () => {
         // Assertions
         expect(web3Wallet.respondSessionRequest).toHaveBeenCalled()
         expect(LL.NOTIFICATION_wallet_connect_matching_error).toHaveBeenCalled()
+        expect(showErrorToast).toHaveBeenCalled()
+    })
+})
+
+describe("signMessageRequestErrorResponse", () => {
+    it("should respond with an error message", async () => {
+        // Define the input
+        const request = {
+            id: 123,
+            topic: "example-topic",
+        }
+        const web3Wallet = {
+            respondSessionRequest: jest.fn().mockResolvedValue(undefined),
+        }
+
+        const LL = {
+            NOTIFICATION_wallet_connect_matching_error: jest.fn(),
+            NOTIFICATION_wallet_connect_error_during_signing: jest.fn(),
+        }
+
+        // Call the function
+        await signMessageRequestErrorResponse({
+            request,
+            web3Wallet,
+            LL,
+        } as {
+            request: SignClientTypes.EventArguments["session_request"]
+            web3Wallet: any
+            LL: any
+        })
+
+        // Check that the respondSessionRequest function was called with the correct parameters
+        expect(web3Wallet.respondSessionRequest).toHaveBeenCalledWith({
+            topic: request.topic,
+            response: {
+                id: request.id,
+                jsonrpc: "2.0",
+            },
+        })
+    })
+
+    it("should show an error toast if responding with an error fails", async () => {
+        // Define the input
+        const request = {
+            id: 123,
+            topic: "example-topic",
+        }
+        const web3Wallet = {
+            respondSessionRequest: jest
+                .fn()
+                .mockRejectedValue(new Error("Network error")),
+        }
+        const LL = {
+            NOTIFICATION_wallet_connect_matching_error: jest.fn(),
+        }
+
+        // Call the function
+        await signMessageRequestErrorResponse({
+            request,
+            web3Wallet,
+            LL,
+        } as {
+            request: SignClientTypes.EventArguments["session_request"]
+            web3Wallet: any
+            LL: any
+        })
+
+        // Check that the showErrorToast function was called with the correct message
         expect(showErrorToast).toHaveBeenCalled()
     })
 })

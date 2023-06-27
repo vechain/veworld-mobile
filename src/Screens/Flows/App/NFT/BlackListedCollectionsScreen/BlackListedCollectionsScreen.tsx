@@ -79,43 +79,6 @@ export const BlackListedCollectionsScreen = () => {
                         </>
                     )}
                 </BaseView>
-
-                <BaseView mx={20}>
-                    <BaseSpacer height={20} />
-                    <BaseText typographyFont="title">
-                        {LL.TITLE_NFTS()}
-                    </BaseText>
-                </BaseView>
-
-                <BaseView justifyContent="center">
-                    {!isEmpty(blackListedCollections) ? (
-                        <FlatList
-                            scrollEnabled={false}
-                            data={blackListedCollections}
-                            extraData={blackListedCollections}
-                            contentContainerStyle={styles.nftListContainer}
-                            numColumns={2}
-                            keyExtractor={item => String(item.address)}
-                            ItemSeparatorComponent={renderSeparator}
-                            renderItem={renderNftCollection}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                        />
-                    ) : (
-                        <>
-                            <BaseView
-                                justifyContent="center"
-                                alignItems="center"
-                                py={48}>
-                                <BaseText typographyFont="caption">
-                                    {LL.NO_HIDDEN_COLLECTIONS({
-                                        name: "NFTs",
-                                    })}
-                                </BaseText>
-                            </BaseView>
-                        </>
-                    )}
-                </BaseView>
             </ScrollView>
         </>
     )
