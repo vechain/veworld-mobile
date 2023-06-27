@@ -86,7 +86,7 @@ const light: Colors = {
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
-    splashBackground: COLORS.DARK_PURPLE,
+    splashBackground: COLORS.PURPLE,
     card: COLORS.WHITE,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
