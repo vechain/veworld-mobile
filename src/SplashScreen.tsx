@@ -6,6 +6,7 @@ import { useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 
 type Props = {
+    playAnimation: boolean
     children: React.ReactNode
 }
 
@@ -23,29 +24,34 @@ type Props = {
  * </SplashScreen>
  * ```
  */
-export const SplashScreen = ({ children }: Props): React.ReactElement => {
+export const SplashScreen = ({
+    playAnimation,
+    children,
+}: Props): React.ReactElement => {
     const [loadingProgress] = useState(new Animated.Value(0))
     const [animationDone, setAnimationDone] = useState(false)
 
     const { styles } = useThemedStyles(baseStyles)
 
     useEffect(() => {
-        Animated.timing(loadingProgress, {
-            toValue: 100,
-            duration: 1000,
-            useNativeDriver: true,
-            delay: 0,
-        }).start(() => {
-            setAnimationDone(true)
-        })
+        if (playAnimation) {
+            Animated.timing(loadingProgress, {
+                toValue: 100,
+                duration: 1000,
+                useNativeDriver: false,
+                delay: 0,
+            }).start(() => {
+                setAnimationDone(true)
+            })
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [playAnimation])
 
     const colorLayer = animationDone ? null : (
         <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
     )
     const whiteLayer = animationDone ? null : (
-        <View style={[StyleSheet.absoluteFill]} />
+        <View style={[StyleSheet.absoluteFill, styles.whiteLayer]} />
     )
 
     const imageScale = {
