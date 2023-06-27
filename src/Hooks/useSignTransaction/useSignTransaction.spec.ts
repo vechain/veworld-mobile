@@ -37,6 +37,7 @@ describe("useSignTransaction", () => {
             timeout: 5000,
         })
         expect(result.current).toEqual({
+            signTransaction: expect.any(Function),
             signAndSendTransaction: expect.any(Function),
             sendTransactionAndPerformUpdates: expect.any(Function),
         })
@@ -58,6 +59,7 @@ describe("useSignTransaction", () => {
             timeout: 5000,
         })
         expect(result.current).toEqual({
+            signTransaction: expect.any(Function),
             signAndSendTransaction: expect.any(Function),
             sendTransactionAndPerformUpdates: expect.any(Function),
         })
@@ -82,6 +84,7 @@ describe("useSignTransaction", () => {
         })
 
         expect(result.current).toEqual({
+            signTransaction: expect.any(Function),
             signAndSendTransaction: expect.any(Function),
             sendTransactionAndPerformUpdates: expect.any(Function),
         })
@@ -117,6 +120,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
@@ -147,6 +151,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
@@ -177,6 +182,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
@@ -205,6 +211,7 @@ describe("useSignTransaction", () => {
                         urlDelegationSignature: Buffer.from(
                             "https://vechainstats.com",
                         ),
+                        selectedDelegationUrl: "https://vechainstats.com",
                     }),
                 { wrapper: TestWrapper },
             )
@@ -213,6 +220,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })
@@ -235,6 +243,7 @@ describe("useSignTransaction", () => {
                         isDelegated: true,
                         onTXFinish: jest.fn(),
                         selectedDelegationOption: DelegationType.URL,
+                        selectedDelegationUrl: undefined,
                     }),
                 { wrapper: TestWrapper },
             )
@@ -243,6 +252,7 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
+                signTransaction: expect.any(Function),
                 signAndSendTransaction: expect.any(Function),
                 sendTransactionAndPerformUpdates: expect.any(Function),
             })

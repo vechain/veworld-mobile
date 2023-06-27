@@ -1260,7 +1260,11 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: string
 	/**
-	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
+	 * Something went wrong while signing the message.
+	 */
+	NOTIFICATION_wallet_connect_error_during_signing: string
+	/**
+	 * Connected app
 	 */
 	CONNECTED_APP_TITLE: string
 	/**
@@ -1333,6 +1337,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: string
 	/**
+	 * Your connected apps list
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: string
+	/**
 	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
 	CONNECTED_APPS_SCREEN_DESCRIPTION: string
@@ -1340,6 +1348,16 @@ type RootTranslation = {
 	 * Y​o​u​ ​h​a​v​e​ ​n​o​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​.​ ​O​n​c​e​ ​y​o​u​ ​h​a​v​e​ ​s​o​m​e​,​ ​t​h​e​y​ ​w​i​l​l​ ​d​i​s​p​l​a​y​e​d​ ​h​e​r​e​.
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
+	/**
+	 * Confirming this you will disconnect the {name} app from {alias}
+	 * @param {string} name
+	 * @param {string} alias
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'name' | 'alias'>
+	/**
+	 * Add app​.
+	 */
+	ADD_APP: string
 	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
@@ -3214,6 +3232,10 @@ Please, try again later.
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
 	/**
+	 * Something went wrong while signing the message.
+	 */
+	NOTIFICATION_wallet_connect_error_during_signing: () => LocalizedString
+	/**
 	 * Connected app
 	 */
 	CONNECTED_APP_TITLE: () => LocalizedString
@@ -3286,6 +3308,10 @@ Please, try again later.
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
 	/**
+	 * Your connected apps list
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: () => LocalizedString
+	/**
 	 * Connect your wallet with WalletConnect to make transactions.
 	 */
 	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
@@ -3293,6 +3319,14 @@ Please, try again later.
 	 * You have no connected apps. Once you have some, they will displayed here.
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
+	/**
+	 * Confirming this you will disconnect the {name} app from {alias}
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { name: string, alias: string }) => LocalizedString
+	/**
+	 * Add app​.
+	 */
+	ADD_APP: () => LocalizedString
 	/**
 	 * Connected app
 	 */

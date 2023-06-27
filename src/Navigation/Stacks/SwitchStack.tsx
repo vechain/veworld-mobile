@@ -5,8 +5,13 @@ import { OnboardingStack } from "./OnboardingStack"
 import { useAppInitState, AppInitState } from "~Hooks"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import BlockListener from "../../BlockListener"
-import { BlackListedCollectionsScreen, ConnectAppScreen } from "~Screens"
-import { SignClientTypes } from "@walletconnect/types"
+import {
+    BlackListedCollectionsScreen,
+    ConnectAppScreen,
+    SendTransactionScreen,
+    SignMessageScreen,
+} from "~Screens"
+import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -16,6 +21,14 @@ export type RootStackParamListSwitch = {
     Blacklisted_Collections: undefined
     Connect_App_Screen: {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
+    }
+    Connected_App_Send_Transaction_Screen: {
+        requestEvent: SignClientTypes.EventArguments["session_request"]
+        session: SessionTypes.Struct
+    }
+    Connected_App_Sign_Message_Screen: {
+        requestEvent: SignClientTypes.EventArguments["session_request"]
+        session: SessionTypes.Struct
     }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
@@ -62,6 +75,16 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CONNECT_APP_SCREEN}
                             component={ConnectAppScreen}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN}
+                            component={SendTransactionScreen}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN}
+                            component={SignMessageScreen}
                         />
                     </Switch.Group>
                 </>

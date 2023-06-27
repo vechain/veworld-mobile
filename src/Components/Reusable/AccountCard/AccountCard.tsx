@@ -5,6 +5,7 @@ import { ColorThemeType, VET } from "~Constants"
 import { FormattingUtils } from "~Utils"
 import {
     AccountIcon,
+    BaseIcon,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
@@ -19,9 +20,18 @@ type Props = {
     onPress?: (account: AccountWithDevice) => void
     selected?: boolean
     containerStyle?: StyleProp<ViewStyle>
+    showOpacityWhenDisabled?: boolean
+    showSelectAccountIcon?: boolean
 }
 export const AccountCard: React.FC<Props> = memo(
-    ({ account, onPress, selected, containerStyle }: Props) => {
+    ({
+        account,
+        onPress,
+        selected,
+        containerStyle,
+        showOpacityWhenDisabled = true,
+        showSelectAccountIcon = false,
+    }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
         const vetBalance = useAppSelector(state =>
             selectVetBalanceByAccount(state, account.address),
@@ -32,6 +42,7 @@ export const AccountCard: React.FC<Props> = memo(
                     disabled={!onPress}
                     action={() => onPress?.(account)}
                     justifyContent="space-between"
+                    showOpacityWhenDisabled={showOpacityWhenDisabled}
                     containerStyle={[
                         styles.container,
                         selected ? styles.selectedContainer : {},
@@ -55,19 +66,29 @@ export const AccountCard: React.FC<Props> = memo(
                             </BaseView>
                         </BaseView>
                     </BaseView>
-                    <BaseView style={styles.rightSubContainer}>
-                        <BaseText style={styles.address} fontSize={10}>
-                            {FormattingUtils.humanAddress(
-                                account.address,
-                                4,
-                                6,
-                            )}
-                        </BaseText>
-                        <BaseSpacer height={4} />
-                        <BaseText fontSize={10}>
-                            {vetBalance} {VET.symbol}
-                        </BaseText>
-                    </BaseView>
+                    {showSelectAccountIcon ? (
+                        <BaseView style={styles.rightSubContainer}>
+                            <BaseIcon
+                                color={"primary"}
+                                size={24}
+                                name={"chevron-right"}
+                            />
+                        </BaseView>
+                    ) : (
+                        <BaseView style={styles.rightSubContainer}>
+                            <BaseText style={styles.address} fontSize={10}>
+                                {FormattingUtils.humanAddress(
+                                    account.address,
+                                    4,
+                                    6,
+                                )}
+                            </BaseText>
+                            <BaseSpacer height={4} />
+                            <BaseText fontSize={10}>
+                                {vetBalance} {VET.symbol}
+                            </BaseText>
+                        </BaseView>
+                    )}
                 </BaseTouchableBox>
             </BaseView>
         )

@@ -128,6 +128,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         urlDelegationSignature,
         selectedDelegationAccount,
         selectedDelegationOption,
+        selectedDelegationUrl,
         onError: () => setLoading(false),
     })
 

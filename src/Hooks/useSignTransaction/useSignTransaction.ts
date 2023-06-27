@@ -1,5 +1,5 @@
 import { HDNode, Transaction, secp256k1 } from "thor-devkit"
-import { CryptoUtils, TransactionUtils, error } from "~Utils"
+import { CryptoUtils, HexUtils, TransactionUtils, error } from "~Utils"
 import { showErrorToast, showWarningToast } from "~Components"
 import {
     selectDevice,
@@ -11,6 +11,7 @@ import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useSendTransaction } from "~Hooks"
+import { sponsorTransaction } from "~Networking"
 
 type Props = {
     transaction: Transaction.Body
@@ -19,6 +20,7 @@ type Props = {
     urlDelegationSignature?: Buffer
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
+    selectedDelegationUrl?: string
     onError?: (e: unknown) => void
 }
 /**
@@ -29,6 +31,7 @@ type Props = {
  * @param urlDelegationSignature the signature of the delegation url
  * @param selectedDelegationAccount the account to delegate to
  * @param selectedDelegationOption the delegation option
+ * @param selectedDelegationUrl the delegation url
  * @param onError on transaction error callback
  * @returns {signAndSendTransaction} the function to sign and send the transaction
  */
@@ -36,9 +39,9 @@ export const useSignTransaction = ({
     transaction,
     onTXFinish,
     isDelegated,
-    urlDelegationSignature,
     selectedDelegationAccount,
     selectedDelegationOption,
+    selectedDelegationUrl,
     onError,
 }: Props) => {
     const { LL } = useI18nContext()
@@ -57,15 +60,16 @@ export const useSignTransaction = ({
         tx: Transaction,
         wallet: Wallet,
         delegateFor?: string,
+        signatureAccount: AccountWithDevice = account,
     ) => {
         if (!wallet.mnemonic)
             throw new Error("Mnemonic wallet can't have an empty mnemonic")
 
-        if (!account.index && account.index !== 0)
-            throw new Error("account index is empty")
+        if (!signatureAccount.index && signatureAccount.index !== 0)
+            throw new Error("signatureAccount index is empty")
 
         const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
-        const derivedNode = hdNode.derive(account.index)
+        const derivedNode = hdNode.derive(signatureAccount.index)
 
         const privateKey = derivedNode.privateKey as Buffer
         const hash = tx.signingHash(delegateFor?.toLowerCase())
@@ -79,12 +83,38 @@ export const useSignTransaction = ({
     ) => {
         switch (selectedDelegationOption) {
             case DelegationType.URL:
-                if (!urlDelegationSignature) {
+                if (!selectedDelegationUrl) {
                     throw new Error(
-                        "Delegation url not found when sending transaction",
+                        "Delegation url not found when requesting delegation signature",
                     )
                 }
-                return Buffer.concat([senderSignature, urlDelegationSignature])
+
+                // build hex encoded version of the transaction for signing request
+                const rawTransaction = HexUtils.addPrefix(
+                    tx.encode().toString("hex"),
+                )
+
+                // request to send for sponsorship/fee delegation
+                const sponsorRequest = {
+                    origin: account.address.toLowerCase(),
+                    raw: rawTransaction,
+                }
+
+                const signature = await sponsorTransaction(
+                    selectedDelegationUrl,
+                    sponsorRequest,
+                )
+
+                if (!signature) {
+                    throw new Error("Error getting delegator signature")
+                }
+
+                const delegatorSignature = Buffer.from(
+                    signature.substr(2),
+                    "hex",
+                )
+
+                return Buffer.concat([senderSignature, delegatorSignature])
             case DelegationType.ACCOUNT:
                 const delegationDevice = selectedDelegationAccount?.device
                 if (!delegationDevice)
@@ -97,7 +127,9 @@ export const useSignTransaction = ({
                     showWarningToast(
                         "Delegated hardware wallet not supported yet",
                     )
-                    return
+                    throw new Error(
+                        "Delegated hardware wallet not supported yet",
+                    )
                 }
 
                 const { decryptedWallet: delegationWallet } =
@@ -107,6 +139,7 @@ export const useSignTransaction = ({
                     tx,
                     delegationWallet,
                     account.address,
+                    selectedDelegationAccount,
                 )
                 return Buffer.concat([
                     senderSignature,
@@ -118,34 +151,44 @@ export const useSignTransaction = ({
     /**
      * sign transaction with user's wallet
      */
+    const signTransaction = async (password?: string) => {
+        if (!senderDevice) throw new Error("Sender device not found")
+
+        //TODO: support ledger
+        if (senderDevice.type === DEVICE_TYPE.LEDGER) {
+            showWarningToast("Hardware wallet not supported yet")
+            throw new Error("Hardware wallet not supported yet")
+        }
+
+        //local mnemonic, identity already verified via useCheckIdentity
+        if (!senderDevice.wallet) {
+            // TODO: support hardware wallet
+            showWarningToast("Hardware wallet not supported yet")
+            throw new Error("Hardware wallet not supported yet")
+        }
+
+        const { decryptedWallet: senderWallet } =
+            await CryptoUtils.decryptWallet(senderDevice, password)
+
+        const tx = isDelegated
+            ? TransactionUtils.toDelegation(transaction)
+            : new Transaction(transaction)
+
+        const senderSignature = await getSignature(tx, senderWallet)
+
+        tx.signature = isDelegated
+            ? await getDelegationSignature(tx, senderSignature, password)
+            : senderSignature
+
+        return tx
+    }
+
+    /**
+     * sign transaction with user's wallet, send it to thor and perform updates
+     */
     const signAndSendTransaction = async (password?: string) => {
         try {
-            if (!senderDevice) return
-
-            //TODO: support ledger
-            if (senderDevice.type === DEVICE_TYPE.LEDGER) {
-                showWarningToast("Hardware wallet not supported yet")
-                return
-            }
-
-            //local mnemonic, identity already verified via useCheckIdentity
-            if (!senderDevice.wallet) {
-                // TODO: support hardware wallet
-                showWarningToast("Hardware wallet not supported yet")
-            }
-
-            const { decryptedWallet: senderWallet } =
-                await CryptoUtils.decryptWallet(senderDevice, password)
-
-            const tx = isDelegated
-                ? TransactionUtils.toDelegation(transaction)
-                : new Transaction(transaction)
-
-            const senderSignature = await getSignature(tx, senderWallet)
-
-            tx.signature = isDelegated
-                ? await getDelegationSignature(tx, senderSignature, password)
-                : senderSignature
+            const tx = await signTransaction(password)
 
             await sendTransactionAndPerformUpdates(tx)
         } catch (e) {
@@ -157,5 +200,9 @@ export const useSignTransaction = ({
         onTXFinish()
     }
 
-    return { signAndSendTransaction, sendTransactionAndPerformUpdates }
+    return {
+        signAndSendTransaction,
+        sendTransactionAndPerformUpdates,
+        signTransaction,
+    }
 }
