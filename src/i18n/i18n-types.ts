@@ -1341,63 +1341,6 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: string
 	/**
-	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
-	 */
-	NOTIFICATION_wallet_connect_disconnected_from_remote: string
-	/**
-	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​a​p​p​.
-	 */
-	NOTIFICATION_wallet_connect_disconnected_success: string
-	/**
-	 * C​o​n​n​e​c​t​i​n​g​ ​m​a​y​ ​t​a​k​e​ ​a​ ​f​e​w​ ​s​e​c​o​n​d​s​.
-	 */
-	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
-	/**
-	 * E​r​r​o​r​ ​p​a​i​r​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​a​p​p​,​ ​p​l​e​a​s​e​ ​g​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​Q​R​ ​C​O​D​E​.
-	 */
-	NOTIFICATION_wallet_connect_error_pairing: string
-	/**
-	 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​d​a​p​p​ ​i​s​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​w​i​t​h​ ​V​e​W​o​r​l​d​.
-	 */
-	NOTIFICATION_wallet_connect_incompatible_dapp: string
-	/**
-	 * W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​n​o​t​ ​i​n​i​t​i​a​l​i​z​e​d​.
-	 */
-	NOTIFICATION_wallet_connect_not_initialized: string
-	/**
-	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​n​a​m​e​}​.
-	 * @param {unknown} name
-	 */
-	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
-	/**
-	 * C​e​r​t​i​f​i​c​a​t​e​ ​s​i​g​n​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
-	 */
-	NOTIFICATION_wallet_connect_sign_success: string
-	/**
-	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​w​i​t​h​ ​a​p​p​,​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	NOTIFICATION_wallet_connect_matching_error: string
-	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​ ​p​r​o​b​l​e​m​ ​d​e​l​e​g​a​t​i​n​g​ ​t​h​e​ ​r​e​q​u​e​s​t​.
-	 */
-	NOTIFICATION_wallet_connect_error_delegating_transaction: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
-	 */
-	NOTIFICATION_wallet_connect_transaction_broadcasted: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​c​o​r​r​e​c​t​l​y​ ​b​u​t​ ​a​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​t​o​ ​t​h​e​ ​d​a​p​p​.
-	 */
-	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: string
-	/**
-	 * E​r​r​o​r​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.
-	 */
-	NOTIFICATION_wallet_connect_error_on_transaction: string
-	/**
-	 * I​n​v​a​l​i​d​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​U​R​I​.
-	 */
-	NOTIFICATION_wallet_connect_invalid_uri: string
-	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
