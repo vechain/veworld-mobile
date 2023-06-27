@@ -78,18 +78,20 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     }, [nav])
 
     // Decoding clauses
-    const clauses = useMemo(() => params.txMessage, [params])
     const tokens = useAppSelector(selectTokensWithInfo)
-    const clausesMetadata = TransactionUtils.interpretClauses(clauses, tokens)
+    const clausesMetadata = TransactionUtils.interpretClauses(
+        params.txMessage,
+        tokens,
+    )
 
     // Prepare Transaction
     const transactionBody: Transaction.Body = {
         chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
         blockRef: thorClient.status.head.id.slice(0, 18),
         expiration: 18,
-        clauses: clauses,
+        clauses: params.txMessage,
         gasPriceCoef: 0,
-        gas: gas?.gas?.toString() || "8000000",
+        gas: gas?.gas?.toString() || "0",
         dependsOn: null,
         nonce: HexUtils.generateRandom(8),
     }
@@ -231,7 +233,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             ;(async () => {
                 const estimatedGas = await GasUtils.estimateGas(
                     thorClient,
-                    clauses,
+                    params.txMessage,
                     0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
                     selectedAccount.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
@@ -239,7 +241,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 setGas(estimatedGas)
             })()
         }
-    }, [selectedAccount, clauses, thorClient])
+    }, [selectedAccount, params.txMessage, thorClient])
 
     return (
         <BaseSafeArea>
