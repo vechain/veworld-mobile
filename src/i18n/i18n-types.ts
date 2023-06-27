@@ -1260,11 +1260,11 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: string
 	/**
-	 * Something went wrong while signing the message.
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​s​i​g​n​i​n​g​ ​t​h​e​ ​m​e​s​s​a​g​e
 	 */
 	NOTIFICATION_wallet_connect_error_during_signing: string
 	/**
-	 * Connected app
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
 	CONNECTED_APP_TITLE: string
 	/**
@@ -1297,11 +1297,11 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
 	/**
-	 * S​i​g​n​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
+	 * S​i​g​n​ ​a​n​d​ ​S​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: string
 	/**
-	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​n​d​ ​s​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: string
 	/**
@@ -1337,11 +1337,11 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: string
 	/**
-	 * Your connected apps list
+	 * Y​o​u​r​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​ ​l​i​s​t
 	 */
 	CONNECTED_APPS_SCREEN_SUBTITLE: string
 	/**
-	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​a​p​p​s​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​n​d​ ​s​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​.
 	 */
 	CONNECTED_APPS_SCREEN_DESCRIPTION: string
 	/**
@@ -1349,15 +1349,15 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
 	/**
-	 * Confirming this you will disconnect the {name} app from {alias}
-	 * @param {string} name
-	 * @param {string} alias
-	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'name' | 'alias'>
-	/**
-	 * Add app​.
+	 * A​d​d​ ​a​p​p
 	 */
 	ADD_APP: string
+	/**
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
+	 * @param {string} alias
+	 * @param {string} name
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'alias' | 'name'>
 	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
@@ -3232,7 +3232,7 @@ Please, try again later.
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
 	/**
-	 * Something went wrong while signing the message.
+	 * Something went wrong while signing the message
 	 */
 	NOTIFICATION_wallet_connect_error_during_signing: () => LocalizedString
 	/**
@@ -3268,11 +3268,11 @@ Please, try again later.
 	 */
 	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
 	/**
-	 * Sign a transaction
+	 * Sign and Send a transaction
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
 	/**
-	 * Your Signature is being requested to send a transaction
+	 * Your Signature is being requested to sign and send a transaction
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: () => LocalizedString
 	/**
@@ -3312,7 +3312,7 @@ Please, try again later.
 	 */
 	CONNECTED_APPS_SCREEN_SUBTITLE: () => LocalizedString
 	/**
-	 * Connect your wallet with WalletConnect to make transactions.
+	 * Connect your wallet with apps to make transactions and sign certificates.
 	 */
 	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
 	/**
@@ -3320,13 +3320,13 @@ Please, try again later.
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
 	/**
-	 * Confirming this you will disconnect the {name} app from {alias}
-	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { name: string, alias: string }) => LocalizedString
-	/**
-	 * Add app​.
+	 * Add app
 	 */
 	ADD_APP: () => LocalizedString
+	/**
+	 * Confirming this you will disconnect the {name} app from {alias}
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
 	/**
 	 * Connected app
 	 */
