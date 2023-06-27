@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback, useMemo, useRef } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { BaseImage, BaseText, BaseView, LongPressProvider } from "~Components"
+import { NFTImage, BaseText, BaseView, LongPressProvider } from "~Components"
 import {
     NFTMediaType,
     NonFungibleToken,
@@ -128,7 +128,7 @@ export const NFTView = memo(
                     action={handleOnItemLongPress}>
                     {isCollection ? (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            <BaseImage
+                            <NFTImage
                                 uri={
                                     getIsvalidMimeType(
                                         collectionItem?.icon.mime!,
@@ -167,7 +167,7 @@ export const NFTView = memo(
                             {getIsvalidMimeType(nftItem?.icon.mime!, [
                                 NFTMediaType.IMAGE,
                             ]) && (
-                                <BaseImage
+                                <NFTImage
                                     uri={nftItem!.icon.url}
                                     style={baseStyles.nftPreviewImage}
                                 />
@@ -179,7 +179,7 @@ export const NFTView = memo(
                                 <BaseView style={baseStyles.nftPreviewImage}>
                                     <Video
                                         PosterComponent={() => (
-                                            <BaseImage
+                                            <NFTImage
                                                 uri={NFTPlaceholder}
                                                 style={
                                                     baseStyles.nftPreviewImage
@@ -204,7 +204,7 @@ export const NFTView = memo(
                                 !MediaUtils.getMime(nftItem?.icon.mime!, [
                                     NFTMediaType.VIDEO,
                                 ]) && (
-                                    <BaseImage
+                                    <NFTImage
                                         uri={NFTPlaceholder}
                                         style={baseStyles.nftPreviewImage}
                                     />
