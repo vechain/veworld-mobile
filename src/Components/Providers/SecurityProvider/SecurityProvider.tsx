@@ -4,6 +4,7 @@ import { useBiometricUnlock } from "./hooks/useBiometricUnlock"
 import { useSecurityDowngrade } from "./hooks/useSecurityDowngrade"
 import { selectIsSecurityDowngrade, useAppSelector } from "~Storage/Redux"
 import { SecurityDowngradeScreen } from "~Screens"
+import { SplashScreen } from "../../../SplashScreen"
 
 type Props = {
     children: React.ReactNode
@@ -12,7 +13,7 @@ type Props = {
 export const SecurityProvider = ({ children }: Props) => {
     const isSecurityDowngrade = useAppSelector(selectIsSecurityDowngrade)
     const { securityDowngrade } = useSecurityDowngrade()
-    const { showLockScreen } = usePasswordUnlock()
+    const { showLockScreen, isSplashHidden } = usePasswordUnlock()
     useBiometricUnlock()
 
     useEffect(() => {
@@ -21,7 +22,14 @@ export const SecurityProvider = ({ children }: Props) => {
 
     if (isSecurityDowngrade) return <SecurityDowngradeScreen />
 
-    if (showLockScreen) return showLockScreen
+    if (showLockScreen)
+        return (
+            <SplashScreen playAnimation={isSplashHidden}>
+                {showLockScreen}
+            </SplashScreen>
+        )
 
-    return <>{children}</>
+    return (
+        <SplashScreen playAnimation={isSplashHidden}>{children}</SplashScreen>
+    )
 }
