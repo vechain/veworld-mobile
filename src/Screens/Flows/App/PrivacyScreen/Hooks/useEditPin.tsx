@@ -1,34 +1,47 @@
 import { isEmpty } from "lodash"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useDisclosure, usePasswordValidation, useWalletSecurity } from "~Hooks"
-import { LocalDevice, Wallet } from "~Model"
+import { useDisclosure, useWalletSecurity } from "~Hooks"
+import { LocalDevice } from "~Model"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
+import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
 import {
-    bulkUpdateDevices,
-    selectLocalDevices,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { CryptoUtils, info, error } from "~Utils"
+    Operation,
+    OperationType,
+    useSecurityTransactions,
+} from "./useSecurityTransactions"
+import { CryptoUtils } from "~Utils"
 
-type Operation = {
-    operation: Function
-    data: EncryptOperation
-}
-
-type EncryptOperation = {
-    device: LocalDevice
-    wallet: Wallet
-    rootAddress: string
-    accessControl: boolean
-    hashEncryptionKey: string
-    _oldPin?: string
-}
-
+/**
+ * `useEditPin` is a custom React hook that handles the process of editing the Pin for the wallet.
+ * It returns several values and functions that can be used to control the Pin editing process.
+ *
+ * @returns {object} An object containing several state variables and functions for controlling the Pin editing process.
+ * @returns {Function} onEditPinPress - A function to start the pin editing process. If the current security is biometrics, the function will not do anything.
+ * @returns {boolean} isEditPinPromptOpen - A boolean indicating whether the edit pin prompt is open.
+ * @returns {Function} closeEditPinPrompt - A function to close the edit pin prompt.
+ * @returns {Function} onPinSuccess - A function to be called when the pin input is successful. It handles the logic for editing the pin.
+ * @returns {string} lockScreenScenario - A string representing the current scenario of the lock screen.
+ * @returns {boolean} isValidatePassword - A boolean indicating whether the current scenario is to validate the old pin.
+ *
+ * @example
+ * ```jsx
+ * const {
+ *   onEditPinPress,
+ *   isEditPinPromptOpen,
+ *   closeEditPinPrompt,
+ *   onPinSuccess,
+ *   lockScreenScenario,
+ *   isValidatePassword,
+ * } = useEditPin();
+ * ```
+ *
+ * @requires `useWalletSecurity` hook for determining the current security state of the wallet.
+ * @requires `useAppSelector` hook with `selectLocalDevices` selector for fetching the local devices where the wallet is stored.
+ * @requires `useSecurityTransactions` hook for orchestrating the series of encryption and decryption operations.
+ *
+ */
 export const useEditPin = () => {
     // [START] - Hooks
-    const dispatch = useAppDispatch()
-
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
@@ -44,8 +57,6 @@ export const useEditPin = () => {
         onOpen: openPasswordPrompt,
         onClose: closeEditPinPrompt,
     } = useDisclosure()
-
-    const { updatePassword } = usePasswordValidation()
 
     // [END] - Hooks
 
@@ -72,125 +83,10 @@ export const useEditPin = () => {
         setOldPin("")
     }, [closeEditPinPrompt])
 
-    // Roll back transactions and the rest
-    const rollbackTransactions = useCallback(
-        async (rollbackOperations: Operation[]) => {
-            info("Rolling back transactions")
-
-            try {
-                const updatedDevices: LocalDevice[] = []
-
-                // Rollback all operations comming from the transactions
-                for (const _operation of rollbackOperations) {
-                    const { encryptedWallet } = await _operation.operation({
-                        wallet: _operation?.data?.wallet,
-                        rootAddress: _operation?.data?.rootAddress,
-                        accessControl: _operation.data.accessControl,
-                        hashEncryptionKey: _operation.data.hashEncryptionKey,
-                    })
-
-                    const updatedDevice = {
-                        ..._operation?.data?.device,
-                        wallet: encryptedWallet,
-                    }
-
-                    updatedDevices.push(updatedDevice)
-                }
-
-                // set updated devices in redux
-                dispatch(bulkUpdateDevices(updatedDevices))
-
-                // update password checker string on redux
-                updatePassword(rollbackOperations[0].data.hashEncryptionKey)
-
-                // reset state
-                onStateCleanup()
-
-                info("Rolling back successful")
-            } catch (e) {
-                // todo -> handle error how? -> reset app
-                error("Rollback failed", e)
-            }
-        },
-        [dispatch, onStateCleanup, updatePassword],
-    )
-
-    const executeTransactions = useCallback(
-        async (operations: Operation[]) => {
-            // use a counter to know if we have at least one operation that was finished in order to rollback
-            let localOperationFinishedCounter = 0
-
-            // Keep  tab of all operations that need to be rolled back
-            const rollbackOperations: Operation[] = []
-
-            try {
-                info("Transactions started")
-                const updatedDevices: LocalDevice[] = []
-
-                // last minute check
-                if (operations.length === 0) return
-
-                for (const index of operations.keys()) {
-                    const _operation = operations[index]
-
-                    // set the old values in the rollback operations
-                    rollbackOperations.push({
-                        operation: CryptoUtils.encryptWallet,
-                        data: {
-                            wallet: _operation?.data?.wallet,
-                            rootAddress: _operation?.data?.rootAddress,
-                            accessControl: _operation.data.accessControl,
-                            hashEncryptionKey: _operation.data._oldPin!,
-                            device: _operation.data.device,
-                        },
-                    })
-
-                    // encrypt wallets with new pin and save new encryption keys to keychain
-                    const { encryptedWallet } = await _operation.operation({
-                        wallet: _operation?.data?.wallet,
-                        rootAddress: _operation?.data?.rootAddress,
-                        accessControl: _operation.data.accessControl,
-                        hashEncryptionKey: _operation.data.hashEncryptionKey,
-                    })
-
-                    // update local counter to know if we need to rollback
-                    localOperationFinishedCounter += 1
-
-                    /*
-                        ! Uncomment this to test rollback (need to have more 2 wallets)
-                        if (localOperationFinishedCounter === 2)
-                            throw new Error("Test error")
-                    */
-
-                    const updatedDevice = {
-                        ..._operation?.data?.device,
-                        wallet: encryptedWallet,
-                    }
-
-                    updatedDevices.push(updatedDevice)
-                }
-
-                // update password checker string on redux
-                updatePassword(operations[0].data.hashEncryptionKey)
-
-                // set updated devices in redux
-                dispatch(bulkUpdateDevices(updatedDevices))
-
-                info("Transactions committed")
-            } catch (e) {
-                error("Transaction failed", e)
-                // if no operations were finished, no need to rollback
-                if (localOperationFinishedCounter === 0) return
-
-                // rollback transactions
-                await rollbackTransactions(rollbackOperations)
-            } finally {
-                // reset state
-                onStateCleanup()
-            }
-        },
-        [dispatch, onStateCleanup, rollbackTransactions, updatePassword],
-    )
+    const { executeTransactions } = useSecurityTransactions({
+        operationType: OperationType.EDIT_PIN,
+        onStateCleanup,
+    })
 
     const changePinInWallets = useCallback(
         async (_oldPin: string, newPin: string) => {
@@ -211,13 +107,12 @@ export const useEditPin = () => {
                         rootAddress: device.rootAddress,
                         accessControl: false,
                         hashEncryptionKey: newPin,
-                        _oldPin,
                         device,
                     },
                 })
             }
 
-            await executeTransactions(operations)
+            await executeTransactions(operations, _oldPin)
         },
         [devices, executeTransactions, isWalletSecurityBiometrics],
     )

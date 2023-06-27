@@ -969,6 +969,10 @@ type RootTranslation = {
 	 */
 	COMMON_RECEIVE: string
 	/**
+	 * O​o​p​s​!
+	 */
+	COMMON_OOPS: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1098,6 +1102,10 @@ type RootTranslation = {
 	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​m​e​t​a​d​a​t​a
 	 */
 	ERROR_NFT_FAILED_TO_GET_METADATA: string
+	/**
+	 * S​e​c​u​r​i​t​y​ ​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_SECURITY_ACTION: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -2931,6 +2939,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_RECEIVE: () => LocalizedString
 	/**
+	 * Oops!
+	 */
+	COMMON_OOPS: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -3059,6 +3071,10 @@ Please, try again later.
 	 * Failed to get token metadata
 	 */
 	ERROR_NFT_FAILED_TO_GET_METADATA: () => LocalizedString
+	/**
+	 * Security action failed. Please check your device and try again.
+	 */
+	ERROR_SECURITY_ACTION: () => LocalizedString
 	/**
 	 * Success!
 	 */

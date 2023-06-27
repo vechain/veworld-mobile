@@ -1,34 +1,57 @@
 import { useCallback } from "react"
 import { useWalletSecurity } from "~Hooks"
-import { LocalDevice, SecurityLevelType } from "~Model"
+import { LocalDevice } from "~Model"
 import { CryptoUtils, error } from "~Utils"
+import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
 import {
-    selectLocalDevices,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import {
-    bulkUpdateDevices,
-    setUserSelectedSecurity,
-} from "~Storage/Redux/Actions"
+    Operation,
+    OperationType,
+    useSecurityTransactions,
+} from "./useSecurityTransactions"
 
 /**
- *  hook to trigger the security upgrade by decrypting and re-encrypting the wallet with the new security level
- * @returns  a function to trigger the security upgrade
+ * `useSecurityUpgrade` is a custom hook that orchestrates a security upgrade of a wallet.
+ * This hook works by decrypting the wallet using the provided password and then re-encrypting it at the new security level.
+ *
+ * Note that if the current wallet security is biometric, this hook will not perform any operation.
+ *
+ * @returns {Function} runSecurityUpgrade - A function that can be invoked to trigger the security upgrade.
+ * This function takes a password and an optional callback function as arguments.
+ * The password is used to decrypt the wallet. The callback is invoked upon successful completion of the upgrade.
+ *
+ * @callback runSecurityUpgrade
+ * @param {string} password - The password that will be used to decrypt the wallet.
+ * @param {() => void} [onSuccessCallback] - An optional callback function that will be invoked when the security upgrade has successfully completed.
+ *
+ * @throws Will throw an error if the security upgrade process encounters any issues.
+ *
+ * @example
+ * ```
+ * const runSecurityUpgrade = useSecurityUpgrade();
+ *
+ * runSecurityUpgrade('password', () => {
+ *   console.log('Security upgrade completed');
+ * });
+ * ```
+ *
+ * @requires `useWalletSecurity` hook for determining the current security state of the wallet.
+ * @requires `useAppSelector` hook with `selectLocalDevices` selector for fetching the local devices where the wallet is stored.
+ * @requires `useSecurityTransactions` hook for orchestrating the series of encryption and decryption operations.
  */
-
 export const useSecurityUpgrade = () => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
-    const dispatch = useAppDispatch()
+
+    const { executeTransactions } = useSecurityTransactions({
+        operationType: OperationType.UPGRADE_SECURITY,
+    })
 
     const runSecurityUpgrade = useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
             if (isWalletSecurityBiometrics) return
 
-            const updatedDevices: LocalDevice[] = []
+            const operations: Operation[] = []
 
-            // todo -> use atomic commit to update all devices at once #579
             try {
                 for (const device of devices) {
                     const { decryptedWallet } = await CryptoUtils.decryptWallet(
@@ -36,31 +59,25 @@ export const useSecurityUpgrade = () => {
                         password,
                     )
 
-                    const { encryptedWallet: updatedEncryptedWallet } =
-                        await CryptoUtils.encryptWallet({
+                    operations.push({
+                        operation: CryptoUtils.encryptWallet,
+                        data: {
                             wallet: decryptedWallet,
                             rootAddress: device.rootAddress,
                             accessControl: true,
-                        })
-
-                    const updatedDevice = {
-                        ...device,
-                        wallet: updatedEncryptedWallet,
-                    }
-
-                    updatedDevices.push(updatedDevice)
+                            device,
+                        },
+                    })
                 }
 
-                dispatch(bulkUpdateDevices(updatedDevices))
-
-                dispatch(setUserSelectedSecurity(SecurityLevelType.BIOMETRIC))
+                await executeTransactions(operations, password)
 
                 onSuccessCallback?.()
             } catch (e) {
                 error("SECURITY UPGRADE ERROR", e)
             }
         },
-        [isWalletSecurityBiometrics, dispatch, devices],
+        [devices, executeTransactions, isWalletSecurityBiometrics],
     )
 
     return runSecurityUpgrade
