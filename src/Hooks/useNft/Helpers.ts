@@ -59,7 +59,7 @@ export const prepareCollectionData = async (
 
     const nftMeta = await fetchMetadata(tokenURI)
 
-    const hasImage = foundCollection?.icon ? true : !!nftMeta?.imageUrl ?? false
+    const hasImage = foundCollection?.icon ? true : !!nftMeta?.imageUrl
 
     const nftCollection: NonFungibleTokenCollection = {
         address: foundCollection?.address ?? _nft.contractAddress,

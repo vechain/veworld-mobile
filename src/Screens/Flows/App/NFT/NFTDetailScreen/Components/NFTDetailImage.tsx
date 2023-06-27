@@ -41,7 +41,6 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
                         source={{ uri: uri }}
                         resizeMode={ResizeMode.COVER}
                         isLooping
-                        isMuted
                     />
                 </BaseView>
             )
@@ -64,6 +63,7 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
                 <BaseView>
                     <BaseText
                         mb={4}
+                        numberOfLines={1}
                         typographyFont="subTitleBold"
                         color={COLORS.WHITE}>
                         {name}

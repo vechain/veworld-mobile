@@ -44,7 +44,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
         selectNFTWithAddressAndTokenId(
             state,
             route.params.collectionAddress!,
-            route.params.nftTokenId!,
+            route.params.nftTokenId,
         ),
     )
 
@@ -55,9 +55,9 @@ export const NFTDetailScreen = ({ route }: Props) => {
         if (supported) {
             await Linking.openURL(nft?.external_url!)
         } else {
-            showErrorToast("Unable to open marketplace")
+            showErrorToast(LL.NO_MARKETPLACE())
         }
-    }, [nft?.external_url])
+    }, [nft?.external_url, LL])
 
     const derivedDescription = useMemo(() => {
         if (nft?.description) return nft?.description

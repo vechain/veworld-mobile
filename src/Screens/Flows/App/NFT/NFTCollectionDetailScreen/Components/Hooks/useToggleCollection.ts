@@ -2,12 +2,16 @@ import { useCallback, useState } from "react"
 import { NonFungibleTokenCollection } from "~Model"
 import {
     removeBlackListCollection,
+    selectSelectedAccount,
     setBlackListCollection,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 
 export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
     const dispatch = useAppDispatch()
+
+    const selectedAccoount = useAppSelector(selectSelectedAccount)
 
     const [isBlacklisted, setIsBlacklisted] = useState(collection.isBlacklisted)
 
@@ -18,12 +22,18 @@ export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
             dispatch(
                 removeBlackListCollection({
                     collection,
+                    accountAddress: selectedAccoount.address,
                 }),
             )
         } else {
-            dispatch(setBlackListCollection({ collection }))
+            dispatch(
+                setBlackListCollection({
+                    collection,
+                    accountAddress: selectedAccoount.address,
+                }),
+            )
         }
-    }, [collection, dispatch, isBlacklisted])
+    }, [collection, dispatch, isBlacklisted, selectedAccoount.address])
 
     return { onToggleCollection, isBlacklisted }
 }

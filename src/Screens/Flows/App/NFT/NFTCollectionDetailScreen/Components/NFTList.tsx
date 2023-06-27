@@ -46,7 +46,7 @@ export const NFTList = ({
             initialNumToRender={6}
             ItemSeparatorComponent={contactsListSeparator}
             numColumns={2}
-            keyExtractor={(item: NonFungibleToken) => String(item?.tokenId)}
+            keyExtractor={(item: NonFungibleToken) => String(item.id)}
             extraData={collection?.nfts ?? []}
             renderItem={renderItem}
             contentContainerStyle={baseStyles.listContainer}

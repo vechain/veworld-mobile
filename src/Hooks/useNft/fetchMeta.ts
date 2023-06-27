@@ -30,20 +30,20 @@ export const fetchMetadata = async (
         switch (protocol) {
             case URIProtocol.IPFS: {
                 const tokenMetadata = await getTokenMetaIpfs(uri)
-                const imageUrl = getImageUrlIpfs(tokenMetadata.image)
-                const response = await fetch(imageUrl)
-                const blob = await response.blob()
+                const { imageUrl, imageType } = await getImageData(
+                    getImageUrlIpfs(tokenMetadata.image),
+                )
 
-                return { tokenMetadata, imageUrl, imageType: blob.type }
+                return { tokenMetadata, imageUrl, imageType }
             }
 
             case URIProtocol.ARWEAVE: {
                 const tokenMetadata = await getTokenMetaArweave(uri)
-                const imageUrl = await getImageUrlArweave(tokenMetadata.image)
-                const response = await fetch(imageUrl)
-                const blob = await response.blob()
+                const { imageUrl, imageType } = await getImageData(
+                    await getImageUrlArweave(tokenMetadata.image),
+                )
 
-                return { tokenMetadata, imageUrl, imageType: blob.type }
+                return { tokenMetadata, imageUrl, imageType }
             }
 
             case URIProtocol.HTTPS: {
@@ -51,13 +51,15 @@ export const fetchMetadata = async (
                     const tokenMetadata = await axios.get<TokenMetadata>(uri, {
                         timeout: NFT_AXIOS_TIMEOUT,
                     })
-                    const response = await fetch(tokenMetadata.data.image)
-                    const blob = await response.blob()
+
+                    const { imageUrl, imageType } = await getImageData(
+                        tokenMetadata.data.image,
+                    )
 
                     return {
                         tokenMetadata: tokenMetadata.data,
-                        imageUrl: tokenMetadata.data.image,
-                        imageType: blob.type,
+                        imageUrl,
+                        imageType,
                     }
                 } catch (e) {
                     info("fetchMetadata -- HTTPS", e)
@@ -70,5 +72,14 @@ export const fetchMetadata = async (
         }
     } catch (e) {
         error(e)
+    }
+}
+
+const getImageData = async (imageUrl: string) => {
+    const response = await fetch(imageUrl)
+    const blob = await response.blob()
+    return {
+        imageUrl,
+        imageType: blob.type,
     }
 }
