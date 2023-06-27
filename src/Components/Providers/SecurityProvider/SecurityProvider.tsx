@@ -14,7 +14,7 @@ export const SecurityProvider = ({ children }: Props) => {
     const isSecurityDowngrade = useAppSelector(selectIsSecurityDowngrade)
     const { securityDowngrade } = useSecurityDowngrade()
     const { showLockScreen, isSplashHidden } = usePasswordUnlock()
-    useBiometricUnlock()
+    const { isFaceIDsucceeded } = useBiometricUnlock()
 
     useEffect(() => {
         securityDowngrade()
@@ -24,12 +24,14 @@ export const SecurityProvider = ({ children }: Props) => {
 
     if (showLockScreen)
         return (
-            <SplashScreen playAnimation={isSplashHidden}>
+            <SplashScreen playAnimation={isSplashHidden || isFaceIDsucceeded}>
                 {showLockScreen}
             </SplashScreen>
         )
 
     return (
-        <SplashScreen playAnimation={isSplashHidden}>{children}</SplashScreen>
+        <SplashScreen playAnimation={isSplashHidden || isFaceIDsucceeded}>
+            {children}
+        </SplashScreen>
     )
 }
