@@ -54,6 +54,7 @@
         "@ledgerhq/react-native-hw-transport-ble": "^6.28.5",
         "@react-native-community/blur": "^4.3.0",
         "@react-native-community/slider": "^4.4.2",
+        "@react-native-masked-view/masked-view": "^0.2.9",
         "@react-navigation/bottom-tabs": "^6.5.2",
         "@react-navigation/material-top-tabs": "^6.6.2",
         "@react-navigation/native": "^6.1.1",
@@ -175,6 +176,7 @@
         "jest-junit": "^16.0.0",
         "jest-transform-stub": "^2.0.0",
         "lint-staged": "^13.1.0",
+        "lokijs": "^1.5.12",
         "metro-react-native-babel-preset": "0.72.3",
         "react-native-dotenv": "^3.4.8",
         "react-native-get-random-values": "^1.9.0",
@@ -182,8 +184,7 @@
         "ts-loader": "9.4.2",
         "ts-node": "^10.9.1",
         "typesafe-i18n": "^5.18.0",
-        "typescript": "^4.8.3",
-        "lokijs": "^1.5.12"
+        "typescript": "^4.8.3"
     },
     "husky": {
         "hooks": {
