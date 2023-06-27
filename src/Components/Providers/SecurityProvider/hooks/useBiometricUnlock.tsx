@@ -29,7 +29,7 @@ export const useBiometricUnlock = () => {
     useEffect(() => {
         const initBiometricUnlock = async () => {
             if (isSecurityDowngrade) {
-                await RNBootSplash.hide({ fade: true })
+                await RNBootSplash.hide({ fade: true, duration: 500 })
                 return
             }
 

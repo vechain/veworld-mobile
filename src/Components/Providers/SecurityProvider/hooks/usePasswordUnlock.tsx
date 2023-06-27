@@ -17,8 +17,9 @@ export const usePasswordUnlock = () => {
                     appLockStatusInactive,
                     isWalletSecurityPassword,
                 )
-            )
-                await RNBootSplash.hide({ fade: true })
+            ) {
+                await RNBootSplash.hide({ fade: true, duration: 500 })
+            }
         }
         initPasswordUnlock()
     }, [appLockStatusActive, isWalletSecurityPassword, appLockStatusInactive])
