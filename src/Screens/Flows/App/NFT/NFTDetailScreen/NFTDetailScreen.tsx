@@ -21,6 +21,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { striptags } from "striptags"
+import { useNavigation } from "@react-navigation/native"
 
 interface NFTAttributeData {
     trait_type: string
@@ -31,7 +32,8 @@ type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
 export const NFTDetailScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
-    const { calculateBottomInsets } = usePlatformBottomInsets()
+    const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
+    const nav = useNavigation()
 
     const collection = useAppSelector(state =>
         selectCollectionWithContractAddress(
@@ -48,7 +50,14 @@ export const NFTDetailScreen = ({ route }: Props) => {
         ),
     )
 
-    const onSendPress = useCallback(() => {}, [])
+    const onSendPress = useCallback(
+        () =>
+            nav.navigate(Routes.SEND_NFT, {
+                contractAddress: route.params.collectionAddress!,
+                tokenId: route.params.nftTokenId!,
+            }),
+        [nav, route.params.collectionAddress, route.params.nftTokenId],
+    )
 
     const onMarketPlacePress = useCallback(async () => {
         const supported = await Linking.canOpenURL(nft?.external_url ?? "")
@@ -71,7 +80,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
-                        paddingBottom: calculateBottomInsets + 80,
+                        paddingBottom: calculateBottomInsets,
                     }}>
                     <BaseSpacer height={26} />
 

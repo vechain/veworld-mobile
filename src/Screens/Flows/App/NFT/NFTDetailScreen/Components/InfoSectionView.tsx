@@ -15,6 +15,8 @@ type Props<T> = {
     data: T
     isLastInList?: boolean
     action?: () => void
+    isFontReverse?: boolean
+    subTtitle?: string
 }
 
 export const InfoSectionView = <T extends NFTAttributeData[] | string>({
@@ -22,6 +24,7 @@ export const InfoSectionView = <T extends NFTAttributeData[] | string>({
     data,
     isLastInList,
     action,
+    subTtitle,
 }: Props<T>) => {
     const theme = useTheme()
 
@@ -60,9 +63,19 @@ export const InfoSectionView = <T extends NFTAttributeData[] | string>({
         }
 
         if (isString(data)) {
-            return <BaseText typographyFont="subSubTitle">{data}</BaseText>
+            return (
+                <>
+                    <BaseText typographyFont="subSubTitle">{data}</BaseText>
+
+                    {subTtitle ? (
+                        <BaseText mt={4} typographyFont="subSubTitleLight">
+                            {subTtitle}
+                        </BaseText>
+                    ) : null}
+                </>
+            )
         }
-    }, [data, theme, action])
+    }, [action, data, theme.isDark, subTtitle])
 
     return (
         <BaseView>

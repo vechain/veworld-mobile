@@ -130,6 +130,19 @@ export const BaseButton = ({
         }
     }, [theme, invertLoaderColor])
 
+    const calculateBackgroundColor = useMemo(() => {
+        if (disabled) return theme.colors.primaryDisabled
+
+        if (isSolidButton) return bgColor
+        else return theme.colors.transparent
+    }, [
+        bgColor,
+        disabled,
+        isSolidButton,
+        theme.colors.primaryDisabled,
+        theme.colors.transparent,
+    ])
+
     return (
         <TouchableOpacity
             onPress={onButtonPress}
@@ -137,9 +150,7 @@ export const BaseButton = ({
             disabled={disabled}
             style={[
                 {
-                    backgroundColor: isSolidButton
-                        ? bgColor
-                        : theme.colors.transparent,
+                    backgroundColor: calculateBackgroundColor,
                     borderColor: isOutlineButton
                         ? bgColor
                         : theme.colors.transparent,
@@ -151,7 +162,6 @@ export const BaseButton = ({
                     padding: otherProps.p,
                     paddingVertical: paddingY,
                     paddingHorizontal: paddingX,
-                    opacity: disabled ? 0.5 : 1,
                     alignSelf: otherProps.selfAlign,
                     display: "flex",
                     alignItems: "center",
