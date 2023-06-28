@@ -7,7 +7,9 @@ import { NETWORK_TYPE, Network } from "~Model"
 
 let web3wallet: IWeb3Wallet
 export const core: ICore = new Core({
-    projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
+    projectId: __DEV__
+        ? process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID_DEV
+        : process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID_PROD,
 })
 
 export async function getWeb3Wallet() {
