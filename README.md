@@ -19,7 +19,7 @@ iOS:
 Download Xcode form the Mac AppStore
 
 ```
-- Xcode - v14.2
+- Xcode - v14.3.1
 ```
 
 **Android**
