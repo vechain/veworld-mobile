@@ -47,16 +47,16 @@ export const EnableBiometrics = () => {
 
             <BaseSpacer height={24} />
 
-            <RequireUserPassword
-                isOpen={isPasswordPromptOpen}
-                onClose={closePasswordPrompt}
-                onSuccess={onPasswordSuccess}
-            />
-
             <BaseButtonGroupHorizontal
                 selectedButtonIds={[securityButtons.currentSecurity]}
                 buttons={securityButtons.buttons}
                 action={shouldCallRequireBiometricsAndEnableIt}
+            />
+
+            <RequireUserPassword
+                isOpen={isPasswordPromptOpen}
+                onClose={closePasswordPrompt}
+                onSuccess={onPasswordSuccess}
             />
         </>
     )

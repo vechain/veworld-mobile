@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
@@ -8,18 +8,19 @@ import {
     BaseSpacer,
     BaseView,
     FadeoutButton,
+    showErrorToast,
 } from "~Components"
-import { ScrollView } from "react-native"
+import { ScrollView, Linking } from "react-native"
 import { usePlatformBottomInsets } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { isEmpty } from "lodash"
-import { FormattingUtils } from "~Utils"
+import { DateUtils, FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
 import {
     selectCollectionWithContractAddress,
     selectNFTWithAddressAndTokenId,
     useAppSelector,
 } from "~Storage/Redux"
+import { striptags } from "striptags"
 
 interface NFTAttributeData {
     trait_type: string
@@ -43,11 +44,25 @@ export const NFTDetailScreen = ({ route }: Props) => {
         selectNFTWithAddressAndTokenId(
             state,
             route.params.collectionAddress!,
-            route.params.nftTokenId!,
+            route.params.nftTokenId,
         ),
     )
 
     const onSendPress = useCallback(() => {}, [])
+
+    const onMarketPlacePress = useCallback(async () => {
+        const supported = await Linking.canOpenURL(nft?.external_url ?? "")
+        if (supported) {
+            await Linking.openURL(nft?.external_url!)
+        } else {
+            showErrorToast(LL.NO_MARKETPLACE())
+        }
+    }, [nft?.external_url, LL])
+
+    const derivedDescription = useMemo(() => {
+        if (nft?.description) return nft?.description
+        if (collection?.description) return collection?.description
+    }, [collection, nft])
 
     return (
         <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
@@ -61,43 +76,109 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     <BaseSpacer height={26} />
 
                     <NFTDetailImage
-                        image={nft?.image ?? ""}
+                        uri={nft?.icon?.url ?? ""}
+                        mime={nft?.icon?.mime ?? ""}
                         name={nft?.name ?? ""}
                         tokenId={nft?.tokenId ?? ""}
-                        hidden={false}
-                        collectionAddress={collection?.address ?? ""}
                     />
 
                     <BaseSpacer height={26} />
 
-                    <InfoSectionView<NFTAttributeData[]>
-                        title={LL.NFT_ATTRIBUTES()}
-                        data={nft?.attributes ?? []}
-                    />
+                    {!!nft?.attributes?.length && (
+                        <InfoSectionView<NFTAttributeData[]>
+                            title={LL.NFT_ATTRIBUTES()}
+                            data={nft?.attributes}
+                        />
+                    )}
 
-                    <InfoSectionView<string>
-                        title={LL.BD_COLLECTION()}
-                        data={collection?.name ?? ""}
-                    />
+                    {collection?.name && (
+                        <InfoSectionView<string>
+                            title={LL.BD_COLLECTION()}
+                            data={collection?.name}
+                        />
+                    )}
 
-                    <InfoSectionView<string>
-                        title={LL.SB_DESCRIPTION()}
-                        data={
-                            !isEmpty(collection?.description ?? "")
-                                ? collection?.description ?? ""
-                                : LL.BD_NFT_DESC_PLACEHOLDER()
-                        }
-                    />
+                    {collection?.totalSupply && (
+                        <InfoSectionView<string>
+                            title={"Total Supply"}
+                            data={collection.totalSupply.toString()}
+                        />
+                    )}
 
-                    <InfoSectionView<string>
-                        isLastInList
-                        title={LL.CONTRACT_ADDRESS()}
-                        data={FormattingUtils.humanAddress(
-                            collection?.address ?? "",
-                            5,
-                            4,
-                        )}
-                    />
+                    {derivedDescription && (
+                        <InfoSectionView<string>
+                            title={LL.SB_DESCRIPTION()}
+                            data={striptags(derivedDescription.trim(), {
+                                allowedTags: new Set(["strong"]),
+                            })}
+                        />
+                    )}
+
+                    {collection?.creator && (
+                        <InfoSectionView<string>
+                            title={"Creator"}
+                            data={collection?.creator}
+                        />
+                    )}
+
+                    {nft?.edition && (
+                        <InfoSectionView<string>
+                            title={"Edition"}
+                            data={nft?.edition.toString()}
+                        />
+                    )}
+
+                    {nft?.external_url && (
+                        <InfoSectionView<string>
+                            title={"Marketplace"}
+                            data={"Link"}
+                            action={onMarketPlacePress}
+                        />
+                    )}
+
+                    {nft?.date && (
+                        <InfoSectionView<string>
+                            title={"Minted At"}
+                            data={DateUtils.formatDateTime(
+                                nft?.date,
+                                "en",
+                                "UTC",
+                            )}
+                        />
+                    )}
+
+                    {nft?.rank && (
+                        <InfoSectionView<string>
+                            title={"Rank"}
+                            data={nft?.rank.toString()}
+                        />
+                    )}
+
+                    {nft && nft.rarity && nft.rarity !== 0 ? (
+                        <InfoSectionView<string>
+                            title={"Rarity"}
+                            data={nft?.rarity?.toString()}
+                        />
+                    ) : null}
+
+                    {!!nft?.scores?.length && (
+                        <InfoSectionView<NFTAttributeData[]>
+                            title={"Scores"}
+                            data={nft?.scores}
+                        />
+                    )}
+
+                    {collection?.address && (
+                        <InfoSectionView<string>
+                            isLastInList
+                            title={LL.CONTRACT_ADDRESS()}
+                            data={FormattingUtils.humanAddress(
+                                collection?.address ?? "",
+                                5,
+                                4,
+                            )}
+                        />
+                    )}
                 </ScrollView>
             </BaseView>
 

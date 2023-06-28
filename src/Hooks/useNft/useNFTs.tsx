@@ -13,17 +13,21 @@ import { useThor } from "~Components"
 import { NFTPlaceholder } from "~Assets"
 import { fetchMetadata } from "./fetchMeta"
 import { error } from "~Utils"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { useI18nContext } from "~i18n"
 
+//  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const thor = useThor()
+    const { LL } = useI18nContext()
 
     const getNFTsForCollection = useCallback(
         async (
             contractAddress: string,
             _page: number,
-            _resultsPerPage: number = 10,
+            _resultsPerPage: number = NFT_PAGE_SIZE,
         ) => {
             dispatch(
                 setNetworkingSideEffects({
@@ -43,6 +47,7 @@ export const useNFTs = () => {
                 const NFTs: NonFungibleToken[] = []
 
                 for (const nfts of nftData) {
+                    //
                     for (const nft of nfts.data) {
                         const tokenURI = await getTokenURI(
                             nft.tokenId,
@@ -65,8 +70,16 @@ export const useNFTs = () => {
                             owner: selectedAccount.address,
                             tokenURI,
                             ...nftMeta?.tokenMetadata,
+                            icon: {
+                                url: nftMeta?.imageUrl ?? NFTPlaceholder,
+                                mime: nftMeta?.imageType ?? "image/png",
+                            },
                             image: nftMeta?.imageUrl ?? NFTPlaceholder,
                             belongsToCollectionAddress: contractAddress,
+                            isBlacklisted: false,
+                            name:
+                                nftMeta?.tokenMetadata.name ??
+                                LL.COMMON_NOT_AVAILABLE(),
                         }
 
                         NFTs.push(_nft)
@@ -99,7 +112,7 @@ export const useNFTs = () => {
                 error("useNFTs", e)
             }
         },
-        [dispatch, selectedAccount.address, thor],
+        [LL, dispatch, selectedAccount.address, thor],
     )
 
     return { getNFTsForCollection }

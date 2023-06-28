@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { BaseSafeArea, BaseView, SelectAccountBottomSheet } from "~Components"
 import { NftScreenHeader } from "./Components"
 import { AccountWithDevice } from "~Model"
@@ -19,12 +19,22 @@ import { useDispatch } from "react-redux"
 import { ImportNFTView } from "./Components/ImportNFTView"
 import { NetworkErrorView } from "./Components/NetworkErrorView"
 import { NFTLIst } from "./Components/NFTLIst"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { MathUtils } from "~Utils"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
 
-    const { fetchMoreCollections, isLoading, collections, error } =
-        useFetchCollections()
+    const [
+        onEndReachedCalledDuringMomentum,
+        setEndReachedCalledDuringMomentum,
+    ] = useState(true)
+
+    const { fetchMoreCollections, isLoading, collections, error, hasNext } =
+        useFetchCollections(
+            onEndReachedCalledDuringMomentum,
+            setEndReachedCalledDuringMomentum,
+        )
 
     const accounts = useAppSelector(selectVisibleAccounts)
 
@@ -36,6 +46,10 @@ export const NFTScreen = () => {
     const setSelectedAccount = (account: AccountWithDevice) => {
         dispatch(selectAccount({ address: account.address }))
     }
+
+    const onMomentumScrollBegin = useCallback(() => {
+        setEndReachedCalledDuringMomentum(true)
+    }, [])
 
     const onGoToBlackListed = useCallback(
         () => nav.navigate(Routes.BLACKLISTED_COLLECTIONS),
@@ -51,7 +65,14 @@ export const NFTScreen = () => {
     const renderContent = useMemo(() => {
         if (!isEmpty(error) && isEmpty(collections)) return <NetworkErrorView />
 
-        if (isLoading && isEmpty(collections)) return <NftSkeleton />
+        if (isLoading && isEmpty(collections))
+            return (
+                <NftSkeleton
+                    numberOfChildren={NFT_PAGE_SIZE}
+                    showMargin
+                    renderExtra={MathUtils.getOdd(collections.length)}
+                />
+            )
 
         if (isShowImportNFTs) return <ImportNFTView />
 
@@ -62,16 +83,20 @@ export const NFTScreen = () => {
                     isLoading={isLoading}
                     onGoToBlackListed={onGoToBlackListed}
                     fetchMoreCollections={fetchMoreCollections}
+                    onMomentumScrollBegin={onMomentumScrollBegin}
+                    hasNext={hasNext}
                 />
             )
         }
     }, [
-        collections,
         error,
-        fetchMoreCollections,
+        collections,
         isLoading,
         isShowImportNFTs,
         onGoToBlackListed,
+        fetchMoreCollections,
+        onMomentumScrollBegin,
+        hasNext,
     ])
 
     return (

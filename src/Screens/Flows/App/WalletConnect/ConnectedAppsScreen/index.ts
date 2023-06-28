@@ -1,2 +1,2 @@
 export * from "./ConnectedAppsScreen"
-export * from "./ConnectAppScreen"
+export * from "./Components"

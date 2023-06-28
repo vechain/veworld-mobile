@@ -5,13 +5,14 @@ import {
     BaseView,
     BaseImage,
     BaseTouchableBox,
-    BaseSpacer,
+    useWalletConnect,
 } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { AccountWithDevice } from "~Model"
 import { ImageStyle } from "react-native-fast-image"
 import { AppDetailsBottomSheet } from "./AppDetailsBottomSheet"
+import { ConfirmDisconnectBottomSheet } from "./ConfirmDisconnectBottomSheet"
 
 type Props = {
     session: SessionTypes.Struct
@@ -19,9 +20,10 @@ type Props = {
     clickable?: boolean
 }
 
-export const ConnectedApp: React.FC<Props> = memo(
+export const ConnectedAppBox: React.FC<Props> = memo(
     ({ session, account, clickable = true }: Props) => {
         const { styles } = useThemedStyles(baseStyles)
+        const { disconnect } = useWalletConnect()
 
         const onPress = () => {
             if (!clickable) return
@@ -30,18 +32,22 @@ export const ConnectedApp: React.FC<Props> = memo(
         }
 
         const {
+            ref: confirmDisconnectBottomSheetRef,
+            onOpen: openConfirmDisconnectDetailsSheet,
+            onClose: closeConfirmDisconnectDetailsSheet,
+        } = useBottomSheetModal()
+
+        const {
             ref: connectedAppDetailsBottomSheetRef,
             onOpen: openConnectedAppDetailsSheet,
             onClose: closeConnectedAppDetailsSheet,
         } = useBottomSheetModal()
 
-        //TODO: Implement "disconnect" functionality on long press
-
         return (
             <>
-                <BaseSpacer height={16} />
                 <BaseTouchableBox
                     action={onPress}
+                    activeOpacity={1}
                     innerContainerStyle={styles.container}>
                     <BaseView
                         w={100}
@@ -59,6 +65,7 @@ export const ConnectedApp: React.FC<Props> = memo(
                                     }
                                 />
                             </BaseView>
+
                             <BaseView
                                 flexDirection="column"
                                 alignItems="center">
@@ -68,14 +75,11 @@ export const ConnectedApp: React.FC<Props> = memo(
                                         alignItems="center"
                                         justifyContent="flex-start">
                                         <BaseText
-                                            typographyFont="button"
-                                            pb={5}>
+                                            typographyFont="subSubTitle"
+                                            fontSize={14}>
                                             {session.peer?.metadata?.name}
                                         </BaseText>
                                     </BaseView>
-                                    <BaseText typographyFont="smallButtonPrimary">
-                                        {session.peer?.metadata?.url}
-                                    </BaseText>
                                 </BaseView>
                             </BaseView>
                         </BaseView>
@@ -87,9 +91,19 @@ export const ConnectedApp: React.FC<Props> = memo(
                             />
                         )}
                     </BaseView>
+
                     <AppDetailsBottomSheet
                         ref={connectedAppDetailsBottomSheetRef}
                         onClose={closeConnectedAppDetailsSheet}
+                        session={session}
+                        account={account}
+                        onDisconnect={openConfirmDisconnectDetailsSheet}
+                    />
+
+                    <ConfirmDisconnectBottomSheet
+                        ref={confirmDisconnectBottomSheetRef}
+                        onCancel={closeConfirmDisconnectDetailsSheet}
+                        onConfirm={topic => disconnect(topic)}
                         session={session}
                         account={account}
                     />
@@ -107,5 +121,5 @@ const baseStyles = () =>
         container: {
             width: "100%",
         },
-        image: { width: 40, height: 40, borderRadius: 24 },
+        image: { width: 35, height: 35, borderRadius: 24 },
     })

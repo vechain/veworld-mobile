@@ -6,14 +6,13 @@ import {
     BaseView,
     BaseText,
     BaseSpacer,
-    useWalletConnect,
     BaseBottomSheet,
-    AccountIcon,
+    AccountCard,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
-import { FormattingUtils, WalletConnectUtils } from "~Utils"
-import { AppInfo } from "./AppInfo"
+import { WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { AppInfo } from "../../Components"
 
 const snapPoints = ["65%"]
 
@@ -21,26 +20,26 @@ type Props = {
     onClose: () => void
     session: SessionTypes.Struct
     account: AccountWithDevice
+    onDisconnect: () => void
 }
 
 export const AppDetailsBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, session, account }, ref) => {
-    const { disconnect } = useWalletConnect()
+>(({ onClose, session, account, onDisconnect }, ref) => {
     const { LL } = useI18nContext()
 
     const { name, description, url, icon } =
         WalletConnectUtils.getSessionRequestAttributes(session)
 
     const disconnectSession = useCallback(() => {
-        disconnect(session.topic)
         onClose()
-    }, [session, disconnect, onClose])
+        onDisconnect()
+    }, [onDisconnect, onClose])
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onClose}>
-            <BaseView mx={20}>
+            <BaseView mx={10}>
                 <BaseText typographyFont="title">
                     {LL.CONNECTED_APP_DETAILS_TITLE()}
                 </BaseText>
@@ -58,18 +57,10 @@ export const AppDetailsBottomSheet = React.forwardRef<
                     {LL.CONNECTED_APP_DETAILS_ACCOUNT_LABEL()}
                 </BaseText>
                 <BaseSpacer height={8} />
-                <BaseView flexDirection="row">
-                    <AccountIcon address={account.address} />
-                    <BaseSpacer width={8} />
-                    <BaseView>
-                        <BaseText typographyFont="subSubTitle">
-                            {account.alias}
-                        </BaseText>
-                        <BaseText typographyFont="captionRegular">
-                            {FormattingUtils.humanAddress(account.address)}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
+                <AccountCard
+                    account={account}
+                    showOpacityWhenDisabled={false}
+                />
 
                 <BaseSpacer height={40} />
                 <BaseButton action={disconnectSession} title="Disconnect" />

@@ -13,6 +13,7 @@ import {
 import { error } from "~Utils"
 import { getNFTdataForContract, prepareCollectionData } from "./Helpers"
 import { useI18nContext } from "~i18n"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -30,10 +31,8 @@ import { useI18nContext } from "~i18n"
  * @method
  * getCollections(_page: number, _resultsPerPage: number = 10)
  * An async function that fetches the NFT collections for the selected account.
- *
- * @param {number} _page - The page number for pagination purposes.
- * @param {number} _resultsPerPage - The number of results to fetch per page. Default value is `10`.
  */
+
 export const useNFTCollections = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
@@ -42,7 +41,7 @@ export const useNFTCollections = () => {
     const { LL } = useI18nContext()
 
     const getCollections = useCallback(
-        async (_page: number, _resultsPerPage: number = 10) => {
+        async (_page: number, _resultsPerPage: number = NFT_PAGE_SIZE) => {
             dispatch(
                 setNetworkingSideEffects({ isLoading: true, error: undefined }),
             )
@@ -55,6 +54,9 @@ export const useNFTCollections = () => {
                         _resultsPerPage,
                         _page,
                     )
+
+                // exit early if there are no more pages to fetch
+                if (_page >= pagination.totalPages) return
 
                 // get nft collection info from GitHub registry
                 const collectionRegistryInfo = await getCollectionInfo(
@@ -82,7 +84,7 @@ export const useNFTCollections = () => {
                         nft,
                         foundCollection,
                         thor,
-                        LL.DATE_NOT_AVAILABLE(),
+                        LL.COMMON_NOT_AVAILABLE(),
                     )
 
                     _nftCollections.push(nftCollection)

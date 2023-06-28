@@ -1,11 +1,11 @@
 import { StyleSheet, FlatList } from "react-native"
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, useCallback } from "react"
 import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
-import { BaseIcon, BaseSpacer, FastActionsBar } from "~Components"
+import { BaseSpacer } from "~Components"
 import { NFTView } from "../../Components"
-import { FastAction, NonFungibleTokenCollection } from "~Model"
-import { useI18nContext } from "~i18n"
+import { NonFungibleTokenCollection } from "~Model"
 import { ListFooterView } from "./ListFooterView"
+import { MathUtils } from "~Utils"
 
 type NFTListProps = {
     item: NonFungibleTokenCollection
@@ -17,6 +17,8 @@ type Props = {
     isLoading: boolean
     onGoToBlackListed: () => void
     fetchMoreCollections: () => void
+    onMomentumScrollBegin: () => void
+    hasNext: boolean
 }
 
 export const NFTLIst = memo(
@@ -25,14 +27,12 @@ export const NFTLIst = memo(
         fetchMoreCollections,
         isLoading,
         onGoToBlackListed,
+        onMomentumScrollBegin,
+        hasNext,
     }: Props) => {
         const { calculateBottomInsets } = usePlatformBottomInsets()
 
-        const { LL } = useI18nContext()
-
-        const { styles, theme } = useThemedStyles(
-            baseStyles(calculateBottomInsets),
-        )
+        const { styles } = useThemedStyles(baseStyles(calculateBottomInsets))
 
         const renderSeparator = useCallback(
             () => <BaseSpacer height={16} />,
@@ -46,42 +46,6 @@ export const NFTLIst = memo(
             [],
         )
 
-        const Actions: FastAction[] = useMemo(
-            () => [
-                {
-                    name: LL.COMMON_IMPORT(),
-                    action: () => {},
-                    icon: (
-                        <BaseIcon
-                            color={theme.colors.text}
-                            name="tray-arrow-up"
-                        />
-                    ),
-                    testID: "importButton",
-                },
-                {
-                    name: LL.BTN_SEND(),
-                    action: () => {},
-                    icon: (
-                        <BaseIcon
-                            color={theme.colors.text}
-                            name="send-outline"
-                        />
-                    ),
-                    testID: "sendButton",
-                },
-                {
-                    name: LL.COMMON_RECEIVE(),
-                    action: () => {},
-                    icon: (
-                        <BaseIcon color={theme.colors.text} name="arrow-down" />
-                    ),
-                    testID: "receiveButton",
-                },
-            ],
-            [LL, theme.colors.text],
-        )
-
         return (
             <FlatList
                 data={collections}
@@ -91,16 +55,21 @@ export const NFTLIst = memo(
                 keyExtractor={item => String(item.address)}
                 ItemSeparatorComponent={renderSeparator}
                 renderItem={renderNftCollection}
+                onScroll={onMomentumScrollBegin}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                onEndReachedThreshold={1}
+                onEndReachedThreshold={0.1}
                 onEndReached={fetchMoreCollections}
-                ListHeaderComponent={<FastActionsBar actions={Actions} />}
                 ListHeaderComponentStyle={styles.listheader}
+                ListFooterComponentStyle={styles.listFooter}
                 ListFooterComponent={
                     <ListFooterView
                         onGoToBlackListed={onGoToBlackListed}
                         isLoading={isLoading}
+                        hasNext={hasNext}
+                        renderExtraSkeleton={MathUtils.getOdd(
+                            collections.length,
+                        )}
                     />
                 }
             />
@@ -118,4 +87,5 @@ const baseStyles = (calculateBottomInsets: number) => () =>
         listheader: {
             marginBottom: 24,
         },
+        listFooter: { zIndex: -1 },
     })

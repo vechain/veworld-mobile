@@ -16,9 +16,15 @@ export interface NonFungibleTokenCollection {
     symbol: string
     creator: string
     description: string
-    icon: string
+    icon: {
+        url: string
+        mime: string
+    }
     balanceOf: number
+    hasCount: boolean
     nfts: NonFungibleToken[]
+    isBlacklisted: boolean
+    totalSupply?: number
 }
 
 export interface NonFungibleToken extends TokenMetadata, WithID {
@@ -26,6 +32,7 @@ export interface NonFungibleToken extends TokenMetadata, WithID {
     tokenId: string
     tokenURI?: string
     belongsToCollectionAddress: string
+    isBlacklisted: boolean
 }
 
 export interface WithID {
@@ -36,11 +43,29 @@ export interface TokenMetadata {
     name?: string
     description?: string
     image: string
+    icon: {
+        url: string
+        mime: string
+    }
     edition?: number
     tokenId?: string
     rank?: number
     rarity?: number
     attributes?: { trait_type: string; value: string }[]
+    contract_address?: string
+    token_id?: string
+    image_mime_type?: string
+    edition_count?: number
+    categories?: any[]
+    minted_at?: number
+    creator?: string
+    external_url?: string
+    scores?: { trait_type: string; value: number }[]
+    date?: number
+    collection?: {
+        family: string
+        name: string
+    }
 }
 
 export interface SelectedNFT {
@@ -62,4 +87,10 @@ export interface NFTTransferLog {
     index: number
     direction: DIRECTIONS
     transactionId: string
+}
+
+export enum NFTMediaType {
+    IMAGE = "image",
+    VIDEO = "video",
+    TEXT = "text", // mp4 appears as text sometimes
 }

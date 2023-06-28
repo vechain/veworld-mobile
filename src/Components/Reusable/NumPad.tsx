@@ -1,12 +1,25 @@
 import { Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
-import { BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import * as Haptics from "expo-haptics"
-import { useThemedStyles } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType, valueToHP } from "~Constants"
 import { widthPercentageToDP as wp } from "react-native-responsive-screen"
 
-const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
+const numPad = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "blank",
+    "0",
+    "canc",
+]
 
 type Props = {
     onDigitPress: (digit: string) => void
@@ -23,10 +36,12 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
         [onDigitPress],
     )
 
+    const theme = useTheme()
+
     return (
         <BaseView flexDirection="row" flexWrap="wrap" w={100}>
             {numPad.map((digit, index) => {
-                const isDeleteKey = digit === "*"
+                const isDeleteKey = digit === "canc"
                 const onPress = isDeleteKey
                     ? onDigitDelete
                     : handleOnDigitPress(digit)
@@ -39,11 +54,18 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
                                     { opacity: pressed ? 0.5 : 1.0 },
                                 ]}
                                 onPress={onPress}>
-                                <BaseText
-                                    typographyFont="largeTitleAccent"
-                                    alignContainer="center">
-                                    {digit}
-                                </BaseText>
+                                {digit !== "canc" ? (
+                                    <BaseText
+                                        typographyFont="largeTitleAccent"
+                                        alignContainer="center">
+                                        {digit}
+                                    </BaseText>
+                                ) : (
+                                    <BaseIcon
+                                        name="backspace-outline"
+                                        color={theme.colors.text}
+                                    />
+                                )}
                             </Pressable>
                         ) : null}
                     </BaseView>

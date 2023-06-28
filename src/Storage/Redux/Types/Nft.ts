@@ -2,11 +2,6 @@ import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { PaginationResponse } from "~Networking"
 
 // COLLECTIONS
-export type NFTBlackListedItem = {
-    tokenId: string
-    collectionsAddress: string
-}
-
 export type CollectionWithPagination = {
     collections: NonFungibleTokenCollection[]
     pagination: PaginationResponse
@@ -21,5 +16,12 @@ export type NFTs = {
             NFTs: NonFungibleToken[]
             pagination: PaginationResponse
         }
+    }
+}
+
+// BLACLLISTED COLLECTIONS
+export type BlackListedCollections = {
+    [accountAddress: string]: {
+        collections: NonFungibleTokenCollection[]
     }
 }

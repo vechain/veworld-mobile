@@ -1,8 +1,11 @@
 import { SignClientTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
+import { Linking } from "react-native"
 import { Certificate } from "thor-devkit"
 import { showErrorToast, showSuccessToast } from "~Components"
+import { defaultMainNetwork } from "~Constants"
+import { Network } from "~Model"
 import HexUtils from "~Utils/HexUtils"
 import { error } from "~Utils/Logger"
 import WalletConnectUtils from "~Utils/WalletConnectUtils"
@@ -22,6 +25,7 @@ export const transactionRequestSuccessResponse = async (
     { request, web3Wallet, LL }: BaseProps,
     transactionId: number,
     signer: string,
+    network: Network,
 ) => {
     try {
         await web3Wallet?.respondSessionRequest({
@@ -37,7 +41,17 @@ export const transactionRequestSuccessResponse = async (
         })
 
         showSuccessToast(
-            LL.NOTIFICATION_wallet_connect_transaction_broadcasted(),
+            LL.SUCCESS_GENERIC(),
+            LL.SUCCESS_GENERIC_OPERATION(),
+            LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+            async () => {
+                await Linking.openURL(
+                    `${
+                        network.explorerUrl ?? defaultMainNetwork.explorerUrl
+                    }/transactions/${transactionId}`,
+                )
+            },
+            "transactionSuccessToast",
         )
     } catch (e) {
         showErrorToast(
@@ -130,6 +144,26 @@ export const userRejectedMethodsResponse = async ({
         const response = WalletConnectUtils.formatJsonRpcError(
             request.id,
             getSdkError("USER_REJECTED_METHODS").message,
+        )
+
+        await web3Wallet?.respondSessionRequest({
+            topic: request.topic,
+            response,
+        })
+    } catch {
+        showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+    }
+}
+
+export const signMessageRequestErrorResponse = async ({
+    request,
+    web3Wallet,
+    LL,
+}: BaseProps) => {
+    try {
+        const response = WalletConnectUtils.formatJsonRpcError(
+            request.id,
+            LL.NOTIFICATION_wallet_connect_error_during_signing(),
         )
 
         await web3Wallet?.respondSessionRequest({

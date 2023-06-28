@@ -29,6 +29,7 @@ type Props = {
     px?: number
     py?: number
     flex?: number
+    showOpacityWhenDisabled?: boolean
 } & Omit<TouchableOpacityProps, "style"> &
     GenericTouchableProps
 
@@ -46,6 +47,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
     px,
     py,
     flex,
+    showOpacityWhenDisabled = true,
     ...props
 }) => {
     const { styles } = useThemedStyles(
@@ -59,6 +61,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
             alignItems,
             disabled,
             flex,
+            showOpacityWhenDisabled,
         }),
     )
 
@@ -85,6 +88,7 @@ type BaseStyles = {
     alignItems: AlignItems
     disabled: boolean
     flex?: number
+    showOpacityWhenDisabled?: boolean
 }
 const baseStyles =
     ({
@@ -97,6 +101,7 @@ const baseStyles =
         alignItems,
         disabled,
         flex,
+        showOpacityWhenDisabled = true,
     }: BaseStyles) =>
     (theme: ColorThemeType) =>
         StyleSheet.create({
@@ -111,7 +116,7 @@ const baseStyles =
                 paddingHorizontal: px,
                 paddingVertical: py,
                 backgroundColor: bg || theme.colors.card,
-                opacity: disabled ? 0.5 : 1,
+                opacity: disabled && showOpacityWhenDisabled ? 0.5 : 1,
                 borderRadius: 16,
                 overflow: "hidden",
             },

@@ -270,6 +270,7 @@ const en: BaseTranslation = {
     COMMON_NOT_AVAILABLE: "N.A.",
     COMMON_IMPORT: "Import",
     COMMON_RECEIVE: "Receive",
+    COMMON_OOPS: "Oops!",
 
 
     // Alerts
@@ -309,6 +310,8 @@ const en: BaseTranslation = {
     ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: "Failed to get token data from Arweave",
     ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: "The token URI protocol is not supported ({protocol})",
     ERROR_NFT_FAILED_TO_GET_METADATA: "Failed to get token metadata",
+    ERROR_SECURITY_ACTION: "Security action failed. Please check your device and try again.",
+
 
     // Success
 
@@ -362,6 +365,7 @@ const en: BaseTranslation = {
     NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: "Transaction broadcasted correctly but an error occurred while communicating to the dapp.",
     NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",
     NOTIFICATION_wallet_connect_invalid_uri: "Invalid Wallet Connect URI.",
+    NOTIFICATION_wallet_connect_error_during_signing: "Something went wrong while signing the message",
    
     // Connected apps
     CONNECTED_APP_TITLE: "Connected app",
@@ -372,8 +376,8 @@ const en: BaseTranslation = {
     CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
     CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
     CONNECTED_APP_SIGN_REQUEST_DESCRIPTION:  "Your Signature is being requested to sign a certificate",
-    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign a transaction",
-    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to send a transaction",
+    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign and Send a transaction",
+    CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to sign and send a transaction",
    
     CONNECTED_APP_SELECTED_ACCOUNT_LABEL: "Account",
     CONNECTED_APP_SELECTED_ORIGIN_LABEL: "Origin",
@@ -384,8 +388,11 @@ const en: BaseTranslation = {
     CONNECTED_APP_SELECTED_MESSAGE_LABEL: "Message",
 
     CONNECTED_APPS_SCREEN_TITLE: "Connected apps",
-    CONNECTED_APPS_SCREEN_DESCRIPTION: "Connect your wallet with WalletConnect to make transactions.",
+    CONNECTED_APPS_SCREEN_SUBTITLE: "Your connected apps list",
+    CONNECTED_APPS_SCREEN_DESCRIPTION: "Connect your wallet with apps to make transactions and sign certificates.",
     CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: "You have no connected apps. Once you have some, they will displayed here.",
+    ADD_APP: "Add app",
+    CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: "Confirming this you will disconnect the {name: string} app from {alias: string}",
     
     CONNECTED_APP_DETAILS_TITLE: "Connected app",   
     CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",   
@@ -402,6 +409,9 @@ const en: BaseTranslation = {
     IMPORT_NFT: "Import NFT",
     RECEIVE_NFT: "Receive NFT",
     NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
+    SHOW_COLLECTION: "Show collection",
+    HIDE_COLLECTION: "Hide collection",
+    NO_MARKETPLACE: "Unable to open marketplace",
 
     // Onboarding
 

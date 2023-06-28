@@ -14,8 +14,14 @@ import {
     ActivitiesSlice,
     DelegationSlice,
     WalletConnectSessionsSlice,
-    // NftSlice,
+    NftSlice,
 } from "./Slices"
+
+export const nftPersistConfig = {
+    key: NftSlice.name,
+    storage: storage,
+    whitelist: ["blackListedCollectionsPerAccount"],
+}
 
 export const getPersistorConfig = async () => {
     const key = await initEncryption()
@@ -31,7 +37,7 @@ export const getPersistorConfig = async () => {
         key: "root",
         storage,
         version: 1,
-        blacklist: [],
+        blacklist: [NftSlice.name],
         whitelist: [
             CurrencySlice.name,
             TokenSlice.name,
@@ -45,7 +51,6 @@ export const getPersistorConfig = async () => {
             ActivitiesSlice.name,
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
-            // NftSlice.name,
         ],
         transforms: [encryptor],
     }

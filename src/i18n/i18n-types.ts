@@ -969,6 +969,10 @@ type RootTranslation = {
 	 */
 	COMMON_RECEIVE: string
 	/**
+	 * O​o​p​s​!
+	 */
+	COMMON_OOPS: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1098,6 +1102,10 @@ type RootTranslation = {
 	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​m​e​t​a​d​a​t​a
 	 */
 	ERROR_NFT_FAILED_TO_GET_METADATA: string
+	/**
+	 * S​e​c​u​r​i​t​y​ ​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_SECURITY_ACTION: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -1252,6 +1260,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: string
 	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​s​i​g​n​i​n​g​ ​t​h​e​ ​m​e​s​s​a​g​e
+	 */
+	NOTIFICATION_wallet_connect_error_during_signing: string
+	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
 	CONNECTED_APP_TITLE: string
@@ -1285,11 +1297,11 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
 	/**
-	 * S​i​g​n​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
+	 * S​i​g​n​ ​a​n​d​ ​S​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: string
 	/**
-	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​n​d​ ​s​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: string
 	/**
@@ -1325,13 +1337,27 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: string
 	/**
-	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 * Y​o​u​r​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​ ​l​i​s​t
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: string
+	/**
+	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​a​p​p​s​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​n​d​ ​s​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​.
 	 */
 	CONNECTED_APPS_SCREEN_DESCRIPTION: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​n​o​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​.​ ​O​n​c​e​ ​y​o​u​ ​h​a​v​e​ ​s​o​m​e​,​ ​t​h​e​y​ ​w​i​l​l​ ​d​i​s​p​l​a​y​e​d​ ​h​e​r​e​.
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
+	/**
+	 * A​d​d​ ​a​p​p
+	 */
+	ADD_APP: string
+	/**
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
+	 * @param {string} alias
+	 * @param {string} name
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'alias' | 'name'>
 	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
@@ -1385,6 +1411,18 @@ type RootTranslation = {
 	 * W​o​o​p​s​!​ ​T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
 	 */
 	NFT_DOWNLOAD_ERROR: string
+	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	SHOW_COLLECTION: string
+	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	HIDE_COLLECTION: string
+	/**
+	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
+	 */
+	NO_MARKETPLACE: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -2913,6 +2951,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_RECEIVE: () => LocalizedString
 	/**
+	 * Oops!
+	 */
+	COMMON_OOPS: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -3041,6 +3083,10 @@ Please, try again later.
 	 * Failed to get token metadata
 	 */
 	ERROR_NFT_FAILED_TO_GET_METADATA: () => LocalizedString
+	/**
+	 * Security action failed. Please check your device and try again.
+	 */
+	ERROR_SECURITY_ACTION: () => LocalizedString
 	/**
 	 * Success!
 	 */
@@ -3190,6 +3236,10 @@ Please, try again later.
 	 */
 	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
 	/**
+	 * Something went wrong while signing the message
+	 */
+	NOTIFICATION_wallet_connect_error_during_signing: () => LocalizedString
+	/**
 	 * Connected app
 	 */
 	CONNECTED_APP_TITLE: () => LocalizedString
@@ -3222,11 +3272,11 @@ Please, try again later.
 	 */
 	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
 	/**
-	 * Sign a transaction
+	 * Sign and Send a transaction
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
 	/**
-	 * Your Signature is being requested to send a transaction
+	 * Your Signature is being requested to sign and send a transaction
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: () => LocalizedString
 	/**
@@ -3262,13 +3312,25 @@ Please, try again later.
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
 	/**
-	 * Connect your wallet with WalletConnect to make transactions.
+	 * Your connected apps list
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: () => LocalizedString
+	/**
+	 * Connect your wallet with apps to make transactions and sign certificates.
 	 */
 	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
 	/**
 	 * You have no connected apps. Once you have some, they will displayed here.
 	 */
 	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
+	/**
+	 * Add app
+	 */
+	ADD_APP: () => LocalizedString
+	/**
+	 * Confirming this you will disconnect the {name} app from {alias}
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
 	/**
 	 * Connected app
 	 */
@@ -3321,6 +3383,18 @@ Please, try again later.
 	 * Woops! There was an error trying to get your NFTs. Please try again in a while.
 	 */
 	NFT_DOWNLOAD_ERROR: () => LocalizedString
+	/**
+	 * Show collection
+	 */
+	SHOW_COLLECTION: () => LocalizedString
+	/**
+	 * Hide collection
+	 */
+	HIDE_COLLECTION: () => LocalizedString
+	/**
+	 * Unable to open marketplace
+	 */
+	NO_MARKETPLACE: () => LocalizedString
 	/**
 	 * Light
 	 */
