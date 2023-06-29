@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { ScrollView, StyleSheet, Keyboard } from "react-native"
 import { Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
@@ -26,6 +26,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
+import { CreateContactBottomSheet } from "../../SendScreen/03-InsertAddressSendScreen/Components"
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.SEND_NFT>
 
@@ -33,8 +34,12 @@ export const SendNFTScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
+    // todo: refactor to a new hook - duplicate also in TransactionSummarySendScreen and InsertAddressSendScreen
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
+    const accountsAndContacts = useMemo(() => {
+        return [...accounts, ...contacts]
+    }, [accounts, contacts])
 
     const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
 
@@ -47,17 +52,42 @@ export const SendNFTScreen = ({ route }: Props) => {
         onClose: closeScanAddressSheetRef,
     } = useBottomSheetModal()
 
+    const {
+        ref: createContactBottomSheetRef,
+        onOpen: openCreateContactSheet,
+        onClose: closeCreateContactSheet,
+    } = useBottomSheetModal()
+
+    const isAddressInContactsOrAccounts = useMemo(() => {
+        if (!selectedAddress) return false
+        return accountsAndContacts.some(accountOrContact =>
+            AddressUtils.compareAddresses(
+                accountOrContact.address,
+                selectedAddress,
+            ),
+        )
+    }, [accountsAndContacts, selectedAddress])
+
     useEffect(() => {
         if (selectedAddress) {
             if (AddressUtils.isValid(selectedAddress)) {
                 setErrorMessage("")
+                if (!isAddressInContactsOrAccounts) {
+                    Keyboard.dismiss()
+                    openCreateContactSheet()
+                }
             } else {
                 setErrorMessage(LL.ERROR_INVALID_ADDRESS())
             }
         } else {
             setErrorMessage("")
         }
-    }, [LL, selectedAddress])
+    }, [
+        LL,
+        isAddressInContactsOrAccounts,
+        openCreateContactSheet,
+        selectedAddress,
+    ])
 
     const onIconPress = useCallback(() => {
         // Todo. test camera
@@ -75,8 +105,9 @@ export const SendNFTScreen = ({ route }: Props) => {
         [LL],
     )
 
-    const onNext = useCallback(() => {
+    const navigateNext = useCallback(() => {
         const { contractAddress, tokenId } = route.params
+
         if (contractAddress && tokenId && selectedAddress) {
             nav.navigate(Routes.SEND_NFT_RECAP, {
                 contractAddress: route.params.contractAddress,
@@ -84,7 +115,21 @@ export const SendNFTScreen = ({ route }: Props) => {
                 receiverAddress: selectedAddress,
             })
         }
-    }, [nav, route.params, selectedAddress])
+    }, [route.params, selectedAddress, nav])
+
+    const onNext = useCallback(() => {
+        if (isAddressInContactsOrAccounts && selectedAddress) {
+            navigateNext()
+        } else {
+            Keyboard.dismiss()
+            openCreateContactSheet()
+        }
+    }, [
+        isAddressInContactsOrAccounts,
+        navigateNext,
+        openCreateContactSheet,
+        selectedAddress,
+    ])
 
     return (
         <>
@@ -198,6 +243,13 @@ export const SendNFTScreen = ({ route }: Props) => {
                     title={LL.COMMON_BTN_NEXT()}
                     action={onNext}
                     disabled={!selectedAddress}
+                />
+
+                <CreateContactBottomSheet
+                    ref={createContactBottomSheetRef}
+                    onClose={closeCreateContactSheet}
+                    onSubmit={navigateNext}
+                    address={selectedAddress}
                 />
 
                 <ScanBottomSheet

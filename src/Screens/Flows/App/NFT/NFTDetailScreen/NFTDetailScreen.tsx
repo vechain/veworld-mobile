@@ -11,7 +11,7 @@ import {
     showErrorToast,
 } from "~Components"
 import { ScrollView, Linking } from "react-native"
-import { usePlatformBottomInsets } from "~Hooks"
+import { useCopyClipboard, usePlatformBottomInsets } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
@@ -34,6 +34,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
     const nav = useNavigation()
+    const { onCopyToClipboard } = useCopyClipboard()
 
     const collection = useAppSelector(state =>
         selectCollectionWithContractAddress(
@@ -73,6 +74,14 @@ export const NFTDetailScreen = ({ route }: Props) => {
         if (collection?.description) return collection?.description
     }, [collection, nft])
 
+    const onCopyToClipboardPress = useCallback(
+        (_data: string) => {
+            onCopyToClipboard(_data, LL.CONTRACT_ADDRESS())
+        },
+        [LL, onCopyToClipboard],
+    )
+
+    // todo - add LL for headers
     return (
         <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
             <BackButtonHeader hasBottomSpacer={false} />
@@ -150,6 +159,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             title={"Minted At"}
                             data={DateUtils.formatDateTime(
                                 nft?.date,
+                                // todo - get loacale
                                 "en",
                                 "UTC",
                             )}
@@ -179,6 +189,9 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
                     {collection?.address && (
                         <InfoSectionView<string>
+                            action={() =>
+                                onCopyToClipboardPress(collection.address)
+                            }
                             isLastInList
                             title={LL.CONTRACT_ADDRESS()}
                             data={FormattingUtils.humanAddress(

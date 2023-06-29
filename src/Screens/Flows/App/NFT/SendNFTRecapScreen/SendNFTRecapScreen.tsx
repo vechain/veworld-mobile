@@ -1,28 +1,45 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
 import {
+    AccountCard,
     BackButtonHeader,
+    BaseCard,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    DelegationOptions,
     FadeoutButton,
     TransferCard,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
+    removeNFTFromCollection,
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
+    selectVthoTokenWithBalanceByAccount,
+    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { NFTRecapView } from "./Components/NFTRecapView"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
 import { ScrollView } from "react-native-gesture-handler"
-import { usePlatformBottomInsets } from "~Hooks"
-import { info } from "~Utils"
+import {
+    useCheckIdentity,
+    useNFTCollections,
+    usePlatformBottomInsets,
+    useSignTransaction,
+    useTransaction,
+} from "~Hooks"
+import { FormattingUtils } from "~Utils"
+import { BigNumber } from "bignumber.js"
+import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/Hooks"
+import { VTHO } from "~Constants"
+import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { StackActions, useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -31,6 +48,8 @@ type Props = NativeStackScreenProps<
 
 export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
+    const nav = useNavigation()
+    const disptach = useAppDispatch()
 
     const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
 
@@ -44,15 +63,97 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         ),
     )
 
+    const { getCollections } = useNFTCollections()
+
+    const [loading, setLoading] = useState(false)
+
+    const onTXFinish = useCallback(() => {
+        setLoading(false)
+
+        // get nft collections again?
+        getCollections(0, 10)
+
+        setTimeout(() => {
+            nav.dispatch(StackActions.popToTop())
+            disptach(removeNFTFromCollection({ NFT: nft! }))
+        }, 300)
+    }, [disptach, nav, nft, getCollections])
+
+    const { gas, transaction } = useTransaction({
+        token: nft!,
+        amount: selectedAccoount.address,
+        addressTo: route.params.receiverAddress,
+    })
+
+    const {
+        selectedDelegationOption,
+        setSelectedDelegationOption,
+        selectedDelegationAccount,
+        setSelectedDelegationAccount,
+        selectedDelegationUrl,
+        setSelectedDelegationUrl,
+        isDelegated,
+        urlDelegationSignature,
+    } = useDelegation({ transaction })
+
+    const { signAndSendTransaction } = useSignTransaction({
+        transaction,
+        onTXFinish,
+        isDelegated,
+        urlDelegationSignature,
+        selectedDelegationAccount,
+        selectedDelegationOption,
+        selectedDelegationUrl,
+        onError: () => setLoading(false),
+    })
+
+    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
+        useCheckIdentity({
+            onIdentityConfirmed: signAndSendTransaction,
+            onCancel: () => setLoading(false),
+        })
+
     const onSendPress = useCallback(() => {
-        info("onSendPress")
-    }, [])
+        setLoading(true)
+        if (selectedAccoount.device.type === DEVICE_TYPE.LEDGER) {
+            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
+                accountWithDevice: selectedAccoount as LedgerAccountWithDevice,
+                transaction,
+                initialRoute: Routes.HOME,
+            })
+        } else checkIdentityBeforeOpening()
+    }, [checkIdentityBeforeOpening, nav, selectedAccoount, transaction])
+
+    const vtho = useAppSelector(state =>
+        selectVthoTokenWithBalanceByAccount(
+            state,
+            selectedDelegationAccount?.address || selectedAccoount.address,
+        ),
+    )
+
+    const vthoBalance = FormattingUtils.scaleNumberDown(
+        vtho.balance.balance,
+        vtho.decimals,
+        2,
+    )
+
+    const vthoGas = FormattingUtils.convertToFiatBalance(
+        gas?.gas?.toString() || "0",
+        1,
+        5,
+    )
+
+    const isThereEnoughGas = useMemo(() => {
+        let leftVtho = new BigNumber(vthoBalance)
+        return vthoGas && leftVtho.gte(vthoGas)
+    }, [vthoBalance, vthoGas])
 
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
 
             <ScrollView
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
                     paddingBottom: calculateBottomInsets,
                 }}>
@@ -88,30 +189,60 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         toAddresses={[route.params.receiverAddress]}
                     />
 
+                    <DelegationOptions
+                        selectedDelegationOption={selectedDelegationOption}
+                        setSelectedDelegationOption={
+                            setSelectedDelegationOption
+                        }
+                        setSelectedAccount={setSelectedDelegationAccount}
+                        selectedAccount={selectedDelegationAccount}
+                        selectedDelegationUrl={selectedDelegationUrl}
+                        setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        disabled={loading}
+                    />
+                    {selectedDelegationAccount && (
+                        <>
+                            <BaseSpacer height={16} />
+                            <AccountCard account={selectedDelegationAccount} />
+                        </>
+                    )}
+                    {selectedDelegationUrl && (
+                        <>
+                            <BaseSpacer height={16} />
+                            <BaseCard>
+                                <BaseText py={8}>
+                                    {selectedDelegationUrl}
+                                </BaseText>
+                            </BaseCard>
+                        </>
+                    )}
+
                     <BaseSpacer height={24} />
 
                     <InfoSectionView<string>
+                        isDanger={!isThereEnoughGas}
                         isFontReverse
                         title={"Estimated gas fee"}
-                        data={"0.0003555 VET"}
-                        subTtitle={"8,03 USD"}
+                        data={vthoGas + " " + VTHO.symbol}
                     />
 
                     <InfoSectionView<string>
                         isFontReverse
                         title={"Estimated time"}
-                        data={"< 30 seconds"}
+                        data={LL.SEND_LESS_THAN_1_MIN()}
                     />
 
                     <InfoSectionView<string>
                         isFontReverse
                         isLastInList
                         title={"Total amount"}
-                        data={"0.0003555 VET"}
+                        data={vthoGas + " " + VTHO.symbol}
                         subTtitle={"8,03 USD"}
                     />
                 </BaseView>
             </ScrollView>
+
+            <ConfirmIdentityBottomSheet />
 
             <FadeoutButton
                 title={LL.SEND_TOKEN_TITLE().toUpperCase()}
@@ -124,5 +255,17 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 const baseStyles = StyleSheet.create({
     previewContainer: {
         height: 130,
+    },
+    addressContainer: {
+        overflow: "visible",
+    },
+    icon: {
+        position: "absolute",
+        right: 16,
+        bottom: -32,
+        padding: 8,
+    },
+    addressView: {
+        zIndex: 2,
     },
 })

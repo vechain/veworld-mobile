@@ -6,7 +6,7 @@ import {
     StyleSheet,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { ColorThemeType, typography, TFonts } from "~Constants"
+import { ColorThemeType, typography, TFonts, COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
 import * as Haptics from "expo-haptics"
@@ -131,17 +131,11 @@ export const BaseButton = ({
     }, [theme, invertLoaderColor])
 
     const calculateBackgroundColor = useMemo(() => {
-        if (disabled) return theme.colors.primaryDisabled
+        if (disabled) return COLORS.DISABLED_GREY
 
         if (isSolidButton) return bgColor
         else return theme.colors.transparent
-    }, [
-        bgColor,
-        disabled,
-        isSolidButton,
-        theme.colors.primaryDisabled,
-        theme.colors.transparent,
-    ])
+    }, [bgColor, disabled, isSolidButton, theme.colors.transparent])
 
     return (
         <TouchableOpacity

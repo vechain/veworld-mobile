@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { ScrollView, StyleSheet } from "react-native"
+import { ScrollView, StyleSheet, Keyboard } from "react-native"
 import { useBottomSheetModal, usePlatformBottomInsets } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
@@ -44,8 +44,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const [errorMessage, setErrorMessage] = useState("")
     const [selectedAddress, setSelectedAddress] = useState("")
     const nav = useNavigation()
-    const accounts = useAppSelector(selectAccounts)
-    const contacts = useAppSelector(selectKnownContacts)
 
     const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
 
@@ -61,6 +59,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         onClose: closeScanAddressSheetRef,
     } = useBottomSheetModal()
 
+    // todo: refactor to a new hook - duplicate also in TransactionSummarySendScreen
+    const accounts = useAppSelector(selectAccounts)
+    const contacts = useAppSelector(selectKnownContacts)
     const accountsAndContacts = useMemo(() => {
         return [...accounts, ...contacts]
     }, [accounts, contacts])
@@ -135,6 +136,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             if (addressExists) return navigateNext(address)
 
             setSelectedAddress(address)
+            Keyboard.dismiss()
             openCreateContactSheet()
         },
         [accountsAndContacts, openCreateContactSheet, navigateNext],
@@ -145,7 +147,10 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     useEffect(() => {
         if (searchText && AddressUtils.isValid(searchText)) {
             setSelectedAddress(searchText)
-            if (!isAddressInContactsOrAccounts) openCreateContactSheet()
+            if (!isAddressInContactsOrAccounts) {
+                Keyboard.dismiss()
+                openCreateContactSheet()
+            }
         }
     }, [searchText, isAddressInContactsOrAccounts, openCreateContactSheet])
 
@@ -158,6 +163,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         if (isAddressInContactsOrAccounts && selectedAddress) {
             navigateNext(selectedAddress)
         } else {
+            Keyboard.dismiss()
             openCreateContactSheet()
         }
     }, [
