@@ -696,5 +696,5 @@ export const sendSignedTransaction = async (
         encodedRawTx,
     )
 
-    return response.data.id
+    return response.data.id as string
 }
