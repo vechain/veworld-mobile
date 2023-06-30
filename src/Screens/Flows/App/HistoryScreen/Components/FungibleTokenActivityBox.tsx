@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useFungibleTokenInfo, useTheme, useThemedStyles } from "~Hooks"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { COLORS, ColorThemeType, DIRECTIONS } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
@@ -40,6 +40,8 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             useAppSelector(selectFungibleTokens),
         ].flat()
 
+        const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
+
         const token = useMemo(
             () =>
                 allTokens.find(
@@ -50,7 +52,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
         )
 
         const exchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, token?.symbol ?? ""),
+            selectCurrencyExchangeRate(state, token?.symbol ?? symbol ?? ""),
         )
 
         const currency = useAppSelector(selectCurrency)
@@ -59,15 +61,16 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             return FormattingUtils.humanNumber(
                 FormattingUtils.scaleNumberDown(
                     activity.amount,
-                    token?.decimals ?? 0,
+                    token?.decimals ?? decimals ?? 0,
                     FormattingUtils.ROUND_DECIMAL_DEFAULT,
                 ),
                 activity.amount,
             )
-        }, [activity.amount, token?.decimals])
+        }, [activity.amount, decimals, token])
 
         const fiatValueTransferred = useMemo(() => {
             if (!token || !exchangeRate?.rate) return undefined
+
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     activity.amount as string,
@@ -95,6 +98,49 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
 
         const directionIcon =
             activity.direction === DIRECTIONS.UP ? "arrow-up" : "arrow-down"
+
+        const renderTransferSummary = useMemo(() => {
+            if (!amountTransferred) return undefined
+            if (!token?.symbol && !symbol) return undefined
+
+            const tokenSymbol = token?.symbol ?? symbol
+
+            return (
+                <>
+                    <BaseView flexDirection="column" alignItems="center">
+                        <BaseView alignItems="flex-end">
+                            <BaseView flexDirection="row" pb={5}>
+                                <BaseText typographyFont="subTitleBold">
+                                    {amountTransferred}{" "}
+                                </BaseText>
+                                <BaseView
+                                    flexDirection="row"
+                                    alignItems="flex-end"
+                                    h={100}>
+                                    <BaseText typographyFont="captionRegular">
+                                        {tokenSymbol?.toUpperCase()}
+                                    </BaseText>
+                                </BaseView>
+                            </BaseView>
+                            {fiatValueTransferred && (
+                                <BaseText
+                                    typographyFont="smallCaptionMedium"
+                                    color={theme.colors.success}>
+                                    {fiatValueTransferred} {currency}
+                                </BaseText>
+                            )}
+                        </BaseView>
+                    </BaseView>
+                </>
+            )
+        }, [
+            amountTransferred,
+            currency,
+            fiatValueTransferred,
+            symbol,
+            theme.colors.success,
+            token?.symbol,
+        ])
 
         return (
             <BaseTouchable
@@ -141,37 +187,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                         </BaseView>
                     </BaseView>
                     <BaseView flexDirection="row">
-                        {token && (
-                            <>
-                                <BaseView
-                                    flexDirection="column"
-                                    alignItems="center">
-                                    <BaseView alignItems="flex-end">
-                                        <BaseView flexDirection="row" pb={5}>
-                                            <BaseText typographyFont="subTitleBold">
-                                                {amountTransferred}{" "}
-                                            </BaseText>
-                                            <BaseView
-                                                flexDirection="row"
-                                                alignItems="flex-end"
-                                                h={100}>
-                                                <BaseText typographyFont="captionRegular">
-                                                    {token.symbol.toUpperCase()}
-                                                </BaseText>
-                                            </BaseView>
-                                        </BaseView>
-                                        {fiatValueTransferred && (
-                                            <BaseText
-                                                typographyFont="smallCaptionMedium"
-                                                color={theme.colors.success}>
-                                                {fiatValueTransferred}{" "}
-                                                {currency}
-                                            </BaseText>
-                                        )}
-                                    </BaseView>
-                                </BaseView>
-                            </>
-                        )}
+                        {renderTransferSummary}
                         <BaseView
                             flexDirection="column"
                             alignItems="center"
