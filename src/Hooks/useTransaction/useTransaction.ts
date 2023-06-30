@@ -43,14 +43,12 @@ export const useTransaction = ({
      * Recalculate clauses on data changes
      */
     const clauses = useMemo(() => {
-        //
         // if fungible token
         if (token.hasOwnProperty("decimals")) {
             let _token = token as FungibleTokenWithBalance
             return prepareFungibleTokenClause(amount, _token, addressTo)
         }
 
-        //
         // if non fungible token
         if (token.hasOwnProperty("tokenId")) {
             let _token = token as NonFungibleToken
@@ -72,7 +70,7 @@ export const useTransaction = ({
             chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
             blockRef: thorClient.status.head.id.slice(0, 18),
             expiration: 18,
-            clauses: clauses || [],
+            clauses: clauses ?? [],
             gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
             gas: gas?.gas || "0",
             dependsOn: null, // NOTE: in extension it is null
@@ -85,7 +83,7 @@ export const useTransaction = ({
             ;(async () => {
                 const estimatedGas = await GasUtils.estimateGas(
                     thorClient,
-                    clauses || [],
+                    clauses ?? [],
                     0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
                     account.address,
                     // NOTE: gasPayer: undefined; in extension it was not used

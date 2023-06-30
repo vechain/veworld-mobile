@@ -22,6 +22,7 @@ import {
 } from "~Storage/Redux"
 import { striptags } from "striptags"
 import { useNavigation } from "@react-navigation/native"
+import { getCalendars } from "expo-localization"
 
 interface NFTAttributeData {
     trait_type: string
@@ -31,7 +32,7 @@ interface NFTAttributeData {
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
 export const NFTDetailScreen = ({ route }: Props) => {
-    const { LL } = useI18nContext()
+    const { LL, locale } = useI18nContext()
     const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
     const nav = useNavigation()
     const { onCopyToClipboard } = useCopyClipboard()
@@ -159,9 +160,9 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             title={"Minted At"}
                             data={DateUtils.formatDateTime(
                                 nft?.date,
-                                // todo - get loacale
-                                "en",
-                                "UTC",
+                                locale,
+                                getCalendars()[0].timeZone ??
+                                    DateUtils.DEFAULT_TIMEZONE,
                             )}
                         />
                     )}

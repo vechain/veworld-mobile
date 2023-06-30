@@ -237,7 +237,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         isLastInList
                         title={"Total amount"}
                         data={vthoGas + " " + VTHO.symbol}
-                        subTtitle={"8,03 USD"}
+                        subTtitle={"8,03 USD"} // todo - add real price
                     />
                 </BaseView>
             </ScrollView>
