@@ -11,7 +11,11 @@ import {
     showErrorToast,
 } from "~Components"
 import { ScrollView, Linking } from "react-native"
-import { useCopyClipboard, usePlatformBottomInsets } from "~Hooks"
+import {
+    BottomInsetsEXtraPadding,
+    useCopyClipboard,
+    usePlatformBottomInsets,
+} from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
@@ -33,7 +37,9 @@ type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
 export const NFTDetailScreen = ({ route }: Props) => {
     const { LL, locale } = useI18nContext()
-    const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
+    const { calculateBottomInsets } = usePlatformBottomInsets(
+        BottomInsetsEXtraPadding.StaticButton,
+    )
     const nav = useNavigation()
     const { onCopyToClipboard } = useCopyClipboard()
 

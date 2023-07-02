@@ -28,6 +28,7 @@ import { NFTRecapView } from "./Components/NFTRecapView"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
 import { ScrollView } from "react-native-gesture-handler"
 import {
+    BottomInsetsEXtraPadding,
     useCheckIdentity,
     useNFTCollections,
     usePlatformBottomInsets,
@@ -51,7 +52,9 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const disptach = useAppDispatch()
 
-    const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
+    const { calculateBottomInsets } = usePlatformBottomInsets(
+        BottomInsetsEXtraPadding.StaticButton,
+    )
 
     const selectedAccoount = useAppSelector(selectSelectedAccount)
 
@@ -138,12 +141,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     )
 
     const vthoGas = FormattingUtils.convertToFiatBalance(
-        gas?.gas?.toString() || "0",
+        gas?.gas?.toString() ?? "0",
         1,
         5,
     )
 
+    // todo -> create a centralized hook for this where we distinguish between errors (not enough gas, error calculating gas, etc)
     const isThereEnoughGas = useMemo(() => {
+        if (!vthoGas || vthoGas === "0.00") return false
         let leftVtho = new BigNumber(vthoBalance)
         return vthoGas && leftVtho.gte(vthoGas)
     }, [vthoBalance, vthoGas])
@@ -247,6 +252,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             <FadeoutButton
                 title={LL.SEND_TOKEN_TITLE().toUpperCase()}
                 action={onSendPress}
+                disabled={!isThereEnoughGas || loading}
             />
         </BaseSafeArea>
     )

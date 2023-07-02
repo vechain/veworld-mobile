@@ -2,16 +2,22 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useMemo } from "react"
 import { PlatformUtils } from "~Utils"
 
-export const usePlatformBottomInsets = (hasStaticButton?: string) => {
+export enum BottomInsetsEXtraPadding {
+    StaticButton = 80,
+}
+
+export const usePlatformBottomInsets = (
+    extraPadding?: BottomInsetsEXtraPadding,
+) => {
     const _paddingBottom = useBottomTabBarHeight()
 
     const calculateBottomInsets: number = useMemo(() => {
-        let staticButtonExtraPadding = hasStaticButton ? 80 : 0
+        let staticButtonExtraPadding = extraPadding ? extraPadding : 0
 
         return PlatformUtils.isIOS()
             ? _paddingBottom + staticButtonExtraPadding
             : 0
-    }, [_paddingBottom, hasStaticButton])
+    }, [_paddingBottom, extraPadding])
 
     return { calculateBottomInsets }
 }

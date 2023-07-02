@@ -18,7 +18,11 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AddressUtils } from "~Utils"
-import { useBottomSheetModal, usePlatformBottomInsets } from "~Hooks"
+import {
+    BottomInsetsEXtraPadding,
+    useBottomSheetModal,
+    usePlatformBottomInsets,
+} from "~Hooks"
 import { ScanTarget } from "~Constants"
 import {
     selectAccounts,
@@ -41,7 +45,9 @@ export const SendNFTScreen = ({ route }: Props) => {
         return [...accounts, ...contacts]
     }, [accounts, contacts])
 
-    const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
+    const { calculateBottomInsets } = usePlatformBottomInsets(
+        BottomInsetsEXtraPadding.StaticButton,
+    )
 
     const [errorMessage, setErrorMessage] = useState("")
     const [selectedAddress, setSelectedAddress] = useState("")

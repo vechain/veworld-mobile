@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ScrollView, StyleSheet, Keyboard } from "react-native"
-import { useBottomSheetModal, usePlatformBottomInsets } from "~Hooks"
+import {
+    BottomInsetsEXtraPadding,
+    useBottomSheetModal,
+    usePlatformBottomInsets,
+} from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
@@ -45,7 +49,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const [selectedAddress, setSelectedAddress] = useState("")
     const nav = useNavigation()
 
-    const { calculateBottomInsets } = usePlatformBottomInsets("hasStaticButton")
+    const { calculateBottomInsets } = usePlatformBottomInsets(
+        BottomInsetsEXtraPadding.StaticButton,
+    )
 
     const {
         ref: createContactBottomSheetRef,
