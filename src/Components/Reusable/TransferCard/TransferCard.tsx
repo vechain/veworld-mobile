@@ -45,13 +45,14 @@ export const TransferCard = memo(
             selectContactByAddress(state, address.toChecksumed(fromAddress)),
         )
 
+        const toAddressesNonEmpty = useMemo(() => {
+            return toAddresses?.map((addr: string) =>
+                addr !== "" ? address.toChecksumed(addr) : "",
+            )
+        }, [toAddresses])
+
         const toContacts = useAppSelector(state =>
-            selectContactsByAddresses(
-                state,
-                toAddresses?.map((addr: string) =>
-                    addr !== "" ? address.toChecksumed(addr) : "",
-                ),
-            ),
+            selectContactsByAddresses(state, toAddressesNonEmpty),
         )
 
         const [activeIndex, setActiveIndex] = useState(0)
