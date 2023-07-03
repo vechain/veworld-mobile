@@ -62,9 +62,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
+
+    // todo - make a single selector for this
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
-
     const accountsAndContacts = useMemo(
         () => [...accounts, ...contacts],
         [accounts, contacts],
@@ -96,7 +97,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { gas, transaction } = useTransaction({
         token,
         amount,
-        address,
+        addressTo: address,
     })
 
     const {
@@ -116,11 +117,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             selectedDelegationAccount?.address || account.address,
         ),
     )
+
     const vthoBalance = FormattingUtils.scaleNumberDown(
         vtho.balance.balance,
         vtho.decimals,
         2,
     )
+
     const { signAndSendTransaction } = useSignTransaction({
         transaction,
         onTXFinish,
@@ -152,6 +155,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         return vthoGas && leftVtho.gte(vthoGas)
     }, [amount, vthoGas, token.symbol, vthoBalance])
 
+    // Todo - add useCallback
     const receiverDetails = () => {
         const receiverExists = accountsAndContacts.find(_account =>
             AddressUtils.compareAddresses(_account.address, address),
@@ -228,6 +232,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                     <BaseSpacer height={24} />
                 </BaseView>
+
+                {/* TODO CHange BaseCardGroup with TransferCard */}
                 <BaseCardGroup
                     views={[
                         {

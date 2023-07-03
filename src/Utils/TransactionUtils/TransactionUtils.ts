@@ -48,6 +48,9 @@ export const SWAP_EXACT_TOKENS_FOR_ETH_SIG = new abi.Function(
 export const SWAP_EVENT_SIG = new abi.Event(abis.UniswapPairV2.SwapEvent)
     .signature
 
+export const NFT_TRANSFER_SIG = new abi.Function(abis.VIP181.transferFrom)
+    .signature
+
 /**
  * Checks if a clause represents a VET transfer.
  *
@@ -67,6 +70,16 @@ export const isVETtransferClause = (clause: Connex.VM.Clause): boolean => {
  */
 export const isTokenTransferClause = (clause: Connex.VM.Clause): boolean => {
     return clause.data?.startsWith(TRANSFER_SIG) || false
+}
+
+/**
+ * Checks if a clause represents an NFT transfer.
+ *
+ * @param clause - The clause to check.
+ * @returns true if the clause represents an NFT, false otherwise.
+ */
+export const isNFTTransferClause = (clause: Connex.VM.Clause): boolean => {
+    return clause.data?.startsWith(NFT_TRANSFER_SIG) || false
 }
 
 export const getTokenAddressFromClause = (
@@ -683,5 +696,5 @@ export const sendSignedTransaction = async (
         encodedRawTx,
     )
 
-    return response.data.id
+    return response.data.id as string
 }

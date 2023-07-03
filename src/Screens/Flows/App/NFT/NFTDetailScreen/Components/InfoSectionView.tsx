@@ -3,7 +3,14 @@ import { StyleSheet } from "react-native"
 import { isArray, isString } from "lodash"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
-import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import {
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseTouchable,
+    BaseView,
+} from "~Components"
+import { useI18nContext } from "~i18n"
 
 interface NFTAttributeData {
     trait_type: string
@@ -15,6 +22,9 @@ type Props<T> = {
     data: T
     isLastInList?: boolean
     action?: () => void
+    isFontReverse?: boolean
+    subTtitle?: string
+    isDanger?: boolean
 }
 
 export const InfoSectionView = <T extends NFTAttributeData[] | string>({
@@ -22,12 +32,22 @@ export const InfoSectionView = <T extends NFTAttributeData[] | string>({
     data,
     isLastInList,
     action,
+    subTtitle,
+    isDanger = false,
 }: Props<T>) => {
     const theme = useTheme()
+    const { LL } = useI18nContext()
 
     const renderData = useMemo(() => {
         if (action && isString(data)) {
-            return <BaseTouchable title={data} underlined action={action} />
+            return (
+                <BaseTouchable
+                    title={data}
+                    underlined
+                    action={action}
+                    font={"subSubTitle"}
+                />
+            )
         }
 
         if (isArray(data)) {
@@ -60,9 +80,35 @@ export const InfoSectionView = <T extends NFTAttributeData[] | string>({
         }
 
         if (isString(data)) {
-            return <BaseText typographyFont="subSubTitle">{data}</BaseText>
+            return (
+                <>
+                    {isDanger ? (
+                        <BaseView flexDirection="row">
+                            <BaseIcon
+                                name="alert-circle-outline"
+                                color={COLORS.DARK_RED}
+                                size={16}
+                            />
+                            <BaseSpacer width={4} />
+                            <BaseText
+                                typographyFont="buttonSecondary"
+                                color={COLORS.DARK_RED}>
+                                {LL.SEND_INSUFFICIENT_VTHO()} {data}
+                            </BaseText>
+                        </BaseView>
+                    ) : (
+                        <BaseText typographyFont="subSubTitle">{data}</BaseText>
+                    )}
+
+                    {subTtitle ? (
+                        <BaseText mt={4} typographyFont="subSubTitleLight">
+                            {subTtitle}
+                        </BaseText>
+                    ) : null}
+                </>
+            )
         }
-    }, [data, theme, action])
+    }, [action, data, theme.isDark, isDanger, LL, subTtitle])
 
     return (
         <BaseView>

@@ -9,9 +9,10 @@ import { BaseButton, BaseView } from "~Components/Base"
 type Props = {
     title: string
     action: () => void
+    disabled?: boolean
 }
 
-export const FadeoutButton = ({ title, action }: Props) => {
+export const FadeoutButton = ({ title, action, disabled = false }: Props) => {
     const tabBarHeight = useBottomTabBarHeight()
     const theme = useTheme()
 
@@ -32,6 +33,7 @@ export const FadeoutButton = ({ title, action }: Props) => {
                 style={{ width: SCREEN_WIDTH - 40 }}
                 py={valueToHP[16]}>
                 <BaseButton
+                    disabled={disabled}
                     size="lg"
                     haptics="medium"
                     w={100}

@@ -189,7 +189,6 @@ export const useSignTransaction = ({
     const signAndSendTransaction = async (password?: string) => {
         try {
             const tx = await signTransaction(password)
-
             await sendTransactionAndPerformUpdates(tx)
         } catch (e) {
             error("[signTransaction]", e)
