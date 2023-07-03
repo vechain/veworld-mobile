@@ -22,6 +22,7 @@ import {
     Step,
     StepsProgressBar,
     showErrorToast,
+    useWalletConnect,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -29,7 +30,7 @@ import {
     Routes,
 } from "~Navigation"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { LedgerUtils, debug, error } from "~Utils"
+import { LedgerUtils, WalletConnectResponseUtils, debug, error } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
@@ -41,17 +42,24 @@ type Props = NativeStackScreenProps<
 >
 
 export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, transaction, initialRoute } = route.params
+    const {
+        accountWithDevice,
+        transaction,
+        initialRoute,
+        origin = "app",
+        requestEvent,
+    } = route.params
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const { web3Wallet } = useWalletConnect()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
-    const { sendTransactionAndPerformUpdates } = useSendTransaction(
-        selectedNetwork,
-        accountWithDevice,
-    )
+    const {
+        sendTransactionAndPerformUpdates,
+        sendConnectedAppTransactionAndPerformUpdates,
+    } = useSendTransaction(selectedNetwork, accountWithDevice)
 
     const [signature, setSignature] = useState<Buffer>()
 
@@ -225,10 +233,17 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             const tx = new Transaction(transaction)
             tx.signature = signature
 
-            await sendTransactionAndPerformUpdates(tx)
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success,
-            )
+            if (origin === "app") {
+                await sendTransactionAndPerformUpdates(tx)
+                await Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Success,
+                )
+            } else if (origin === "walletConnect") {
+                await sendConnectedAppTransactionAndPerformUpdates(
+                    tx,
+                    requestEvent,
+                )
+            }
             navigateOnFinish()
         } catch (e) {
             error(e)
@@ -236,6 +251,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
+
+            if (origin === "walletConnect") {
+                await WalletConnectResponseUtils.transactionRequestFailedResponse(
+                    { request: requestEvent, web3Wallet, LL },
+                )
+            }
         } finally {
             setIsSending(false)
         }
@@ -245,6 +266,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         transaction,
         sendTransactionAndPerformUpdates,
         navigateOnFinish,
+        origin,
+        requestEvent,
+        sendConnectedAppTransactionAndPerformUpdates,
+        web3Wallet,
     ])
 
     const onConnectionErrorDismiss = useCallback(() => {

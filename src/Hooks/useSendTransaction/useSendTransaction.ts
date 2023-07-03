@@ -1,6 +1,6 @@
 import { Linking } from "react-native"
 import { Transaction } from "thor-devkit"
-import { showSuccessToast, useThor } from "~Components"
+import { showSuccessToast, useThor, useWalletConnect } from "~Components"
 import { defaultMainNetwork } from "~Constants"
 import { Network, WalletAccount } from "~Model"
 import {
@@ -10,6 +10,7 @@ import {
 } from "~Storage/Redux"
 import { sendTransaction } from "~Networking"
 import { useI18nContext } from "~i18n"
+import { WalletConnectResponseUtils } from "~Utils"
 
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
@@ -24,6 +25,7 @@ export const useSendTransaction = (
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const thorClient = useThor()
+    const { web3Wallet } = useWalletConnect()
 
     const sendTransactionAndPerformUpdates = async (tx: Transaction) => {
         const id = await sendTransaction(tx, network.currentUrl)
@@ -47,5 +49,26 @@ export const useSendTransaction = (
         await dispatch(updateAccountBalances(thorClient, account.address))
     }
 
-    return { sendTransactionAndPerformUpdates }
+    const sendConnectedAppTransactionAndPerformUpdates = async (
+        tx: Transaction,
+        requestEvent: any,
+    ) => {
+        const id = await sendTransaction(tx, network.currentUrl)
+
+        //Todo: add pending transaction activity
+
+        await WalletConnectResponseUtils.transactionRequestSuccessResponse(
+            { request: requestEvent, web3Wallet, LL },
+            id,
+            account.address,
+            network,
+        )
+
+        await dispatch(updateAccountBalances(thorClient, account.address))
+    }
+
+    return {
+        sendTransactionAndPerformUpdates,
+        sendConnectedAppTransactionAndPerformUpdates,
+    }
 }

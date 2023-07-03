@@ -44,6 +44,8 @@ export type RootStackParamListDiscover = {
         accountWithDevice: LedgerAccountWithDevice
         transaction: Transaction.Body
         initialRoute: string
+        origin?: string
+        requestEvent?: any
     }
 }
 

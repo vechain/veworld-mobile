@@ -34,12 +34,20 @@ import {
     error,
     TransactionUtils,
 } from "~Utils"
-import { useCheckIdentity, useSignTransaction } from "~Hooks"
-import { AccountWithDevice, EstimateGasResult } from "~Model"
+import {
+    useCheckIdentity,
+    useSendTransaction,
+    useSignTransaction,
+} from "~Hooks"
+import {
+    AccountWithDevice,
+    DEVICE_TYPE,
+    EstimateGasResult,
+    LedgerAccountWithDevice,
+} from "~Model"
 import { getSdkError } from "@walletconnect/utils"
 import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
-import { sendTransaction } from "~Networking"
 import { ScrollView } from "react-native-gesture-handler"
 import { useDelegation } from "~Screens/Flows/App/SendScreen/04-TransactionSummarySendScreen/Hooks"
 import { DelegationType } from "~Model/Delegation"
@@ -76,6 +84,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const onClose = useCallback(() => {
         nav.goBack()
     }, [nav])
+
+    const { sendConnectedAppTransactionAndPerformUpdates } = useSendTransaction(
+        network,
+        selectedAccount,
+    )
 
     // Decoding clauses
     const tokens = useAppSelector(selectTokensWithInfo)
@@ -168,19 +181,13 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     /**
      * Signs the transaction and sends it to the blockchain
      */
-    const handleAccept = useCallback(
+    const signAndSendTransaction = useCallback(
         async (password?: string) => {
             try {
                 let tx = await signTransaction(password)
-                const txId = await sendTransaction(tx, network.currentUrl)
-
-                //TODO: Add to history
-
-                await WalletConnectResponseUtils.transactionRequestSuccessResponse(
-                    { request: requestEvent, web3Wallet, LL },
-                    txId,
-                    selectedAccount.address,
-                    network,
+                await sendConnectedAppTransactionAndPerformUpdates(
+                    tx,
+                    requestEvent,
                 )
             } catch (e) {
                 error(e)
@@ -192,20 +199,31 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             }
         },
         [
-            selectedAccount,
-            network,
             web3Wallet,
             LL,
             requestEvent,
             signTransaction,
             onClose,
+            sendConnectedAppTransactionAndPerformUpdates,
         ],
     )
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed: handleAccept,
+            onIdentityConfirmed: signAndSendTransaction,
         })
+
+    const handleOnConfirm = () => {
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
+            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
+                accountWithDevice: selectedAccount as LedgerAccountWithDevice,
+                transaction: transactionBody,
+                initialRoute: Routes.HOME,
+                origin: "walletConnect",
+                requestEvent,
+            })
+        } else checkIdentityBeforeOpening()
+    }
 
     const onPressBack = useCallback(async () => {
         await onReject()
@@ -333,7 +351,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
-                        action={checkIdentityBeforeOpening}
+                        action={handleOnConfirm}
                         disabled={!isThereEnoughGas && !isDelegated}
                     />
                     <BaseSpacer height={16} />

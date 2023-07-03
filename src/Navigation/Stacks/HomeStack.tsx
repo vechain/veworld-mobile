@@ -51,6 +51,8 @@ export type RootStackParamListHome = {
         accountWithDevice: LedgerAccountWithDevice
         transaction: Transaction.Body
         initialRoute: string
+        origin?: string
+        requestEvent?: any
     }
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined
