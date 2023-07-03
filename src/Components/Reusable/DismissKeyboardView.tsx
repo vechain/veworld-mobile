@@ -1,9 +1,9 @@
 import React, { ReactNode } from "react"
 import {
-    TouchableWithoutFeedback,
     Keyboard,
     ViewProps,
     ScrollViewProps,
+    TouchableWithoutFeedback,
 } from "react-native"
 
 type Props = {

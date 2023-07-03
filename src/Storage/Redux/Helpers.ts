@@ -20,7 +20,7 @@ import {
 export const nftPersistConfig = {
     key: NftSlice.name,
     storage: storage,
-    whitelist: ["blackListedCollections"],
+    whitelist: ["blackListedCollectionsPerAccount"],
 }
 
 export const getPersistorConfig = async () => {

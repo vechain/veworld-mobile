@@ -62,7 +62,7 @@ export enum COLORS {
     PASTEL_ORANGE = "#fedbc0",
     DARK_ORANGE_ALERT = "#AF4F0A",
     MEDIUM_ORANGE = "#FA710E",
-    DARK_BLUE = "#28008c",
+    DISABLED_GREY = "#E5E5E5",
 }
 
 const light: Colors = {

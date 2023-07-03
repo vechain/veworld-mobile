@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { VTHO, currencySymbolMap } from "~Constants"
-import { useCopyClipboard } from "~Hooks"
+import { useCopyClipboard, useFungibleTokenInfo } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import {
@@ -33,16 +33,20 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         const { gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent } =
             useGasFee(activity)
 
+        const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
+
         const amountTransferred = useMemo(() => {
+            if (!token?.decimals && !decimals) return
+
             return FormattingUtils.humanNumber(
                 FormattingUtils.scaleNumberDown(
                     activity.amount,
-                    token?.decimals ?? 0,
+                    token?.decimals ?? decimals ?? 0,
                     FormattingUtils.ROUND_DECIMAL_DEFAULT,
                 ),
                 activity.amount,
             )
-        }, [activity.amount, token?.decimals])
+        }, [activity.amount, decimals, token])
 
         const exchangeRate = useAppSelector((state: RootState) =>
             selectCurrencyExchangeRate(state, token?.symbol ?? ""),
@@ -74,7 +78,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             {
                 id: 1,
                 title: LL.VALUE_TITLE(),
-                value: `${amountTransferred} ${token?.symbol}`,
+                value: `${amountTransferred} ${token?.symbol ?? symbol}`,
                 typographyFont: "subSubTitle",
                 underline: false,
                 valueAdditional: fiatValueTransferred

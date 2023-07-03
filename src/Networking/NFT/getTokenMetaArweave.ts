@@ -31,7 +31,7 @@ export const getImageUrlArweave = async (uri: string) => {
 
         const res = await arweave.api.get<string>(id)
 
-        return res.url
+        return res.url as string
     } catch (e) {
         error(e)
         throw e

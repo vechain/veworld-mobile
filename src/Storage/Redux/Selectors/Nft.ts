@@ -3,14 +3,17 @@ import { RootState } from "../Types"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { selectSelectedAccount } from "./Account"
 import { isEmpty } from "lodash"
-import { ACCOUNT_WITH_NFTS } from "~Constants/Constants/NFT"
 
 const selectNftState = (state: RootState) => state.nft
 
 export const selectBlackListedCollections = createSelector(
     selectNftState,
-    state => {
-        return state.blackListedCollections
+    selectSelectedAccount,
+    (state, account) => {
+        return (
+            state.blackListedCollectionsPerAccount[account.address]
+                ?.collections || []
+        )
     },
 )
 
@@ -23,19 +26,17 @@ export const selectNftCollections = createSelector(
     selectNftState,
     selectSelectedAccount,
     selectBlackListedCollections,
-    (state, account, blackListedCollections) => {
+    (state, account, blackListedCollectionsPerAccount) => {
         const collections =
-            state.collectionsPerAccount[ACCOUNT_WITH_NFTS]?.collections
-        // state.collectionsPerAccount[account.address]?.collections
+            state.collectionsPerAccount[account.address]?.collections
 
-        if (collections && blackListedCollections) {
+        if (collections && blackListedCollectionsPerAccount) {
             const pagination =
-                state.collectionsPerAccount[ACCOUNT_WITH_NFTS]?.pagination
-            // state.collectionsPerAccount[account.address]?.pagination
+                state.collectionsPerAccount[account.address]?.pagination
 
             const filteredCollections = removeMatchingElements(
                 collections,
-                blackListedCollections,
+                blackListedCollectionsPerAccount,
             )
 
             return {
@@ -99,14 +100,8 @@ export const selectNFTWithAddressAndTokenId = createSelector(
         (state: RootState, contractAddress: string, tokenId: string) => tokenId,
     ],
     (state, account, contractAddress, tokenId) => {
-        // if (state.NFTsPerAccount[account.address] !== undefined) {
-        //     return state.NFTsPerAccount[account.address][
-        //         contractAddress
-        //     ].NFTs.find(nft => nft.tokenId === tokenId)
-        // }
-
-        if (state.NFTsPerAccount[ACCOUNT_WITH_NFTS] !== undefined) {
-            return state.NFTsPerAccount[ACCOUNT_WITH_NFTS][
+        if (state.NFTsPerAccount[account.address] !== undefined) {
+            return state.NFTsPerAccount[account.address][
                 contractAddress
             ].NFTs.find(nft => nft.tokenId === tokenId) as NonFungibleToken
         }
@@ -120,12 +115,8 @@ export const selectNFTsForCollection = createSelector(
         (state: RootState, collectionAddress: string) => collectionAddress,
     ],
     (account, nftState, collectionAddress) => {
-        // if (nftState.NFTsPerAccount[account.address] !== undefined) {
-        //     return nftState.NFTsPerAccount[account.address][collectionAddress]
-        // }
-
-        if (nftState.NFTsPerAccount[ACCOUNT_WITH_NFTS] !== undefined) {
-            return nftState.NFTsPerAccount[ACCOUNT_WITH_NFTS][collectionAddress]
+        if (nftState.NFTsPerAccount[account.address] !== undefined) {
+            return nftState.NFTsPerAccount[account.address][collectionAddress]
         }
 
         return {
@@ -142,11 +133,13 @@ export const selectNFTsForCollection = createSelector(
 )
 
 export const selectBlackListedCollectionByAddress = createSelector(
-    [selectNftState, (state, collectionAddress: string) => collectionAddress],
-    (state, collectionAddress: string) =>
-        state.blackListedCollections.find(
-            col => col.address === collectionAddress,
-        ),
+    [
+        selectNftState,
+        selectBlackListedCollections,
+        (state, collectionAddress: string) => collectionAddress,
+    ],
+    (state, blackListedCollections, collectionAddress: string) =>
+        blackListedCollections.find(col => col.address === collectionAddress),
 )
 
 // HELPERS

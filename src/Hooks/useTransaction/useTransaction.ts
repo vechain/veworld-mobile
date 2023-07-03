@@ -3,15 +3,26 @@ import { Transaction, abi } from "thor-devkit"
 
 import { HexUtils, FormattingUtils, GasUtils } from "~Utils"
 import { useThor } from "~Components"
-import { EstimateGasResult, FungibleTokenWithBalance } from "~Model"
+import {
+    AccountWithDevice,
+    EstimateGasResult,
+    FungibleTokenWithBalance,
+    NonFungibleToken,
+} from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { VET, abis } from "~Constants"
 
+type UseTransactionReturnProps = {
+    gas?: EstimateGasResult
+    setGas: (gas: EstimateGasResult) => void
+    transaction: Transaction.Body
+}
+
 type Props = {
-    token: FungibleTokenWithBalance
+    token: FungibleTokenWithBalance | NonFungibleToken
     amount: string
-    address: string
+    addressTo: string
 }
 /**
  * Hook to calculate gas and generate the transaction body based on token, amount and address
@@ -22,44 +33,36 @@ type Props = {
 export const useTransaction = ({
     amount,
     token,
-    address,
+    addressTo,
 }: Props): UseTransactionReturnProps => {
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
     const thorClient = useThor()
 
     /**
-     * recalculate clauses on data changes
+     * Recalculate clauses on data changes
      */
     const clauses = useMemo(() => {
-        const scaledAmount =
-            "0x" +
-            new BigNumber(
-                FormattingUtils.scaleNumberUp(amount, token.decimals),
-            ).toString(16)
-        // if vet
-        if (token.symbol === VET.symbol) {
-            return [
-                {
-                    to: address,
-                    value: scaledAmount,
-                    data: "0x",
-                },
-            ]
-        }
         // if fungible token
-        const func = new abi.Function(abis.VIP180.transfer)
-        const data = func.encode(address, scaledAmount)
-        return [
-            {
-                to: token.address,
-                value: 0,
-                data: data,
-            },
-        ]
-    }, [address, amount, token.address, token.decimals, token.symbol])
+        if (token.hasOwnProperty("decimals")) {
+            let _token = token as FungibleTokenWithBalance
+            return prepareFungibleTokenClause(amount, _token, addressTo)
+        }
+
+        // if non fungible token
+        if (token.hasOwnProperty("tokenId")) {
+            let _token = token as NonFungibleToken
+            return prepareNonFungibleTokenClause(
+                thorClient,
+                _token,
+                account,
+                addressTo,
+            )
+        }
+    }, [account, addressTo, amount, thorClient, token])
+
     /**
-     * recalculate transaction on data changes
+     * Recalculate transaction on data changes
      */
     const transaction = useMemo((): Transaction.Body => {
         const DEFAULT_GAS_COEFFICIENT = 0
@@ -67,7 +70,7 @@ export const useTransaction = ({
             chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
             blockRef: thorClient.status.head.id.slice(0, 18),
             expiration: 18,
-            clauses,
+            clauses: clauses ?? [],
             gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
             gas: gas?.gas || "0",
             dependsOn: null, // NOTE: in extension it is null
@@ -80,7 +83,7 @@ export const useTransaction = ({
             ;(async () => {
                 const estimatedGas = await GasUtils.estimateGas(
                     thorClient,
-                    clauses,
+                    clauses ?? [],
                     0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
                     account.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
@@ -93,8 +96,49 @@ export const useTransaction = ({
     return { gas, setGas, transaction }
 }
 
-type UseTransactionReturnProps = {
-    gas?: EstimateGasResult
-    setGas: (gas: EstimateGasResult) => void
-    transaction: Transaction.Body
+const prepareFungibleTokenClause = (
+    amount: string,
+    _token: FungibleTokenWithBalance,
+    addressTo: string,
+) => {
+    const scaledAmount =
+        "0x" +
+        new BigNumber(
+            FormattingUtils.scaleNumberUp(amount, _token.decimals),
+        ).toString(16)
+
+    // if vet
+    if (_token.symbol === VET.symbol) {
+        return [
+            {
+                to: addressTo,
+                value: scaledAmount,
+                data: "0x",
+            },
+        ]
+    }
+
+    const func = new abi.Function(abis.VIP180.transfer)
+    const data = func.encode(addressTo, scaledAmount)
+    return [
+        {
+            to: _token.address,
+            value: 0,
+            data: data,
+        },
+    ]
+}
+
+const prepareNonFungibleTokenClause = (
+    thorClient: Connex.Thor,
+    _token: NonFungibleToken,
+    account: AccountWithDevice,
+    addressTo: string,
+) => {
+    const clause = thorClient
+        .account(_token.belongsToCollectionAddress)
+        .method(abis.VIP181.transferFrom)
+        .asClause(account.address, addressTo, _token.tokenId)
+
+    return [clause]
 }
