@@ -39,14 +39,14 @@ export const NftSlice = createSlice({
         setCollections: (
             state,
             action: PayloadAction<{
-                address: string
+                currentAccountAddress: string
                 collectiondata: CollectionWithPagination
             }>,
         ) => {
-            const { collectiondata, address } = action.payload
+            const { collectiondata, currentAccountAddress } = action.payload
 
-            if (!state.collectionsPerAccount[address]) {
-                state.collectionsPerAccount[address] = {
+            if (!state.collectionsPerAccount[currentAccountAddress]) {
+                state.collectionsPerAccount[currentAccountAddress] = {
                     collections: [],
                     pagination: {
                         countLimit: 0,
@@ -59,12 +59,13 @@ export const NftSlice = createSlice({
             }
 
             let uniqueCollections = [
-                ...state.collectionsPerAccount[address].collections,
+                ...state.collectionsPerAccount[currentAccountAddress]
+                    .collections,
                 ...collectiondata.collections,
             ]
 
             const allUnique = uniqBy(uniqueCollections, "address")
-            state.collectionsPerAccount[address] = {
+            state.collectionsPerAccount[currentAccountAddress] = {
                 collections: allUnique,
                 pagination: collectiondata.pagination,
             }
@@ -182,6 +183,30 @@ export const NftSlice = createSlice({
             return state
         },
 
+        removeNFTFromCollection: (
+            state,
+            action: PayloadAction<{
+                NFT: NonFungibleToken
+            }>,
+        ) => {
+            const { NFT } = action.payload
+
+            // remove nft from nfts list
+            let allNFTsForAccount =
+                state.NFTsPerAccount[NFT.owner][NFT.belongsToCollectionAddress]
+                    .NFTs
+
+            const filteredNFTs = allNFTsForAccount.filter(
+                nft => nft.id !== NFT.id,
+            )
+
+            state.NFTsPerAccount[NFT.owner][
+                NFT.belongsToCollectionAddress
+            ].NFTs = filteredNFTs
+
+            return state
+        },
+
         // SET NETWORKING SIDE EFFECTS
         setNetworkingSideEffects: (
             state,
@@ -206,4 +231,5 @@ export const {
     removeBlackListCollection,
     setNFTs,
     resetNftState,
+    removeNFTFromCollection,
 } = NftSlice.actions

@@ -1131,6 +1131,10 @@ type RootTranslation = {
 	 */
 	ERROR_SECURITY_ACTION: string
 	/**
+	 * I​n​v​a​l​i​d​ ​a​d​d​r​e​s​s
+	 */
+	ERROR_INVALID_ADDRESS: string
+	/**
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
@@ -1447,6 +1451,18 @@ type RootTranslation = {
 	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
 	 */
 	NO_MARKETPLACE: string
+	/**
+	 * S​e​n​d​ ​y​o​u​r​ ​N​F​T
+	 */
+	SEND_NFT_TITLE: string
+	/**
+	 * F​i​l​l​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​f​i​e​l​d​s
+	 */
+	SEND_NFT_SUB_TITLE: string
+	/**
+	 * R​e​c​a​p
+	 */
+	RECAP: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -3136,6 +3152,10 @@ Please, try again later.
 	 */
 	ERROR_SECURITY_ACTION: () => LocalizedString
 	/**
+	 * Invalid address
+	 */
+	ERROR_INVALID_ADDRESS: () => LocalizedString
+	/**
 	 * Success!
 	 */
 	SUCCESS_GENERIC: () => LocalizedString
@@ -3443,6 +3463,18 @@ Please, try again later.
 	 * Unable to open marketplace
 	 */
 	NO_MARKETPLACE: () => LocalizedString
+	/**
+	 * Send your NFT
+	 */
+	SEND_NFT_TITLE: () => LocalizedString
+	/**
+	 * Fill the required fields
+	 */
+	SEND_NFT_SUB_TITLE: () => LocalizedString
+	/**
+	 * Recap
+	 */
+	RECAP: () => LocalizedString
 	/**
 	 * Light
 	 */

@@ -29,6 +29,8 @@ export enum Routes {
     NFTS = "NFTs",
     NFT_DETAILS = "NFT_Details",
     NFT_COLLECTION_DETAILS = "NFT_Collection_Details",
+    SEND_NFT = "Send_NFT",
+    SEND_NFT_RECAP = "Send_NFT_Recap",
     WALLET_MANAGEMENT = "Wallet_Management",
     SETTINGS_TRANSACTIONS = "Transactions",
     MANAGE_DELEGATION_URLS = "Manage_Delegation_URLs",

@@ -317,6 +317,7 @@ const en: BaseTranslation = {
     ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: "The token URI protocol is not supported ({protocol})",
     ERROR_NFT_FAILED_TO_GET_METADATA: "Failed to get token metadata",
     ERROR_SECURITY_ACTION: "Security action failed. Please check your device and try again.",
+    ERROR_INVALID_ADDRESS: "Invalid address",
 
 
     // Success
@@ -418,6 +419,9 @@ const en: BaseTranslation = {
     SHOW_COLLECTION: "Show collection",
     HIDE_COLLECTION: "Hide collection",
     NO_MARKETPLACE: "Unable to open marketplace",
+    SEND_NFT_TITLE: "Send your NFT",
+    SEND_NFT_SUB_TITLE: "Fill the required fields",
+    RECAP: "Recap",
 
     // Onboarding
 
