@@ -6,6 +6,17 @@ import * as i18n from "~i18n"
 const WALLET_KEY = "VeWorld_Wallet_key"
 const REDUX_KEY = "VeWorld_Redux_key"
 
+enum ACCESS_CONTROL_KEY {
+    ACCESS_CONTROL = "access_control",
+    NO_ACCESS_CONTROL = "no_access_control",
+}
+
+const getAccessControl = (accessControl: boolean) => {
+    return accessControl
+        ? ACCESS_CONTROL_KEY.ACCESS_CONTROL
+        : ACCESS_CONTROL_KEY.NO_ACCESS_CONTROL
+}
+
 /**
  * Get the encryption key for the device. Used to decrypt the wallet
  * @param rootAddress  rootAddress of device
@@ -25,18 +36,27 @@ const getDeviceEncryptionKey = async (
         options = {
             requireAuthentication: accessControl,
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${rootAddress}`,
+            keychainService: `${WALLET_KEY}_${getAccessControl(
+                true,
+            )}_${rootAddress}`,
             authenticationPrompt: promptTitle.toString(),
         }
     } else {
         options = {
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${rootAddress}`,
+            keychainService: `${WALLET_KEY}_${getAccessControl(
+                false,
+            )}_${rootAddress}`,
         }
     }
 
     try {
-        return await Keychain.get(options, `${WALLET_KEY}_${rootAddress}`)
+        return await Keychain.get(
+            options,
+            `${WALLET_KEY}_${getAccessControl(
+                accessControl ?? false,
+            )}_${rootAddress}`,
+        )
     } catch (err) {
         error(err)
     }
@@ -62,31 +82,51 @@ const setDeviceEncryptionKey = async (
         options = {
             requireAuthentication: accessControl,
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${rootAddress}`,
+            keychainService: `${WALLET_KEY}_${getAccessControl(
+                true,
+            )}_${rootAddress}`,
             authenticationPrompt: promptTitle.toString(),
         }
     } else {
         options = {
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${rootAddress}`,
+            keychainService: `${WALLET_KEY}_${getAccessControl(
+                false,
+            )}_${rootAddress}`,
         }
     }
 
-    await Keychain.set(encryptionKey, options, `${WALLET_KEY}_${rootAddress}`)
+    try {
+        await Keychain.set(
+            encryptionKey,
+            options,
+            `${WALLET_KEY}_${getAccessControl(
+                accessControl ?? false,
+            )}_${rootAddress}`,
+        )
+    } catch (err) {
+        error(err)
+    }
 }
 
 /**
  *  Delete the encryption key for the device. Used to decrypt the wallet
  * @param rootAddress rootAddress of device
  */
-const deleteDeviceEncryptionKey = async (rootAddress: string) => {
+const deleteDeviceEncryptionKey = async (
+    rootAddress: string,
+    accessControl: boolean,
+) => {
     const options = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         keychainService: `${WALLET_KEY}_${rootAddress}`,
     }
 
     try {
-        await Keychain.deleteItem(`${WALLET_KEY}_${rootAddress}`, options)
+        await Keychain.deleteItem(
+            `${WALLET_KEY}_${getAccessControl(accessControl)}_${rootAddress}`,
+            options,
+        )
     } catch (err) {
         error(err)
     }
