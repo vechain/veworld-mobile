@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react"
 import { useAppLock, useAppReset, useWalletSecurity } from "~Hooks"
-import { AlertUtils, BiometricsUtils, LockScreenUtils } from "~Utils"
+import { AlertUtils, BiometricsUtils, LockScreenUtils, debug } from "~Utils"
 import RNBootSplash from "react-native-bootsplash"
 import { selectIsSecurityDowngrade, useAppSelector } from "~Storage/Redux"
 
@@ -12,9 +12,10 @@ export const useBiometricUnlock = () => {
 
     const recursiveFaceId = useCallback(async () => {
         let results = await BiometricsUtils.authenticateWithBiometrics()
+
         if (results.success) {
             await RNBootSplash.hide({ fade: true })
-        } else if (results.error) {
+        } else if (results.error === "user_cancel") {
             AlertUtils.showCancelledFaceIdAlert(
                 async () => {
                     await appReset()
@@ -23,6 +24,9 @@ export const useBiometricUnlock = () => {
                     return await recursiveFaceId()
                 },
             )
+        } else {
+            debug("BiometricUnlock", "Error", results.error)
+            return
         }
     }, [appReset])
 
