@@ -15,6 +15,20 @@ import {
     DelegationSlice,
     WalletConnectSessionsSlice,
     NftSlice,
+    resetAccountState,
+    resetActivityState,
+    resetBalancesState,
+    resetCacheState,
+    resetConfigState,
+    resetContactsState,
+    resetCurrencyState,
+    resetDelegationState,
+    resetDeviceState,
+    resetNetworkState,
+    resetNftState,
+    resetTokensState,
+    resetUserPreferencesState,
+    resetWalletConnectState,
 } from "./Slices"
 
 export const nftPersistConfig = {
@@ -57,3 +71,22 @@ export const getPersistorConfig = async () => {
 
     return persistConfig
 }
+
+// This combines all reset actions from all slices
+// Remember to add new reset actions here of any new persisted Slice
+export const resetActions = [
+    resetAccountState,
+    resetActivityState,
+    resetBalancesState,
+    resetCacheState,
+    resetConfigState,
+    resetContactsState,
+    resetCurrencyState,
+    resetDelegationState,
+    resetDeviceState,
+    resetNetworkState,
+    resetNftState,
+    resetTokensState,
+    resetUserPreferencesState,
+    resetWalletConnectState,
+]
