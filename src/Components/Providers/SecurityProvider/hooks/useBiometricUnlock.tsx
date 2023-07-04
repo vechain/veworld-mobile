@@ -48,10 +48,7 @@ export const useBiometricUnlock = () => {
         }
 
         initBiometricUnlock()
-    }, [
-        appLockStatusActive,
-        isSecurityDowngrade,
-        isWalletSecurityBiometrics,
-        recursiveFaceId,
-    ])
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [appLockStatusActive, isSecurityDowngrade, isWalletSecurityBiometrics])
 }
