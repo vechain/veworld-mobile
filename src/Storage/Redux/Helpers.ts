@@ -37,6 +37,12 @@ export const nftPersistConfig = {
     whitelist: ["blackListedCollectionsPerAccount"],
 }
 
+/**
+ * Asynchronously generates and returns the configuration object for a Redux Persistor.
+ * The object includes the key for encryption, storage engine, version number, blacklists, whitelists, and encryption transforms.
+ *
+ * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
+ */
 export const getPersistorConfig = async () => {
     const key = await initEncryption()
 
@@ -72,8 +78,10 @@ export const getPersistorConfig = async () => {
     return persistConfig
 }
 
-// This combines all reset actions from all slices
-// Remember to add new reset actions here of any new persisted Slice
+/**
+ * This is an array of all reset actions from every slice in the application.
+ * Remember to add new reset actions here of any new persisted Slice.
+ */
 export const resetActions = [
     resetAccountState,
     resetActivityState,
