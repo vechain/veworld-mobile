@@ -1,15 +1,8 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React from "react"
-import { StyleSheet } from "react-native"
 import { useScrollableList } from "~Hooks"
-import {
-    AccountCard,
-    BaseBottomSheet,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 const snapPoints = ["40%"]
@@ -64,35 +57,25 @@ export const SelectAccountBottomSheet = React.forwardRef<
                 <BaseText typographyFont="subTitleBold">
                     {LL.COMMON_SELECT_ACCOUNT()}
                 </BaseText>
-                <BaseSpacer height={16} />
-                <BaseView flexDirection="row" style={styles.list}>
-                    <BottomSheetFlatList
-                        data={accounts}
-                        keyExtractor={account => account.address}
-                        ItemSeparatorComponent={ItemSeparatorComponent}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                        viewabilityConfig={viewabilityConfig}
-                        renderItem={({ item }) => (
-                            <AccountCard
-                                account={item}
-                                onPress={handlePress}
-                                selected={
-                                    item.address === selectedAccount?.address
-                                }
-                            />
-                        )}
-                        scrollEnabled={isListScrollable}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </BaseView>
+                <BaseSpacer height={12} />
+                <BottomSheetFlatList
+                    data={accounts}
+                    keyExtractor={account => account.address}
+                    ItemSeparatorComponent={ItemSeparatorComponent}
+                    onViewableItemsChanged={onViewableItemsChanged}
+                    viewabilityConfig={viewabilityConfig}
+                    renderItem={({ item }) => (
+                        <AccountCard
+                            account={item}
+                            onPress={handlePress}
+                            selected={item.address === selectedAccount?.address}
+                        />
+                    )}
+                    scrollEnabled={isListScrollable}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                />
             </BaseBottomSheet>
         )
     },
 )
-
-const styles = StyleSheet.create({
-    list: {
-        height: "70%",
-    },
-})
