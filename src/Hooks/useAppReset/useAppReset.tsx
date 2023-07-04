@@ -23,7 +23,6 @@ export const useAppReset = () => {
         await Promise.all(promises)
     }, [devices, isWalletSecurityBiometrics])
 
-    // TODO add loader in the reset app button while resetting the app from the reset action
     const appReset = useCallback(async () => {
         await removeEncryptionKeysFromKeychain()
 
