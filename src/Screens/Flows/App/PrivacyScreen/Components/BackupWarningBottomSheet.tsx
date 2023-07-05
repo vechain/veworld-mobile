@@ -19,7 +19,7 @@ type Props = {
     onConfirm: () => void
 }
 
-const snapPoints = ["57%"]
+const snapPoints = ["60%"]
 
 export const BackupWarningBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -36,8 +36,15 @@ export const BackupWarningBottomSheet = React.forwardRef<
         setChecked(false)
     }, [onClose, onConfirm])
 
+    const handleSheetChanges = useCallback((index: number) => {
+        if (index === -1) setChecked(false)
+    }, [])
+
     return (
-        <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
+        <BaseBottomSheet
+            ref={ref}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}>
             <ScrollViewWithFooter
                 footer={
                     <BaseView>
