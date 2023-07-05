@@ -10,8 +10,11 @@ import {
     ConnectAppScreen,
     SendTransactionScreen,
     SignMessageScreen,
+    LedgerSignMessageScreen,
 } from "~Screens"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
+import { LedgerAccountWithDevice } from "~Model"
+import { Certificate } from "thor-devkit"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -29,6 +32,13 @@ export type RootStackParamListSwitch = {
     Connected_App_Sign_Message_Screen: {
         requestEvent: SignClientTypes.EventArguments["session_request"]
         session: SessionTypes.Struct
+    }
+    Ledger_Sign_Message_Screen: {
+        accountWithDevice: LedgerAccountWithDevice
+        certificate: Certificate
+        initialRoute: string
+        origin?: string
+        requestEvent?: any
     }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
@@ -85,6 +95,11 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN}
                             component={SignMessageScreen}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.LEDGER_SIGN_MESSAGE_SCREEN}
+                            component={LedgerSignMessageScreen}
                         />
                     </Switch.Group>
                 </>

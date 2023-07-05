@@ -14,7 +14,7 @@ import { Certificate, blake2b256 } from "thor-devkit"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { WalletConnectUtils, WalletConnectResponseUtils, error } from "~Utils"
 import { useCheckIdentity, useSignMessage } from "~Hooks"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -66,7 +66,19 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
         nav.goBack()
     }, [nav])
 
-    const handleAccept = useCallback(
+    const handleOnConfirm = () => {
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
+            nav.navigate(Routes.LEDGER_SIGN_MESSAGE_SCREEN, {
+                accountWithDevice: selectedAccount as LedgerAccountWithDevice,
+                certificate: cert,
+                initialRoute: Routes.HOME,
+                origin: "walletConnect",
+                requestEvent,
+            })
+        } else checkIdentityBeforeOpening()
+    }
+
+    const signCertificate = useCallback(
         async (password?: string) => {
             try {
                 const signature = await signMessage(password)
@@ -115,7 +127,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
-            onIdentityConfirmed: handleAccept,
+            onIdentityConfirmed: signCertificate,
         })
 
     const onPressBack = useCallback(async () => {
@@ -169,7 +181,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="light"
                         title={LL.COMMON_BTN_SIGN()}
-                        action={checkIdentityBeforeOpening}
+                        action={handleOnConfirm}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

@@ -131,6 +131,7 @@ const WalletConnectContextProvider = ({
 
             // Show the screen based on the request method
             switch (requestEvent.params.request.method) {
+                case RequestMethods.SIGN:
                 case RequestMethods.IDENTIFY:
                     nav.navigate(Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN, {
                         requestEvent,
