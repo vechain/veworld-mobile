@@ -36,15 +36,15 @@ export const BackupWarningBottomSheet = React.forwardRef<
         setChecked(false)
     }, [onClose, onConfirm])
 
-    const handleSheetChanges = useCallback((index: number) => {
-        if (index === -1) setChecked(false)
+    const onDismiss = useCallback(() => {
+        setChecked(false)
     }, [])
 
     return (
         <BaseBottomSheet
             ref={ref}
             snapPoints={snapPoints}
-            onChange={handleSheetChanges}>
+            onDismiss={onDismiss}>
             <ScrollViewWithFooter
                 footer={
                     <BaseView>
