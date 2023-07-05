@@ -70,8 +70,10 @@ export const createBaseActivityFromTransaction = (
 export const createTransferClauseFromIncomingTransfer = (
     to: string,
     value: number,
-    tokenAddress: string,
+    contractAddress: string,
     type: ActivityType,
+    from?: string,
+    tokenId?: number,
 ): Connex.VM.Clause | undefined => {
     if (type === ActivityType.VET_TRANSFER) {
         return TransactionUtils.encodeTransferFungibleTokenClause(
@@ -85,7 +87,16 @@ export const createTransferClauseFromIncomingTransfer = (
         return TransactionUtils.encodeTransferFungibleTokenClause(
             to,
             value,
-            tokenAddress,
+            contractAddress,
+        )
+    }
+
+    if (type === ActivityType.NFT_TRANSFER && from && tokenId) {
+        return TransactionUtils.encodeTransferNonFungibleTokenClause(
+            from,
+            to,
+            contractAddress,
+            tokenId,
         )
     }
 }
@@ -106,6 +117,9 @@ export const eventTypeToActivityType = (
 
         case EventTypeResponse.FUNGIBLE_TOKEN:
             return ActivityType.FUNGIBLE_TOKEN
+
+        case EventTypeResponse.NFT:
+            return ActivityType.NFT_TRANSFER
 
         default:
             debug(
@@ -138,6 +152,7 @@ export const createBaseActivityFromIncomingTransfer = (
         value,
         tokenAddress,
         eventType,
+        tokenId,
     } = incomingTransfer
 
     const activityType = eventTypeToActivityType(eventType)
@@ -149,6 +164,8 @@ export const createBaseActivityFromIncomingTransfer = (
         value,
         tokenAddress,
         activityType,
+        from,
+        tokenId,
     )
 
     if (!encodedClause) return null
