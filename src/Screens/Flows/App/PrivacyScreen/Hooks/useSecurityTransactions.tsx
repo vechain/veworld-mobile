@@ -4,6 +4,7 @@ import { usePasswordValidation } from "~Hooks"
 import { LocalDevice, SecurityLevelType, Wallet } from "~Model"
 import {
     bulkUpdateDevices,
+    setIsAppBlocked,
     setUserSelectedSecurity,
     useAppDispatch,
 } from "~Storage/Redux"
@@ -56,6 +57,11 @@ export const useSecurityTransactions = ({
     const { LL } = useI18nContext()
 
     const { updatePassword } = usePasswordValidation()
+
+    const handleOnAppBlocked = useCallback(() => {
+        //Dispatch Blocked flag
+        dispatch(setIsAppBlocked(true))
+    }, [dispatch])
 
     /**
      * Executes a single operation and returns an updated device.
@@ -115,15 +121,23 @@ export const useSecurityTransactions = ({
                     dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
                 }
 
+                // Uncomment to test rollback failure
+                //if (updatedDevices.length > 0) throw new Error("Test rollback")
+
                 info("[END] - Rolling back transactions")
             } catch (e) {
-                // todo -> handle error how? -> reset app
                 error("Rollback failed", e)
+
+                showErrorToast(LL.COMMON_OOPS(), LL.ERROR_GENERIC_SUBTITLE())
+
+                handleOnAppBlocked()
             }
         },
         [
+            LL,
             dispatch,
             executeOperation,
+            handleOnAppBlocked,
             onStateCleanup,
             operationType,
             updatePassword,

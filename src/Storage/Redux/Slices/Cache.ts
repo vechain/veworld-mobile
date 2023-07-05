@@ -36,8 +36,13 @@ export const CacheSlice = createSlice({
         setAppLockStatus: (state, action: PayloadAction<WALLET_STATUS>) => {
             state.appLockStatus = action.payload
         },
+        resetCacheState: () => initialState,
     },
 })
 
-export const { setMnemonic, setNewLedgerDevice, setAppLockStatus } =
-    CacheSlice.actions
+export const {
+    setMnemonic,
+    setNewLedgerDevice,
+    setAppLockStatus,
+    resetCacheState,
+} = CacheSlice.actions

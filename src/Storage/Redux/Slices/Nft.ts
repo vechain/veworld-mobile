@@ -219,6 +219,8 @@ export const NftSlice = createSlice({
             state.error = action.payload.error
             return state
         },
+
+        resetNftState: () => initialStateNft,
     },
 })
 
@@ -228,5 +230,6 @@ export const {
     setNetworkingSideEffects,
     removeBlackListCollection,
     setNFTs,
+    resetNftState,
     removeNFTFromCollection,
 } = NftSlice.actions
