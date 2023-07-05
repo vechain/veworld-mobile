@@ -139,6 +139,12 @@ const prepareNonFungibleTokenClause = (
         .account(_token.belongsToCollectionAddress)
         .method(abis.VIP181.transferFrom)
         .asClause(account.address, addressTo, _token.tokenId)
+    //! NOTE: uncomment following line and comment out the line above to create a reverted transaction
+    // .asClause(
+    //     "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
+    //     addressTo,
+    //     "6969420",
+    // )
 
     return [clause]
 }

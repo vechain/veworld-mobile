@@ -66,6 +66,7 @@ const BlockListener: React.FC = () => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const thor = useThor()
     const pendingActivities = useAppSelector(selectActivitiesWithoutFinality)
+
     const {
         count: counter,
         increment: incrementCounter,
@@ -99,7 +100,7 @@ const BlockListener: React.FC = () => {
     )
 
     const onOpen = () => {
-        info("Beat WS open on: ", beatUrl)
+        // info("Beat WS open on: ", beatUrl)
         dispatch(updateNodeError(false))
     }
 
@@ -156,6 +157,7 @@ const BlockListener: React.FC = () => {
     ) => {
         //Update the pending transaction cache, check for reverted
         const updatedActivities = await updateActivities(pendingActivities)
+
         for (const updatedAct of updatedActivities) {
             if (updatedAct.status === ActivityStatus.REVERTED) {
                 showTransactionReverted(updatedAct.id)
@@ -166,7 +168,26 @@ const BlockListener: React.FC = () => {
         const relevantAccounts = accounts.filter(acc =>
             BloomUtils.testBloomForAddress(beat.bloom, beat.k, acc.address),
         )
+
         if (relevantAccounts.length === 0) return
+
+        // info("received Beat", beat)
+        /*
+            NFT SEND
+            {"bloom": "0xe258497d1674b4525207bb627e7575e4f1cd4061", "gasLimit": 29941436, "id": "0x00f07feb6d22b1bb415ff5fa58b311bd867077702d1601f71a43cec456fd5bc6", "k": 13, "number": 15761387, "obsolete": false, "parentID": "0x00f07fea5dbddbb4ec38b18c77d0f576b830ee74e3bca1b2019e11b333485869", "timestamp": 1688137980, "txsFeatures": 1}
+         */
+
+        // info(
+        //     "NFT BLOOM",
+        //     BloomUtils.testBloomForAddress(
+        //         beat.bloom,
+        //         beat.k,
+        //         "0xa00c0b2b042b10402719cf0805054205c5c97fd2",
+        //     ),
+        // )
+        /*
+            NFT BLOOM true
+        */
 
         // Detect transfer events for all accounts and alert the user
         await attemptAlertOnVetTransfer(beat.number, relevantAccounts)
@@ -186,6 +207,7 @@ const BlockListener: React.FC = () => {
                     acct.address,
                 ),
             )
+
             if (relevantTokensForAcct.length > 0)
                 await attemptAlertOnTokenTransfer(
                     beat.number,

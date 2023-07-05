@@ -17,6 +17,10 @@ import { reducer } from "./Store"
 import { RootState, Store } from "./Types"
 import { getPersistorConfig } from "./Helpers"
 
+if (process.env.NODE_ENV !== "production") {
+    require("basil-ws-flipper").wsDebugPlugin
+}
+
 export const useInitStore = (preloadedState?: Partial<RootState>) => {
     const [store, setStore] = useState<Store | undefined>()
     const [persistor, setPersistor] = useState<Persistor | undefined>()

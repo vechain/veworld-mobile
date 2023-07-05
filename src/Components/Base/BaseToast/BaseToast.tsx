@@ -186,3 +186,10 @@ export const showInfoToast = (
         props: { textLink: textLink, onPress: onPress },
     })
 }
+
+export enum ToastType {
+    Success = "success",
+    Error = "error",
+    Warning = "warning",
+    Info = "info",
+}

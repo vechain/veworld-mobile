@@ -17,11 +17,9 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
-    removeNFTFromCollection,
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
     selectVthoTokenWithBalanceByAccount,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { NFTRecapView } from "./Components/NFTRecapView"
@@ -30,7 +28,6 @@ import { ScrollView } from "react-native-gesture-handler"
 import {
     BottomInsetsEXtraPadding,
     useCheckIdentity,
-    useNFTCollections,
     usePlatformBottomInsets,
     useSignTransaction,
     useTransaction,
@@ -50,7 +47,6 @@ type Props = NativeStackScreenProps<
 export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const disptach = useAppDispatch()
 
     const { calculateBottomInsets } = usePlatformBottomInsets(
         BottomInsetsEXtraPadding.StaticButton,
@@ -66,21 +62,12 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         ),
     )
 
-    const { getCollections } = useNFTCollections()
-
     const [loading, setLoading] = useState(false)
 
     const onTXFinish = useCallback(() => {
         setLoading(false)
-
-        // get nft collections again?
-        getCollections(0, 10)
-
-        setTimeout(() => {
-            nav.dispatch(StackActions.popToTop())
-            disptach(removeNFTFromCollection({ NFT: nft! }))
-        }, 300)
-    }, [disptach, nav, nft, getCollections])
+        nav.dispatch(StackActions.popToTop())
+    }, [nav])
 
     const { gas, transaction } = useTransaction({
         token: nft!,
@@ -108,6 +95,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         selectedDelegationOption,
         selectedDelegationUrl,
         onError: () => setLoading(false),
+        token: nft!,
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
