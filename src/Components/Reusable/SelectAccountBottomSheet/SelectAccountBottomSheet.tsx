@@ -1,12 +1,10 @@
+import React from "react"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React from "react"
-import { useScrollableList } from "~Hooks"
+import { useScrollableBottomSheet } from "~Hooks"
 import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
-const snapPoints = ["40%"]
-
 /**
  * @typedef {object} Props
  * @prop {() => void} onDismiss - called on the bottom sheet dismiss
@@ -24,6 +22,8 @@ type Props = {
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={16} />
+
+const snapPoints = ["50%", "75%", "90%"]
 
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<
@@ -46,13 +46,14 @@ export const SelectAccountBottomSheet = React.forwardRef<
             closeBottomSheet()
         }
 
-        const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-            useScrollableList(accounts, 0, snapPoints.length)
+        const { flatListScrollProps, handleSheetChangePosition } =
+            useScrollableBottomSheet({ data: accounts, snapPoints })
 
         return (
             <BaseBottomSheet
                 snapPoints={snapPoints}
                 ref={ref}
+                onChange={handleSheetChangePosition}
                 onDismiss={onDismiss}>
                 <BaseText typographyFont="subTitleBold">
                     {LL.COMMON_SELECT_ACCOUNT()}
@@ -62,8 +63,6 @@ export const SelectAccountBottomSheet = React.forwardRef<
                     data={accounts}
                     keyExtractor={account => account.address}
                     ItemSeparatorComponent={ItemSeparatorComponent}
-                    onViewableItemsChanged={onViewableItemsChanged}
-                    viewabilityConfig={viewabilityConfig}
                     renderItem={({ item }) => (
                         <AccountCard
                             account={item}
@@ -71,9 +70,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
                             selected={item.address === selectedAccount?.address}
                         />
                     )}
-                    scrollEnabled={isListScrollable}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
+                    {...flatListScrollProps}
                 />
             </BaseBottomSheet>
         )
