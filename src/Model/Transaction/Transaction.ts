@@ -81,7 +81,8 @@ export type SwapEvent = {
 export type TransferEvent = {
     from: string
     to: string
-    value: string
+    value?: string
+    tokenId?: string
 }
 
 export type SwapResult = {
