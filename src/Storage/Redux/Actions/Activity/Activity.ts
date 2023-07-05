@@ -73,7 +73,7 @@ const createPendingTransferActivityFromTx = (
         status: ActivityStatus.PENDING,
         isTransaction: true,
         timestamp: Date.now(),
-        gasPayer: (delegated ? delegator : origin) ?? "", //TODO Check if 'delegator' is correctly set when delegating a transaction to another account
+        gasPayer: (delegated ? delegator : origin) ?? "",
         blockNumber: 0,
         type,
         amount,

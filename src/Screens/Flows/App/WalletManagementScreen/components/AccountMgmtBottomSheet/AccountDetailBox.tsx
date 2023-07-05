@@ -49,7 +49,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                             )}
                         </BaseText>
                         <BaseSpacer height={4} />
-                        {/** TODO: change with a real budget */}
+                        {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/770) change with a real budget */}
                         {/* eslint-disable-next-line i18next/no-literal-string  */}
                         <BaseText fontSize={10}>1.2235 VET</BaseText>
                     </BaseView>

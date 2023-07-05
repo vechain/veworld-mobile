@@ -18,7 +18,7 @@ export const BaseImage = memo((props: Props) => {
                 testID={testID}
                 style={[{ width: w, height: h }, style]}
                 fallback
-                // todo -> change fallback image
+                // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/749) change fallback image
                 defaultSource={require("../../Assets/Img/NFTPlaceholder.png")}
                 source={{
                     uri,
