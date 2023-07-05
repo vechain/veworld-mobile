@@ -59,8 +59,13 @@ export const ContactsSlice = createSlice({
                 state.contacts[contactExistsIndex].alias = alias
             }
         },
+        resetContactsState: () => initialContactsState,
     },
 })
 
-export const { insertContact, deleteContact, updateContact } =
-    ContactsSlice.actions
+export const {
+    insertContact,
+    deleteContact,
+    updateContact,
+    resetContactsState,
+} = ContactsSlice.actions

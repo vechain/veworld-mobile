@@ -55,8 +55,9 @@ export const WalletConnectSessionsSlice = createSlice({
                 }
             }
         },
+        resetWalletConnectState: () => initialSessionsState,
     },
 })
 
-export const { insertSession, deleteSession } =
+export const { insertSession, deleteSession, resetWalletConnectState } =
     WalletConnectSessionsSlice.actions

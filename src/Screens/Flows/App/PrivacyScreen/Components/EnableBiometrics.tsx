@@ -1,5 +1,5 @@
-import React, { useCallback } from "react"
-import { useDisclosure } from "~Hooks"
+import React, { useCallback, useState } from "react"
+import { useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
 import {
     BaseButtonGroupHorizontal,
     BaseSpacer,
@@ -9,8 +9,14 @@ import {
 import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
 import { useI18nContext } from "~i18n"
 import { useSecurityButtons } from "../Hooks/useSecurityButtons"
+import { BackupWarningBottomSheet } from "./BackupWarningBottomSheet"
+import { BaseButtonGroupHorizontalType, SecurityLevelType } from "~Model"
 
 export const EnableBiometrics = () => {
+    // State for the current button
+    const [currentButton, setCurrentButton] =
+        useState<BaseButtonGroupHorizontalType>()
+
     const runSecurityUpgrade = useSecurityUpgrade()
     const { LL } = useI18nContext()
 
@@ -20,8 +26,16 @@ export const EnableBiometrics = () => {
         onClose: closePasswordPrompt,
     } = useDisclosure()
 
+    const {
+        ref: backupWarningSheetRef,
+        onOpen: openBackupWarningSheet,
+        onClose: closeBackupWarningSheet,
+    } = useBottomSheetModal()
+
     const { securityButtons, shouldCallRequireBiometricsAndEnableIt } =
         useSecurityButtons(openPasswordPrompt)
+
+    const { isWalletSecurityBiometrics } = useWalletSecurity()
 
     const onPasswordSuccess = useCallback(
         async (password: string) => {
@@ -35,6 +49,26 @@ export const EnableBiometrics = () => {
         },
         [runSecurityUpgrade, closePasswordPrompt],
     )
+
+    const onButtonPress = useCallback(
+        (button: BaseButtonGroupHorizontalType) => {
+            if (
+                button.id !== SecurityLevelType.BIOMETRIC ||
+                isWalletSecurityBiometrics
+            )
+                return
+
+            setCurrentButton(button)
+            openBackupWarningSheet()
+        },
+        [isWalletSecurityBiometrics, openBackupWarningSheet],
+    )
+
+    const handleOnProceed = useCallback(() => {
+        if (!currentButton) return
+
+        shouldCallRequireBiometricsAndEnableIt(currentButton)
+    }, [shouldCallRequireBiometricsAndEnableIt, currentButton])
 
     return (
         <>
@@ -50,13 +84,19 @@ export const EnableBiometrics = () => {
             <BaseButtonGroupHorizontal
                 selectedButtonIds={[securityButtons.currentSecurity]}
                 buttons={securityButtons.buttons}
-                action={shouldCallRequireBiometricsAndEnableIt}
+                action={onButtonPress}
             />
 
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}
                 onClose={closePasswordPrompt}
                 onSuccess={onPasswordSuccess}
+            />
+
+            <BackupWarningBottomSheet
+                ref={backupWarningSheetRef}
+                onConfirm={handleOnProceed}
+                onClose={closeBackupWarningSheet}
             />
         </>
     )

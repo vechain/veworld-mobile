@@ -50,10 +50,15 @@ export const useCreateWallet = () => {
                 const { device, wallet } = getDeviceFromMnemonic(mnemonic)
                 dispatch(setMnemonic(undefined))
 
+                // if userPassword is provided, encrypt the wallet with access control false
+                const accessControl = userPassword
+                    ? false
+                    : biometrics?.accessControl ?? false
+
                 const { encryptedWallet } = await CryptoUtils.encryptWallet({
                     wallet,
                     rootAddress: device.rootAddress,
-                    accessControl: biometrics?.accessControl ?? false,
+                    accessControl,
                     hashEncryptionKey: userPassword,
                 })
 
