@@ -201,7 +201,7 @@ export const HistoryScreen = () => {
                             width: SCREEN_WIDTH,
                         }}
                         onScroll={onScroll}
-                        onEndReachedThreshold={1}
+                        onEndReachedThreshold={0.5}
                         onEndReached={onEndReached}
                         refreshControl={
                             <RefreshControl
