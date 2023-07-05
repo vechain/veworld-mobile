@@ -1,6 +1,5 @@
 import React, { useCallback } from "react"
 import { useDisclosure, useWalletSecurity } from "~Hooks"
-import { BiometricsUtils } from "~Utils"
 import { RequireUserPassword } from "~Components"
 
 type Props = {
@@ -27,10 +26,7 @@ export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
      */
     const checkIdentityBeforeOpening = useCallback(async () => {
         if (isWalletSecurityBiometrics) {
-            let { success } = await BiometricsUtils.authenticateWithBiometrics()
-            if (success) {
-                onIdentityConfirmed()
-            }
+            onIdentityConfirmed()
         } else {
             openPasswordPrompt()
         }

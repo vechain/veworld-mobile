@@ -183,6 +183,10 @@ type RootTranslation = {
 	 */
 	BTN_LETS_GET_SENDING: string
 	/**
+	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​m​y​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e
+	 */
+	BTN_SECURITY_OPERATION_CHECKBOX: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -464,6 +468,10 @@ type RootTranslation = {
 	 */
 	BD_COLLECTION: string
 	/**
+	 * L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.
+	 */
+	BD_APP_BLOCKED: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -628,6 +636,10 @@ type RootTranslation = {
 	 */
 	TITLE_DISCOVER: string
 	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
+	 */
+	TITLE_BACKUP_YOUR_PHRASE: string
+	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
 	SB_IMPORT_WALLET_TYPE: string
@@ -750,6 +762,14 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	SB_COLLECTIBLES: string
+	/**
+	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
+	 */
+	SB_BACKUP_YOUR_PHRASE: string
+	/**
+	 * R​E​S​E​T​ ​t​h​e​ ​A​p​p​!
+	 */
+	SB_BACKUP_YOUR_PHRASE_2: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -973,6 +993,10 @@ type RootTranslation = {
 	 */
 	COMMON_OOPS: string
 	/**
+	 * P​r​o​c​e​e​d
+	 */
+	COMMON_PROCEED: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1106,6 +1130,10 @@ type RootTranslation = {
 	 * S​e​c​u​r​i​t​y​ ​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_SECURITY_ACTION: string
+	/**
+	 * I​n​v​a​l​i​d​ ​a​d​d​r​e​s​s
+	 */
+	ERROR_INVALID_ADDRESS: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -1423,6 +1451,18 @@ type RootTranslation = {
 	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
 	 */
 	NO_MARKETPLACE: string
+	/**
+	 * S​e​n​d​ ​y​o​u​r​ ​N​F​T
+	 */
+	SEND_NFT_TITLE: string
+	/**
+	 * F​i​l​l​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​f​i​e​l​d​s
+	 */
+	SEND_NFT_SUB_TITLE: string
+	/**
+	 * R​e​c​a​p
+	 */
+	RECAP: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -2171,6 +2211,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_LETS_GET_SENDING: () => LocalizedString
 	/**
+	 * I state that I have backed up my secret phrase
+	 */
+	BTN_SECURITY_OPERATION_CHECKBOX: () => LocalizedString
+	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
 	BD_GDPR: () => LocalizedString
@@ -2451,6 +2495,10 @@ export type TranslationFunctions = {
 	 */
 	BD_COLLECTION: () => LocalizedString
 	/**
+	 * Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+	 */
+	BD_APP_BLOCKED: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -2615,6 +2663,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_DISCOVER: () => LocalizedString
 	/**
+	 * Backup your phrase
+	 */
+	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
+	/**
 	 * Which kind of wallet do you want to import?
 	 */
 	SB_IMPORT_WALLET_TYPE: () => LocalizedString
@@ -2734,6 +2786,14 @@ export type TranslationFunctions = {
 	 * Collectibles
 	 */
 	SB_COLLECTIBLES: () => LocalizedString
+	/**
+	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
+	 */
+	SB_BACKUP_YOUR_PHRASE: () => LocalizedString
+	/**
+	 * RESET the App!
+	 */
+	SB_BACKUP_YOUR_PHRASE_2: () => LocalizedString
 	/**
 	 * Face ID
 	 */
@@ -2955,6 +3015,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_OOPS: () => LocalizedString
 	/**
+	 * Proceed
+	 */
+	COMMON_PROCEED: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -3087,6 +3151,10 @@ Please, try again later.
 	 * Security action failed. Please check your device and try again.
 	 */
 	ERROR_SECURITY_ACTION: () => LocalizedString
+	/**
+	 * Invalid address
+	 */
+	ERROR_INVALID_ADDRESS: () => LocalizedString
 	/**
 	 * Success!
 	 */
@@ -3395,6 +3463,18 @@ Please, try again later.
 	 * Unable to open marketplace
 	 */
 	NO_MARKETPLACE: () => LocalizedString
+	/**
+	 * Send your NFT
+	 */
+	SEND_NFT_TITLE: () => LocalizedString
+	/**
+	 * Fill the required fields
+	 */
+	SEND_NFT_SUB_TITLE: () => LocalizedString
+	/**
+	 * Recap
+	 */
+	RECAP: () => LocalizedString
 	/**
 	 * Light
 	 */

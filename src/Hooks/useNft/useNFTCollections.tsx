@@ -93,7 +93,7 @@ export const useNFTCollections = () => {
                 // set collections to store
                 dispatch(
                     setCollections({
-                        address: selectedAccount.address,
+                        currentAccountAddress: selectedAccount.address,
                         collectiondata: {
                             collections: _nftCollections,
                             pagination,

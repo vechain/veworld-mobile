@@ -11,7 +11,11 @@ import {
     showErrorToast,
 } from "~Components"
 import { ScrollView, Linking } from "react-native"
-import { usePlatformBottomInsets } from "~Hooks"
+import {
+    BottomInsetsEXtraPadding,
+    useCopyClipboard,
+    usePlatformBottomInsets,
+} from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
@@ -21,6 +25,8 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { striptags } from "striptags"
+import { useNavigation } from "@react-navigation/native"
+import { getCalendars } from "expo-localization"
 
 interface NFTAttributeData {
     trait_type: string
@@ -30,8 +36,12 @@ interface NFTAttributeData {
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
 export const NFTDetailScreen = ({ route }: Props) => {
-    const { LL } = useI18nContext()
-    const { calculateBottomInsets } = usePlatformBottomInsets()
+    const { LL, locale } = useI18nContext()
+    const { calculateBottomInsets } = usePlatformBottomInsets(
+        BottomInsetsEXtraPadding.StaticButton,
+    )
+    const nav = useNavigation()
+    const { onCopyToClipboard } = useCopyClipboard()
 
     const collection = useAppSelector(state =>
         selectCollectionWithContractAddress(
@@ -48,7 +58,14 @@ export const NFTDetailScreen = ({ route }: Props) => {
         ),
     )
 
-    const onSendPress = useCallback(() => {}, [])
+    const onSendPress = useCallback(
+        () =>
+            nav.navigate(Routes.SEND_NFT, {
+                contractAddress: route.params.collectionAddress!,
+                tokenId: route.params.nftTokenId!,
+            }),
+        [nav, route.params.collectionAddress, route.params.nftTokenId],
+    )
 
     const onMarketPlacePress = useCallback(async () => {
         const supported = await Linking.canOpenURL(nft?.external_url ?? "")
@@ -64,6 +81,14 @@ export const NFTDetailScreen = ({ route }: Props) => {
         if (collection?.description) return collection?.description
     }, [collection, nft])
 
+    const onCopyToClipboardPress = useCallback(
+        (_data: string) => {
+            onCopyToClipboard(_data, LL.CONTRACT_ADDRESS())
+        },
+        [LL, onCopyToClipboard],
+    )
+
+    // todo - add LL for headers
     return (
         <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
             <BackButtonHeader hasBottomSpacer={false} />
@@ -71,7 +96,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
-                        paddingBottom: calculateBottomInsets + 80,
+                        paddingBottom: calculateBottomInsets,
                     }}>
                     <BaseSpacer height={26} />
 
@@ -141,8 +166,9 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             title={"Minted At"}
                             data={DateUtils.formatDateTime(
                                 nft?.date,
-                                "en",
-                                "UTC",
+                                locale,
+                                getCalendars()[0].timeZone ??
+                                    DateUtils.DEFAULT_TIMEZONE,
                             )}
                         />
                     )}
@@ -170,6 +196,9 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
                     {collection?.address && (
                         <InfoSectionView<string>
+                            action={() =>
+                                onCopyToClipboardPress(collection.address)
+                            }
                             isLastInList
                             title={LL.CONTRACT_ADDRESS()}
                             data={FormattingUtils.humanAddress(

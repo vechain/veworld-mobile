@@ -117,6 +117,7 @@ export const BalanceSlice = createSlice({
                 return updatedBalance ? updatedBalance : balance
             })
         },
+        resetBalancesState: () => initialState,
     },
 })
 
@@ -126,4 +127,5 @@ export const {
     updateTokenBalances,
     removeTokenBalance,
     changeBalancePosition,
+    resetBalancesState,
 } = BalanceSlice.actions

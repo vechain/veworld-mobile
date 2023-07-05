@@ -66,6 +66,7 @@ export const NetworkSlice = createSlice({
         updateNodeError: (state, action: PayloadAction<boolean>) => {
             state.isNodeError = action.payload
         },
+        resetNetworkState: () => initialState,
     },
 })
 
@@ -77,4 +78,5 @@ export const {
     toggleShowTestnetTag,
     toggleShowConversionOtherNetworks,
     updateNodeError,
+    resetNetworkState,
 } = NetworkSlice.actions

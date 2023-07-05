@@ -29,6 +29,8 @@ export enum Routes {
     NFTS = "NFTs",
     NFT_DETAILS = "NFT_Details",
     NFT_COLLECTION_DETAILS = "NFT_Collection_Details",
+    SEND_NFT = "Send_NFT",
+    SEND_NFT_RECAP = "Send_NFT_Recap",
     WALLET_MANAGEMENT = "Wallet_Management",
     SETTINGS_TRANSACTIONS = "Transactions",
     MANAGE_DELEGATION_URLS = "Manage_Delegation_URLs",
@@ -52,4 +54,5 @@ export enum Routes {
     CONNECT_APP_SCREEN = "Connect_App_Screen",
     CONNECTED_APP_SEND_TRANSACTION_SCREEN = "Connected_App_Send_Transaction_Screen",
     CONNECTED_APP_SIGN_MESSAGE_SCREEN = "Connected_App_Sign_Message_Screen",
+    BLOCKED_APP_SCREEN = "Blocked_App_Screen",
 }

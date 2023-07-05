@@ -6,7 +6,7 @@ import {
     StyleSheet,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { ColorThemeType, typography, TFonts } from "~Constants"
+import { ColorThemeType, typography, TFonts, COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
 import * as Haptics from "expo-haptics"
@@ -130,6 +130,13 @@ export const BaseButton = ({
         }
     }, [theme, invertLoaderColor])
 
+    const calculateBackgroundColor = useMemo(() => {
+        if (disabled) return COLORS.DISABLED_GREY
+
+        if (isSolidButton) return bgColor
+        else return theme.colors.transparent
+    }, [bgColor, disabled, isSolidButton, theme.colors.transparent])
+
     return (
         <TouchableOpacity
             onPress={onButtonPress}
@@ -137,9 +144,7 @@ export const BaseButton = ({
             disabled={disabled}
             style={[
                 {
-                    backgroundColor: isSolidButton
-                        ? bgColor
-                        : theme.colors.transparent,
+                    backgroundColor: calculateBackgroundColor,
                     borderColor: isOutlineButton
                         ? bgColor
                         : theme.colors.transparent,
@@ -151,7 +156,6 @@ export const BaseButton = ({
                     padding: otherProps.p,
                     paddingVertical: paddingY,
                     paddingHorizontal: paddingX,
-                    opacity: disabled ? 0.5 : 1,
                     alignSelf: otherProps.selfAlign,
                     display: "flex",
                     alignItems: "center",

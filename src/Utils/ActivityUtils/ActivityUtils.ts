@@ -20,6 +20,10 @@ export const getActivityTypeFromClause = (
         return ActivityType.VET_TRANSFER
     }
 
+    if (TransactionUtils.isNFTTransferClause(clauses[0])) {
+        return ActivityType.NFT_TRANSFER
+    }
+
     return ActivityType.CONNECTED_APP_TRANSACTION
 }
 

@@ -97,6 +97,8 @@ export const TokenSlice = createSlice({
         ) => {
             state.coinGeckoTokens = action.payload
         },
+
+        resetTokensState: () => initialTokenState,
     },
 })
 
@@ -108,4 +110,5 @@ export const {
     setCoinGeckoTokens,
     setSuggestedTokens,
     setCoinMarketInfo,
+    resetTokensState,
 } = TokenSlice.actions

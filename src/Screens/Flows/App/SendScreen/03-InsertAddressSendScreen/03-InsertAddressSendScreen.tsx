@@ -1,22 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { StyleSheet } from "react-native"
-import { useBottomSheetModal } from "~Hooks"
+import { ScrollView, StyleSheet, Keyboard } from "react-native"
+import {
+    BottomInsetsEXtraPadding,
+    useBottomSheetModal,
+    usePlatformBottomInsets,
+} from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
     BackButtonHeader,
     BaseAccordion,
-    BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseTextInput,
     BaseView,
     ContactCard,
+    FadeoutButton,
     ScanBottomSheet,
-    ScrollViewWithFooter,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -45,8 +48,10 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const [errorMessage, setErrorMessage] = useState("")
     const [selectedAddress, setSelectedAddress] = useState("")
     const nav = useNavigation()
-    const accounts = useAppSelector(selectAccounts)
-    const contacts = useAppSelector(selectKnownContacts)
+
+    const { calculateBottomInsets } = usePlatformBottomInsets(
+        BottomInsetsEXtraPadding.StaticButton,
+    )
 
     const {
         ref: createContactBottomSheetRef,
@@ -60,6 +65,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         onClose: closeScanAddressSheetRef,
     } = useBottomSheetModal()
 
+    // todo: refactor to a new hook - duplicate also in TransactionSummarySendScreen
+    const accounts = useAppSelector(selectAccounts)
+    const contacts = useAppSelector(selectKnownContacts)
     const accountsAndContacts = useMemo(() => {
         return [...accounts, ...contacts]
     }, [accounts, contacts])
@@ -134,6 +142,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             if (addressExists) return navigateNext(address)
 
             setSelectedAddress(address)
+            Keyboard.dismiss()
             openCreateContactSheet()
         },
         [accountsAndContacts, openCreateContactSheet, navigateNext],
@@ -144,7 +153,10 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     useEffect(() => {
         if (searchText && AddressUtils.isValid(searchText)) {
             setSelectedAddress(searchText)
-            if (!isAddressInContactsOrAccounts) openCreateContactSheet()
+            if (!isAddressInContactsOrAccounts) {
+                Keyboard.dismiss()
+                openCreateContactSheet()
+            }
         }
     }, [searchText, isAddressInContactsOrAccounts, openCreateContactSheet])
 
@@ -157,6 +169,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         if (isAddressInContactsOrAccounts && selectedAddress) {
             navigateNext(selectedAddress)
         } else {
+            Keyboard.dismiss()
             openCreateContactSheet()
         }
     }, [
@@ -169,19 +182,10 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     return (
         <BaseSafeArea grow={1} testID="Insert_Address_Send_Screen">
             <BackButtonHeader />
-            <ScrollViewWithFooter
-                footer={
-                    <>
-                        <BaseButton
-                            style={styles.nextButton}
-                            mx={24}
-                            title={LL.COMMON_BTN_NEXT()}
-                            disabled={!selectedAddress}
-                            action={onNext}
-                        />
-                        <BaseSpacer height={96} />
-                    </>
-                }>
+            <ScrollView
+                contentContainerStyle={{
+                    paddingBottom: calculateBottomInsets,
+                }}>
                 <BaseView mx={24}>
                     <BaseText typographyFont="title">
                         {LL.SEND_TOKEN_TITLE()}
@@ -197,7 +201,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     <BaseSpacer height={24} />
                     <BaseView flexDirection="row" w={100}>
                         <BaseTextInput
-                            containerStyle={styles.inputContainer}
+                            containerStyle={baseStyles.inputContainer}
                             value={searchText}
                             setValue={handleSearchChange}
                             placeholder={LL.SEND_ENTER_AN_ADDRESS()}
@@ -236,7 +240,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                     return (
                                         <ContactCard
                                             key={contact.address}
-                                            containerStyle={styles.contactCard}
+                                            containerStyle={
+                                                baseStyles.contactCard
+                                            }
                                             contact={contact}
                                             onPress={onPress}
                                             selected={isSelected}
@@ -271,7 +277,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                     return (
                                         <AccountCard
                                             key={account.address}
-                                            containerStyle={styles.accountCard}
+                                            containerStyle={
+                                                baseStyles.accountCard
+                                            }
                                             account={account}
                                             onPress={onPress}
                                             selected={isSelected}
@@ -282,13 +290,21 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         }
                     />
                 </BaseView>
-            </ScrollViewWithFooter>
+            </ScrollView>
+
+            <FadeoutButton
+                title={LL.COMMON_BTN_NEXT()}
+                action={onNext}
+                disabled={!selectedAddress}
+            />
+
             <CreateContactBottomSheet
                 ref={createContactBottomSheetRef}
                 onClose={closeCreateContactSheet}
                 onSubmit={navigateNext}
                 address={selectedAddress}
             />
+
             <ScanBottomSheet
                 ref={scanAddressSheetRef}
                 onClose={closeScanAddressSheetRef}
@@ -299,7 +315,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     )
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
     icon: {
         position: "absolute",
         top: 10,

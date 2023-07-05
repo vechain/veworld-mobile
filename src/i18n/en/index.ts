@@ -48,6 +48,7 @@ const en: BaseTranslation = {
     BTN_EDIT_PIN: "Edit Pin",
     BTN_BACKUP_MENMONIC: "Backup phrase",
     BTN_LETS_GET_SENDING: "Let's get sending!",
+    BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
    
 
     // BODY
@@ -133,6 +134,7 @@ const en: BaseTranslation = {
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
+    BD_APP_BLOCKED: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
  
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -177,6 +179,7 @@ const en: BaseTranslation = {
     TITLE_EDIT_WALLET: "Edit wallet",
     TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
     TITLE_DISCOVER: "Discover",
+    TITLE_BACKUP_YOUR_PHRASE: "Backup your phrase",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE: "Which kind of wallet do you want to import?",
@@ -209,6 +212,8 @@ const en: BaseTranslation = {
     SB_NO_TRANSACTIONS: "Your activities will appear here",
     SB_DESCRIPTION: "Description",
     SB_COLLECTIBLES: "Collectibles",
+    SB_BACKUP_YOUR_PHRASE: "Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to",
+    SB_BACKUP_YOUR_PHRASE_2: "RESET the App!",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -271,6 +276,7 @@ const en: BaseTranslation = {
     COMMON_IMPORT: "Import",
     COMMON_RECEIVE: "Receive",
     COMMON_OOPS: "Oops!",
+    COMMON_PROCEED: "Proceed",
 
 
     // Alerts
@@ -311,6 +317,7 @@ const en: BaseTranslation = {
     ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: "The token URI protocol is not supported ({protocol})",
     ERROR_NFT_FAILED_TO_GET_METADATA: "Failed to get token metadata",
     ERROR_SECURITY_ACTION: "Security action failed. Please check your device and try again.",
+    ERROR_INVALID_ADDRESS: "Invalid address",
 
 
     // Success
@@ -412,6 +419,9 @@ const en: BaseTranslation = {
     SHOW_COLLECTION: "Show collection",
     HIDE_COLLECTION: "Hide collection",
     NO_MARKETPLACE: "Unable to open marketplace",
+    SEND_NFT_TITLE: "Send your NFT",
+    SEND_NFT_SUB_TITLE: "Fill the required fields",
+    RECAP: "Recap",
 
     // Onboarding
 

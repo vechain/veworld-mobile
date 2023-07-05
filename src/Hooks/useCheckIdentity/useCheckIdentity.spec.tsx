@@ -25,37 +25,6 @@ describe("useCheckIdentity", () => {
     })
 
     describe("Biometrics enabled", () => {
-        it("does not call onIdentityConfirmed when biometric is wrong", async () => {
-            const onIdentityConfirmed = jest.fn()
-            const { result, waitForNextUpdate } = renderHook(
-                () =>
-                    useCheckIdentity({
-                        onIdentityConfirmed,
-                        onCancel: jest.fn(),
-                    }),
-                { wrapper: TestWrapper },
-            )
-
-            ;(useWalletSecurity as jest.Mock).mockReturnValue({
-                isWalletSecurityBiometrics: true,
-            })
-            await waitForNextUpdate()
-
-            jest.spyOn(
-                BiometricsUtils,
-                "authenticateWithBiometrics",
-            ).mockResolvedValue({
-                success: false,
-                error: "error",
-            })
-
-            await act(async () => {
-                await result.current.checkIdentityBeforeOpening()
-            })
-
-            expect(onIdentityConfirmed).not.toHaveBeenCalled()
-        })
-
         it("calls onIdentityConfirmed without password when biometric is correct", async () => {
             const onIdentityConfirmed = jest.fn()
             const { result, waitForNextUpdate } = renderHook(

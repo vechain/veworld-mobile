@@ -2,7 +2,7 @@ import { Linking } from "react-native"
 import { Transaction } from "thor-devkit"
 import { showSuccessToast, useThor } from "~Components"
 import { defaultMainNetwork } from "~Constants"
-import { Network, WalletAccount } from "~Model"
+import { ActivityType, Network, WalletAccount } from "~Model"
 import {
     addPendingTransferTransactionActivity,
     updateAccountBalances,
@@ -10,6 +10,7 @@ import {
 } from "~Storage/Redux"
 import { sendTransaction } from "~Networking"
 import { useI18nContext } from "~i18n"
+import { ActivityUtils } from "~Utils"
 
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
@@ -28,8 +29,15 @@ export const useSendTransaction = (
     const sendTransactionAndPerformUpdates = async (tx: Transaction) => {
         const id = await sendTransaction(tx, network.currentUrl)
 
-        // Add pending transaction activity
-        dispatch(addPendingTransferTransactionActivity(tx, thorClient))
+        const type = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
+        if (type === ActivityType.NFT_TRANSFER) {
+            // todo - handle NFT activity?
+        } else {
+            // Add pending transaction activity
+            dispatch(addPendingTransferTransactionActivity(tx, thorClient))
+        }
+
+        await dispatch(updateAccountBalances(thorClient, account.address))
 
         showSuccessToast(
             LL.SUCCESS_GENERIC(),
@@ -44,7 +52,6 @@ export const useSendTransaction = (
             },
             "transactionSuccessToast",
         )
-        await dispatch(updateAccountBalances(thorClient, account.address))
     }
 
     return { sendTransactionAndPerformUpdates }

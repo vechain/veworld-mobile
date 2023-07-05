@@ -73,6 +73,7 @@ export const DeviceSlice = createSlice({
 
             state.splice(index, 1)
         },
+        resetDeviceState: () => initialDeviceState,
     },
 })
 
@@ -82,4 +83,5 @@ export const {
     updateDevice,
     bulkUpdateDevices,
     removeDeviceByIndex,
+    resetDeviceState,
 } = DeviceSlice.actions
