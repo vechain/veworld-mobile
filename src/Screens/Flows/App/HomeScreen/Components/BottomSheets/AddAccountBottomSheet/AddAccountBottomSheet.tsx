@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseButton, BaseBottomSheet } from "~Components"
 import { DevicesList } from "./DevicesList"
@@ -13,6 +13,8 @@ type Props = {
     onClose: () => void
 }
 
+const snapPoints = ["75%"]
+
 export const AddAccountBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
@@ -22,11 +24,10 @@ export const AddAccountBottomSheet = React.forwardRef<
 
     const [selectedDevice, setSelectedDevice] = useState<BaseDevice>()
 
-    const snapPoints = useMemo(() => ["75%"], [])
-
     const onCreateAccount = useCallback(() => {
         if (selectedDevice) {
             dispatch(addAccountForDevice(selectedDevice))
+            setSelectedDevice(undefined)
             onClose()
         }
     }, [dispatch, onClose, selectedDevice])
@@ -34,23 +35,6 @@ export const AddAccountBottomSheet = React.forwardRef<
     const handleSheetChanges = useCallback((index: number) => {
         info("addAccountSheet position changed", index)
     }, [])
-
-    // const renderFooter = useCallback(
-    //     (props: BottomSheetFooterProps) => (
-    //         <BottomSheetFooter
-    //             {...props}
-    //             style={baseStyles.bottomSheetFooter}
-    //             bottomInset={24}>
-    //             <BaseButton
-    //                 disabled={!selectedDevice}
-    //                 action={onCreateAccount}
-    //                 w={100}
-    //                 title={"Add Account"}
-    //             />
-    //         </BottomSheetFooter>
-    //     ),
-    //     [selectedDevice, onCreateAccount],
-    // )
 
     return (
         <BaseBottomSheet
@@ -81,7 +65,6 @@ export const AddAccountBottomSheet = React.forwardRef<
 })
 
 const baseStyles = StyleSheet.create({
-    // bottomSheetFooter: { paddingHorizontal: 24, paddingVertical: 24 },
     contentStyle: { flex: 0.85 },
     footerStyle: { flex: 0.15, paddingBottom: 24 },
 })

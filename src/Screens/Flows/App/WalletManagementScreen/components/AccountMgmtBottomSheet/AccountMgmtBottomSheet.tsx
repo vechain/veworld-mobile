@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useScrollableList, useTheme } from "~Hooks"
-import { AddressUtils, info } from "~Utils"
+import { useScrollableBottomSheet, useTheme } from "~Hooks"
+import { AddressUtils } from "~Utils"
 import {
     BaseIcon,
     BaseSpacer,
@@ -26,6 +26,8 @@ type Props = {
     onClose: () => void
 }
 
+const snapPoints = ["50%", "75%", "90%"]
+
 export const AccountMgmtBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
@@ -33,33 +35,24 @@ export const AccountMgmtBottomSheet = React.forwardRef<
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
-
     const deviceAccounts = useAppSelector(state =>
         selectAccountsByDevice(state, device?.rootAddress),
     )
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const [snapIndex, setSnapIndex] = useState<number>(0)
-
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(deviceAccounts, snapIndex, snapPoints.length)
-
-    const handleSheetChanges = useCallback((index: number) => {
-        info("walletManagementSheet position changed", index)
-        setSnapIndex(index)
-    }, [])
-
     const accountsListSeparator = useCallback(
         () => <BaseSpacer height={16} />,
         [],
     )
 
+    const { flatListScrollProps, handleSheetChangePosition } =
+        useScrollableBottomSheet({ data: deviceAccounts, snapPoints })
+
     return (
         <BaseBottomSheet
             snapPoints={snapPoints}
-            onChange={handleSheetChanges}
+            onChange={handleSheetChangePosition}
             ref={ref}>
             <BaseView flexDirection="row" w={100}>
                 <BaseText typographyFont="subTitleBold">
@@ -88,8 +81,6 @@ export const AccountMgmtBottomSheet = React.forwardRef<
                         data={deviceAccounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                        viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => {
                             const isSelected = AddressUtils.compareAddresses(
                                 selectedAccount.address,
@@ -103,9 +94,7 @@ export const AccountMgmtBottomSheet = React.forwardRef<
                                 />
                             )
                         }}
-                        scrollEnabled={isListScrollable}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
+                        {...flatListScrollProps}
                     />
                 )}
             </BaseView>
