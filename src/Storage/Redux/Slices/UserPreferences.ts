@@ -54,6 +54,7 @@ export const UserPreferencesSlice = createSlice({
         ) => {
             state.isAnalyticsTrackingEnabled = action.payload
         },
+        resetUserPreferencesState: () => initialState,
     },
 })
 
@@ -65,4 +66,5 @@ export const {
     setCurrency,
     setLanguage,
     setAnalyticsTrackingEnabled,
+    resetUserPreferencesState,
 } = UserPreferencesSlice.actions

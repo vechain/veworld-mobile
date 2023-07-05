@@ -36,6 +36,7 @@ import {
 } from "~Storage/Redux/Actions"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useEditPin } from "./Hooks/useEditPin"
+import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -100,6 +101,16 @@ export const PrivacyScreen = () => {
         isValidatePassword,
     } = useEditPin()
 
+    const {
+        ref: backupWarningSheetRef,
+        onOpen: openBackupWarningSheet,
+        onClose: closeBackupWarningSheet,
+    } = useBottomSheetModal()
+
+    const handleOnEditPinPress = useCallback(() => {
+        openBackupWarningSheet()
+    }, [openBackupWarningSheet])
+
     // [END] - Hooks setup
 
     // [START] - Internal Methods
@@ -155,13 +166,14 @@ export const PrivacyScreen = () => {
                     />
 
                     <BaseSpacer height={24} />
+
                     <EnableBiometrics />
 
                     {!isWalletSecurityBiometrics && (
                         <>
                             <BaseSpacer height={16} />
                             <BaseTouchable
-                                action={onEditPinPress}
+                                action={handleOnEditPinPress}
                                 title={LL.BTN_EDIT_PIN()}
                                 underlined
                             />
@@ -222,6 +234,12 @@ export const PrivacyScreen = () => {
                 </BaseView>
                 <BaseSpacer height={20} />
             </ScrollView>
+
+            <BackupWarningBottomSheet
+                ref={backupWarningSheetRef}
+                onConfirm={onEditPinPress}
+                onClose={closeBackupWarningSheet}
+            />
         </BaseSafeArea>
     )
 }

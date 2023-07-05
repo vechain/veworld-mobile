@@ -111,6 +111,7 @@ export const AccountSlice = createSlice({
                     !state.accounts[accountExistsIndex].visible
             }
         },
+        resetAccountState: () => initialAccountState,
     },
 })
 
@@ -121,4 +122,5 @@ export const {
     removeAccountsByDevice,
     setAccountVisibility,
     toggleAccountVisibility,
+    resetAccountState,
 } = AccountSlice.actions

@@ -1,11 +1,7 @@
 import { useCallback } from "react"
+import { useWalletSecurity } from "~Hooks/useWalletSecurity"
 import KeychainService from "~Services/KeychainService"
-import { purgeStoredState } from "redux-persist"
-import {
-    getPersistorConfig,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { resetApp, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { info } from "~Utils/Logger"
 
@@ -14,21 +10,26 @@ export const useAppReset = () => {
     const dispatch = useAppDispatch()
     const devices = useAppSelector(selectDevices)
 
+    const { isWalletSecurityBiometrics } = useWalletSecurity()
+
     // for every device delete the encryption keys from keychain
     const removeEncryptionKeysFromKeychain = useCallback(async () => {
         const promises = devices.map(device => {
-            return KeychainService.deleteDeviceEncryptionKey(device.rootAddress)
+            return KeychainService.deleteDeviceEncryptionKey(
+                device.rootAddress,
+                isWalletSecurityBiometrics,
+            )
         })
         await Promise.all(promises)
-    }, [devices])
+    }, [devices, isWalletSecurityBiometrics])
 
     const appReset = useCallback(async () => {
         await removeEncryptionKeysFromKeychain()
-        const persistConfig = await getPersistorConfig()
-        purgeStoredState(persistConfig) // clean redux-persist store
-        dispatch({ type: "RESET" }) // clean redux store (used by redux-reset)
+
+        await dispatch(resetApp())
+
         info("App Reset Finished")
-    }, [removeEncryptionKeysFromKeychain, dispatch])
+    }, [dispatch, removeEncryptionKeysFromKeychain])
 
     return appReset
 }

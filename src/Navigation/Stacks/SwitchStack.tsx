@@ -13,6 +13,7 @@ import {
     LedgerSignMessageScreen,
 } from "~Screens"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
+import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { LedgerAccountWithDevice } from "~Model"
 import { Certificate } from "thor-devkit"
 
@@ -33,6 +34,7 @@ export type RootStackParamListSwitch = {
         requestEvent: SignClientTypes.EventArguments["session_request"]
         session: SessionTypes.Struct
     }
+    Blocked_App_Screen: undefined
     Ledger_Sign_Message_Screen: {
         accountWithDevice: LedgerAccountWithDevice
         certificate: Certificate
@@ -95,6 +97,11 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN}
                             component={SignMessageScreen}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.BLOCKED_APP_SCREEN}
+                            component={AppBlockedScreen}
                         />
 
                         <Switch.Screen

@@ -5,8 +5,6 @@ import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
-import { PersistGate } from "redux-persist/integration/react"
-import { Provider } from "react-redux"
 import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
@@ -32,7 +30,7 @@ import { typography } from "~Constants"
 import { info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
-import { useInitStore } from "~Storage/Redux"
+import { StoreContextProvider } from "~Components/Providers/StoreProvider"
 
 const { fontFamily } = typography
 
@@ -59,31 +57,25 @@ const Main = () => {
         [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
-    const { store, persistor } = useInitStore()
-
-    if (!store || !persistor) return <></>
-
     return (
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <GestureHandlerRootView style={{ flex: 1 }}>
-                    <ConnexContextProvider>
-                        <SafeAreaProvider>
-                            <TranslationProvider>
-                                <NavigationProvider>
-                                    <BottomSheetModalProvider>
-                                        <WalletConnectContextProvider>
-                                            {fontsLoaded && <EntryPoint />}
-                                        </WalletConnectContextProvider>
-                                    </BottomSheetModalProvider>
-                                </NavigationProvider>
-                                <BaseToast />
-                            </TranslationProvider>
-                        </SafeAreaProvider>
-                    </ConnexContextProvider>
-                </GestureHandlerRootView>
-            </PersistGate>
-        </Provider>
+        <StoreContextProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <ConnexContextProvider>
+                    <SafeAreaProvider>
+                        <TranslationProvider>
+                            <NavigationProvider>
+                                <BottomSheetModalProvider>
+                                    <WalletConnectContextProvider>
+                                        {fontsLoaded && <EntryPoint />}
+                                    </WalletConnectContextProvider>
+                                </BottomSheetModalProvider>
+                            </NavigationProvider>
+                            <BaseToast />
+                        </TranslationProvider>
+                    </SafeAreaProvider>
+                </ConnexContextProvider>
+            </GestureHandlerRootView>
+        </StoreContextProvider>
     )
 }
 
