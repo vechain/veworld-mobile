@@ -51,6 +51,12 @@ export const SWAP_EVENT_SIG = new abi.Event(abis.UniswapPairV2.SwapEvent)
 export const NFT_TRANSFER_SIG = new abi.Function(abis.VIP181.transferFrom)
     .signature
 
+/*
+ * Note: Fungible Token & NFT Transfer events have the same signature
+ */
+export const TRANSFER_EVENT_SIG = new abi.Event(abis.VIP180.TransferEvent)
+    .signature
+
 /**
  * Checks if a clause represents a VET transfer.
  *
@@ -139,6 +145,42 @@ export const encodeTransferFungibleTokenClause = (
 
     return {
         to: tokenAddress,
+        value: "0x0",
+        data: clauseData,
+    }
+}
+
+/**
+ * Encodes a transaction clause for a non-fungible token transfer operation.
+ *
+ * This function accepts details about the NFT transfer, including sender's address,
+ * recipient's address, contract address, and the token ID. It then constructs
+ * the payload and returns an encoded transaction clause object representing the
+ * non-fungible token transfer.
+ *
+ * @param {string} from - The blockchain address of the sender initiating the NFT transfer.
+ * @param {string} to - The blockchain address of the recipient of the NFT transfer.
+ * @param {string} contractAddress - The blockchain address of the NFT contract.
+ * @param {number} tokenId - The unique identifier of the token to be transferred.
+ *
+ * @returns {Connex.VM.Clause} The encoded clause representing the non-fungible token transfer operation.
+ */
+export const encodeTransferNonFungibleTokenClause = (
+    from: string,
+    to: string,
+    contractAddress: string,
+    tokenId: number,
+) => {
+    const hexTokenId = "0x" + new BigNumber(tokenId).toString(16)
+
+    const clauseData = new abi.Function(abis.VIP181.transferFrom).encode(
+        from,
+        to,
+        hexTokenId,
+    )
+
+    return {
+        to: contractAddress,
         value: "0x0",
         data: clauseData,
     }
