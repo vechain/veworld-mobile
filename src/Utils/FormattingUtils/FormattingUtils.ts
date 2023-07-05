@@ -69,7 +69,7 @@ export const scaleNumberDown = (
         const valBn = new BigNumber(val)
         if (valBn.isNaN()) throw Error("The value provided is NaN.")
 
-        const amount = valBn.dividedBy(`1${"0".repeat(scaleDecimal)}`)
+        const amount = valBn.dividedBy(10 ** scaleDecimal)
 
         if (scaleDecimal === roundDecimal) return amount.toFixed()
 
