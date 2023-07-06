@@ -101,7 +101,6 @@ AppRegistry.registerComponent(appName, () => Main)
 if (__DEV__) {
     const ignoreWarns = [
         "VirtualizedLists should never be nested inside plain ScrollViews",
-        "AssertIsWebSocket - Safe to ignore",
     ]
 
     const errorWarn = global.console.error

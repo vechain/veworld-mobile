@@ -27,11 +27,6 @@ const StoreContext = React.createContext<StoreProvider | undefined>(undefined)
 
 type StoreContextProviderProps = { children: React.ReactNode }
 
-// todo.vas -> WS debugger -> producer a warning on the terminal (safe to ignore)
-// if (process.env.NODE_ENV !== "production") {
-//     require("basil-ws-flipper").wsDebugPlugin
-// }
-
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const [store, setStore] = useState<Store | undefined>()
     const [persistor, setPersistor] = useState<Persistor | undefined>()

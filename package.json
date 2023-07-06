@@ -72,7 +72,6 @@
         "async-mutex": "^0.4.0",
         "axios": "^0.27.2",
         "babel-plugin-module-resolver": "^4.1.0",
-        "basil-ws-flipper": "^1.0.0",
         "buffer": "^6.0.3",
         "eth-rpc-errors": "^4.0.3",
         "expo": "^47.0.9",
@@ -107,7 +106,7 @@
         "react-native-drop-shadow": "^0.0.6",
         "react-native-exception-handler": "^2.10.10",
         "react-native-fast-image": "^8.6.3",
-        "react-native-flipper": "^0.203.0",
+        "react-native-flipper": "0.163.0",
         "react-native-gesture-handler": "2.9.0",
         "react-native-haptic-feedback": "^1.14.0",
         "react-native-linear-gradient": "^2.6.2",
@@ -140,7 +139,6 @@
         "thor-devkit": "https://github.com/vechainfoundation/thor-devkit.js",
         "url": "^0.11.0",
         "util": "^0.12.5",
-        "web3-utils": "^4.0.2",
         "whatwg-fetch": "^3.6.2"
     },
     "devDependencies": {
