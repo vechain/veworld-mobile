@@ -5,15 +5,14 @@ import { useAmountInput, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
     BaseText,
-    BaseSafeArea,
-    BackButtonHeader,
     BaseView,
     BaseSpacer,
     BaseCardGroup,
     BaseIcon,
     BaseCard,
     BaseRange,
-    BaseButton,
+    Layout,
+    FadeoutButton,
     DismissKeyboardView,
 } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
@@ -151,18 +150,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const inputColor = isError ? theme.colors.danger : theme.colors.text
 
     return (
-        <BaseSafeArea grow={1} testID="Select_Amount_Send_Screen">
-            <DismissKeyboardView>
-                <KeyboardAvoidingView
-                    behavior="padding"
-                    style={styles.container}>
-                    <BaseView>
-                        <BackButtonHeader />
-                        <BaseView mx={24}>
-                            <BaseText typographyFont="subTitleBold">
-                                {LL.SEND_TOKEN_TITLE()}
-                            </BaseText>
-                            <BaseSpacer height={24} />
+        <Layout
+            safeAreaTestID="Select_Amount_Send_Screen"
+            isScrollEnabled={false}
+            title={LL.SEND_TOKEN_TITLE()}
+            body={
+                <DismissKeyboardView>
+                    <KeyboardAvoidingView behavior="padding">
+                        <BaseView>
                             <BaseText typographyFont="button">
                                 {LL.SEND_CURRENT_BALANCE()}
                             </BaseText>
@@ -198,97 +193,97 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                     </BaseView>
                                 </BaseView>
                             )}
-                        </BaseView>
-                        <BaseSpacer height={16} />
-                        <BaseCardGroup
-                            views={[
-                                {
-                                    children: (
-                                        <BaseView
-                                            flex={1}
-                                            style={styles.amountContainer}>
-                                            <BaseText typographyFont="captionBold">
-                                                {isInputInFiat
-                                                    ? currency
-                                                    : token.symbol}
-                                            </BaseText>
-                                            <BaseSpacer height={6} />
-                                            <BaseView flexDirection="row">
-                                                {isInputInFiat ? (
-                                                    <BaseText typographyFont="largeTitle">
-                                                        {
-                                                            CURRENCY_SYMBOLS[
-                                                                currency
-                                                            ]
+                            <BaseSpacer height={16} />
+                            <BaseCardGroup
+                                views={[
+                                    {
+                                        children: (
+                                            <BaseView
+                                                flex={1}
+                                                style={styles.amountContainer}>
+                                                <BaseText typographyFont="captionBold">
+                                                    {isInputInFiat
+                                                        ? currency
+                                                        : token.symbol}
+                                                </BaseText>
+                                                <BaseSpacer height={6} />
+                                                <BaseView flexDirection="row">
+                                                    {isInputInFiat ? (
+                                                        <BaseText typographyFont="largeTitle">
+                                                            {
+                                                                CURRENCY_SYMBOLS[
+                                                                    currency
+                                                                ]
+                                                            }
+                                                        </BaseText>
+                                                    ) : (
+                                                        <TokenImage
+                                                            icon={token.icon}
+                                                        />
+                                                    )}
+                                                    <BaseSpacer width={16} />
+                                                    <TextInput
+                                                        placeholder="0"
+                                                        style={[
+                                                            {
+                                                                color: inputColor,
+                                                            },
+                                                            // @ts-ignore
+                                                            styles.input,
+                                                        ]}
+                                                        placeholderTextColor={
+                                                            inputColor
                                                         }
-                                                    </BaseText>
-                                                ) : (
-                                                    <TokenImage
-                                                        icon={token.icon}
+                                                        keyboardType="numeric"
+                                                        value={input}
+                                                        onChangeText={
+                                                            handleChangeInput
+                                                        }
+                                                        maxLength={10}
+                                                        testID="SendScreen_amountInput"
+                                                    />
+                                                </BaseView>
+                                                {isExchangeRateAvailable && (
+                                                    <BaseIcon
+                                                        name={"autorenew"}
+                                                        size={20}
+                                                        color={
+                                                            COLORS.DARK_PURPLE
+                                                        }
+                                                        bg={COLORS.LIME_GREEN}
+                                                        style={styles.icon}
+                                                        action={
+                                                            handleToggleInputInFiat
+                                                        }
                                                     />
                                                 )}
-                                                <BaseSpacer width={16} />
-                                                <TextInput
-                                                    placeholder="0"
-                                                    style={[
-                                                        {
-                                                            color: inputColor,
-                                                        },
-                                                        // @ts-ignore
-                                                        styles.input,
-                                                    ]}
-                                                    placeholderTextColor={
-                                                        inputColor
-                                                    }
-                                                    keyboardType="numeric"
-                                                    value={input}
-                                                    onChangeText={
-                                                        handleChangeInput
-                                                    }
-                                                    maxLength={10}
-                                                    testID="SendScreen_amountInput"
-                                                />
                                             </BaseView>
-                                            {isExchangeRateAvailable && (
-                                                <BaseIcon
-                                                    name={"autorenew"}
-                                                    size={20}
-                                                    color={COLORS.DARK_PURPLE}
-                                                    bg={COLORS.LIME_GREEN}
-                                                    style={styles.icon}
-                                                    action={
-                                                        handleToggleInputInFiat
-                                                    }
-                                                />
-                                            )}
-                                        </BaseView>
-                                    ),
-                                    style: styles.amountView,
-                                },
-                                ...(isExchangeRateAvailable
-                                    ? [
-                                          {
-                                              children: (
-                                                  <BaseText
-                                                      typographyFont="captionBold"
-                                                      color={inputColor}>
-                                                      {"≈ "}
-                                                      {isInputInFiat
-                                                          ? formattedTokenInput
-                                                          : formattedFiatInput}{" "}
-                                                      {isInputInFiat
-                                                          ? token.symbol
-                                                          : currency}
-                                                  </BaseText>
-                                              ),
-                                              style: styles.counterValueView,
-                                          },
-                                      ]
-                                    : []),
-                            ]}
-                        />
-                        <BaseSpacer height={16} />
-                        <BaseView mx={24}>
+                                        ),
+                                        style: styles.amountView,
+                                    },
+                                    ...(isExchangeRateAvailable
+                                        ? [
+                                              {
+                                                  children: (
+                                                      <BaseText
+                                                          typographyFont="captionBold"
+                                                          color={inputColor}>
+                                                          {"≈ "}
+                                                          {isInputInFiat
+                                                              ? formattedTokenInput
+                                                              : formattedFiatInput}{" "}
+                                                          {isInputInFiat
+                                                              ? token.symbol
+                                                              : currency}
+                                                      </BaseText>
+                                                  ),
+                                                  style: styles.counterValueView,
+                                              },
+                                          ]
+                                        : []),
+                                ]}
+                            />
+                            <BaseSpacer height={16} />
                             <BaseCard>
                                 <BaseView flex={1}>
                                     <BaseText typographyFont="button">
@@ -318,34 +313,28 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                 </BaseView>
                             </BaseCard>
                         </BaseView>
-                    </BaseView>
-                    <BaseButton
-                        style={styles.nextButton}
-                        mx={24}
-                        haptics="light"
-                        title={LL.COMMON_BTN_NEXT()}
-                        disabled={
-                            isError ||
-                            input === "" ||
-                            new BigNumber(input).isZero()
-                        }
-                        action={goToInsertAddress}
-                    />
-                </KeyboardAvoidingView>
-            </DismissKeyboardView>
-        </BaseSafeArea>
+                    </KeyboardAvoidingView>
+                </DismissKeyboardView>
+            }
+            footer={
+                <FadeoutButton
+                    title={LL.COMMON_BTN_NEXT()}
+                    disabled={
+                        isError || input === "" || new BigNumber(input).isZero()
+                    }
+                    action={goToInsertAddress}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
+                />
+            }
+        />
     )
 }
 
 const styles = StyleSheet.create({
     input: {
         ...defaultTypography.largeTitle,
-        flex: 1,
-    },
-    container: {
-        justifyContent: "space-between",
-        display: "flex",
-        flexGrow: 1,
         flex: 1,
     },
     budget: {
@@ -365,8 +354,5 @@ const styles = StyleSheet.create({
     },
     counterValueView: {
         zIndex: 1,
-    },
-    nextButton: {
-        marginBottom: 70,
     },
 })
