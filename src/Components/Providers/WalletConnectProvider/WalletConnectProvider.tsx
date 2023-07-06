@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { AddressUtils, WalletConnectUtils, error } from "~Utils"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { AddressUtils, debug, error, WalletConnectUtils } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
-import { SignClientTypes, SessionTypes } from "@walletconnect/types"
+import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import {
-    useAppSelector,
-    useAppDispatch,
-    selectSelectedAccountAddress,
-    selectVisibleAccounts,
+    changeSelectedNetwork,
     deleteSession,
     selectAccount,
-    changeSelectedNetwork,
+    selectSelectedAccountAddress,
+    selectVisibleAccounts,
+    useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -18,6 +18,8 @@ import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { RequestMethods } from "~Constants"
 import { AccountWithDevice, Network } from "~Model"
+import { Linking } from "react-native"
+import "react-native-url-polyfill/auto"
 
 /**
  * Wallet Connect Flow:
@@ -78,6 +80,31 @@ const WalletConnectContextProvider = ({
         },
         [web3Wallet, LL],
     )
+
+    /**
+     * Sets up a listener for DApp session proposals
+     */
+    useEffect(() => {
+        Linking.addListener("url", event => {
+            if (typeof event?.url !== "string") return
+
+            try {
+                const uri = new URL(event.url)
+
+                const walletConnectUri = uri.searchParams.get("uri")
+
+                if (
+                    walletConnectUri &&
+                    WalletConnectUtils.isValidURI(walletConnectUri)
+                ) {
+                    debug("WalletConnectProvider: onPair", event)
+                    onPair(walletConnectUri)
+                }
+            } catch (e) {
+                error(e)
+            }
+        })
+    }, [onPair])
 
     /**
      * Handle session proposal
