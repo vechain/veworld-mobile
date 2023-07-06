@@ -38,7 +38,7 @@ export const SendNFTScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
-    // todo: refactor to a new hook - duplicate also in TransactionSummarySendScreen and InsertAddressSendScreen
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
     const accountsAndContacts = useMemo(() => {
@@ -96,7 +96,7 @@ export const SendNFTScreen = ({ route }: Props) => {
     ])
 
     const onIconPress = useCallback(() => {
-        // Todo. test camera
+        // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/764) test camera
         openScanAddressSheet()
     }, [openScanAddressSheet])
 
@@ -215,7 +215,7 @@ export const SendNFTScreen = ({ route }: Props) => {
                                     </BaseText>
                                 </BaseView>
                             }
-                            /*TODO: fix accordions with dynamic content */
+                            // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/765) fix accordions with dynamic content
                             bodyComponent={
                                 <BaseView>
                                     {accounts.map(account => {

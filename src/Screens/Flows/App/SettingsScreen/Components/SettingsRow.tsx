@@ -17,7 +17,7 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
     const theme = useTheme()
 
     const onPress = useCallback(
-        // Todo: types
+        // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/768) add types
         () => nav.navigate(screenName as any),
         [screenName, nav],
     )

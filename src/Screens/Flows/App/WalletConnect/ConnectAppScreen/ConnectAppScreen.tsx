@@ -119,7 +119,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 }),
             )
 
-            //TODO: add to history?
+            // TODO (Dan) (https://github.com/vechainfoundation/veworld-mobile/issues/769) add to history?
 
             showSuccessToast(
                 LL.NOTIFICATION_wallet_connect_successfull_connection({

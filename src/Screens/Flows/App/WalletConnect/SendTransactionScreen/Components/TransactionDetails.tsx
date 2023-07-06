@@ -179,7 +179,6 @@ export const TransactionDetails = ({
             </BaseText>
             <BaseSpacer height={6} />
             <BaseText typographyFont="subSubTitle">
-                {/** TODO: copied from extension, understand if it is fixed as "less than 1 min" */}
                 {LL.SEND_LESS_THAN_1_MIN()}
             </BaseText>
 

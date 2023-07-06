@@ -69,7 +69,7 @@ export const fetchTransactions = async (
 
     // Indexer doesn't support testnet transaction indexing
     if (thor.genesis.id === genesises.test.id) {
-        info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
+        info("Testnet transaction indexing is not supported yet") // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/774) Change when it will be supported
         return {
             data: [],
             pagination: {
@@ -116,7 +116,7 @@ export const fetchIncomingTransfers = async (
 
     // Indexer doesn't support testnet transaction indexing
     if (thor.genesis.id === genesises.test.id) {
-        info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
+        info("Testnet transaction indexing is not supported yet") // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/774) Change when it will be supported
         return {
             data: [],
             pagination: {

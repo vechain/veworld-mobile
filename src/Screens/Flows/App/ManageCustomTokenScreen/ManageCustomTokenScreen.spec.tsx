@@ -31,7 +31,6 @@ jest.spyOn(Driver, "connect").mockImplementation(
     },
 )
 
-//TODO: this test leaves an open handle (ConnexProvier)
 describe("ManageCustomTokenScreen", () => {
     afterEach(() => {
         driver.close()
@@ -40,6 +39,5 @@ describe("ManageCustomTokenScreen", () => {
         render(<ManageCustomTokenScreen />, {
             wrapper: TestWrapper,
         })
-        // await findElement()
     })
 })
