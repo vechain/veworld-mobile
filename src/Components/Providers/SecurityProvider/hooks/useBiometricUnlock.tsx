@@ -10,18 +10,18 @@ export const useBiometricUnlock = () => {
     const appReset = useAppReset()
     const isSecurityDowngrade = useAppSelector(selectIsSecurityDowngrade)
 
-    const recursiveFaceId = useCallback(async () => {
+    const recursiveBiometricsUnlock = useCallback(async () => {
         let results = await BiometricsUtils.authenticateWithBiometrics()
 
         if (results.success) {
             await RNBootSplash.hide({ fade: true })
         } else if (results.error === "user_cancel") {
-            AlertUtils.showCancelledFaceIdAlert(
+            AlertUtils.showCancelledBiometricsAlert(
                 async () => {
                     await appReset()
                 },
                 async () => {
-                    return await recursiveFaceId()
+                    return await recursiveBiometricsUnlock()
                 },
             )
         } else {
@@ -43,7 +43,7 @@ export const useBiometricUnlock = () => {
                     isWalletSecurityBiometrics,
                 )
             ) {
-                await recursiveFaceId()
+                await recursiveBiometricsUnlock()
             }
         }
 
