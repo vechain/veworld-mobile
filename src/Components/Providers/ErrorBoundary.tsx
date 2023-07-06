@@ -58,8 +58,6 @@ const styles = StyleSheet.create({
     icon: { alignItems: "flex-start" },
 })
 
-// TODO: show the correct error screen
-// NOTE: we don't need to log on the console or send to sentry because the error is intercepted by errorHandler.js
 export class ErrorBoundary extends React.Component<ViewProps> {
     state = {
         hasError: false,
