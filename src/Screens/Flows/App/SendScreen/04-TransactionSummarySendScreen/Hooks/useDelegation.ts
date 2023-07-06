@@ -34,10 +34,6 @@ export const useDelegation = ({ transaction }: Props) => {
     const defaultDelegationAccount = useSelector(getDefaultDelegationAccount)
     const defaultDelegationUrl = useSelector(getDefaultDelegationUrl)
 
-    /**
-     * TODO: Can be used later on to delegation in-extension transactions
-     */
-
     const fetchSignature = async (
         txBody: Transaction.Body,
         delegationUrl: string,

@@ -122,7 +122,7 @@ export const useSignTransaction = ({
                         "Delegation device not found when sending transaction",
                     )
 
-                //TODO: support ledger delegation
+                // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/754) support ledger delegation
                 if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
                     showWarningToast(
                         "Delegated hardware wallet not supported yet",
@@ -154,7 +154,7 @@ export const useSignTransaction = ({
     const signTransaction = async (password?: string) => {
         if (!senderDevice) throw new Error("Sender device not found")
 
-        //TODO: support ledger
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/753) support ledger
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
             showWarningToast("Hardware wallet not supported yet")
             throw new Error("Hardware wallet not supported yet")
@@ -162,7 +162,7 @@ export const useSignTransaction = ({
 
         //local mnemonic, identity already verified via useCheckIdentity
         if (!senderDevice.wallet) {
-            // TODO: support hardware wallet
+            // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/753) support ledger
             showWarningToast("Hardware wallet not supported yet")
             throw new Error("Hardware wallet not supported yet")
         }
