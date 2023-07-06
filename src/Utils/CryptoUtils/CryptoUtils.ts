@@ -128,11 +128,14 @@ const decryptWallet = async (device: LocalDevice, userPassword?: string) => {
         device.rootAddress,
         accessControl,
     )
+
     if (!encryptedEncryptionKey)
         throw new Error(
             `encryption key for device ${device.rootAddress} not found`,
         )
+
     let encryptionKey
+
     if (userPassword) {
         encryptionKey = decrypt<string>(encryptedEncryptionKey, userPassword)
     } else encryptionKey = encryptedEncryptionKey

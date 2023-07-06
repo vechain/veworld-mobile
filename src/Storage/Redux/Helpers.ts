@@ -16,6 +16,21 @@ import {
     WalletConnectSessionsSlice,
     NftSlice,
     PendingSlice,
+    resetAccountState,
+    resetActivityState,
+    resetBalancesState,
+    resetCacheState,
+    resetConfigState,
+    resetContactsState,
+    resetCurrencyState,
+    resetDelegationState,
+    resetDeviceState,
+    resetNetworkState,
+    resetNftState,
+    resetTokensState,
+    resetUserPreferencesState,
+    resetWalletConnectState,
+    resetPendingState,
 } from "./Slices"
 
 export const nftPersistConfig = {
@@ -24,6 +39,12 @@ export const nftPersistConfig = {
     whitelist: ["blackListedCollectionsPerAccount"],
 }
 
+/**
+ * Asynchronously generates and returns the configuration object for a Redux Persistor.
+ * The object includes the key for encryption, storage engine, version number, blacklists, whitelists, and encryption transforms.
+ *
+ * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
+ */
 export const getPersistorConfig = async () => {
     const key = await initEncryption()
 
@@ -59,3 +80,25 @@ export const getPersistorConfig = async () => {
 
     return persistConfig
 }
+
+/**
+ * This is an array of all reset actions from every slice in the application.
+ * Remember to add new reset actions here of any new persisted Slice.
+ */
+export const resetActions = [
+    resetAccountState,
+    resetActivityState,
+    resetBalancesState,
+    resetCacheState,
+    resetConfigState,
+    resetContactsState,
+    resetCurrencyState,
+    resetDelegationState,
+    resetDeviceState,
+    resetNetworkState,
+    resetNftState,
+    resetTokensState,
+    resetUserPreferencesState,
+    resetWalletConnectState,
+    resetPendingState,
+]

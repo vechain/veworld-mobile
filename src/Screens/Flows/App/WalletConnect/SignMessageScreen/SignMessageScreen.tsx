@@ -74,7 +74,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     throw new Error("Signature is empty")
                 }
 
-                //TODO: add to history
+                // TODO (Dan) (https://github.com/vechainfoundation/veworld-mobile/issues/769) add to history?
 
                 await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
                     {

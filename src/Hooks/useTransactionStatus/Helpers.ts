@@ -5,6 +5,7 @@ import { Network, TransactionOrigin } from "~Model"
 import * as i18n from "~i18n"
 
 // todo - fix translation based on type and origin
+
 export const getTranslation = (
     txOrigin: TransactionOrigin,
     amount?: string,

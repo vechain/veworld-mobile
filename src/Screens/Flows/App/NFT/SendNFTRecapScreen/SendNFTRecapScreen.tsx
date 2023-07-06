@@ -134,7 +134,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         5,
     )
 
-    // todo -> create a centralized hook for this where we distinguish between errors (not enough gas, error calculating gas, etc)
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/760) create a centralized hook for this where we distinguish between errors (not enough gas, error calculating gas, etc)
     const isThereEnoughGas = useMemo(() => {
         if (!vthoGas || vthoGas === "0.00") return false
         let leftVtho = new BigNumber(vthoBalance)
@@ -176,7 +176,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={24} />
 
-                    {/* TODO convert style to design specs*/}
+                    {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/761) convert style to design specs*/}
                     <TransferCard
                         fromAddress={selectedAccoount!.address}
                         toAddresses={[route.params.receiverAddress]}
@@ -230,7 +230,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         isLastInList
                         title={"Total amount"}
                         data={vthoGas + " " + VTHO.symbol}
-                        subTtitle={"8,03 USD"} // todo - add real price
+                        subTtitle={"8,03 USD"} // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/762) add real price
                     />
                 </BaseView>
             </ScrollView>

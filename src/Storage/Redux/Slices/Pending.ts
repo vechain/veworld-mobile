@@ -47,8 +47,15 @@ export const PendingSlice = createSlice({
 
             return state
         },
+
+        resetPendingState: () => {
+            return initialState
+        },
     },
 })
 
-export const { setPendingTransaction, removePendingTransaction } =
-    PendingSlice.actions
+export const {
+    setPendingTransaction,
+    removePendingTransaction,
+    resetPendingState,
+} = PendingSlice.actions

@@ -129,7 +129,7 @@ const BlockListener: React.FC = () => {
         const log = closeEvent.isTrusted ? info : warn
         log("Will attempt to reconnect web socket after closure", closeEvent)
 
-        // TODO: //Attempt to use another node if the current one has issues
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/747) Attempt to use another node if the current one has issues
         //Not doing async because the result should not affect this function
         // if (!closeEvent.wasClean && network.defaultNet) {
         //     dispatch(changeSelectedNetwork(network.id))

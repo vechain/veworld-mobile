@@ -38,7 +38,7 @@ const GCD: React.FC = () => {
                     )
 
                     // Early exit if tx is not related to any of the visible accounts
-                    if (!foundAccount) return
+                    if (!foundAccount.account) return
 
                     // check if tx is reverted
                     prepareTransactionStatus({ txId: transfer.meta.txID })
@@ -87,7 +87,7 @@ const GCD: React.FC = () => {
                         decodedTransfer,
                     )
 
-                    if (!foundAccount) return
+                    if (!foundAccount.account) return
 
                     // check if tx is reverted
                     prepareTransactionStatus({ txId: transfer.meta.txID })

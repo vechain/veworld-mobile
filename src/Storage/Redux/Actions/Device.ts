@@ -54,7 +54,7 @@ const addDeviceAndAccounts =
     (device: LocalDevice): AppThunk<WalletAccount> =>
     dispatch => {
         dispatch(addDevice(device))
-        //todo: here should add until i found an account with no balance
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/773) here should add until i found an account with no balance
         const account = dispatch(addAccountForDevice(device))
 
         return account
@@ -82,7 +82,6 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
                 ),
             )
 
-            //TODO: Do we want to handle this differently ?
             if (deviceExists) return { device: deviceExists, accounts: [] }
 
             //Create the new ledger device and persist it

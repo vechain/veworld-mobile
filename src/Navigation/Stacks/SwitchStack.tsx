@@ -12,6 +12,7 @@ import {
 } from "~Screens"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import GCD from "../../GCD/GCD"
+import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import BlockListener from "../../BlockListener"
 
 export type RootStackParamListSwitch = {
@@ -31,6 +32,7 @@ export type RootStackParamListSwitch = {
         requestEvent: SignClientTypes.EventArguments["session_request"]
         session: SessionTypes.Struct
     }
+    Blocked_App_Screen: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -86,6 +88,11 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN}
                             component={SignMessageScreen}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.BLOCKED_APP_SCREEN}
+                            component={AppBlockedScreen}
                         />
                     </Switch.Group>
                 </>

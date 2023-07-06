@@ -2,11 +2,16 @@ import { useCallback, useMemo } from "react"
 import { useBiometricsValidation, useWalletSecurity } from "~Hooks"
 import { BaseButtonGroupHorizontalType, SecurityLevelType } from "~Model"
 
+export type SecurityButtons = {
+    buttons: BaseButtonGroupHorizontalType[]
+    currentSecurity: SecurityLevelType
+}
+
 export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
     const { authenticateBiometrics } = useBiometricsValidation()
 
-    const securityButtons = useMemo(() => {
+    const securityButtons: SecurityButtons = useMemo(() => {
         return {
             buttons: [
                 {

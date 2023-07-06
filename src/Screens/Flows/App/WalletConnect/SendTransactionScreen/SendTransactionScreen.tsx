@@ -175,7 +175,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 let tx = await signTransaction(password)
                 const txId = await sendTransaction(tx, network.currentUrl)
 
-                //TODO: Add to history
+                // TODO (Dan) (https://github.com/vechainfoundation/veworld-mobile/issues/769) add to history?
 
                 await WalletConnectResponseUtils.transactionRequestSuccessResponse(
                     { request: requestEvent, web3Wallet, LL },

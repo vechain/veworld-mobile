@@ -4,12 +4,17 @@ import { BaseScrollView, BaseSpacer, BaseView } from "~Components/Base"
 type Props = {
     children: ReactNode
     footer: ReactNode
+    isScrollEnabled?: boolean
 }
 
-export const ScrollViewWithFooter = ({ children, footer }: Props) => {
+export const ScrollViewWithFooter = ({
+    children,
+    footer,
+    isScrollEnabled = true,
+}: Props) => {
     return (
         <BaseView h={100} alignItems={"stretch"}>
-            <BaseScrollView>
+            <BaseScrollView scrollEnabled={isScrollEnabled}>
                 <BaseView>{children}</BaseView>
                 {/** here we can add a fade like effect */}
             </BaseScrollView>

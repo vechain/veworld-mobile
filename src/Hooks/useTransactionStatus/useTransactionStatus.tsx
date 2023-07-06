@@ -53,8 +53,6 @@ export const useTransactionStatus = () => {
 
             // if txReceipt is not null
             if (txReceipt && count < 10) {
-                info("txReceipt received", txReceipt)
-
                 // if txReceipt is reverted
                 if (txReceipt.reverted) {
                     info("txReceipt is reverted")
