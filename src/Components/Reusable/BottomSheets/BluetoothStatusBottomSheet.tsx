@@ -76,7 +76,6 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     const handleOnPress = useCallback(() => {
         if (!isAuthorized) {
             Linking.openSettings()
-            //TODO: Go to BLE settings
         } else if (!isEnabled) {
             PlatformUtils.isIOS()
                 ? Linking.openURL("App-Prefs:Bluetooth")
@@ -97,7 +96,7 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     }, [LL, isAuthorized, isEnabled, isUnsupported])
 
     return (
-        //TODO: Pass prop to disable close on touch outside when available
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/750) Pass prop to disable close on touch outside when available
         <BaseBottomSheet
             enablePanDownToClose={false}
             snapPoints={snapPoints}

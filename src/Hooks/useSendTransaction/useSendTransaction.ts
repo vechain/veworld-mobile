@@ -31,7 +31,7 @@ export const useSendTransaction = (
 
         const type = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
         if (type === ActivityType.NFT_TRANSFER) {
-            // todo - handle NFT activity?
+            // TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/752) handle NFT activity?
         } else {
             // Add pending transaction activity
             dispatch(addPendingTransferTransactionActivity(tx, thorClient))

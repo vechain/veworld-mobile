@@ -2,7 +2,7 @@ import React from "react"
 import { BaseText, BaseTouchable, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import * as Clipboard from "expo-clipboard"
-import PlatformUtils from "~Utils/PlatformUtils" // TODO: remove this circular dependency
+import PlatformUtils from "~Utils/PlatformUtils" // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/748) remove this circular dependency
 
 interface Props {
     onPaste: (result: string) => void

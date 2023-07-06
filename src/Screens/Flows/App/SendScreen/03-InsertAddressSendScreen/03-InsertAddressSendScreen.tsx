@@ -65,7 +65,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         onClose: closeScanAddressSheetRef,
     } = useBottomSheetModal()
 
-    // todo: refactor to a new hook - duplicate also in TransactionSummarySendScreen
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
     const accountsAndContacts = useMemo(() => {
@@ -262,7 +262,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                 </BaseText>
                             </BaseView>
                         }
-                        /*TODO: fix accordions with dynamic content */
                         bodyComponent={
                             <BaseView>
                                 {filteredAccounts.map(account => {

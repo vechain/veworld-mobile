@@ -49,7 +49,7 @@ export const AppSecurityScreen = () => {
                     <BaseText typographyFont="title">
                         {LL.TITLE_SECURITY()}
                     </BaseText>
-                    {/* TODO: change this lorem ipsum */}
+                    {/* TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/771) change this lorem ipsum */}
                     {/* eslint-disable-next-line i18next/no-literal-string */}
                     <BaseText typographyFont="body" my={10}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit,
