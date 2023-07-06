@@ -2,7 +2,7 @@ import React from "react"
 import { BaseText, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
-import PlatformUtils from "~Utils/PlatformUtils" // TODO: remove this circular dependency
+import PlatformUtils from "~Utils/PlatformUtils" // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/748) remove this circular dependency
 
 export const CameraHeader = () => {
     const { LL } = useI18nContext()
