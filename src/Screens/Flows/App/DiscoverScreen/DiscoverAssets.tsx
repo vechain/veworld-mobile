@@ -26,7 +26,7 @@ import { Routes } from "~Navigation"
 // const ITEM_WIDTH = Dimensions.get("window").width - 40
 // const ITEM_HEIGHT = 64
 
-// TODO: Substitute Scrollview with FlashList #406
+// TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/406) Substitute Scrollview with FlashList
 
 export const DiscoverAssets = () => {
     const { LL } = useI18nContext()

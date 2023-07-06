@@ -9,7 +9,7 @@ export const ImportNFTView = () => {
     const { calculateBottomInsets } = usePlatformBottomInsets()
     const { LL } = useI18nContext()
 
-    // TODO : add flows on BaseTouchable
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/759) add flows on BaseTouchable
     return (
         <BaseView
             style={{ marginBottom: calculateBottomInsets }}

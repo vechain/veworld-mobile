@@ -88,7 +88,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
         [LL, onCopyToClipboard],
     )
 
-    // todo - add LL for headers
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/758) add LL for headers
     return (
         <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
             <BackButtonHeader hasBottomSpacer={false} />

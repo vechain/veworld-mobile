@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { AddressUtils, debug, error, WalletConnectUtils } from "~Utils"
+import { AddressUtils, error, WalletConnectUtils } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import {
@@ -97,7 +97,6 @@ const WalletConnectContextProvider = ({
                     walletConnectUri &&
                     WalletConnectUtils.isValidURI(walletConnectUri)
                 ) {
-                    debug("WalletConnectProvider: onPair", event)
                     onPair(walletConnectUri)
                 }
             } catch (e) {

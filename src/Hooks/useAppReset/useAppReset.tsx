@@ -5,7 +5,6 @@ import { resetApp, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { info } from "~Utils/Logger"
 
-// TODO: test it, currently there is no way to test it, there is an error on mocking redux persist
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
     const devices = useAppSelector(selectDevices)

@@ -70,7 +70,9 @@ export const HistoryScreen = () => {
     // To prevent fetching next page of activities on FlashList mount
     const [hasScrolled, setHasScrolled] = useState(false)
 
-    // TODO, when account changes set page of activity fetching back to 0 and refetch otherwise we would be at the page of activities of the previous account
+    // TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/757)
+    // when account changes set page of activity fetching back to 0
+    // and refetch otherwise we would be at the page of activities of the previous account
     const onChangeAccountPress = () => {}
 
     const goBack = useCallback(() => nav.goBack(), [nav])
