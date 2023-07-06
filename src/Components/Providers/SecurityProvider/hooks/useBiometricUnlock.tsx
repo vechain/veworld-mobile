@@ -10,12 +10,13 @@ export const useBiometricUnlock = () => {
     const appReset = useAppReset()
     const isSecurityDowngrade = useAppSelector(selectIsSecurityDowngrade)
 
-    const [isFaceIDsucceeded, setIsFaceIDsucceeded] = useState(false)
+    const [isBiometricsSucceeded, setIsBiometricsSucceeded] = useState(false)
+
     const recursiveFaceId = useCallback(async () => {
         let results = await BiometricsUtils.authenticateWithBiometrics()
         if (results.success) {
             await RNBootSplash.hide({ fade: true })
-            setIsFaceIDsucceeded(true)
+            setIsBiometricsSucceeded(true)
         } else if (results.error) {
             AlertUtils.showCancelledFaceIdAlert(
                 async () => {
@@ -53,5 +54,5 @@ export const useBiometricUnlock = () => {
         recursiveFaceId,
     ])
 
-    return { isFaceIDsucceeded }
+    return { isBiometricsSucceeded }
 }
