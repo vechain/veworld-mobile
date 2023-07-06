@@ -305,7 +305,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                             {LL.SEND_RANGE_ZERO()}
                                         </BaseText>
                                         <BaseSpacer width={8} />
-                                        {/** TODO: understand how to add percentage value label */}
+                                        {/* TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/766) understand how to add percentage value label */}
                                         <BaseRange
                                             value={percentage}
                                             onChange={

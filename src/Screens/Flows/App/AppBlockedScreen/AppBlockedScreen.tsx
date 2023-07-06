@@ -36,7 +36,6 @@ export const AppBlockedScreen = () => {
                     <BaseSpacer height={40} />
                     <BaseText align="left" py={20}>
                         {LL.BD_APP_BLOCKED()}
-                        {/* TODO Change translation. Currently dummy text */}
                     </BaseText>
                 </BaseView>
 
