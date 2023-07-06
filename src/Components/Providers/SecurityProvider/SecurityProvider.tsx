@@ -8,7 +8,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { SecurityDowngradeScreen } from "~Screens"
-import { SplashScreen } from "../../../SplashScreen"
+import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 
 type Props = {
@@ -29,29 +29,30 @@ export const SecurityProvider = ({ children }: Props) => {
 
     if (isAppBlocked)
         return (
-            <SplashScreen playAnimation={true}>
+            <AnimatedSplashScreen playAnimation={true}>
                 <AppBlockedScreen />
-            </SplashScreen>
+            </AnimatedSplashScreen>
         )
 
     if (isSecurityDowngrade)
         return (
-            <SplashScreen playAnimation={true}>
+            <AnimatedSplashScreen playAnimation={true}>
                 <SecurityDowngradeScreen />
-            </SplashScreen>
+            </AnimatedSplashScreen>
         )
 
     if (showLockScreen)
         return (
-            <SplashScreen
+            <AnimatedSplashScreen
                 playAnimation={isSplashHidden || isBiometricsSucceeded}>
                 {showLockScreen}
-            </SplashScreen>
+            </AnimatedSplashScreen>
         )
 
     return (
-        <SplashScreen playAnimation={isSplashHidden || isBiometricsSucceeded}>
+        <AnimatedSplashScreen
+            playAnimation={isSplashHidden || isBiometricsSucceeded}>
             {children}
-        </SplashScreen>
+        </AnimatedSplashScreen>
     )
 }

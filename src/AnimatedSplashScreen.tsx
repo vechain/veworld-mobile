@@ -11,20 +11,20 @@ type Props = {
 }
 
 /**
- * SplashScreen component. It creates a loading animation screen for the application.
- * SplashScreen uses a MaskedView to display an Animated.Image which scales during the loading process.
+ * AnimatedSplashScreen component. It creates a loading animation screen for the application.
+ * AnimatedSplashScreen uses a MaskedView to display an Animated.Image which scales during the loading process.
  *
- * @param {Props} props - The properties that define the SplashScreen component.
- * @returns {React.ReactElement} Render the SplashScreen component.
+ * @param {Props} props - The properties that define the AnimatedSplashScreen component.
+ * @returns {React.ReactElement} Render the AnimatedSplashScreen component.
  *
  * @example
  * ```jsx
- * <SplashScreen>
+ * <AnimatedSplashScreen>
  *     <App />
- * </SplashScreen>
+ * </AnimatedSplashScreen>
  * ```
  */
-export const SplashScreen = ({
+export const AnimatedSplashScreen = ({
     playAnimation,
     children,
 }: Props): React.ReactElement => {
