@@ -11,6 +11,7 @@ import { useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
     DEVICE_TYPE,
+    FungibleTokenWithBalance,
     NonFungibleToken,
     Wallet,
 } from "~Model"
@@ -27,7 +28,7 @@ type Props = {
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
     onError?: (e: unknown) => void
-    token: NonFungibleToken | undefined
+    token?: NonFungibleToken | FungibleTokenWithBalance
 }
 /**
  * Hooks that expose a function to sign and send a transaction performing updates on success
@@ -59,7 +60,7 @@ export const useSignTransaction = ({
         selectDevice(state, account.rootAddress),
     )
 
-    const { prepareTransactionStatus } = useTransactionStatus()
+    const { setTransactionPending } = useTransactionStatus()
 
     const { sendTransactionAndPerformUpdates } = useSendTransaction(
         network,
@@ -201,8 +202,16 @@ export const useSignTransaction = ({
             const tx = await signTransaction(password)
             const id = await sendTransactionAndPerformUpdates(tx)
 
-            //todo -> add funcgible token? -- VET?
-            prepareTransactionStatus({ txId: id, id: token?.id! })
+            //todo -> add VET?
+            if (token?.hasOwnProperty("tokenId")) {
+                const _token = token as NonFungibleToken
+                setTransactionPending({ txId: id, id: _token.id })
+            }
+
+            if (token?.hasOwnProperty("balance")) {
+                const _token = token as FungibleTokenWithBalance
+                setTransactionPending({ txId: id, id: _token.address })
+            }
         } catch (e) {
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())

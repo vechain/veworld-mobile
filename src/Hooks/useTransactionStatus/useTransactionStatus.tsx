@@ -1,12 +1,5 @@
 import { useCallback } from "react"
-import { Linking } from "react-native"
-import {
-    ToastType,
-    showSuccessToast,
-    useThor,
-    showErrorToast,
-} from "~Components"
-import { defaultMainNetwork } from "~Constants"
+import { ToastType, useThor } from "~Components"
 import { useCounter } from "~Hooks/useCounter"
 import { TransactionOrigin } from "~Model"
 import {
@@ -17,7 +10,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { info } from "~Utils"
-import { getTranslation } from "./Helpers"
+import { informUser } from "./Helpers"
 
 export const useTransactionStatus = () => {
     const dispatch = useAppDispatch()
@@ -26,55 +19,6 @@ export const useTransactionStatus = () => {
     const network = useAppSelector(selectSelectedNetwork)
 
     const { count, increment } = useCounter()
-
-    // todo - fix toast info and text based on type and origin
-    const informUser = useCallback(
-        ({
-            txId,
-            originType,
-            toastType,
-        }: {
-            txId: string
-            originType: TransactionOrigin
-            toastType: ToastType
-        }) => {
-            const translationKeys = getTranslation(originType)
-
-            if (toastType === ToastType.Error) {
-                showErrorToast(
-                    translationKeys[0],
-                    translationKeys[1],
-                    translationKeys[2],
-                    async () => {
-                        await Linking.openURL(
-                            `${
-                                network.explorerUrl ??
-                                defaultMainNetwork.explorerUrl
-                            }/transactions/${txId}`,
-                        )
-                    },
-                )
-            }
-
-            if (toastType === ToastType.Success) {
-                showSuccessToast(
-                    translationKeys[0],
-                    translationKeys[1],
-                    translationKeys[2],
-                    async () => {
-                        await Linking.openURL(
-                            `${
-                                network.explorerUrl ??
-                                defaultMainNetwork.explorerUrl
-                            }/transactions/${txId}`,
-                        )
-                    },
-                    "transactionSuccessToast",
-                )
-            }
-        },
-        [network.explorerUrl],
-    )
 
     const setTransactionPending = useCallback(
         ({ txId, id }: { txId: string; id: string }) => {
@@ -91,51 +35,48 @@ export const useTransactionStatus = () => {
     )
 
     const setTransactionReverted = useCallback(
-        ({
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            txId,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            id,
-        }: {
-            txId: string
-            id: string
-        }) => {
+        ({ txId }: { txId: string }) => {
             informUser({
                 txId,
                 originType: TransactionOrigin.FROM,
                 toastType: ToastType.Error,
+                network,
             })
         },
-        [informUser],
+        [network],
     )
 
     const prepareTransactionStatus = useCallback(
-        async ({ txId, id }: { txId: string; id: string }) => {
-            // set pending immediately
-            setTransactionPending({ txId, id })
-
+        async ({ txId }: { txId: string }) => {
             // wait to to get tx id
             const txReceipt = await thor.transaction(txId).getReceipt()
 
             // if txReceipt is not null
             if (txReceipt && count < 10) {
+                info("txReceipt received", txReceipt)
+
                 // if txReceipt is reverted
                 if (txReceipt.reverted) {
                     info("txReceipt is reverted")
-                    setTransactionReverted({ txId, id })
+                    setTransactionReverted({ txId })
                     return
                 }
             } else {
                 // if txReceipt is still null -> retry for 20 times with a 1s delay
                 setTimeout(async () => {
                     info("txReceipt is null, retrying...")
-                    await prepareTransactionStatus({ txId, id })
+                    await prepareTransactionStatus({ txId })
                     increment()
                 }, 1000)
             }
         },
-        [setTransactionPending, thor, count, setTransactionReverted, increment],
+        [thor, count, setTransactionReverted, increment],
     )
 
-    return { removeTransactionPending, prepareTransactionStatus, informUser }
+    return {
+        removeTransactionPending,
+        setTransactionPending,
+        informUser,
+        prepareTransactionStatus,
+    }
 }

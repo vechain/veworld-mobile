@@ -171,24 +171,6 @@ const BlockListener: React.FC = () => {
 
         if (relevantAccounts.length === 0) return
 
-        // info("received Beat", beat)
-        /*
-            NFT SEND
-            {"bloom": "0xe258497d1674b4525207bb627e7575e4f1cd4061", "gasLimit": 29941436, "id": "0x00f07feb6d22b1bb415ff5fa58b311bd867077702d1601f71a43cec456fd5bc6", "k": 13, "number": 15761387, "obsolete": false, "parentID": "0x00f07fea5dbddbb4ec38b18c77d0f576b830ee74e3bca1b2019e11b333485869", "timestamp": 1688137980, "txsFeatures": 1}
-         */
-
-        // info(
-        //     "NFT BLOOM",
-        //     BloomUtils.testBloomForAddress(
-        //         beat.bloom,
-        //         beat.k,
-        //         "0xa00c0b2b042b10402719cf0805054205c5c97fd2",
-        //     ),
-        // )
-        /*
-            NFT BLOOM true
-        */
-
         // Detect transfer events for all accounts and alert the user
         await attemptAlertOnVetTransfer(beat.number, relevantAccounts)
 

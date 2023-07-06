@@ -16,16 +16,11 @@ import { TransactionOrigin } from "~Model"
 import { ToastType } from "~Components"
 
 const GCD: React.FC = () => {
-    // const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
 
-    const { removeTransactionPending, informUser } = useTransactionStatus()
-
-    // const { wsUrlForVET, isVetWSOpen } = useWsUrlForVET(
-    //     currentAccount,
-    //     network.currentUrl,
-    // )
+    const { removeTransactionPending, informUser, prepareTransactionStatus } =
+        useTransactionStatus()
 
     const onTokenMessage = useCallback(
         async (ev: WebSocketMessageEvent) => {
@@ -35,36 +30,36 @@ const GCD: React.FC = () => {
                 const decodedTransfer =
                     TransactionUtils.decodeTransferEvent(transfer)
 
+                // ~ NFT TRANSFER
                 if (decodedTransfer?.tokenId) {
                     const foundAccount = findInvolvedAccount(
                         visibleAccounts,
                         decodedTransfer,
                     )
 
+                    // Early exit if tx is not related to any of the visible accounts
                     if (!foundAccount) return
 
-                    if (foundAccount.origin === TransactionOrigin.TO) {
-                        info("TO : ", {
-                            account: foundAccount.account?.address,
-                            txOrigin: transfer.meta.txOrigin,
-                        })
+                    // check if tx is reverted
+                    prepareTransactionStatus({ txId: transfer.meta.txID })
 
+                    // User received NFT
+                    if (foundAccount.origin === TransactionOrigin.TO) {
                         // inform user for successfull transfer
                         informUser({
                             txId: transfer.meta.txID,
                             originType: TransactionOrigin.TO,
                             toastType: ToastType.Success,
+                            network,
                         })
 
                         // reload NFT collections from indexer
+                        //todo
                     }
 
+                    // User sent NFT
                     if (foundAccount.origin === TransactionOrigin.FROM) {
-                        info("FROM : ", {
-                            account: foundAccount.account?.address,
-                            txOrigin: transfer.meta.txOrigin,
-                        })
-
+                        // we should wait for the indexer to index the transfer
                         setTimeout(() => {
                             // remove tx pending from redux
                             removeTransactionPending({
@@ -76,13 +71,16 @@ const GCD: React.FC = () => {
                                 txId: transfer.meta.txID,
                                 originType: TransactionOrigin.FROM,
                                 toastType: ToastType.Success,
+                                network,
                             })
 
                             // reload NFT collections from indexer
+                            //todo
                         }, 4000)
                     }
                 }
 
+                // ~ FUNGIBLE TOKEN TRANSFER
                 if (decodedTransfer?.value) {
                     const foundAccount = findInvolvedAccount(
                         visibleAccounts,
@@ -91,21 +89,73 @@ const GCD: React.FC = () => {
 
                     if (!foundAccount) return
 
-                    if (foundAccount.origin === "to") {
+                    // check if tx is reverted
+                    prepareTransactionStatus({ txId: transfer.meta.txID })
+
+                    // User received token
+                    if (foundAccount.origin === TransactionOrigin.TO) {
+                        info("TO : ", {
+                            account: foundAccount.account?.address,
+                            txOrigin: transfer.meta.txOrigin,
+                            amount: decodedTransfer.value,
+                        })
+
+                        // inform user for successfull transfer
+                        informUser({
+                            txId: transfer.meta.txID,
+                            originType: TransactionOrigin.FROM,
+                            toastType: ToastType.Success,
+                            network,
+                            amount: decodedTransfer.value,
+                        })
+
+                        // reload balances
+                        //todo
                     }
 
-                    if (foundAccount.origin === "from") {
-                        // inform usr
+                    // User send token
+                    if (foundAccount.origin === TransactionOrigin.FROM) {
+                        info("FROM : ", {
+                            account: foundAccount.account?.address,
+                            txOrigin: transfer.meta.txOrigin,
+                            amount: decodedTransfer.value,
+                        })
+
+                        // remove tx pending from redux
+                        removeTransactionPending({ txId: transfer.meta.txID })
+
+                        // inform usr for successfull transfer
+                        informUser({
+                            txId: transfer.meta.txID,
+                            originType: TransactionOrigin.FROM,
+                            toastType: ToastType.Success,
+                            network,
+                            amount: decodedTransfer.value,
+                        })
+
+                        // reload balances
+                        //todo
                     }
                 }
             } catch (e) {
                 error(e)
             }
         },
-        [informUser, removeTransactionPending, visibleAccounts],
+        [
+            prepareTransactionStatus,
+            visibleAccounts,
+            informUser,
+            network,
+            removeTransactionPending,
+        ],
     )
 
     useWsUrlForTokens(network.currentUrl, onTokenMessage)
+
+    // const { wsUrlForVET, isVetWSOpen } = useWsUrlForVET(
+    //     currentAccount,
+    //     network.currentUrl,
+    // )
 
     // const onVETMessage = useCallback(async (ev: WebSocketMessageEvent) => {
     //     const transfer = JSON.parse(ev.data) as VetTransferEvent
@@ -124,26 +174,6 @@ const GCD: React.FC = () => {
     //     //     }),
     //     // )
     // }, [])
-
-    // useWebSocket(
-    //     wsUrlForTokens,
-    //     {
-    //         onMessage: onTokenMessage,
-    //         onOpen: ev => {
-    //             info("Beat WS open on: ", ev.currentTarget)
-    //             dispatch(updateNodeError(false))
-    //         },
-    //         onError: ev => {
-    //             error(ev)
-    //         },
-    //         onClose: ev => info(ev),
-    //         shouldReconnect: () => true,
-    //         retryOnError: true,
-    //         reconnectAttempts: 10_000,
-    //         reconnectInterval: 1_000,
-    //     },
-    //     isTokenWSOpen,
-    // )
 
     // useWebSocket(
     //     wsUrlForVET,
@@ -198,17 +228,3 @@ interface TransferEvent {
 // }
 
 export default GCD
-
-/*
-                    use cases:
-                        - I send NFT to other
-                        - I receive NFT from other
-                            - I can show a tost saying (you received NFT from other(adddress) to your account(address))
-
-                            - If selected account is not included in transfer data, I can still show the toast and on tap of toast I can switch selected account?
-
-                            - If selected account is included in transfer data, I can show the toast and on tap of toast I can go to nft tab and refresh by calling the indexer from the begining
-
-                            ~ QUESITON: 
-                            - If the NFT is not indexed on the first page the user would just need to scroll? How does he know what NFT he has received?
-                */

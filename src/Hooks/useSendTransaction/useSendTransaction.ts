@@ -36,21 +36,6 @@ export const useSendTransaction = (
 
         await dispatch(updateAccountBalances(thorClient, account.address))
 
-        // todo - remove and use on components?
-        // showSuccessToast(
-        //     LL.SUCCESS_GENERIC(),
-        //     LL.SUCCESS_GENERIC_OPERATION(),
-        //     LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        //     async () => {
-        //         await Linking.openURL(
-        //             `${
-        //                 network.explorerUrl ?? defaultMainNetwork.explorerUrl
-        //             }/transactions/${id}`,
-        //         )
-        //     },
-        //     "transactionSuccessToast",
-        // )
-
         return id
     }
 
