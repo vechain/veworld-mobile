@@ -48,6 +48,7 @@ export const DelegationSlice = createSlice({
         ) => {
             state.defaultDelegationUrl = action.payload
         },
+        resetDelegationState: () => initialState,
     },
 })
 
@@ -57,4 +58,5 @@ export const {
     setDefaultDelegationAccount,
     setDefaultDelegationUrl,
     deleteDelegationUrl,
+    resetDelegationState,
 } = DelegationSlice.actions

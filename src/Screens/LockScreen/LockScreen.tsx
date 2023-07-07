@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { usePasswordValidation } from "~Hooks"
 import {
+    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -134,7 +135,7 @@ export const LockScreen: React.FC<Props> = memo(
         }, [LL, scenario])
 
         return (
-            <>
+            <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
                 <BaseView mx={20} alignItems="center">
                     <BaseView alignSelf="flex-start">
@@ -157,7 +158,7 @@ export const LockScreen: React.FC<Props> = memo(
                 </BaseView>
 
                 <BaseSpacer height={40} />
-            </>
+            </BaseSafeArea>
         )
     },
 )

@@ -26,6 +26,7 @@ export const CurrencySlice = createSlice({
         clearExchangeRate: state => {
             state.exchangeRates = []
         },
+        resetCurrencyState: () => initialCurrencyState,
     },
 })
 
@@ -34,4 +35,5 @@ export const {
     updateExchangeRate,
     clearExchangeRate,
     updateAvailableCurrencies,
+    resetCurrencyState,
 } = CurrencySlice.actions

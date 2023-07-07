@@ -7,6 +7,7 @@ export interface ConfigState {
     lastSecurityLevel: SecurityLevelType
     isSecurityDowngrade: boolean
     pinValidationString: string
+    isAppBlocked: boolean
 }
 
 const initialState: ConfigState = {
@@ -14,6 +15,7 @@ const initialState: ConfigState = {
     lastSecurityLevel: SecurityLevelType.NONE,
     isSecurityDowngrade: false,
     pinValidationString: SettingsConstants.VALIDATION_STRING,
+    isAppBlocked: false,
 }
 
 export const ConfigSlice = createSlice({
@@ -47,6 +49,10 @@ export const ConfigSlice = createSlice({
         setPinValidationString: (state, action: PayloadAction<string>) => {
             state.pinValidationString = action.payload
         },
+        setIsAppBlocked: (state, action: PayloadAction<boolean>) => {
+            state.isAppBlocked = action.payload
+        },
+        resetConfigState: () => initialState,
     },
 })
 
@@ -55,4 +61,6 @@ export const {
     setLastSecurityLevel,
     setIsSecurityDowngrade,
     setPinValidationString,
+    setIsAppBlocked,
+    resetConfigState,
 } = ConfigSlice.actions

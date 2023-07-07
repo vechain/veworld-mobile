@@ -135,6 +135,7 @@ export const ActivitiesSlice = createSlice({
                 }
             }
         },
+        resetActivityState: () => initialActivitiesState,
     },
 })
 
@@ -143,4 +144,5 @@ export const {
     upsertActivityTestnet,
     updateTransactionActivitiesMainnet,
     updateTransactionActivitiesTestnet,
+    resetActivityState,
 } = ActivitiesSlice.actions

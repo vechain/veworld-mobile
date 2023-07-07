@@ -30,7 +30,7 @@ export const SignCertificateDetails: React.FC<Props> = memo(({ activity }) => {
             value: `${activity.linkUrl}`,
             typographyFont: "subSubTitleLight",
             underline: true,
-            //TODO onValuePress opens browser or in-app browser
+            // TODO(Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/755) onValuePress opens browser or in-app browser
         },
         {
             id: 2,

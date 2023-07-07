@@ -61,12 +61,11 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 ),
                 testID: "buyButton",
             },
-
             {
                 name: LL.BTN_SEND(),
                 action: () =>
                     nav.navigate(Routes.SELECT_TOKEN_SEND, {
-                        initialRoute: Routes.DISCOVER,
+                        initialRoute: Routes.HOME, // this will change Routes.DISCOVER when discover will be in a separated tab
                     }),
                 icon: (
                     <BaseIcon color={theme.colors.text} name="send-outline" />

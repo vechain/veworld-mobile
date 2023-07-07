@@ -1,0 +1,105 @@
+import React, { useCallback } from "react"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import {
+    BaseBottomSheet,
+    BaseButton,
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    CheckBoxWithText,
+    ScrollViewWithFooter,
+} from "~Components"
+import { useI18nContext } from "~i18n"
+import { COLORS } from "~Constants"
+import { StyleSheet } from "react-native"
+
+type Props = {
+    onClose: () => void
+    onConfirm: () => void
+}
+
+const snapPoints = ["57%"]
+
+export const BackupWarningBottomSheet = React.forwardRef<
+    BottomSheetModalMethods,
+    Props
+>(({ onClose, onConfirm }, ref) => {
+    const { LL } = useI18nContext()
+
+    // Holds the state of the user's acknowledgement of the warning
+    const [isChecked, setChecked] = React.useState(false)
+
+    const handleOnProceed = useCallback(() => {
+        onConfirm()
+        onClose()
+        setChecked(false)
+    }, [onClose, onConfirm])
+
+    return (
+        <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
+            <ScrollViewWithFooter
+                footer={
+                    <BaseView>
+                        <CheckBoxWithText
+                            text={LL.BTN_SECURITY_OPERATION_CHECKBOX()}
+                            checkAction={setChecked}
+                            testID="security-operation-app-checkbox"
+                        />
+
+                        <BaseSpacer height={4} />
+
+                        <BaseButton
+                            w={100}
+                            haptics="light"
+                            title={LL.COMMON_PROCEED()}
+                            disabled={!isChecked}
+                            action={handleOnProceed}
+                        />
+                        <BaseSpacer height={16} />
+                    </BaseView>
+                }
+                isScrollEnabled={false}>
+                <BaseView>
+                    <BaseText typographyFont="subTitleBold">
+                        {LL.TITLE_BACKUP_YOUR_PHRASE()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subSubTitleLight">
+                        {LL.SB_BACKUP_YOUR_PHRASE()}
+                    </BaseText>
+                    <BaseText typographyFont="subSubTitle" pt={4}>
+                        {LL.SB_BACKUP_YOUR_PHRASE_2()}
+                    </BaseText>
+
+                    <BaseSpacer height={24} />
+
+                    {/* Warning ICON */}
+                    <BaseView justifyContent="center" alignItems="center">
+                        <BaseView
+                            justifyContent="center"
+                            bg={COLORS.PASTEL_ORANGE}
+                            style={baseStyles.warningIcon}>
+                            <BaseIcon
+                                my={8}
+                                size={55}
+                                name="alert-outline"
+                                color={COLORS.MEDIUM_ORANGE}
+                            />
+                        </BaseView>
+                    </BaseView>
+
+                    <BaseSpacer height={16} />
+                </BaseView>
+            </ScrollViewWithFooter>
+        </BaseBottomSheet>
+    )
+})
+
+const baseStyles = StyleSheet.create({
+    warningIcon: {
+        width: 120,
+        height: 120,
+        borderRadius: 24,
+    },
+})
