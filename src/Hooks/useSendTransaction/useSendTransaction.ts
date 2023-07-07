@@ -20,7 +20,6 @@ export const useSendTransaction = (
     account: WalletAccount,
 ) => {
     const dispatch = useAppDispatch()
-    // const { LL } = useI18nContext()
     const thorClient = useThor()
 
     const sendTransactionAndPerformUpdates = async (tx: Transaction) => {

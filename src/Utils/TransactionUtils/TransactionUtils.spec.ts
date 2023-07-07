@@ -10,7 +10,7 @@ import {
 } from "~Model"
 import TransactionUtils from "."
 import * as logger from "~Utils/Logger/Logger"
-import { toDelegation } from "./TransactionUtils"
+import { decodeTransferEvent, toDelegation } from "./TransactionUtils"
 import { Transaction } from "thor-devkit"
 import { VET, genesises } from "~Constants"
 
@@ -1462,5 +1462,70 @@ describe("toDelegation", () => {
     it("should create a new Transaction with reserved features set to 1", () => {
         const result = toDelegation({} as Transaction.Body)
         expect(result.body.reserved).toEqual({ features: 1 })
+    })
+})
+
+describe("Decode Transfer Event", () => {
+    it("should correctly decode NFT transfer events", () => {
+        const decodedEvent = {
+            from: "0x3ca43f476106ff42ec6209ee78129b62547570ff",
+            to: "0xf6f50606d11cbfedb0da9ded07c554eb7f05fcd3",
+            tokenId: "86328",
+        }
+
+        const eventObj = {
+            address: "0xb1b9d40758cc3d90f1b2899dfb7a64e5d0235c61",
+            data: "0x",
+            meta: {
+                blockID:
+                    "0x00f162dc3d566f3d88329b1d46130dd7c6b5ce78307bd3d304f66b8cc6e986f9",
+                blockNumber: 15819484,
+                blockTimestamp: 1688718950,
+                clauseIndex: 0,
+                txID: "0x571e68f0fa31d324ca8926264e6ff745e3552ce9d504e68c50b15877517a21f7",
+                txOrigin: "0x3ca43f476106ff42ec6209ee78129b62547570ff",
+            },
+            obsolete: false,
+            topics: [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x0000000000000000000000003ca43f476106ff42ec6209ee78129b62547570ff",
+                "0x000000000000000000000000f6f50606d11cbfedb0da9ded07c554eb7f05fcd3",
+                "0x0000000000000000000000000000000000000000000000000000000000015138",
+            ],
+        }
+
+        const result = decodeTransferEvent(eventObj)
+        expect(result).toEqual(decodedEvent)
+    })
+
+    it("should correctly decode Fungible Token transfer events", () => {
+        const decodedEvent = {
+            from: "0x85d10fff9cb9754851e38061bb113992f580e87b",
+            to: "0x9a107a75cff525b033a3e53cadafe3d193b570ec",
+            value: "42900631850968107846730",
+        }
+
+        const eventObj = {
+            address: "0x0000000000000000000000000000456e65726779",
+            data: "0x000000000000000000000000000000000000000000000915a5dd9b2a9ade0c4a",
+            meta: {
+                blockID:
+                    "0x00f162e0980187cf922b8304f28512629c5fbbb3700eb22c6a1b7d5f4ee194ad",
+                blockNumber: 15819488,
+                blockTimestamp: 1688718990,
+                clauseIndex: 0,
+                txID: "0x6589353523483c1d0792703c8ab798cd92f347da0c65e26c83ab0650555e6a08",
+                txOrigin: "0x85d10fff9cb9754851e38061bb113992f580e87b",
+            },
+            obsolete: false,
+            topics: [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x00000000000000000000000085d10fff9cb9754851e38061bb113992f580e87b",
+                "0x0000000000000000000000009a107a75cff525b033a3e53cadafe3d193b570ec",
+            ],
+        }
+
+        const result = decodeTransferEvent(eventObj)
+        expect(result).toEqual(decodedEvent)
     })
 })

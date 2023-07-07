@@ -41,7 +41,7 @@ const GCD: React.FC = () => {
                     if (!foundAccount.account) return
 
                     // check if tx is reverted
-                    prepareTransactionStatus({ txId: transfer.meta.txID })
+                    await prepareTransactionStatus({ txId: transfer.meta.txID })
 
                     // User received NFT
                     if (foundAccount.origin === TransactionOrigin.TO) {
@@ -90,7 +90,7 @@ const GCD: React.FC = () => {
                     if (!foundAccount.account) return
 
                     // check if tx is reverted
-                    prepareTransactionStatus({ txId: transfer.meta.txID })
+                    await prepareTransactionStatus({ txId: transfer.meta.txID })
 
                     // User received token
                     if (foundAccount.origin === TransactionOrigin.TO) {

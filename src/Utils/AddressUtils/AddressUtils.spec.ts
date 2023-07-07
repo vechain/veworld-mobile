@@ -193,7 +193,7 @@ describe("Check vechain address", () => {
         expect(isVechainToken("invalid-address")).toBe(false)
     })
 
-    test("Shoud add correct padding to address 2", () => {
+    test("Shoud add correct padding to address", () => {
         expect(leftPadWithZeros(address1, 64)).toBe(
             "0x000000000000000000000000" + address1NoHex,
         )

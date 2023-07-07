@@ -1,4 +1,8 @@
-import { AccountWithDevice, TransferEventResult } from "~Model"
+import {
+    AccountWithDevice,
+    TransactionOrigin,
+    TransferEventResult,
+} from "~Model"
 import { AddressUtils } from "~Utils"
 
 export const findInvolvedAccount = (
@@ -9,12 +13,12 @@ export const findInvolvedAccount = (
 
     const foundAccount = visibleAccounts.find(acc => {
         if (AddressUtils.compareAddresses(acc.address, decodedTransfer.to)) {
-            origin = "to"
+            origin = TransactionOrigin.TO
             return acc
         }
 
         if (AddressUtils.compareAddresses(acc.address, decodedTransfer.from)) {
-            origin = "from"
+            origin = TransactionOrigin.FROM
             return acc
         }
     })
