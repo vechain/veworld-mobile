@@ -36,6 +36,10 @@ export const BackupWarningBottomSheet = React.forwardRef<
         setChecked(false)
     }, [onClose, onConfirm])
 
+    const onDismiss = useCallback(() => {
+        setChecked(false)
+    }, [])
+
     const snapPoints = useMemo(() => {
         if (PlatformUtils.isAndroid() && isUpgradeSecurity) {
             return ["70%"]
@@ -44,7 +48,10 @@ export const BackupWarningBottomSheet = React.forwardRef<
     }, [isUpgradeSecurity])
 
     return (
-        <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
+        <BaseBottomSheet
+            ref={ref}
+            snapPoints={snapPoints}
+            onDismiss={onDismiss}>
             <ScrollViewWithFooter
                 footer={
                     <BaseView>
