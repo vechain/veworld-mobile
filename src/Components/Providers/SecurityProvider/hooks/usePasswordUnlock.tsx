@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useAppLock, useWalletSecurity } from "~Hooks"
 import { LockScreenUtils } from "~Utils"
 import RNBootSplash from "react-native-bootsplash"
@@ -10,6 +10,8 @@ export const usePasswordUnlock = () => {
         useAppLock()
     const { isWalletSecurityPassword } = useWalletSecurity()
 
+    const [isSplashHidden, setIsSplashHidden] = useState(false)
+
     useEffect(() => {
         const initPasswordUnlock = async () => {
             if (
@@ -17,8 +19,10 @@ export const usePasswordUnlock = () => {
                     appLockStatusInactive,
                     isWalletSecurityPassword,
                 )
-            )
-                await RNBootSplash.hide({ fade: true })
+            ) {
+                await RNBootSplash.hide({ fade: true, duration: 500 })
+                setIsSplashHidden(true)
+            }
         }
         initPasswordUnlock()
     }, [appLockStatusActive, isWalletSecurityPassword, appLockStatusInactive])
@@ -39,5 +43,5 @@ export const usePasswordUnlock = () => {
         }
     }, [appLockStatusActive, isWalletSecurityPassword, unlockApp])
 
-    return { showLockScreen }
+    return { showLockScreen, isSplashHidden }
 }
