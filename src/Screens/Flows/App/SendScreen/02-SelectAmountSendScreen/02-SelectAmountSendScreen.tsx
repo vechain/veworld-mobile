@@ -32,6 +32,7 @@ import {
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { throttle } from "lodash"
+import { useMaxAmount } from "./Hooks/useMaxAmount"
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<
@@ -54,15 +55,19 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
 
+    const { maxTokenAmount } = useMaxAmount({ token })
+
     const rawTokenBalance = FormattingUtils.scaleNumberDown(
         token.balance.balance,
         token.decimals,
-        8,
+        token.decimals,
     )
+
     const formattedTokenBalance = FormattingUtils.humanNumber(
         rawTokenBalance,
         rawTokenBalance,
     )
+
     const rawTokenBalanceinFiat = FormattingUtils.convertToFiatBalance(
         rawTokenBalance || "0",
         exchangeRate?.rate || 1,
@@ -89,8 +94,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     )
 
     const percentage = useMemo(() => {
-        const isRawTokenBalanceZero = new BigNumber(rawTokenBalance).isZero()
-        if (isRawTokenBalanceZero) return 0
+        if (new BigNumber(maxTokenAmount).isZero()) return 0
 
         if (isInputInFiat)
             return (
@@ -101,11 +105,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             )
         return (
             new BigNumber(input)
-                .div(rawTokenBalance)
+                .div(maxTokenAmount)
                 .multipliedBy(100)
                 .toNumber() || 0
         )
-    }, [input, rawTokenBalance, rawTokenBalanceinFiat, isInputInFiat])
+    }, [input, maxTokenAmount, rawTokenBalanceinFiat, isInputInFiat])
 
     const handleToggleInputInFiat = () => {
         setInput(isInputInFiat ? formattedTokenInput : formattedFiatInput)
@@ -113,7 +117,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     }
 
     const onChangePercentage = (value: number) => {
-        const newTokenInput = new BigNumber(rawTokenBalance)
+        const newTokenInput = new BigNumber(maxTokenAmount)
             .div(100)
             .multipliedBy(value)
             .toString()
@@ -133,7 +137,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const throttleOnChangePercentage = throttle(onChangePercentage, 100)
 
     const handleChangeInput = (newValue: string) => {
-        if (new BigNumber(newValue).gt(rawTokenBalance)) {
+        if (new BigNumber(newValue).gt(maxTokenAmount)) {
             setIsError(true)
         } else {
             setIsError(false)
