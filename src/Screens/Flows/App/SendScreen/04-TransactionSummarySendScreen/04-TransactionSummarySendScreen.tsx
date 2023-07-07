@@ -213,8 +213,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         <Layout
             safeAreaTestID="Transaction_Summary_Send_Screen"
             title={LL.SEND_TOKEN_TITLE()}
-            header={
-                <>
+            body={
+                <BaseView mb={80} mt={8}>
                     {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/767) CHange BaseCardGroup with TransferCard */}
                     <BaseCardGroup
                         views={[
@@ -287,10 +287,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
                     <BaseSpacer height={16} />
                     <ConfirmIdentityBottomSheet />
-                </>
-            }
-            body={
-                <BaseView mb={80}>
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}
                         setSelectedDelegationOption={

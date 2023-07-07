@@ -14,7 +14,7 @@ type Props = {
     noBackButton?: boolean
     noMargin?: boolean
     title?: string
-    header?: ReactNode
+    fixedHeader?: ReactNode
     body?: ReactNode
     footer?: ReactNode
     isScrollEnabled?: boolean
@@ -25,25 +25,29 @@ export const Layout = ({
     noBackButton = false,
     noMargin = false,
     title,
-    header,
+    fixedHeader,
     body,
     footer,
     isScrollEnabled = true,
     safeAreaTestID,
 }: Props) => {
     const theme = useTheme()
+    const Title = () => (
+        <BaseText
+            typographyFont="subTitleBold"
+            mb={24}
+            mt={fixedHeader ? 0 : 8}>
+            {title}
+        </BaseText>
+    )
     return (
         <BaseSafeArea grow={1} testID={safeAreaTestID}>
             <BaseView h={100}>
                 {!noBackButton && <BackButtonHeader hasBottomSpacer={false} />}
-                <BaseSpacer height={16} />
+                <BaseSpacer height={fixedHeader ? 16 : 8} />
                 <BaseView mx={noMargin ? 0 : 24}>
-                    {title && (
-                        <BaseText typographyFont="subTitleBold" mb={24}>
-                            {title}
-                        </BaseText>
-                    )}
-                    {header && <BaseView>{header}</BaseView>}
+                    {fixedHeader && title && <Title />}
+                    {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
                 </BaseView>
                 {isScrollEnabled && (
                     <BaseSpacer height={1} background={theme.colors.card} />
@@ -52,6 +56,7 @@ export const Layout = ({
                     <BaseScrollView
                         scrollEnabled={isScrollEnabled}
                         style={noMargin ? {} : styles.scrollView}>
+                        {!fixedHeader && title && <Title />}
                         {body}
                     </BaseScrollView>
                 )}

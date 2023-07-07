@@ -46,7 +46,7 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
         <Layout
             safeAreaTestID="Select_Token_Send_Screen"
             title={LL.SEND_TOKEN_TITLE()}
-            header={
+            fixedHeader={
                 <BaseView>
                     <BaseText typographyFont="button">
                         {LL.SEND_TOKEN_SUBTITLE()}

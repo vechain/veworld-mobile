@@ -174,7 +174,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         <Layout
             safeAreaTestID="Insert_Address_Send_Screen"
             title={LL.SEND_TOKEN_TITLE()}
-            header={
+            fixedHeader={
                 <BaseView>
                     <BaseText typographyFont="button">
                         {LL.SEND_INSERT_ADDRESS()}
