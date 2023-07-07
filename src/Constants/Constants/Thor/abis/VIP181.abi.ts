@@ -27,7 +27,7 @@ export const ApprovalEvent: abi.Event.Definition = {
     type: "event",
 }
 
-export const TrasferEvent: abi.Event.Definition = {
+export const TransferEvent: abi.Event.Definition = {
     anonymous: false,
     inputs: [
         {

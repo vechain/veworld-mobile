@@ -49,6 +49,7 @@ type Props = NativeStackScreenProps<
     Routes.TRANSACTION_SUMMARY_SEND
 >
 
+// Todo - handle is pending transaction - how excatly?
 export const TransactionSummarySendScreen = ({ route }: Props) => {
     const [loading, setLoading] = useState(false)
     const nav = useNavigation()
@@ -130,6 +131,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
+        token,
         onError: () => setLoading(false),
     })
 
