@@ -9,6 +9,7 @@ import {
     SwapCard,
     FadeoutButton,
     TransferCard,
+    TransactionStatusBox,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
@@ -30,7 +31,6 @@ import {
     FungibleTokenTransferDetails,
     SignCertificateDetails,
     DappTransactionDetails,
-    ActivityStatusBox,
 } from "./Components"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
@@ -208,7 +208,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
                     {isPendingOrFailedActivity && (
                         <>
-                            <ActivityStatusBox
+                            <TransactionStatusBox
                                 status={
                                     activityFromStore?.status || activity.status
                                 }

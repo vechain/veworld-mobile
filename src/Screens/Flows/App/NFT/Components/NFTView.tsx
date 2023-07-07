@@ -11,6 +11,7 @@ import {
 import { Routes } from "~Navigation"
 import {
     removeBlackListCollection,
+    selectPendingTx,
     selectSelectedAccount,
     setBlackListCollection,
     useAppDispatch,
@@ -19,6 +20,7 @@ import {
 import { MediaUtils } from "~Utils"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     item: NonFungibleTokenCollection | NonFungibleToken
@@ -44,6 +46,7 @@ export const NFTView = memo(
         const nav = useNavigation()
         const dispatch = useAppDispatch()
         const video = useRef(null)
+        const { LL } = useI18nContext()
 
         const selectedAccoount = useAppSelector(selectSelectedAccount)
 
@@ -63,6 +66,10 @@ export const NFTView = memo(
             : undefined
 
         const nftItem = !isCollection ? (item as NonFungibleToken) : undefined
+
+        const isPendingTx = useAppSelector(state =>
+            selectPendingTx(state, nftItem?.id!),
+        )
 
         const onNftPress = useCallback(
             (nft: NonFungibleToken) =>
@@ -224,6 +231,22 @@ export const NFTView = memo(
                                     />
                                 )}
 
+                            {isPendingTx && (
+                                <BaseView
+                                    w={43}
+                                    style={baseStyles.nftPendingLabel}
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    justifyContent="space-between">
+                                    <BaseText
+                                        typographyFont="caption"
+                                        color={COLORS.WHITE}
+                                        w={80}>
+                                        {LL.ACTIVITIES_STATUS_pending()}
+                                    </BaseText>
+                                </BaseView>
+                            )}
+
                             <BaseView
                                 style={baseStyles.nftCollectionNameBar}
                                 flexDirection="row"
@@ -277,5 +300,14 @@ const baseStyles = StyleSheet.create({
         paddingHorizontal: 4,
         borderRadius: 13,
         backgroundColor: COLORS.DARK_PURPLE,
+    },
+    nftPendingLabel: {
+        position: "absolute",
+        height: 18,
+        top: 0,
+        left: 0,
+        backgroundColor: COLORS.DARK_ORANGE_ALERT,
+        paddingStart: 12,
+        borderBottomRightRadius: 13,
     },
 })

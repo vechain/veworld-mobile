@@ -4,7 +4,6 @@ import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { useAppInitState, AppInitState } from "~Hooks"
 import { CreateWalletAppStack, Routes } from "~Navigation"
-import BlockListener from "../../BlockListener"
 import {
     BlackListedCollectionsScreen,
     ConnectAppScreen,
@@ -12,7 +11,9 @@ import {
     SignMessageScreen,
 } from "~Screens"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
+import GCD from "../../GCD/GCD"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
+import BlockListener from "../../BlockListener"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -113,6 +114,7 @@ const AppContainer = () => {
     return (
         <>
             <BlockListener />
+            <GCD />
             <TabStack />
         </>
     )

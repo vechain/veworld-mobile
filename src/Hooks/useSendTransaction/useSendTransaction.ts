@@ -1,7 +1,5 @@
-import { Linking } from "react-native"
 import { Transaction } from "thor-devkit"
-import { showSuccessToast, useThor } from "~Components"
-import { defaultMainNetwork } from "~Constants"
+import { useThor } from "~Components"
 import { ActivityType, Network, WalletAccount } from "~Model"
 import {
     addPendingTransferTransactionActivity,
@@ -9,7 +7,6 @@ import {
     useAppDispatch,
 } from "~Storage/Redux"
 import { sendTransaction } from "~Networking"
-import { useI18nContext } from "~i18n"
 import { ActivityUtils } from "~Utils"
 
 /**
@@ -23,35 +20,22 @@ export const useSendTransaction = (
     account: WalletAccount,
 ) => {
     const dispatch = useAppDispatch()
-    const { LL } = useI18nContext()
     const thorClient = useThor()
 
     const sendTransactionAndPerformUpdates = async (tx: Transaction) => {
         const id = await sendTransaction(tx, network.currentUrl)
-
         const type = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
+
         if (type === ActivityType.NFT_TRANSFER) {
             // TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/752) handle NFT activity?
         } else {
-            // Add pending transaction activity
+            // todo - Add pending transaction activity
             dispatch(addPendingTransferTransactionActivity(tx, thorClient))
         }
 
         await dispatch(updateAccountBalances(thorClient, account.address))
 
-        showSuccessToast(
-            LL.SUCCESS_GENERIC(),
-            LL.SUCCESS_GENERIC_OPERATION(),
-            LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-            async () => {
-                await Linking.openURL(
-                    `${
-                        network.explorerUrl ?? defaultMainNetwork.explorerUrl
-                    }/transactions/${id}`,
-                )
-            },
-            "transactionSuccessToast",
-        )
+        return id
     }
 
     return { sendTransactionAndPerformUpdates }
