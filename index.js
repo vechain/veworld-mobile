@@ -31,6 +31,7 @@ import { info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
+import * as Sentry from "@sentry/react-native"
 
 const { fontFamily } = typography
 
@@ -44,6 +45,14 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
     LogBox.ignoreAllLogs()
 }
+
+Sentry.init({
+    dsn: "https://d9f6366fe78846b88450241b1bc23e05@o4505487555297280.ingest.sentry.io/4505487558508544",
+    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    tracesSampleRate: 1.0,
+    environment: process.env.NODE_ENV,
+})
 
 const Main = () => {
     const [fontsLoaded] = useFonts({
@@ -96,7 +105,7 @@ const NavigationProvider = ({ children }) => {
     )
 }
 
-AppRegistry.registerComponent(appName, () => Main)
+AppRegistry.registerComponent(appName, () => Sentry.wrap(Main))
 
 if (__DEV__) {
     const ignoreWarns = [
