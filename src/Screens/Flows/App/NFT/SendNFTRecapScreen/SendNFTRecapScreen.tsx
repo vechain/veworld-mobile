@@ -17,11 +17,9 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
-    removeNFTFromCollection,
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
     selectVthoTokenWithBalanceByAccount,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { NFTRecapView } from "./Components/NFTRecapView"
@@ -30,7 +28,6 @@ import { ScrollView } from "react-native-gesture-handler"
 import {
     BottomInsetsEXtraPadding,
     useCheckIdentity,
-    useNFTCollections,
     usePlatformBottomInsets,
     useSignTransaction,
     useTransaction,
@@ -50,7 +47,6 @@ type Props = NativeStackScreenProps<
 export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const disptach = useAppDispatch()
 
     const { calculateBottomInsets } = usePlatformBottomInsets(
         BottomInsetsEXtraPadding.StaticButton,
@@ -66,21 +62,12 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         ),
     )
 
-    const { getCollections } = useNFTCollections()
-
     const [loading, setLoading] = useState(false)
 
     const onTXFinish = useCallback(() => {
         setLoading(false)
-
-        // get nft collections again?
-        getCollections(0, 10)
-
-        setTimeout(() => {
-            nav.dispatch(StackActions.popToTop())
-            disptach(removeNFTFromCollection({ NFT: nft! }))
-        }, 300)
-    }, [disptach, nav, nft, getCollections])
+        nav.dispatch(StackActions.popToTop())
+    }, [nav])
 
     const { gas, transaction } = useTransaction({
         token: nft!,
@@ -108,6 +95,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         selectedDelegationOption,
         selectedDelegationUrl,
         onError: () => setLoading(false),
+        token: nft!,
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
@@ -146,7 +134,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         5,
     )
 
-    // todo -> create a centralized hook for this where we distinguish between errors (not enough gas, error calculating gas, etc)
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/760) create a centralized hook for this where we distinguish between errors (not enough gas, error calculating gas, etc)
     const isThereEnoughGas = useMemo(() => {
         if (!vthoGas || vthoGas === "0.00") return false
         let leftVtho = new BigNumber(vthoBalance)
@@ -188,7 +176,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={24} />
 
-                    {/* TODO convert style to design specs*/}
+                    {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/761) convert style to design specs*/}
                     <TransferCard
                         fromAddress={selectedAccoount!.address}
                         toAddresses={[route.params.receiverAddress]}
@@ -242,7 +230,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         isLastInList
                         title={"Total amount"}
                         data={vthoGas + " " + VTHO.symbol}
-                        subTtitle={"8,03 USD"} // todo - add real price
+                        subTtitle={"8,03 USD"} // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/762) add real price
                     />
                 </BaseView>
             </ScrollView>

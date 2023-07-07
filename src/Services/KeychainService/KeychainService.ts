@@ -106,6 +106,7 @@ const setDeviceEncryptionKey = async (
         )
     } catch (err) {
         error(err)
+        throw new Error("Error setting encryption key")
     }
 }
 

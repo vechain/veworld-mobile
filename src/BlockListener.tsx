@@ -66,6 +66,7 @@ const BlockListener: React.FC = () => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const thor = useThor()
     const pendingActivities = useAppSelector(selectActivitiesWithoutFinality)
+
     const {
         count: counter,
         increment: incrementCounter,
@@ -99,7 +100,7 @@ const BlockListener: React.FC = () => {
     )
 
     const onOpen = () => {
-        info("Beat WS open on: ", beatUrl)
+        // info("Beat WS open on: ", beatUrl)
         dispatch(updateNodeError(false))
     }
 
@@ -128,7 +129,7 @@ const BlockListener: React.FC = () => {
         const log = closeEvent.isTrusted ? info : warn
         log("Will attempt to reconnect web socket after closure", closeEvent)
 
-        // TODO: //Attempt to use another node if the current one has issues
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/747) Attempt to use another node if the current one has issues
         //Not doing async because the result should not affect this function
         // if (!closeEvent.wasClean && network.defaultNet) {
         //     dispatch(changeSelectedNetwork(network.id))
@@ -156,6 +157,7 @@ const BlockListener: React.FC = () => {
     ) => {
         //Update the pending transaction cache, check for reverted
         const updatedActivities = await updateActivities(pendingActivities)
+
         for (const updatedAct of updatedActivities) {
             if (updatedAct.status === ActivityStatus.REVERTED) {
                 showTransactionReverted(updatedAct.id)
@@ -166,6 +168,7 @@ const BlockListener: React.FC = () => {
         const relevantAccounts = accounts.filter(acc =>
             BloomUtils.testBloomForAddress(beat.bloom, beat.k, acc.address),
         )
+
         if (relevantAccounts.length === 0) return
 
         // Detect transfer events for all accounts and alert the user
@@ -186,6 +189,7 @@ const BlockListener: React.FC = () => {
                     acct.address,
                 ),
             )
+
             if (relevantTokensForAcct.length > 0)
                 await attemptAlertOnTokenTransfer(
                     beat.number,

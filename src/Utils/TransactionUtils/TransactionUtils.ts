@@ -9,6 +9,7 @@ import {
     SwapResult,
     Token,
     TransactionOutcomes,
+    TransferEventResult,
 } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { abis, VET } from "~Constants"
@@ -45,10 +46,13 @@ export const SWAP_EXACT_TOKENS_FOR_ETH_SIG = new abi.Function(
     abis.UniswapRouterV2.swapExactTokensForETH,
 ).signature
 
+export const NFT_TRANSFER_SIG = new abi.Function(abis.VIP181.transferFrom)
+    .signature
+
 export const SWAP_EVENT_SIG = new abi.Event(abis.UniswapPairV2.SwapEvent)
     .signature
 
-export const NFT_TRANSFER_SIG = new abi.Function(abis.VIP181.transferFrom)
+export const TRANSFER_EVENT_SIG = new abi.Event(abis.VIP180.TransferEvent)
     .signature
 
 /*
@@ -201,6 +205,7 @@ export const decodeTokenTransferClause = (
                 abis.VIP180.transfer.inputs,
                 "0x" + clause.data.slice(TRANSFER_SIG.length),
             )
+
             return {
                 to: decoded.to,
                 amount: decoded.amount,
@@ -739,4 +744,45 @@ export const sendSignedTransaction = async (
     )
 
     return response.data.id as string
+}
+
+export const decodeTransferEvent = (
+    event: Connex.VM.Event,
+): TransferEventResult | null => {
+    if (
+        event.topics[0]
+            ?.toLowerCase()
+            .startsWith(TRANSFER_EVENT_SIG.toLowerCase())
+    ) {
+        const isNFTTransferEvent = event.topics.length === 4
+        const isFungibleTokenTransferEvent = event.topics.length === 3
+
+        try {
+            if (isNFTTransferEvent) {
+                const decodedNFTTransferEvent = new abi.Event(
+                    abis.VIP181.TransferEvent,
+                ).decode(event.data, event.topics)
+
+                return {
+                    from: decodedNFTTransferEvent.from,
+                    to: decodedNFTTransferEvent.to,
+                    tokenId: decodedNFTTransferEvent.tokenId,
+                }
+            } else if (isFungibleTokenTransferEvent) {
+                const decodedTokenTransferEvent = new abi.Event(
+                    abis.VIP180.TransferEvent,
+                ).decode(event.data, event.topics)
+
+                return {
+                    from: decodedTokenTransferEvent.from,
+                    to: decodedTokenTransferEvent.to,
+                    value: decodedTokenTransferEvent.value,
+                }
+            }
+        } catch (e) {
+            debug("Failed to decode parameters", e)
+        }
+    }
+
+    return null
 }

@@ -51,6 +51,7 @@ type Props = NativeStackScreenProps<
     Routes.TRANSACTION_SUMMARY_SEND
 >
 
+// Todo - handle is pending transaction - how excatly?
 export const TransactionSummarySendScreen = ({ route }: Props) => {
     const [loading, setLoading] = useState(false)
     const nav = useNavigation()
@@ -63,7 +64,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectCurrencyExchangeRate(state, token.symbol),
     )
 
-    // todo - make a single selector for this
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
     const accountsAndContacts = useMemo(
@@ -132,6 +133,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
+        token,
         onError: () => setLoading(false),
     })
 
@@ -155,7 +157,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         return vthoGas && leftVtho.gte(vthoGas)
     }, [amount, vthoGas, token.symbol, vthoBalance])
 
-    // Todo - add useCallback
     const receiverDetails = () => {
         const receiverExists = accountsAndContacts.find(_account =>
             AddressUtils.compareAddresses(_account.address, address),
@@ -233,7 +234,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     <BaseSpacer height={24} />
                 </BaseView>
 
-                {/* TODO CHange BaseCardGroup with TransferCard */}
+                {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/767) CHange BaseCardGroup with TransferCard */}
                 <BaseCardGroup
                     views={[
                         {
@@ -405,7 +406,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                     <BaseSpacer height={6} />
                     <BaseText typographyFont="subSubTitle">
-                        {/** TODO: copied from extension, understand if it is fixed as "less than 1 min" */}
                         {LL.SEND_LESS_THAN_1_MIN()}
                     </BaseText>
                     <BaseSpacer height={24} />

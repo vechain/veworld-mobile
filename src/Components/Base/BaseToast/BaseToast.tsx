@@ -2,7 +2,7 @@ import React from "react"
 import Toast, { ToastConfigParams } from "react-native-toast-message"
 import { ColorThemeType } from "~Constants"
 import { useTheme } from "~Hooks"
-import PlatformUtils from "~Utils/PlatformUtils" // TODO: remove this circular dependency
+import PlatformUtils from "~Utils/PlatformUtils" // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/748) remove this circular dependency
 import {
     errorToastStyles,
     infoToastStyles,
@@ -185,4 +185,11 @@ export const showInfoToast = (
         text2,
         props: { textLink: textLink, onPress: onPress },
     })
+}
+
+export enum ToastType {
+    Success = "success",
+    Error = "error",
+    Warning = "warning",
+    Info = "info",
 }

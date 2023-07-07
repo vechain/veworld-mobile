@@ -8,6 +8,7 @@ import {
     BaseSpacer,
     BaseView,
     FadeoutButton,
+    TransactionStatusBox,
     showErrorToast,
 } from "~Components"
 import { ScrollView, Linking } from "react-native"
@@ -22,11 +23,13 @@ import { InfoSectionView, NFTDetailImage } from "./Components"
 import {
     selectCollectionWithContractAddress,
     selectNFTWithAddressAndTokenId,
+    selectPendingTx,
     useAppSelector,
 } from "~Storage/Redux"
 import { striptags } from "striptags"
 import { useNavigation } from "@react-navigation/native"
 import { getCalendars } from "expo-localization"
+import { ActivityStatus } from "~Model"
 
 interface NFTAttributeData {
     trait_type: string
@@ -56,6 +59,10 @@ export const NFTDetailScreen = ({ route }: Props) => {
             route.params.collectionAddress!,
             route.params.nftTokenId,
         ),
+    )
+
+    const isPendingTx = useAppSelector(state =>
+        selectPendingTx(state, nft?.id!),
     )
 
     const onSendPress = useCallback(
@@ -88,7 +95,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
         [LL, onCopyToClipboard],
     )
 
-    // todo - add LL for headers
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/758) add LL for headers
     return (
         <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
             <BackButtonHeader hasBottomSpacer={false} />
@@ -106,6 +113,18 @@ export const NFTDetailScreen = ({ route }: Props) => {
                         name={nft?.name ?? ""}
                         tokenId={nft?.tokenId ?? ""}
                     />
+
+                    <BaseSpacer height={26} />
+
+                    {isPendingTx && (
+                        <TransactionStatusBox
+                            status={
+                                isPendingTx
+                                    ? ActivityStatus.PENDING
+                                    : ActivityStatus.SUCCESS
+                            }
+                        />
+                    )}
 
                     <BaseSpacer height={26} />
 
@@ -212,6 +231,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
             </BaseView>
 
             <FadeoutButton
+                disabled={!!isPendingTx ?? false}
                 title={LL.SEND_TOKEN_TITLE().toUpperCase()}
                 action={onSendPress}
             />

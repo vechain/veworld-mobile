@@ -63,7 +63,7 @@ describe("LedgerUtils", () => {
     })
 
     describe("checkLedgerConnection", () => {
-        //TODO: mock transport and test more
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/776) mock transport and test more
         it("should not throw", async () => {
             await LedgerUtils.checkLedgerConnection({
                 transport: TestHelpers.data.mockedTransport,
@@ -98,7 +98,7 @@ describe("LedgerUtils", () => {
     })
 
     describe("signTransaction", () => {
-        //TODO: mock transport and test more
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/776) mock transport and test more
         // Do not work since we switched from vet app to transport
         // it("should works as expected", async () => {
         //     await LedgerUtils.signTransaction(
