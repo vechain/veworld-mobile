@@ -9,7 +9,7 @@ export const getTransactionsOrigin = (
     pageSize: number,
     direction: ORDER,
 ) => {
-    return `${process.env.REACT_APP_INDEXER_URL}/transactions?origin=${address}&size=${pageSize}&page=${page}&direction=${direction}`
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transactions?origin=${address}&size=${pageSize}&page=${page}&direction=${direction}`
 }
 
 export const getIncomingTransfersOrigin = (
@@ -18,9 +18,9 @@ export const getIncomingTransfersOrigin = (
     pageSize: number,
     direction: ORDER,
 ) => {
-    return `${process.env.REACT_APP_INDEXER_URL}/transfers/to?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/to?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
 }
 
 export const getBlock = (blockId: string) => {
-    return `${process.env.REACT_APP_INDEXER_URL}/blocks?revision=${blockId}`
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/blocks?revision=${blockId}`
 }

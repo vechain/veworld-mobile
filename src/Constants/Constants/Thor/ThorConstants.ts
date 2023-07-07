@@ -1,4 +1,6 @@
 import type { abi } from "thor-devkit"
+import { BigNumber } from "bignumber.js"
+
 import {
     VIP180,
     VIP181,
@@ -151,3 +153,6 @@ export const chainTagToGenesisId: Record<number, string> = {
     74: genesisesId.main,
     39: genesisesId.test,
 }
+
+// This is a high estimate of the gas cost for a VTHO transfer
+export const VTHO_GAS_ESTIMATE = new BigNumber(67000)

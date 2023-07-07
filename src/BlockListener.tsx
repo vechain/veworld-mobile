@@ -66,6 +66,7 @@ const BlockListener: React.FC = () => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const thor = useThor()
     const pendingActivities = useAppSelector(selectActivitiesWithoutFinality)
+
     const {
         count: counter,
         increment: incrementCounter,
@@ -99,7 +100,7 @@ const BlockListener: React.FC = () => {
     )
 
     const onOpen = () => {
-        info("Beat WS open on: ", beatUrl)
+        // info("Beat WS open on: ", beatUrl)
         dispatch(updateNodeError(false))
     }
 
@@ -156,6 +157,7 @@ const BlockListener: React.FC = () => {
     ) => {
         //Update the pending transaction cache, check for reverted
         const updatedActivities = await updateActivities(pendingActivities)
+
         for (const updatedAct of updatedActivities) {
             if (updatedAct.status === ActivityStatus.REVERTED) {
                 showTransactionReverted(updatedAct.id)
@@ -166,6 +168,7 @@ const BlockListener: React.FC = () => {
         const relevantAccounts = accounts.filter(acc =>
             BloomUtils.testBloomForAddress(beat.bloom, beat.k, acc.address),
         )
+
         if (relevantAccounts.length === 0) return
 
         // Detect transfer events for all accounts and alert the user
@@ -186,6 +189,7 @@ const BlockListener: React.FC = () => {
                     acct.address,
                 ),
             )
+
             if (relevantTokensForAcct.length > 0)
                 await attemptAlertOnTokenTransfer(
                     beat.number,

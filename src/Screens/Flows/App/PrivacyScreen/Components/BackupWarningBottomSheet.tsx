@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseBottomSheet,
@@ -13,18 +13,18 @@ import {
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     onClose: () => void
     onConfirm: () => void
+    isUpgradeSecurity?: boolean
 }
-
-const snapPoints = ["60%"]
 
 export const BackupWarningBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, onConfirm }, ref) => {
+>(({ onClose, onConfirm, isUpgradeSecurity = false }, ref) => {
     const { LL } = useI18nContext()
 
     // Holds the state of the user's acknowledgement of the warning
@@ -39,6 +39,13 @@ export const BackupWarningBottomSheet = React.forwardRef<
     const onDismiss = useCallback(() => {
         setChecked(false)
     }, [])
+
+    const snapPoints = useMemo(() => {
+        if (PlatformUtils.isAndroid() && isUpgradeSecurity) {
+            return ["70%"]
+        }
+        return ["60%"]
+    }, [isUpgradeSecurity])
 
     return (
         <BaseBottomSheet
@@ -75,7 +82,7 @@ export const BackupWarningBottomSheet = React.forwardRef<
                     <BaseText typographyFont="subSubTitleLight">
                         {LL.SB_BACKUP_YOUR_PHRASE()}
                     </BaseText>
-                    <BaseText typographyFont="subSubTitle" pt={4}>
+                    <BaseText typographyFont="subSubTitle">
                         {LL.SB_BACKUP_YOUR_PHRASE_2()}
                     </BaseText>
 
@@ -96,7 +103,13 @@ export const BackupWarningBottomSheet = React.forwardRef<
                         </BaseView>
                     </BaseView>
 
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={24} />
+
+                    {PlatformUtils.isAndroid() && isUpgradeSecurity && (
+                        <BaseText typographyFont="subSubTitle" pt={4}>
+                            {LL.SB_UPGRADE_SECURITY_WARNING_ANDROID()}
+                        </BaseText>
+                    )}
                 </BaseView>
             </ScrollViewWithFooter>
         </BaseBottomSheet>

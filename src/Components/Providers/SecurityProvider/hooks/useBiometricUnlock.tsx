@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useAppLock, useAppReset, useWalletSecurity } from "~Hooks"
 import { AlertUtils, BiometricsUtils, LockScreenUtils, debug } from "~Utils"
 import RNBootSplash from "react-native-bootsplash"
@@ -10,18 +10,21 @@ export const useBiometricUnlock = () => {
     const appReset = useAppReset()
     const isSecurityDowngrade = useAppSelector(selectIsSecurityDowngrade)
 
-    const recursiveFaceId = useCallback(async () => {
+    const [isBiometricsSucceeded, setIsBiometricsSucceeded] = useState(false)
+
+    const recursiveBiometricsUnlock = useCallback(async () => {
         let results = await BiometricsUtils.authenticateWithBiometrics()
 
         if (results.success) {
             await RNBootSplash.hide({ fade: true })
+            setIsBiometricsSucceeded(true)
         } else if (results.error === "user_cancel") {
-            AlertUtils.showCancelledFaceIdAlert(
+            AlertUtils.showCancelledBiometricsAlert(
                 async () => {
                     await appReset()
                 },
                 async () => {
-                    return await recursiveFaceId()
+                    return await recursiveBiometricsUnlock()
                 },
             )
         } else {
@@ -33,7 +36,7 @@ export const useBiometricUnlock = () => {
     useEffect(() => {
         const initBiometricUnlock = async () => {
             if (isSecurityDowngrade) {
-                await RNBootSplash.hide({ fade: true })
+                await RNBootSplash.hide({ fade: true, duration: 500 })
                 return
             }
 
@@ -43,7 +46,7 @@ export const useBiometricUnlock = () => {
                     isWalletSecurityBiometrics,
                 )
             ) {
-                await recursiveFaceId()
+                await recursiveBiometricsUnlock()
             }
         }
 
@@ -51,4 +54,6 @@ export const useBiometricUnlock = () => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [appLockStatusActive, isSecurityDowngrade, isWalletSecurityBiometrics])
+
+    return { isBiometricsSucceeded }
 }

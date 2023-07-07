@@ -109,6 +109,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         transaction: transactionBody,
     })
 
+    // TODO - add token to handle pending txs?
     // Sign transaction
     const { signTransaction } = useSignTransaction({
         transaction: transactionBody,

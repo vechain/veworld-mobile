@@ -8,7 +8,7 @@ type Props = {
     status: ActivityStatus
 }
 
-export const ActivityStatusBox: React.FC<Props> = memo(({ status }) => {
+export const TransactionStatusBox: React.FC<Props> = memo(({ status }) => {
     const { LL } = useI18nContext()
 
     const statusTitle =
