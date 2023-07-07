@@ -8,9 +8,15 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, DEVICE_TYPE, Wallet } from "~Model"
+import {
+    AccountWithDevice,
+    DEVICE_TYPE,
+    FungibleTokenWithBalance,
+    NonFungibleToken,
+    Wallet,
+} from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { useSendTransaction } from "~Hooks"
+import { useSendTransaction, useTransactionStatus } from "~Hooks"
 import { sponsorTransaction } from "~Networking"
 
 type Props = {
@@ -22,6 +28,7 @@ type Props = {
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
     onError?: (e: unknown) => void
+    token?: NonFungibleToken | FungibleTokenWithBalance
 }
 /**
  * Hooks that expose a function to sign and send a transaction performing updates on success
@@ -35,6 +42,7 @@ type Props = {
  * @param onError on transaction error callback
  * @returns {signAndSendTransaction} the function to sign and send the transaction
  */
+
 export const useSignTransaction = ({
     transaction,
     onTXFinish,
@@ -43,6 +51,7 @@ export const useSignTransaction = ({
     selectedDelegationOption,
     selectedDelegationUrl,
     onError,
+    token,
 }: Props) => {
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
@@ -50,6 +59,8 @@ export const useSignTransaction = ({
     const senderDevice = useAppSelector(state =>
         selectDevice(state, account.rootAddress),
     )
+
+    const { setTransactionPending } = useTransactionStatus()
 
     const { sendTransactionAndPerformUpdates } = useSendTransaction(
         network,
@@ -189,7 +200,18 @@ export const useSignTransaction = ({
     const signAndSendTransaction = async (password?: string) => {
         try {
             const tx = await signTransaction(password)
-            await sendTransactionAndPerformUpdates(tx)
+            const id = await sendTransactionAndPerformUpdates(tx)
+
+            //todo -> add VET?
+            if (token?.hasOwnProperty("tokenId")) {
+                const _token = token as NonFungibleToken
+                setTransactionPending({ txId: id, id: _token.id })
+            }
+
+            if (token?.hasOwnProperty("balance")) {
+                const _token = token as FungibleTokenWithBalance
+                setTransactionPending({ txId: id, id: _token.address })
+            }
         } catch (e) {
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
