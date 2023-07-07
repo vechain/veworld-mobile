@@ -96,3 +96,38 @@ export enum TransactionOrigin {
     FROM = "from",
     TO = "to",
 }
+
+export interface TransferEvent {
+    address: string
+    topics: string[]
+    data: string
+    meta: {
+        blockID: string
+        blockNumber: number
+        blockTimestamp: number
+        txID: string
+        txOrigin: string
+        clauseIndex: number
+    }
+    obsolete: boolean
+}
+
+export interface VetTransferEvent {
+    amount: string
+    meta: {
+        blockID: string
+        blockNumber: number
+        blockTimestamp: number
+        clauseIndex: number
+        txID: string
+        txOrigin: string
+    }
+    recipient: string
+    sender: string
+}
+
+export enum TransactionType {
+    NFT = "NFT",
+    TOKEN = "TOKEN",
+    VET = "VET",
+}

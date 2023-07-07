@@ -1,7 +1,7 @@
 import { useCallback } from "react"
-import { ToastType, useThor } from "~Components"
+import { useThor } from "~Components"
+import { informUserforRevertedTransaction } from "../../GCD/Helpers"
 import { useCounter } from "~Hooks/useCounter"
-import { TransactionOrigin } from "~Model"
 import {
     removePendingTransaction,
     selectSelectedNetwork,
@@ -10,7 +10,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { info } from "~Utils"
-import { informUser } from "./Helpers"
 
 export const useTransactionStatus = () => {
     const dispatch = useAppDispatch()
@@ -36,17 +35,16 @@ export const useTransactionStatus = () => {
 
     const setTransactionReverted = useCallback(
         ({ txId }: { txId: string }) => {
-            informUser({
+            informUserforRevertedTransaction({
                 txId,
-                originType: TransactionOrigin.FROM,
-                toastType: ToastType.Error,
                 network,
             })
         },
         [network],
     )
 
-    const prepareTransactionStatus = useCallback(
+    // check reverted tx on Mainnet -> event is not arriving on websocket if tx is reverted??
+    const checkIfReverted = useCallback(
         async ({ txId }: { txId: string }) => {
             // wait to to get tx id
             const txReceipt = await thor.transaction(txId).getReceipt()
@@ -60,10 +58,10 @@ export const useTransactionStatus = () => {
                     return
                 }
             } else {
-                // if txReceipt is still null -> retry for 20 times with a 1s delay
+                // if txReceipt is still null -> retry for 10 times with a 1s delay
                 setTimeout(async () => {
                     info("txReceipt is null, retrying...")
-                    await prepareTransactionStatus({ txId })
+                    await checkIfReverted({ txId })
                     increment()
                 }, 1000)
             }
@@ -74,7 +72,6 @@ export const useTransactionStatus = () => {
     return {
         removeTransactionPending,
         setTransactionPending,
-        informUser,
-        prepareTransactionStatus,
+        checkIfReverted,
     }
 }

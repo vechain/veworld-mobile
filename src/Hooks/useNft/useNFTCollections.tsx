@@ -50,6 +50,7 @@ export const useNFTCollections = () => {
                 // Get contract addresses for nfts owned by ownerAddress
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
+                        network,
                         selectedAccount.address,
                         _resultsPerPage,
                         _page,
@@ -66,6 +67,7 @@ export const useNFTCollections = () => {
                 // Get nfts for each contract address
                 const nftResultsPerPage = 1
                 const { nftData } = await getNFTdataForContract(
+                    network,
                     contractsForNFTs,
                     selectedAccount.address,
                     nftResultsPerPage,
@@ -117,7 +119,7 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, network.type, selectedAccount.address, thor],
+        [LL, dispatch, network, selectedAccount.address, thor],
     )
 
     return { getCollections }

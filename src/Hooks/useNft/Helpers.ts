@@ -9,13 +9,14 @@ import {
 } from "~Networking"
 import { fetchMetadata } from "./fetchMeta"
 import { NFTPlaceholder } from "~Assets"
-import { NonFungibleTokenCollection } from "~Model"
+import { Network, NonFungibleTokenCollection } from "~Model"
 const allSettled = require("promise.allsettled")
 
 /*
  * Helper functions for useNFTCollections
  */
 export const getNFTdataForContract = async (
+    network: Network,
     contractsForNFTs: string[],
     selectedAccountAddress: string,
     _resultsPerPage: number,
@@ -25,6 +26,7 @@ export const getNFTdataForContract = async (
 
     for (const contractAddress of contractsForNFTs) {
         const nfts = getNftsForContract(
+            network,
             contractAddress,
             selectedAccountAddress,
             _resultsPerPage,

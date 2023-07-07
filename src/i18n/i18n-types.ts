@@ -1237,15 +1237,51 @@ type RootTranslation = {
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
-	 * @param {unknown} txId
+	 * @param {string} txId
 	 */
 	NOTIFICATION_transaction_reverted: RequiredParams<'txId'>
 	/**
-	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}
-	 * @param {unknown} amount
-	 * @param {unknown} token
+	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}​ ​o​n​ ​{​a​l​i​a​s​}
+	 * @param {string} alias
+	 * @param {string} amount
+	 * @param {string} token
 	 */
-	NOTIFICATION_found_token_transfer: RequiredParams<'amount' | 'token'>
+	NOTIFICATION_found_token_transfer: RequiredParams<'alias' | 'amount' | 'token'>
+	/**
+	 * I​n​c​o​m​i​n​g​!
+	 */
+	NOTIFICATION_INCOMING_NFT_TITLE: string
+	/**
+	 * {​c​o​l​l​e​c​t​i​o​n​N​a​m​e​}​ ​Y​o​u​ ​r​e​c​e​i​v​e​d​ ​a​ ​n​e​w​ ​N​F​T​ ​f​r​o​m​ ​{​f​r​o​m​}​ ​t​o​ ​{​a​l​i​a​s​}​.
+	 * @param {string} alias
+	 * @param {string} collectionName
+	 * @param {string} from
+	 */
+	NOTIFICATION_INCOMING_NFT_BODY: RequiredParams<'alias' | 'collectionName' | 'from'>
+	/**
+	 * G​o​ ​t​o​ ​N​F​T​s
+	 */
+	NOTIFIACTION_INCOMING_NFT_ACTION: string
+	/**
+	 * O​u​t​g​o​i​n​g​!
+	 */
+	NOTIFICATION_OUTGOING_NFT_TITLE: string
+	/**
+	 * {​c​o​l​l​e​c​t​i​o​n​N​a​m​e​}​ ​N​F​T​ ​w​a​s​ ​s​u​c​c​e​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
+	 * @param {string} collectionName
+	 * @param {string} to
+	 */
+	NOTIFICATION_OUTGOING_NFT_BODY: RequiredParams<'collectionName' | 'to'>
+	/**
+	 * {​a​m​o​u​n​t​}​ ​w​a​s​ ​s​u​c​c​e​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
+	 * @param {string} amount
+	 * @param {string} to
+	 */
+	NOTIFIACTION_OUTGOING_TOKEN_BODY: RequiredParams<'amount' | 'to'>
+	/**
+	 * V​i​e​w​ ​a​c​c​o​u​n​t
+	 */
+	NOTIFICATION_VIEW_ACCOUNT: string
 	/**
 	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
 	 */
@@ -3274,11 +3310,39 @@ Please, try again later.
 	/**
 	 * Transaction {txId} was reverted.
 	 */
-	NOTIFICATION_transaction_reverted: (arg: { txId: unknown }) => LocalizedString
+	NOTIFICATION_transaction_reverted: (arg: { txId: string }) => LocalizedString
 	/**
-	 * Found {token} transfer: {amount}
+	 * Found {token} transfer: {amount} on {alias}
 	 */
-	NOTIFICATION_found_token_transfer: (arg: { amount: unknown, token: unknown }) => LocalizedString
+	NOTIFICATION_found_token_transfer: (arg: { alias: string, amount: string, token: string }) => LocalizedString
+	/**
+	 * Incoming!
+	 */
+	NOTIFICATION_INCOMING_NFT_TITLE: () => LocalizedString
+	/**
+	 * {collectionName} You received a new NFT from {from} to {alias}.
+	 */
+	NOTIFICATION_INCOMING_NFT_BODY: (arg: { alias: string, collectionName: string, from: string }) => LocalizedString
+	/**
+	 * Go to NFTs
+	 */
+	NOTIFIACTION_INCOMING_NFT_ACTION: () => LocalizedString
+	/**
+	 * Outgoing!
+	 */
+	NOTIFICATION_OUTGOING_NFT_TITLE: () => LocalizedString
+	/**
+	 * {collectionName} NFT was succesfully sent to {to}.
+	 */
+	NOTIFICATION_OUTGOING_NFT_BODY: (arg: { collectionName: string, to: string }) => LocalizedString
+	/**
+	 * {amount} was succesfully sent to {to}.
+	 */
+	NOTIFIACTION_OUTGOING_TOKEN_BODY: (arg: { amount: string, to: string }) => LocalizedString
+	/**
+	 * View account
+	 */
+	NOTIFICATION_VIEW_ACCOUNT: () => LocalizedString
 	/**
 	 * A connected app successfully disconnected from this wallet.
 	 */
