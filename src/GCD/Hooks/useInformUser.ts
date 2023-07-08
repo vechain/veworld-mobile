@@ -15,7 +15,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 )
             } else {
                 // received token/VET
-                // todo.vas -> switch currrent account to accountAddress -> IF NOT, SWITCH TO THAT ACCOUNT
+                // todo.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/806
             }
         },
         [network.explorerUrl],
@@ -32,7 +32,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 )
             } else {
                 // 1. User received NFT
-                // todo.vas -> GO TO NFT TAB -> switch currrent account to accountAddress -> REFRESH NFTS
+                // todo.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/806
             }
         },
         [network.explorerUrl],

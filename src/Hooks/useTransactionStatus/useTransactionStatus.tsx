@@ -52,7 +52,7 @@ export const useTransactionStatus = () => {
             txId: string
             token: FungibleTokenWithBalance | NonFungibleToken
         }) => {
-            //todo.vas -> add VET?
+            //todo.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/804 [add VET suppoert]
             if (token?.hasOwnProperty("tokenId")) {
                 const _token = token as NonFungibleToken
                 setTransactionPending({ txId, id: _token.id })
