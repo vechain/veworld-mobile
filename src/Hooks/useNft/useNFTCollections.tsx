@@ -50,7 +50,7 @@ export const useNFTCollections = () => {
                 // Get contract addresses for nfts owned by ownerAddress
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
-                        network,
+                        network.type,
                         selectedAccount.address,
                         _resultsPerPage,
                         _page,

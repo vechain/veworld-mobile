@@ -1820,6 +1820,10 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_TX_READY_SB: string
 	/**
+	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​p​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
+	 */
+	SEND_PENDING_TX_REVERT_ALERT: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -3875,6 +3879,10 @@ Please, try again later.
 	 * The transaction is ready to be sent, press confirm to send it to the network
 	 */
 	SEND_LEDGER_TX_READY_SB: () => LocalizedString
+	/**
+	 * This transaction may be reverted if ypur balance is too low
+	 */
+	SEND_PENDING_TX_REVERT_ALERT: () => LocalizedString
 	/**
 	 * Account
 	 */

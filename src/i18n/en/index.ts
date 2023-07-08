@@ -533,6 +533,7 @@ const en: BaseTranslation = {
     SEND_LEDGER_SIGN_DATA_SB: "We are signing your transaction with your Ledger, please confirm the transaction on your device when required",
     SEND_LEDGER_TX_READY: "Transaction is ready",
     SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",
+    SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

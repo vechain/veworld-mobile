@@ -26,7 +26,7 @@ export const getNFTdataForContract = async (
 
     for (const contractAddress of contractsForNFTs) {
         const nfts = getNftsForContract(
-            network,
+            network.type,
             contractAddress,
             selectedAccountAddress,
             _resultsPerPage,

@@ -1,7 +1,6 @@
-import { useCallback } from "react"
+import { useCallback, useRef } from "react"
 import { useThor } from "~Components"
 import { informUserforRevertedTransaction } from "../../GCD/Helpers"
-import { useCounter } from "~Hooks/useCounter"
 import {
     removePendingTransaction,
     selectSelectedNetwork,
@@ -17,8 +16,7 @@ export const useTransactionStatus = () => {
     const thor = useThor()
 
     const network = useAppSelector(selectSelectedNetwork)
-
-    const { count, increment } = useCounter()
+    const count = useRef(0)
 
     const setTransactionPending = useCallback(
         ({ txId, id }: { txId: string; id: string }) => {
@@ -78,10 +76,10 @@ export const useTransactionStatus = () => {
             // wait to to get tx id
             const txReceipt = await thor.transaction(txId).getReceipt()
 
-            setTxPendingStatus({ txId, token })
+            count.current <= 0 && setTxPendingStatus({ txId, token })
 
             // if txReceipt is not null
-            if (txReceipt && count < 10) {
+            if (txReceipt && count.current < 10) {
                 // if txReceipt is reverted
                 if (txReceipt.reverted) {
                     info("txReceipt is reverted", txReceipt.meta.txOrigin)
@@ -92,20 +90,20 @@ export const useTransactionStatus = () => {
                 }
             } else {
                 // if txReceipt is still null -> retry for 10 times with a 1s delay
+                count.current = count.current + 1
+
                 setTimeout(async () => {
                     info("txReceipt is null, retrying...")
                     await prepareTxStatus({ txId, token })
-                    increment()
                 }, 1000)
             }
         },
         [
             thor,
             setTxPendingStatus,
-            count,
             setTransactionReverted,
             removeTransactionPending,
-            increment,
+            count,
         ],
     )
 

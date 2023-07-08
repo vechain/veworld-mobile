@@ -38,6 +38,7 @@ import {
     selectKnownContacts,
     selectAccounts,
     selectVthoTokenWithBalanceByAccount,
+    selectPendingTx,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -51,7 +52,6 @@ type Props = NativeStackScreenProps<
     Routes.TRANSACTION_SUMMARY_SEND
 >
 
-// Todo - handle is pending transaction - how excatly?
 export const TransactionSummarySendScreen = ({ route }: Props) => {
     const [loading, setLoading] = useState(false)
     const nav = useNavigation()
@@ -79,6 +79,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             0,
         ),
         amount,
+    )
+
+    const pendingTransaction = useAppSelector(state =>
+        selectPendingTx(state, token.address),
     )
 
     const onTXFinish = useCallback(() => {
@@ -304,6 +308,18 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         },
                     ]}
                 />
+
+                {!!pendingTransaction && (
+                    <>
+                        <BaseSpacer height={24} />
+                        <BaseView mx={24}>
+                            <BaseText color={COLORS.DARK_RED_ALERT}>
+                                {LL.SEND_PENDING_TX_REVERT_ALERT()}
+                            </BaseText>
+                        </BaseView>
+                    </>
+                )}
+
                 <BaseView mx={24}>
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}

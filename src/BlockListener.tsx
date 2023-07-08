@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import useWebSocket from "react-use-websocket"
 import { VET } from "~Constants"
-import { useCounter, useToastNotification } from "~Hooks"
+import { useCounter } from "~Hooks"
 import {
     AddressUtils,
     BloomUtils,
@@ -66,14 +66,13 @@ const BlockListener: React.FC = () => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const thor = useThor()
     const pendingActivities = useAppSelector(selectActivitiesWithoutFinality)
-
     const {
         count: counter,
         increment: incrementCounter,
         reset: resetCounter,
     } = useCounter()
-    const { showTransactionReverted, showFoundTokenTransfer } =
-        useToastNotification()
+    // const { showTransactionReverted, showFoundTokenTransfer } =
+    //     useToastNotification()
 
     useEffect(() => {
         resetCounter()
@@ -100,7 +99,7 @@ const BlockListener: React.FC = () => {
     )
 
     const onOpen = () => {
-        // info("Beat WS open on: ", beatUrl)
+        info("Beat WS open on: ", beatUrl)
         dispatch(updateNodeError(false))
     }
 
@@ -157,10 +156,9 @@ const BlockListener: React.FC = () => {
     ) => {
         //Update the pending transaction cache, check for reverted
         const updatedActivities = await updateActivities(pendingActivities)
-
         for (const updatedAct of updatedActivities) {
             if (updatedAct.status === ActivityStatus.REVERTED) {
-                showTransactionReverted(updatedAct.id)
+                // showTransactionReverted(updatedAct.id)
             }
         }
 
@@ -168,7 +166,6 @@ const BlockListener: React.FC = () => {
         const relevantAccounts = accounts.filter(acc =>
             BloomUtils.testBloomForAddress(beat.bloom, beat.k, acc.address),
         )
-
         if (relevantAccounts.length === 0) return
 
         // Detect transfer events for all accounts and alert the user
@@ -189,7 +186,6 @@ const BlockListener: React.FC = () => {
                     acct.address,
                 ),
             )
-
             if (relevantTokensForAcct.length > 0)
                 await attemptAlertOnTokenTransfer(
                     beat.number,
@@ -227,7 +223,7 @@ const BlockListener: React.FC = () => {
 
         // send toast notification for each transfer
         transfers.forEach(transfer => {
-            showFoundTokenTransfer(VET, transfer.amount)
+            // showFoundTokenTransfer(VET, transfer.amount)
 
             dispatch(
                 addIncomingTransfer(
@@ -273,7 +269,7 @@ const BlockListener: React.FC = () => {
 
             tokenTransfers.forEach(evt => {
                 if (!processedTransactionIds.has(evt.transactionId)) {
-                    showFoundTokenTransfer(token, evt.amount)
+                    // showFoundTokenTransfer(token, evt.amount)
                     setProcessedTransactionIds(
                         prev => new Set([...prev, evt.transactionId]),
                     )
