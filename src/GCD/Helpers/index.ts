@@ -9,7 +9,6 @@ export * from "./handleNFTTransfers"
 
 import {
     AccountWithDevice,
-    Network,
     TransferEvent,
     TransferEventResult,
     VetTransferEvent,
@@ -19,10 +18,8 @@ export interface BaseTrnasferHandlerProps {
     visibleAccounts: AccountWithDevice[]
     decodedTransfer: TransferEventResult
     transfer: TransferEvent
-    checkIfReverted: (params: { txId: string }) => Promise<void>
     removeTransactionPending: (params: { txId: string }) => void
-    network: Network
-    reconciliationAction: (params: { accountAddress: string }) => void
+    informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
 export interface NFTTrnasferHandlerProps extends BaseTrnasferHandlerProps {
@@ -33,13 +30,13 @@ export interface TokenTrnasferHandlerProps extends BaseTrnasferHandlerProps {
     fetchData: (
         address: string,
     ) => Promise<{ symbol: string; decimals: number }>
+    stateReconciliationAction: (params: { accountAddress: string }) => void
 }
 
 export interface VETTransferHandlerProps {
     transfer: VetTransferEvent
     visibleAccounts: AccountWithDevice[]
     removeTransactionPending: (params: { txId: string }) => void
-    checkIfReverted: (params: { txId: string }) => Promise<void>
-    network: Network
-    reconciliationAction: (params: { accountAddress: string }) => void
+    stateReconciliationAction: (params: { accountAddress: string }) => void
+    informUser: (params: { accountAddress: string; txId?: string }) => void
 }

@@ -31,7 +31,6 @@ export const initialStateNft: NftSliceState = {
 }
 
 // todo.vas - add testnet state
-
 // Note: To test, replace `accountAddress - address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const NftSlice = createSlice({
     name: "nft",

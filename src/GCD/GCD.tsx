@@ -6,6 +6,7 @@ import {
 } from "~Storage/Redux"
 import { TransactionUtils, error } from "~Utils"
 import {
+    useInformUser,
     useStateReconciliaiton,
     useWsUrlForTokens,
     useWsUrlForVET,
@@ -23,13 +24,13 @@ import {
 } from "./Helpers"
 
 const GCD: React.FC = () => {
-    const network = useAppSelector(selectSelectedNetwork)
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
-
+    const network = useAppSelector(selectSelectedNetwork)
     const { fetchData } = useFungibleTokenInfo()
     const { fetchData: fetchCollectionName } = useNonFungibleTokenInfo()
-    const { removeTransactionPending, checkIfReverted } = useTransactionStatus()
-    const { updateBalances, updateNFTs } = useStateReconciliaiton()
+    const { removeTransactionPending } = useTransactionStatus()
+    const { stateReconciliationAction } = useStateReconciliaiton()
+    const { forTokens, forNFTs } = useInformUser({ network })
 
     const onTokenMessage = useCallback(
         async (ev: WebSocketMessageEvent) => {
@@ -41,29 +42,26 @@ const GCD: React.FC = () => {
 
                 // ~ NFT TRANSFER
                 if (decodedTransfer?.tokenId) {
-                    handleNFTTransfers({
+                    await handleNFTTransfers({
                         visibleAccounts,
                         decodedTransfer,
                         transfer,
                         removeTransactionPending,
-                        checkIfReverted,
-                        network,
                         fetchCollectionName,
-                        reconciliationAction: updateNFTs,
+                        informUser: forNFTs,
                     })
                 }
 
                 // ~ FUNGIBLE TOKEN TRANSFER
                 if (decodedTransfer?.value) {
-                    handleTokenTransfers({
+                    await handleTokenTransfers({
                         visibleAccounts,
                         decodedTransfer,
                         transfer,
                         removeTransactionPending,
-                        checkIfReverted,
-                        network,
                         fetchData,
-                        reconciliationAction: updateBalances,
+                        stateReconciliationAction,
+                        informUser: forTokens,
                     })
                 }
             } catch (e) {
@@ -73,12 +71,11 @@ const GCD: React.FC = () => {
         [
             visibleAccounts,
             removeTransactionPending,
-            checkIfReverted,
-            network,
             fetchCollectionName,
-            updateNFTs,
+            forNFTs,
             fetchData,
-            updateBalances,
+            stateReconciliationAction,
+            forTokens,
         ],
     )
 
@@ -93,17 +90,15 @@ const GCD: React.FC = () => {
                 transfer,
                 visibleAccounts,
                 removeTransactionPending,
-                checkIfReverted,
-                network,
-                reconciliationAction: updateBalances,
+                stateReconciliationAction,
+                informUser: forTokens,
             })
         },
         [
-            checkIfReverted,
-            network,
-            removeTransactionPending,
             visibleAccounts,
-            updateBalances,
+            removeTransactionPending,
+            stateReconciliationAction,
+            forTokens,
         ],
     )
 

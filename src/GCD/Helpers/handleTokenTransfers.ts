@@ -5,29 +5,21 @@ import {
     TokenTrnasferHandlerProps,
 } from "."
 import { TransactionOrigin } from "~Model"
-import { info } from "~Utils"
 
 export const handleTokenTransfers = async ({
     visibleAccounts,
     decodedTransfer,
-    checkIfReverted,
     transfer,
     fetchData,
-    network,
     removeTransactionPending,
-    reconciliationAction,
+    stateReconciliationAction,
+    informUser,
 }: TokenTrnasferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, decodedTransfer)
 
     if (!foundAccount.account) return
 
-    // check if tx is reverted
-    await checkIfReverted({ txId: transfer.meta.txID })
-
     const { symbol, decimals } = await fetchData(transfer.address)
-
-    // todo.vas - pass action from above
-    const action = () => info("User tapped on token Banner for incoming")
 
     // User received token
     if (foundAccount.origin === TransactionOrigin.TO) {
@@ -37,11 +29,11 @@ export const handleTokenTransfers = async ({
             symbol,
             decimals,
             alias: foundAccount.account.alias,
-            action,
+            decodedTransfer,
+            informUser,
         })
 
-        // reload balances
-        reconciliationAction({ accountAddress: foundAccount.account.address })
+        stateReconciliationAction({ accountAddress: decodedTransfer.to })
     }
 
     // User send token
@@ -52,14 +44,16 @@ export const handleTokenTransfers = async ({
         // inform usr for successfull transfer
         InformUserForOutgoingToken({
             txId: transfer.meta.txID,
-            network,
             amount: decodedTransfer.value || "0",
             symbol,
             decimals,
+            decodedTransfer,
             to: decodedTransfer.to,
+            informUser,
         })
 
-        // reload balance
-        reconciliationAction({ accountAddress: foundAccount.account.address })
+        stateReconciliationAction({
+            accountAddress: foundAccount.account.address,
+        })
     }
 }

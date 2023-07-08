@@ -1,29 +1,26 @@
 import { Linking } from "react-native"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { VET, defaultMainNetwork } from "~Constants"
-import { Network } from "~Model"
+import { Network, TransferEventResult } from "~Model"
 import { FormattingUtils } from "~Utils"
 import * as i18n from "~i18n"
 import { isEmpty } from "lodash"
 
-// todo
-/*
-        - If selected account is not included in transfer data, I can still show the toast and on tap of toast I can switch selected account?
-        - If selected account is included in transfer data, I can show the toast and on tap of toast I can go to nft tab and refresh by calling the indexer from the begining
-*/
-
+// ~ NFT - INCOMING
 type InformUserForIncomingNFTProps = {
     collectionName: string
     alias: string
     from: string
-    action: () => void
+    decodedTransfer: TransferEventResult
+    informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
 export const informUSerForIncomingNFT = ({
     collectionName,
     alias,
     from,
-    action,
+    decodedTransfer,
+    informUser,
 }: InformUserForIncomingNFTProps) => {
     const locale = i18n.detectLocale()
 
@@ -37,22 +34,25 @@ export const informUSerForIncomingNFT = ({
             from: formattedFrom,
         }),
         i18n.i18n()[locale].NOTIFIACTION_INCOMING_NFT_ACTION(),
-        async () => action(), // todo.vas -> GO TO NFT TAB -> CHECK IF accountAddress IS CURRENT ACCOUNT -> IF NOT, SWITCH TO THAT ACCOUNT -> REFRESH NFTS
+        () => informUser({ accountAddress: decodedTransfer.to }),
     )
 }
 
+// ~ NFT - OUTGOING
 type InformUserForOutgoingNFTProps = {
     txId: string
     to: string
+    from: string
     collectionName: string
-    network: Network
+    informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
 export const informUserForOutgoingNFT = ({
     txId,
     to,
+    from,
     collectionName,
-    network,
+    informUser,
 }: InformUserForOutgoingNFTProps) => {
     const locale = i18n.detectLocale()
 
@@ -65,22 +65,18 @@ export const informUserForOutgoingNFT = ({
             to: formattedTo,
         }),
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        async () => {
-            await Linking.openURL(
-                `${
-                    network.explorerUrl ?? defaultMainNetwork.explorerUrl
-                }/transactions/${txId}`,
-            )
-        },
+        () => informUser({ txId, accountAddress: from }),
     )
 }
 
+// ~TOKEN - INCOMING
 type InformUserForIncomingTokenProps = {
     amount: string
     symbol: string
     decimals: number
     alias: string
-    action: () => void
+    decodedTransfer: TransferEventResult
+    informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
 export const InformUserForIncomingToken = ({
@@ -88,7 +84,8 @@ export const InformUserForIncomingToken = ({
     symbol,
     decimals,
     alias,
-    action,
+    decodedTransfer,
+    informUser,
 }: InformUserForIncomingTokenProps) => {
     const locale = i18n.detectLocale()
 
@@ -110,17 +107,19 @@ export const InformUserForIncomingToken = ({
             alias,
         }),
         i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
-        async () => action(), // todo.vas -> CHECK IF accountAddress IS CURRENT ACCOUNT -> IF NOT, SWITCH TO THAT ACCOUNT
+        () => informUser({ accountAddress: decodedTransfer.to }),
     )
 }
 
+// ~TOKEN - OUTGOING
 type InformUserForOutgoingTokenProps = {
     txId: string
     amount: string
     symbol: string
     decimals: number
-    network: Network
+    decodedTransfer: TransferEventResult
     to: string
+    informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
 export const InformUserForOutgoingToken = ({
@@ -128,8 +127,9 @@ export const InformUserForOutgoingToken = ({
     amount,
     symbol,
     decimals,
-    network,
     to,
+    decodedTransfer,
+    informUser,
 }: InformUserForOutgoingTokenProps) => {
     const locale = i18n.detectLocale()
 
@@ -154,52 +154,23 @@ export const InformUserForOutgoingToken = ({
             to: formattedTo,
         }),
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        async () => {
-            await Linking.openURL(
-                `${
-                    network.explorerUrl ?? defaultMainNetwork.explorerUrl
-                }/transactions/${txId}`,
-            )
-        },
+        () => informUser({ accountAddress: decodedTransfer.from, txId }),
     )
 }
 
-export const informUserforRevertedTransaction = ({
-    txId,
-    network,
-}: {
-    txId: string
-    network: Network
-}) => {
-    const locale = i18n.detectLocale()
-    const formattedTxId = FormattingUtils.humanAddress(txId, 4, 5)
-
-    showErrorToast(
-        i18n.i18n()[locale].ERROR(),
-        i18n.i18n()[locale].NOTIFICATION_transaction_reverted({
-            txId: formattedTxId,
-        }),
-        i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        async () => {
-            await Linking.openURL(
-                `${
-                    network.explorerUrl ?? defaultMainNetwork.explorerUrl
-                }/transactions/${txId}`,
-            )
-        },
-    )
-}
-
+// ~VET - INCOMING
 type InformUserForIncomingVETProps = {
     amount: string
     alias: string
-    action: () => void
+    to: string
+    informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
 export const InformUserForIncomingVET = ({
     amount,
     alias,
-    action,
+    to,
+    informUser,
 }: InformUserForIncomingVETProps) => {
     const locale = i18n.detectLocale()
 
@@ -216,22 +187,25 @@ export const InformUserForIncomingVET = ({
             alias,
         }),
         i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
-        async () => action(), // todo.vas -> CHECK IF accountAddress IS CURRENT ACCOUNT -> IF NOT, SWITCH TO THAT ACCOUNT
+        () => informUser({ accountAddress: to }),
     )
 }
 
+// ~VET - OUTGOING
 type InformUserForOutgoingTokenVET = {
     txId: string
     amount: string
-    network: Network
     to: string
+    from: string
+    informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
 export const InformUserForOutgoingVET = ({
     txId,
     amount,
-    network,
     to,
+    from,
+    informUser,
 }: InformUserForOutgoingTokenVET) => {
     const locale = i18n.detectLocale()
 
@@ -248,8 +222,29 @@ export const InformUserForOutgoingVET = ({
             to: fomattedTo,
         }),
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        async () => {
-            await Linking.openURL(
+        () => informUser({ accountAddress: from, txId }),
+    )
+}
+
+// ~ REVERTED TRANSACTION
+export const informUserforRevertedTransaction = ({
+    txId,
+    network,
+}: {
+    txId: string
+    network: Network
+}) => {
+    const locale = i18n.detectLocale()
+    const formattedTxId = FormattingUtils.humanAddress(txId, 4, 5)
+
+    showErrorToast(
+        i18n.i18n()[locale].ERROR(),
+        i18n.i18n()[locale].NOTIFICATION_transaction_reverted({
+            txId: formattedTxId,
+        }),
+        i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        () => {
+            Linking.openURL(
                 `${
                     network.explorerUrl ?? defaultMainNetwork.explorerUrl
                 }/transactions/${txId}`,

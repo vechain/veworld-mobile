@@ -5,16 +5,14 @@ import {
     informUSerForIncomingNFT,
     informUserForOutgoingNFT,
 } from "."
-import { info } from "~Utils"
 
 export const handleNFTTransfers = async ({
     visibleAccounts,
     decodedTransfer,
     transfer,
-    checkIfReverted,
-    network,
     removeTransactionPending,
     fetchCollectionName,
+    informUser,
 }: NFTTrnasferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, decodedTransfer)
 
@@ -23,24 +21,16 @@ export const handleNFTTransfers = async ({
 
     const collectionName = await fetchCollectionName(transfer.address)
 
-    // check if tx is reverted
-    await checkIfReverted({ txId: transfer.meta.txID })
-
     // User received NFT
     if (foundAccount.origin === TransactionOrigin.TO) {
-        // todo.vas - pass action from above
-        const action = () => info("User tapped on NFT Banner for incoming")
-
         // inform user for successfull transfer
         informUSerForIncomingNFT({
             collectionName,
             from: transfer.meta.txOrigin,
             alias: foundAccount.account.alias,
-            action,
+            decodedTransfer,
+            informUser,
         })
-
-        // reload NFT collections from indexer
-        //todo.vas
     }
 
     // User sent NFT
@@ -56,12 +46,10 @@ export const handleNFTTransfers = async ({
             informUserForOutgoingNFT({
                 txId: transfer.meta.txID,
                 to: decodedTransfer.to,
+                from: transfer.meta.txOrigin,
                 collectionName,
-                network,
+                informUser,
             })
-
-            // reload NFT collections from indexer
-            //todo.vas
         }, 4000)
     }
 }

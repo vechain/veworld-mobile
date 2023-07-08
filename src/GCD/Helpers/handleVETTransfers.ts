@@ -5,16 +5,14 @@ import {
     VETTransferHandlerProps,
     findInvolvedAccount,
 } from "."
-import { info } from "~Utils"
 
-export const handleVETTransfers = async ({
+export const handleVETTransfers = ({
     transfer,
     visibleAccounts,
     removeTransactionPending,
-    checkIfReverted,
-    network,
-    reconciliationAction,
-}: VETTransferHandlerProps): Promise<void> => {
+    stateReconciliationAction,
+    informUser,
+}: VETTransferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, {
         from: transfer.sender,
         to: transfer.recipient,
@@ -23,23 +21,17 @@ export const handleVETTransfers = async ({
 
     if (!foundAccount.account) return
 
-    // check if tx is reverted
-    await checkIfReverted({ txId: transfer.meta.txID })
-
-    // todo.vas - pass action from above
-    const action = () => info("User tapped on VET Banner for incoming")
-
     // User received token
     if (foundAccount.origin === TransactionOrigin.TO) {
         // inform user for successfull transfer
         InformUserForIncomingVET({
-            action,
             alias: foundAccount.account.alias,
             amount: transfer.amount,
+            to: transfer.recipient,
+            informUser,
         })
 
-        // reload balances
-        reconciliationAction({ accountAddress: foundAccount.account.address })
+        stateReconciliationAction({ accountAddress: transfer.recipient })
     }
 
     // User send token
@@ -50,12 +42,12 @@ export const handleVETTransfers = async ({
         // inform usr for successfull transfer
         InformUserForOutgoingVET({
             txId: transfer.meta.txID,
-            network,
             amount: transfer.amount,
             to: transfer.recipient,
+            from: transfer.sender,
+            informUser,
         })
 
-        // reload balances
-        reconciliationAction({ accountAddress: foundAccount.account.address })
+        stateReconciliationAction({ accountAddress: transfer.sender })
     }
 }

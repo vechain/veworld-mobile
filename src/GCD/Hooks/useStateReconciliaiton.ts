@@ -6,14 +6,12 @@ export const useStateReconciliaiton = () => {
     const dispatch = useAppDispatch()
     const thor = useThor()
 
-    const updateBalances = useCallback(
-        async ({ accountAddress }: { accountAddress: string }) => {
-            dispatch(updateAccountBalances(thor, accountAddress))
+    const stateReconciliationAction = useCallback(
+        (params: { accountAddress: string }) => {
+            dispatch(updateAccountBalances(thor, params.accountAddress))
         },
         [dispatch, thor],
     )
 
-    const updateNFTs = useCallback(async () => {}, [])
-
-    return { updateBalances, updateNFTs }
+    return { stateReconciliationAction }
 }

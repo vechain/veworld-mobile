@@ -10,6 +10,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { info } from "~Utils"
+import { FungibleTokenWithBalance, NonFungibleToken } from "~Model"
 
 export const useTransactionStatus = () => {
     const dispatch = useAppDispatch()
@@ -43,35 +44,74 @@ export const useTransactionStatus = () => {
         [network],
     )
 
+    const setTxPendingStatus = useCallback(
+        ({
+            txId,
+            token,
+        }: {
+            txId: string
+            token: FungibleTokenWithBalance | NonFungibleToken
+        }) => {
+            //todo.vas -> add VET?
+            if (token?.hasOwnProperty("tokenId")) {
+                const _token = token as NonFungibleToken
+                setTransactionPending({ txId, id: _token.id })
+            }
+
+            if (token?.hasOwnProperty("balance")) {
+                const _token = token as FungibleTokenWithBalance
+                setTransactionPending({ txId, id: _token.address })
+            }
+        },
+        [setTransactionPending],
+    )
+
     // check reverted tx on Mainnet -> event is not arriving on websocket if tx is reverted??
-    const checkIfReverted = useCallback(
-        async ({ txId }: { txId: string }) => {
+    const prepareTxStatus = useCallback(
+        async ({
+            txId,
+            token,
+        }: {
+            txId: string
+            token: FungibleTokenWithBalance | NonFungibleToken
+        }) => {
             // wait to to get tx id
             const txReceipt = await thor.transaction(txId).getReceipt()
+
+            setTxPendingStatus({ txId, token })
 
             // if txReceipt is not null
             if (txReceipt && count < 10) {
                 // if txReceipt is reverted
                 if (txReceipt.reverted) {
-                    info("txReceipt is reverted")
+                    info("txReceipt is reverted", txReceipt.meta.txOrigin)
                     setTransactionReverted({ txId })
+                    removeTransactionPending({ txId })
                     return
+                } else {
                 }
             } else {
                 // if txReceipt is still null -> retry for 10 times with a 1s delay
                 setTimeout(async () => {
                     info("txReceipt is null, retrying...")
-                    await checkIfReverted({ txId })
+                    await prepareTxStatus({ txId, token })
                     increment()
                 }, 1000)
             }
         },
-        [thor, count, setTransactionReverted, increment],
+        [
+            thor,
+            setTxPendingStatus,
+            count,
+            setTransactionReverted,
+            removeTransactionPending,
+            increment,
+        ],
     )
 
     return {
         removeTransactionPending,
         setTransactionPending,
-        checkIfReverted,
+        prepareTxStatus,
     }
 }
