@@ -12,6 +12,7 @@ export const handleNFTTransfers = async ({
     transfer,
     removeTransactionPending,
     fetchCollectionName,
+    stateReconciliationAction,
     informUser,
 }: NFTTrnasferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, decodedTransfer)
@@ -23,14 +24,19 @@ export const handleNFTTransfers = async ({
 
     // User received NFT
     if (foundAccount.origin === TransactionOrigin.TO) {
-        // inform user for successfull transfer
-        informUSerForIncomingNFT({
-            collectionName,
-            from: transfer.meta.txOrigin,
-            alias: foundAccount.account.alias,
-            decodedTransfer,
-            informUser,
-        })
+        // we should wait for the indexer to index the transfer
+        setTimeout(() => {
+            // inform user for successfull transfer
+            informUSerForIncomingNFT({
+                collectionName,
+                from: transfer.meta.txOrigin,
+                alias: foundAccount.account!.alias, // this should be read by typescript as it is already checked on line 21
+                decodedTransfer,
+                informUser,
+            })
+
+            stateReconciliationAction({ accountAddress: decodedTransfer.to })
+        }, 4000)
     }
 
     // User sent NFT
@@ -50,6 +56,9 @@ export const handleNFTTransfers = async ({
                 collectionName,
                 informUser,
             })
+
+            stateReconciliationAction({ accountAddress: decodedTransfer.to })
+            stateReconciliationAction({ accountAddress: decodedTransfer.from })
         }, 4000)
     }
 }

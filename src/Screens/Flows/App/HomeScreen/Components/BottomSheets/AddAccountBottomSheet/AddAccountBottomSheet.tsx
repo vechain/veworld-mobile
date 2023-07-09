@@ -8,6 +8,7 @@ import { useAppDispatch } from "~Storage/Redux"
 import { addAccountForDevice } from "~Storage/Redux/Actions"
 import { BaseDevice } from "~Model"
 import { info } from "~Utils"
+import { useResetNFTNavStack } from "~Hooks"
 
 type Props = {
     onClose: () => void
@@ -21,16 +22,18 @@ export const AddAccountBottomSheet = React.forwardRef<
 >(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const { resetNFTStack } = useResetNFTNavStack()
 
     const [selectedDevice, setSelectedDevice] = useState<BaseDevice>()
 
     const onCreateAccount = useCallback(() => {
         if (selectedDevice) {
+            resetNFTStack()
             dispatch(addAccountForDevice(selectedDevice))
             setSelectedDevice(undefined)
             onClose()
         }
-    }, [dispatch, onClose, selectedDevice])
+    }, [dispatch, onClose, resetNFTStack, selectedDevice])
 
     const handleSheetChanges = useCallback((index: number) => {
         info("addAccountSheet position changed", index)

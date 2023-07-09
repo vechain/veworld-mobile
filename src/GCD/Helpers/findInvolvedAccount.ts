@@ -17,6 +17,7 @@ export const findInvolvedAccount = (
             return acc
         }
 
+        // NOTE - if a user transfers to himself (same or different account), the transfer will be indexed as an outgoing operation
         if (AddressUtils.compareAddresses(acc.address, decodedTransfer.from)) {
             origin = TransactionOrigin.FROM
             return acc

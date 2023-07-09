@@ -2,7 +2,7 @@ import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useState } from "react"
 
 import { ViewToken, StyleSheet } from "react-native"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useResetNFTNavStack } from "~Hooks"
 import {
     BackButtonHeader,
     BaseSpacer,
@@ -17,6 +17,7 @@ import { AccountMgmtBottomSheet, WalletManagementHeader } from "./components"
 
 export const WalletManagementScreen = () => {
     const [isScrollable, setIsScrollable] = useState(false)
+    const { resetNFTStack } = useResetNFTNavStack()
 
     const devices = useAppSelector(selectDevices)
     const [selectedDevice, setSelectedDevice] = useState<BaseDevice>()
@@ -34,10 +35,11 @@ export const WalletManagementScreen = () => {
 
     const onDeviceSelected = useCallback(
         (device: BaseDevice) => () => {
+            resetNFTStack()
             setSelectedDevice(device)
             openAccountMgmtSheet()
         },
-        [openAccountMgmtSheet, setSelectedDevice],
+        [openAccountMgmtSheet, setSelectedDevice, resetNFTStack],
     )
 
     const checkViewableItems = useCallback(

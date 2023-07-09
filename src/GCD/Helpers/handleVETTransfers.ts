@@ -49,5 +49,6 @@ export const handleVETTransfers = ({
         })
 
         stateReconciliationAction({ accountAddress: transfer.sender })
+        stateReconciliationAction({ accountAddress: transfer.recipient })
     }
 }

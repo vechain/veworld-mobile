@@ -1,7 +1,7 @@
 import React from "react"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useScrollableBottomSheet } from "~Hooks"
+import { useResetNFTNavStack, useScrollableBottomSheet } from "~Hooks"
 import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -41,7 +41,10 @@ export const SelectAccountBottomSheet = React.forwardRef<
         ref,
     ) => {
         const { LL } = useI18nContext()
+        const { resetNFTStack } = useResetNFTNavStack()
+
         const handlePress = (account: AccountWithDevice) => {
+            resetNFTStack()
             setSelectedAccount(account)
             closeBottomSheet()
         }

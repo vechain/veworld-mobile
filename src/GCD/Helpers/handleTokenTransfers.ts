@@ -53,7 +53,11 @@ export const handleTokenTransfers = async ({
         })
 
         stateReconciliationAction({
-            accountAddress: foundAccount.account.address,
+            accountAddress: decodedTransfer.from,
+        })
+
+        stateReconciliationAction({
+            accountAddress: decodedTransfer.to,
         })
     }
 }

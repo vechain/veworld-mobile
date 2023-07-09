@@ -29,7 +29,7 @@ const GCD: React.FC = () => {
     const { fetchData } = useFungibleTokenInfo()
     const { fetchData: fetchCollectionName } = useNonFungibleTokenInfo()
     const { removeTransactionPending } = useTransactionStatus()
-    const { stateReconciliationAction } = useStateReconciliaiton()
+    const { updateBalances, updateNFTs } = useStateReconciliaiton()
     const { forTokens, forNFTs } = useInformUser({ network })
 
     const onTokenMessage = useCallback(
@@ -48,6 +48,7 @@ const GCD: React.FC = () => {
                         transfer,
                         removeTransactionPending,
                         fetchCollectionName,
+                        stateReconciliationAction: updateNFTs,
                         informUser: forNFTs,
                     })
                 }
@@ -60,7 +61,7 @@ const GCD: React.FC = () => {
                         transfer,
                         removeTransactionPending,
                         fetchData,
-                        stateReconciliationAction,
+                        stateReconciliationAction: updateBalances,
                         informUser: forTokens,
                     })
                 }
@@ -72,9 +73,10 @@ const GCD: React.FC = () => {
             visibleAccounts,
             removeTransactionPending,
             fetchCollectionName,
+            updateNFTs,
             forNFTs,
             fetchData,
-            stateReconciliationAction,
+            updateBalances,
             forTokens,
         ],
     )
@@ -90,16 +92,11 @@ const GCD: React.FC = () => {
                 transfer,
                 visibleAccounts,
                 removeTransactionPending,
-                stateReconciliationAction,
+                stateReconciliationAction: updateBalances,
                 informUser: forTokens,
             })
         },
-        [
-            visibleAccounts,
-            removeTransactionPending,
-            stateReconciliationAction,
-            forTokens,
-        ],
+        [visibleAccounts, removeTransactionPending, updateBalances, forTokens],
     )
 
     useWsUrlForVET(network.currentUrl, onVETMessage)

@@ -20,6 +20,7 @@ export interface BaseTrnasferHandlerProps {
     transfer: TransferEvent
     removeTransactionPending: (params: { txId: string }) => void
     informUser: (params: { accountAddress: string; txId?: string }) => void
+    stateReconciliationAction: (params: { accountAddress: string }) => void
 }
 
 export interface NFTTrnasferHandlerProps extends BaseTrnasferHandlerProps {
@@ -30,7 +31,6 @@ export interface TokenTrnasferHandlerProps extends BaseTrnasferHandlerProps {
     fetchData: (
         address: string,
     ) => Promise<{ symbol: string; decimals: number }>
-    stateReconciliationAction: (params: { accountAddress: string }) => void
 }
 
 export interface VETTransferHandlerProps {
