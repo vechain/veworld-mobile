@@ -197,7 +197,7 @@ export const NftSlice = createSlice({
             return state
         },
 
-        // TODO.vas -> Bugged - Not removing collections from state
+        // TODO.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/808
         refreshNFTs: (
             state,
             action: PayloadAction<{ accountAddress: string }>,
