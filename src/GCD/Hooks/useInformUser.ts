@@ -1,9 +1,15 @@
+import { useNavigation } from "@react-navigation/native"
 import { useCallback } from "react"
 import { Linking } from "react-native"
 import { defaultMainNetwork } from "~Constants"
 import { Network } from "~Model"
+import { Routes } from "~Navigation"
+import { selectAccount, useAppDispatch } from "~Storage/Redux"
 
 export const useInformUser = ({ network }: { network: Network }) => {
+    const nav = useNavigation()
+    const disptach = useAppDispatch()
+
     const forTokens = useCallback(
         async (params: { accountAddress: string; txId?: string }) => {
             // Outgoing transactions
@@ -15,10 +21,15 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 )
             } else {
                 // received token/VET
-                // todo.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/806
+                nav.navigate(Routes.HOME)
+                disptach(
+                    selectAccount({
+                        address: params.accountAddress,
+                    }),
+                )
             }
         },
-        [network.explorerUrl],
+        [disptach, nav, network.explorerUrl],
     )
 
     const forNFTs = useCallback(
@@ -32,10 +43,15 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 )
             } else {
                 // 1. User received NFT
-                // todo.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/806
+                nav.navigate(Routes.NFTS)
+                disptach(
+                    selectAccount({
+                        address: params.accountAddress,
+                    }),
+                )
             }
         },
-        [network.explorerUrl],
+        [disptach, nav, network.explorerUrl],
     )
 
     return { forTokens, forNFTs }
