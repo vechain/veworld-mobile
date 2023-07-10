@@ -43,7 +43,6 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
     }, [styles.nftImage])
 
     const renderMedia = useMemo(() => {
-        // TODO return skeleton loader
         if (isMediaLoading) return <NFTTransferCardSkeleton />
 
         if (tokenImage && tokenMime) {
