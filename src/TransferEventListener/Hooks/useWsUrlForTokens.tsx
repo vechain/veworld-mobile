@@ -18,7 +18,7 @@ export const useWsUrlForTokens = (
 
     const onError = useCallback(
         (ev: WebSocketErrorEvent) => {
-            error("Error on beat WS: ", ev)
+            error("Error in Token Transfer WS: ", ev)
 
             if (count > 3) {
                 warn("Troubles connecting to useWsUrlForTokens.")
