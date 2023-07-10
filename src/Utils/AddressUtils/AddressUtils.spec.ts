@@ -8,6 +8,7 @@ import {
     isValid,
     isVechainToken,
     regexPattern,
+    leftPadWithZeros,
 } from "./AddressUtils"
 
 const validMnemonicPhrase = [
@@ -190,5 +191,11 @@ describe("Check vechain address", () => {
 
     test("Invalid vechain thor token address must return false", () => {
         expect(isVechainToken("invalid-address")).toBe(false)
+    })
+
+    test("Shoud add correct padding to address", () => {
+        expect(leftPadWithZeros(address1, 64)).toBe(
+            "0x000000000000000000000000" + address1NoHex,
+        )
     })
 })

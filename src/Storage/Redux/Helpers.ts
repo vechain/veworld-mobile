@@ -15,6 +15,7 @@ import {
     DelegationSlice,
     WalletConnectSessionsSlice,
     NftSlice,
+    PendingSlice,
     resetAccountState,
     resetActivityState,
     resetBalancesState,
@@ -29,6 +30,7 @@ import {
     resetTokensState,
     resetUserPreferencesState,
     resetWalletConnectState,
+    resetPendingState,
 } from "./Slices"
 
 export const nftPersistConfig = {
@@ -71,6 +73,7 @@ export const getPersistorConfig = async () => {
             ActivitiesSlice.name,
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
+            PendingSlice.name,
         ],
         transforms: [encryptor],
     }
@@ -97,4 +100,5 @@ export const resetActions = [
     resetTokensState,
     resetUserPreferencesState,
     resetWalletConnectState,
+    resetPendingState,
 ]

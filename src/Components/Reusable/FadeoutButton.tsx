@@ -10,9 +10,21 @@ type Props = {
     title: string
     action: () => void
     disabled?: boolean
+    isLoading?: boolean
+    bottom?: number
+    mx?: number
+    width?: number | string
 }
 
-export const FadeoutButton = ({ title, action, disabled = false }: Props) => {
+export const FadeoutButton = ({
+    title,
+    action,
+    disabled = false,
+    isLoading = false,
+    bottom,
+    mx,
+    width,
+}: Props) => {
     const tabBarHeight = useBottomTabBarHeight()
     const theme = useTheme()
 
@@ -21,7 +33,8 @@ export const FadeoutButton = ({ title, action, disabled = false }: Props) => {
             style={[
                 baseStyles.container,
                 {
-                    bottom: tabBarHeight,
+                    width: width ?? "100%",
+                    bottom: bottom ?? tabBarHeight,
                 },
             ]}
             colors={[
@@ -29,7 +42,7 @@ export const FadeoutButton = ({ title, action, disabled = false }: Props) => {
                 theme.colors.background,
             ]}>
             <BaseView
-                mx={20}
+                mx={mx ?? 20}
                 style={{ width: SCREEN_WIDTH - 40 }}
                 py={valueToHP[16]}>
                 <BaseButton
@@ -40,6 +53,7 @@ export const FadeoutButton = ({ title, action, disabled = false }: Props) => {
                     title={title}
                     action={action}
                     activeOpacity={0.94}
+                    isLoading={isLoading}
                 />
             </BaseView>
         </LinearGradient>
@@ -49,6 +63,5 @@ export const FadeoutButton = ({ title, action, disabled = false }: Props) => {
 const baseStyles = StyleSheet.create({
     container: {
         position: "absolute",
-        width: "100%",
     },
 })

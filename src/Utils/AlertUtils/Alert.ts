@@ -30,15 +30,15 @@ const Alert = (
     RNAlert.alert(title, message, config)
 }
 
-const showCancelledFaceIdAlert = (
+const showCancelledBiometricsAlert = (
     cancelAction: () => void,
     buttonAction: () => void,
 ) => {
     const locale = i18n.detectLocale()
-    let title = i18n.i18n()[locale].TITLE_ALERT_FACE_ID_CANCELLED()
-    let msg = i18n.i18n()[locale].BD_ALERT_FACE_ID_CANCELLED()
+    let title = i18n.i18n()[locale].TITLE_ALERT_BIOMETRICS_CANCELLED()
+    let msg = i18n.i18n()[locale].BD_ALERT_BIOMETRICS_CANCELLED()
     let retry = i18n.i18n()[locale].COMMON_BTN_RETRY()
-    let signOut = i18n.i18n()[locale].COMMON_BTN_SIGN_OUT()
+    let signOut = i18n.i18n()[locale].COMMON_BTN_RESET()
 
     Alert(title, msg, retry, buttonAction, signOut, cancelAction, "destructive")
 }
@@ -68,7 +68,7 @@ const showDefaultAlert = (
 
 export {
     Alert,
-    showCancelledFaceIdAlert,
+    showCancelledBiometricsAlert,
     showGoToSettingsAlert,
     showDefaultAlert,
 }

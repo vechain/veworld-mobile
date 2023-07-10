@@ -97,6 +97,7 @@ export const EnableBiometrics = () => {
                 ref={backupWarningSheetRef}
                 onConfirm={handleOnProceed}
                 onClose={closeBackupWarningSheet}
+                isUpgradeSecurity={true}
             />
         </>
     )

@@ -51,6 +51,23 @@ export const ConfirmMnemonicScreen = () => {
         [],
     )
 
+    // Filter out the 3 words we are challenging the user to find
+    // and shuffle the remaining words
+    const fillerMnemonicArray = useMemo(() => {
+        const updatedArray: Array<string> = []
+
+        mnemonicArray.forEach((word, index) => {
+            if (
+                index !== firstIndex &&
+                index !== secondIndex &&
+                index !== thirdIndex
+            )
+                updatedArray.push(word)
+        })
+
+        return CryptoUtils.shuffleArray(updatedArray)
+    }, [mnemonicArray, firstIndex, secondIndex, thirdIndex])
+
     const onConfirmPress = () => {
         if (
             selectedFirstWord === mnemonicArray[firstIndex] &&
@@ -86,52 +103,52 @@ export const ConfirmMnemonicScreen = () => {
                     label: mnemonicArray[firstIndex],
                 },
                 {
-                    id: mnemonicArray[firstIndex + 1],
-                    label: mnemonicArray[firstIndex + 1],
+                    id: fillerMnemonicArray[0],
+                    label: fillerMnemonicArray[0],
                 },
                 {
-                    id: mnemonicArray[firstIndex + 2],
-                    label: mnemonicArray[firstIndex + 2],
+                    id: fillerMnemonicArray[1],
+                    label: fillerMnemonicArray[1],
                 },
             ]),
-        [firstIndex, mnemonicArray],
+        [mnemonicArray, fillerMnemonicArray, firstIndex],
     )
 
     const buttonsSecondWord = useMemo(
         () =>
             CryptoUtils.shuffleArray([
                 {
-                    id: mnemonicArray[secondIndex - 1],
-                    label: mnemonicArray[secondIndex - 1],
-                },
-                {
                     id: mnemonicArray[secondIndex],
                     label: mnemonicArray[secondIndex],
                 },
                 {
-                    id: mnemonicArray[secondIndex + 1],
-                    label: mnemonicArray[secondIndex + 1],
+                    id: fillerMnemonicArray[2],
+                    label: fillerMnemonicArray[2],
+                },
+                {
+                    id: fillerMnemonicArray[3],
+                    label: fillerMnemonicArray[3],
                 },
             ]),
-        [mnemonicArray, secondIndex],
+        [mnemonicArray, fillerMnemonicArray, secondIndex],
     )
     const buttonsThirdWord = useMemo(
         () =>
             CryptoUtils.shuffleArray([
                 {
-                    id: mnemonicArray[thirdIndex - 2],
-                    label: mnemonicArray[thirdIndex - 2],
-                },
-                {
-                    id: mnemonicArray[thirdIndex - 1],
-                    label: mnemonicArray[thirdIndex - 1],
-                },
-                {
                     id: mnemonicArray[thirdIndex],
                     label: mnemonicArray[thirdIndex],
                 },
+                {
+                    id: fillerMnemonicArray[4],
+                    label: fillerMnemonicArray[4],
+                },
+                {
+                    id: fillerMnemonicArray[5],
+                    label: fillerMnemonicArray[5],
+                },
             ]),
-        [mnemonicArray, thirdIndex],
+        [mnemonicArray, fillerMnemonicArray, thirdIndex],
     )
 
     const handleSelectFirstWord = useCallback((button: ButtonType) => {
