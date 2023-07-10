@@ -1,11 +1,11 @@
 import React, { memo, useMemo } from "react"
 import { useCopyClipboard } from "~Hooks"
 import { FormattingUtils } from "~Utils"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { SignCertActivity } from "~Model"
 import { ActivityDetail } from "../Type"
 import { ActivityDetailItem } from "./ActivityDetailItem"
+import { genesisesId } from "~Constants"
 
 type Props = {
     activity: SignCertActivity
@@ -14,7 +14,11 @@ type Props = {
 export const SignCertificateDetails: React.FC<Props> = memo(({ activity }) => {
     const { LL } = useI18nContext()
 
-    const network = useAppSelector(selectSelectedNetwork)
+    const network = useMemo(() => {
+        return activity.genesisId === genesisesId.main
+            ? LL.NETWORK_LABEL_MAINNET()
+            : LL.NETWORK_LABEL_TESTNET()
+    }, [LL, activity.genesisId])
 
     const transactionIDshort = useMemo(() => {
         return FormattingUtils.humanAddress(activity.id, 7, 9)
@@ -59,7 +63,7 @@ export const SignCertificateDetails: React.FC<Props> = memo(({ activity }) => {
         {
             id: 5,
             title: LL.TITLE_NETWORK(),
-            value: network.name.toUpperCase(),
+            value: network.toUpperCase(),
             typographyFont: "subSubTitle",
             underline: false,
         },
