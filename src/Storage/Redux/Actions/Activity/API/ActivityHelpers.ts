@@ -5,6 +5,7 @@ import {
     ActivityStatus,
     ActivityType,
     FungibleTokenActivity,
+    NonFungibleTokenActivity,
 } from "~Model"
 import {
     EventTypeResponse,
@@ -209,6 +210,29 @@ export const createFungibleTokenActivity = (
 }
 
 /**
+ * Function to create a NonFungibleTokenActivity.
+ * This type of activity involves the transfer of a non-fungible token from one address to another.
+ * @param activity - Base activity to be enriched with non-fungible token data.
+ * @param contractAddress - The address of the token contract.
+ * @param tokenId - The id of the token being transferred.
+ * @param direction - The direction of the transfer.
+ * @returns  A NonFungibleTokenActivity enriched with token data.
+ */
+export const createNonFungibleTokenActivity = (
+    activity: NonFungibleTokenActivity,
+    contractAddress: string,
+    tokenId: string,
+    direction: DIRECTIONS,
+): NonFungibleTokenActivity => {
+    return {
+        ...activity,
+        contractAddress,
+        tokenId,
+        direction,
+    }
+}
+
+/**
  * Function to enrich an activity with token data.
  * If the activity involves a fungible token transfer, this function decodes the token transfer clause and adds the token data to the activity.
  * @param activity - The activity to be enriched with token data.
@@ -252,6 +276,37 @@ export const enrichActivityWithVetTransfer = (
 }
 
 /**
+ * Function to enrich an activity with NFT data.
+ * If the activity involves a non-fungible token transfer, this function decodes the token transfer clause and adds the token data to the activity.
+ * @param activity - The activity to be enriched with NFT data.
+ * @param clause - The transaction clause from which to decode the NFT data.
+ * @param direction - The direction of the transfer.
+ * @returns A NonFungibleTokenActivity enriched with NFT data.
+ */
+export const enrichActivityWithNFTData = (
+    activity: Activity,
+    clause: Connex.VM.Clause,
+    direction: DIRECTIONS,
+): NonFungibleTokenActivity => {
+    // Decode NFT transfer clause
+    const nftData =
+        TransactionUtils.decodeNonFungibleTokenTransferClause(clause)
+
+    if (!nftData) {
+        debug("Unable to decode NFT transfer clause", clause)
+        return activity as NonFungibleTokenActivity
+    }
+
+    // Create non fungible token activity with NFT data
+    return createNonFungibleTokenActivity(
+        activity as NonFungibleTokenActivity,
+        clause.to ?? "",
+        nftData?.tokenId,
+        direction,
+    )
+}
+
+/**
  * Process an activity based on its type.
  *
  * @param activity - The activity to be processed.
@@ -263,14 +318,16 @@ const processActivity = (
     activity: Activity,
     clause: Connex.VM.Clause,
     direction: DIRECTIONS,
-): FungibleTokenActivity => {
+): Activity => {
     switch (activity.type) {
         case ActivityType.FUNGIBLE_TOKEN:
             return enrichActivityWithTokenData(activity, clause, direction)
         case ActivityType.VET_TRANSFER:
             return enrichActivityWithVetTransfer(activity, clause, direction)
+        case ActivityType.NFT_TRANSFER:
+            return enrichActivityWithNFTData(activity, clause, direction)
         default:
-            return activity as FungibleTokenActivity
+            return activity as Activity
     }
 }
 
