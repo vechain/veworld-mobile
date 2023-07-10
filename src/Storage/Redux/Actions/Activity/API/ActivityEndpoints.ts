@@ -28,7 +28,9 @@ export const getTransfersForBlock = (
     pageSize: number,
     direction: ORDER,
 ) => {
-    return `http://192.168.1.106:8080/api/v1/transfers/forBlock?blockNumber=${blockNumber}&addresses=${addresses.join(
+    return `${
+        process.env.REACT_APP_INDEXER_MAINNET_URL
+    }/api/v1/transfers/forBlock?blockNumber=${blockNumber}&addresses=${addresses.join(
         ",",
     )}&size=${pageSize}&page=${page}&direction=${direction}`
 }
