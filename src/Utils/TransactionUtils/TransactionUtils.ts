@@ -52,9 +52,6 @@ export const NFT_TRANSFER_SIG = new abi.Function(abis.VIP181.transferFrom)
 export const SWAP_EVENT_SIG = new abi.Event(abis.UniswapPairV2.SwapEvent)
     .signature
 
-export const TRANSFER_EVENT_SIG = new abi.Event(abis.VIP180.TransferEvent)
-    .signature
-
 /*
  * Note: Fungible Token & NFT Transfer events have the same signature
  */
@@ -209,6 +206,42 @@ export const decodeTokenTransferClause = (
             return {
                 to: decoded.to,
                 amount: decoded.amount,
+            }
+        } catch (e) {
+            debug("Failed to decode parameters", e)
+        }
+    }
+
+    return null
+}
+
+/**
+ * Decodes a clause as a non-fungible token (NFT) transfer clause.
+ *
+ * This function accepts a clause and tries to decode it as an NFT transfer clause.
+ * If the data in the clause starts with the NFT_TRANSFER_SIG signature, it tries to
+ * decode the parameters using the VIP181 'transferFrom' ABI inputs. In case of a
+ * successful decoding, it returns an object with the details of the NFT transfer
+ * (including 'from', 'to', and 'tokenId'). Otherwise, it logs the error and returns null.
+ *
+ * @param {Connex.VM.Clause} clause - The clause to decode.
+ * @returns {Object|null} An object with 'from', 'to', and 'tokenId' properties if the clause
+ * could be successfully decoded as an NFT transfer clause; null otherwise.
+ */
+export const decodeNonFungibleTokenTransferClause = (
+    clause: Connex.VM.Clause,
+): { from: string; to: string; tokenId: string } | null => {
+    if (clause.data?.startsWith(NFT_TRANSFER_SIG)) {
+        try {
+            const decoded = abi.decodeParameters(
+                abis.VIP181.transferFrom.inputs,
+                "0x" + clause.data.slice(NFT_TRANSFER_SIG.length),
+            )
+
+            return {
+                from: decoded.from,
+                to: decoded.to,
+                tokenId: decoded.tokenId,
             }
         } catch (e) {
             debug("Failed to decode parameters", e)
@@ -746,6 +779,13 @@ export const sendSignedTransaction = async (
     return response.data.id as string
 }
 
+/**
+ * Decodes a Transfer event which can be a Token Transfer or a NFT Transfer
+ *
+ * @param event - The Virtual Machine event.
+ * @returns An object containing the from, to and value of the token transfer event, or the from, to, and tokenId of the NFT transfer event.
+ * Returns null if the event is not a token transfer or NFT transfer event.
+ */
 export const decodeTransferEvent = (
     event: Connex.VM.Event,
 ): TransferEventResult | null => {
