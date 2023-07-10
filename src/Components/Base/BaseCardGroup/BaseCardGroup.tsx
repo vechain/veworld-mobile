@@ -12,7 +12,7 @@ export const BaseCardGroup = memo(
     ({ containerStyle, views }: ViewProps & Props) => {
         const theme = useTheme()
         return (
-            <BaseView style={[styles.container, containerStyle]}>
+            <BaseView style={containerStyle}>
                 {views.map((view, index) => {
                     const { children, style, ...others } = view
                     const borderTopRadius = index === 0 ? 16 : 0
@@ -49,9 +49,6 @@ export const BaseCardGroup = memo(
 )
 
 const styles = StyleSheet.create({
-    container: {
-        marginHorizontal: 24,
-    },
     view: {
         width: "100%",
         flexDirection: "row",

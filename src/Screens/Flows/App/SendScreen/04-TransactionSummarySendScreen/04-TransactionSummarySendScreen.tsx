@@ -12,18 +12,16 @@ import { VTHO, COLORS } from "~Constants"
 import {
     AccountCard,
     AccountIcon,
-    BackButtonHeader,
-    BaseButton,
     BaseCard,
     BaseCardGroup,
     BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-    ScrollViewWithFooter,
     DelegationOptions,
     LedgerBadge,
+    Layout,
+    FadeoutButton,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -214,97 +212,83 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     }
 
     return (
-        <BaseSafeArea grow={1} testID="Transaction_Summary_Send_Screen">
-            <ScrollViewWithFooter
-                footer={
-                    <BaseButton
-                        style={styles.nextButton}
-                        mx={24}
-                        title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                        action={handleOnConfirm}
-                        disabled={continueButtonDisabled || loading}
-                        isLoading={loading}
-                    />
-                }>
-                <BackButtonHeader />
-                <BaseView mx={24}>
-                    <BaseText typographyFont="title">
-                        {LL.SEND_TOKEN_TITLE()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
-                </BaseView>
-
-                {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/767) CHange BaseCardGroup with TransferCard */}
-                <BaseCardGroup
-                    views={[
-                        {
-                            children: (
-                                <BaseView
-                                    flex={1}
-                                    style={styles.addressContainer}
-                                    alignItems="flex-start">
-                                    <BaseText typographyFont="captionBold">
-                                        {LL.SEND_FROM()}
-                                    </BaseText>
-                                    <BaseSpacer height={8} />
-                                    <BaseView flexDirection="row">
-                                        <AccountIcon
-                                            address={account.address}
-                                        />
-                                        <BaseSpacer width={8} />
-                                        <BaseView>
-                                            <BaseText typographyFont="subSubTitle">
-                                                {account.alias}
-                                            </BaseText>
-                                            <BaseView
-                                                flexDirection="row"
-                                                mt={3}>
-                                                {account.device?.type ===
-                                                    DEVICE_TYPE.LEDGER && (
-                                                    <LedgerBadge
-                                                        //eslint-disable-next-line react-native/no-inline-styles
-                                                        containerStyle={{
-                                                            mr: 8,
-                                                        }}
-                                                    />
-                                                )}
-                                                <BaseText typographyFont="captionRegular">
-                                                    {FormattingUtils.humanAddress(
-                                                        account.address,
-                                                    )}
+        <Layout
+            safeAreaTestID="Transaction_Summary_Send_Screen"
+            title={LL.SEND_TOKEN_TITLE()}
+            body={
+                <BaseView mb={80} mt={8}>
+                    {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/767) CHange BaseCardGroup with TransferCard */}
+                    <BaseCardGroup
+                        views={[
+                            {
+                                children: (
+                                    <BaseView
+                                        flex={1}
+                                        style={styles.addressContainer}
+                                        alignItems="flex-start">
+                                        <BaseText typographyFont="captionBold">
+                                            {LL.SEND_FROM()}
+                                        </BaseText>
+                                        <BaseSpacer height={8} />
+                                        <BaseView flexDirection="row">
+                                            <AccountIcon
+                                                address={account.address}
+                                            />
+                                            <BaseSpacer width={8} />
+                                            <BaseView>
+                                                <BaseText typographyFont="subSubTitle">
+                                                    {account.alias}
                                                 </BaseText>
+                                                <BaseView
+                                                    flexDirection="row"
+                                                    mt={3}>
+                                                    {account.device?.type ===
+                                                        DEVICE_TYPE.LEDGER && (
+                                                        <LedgerBadge
+                                                            //eslint-disable-next-line react-native/no-inline-styles
+                                                            containerStyle={{
+                                                                mr: 8,
+                                                            }}
+                                                        />
+                                                    )}
+                                                    <BaseText typographyFont="captionRegular">
+                                                        {FormattingUtils.humanAddress(
+                                                            account.address,
+                                                        )}
+                                                    </BaseText>
+                                                </BaseView>
                                             </BaseView>
                                         </BaseView>
+                                        <BaseIcon
+                                            name={"arrow-down"}
+                                            size={20}
+                                            color={COLORS.WHITE}
+                                            bg={COLORS.DARK_PURPLE_DISABLED}
+                                            style={styles.icon}
+                                        />
                                     </BaseView>
-                                    <BaseIcon
-                                        name={"arrow-down"}
-                                        size={20}
-                                        color={COLORS.WHITE}
-                                        bg={COLORS.DARK_PURPLE_DISABLED}
-                                        style={styles.icon}
-                                    />
-                                </BaseView>
-                            ),
-                            style: styles.addressView,
-                        },
-                        {
-                            children: (
-                                <BaseView flex={1} alignItems="flex-start">
-                                    <BaseText typographyFont="captionBold">
-                                        {LL.SEND_TO()}
-                                    </BaseText>
-                                    <BaseSpacer height={8} />
-                                    <BaseView flexDirection="row">
-                                        <AccountIcon address={address} />
-                                        <BaseSpacer width={8} />
-                                        {receiverDetails()}
+                                ),
+                                style: styles.addressView,
+                            },
+                            {
+                                children: (
+                                    <BaseView flex={1} alignItems="flex-start">
+                                        <BaseText typographyFont="captionBold">
+                                            {LL.SEND_TO()}
+                                        </BaseText>
+                                        <BaseSpacer height={8} />
+                                        <BaseView flexDirection="row">
+                                            <AccountIcon address={address} />
+                                            <BaseSpacer width={8} />
+                                            {receiverDetails()}
+                                        </BaseView>
                                     </BaseView>
-                                </BaseView>
-                            ),
-                        },
-                    ]}
-                />
-                <BaseView mx={24}>
+                                ),
+                            },
+                        ]}
+                    />
+                    <BaseSpacer height={16} />
+                    <ConfirmIdentityBottomSheet />
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}
                         setSelectedDelegationOption={
@@ -408,11 +392,20 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     <BaseText typographyFont="subSubTitle">
                         {LL.SEND_LESS_THAN_1_MIN()}
                     </BaseText>
-                    <BaseSpacer height={24} />
                 </BaseView>
-                <ConfirmIdentityBottomSheet />
-            </ScrollViewWithFooter>
-        </BaseSafeArea>
+            }
+            footer={
+                <FadeoutButton
+                    title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
+                    action={handleOnConfirm}
+                    disabled={continueButtonDisabled || loading}
+                    isLoading={loading}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
+                />
+            }
+        />
     )
 }
 
