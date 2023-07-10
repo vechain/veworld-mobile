@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react"
 import { useThor } from "~Components"
-import { informUserforRevertedTransaction } from "../../GCD/Helpers"
+import { informUserforRevertedTransaction } from "../../TransferEventListener"
 import {
     removePendingTransaction,
     selectSelectedNetwork,

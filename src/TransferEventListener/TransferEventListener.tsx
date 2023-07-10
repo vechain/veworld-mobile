@@ -23,7 +23,7 @@ import {
     handleVETTransfers,
 } from "./Helpers"
 
-const GCD: React.FC = () => {
+export const TransferEventListener: React.FC = () => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const network = useAppSelector(selectSelectedNetwork)
     const { fetchData } = useFungibleTokenInfo()
@@ -103,5 +103,3 @@ const GCD: React.FC = () => {
 
     return <></>
 }
-
-export default GCD
