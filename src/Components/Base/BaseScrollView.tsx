@@ -32,6 +32,7 @@ export const BaseScrollView: FC<Props> = props => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.contentContainerStyle}
                 contentInsetAdjustmentBehavior="automatic"
                 style={[
                     styles.scrollView,
@@ -48,6 +49,9 @@ const styles = StyleSheet.create({
     scrollViewContainer: {
         flex: 1,
         width: "100%",
+    },
+    contentContainerStyle: {
+        flexGrow: 1,
     },
     scrollView: {
         height: "100%",
