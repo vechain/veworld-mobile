@@ -75,8 +75,29 @@ export const fetchMetadata = async (
     }
 }
 
+export const fetchWithTimeout = async (
+    resource: RequestInfo,
+    options = {},
+    timeout?: number,
+) => {
+    const controller = new AbortController()
+    const id = setTimeout(
+        () => controller.abort(),
+        timeout ?? NFT_AXIOS_TIMEOUT,
+    )
+
+    const response = await fetch(resource, {
+        ...options,
+        signal: controller.signal,
+    })
+
+    clearTimeout(id)
+
+    return response
+}
+
 const getImageData = async (imageUrl: string) => {
-    const response = await fetch(imageUrl)
+    const response = await fetchWithTimeout(imageUrl)
     const blob = await response.blob()
     return {
         imageUrl,
