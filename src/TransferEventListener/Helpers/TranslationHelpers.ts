@@ -1,17 +1,18 @@
 import { Linking } from "react-native"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { VET, defaultMainNetwork } from "~Constants"
-import { Network, TransferEventResult } from "~Model"
+import { Network } from "~Model"
 import { FormattingUtils } from "~Utils"
 import * as i18n from "~i18n"
 import { isEmpty } from "lodash"
+import { IncomingTransferResponse } from "~Storage/Redux"
 
 // ~ NFT - INCOMING
 type InformUserForIncomingNFTProps = {
     collectionName: string
     alias: string
     from: string
-    decodedTransfer: TransferEventResult
+    transfer: IncomingTransferResponse
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
@@ -19,7 +20,7 @@ export const informUSerForIncomingNFT = ({
     collectionName,
     alias,
     from,
-    decodedTransfer,
+    transfer,
     informUser,
 }: InformUserForIncomingNFTProps) => {
     const locale = i18n.detectLocale()
@@ -34,7 +35,7 @@ export const informUSerForIncomingNFT = ({
             from: formattedFrom,
         }),
         i18n.i18n()[locale].NOTIFIACTION_INCOMING_NFT_ACTION(),
-        () => informUser({ accountAddress: decodedTransfer.to }),
+        () => informUser({ accountAddress: transfer.to }),
     )
 }
 
@@ -75,7 +76,7 @@ type InformUserForIncomingTokenProps = {
     symbol: string
     decimals: number
     alias: string
-    decodedTransfer: TransferEventResult
+    transfer: IncomingTransferResponse
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
@@ -84,7 +85,7 @@ export const InformUserForIncomingToken = ({
     symbol,
     decimals,
     alias,
-    decodedTransfer,
+    transfer,
     informUser,
 }: InformUserForIncomingTokenProps) => {
     const locale = i18n.detectLocale()
@@ -107,7 +108,7 @@ export const InformUserForIncomingToken = ({
             alias,
         }),
         i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
-        () => informUser({ accountAddress: decodedTransfer.to }),
+        () => informUser({ accountAddress: transfer.to }),
     )
 }
 
@@ -117,7 +118,7 @@ type InformUserForOutgoingTokenProps = {
     amount: string
     symbol: string
     decimals: number
-    decodedTransfer: TransferEventResult
+    transfer: IncomingTransferResponse
     to: string
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
@@ -128,7 +129,7 @@ export const InformUserForOutgoingToken = ({
     symbol,
     decimals,
     to,
-    decodedTransfer,
+    transfer,
     informUser,
 }: InformUserForOutgoingTokenProps) => {
     const locale = i18n.detectLocale()
@@ -154,7 +155,7 @@ export const InformUserForOutgoingToken = ({
             to: formattedTo,
         }),
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        () => informUser({ accountAddress: decodedTransfer.from, txId }),
+        () => informUser({ accountAddress: transfer.from, txId }),
     )
 }
 

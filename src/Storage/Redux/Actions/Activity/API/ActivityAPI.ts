@@ -144,6 +144,38 @@ export const fetchIncomingTransfers = async (
 }
 
 /**
+ * Fetches transfers for a list of address for a specific block number.
+ *
+ * @param {number} blockNumber - The block number to fetch transfers for.
+ * @param {array<string>} addresses - A list of addresses.
+ * @param {number} page - The page number to fetch.
+ *
+ * @returns {Promise<FetchIncomingTransfersResponse[]>} A promise that resolves to an array of incoming transfers.
+ *
+ * @throws Will throw an error if the network request fails.
+ */
+export const fetchTransfersForBlock = async (
+    blockNumber: number,
+    addresses: string[],
+    page: number,
+): Promise<FetchIncomingTransfersResponse> => {
+    debug(`Fetching transfers for ${addresses} at block ${blockNumber}`)
+    try {
+        return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
+            ActivityEndpoints.getTransfersForBlock(
+                blockNumber,
+                addresses,
+                page,
+                DEFAULT_PAGE_SIZE,
+                ORDER.DESC,
+            ),
+        )
+    } catch (error) {
+        throw new Error(`Failed to fetch transfers: ${error}`)
+    }
+}
+
+/**
  * Fetches a block from the Thor blockchain.
  *
  * @param blockId - The unique identifier of the block to fetch.

@@ -8,34 +8,33 @@ import {
 
 export const handleNFTTransfers = async ({
     visibleAccounts,
-    decodedTransfer,
     transfer,
     removeTransactionPending,
     fetchCollectionName,
     stateReconciliationAction,
     informUser,
 }: NFTTrnasferHandlerProps) => {
-    const foundAccount = findInvolvedAccount(visibleAccounts, decodedTransfer)
+    const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
     // Early exit if tx is not related to any of the visible accounts
     if (!foundAccount.account) return
 
-    const collectionName = await fetchCollectionName(transfer.address)
+    const collectionName = await fetchCollectionName(transfer.tokenAddress)
 
     // User received NFT
     if (foundAccount.origin === TransactionOrigin.TO) {
         // we should wait for the indexer to index the transfer
         setTimeout(() => {
-            // inform user for successfull transfer
+            // inform user for successful transfer
             informUSerForIncomingNFT({
                 collectionName,
-                from: transfer.meta.txOrigin,
+                from: transfer.from,
                 alias: foundAccount.account!.alias, // this should be read by typescript as it is already checked on line 21
-                decodedTransfer,
+                transfer,
                 informUser,
             })
 
-            stateReconciliationAction({ accountAddress: decodedTransfer.to })
+            stateReconciliationAction({ accountAddress: transfer.to })
         }, 4000)
     }
 
@@ -45,20 +44,20 @@ export const handleNFTTransfers = async ({
         setTimeout(() => {
             // remove tx pending from redux
             removeTransactionPending({
-                txId: transfer.meta.txID,
+                txId: transfer.txId,
             })
 
             // inform usr for successfull transfer
             informUserForOutgoingNFT({
-                txId: transfer.meta.txID,
-                to: decodedTransfer.to,
-                from: transfer.meta.txOrigin,
+                txId: transfer.txId,
+                to: transfer.to,
+                from: transfer.from,
                 collectionName,
                 informUser,
             })
 
-            stateReconciliationAction({ accountAddress: decodedTransfer.to })
-            stateReconciliationAction({ accountAddress: decodedTransfer.from })
+            stateReconciliationAction({ accountAddress: transfer.to })
+            stateReconciliationAction({ accountAddress: transfer.from })
         }, 4000)
     }
 }

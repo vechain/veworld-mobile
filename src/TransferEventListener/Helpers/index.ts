@@ -7,17 +7,12 @@ export * from "./handleTokenTransfers"
 export * from "./handleVETTransfers"
 export * from "./handleNFTTransfers"
 
-import {
-    AccountWithDevice,
-    TransferEvent,
-    TransferEventResult,
-    VetTransferEvent,
-} from "~Model"
+import { AccountWithDevice } from "~Model"
+import { IncomingTransferResponse } from "~Storage/Redux"
 
 export interface BaseTrnasferHandlerProps {
     visibleAccounts: AccountWithDevice[]
-    decodedTransfer: TransferEventResult
-    transfer: TransferEvent
+    transfer: IncomingTransferResponse
     removeTransactionPending: (params: { txId: string }) => void
     informUser: (params: { accountAddress: string; txId?: string }) => void
     stateReconciliationAction: (params: { accountAddress: string }) => void
@@ -34,7 +29,7 @@ export interface TokenTrnasferHandlerProps extends BaseTrnasferHandlerProps {
 }
 
 export interface VETTransferHandlerProps {
-    transfer: VetTransferEvent
+    transfer: IncomingTransferResponse
     visibleAccounts: AccountWithDevice[]
     removeTransactionPending: (params: { txId: string }) => void
     stateReconciliationAction: (params: { accountAddress: string }) => void

@@ -1,13 +1,10 @@
-import {
-    AccountWithDevice,
-    TransactionOrigin,
-    TransferEventResult,
-} from "~Model"
+import { AccountWithDevice, TransactionOrigin } from "~Model"
+import { IncomingTransferResponse } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
 export const findInvolvedAccount = (
     visibleAccounts: AccountWithDevice[],
-    decodedTransfer: TransferEventResult,
+    decodedTransfer: IncomingTransferResponse,
 ) => {
     let origin = ""
 

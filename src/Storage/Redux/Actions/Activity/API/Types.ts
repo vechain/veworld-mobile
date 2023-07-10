@@ -35,13 +35,15 @@ export interface FetchTransactionsResponse {
 export enum EventTypeResponse {
     FUNGIBLE_TOKEN = "FUNGIBLE_TOKEN",
     VET = "VET",
+    NFT = "NFT",
+    SEMI_FUNGIBLE_TOKEN = "SEMI_FUNGIBLE_TOKEN",
 }
 
 export interface IncomingTransferResponse extends BaseTransactionResponse {
     txId: string
     from: string
     to: string
-    value: number
+    value: string
     tokenAddress: string
     topics: string[]
     eventType: EventTypeResponse

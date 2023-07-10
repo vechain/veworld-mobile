@@ -8,56 +8,55 @@ import { TransactionOrigin } from "~Model"
 
 export const handleTokenTransfers = async ({
     visibleAccounts,
-    decodedTransfer,
     transfer,
     fetchData,
     removeTransactionPending,
     stateReconciliationAction,
     informUser,
 }: TokenTrnasferHandlerProps) => {
-    const foundAccount = findInvolvedAccount(visibleAccounts, decodedTransfer)
+    const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
     if (!foundAccount.account) return
 
-    const { symbol, decimals } = await fetchData(transfer.address)
+    const { symbol, decimals } = await fetchData(transfer.tokenAddress)
 
     // User received token
     if (foundAccount.origin === TransactionOrigin.TO) {
-        // inform user for successfull transfer
+        // inform user for successful transfer
         InformUserForIncomingToken({
-            amount: decodedTransfer.value || "0",
+            amount: transfer.value || "0",
             symbol,
             decimals,
             alias: foundAccount.account.alias,
-            decodedTransfer,
+            transfer,
             informUser,
         })
 
-        stateReconciliationAction({ accountAddress: decodedTransfer.to })
+        stateReconciliationAction({ accountAddress: transfer.to })
     }
 
     // User send token
     if (foundAccount.origin === TransactionOrigin.FROM) {
         // remove tx pending from redux
-        removeTransactionPending({ txId: transfer.meta.txID })
+        removeTransactionPending({ txId: transfer.txId })
 
         // inform usr for successfull transfer
         InformUserForOutgoingToken({
-            txId: transfer.meta.txID,
-            amount: decodedTransfer.value || "0",
+            txId: transfer.txId,
+            amount: transfer.value || "0",
             symbol,
             decimals,
-            decodedTransfer,
-            to: decodedTransfer.to,
+            transfer,
+            to: transfer.to,
             informUser,
         })
 
         stateReconciliationAction({
-            accountAddress: decodedTransfer.from,
+            accountAddress: transfer.from,
         })
 
         stateReconciliationAction({
-            accountAddress: decodedTransfer.to,
+            accountAddress: transfer.to,
         })
     }
 }

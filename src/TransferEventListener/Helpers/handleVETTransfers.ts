@@ -13,42 +13,38 @@ export const handleVETTransfers = ({
     stateReconciliationAction,
     informUser,
 }: VETTransferHandlerProps) => {
-    const foundAccount = findInvolvedAccount(visibleAccounts, {
-        from: transfer.sender,
-        to: transfer.recipient,
-        value: transfer.amount,
-    })
+    const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
     if (!foundAccount.account) return
 
     // User received token
     if (foundAccount.origin === TransactionOrigin.TO) {
-        // inform user for successfull transfer
+        // inform user for successful transfer
         InformUserForIncomingVET({
             alias: foundAccount.account.alias,
-            amount: transfer.amount,
-            to: transfer.recipient,
+            amount: transfer.value,
+            to: transfer.to,
             informUser,
         })
 
-        stateReconciliationAction({ accountAddress: transfer.recipient })
+        stateReconciliationAction({ accountAddress: transfer.to })
     }
 
     // User send token
     if (foundAccount.origin === TransactionOrigin.FROM) {
         // remove tx pending from redux
-        removeTransactionPending({ txId: transfer.meta.txID })
+        removeTransactionPending({ txId: transfer.txId })
 
         // inform usr for successfull transfer
         InformUserForOutgoingVET({
-            txId: transfer.meta.txID,
-            amount: transfer.amount,
-            to: transfer.recipient,
-            from: transfer.sender,
+            txId: transfer.txId,
+            amount: transfer.value,
+            to: transfer.to,
+            from: transfer.from,
             informUser,
         })
 
-        stateReconciliationAction({ accountAddress: transfer.sender })
-        stateReconciliationAction({ accountAddress: transfer.recipient })
+        stateReconciliationAction({ accountAddress: transfer.to })
+        stateReconciliationAction({ accountAddress: transfer.from })
     }
 }
