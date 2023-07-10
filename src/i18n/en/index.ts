@@ -83,6 +83,7 @@ const en: BaseTranslation = {
     BD_WALLET_IMPORT_LOCAL:
         "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
+    BD_ALERT_BIOMETRICS_CANCELLED: "You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?",
     BD_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
     BD_CONFIRM_RESET: "Confirm reset",
     BD_RESET_APP_01: "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).",
@@ -154,6 +155,7 @@ const en: BaseTranslation = {
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
+    TITLE_ALERT_BIOMETRICS_CANCELLED: "Biometrics Cancelled",
 
     TITLE_WALLET_SUCCESS: "You're finally one of us!",
     TITLE_RESET_APP: "VeWorld reset",
@@ -214,6 +216,7 @@ const en: BaseTranslation = {
     SB_COLLECTIBLES: "Collectibles",
     SB_BACKUP_YOUR_PHRASE: "Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to",
     SB_BACKUP_YOUR_PHRASE_2: "RESET the App!",
+    SB_UPGRADE_SECURITY_WARNING_ANDROID: "Also, you will be asked to use your biometrics security method for each wallet!",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -245,6 +248,7 @@ const en: BaseTranslation = {
     COMMON_BTN_SIGN: "SIGN",
     COMMON_BTN_REJECT: "REJECT",
     COMMON_BTN_SIGN_AND_SEND: "SIGN AND SEND",
+    COMMON_BTN_RESET: "Reset App",
 
     // Common Labels
     COMMON_LBL_AND: "and",
