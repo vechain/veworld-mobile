@@ -58,7 +58,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
         const currency = useAppSelector(selectCurrency)
 
         const amountTransferred = useMemo(() => {
-            return FormattingUtils.humanNumber(
+            const humanReadable = FormattingUtils.humanNumber(
                 FormattingUtils.scaleNumberDown(
                     activity.amount,
                     token?.decimals ?? decimals ?? 0,
@@ -66,6 +66,10 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
                 ),
                 activity.amount,
             )
+
+            return humanReadable.length > 11
+                ? humanReadable.substring(0, 10).concat("...")
+                : humanReadable
         }, [activity.amount, decimals, token])
 
         const fiatValueTransferred = useMemo(() => {
