@@ -2,7 +2,7 @@ import { Alert as RNAlert } from "react-native"
 import { AlertButtonStyle } from "./enums"
 import {
     Alert,
-    showCancelledFaceIdAlert,
+    showCancelledBiometricsAlert,
     showGoToSettingsAlert,
     showDefaultAlert,
 } from "./Alert"
@@ -79,7 +79,7 @@ describe("showCancelledFaceIdAlert", () => {
     it("should show an alert for cancelled Face ID authentication", () => {
         const cancelAction = jest.fn()
         const buttonAction = jest.fn()
-        showCancelledFaceIdAlert(cancelAction, buttonAction)
+        showCancelledBiometricsAlert(cancelAction, buttonAction)
         expect(RNAlert.alert).toHaveBeenCalled()
     })
 })
