@@ -5,7 +5,7 @@ import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 const toID = (_tokenUri: string) => _tokenUri?.split("://")[1]
 
-// loop
+// TODO - Remove centralization to only 1 Public gateway. Check extension's `ÌPFSClient.performFetch` #803
 
 export const getTokenMetaIpfs = async (
     tokenUri: string,
