@@ -23,6 +23,7 @@ import {
     DappTransactionActivityBox,
     FungibleTokenActivityBox,
     NoActivitiesButton,
+    NonFungibleTokenActivityBox,
     SignedCertificateActivityBox,
     SkeletonActivityBox,
     SwapTransactionActivityBox,
@@ -33,6 +34,7 @@ import {
     ConnectedAppTxActivity,
     FungibleToken,
     FungibleTokenActivity,
+    NonFungibleTokenActivity,
     SignCertActivity,
     TransactionOutcomes,
 } from "~Model"
@@ -132,6 +134,14 @@ export const HistoryScreen = () => {
                         <FungibleTokenActivityBox
                             key={id}
                             activity={activity as FungibleTokenActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
+                case ActivityType.NFT_TRANSFER:
+                    return (
+                        <NonFungibleTokenActivityBox
+                            key={id}
+                            activity={activity as NonFungibleTokenActivity}
                             onPress={onActivityPress}
                         />
                     )
