@@ -16,9 +16,9 @@ import {
     selectAccount,
     selectSelectedAccount,
     selectVisibleAccounts,
+    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { useDispatch } from "react-redux"
 import { AccountWithDevice } from "~Model"
 
 export const HomeScreen = () => {
@@ -44,7 +44,7 @@ export const HomeScreen = () => {
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const setSelectedAccount = (account: AccountWithDevice) => {
         dispatch(selectAccount({ address: account.address }))

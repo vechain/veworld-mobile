@@ -13,9 +13,9 @@ import {
     selectCollectionListIsEmpty,
     selectSelectedAccount,
     selectVisibleAccounts,
+    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { useDispatch } from "react-redux"
 import { ImportNFTView } from "./Components/ImportNFTView"
 import { NetworkErrorView } from "./Components/NetworkErrorView"
 import { NFTLIst } from "./Components/NFTLIst"
@@ -41,7 +41,7 @@ export const NFTScreen = () => {
     const isShowImportNFTs = useAppSelector(selectCollectionListIsEmpty)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const setSelectedAccount = (account: AccountWithDevice) => {
         dispatch(selectAccount({ address: account.address }))
