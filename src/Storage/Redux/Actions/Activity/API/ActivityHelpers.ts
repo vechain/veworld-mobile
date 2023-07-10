@@ -327,7 +327,7 @@ const processActivity = (
         case ActivityType.NFT_TRANSFER:
             return enrichActivityWithNFTData(activity, clause, direction)
         default:
-            return activity as Activity
+            return activity
     }
 }
 
