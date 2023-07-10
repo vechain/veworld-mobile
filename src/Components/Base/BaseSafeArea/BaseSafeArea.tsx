@@ -5,7 +5,6 @@ import { StyleSheet } from "react-native"
 import { SafeAreaViewProps } from "react-native-safe-area-context"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import { PlatformUtils } from "~Utils"
 import { getTabbar } from "../Helpers/getTabbar"
 import { SafeAreaView } from "./SafeAreaView"
 
@@ -34,7 +33,7 @@ export const BaseSafeArea = ({
     )
 
     useEffect(() => {
-        if (nav && nav.getState() && PlatformUtils.isAndroid()) {
+        if (nav && nav.getState()) {
             const tab = getTabbar(nav)
             if (tab) {
                 setIsTab(true)
