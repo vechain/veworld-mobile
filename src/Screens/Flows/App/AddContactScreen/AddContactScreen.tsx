@@ -17,6 +17,7 @@ import { useAppDispatch } from "~Storage/Redux"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { ContactForm } from "./Components"
 import { useContactValidation } from "../ContactsScreen"
+import { StyleSheet } from "react-native"
 
 export const AddContactScreen = () => {
     // [START] Hooks
@@ -102,6 +103,7 @@ export const AddContactScreen = () => {
                         title={LL.BTN_ADD_CONTACT().toUpperCase()}
                         disabled={!isFormValid}
                         bgColor={theme.colors.primary}
+                        style={styles.baseButtonBottomPadding}
                         testID="Add_Contact_Button"
                     />
                 </BaseView>
@@ -109,3 +111,9 @@ export const AddContactScreen = () => {
         </DismissKeyboardView>
     )
 }
+
+const styles = StyleSheet.create({
+    baseButtonBottomPadding: {
+        marginBottom: 16,
+    },
+})
