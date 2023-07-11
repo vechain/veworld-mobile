@@ -69,7 +69,7 @@ export const createBaseActivityFromTransaction = (
  */
 export const createTransferClauseFromIncomingTransfer = (
     to: string,
-    value: number,
+    value: string,
     tokenAddress: string,
     type: ActivityType,
 ): Connex.VM.Clause | undefined => {

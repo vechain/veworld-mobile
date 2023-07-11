@@ -4,16 +4,14 @@ import { NftScreenHeader } from "./Components"
 import { AccountWithDevice } from "~Model"
 import { isEmpty } from "lodash"
 import { NftSkeleton } from "./Components/NftSkeleton"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { useFetchCollections } from "./useFetchCollections"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import {
-    selectAccount,
     selectCollectionListIsEmpty,
     selectSelectedAccount,
     selectVisibleAccounts,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { ImportNFTView } from "./Components/ImportNFTView"
@@ -24,6 +22,7 @@ import { MathUtils } from "~Utils"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const [
         onEndReachedCalledDuringMomentum,
@@ -41,10 +40,9 @@ export const NFTScreen = () => {
     const isShowImportNFTs = useAppSelector(selectCollectionListIsEmpty)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const dispatch = useAppDispatch()
 
     const setSelectedAccount = (account: AccountWithDevice) => {
-        dispatch(selectAccount({ address: account.address }))
+        onSetSelectedAccount({ address: account.address })
     }
 
     const onMomentumScrollBegin = useCallback(() => {

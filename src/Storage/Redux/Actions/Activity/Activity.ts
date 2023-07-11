@@ -113,7 +113,7 @@ export const createIncomingTransfer = (
 
     const encodedClause = createTransferClauseFromIncomingTransfer(
         recipient,
-        Number(amount),
+        amount,
         tokenAddress,
         activityType,
     )

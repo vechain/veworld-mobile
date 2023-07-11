@@ -22,7 +22,6 @@ import { AccountWithDevice, NETWORK_TYPE } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     insertSession,
-    selectAccount,
     selectSelectedAccount,
     selectVisibleAccounts,
     useAppDispatch,
@@ -32,6 +31,7 @@ import { WalletConnectUtils, error } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests } from "./Components"
 import { AppInfo } from "../Components"
+import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -40,6 +40,8 @@ type Props = NativeStackScreenProps<
 
 export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const currentProposal = route.params.sessionProposal
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const { web3Wallet } = useWalletConnect()
 
@@ -55,7 +57,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
     const setSelectedAccount = (account: AccountWithDevice) => {
-        dispatch(selectAccount({ address: account.address }))
+        onSetSelectedAccount({ address: account.address })
     }
 
     const { name, url, methods, icon, description } =

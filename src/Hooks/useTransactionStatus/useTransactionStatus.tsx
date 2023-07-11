@@ -83,7 +83,7 @@ export const useTransactionStatus = () => {
                 if (txReceipt.reverted) {
                     info("txReceipt is reverted", txReceipt.meta.txOrigin)
                     setTransactionReverted({ txId })
-                    removeTransactionPending({ txId })
+                    removeTransactionPending({ txId }) // todo.vas do not persist pending state on redux
                     return
                 } else {
                 }

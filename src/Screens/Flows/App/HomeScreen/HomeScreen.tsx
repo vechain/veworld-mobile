@@ -6,22 +6,25 @@ import {
     AccountManagementBottomSheet,
     EditTokensBar,
 } from "./Components"
-import { useBottomSheetModal, useMemoizedAnimation } from "~Hooks"
+import {
+    useBottomSheetModal,
+    useMemoizedAnimation,
+    useSetSelectedAccount,
+} from "~Hooks"
 import { BaseSafeArea, BaseSpacer, SelectAccountBottomSheet } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import {
-    selectAccount,
     selectSelectedAccount,
     selectVisibleAccounts,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountWithDevice } from "~Model"
 
 export const HomeScreen = () => {
     useTokenBalances()
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const {
         ref: accountManagementBottomSheetRef,
@@ -43,10 +46,9 @@ export const HomeScreen = () => {
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const dispatch = useAppDispatch()
 
     const setSelectedAccount = (account: AccountWithDevice) => {
-        dispatch(selectAccount({ address: account.address }))
+        onSetSelectedAccount({ address: account.address })
     }
 
     const { animateEntering } = useMemoizedAnimation({

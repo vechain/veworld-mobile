@@ -22,7 +22,7 @@ import {
     StyleSheet,
 } from "react-native"
 import { info } from "~Utils"
-import { useResetNFTNavStack } from "~Hooks"
+import { useSetSelectedAccount } from "~Hooks"
 
 type Props = {
     onClose: () => void
@@ -36,7 +36,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
 >(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { resetNFTStack } = useResetNFTNavStack()
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
@@ -76,11 +76,11 @@ export const SelectNetworkBottomSheet = React.forwardRef<
 
     const onPress = useCallback(
         (network: Network) => {
-            resetNFTStack()
+            onSetSelectedAccount({})
             dispatch(changeSelectedNetwork(network))
             onClose()
         },
-        [resetNFTStack, dispatch, onClose],
+        [onSetSelectedAccount, dispatch, onClose],
     )
 
     const renderSectionHeader = useCallback(

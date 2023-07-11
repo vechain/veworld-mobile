@@ -124,7 +124,7 @@ export const getAmountFromClause = (
  */
 export const encodeTransferFungibleTokenClause = (
     to: string,
-    value: number,
+    value: string,
     tokenAddress: string,
 ): Connex.VM.Clause => {
     const hexValue = "0x" + new BigNumber(value).toString(16)
