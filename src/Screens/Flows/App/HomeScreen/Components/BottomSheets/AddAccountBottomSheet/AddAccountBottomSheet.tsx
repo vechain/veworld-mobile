@@ -8,6 +8,7 @@ import { useAppDispatch } from "~Storage/Redux"
 import { addAccountForDevice } from "~Storage/Redux/Actions"
 import { BaseDevice } from "~Model"
 import { info } from "~Utils"
+import { useSetSelectedAccount } from "~Hooks"
 
 type Props = {
     onClose: () => void
@@ -21,16 +22,18 @@ export const AddAccountBottomSheet = React.forwardRef<
 >(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const [selectedDevice, setSelectedDevice] = useState<BaseDevice>()
 
     const onCreateAccount = useCallback(() => {
         if (selectedDevice) {
+            onSetSelectedAccount({})
             dispatch(addAccountForDevice(selectedDevice))
             setSelectedDevice(undefined)
             onClose()
         }
-    }, [dispatch, onClose, selectedDevice])
+    }, [dispatch, onClose, onSetSelectedAccount, selectedDevice])
 
     const handleSheetChanges = useCallback((index: number) => {
         info("addAccountSheet position changed", index)

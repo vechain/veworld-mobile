@@ -41,6 +41,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
         ref,
     ) => {
         const { LL } = useI18nContext()
+
         const handlePress = (account: AccountWithDevice) => {
             setSelectedAccount(account)
             closeBottomSheet()

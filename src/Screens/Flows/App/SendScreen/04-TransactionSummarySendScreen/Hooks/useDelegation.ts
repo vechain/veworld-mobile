@@ -13,7 +13,6 @@ import { error, info, HexUtils, TransactionUtils } from "~Utils"
 import axios from "axios"
 import { showErrorToast } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useSelector } from "react-redux"
 
 type Props = {
     transaction: Transaction.Body
@@ -30,9 +29,9 @@ export const useDelegation = ({ transaction }: Props) => {
     const [urlDelegationSignature, setUrlDelegationSignature] =
         useState<Buffer>()
     const isDelegated = selectedDelegationOption !== DelegationType.NONE
-    const defaultDelegationOption = useSelector(getDefaultDelegationOption)
-    const defaultDelegationAccount = useSelector(getDefaultDelegationAccount)
-    const defaultDelegationUrl = useSelector(getDefaultDelegationUrl)
+    const defaultDelegationOption = useAppSelector(getDefaultDelegationOption)
+    const defaultDelegationAccount = useAppSelector(getDefaultDelegationAccount)
+    const defaultDelegationUrl = useAppSelector(getDefaultDelegationUrl)
 
     const fetchSignature = async (
         txBody: Transaction.Body,

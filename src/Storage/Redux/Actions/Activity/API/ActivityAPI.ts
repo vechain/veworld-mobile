@@ -1,53 +1,20 @@
-import axios from "axios"
-import { debug, info } from "~Utils"
+import { debug } from "~Utils"
 import {
-    ActivityEndpoints,
-    FetchIncomingTransfersResponse,
-    FetchTransactionsResponse,
     getActivitiesFromIncomingTransfers,
     getActivitiesFromTransactions,
 } from "."
-import { ORDER } from "./ActivityEndpoints"
 import { Activity } from "~Model"
-import { genesises } from "~Constants"
-
-export const DEFAULT_PAGE_SIZE: number = 25
-const TIMEOUT = 15000
-
-// Create an instance of axios with common configurations
-const axiosInstance = axios.create({
-    timeout: TIMEOUT,
-})
-
-/**
- * Fetches data from a specific URL endpoint using axios HTTP client.
- *
- * @template T The expected return type from the HTTP request.
- * @param {string} url - The URL of the HTTP endpoint.
- *
- * @returns {Promise<T>} A promise that resolves to the data from the response.
- *
- * @throws Will throw an error if the HTTP request fails or if the error is not an instance of Error.
- */
-export const fetchFromEndpoint = async <T>(url: string) => {
-    try {
-        const response = await axiosInstance.get<T>(url)
-        return response.data
-    } catch (error) {
-        // Verify if 'error' is an instance of an Error before accessing 'error.message'
-        if (error instanceof Error) {
-            throw new Error(
-                `Failed to fetch from endpoint ${url}: ${error.message}`,
-            )
-        } else {
-            throw new Error(
-                `Failed to fetch from endpoint ${url}: ${JSON.stringify(
-                    error,
-                )}`,
-            )
-        }
-    }
-}
+import {
+    ORDER,
+    getIncomingTransfersOrigin,
+    getTransactionsOrigin,
+} from "~Constants"
+import {
+    DEFAULT_PAGE_SIZE,
+    FetchIncomingTransfersResponse,
+    FetchTransactionsResponse,
+    fetchFromEndpoint,
+} from "~Networking"
 
 /**
  * Fetches transactions for a given address.
@@ -67,24 +34,10 @@ export const fetchTransactions = async (
 ): Promise<FetchTransactionsResponse> => {
     debug(`Fetching transactions for ${address}`)
 
-    // Indexer doesn't support testnet transaction indexing
-    if (thor.genesis.id === genesises.test.id) {
-        info("Testnet transaction indexing is not supported yet") // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/774) Change when it will be supported
-        return {
-            data: [],
-            pagination: {
-                hasCount: false,
-                countLimit: 0,
-                totalPages: 0,
-                totalElements: 0,
-                hasNext: false,
-            },
-        }
-    }
-
     try {
         return await fetchFromEndpoint<FetchTransactionsResponse>(
-            ActivityEndpoints.getTransactionsOrigin(
+            getTransactionsOrigin(
+                thor,
                 address,
                 page,
                 DEFAULT_PAGE_SIZE,
@@ -114,24 +67,10 @@ export const fetchIncomingTransfers = async (
 ): Promise<FetchIncomingTransfersResponse> => {
     debug(`Fetching incoming transfers for ${address}`)
 
-    // Indexer doesn't support testnet transaction indexing
-    if (thor.genesis.id === genesises.test.id) {
-        info("Testnet transaction indexing is not supported yet") // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/774) Change when it will be supported
-        return {
-            data: [],
-            pagination: {
-                hasCount: false,
-                countLimit: 0,
-                totalPages: 0,
-                totalElements: 0,
-                hasNext: false,
-            },
-        }
-    }
-
     try {
         return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
-            ActivityEndpoints.getIncomingTransfersOrigin(
+            getIncomingTransfersOrigin(
+                thor,
                 address,
                 page,
                 DEFAULT_PAGE_SIZE,

@@ -38,10 +38,11 @@ export const useFetchCollections = (
 
     useEffect(() => {
         setCollections(nftCollections?.collections ?? [])
-    }, [nftCollections?.collections])
+    }, [nftCollections?.collections, nftCollections?.collections?.length])
 
     useEffect(() => {
         if (isEmpty(nftCollections?.collections)) {
+            setCollections([])
             getCollections(0, FIRST_TIME_COLLECITONS_TO_FETCH)
         }
 

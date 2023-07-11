@@ -1,6 +1,11 @@
 import { DIRECTIONS } from "~Constants"
 import { warn } from "~Utils"
-import { Activity, ActivityType, FungibleTokenActivity } from "~Model"
+import {
+    Activity,
+    ActivityType,
+    FungibleTokenActivity,
+    NonFungibleTokenActivity,
+} from "~Model"
 import { TranslationFunctions } from "~i18n"
 
 export const getActivityTitle = (
@@ -20,6 +25,11 @@ export const getActivityTitle = (
             return LL.SIGNED_CERTIFICATE()
         case ActivityType.CONNECTED_APP_TRANSACTION:
             return isSwap ? LL.SWAP() : LL.DAPP_TRANSACTION()
+        case ActivityType.NFT_TRANSFER:
+            return (activity as NonFungibleTokenActivity).direction ===
+                DIRECTIONS.UP
+                ? LL.NFT_SEND()
+                : LL.NFT_RECEIVE()
         default:
             warn("Unknown activity type")
     }

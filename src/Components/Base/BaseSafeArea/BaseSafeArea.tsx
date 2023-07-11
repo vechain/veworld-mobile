@@ -1,11 +1,9 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useNavigation } from "@react-navigation/native"
 import React, { useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { SafeAreaViewProps } from "react-native-safe-area-context"
-import { useThemedStyles } from "~Hooks"
+import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import { PlatformUtils } from "~Utils"
 import { getTabbar } from "../Helpers/getTabbar"
 import { SafeAreaView } from "./SafeAreaView"
 
@@ -25,16 +23,22 @@ export const BaseSafeArea = ({
     ...otherProps
 }: Props) => {
     const nav = useNavigation()
-    const tabbarHeight = useBottomTabBarHeight()
+    const { calculateBottomInsets } = usePlatformBottomInsets()
 
     const [isTab, setIsTab] = useState(false)
 
     const { styles: themedStyles } = useThemedStyles(
-        baseStyles({ isTab, tabbarHeight, flexGrow, bgTransparent, bg }),
+        baseStyles({
+            isTab,
+            calculateBottomInsets,
+            flexGrow,
+            bgTransparent,
+            bg,
+        }),
     )
 
     useEffect(() => {
-        if (nav && nav.getState() && PlatformUtils.isAndroid()) {
+        if (nav && nav.getState()) {
             const tab = getTabbar(nav)
             if (tab) {
                 setIsTab(true)
@@ -42,7 +46,7 @@ export const BaseSafeArea = ({
                 setIsTab(false)
             }
         }
-    }, [nav, tabbarHeight])
+    }, [nav, calculateBottomInsets])
 
     return (
         <SafeAreaView style={[themedStyles.container, style]} {...otherProps}>
@@ -53,18 +57,24 @@ export const BaseSafeArea = ({
 
 type BaseStylesProps = {
     isTab: boolean
-    tabbarHeight: number
+    calculateBottomInsets: number
     flexGrow?: number
     bgTransparent: boolean
     bg?: string
 }
 
 const baseStyles =
-    ({ isTab, tabbarHeight, flexGrow, bgTransparent, bg }: BaseStylesProps) =>
+    ({
+        isTab,
+        calculateBottomInsets,
+        flexGrow,
+        bgTransparent,
+        bg,
+    }: BaseStylesProps) =>
     (theme: ColorThemeType) =>
         StyleSheet.create({
             container: {
-                paddingBottom: isTab ? tabbarHeight : 0,
+                paddingBottom: isTab ? calculateBottomInsets : 0,
                 flexGrow,
                 backgroundColor: bgTransparent
                     ? "transparent"

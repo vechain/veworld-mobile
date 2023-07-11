@@ -45,7 +45,8 @@
         "build:android:debug": "./scripts/build-debug-apk.sh",
         "build:android:release": "./scripts/build-release-apk.sh",
         "prepare": "husky install",
-        "check-circular-dependencies": "npx madge --circular --warning --extensions js,jsx,ts,tsx ."
+        "check-circular-dependencies": "npx madge --circular --warning --extensions js,jsx,ts,tsx .",
+        "release": "release-it"
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
@@ -62,6 +63,7 @@
         "@react-navigation/native-stack": "^6.9.7",
         "@reduxjs/toolkit": "^1.9.3",
         "@shopify/flash-list": "^1.4.1",
+        "@release-it/conventional-changelog": "^6.0.0",
         "@vechain/connex-driver": "^2.0.12",
         "@vechain/connex-framework": "^2.0.12",
         "@vechain/picasso": "^2.1.1",
@@ -135,6 +137,7 @@
         "redux-flipper": "^2.0.2",
         "redux-persist": "^6.0.0",
         "redux-reset": "^0.3.0",
+        "release-it": "^15.11.0",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
         "striptags": "^4.0.0-alpha.4",
@@ -201,5 +204,34 @@
     },
     "resolutions": {
         "react-native-reanimated": "^2.14.4"
+    },
+    "release-it": {
+        "git": {
+            "commitMessage": "chore: release v${version}"
+        },
+        "github": {
+            "release": true
+        },
+        "npm": {
+            "publish": false
+        },
+        "plugins": {
+            "@release-it/conventional-changelog": {
+                "infile": "CHANGELOG.md",
+                "preset": {
+                    "name": "conventionalcommits",
+                    "types": [
+                        {
+                            "type": "feat",
+                            "section": "Features"
+                        },
+                        {
+                            "type": "fix",
+                            "section": "Bug Fixes"
+                        }
+                    ]
+                }
+            }
+        }
     }
 }

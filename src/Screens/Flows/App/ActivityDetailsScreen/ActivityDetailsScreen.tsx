@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
-    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -10,11 +9,12 @@ import {
     FadeoutButton,
     TransferCard,
     TransactionStatusBox,
+    BackButtonHeader,
+    NFTTransferCard,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
 import { ScrollView, StyleSheet } from "react-native"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useBottomSheetModal, usePlatformBottomInsets } from "~Hooks"
 import { DateUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
@@ -25,14 +25,15 @@ import {
     ConnectedAppTxActivity,
     ContactType,
     FungibleTokenActivity,
+    NonFungibleTokenActivity,
     SignCertActivity,
 } from "~Model"
 import {
     FungibleTokenTransferDetails,
     SignCertificateDetails,
     DappTransactionDetails,
+    NonFungibleTokenTransferDetails,
 } from "./Components"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { selectActivity, useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -46,13 +47,9 @@ type Props = NativeStackScreenProps<
 export const ActivityDetailsScreen = ({ route }: Props) => {
     const { activity, token, isSwap, decodedClauses } = route.params
 
-    const nav = useNavigation()
-
-    const theme = useTheme()
+    const { calculateBottomInsets } = usePlatformBottomInsets()
 
     const { LL, locale } = useI18nContext()
-
-    const tabBarHeight = useBottomTabBarHeight()
 
     const dispatch = useAppDispatch()
 
@@ -60,8 +57,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         useState<string>()
 
     const [customTokenAddress, setCustomTokenAddress] = useState<string>()
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const activityFromStore = useAppSelector(state =>
         selectActivity(state, activity.id),
@@ -107,6 +102,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             : activity.status !== ActivityStatus.SUCCESS
     }, [activity, activityFromStore])
 
+    const isNFTtransfer = useMemo(() => {
+        return activity.type === ActivityType.NFT_TRANSFER
+    }, [activity.type])
+
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
             case ActivityType.FUNGIBLE_TOKEN:
@@ -136,6 +135,16 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         activity={
                             (activityFromStore ??
                                 activity) as ConnectedAppTxActivity
+                        }
+                    />
+                )
+            }
+            case ActivityType.NFT_TRANSFER: {
+                return (
+                    <NonFungibleTokenTransferDetails
+                        activity={
+                            (activityFromStore ??
+                                activity) as NonFungibleTokenActivity
                         }
                     />
                 )
@@ -175,25 +184,15 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     return (
         <BaseSafeArea grow={1} testID="Activity_Details_Screen">
+            <BackButtonHeader hasBottomSpacer={false} />
+
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={[
-                    baseStyles.scrollViewContainer,
-                    { paddingBottom: tabBarHeight },
-                ]}
+                contentContainerStyle={{ paddingBottom: calculateBottomInsets }}
                 style={baseStyles.scrollView}>
-                <BaseView pb={6}>
-                    <BaseIcon
-                        style={baseStyles.backIcon}
-                        size={36}
-                        name="chevron-left"
-                        color={theme.colors.text}
-                        action={goBack}
-                    />
-                </BaseView>
-                <BaseView mx={20}>
+                <BaseView mx={24}>
                     <BaseText typographyFont="title">
                         {getActivityTitle(activity, LL, isSwap)}
                     </BaseText>
@@ -239,6 +238,23 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={20} />
 
+                    {isNFTtransfer && (
+                        <>
+                            <NFTTransferCard
+                                collectionAddress={
+                                    (activity as NonFungibleTokenActivity)
+                                        .contractAddress
+                                }
+                                tokenId={
+                                    (activity as NonFungibleTokenActivity)
+                                        .tokenId
+                                }
+                            />
+
+                            <BaseSpacer height={20} />
+                        </>
+                    )}
+
                     <BaseText typographyFont="subTitleBold">
                         {LL.DETAILS()}
                     </BaseText>
@@ -247,8 +263,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
                     {/* Render Activity Details based on the 'activity.type' */}
                     {renderActivityDetails}
-
-                    <BaseSpacer height={32} />
                 </BaseView>
             </ScrollView>
 
@@ -283,9 +297,6 @@ const baseStyles = StyleSheet.create({
     backIcon: {
         marginHorizontal: 8,
         alignSelf: "flex-start",
-    },
-    scrollViewContainer: {
-        width: "100%",
     },
     scrollView: {
         width: "100%",

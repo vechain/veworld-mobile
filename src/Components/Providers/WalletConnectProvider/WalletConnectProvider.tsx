@@ -5,7 +5,6 @@ import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import {
     changeSelectedNetwork,
     deleteSession,
-    selectAccount,
     selectSelectedAccountAddress,
     selectVisibleAccounts,
     useAppDispatch,
@@ -19,6 +18,7 @@ import { useNavigation } from "@react-navigation/native"
 import { RequestMethods } from "~Constants"
 import { AccountWithDevice, Network } from "~Model"
 import { Linking } from "react-native"
+import { useSetSelectedAccount } from "~Hooks"
 
 /**
  * Wallet Connect Flow:
@@ -51,6 +51,7 @@ const WalletConnectContextProvider = ({
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
     const nav = useNavigation()
     const accounts = useAppSelector(selectVisibleAccounts)
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     /**
      * A pairing between the DApp and the wallet needs to be established in order to make
@@ -156,7 +157,7 @@ const WalletConnectContextProvider = ({
                     return AddressUtils.compareAddresses(address, acct.address)
                 })
             if (selectedAccount)
-                dispatch(selectAccount({ address: selectedAccount.address }))
+                onSetSelectedAccount({ address: selectedAccount.address })
 
             // Switch to the requested network
             const network: Network = WalletConnectUtils.getNetworkType(
@@ -183,7 +184,7 @@ const WalletConnectContextProvider = ({
                     break
             }
         },
-        [web3Wallet, accounts, dispatch, nav],
+        [web3Wallet, accounts, onSetSelectedAccount, dispatch, nav],
     )
 
     /**

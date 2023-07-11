@@ -11,9 +11,8 @@ import {
     SignMessageScreen,
 } from "~Screens"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
-import GCD from "../../GCD/GCD"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
-import BlockListener from "../../BlockListener"
+import { TransferEventListener } from "../../TransferEventListener"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -113,8 +112,7 @@ export const SwitchStack = () => {
 const AppContainer = () => {
     return (
         <>
-            <BlockListener />
-            <GCD />
+            <TransferEventListener />
             <TabStack />
         </>
     )

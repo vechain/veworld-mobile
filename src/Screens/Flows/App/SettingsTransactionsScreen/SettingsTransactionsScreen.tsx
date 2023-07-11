@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
 import React from "react"
-import { useDispatch, useSelector } from "react-redux"
 import {
     AccountCard,
     BackButtonHeader,
@@ -22,14 +21,18 @@ import {
     setDefaultDelegationAccount,
     setDefaultDelegationOption,
     setDefaultDelegationUrl,
+    useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
 export const SettingsTransactionsScreen = () => {
-    const selectedDelegationOption = useSelector(getDefaultDelegationOption)
-    const selectedDelegationAccount = useSelector(getDefaultDelegationAccount)
-    const selectedDelegationUrl = useSelector(getDefaultDelegationUrl)
-    const dispatch = useDispatch()
+    const selectedDelegationOption = useAppSelector(getDefaultDelegationOption)
+    const selectedDelegationAccount = useAppSelector(
+        getDefaultDelegationAccount,
+    )
+    const selectedDelegationUrl = useAppSelector(getDefaultDelegationUrl)
+    const dispatch = useAppDispatch()
     const setSelectedDelegationOption = (
         defaultDelegationOption: DelegationType,
     ) => dispatch(setDefaultDelegationOption(defaultDelegationOption))
