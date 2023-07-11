@@ -1,5 +1,5 @@
 import { AccountWithDevice, TransactionOrigin } from "~Model"
-import { IncomingTransferResponse } from "~Storage/Redux"
+import { IncomingTransferResponse } from "~Networking"
 import { AddressUtils } from "~Utils"
 
 export const findInvolvedAccount = (
