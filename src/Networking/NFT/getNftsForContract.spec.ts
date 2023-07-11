@@ -2,6 +2,7 @@ import axios from "axios"
 import { getNftsForContract } from "./getNftsForContract"
 import { NFTS_OWNED_PER_CONTRACT } from "~Constants"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
+import { NETWORK_TYPE } from "~Model"
 
 jest.mock("axios")
 
@@ -27,6 +28,7 @@ describe("getNftsForContract", () => {
         ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: responseData })
 
         const nfts = await getNftsForContract(
+            NETWORK_TYPE.MAIN,
             contractAddress,
             ownerAddress,
             resultsPerPage,
@@ -37,6 +39,7 @@ describe("getNftsForContract", () => {
 
         expect(axios.get).toHaveBeenCalledWith(
             NFTS_OWNED_PER_CONTRACT(
+                NETWORK_TYPE.MAIN,
                 ownerAddress,
                 contractAddress,
                 resultsPerPage,

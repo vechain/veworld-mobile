@@ -360,8 +360,15 @@ const en: BaseTranslation = {
 
     // Notifications
     NOTIFICATION_COPIED_CLIPBOARD: "{name} has been copied to the clipboard!",
-    NOTIFICATION_transaction_reverted: "Transaction {txId} was reverted.",
-    NOTIFICATION_found_token_transfer: "Found {token} transfer: {amount}",
+    NOTIFICATION_transaction_reverted: "Transaction {txId : string} was reverted.",
+    NOTIFICATION_found_token_transfer: "Found {token : string} transfer: {amount : string} on {alias: string}",
+    NOTIFICATION_INCOMING_NFT_TITLE: "Incoming!",
+    NOTIFICATION_INCOMING_NFT_BODY: "{collectionName: string} You received a new NFT from {from: string} to {alias: string}.",
+    NOTIFIACTION_INCOMING_NFT_ACTION: "Go to NFTs",
+    NOTIFICATION_OUTGOING_NFT_TITLE: "Outgoing!",
+    NOTIFICATION_OUTGOING_NFT_BODY: "{collectionName: string} NFT was succesfully sent to {to: string}.",
+    NOTIFIACTION_OUTGOING_TOKEN_BODY: "{amount: string} was succesfully sent to {to: string}.",
+    NOTIFICATION_VIEW_ACCOUNT: "View account",
 
     // Wallet connect notifications
     NOTIFICATION_wallet_connect_disconnected_from_remote: "A connected app successfully disconnected from this wallet.",
@@ -530,6 +537,7 @@ const en: BaseTranslation = {
     SEND_LEDGER_SIGN_DATA_SB: "We are signing your transaction with your Ledger, please confirm the transaction on your device when required",
     SEND_LEDGER_TX_READY: "Transaction is ready",
     SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",
+    SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low",
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

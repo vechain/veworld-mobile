@@ -94,7 +94,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
 
         paddingTop: {
-            paddingBottom: 24,
             paddingTop: 16,
         },
     })

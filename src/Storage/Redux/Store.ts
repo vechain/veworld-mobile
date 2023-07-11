@@ -34,5 +34,5 @@ export const reducer = combineReducers({
     [DelegationSlice.name]: DelegationSlice.reducer,
     [NftSlice.name]: persistReducer(nftPersistConfig, NftSlice.reducer), // persist specific keys fron a reducer
     [WalletConnectSessionsSlice.name]: WalletConnectSessionsSlice.reducer,
-    [PendingSlice.name]: PendingSlice.reducer, // todo -> add to useResetApp
+    [PendingSlice.name]: PendingSlice.reducer,
 })
