@@ -20,7 +20,6 @@ import {
 } from "./Components"
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { striptags } from "striptags"
 import {
     fetchVechainMarketInfo,
@@ -39,7 +38,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const theme = useTheme()
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const paddingBottom = useBottomTabBarHeight()
     const marketInfo = useAppSelector(state =>
         selectMarketInfoFor(token.symbol, state),
     )
@@ -94,7 +92,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={{ paddingBottom }}
                 style={{
                     backgroundColor: theme.colors.background,
                 }}>

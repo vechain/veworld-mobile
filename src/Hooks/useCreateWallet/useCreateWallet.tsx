@@ -70,6 +70,7 @@ export const useCreateWallet = () => {
                 )
 
                 dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
+
                 if (!selectedAccount)
                     dispatch(selectAccount({ address: newAccount.address }))
 

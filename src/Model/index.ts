@@ -1,6 +1,7 @@
 export * from "./Account"
 export * from "./Activity"
 export * from "./Transaction"
+export * from "./Beat"
 // export * from "./Backup"
 export * from "./Balance"
 // export * from "./Connex"

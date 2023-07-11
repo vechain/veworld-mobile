@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import {
     BackButtonHeader,
@@ -13,11 +12,12 @@ import {
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { Routes, tabbarBaseStyles } from "~Navigation"
+import { Routes } from "~Navigation"
 import { useAppDispatch } from "~Storage/Redux"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
 import { ContactForm } from "./Components"
 import { useContactValidation } from "../ContactsScreen"
+import { StyleSheet } from "react-native"
 
 export const AddContactScreen = () => {
     // [START] Hooks
@@ -103,7 +103,7 @@ export const AddContactScreen = () => {
                         title={LL.BTN_ADD_CONTACT().toUpperCase()}
                         disabled={!isFormValid}
                         bgColor={theme.colors.primary}
-                        style={baseStyles.primaryButton}
+                        style={styles.baseButtonBottomPadding}
                         testID="Add_Contact_Button"
                     />
                 </BaseView>
@@ -112,12 +112,8 @@ export const AddContactScreen = () => {
     )
 }
 
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-    primaryButton: {
-        marginBottom: tabbarBaseStyles.tabbar.height * 1.1,
+const styles = StyleSheet.create({
+    baseButtonBottomPadding: {
+        marginBottom: 16,
     },
 })

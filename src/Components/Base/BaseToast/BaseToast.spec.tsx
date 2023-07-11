@@ -33,7 +33,7 @@ describe("BaseToast", () => {
             type: "success",
             text1,
             text2,
-            props: { textLink, onPress },
+            props: { textLink, onPress, visibilityTime: 10000 },
         })
     })
 
@@ -49,7 +49,7 @@ describe("BaseToast", () => {
             type: "error",
             text1,
             text2,
-            props: { textLink, onPress },
+            props: { textLink, onPress, visibilityTime: 10000 },
         })
     })
 
@@ -65,7 +65,7 @@ describe("BaseToast", () => {
             type: "warning",
             text1,
             text2,
-            props: { textLink, onPress },
+            props: { textLink, onPress, visibilityTime: 10000 },
         })
     })
 
@@ -81,7 +81,7 @@ describe("BaseToast", () => {
             type: "info",
             text1,
             text2,
-            props: { textLink, onPress },
+            props: { textLink, onPress, visibilityTime: 10000 },
         })
     })
 

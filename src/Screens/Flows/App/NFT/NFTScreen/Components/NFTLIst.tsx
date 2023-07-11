@@ -1,6 +1,5 @@
 import { StyleSheet, FlatList } from "react-native"
 import React, { memo, useCallback } from "react"
-import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
 import { BaseSpacer } from "~Components"
 import { NFTView } from "../../Components"
 import { NonFungibleTokenCollection } from "~Model"
@@ -30,10 +29,6 @@ export const NFTLIst = memo(
         onMomentumScrollBegin,
         hasNext,
     }: Props) => {
-        const { calculateBottomInsets } = usePlatformBottomInsets()
-
-        const { styles } = useThemedStyles(baseStyles(calculateBottomInsets))
-
         const renderSeparator = useCallback(
             () => <BaseSpacer height={16} />,
             [],
@@ -50,7 +45,7 @@ export const NFTLIst = memo(
             <FlatList
                 data={collections}
                 extraData={collections}
-                contentContainerStyle={styles.listContainer}
+                contentContainerStyle={baseStyles.listContainer}
                 numColumns={2}
                 keyExtractor={item => String(item.address)}
                 ItemSeparatorComponent={renderSeparator}
@@ -60,8 +55,8 @@ export const NFTLIst = memo(
                 showsHorizontalScrollIndicator={false}
                 onEndReachedThreshold={0.1}
                 onEndReached={fetchMoreCollections}
-                ListHeaderComponentStyle={styles.listheader}
-                ListFooterComponentStyle={styles.listFooter}
+                ListHeaderComponentStyle={baseStyles.listheader}
+                ListFooterComponentStyle={baseStyles.listFooter}
                 ListFooterComponent={
                     <ListFooterView
                         onGoToBlackListed={onGoToBlackListed}
@@ -77,15 +72,13 @@ export const NFTLIst = memo(
     },
 )
 
-const baseStyles = (calculateBottomInsets: number) => () =>
-    StyleSheet.create({
-        listContainer: {
-            marginHorizontal: 20,
-            paddingTop: 24,
-            paddingBottom: calculateBottomInsets,
-        },
-        listheader: {
-            marginBottom: 24,
-        },
-        listFooter: { zIndex: -1 },
-    })
+const baseStyles = StyleSheet.create({
+    listContainer: {
+        marginHorizontal: 20,
+        paddingTop: 24,
+    },
+    listheader: {
+        marginBottom: 24,
+    },
+    listFooter: { zIndex: -1 },
+})

@@ -26,7 +26,6 @@ import { NFTRecapView } from "./Components/NFTRecapView"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
 import { ScrollView } from "react-native-gesture-handler"
 import {
-    BottomInsetsEXtraPadding,
     useCheckIdentity,
     usePlatformBottomInsets,
     useSignTransaction,
@@ -48,9 +47,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
-    const { calculateBottomInsets } = usePlatformBottomInsets(
-        BottomInsetsEXtraPadding.StaticButton,
-    )
+    const { calculateBottomInsets } = usePlatformBottomInsets()
 
     const selectedAccoount = useAppSelector(selectSelectedAccount)
 

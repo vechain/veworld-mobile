@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useThor } from "~Components"
 import { NFTMeta, fetchMetadata } from "~Hooks/useNft/fetchMeta"
 import { TokenMetadata } from "~Model"
@@ -27,8 +27,8 @@ import { error } from "~Utils"
  *
  */
 export const useNonFungibleTokenInfo = (
-    tokenId: string,
-    contractAddress: string,
+    tokenId?: string,
+    contractAddress?: string,
 ) => {
     const [tokenUri, setTokenUri] = useState<string | undefined>()
     const [tokenMetadata, setTokenMetadata] = useState<
@@ -90,6 +90,13 @@ export const useNonFungibleTokenInfo = (
                 })
     }, [tokenUri])
 
+    const fetchData = useCallback(
+        async (_tokenAddress: string) => {
+            return await getName(_tokenAddress, thor)
+        },
+        [thor],
+    )
+
     return {
         tokenMetadata,
         tokenUri,
@@ -97,5 +104,6 @@ export const useNonFungibleTokenInfo = (
         tokenImage,
         tokenMime,
         isMediaLoading,
+        fetchData,
     }
 }
