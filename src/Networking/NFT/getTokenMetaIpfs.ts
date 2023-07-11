@@ -5,7 +5,7 @@ import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 const toID = (_tokenUri: string) => _tokenUri?.split("://")[1]
 
-// TODO - Remove centralization to only 1 Public gateway. Check extension's `ÌPFSClient.performFetch` #803
+// TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/803) Remove centralization to only 1 Public gateway.
 
 export const getTokenMetaIpfs = async (
     tokenUri: string,
