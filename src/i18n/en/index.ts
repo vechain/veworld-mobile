@@ -355,6 +355,8 @@ const en: BaseTranslation = {
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",
     NETWORK_LABEL_TEST_NETWORKS: "Test Networks",
     NETWORK_LABEL_OTHER_NETWORKS: "Other Networks",
+    NETWORK_LABEL_MAINNET: "Mainnet",
+    NETWORK_LABEL_TESTNET: "Testnet",
 
     // Notifications
     NOTIFICATION_COPIED_CLIPBOARD: "{name} has been copied to the clipboard!",
@@ -433,6 +435,8 @@ const en: BaseTranslation = {
     SEND_NFT_TITLE: "Send your NFT",
     SEND_NFT_SUB_TITLE: "Fill the required fields",
     RECAP: "Recap",
+    COLLECTION_NAME: "Collection name",
+    UNKNOWN_COLLECTION: "Unknown collection name",
 
     // Onboarding
 
@@ -605,6 +609,8 @@ const en: BaseTranslation = {
     SWAP: "Swap",
     SIGN_CERTIFICATE: "Sign certificate",
     SIGNED_CERTIFICATE: "Signed certificate",
+    NFT_SEND: "NFT Send",
+    NFT_RECEIVE: "NFT Receive",
     ORIGIN: "Origin",
     CONTENT: "Content",
     STATUS: "Status",

@@ -1231,6 +1231,14 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
+	 * M​a​i​n​n​e​t
+	 */
+	NETWORK_LABEL_MAINNET: string
+	/**
+	 * T​e​s​t​n​e​t
+	 */
+	NETWORK_LABEL_TESTNET: string
+	/**
 	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
@@ -1515,6 +1523,14 @@ type RootTranslation = {
 	 * R​e​c​a​p
 	 */
 	RECAP: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 */
+	COLLECTION_NAME: string
+	/**
+	 * U​n​k​n​o​w​n​ ​c​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 */
+	UNKNOWN_COLLECTION: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -1995,6 +2011,14 @@ type RootTranslation = {
 	 * S​i​g​n​e​d​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	SIGNED_CERTIFICATE: string
+	/**
+	 * N​F​T​ ​S​e​n​d
+	 */
+	NFT_SEND: string
+	/**
+	 * N​F​T​ ​R​e​c​e​i​v​e
+	 */
+	NFT_RECEIVE: string
 	/**
 	 * O​r​i​g​i​n
 	 */
@@ -3308,6 +3332,14 @@ Please, try again later.
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
+	 * Mainnet
+	 */
+	NETWORK_LABEL_MAINNET: () => LocalizedString
+	/**
+	 * Testnet
+	 */
+	NETWORK_LABEL_TESTNET: () => LocalizedString
+	/**
 	 * {name} has been copied to the clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
@@ -3575,6 +3607,14 @@ Please, try again later.
 	 * Recap
 	 */
 	RECAP: () => LocalizedString
+	/**
+	 * Collection name
+	 */
+	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * Unknown collection name
+	 */
+	UNKNOWN_COLLECTION: () => LocalizedString
 	/**
 	 * Light
 	 */
@@ -4055,6 +4095,14 @@ Please, try again later.
 	 * Signed certificate
 	 */
 	SIGNED_CERTIFICATE: () => LocalizedString
+	/**
+	 * NFT Send
+	 */
+	NFT_SEND: () => LocalizedString
+	/**
+	 * NFT Receive
+	 */
+	NFT_RECEIVE: () => LocalizedString
 	/**
 	 * Origin
 	 */

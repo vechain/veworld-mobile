@@ -10,6 +10,7 @@ import {
     TransferCard,
     TransactionStatusBox,
     BackButtonHeader,
+    NFTTransferCard,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { ScrollView, StyleSheet } from "react-native"
@@ -24,12 +25,14 @@ import {
     ConnectedAppTxActivity,
     ContactType,
     FungibleTokenActivity,
+    NonFungibleTokenActivity,
     SignCertActivity,
 } from "~Model"
 import {
     FungibleTokenTransferDetails,
     SignCertificateDetails,
     DappTransactionDetails,
+    NonFungibleTokenTransferDetails,
 } from "./Components"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
@@ -99,6 +102,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             : activity.status !== ActivityStatus.SUCCESS
     }, [activity, activityFromStore])
 
+    const isNFTtransfer = useMemo(() => {
+        return activity.type === ActivityType.NFT_TRANSFER
+    }, [activity.type])
+
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
             case ActivityType.FUNGIBLE_TOKEN:
@@ -128,6 +135,16 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         activity={
                             (activityFromStore ??
                                 activity) as ConnectedAppTxActivity
+                        }
+                    />
+                )
+            }
+            case ActivityType.NFT_TRANSFER: {
+                return (
+                    <NonFungibleTokenTransferDetails
+                        activity={
+                            (activityFromStore ??
+                                activity) as NonFungibleTokenActivity
                         }
                     />
                 )
@@ -220,6 +237,23 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         ))}
 
                     <BaseSpacer height={20} />
+
+                    {isNFTtransfer && (
+                        <>
+                            <NFTTransferCard
+                                collectionAddress={
+                                    (activity as NonFungibleTokenActivity)
+                                        .contractAddress
+                                }
+                                tokenId={
+                                    (activity as NonFungibleTokenActivity)
+                                        .tokenId
+                                }
+                            />
+
+                            <BaseSpacer height={20} />
+                        </>
+                    )}
 
                     <BaseText typographyFont="subTitleBold">
                         {LL.DETAILS()}

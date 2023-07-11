@@ -1,33 +1,21 @@
 import React, { memo, useMemo } from "react"
 import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
-import { useCopyClipboard, useFungibleTokenInfo } from "~Hooks"
+import { useCopyClipboard } from "~Hooks"
 import { FormattingUtils } from "~Utils"
-import { FungibleToken, FungibleTokenActivity } from "~Model"
-import {
-    selectCurrency,
-    selectCurrencyExchangeRate,
-    useAppSelector,
-} from "~Storage/Redux"
-import { RootState } from "~Storage/Redux/Types"
+import { NonFungibleTokenActivity } from "~Model"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { ActivityDetail } from "../Type"
 import { useGasFee } from "../Hooks"
 import { ActivityDetailItem } from "./ActivityDetailItem"
 
 type Props = {
-    activity: FungibleTokenActivity
-    token?: FungibleToken
+    activity: NonFungibleTokenActivity
 }
 
-export const FungibleTokenTransferDetails: React.FC<Props> = memo(
-    ({ activity, token }) => {
+export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(
+    ({ activity }) => {
         const { LL } = useI18nContext()
-
-        const network = useMemo(() => {
-            return activity.genesisId === genesisesId.main
-                ? LL.NETWORK_LABEL_MAINNET()
-                : LL.NETWORK_LABEL_TESTNET()
-        }, [LL, activity.genesisId])
 
         const currency = useAppSelector(selectCurrency)
 
@@ -35,38 +23,6 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
 
         const { gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent } =
             useGasFee(activity)
-
-        const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
-
-        const amountTransferred = useMemo(() => {
-            if (!token?.decimals && !decimals) return
-
-            return FormattingUtils.humanNumber(
-                FormattingUtils.scaleNumberDown(
-                    activity.amount,
-                    token?.decimals ?? decimals ?? 0,
-                    FormattingUtils.ROUND_DECIMAL_DEFAULT,
-                ),
-                activity.amount,
-            )
-        }, [activity.amount, decimals, token])
-
-        const exchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, token?.symbol ?? ""),
-        )
-
-        const fiatValueTransferred = useMemo(() => {
-            if (exchangeRate?.rate && token) {
-                return FormattingUtils.humanNumber(
-                    FormattingUtils.convertToFiatBalance(
-                        activity.amount as string,
-                        exchangeRate.rate,
-                        token.decimals,
-                    ),
-                    activity.amount,
-                )
-            }
-        }, [activity.amount, exchangeRate?.rate, token])
 
         const transactionIDshort = useMemo(() => {
             return FormattingUtils.humanAddress(activity.id, 7, 9)
@@ -76,20 +32,16 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             return activity.blockNumber
         }, [activity.blockNumber])
 
+        const network = useMemo(() => {
+            return activity.genesisId === genesisesId.main
+                ? LL.NETWORK_LABEL_MAINNET()
+                : LL.NETWORK_LABEL_TESTNET()
+        }, [LL, activity.genesisId])
+
         // Details List
         const details: Array<ActivityDetail> = [
             {
                 id: 1,
-                title: LL.VALUE_TITLE(),
-                value: `${amountTransferred} ${token?.symbol ?? symbol}`,
-                typographyFont: "subSubTitle",
-                underline: false,
-                valueAdditional: fiatValueTransferred
-                    ? `≈ ${fiatValueTransferred} ${currencySymbolMap[currency]}`
-                    : "",
-            },
-            {
-                id: 2,
                 title: LL.GAS_FEE(),
                 value: gasFeeInVTHOHumanReadable
                     ? `${gasFeeInVTHOHumanReadable} ${VTHO.symbol}`

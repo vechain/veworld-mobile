@@ -44,6 +44,7 @@ export interface IncomingTransferResponse extends BaseTransactionResponse {
     from: string
     to: string
     value: string
+    tokenId: number
     tokenAddress: string
     topics: string[]
     eventType: EventTypeResponse

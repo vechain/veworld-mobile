@@ -23,6 +23,7 @@ import {
     DappTransactionActivityBox,
     FungibleTokenActivityBox,
     NoActivitiesButton,
+    NonFungibleTokenActivityBox,
     SignedCertificateActivityBox,
     SkeletonActivityBox,
     SwapTransactionActivityBox,
@@ -33,6 +34,7 @@ import {
     ConnectedAppTxActivity,
     FungibleToken,
     FungibleTokenActivity,
+    NonFungibleTokenActivity,
     SignCertActivity,
     TransactionOutcomes,
 } from "~Model"
@@ -135,6 +137,14 @@ export const HistoryScreen = () => {
                             onPress={onActivityPress}
                         />
                     )
+                case ActivityType.NFT_TRANSFER:
+                    return (
+                        <NonFungibleTokenActivityBox
+                            key={id}
+                            activity={activity as NonFungibleTokenActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
                 case ActivityType.CONNECTED_APP_TRANSACTION:
                     const decodedClauses = TransactionUtils.interpretClauses(
                         activity.clauses,
@@ -203,7 +213,7 @@ export const HistoryScreen = () => {
                             width: SCREEN_WIDTH,
                         }}
                         onScroll={onScroll}
-                        onEndReachedThreshold={1}
+                        onEndReachedThreshold={0.5}
                         onEndReached={onEndReached}
                         refreshControl={
                             <RefreshControl
