@@ -9,6 +9,8 @@ import {
     SwapCard,
     FadeoutButton,
     TransferCard,
+    TransactionStatusBox,
+    NFTTransferCard,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
@@ -24,13 +26,14 @@ import {
     ConnectedAppTxActivity,
     ContactType,
     FungibleTokenActivity,
+    NonFungibleTokenActivity,
     SignCertActivity,
 } from "~Model"
 import {
     FungibleTokenTransferDetails,
     SignCertificateDetails,
     DappTransactionDetails,
-    ActivityStatusBox,
+    NonFungibleTokenTransferDetails,
 } from "./Components"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
@@ -107,6 +110,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             : activity.status !== ActivityStatus.SUCCESS
     }, [activity, activityFromStore])
 
+    const isNFTtransfer = useMemo(() => {
+        return activity.type === ActivityType.NFT_TRANSFER
+    }, [activity.type])
+
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
             case ActivityType.FUNGIBLE_TOKEN:
@@ -136,6 +143,16 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         activity={
                             (activityFromStore ??
                                 activity) as ConnectedAppTxActivity
+                        }
+                    />
+                )
+            }
+            case ActivityType.NFT_TRANSFER: {
+                return (
+                    <NonFungibleTokenTransferDetails
+                        activity={
+                            (activityFromStore ??
+                                activity) as NonFungibleTokenActivity
                         }
                     />
                 )
@@ -208,7 +225,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
                     {isPendingOrFailedActivity && (
                         <>
-                            <ActivityStatusBox
+                            <TransactionStatusBox
                                 status={
                                     activityFromStore?.status || activity.status
                                 }
@@ -238,6 +255,23 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         ))}
 
                     <BaseSpacer height={20} />
+
+                    {isNFTtransfer && (
+                        <>
+                            <NFTTransferCard
+                                collectionAddress={
+                                    (activity as NonFungibleTokenActivity)
+                                        .contractAddress
+                                }
+                                tokenId={
+                                    (activity as NonFungibleTokenActivity)
+                                        .tokenId
+                                }
+                            />
+
+                            <BaseSpacer height={20} />
+                        </>
+                    )}
 
                     <BaseText typographyFont="subTitleBold">
                         {LL.DETAILS()}

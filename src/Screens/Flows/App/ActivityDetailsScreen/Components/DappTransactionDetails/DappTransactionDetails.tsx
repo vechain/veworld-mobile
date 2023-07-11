@@ -1,11 +1,10 @@
 import React, { memo, useMemo } from "react"
-import { VTHO, currencySymbolMap } from "~Constants"
+import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
 import { FormattingUtils, TransactionUtils } from "~Utils"
 import { BaseSpacer } from "~Components"
 import { useCopyClipboard } from "~Hooks"
 import {
     selectCurrency,
-    selectSelectedNetwork,
     selectTokensWithInfo,
     useAppSelector,
 } from "~Storage/Redux"
@@ -23,7 +22,11 @@ type Props = {
 export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
     const { LL } = useI18nContext()
 
-    const network = useAppSelector(selectSelectedNetwork)
+    const network = useMemo(() => {
+        return activity.genesisId === genesisesId.main
+            ? LL.NETWORK_LABEL_MAINNET()
+            : LL.NETWORK_LABEL_TESTNET()
+    }, [LL, activity.genesisId])
 
     const currency = useAppSelector(selectCurrency)
 
@@ -73,7 +76,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             value: activity.linkUrl || "",
             typographyFont: "subSubTitleLight",
             underline: true,
-            //TODO onValuePress opens browser or in-app browser
+            // TODO(Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/755) onValuePress opens browser or in-app browser
         },
         {
             id: 3,
@@ -105,7 +108,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
         {
             id: 6,
             title: LL.TITLE_NETWORK(),
-            value: network.name.toUpperCase(),
+            value: network.toUpperCase(),
             typographyFont: "subSubTitle",
             underline: false,
         },

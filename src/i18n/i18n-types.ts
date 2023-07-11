@@ -263,6 +263,10 @@ type RootTranslation = {
 	 */
 	BD_ALERT_FACE_ID_CANCELLED: string
 	/**
+	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​o​r​l​d​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​R​e​s​e​t​ ​t​h​e​ ​W​a​l​l​e​t​,​ ​o​r​ ​R​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
+	 */
+	BD_ALERT_BIOMETRICS_CANCELLED: string
+	/**
 	 * I​f​ ​y​o​u​ ​h​a​v​e​ ​a​n​y​ ​d​o​u​b​t​s​ ​a​b​o​u​t​ ​h​o​w​ ​t​h​e​ ​a​p​p​ ​w​o​r​k​s​,​ ​p​l​e​a​s​e​ ​f​o​l​l​o​w​ ​o​u​r​ ​d​o​c​u​m​e​n​t​a​t​i​o​n​ ​o​n​ ​V​e​c​h​a​i​n​.​o​r​g
 	 */
 	BD_WALLET_SUCCESS: string
@@ -540,6 +544,10 @@ type RootTranslation = {
 	 */
 	TITLE_ALERT_CAMERA_PERMISSION: string
 	/**
+	 * B​i​o​m​e​t​r​i​c​s​ ​C​a​n​c​e​l​l​e​d
+	 */
+	TITLE_ALERT_BIOMETRICS_CANCELLED: string
+	/**
 	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
 	 */
 	TITLE_WALLET_SUCCESS: string
@@ -771,6 +779,10 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_YOUR_PHRASE_2: string
 	/**
+	 * A​l​s​o​,​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​a​s​k​e​d​ ​t​o​ ​u​s​e​ ​y​o​u​r​ ​b​i​o​m​e​t​r​i​c​s​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​f​o​r​ ​e​a​c​h​ ​w​a​l​l​e​t​!
+	 */
+	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -874,6 +886,10 @@ type RootTranslation = {
 	 * S​I​G​N​ ​A​N​D​ ​S​E​N​D
 	 */
 	COMMON_BTN_SIGN_AND_SEND: string
+	/**
+	 * R​e​s​e​t​ ​A​p​p
+	 */
+	COMMON_BTN_RESET: string
 	/**
 	 * a​n​d
 	 */
@@ -1215,6 +1231,14 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
+	 * M​a​i​n​n​e​t
+	 */
+	NETWORK_LABEL_MAINNET: string
+	/**
+	 * T​e​s​t​n​e​t
+	 */
+	NETWORK_LABEL_TESTNET: string
+	/**
 	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {unknown} name
 	 */
@@ -1463,6 +1487,14 @@ type RootTranslation = {
 	 * R​e​c​a​p
 	 */
 	RECAP: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 */
+	COLLECTION_NAME: string
+	/**
+	 * U​n​k​n​o​w​n​ ​c​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 */
+	UNKNOWN_COLLECTION: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -1940,6 +1972,14 @@ type RootTranslation = {
 	 */
 	SIGNED_CERTIFICATE: string
 	/**
+	 * N​F​T​ ​S​e​n​d
+	 */
+	NFT_SEND: string
+	/**
+	 * N​F​T​ ​R​e​c​e​i​v​e
+	 */
+	NFT_RECEIVE: string
+	/**
 	 * O​r​i​g​i​n
 	 */
 	ORIGIN: string
@@ -2291,6 +2331,10 @@ export type TranslationFunctions = {
 	 */
 	BD_ALERT_FACE_ID_CANCELLED: () => LocalizedString
 	/**
+	 * You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?
+	 */
+	BD_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
+	/**
 	 * If you have any doubts about how the app works, please follow our documentation on Vechain.org
 	 */
 	BD_WALLET_SUCCESS: () => LocalizedString
@@ -2567,6 +2611,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ALERT_CAMERA_PERMISSION: () => LocalizedString
 	/**
+	 * Biometrics Cancelled
+	 */
+	TITLE_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
+	/**
 	 * You're finally one of us!
 	 */
 	TITLE_WALLET_SUCCESS: () => LocalizedString
@@ -2795,6 +2843,10 @@ export type TranslationFunctions = {
 	 */
 	SB_BACKUP_YOUR_PHRASE_2: () => LocalizedString
 	/**
+	 * Also, you will be asked to use your biometrics security method for each wallet!
+	 */
+	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -2898,6 +2950,10 @@ export type TranslationFunctions = {
 	 * SIGN AND SEND
 	 */
 	COMMON_BTN_SIGN_AND_SEND: () => LocalizedString
+	/**
+	 * Reset App
+	 */
+	COMMON_BTN_RESET: () => LocalizedString
 	/**
 	 * and
 	 */
@@ -3236,6 +3292,14 @@ Please, try again later.
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
+	 * Mainnet
+	 */
+	NETWORK_LABEL_MAINNET: () => LocalizedString
+	/**
+	 * Testnet
+	 */
+	NETWORK_LABEL_TESTNET: () => LocalizedString
+	/**
 	 * {name} has been copied to the clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
@@ -3475,6 +3539,14 @@ Please, try again later.
 	 * Recap
 	 */
 	RECAP: () => LocalizedString
+	/**
+	 * Collection name
+	 */
+	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * Unknown collection name
+	 */
+	UNKNOWN_COLLECTION: () => LocalizedString
 	/**
 	 * Light
 	 */
@@ -3951,6 +4023,14 @@ Please, try again later.
 	 * Signed certificate
 	 */
 	SIGNED_CERTIFICATE: () => LocalizedString
+	/**
+	 * NFT Send
+	 */
+	NFT_SEND: () => LocalizedString
+	/**
+	 * NFT Receive
+	 */
+	NFT_RECEIVE: () => LocalizedString
 	/**
 	 * Origin
 	 */

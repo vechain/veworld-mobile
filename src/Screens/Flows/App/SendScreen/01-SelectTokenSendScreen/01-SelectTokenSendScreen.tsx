@@ -1,16 +1,13 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState } from "react"
-import { StyleSheet } from "react-native"
 import {
     BaseText,
-    BaseSafeArea,
-    BackButtonHeader,
     BaseView,
     BaseSpacer,
     BaseSearchInput,
-    BaseScrollView,
     OfficialTokenCard,
+    Layout,
 } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
 import {
@@ -44,52 +41,45 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
             initialRoute: route.params.initialRoute ?? "",
         })
     }
+
     return (
-        <BaseSafeArea grow={1} testID="Select_Token_Send_Screen">
-            <BackButtonHeader />
-            <BaseView mx={24}>
-                <BaseText typographyFont="title">
-                    {LL.SEND_TOKEN_TITLE()}
-                </BaseText>
-                <BaseSpacer height={24} />
-                <BaseText typographyFont="button">
-                    {LL.SEND_TOKEN_SUBTITLE()}
-                </BaseText>
-                <BaseSpacer height={8} />
-                <BaseText typographyFont="body">
-                    {LL.SEND_TOKEN_SELECT_ASSET()}
-                </BaseText>
-                <BaseSpacer height={16} />
-                <BaseSearchInput
-                    value={tokenQuery}
-                    setValue={setTokenQuery}
-                    placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
-                />
-            </BaseView>
-            <BaseSpacer height={16} />
-            <BaseScrollView
-                containerStyle={styles.scrollViewContainer}
-                style={styles.scrollView}>
-                {filteredTokens.length ? (
-                    filteredTokens.map(token => (
-                        <OfficialTokenCard
-                            key={token.address}
-                            token={token}
-                            action={handleClickToken(token)}
-                        />
-                    ))
-                ) : (
-                    <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
-                )}
-            </BaseScrollView>
-        </BaseSafeArea>
+        <Layout
+            safeAreaTestID="Select_Token_Send_Screen"
+            title={LL.SEND_TOKEN_TITLE()}
+            fixedHeader={
+                <BaseView>
+                    <BaseText typographyFont="button">
+                        {LL.SEND_TOKEN_SUBTITLE()}
+                    </BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="body">
+                        {LL.SEND_TOKEN_SELECT_ASSET()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseSearchInput
+                        value={tokenQuery}
+                        setValue={setTokenQuery}
+                        placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
+                    />
+                    <BaseSpacer height={16} />
+                </BaseView>
+            }
+            body={
+                <BaseView>
+                    <BaseSpacer height={8} />
+                    {filteredTokens.length ? (
+                        filteredTokens.map(token => (
+                            <OfficialTokenCard
+                                key={token.address}
+                                token={token}
+                                action={handleClickToken(token)}
+                            />
+                        ))
+                    ) : (
+                        <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
+                    )}
+                </BaseView>
+            }
+        />
     )
 }
-const styles = StyleSheet.create({
-    scrollViewContainer: {
-        marginBottom: 60,
-    },
-    scrollView: {
-        paddingHorizontal: 20,
-    },
-})

@@ -11,7 +11,6 @@ jest.mock("@ledgerhq/react-native-hw-transport-ble")
 const deviceId = "testDeviceId"
 const waitFirstManualConnection = false
 const onConnectionError = jest.fn()
-//TODO - test succesfully connection (mock send method in transport), checkLedgerConnection called with timeout
 
 describe("useLedger", () => {
     beforeEach(() => {

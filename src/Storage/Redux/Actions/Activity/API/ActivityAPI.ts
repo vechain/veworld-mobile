@@ -1,5 +1,5 @@
 import axios from "axios"
-import { debug, info } from "~Utils"
+import { debug } from "~Utils"
 import {
     ActivityEndpoints,
     FetchIncomingTransfersResponse,
@@ -9,7 +9,6 @@ import {
 } from "."
 import { ORDER } from "./ActivityEndpoints"
 import { Activity } from "~Model"
-import { genesises } from "~Constants"
 
 export const DEFAULT_PAGE_SIZE: number = 25
 const TIMEOUT = 15000
@@ -67,24 +66,10 @@ export const fetchTransactions = async (
 ): Promise<FetchTransactionsResponse> => {
     debug(`Fetching transactions for ${address}`)
 
-    // Indexer doesn't support testnet transaction indexing
-    if (thor.genesis.id === genesises.test.id) {
-        info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
-        return {
-            data: [],
-            pagination: {
-                hasCount: false,
-                countLimit: 0,
-                totalPages: 0,
-                totalElements: 0,
-                hasNext: false,
-            },
-        }
-    }
-
     try {
         return await fetchFromEndpoint<FetchTransactionsResponse>(
             ActivityEndpoints.getTransactionsOrigin(
+                thor,
                 address,
                 page,
                 DEFAULT_PAGE_SIZE,
@@ -114,24 +99,10 @@ export const fetchIncomingTransfers = async (
 ): Promise<FetchIncomingTransfersResponse> => {
     debug(`Fetching incoming transfers for ${address}`)
 
-    // Indexer doesn't support testnet transaction indexing
-    if (thor.genesis.id === genesises.test.id) {
-        info("Testnet transaction indexing is not supported yet") //TODO Change when it will be supported
-        return {
-            data: [],
-            pagination: {
-                hasCount: false,
-                countLimit: 0,
-                totalPages: 0,
-                totalElements: 0,
-                hasNext: false,
-            },
-        }
-    }
-
     try {
         return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
             ActivityEndpoints.getIncomingTransfersOrigin(
+                thor,
                 address,
                 page,
                 DEFAULT_PAGE_SIZE,

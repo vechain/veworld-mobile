@@ -10,7 +10,7 @@ import {
 } from "~Model"
 import TransactionUtils from "."
 import * as logger from "~Utils/Logger/Logger"
-import { toDelegation } from "./TransactionUtils"
+import { decodeTransferEvent, toDelegation } from "./TransactionUtils"
 import { Transaction } from "thor-devkit"
 import { VET, genesises } from "~Constants"
 
@@ -1456,11 +1456,161 @@ describe("TransactionUtils", () => {
             expect(encodedClause).toEqual(result)
         })
     })
+
+    describe("encodeTransferNonFungibleTokenClause", () => {
+        it("should encode a transfer NFT clause", () => {
+            const from = "0xCF130b42Ae31C4931298B4B1c0F1D974B8732957"
+            const to = "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa"
+            const tokenId = 3605
+            const nftContractAddress =
+                "0xC8ebceCb1438b9A00eA1003c956C3e0b83aa0EC3"
+
+            const result = {
+                to: nftContractAddress,
+                value: "0x0",
+                data: "0x23b872dd000000000000000000000000cf130b42ae31c4931298b4b1c0f1d974b8732957000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa0000000000000000000000000000000000000000000000000000000000000e15",
+            }
+
+            const encodedClause =
+                TransactionUtils.encodeTransferNonFungibleTokenClause(
+                    from,
+                    to,
+                    nftContractAddress,
+                    tokenId,
+                )
+
+            expect(encodedClause).toEqual(result)
+        })
+    })
 })
 
 describe("toDelegation", () => {
     it("should create a new Transaction with reserved features set to 1", () => {
         const result = toDelegation({} as Transaction.Body)
         expect(result.body.reserved).toEqual({ features: 1 })
+    })
+})
+
+describe("Decode Transfer Event", () => {
+    it("should correctly decode NFT transfer events", () => {
+        const decodedEvent = {
+            from: "0x3ca43f476106ff42ec6209ee78129b62547570ff",
+            to: "0xf6f50606d11cbfedb0da9ded07c554eb7f05fcd3",
+            tokenId: "86328",
+        }
+
+        const eventObj = {
+            address: "0xb1b9d40758cc3d90f1b2899dfb7a64e5d0235c61",
+            data: "0x",
+            meta: {
+                blockID:
+                    "0x00f162dc3d566f3d88329b1d46130dd7c6b5ce78307bd3d304f66b8cc6e986f9",
+                blockNumber: 15819484,
+                blockTimestamp: 1688718950,
+                clauseIndex: 0,
+                txID: "0x571e68f0fa31d324ca8926264e6ff745e3552ce9d504e68c50b15877517a21f7",
+                txOrigin: "0x3ca43f476106ff42ec6209ee78129b62547570ff",
+            },
+            obsolete: false,
+            topics: [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x0000000000000000000000003ca43f476106ff42ec6209ee78129b62547570ff",
+                "0x000000000000000000000000f6f50606d11cbfedb0da9ded07c554eb7f05fcd3",
+                "0x0000000000000000000000000000000000000000000000000000000000015138",
+            ],
+        }
+
+        const result = decodeTransferEvent(eventObj)
+        expect(result).toEqual(decodedEvent)
+    })
+
+    it("should correctly decode Fungible Token transfer events", () => {
+        const decodedEvent = {
+            from: "0x85d10fff9cb9754851e38061bb113992f580e87b",
+            to: "0x9a107a75cff525b033a3e53cadafe3d193b570ec",
+            value: "42900631850968107846730",
+        }
+
+        const eventObj = {
+            address: "0x0000000000000000000000000000456e65726779",
+            data: "0x000000000000000000000000000000000000000000000915a5dd9b2a9ade0c4a",
+            meta: {
+                blockID:
+                    "0x00f162e0980187cf922b8304f28512629c5fbbb3700eb22c6a1b7d5f4ee194ad",
+                blockNumber: 15819488,
+                blockTimestamp: 1688718990,
+                clauseIndex: 0,
+                txID: "0x6589353523483c1d0792703c8ab798cd92f347da0c65e26c83ab0650555e6a08",
+                txOrigin: "0x85d10fff9cb9754851e38061bb113992f580e87b",
+            },
+            obsolete: false,
+            topics: [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x00000000000000000000000085d10fff9cb9754851e38061bb113992f580e87b",
+                "0x0000000000000000000000009a107a75cff525b033a3e53cadafe3d193b570ec",
+            ],
+        }
+
+        const result = decodeTransferEvent(eventObj)
+        expect(result).toEqual(decodedEvent)
+    })
+
+    describe("decodeNonFungibleTokenTransferClause", () => {
+        it("should return decoded non fungible token transfer data if data starts with NFT_TRANSFER_SIG", () => {
+            const data =
+                "0x23b872dd000000000000000000000000cf130b42ae31c4931298b4b1c0f1d974b8732957000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa0000000000000000000000000000000000000000000000000000000000000e15"
+            expect(
+                TransactionUtils.decodeNonFungibleTokenTransferClause({
+                    data,
+                    to: "0xC8ebceCb1438b9A00eA1003c956C3e0b83aa0EC3",
+                    value: "0x",
+                }),
+            ).toEqual({
+                from: "0xcf130b42ae31c4931298b4b1c0f1d974b8732957",
+                to: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+                tokenId: "3605",
+            })
+        })
+        it("should return null if data does not start with NFT_TRANSFER_SIG", () => {
+            const data = "0x123"
+            expect(
+                TransactionUtils.decodeNonFungibleTokenTransferClause({
+                    data,
+                    to: "0x",
+                    value: "0x",
+                }),
+            ).toBe(null)
+        })
+        it("should return null if data is empty", () => {
+            const data = ""
+            expect(
+                TransactionUtils.decodeNonFungibleTokenTransferClause({
+                    data,
+                    to: "0x",
+                    value: "0x",
+                }),
+            ).toBe(null)
+        })
+        it("should log error when fails to decode non fungible token transfer clause", () => {
+            const debugSpy = jest.spyOn(logger, "debug")
+
+            const clause = {
+                data: "0x23b872dd000000000000000000000000cf130b42ae31c4931298b4b1c0f1d974b87329570000000000000000000000",
+                to: "0x",
+                value: "0x",
+            }
+
+            expect(
+                TransactionUtils.decodeNonFungibleTokenTransferClause(clause),
+            ).toBe(null)
+
+            expect(debugSpy).toHaveBeenCalledWith(
+                "Failed to decode parameters",
+                expect.any(Error),
+            )
+
+            // Restore the original function
+            debugSpy.mockRestore()
+        })
     })
 })

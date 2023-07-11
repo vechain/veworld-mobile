@@ -35,7 +35,7 @@ export const useSignMessage = ({ hash }: Props) => {
     const signMessage = async (password?: string) => {
         if (!senderDevice) return
 
-        //TODO: support ledger
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/753) support ledger
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
             showWarningToast("Hardware wallet not supported yet")
             throw new Error("Hardware wallet not supported yet")
@@ -43,7 +43,7 @@ export const useSignMessage = ({ hash }: Props) => {
 
         //local mnemonic, identity already verified via useCheckIdentity
         if (!senderDevice.wallet) {
-            // TODO: support hardware wallet
+            // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/753) support ledger
             showWarningToast("Hardware wallet not supported yet")
             throw new Error("Hardware wallet not supported yet")
         }

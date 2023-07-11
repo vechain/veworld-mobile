@@ -81,7 +81,8 @@ export type SwapEvent = {
 export type TransferEvent = {
     from: string
     to: string
-    value: string
+    value?: string
+    tokenId?: string
 }
 
 export type SwapResult = {
@@ -89,4 +90,16 @@ export type SwapResult = {
     paidTokenAddress: string
     receivedAmount: string
     receivedTokenAddress: string
+}
+
+export type TransferEventResult = {
+    from: string
+    to: string
+    tokenId?: string
+    value?: string
+}
+
+export enum TransactionOrigin {
+    FROM = "from",
+    TO = "to",
 }

@@ -1,24 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { ScrollView, StyleSheet, Keyboard } from "react-native"
-import {
-    BottomInsetsEXtraPadding,
-    useBottomSheetModal,
-    usePlatformBottomInsets,
-} from "~Hooks"
+import { StyleSheet, Keyboard } from "react-native"
+import { useBottomSheetModal } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
-    BackButtonHeader,
     BaseAccordion,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseTextInput,
     BaseView,
     ContactCard,
     FadeoutButton,
+    Layout,
     ScanBottomSheet,
 } from "~Components"
 import {
@@ -49,10 +44,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const [selectedAddress, setSelectedAddress] = useState("")
     const nav = useNavigation()
 
-    const { calculateBottomInsets } = usePlatformBottomInsets(
-        BottomInsetsEXtraPadding.StaticButton,
-    )
-
     const {
         ref: createContactBottomSheetRef,
         onOpen: openCreateContactSheet,
@@ -65,7 +56,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         onClose: closeScanAddressSheetRef,
     } = useBottomSheetModal()
 
-    // todo: refactor to a new hook - duplicate also in TransactionSummarySendScreen
+    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
     const accountsAndContacts = useMemo(() => {
@@ -180,17 +171,11 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     ])
 
     return (
-        <BaseSafeArea grow={1} testID="Insert_Address_Send_Screen">
-            <BackButtonHeader />
-            <ScrollView
-                contentContainerStyle={{
-                    paddingBottom: calculateBottomInsets,
-                }}>
-                <BaseView mx={24}>
-                    <BaseText typographyFont="title">
-                        {LL.SEND_TOKEN_TITLE()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
+        <Layout
+            safeAreaTestID="Insert_Address_Send_Screen"
+            title={LL.SEND_TOKEN_TITLE()}
+            fixedHeader={
+                <BaseView>
                     <BaseText typographyFont="button">
                         {LL.SEND_INSERT_ADDRESS()}
                     </BaseText>
@@ -214,7 +199,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         />
                     </BaseView>
                 </BaseView>
-                <BaseView mx={24}>
+            }
+            body={
+                <BaseView mb={80}>
                     <BaseAccordion
                         defaultIsOpen={!!contacts.length}
                         headerComponent={
@@ -262,7 +249,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                 </BaseText>
                             </BaseView>
                         }
-                        /*TODO: fix accordions with dynamic content */
                         bodyComponent={
                             <BaseView>
                                 {filteredAccounts.map(account => {
@@ -290,28 +276,34 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         }
                     />
                 </BaseView>
-            </ScrollView>
+            }
+            footer={
+                <>
+                    <FadeoutButton
+                        title={LL.COMMON_BTN_NEXT()}
+                        action={onNext}
+                        disabled={!selectedAddress}
+                        bottom={0}
+                        mx={0}
+                        width={"auto"}
+                    />
 
-            <FadeoutButton
-                title={LL.COMMON_BTN_NEXT()}
-                action={onNext}
-                disabled={!selectedAddress}
-            />
+                    <CreateContactBottomSheet
+                        ref={createContactBottomSheetRef}
+                        onClose={closeCreateContactSheet}
+                        onSubmit={navigateNext}
+                        address={selectedAddress}
+                    />
 
-            <CreateContactBottomSheet
-                ref={createContactBottomSheetRef}
-                onClose={closeCreateContactSheet}
-                onSubmit={navigateNext}
-                address={selectedAddress}
-            />
-
-            <ScanBottomSheet
-                ref={scanAddressSheetRef}
-                onClose={closeScanAddressSheetRef}
-                onScan={onSuccessfullScan}
-                target={ScanTarget.ADDRESS}
-            />
-        </BaseSafeArea>
+                    <ScanBottomSheet
+                        ref={scanAddressSheetRef}
+                        onClose={closeScanAddressSheetRef}
+                        onScan={onSuccessfullScan}
+                        target={ScanTarget.ADDRESS}
+                    />
+                </>
+            }
+        />
     )
 }
 

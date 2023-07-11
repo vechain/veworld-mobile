@@ -23,6 +23,7 @@ import {
     DappTransactionActivityBox,
     FungibleTokenActivityBox,
     NoActivitiesButton,
+    NonFungibleTokenActivityBox,
     SignedCertificateActivityBox,
     SkeletonActivityBox,
     SwapTransactionActivityBox,
@@ -33,6 +34,7 @@ import {
     ConnectedAppTxActivity,
     FungibleToken,
     FungibleTokenActivity,
+    NonFungibleTokenActivity,
     SignCertActivity,
     TransactionOutcomes,
 } from "~Model"
@@ -70,7 +72,9 @@ export const HistoryScreen = () => {
     // To prevent fetching next page of activities on FlashList mount
     const [hasScrolled, setHasScrolled] = useState(false)
 
-    // TODO, when account changes set page of activity fetching back to 0 and refetch otherwise we would be at the page of activities of the previous account
+    // TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/757)
+    // when account changes set page of activity fetching back to 0
+    // and refetch otherwise we would be at the page of activities of the previous account
     const onChangeAccountPress = () => {}
 
     const goBack = useCallback(() => nav.goBack(), [nav])
@@ -130,6 +134,14 @@ export const HistoryScreen = () => {
                         <FungibleTokenActivityBox
                             key={id}
                             activity={activity as FungibleTokenActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
+                case ActivityType.NFT_TRANSFER:
+                    return (
+                        <NonFungibleTokenActivityBox
+                            key={id}
+                            activity={activity as NonFungibleTokenActivity}
                             onPress={onActivityPress}
                         />
                     )
@@ -201,7 +213,7 @@ export const HistoryScreen = () => {
                             width: SCREEN_WIDTH,
                         }}
                         onScroll={onScroll}
-                        onEndReachedThreshold={1}
+                        onEndReachedThreshold={0.5}
                         onEndReached={onEndReached}
                         refreshControl={
                             <RefreshControl
