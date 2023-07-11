@@ -16,7 +16,7 @@ type InformUserForIncomingNFTProps = {
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
-export const informUSerForIncomingNFT = ({
+export const informUserForIncomingNFT = ({
     collectionName,
     alias,
     from,
