@@ -30,7 +30,7 @@ export const getTransfersForBlock = (
 ) => {
     return `${
         process.env.REACT_APP_INDEXER_MAINNET_URL
-    }/api/v1/transfers/forBlock?blockNumber=${blockNumber}&addresses=${addresses.join(
+    }/transfers/forBlock?blockNumber=${blockNumber}&addresses=${addresses.join(
         ",",
     )}&size=${pageSize}&page=${page}&direction=${direction}`
 }
