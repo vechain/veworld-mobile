@@ -6,23 +6,25 @@ import {
     AccountManagementBottomSheet,
     EditTokensBar,
 } from "./Components"
-import { useBottomSheetModal, useMemoizedAnimation } from "~Hooks"
+import {
+    useBottomSheetModal,
+    useMemoizedAnimation,
+    useSetSelectedAccount,
+} from "~Hooks"
 import { BaseSafeArea, BaseSpacer, SelectAccountBottomSheet } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import {
-    selectAccount,
     selectSelectedAccount,
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
-import { useDispatch } from "react-redux"
 import { AccountWithDevice } from "~Model"
 
 export const HomeScreen = () => {
     useTokenBalances()
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const {
         ref: accountManagementBottomSheetRef,
@@ -44,10 +46,9 @@ export const HomeScreen = () => {
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const dispatch = useDispatch()
 
     const setSelectedAccount = (account: AccountWithDevice) => {
-        dispatch(selectAccount({ address: account.address }))
+        onSetSelectedAccount({ address: account.address })
     }
 
     const { animateEntering } = useMemoizedAnimation({
@@ -58,13 +59,11 @@ export const HomeScreen = () => {
 
     const [isEdit, setIsEdit] = useState(false)
     const visibleHeightRef = useRef<number>(0)
-    const paddingBottom = useBottomTabBarHeight()
 
     return (
         <BaseSafeArea grow={1}>
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom }}
                 onContentSizeChange={visibleHeight => {
                     visibleHeightRef.current = visibleHeight
                 }}>

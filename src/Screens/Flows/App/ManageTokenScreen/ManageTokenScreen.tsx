@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ScrollView } from "react-native"
 import { useBottomSheetModal, useTheme } from "~Hooks"
 import {
     BackButtonHeader,
@@ -7,7 +7,6 @@ import {
     BaseCard,
     BaseIcon,
     BaseSafeArea,
-    BaseScrollView,
     BaseSearchInput,
     BaseSpacer,
     BaseText,
@@ -132,8 +131,7 @@ export const ManageTokenScreen = () => {
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
                 <BackButtonHeader />
-                <BaseScrollView
-                    containerStyle={styles.scrollViewContainer}
+                <ScrollView
                     style={styles.scrollView}
                     testID="ManageTokenScreen_ScrollView_tokensScrollView">
                     <BaseView>
@@ -253,7 +251,7 @@ export const ManageTokenScreen = () => {
                     ) : (
                         <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
                     )}
-                </BaseScrollView>
+                </ScrollView>
                 <AddCustomTokenBottomSheet
                     ref={addCustomTokenSheetRef}
                     onClose={closeAddCustomTokenSheet}
@@ -270,9 +268,6 @@ export const ManageTokenScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    scrollViewContainer: {
-        marginBottom: 60,
-    },
     scrollView: {
         paddingHorizontal: 20,
     },

@@ -1416,7 +1416,7 @@ describe("TransactionUtils", () => {
     describe("encodeTransferFungibleTokenClause", () => {
         it("should encode a transfer VET clause", () => {
             const to = "0x058D4C951AA24CA012cEf3408B259aC1C69D1258"
-            const value = 1559
+            const value = "1559"
             const tokenAddress = VET.address
 
             const result = {
@@ -1437,7 +1437,7 @@ describe("TransactionUtils", () => {
 
         it("should encode a fungible token transfer clause", () => {
             const to = "0x63792F9BAeF181e44Fc5F81918809FB98e4F71c5"
-            const value = 216800000000000000000000
+            const value = "216800000000000000000000"
             const tokenAddress = "0x5db3C8A942333f6468176a870dB36eEf120a34DC"
 
             const result = {

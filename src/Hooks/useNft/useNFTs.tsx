@@ -1,6 +1,7 @@
 import { useCallback } from "react"
 import {
     selectSelectedAccount,
+    selectSelectedNetwork,
     setNFTs,
     setNetworkingSideEffects,
     useAppDispatch,
@@ -19,6 +20,7 @@ import { useI18nContext } from "~i18n"
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
     const dispatch = useAppDispatch()
+    const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const thor = useThor()
     const { LL } = useI18nContext()
@@ -38,6 +40,7 @@ export const useNFTs = () => {
 
             try {
                 const { nftData } = await getNFTdataForContract(
+                    network,
                     [contractAddress],
                     selectedAccount.address,
                     _resultsPerPage,
@@ -112,7 +115,7 @@ export const useNFTs = () => {
                 error("useNFTs", e)
             }
         },
-        [LL, dispatch, selectedAccount.address, thor],
+        [LL, dispatch, selectedAccount.address, thor, network],
     )
 
     return { getNFTsForCollection }

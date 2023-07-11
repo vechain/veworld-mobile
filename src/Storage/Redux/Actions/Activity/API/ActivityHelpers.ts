@@ -11,7 +11,7 @@ import {
     EventTypeResponse,
     IncomingTransferResponse,
     TransactionsResponse,
-} from "./Types"
+} from "~Networking"
 
 /**
  * Function to create a base activity from a transaction response.
@@ -70,7 +70,7 @@ export const createBaseActivityFromTransaction = (
  */
 export const createTransferClauseFromIncomingTransfer = (
     to: string,
-    value: number,
+    value: string,
     contractAddress: string,
     type: ActivityType,
     from?: string,

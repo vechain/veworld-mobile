@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useThor } from "~Components"
 import { VET } from "~Constants"
 import { getTokenDecimals, getTokenSymbol } from "~Networking"
@@ -13,7 +13,7 @@ import { error as loggerError } from "~Utils"
  * @example
  * const { symbol, decimals } = useFungibleTokenInfo(tokenAddress);
  */
-export const useFungibleTokenInfo = (tokenAddress: string) => {
+export const useFungibleTokenInfo = (tokenAddress?: string) => {
     const [symbol, setSymbol] = useState<string>()
     const [decimals, setDecimals] = useState<number>()
     const [error, setError] = useState<Error | null>(null)
@@ -25,9 +25,9 @@ export const useFungibleTokenInfo = (tokenAddress: string) => {
 
         const fetchData = async () => {
             try {
-                const resDecimals = await getTokenDecimals(tokenAddress, thor)
+                const resDecimals = await getTokenDecimals(tokenAddress!, thor)
                 setDecimals(resDecimals)
-                const resSymbol = await getTokenSymbol(tokenAddress, thor)
+                const resSymbol = await getTokenSymbol(tokenAddress!, thor)
                 setSymbol(resSymbol)
             } catch (err) {
                 setError(err as Error)
@@ -35,12 +35,27 @@ export const useFungibleTokenInfo = (tokenAddress: string) => {
             }
         }
 
-        fetchData()
+        tokenAddress && fetchData()
     }, [tokenAddress, thor])
+
+    const fetchData = useCallback(
+        async (_tokenAddress: string) => {
+            const resDecimals = await getTokenDecimals(_tokenAddress, thor)
+
+            const resSymbol = await getTokenSymbol(_tokenAddress, thor)
+
+            return {
+                symbol: resSymbol,
+                decimals: resDecimals,
+            }
+        },
+        [thor],
+    )
 
     return {
         symbol,
         decimals,
         error,
+        fetchData,
     }
 }
