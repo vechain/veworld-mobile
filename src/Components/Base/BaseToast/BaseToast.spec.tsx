@@ -33,7 +33,8 @@ describe("BaseToast", () => {
             type: "success",
             text1,
             text2,
-            props: { textLink, onPress, visibilityTime: 10000 },
+            visibilityTime: 4000,
+            props: { textLink, onPress },
         })
     })
 
@@ -49,7 +50,8 @@ describe("BaseToast", () => {
             type: "error",
             text1,
             text2,
-            props: { textLink, onPress, visibilityTime: 10000 },
+            visibilityTime: 4000,
+            props: { textLink, onPress },
         })
     })
 
@@ -65,7 +67,8 @@ describe("BaseToast", () => {
             type: "warning",
             text1,
             text2,
-            props: { textLink, onPress, visibilityTime: 10000 },
+            visibilityTime: 4000,
+            props: { textLink, onPress },
         })
     })
 
@@ -81,7 +84,25 @@ describe("BaseToast", () => {
             type: "info",
             text1,
             text2,
-            props: { textLink, onPress, visibilityTime: 10000 },
+            visibilityTime: 4000,
+            props: { textLink, onPress },
+        })
+    })
+
+    it("calls showInfoToast with correct parameters & visibility time", () => {
+        const text1 = "Info"
+        const text2 = "Details"
+        const textLink = "Click here"
+        const onPress = jest.fn()
+
+        showInfoToast(text1, text2, textLink, onPress, 7_000)
+
+        expect(Toast.show).toHaveBeenCalledWith({
+            type: "info",
+            text1,
+            text2,
+            visibilityTime: 7_000,
+            props: { textLink, onPress },
         })
     })
 
