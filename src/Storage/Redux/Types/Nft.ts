@@ -1,5 +1,5 @@
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
-import { PaginationResponse } from "~Networking"
+import { GithubCollectionResponse, PaginationResponse } from "~Networking"
 
 // COLLECTIONS
 export type CollectionWithPagination = {
@@ -8,6 +8,13 @@ export type CollectionWithPagination = {
 }
 
 export type Collections = Record<string, CollectionWithPagination>
+
+// Collection Registry Info
+export type CollectionRegistryInfo = {
+    [network: string]: {
+        registryInfo: GithubCollectionResponse[]
+    }
+}
 
 // NFTS
 export type NFTs = {
@@ -19,7 +26,7 @@ export type NFTs = {
     }
 }
 
-// BLACLLISTED COLLECTIONS
+// BLACKLISTED COLLECTIONS
 export type BlackListedCollections = {
     [accountAddress: string]: {
         collections: NonFungibleTokenCollection[]

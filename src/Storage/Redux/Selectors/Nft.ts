@@ -3,6 +3,7 @@ import { RootState } from "../Types"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { selectSelectedAccount } from "./Account"
 import { isEmpty } from "lodash"
+import { selectSelectedNetwork } from "./Network"
 
 const selectNftState = (state: RootState) => state.nft
 
@@ -56,6 +57,12 @@ export const selectNftCollections = createSelector(
             },
         }
     },
+)
+
+export const selectCollectionRegistryInfo = createSelector(
+    selectNftState,
+    selectSelectedNetwork,
+    (state, network) => state.collectionRegistryInfo[network.type],
 )
 
 export const selectNftNetworkingSideEffects = createSelector(

@@ -4,13 +4,15 @@ import { uniqBy } from "lodash"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import {
     BlackListedCollections,
+    CollectionRegistryInfo,
     Collections,
     CollectionWithPagination,
     NFTs,
 } from "../Types/Nft"
-import { PaginationResponse } from "~Networking"
+import { GithubCollectionResponse, PaginationResponse } from "~Networking"
 
 type NftSliceState = {
+    collectionRegistryInfo: CollectionRegistryInfo
     collectionsPerAccount: Collections
     NFTsPerAccount: NFTs
 
@@ -21,6 +23,7 @@ type NftSliceState = {
 }
 
 export const initialStateNft: NftSliceState = {
+    collectionRegistryInfo: {},
     collectionsPerAccount: {},
     NFTsPerAccount: {},
 
@@ -69,6 +72,25 @@ export const NftSlice = createSlice({
             state.collectionsPerAccount[currentAccountAddress] = {
                 collections: allUnique,
                 pagination: collectiondata.pagination,
+            }
+
+            return state
+        },
+
+        // INITIALISE COLLECTIONS REGISTRY INFO. SHOULD ONLY BE SET ONCE PER SESSION PER NETWORK
+        setCollectionRegistryInfo: (
+            state,
+            action: PayloadAction<{
+                registryInfo: GithubCollectionResponse[]
+                network: string
+            }>,
+        ) => {
+            const { registryInfo, network } = action.payload
+
+            if (state.collectionRegistryInfo[network]) return
+
+            state.collectionRegistryInfo[network] = {
+                registryInfo,
             }
 
             return state
@@ -216,6 +238,7 @@ export const NftSlice = createSlice({
 export const {
     setBlackListCollection,
     setCollections,
+    setCollectionRegistryInfo,
     setNetworkingSideEffects,
     removeBlackListCollection,
     setNFTs,

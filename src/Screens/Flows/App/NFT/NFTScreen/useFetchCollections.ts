@@ -10,7 +10,7 @@ import {
 } from "~Storage/Redux"
 import { isEmpty } from "lodash"
 
-const FIRST_TIME_COLLECITONS_TO_FETCH = 10
+const FIRST_TIME_COLLECTIONS_TO_FETCH = 10
 
 export const useFetchCollections = (
     onEndReachedCalledDuringMomentum: boolean,
@@ -43,7 +43,7 @@ export const useFetchCollections = (
     useEffect(() => {
         if (isEmpty(nftCollections?.collections)) {
             setCollections([])
-            getCollections(0, FIRST_TIME_COLLECITONS_TO_FETCH)
+            getCollections(0, FIRST_TIME_COLLECTIONS_TO_FETCH)
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
