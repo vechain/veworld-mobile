@@ -83,24 +83,30 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
             <BaseView bg={theme.colors.card} style={styles.view}>
                 <BaseView flexDirection="row" p={16}>
                     <BaseView pr={16}>{renderMedia}</BaseView>
-                    <BaseView flexDirection="column" flex={1}>
-                        <BaseView style={styles.nftDetail}>
-                            <BaseText typographyFont="buttonSecondary" pb={4}>
-                                {LL.COLLECTION_NAME()}
-                            </BaseText>
-                            <BaseText pb={8} typographyFont="subSubTitle">
-                                {validatedCollectionName}
-                            </BaseText>
+                    {!isMediaLoading && (
+                        <BaseView flexDirection="column" flex={1}>
+                            <BaseView style={styles.nftDetail}>
+                                <BaseText
+                                    typographyFont="buttonSecondary"
+                                    pb={4}>
+                                    {LL.COLLECTION_NAME()}
+                                </BaseText>
+                                <BaseText pb={8} typographyFont="subSubTitle">
+                                    {validatedCollectionName}
+                                </BaseText>
+                            </BaseView>
+                            <BaseView pt={8}>
+                                <BaseText
+                                    typographyFont="buttonSecondary"
+                                    pb={4}>
+                                    {LL.TOKEN_ID()}
+                                </BaseText>
+                                <BaseText typographyFont="subSubTitle">
+                                    #{tokenId}
+                                </BaseText>
+                            </BaseView>
                         </BaseView>
-                        <BaseView pt={8}>
-                            <BaseText typographyFont="buttonSecondary" pb={4}>
-                                {LL.TOKEN_ID()}
-                            </BaseText>
-                            <BaseText typographyFont="subSubTitle">
-                                #{tokenId}
-                            </BaseText>
-                        </BaseView>
-                    </BaseView>
+                    )}
                 </BaseView>
             </BaseView>
         </BaseView>
