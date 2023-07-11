@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { AppRegistry, LogBox } from "react-native"
 import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
@@ -32,6 +32,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
 import * as Sentry from "@sentry/react-native"
+import { useAppSelector, selectSentryTrackingEnabled } from "~Storage/Redux"
 
 const { fontFamily } = typography
 
@@ -46,14 +47,6 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     LogBox.ignoreAllLogs()
 }
 
-Sentry.init({
-    dsn: "https://d9f6366fe78846b88450241b1bc23e05@o4505487555297280.ingest.sentry.io/4505487558508544",
-    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-    // We recommend adjusting this value in production.
-    tracesSampleRate: 1.0,
-    environment: process.env.NODE_ENV,
-})
-
 const Main = () => {
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
@@ -66,24 +59,45 @@ const Main = () => {
         [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
+    const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
+
+    useEffect(() => {
+        if (sentryTrackingEnabled) {
+            Sentry.init({
+                dsn: process.env.REACT_APP_SENTRY_DSN,
+                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                tracesSampleRate: 1.0,
+                environment: process.env.NODE_ENV,
+            })
+        } else {
+            Sentry.close()
+        }
+    }, [sentryTrackingEnabled])
+    return (
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <ConnexContextProvider>
+                <SafeAreaProvider>
+                    <TranslationProvider>
+                        <NavigationProvider>
+                            <BottomSheetModalProvider>
+                                <WalletConnectContextProvider>
+                                    {fontsLoaded && <EntryPoint />}
+                                </WalletConnectContextProvider>
+                            </BottomSheetModalProvider>
+                        </NavigationProvider>
+                        <BaseToast />
+                    </TranslationProvider>
+                </SafeAreaProvider>
+            </ConnexContextProvider>
+        </GestureHandlerRootView>
+    )
+}
+
+const ReduxWrappedMain = () => {
     return (
         <StoreContextProvider>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-                <ConnexContextProvider>
-                    <SafeAreaProvider>
-                        <TranslationProvider>
-                            <NavigationProvider>
-                                <BottomSheetModalProvider>
-                                    <WalletConnectContextProvider>
-                                        {fontsLoaded && <EntryPoint />}
-                                    </WalletConnectContextProvider>
-                                </BottomSheetModalProvider>
-                            </NavigationProvider>
-                            <BaseToast />
-                        </TranslationProvider>
-                    </SafeAreaProvider>
-                </ConnexContextProvider>
-            </GestureHandlerRootView>
+            <Main />
         </StoreContextProvider>
     )
 }
@@ -105,7 +119,7 @@ const NavigationProvider = ({ children }) => {
     )
 }
 
-AppRegistry.registerComponent(appName, () => Sentry.wrap(Main))
+AppRegistry.registerComponent(appName, () => Sentry.wrap(ReduxWrappedMain))
 
 if (__DEV__) {
     const ignoreWarns = [

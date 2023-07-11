@@ -9,6 +9,7 @@ export interface UserPreferenceState {
     currency: CURRENCY
     language: LANGUAGE
     isAnalyticsTrackingEnabled: boolean
+    isSentryTrackingEnabled: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -19,6 +20,7 @@ const initialState: UserPreferenceState = {
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,
     isAnalyticsTrackingEnabled: false,
+    isSentryTrackingEnabled: true,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -54,6 +56,9 @@ export const UserPreferencesSlice = createSlice({
         ) => {
             state.isAnalyticsTrackingEnabled = action.payload
         },
+        setSentryTrackingEnabled: (state, action: PayloadAction<boolean>) => {
+            state.isSentryTrackingEnabled = action.payload
+        },
         resetUserPreferencesState: () => initialState,
     },
 })
@@ -66,5 +71,6 @@ export const {
     setCurrency,
     setLanguage,
     setAnalyticsTrackingEnabled,
+    setSentryTrackingEnabled,
     resetUserPreferencesState,
 } = UserPreferencesSlice.actions
