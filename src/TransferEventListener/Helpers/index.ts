@@ -19,11 +19,11 @@ export interface BaseTransferHandlerProps {
     stateReconciliationAction: (params: { accountAddress: string }) => void
 }
 
-export interface NFTTrnasferHandlerProps extends BaseTransferHandlerProps {
+export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
     fetchCollectionName: (address: string) => Promise<string>
 }
 
-export interface TokenTrnasferHandlerProps extends BaseTransferHandlerProps {
+export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
     fetchData: (
         address: string,
     ) => Promise<{ symbol: string; decimals: number }>
