@@ -3,8 +3,6 @@ import {
     selectSelectedNetwork,
     selectVisibleAccounts,
     useAppSelector,
-    fetchTransfersForBlock,
-    EventTypeResponse,
     selectBlackListedCollections,
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
@@ -17,10 +15,12 @@ import {
 import { Beat } from "~Model"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
 import {
+    fetchTransfersForBlock,
     handleNFTTransfers,
     handleTokenTransfers,
     handleVETTransfers,
 } from "./Helpers"
+import { EventTypeResponse } from "~Networking"
 
 export const TransferEventListener: React.FC = () => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
@@ -60,6 +60,7 @@ export const TransferEventListener: React.FC = () => {
                     beat.number,
                     relevantAccounts.slice(0, 20).map(acc => acc.address),
                     0,
+                    network.type,
                 )
 
                 debug(
@@ -127,14 +128,15 @@ export const TransferEventListener: React.FC = () => {
         },
         [
             visibleAccounts,
+            network.type,
             removeTransactionPending,
             fetchCollectionName,
             updateNFTs,
             forNFTs,
+            blackListedCollections,
             fetchData,
             updateBalances,
             forTokens,
-            blackListedCollections,
         ],
     )
 

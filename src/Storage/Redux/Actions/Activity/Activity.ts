@@ -15,13 +15,11 @@ import {
     selectCurrentTransactionActivities,
     selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
-import {
-    DEFAULT_PAGE_SIZE,
-    createTransferClauseFromIncomingTransfer,
-} from "./API"
+import { createTransferClauseFromIncomingTransfer } from "./API"
 import { Transaction } from "thor-devkit"
 import { DIRECTIONS, VET, chainTagToGenesisId, genesisesId } from "~Constants"
 import { ActivityUtils, TransactionUtils } from "~Utils"
+import { DEFAULT_PAGE_SIZE } from "~Networking"
 
 /**
  * Creates a new pending FungibleTokenActivity from a given transaction.

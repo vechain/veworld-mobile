@@ -1,52 +1,20 @@
-import axios from "axios"
 import { debug } from "~Utils"
 import {
-    ActivityEndpoints,
-    FetchIncomingTransfersResponse,
-    FetchTransactionsResponse,
     getActivitiesFromIncomingTransfers,
     getActivitiesFromTransactions,
 } from "."
-import { ORDER } from "./ActivityEndpoints"
 import { Activity } from "~Model"
-
-export const DEFAULT_PAGE_SIZE: number = 25
-const TIMEOUT = 15000
-
-// Create an instance of axios with common configurations
-const axiosInstance = axios.create({
-    timeout: TIMEOUT,
-})
-
-/**
- * Fetches data from a specific URL endpoint using axios HTTP client.
- *
- * @template T The expected return type from the HTTP request.
- * @param {string} url - The URL of the HTTP endpoint.
- *
- * @returns {Promise<T>} A promise that resolves to the data from the response.
- *
- * @throws Will throw an error if the HTTP request fails or if the error is not an instance of Error.
- */
-export const fetchFromEndpoint = async <T>(url: string) => {
-    try {
-        const response = await axiosInstance.get<T>(url)
-        return response.data
-    } catch (error) {
-        // Verify if 'error' is an instance of an Error before accessing 'error.message'
-        if (error instanceof Error) {
-            throw new Error(
-                `Failed to fetch from endpoint ${url}: ${error.message}`,
-            )
-        } else {
-            throw new Error(
-                `Failed to fetch from endpoint ${url}: ${JSON.stringify(
-                    error,
-                )}`,
-            )
-        }
-    }
-}
+import {
+    ORDER,
+    getIncomingTransfersOrigin,
+    getTransactionsOrigin,
+} from "~Constants"
+import {
+    DEFAULT_PAGE_SIZE,
+    FetchIncomingTransfersResponse,
+    FetchTransactionsResponse,
+    fetchFromEndpoint,
+} from "~Networking"
 
 /**
  * Fetches transactions for a given address.
@@ -68,7 +36,7 @@ export const fetchTransactions = async (
 
     try {
         return await fetchFromEndpoint<FetchTransactionsResponse>(
-            ActivityEndpoints.getTransactionsOrigin(
+            getTransactionsOrigin(
                 thor,
                 address,
                 page,
@@ -101,7 +69,7 @@ export const fetchIncomingTransfers = async (
 
     try {
         return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
-            ActivityEndpoints.getIncomingTransfersOrigin(
+            getIncomingTransfersOrigin(
                 thor,
                 address,
                 page,
@@ -111,38 +79,6 @@ export const fetchIncomingTransfers = async (
         )
     } catch (error) {
         throw new Error(`Failed to fetch incoming transfers: ${error}`)
-    }
-}
-
-/**
- * Fetches transfers for a list of address for a specific block number.
- *
- * @param {number} blockNumber - The block number to fetch transfers for.
- * @param {array<string>} addresses - A list of addresses.
- * @param {number} page - The page number to fetch.
- *
- * @returns {Promise<FetchIncomingTransfersResponse[]>} A promise that resolves to an array of incoming transfers.
- *
- * @throws Will throw an error if the network request fails.
- */
-export const fetchTransfersForBlock = async (
-    blockNumber: number,
-    addresses: string[],
-    page: number,
-): Promise<FetchIncomingTransfersResponse> => {
-    debug(`Fetching transfers for ${addresses} at block ${blockNumber}`)
-    try {
-        return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
-            ActivityEndpoints.getTransfersForBlock(
-                blockNumber,
-                addresses,
-                page,
-                DEFAULT_PAGE_SIZE,
-                ORDER.DESC,
-            ),
-        )
-    } catch (error) {
-        throw new Error(`Failed to fetch transfers: ${error}`)
     }
 }
 

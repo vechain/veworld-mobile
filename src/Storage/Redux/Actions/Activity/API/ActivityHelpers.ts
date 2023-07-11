@@ -11,7 +11,7 @@ import {
     EventTypeResponse,
     IncomingTransferResponse,
     TransactionsResponse,
-} from "./Types"
+} from "~Networking"
 
 /**
  * Function to create a base activity from a transaction response.

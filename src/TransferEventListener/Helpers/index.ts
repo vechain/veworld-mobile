@@ -6,9 +6,10 @@ export * from "./TranslationHelpers"
 export * from "./handleTokenTransfers"
 export * from "./handleVETTransfers"
 export * from "./handleNFTTransfers"
+export * from "./fetchTransfersForBlock"
 
 import { AccountWithDevice } from "~Model"
-import { IncomingTransferResponse } from "~Storage/Redux"
+import { IncomingTransferResponse } from "~Networking"
 
 export interface BaseTrnasferHandlerProps {
     visibleAccounts: AccountWithDevice[]
