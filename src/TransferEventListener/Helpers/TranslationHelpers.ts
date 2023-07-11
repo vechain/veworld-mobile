@@ -5,7 +5,7 @@ import { Network } from "~Model"
 import { FormattingUtils } from "~Utils"
 import * as i18n from "~i18n"
 import { isEmpty } from "lodash"
-import { IncomingTransferResponse } from "~Storage/Redux"
+import { IncomingTransferResponse } from "~Networking"
 
 // ~ NFT - INCOMING
 type InformUserForIncomingNFTProps = {
