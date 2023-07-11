@@ -11,7 +11,7 @@ import {
 } from "../Types/Nft"
 import { GithubCollectionResponse, PaginationResponse } from "~Networking"
 
-type NftSliceState = {
+export type NftSliceState = {
     collectionRegistryInfo: CollectionRegistryInfo
     collectionsPerAccount: Collections
     NFTsPerAccount: NFTs
