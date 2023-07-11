@@ -1,7 +1,7 @@
 import { TransactionOrigin } from "~Model"
 import { findInvolvedAccount } from "./findInvolvedAccount"
 import {
-    NFTTrnasferHandlerProps,
+    NFTTransferHandlerProps,
     informUserForIncomingNFT,
     informUserForOutgoingNFT,
 } from "."
@@ -13,7 +13,7 @@ export const handleNFTTransfers = async ({
     fetchCollectionName,
     stateReconciliationAction,
     informUser,
-}: NFTTrnasferHandlerProps) => {
+}: NFTTransferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
     // Early exit if tx is not related to any of the visible accounts
