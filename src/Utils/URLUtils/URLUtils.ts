@@ -8,8 +8,7 @@ import { error } from "~Utils/Logger"
 function parseUrl(url?: string) {
     const trimmedUrl = url?.trim()
     const match = trimmedUrl?.match(
-        // eslint-disable-next-line no-useless-escape
-        /^(https?):\/\/(?:www\.)?([^:\/?#]+)(?::([0-9]+))?([^?#]*)(\?[^#]*)?(#.*)?$/,
+        /^(https?):\/\/(?:www\.)?([^:/?#]+)(?::([\d]+))?([^?#]*)(\?[^#]*)?(#.*)?$/,
     )
     if (!match) {
         throw new Error("Invalid URL")
