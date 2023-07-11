@@ -78,6 +78,13 @@ export type SwapEvent = {
     to: string
 }
 
+export type TransferEvent = {
+    from: string
+    to: string
+    value?: string
+    tokenId?: string
+}
+
 export type SwapResult = {
     paidAmount: string
     paidTokenAddress: string

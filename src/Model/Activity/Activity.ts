@@ -39,6 +39,16 @@ export interface FungibleTokenActivity extends Activity {
 }
 
 /**
+ * The NonFungibleTokenActivity interface represents a blockchain activity specifically for non-fungible token transactions.
+ */
+export interface NonFungibleTokenActivity extends Activity {
+    tokenId: string
+    contractAddress: string
+    type: ActivityType.NFT_TRANSFER
+    direction: DIRECTIONS
+}
+
+/**
  * The ConnectedAppTxActivity interface represents a blockchain activity related to transactions from connected applications.
  */
 export interface ConnectedAppTxActivity extends Activity {

@@ -1456,6 +1456,32 @@ describe("TransactionUtils", () => {
             expect(encodedClause).toEqual(result)
         })
     })
+
+    describe("encodeTransferNonFungibleTokenClause", () => {
+        it("should encode a transfer NFT clause", () => {
+            const from = "0xCF130b42Ae31C4931298B4B1c0F1D974B8732957"
+            const to = "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa"
+            const tokenId = 3605
+            const nftContractAddress =
+                "0xC8ebceCb1438b9A00eA1003c956C3e0b83aa0EC3"
+
+            const result = {
+                to: nftContractAddress,
+                value: "0x0",
+                data: "0x23b872dd000000000000000000000000cf130b42ae31c4931298b4b1c0f1d974b8732957000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa0000000000000000000000000000000000000000000000000000000000000e15",
+            }
+
+            const encodedClause =
+                TransactionUtils.encodeTransferNonFungibleTokenClause(
+                    from,
+                    to,
+                    nftContractAddress,
+                    tokenId,
+                )
+
+            expect(encodedClause).toEqual(result)
+        })
+    })
 })
 
 describe("toDelegation", () => {
@@ -1527,5 +1553,64 @@ describe("Decode Transfer Event", () => {
 
         const result = decodeTransferEvent(eventObj)
         expect(result).toEqual(decodedEvent)
+    })
+
+    describe("decodeNonFungibleTokenTransferClause", () => {
+        it("should return decoded non fungible token transfer data if data starts with NFT_TRANSFER_SIG", () => {
+            const data =
+                "0x23b872dd000000000000000000000000cf130b42ae31c4931298b4b1c0f1d974b8732957000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa0000000000000000000000000000000000000000000000000000000000000e15"
+            expect(
+                TransactionUtils.decodeNonFungibleTokenTransferClause({
+                    data,
+                    to: "0xC8ebceCb1438b9A00eA1003c956C3e0b83aa0EC3",
+                    value: "0x",
+                }),
+            ).toEqual({
+                from: "0xcf130b42ae31c4931298b4b1c0f1d974b8732957",
+                to: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+                tokenId: "3605",
+            })
+        })
+        it("should return null if data does not start with NFT_TRANSFER_SIG", () => {
+            const data = "0x123"
+            expect(
+                TransactionUtils.decodeNonFungibleTokenTransferClause({
+                    data,
+                    to: "0x",
+                    value: "0x",
+                }),
+            ).toBe(null)
+        })
+        it("should return null if data is empty", () => {
+            const data = ""
+            expect(
+                TransactionUtils.decodeNonFungibleTokenTransferClause({
+                    data,
+                    to: "0x",
+                    value: "0x",
+                }),
+            ).toBe(null)
+        })
+        it("should log error when fails to decode non fungible token transfer clause", () => {
+            const debugSpy = jest.spyOn(logger, "debug")
+
+            const clause = {
+                data: "0x23b872dd000000000000000000000000cf130b42ae31c4931298b4b1c0f1d974b87329570000000000000000000000",
+                to: "0x",
+                value: "0x",
+            }
+
+            expect(
+                TransactionUtils.decodeNonFungibleTokenTransferClause(clause),
+            ).toBe(null)
+
+            expect(debugSpy).toHaveBeenCalledWith(
+                "Failed to decode parameters",
+                expect.any(Error),
+            )
+
+            // Restore the original function
+            debugSpy.mockRestore()
+        })
     })
 })
