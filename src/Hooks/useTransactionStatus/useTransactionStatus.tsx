@@ -1,7 +1,6 @@
-import { useCallback } from "react"
-import { ToastType, useThor } from "~Components"
-import { useCounter } from "~Hooks/useCounter"
-import { TransactionOrigin } from "~Model"
+import { useCallback, useRef } from "react"
+import { useThor } from "~Components"
+import { informUserforRevertedTransaction } from "../../TransferEventListener"
 import {
     removePendingTransaction,
     selectSelectedNetwork,
@@ -10,15 +9,14 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { info } from "~Utils"
-import { informUser } from "./Helpers"
+import { FungibleTokenWithBalance, NonFungibleToken } from "~Model"
 
 export const useTransactionStatus = () => {
     const dispatch = useAppDispatch()
     const thor = useThor()
 
     const network = useAppSelector(selectSelectedNetwork)
-
-    const { count, increment } = useCounter()
+    const count = useRef(0)
 
     const setTransactionPending = useCallback(
         ({ txId, id }: { txId: string; id: string }) => {
@@ -36,45 +34,81 @@ export const useTransactionStatus = () => {
 
     const setTransactionReverted = useCallback(
         ({ txId }: { txId: string }) => {
-            informUser({
+            informUserforRevertedTransaction({
                 txId,
-                originType: TransactionOrigin.FROM,
-                toastType: ToastType.Error,
                 network,
             })
         },
         [network],
     )
 
-    const prepareTransactionStatus = useCallback(
-        async ({ txId }: { txId: string }) => {
+    const setTxPendingStatus = useCallback(
+        ({
+            txId,
+            token,
+        }: {
+            txId: string
+            token: FungibleTokenWithBalance | NonFungibleToken
+        }) => {
+            if (token?.hasOwnProperty("tokenId")) {
+                const _token = token as NonFungibleToken
+                setTransactionPending({ txId, id: _token.id })
+            }
+
+            if (token?.hasOwnProperty("balance")) {
+                const _token = token as FungibleTokenWithBalance
+                setTransactionPending({ txId, id: _token.address })
+            }
+        },
+        [setTransactionPending],
+    )
+
+    // check reverted tx on Mainnet -> event is not arriving on websocket if tx is reverted??
+    const prepareTxStatus = useCallback(
+        async ({
+            txId,
+            token,
+        }: {
+            txId: string
+            token: FungibleTokenWithBalance | NonFungibleToken
+        }) => {
             // wait to to get tx id
             const txReceipt = await thor.transaction(txId).getReceipt()
 
+            count.current <= 0 && setTxPendingStatus({ txId, token })
+
             // if txReceipt is not null
-            if (txReceipt && count < 10) {
+            if (txReceipt && count.current < 10) {
                 // if txReceipt is reverted
                 if (txReceipt.reverted) {
-                    info("txReceipt is reverted")
+                    info("txReceipt is reverted", txReceipt.meta.txOrigin)
                     setTransactionReverted({ txId })
+                    removeTransactionPending({ txId }) // todo.vas do not persist pending state on redux
                     return
+                } else {
                 }
             } else {
-                // if txReceipt is still null -> retry for 20 times with a 1s delay
+                // if txReceipt is still null -> retry for 10 times with a 1s delay
+                count.current = count.current + 1
+
                 setTimeout(async () => {
                     info("txReceipt is null, retrying...")
-                    await prepareTransactionStatus({ txId })
-                    increment()
+                    await prepareTxStatus({ txId, token })
                 }, 1000)
             }
         },
-        [thor, count, setTransactionReverted, increment],
+        [
+            thor,
+            setTxPendingStatus,
+            setTransactionReverted,
+            removeTransactionPending,
+            count,
+        ],
     )
 
     return {
         removeTransactionPending,
         setTransactionPending,
-        informUser,
-        prepareTransactionStatus,
+        prepareTxStatus,
     }
 }

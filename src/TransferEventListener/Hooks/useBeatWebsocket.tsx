@@ -1,13 +1,12 @@
 import { useCallback, useMemo } from "react"
-import { TRANSFER_SIGNATURE } from "../Helpers"
 import { URLUtils, error, info, warn } from "~Utils"
 import useWebSocket from "react-use-websocket"
 import { updateNodeError, useAppDispatch } from "~Storage/Redux"
 import { useCounter } from "~Hooks"
 
-export const useWsUrlForTokens = (
+export const useBeatWebsocket = (
     currentNetworkUrl: string,
-    onTokenMessage: (ev: WebSocketMessageEvent) => void,
+    onMessage: (ev: WebSocketMessageEvent) => void,
 ) => {
     const dispatch = useAppDispatch()
     const { count, increment } = useCounter()
@@ -18,10 +17,10 @@ export const useWsUrlForTokens = (
 
     const onError = useCallback(
         (ev: WebSocketErrorEvent) => {
-            error("Error on beat WS: ", ev)
+            error("Error in VET Transfer WS: ", ev)
 
             if (count > 3) {
-                warn("Troubles connecting to useWsUrlForTokens.")
+                warn("Trouble connecting to useBeatWebsocket.")
                 dispatch(updateNodeError(true))
             } else {
                 increment()
@@ -34,7 +33,7 @@ export const useWsUrlForTokens = (
         const log = closeEvent.isTrusted ? info : warn
         log("Will attempt to reconnect web socket after closure", closeEvent)
 
-        // TODO: //Attempt to use another node if the current one has issues
+        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/747) Attempt to use another node if the current one has issues
         //Not doing async because the result should not affect this function
         // if (!closeEvent.wasClean && network.defaultNet) {
         //     dispatch(changeSelectedNetwork(network.id))
@@ -44,19 +43,15 @@ export const useWsUrlForTokens = (
         return true
     }, [])
 
-    const wsUrlForTokens = useMemo(() => {
+    const wsUrlForBeat = useMemo(() => {
         return URLUtils.toWebsocketURL(
             currentNetworkUrl,
-            `/subscriptions/event?t0=${TRANSFER_SIGNATURE}`,
+            "/subscriptions/beat2",
         )
     }, [currentNetworkUrl])
 
-    useWebSocket(wsUrlForTokens, {
-        onMessage: ev => {
-            dispatch(updateNodeError(false))
-            onTokenMessage(ev)
-        },
-        share: true,
+    useWebSocket(wsUrlForBeat, {
+        onMessage: onMessage,
         onOpen: onOpen,
         onError: onError,
         onClose: ev => info(ev),

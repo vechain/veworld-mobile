@@ -59,7 +59,7 @@ export const getPersistorConfig = async () => {
         key: "root",
         storage,
         version: 1,
-        blacklist: [NftSlice.name],
+        blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,
             TokenSlice.name,
@@ -73,7 +73,6 @@ export const getPersistorConfig = async () => {
             ActivitiesSlice.name,
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
-            PendingSlice.name,
         ],
         transforms: [encryptor],
     }

@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react"
-import { StyleSheet, View, Animated } from "react-native"
+import React, { useEffect, useState } from "react"
+import { Image, StyleSheet, View } from "react-native"
+import Animated, {
+    runOnJS,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated"
 import MaskedView from "@react-native-masked-view/masked-view"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -28,24 +34,18 @@ export const AnimatedSplashScreen = ({
     playAnimation,
     children,
 }: Props): React.ReactElement => {
-    const [loadingProgress] = useState(new Animated.Value(0))
+    const loadingProgress = useSharedValue(0)
     const [animationDone, setAnimationDone] = useState(false)
 
     const { styles } = useThemedStyles(baseStyles)
 
     useEffect(() => {
         if (playAnimation) {
-            Animated.timing(loadingProgress, {
-                toValue: 100,
-                duration: 700,
-                useNativeDriver: false,
-                delay: 0,
-            }).start(() => {
-                setAnimationDone(true)
+            loadingProgress.value = withTiming(100, { duration: 700 }, () => {
+                runOnJS(setAnimationDone)(true)
             })
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [playAnimation])
+    }, [playAnimation, loadingProgress])
 
     const colorLayer = animationDone ? null : (
         <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
@@ -54,16 +54,15 @@ export const AnimatedSplashScreen = ({
         <View style={[StyleSheet.absoluteFill, styles.whiteLayer]} />
     )
 
-    const imageScale = {
-        transform: [
-            {
-                scale: loadingProgress.interpolate({
-                    inputRange: [0, 14, 100],
-                    outputRange: [0.1, 0.01, 16],
-                }),
-            },
-        ],
-    }
+    const animatedStyles = useAnimatedStyle(() => {
+        return {
+            transform: [
+                {
+                    scale: loadingProgress.value / 6, // Adjust according to your needs
+                },
+            ],
+        }
+    })
 
     if (PlatformUtils.isAndroid()) return <>{children}</>
 
@@ -74,12 +73,14 @@ export const AnimatedSplashScreen = ({
                 style={styles.innerContainer}
                 maskElement={
                     <View style={styles.centered}>
-                        <Animated.Image
-                            source={require("../bootsplash_logo_white.png")}
-                            // eslint-disable-next-line react-native/no-inline-styles
-                            style={[{ width: 1000 }, imageScale]}
-                            resizeMode="contain"
-                        />
+                        <Animated.View style={animatedStyles}>
+                            <Image
+                                source={require("../bootsplash_logo_white.png")}
+                                // eslint-disable-next-line react-native/no-inline-styles
+                                style={{ width: 1000 }}
+                                resizeMode="contain"
+                            />
+                        </Animated.View>
                     </View>
                 }>
                 {whiteLayer}

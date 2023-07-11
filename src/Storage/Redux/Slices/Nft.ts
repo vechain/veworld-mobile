@@ -30,6 +30,7 @@ export const initialStateNft: NftSliceState = {
     error: undefined,
 }
 
+// todo.vas - add testnet state
 // Note: To test, replace `accountAddress - address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const NftSlice = createSlice({
     name: "nft",
@@ -183,30 +184,6 @@ export const NftSlice = createSlice({
             return state
         },
 
-        removeNFTFromCollection: (
-            state,
-            action: PayloadAction<{
-                NFT: NonFungibleToken
-            }>,
-        ) => {
-            const { NFT } = action.payload
-
-            // remove nft from nfts list
-            let allNFTsForAccount =
-                state.NFTsPerAccount[NFT.owner][NFT.belongsToCollectionAddress]
-                    .NFTs
-
-            const filteredNFTs = allNFTsForAccount.filter(
-                nft => nft.id !== NFT.id,
-            )
-
-            state.NFTsPerAccount[NFT.owner][
-                NFT.belongsToCollectionAddress
-            ].NFTs = filteredNFTs
-
-            return state
-        },
-
         // SET NETWORKING SIDE EFFECTS
         setNetworkingSideEffects: (
             state,
@@ -217,6 +194,18 @@ export const NftSlice = createSlice({
         ) => {
             state.isLoading = action.payload.isLoading
             state.error = action.payload.error
+            return state
+        },
+
+        // TODO.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/808
+        refreshNFTs: (
+            state,
+            action: PayloadAction<{ accountAddress: string }>,
+        ) => {
+            const { accountAddress } = action.payload
+
+            delete state.collectionsPerAccount[accountAddress]
+
             return state
         },
 
@@ -231,5 +220,5 @@ export const {
     removeBlackListCollection,
     setNFTs,
     resetNftState,
-    removeNFTFromCollection,
+    refreshNFTs,
 } = NftSlice.actions

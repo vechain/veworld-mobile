@@ -42,6 +42,7 @@ export const PendingSlice = createSlice({
             const foundIndex = state.pendingTransactions.findIndex(
                 tx => tx.txId === action.payload.txId,
             )
+
             if (foundIndex !== -1)
                 state.pendingTransactions.splice(foundIndex, 1)
 
