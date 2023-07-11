@@ -5,6 +5,7 @@ import {
     useAppSelector,
     fetchTransfersForBlock,
     EventTypeResponse,
+    selectBlackListedCollections,
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
 import { useInformUser, useStateReconciliaiton } from "./Hooks"
@@ -29,6 +30,7 @@ export const TransferEventListener: React.FC = () => {
     const { removeTransactionPending } = useTransactionStatus()
     const { updateBalances, updateNFTs } = useStateReconciliaiton()
     const { forTokens, forNFTs } = useInformUser({ network })
+    const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
     const onBeatMessage = useCallback(
         async (ev: WebSocketMessageEvent) => {
@@ -88,7 +90,10 @@ export const TransferEventListener: React.FC = () => {
                         .filter(
                             t =>
                                 t.eventType ===
-                                EventTypeResponse.FUNGIBLE_TOKEN,
+                                    EventTypeResponse.FUNGIBLE_TOKEN &&
+                                !blackListedCollections
+                                    .map(c => c.address)
+                                    .includes(t.tokenAddress),
                         )
                         .map(async transfer => {
                             await handleTokenTransfers({
@@ -129,6 +134,7 @@ export const TransferEventListener: React.FC = () => {
             fetchData,
             updateBalances,
             forTokens,
+            blackListedCollections,
         ],
     )
 
