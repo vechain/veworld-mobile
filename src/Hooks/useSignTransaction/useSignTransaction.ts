@@ -59,9 +59,7 @@ export const useSignTransaction = ({
     const senderDevice = useAppSelector(state =>
         selectDevice(state, account.rootAddress),
     )
-
-    const { setTransactionPending } = useTransactionStatus()
-
+    const { prepareTxStatus } = useTransactionStatus()
     const { sendTransactionAndPerformUpdates } = useSendTransaction(
         network,
         account,
@@ -201,17 +199,7 @@ export const useSignTransaction = ({
         try {
             const tx = await signTransaction(password)
             const id = await sendTransactionAndPerformUpdates(tx)
-
-            //todo -> add VET?
-            if (token?.hasOwnProperty("tokenId")) {
-                const _token = token as NonFungibleToken
-                setTransactionPending({ txId: id, id: _token.id })
-            }
-
-            if (token?.hasOwnProperty("balance")) {
-                const _token = token as FungibleTokenWithBalance
-                setTransactionPending({ txId: id, id: _token.address })
-            }
+            if (token) await prepareTxStatus({ txId: id, token })
         } catch (e) {
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())

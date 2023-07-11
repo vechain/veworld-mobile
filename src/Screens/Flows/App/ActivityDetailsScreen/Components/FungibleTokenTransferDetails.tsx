@@ -1,12 +1,11 @@
 import React, { memo, useMemo } from "react"
-import { VTHO, currencySymbolMap } from "~Constants"
+import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
 import { useCopyClipboard, useFungibleTokenInfo } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import {
     selectCurrency,
     selectCurrencyExchangeRate,
-    selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
@@ -24,7 +23,11 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
     ({ activity, token }) => {
         const { LL } = useI18nContext()
 
-        const network = useAppSelector(selectSelectedNetwork)
+        const network = useMemo(() => {
+            return activity.genesisId === genesisesId.main
+                ? LL.NETWORK_LABEL_MAINNET()
+                : LL.NETWORK_LABEL_TESTNET()
+        }, [LL, activity.genesisId])
 
         const currency = useAppSelector(selectCurrency)
 
@@ -117,7 +120,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             {
                 id: 5,
                 title: LL.TITLE_NETWORK(),
-                value: network.name.toUpperCase(),
+                value: network.toUpperCase(),
                 typographyFont: "subSubTitle",
                 underline: false,
             },

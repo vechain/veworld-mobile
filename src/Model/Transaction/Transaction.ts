@@ -78,6 +78,13 @@ export type SwapEvent = {
     to: string
 }
 
+export type TransferEvent = {
+    from: string
+    to: string
+    value?: string
+    tokenId?: string
+}
+
 export type SwapResult = {
     paidAmount: string
     paidTokenAddress: string
@@ -95,4 +102,39 @@ export type TransferEventResult = {
 export enum TransactionOrigin {
     FROM = "from",
     TO = "to",
+}
+
+export interface TransferEventResponse {
+    address: string
+    topics: string[]
+    data: string
+    meta: {
+        blockID: string
+        blockNumber: number
+        blockTimestamp: number
+        txID: string
+        txOrigin: string
+        clauseIndex: number
+    }
+    obsolete: boolean
+}
+
+export interface VetTransferEvent {
+    amount: string
+    meta: {
+        blockID: string
+        blockNumber: number
+        blockTimestamp: number
+        clauseIndex: number
+        txID: string
+        txOrigin: string
+    }
+    recipient: string
+    sender: string
+}
+
+export enum TransactionType {
+    NFT = "NFT",
+    TOKEN = "TOKEN",
+    VET = "VET",
 }

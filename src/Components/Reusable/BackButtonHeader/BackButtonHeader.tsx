@@ -31,5 +31,5 @@ export const BackButtonHeader = ({
 }
 
 const backButtonHeaderStyle = StyleSheet.create({
-    backButton: { paddingHorizontal: 8, alignSelf: "flex-start" },
+    backButton: { paddingHorizontal: 12, alignSelf: "flex-start" },
 })

@@ -1,6 +1,7 @@
 import axios from "axios"
 import { NFTS_OWNED_PER_CONTRACT } from "~Constants"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
+import { NETWORK_TYPE } from "~Model"
 
 export type NftItemResponse = {
     id: string
@@ -26,6 +27,7 @@ export type NftForContractResponse = {
 }
 
 export const getNftsForContract = async (
+    networkType: NETWORK_TYPE,
     contractAddress: string,
     ownerAddress: string,
     resultsPerPage: number = 20,
@@ -33,6 +35,7 @@ export const getNftsForContract = async (
 ): Promise<NftForContractResponse[]> => {
     const response = await axios.get(
         NFTS_OWNED_PER_CONTRACT(
+            networkType,
             ownerAddress,
             contractAddress,
             resultsPerPage,

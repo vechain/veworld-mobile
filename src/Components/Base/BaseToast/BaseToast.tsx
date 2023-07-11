@@ -141,7 +141,12 @@ export const showSuccessToast = (
         type: "success",
         text1,
         text2,
-        props: { textLink: textLink, onPress: onPress, testID },
+        props: {
+            textLink: textLink,
+            onPress: onPress,
+            testID,
+            visibilityTime: 10_000,
+        },
     })
 }
 
@@ -149,13 +154,13 @@ export const showErrorToast = (
     text1: string,
     text2?: string,
     textLink?: string,
-    onPress?: () => void,
+    action1?: () => void,
 ) => {
     Toast.show({
         type: "error",
         text1,
         text2,
-        props: { textLink: textLink, onPress: onPress },
+        props: { textLink: textLink, onPress: action1, visibilityTime: 10_000 },
     })
 }
 
@@ -169,7 +174,7 @@ export const showWarningToast = (
         type: "warning",
         text1,
         text2,
-        props: { textLink: textLink, onPress: onPress },
+        props: { textLink: textLink, onPress: onPress, visibilityTime: 10_000 },
     })
 }
 
@@ -183,7 +188,7 @@ export const showInfoToast = (
         type: "info",
         text1,
         text2,
-        props: { textLink: textLink, onPress: onPress },
+        props: { textLink: textLink, onPress: onPress, visibilityTime: 10_000 },
     })
 }
 
