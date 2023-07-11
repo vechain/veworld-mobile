@@ -13,10 +13,10 @@ function replaceSeparators(
     const sNumParts = sNum.split(".")
     if (separators && separators.thousands && sNumParts[0]) {
         // every three digits, replace it with the digits + the thousands separator
-        // $1 indicates that the matched substring is to be replaced by the first captured group
+        // \B is used to match non-word boundaries to prevent unnecessary backtracking
         sNumParts[0] = sNumParts[0].replace(
-            /(\d)(?=(\d\d\d)+(?!\d))/g,
-            "$1" + separators.thousands,
+            /\B(?=(\d{3})+(?!\d))/g,
+            separators.thousands,
         )
     }
     sNum = sNumParts.join(separators.decimal)
