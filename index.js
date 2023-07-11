@@ -9,10 +9,10 @@ import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
-    WalletConnectContextProvider,
+    BaseToast,
     ConnexContextProvider,
     TranslationProvider,
-    BaseToast,
+    WalletConnectContextProvider,
 } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
@@ -31,6 +31,7 @@ import { info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
+import "react-native-url-polyfill/auto"
 
 const { fontFamily } = typography
 

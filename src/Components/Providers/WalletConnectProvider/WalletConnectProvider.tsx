@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { AddressUtils, error, WalletConnectUtils } from "~Utils"
+import { AddressUtils, debug, error, WalletConnectUtils } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import {
@@ -19,7 +19,6 @@ import { useNavigation } from "@react-navigation/native"
 import { RequestMethods } from "~Constants"
 import { AccountWithDevice, Network } from "~Model"
 import { Linking } from "react-native"
-import "react-native-url-polyfill/auto"
 
 /**
  * Wallet Connect Flow:
@@ -85,12 +84,10 @@ const WalletConnectContextProvider = ({
      * Sets up a listener for DApp session proposals
      */
     useEffect(() => {
-        Linking.addListener("url", event => {
-            if (typeof event?.url !== "string") return
-
+        const onUrl = (url: string) => {
+            debug("Linking Event:", url)
             try {
-                const uri = new URL(event.url)
-
+                const uri = new URL(url)
                 const walletConnectUri = uri.searchParams.get("uri")
 
                 if (
@@ -102,7 +99,15 @@ const WalletConnectContextProvider = ({
             } catch (e) {
                 error(e)
             }
+        }
+
+        Linking.addListener("url", event => {
+            if (typeof event?.url === "string") onUrl(event.url)
         })
+
+        return () => {
+            Linking.removeAllListeners("url")
+        }
     }, [onPair])
 
     /**
@@ -110,6 +115,8 @@ const WalletConnectContextProvider = ({
      */
     const onSessionProposal = useCallback(
         (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
+            debug("Session proposal:", JSON.stringify(proposal))
+
             if (!selectedAccountAddress) return
             if (!web3Wallet) return
             if (!proposal.params.requiredNamespaces.vechain) {
@@ -133,6 +140,8 @@ const WalletConnectContextProvider = ({
         async (
             requestEvent: SignClientTypes.EventArguments["session_request"],
         ) => {
+            debug("Session request: ", JSON.stringify(requestEvent))
+
             if (!web3Wallet)
                 throw new Error("Web3Wallet is not initialized properly")
 
@@ -146,8 +155,8 @@ const WalletConnectContextProvider = ({
                 accounts.find(acct => {
                     return AddressUtils.compareAddresses(address, acct.address)
                 })
-            if (!selectedAccount) throw new Error("Account not found")
-            dispatch(selectAccount({ address: selectedAccount.address }))
+            if (selectedAccount)
+                dispatch(selectAccount({ address: selectedAccount.address }))
 
             // Switch to the requested network
             const network: Network = WalletConnectUtils.getNetworkType(
@@ -182,6 +191,8 @@ const WalletConnectContextProvider = ({
      */
     const disconnect = useCallback(
         async (topic: string, fromRemote = false) => {
+            debug("Disconnecting session", topic, fromRemote)
+
             if (!web3Wallet) return
 
             try {
@@ -210,6 +221,8 @@ const WalletConnectContextProvider = ({
 
     const onSessionDelete = useCallback(
         (payload: { id: number; topic: string }) => {
+            debug("Session delete", payload)
+
             if (!selectedAccountAddress) return
 
             disconnect(payload.topic, true)
