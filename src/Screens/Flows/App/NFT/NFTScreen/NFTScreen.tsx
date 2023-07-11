@@ -16,7 +16,7 @@ import {
 } from "~Storage/Redux"
 import { ImportNFTView } from "./Components/ImportNFTView"
 import { NetworkErrorView } from "./Components/NetworkErrorView"
-import { NFTList } from "./Components/NFTListRenameTemp"
+import { NFTList } from "./Components/NFTList"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { MathUtils } from "~Utils"
 
