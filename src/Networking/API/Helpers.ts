@@ -1,6 +1,7 @@
 import axios from "axios"
 
 export const DEFAULT_PAGE_SIZE: number = 25
+export const MAX_PAGE_SIZE: number = 150
 const TIMEOUT = 15000
 
 // Create an instance of axios with common configurations

@@ -40,6 +40,13 @@ export const getDestinationAddressFromClause = (clause: Connex.VM.Clause) => {
         return tokenData?.to
     }
 
+    if (TransactionUtils.isNFTTransferClause(clause)) {
+        const nftData =
+            TransactionUtils.decodeNonFungibleTokenTransferClause(clause)
+
+        return nftData?.to
+    }
+
     return clause.to
 }
 
@@ -57,6 +64,7 @@ export const isTransactionActivity = (activity: Activity) => {
         type === ActivityType.FUNGIBLE_TOKEN ||
         type === ActivityType.VET_TRANSFER ||
         type === ActivityType.DELEGATED_TRANSACTION ||
+        type === ActivityType.NFT_TRANSFER ||
         activity.isTransaction
     )
 }

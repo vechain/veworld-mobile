@@ -4,6 +4,9 @@ import {
     selectVisibleAccounts,
     useAppSelector,
     selectBlackListedCollections,
+    validateAndUpsertActivity,
+    useAppDispatch,
+    selectActivitiesWithoutFinality,
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
 import { useInformUser, useStateReconciliaiton } from "./Hooks"
@@ -12,7 +15,7 @@ import {
     useNonFungibleTokenInfo,
     useTransactionStatus,
 } from "~Hooks"
-import { Beat } from "~Model"
+import { Activity, Beat } from "~Model"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
 import {
     fetchTransfersForBlock,
@@ -21,16 +24,47 @@ import {
     handleVETTransfers,
 } from "./Helpers"
 import { EventTypeResponse } from "~Networking"
+import { useThor } from "~Components"
 
 export const TransferEventListener: React.FC = () => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
+
+    const pendingActivities = useAppSelector(selectActivitiesWithoutFinality)
+
     const network = useAppSelector(selectSelectedNetwork)
+
+    const thor = useThor()
+
     const { fetchData } = useFungibleTokenInfo()
+
     const { fetchData: fetchCollectionName } = useNonFungibleTokenInfo()
+
     const { removeTransactionPending } = useTransactionStatus()
+
     const { updateBalances, updateNFTs } = useStateReconciliaiton()
+
     const { forTokens, forNFTs } = useInformUser({ network })
+
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
+
+    const dispatch = useAppDispatch()
+
+    /**
+     * For each pending activity, validates and upserts the updated activity if it's finalized on the blockchain
+     */
+    const updateActivities = useCallback(
+        async (activities: Activity[]) => {
+            const updatedActs: Activity[] = []
+            for (const activity of activities) {
+                const updated = await dispatch(
+                    validateAndUpsertActivity({ activity, thor }),
+                ).unwrap()
+                updatedActs.push(updated)
+            }
+            return updatedActs
+        },
+        [dispatch, thor],
+    )
 
     const onBeatMessage = useCallback(
         async (ev: WebSocketMessageEvent) => {
@@ -58,10 +92,13 @@ export const TransferEventListener: React.FC = () => {
                 // Get transfers from indexer
                 const transfers = await fetchTransfersForBlock(
                     beat.number,
-                    relevantAccounts.slice(0, 20).map(acc => acc.address),
+                    relevantAccounts.slice(0, 20).map(acc => acc.address), // Limit to first 20 accounts
                     0,
                     network.type,
                 )
+
+                //Update the pending transactions cache
+                await updateActivities(pendingActivities)
 
                 debug(
                     `Found ${transfers.pagination.totalElements} transfers in block ${beat.number}`,
@@ -72,7 +109,13 @@ export const TransferEventListener: React.FC = () => {
                 // ~ NFT TRANSFER
                 await Promise.all(
                     transfers.data
-                        .filter(t => t.eventType === EventTypeResponse.NFT)
+                        .filter(
+                            t =>
+                                t.eventType === EventTypeResponse.NFT &&
+                                !blackListedCollections
+                                    .map(c => c.address)
+                                    .includes(t.tokenAddress),
+                        )
                         .map(async transfer => {
                             await handleNFTTransfers({
                                 visibleAccounts: relevantAccounts,
@@ -91,10 +134,7 @@ export const TransferEventListener: React.FC = () => {
                         .filter(
                             t =>
                                 t.eventType ===
-                                    EventTypeResponse.FUNGIBLE_TOKEN &&
-                                !blackListedCollections
-                                    .map(c => c.address)
-                                    .includes(t.tokenAddress),
+                                EventTypeResponse.FUNGIBLE_TOKEN,
                         )
                         .map(async transfer => {
                             await handleTokenTransfers({
@@ -128,12 +168,14 @@ export const TransferEventListener: React.FC = () => {
         },
         [
             visibleAccounts,
+            updateActivities,
+            pendingActivities,
             network.type,
+            blackListedCollections,
             removeTransactionPending,
             fetchCollectionName,
             updateNFTs,
             forNFTs,
-            blackListedCollections,
             fetchData,
             updateBalances,
             forTokens,
