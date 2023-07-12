@@ -24,7 +24,7 @@ export const AboutScreen = () => {
         {
             title: LL.SETTINGS_ABOUT_GET_HELP(),
             subtitle: LL.SETTINGS_ABOUT_REPORT_BUG(),
-            url: "https://www.veworld.net/",
+            url: "https://sipcpw93iw9.typeform.com/to/lhjj8zyG",
         },
         {
             title: LL.SETTINGS_ABOUT_OUR_COMMITMENT(),
