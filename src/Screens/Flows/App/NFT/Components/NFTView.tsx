@@ -13,6 +13,7 @@ import {
     removeBlackListCollection,
     selectPendingTx,
     selectSelectedAccount,
+    selectSelectedNetwork,
     setBlackListCollection,
     useAppDispatch,
     useAppSelector,
@@ -44,6 +45,7 @@ export const NFTView = memo(
         isHidden = false,
     }: Props) => {
         const nav = useNavigation()
+        const network = useAppSelector(selectSelectedNetwork)
         const dispatch = useAppDispatch()
         const video = useRef(null)
         const { LL } = useI18nContext()
@@ -98,6 +100,7 @@ export const NFTView = memo(
                 if (itemAction === ItemTitle.HIDE_COLLECTION)
                     dispatch(
                         setBlackListCollection({
+                            network: network.type,
                             collection: collectionItem!,
                             accountAddress: selectedAccoount.address,
                         }),
@@ -106,6 +109,7 @@ export const NFTView = memo(
                 if (itemAction === ItemTitle.SHOW_COLLECTION)
                     dispatch(
                         removeBlackListCollection({
+                            network: network.type,
                             collection: collectionItem!,
                             accountAddress: selectedAccoount.address,
                         }),
@@ -115,6 +119,7 @@ export const NFTView = memo(
                 CollectionItem,
                 collectionItem,
                 dispatch,
+                network,
                 isCollection,
                 selectedAccoount.address,
             ],

@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { uniqBy } from "lodash"
-import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
+import {
+    NonFungibleToken,
+    NonFungibleTokenCollection,
+    NETWORK_TYPE,
+} from "~Model"
 import {
     BlackListedCollections,
     CollectionRegistryInfo,
@@ -10,6 +14,7 @@ import {
     NFTs,
 } from "../Types/Nft"
 import { GithubCollectionResponse, PaginationResponse } from "~Networking"
+import { debug } from "~Utils"
 
 export type NftSliceState = {
     collectionRegistryInfo: CollectionRegistryInfo
@@ -23,11 +28,30 @@ export type NftSliceState = {
 }
 
 export const initialStateNft: NftSliceState = {
-    collectionRegistryInfo: {},
-    collectionsPerAccount: {},
-    NFTsPerAccount: {},
-
-    blackListedCollectionsPerAccount: {},
+    collectionRegistryInfo: {
+        [NETWORK_TYPE.MAIN]: [],
+        [NETWORK_TYPE.TEST]: [],
+        [NETWORK_TYPE.SOLO]: [],
+        [NETWORK_TYPE.OTHER]: [],
+    },
+    collectionsPerAccount: {
+        [NETWORK_TYPE.MAIN]: {},
+        [NETWORK_TYPE.TEST]: {},
+        [NETWORK_TYPE.SOLO]: {},
+        [NETWORK_TYPE.OTHER]: {},
+    },
+    NFTsPerAccount: {
+        [NETWORK_TYPE.MAIN]: {},
+        [NETWORK_TYPE.TEST]: {},
+        [NETWORK_TYPE.SOLO]: {},
+        [NETWORK_TYPE.OTHER]: {},
+    },
+    blackListedCollectionsPerAccount: {
+        [NETWORK_TYPE.MAIN]: {},
+        [NETWORK_TYPE.TEST]: {},
+        [NETWORK_TYPE.SOLO]: {},
+        [NETWORK_TYPE.OTHER]: {},
+    },
 
     isLoading: false,
     error: undefined,
@@ -43,14 +67,16 @@ export const NftSlice = createSlice({
         setCollections: (
             state,
             action: PayloadAction<{
+                network: string
                 currentAccountAddress: string
-                collectiondata: CollectionWithPagination
+                collectionData: CollectionWithPagination
             }>,
         ) => {
-            const { collectiondata, currentAccountAddress } = action.payload
+            const { network, collectionData, currentAccountAddress } =
+                action.payload
 
-            if (!state.collectionsPerAccount[currentAccountAddress]) {
-                state.collectionsPerAccount[currentAccountAddress] = {
+            if (!state.collectionsPerAccount[network][currentAccountAddress]) {
+                state.collectionsPerAccount[network][currentAccountAddress] = {
                     collections: [],
                     pagination: {
                         countLimit: 0,
@@ -63,35 +89,41 @@ export const NftSlice = createSlice({
             }
 
             let uniqueCollections = [
-                ...state.collectionsPerAccount[currentAccountAddress]
+                ...state.collectionsPerAccount[network][currentAccountAddress]
                     .collections,
-                ...collectiondata.collections,
+                ...collectionData.collections,
             ]
 
             const allUnique = uniqBy(uniqueCollections, "address")
-            state.collectionsPerAccount[currentAccountAddress] = {
+            state.collectionsPerAccount[network][currentAccountAddress] = {
                 collections: allUnique,
-                pagination: collectiondata.pagination,
+                pagination: collectionData.pagination,
             }
 
             return state
         },
 
-        // INITIALISE COLLECTIONS REGISTRY INFO. SHOULD ONLY BE SET ONCE PER SESSION PER NETWORK
+        // SET COLLECTIONS REGISTRY INFO
         setCollectionRegistryInfo: (
             state,
             action: PayloadAction<{
-                registryInfo: GithubCollectionResponse[]
                 network: string
+                registryInfo: GithubCollectionResponse[]
             }>,
         ) => {
             const { registryInfo, network } = action.payload
 
-            if (state.collectionRegistryInfo[network]) return
+            if (
+                state.collectionRegistryInfo[network].length ===
+                registryInfo.length
+            )
+                return state
 
-            state.collectionRegistryInfo[network] = {
-                registryInfo,
-            }
+            debug(
+                `Setting collection registry info ${registryInfo.length} for ${network}`,
+            )
+
+            state.collectionRegistryInfo[network] = registryInfo
 
             return state
         },
@@ -100,29 +132,35 @@ export const NftSlice = createSlice({
         setBlackListCollection: (
             state,
             action: PayloadAction<{
+                network: string
                 collection: NonFungibleTokenCollection
                 accountAddress: string
             }>,
         ) => {
-            const { collection, accountAddress } = action.payload
+            const { network, collection, accountAddress } = action.payload
 
             collection.isBlacklisted = true
 
-            if (!state.blackListedCollectionsPerAccount[accountAddress]) {
-                state.blackListedCollectionsPerAccount[accountAddress] = {
+            if (
+                !state.blackListedCollectionsPerAccount[network][accountAddress]
+            ) {
+                state.blackListedCollectionsPerAccount[network][
+                    accountAddress
+                ] = {
                     collections: [],
                 }
             }
 
             let allCollections = [
-                ...state.blackListedCollectionsPerAccount[accountAddress]
-                    .collections,
+                ...state.blackListedCollectionsPerAccount[network][
+                    accountAddress
+                ].collections,
                 collection,
             ]
 
             const uniqueCollections = uniqBy(allCollections, "address")
 
-            state.blackListedCollectionsPerAccount[accountAddress] = {
+            state.blackListedCollectionsPerAccount[network][accountAddress] = {
                 collections: uniqueCollections,
             }
 
@@ -133,18 +171,22 @@ export const NftSlice = createSlice({
         removeBlackListCollection: (
             state,
             action: PayloadAction<{
+                network: string
                 collection: NonFungibleTokenCollection
                 accountAddress: string
             }>,
         ) => {
-            const { collection, accountAddress } = action.payload
+            const { network, collection, accountAddress } = action.payload
 
             const filteredCollections = state.blackListedCollectionsPerAccount[
-                accountAddress
-            ].collections.filter(col => col.address !== collection.address)
+                network
+            ][accountAddress].collections.filter(
+                col => col.address !== collection.address,
+            )
 
-            state.blackListedCollectionsPerAccount[accountAddress].collections =
-                filteredCollections
+            state.blackListedCollectionsPerAccount[network][
+                accountAddress
+            ].collections = filteredCollections
 
             return state
         },
@@ -153,18 +195,19 @@ export const NftSlice = createSlice({
         setNFTs: (
             state,
             action: PayloadAction<{
+                network: string
                 address: string
                 collectionAddress: string
                 NFTs: NonFungibleToken[]
                 pagination: PaginationResponse
             }>,
         ) => {
-            const { address, collectionAddress, NFTs, pagination } =
+            const { network, address, collectionAddress, NFTs, pagination } =
                 action.payload
 
             // comes the first time
-            if (!state.NFTsPerAccount[address]) {
-                state.NFTsPerAccount[address] = {
+            if (!state.NFTsPerAccount[network][address]) {
+                state.NFTsPerAccount[network][address] = {
                     [collectionAddress]: {
                         NFTs: [],
                         pagination: {
@@ -179,8 +222,8 @@ export const NftSlice = createSlice({
             }
 
             // comes every time the users loads NFTs from a new collection
-            if (!state.NFTsPerAccount[address][collectionAddress]) {
-                state.NFTsPerAccount[address][collectionAddress] = {
+            if (!state.NFTsPerAccount[network][address][collectionAddress]) {
+                state.NFTsPerAccount[network][address][collectionAddress] = {
                     NFTs: [],
                     pagination: {
                         countLimit: 0,
@@ -193,15 +236,18 @@ export const NftSlice = createSlice({
             }
 
             let uniqueNFTs = [
-                ...state.NFTsPerAccount[address][collectionAddress].NFTs,
+                ...state.NFTsPerAccount[network][address][collectionAddress]
+                    .NFTs,
                 ...NFTs,
             ]
 
             const allUnique = uniqBy(uniqueNFTs, "id")
-            state.NFTsPerAccount[address][collectionAddress].NFTs = allUnique
+            state.NFTsPerAccount[network][address][collectionAddress].NFTs =
+                allUnique
 
-            state.NFTsPerAccount[address][collectionAddress].pagination =
-                pagination
+            state.NFTsPerAccount[network][address][
+                collectionAddress
+            ].pagination = pagination
 
             return state
         },

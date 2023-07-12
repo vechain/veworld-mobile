@@ -19,9 +19,11 @@ import { NetworkErrorView } from "./Components/NetworkErrorView"
 import { NFTList } from "./Components/NFTList"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { MathUtils } from "~Utils"
+import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
+    useNFTRegistry()
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const [
