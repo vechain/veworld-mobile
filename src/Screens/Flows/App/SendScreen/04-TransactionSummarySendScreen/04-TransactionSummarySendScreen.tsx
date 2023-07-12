@@ -44,6 +44,7 @@ import { useDelegation } from "./Hooks"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
+import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -97,7 +98,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     }, [initialRoute, nav])
 
     //build transaction
-    const { gas, transaction } = useTransaction({
+    const { gas, transaction, loadingGas } = useTransaction({
         token,
         amount,
         addressTo: address,
@@ -213,6 +214,62 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 initialRoute,
             })
         } else checkIdentityBeforeOpening()
+    }
+
+    const renderGas = () => {
+        if (loadingGas)
+            return (
+                <SkeletonContent
+                    animationDirection="horizontalLeft"
+                    boneColor={theme.colors.skeletonBoneColor}
+                    highlightColor={theme.colors.skeletonHighlightColor}
+                    layout={[
+                        {
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            width: "100%",
+                            children: [
+                                // Line
+                                {
+                                    width: "40%",
+                                    height: 18,
+                                },
+                            ],
+                        },
+                    ]}
+                    isLoading={true}
+                />
+            )
+        return selectedDelegationOption === DelegationType.URL ? (
+            <BaseText typographyFont="subSubTitle">
+                {LL.SEND_DELEGATED_FEES()}
+            </BaseText>
+        ) : (
+            <>
+                <BaseText typographyFont="subSubTitle">
+                    {vthoGas || LL.COMMON_NOT_AVAILABLE()} {VTHO.symbol}
+                </BaseText>
+                {!isThereEnoughGas && (
+                    <>
+                        <BaseSpacer height={8} />
+                        <BaseView flexDirection="row">
+                            <BaseIcon
+                                name="alert-circle-outline"
+                                color={COLORS.DARK_RED}
+                                size={16}
+                            />
+                            <BaseSpacer width={4} />
+                            <BaseText
+                                typographyFont="buttonSecondary"
+                                color={COLORS.DARK_RED}>
+                                {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance}{" "}
+                                {VTHO.symbol}
+                            </BaseText>
+                        </BaseView>
+                    </>
+                )}
+            </>
+        )
     }
 
     return (
@@ -362,37 +419,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         {LL.SEND_GAS_FEE()}
                     </BaseText>
                     <BaseSpacer height={6} />
-                    {selectedDelegationOption === DelegationType.URL ? (
-                        <BaseText typographyFont="subSubTitle">
-                            {LL.SEND_DELEGATED_FEES()}
-                        </BaseText>
-                    ) : (
-                        <>
-                            <BaseText typographyFont="subSubTitle">
-                                {vthoGas || LL.COMMON_NOT_AVAILABLE()}{" "}
-                                {VTHO.symbol}
-                            </BaseText>
-                            {!isThereEnoughGas && (
-                                <>
-                                    <BaseSpacer height={8} />
-                                    <BaseView flexDirection="row">
-                                        <BaseIcon
-                                            name="alert-circle-outline"
-                                            color={COLORS.DARK_RED}
-                                            size={16}
-                                        />
-                                        <BaseSpacer width={4} />
-                                        <BaseText
-                                            typographyFont="buttonSecondary"
-                                            color={COLORS.DARK_RED}>
-                                            {LL.SEND_INSUFFICIENT_VTHO()}{" "}
-                                            {vthoBalance} {VTHO.symbol}
-                                        </BaseText>
-                                    </BaseView>
-                                </>
-                            )}
-                        </>
-                    )}
+                    {renderGas()}
                     <BaseSpacer height={12} />
                     <BaseSpacer
                         height={0.5}
@@ -413,7 +440,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 <FadeoutButton
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                     action={handleOnConfirm}
-                    disabled={continueButtonDisabled || loading}
+                    disabled={continueButtonDisabled || loading || loadingGas}
                     isLoading={loading}
                     bottom={0}
                     mx={0}
