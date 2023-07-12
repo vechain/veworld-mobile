@@ -453,7 +453,15 @@ const en: BaseTranslation = {
 
     SETTINGS_CURRENCIES_CONVERT_TO_FIAT: "Convert balances to fiat",
     
-    // Settings Languages
+    // Settings About
+
+    SETTINGS_ABOUT_OFFICIAL_SITE: "Official site",
+    SETTINGS_ABOUT_APP_VERSION: "Version {version}",
+    SETTINGS_ABOUT_WEWORLD_WEBSITE: "veworld.net",
+    SETTINGS_ABOUT_GET_HELP: "Get help",
+    SETTINGS_ABOUT_REPORT_BUG: "Report a bug",
+    SETTINGS_ABOUT_OUR_COMMITMENT: "Our commitment to you",
+    SETTINGS_ABOUT_PRIVACY_POLICY: "Privacy policy",
 
     // Settings Transactions
 
