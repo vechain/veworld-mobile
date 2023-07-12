@@ -89,13 +89,23 @@ export const isNFTTransferClause = (clause: Connex.VM.Clause): boolean => {
     return clause.data?.startsWith(NFT_TRANSFER_SIG) || false
 }
 
-export const getTokenAddressFromClause = (
+/**
+ * Returns the contract address of the clause. If the clause represents a VET transfer,
+ * Then the VET address is returned. If the clause is a token transfer or NFT transfer,
+ * then the contract address is returned.
+ *
+ * Note: the contract address is the `to` field of the clause.s
+ *
+ * @param clause - The clause to check.
+ * @returns the contract address of the clause.
+ */
+export const getContractAddressFromClause = (
     clause: Connex.VM.Clause,
 ): string | undefined => {
     if (isVETtransferClause(clause)) return VET.address
-    if (isTokenTransferClause(clause)) {
-        const tokenAddress = clause.to?.toLowerCase()
-        return tokenAddress
+    if (isTokenTransferClause(clause) || isNFTTransferClause(clause)) {
+        const contractAddress = clause.to?.toLowerCase()
+        return contractAddress
     }
 
     return undefined
@@ -104,7 +114,8 @@ export const getTokenAddressFromClause = (
 export const getAmountFromClause = (
     clause: Connex.VM.Clause,
 ): string | undefined => {
-    if (isVETtransferClause(clause)) return Number(clause.value).toString()
+    if (isVETtransferClause(clause))
+        return new BigNumber(clause.value).toString()
     if (isTokenTransferClause(clause)) {
         const decoded = decodeTokenTransferClause(clause)
         return decoded?.amount

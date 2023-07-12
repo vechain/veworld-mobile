@@ -11,7 +11,7 @@ export * from "./fetchTransfersForBlock"
 import { AccountWithDevice } from "~Model"
 import { IncomingTransferResponse } from "~Networking"
 
-export interface BaseTrnasferHandlerProps {
+export interface BaseTransferHandlerProps {
     visibleAccounts: AccountWithDevice[]
     transfer: IncomingTransferResponse
     removeTransactionPending: (params: { txId: string }) => void
@@ -19,11 +19,11 @@ export interface BaseTrnasferHandlerProps {
     stateReconciliationAction: (params: { accountAddress: string }) => void
 }
 
-export interface NFTTrnasferHandlerProps extends BaseTrnasferHandlerProps {
+export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
     fetchCollectionName: (address: string) => Promise<string>
 }
 
-export interface TokenTrnasferHandlerProps extends BaseTrnasferHandlerProps {
+export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
     fetchData: (
         address: string,
     ) => Promise<{ symbol: string; decimals: number }>

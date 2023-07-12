@@ -8,6 +8,7 @@ import { Activity, ActivityStatus, NonFungibleTokenActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
 import { ActivityStatusIndicator } from "."
+import { HistoryReceiveNFTIconSVG, HistorySendNFTIconSVG } from "~Assets"
 
 type Props = {
     activity: NonFungibleTokenActivity
@@ -27,10 +28,13 @@ export const NonFungibleTokenActivityBox: React.FC<Props> = memo(
                 ? LL.NFT_SEND()
                 : LL.NFT_RECEIVE()
 
-        const directionIcon =
-            activity.direction === DIRECTIONS.UP
-                ? "file-image-minus-outline"
-                : "file-image-plus-outline"
+        const directionIcon = useMemo(() => {
+            return activity.direction === DIRECTIONS.UP ? (
+                <HistorySendNFTIconSVG />
+            ) : (
+                <HistoryReceiveNFTIconSVG />
+            )
+        }, [activity.direction])
 
         const dateTimeActivity = useMemo(() => {
             return activity.timestamp
@@ -52,15 +56,11 @@ export const NonFungibleTokenActivityBox: React.FC<Props> = memo(
                     style={styles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
-                        <BaseView flexDirection="column" alignItems="center">
-                            <BaseIcon
-                                name={directionIcon}
-                                size={20}
-                                color={COLORS.DARK_PURPLE}
-                                testID="magnify"
-                                bg={COLORS.WHITE}
-                                iconPadding={4}
-                            />
+                        <BaseView
+                            justifyContent="center"
+                            alignItems="center"
+                            style={styles.icon}>
+                            {directionIcon}
                         </BaseView>
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseView pl={12}>
@@ -108,5 +108,11 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         container: {
             width: "100%",
+        },
+        icon: {
+            backgroundColor: COLORS.WHITE,
+            width: 38,
+            height: 38,
+            borderRadius: 19,
         },
     })

@@ -2,7 +2,7 @@ import { findInvolvedAccount } from "./findInvolvedAccount"
 import {
     InformUserForIncomingToken,
     InformUserForOutgoingToken,
-    TokenTrnasferHandlerProps,
+    TokenTransferHandlerProps,
 } from "."
 import { TransactionOrigin } from "~Model"
 
@@ -13,7 +13,7 @@ export const handleTokenTransfers = async ({
     removeTransactionPending,
     stateReconciliationAction,
     informUser,
-}: TokenTrnasferHandlerProps) => {
+}: TokenTransferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
     if (!foundAccount.account) return

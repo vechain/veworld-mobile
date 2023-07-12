@@ -16,7 +16,7 @@ type InformUserForIncomingNFTProps = {
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
-export const informUSerForIncomingNFT = ({
+export const informUserForIncomingNFT = ({
     collectionName,
     alias,
     from,
@@ -36,6 +36,7 @@ export const informUSerForIncomingNFT = ({
         }),
         i18n.i18n()[locale].NOTIFIACTION_INCOMING_NFT_ACTION(),
         () => informUser({ accountAddress: transfer.to }),
+        10_000,
     )
 }
 
@@ -67,6 +68,7 @@ export const informUserForOutgoingNFT = ({
         }),
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
         () => informUser({ txId, accountAddress: from }),
+        10_000,
     )
 }
 
@@ -109,6 +111,7 @@ export const InformUserForIncomingToken = ({
         }),
         i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
         () => informUser({ accountAddress: transfer.to }),
+        7_000,
     )
 }
 
@@ -156,6 +159,7 @@ export const InformUserForOutgoingToken = ({
         }),
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
         () => informUser({ accountAddress: transfer.from, txId }),
+        7_000,
     )
 }
 
