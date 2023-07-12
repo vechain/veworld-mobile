@@ -1,7 +1,7 @@
 import { ORDER, getTransfersForBlock } from "~Constants"
 import { NETWORK_TYPE } from "~Model"
 import {
-    DEFAULT_PAGE_SIZE,
+    MAX_PAGE_SIZE,
     FetchIncomingTransfersResponse,
     fetchFromEndpoint,
 } from "~Networking"
@@ -31,7 +31,7 @@ export const fetchTransfersForBlock = async (
                 blockNumber,
                 addresses,
                 page,
-                DEFAULT_PAGE_SIZE,
+                MAX_PAGE_SIZE,
                 ORDER.DESC,
                 networType,
             ),

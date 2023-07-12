@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
-import { FormattingUtils, PlatformUtils, TransactionUtils } from "~Utils"
+import { FormattingUtils, TransactionUtils } from "~Utils"
 import {
     BaseText,
     BaseSafeArea,
@@ -39,8 +39,6 @@ import {
     TransactionOutcomes,
 } from "~Model"
 import { Routes } from "~Navigation"
-import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useAccountActivities } from "./Hooks"
 
 // Number of Skeleton Activity boxes to show when fetching first page of activities
@@ -60,12 +58,6 @@ export const HistoryScreen = () => {
     const nav = useNavigation()
 
     const theme = useTheme()
-
-    const insets = useSafeAreaInsets()
-
-    const tabBarHeight = useBottomTabBarHeight()
-
-    const styles = baseStyles(insets, tabBarHeight)
 
     const tokens = useAppSelector(selectTokensWithInfo)
 
@@ -185,7 +177,7 @@ export const HistoryScreen = () => {
         return (
             <>
                 <BaseSpacer height={30} />
-                <BaseView flexDirection="row" style={styles.list}>
+                <BaseView flexDirection="row" style={baseStyles.list}>
                     <FlashList
                         data={activities}
                         keyExtractor={activity => activity.id}
@@ -234,7 +226,6 @@ export const HistoryScreen = () => {
         onScroll,
         refreshing,
         renderActivity,
-        styles.list,
         theme.colors.border,
     ])
 
@@ -242,7 +233,7 @@ export const HistoryScreen = () => {
         return (
             <>
                 <BaseSpacer height={30} />
-                <BaseView flexDirection="row" style={styles.list}>
+                <BaseView flexDirection="row" style={baseStyles.list}>
                     <FlatList
                         data={[...Array(SKELETON_COUNT)]}
                         keyExtractor={(_, index) => `skeleton-${index}`}
@@ -260,7 +251,7 @@ export const HistoryScreen = () => {
                 </BaseView>
             </>
         )
-    }, [styles.list])
+    }, [])
 
     const renderNoActivitiesButton = useMemo(() => {
         return (
@@ -268,16 +259,16 @@ export const HistoryScreen = () => {
                 justifyContent="center"
                 alignItems="center"
                 w={100}
-                style={styles.noActivitiesButton}>
+                style={baseStyles.noActivitiesButton}>
                 <NoActivitiesButton onPress={onStartTransactingPress} />
             </BaseView>
         )
-    }, [onStartTransactingPress, styles.noActivitiesButton])
+    }, [onStartTransactingPress])
 
     return (
         <BaseSafeArea grow={1} testID="History_Screen">
             <BaseIcon
-                style={styles.backIcon}
+                style={baseStyles.backIcon}
                 size={36}
                 name="chevron-left"
                 color={theme.colors.text}
@@ -316,21 +307,18 @@ export const HistoryScreen = () => {
     )
 }
 
-const baseStyles = (insets: EdgeInsets, tabBarHeight: number) =>
-    StyleSheet.create({
-        backIcon: {
-            marginHorizontal: 8,
-            alignSelf: "flex-start",
-        },
-        list: {
-            top: 0,
-            flex: 1,
-            marginBottom: PlatformUtils.isIOS()
-                ? tabBarHeight - insets.bottom
-                : 0,
-        },
-        noActivitiesButton: {
-            position: "absolute",
-            bottom: "50%",
-        },
-    })
+const baseStyles = StyleSheet.create({
+    backIcon: {
+        marginHorizontal: 8,
+        alignSelf: "flex-start",
+    },
+    list: {
+        top: 0,
+        flex: 1,
+        marginBottom: 0,
+    },
+    noActivitiesButton: {
+        position: "absolute",
+        bottom: "50%",
+    },
+})
