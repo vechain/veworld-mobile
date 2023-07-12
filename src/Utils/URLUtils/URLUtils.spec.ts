@@ -5,10 +5,10 @@ describe("URLUtils", () => {
         test("should return parsed URL - https", () => {
             expect(URLUtils.parseUrl("https://www.google.com")).toEqual({
                 url: "https://www.google.com",
-                origin: "https://www.google.com",
-                protocol: "https:",
-                host: "www.google.com",
-                hostname: "www.google.com",
+                origin: "https://google.com",
+                protocol: "https",
+                host: "google.com",
+                hostname: "google.com",
                 port: undefined,
                 pathname: "",
                 search: "",
@@ -18,10 +18,10 @@ describe("URLUtils", () => {
         test("should return parsed URL - http", () => {
             expect(URLUtils.parseUrl("http://www.google.com")).toEqual({
                 url: "http://www.google.com",
-                origin: "http://www.google.com",
-                protocol: "http:",
-                host: "www.google.com",
-                hostname: "www.google.com",
+                origin: "http://google.com",
+                protocol: "http",
+                host: "google.com",
+                hostname: "google.com",
                 port: undefined,
                 pathname: "",
                 search: "",
@@ -32,14 +32,64 @@ describe("URLUtils", () => {
         test("should return parsed URL - http with trailing spaces", () => {
             expect(URLUtils.parseUrl(" http://www.google.com ")).toEqual({
                 url: "http://www.google.com",
-                origin: "http://www.google.com",
-                protocol: "http:",
-                host: "www.google.com",
-                hostname: "www.google.com",
+                origin: "http://google.com",
+                protocol: "http",
+                host: "google.com",
+                hostname: "google.com",
                 port: undefined,
                 pathname: "",
                 search: "",
                 hash: "",
+            })
+        })
+
+        test("should return parsed URL - search string", () => {
+            expect(
+                URLUtils.parseUrl("http://www.google.com?param1=blah"),
+            ).toEqual({
+                url: "http://www.google.com?param1=blah",
+                origin: "http://google.com",
+                protocol: "http",
+                host: "google.com",
+                hostname: "google.com",
+                port: undefined,
+                pathname: "",
+                search: "param1=blah",
+                hash: "",
+            })
+        })
+
+        test("should return parsed URL - hash string", () => {
+            expect(
+                URLUtils.parseUrl("http://www.google.com#somestring"),
+            ).toEqual({
+                url: "http://www.google.com#somestring",
+                origin: "http://google.com",
+                protocol: "http",
+                host: "google.com",
+                hostname: "google.com",
+                port: undefined,
+                pathname: "",
+                search: "",
+                hash: "somestring",
+            })
+        })
+
+        test("should return parsed URL - hash string and search", () => {
+            expect(
+                URLUtils.parseUrl(
+                    "http://www.google.com?param1=blah#somestring",
+                ),
+            ).toEqual({
+                url: "http://www.google.com?param1=blah#somestring",
+                origin: "http://google.com",
+                protocol: "http",
+                host: "google.com",
+                hostname: "google.com",
+                port: undefined,
+                pathname: "",
+                search: "param1=blah",
+                hash: "somestring",
             })
         })
 
@@ -111,25 +161,25 @@ describe("URLUtils", () => {
     describe("Clean URLs", function () {
         test("should return clean URL - no trailing slash", function () {
             expect(URLUtils.clean("https://www.google.com")).toBe(
-                "https://www.google.com",
+                "https://google.com",
             )
         })
 
         test("should return clean URL - trailing slash", function () {
             expect(URLUtils.clean("https://www.google.com/")).toBe(
-                "https://www.google.com",
+                "https://google.com",
             )
         })
 
         test("should return clean URL - paths", function () {
             expect(URLUtils.clean("https://www.google.com/search")).toBe(
-                "https://www.google.com/search",
+                "https://google.com/search",
             )
         })
 
         test("should return clean URL - paths with trailing slash", function () {
             expect(URLUtils.clean("https://www.google.com/search/")).toBe(
-                "https://www.google.com/search",
+                "https://google.com/search",
             )
         })
     })
@@ -141,12 +191,12 @@ describe("URLUtils", () => {
                     "https://www.google.com",
                     "/subscriptions/beat2",
                 ),
-            ).toBe("wss://www.google.com/subscriptions/beat2")
+            ).toBe("wss://google.com/subscriptions/beat2")
         })
 
         test("should return websocket URL - no suffix", function () {
             expect(URLUtils.toWebsocketURL("https://www.google.com")).toBe(
-                "wss://www.google.com",
+                "wss://google.com",
             )
         })
     })
@@ -155,7 +205,7 @@ describe("URLUtils", () => {
         test("should return  the node beat websocket URL", function () {
             expect(
                 URLUtils.toNodeBeatWebsocketUrl("https://www.google.com"),
-            ).toBe("wss://www.google.com/subscriptions/beat2")
+            ).toBe("wss://google.com/subscriptions/beat2")
         })
     })
 
