@@ -42,3 +42,7 @@ export const selectIsAppLockActive = createSelector(reducer, state => {
 export const selectAnalyticsTrackingEnabled = createSelector(reducer, state => {
     return state.isAnalyticsTrackingEnabled
 })
+
+export const selectSentryTrackingEnabled = createSelector(reducer, state => {
+    return state.isSentryTrackingEnabled
+})

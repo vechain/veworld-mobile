@@ -136,6 +136,7 @@ project.ext.vectoricons = [
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
+apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
 
 android {
     ndkVersion rootProject.ext.ndkVersion
