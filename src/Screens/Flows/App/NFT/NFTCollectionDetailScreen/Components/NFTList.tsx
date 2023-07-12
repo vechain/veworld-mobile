@@ -1,7 +1,6 @@
 import React, { useCallback } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { BaseSpacer } from "~Components"
-import { usePlatformBottomInsets } from "~Hooks"
 import { HeaderComponent } from "./HeaderComponent"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { NFTView } from "../../Components"
@@ -24,8 +23,6 @@ export const NFTList = ({
     onMomentumScrollBegin,
     hasNext,
 }: Props) => {
-    const { calculateBottomInsets } = usePlatformBottomInsets()
-
     const contactsListSeparator = useCallback(
         () => <BaseSpacer height={16} />,
         [],
@@ -40,7 +37,6 @@ export const NFTList = ({
 
     return (
         <FlatList
-            style={{ marginBottom: calculateBottomInsets }}
             ListHeaderComponent={<HeaderComponent collection={collection} />}
             data={NFTs}
             initialNumToRender={6}
@@ -56,7 +52,10 @@ export const NFTList = ({
             onEndReachedThreshold={0.1}
             onEndReached={fetchMoreNFTs}
             ListFooterComponent={
-                <ListFooterView isLoading={isLoading} hasNext={hasNext} />
+                <>
+                    <ListFooterView isLoading={isLoading} hasNext={hasNext} />
+                    {!isLoading && <BaseSpacer height={16} />}
+                </>
             }
         />
     )

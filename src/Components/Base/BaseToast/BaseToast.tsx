@@ -135,17 +135,18 @@ export const showSuccessToast = (
     text2?: string,
     textLink?: string,
     onPress?: () => void,
+    visibilityTime?: number,
     testID?: string,
 ) => {
     Toast.show({
         type: "success",
         text1,
         text2,
+        visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
         props: {
             textLink: textLink,
             onPress: onPress,
             testID,
-            visibilityTime: 10_000,
         },
     })
 }
@@ -155,12 +156,14 @@ export const showErrorToast = (
     text2?: string,
     textLink?: string,
     action1?: () => void,
+    visibilityTime?: number,
 ) => {
     Toast.show({
         type: "error",
         text1,
         text2,
-        props: { textLink: textLink, onPress: action1, visibilityTime: 10_000 },
+        visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
+        props: { textLink: textLink, onPress: action1 },
     })
 }
 
@@ -169,12 +172,14 @@ export const showWarningToast = (
     text2?: string,
     textLink?: string,
     onPress?: () => void,
+    visibilityTime?: number,
 ) => {
     Toast.show({
         type: "warning",
         text1,
         text2,
-        props: { textLink: textLink, onPress: onPress, visibilityTime: 10_000 },
+        visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
+        props: { textLink: textLink, onPress: onPress },
     })
 }
 
@@ -183,12 +188,14 @@ export const showInfoToast = (
     text2?: string,
     textLink?: string,
     onPress?: () => void,
+    visibilityTime?: number,
 ) => {
     Toast.show({
         type: "info",
         text1,
         text2,
-        props: { textLink: textLink, onPress: onPress, visibilityTime: 10_000 },
+        visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
+        props: { textLink: textLink, onPress: onPress },
     })
 }
 
