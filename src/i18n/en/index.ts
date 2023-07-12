@@ -294,6 +294,7 @@ const en: BaseTranslation = {
     ALERT_MSG_ENABLE_BLUETOOTH: "Please, open the device settings and enable to continue.",
     ALERT_TITLE_UNSUPPORTED_BLUETOOTH: "Bluetooth is not supported",
     ALERT_MSG_UNSUPPORTED_BLUETOOTH: "Your device does not support Bluetooth, which is required to use this feature.",
+    ALERT_MSG_INTERNET_DOWN: "Connection problems detected.\nTry reconnect your device to the internet.",
 
 
     // Errors

@@ -10,7 +10,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
     WalletConnectContextProvider,
-    ConnexContextProvider,
     TranslationProvider,
     BaseToast,
 } from "~Components"
@@ -33,6 +32,8 @@ import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
 import { useAppSelector, selectSentryTrackingEnabled } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
+import { InternetDownScreen } from "~Screens"
+import NetInfo from "@react-native-community/netinfo"
 
 const { fontFamily } = typography
 
@@ -48,6 +49,8 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
 }
 
 const Main = () => {
+    const { isConnected } = NetInfo.useNetInfo()
+
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
         [fontFamily["Inter-Regular"]]: Inter_Regular,
@@ -77,9 +80,9 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ConnexContextProvider>
-                <SafeAreaProvider>
-                    <TranslationProvider>
+            <TranslationProvider>
+                {isConnected ? (
+                    <SafeAreaProvider>
                         <NavigationProvider>
                             <BottomSheetModalProvider>
                                 <WalletConnectContextProvider>
@@ -88,9 +91,11 @@ const Main = () => {
                             </BottomSheetModalProvider>
                         </NavigationProvider>
                         <BaseToast />
-                    </TranslationProvider>
-                </SafeAreaProvider>
-            </ConnexContextProvider>
+                    </SafeAreaProvider>
+                ) : (
+                    <InternetDownScreen />
+                )}
+            </TranslationProvider>
         </GestureHandlerRootView>
     )
 }
