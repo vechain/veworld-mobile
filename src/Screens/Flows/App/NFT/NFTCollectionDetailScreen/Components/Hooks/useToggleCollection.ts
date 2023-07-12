@@ -3,6 +3,7 @@ import { NonFungibleTokenCollection } from "~Model"
 import {
     removeBlackListCollection,
     selectSelectedAccount,
+    selectSelectedNetwork,
     setBlackListCollection,
     useAppDispatch,
     useAppSelector,
@@ -10,6 +11,7 @@ import {
 
 export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
     const dispatch = useAppDispatch()
+    const network = useAppSelector(selectSelectedNetwork)
 
     const selectedAccoount = useAppSelector(selectSelectedAccount)
 
@@ -21,6 +23,7 @@ export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
         if (isBlacklisted) {
             dispatch(
                 removeBlackListCollection({
+                    network: network.type,
                     collection,
                     accountAddress: selectedAccoount.address,
                 }),
@@ -28,12 +31,13 @@ export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
         } else {
             dispatch(
                 setBlackListCollection({
+                    network: network.type,
                     collection,
                     accountAddress: selectedAccoount.address,
                 }),
             )
         }
-    }, [collection, dispatch, isBlacklisted, selectedAccoount.address])
+    }, [collection, network, dispatch, isBlacklisted, selectedAccoount.address])
 
     return { onToggleCollection, isBlacklisted }
 }
