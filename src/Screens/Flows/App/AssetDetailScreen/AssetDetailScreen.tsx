@@ -47,7 +47,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const foundToken = tokens.filter(
         t =>
             t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
-            token.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
+            t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
 
     const goBack = useCallback(() => nav.goBack(), [nav])
