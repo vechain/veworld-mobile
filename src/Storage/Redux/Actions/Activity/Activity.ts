@@ -1,8 +1,11 @@
 import {
     Activity,
     ActivityStatus,
+    ConnectedAppActivity,
     FungibleTokenActivity,
+    NETWORK_TYPE,
     NonFungibleTokenActivity,
+    SignCertActivity,
 } from "~Model"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
 import {
@@ -14,11 +17,15 @@ import {
 import {
     selectCurrentTransactionActivities,
     selectSelectedAccount,
+    selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
 import {
+    createConnectedAppActivity,
     createIncomingTransfer,
+    createPendingDappTransactionActivity,
     createPendingNFTTransferActivityFromTx,
     createPendingTransferActivityFromTx,
+    createSignCertificateActivity,
 } from "./API"
 import { Transaction } from "thor-devkit"
 import { genesisesId } from "~Constants"
@@ -63,13 +70,13 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
         thor.genesis.id === genesisesId.main
             ? dispatch(
                   upsertActivityMainnet({
-                      address: updatedActivity.from.toLowerCase(),
+                      address: updatedActivity.from?.toLowerCase(),
                       activity: updatedActivity,
                   }),
               )
             : dispatch(
                   upsertActivityTestnet({
-                      address: updatedActivity.from.toLowerCase(),
+                      address: updatedActivity.from?.toLowerCase(),
                       activity: updatedActivity,
                   }),
               )
@@ -86,9 +93,10 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
  * @returns An asynchronous thunk action that, when dispatched, upserts a pending transfer activity to the Redux store.
  */
 export const addPendingTransferTransactionActivity =
-    (outgoingTx: Transaction, thor: Connex.Thor): AppThunk<void> =>
+    (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
 
         // Ensure selectedAccount is not undefined and outgoingTx has a transaction ID
         if (!selectedAccount || !outgoingTx.id) return
@@ -96,7 +104,7 @@ export const addPendingTransferTransactionActivity =
         const pendingActivity: FungibleTokenActivity =
             createPendingTransferActivityFromTx(outgoingTx)
 
-        thor.genesis.id === genesisesId.main
+        selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
                   upsertActivityMainnet({
                       address: selectedAccount.address.toLowerCase(),
@@ -123,9 +131,10 @@ export const addPendingTransferTransactionActivity =
  * @returns An asynchronous thunk action that, when dispatched, upserts a pending NFT transfer activity to the Redux store.
  */
 export const addPendingNFTtransferTransactionActivity =
-    (outgoingTx: Transaction, thor: Connex.Thor): AppThunk<void> =>
+    (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
 
         // Ensure selectedAccount is not undefined and outgoingTx has a transaction ID
         if (!selectedAccount || !outgoingTx.id) return
@@ -133,7 +142,7 @@ export const addPendingNFTtransferTransactionActivity =
         const pendingActivity: NonFungibleTokenActivity =
             createPendingNFTTransferActivityFromTx(outgoingTx)
 
-        thor.genesis.id === genesisesId.main
+        selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
                   upsertActivityMainnet({
                       address: selectedAccount.address.toLowerCase(),
@@ -160,18 +169,24 @@ export const addPendingNFTtransferTransactionActivity =
  *
  * @returns An asynchronous thunk action that, when dispatched, upserts an incoming transfer activity to the Redux store.
  */
-export const addIncomingTransfer =
+export const addIncomingTokenTransfer =
     (
-        meta: Connex.Thor.Filter.WithMeta["meta"],
+        txID: string,
+        blockNumber: number,
+        blockTimestamp: number,
         amount: string,
         recipient: string,
         sender: string,
         tokenAddress: string,
         thor: Connex.Thor,
     ): AppThunk<void> =>
-    dispatch => {
+    (dispatch, getState) => {
+        const selectedNetwork = selectSelectedNetwork(getState())
+
         const incomingTransferActivity = createIncomingTransfer(
-            meta,
+            txID,
+            blockNumber,
+            blockTimestamp,
             amount,
             recipient,
             sender,
@@ -179,7 +194,7 @@ export const addIncomingTransfer =
             thor,
         )
 
-        thor.genesis.id === genesisesId.main
+        selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
                   upsertActivityMainnet({
                       address: recipient.toLowerCase(),
@@ -195,6 +210,138 @@ export const addIncomingTransfer =
     }
 
 /**
+ * This method adds a new connected application activity to the Redux store.
+ *
+ * @param name - The name of the connected application (optional).
+ * @param linkUrl - The URL of the connected application (optional).
+ * @param description - The description of the connected application (optional).
+ * @param methods - The methods used by the connected application (optional).
+ *
+ * @returns An asynchronous thunk action that, when dispatched, adds a new connected app activity to the Redux store.
+ */
+export const addConnectedAppActivity =
+    (
+        name?: string,
+        linkUrl?: string,
+        description?: string,
+        methods?: string[],
+    ): AppThunk<void> =>
+    (dispatch, getState) => {
+        const selectedAccount = selectSelectedAccount(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
+
+        // Ensure selectedAccount is not undefined
+        if (!selectedAccount) return
+
+        const connectedAppActivity: ConnectedAppActivity =
+            createConnectedAppActivity(
+                selectedAccount.address,
+                name,
+                linkUrl,
+                description,
+                methods,
+            )
+
+        selectedNetwork.type === NETWORK_TYPE.MAIN
+            ? dispatch(
+                  upsertActivityMainnet({
+                      address: selectedAccount.address.toLowerCase(),
+                      activity: connectedAppActivity,
+                  }),
+              )
+            : dispatch(
+                  upsertActivityTestnet({
+                      address: selectedAccount.address.toLowerCase(),
+                      activity: connectedAppActivity,
+                  }),
+              )
+    }
+
+/**
+ * This method adds a new sign certificate activity to the Redux store.
+ *
+ * @param name - The name of the certificate (optional).
+ * @param linkUrl - The URL of the certificate (optional).
+ * @param content - The content of the certificate (optional).
+ * @param purpose - The purpose of the certificate (optional).
+ *
+ * @returns An asynchronous thunk action that, when dispatched, adds a new sign certificate activity to the Redux store.
+ */
+export const addSignCertificateActivity =
+    (
+        name?: string,
+        linkUrl?: string,
+        content?: string,
+        purpose?: string,
+    ): AppThunk<void> =>
+    (dispatch, getState) => {
+        const selectedAccount = selectSelectedAccount(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
+
+        // Ensure selectedAccount is not undefined
+        if (!selectedAccount) return
+
+        const connectedAppActivity: SignCertActivity =
+            createSignCertificateActivity(
+                selectedAccount.address,
+                name,
+                linkUrl,
+                content,
+                purpose,
+            )
+
+        selectedNetwork.type === NETWORK_TYPE.MAIN
+            ? dispatch(
+                  upsertActivityMainnet({
+                      address: selectedAccount.address.toLowerCase(),
+                      activity: connectedAppActivity,
+                  }),
+              )
+            : dispatch(
+                  upsertActivityTestnet({
+                      address: selectedAccount.address.toLowerCase(),
+                      activity: connectedAppActivity,
+                  }),
+              )
+    }
+
+/**
+ * This method adds a new pending DApp transaction activity to the Redux store.
+ *
+ * @param tx - The transaction details.
+ * @param name - The name of the DApp (optional).
+ * @param linkUrl - The URL of the DApp (optional).
+ *
+ * @returns An asynchronous thunk action that, when dispatched, adds a new pending DApp transaction activity to the Redux store.
+ */
+export const addPendingDappTransactionActivity =
+    (tx: Transaction, name?: string, linkUrl?: string): AppThunk<void> =>
+    (dispatch, getState) => {
+        const selectedAccount = selectSelectedAccount(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
+
+        // Ensure selectedAccount is not undefinedù
+        if (!selectedAccount) return
+
+        const pendingDappActivity: Activity =
+            createPendingDappTransactionActivity(tx, name, linkUrl)
+
+        selectedNetwork.type === NETWORK_TYPE.MAIN
+            ? dispatch(
+                  upsertActivityMainnet({
+                      address: selectedAccount.address.toLowerCase(),
+                      activity: pendingDappActivity,
+                  }),
+              )
+            : dispatch(
+                  upsertActivityTestnet({
+                      address: selectedAccount.address.toLowerCase(),
+                      activity: pendingDappActivity,
+                  }),
+              )
+    }
+
+/**
  * This method updates account transaction activities.
  * It fetches the current activities from the state, adds new activities,
  * sorts them based on timestamp, and limits them to DEFAULT_PAGE_SIZE.
@@ -203,9 +350,10 @@ export const addIncomingTransfer =
  * @returns A ThunkAction, which dispatches the updateTransactionActivities action.
  */
 export const updateAccountTransactionActivities =
-    (transactionActivities: Activity[], thor: Connex.Thor): AppThunk<void> =>
+    (transactionActivities: Activity[]): AppThunk<void> =>
     async (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
 
         // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
@@ -234,7 +382,7 @@ export const updateAccountTransactionActivities =
             DEFAULT_PAGE_SIZE * 2,
         )
 
-        thor.genesis.id === genesisesId.main
+        selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
                   updateTransactionActivitiesMainnet({
                       address: selectedAccount.address.toLowerCase(),
