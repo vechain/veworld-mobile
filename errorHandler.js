@@ -4,12 +4,15 @@ import {
     setNativeExceptionHandler,
 } from "react-native-exception-handler"
 import RNRestart from "react-native-restart"
+import * as Sentry from "@sentry/react-native"
 
 const allowInDevMode = false // is an optional parameter is a boolean.
 
 // unhandled JS errors
 // in this case is just possible to display an alert to the user and log the error to sentry
 setJSExceptionHandler((error, isFatal) => {
+    Sentry.captureException(error)
+
     if (isFatal) {
         Alert.alert("Error", "Unexpected error occurred", [
             {
@@ -31,7 +34,8 @@ const executeDefaultHandler = false // is an optional boolean (both IOS, ANDROID
 // Unhandled native modules errors
 // in this case is not possible to display anything to the user, the app will just crash but we can log the error to sentry
 const exceptionhandler = exceptionString => {
-    // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/688) add sentry logging
+    Sentry.captureException(new Error(exceptionString))
+
     // eslint-disable-next-line no-console
     console.warn(exceptionString)
 }

@@ -12,7 +12,7 @@ type Props = {
 
 export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
     return (
-        <BaseCard containerStyle={[containerStyle]}>
+        <BaseCard containerStyle={containerStyle}>
             <BaseCard
                 style={[
                     styles.imageContainer,
@@ -31,8 +31,13 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
                 )}
             </BaseCard>
             <BaseSpacer width={16} />
-            <BaseView flexDirection="column" justifyContent="center">
-                <BaseText typographyFont="buttonPrimary">{token.name}</BaseText>
+            <BaseView flexDirection="column" justifyContent="center" w={75}>
+                <BaseText
+                    typographyFont="buttonPrimary"
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {token.name}
+                </BaseText>
                 <BaseText typographyFont="captionRegular">
                     {token.symbol}
                 </BaseText>

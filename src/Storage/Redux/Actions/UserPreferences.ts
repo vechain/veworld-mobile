@@ -6,6 +6,7 @@ import {
     setLanguage,
     setCurrency,
     setAnalyticsTrackingEnabled,
+    setSentryTrackingEnabled,
 } from "../Slices/UserPreferences"
 
 export {
@@ -16,4 +17,5 @@ export {
     setLanguage,
     setCurrency,
     setAnalyticsTrackingEnabled,
+    setSentryTrackingEnabled,
 }

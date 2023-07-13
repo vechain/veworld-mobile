@@ -8,6 +8,8 @@ import { error, info } from "~Utils"
 import { TokenMetadata } from "~Model"
 import axios from "axios"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
+import ReactNativeBlobUtil, { PolyfillBlob } from "react-native-blob-util"
+import { Methods } from "~Constants"
 
 enum URIProtocol {
     IPFS = "ipfs",
@@ -18,7 +20,7 @@ enum URIProtocol {
 export type NFTMeta = {
     tokenMetadata: TokenMetadata
     imageUrl: string
-    imageType: Blob["type"]
+    imageType: string
 }
 
 export const fetchMetadata = async (
@@ -75,32 +77,40 @@ export const fetchMetadata = async (
     }
 }
 
-export const fetchWithTimeout = async (
-    resource: RequestInfo,
-    options = {},
+interface CustomPolyfillBlob extends PolyfillBlob {
+    type?: string
+}
+
+export const fetchImageWithTimeout = async (
+    resource: string,
     timeout?: number,
 ) => {
     const controller = new AbortController()
+
     const id = setTimeout(
         () => controller.abort(),
         timeout ?? NFT_AXIOS_TIMEOUT,
     )
 
-    const response = await fetch(resource, {
-        ...options,
-        signal: controller.signal,
-    })
+    const res = await ReactNativeBlobUtil.config({
+        timeout: timeout ?? NFT_AXIOS_TIMEOUT,
+    }).fetch(Methods.GET, resource)
 
     clearTimeout(id)
 
-    return response
+    let status = res.info().status
+    if (status === 200) {
+        let blob: CustomPolyfillBlob = await res.blob(res.type, 0)
+        return blob.type ?? "image/png"
+    } else {
+        return "image/png"
+    }
 }
 
 const getImageData = async (imageUrl: string) => {
-    const response = await fetchWithTimeout(imageUrl)
-    const blob = await response.blob()
+    const mime = await fetchImageWithTimeout(imageUrl)
     return {
-        imageUrl,
-        imageType: blob.type,
+        imageUrl: imageUrl,
+        imageType: mime,
     }
 }
