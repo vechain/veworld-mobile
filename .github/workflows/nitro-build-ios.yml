@@ -3,10 +3,10 @@ on:
     workflow_dispatch:
     push:
         branches:
-            - main
+            - headless-testing-detox
     pull_request:
         branches:
-            - main
+            - headless-testing-detox
 
 jobs:
     build-test-ios:
@@ -33,7 +33,7 @@ jobs:
 
             - name: Run tests with Detox
               run: |
-                  detox test --configuration ios.sim.debug --cleanup --headless --loglevel debug --record-logs all
+                  detox test --configuration ios.sim.debug --cleanup --headless --detoxPrintBusyIdleResources YES --loglevel debug --record-logs all
 
             - name: Upload artifacts
               if: failure()
