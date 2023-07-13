@@ -53,7 +53,7 @@ export interface NonFungibleTokenActivity extends Activity {
 }
 
 /**
- * The DappTxActivity interface represents a blockchain activity related to transactions from connected applications.
+ * The DappTxActivity interface represents a blockchain activity and is a transaction on-chain.
  */
 export interface DappTxActivity extends Activity {
     type: ActivityType.DAPP_TRANSACTION
