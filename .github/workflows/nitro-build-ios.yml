@@ -1,4 +1,4 @@
-name: detox-nitro-ios
+name: headless-testing
 on:
     workflow_dispatch:
     push:
