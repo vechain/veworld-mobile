@@ -36,6 +36,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
             return (
                 <BaseView flexDirection="row">
                     <BaseIcon
+                        haptics="Light"
                         name="priority-low"
                         action={onButtonPress}
                         size={24}
@@ -43,6 +44,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                     />
                     <BaseSpacer width={18} />
                     <BaseIcon
+                        haptics="Light"
                         name="pencil-outline"
                         bg={COLORS.LIME_GREEN}
                         color={COLORS.DARK_PURPLE}
@@ -54,6 +56,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
             )
         return (
             <BaseButton
+                haptics="Light"
                 action={onButtonPress}
                 bgColor={COLORS.LIME_GREEN}
                 textColor={COLORS.DARK_PURPLE}

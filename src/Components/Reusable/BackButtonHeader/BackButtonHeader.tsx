@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
-import HapticsService from "~Services/HapticsService"
 
 type Props = {
     iconTestID?: string
@@ -18,13 +17,13 @@ export const BackButtonHeader = ({
     const theme = useTheme()
 
     const onActionPress = useCallback(async () => {
-        HapticsService.triggerImpact({ level: "Light" })
         nav.goBack()
     }, [nav])
 
     return (
         <>
             <BaseIcon
+                haptics="Light"
                 style={backButtonHeaderStyle.backButton}
                 size={36}
                 name="chevron-left"

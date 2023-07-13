@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react"
-import { ViewProps, StyleSheet, Pressable } from "react-native"
+import { ViewProps, StyleSheet } from "react-native"
 import { CURRENCY, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
@@ -9,6 +9,7 @@ import {
     BaseIcon,
     BaseSpacer,
     BaseText,
+    BaseTouchable,
     BaseView,
     LedgerBadge,
 } from "~Components"
@@ -97,8 +98,9 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     />
                 </BaseView>
                 <BaseView>
-                    <Pressable
-                        onPress={openAccountManagement}
+                    <BaseTouchable
+                        haptics="Medium"
+                        action={openAccountManagement}
                         style={styles.pressable}>
                         <BaseView
                             style={styles.borderBottom}
@@ -110,13 +112,13 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                 name="account-cog-outline"
                                 color={theme.colors.textReversed}
                                 size={28}
-                                action={openAccountManagement}
                                 testID="AccountCard_accountManagementButton"
                             />
                         </BaseView>
-                    </Pressable>
-                    <Pressable
-                        onPress={openSelectAccountBottomSheet}
+                    </BaseTouchable>
+                    <BaseTouchable
+                        haptics="Medium"
+                        action={openSelectAccountBottomSheet}
                         style={styles.pressable}>
                         <BaseView
                             justifyContent="center"
@@ -129,7 +131,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                 testID="AccountCard_changeAccountButton"
                             />
                         </BaseView>
-                    </Pressable>
+                    </BaseTouchable>
                 </BaseView>
             </BaseView>
         </BaseView>

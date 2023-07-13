@@ -1,9 +1,10 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect, useMemo } from "react"
-import { StyleSheet, ScrollView } from "react-native"
+import React, { useEffect, useMemo } from "react"
+import { ScrollView } from "react-native"
 import { useTheme } from "~Hooks"
 import {
+    BackButtonHeader,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
@@ -50,8 +51,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
 
-    const goBack = useCallback(() => nav.goBack(), [nav])
-
     const dispatch = useAppDispatch()
     useEffect(() => {
         dispatch(fetchVechainMarketInfo())
@@ -84,14 +83,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 style={{
                     backgroundColor: theme.colors.background,
                 }}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-                <BaseSpacer height={12} />
+                <BackButtonHeader />
 
                 <BaseView mx={20}>
                     <AssetHeader
@@ -141,10 +133,3 @@ export const AssetDetailScreen = ({ route }: Props) => {
         </BaseSafeArea>
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-})
