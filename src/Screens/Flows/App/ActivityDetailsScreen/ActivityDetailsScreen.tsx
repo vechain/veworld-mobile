@@ -27,7 +27,7 @@ import {
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
-    ConnectedAppTxActivity,
+    ConnectedAppActivity,
 } from "~Model"
 import {
     FungibleTokenTransferDetails,
@@ -155,7 +155,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     <ConnectedAppDetails
                         activity={
                             (activityFromStore ??
-                                activity) as ConnectedAppTxActivity
+                                activity) as ConnectedAppActivity
                         }
                     />
                 )

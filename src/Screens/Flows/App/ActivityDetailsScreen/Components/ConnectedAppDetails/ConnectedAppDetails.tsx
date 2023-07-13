@@ -1,14 +1,14 @@
 import React, { memo, useMemo } from "react"
 import { BaseSpacer } from "~Components"
 import { useI18nContext } from "~i18n"
-import { ConnectedAppTxActivity } from "~Model"
+import { ConnectedAppActivity } from "~Model"
 import { ActivityDetail } from "../../Type"
 import { ActivityDetailItem } from "../ActivityDetailItem"
 import { Linking } from "react-native"
 import { wcMethodsToRequestTranslations } from "./Helpers"
 
 type Props = {
-    activity: ConnectedAppTxActivity
+    activity: ConnectedAppActivity
 }
 
 export const ConnectedAppDetails: React.FC<Props> = memo(({ activity }) => {

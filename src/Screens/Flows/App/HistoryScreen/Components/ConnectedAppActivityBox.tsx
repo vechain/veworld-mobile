@@ -4,13 +4,13 @@ import { useTheme, useThemedStyles } from "~Hooks"
 import { DateUtils } from "~Utils"
 import { COLORS, ColorThemeType } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { Activity, ActivityStatus, ConnectedAppTxActivity } from "~Model"
+import { Activity, ActivityStatus, ConnectedAppActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
 import { ActivityStatusIndicator } from "."
 
 type Props = {
-    activity: ConnectedAppTxActivity
+    activity: ConnectedAppActivity
     onPress: (activity: Activity) => void
 }
 

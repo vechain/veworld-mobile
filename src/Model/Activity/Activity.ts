@@ -62,9 +62,9 @@ export interface DappTxActivity extends Activity {
 }
 
 /**
- * The ConnectedAppTxActivity interface represents a blockchain activity related to transactions from connected applications.
+ * The ConnectedAppActivity interface represents a blockchain activity related to transactions from connected applications.
  */
-export interface ConnectedAppTxActivity extends Activity {
+export interface ConnectedAppActivity extends Activity {
     type: ActivityType.CONNECTED_APP_TRANSACTION
     name?: string
     linkUrl?: string
