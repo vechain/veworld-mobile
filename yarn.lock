@@ -12588,6 +12588,11 @@ react-native-context-menu-view@^1.9.1:
   resolved "https://registry.yarnpkg.com/react-native-context-menu-view/-/react-native-context-menu-view-1.9.2.tgz#35b40808075e854950a046b172413958ca34df3e"
   integrity sha512-VIAO1fJFSlNbtyL7CIoNSaQzjlN5myR+RVzpHmJTO7cfWxFIdiuOqAULBFuOVddLRFfzblFhZ/h6MpO4UIpV8w==
 
+react-native-device-info@^10.7.0:
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.7.0.tgz#f97f6f0da5d5a8775191566a667437c6ffc60417"
+  integrity sha512-8PiuGwKFB/56mjl5uVuCFoBLZJonerJRS/CTPAsT1rbyrc9vDGAj93FmzYW9GBroKUtQwF2gSP2scQzMHB/rVg==
+
 react-native-dotenv@^3.4.8:
   version "3.4.9"
   resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.9.tgz#621c5b0c1d0c5c7f569bfe5a1d804bec7885c010"
