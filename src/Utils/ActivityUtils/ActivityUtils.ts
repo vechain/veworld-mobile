@@ -10,7 +10,7 @@ import TransactionUtils from "../TransactionUtils"
 export const getActivityTypeFromClause = (
     clauses: Connex.VM.Clause[],
 ): ActivityType => {
-    if (clauses.length > 1) return ActivityType.CONNECTED_APP_TRANSACTION
+    if (clauses.length > 1) return ActivityType.DAPP_TRANSACTION
 
     if (TransactionUtils.isTokenTransferClause(clauses[0])) {
         return ActivityType.FUNGIBLE_TOKEN
@@ -24,7 +24,7 @@ export const getActivityTypeFromClause = (
         return ActivityType.NFT_TRANSFER
     }
 
-    return ActivityType.CONNECTED_APP_TRANSACTION
+    return ActivityType.DAPP_TRANSACTION
 }
 
 /**
@@ -60,11 +60,11 @@ export const isTransactionActivity = (activity: Activity) => {
     const type = activity.type
 
     return (
-        type === ActivityType.CONNECTED_APP_TRANSACTION ||
         type === ActivityType.FUNGIBLE_TOKEN ||
         type === ActivityType.VET_TRANSFER ||
-        type === ActivityType.DELEGATED_TRANSACTION ||
         type === ActivityType.NFT_TRANSFER ||
+        type === ActivityType.DELEGATED_TRANSACTION ||
+        type === ActivityType.DAPP_TRANSACTION ||
         activity.isTransaction
     )
 }
