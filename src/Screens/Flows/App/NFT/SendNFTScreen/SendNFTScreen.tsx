@@ -262,7 +262,7 @@ export const SendNFTScreen = ({ route }: Props) => {
                     ref={scanAddressSheetRef}
                     onClose={closeScanAddressSheetRef}
                     onScan={onScan}
-                    target={ScanTarget.WALLET_CONNECT}
+                    target={ScanTarget.ADDRESS}
                 />
             </BaseSafeArea>
         </>
