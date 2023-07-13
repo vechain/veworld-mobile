@@ -108,7 +108,7 @@ export const BaseAccordion = ({
             </Pressable>
             <Animated.View
                 style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
-                <View ref={aref} style={styles.bodyContent}>
+                <View ref={aref} style={styles.bodyContent} collapsable={false}>
                     {bodyComponent}
                 </View>
             </Animated.View>
