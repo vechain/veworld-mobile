@@ -24,6 +24,7 @@ import { striptags } from "striptags"
 import {
     fetchVechainMarketInfo,
     selectMarketInfoFor,
+    selectSendableTokensWithBalance,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -42,6 +43,13 @@ export const AssetDetailScreen = ({ route }: Props) => {
         selectMarketInfoFor(token.symbol, state),
     )
 
+    const tokens = useAppSelector(selectSendableTokensWithBalance)
+    const foundToken = tokens.filter(
+        t =>
+            t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
+            t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
+    )
+
     const goBack = useCallback(() => nav.goBack(), [nav])
 
     const dispatch = useAppDispatch()
@@ -52,38 +60,19 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const Actions: FastAction[] = useMemo(
         () => [
             {
-                name: LL.BTN_BUY(),
-                action: () => nav.navigate(Routes.BUY),
-                icon: (
-                    <BaseIcon color={theme.colors.text} name="cart-outline" />
-                ),
-                testID: "buyButton",
-            },
-            {
                 name: LL.BTN_SEND(),
                 action: () =>
-                    nav.navigate(Routes.SELECT_TOKEN_SEND, {
-                        initialRoute: Routes.HOME, // this will change Routes.DISCOVER when discover will be in a separated tab
+                    nav.navigate(Routes.SELECT_AMOUNT_SEND, {
+                        token: foundToken[0],
+                        initialRoute: Routes.HOME,
                     }),
                 icon: (
                     <BaseIcon color={theme.colors.text} name="send-outline" />
                 ),
                 testID: "sendButton",
             },
-
-            {
-                name: LL.BTN_SWAP(),
-                action: () => nav.navigate(Routes.SWAP),
-                icon: (
-                    <BaseIcon
-                        color={theme.colors.text}
-                        name="swap-horizontal"
-                    />
-                ),
-                testID: "swapButton",
-            },
         ],
-        [LL, nav, theme.colors.text],
+        [LL, foundToken, nav, theme.colors.text],
     )
 
     return (
@@ -117,7 +106,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                 <BaseView mx={20} alignItems="center">
                     <BaseSpacer height={24} />
-                    <FastActionsBar actions={Actions} />
+                    <FastActionsBar actions={Actions} paddingHorizontal={44} />
 
                     <BaseSpacer height={24} />
 
