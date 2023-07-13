@@ -56,7 +56,7 @@ export const AccountMgmtBottomSheet = React.forwardRef<
             ref={ref}>
             <BaseView flexDirection="row" w={100}>
                 <BaseText typographyFont="subTitleBold">
-                    {LL.SB_EDIT_WALLET({ name: device?.alias })}
+                    {LL.SB_EDIT_WALLET({ name: device?.alias ?? "" })}
                 </BaseText>
 
                 <BaseIcon

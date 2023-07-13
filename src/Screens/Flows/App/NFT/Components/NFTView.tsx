@@ -126,8 +126,19 @@ export const NFTView = memo(
         )
 
         const getIsValidMimeType = useCallback(
-            (itemUrl: string, type: NFTMediaType[]) =>
-                MediaUtils.getMime(itemUrl, type),
+            (itemUrl: string, type: NFTMediaType[]) => {
+                return MediaUtils.getMime(itemUrl, type)
+            },
+            [],
+        )
+
+        const renderNFTStaticImage = useCallback(
+            () => (
+                <NFTImage
+                    uri={NFTPlaceholder}
+                    style={baseStyles.nftPreviewImage}
+                />
+            ),
             [],
         )
 
@@ -204,14 +215,7 @@ export const NFTView = memo(
                             ]) && (
                                 <BaseView style={baseStyles.nftPreviewImage}>
                                     <Video
-                                        PosterComponent={() => (
-                                            <NFTImage
-                                                uri={NFTPlaceholder}
-                                                style={
-                                                    baseStyles.nftPreviewImage
-                                                }
-                                            />
-                                        )}
+                                        PosterComponent={renderNFTStaticImage}
                                         usePoster
                                         ref={video}
                                         shouldPlay
