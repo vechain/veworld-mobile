@@ -52,7 +52,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const [loading, setLoading] = useState(false)
+    const [loadingTransaction, setLoadingTransaction] = useState(false)
     const nav = useNavigation()
     const { token, amount, address, initialRoute } = route.params
     const { LL } = useI18nContext()
@@ -94,7 +94,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 nav.navigate(Routes.HOME)
                 break
         }
-        setLoading(false)
+        setLoadingTransaction(false)
     }, [initialRoute, nav])
 
     //build transaction
@@ -137,13 +137,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectedDelegationOption,
         selectedDelegationUrl,
         token,
-        onError: () => setLoading(false),
+        onError: () => setLoadingTransaction(false),
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: signAndSendTransaction,
-            onCancel: () => setLoading(false),
+            onCancel: () => setLoadingTransaction(false),
         })
 
     const vthoGas = FormattingUtils.convertToFiatBalance(
@@ -206,7 +206,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         !isThereEnoughGas && selectedDelegationOption !== DelegationType.URL
 
     const handleOnConfirm = () => {
-        setLoading(true)
+        setLoadingTransaction(true)
         if (account.device.type === DEVICE_TYPE.LEDGER) {
             nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
                 accountWithDevice: account as LedgerAccountWithDevice,
@@ -255,13 +255,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         <BaseView flexDirection="row">
                             <BaseIcon
                                 name="alert-circle-outline"
-                                color={COLORS.DARK_RED}
+                                color={theme.colors.danger}
                                 size={16}
                             />
                             <BaseSpacer width={4} />
                             <BaseText
                                 typographyFont="buttonSecondary"
-                                color={COLORS.DARK_RED}>
+                                color={theme.colors.danger}>
                                 {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance}{" "}
                                 {VTHO.symbol}
                             </BaseText>
@@ -370,7 +370,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}
                         setSelectedDelegationUrl={setSelectedDelegationUrl}
-                        disabled={loading}
+                        disabled={loadingTransaction}
                     />
                     {selectedDelegationAccount && (
                         <>
@@ -440,8 +440,12 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 <FadeoutButton
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                     action={handleOnConfirm}
-                    disabled={continueButtonDisabled || loading || loadingGas}
-                    isLoading={loading}
+                    disabled={
+                        continueButtonDisabled ||
+                        loadingTransaction ||
+                        loadingGas
+                    }
+                    isLoading={loadingTransaction}
                     bottom={0}
                     mx={0}
                     width={"auto"}
