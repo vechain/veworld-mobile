@@ -84,6 +84,5 @@ export const prepareCollectionData = async (
         isBlacklisted: false,
         totalSupply: await getTokenTotalSupply(_nft.contractAddress, thor),
     }
-
     return { nftCollection, hasImage }
 }

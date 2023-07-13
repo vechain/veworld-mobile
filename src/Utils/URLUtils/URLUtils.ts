@@ -8,7 +8,7 @@ import { error } from "~Utils/Logger"
 function parseUrl(url?: string) {
     const trimmedUrl = url?.trim()
     const match = trimmedUrl?.match(
-        /^(https?):\/\/(?:www\.)?([^:/?#]+)(?::([\d]+))?([^?#]*)(\?[^#]*)?(#.*)?$/,
+        /^(https?):\/\/(?:www\.)?([^:/?#]+)(?::(\d+))?([^?#]*)(\?[^#]*)?(#.*)?$/,
     )
     if (!match) {
         throw new Error("Invalid URL")
