@@ -1,16 +1,13 @@
 import { useCallback } from "react"
 import { useThor } from "~Components"
-import { NonFungibleTokenCollection } from "~Model"
-import { getCollectionInfo, getContractAddresses } from "~Networking"
+import { Network, NonFungibleTokenCollection } from "~Model"
+import { GithubCollectionResponse, getContractAddresses } from "~Networking"
 import {
-    selectSelectedAccount,
-    selectSelectedNetwork,
     setCollections,
     setNetworkingSideEffects,
     useAppDispatch,
-    useAppSelector,
 } from "~Storage/Redux"
-import { error } from "~Utils"
+import { debug, error } from "~Utils"
 import { getNFTdataForContract, prepareCollectionData } from "./Helpers"
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
@@ -35,13 +32,17 @@ import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
 export const useNFTCollections = () => {
     const thor = useThor()
-    const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
     const getCollections = useCallback(
-        async (_page: number, _resultsPerPage: number = NFT_PAGE_SIZE) => {
+        async (
+            selectedAccount: string,
+            network: Network,
+            registryInfo: GithubCollectionResponse[],
+            _page: number,
+            _resultsPerPage: number = NFT_PAGE_SIZE,
+        ) => {
             dispatch(
                 setNetworkingSideEffects({ isLoading: true, error: undefined }),
             )
@@ -51,34 +52,41 @@ export const useNFTCollections = () => {
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
                         network.type,
-                        selectedAccount.address,
+                        selectedAccount,
                         _resultsPerPage,
                         _page,
                     )
 
-                // exit early if there are no more pages to fetch
-                if (_page >= pagination.totalPages) return
-
-                // get nft collection info from GitHub registry
-                const collectionRegistryInfo = await getCollectionInfo(
-                    network.type,
+                debug(
+                    `Got ${pagination.totalElements} nft contracts from indexer`,
                 )
+
+                // exit early if there are no more pages to fetch
+                if (_page >= pagination.totalPages) {
+                    dispatch(
+                        setNetworkingSideEffects({
+                            isLoading: false,
+                            error: undefined,
+                        }),
+                    )
+                    return
+                }
 
                 // Get nfts for each contract address
                 const nftResultsPerPage = 1
                 const { nftData } = await getNFTdataForContract(
                     network,
                     contractsForNFTs,
-                    selectedAccount.address,
+                    selectedAccount,
                     nftResultsPerPage,
                 )
 
                 const _nftCollections: NonFungibleTokenCollection[] = []
 
-                // loop over the nnft collections
+                // loop over the nft collections
                 for (const nft of nftData) {
                     // find collection from GH registry
-                    const foundCollection = collectionRegistryInfo.find(
+                    const foundCollection = registryInfo.find(
                         col => col.address === nft.data[0].contractAddress,
                     )
 
@@ -95,8 +103,9 @@ export const useNFTCollections = () => {
                 // set collections to store
                 dispatch(
                     setCollections({
-                        currentAccountAddress: selectedAccount.address,
-                        collectiondata: {
+                        network: network.type,
+                        currentAccountAddress: selectedAccount,
+                        collectionData: {
                             collections: _nftCollections,
                             pagination,
                         },
@@ -119,7 +128,7 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, network, selectedAccount.address, thor],
+        [LL, dispatch, thor],
     )
 
     return { getCollections }
