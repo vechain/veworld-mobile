@@ -1,4 +1,4 @@
-name: headless-testing
+name: headless-testing-ios
 on:
     workflow_dispatch:
     push:
