@@ -24,6 +24,17 @@ jest.mock("react-native-quick-crypto", () => ({
     })),
 }))
 
+jest.mock("react-native-blob-util", () => ({
+    PolyfillBlob: jest.fn(),
+    ReactNativeBlobUtil: {
+        fetch: jest.fn(() => ({
+            json: jest.fn(() => ({
+                image: "image",
+            })),
+        })),
+    },
+}))
+
 jest.mock("react-native-bootsplash", () => {})
 
 jest.mock("expo-secure-store", () => ({

@@ -363,6 +363,8 @@ PODS:
   - react-native-ble-plx (2.0.3):
     - MultiplatformBleAdapter (= 0.1.9)
     - React-Core
+  - react-native-blob-util (0.18.3):
+    - React-Core
   - react-native-blur (4.3.2):
     - React-Core
   - react-native-context-menu-view (1.9.2):
@@ -595,6 +597,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-ble-plx (from `../node_modules/react-native-ble-plx`)
+  - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
@@ -743,6 +746,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-ble-plx:
     :path: "../node_modules/react-native-ble-plx"
+  react-native-blob-util:
+    :path: "../node_modules/react-native-blob-util"
   react-native-blur:
     :path: "../node_modules/@react-native-community/blur"
   react-native-context-menu-view:
@@ -876,6 +881,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-ble-plx: f10240444452dfb2d2a13a0e4f58d7783e92d76e
+  react-native-blob-util: 2d36383bb52c15c5451be81cb7ddf22bc34a12a6
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
   react-native-context-menu-view: bb7334074a008da03df3b7f29ef28ddf8eef8c0a
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
@@ -920,6 +926,6 @@ SPEC CHECKSUMS:
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: d0a5fb65a23dd1307addb035bcaf5ca52db857b7
+PODFILE CHECKSUM: 46e602853ef400c822958c486fa6231b795daffc
 
 COCOAPODS: 1.12.1
