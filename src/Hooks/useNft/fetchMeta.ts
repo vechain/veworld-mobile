@@ -4,7 +4,7 @@ import {
     getTokenMetaArweave,
     getTokenMetaIpfs,
 } from "~Networking"
-import { error, info } from "~Utils"
+import { error, warn } from "~Utils"
 import { TokenMetadata } from "~Model"
 import axios from "axios"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
@@ -49,31 +49,27 @@ export const fetchMetadata = async (
             }
 
             case URIProtocol.HTTPS: {
-                try {
-                    const tokenMetadata = await axios.get<TokenMetadata>(uri, {
-                        timeout: NFT_AXIOS_TIMEOUT,
-                    })
+                const tokenMetadata = await axios.get<TokenMetadata>(uri, {
+                    timeout: NFT_AXIOS_TIMEOUT,
+                })
 
-                    const { imageUrl, imageType } = await getImageData(
-                        tokenMetadata.data.image,
-                    )
+                const { imageUrl, imageType } = await getImageData(
+                    tokenMetadata.data.image,
+                )
 
-                    return {
-                        tokenMetadata: tokenMetadata.data,
-                        imageUrl,
-                        imageType,
-                    }
-                } catch (e) {
-                    info("fetchMetadata -- HTTPS", e)
-                    throw e
+                return {
+                    tokenMetadata: tokenMetadata.data,
+                    imageUrl,
+                    imageType,
                 }
             }
 
             default:
+                warn(`Unable to detect protocol for metadata URI ${uri}`)
                 return undefined
         }
     } catch (e) {
-        error(e)
+        error(`Error fetching metadata ${uri}`, e)
     }
 }
 
