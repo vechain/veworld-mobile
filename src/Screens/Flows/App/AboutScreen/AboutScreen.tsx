@@ -39,7 +39,7 @@ export const AboutScreen = () => {
 
     return (
         <Layout
-            isScrollEnabled={false}
+            isScrollEnabled={true}
             title={LL.TITLE_ABOUT()}
             body={
                 <BaseView h={100} alignItems="center">
