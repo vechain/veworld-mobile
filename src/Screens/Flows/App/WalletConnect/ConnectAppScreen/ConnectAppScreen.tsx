@@ -123,7 +123,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 }),
             )
 
-            // TODO (Dan) (https://github.com/vechainfoundation/veworld-mobile/issues/769) add to history?
             dispatch(addConnectedAppActivity(name, url, description, methods))
 
             showSuccessToast(
