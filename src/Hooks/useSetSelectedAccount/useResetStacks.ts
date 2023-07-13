@@ -8,6 +8,8 @@ export const useResetStacks = () => {
     const resetStacks = useCallback(() => {
         const state = nav.getState()
 
+        if (!state) return
+
         const nftRoutes = state.routes.filter(r => r.name === Routes.NFTS)
         const homeRoutes = state.routes.filter(r => r.name === Routes.HOME)
 

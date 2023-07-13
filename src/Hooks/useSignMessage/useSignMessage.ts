@@ -51,9 +51,7 @@ export const useSignMessage = ({ hash }: Props) => {
         const { decryptedWallet: senderWallet } =
             await CryptoUtils.decryptWallet(senderDevice, password)
 
-        const signature = await getSignature(senderWallet)
-
-        return signature
+        return await getSignature(senderWallet)
     }
 
     return {

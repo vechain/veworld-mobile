@@ -5,16 +5,16 @@ import { getSdkError } from "@walletconnect/utils"
 import React, { FC, useCallback } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
+    AccountCard,
+    BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    CloseModalButton,
+    SelectAccountBottomSheet,
     showErrorToast,
     showSuccessToast,
-    BaseButton,
-    SelectAccountBottomSheet,
-    AccountCard,
-    CloseModalButton,
     useWalletConnect,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
@@ -27,7 +27,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { WalletConnectUtils, error } from "~Utils"
+import { error, WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests } from "./Components"
 import { AppInfo } from "../Components"
@@ -77,7 +77,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             return
         }
 
-        if (!currentProposal || !requiredNamespaces) {
+        if (!currentProposal || !requiredNamespaces.vechain.chains) {
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
             return
         }
@@ -129,7 +129,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 }),
             )
         } catch (err: unknown) {
-            error(err)
+            error("ConnectedAppScreen:handleAccept", err)
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
         }
     }, [currentProposal, dispatch, LL, nav, web3Wallet, name, selectedAccount])
@@ -147,7 +147,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     reason: getSdkError("USER_REJECTED_METHODS"),
                 })
             } catch (err: unknown) {
-                error(err)
+                error("ConnectedAppScreen:handleReject", err)
             } finally {
                 nav.goBack()
             }

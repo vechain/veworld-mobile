@@ -1,4 +1,3 @@
-import { SignClientTypes } from "@walletconnect/types"
 import {
     signMessageRequestErrorResponse,
     signMessageRequestSuccessResponse,
@@ -9,8 +8,9 @@ import {
 } from "./WalletConnectResponseUtils"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { Certificate } from "thor-devkit"
-import { NETWORK_TYPE, Network } from "~Model"
+import { Network, NETWORK_TYPE } from "~Model"
 import { genesises } from "~Constants"
+import { PendingRequestTypes } from "@walletconnect/types"
 
 // Mock the dependencies
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
@@ -63,7 +63,7 @@ describe("transactionRequestSuccessResponse", () => {
         // Call the function
         await transactionRequestSuccessResponse(
             { request, web3Wallet, LL } as {
-                request: SignClientTypes.EventArguments["session_request"]
+                request: PendingRequestTypes.Struct
                 web3Wallet: any
                 LL: any
             },
@@ -120,7 +120,7 @@ describe("transactionRequestSuccessResponse", () => {
         // Call the function
         await transactionRequestSuccessResponse(
             { request, web3Wallet, LL } as {
-                request: SignClientTypes.EventArguments["session_request"]
+                request: PendingRequestTypes.Struct
                 web3Wallet: any
                 LL: any
             },
@@ -181,7 +181,7 @@ describe("signMessageRequestSuccessResponse", () => {
         // Call the function
         await signMessageRequestSuccessResponse(
             { request, web3Wallet, LL } as {
-                request: SignClientTypes.EventArguments["session_request"]
+                request: PendingRequestTypes.Struct
                 web3Wallet: any
                 LL: any
             },
@@ -239,7 +239,7 @@ describe("signMessageRequestSuccessResponse", () => {
         // Call the function
         await signMessageRequestSuccessResponse(
             { request, web3Wallet, LL } as {
-                request: SignClientTypes.EventArguments["session_request"]
+                request: PendingRequestTypes.Struct
                 web3Wallet: any
                 LL: any
             },
@@ -290,7 +290,7 @@ describe("transactionRequestFailedResponse", () => {
 
         // Call the function
         await transactionRequestFailedResponse({ request, web3Wallet, LL } as {
-            request: SignClientTypes.EventArguments["session_request"]
+            request: PendingRequestTypes.Struct
             web3Wallet: any
             LL: any
         })
@@ -325,7 +325,7 @@ describe("transactionRequestFailedResponse", () => {
 
         // Call the function
         await transactionRequestFailedResponse({ request, web3Wallet, LL } as {
-            request: SignClientTypes.EventArguments["session_request"]
+            request: PendingRequestTypes.Struct
             web3Wallet: any
             LL: any
         })
@@ -361,7 +361,7 @@ describe("sponsorSignRequestFailedResponse", () => {
 
         // Call the function
         await sponsorSignRequestFailedResponse({ request, web3Wallet, LL } as {
-            request: SignClientTypes.EventArguments["session_request"]
+            request: PendingRequestTypes.Struct
             web3Wallet: any
             LL: any
         })
@@ -402,7 +402,7 @@ describe("sponsorSignRequestFailedResponse", () => {
 
         // Call the function
         await sponsorSignRequestFailedResponse({ request, web3Wallet, LL } as {
-            request: SignClientTypes.EventArguments["session_request"]
+            request: PendingRequestTypes.Struct
             web3Wallet: any
             LL: any
         })
@@ -444,7 +444,7 @@ describe("userRejectedMethodsResponse", () => {
 
         // Call the function
         await userRejectedMethodsResponse({ request, web3Wallet, LL } as {
-            request: SignClientTypes.EventArguments["session_request"]
+            request: PendingRequestTypes.Struct
             web3Wallet: any
             LL: any
         })
@@ -474,7 +474,7 @@ describe("userRejectedMethodsResponse", () => {
 
         // Call the function
         await userRejectedMethodsResponse({ request, web3Wallet, LL } as {
-            request: SignClientTypes.EventArguments["session_request"]
+            request: PendingRequestTypes.Struct
             web3Wallet: any
             LL: any
         })
@@ -508,7 +508,7 @@ describe("signMessageRequestErrorResponse", () => {
             web3Wallet,
             LL,
         } as {
-            request: SignClientTypes.EventArguments["session_request"]
+            request: PendingRequestTypes.Struct
             web3Wallet: any
             LL: any
         })
@@ -544,7 +544,7 @@ describe("signMessageRequestErrorResponse", () => {
             web3Wallet,
             LL,
         } as {
-            request: SignClientTypes.EventArguments["session_request"]
+            request: PendingRequestTypes.Struct
             web3Wallet: any
             LL: any
         })

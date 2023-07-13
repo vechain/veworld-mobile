@@ -1,4 +1,4 @@
-import { SignClientTypes } from "@walletconnect/types"
+import { PendingRequestTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { Linking } from "react-native"
@@ -12,7 +12,7 @@ import WalletConnectUtils from "~Utils/WalletConnectUtils"
 import { TranslationFunctions } from "~i18n"
 
 type BaseProps = {
-    request: SignClientTypes.EventArguments["session_request"]
+    request: PendingRequestTypes.Struct
     web3Wallet: IWeb3Wallet | undefined
     LL: TranslationFunctions
 }

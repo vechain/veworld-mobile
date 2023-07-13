@@ -29,7 +29,7 @@
 			<string>org.vechain.veworld.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>veworld</string>
+				<string>wc</string>
 			</array>
 		</dict>
 	</array>

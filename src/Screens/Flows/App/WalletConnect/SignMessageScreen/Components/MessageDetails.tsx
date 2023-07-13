@@ -8,24 +8,22 @@ import { useI18nContext } from "~i18n"
 import React from "react"
 import { capitalize } from "lodash"
 import { WalletConnectUtils } from "~Utils"
-import { SessionTypes, SignClientTypes } from "@walletconnect/types"
+import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
 import { useTheme } from "~Hooks"
 
 type Props = {
     sessionRequest: SessionTypes.Struct
-    requestEvent: SignClientTypes.EventArguments["session_request"]
+    requestEvent: PendingRequestTypes.Struct
+    message: Connex.Vendor.CertMessage
 }
 
-export const MessageDetails = ({ sessionRequest, requestEvent }: Props) => {
+export const MessageDetails = ({ sessionRequest, message }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
     // Session request values
-    const { method, params } =
-        WalletConnectUtils.getRequestEventAttributes(requestEvent)
     const { name } =
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
-    const message = params.payload.content
 
     return (
         <BaseView>
@@ -53,7 +51,7 @@ export const MessageDetails = ({ sessionRequest, requestEvent }: Props) => {
             </BaseText>
             <BaseSpacer height={6} />
             <BaseText typographyFont="subSubTitle">
-                {capitalize(method)}
+                {capitalize(message.purpose)}
             </BaseText>
 
             <BaseSpacer height={12} />
@@ -69,7 +67,7 @@ export const MessageDetails = ({ sessionRequest, requestEvent }: Props) => {
             </BaseText>
             <BaseSpacer height={6} />
             <CompressAndExpandBaseText
-                text={message}
+                text={message.payload.content}
                 typographyFont="subSubTitle"
             />
         </BaseView>

@@ -1,10 +1,15 @@
-import { SessionTypes, SignClientTypes } from "@walletconnect/types"
+import {
+    PendingRequestTypes,
+    SessionTypes,
+    SignClientTypes,
+} from "@walletconnect/types"
 import {
     formatJsonRpcError,
     getNetworkType,
     getPairAttributes,
     getRequestEventAttributes,
     getSessionRequestAttributes,
+    getTopicFromPairUri,
     isValidURI,
 } from "./WalletConnectUtils"
 import { NETWORK_TYPE } from "~Model"
@@ -107,7 +112,7 @@ describe("getRequestEventAttributes", () => {
         }
 
         const attributes = getRequestEventAttributes(
-            requestEvent as SignClientTypes.EventArguments["session_request"],
+            requestEvent as PendingRequestTypes.Struct,
         )
 
         expect(attributes).toEqual({
@@ -226,5 +231,24 @@ describe("getNetworkType", () => {
 
         // Assertion
         expect(result.type).toEqual(NETWORK_TYPE.MAIN)
+    })
+})
+
+describe("getTopicFromPairUri", () => {
+    it("should return the topic from the pair uri", () => {
+        const uri =
+            "wc:f806fb3ec5966416231fa4843266c62c325dbc91ed43738c85aff5614001f12d@2?relay-protocol=irn&symKey=a595115e95bb91be8c4659c7cc97379aa519be872dacbd66c9075cb70367342f"
+
+        const topic = getTopicFromPairUri(uri)
+
+        expect(topic).toEqual(
+            "f806fb3ec5966416231fa4843266c62c325dbc91ed43738c85aff5614001f12d",
+        )
+    })
+
+    it("should throw an error if the uri is invalid", () => {
+        const uri = "invalidUri"
+
+        expect(() => getTopicFromPairUri(uri)).toThrowError()
     })
 })

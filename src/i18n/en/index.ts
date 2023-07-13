@@ -49,7 +49,7 @@ const en: BaseTranslation = {
     BTN_BACKUP_MENMONIC: "Backup phrase",
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
-   
+
 
     // BODY
     BD_GDPR:
@@ -116,8 +116,8 @@ const en: BaseTranslation = {
     BD_USD: "USD",
     BD_EUR: "EUR",
     BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
-    BD_CONTACTS_LIST: "Your contact list", 
-    BD_CONTACTS_LIST_DISCLAIMER: "Add friends and addresses you trust", 
+    BD_CONTACTS_LIST: "Your contact list",
+    BD_CONTACTS_LIST_DISCLAIMER: "Add friends and addresses you trust",
     BD_ADD_CONTACT: "Add contact details",
     BD_ADD_CONTACT_DISCLAIMER: "Insert the required data to add a new contact",
     BD_CONTACT_NAME: "Contact name",
@@ -136,7 +136,7 @@ const en: BaseTranslation = {
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
     BD_APP_BLOCKED: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
- 
+
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
     TITLE_ONBARDING_SLIDE_01: "Seamlessly manage your crypto",
@@ -201,8 +201,8 @@ const en: BaseTranslation = {
     SB_SELECT_LANGUAGE: "Select your language",
     SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
     SB_CAMERA_ANAVAILABILITY: "Your device does not support this operation.",
-    SB_YOUR_TOKENS : "Your tokens",
-    SB_YOUR_NFTS : "Your collections",
+    SB_YOUR_TOKENS: "Your tokens",
+    SB_YOUR_NFTS: "Your collections",
     SB_CONFIRM_OPERATION: "Confirm the operation?",
     SB_CONTACT_LIST_EMPTY: "Your contact list is empty",
     SB_CREATE_ONE: "Create one",
@@ -376,6 +376,10 @@ const en: BaseTranslation = {
     NOTIFICATION_warning_wallet_connect_connection_could_delay: "Connecting may take a few seconds.",
     NOTIFICATION_wallet_connect_error_pairing: "Error pairing with the app, please generate a new QR CODE.",
     NOTIFICATION_wallet_connect_incompatible_dapp: "The requested dapp is not compatible with VeWorld.",
+    NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: "The DApp is not verified on Wallet Connect",
+    NOTIFICATION_DAPP_INVALID_REQUEST: "The DApp made an invalid request",
+    NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: "The DApp requested an invalid account",
+    NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: "The DApp requested an account that was not found",
     NOTIFICATION_wallet_connect_not_initialized: "Wallet Connect not initialized.",
     NOTIFICATION_wallet_connect_successfull_connection: "Successfully connected to {name}.",
     NOTIFICATION_wallet_connect_sign_success: "Certificate signed successfully.",
@@ -386,7 +390,7 @@ const en: BaseTranslation = {
     NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",
     NOTIFICATION_wallet_connect_invalid_uri: "Invalid Wallet Connect URI.",
     NOTIFICATION_wallet_connect_error_during_signing: "Something went wrong while signing the message",
-   
+
     // Connected apps
     CONNECTED_APP_TITLE: "Connected app",
     CONNECTED_APP_REQUEST: "External app connection",
@@ -395,10 +399,10 @@ const en: BaseTranslation = {
     CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: "\u25CF Request transactions to send to Vechain Thor",
     CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
     CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
-    CONNECTED_APP_SIGN_REQUEST_DESCRIPTION:  "Your Signature is being requested to sign a certificate",
+    CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: "Your Signature is being requested to sign a certificate",
     CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign and Send a transaction",
     CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to sign and send a transaction",
-   
+
     CONNECTED_APP_SELECTED_ACCOUNT_LABEL: "Account",
     CONNECTED_APP_SELECTED_ORIGIN_LABEL: "Origin",
     CONNECTED_APP_SELECTED_PURPOSE_LABEL: "Purpose",
@@ -412,10 +416,10 @@ const en: BaseTranslation = {
     CONNECTED_APPS_SCREEN_DESCRIPTION: "Connect your wallet with apps to make transactions and sign certificates.",
     CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: "You have no connected apps. Once you have some, they will displayed here.",
     ADD_APP: "Add app",
-    CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: "Confirming this you will disconnect the {name: string} app from {alias: string}",
-    
-    CONNECTED_APP_DETAILS_TITLE: "Connected app",   
-    CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",   
+    CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: "Confirming this you will disconnect the {name: string} app",
+
+    CONNECTED_APP_DETAILS_TITLE: "Connected app",
+    CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",
@@ -452,7 +456,7 @@ const en: BaseTranslation = {
     // Settings Currencies
 
     SETTINGS_CURRENCIES_CONVERT_TO_FIAT: "Convert balances to fiat",
-    
+
     // Settings Languages
 
     // Settings Transactions

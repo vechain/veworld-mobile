@@ -1311,6 +1311,22 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_wallet_connect_incompatible_dapp: string
 	/**
+	 * T​h​e​ ​D​A​p​p​ ​i​s​ ​n​o​t​ ​v​e​r​i​f​i​e​d​ ​o​n​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t
+	 */
+	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: string
+	/**
+	 * T​h​e​ ​D​A​p​p​ ​m​a​d​e​ ​a​n​ ​i​n​v​a​l​i​d​ ​r​e​q​u​e​s​t
+	 */
+	NOTIFICATION_DAPP_INVALID_REQUEST: string
+	/**
+	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​i​n​v​a​l​i​d​ ​a​c​c​o​u​n​t
+	 */
+	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: string
+	/**
+	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​a​c​c​o​u​n​t​ ​t​h​a​t​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d
+	 */
+	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: string
+	/**
 	 * W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​n​o​t​ ​i​n​i​t​i​a​l​i​z​e​d​.
 	 */
 	NOTIFICATION_wallet_connect_not_initialized: string
@@ -1441,11 +1457,10 @@ type RootTranslation = {
 	 */
 	ADD_APP: string
 	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
-	 * @param {string} alias
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p
 	 * @param {string} name
 	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'alias' | 'name'>
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'name'>
 	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
@@ -3400,6 +3415,22 @@ Please, try again later.
 	 */
 	NOTIFICATION_wallet_connect_incompatible_dapp: () => LocalizedString
 	/**
+	 * The DApp is not verified on Wallet Connect
+	 */
+	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: () => LocalizedString
+	/**
+	 * The DApp made an invalid request
+	 */
+	NOTIFICATION_DAPP_INVALID_REQUEST: () => LocalizedString
+	/**
+	 * The DApp requested an invalid account
+	 */
+	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: () => LocalizedString
+	/**
+	 * The DApp requested an account that was not found
+	 */
+	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: () => LocalizedString
+	/**
 	 * Wallet Connect not initialized.
 	 */
 	NOTIFICATION_wallet_connect_not_initialized: () => LocalizedString
@@ -3528,9 +3559,9 @@ Please, try again later.
 	 */
 	ADD_APP: () => LocalizedString
 	/**
-	 * Confirming this you will disconnect the {name} app from {alias}
+	 * Confirming this you will disconnect the {name} app
 	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { name: string }) => LocalizedString
 	/**
 	 * Connected app
 	 */
