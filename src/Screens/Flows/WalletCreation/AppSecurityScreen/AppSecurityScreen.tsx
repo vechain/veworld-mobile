@@ -60,6 +60,7 @@ export const AppSecurityScreen = () => {
 
                 <BaseView alignItems="center" w={100}>
                     <BaseButton
+                        haptics="Medium"
                         action={onBiometricsPress}
                         w={100}
                         mx={20}
@@ -70,6 +71,7 @@ export const AppSecurityScreen = () => {
                     />
 
                     <BaseButton
+                        haptics="Medium"
                         variant="outline"
                         action={onPasswordPress}
                         w={100}

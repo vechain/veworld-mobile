@@ -9,10 +9,10 @@ import React, { useCallback, useMemo } from "react"
 import { ColorThemeType, typography, TFonts, COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
-import * as Haptics from "expo-haptics"
 import Lottie from "lottie-react-native"
 import { LoaderDark, LoaderLight } from "~Assets"
 import { StyleProps } from "react-native-reanimated"
+import HapticsService from "~Services/HapticsService"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -38,7 +38,7 @@ type Props = {
     fontWeight?: keyof typeof otherTypography.fontWeight
     fontFamily?: keyof typeof otherTypography.fontFamily
     selfAlign?: "auto" | FlexAlignType
-    haptics?: "light" | "medium" | "heavy"
+    haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
     leftIcon?: React.ReactNode
     rightIcon?: React.ReactNode
     isLoading?: boolean
@@ -72,22 +72,20 @@ export const BaseButton = ({
     )
 
     const onButtonPress = useCallback(async () => {
-        if (otherProps.haptics) {
-            switch (otherProps.haptics) {
-                case Haptics.ImpactFeedbackStyle.Light:
-                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-                    break
+        const { haptics } = otherProps
 
-                case Haptics.ImpactFeedbackStyle.Medium:
-                    await Haptics.impactAsync(
-                        Haptics.ImpactFeedbackStyle.Medium,
-                    )
-                    break
-
-                case Haptics.ImpactFeedbackStyle.Heavy:
-                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-                    break
-            }
+        if (
+            haptics === "Success" ||
+            haptics === "Warning" ||
+            haptics === "Error"
+        ) {
+            await HapticsService.triggerNotification({ level: haptics })
+        } else if (
+            haptics === "Light" ||
+            haptics === "Medium" ||
+            haptics === "Heavy"
+        ) {
+            await HapticsService.triggerImpact({ level: haptics })
         }
 
         otherProps.action()
