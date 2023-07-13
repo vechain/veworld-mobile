@@ -12,7 +12,7 @@ import {
     WalletConnectContextProvider,
     TranslationProvider,
     BaseToast,
-    ConnexProvider,
+    ConnexContextProvider,
 } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
@@ -83,7 +83,7 @@ const Main = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <TranslationProvider>
                 {isConnected ? (
-                    <ConnexProvider>
+                    <ConnexContextProvider>
                         <SafeAreaProvider>
                             <NavigationProvider>
                                 <BottomSheetModalProvider>
@@ -94,7 +94,7 @@ const Main = () => {
                             </NavigationProvider>
                             <BaseToast />
                         </SafeAreaProvider>
-                    </ConnexProvider>
+                    </ConnexContextProvider>
                 ) : (
                     <InternetDownScreen />
                 )}
