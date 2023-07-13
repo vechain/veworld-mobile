@@ -43,8 +43,11 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit }: Props) => {
                 )}
             </BaseCard>
             <BaseSpacer width={16} />
-            <BaseView>
-                <BaseText typographyFont="subTitleBold">
+            <BaseView w={75}>
+                <BaseText
+                    typographyFont="subTitleBold"
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
                     {tokenWithBalance.name}
                 </BaseText>
                 <BaseView
@@ -81,7 +84,8 @@ const baseStyles = (isEdit: boolean) =>
             flexDirection: "row",
             alignItems: "center",
             width: "100%",
-            flexGrow: 1,
+            // flexWrap: "wrap",
+            // flexGrow: 1,
             paddingHorizontal: 12,
             paddingLeft: isEdit ? 44 : 12,
         },
