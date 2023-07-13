@@ -294,6 +294,7 @@ const en: BaseTranslation = {
     ALERT_MSG_ENABLE_BLUETOOTH: "Please, open the device settings and enable to continue.",
     ALERT_TITLE_UNSUPPORTED_BLUETOOTH: "Bluetooth is not supported",
     ALERT_MSG_UNSUPPORTED_BLUETOOTH: "Your device does not support Bluetooth, which is required to use this feature.",
+    ALERT_MSG_INTERNET_DOWN: "Connection problems detected.\nTry reconnect your device to the internet.",
 
 
     // Errors
@@ -562,6 +563,8 @@ const en: BaseTranslation = {
     // Wallet Titles
 
     // Wallet 
+    WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: "We need permissions to perform bluetooth scanning",
+    WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: "Allow Bluetooth",
     WALLET_LEDGER_SELECT_DEVICE_TITLE: "Import ledger",
     WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked and the bluetooth enabled",
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: "Enable additional settings",

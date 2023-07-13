@@ -16,12 +16,14 @@ import {
 } from "~Storage/Redux"
 import { ImportNFTView } from "./Components/ImportNFTView"
 import { NetworkErrorView } from "./Components/NetworkErrorView"
-import { NFTLIst } from "./Components/NFTLIst"
+import { NFTList } from "./Components/NFTList"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { MathUtils } from "~Utils"
+import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
+    useNFTRegistry()
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const [
@@ -76,7 +78,7 @@ export const NFTScreen = () => {
 
         if (!isEmpty(collections)) {
             return (
-                <NFTLIst
+                <NFTList
                     collections={collections}
                     isLoading={isLoading}
                     onGoToBlackListed={onGoToBlackListed}

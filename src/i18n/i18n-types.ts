@@ -1053,6 +1053,11 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
 	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​p​r​o​b​l​e​m​s​ ​d​e​t​e​c​t​e​d​.​
+​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
+	 */
+	ALERT_MSG_INTERNET_DOWN: string
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
@@ -1876,6 +1881,14 @@ type RootTranslation = {
 	 * W​a​l​l​e​t
 	 */
 	WALLET_LABEL_WALLET: string
+	/**
+	 * W​e​ ​n​e​e​d​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​p​e​r​f​o​r​m​ ​b​l​u​e​t​o​o​t​h​ ​s​c​a​n​n​i​n​g
+	 */
+	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: string
+	/**
+	 * A​l​l​o​w​ ​B​l​u​e​t​o​o​t​h
+	 */
+	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: string
 	/**
 	 * I​m​p​o​r​t​ ​l​e​d​g​e​r
 	 */
@@ -3184,6 +3197,11 @@ export type TranslationFunctions = {
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
 	/**
+	 * Connection problems detected.
+Try reconnect your device to the internet.
+	 */
+	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
+	/**
 	 * Something went wrong!
 	 */
 	ERROR_GENERIC_SUBTITLE: () => LocalizedString
@@ -3988,6 +4006,14 @@ Please, try again later.
 	 * Wallet
 	 */
 	WALLET_LABEL_WALLET: () => LocalizedString
+	/**
+	 * We need permissions to perform bluetooth scanning
+	 */
+	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: () => LocalizedString
+	/**
+	 * Allow Bluetooth
+	 */
+	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: () => LocalizedString
 	/**
 	 * Import ledger
 	 */

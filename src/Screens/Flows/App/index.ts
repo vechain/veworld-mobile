@@ -24,3 +24,5 @@ export * from "./ActivityDetailsScreen"
 export * from "./NFT"
 export * from "./WalletConnect"
 export * from "./AboutScreen"
+export * from "./InternetDownScreen"
+
