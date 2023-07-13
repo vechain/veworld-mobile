@@ -320,7 +320,7 @@ export const addPendingDappTransactionActivity =
         const selectedAccount = selectSelectedAccount(getState())
         const selectedNetwork = selectSelectedNetwork(getState())
 
-        // Ensure selectedAccount is not undefinedù
+        // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
 
         const pendingDappActivity: Activity =
