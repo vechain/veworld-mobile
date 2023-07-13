@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -28,6 +28,7 @@ export const SelectLedgerDevice = () => {
     const nav = useNavigation()
     const [androidPermissionsGranted, setAndroidPermissionsGranted] =
         useState(false)
+    const [firstNeverAskAgain, setFirstNeverAskAgain] = useState(true)
 
     const [availableDevices, setAvailableDevices] = useState<
         ConnectedLedgerDevice[]
@@ -48,36 +49,48 @@ export const SelectLedgerDevice = () => {
         }
     }, [nav, selectedDevice])
 
-    const goToSettings = useCallback(() => {
-        Linking.openSettings()
-    }, [])
+    const checkPermissions = useCallback(
+        async (fromUseEffect = false) => {
+            if (Platform.OS === "android") {
+                const permissionResponses =
+                    await PermissionsAndroid.requestMultiple([
+                        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+                    ])
+                const permissionStatuses = Object.values(permissionResponses)
+                const allGranted = permissionStatuses.every(
+                    status => status === PermissionsAndroid.RESULTS.GRANTED,
+                )
 
-    const askForPermissions = useCallback(async () => {
-        if (Platform.OS === "android") {
-            const locationPermission = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            )
-            const bleConnectPermission = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-            )
-            const bleScanPermission = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-            )
-            if (
-                locationPermission === PermissionsAndroid.RESULTS.GRANTED &&
-                bleConnectPermission === PermissionsAndroid.RESULTS.GRANTED &&
-                bleScanPermission === PermissionsAndroid.RESULTS.GRANTED
-            ) {
-                setAndroidPermissionsGranted(true)
-            } else {
+                if (allGranted) {
+                    setAndroidPermissionsGranted(true)
+                    return
+                }
+
                 setAndroidPermissionsGranted(false)
+
+                /** https://developer.android.com/about/versions/11/privacy/permissions#dialog-visibility */
+                const someNeverAskAgain = permissionStatuses.some(
+                    status =>
+                        status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN,
+                )
+
+                if (someNeverAskAgain) {
+                    if (!firstNeverAskAgain && !fromUseEffect) {
+                        await Linking.openSettings()
+                    } else {
+                        setFirstNeverAskAgain(false)
+                    }
+                }
             }
-        }
-    }, [])
+        },
+        [firstNeverAskAgain],
+    )
 
     useEffect(() => {
-        askForPermissions()
-    }, [askForPermissions])
+        checkPermissions(true)
+    }, [checkPermissions])
 
     /**
      * Listen for new ledger (nanox) devices if bluetooth is enabled
@@ -135,6 +148,17 @@ export const SelectLedgerDevice = () => {
 
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
+    const devicesFoundMessage = useMemo(() => {
+        if (availableDevices.length === 0) {
+            return LL.WALLET_LEDGER_NO_DEVICES_FOUND()
+        }
+        if (availableDevices.length === 1) {
+            return LL.WALLET_LEDGER_ONE_DEVICE_FOUND()
+        }
+        return LL.WALLET_LEDGER_MORE_DEVICES_FOUND({
+            count: availableDevices.length,
+        })
+    }, [LL, availableDevices.length])
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
@@ -164,9 +188,7 @@ export const SelectLedgerDevice = () => {
                             align="center"
                             typographyFont="subTitleBold"
                             my={10}>
-                            {availableDevices.length > 0
-                                ? `${availableDevices.length} devices found`
-                                : "No devices found"}
+                            {devicesFoundMessage}
                         </BaseText>
                         {availableDevices.length > 0 && (
                             <FlatList
@@ -189,7 +211,7 @@ export const SelectLedgerDevice = () => {
                             </BaseText>
                             <BaseSpacer height={16} />
                             <BaseButton
-                                action={goToSettings}
+                                action={checkPermissions}
                                 w={100}
                                 title={LL.WALLET_LEDGER_ASK_PERMISSIONS_BUTTON()}
                             />

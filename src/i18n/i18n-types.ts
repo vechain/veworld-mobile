@@ -1842,11 +1842,11 @@ type RootTranslation = {
 	 */
 	WALLET_LABEL_WALLET: string
 	/**
-	 * W​e​ ​n​e​e​d​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​p​e​r​f​o​r​m​ ​b​l​u​e​t​o​o​t​h​ ​s​c​a​n​n​i​n​g
+	 * W​e​ ​n​e​e​d​ ​b​l​u​e​t​o​o​t​h​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​p​e​r​f​o​r​m​ ​b​l​u​e​t​o​o​t​h​ ​s​c​a​n​n​i​n​g
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: string
 	/**
-	 * A​l​l​o​w​ ​B​l​u​e​t​o​o​t​h
+	 * G​i​v​e​ ​p​e​r​m​i​s​s​i​o​n​s
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: string
 	/**
@@ -1854,7 +1854,20 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: string
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​a​n​d​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d
+	 * N​o​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
+	 */
+	WALLET_LEDGER_NO_DEVICES_FOUND: string
+	/**
+	 * 1​ ​d​e​v​i​c​e​ ​f​o​u​n​d
+	 */
+	WALLET_LEDGER_ONE_DEVICE_FOUND: string
+	/**
+	 * {​c​o​u​n​t​}​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
+	 * @param {number} count
+	 */
+	WALLET_LEDGER_MORE_DEVICES_FOUND: RequiredParams<'count'>
+	/**
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
@@ -3931,11 +3944,11 @@ Please, try again later.
 	 */
 	WALLET_LABEL_WALLET: () => LocalizedString
 	/**
-	 * We need permissions to perform bluetooth scanning
+	 * We need bluetooth and location permissions to perform bluetooth scanning
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: () => LocalizedString
 	/**
-	 * Allow Bluetooth
+	 * Give permissions
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: () => LocalizedString
 	/**
@@ -3943,7 +3956,19 @@ Please, try again later.
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked and the bluetooth enabled
+	 * No devices found
+	 */
+	WALLET_LEDGER_NO_DEVICES_FOUND: () => LocalizedString
+	/**
+	 * 1 device found
+	 */
+	WALLET_LEDGER_ONE_DEVICE_FOUND: () => LocalizedString
+	/**
+	 * {count} devices found
+	 */
+	WALLET_LEDGER_MORE_DEVICES_FOUND: (arg: { count: number }) => LocalizedString
+	/**
+	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**

@@ -9,6 +9,8 @@ import {
 import { BackButtonHeader } from "../BackButtonHeader"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     noBackButton?: boolean
@@ -32,6 +34,7 @@ export const Layout = ({
     safeAreaTestID,
 }: Props) => {
     const theme = useTheme()
+    const paddingBottom = useBottomTabBarHeight()
     const Title = () => (
         <BaseText
             typographyFont="subTitleBold"
@@ -40,6 +43,7 @@ export const Layout = ({
             {title}
         </BaseText>
     )
+
     return (
         <BaseSafeArea grow={1} testID={safeAreaTestID}>
             <BaseView h={100}>
@@ -60,7 +64,13 @@ export const Layout = ({
                         {body}
                     </BaseScrollView>
                 )}
-                {footer && <BaseView mx={noMargin ? 0 : 24}>{footer}</BaseView>}
+                {footer && (
+                    <BaseView
+                        mx={noMargin ? 0 : 24}
+                        mb={PlatformUtils.isAndroid() ? paddingBottom : 0}>
+                        {footer}
+                    </BaseView>
+                )}
             </BaseView>
         </BaseSafeArea>
     )
