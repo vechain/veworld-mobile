@@ -376,6 +376,8 @@ PODS:
   - react-native-mmkv (2.5.1):
     - MMKV (>= 1.2.13)
     - React-Core
+  - react-native-netinfo (9.4.1):
+    - React-Core
   - react-native-pager-view (6.2.0):
     - React-Core
   - react-native-quick-crypto (0.5.0):
@@ -595,6 +597,7 @@ DEPENDENCIES:
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
   - react-native-restart (from `../node_modules/react-native-restart`)
@@ -746,6 +749,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-random-values"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-quick-crypto:
@@ -871,6 +876,7 @@ SPEC CHECKSUMS:
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
+  react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df
   react-native-quick-crypto: a903ff39ac8fea78bb9d37cccc5cc0596afc9670
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162

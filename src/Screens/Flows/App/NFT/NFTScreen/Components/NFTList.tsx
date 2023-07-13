@@ -20,7 +20,7 @@ type Props = {
     hasNext: boolean
 }
 
-export const NFTLIst = memo(
+export const NFTList = memo(
     ({
         collections,
         fetchMoreCollections,

@@ -91,6 +91,7 @@ export const useNFTs = () => {
 
                 dispatch(
                     setNFTs({
+                        network: network.type,
                         address: selectedAccount.address,
                         collectionAddress: contractAddress,
                         NFTs: NFTs,
