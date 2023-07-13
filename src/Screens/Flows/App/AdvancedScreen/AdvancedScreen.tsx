@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback } from "react"
 import {
     BaseButton,
     BaseIcon,
@@ -14,11 +14,18 @@ import { info } from "~Utils"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
+import {
+    selectSentryTrackingEnabled,
+    setSentryTrackingEnabled,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 
 export const AdvancedScreen = () => {
     const nav = useNavigation()
     const theme = useTheme()
     const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
@@ -27,10 +34,13 @@ export const AdvancedScreen = () => {
         info("Download logs")
     }, [])
 
-    const [isAnalytics, setIsAnalytics] = useState(true)
-    const toggleTagSwitch = useCallback((newValue: boolean) => {
-        setIsAnalytics(newValue)
-    }, [])
+    const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
+    const toggleSentryTrackingSwitch = useCallback(
+        (newValue: boolean) => {
+            dispatch(setSentryTrackingEnabled(newValue))
+        },
+        [dispatch],
+    )
 
     return (
         <BaseSafeArea grow={1}>
@@ -86,8 +96,8 @@ export const AdvancedScreen = () => {
                 <EnableFeature
                     title={LL.BD_HELP_IMPROVE()}
                     subtitle={LL.BD_HELP_IMPROVE_DISCLAIMER()}
-                    onValueChange={toggleTagSwitch}
-                    value={isAnalytics}
+                    onValueChange={toggleSentryTrackingSwitch}
+                    value={sentryTrackingEnabled}
                 />
             </BaseView>
         </BaseSafeArea>

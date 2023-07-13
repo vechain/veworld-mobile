@@ -53,6 +53,7 @@ target 'VeWorld' do
   )
   
   pod 'OpenSSL-Universal', :modular_headers => true, :configurations => ['Release']
+  pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
   
   target 'VeWorldTests' do
     inherit! :complete
