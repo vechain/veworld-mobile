@@ -80,7 +80,6 @@ export const prepareCollectionData = async (
         },
         balanceOf: nft.pagination.totalElements,
         hasCount: nft.pagination.hasCount,
-        nfts: [],
         isBlacklisted: false,
         totalSupply: await getTokenTotalSupply(_nft.contractAddress, thor),
     }

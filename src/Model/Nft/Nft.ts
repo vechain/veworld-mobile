@@ -22,7 +22,6 @@ export interface NonFungibleTokenCollection {
     }
     balanceOf: number
     hasCount: boolean
-    nfts: NonFungibleToken[]
     isBlacklisted: boolean
     totalSupply?: number
 }
