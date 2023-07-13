@@ -1053,6 +1053,11 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
 	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​p​r​o​b​l​e​m​s​ ​d​e​t​e​c​t​e​d​.​
+​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
+	 */
+	ALERT_MSG_INTERNET_DOWN: string
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
@@ -3162,6 +3167,11 @@ export type TranslationFunctions = {
 	 * Your device does not support Bluetooth, which is required to use this feature.
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
+	/**
+	 * Connection problems detected.
+Try reconnect your device to the internet.
+	 */
+	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */

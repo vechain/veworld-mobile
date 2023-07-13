@@ -36,8 +36,18 @@ export const selectAllActivities = createSelector(
  * @returns {Activity | undefined} - The activity with the specified txId, or undefined if not found.
  */
 export const selectActivity = createSelector(
-    [selectAllActivities, (state: RootState, txId: string) => txId],
-    (activities, txId) => activities.find(activity => activity.id === txId),
+    [
+        selectAllActivities,
+        selectSelectedNetwork,
+        (state: RootState, txId: string) => txId,
+    ],
+    (activities, network, txId) => {
+        return activities.find(
+            act =>
+                act.id.toLowerCase() === txId.toLowerCase() &&
+                act.genesisId === network.genesis.id,
+        )
+    },
 )
 
 /**

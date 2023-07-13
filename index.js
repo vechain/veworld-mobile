@@ -31,6 +31,8 @@ import { info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
+import { InternetDownScreen } from "~Screens"
+import NetInfo from "@react-native-community/netinfo"
 
 const { fontFamily } = typography
 
@@ -57,23 +59,29 @@ const Main = () => {
         [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
+    const { isConnected } = NetInfo.useNetInfo()
+
     return (
         <StoreContextProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
-                <ConnexContextProvider>
-                    <SafeAreaProvider>
-                        <TranslationProvider>
-                            <NavigationProvider>
-                                <BottomSheetModalProvider>
-                                    <WalletConnectContextProvider>
-                                        {fontsLoaded && <EntryPoint />}
-                                    </WalletConnectContextProvider>
-                                </BottomSheetModalProvider>
-                            </NavigationProvider>
-                            <BaseToast />
-                        </TranslationProvider>
-                    </SafeAreaProvider>
-                </ConnexContextProvider>
+                <TranslationProvider>
+                    {isConnected ? (
+                        <ConnexContextProvider>
+                            <SafeAreaProvider>
+                                <NavigationProvider>
+                                    <BottomSheetModalProvider>
+                                        <WalletConnectContextProvider>
+                                            {fontsLoaded && <EntryPoint />}
+                                        </WalletConnectContextProvider>
+                                    </BottomSheetModalProvider>
+                                </NavigationProvider>
+                                <BaseToast />
+                            </SafeAreaProvider>
+                        </ConnexContextProvider>
+                    ) : (
+                        <InternetDownScreen />
+                    )}
+                </TranslationProvider>
             </GestureHandlerRootView>
         </StoreContextProvider>
     )

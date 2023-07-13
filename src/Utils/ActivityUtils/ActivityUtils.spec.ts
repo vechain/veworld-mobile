@@ -48,6 +48,12 @@ const contractCallClause: Connex.VM.Clause = {
     data: "0x1234567",
 }
 
+const nftTransferClause: Connex.VM.Clause = {
+    to: "0xC8ebceCb1438b9A00eA1003c956C3e0b83aa0EC3",
+    value: "0x",
+    data: "0x23b872dd000000000000000000000000cf130b42ae31c4931298b4b1c0f1d974b8732957000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa0000000000000000000000000000000000000000000000000000000000000e15",
+}
+
 const BASE_SAMPLE_ACTIVITY = {
     //Send
     from: SAMPLE_ACCOUNT,
@@ -112,6 +118,15 @@ describe("getDestinationAddressFromClause", () => {
             ActivityUtils.getDestinationAddressFromClause(contractCallClause)
 
         expect(address).toBe(contractCallClause.to)
+    })
+
+    test("should return the destination address of nft transfer", () => {
+        const address =
+            ActivityUtils.getDestinationAddressFromClause(nftTransferClause)
+
+        const expectedAddress = "0xf077b491b355e64048ce21e3a6fc4751eeea77fa"
+
+        expect(address).toBe(expectedAddress)
     })
 })
 
