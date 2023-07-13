@@ -21,6 +21,7 @@ import { useBottomSheetModal } from "~Hooks"
 import { AccountWithDevice, NETWORK_TYPE } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
+    addConnectedAppActivity,
     insertSession,
     selectSelectedAccount,
     selectVisibleAccounts,
@@ -68,6 +69,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
      */
     const handleAccept = useCallback(async () => {
         const { id, params } = currentProposal
+
         const requiredNamespaces: ProposalTypes.RequiredNamespaces =
             params.requiredNamespaces
         const relays: RelayerTypes.ProtocolOptions[] = params.relays
@@ -122,6 +124,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             )
 
             // TODO (Dan) (https://github.com/vechainfoundation/veworld-mobile/issues/769) add to history?
+            dispatch(addConnectedAppActivity(name, url, description, methods))
 
             showSuccessToast(
                 LL.NOTIFICATION_wallet_connect_successfull_connection({
@@ -132,7 +135,18 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             error(err)
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
         }
-    }, [currentProposal, dispatch, LL, nav, web3Wallet, name, selectedAccount])
+    }, [
+        currentProposal,
+        web3Wallet,
+        nav,
+        LL,
+        selectedAccount.address,
+        dispatch,
+        name,
+        url,
+        description,
+        methods,
+    ])
 
     /**
      * Handle session rejection
