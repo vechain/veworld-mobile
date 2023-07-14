@@ -101,3 +101,9 @@ jest.mock("@walletconnect/web3wallet", () => ({
     on: jest.fn(),
     off: jest.fn(),
 }))
+
+jest.mock("react-native/Libraries/EventEmitter/NativeEventEmitter")
+
+// @ts-ignore
+import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
+jest.mock("react-native-device-info", () => mockRNDeviceInfo)
