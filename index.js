@@ -79,6 +79,8 @@ const Main = () => {
         }
     }, [sentryTrackingEnabled])
 
+    if (!fontsLoaded) return
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <TranslationProvider>
@@ -88,7 +90,7 @@ const Main = () => {
                             <NavigationProvider>
                                 <BottomSheetModalProvider>
                                     <WalletConnectContextProvider>
-                                        {fontsLoaded && <EntryPoint />}
+                                        <EntryPoint />
                                     </WalletConnectContextProvider>
                                 </BottomSheetModalProvider>
                             </NavigationProvider>

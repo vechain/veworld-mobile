@@ -11,6 +11,7 @@ import {
     BaseText,
     BaseView,
     FastActionsBar,
+    showWarningToast,
 } from "~Components"
 import { RootStackParamListDiscover, Routes } from "~Navigation"
 import {
@@ -60,18 +61,28 @@ export const AssetDetailScreen = ({ route }: Props) => {
         () => [
             {
                 name: LL.BTN_SEND(),
-                action: () =>
-                    nav.navigate(Routes.SELECT_AMOUNT_SEND, {
-                        token: foundToken[0],
-                        initialRoute: Routes.HOME,
-                    }),
+                action: () => {
+                    if (foundToken.length) {
+                        nav.navigate(Routes.SELECT_AMOUNT_SEND, {
+                            token: foundToken[0],
+                            initialRoute: Routes.HOME,
+                        })
+                    } else {
+                        showWarningToast(
+                            LL.HEADS_UP(),
+                            LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                                tokenName: token.symbol,
+                            }),
+                        )
+                    }
+                },
                 icon: (
                     <BaseIcon color={theme.colors.text} name="send-outline" />
                 ),
                 testID: "sendButton",
             },
         ],
-        [LL, foundToken, nav, theme.colors.text],
+        [LL, foundToken, nav, theme.colors.text, token.symbol],
     )
 
     return (
