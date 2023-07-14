@@ -175,6 +175,10 @@ type RootTranslation = {
 	 */
 	BTN_EDIT_PIN: string
 	/**
+	 * E​n​a​b​l​e
+	 */
+	BTN_ENABLE: string
+	/**
 	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
 	 */
 	BTN_BACKUP_MENMONIC: string
@@ -1046,6 +1050,14 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​B​l​u​e​t​o​o​t​h​,​ ​w​h​i​c​h​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​u​s​e​ ​t​h​i​s​ ​f​e​a​t​u​r​e​.
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
+	/**
+	 * E​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s
+	 */
+	ALERT_TITLE_ENABLE_LOCATION: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​e​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​t​o​ ​c​o​n​t​i​n​u​e​.
+	 */
+	ALERT_MSG_ENABLE_LOCATION: string
 	/**
 	 * C​o​n​n​e​c​t​i​o​n​ ​p​r​o​b​l​e​m​s​ ​d​e​t​e​c​t​e​d​.​
 ​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
@@ -2335,6 +2347,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_EDIT_PIN: () => LocalizedString
 	/**
+	 * Enable
+	 */
+	BTN_ENABLE: () => LocalizedString
+	/**
 	 * Backup phrase
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
@@ -3202,6 +3218,14 @@ export type TranslationFunctions = {
 	 * Your device does not support Bluetooth, which is required to use this feature.
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
+	/**
+	 * Enable location services
+	 */
+	ALERT_TITLE_ENABLE_LOCATION: () => LocalizedString
+	/**
+	 * Please, open the device settings and enable location services to continue.
+	 */
+	ALERT_MSG_ENABLE_LOCATION: () => LocalizedString
 	/**
 	 * Connection problems detected.
 Try reconnect your device to the internet.

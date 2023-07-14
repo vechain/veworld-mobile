@@ -8,10 +8,11 @@ import {
     BaseView,
     BluetoothStatusBottomSheet,
     DismissKeyboardView,
+    LocationStatusBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { debug } from "~Utils"
-import { PermissionsAndroid, StyleSheet, Platform, Linking } from "react-native"
+import { StyleSheet, Platform } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
@@ -22,13 +23,11 @@ import { ConnectedLedgerDevice } from "~Model"
 import Lottie from "lottie-react-native"
 import { BlePairingDark } from "~Assets/Lottie"
 import * as Haptics from "expo-haptics"
+import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const [androidPermissionsGranted, setAndroidPermissionsGranted] =
-        useState(false)
-    const [firstNeverAskAgain, setFirstNeverAskAgain] = useState(true)
 
     const [availableDevices, setAvailableDevices] = useState<
         ConnectedLedgerDevice[]
@@ -40,6 +39,9 @@ export const SelectLedgerDevice = () => {
         setSelectedDevice(device)
     }, [])
 
+    const { androidPermissionsGranted, checkPermissions } =
+        LedgerAndroidPermissions()
+
     const onImportClick = useCallback(() => {
         if (selectedDevice) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
@@ -48,49 +50,6 @@ export const SelectLedgerDevice = () => {
             })
         }
     }, [nav, selectedDevice])
-
-    const checkPermissions = useCallback(
-        async (fromUseEffect = false) => {
-            if (Platform.OS === "android") {
-                const permissionResponses =
-                    await PermissionsAndroid.requestMultiple([
-                        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-                    ])
-                const permissionStatuses = Object.values(permissionResponses)
-                const allGranted = permissionStatuses.every(
-                    status => status === PermissionsAndroid.RESULTS.GRANTED,
-                )
-
-                if (allGranted) {
-                    setAndroidPermissionsGranted(true)
-                    return
-                }
-
-                setAndroidPermissionsGranted(false)
-
-                /** https://developer.android.com/about/versions/11/privacy/permissions#dialog-visibility */
-                const someNeverAskAgain = permissionStatuses.some(
-                    status =>
-                        status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN,
-                )
-
-                if (someNeverAskAgain) {
-                    if (!firstNeverAskAgain && !fromUseEffect) {
-                        await Linking.openSettings()
-                    } else {
-                        setFirstNeverAskAgain(false)
-                    }
-                }
-            }
-        },
-        [firstNeverAskAgain],
-    )
-
-    useEffect(() => {
-        checkPermissions(true)
-    }, [checkPermissions])
 
     /**
      * Listen for new ledger (nanox) devices if bluetooth is enabled
@@ -230,6 +189,7 @@ export const SelectLedgerDevice = () => {
 
                 <BaseSpacer height={40} />
                 <BluetoothStatusBottomSheet />
+                <LocationStatusBottomSheet />
             </BaseSafeArea>
         </DismissKeyboardView>
     )

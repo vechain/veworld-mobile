@@ -46,6 +46,7 @@ const en: BaseTranslation = {
     BTN_ADD_CONTACT: "Add contact",
     BTN_CREATE_CONTACT: "Create contact",
     BTN_EDIT_PIN: "Edit Pin",
+    BTN_ENABLE: "Enable",
     BTN_BACKUP_MENMONIC: "Backup phrase",
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
@@ -293,6 +294,8 @@ const en: BaseTranslation = {
     ALERT_MSG_ENABLE_BLUETOOTH: "Please, open the device settings and enable to continue.",
     ALERT_TITLE_UNSUPPORTED_BLUETOOTH: "Bluetooth is not supported",
     ALERT_MSG_UNSUPPORTED_BLUETOOTH: "Your device does not support Bluetooth, which is required to use this feature.",
+    ALERT_TITLE_ENABLE_LOCATION: "Enable location services",
+    ALERT_MSG_ENABLE_LOCATION: "Please, open the device settings and enable location services to continue.",
     ALERT_MSG_INTERNET_DOWN: "Connection problems detected.\nTry reconnect your device to the internet.",
 
 
