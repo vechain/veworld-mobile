@@ -889,7 +889,7 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_AND: string
 	/**
-	 * n​a​m​e
+	 * N​a​m​e
 	 */
 	COMMON_LBL_NAME: string
 	/**
@@ -1448,6 +1448,14 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​e​d​ ​w​i​t​h
 	 */
 	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: string
+	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
+	 */
+	CONNECTED_APP_CONNECTION_REQUESTS: string
+	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	CONNECTED_APP_DESCRIPTION: string
 	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
@@ -3026,7 +3034,7 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_AND: () => LocalizedString
 	/**
-	 * name
+	 * Name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
 	/**
@@ -3567,6 +3575,14 @@ Please, try again later.
 	 * Connected with
 	 */
 	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: () => LocalizedString
+	/**
+	 * Connection requests
+	 */
+	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
+	/**
+	 * Description
+	 */
+	CONNECTED_APP_DESCRIPTION: () => LocalizedString
 	/**
 	 * Contract address
 	 */

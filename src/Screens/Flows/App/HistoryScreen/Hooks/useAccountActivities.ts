@@ -64,9 +64,7 @@ export const useAccountActivities = (address: string) => {
 
                 // If first page, update Redux state and set activities state
                 if (page === 0) {
-                    dispatch(
-                        updateAccountTransactionActivities(txActivities, thor),
-                    )
+                    dispatch(updateAccountTransactionActivities(txActivities))
 
                     setActivities(txActivities)
                     incrementPageAndSetFetchedFlag()

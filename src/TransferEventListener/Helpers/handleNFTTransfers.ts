@@ -23,6 +23,11 @@ export const handleNFTTransfers = async ({
 
     // User received NFT
     if (foundAccount.origin === TransactionOrigin.TO) {
+        // remove tx pending from redux
+        removeTransactionPending({
+            txId: transfer.txId,
+        })
+
         // inform user for successful transfer
         informUserForIncomingNFT({
             collectionName,
