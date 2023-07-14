@@ -1,3 +1,4 @@
+import { validateIpfsUri } from "~Utils/IPFSUtils/IPFSUtils"
 import { error } from "~Utils/Logger"
 
 /**
@@ -104,6 +105,32 @@ const isAllowed = (url: string) => {
 const isValid = (url: string) => {
     return isHttps(url) || isHttp(url)
 }
+/**
+ * Convert a URI to a URL
+ * We support both IPFS and Arweave URIs. Both should be converted to their https gateway URLs.
+ * All other URIs should pass through unchanged.
+ *
+ * @param uri
+ */
+const convertUriToUrl = (uri: string) => {
+    // if it is a data uri just return it
+    if (uri.startsWith("data:")) return uri
+    const splitUri = uri?.split("://")
+    if (splitUri.length !== 2) throw new Error(`Invalid URI ${uri}`)
+    const protocol = splitUri[0]
+    const uriWithoutProtocol = splitUri[1]
+
+    switch (protocol) {
+        case "ipfs":
+            if (!validateIpfsUri(uri))
+                throw new Error(`Invalid IPFS URI ${uri}`)
+            return `https://ipfs.io/ipfs/${uriWithoutProtocol}`
+        case "ar":
+            return `https://arweave.net/${uriWithoutProtocol}`
+        default:
+            return uri
+    }
+}
 
 export default {
     parseUrl,
@@ -116,4 +143,5 @@ export default {
     isLocalHost,
     isAllowed,
     isValid,
+    convertUriToUrl,
 }

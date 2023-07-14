@@ -1,7 +1,12 @@
 // Test Helpers.ts mocking calls where appropriate
 
-import { GithubCollectionResponse } from "~Networking"
-import { parseCollectionMetadataFromRegistry } from "./Helpers"
+import { GithubCollectionResponse, NftItemResponse } from "~Networking"
+import {
+    parseCollectionMetadataFromRegistry,
+    parseCollectionMetadataWithoutRegistry,
+    parseNftMetadata,
+} from "./Helpers"
+import { NFTPlaceholder } from "~Assets"
 import { NETWORK_TYPE } from "~Model"
 
 const regInfo: GithubCollectionResponse = {
@@ -52,8 +57,35 @@ jest.mock("~Networking", () => ({
         },
     }),
     getTokenTotalSupply: jest.fn().mockResolvedValue(1),
+    getName: jest.fn().mockResolvedValue("name"),
     getSymbol: jest.fn().mockResolvedValue("symbol"),
+    getTokenURI: jest
+        .fn()
+        .mockResolvedValue(
+            "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
+        ),
+    getTokenMetaIpfs: jest.fn().mockResolvedValue({
+        name: "name",
+        description: "description",
+        image: "http://google.com/image.png",
+        attributes: [],
+    }),
+    // fetchMetadata: jest.fn().mockResolvedValue({
+    //     name: "fetchMetadata-name",
+    //     description: "fetchMetadata-description",
+    //     image: "http://vechain.org/image.png",
+    //     attributes: [],
+    // }),
 }))
+
+jest.mock("axios", () => ({
+    head: jest.fn().mockResolvedValue({
+        headers: {
+            "content-type": "image/jpg",
+        },
+    }),
+}))
+
 const thor = {
     account: jest.fn(),
 } as any
@@ -76,47 +108,16 @@ describe("Helpers - parseCollectionMetadataFromRegistry", () => {
             thor,
         )
         expect(result).toEqual({
-            address: collection,
-            name: regInfo.name,
-            symbol: "symbol",
-            creator: regInfo.creator,
-            description: regInfo.description,
-            icon: {
-                url: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
-                mime: "image/webp",
-            },
+            address: "0x456",
             balanceOf: 1,
+            creator: "creator",
+            description: "description",
             hasCount: true,
+            image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
             isBlacklisted: false,
-            totalSupply: 1,
-        })
-    })
-
-    it("should parse collection metadata without registry", async () => {
-        const network = NETWORK_TYPE.MAIN
-        const selectedAccount = "0x123"
-        const collection = "0x456"
-
-        const result = await parseCollectionMetadataFromRegistry(
-            network,
-            selectedAccount,
-            collection,
-            regInfo,
-            thor,
-        )
-        expect(result).toEqual({
-            address: collection,
-            name: regInfo.name,
+            mimeType: "image/webp",
+            name: "name",
             symbol: "symbol",
-            creator: regInfo.creator,
-            description: regInfo.description,
-            icon: {
-                url: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
-                mime: "image/webp",
-            },
-            balanceOf: 1,
-            hasCount: true,
-            isBlacklisted: false,
             totalSupply: 1,
         })
     })
@@ -158,26 +159,57 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
         const selectedAccount = "0x123"
         const collection = "0x456"
 
-        const result = await parseCollectionMetadataFromRegistry(
+        const result = await parseCollectionMetadataWithoutRegistry(
             network,
             selectedAccount,
             collection,
-            regInfo,
             thor,
+            "notAvailable",
         )
         expect(result).toEqual({
-            address: collection,
-            name: regInfo.name,
-            symbol: "symbol",
-            creator: regInfo.creator,
-            description: regInfo.description,
-            icon: {
-                url: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
-                mime: "image/webp",
-            },
+            address: "0x456",
             balanceOf: 1,
+            creator: "notAvailable",
+            description: "description",
             hasCount: true,
+            image: "http://google.com/image.png",
             isBlacklisted: false,
+            mimeType: "image/jpg",
+            name: "name",
+            symbol: "symbol",
+            totalSupply: 1,
+        })
+    })
+
+    it("should parse default collection if no metadata found", async () => {
+        const network = NETWORK_TYPE.MAIN
+        const selectedAccount = "0x123"
+        const collection = "0x456"
+
+        // mock fetchMetadata and return undefined
+        ;(require("~Networking") as any).getTokenMetaIpfs.mockResolvedValueOnce(
+            undefined,
+        )
+
+        const result = await parseCollectionMetadataWithoutRegistry(
+            network,
+            selectedAccount,
+            collection,
+            thor,
+            "notAvailable",
+        )
+
+        expect(result).toEqual({
+            address: "0x456",
+            balanceOf: 1,
+            creator: "notAvailable",
+            description: "",
+            hasCount: true,
+            image: NFTPlaceholder,
+            isBlacklisted: false,
+            mimeType: "image/png",
+            name: "name",
+            symbol: "symbol",
             totalSupply: 1,
         })
     })
@@ -198,12 +230,12 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
         })
 
         await expect(
-            parseCollectionMetadataFromRegistry(
+            parseCollectionMetadataWithoutRegistry(
                 network,
                 selectedAccount,
                 collection,
-                regInfo,
                 thor,
+                "notAvailable",
             ),
         ).rejects.toThrow("Failed to parse collection metadata from chain data")
     })
@@ -216,56 +248,35 @@ describe("Helpers - parseNftMetadata", () => {
 
     it("should parse NFT metadata", async () => {
         const network = NETWORK_TYPE.MAIN
-        const selectedAccount = "0x123"
-        const collection = "0x456"
+        const nft: NftItemResponse = {
+            tokenId: "1",
+            owner: "0x123",
+            id: "id",
+            contractAddress: "0x0032",
+            txId: "0x445543",
+            blockNumber: 120,
+            blockId: "0x34745",
+        }
 
-        const result = await parseCollectionMetadataFromRegistry(
+        const result = await parseNftMetadata(
             network,
-            selectedAccount,
-            collection,
-            regInfo,
+            nft,
             thor,
+            "notAvailable",
         )
+
         expect(result).toEqual({
-            address: collection,
-            name: regInfo.name,
-            symbol: "symbol",
-            creator: regInfo.creator,
-            description: regInfo.description,
-            icon: {
-                url: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
-                mime: "image/webp",
-            },
-            balanceOf: 1,
-            hasCount: true,
+            attributes: [],
+            contractAddress: "0x0032",
+            description: "description",
+            id: nft.contractAddress + nft.tokenId + nft.owner,
+            image: "http://google.com/image.png",
             isBlacklisted: false,
-            totalSupply: 1,
+            mimeType: "image/jpg",
+            name: "name",
+            owner: "0x123",
+            tokenId: "1",
+            tokenURI: "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
         })
-    })
-
-    it("should throw error if no NFTs found", async () => {
-        const network = NETWORK_TYPE.MAIN
-        const selectedAccount = "0x123"
-        const collection = "0x456"
-
-        ;(
-            require("~Networking") as any
-        ).getNftsForContract.mockResolvedValueOnce({
-            data: [],
-            pagination: {
-                totalElements: 0,
-                hasCount: true,
-            },
-        })
-
-        await expect(
-            parseCollectionMetadataFromRegistry(
-                network,
-                selectedAccount,
-                collection,
-                regInfo,
-                thor,
-            ),
-        ).rejects.toThrow("Failed to parse collection metadata from chain data")
     })
 })

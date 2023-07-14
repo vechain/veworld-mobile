@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useThor } from "~Components"
-import { NFTMeta, fetchMetadata } from "~Hooks/useNft/fetchMeta"
+import { resolveMimeType } from "~Hooks/useNft/Helpers"
+import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
 import { TokenMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
 import { error } from "~Utils"
@@ -76,10 +77,9 @@ export const useNonFungibleTokenInfo = (
     useEffect(() => {
         if (tokenUri)
             fetchMetadata(tokenUri)
-                .then((nftMeta?: NFTMeta) => {
-                    setTokenMetadata(nftMeta?.tokenMetadata)
-                    setTokenImage(nftMeta?.imageUrl)
-                    setTokenMime(nftMeta?.imageType ?? "image/png")
+                .then((metadata?: TokenMetadata) => {
+                    setTokenMetadata(metadata)
+                    setTokenImage(metadata?.image)
 
                     setIsMediaLoading(false)
                 })
@@ -90,13 +90,13 @@ export const useNonFungibleTokenInfo = (
                 })
     }, [tokenUri])
 
-    const fetchData = useCallback(
-        async (_tokenAddress: string) => {
-            return await getName(_tokenAddress, thor)
-        },
-        [thor],
-    )
-
+    useEffect(() => {
+        if (tokenMetadata && tokenMetadata.image) {
+            resolveMimeType(tokenMetadata.image).then(mime =>
+                setTokenMime(mime),
+            )
+        }
+    }, [tokenMetadata])
     return {
         tokenMetadata,
         tokenUri,
@@ -104,6 +104,5 @@ export const useNonFungibleTokenInfo = (
         tokenImage,
         tokenMime,
         isMediaLoading,
-        fetchData,
     }
 }

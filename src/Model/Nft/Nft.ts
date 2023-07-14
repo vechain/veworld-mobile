@@ -16,10 +16,8 @@ export interface NonFungibleTokenCollection {
     symbol: string
     creator: string
     description: string
-    icon: {
-        url: string
-        mime: string
-    }
+    image: string
+    mimeType: string
     balanceOf: number
     hasCount: boolean
     isBlacklisted: boolean
@@ -28,29 +26,26 @@ export interface NonFungibleTokenCollection {
 
 export interface NonFungibleToken extends TokenMetadata, WithID {
     owner: string
+    contractAddress: string
     tokenId: string
     tokenURI?: string
-    belongsToCollectionAddress: string
     isBlacklisted: boolean
+    mimeType: string
 }
 
 export interface WithID {
     id: string
 }
 
-export interface TokenMetadata {
-    name?: string
-    description?: string
-    image: string
-    icon: {
-        url: string
-        mime: string
-    }
+export interface TokenMetadata
+    extends ERC721Metadata,
+        OpenSeaMetadata,
+        WorldOfVMetadata {}
+
+export interface WorldOfVMetadata {
     edition?: number
-    tokenId?: string
     rank?: number
     rarity?: number
-    attributes?: { trait_type: string; value: string }[]
     contract_address?: string
     token_id?: string
     image_mime_type?: string
@@ -65,6 +60,21 @@ export interface TokenMetadata {
         family: string
         name: string
     }
+}
+
+export interface OpenSeaMetadata {
+    image_data?: string
+    external_url?: string
+    background_color?: string
+    animation_url?: string
+    youtube_url?: string
+    attributes?: { trait_type: string; value: string }[]
+}
+
+export interface ERC721Metadata {
+    name: string
+    description: string
+    image: string
 }
 
 export interface SelectedNFT {

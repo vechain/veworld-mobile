@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { URLUtils } from "~Utils"
+import { URIUtils } from "~Utils"
 import {
     BaseButton,
     BaseSpacer,
@@ -54,7 +54,7 @@ export const AddUrlBottomSheet = React.forwardRef<
                         <BaseButton
                             title={LL.COMMON_BTN_ADD()}
                             action={handleAddUrl}
-                            disabled={!URLUtils.isValid(newUrl)}
+                            disabled={!URIUtils.isValid(newUrl)}
                             flex={1}
                         />
                     </BaseView>

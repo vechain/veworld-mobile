@@ -168,10 +168,10 @@ export const NFTView = memo(
                             <NFTImage
                                 uri={
                                     getIsValidMimeType(
-                                        collectionItem?.icon.mime!,
+                                        collectionItem!.mimeType,
                                         [NFTMediaType.IMAGE],
                                     )
-                                        ? collectionItem!.icon.url
+                                        ? collectionItem!.image
                                         : NFTPlaceholder
                                 }
                                 style={baseStyles.nftPreviewImage}
@@ -201,16 +201,16 @@ export const NFTView = memo(
                         </BaseView>
                     ) : (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            {getIsValidMimeType(nftItem?.icon.mime!, [
+                            {getIsValidMimeType(nftItem!.mimeType, [
                                 NFTMediaType.IMAGE,
                             ]) && (
                                 <NFTImage
-                                    uri={nftItem!.icon.url}
+                                    uri={nftItem!.image}
                                     style={baseStyles.nftPreviewImage}
                                 />
                             )}
 
-                            {MediaUtils.getMime(nftItem?.icon.mime!, [
+                            {MediaUtils.getMime(nftItem!.mimeType, [
                                 NFTMediaType.VIDEO,
                             ]) && (
                                 <BaseView style={baseStyles.nftPreviewImage}>
@@ -220,7 +220,7 @@ export const NFTView = memo(
                                         ref={video}
                                         shouldPlay
                                         style={baseStyles.nftPreviewImage}
-                                        source={{ uri: nftItem!.icon.url }}
+                                        source={{ uri: nftItem!.image }}
                                         resizeMode={ResizeMode.COVER}
                                         isLooping
                                         isMuted
@@ -228,10 +228,10 @@ export const NFTView = memo(
                                 </BaseView>
                             )}
 
-                            {!MediaUtils.getMime(nftItem?.icon.mime!, [
+                            {!MediaUtils.getMime(nftItem!.mimeType, [
                                 NFTMediaType.IMAGE,
                             ]) &&
-                                !MediaUtils.getMime(nftItem?.icon.mime!, [
+                                !MediaUtils.getMime(nftItem!.mimeType, [
                                     NFTMediaType.VIDEO,
                                 ]) && (
                                     <NFTImage

@@ -15,14 +15,14 @@ export const NFTRecapView = ({ nft }: Props) => {
 
     return (
         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-            {MediaUtils.getMime(nft.icon.mime!, [NFTMediaType.IMAGE]) && (
+            {MediaUtils.getMime(nft.mimeType, [NFTMediaType.IMAGE]) && (
                 <NFTImage
-                    uri={nft.icon.url}
+                    uri={nft.mimeType}
                     style={baseStyles.nftPreviewImage}
                 />
             )}
 
-            {MediaUtils.getMime(nft.icon.mime!, [NFTMediaType.VIDEO]) && (
+            {MediaUtils.getMime(nft.mimeType, [NFTMediaType.VIDEO]) && (
                 <BaseView style={baseStyles.nftPreviewImage}>
                     <Video
                         PosterComponent={() => (
@@ -35,7 +35,7 @@ export const NFTRecapView = ({ nft }: Props) => {
                         ref={video}
                         shouldPlay
                         style={baseStyles.nftPreviewImage}
-                        source={{ uri: nft.icon.url }}
+                        source={{ uri: nft.image }}
                         resizeMode={ResizeMode.COVER}
                         isLooping
                         isMuted
@@ -43,8 +43,8 @@ export const NFTRecapView = ({ nft }: Props) => {
                 </BaseView>
             )}
 
-            {!MediaUtils.getMime(nft.icon.mime!, [NFTMediaType.IMAGE]) &&
-                !MediaUtils.getMime(nft.icon.mime!, [NFTMediaType.VIDEO]) && (
+            {!MediaUtils.getMime(nft.mimeType, [NFTMediaType.IMAGE]) &&
+                !MediaUtils.getMime(nft.mimeType, [NFTMediaType.VIDEO]) && (
                     <NFTImage
                         uri={NFTPlaceholder}
                         style={baseStyles.nftPreviewImage}

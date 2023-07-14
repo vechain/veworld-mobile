@@ -14,6 +14,8 @@ import {
     NonFungibleToken,
     NonFungibleTokenCollection,
 } from "~Model"
+import { URIUtils, error } from "~Utils"
+import axios from "axios"
 
 export const parseCollectionMetadataFromRegistry = async (
     network: NETWORK_TYPE,
@@ -39,10 +41,8 @@ export const parseCollectionMetadataFromRegistry = async (
         symbol: await getSymbol(collection, thor),
         creator: regInfo.creator,
         description: regInfo.description,
-        icon: {
-            url: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
-            mime: "image/webp",
-        },
+        image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
+        mimeType: "image/webp",
         balanceOf: pagination.totalElements,
         hasCount: pagination.hasCount,
         isBlacklisted: false,
@@ -71,23 +71,25 @@ export const parseCollectionMetadataWithoutRegistry = async (
         throw new Error("Failed to parse collection metadata from chain data")
 
     const tokenURI = await getTokenURI(data[0].tokenId, collection, thor)
-    const nftMeta = await fetchMetadata(tokenURI)
+    const tokenMetadata = await fetchMetadata(tokenURI)
+    const image = URIUtils.convertUriToUrl(
+        tokenMetadata?.image ?? NFTPlaceholder,
+    )
 
     const nftCollection: NonFungibleTokenCollection = {
         address: collection,
         name: await getName(collection, thor),
         symbol: await getSymbol(collection, thor),
         creator: notAvailable,
-        description: nftMeta?.tokenMetadata.description ?? "",
-        icon: {
-            url: nftMeta?.imageUrl ?? NFTPlaceholder,
-            mime: nftMeta?.imageType ?? "image/png",
-        },
+        description: tokenMetadata?.description ?? "",
+        image,
+        mimeType: await resolveMimeType(image),
         balanceOf: pagination.totalElements,
         hasCount: pagination.hasCount,
         isBlacklisted: false,
         totalSupply: await getTokenTotalSupply(collection, thor),
     }
+
     return nftCollection
 }
 
@@ -98,23 +100,42 @@ export const parseNftMetadata = async (
     notAvailable: string,
 ): Promise<NonFungibleToken> => {
     const tokenURI = await getTokenURI(nft.tokenId, nft.contractAddress, thor)
-    const nftMeta = await fetchMetadata(tokenURI)
+    const tokenMetadata = await fetchMetadata(tokenURI)
+
+    const image = URIUtils.convertUriToUrl(
+        tokenMetadata?.image ?? NFTPlaceholder,
+    )
 
     const nftWithMetadata: NonFungibleToken = {
+        ...tokenMetadata,
         id: nft.contractAddress + nft.tokenId + nft.owner,
+        name: tokenMetadata?.name ?? notAvailable,
+        description: tokenMetadata?.description ?? notAvailable,
+        contractAddress: nft.contractAddress,
         tokenId: nft.tokenId,
         owner: nft.owner,
         tokenURI,
-        ...nftMeta?.tokenMetadata,
-        icon: {
-            url: nftMeta?.imageUrl ?? NFTPlaceholder,
-            mime: nftMeta?.imageType ?? "image/png",
-        },
-        image: nftMeta?.imageUrl ?? NFTPlaceholder,
-        belongsToCollectionAddress: nft.contractAddress,
+        image,
+        mimeType: await resolveMimeType(image),
         isBlacklisted: false,
-        name: nftMeta?.tokenMetadata.name ?? notAvailable,
     }
 
     return nftWithMetadata
+}
+
+export const resolveMimeType = async (resource: string) => {
+    try {
+        // If it's a data URI parse from the string
+        if (resource.startsWith("data:")) {
+            const mime = resource.split(";")[0].split(":")[1]
+            return mime
+        }
+
+        const res = await axios.head(resource)
+        const contentType = res.headers["content-type"]
+        return contentType ?? "image/png"
+    } catch (err) {
+        error(err)
+    }
+    return "image/png"
 }
