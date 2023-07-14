@@ -49,7 +49,7 @@ const toWebsocketURL = (url: string, suffix?: string) => {
     return clean(url)
         .replace(/^http:/i, "ws:")
         .replace(/^https:/i, "wss:")
-        .concat(suffix || "")
+        .concat(suffix ?? "")
 }
 
 // Returns the default websocket url for the node (beat2)

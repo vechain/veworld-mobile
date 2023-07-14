@@ -91,7 +91,7 @@ export const useNonFungibleTokenInfo = (
     }, [tokenUri])
 
     useEffect(() => {
-        if (tokenMetadata && tokenMetadata.image) {
+        if (tokenMetadata?.image) {
             resolveMimeType(tokenMetadata.image).then(mime =>
                 setTokenMime(mime),
             )
