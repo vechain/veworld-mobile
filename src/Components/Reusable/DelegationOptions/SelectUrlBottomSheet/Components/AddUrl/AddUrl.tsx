@@ -1,10 +1,10 @@
 import React from "react"
 import { URLUtils } from "~Utils"
 import {
+    BaseBottomSheetTextInput,
     BaseButton,
     BaseSpacer,
     BaseText,
-    BaseTextInput,
     BaseView,
     ScrollViewWithFooter,
 } from "~Components"
@@ -85,7 +85,7 @@ export const AddUrl = ({
                 {LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}
             </BaseText>
             <BaseSpacer height={24} />
-            <BaseTextInput
+            <BaseBottomSheetTextInput
                 value={newUrl}
                 onChangeText={setNewUrl}
                 placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
