@@ -54,7 +54,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
             purpose: message.purpose,
             payload: message.payload,
             timestamp: Math.round(Date.now() / 1000),
-            domain: new URL(url).toString(),
+            domain: new URL(url).hostname,
             signer: selectedAccount?.address ?? "",
         }
     }, [message, selectedAccount, url])
