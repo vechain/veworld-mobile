@@ -307,3 +307,16 @@ export const selectVthoTokenWithBalanceByAccount = createSelector(
         }
     },
 )
+
+export const selectVthoBalanceByAccount = createSelector(
+    [selectVthoTokenWithBalanceByAccount],
+    vthoBalance => {
+        return new BigNumber(
+            FormattingUtils.convertToFiatBalance(
+                vthoBalance?.balance.balance || "0",
+                1,
+                VTHO.decimals,
+            ),
+        ).toString()
+    },
+)
