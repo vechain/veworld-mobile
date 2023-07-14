@@ -6,7 +6,6 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    ScrollViewWithFooter,
 } from "~Components"
 import {
     addDelegationUrl,
@@ -55,42 +54,42 @@ export const AddUrl = ({
         setAddUrlMode(false)
     }
     return (
-        <ScrollViewWithFooter
-            footer={
-                <BaseView flexDirection="row">
-                    {addUrlMode && (
-                        <>
-                            <BaseButton
-                                title={LL.COMMON_BTN_CANCEL()}
-                                action={closeAddMode}
-                                variant="outline"
-                                flex={1}
-                            />
-                            <BaseSpacer width={16} />
-                        </>
-                    )}
-                    <BaseButton
-                        title={LL.COMMON_BTN_ADD()}
-                        action={handleAddUrl}
-                        disabled={!URLUtils.isValid(newUrl)}
-                        flex={1}
-                    />
-                </BaseView>
-            }>
-            <BaseText typographyFont="subTitleBold">
-                {LL.SEND_DELEGATION_ADD_URL()}
-            </BaseText>
-            <BaseSpacer height={16} />
-            <BaseText typographyFont="subSubTitleLight">
-                {LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}
-            </BaseText>
-            <BaseSpacer height={24} />
-            <BaseBottomSheetTextInput
-                value={newUrl}
-                onChangeText={setNewUrl}
-                placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
-                testID="AddUrl_input"
-            />
-        </ScrollViewWithFooter>
+        <BaseView w={100} h={100} flexGrow={1} justifyContent="space-between">
+            <BaseView>
+                <BaseText typographyFont="subTitleBold">
+                    {LL.SEND_DELEGATION_ADD_URL()}
+                </BaseText>
+                <BaseSpacer height={16} />
+                <BaseText typographyFont="subSubTitleLight">
+                    {LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}
+                </BaseText>
+                <BaseSpacer height={24} />
+                <BaseBottomSheetTextInput
+                    value={newUrl}
+                    onChangeText={setNewUrl}
+                    placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
+                    testID="AddUrl_input"
+                />
+            </BaseView>
+            <BaseView flexDirection="row" pb={32}>
+                {addUrlMode && (
+                    <>
+                        <BaseButton
+                            title={LL.COMMON_BTN_CANCEL()}
+                            action={closeAddMode}
+                            variant="outline"
+                            flex={1}
+                        />
+                        <BaseSpacer width={16} />
+                    </>
+                )}
+                <BaseButton
+                    title={LL.COMMON_BTN_ADD()}
+                    action={handleAddUrl}
+                    disabled={!URLUtils.isValid(newUrl)}
+                    flex={1}
+                />
+            </BaseView>
+        </BaseView>
     )
 }
