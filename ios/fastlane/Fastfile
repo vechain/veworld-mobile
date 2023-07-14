@@ -17,9 +17,9 @@ default_platform(:ios)
 
 platform :ios do
 
-  desc "Increment package.json, Info.plist(IOS) and build.gradle(Android) versions"
+  desc "Generate changelog, increment package.json version and update Info.plist(IOS) and build.gradle(Android) versions"
   lane :increment_version do |options|
-    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
+    Dir.chdir "../.." do # Navigate to the root
       sh("yarn release:ci")
     end
 
