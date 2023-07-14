@@ -31,6 +31,8 @@ export const TransactionStatusBox: React.FC<Props> = memo(({ status }) => {
             ? COLORS.MEDIUM_ORANGE
             : COLORS.MEDIUM_RED
 
+    if (status === ActivityStatus.SUCCESS) return <></>
+
     return (
         <BaseView bg={statusBgColor} borderRadius={12}>
             <BaseView mx={16} my={12}>

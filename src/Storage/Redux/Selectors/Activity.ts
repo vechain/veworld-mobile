@@ -20,9 +20,8 @@ export const selectAllActivities = createSelector(
             allActivities = [
                 ...allActivities,
                 ...activities.transactionActivitiesMainnet,
-                ...activities.nonTransactionActivitiesMainnet,
                 ...activities.transactionActivitiesTestnet,
-                ...activities.nonTransactionActivitiesTestnet,
+                ...activities.nonTransactionActivities,
             ]
         })
 
@@ -99,20 +98,11 @@ export const selectCurrentActivities = createSelector(
     selectCurrentTransactionActivities,
     (activitiesState, network, account, currentTransactionActivities) => {
         if (account.address && activitiesState[account.address.toLowerCase()]) {
-            if (network.genesis.id === genesisesId.main)
-                return activitiesState[
-                    account.address.toLowerCase()
-                ].nonTransactionActivitiesMainnet
-                    .filter(act => act.genesisId === network.genesis.id)
-                    .concat(currentTransactionActivities)
-                    .sort((a, b) => b.timestamp - a.timestamp)
-            else
-                return activitiesState[
-                    account.address.toLowerCase()
-                ].nonTransactionActivitiesTestnet
-                    .filter(act => act.genesisId === network.genesis.id)
-                    .concat(currentTransactionActivities)
-                    .sort((a, b) => b.timestamp - a.timestamp)
+            return activitiesState[
+                account.address.toLowerCase()
+            ].nonTransactionActivities
+                .concat(currentTransactionActivities)
+                .sort((a, b) => b.timestamp - a.timestamp)
         }
 
         return []

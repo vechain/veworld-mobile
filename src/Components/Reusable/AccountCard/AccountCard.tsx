@@ -38,7 +38,7 @@ export const AccountCard: React.FC<Props> = memo(
         showSelectAccountIcon = false,
         useVthoBalance = false,
     }: Props) => {
-        const { styles } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles)
         const vetBalance = useAppSelector(state =>
             selectVetBalanceByAccount(state, account.address),
         )
@@ -83,7 +83,7 @@ export const AccountCard: React.FC<Props> = memo(
                     {showSelectAccountIcon ? (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseIcon
-                                color={"primary"}
+                                color={theme.colors.text}
                                 size={24}
                                 name={"chevron-right"}
                             />

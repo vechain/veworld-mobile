@@ -24,6 +24,7 @@ import {
     useAppDispatch,
     addDelegationUrl,
     selectTokensWithInfo,
+    addPendingDappTransactionActivity,
 } from "~Storage/Redux"
 import {
     HexUtils,
@@ -60,6 +61,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const sessionRequest = route.params.session
     const { params, topic } =
         WalletConnectUtils.getRequestEventAttributes(requestEvent)
+
+    const { name, url } =
+        WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
 
     const { web3Wallet } = useWalletConnect()
     const thorClient = useThor()
@@ -175,14 +179,14 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 let tx = await signTransaction(password)
                 const txId = await sendTransaction(tx, network.currentUrl)
 
-                // TODO (Dan) (https://github.com/vechainfoundation/veworld-mobile/issues/769) add to history?
-
                 await WalletConnectResponseUtils.transactionRequestSuccessResponse(
                     { request: requestEvent, web3Wallet, LL },
                     txId,
                     selectedAccount.address,
                     network,
                 )
+
+                dispatch(addPendingDappTransactionActivity(tx, name, url))
             } catch (e) {
                 error(e)
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
@@ -193,12 +197,15 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             }
         },
         [
-            selectedAccount,
+            signTransaction,
             network,
+            requestEvent,
             web3Wallet,
             LL,
-            requestEvent,
-            signTransaction,
+            selectedAccount.address,
+            dispatch,
+            name,
+            url,
             onClose,
         ],
     )

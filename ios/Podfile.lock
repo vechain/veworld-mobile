@@ -129,9 +129,9 @@ PODS:
   - lottie-react-native (6.0.0-rc.7):
     - lottie-ios (~> 4.2.0)
     - React-Core
-  - MMKV (1.3.0):
-    - MMKVCore (~> 1.3.0)
-  - MMKVCore (1.3.0)
+  - MMKV (1.2.16):
+    - MMKVCore (~> 1.2.16)
+  - MMKVCore (1.2.16)
   - MultiplatformBleAdapter (0.1.9)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -465,11 +465,13 @@ PODS:
     - React-Core
   - RNCMaskedView (0.2.9):
     - React-Core
+  - RNDeviceInfo (10.8.0):
+    - React-Core
   - RNFastImage (8.6.3):
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFlashList (1.4.3):
+  - RNFlashList (1.5.0):
     - React-Core
   - RNGestureHandler (2.9.0):
     - React-Core
@@ -519,7 +521,7 @@ PODS:
   - Sentry/HybridSDK (8.8.0):
     - SentryPrivate (= 8.8.0)
   - SentryPrivate (8.8.0)
-  - SocketRocket (0.6.1)
+  - SocketRocket (0.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -625,6 +627,7 @@ DEPENDENCIES:
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -802,6 +805,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
   RNFlashList:
@@ -861,8 +866,8 @@ SPEC CHECKSUMS:
   libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
   lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
   lottie-react-native: a7341509cbc0bf01dff9889d1f7e17e8e745cf9e
-  MMKV: 9c6c3fa4ddd849f28c7b9a5c9d23aab84f14ee35
-  MMKVCore: 9bb7440b170181ac5b81f542ac258103542e693d
+  MMKV: 784471ce430a2e2d16afef9053d63fab1b357d9e
+  MMKVCore: 9cfef4c48c6c46f66226fc2e4634d78490206a48
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
@@ -909,8 +914,9 @@ SPEC CHECKSUMS:
   RNBootSplash: 91e0c16bfc96703cb5b0562785b9a8cbfeb298fe
   RNCAsyncStorage: 4b98ac3c64efa4e35c1197cb0c5ca5e9f5d4c666
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
+  RNDeviceInfo: 5795b418ed3451ebcaf39384e6cf51f60cb931c9
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNFlashList: ade81b4e928ebd585dd492014d40fb8d0e848aab
+  RNFlashList: 25b0e092b4470c84db0386d4f5316dc34123bb6d
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
   RNReanimated: bec7736122a268883bdede07f1bf9cf4b40158db
@@ -921,11 +927,11 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Sentry: 927dfb29d18a14d924229a59cc2ad149f43349f2
   SentryPrivate: 4350d865f898224ab9fa02b37d6ee7fbb623f47e
-  SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
 PODFILE CHECKSUM: 46e602853ef400c822958c486fa6231b795daffc
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.12.0

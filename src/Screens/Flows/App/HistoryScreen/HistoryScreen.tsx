@@ -20,6 +20,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { FlashList } from "@shopify/flash-list"
 import {
+    ConnectedAppActivityBox,
     DappTransactionActivityBox,
     FungibleTokenActivityBox,
     NoActivitiesButton,
@@ -31,7 +32,8 @@ import {
 import {
     Activity,
     ActivityType,
-    ConnectedAppTxActivity,
+    ConnectedAppActivity,
+    DappTxActivity,
     FungibleToken,
     FungibleTokenActivity,
     NonFungibleTokenActivity,
@@ -135,9 +137,9 @@ export const HistoryScreen = () => {
                             onPress={onActivityPress}
                         />
                     )
-                case ActivityType.CONNECTED_APP_TRANSACTION:
+                case ActivityType.DAPP_TRANSACTION:
                     const decodedClauses = TransactionUtils.interpretClauses(
-                        activity.clauses,
+                        activity.clauses ?? [],
                         tokens,
                     )
 
@@ -147,14 +149,14 @@ export const HistoryScreen = () => {
                     return isSwap ? (
                         <SwapTransactionActivityBox
                             key={id}
-                            activity={activity as ConnectedAppTxActivity}
+                            activity={activity as DappTxActivity}
                             decodedClauses={decodedClauses}
                             onPress={onActivityPress}
                         />
                     ) : (
                         <DappTransactionActivityBox
                             key={id}
-                            activity={activity as ConnectedAppTxActivity}
+                            activity={activity as DappTxActivity}
                             onPress={onActivityPress}
                         />
                     )
@@ -163,6 +165,14 @@ export const HistoryScreen = () => {
                         <SignedCertificateActivityBox
                             key={id}
                             activity={activity as SignCertActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
+                case ActivityType.CONNECTED_APP_TRANSACTION:
+                    return (
+                        <ConnectedAppActivityBox
+                            key={id}
+                            activity={activity as ConnectedAppActivity}
                             onPress={onActivityPress}
                         />
                     )

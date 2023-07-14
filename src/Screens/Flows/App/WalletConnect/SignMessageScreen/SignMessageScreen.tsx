@@ -11,7 +11,12 @@ import {
     BaseSafeArea,
 } from "~Components"
 import { Certificate, blake2b256 } from "thor-devkit"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import {
+    addSignCertificateActivity,
+    selectSelectedAccount,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { WalletConnectUtils, WalletConnectResponseUtils, error } from "~Utils"
 import { useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice } from "~Model"
@@ -36,6 +41,8 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const selectedAccount: AccountWithDevice = useAppSelector(
         selectSelectedAccount,
     )
+
+    const dispatch = useAppDispatch()
 
     // Request values
     const { params } =
@@ -74,8 +81,6 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     throw new Error("Signature is empty")
                 }
 
-                // TODO (Dan) (https://github.com/vechainfoundation/veworld-mobile/issues/769) add to history?
-
                 await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
                     {
                         request: requestEvent,
@@ -84,6 +89,15 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     },
                     signature,
                     cert,
+                )
+
+                dispatch(
+                    addSignCertificateActivity(
+                        sessionRequest.peer.metadata.name,
+                        cert.domain,
+                        cert.payload.content,
+                        cert.purpose,
+                    ),
                 )
             } catch (err: unknown) {
                 error(err)
@@ -98,7 +112,16 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
 
             onClose()
         },
-        [signMessage, requestEvent, web3Wallet, LL, cert, onClose],
+        [
+            onClose,
+            signMessage,
+            requestEvent,
+            web3Wallet,
+            LL,
+            cert,
+            dispatch,
+            sessionRequest.peer.metadata.name,
+        ],
     )
 
     const onReject = useCallback(async () => {

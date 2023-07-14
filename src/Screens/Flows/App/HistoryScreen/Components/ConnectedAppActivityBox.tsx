@@ -4,17 +4,17 @@ import { useTheme, useThemedStyles } from "~Hooks"
 import { DateUtils } from "~Utils"
 import { COLORS, ColorThemeType } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { Activity, ActivityStatus, DappTxActivity } from "~Model"
+import { Activity, ActivityStatus, ConnectedAppActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
 import { ActivityStatusIndicator } from "."
 
 type Props = {
-    activity: DappTxActivity
+    activity: ConnectedAppActivity
     onPress: (activity: Activity) => void
 }
 
-export const DappTransactionActivityBox: React.FC<Props> = memo(
+export const ConnectedAppActivityBox: React.FC<Props> = memo(
     ({ activity, onPress }) => {
         const theme = useTheme()
 
@@ -34,7 +34,6 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
 
         return (
             <BaseTouchable
-                haptics="Light"
                 action={() => onPress(activity)}
                 style={styles.container}>
                 <BaseView
@@ -45,7 +44,7 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
                     <BaseView flexDirection="row">
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseIcon
-                                name="view-grid-outline"
+                                name="laptop"
                                 size={20}
                                 color={COLORS.DARK_PURPLE}
                                 testID="magnify"
@@ -62,7 +61,7 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
                                     <BaseText
                                         typographyFont="buttonPrimary"
                                         pb={5}>
-                                        {LL.DAPP_TRANSACTION()}
+                                        {LL.CONNECTED_APP_TITLE()}
                                     </BaseText>
                                     {activity.status &&
                                         activity.status !==

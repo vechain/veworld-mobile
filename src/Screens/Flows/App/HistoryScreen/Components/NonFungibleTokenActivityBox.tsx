@@ -74,12 +74,13 @@ export const NonFungibleTokenActivityBox: React.FC<Props> = memo(
                                         pb={5}>
                                         {transferDirectionText}
                                     </BaseText>
-                                    {activity.status !==
-                                        ActivityStatus.SUCCESS && (
-                                        <ActivityStatusIndicator
-                                            activityStatus={activity.status}
-                                        />
-                                    )}
+                                    {activity.status &&
+                                        activity.status !==
+                                            ActivityStatus.SUCCESS && (
+                                            <ActivityStatusIndicator
+                                                activityStatus={activity.status}
+                                            />
+                                        )}
                                 </BaseView>
                                 <BaseText typographyFont="smallCaptionRegular">
                                     {dateTimeActivity}
