@@ -292,7 +292,7 @@ type RootTranslation = {
 	BD_YOUR_BALANCE: string
 	/**
 	 * S​e​l​e​c​t​ ​w​o​r​d​ ​{​n​u​m​b​e​r​}
-	 * @param {unknown} number
+	 * @param {number} number
 	 */
 	BD_SELECT_WORD: RequiredParams<'number'>
 	/**
@@ -685,7 +685,7 @@ type RootTranslation = {
 	SB_CHOOSE_A_WALLET: string
 	/**
 	 * E​d​i​t​ ​w​a​l​l​e​t​ ​{​n​a​m​e​}
-	 * @param {unknown} name
+	 * @param {string} name
 	 */
 	SB_EDIT_WALLET: RequiredParams<'name'>
 	/**
@@ -696,12 +696,6 @@ type RootTranslation = {
 	 * R​e​n​a​m​e​ ​o​r​ ​r​e​o​r​d​e​r​ ​a​c​c​o​u​n​t​s​ 
 	 */
 	SB_RENAME_REORDER_ACCOUNTS: string
-	/**
-	 * {​a​l​i​a​s​}​ ​(​{​a​c​c​o​u​n​t​s​}​ ​a​c​c​o​u​n​t​s​)
-	 * @param {unknown} accounts
-	 * @param {unknown} alias
-	 */
-	SB_DEVICE_CARD: RequiredParams<'accounts' | 'alias'>
 	/**
 	 * E​n​t​e​r​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
 	 */
@@ -928,7 +922,7 @@ type RootTranslation = {
 	COMMON_LBL_FAVOURITES: string
 	/**
 	 * E​n​t​e​r​ ​t​h​e​ ​{​n​a​m​e​}
-	 * @param {unknown} name
+	 * @param {string} name
 	 */
 	COMMON_LBL_ENTER_THE: RequiredParams<'name'>
 	/**
@@ -1053,6 +1047,11 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
 	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​p​r​o​b​l​e​m​s​ ​d​e​t​e​c​t​e​d​.​
+​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
+	 */
+	ALERT_MSG_INTERNET_DOWN: string
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
@@ -1133,11 +1132,6 @@ type RootTranslation = {
 	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​A​r​w​e​a​v​e
 	 */
 	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: string
-	/**
-	 * T​h​e​ ​t​o​k​e​n​ ​U​R​I​ ​p​r​o​t​o​c​o​l​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​(​{​p​r​o​t​o​c​o​l​}​)
-	 * @param {unknown} protocol
-	 */
-	ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: RequiredParams<'protocol'>
 	/**
 	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​m​e​t​a​d​a​t​a
 	 */
@@ -1240,7 +1234,7 @@ type RootTranslation = {
 	NETWORK_LABEL_TESTNET: string
 	/**
 	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
-	 * @param {unknown} name
+	 * @param {string} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
 	/**
@@ -1332,7 +1326,7 @@ type RootTranslation = {
 	NOTIFICATION_wallet_connect_not_initialized: string
 	/**
 	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​n​a​m​e​}​.
-	 * @param {unknown} name
+	 * @param {string} name
 	 */
 	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
 	/**
@@ -1862,6 +1856,14 @@ type RootTranslation = {
 	 * W​a​l​l​e​t
 	 */
 	WALLET_LABEL_WALLET: string
+	/**
+	 * W​e​ ​n​e​e​d​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​p​e​r​f​o​r​m​ ​b​l​u​e​t​o​o​t​h​ ​s​c​a​n​n​i​n​g
+	 */
+	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: string
+	/**
+	 * A​l​l​o​w​ ​B​l​u​e​t​o​o​t​h
+	 */
+	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: string
 	/**
 	 * I​m​p​o​r​t​ ​l​e​d​g​e​r
 	 */
@@ -2416,7 +2418,7 @@ export type TranslationFunctions = {
 	/**
 	 * Select word {number}
 	 */
-	BD_SELECT_WORD: (arg: { number: unknown }) => LocalizedString
+	BD_SELECT_WORD: (arg: { number: number }) => LocalizedString
 	/**
 	 * Select a network
 	 */
@@ -2808,7 +2810,7 @@ export type TranslationFunctions = {
 	/**
 	 * Edit wallet {name}
 	 */
-	SB_EDIT_WALLET: (arg: { name: unknown }) => LocalizedString
+	SB_EDIT_WALLET: (arg: { name: string }) => LocalizedString
 	/**
 	 * Rename wallet
 	 */
@@ -2817,10 +2819,6 @@ export type TranslationFunctions = {
 	 * Rename or reorder accounts 
 	 */
 	SB_RENAME_REORDER_ACCOUNTS: () => LocalizedString
-	/**
-	 * {alias} ({accounts} accounts)
-	 */
-	SB_DEVICE_CARD: (arg: { accounts: unknown, alias: unknown }) => LocalizedString
 	/**
 	 * Enter your language
 	 */
@@ -3048,7 +3046,7 @@ export type TranslationFunctions = {
 	/**
 	 * Enter the {name}
 	 */
-	COMMON_LBL_ENTER_THE: (arg: { name: unknown }) => LocalizedString
+	COMMON_LBL_ENTER_THE: (arg: { name: string }) => LocalizedString
 	/**
 	 * Default
 	 */
@@ -3170,6 +3168,11 @@ export type TranslationFunctions = {
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
 	/**
+	 * Connection problems detected.
+Try reconnect your device to the internet.
+	 */
+	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
+	/**
 	 * Something went wrong!
 	 */
 	ERROR_GENERIC_SUBTITLE: () => LocalizedString
@@ -3250,10 +3253,6 @@ Please, try again later.
 	 * Failed to get token data from Arweave
 	 */
 	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: () => LocalizedString
-	/**
-	 * The token URI protocol is not supported ({protocol})
-	 */
-	ERROR_NFT_TOKEN_URI_PROTOCOL_NOT_SUPPORTED: (arg: { protocol: unknown }) => LocalizedString
 	/**
 	 * Failed to get token metadata
 	 */
@@ -3357,7 +3356,7 @@ Please, try again later.
 	/**
 	 * {name} has been copied to the clipboard!
 	 */
-	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: unknown }) => LocalizedString
+	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
 	/**
 	 * Transaction {txId} was reverted.
 	 */
@@ -3437,7 +3436,7 @@ Please, try again later.
 	/**
 	 * Successfully connected to {name}.
 	 */
-	NOTIFICATION_wallet_connect_successfull_connection: (arg: { name: unknown }) => LocalizedString
+	NOTIFICATION_wallet_connect_successfull_connection: (arg: { name: string }) => LocalizedString
 	/**
 	 * Certificate signed successfully.
 	 */
@@ -3962,6 +3961,14 @@ Please, try again later.
 	 * Wallet
 	 */
 	WALLET_LABEL_WALLET: () => LocalizedString
+	/**
+	 * We need permissions to perform bluetooth scanning
+	 */
+	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: () => LocalizedString
+	/**
+	 * Allow Bluetooth
+	 */
+	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: () => LocalizedString
 	/**
 	 * Import ledger
 	 */

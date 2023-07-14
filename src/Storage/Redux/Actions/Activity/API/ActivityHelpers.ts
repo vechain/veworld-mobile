@@ -12,6 +12,189 @@ import {
     IncomingTransferResponse,
     TransactionsResponse,
 } from "~Networking"
+import { Transaction } from "thor-devkit"
+
+/**
+ * Creates a base activity from a given transaction.
+ *
+ * The function extracts necessary details from the transaction such as its id, origin, delegated status, delegator, body and more.
+ * It also determines the activity type based on the transaction's clauses.
+ *
+ * @param tx - The transaction from which to create the base activity.
+ * @returns A new activity object based on the given transaction.
+ */
+const createBaseActivityFromTx = (tx: Transaction) => {
+    const { id, origin, delegated, delegator, body } = tx
+    const { clauses, gas, chainTag } = body
+    const type = ActivityUtils.getActivityTypeFromClause(clauses)
+
+    return {
+        from: origin ?? "",
+        to: clauses.map(
+            (clause: Transaction.Clause) =>
+                ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
+        ),
+        id: id ?? "",
+        genesisId: chainTagToGenesisId[chainTag],
+        gasUsed: Number(gas),
+        clauses,
+        delegated,
+        status: ActivityStatus.PENDING,
+        isTransaction: true,
+        timestamp: Date.now(),
+        gasPayer: (delegated ? delegator : origin) ?? "",
+        blockNumber: 0,
+        type,
+        direction: DIRECTIONS.UP,
+        outputs: [],
+    }
+}
+
+/**
+ * A helper function to handle exceptions regarding the address extraction.
+ */
+const getAddressFromClause = (clause: Transaction.Clause) => {
+    const address = TransactionUtils.getContractAddressFromClause(clause)
+    if (!address) throw new Error("Invalid address")
+    return address
+}
+
+/**
+ * Creates a new pending FungibleTokenActivity from a given transaction.
+ *
+ * The transaction clauses are analyzed to determine the activity type (VET_TRANSFER or FUNGIBLE_TOKEN).
+ * In case the transaction type is different, an error is thrown.
+ *
+ * The method also extracts the token address and amount from the first transaction clause.
+ * Errors are thrown if these values cannot be extracted.
+ *
+ * @param tx - The transaction from which to create the activity.
+ * @returns A new FungibleTokenActivity object based on the given transaction.
+ * @throws {Error} If the transaction type is neither VET_TRANSFER nor FUNGIBLE_TOKEN.
+ * @throws {Error} If the token address cannot be extracted from the transaction.
+ * @throws {Error} If the amount cannot be extracted from the transaction.
+ */
+export const createPendingTransferActivityFromTx = (
+    tx: Transaction,
+): FungibleTokenActivity => {
+    const baseActivity = createBaseActivityFromTx(tx)
+
+    if (
+        baseActivity.type !== ActivityType.VET_TRANSFER &&
+        baseActivity.type !== ActivityType.FUNGIBLE_TOKEN
+    )
+        throw new Error("Invalid transaction type")
+
+    const tokenAddress = getAddressFromClause(baseActivity.clauses[0])
+
+    const amount = TransactionUtils.getAmountFromClause(baseActivity.clauses[0])
+
+    if (!amount) throw new Error("Invalid amount")
+
+    return {
+        ...baseActivity,
+        type: baseActivity.type,
+        amount,
+        tokenAddress,
+    }
+}
+
+/**
+ * Creates a new pending Non-Fungible Token (NFT) activity from a given transaction.
+ *
+ * The function creates a base activity from the transaction and then checks the activity type. If the type is not 'NFT_TRANSFER',
+ * an error is thrown. It also extracts the contract address and the decoded NFT token id from the first transaction clause.
+ *
+ * @param tx - The transaction from which to create the NFT activity.
+ * @returns A new NonFungibleTokenActivity object based on the given transaction.
+ * @throws {Error} If the transaction type is not 'NFT_TRANSFER'.
+ * @throws {Error} If the contract address cannot be extracted from the transaction.
+ * @throws {Error} If the NFT token Id cannot be decoded from the transaction clause.
+ */
+export const createPendingNFTTransferActivityFromTx = (
+    tx: Transaction,
+): NonFungibleTokenActivity => {
+    const baseActivity = createBaseActivityFromTx(tx)
+
+    if (baseActivity.type !== ActivityType.NFT_TRANSFER)
+        throw new Error("Invalid transaction type")
+
+    const contractAddress = getAddressFromClause(baseActivity.clauses[0])
+
+    const decodedTransfer =
+        TransactionUtils.decodeNonFungibleTokenTransferClause(
+            baseActivity.clauses[0],
+        )
+
+    if (!decodedTransfer?.tokenId) throw new Error("Invalid tokenId")
+
+    return {
+        ...baseActivity,
+        type: baseActivity.type,
+        tokenId: decodedTransfer.tokenId,
+        contractAddress,
+    }
+}
+
+/**
+ * Creates a new incoming FungibleTokenActivity.
+ *
+ * @param meta - Metadata about the transaction, which includes the transaction ID, block number, and block timestamp.
+ * @param amount - The amount of tokens involved in the transaction.
+ * @param recipient - The address of the recipient of the tokens.
+ * @param sender - The address of the sender of the tokens.
+ * @param tokenAddress - The address of the token contract.
+ * @param thor - The Connex.Thor instance used for querying the chain.
+ *
+ * @returns A new FungibleTokenActivity object based on the given parameters.
+ * @throws {Error} If an encoded clause cannot be created from the incoming transfer log.
+ */
+export const createIncomingTransfer = (
+    meta: Connex.Thor.Filter.WithMeta["meta"],
+    amount: string,
+    recipient: string,
+    sender: string,
+    tokenAddress: string,
+    thor: Connex.Thor,
+): FungibleTokenActivity => {
+    const { txID, blockNumber, blockTimestamp } = meta
+
+    const activityType =
+        tokenAddress === VET.address
+            ? ActivityType.VET_TRANSFER
+            : ActivityType.FUNGIBLE_TOKEN
+
+    const encodedClause = createTransferClauseFromIncomingTransfer(
+        recipient,
+        amount,
+        tokenAddress,
+        activityType,
+    )
+
+    if (!encodedClause) {
+        throw new Error(
+            "Invalid encoded clause. Can't create incoming transfer activity from TransferLog",
+        )
+    }
+
+    const clauses: Connex.VM.Clause[] = [encodedClause]
+
+    return {
+        from: sender,
+        to: [recipient],
+        id: txID,
+        blockNumber,
+        isTransaction: true,
+        genesisId: thor.genesis.id,
+        type: activityType,
+        timestamp: blockTimestamp * 1000, // Convert to milliseconds
+        status: ActivityStatus.SUCCESS,
+        clauses,
+        direction: DIRECTIONS.DOWN,
+        amount: Number(amount),
+        tokenAddress: tokenAddress,
+    }
+}
 
 /**
  * Function to create a base activity from a transaction response.
@@ -20,7 +203,7 @@ import {
  * @param transaction - The transaction response from which to create the activity.
  * @returns An activity created from the transaction response.
  */
-export const createBaseActivityFromTransaction = (
+export const createBaseActivityFromTransactionResponse = (
     transaction: TransactionsResponse,
 ): Activity => {
     // Destructure needed properties from transaction
@@ -342,7 +525,8 @@ export const getActivitiesFromTransactions = (
     transactions: TransactionsResponse[],
 ): Activity[] => {
     return transactions.map(transaction => {
-        let activity: Activity = createBaseActivityFromTransaction(transaction)
+        let activity: Activity =
+            createBaseActivityFromTransactionResponse(transaction)
 
         return processActivity(activity, transaction.clauses[0], DIRECTIONS.UP)
     })

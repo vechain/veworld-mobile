@@ -13,6 +13,7 @@ import {
     removeBlackListCollection,
     selectPendingTx,
     selectSelectedAccount,
+    selectSelectedNetwork,
     setBlackListCollection,
     useAppDispatch,
     useAppSelector,
@@ -44,6 +45,7 @@ export const NFTView = memo(
         isHidden = false,
     }: Props) => {
         const nav = useNavigation()
+        const network = useAppSelector(selectSelectedNetwork)
         const dispatch = useAppDispatch()
         const video = useRef(null)
         const { LL } = useI18nContext()
@@ -98,6 +100,7 @@ export const NFTView = memo(
                 if (itemAction === ItemTitle.HIDE_COLLECTION)
                     dispatch(
                         setBlackListCollection({
+                            network: network.type,
                             collection: collectionItem!,
                             accountAddress: selectedAccoount.address,
                         }),
@@ -106,6 +109,7 @@ export const NFTView = memo(
                 if (itemAction === ItemTitle.SHOW_COLLECTION)
                     dispatch(
                         removeBlackListCollection({
+                            network: network.type,
                             collection: collectionItem!,
                             accountAddress: selectedAccoount.address,
                         }),
@@ -115,14 +119,26 @@ export const NFTView = memo(
                 CollectionItem,
                 collectionItem,
                 dispatch,
+                network,
                 isCollection,
                 selectedAccoount.address,
             ],
         )
 
         const getIsValidMimeType = useCallback(
-            (itemUrl: string, type: NFTMediaType[]) =>
-                MediaUtils.getMime(itemUrl, type),
+            (itemUrl: string, type: NFTMediaType[]) => {
+                return MediaUtils.getMime(itemUrl, type)
+            },
+            [],
+        )
+
+        const renderNFTStaticImage = useCallback(
+            () => (
+                <NFTImage
+                    uri={NFTPlaceholder}
+                    style={baseStyles.nftPreviewImage}
+                />
+            ),
             [],
         )
 
@@ -199,14 +215,7 @@ export const NFTView = memo(
                             ]) && (
                                 <BaseView style={baseStyles.nftPreviewImage}>
                                     <Video
-                                        PosterComponent={() => (
-                                            <NFTImage
-                                                uri={NFTPlaceholder}
-                                                style={
-                                                    baseStyles.nftPreviewImage
-                                                }
-                                            />
-                                        )}
+                                        PosterComponent={renderNFTStaticImage}
                                         usePoster
                                         ref={video}
                                         shouldPlay

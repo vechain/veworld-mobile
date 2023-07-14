@@ -2,6 +2,7 @@ import { Transaction } from "thor-devkit"
 import { useThor } from "~Components"
 import { ActivityType, Network, WalletAccount } from "~Model"
 import {
+    addPendingNFTtransferTransactionActivity,
     addPendingTransferTransactionActivity,
     updateAccountBalances,
     useAppDispatch,
@@ -27,9 +28,8 @@ export const useSendTransaction = (
         const type = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
 
         if (type === ActivityType.NFT_TRANSFER) {
-            // TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/752) handle NFT activity?
+            dispatch(addPendingNFTtransferTransactionActivity(tx, thorClient))
         } else {
-            // todo - Add pending transaction activity
             dispatch(addPendingTransferTransactionActivity(tx, thorClient))
         }
 

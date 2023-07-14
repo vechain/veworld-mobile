@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { AppRegistry, LogBox } from "react-native"
 import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
@@ -9,10 +9,10 @@ import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
+    WalletConnectContextProvider,
+    TranslationProvider,
     BaseToast,
     ConnexContextProvider,
-    TranslationProvider,
-    WalletConnectContextProvider,
 } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
@@ -31,7 +31,10 @@ import { info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
-import "react-native-url-polyfill/auto"
+import { useAppSelector, selectSentryTrackingEnabled } from "~Storage/Redux"
+import * as Sentry from "@sentry/react-native"
+import { InternetDownScreen } from "~Screens"
+import NetInfo from "@react-native-community/netinfo"
 
 const { fontFamily } = typography
 
@@ -47,6 +50,8 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
 }
 
 const Main = () => {
+    const { isConnected } = NetInfo.useNetInfo()
+
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
         [fontFamily["Inter-Regular"]]: Inter_Regular,
@@ -58,12 +63,28 @@ const Main = () => {
         [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
+    const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
+
+    useEffect(() => {
+        if (sentryTrackingEnabled) {
+            Sentry.init({
+                dsn: process.env.REACT_APP_SENTRY_DSN,
+                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                tracesSampleRate: 1.0,
+                environment: process.env.NODE_ENV,
+            })
+        } else {
+            Sentry.close()
+        }
+    }, [sentryTrackingEnabled])
+
     return (
-        <StoreContextProvider>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-                <ConnexContextProvider>
-                    <SafeAreaProvider>
-                        <TranslationProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <TranslationProvider>
+                {isConnected ? (
+                    <ConnexContextProvider>
+                        <SafeAreaProvider>
                             <NavigationProvider>
                                 <BottomSheetModalProvider>
                                     <WalletConnectContextProvider>
@@ -72,11 +93,13 @@ const Main = () => {
                                 </BottomSheetModalProvider>
                             </NavigationProvider>
                             <BaseToast />
-                        </TranslationProvider>
-                    </SafeAreaProvider>
-                </ConnexContextProvider>
-            </GestureHandlerRootView>
-        </StoreContextProvider>
+                        </SafeAreaProvider>
+                    </ConnexContextProvider>
+                ) : (
+                    <InternetDownScreen />
+                )}
+            </TranslationProvider>
+        </GestureHandlerRootView>
     )
 }
 
@@ -97,7 +120,15 @@ const NavigationProvider = ({ children }) => {
     )
 }
 
-AppRegistry.registerComponent(appName, () => Main)
+const ReduxWrappedMain = () => {
+    return (
+        <StoreContextProvider>
+            <Main />
+        </StoreContextProvider>
+    )
+}
+
+AppRegistry.registerComponent(appName, () => Sentry.wrap(ReduxWrappedMain))
 
 if (__DEV__) {
     const ignoreWarns = [

@@ -18,10 +18,11 @@ import {
     useWalletConnect,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
-import { AccountWithDevice, NETWORK_TYPE } from "~Model"
+import { AccountWithDevice } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     insertSession,
+    selectNetworks,
     selectSelectedAccount,
     selectVisibleAccounts,
     useAppDispatch,
@@ -51,6 +52,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const networks = useAppSelector(selectNetworks)
+
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
@@ -85,13 +88,15 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         // Setup vechain namespaces to return to the dapp
         const namespaces: SessionTypes.Namespaces = {}
         const connectedAccounts: string[] = []
+        const networkIdentifiers = networks.map(network =>
+            network.genesis.id.slice(-32),
+        )
         requiredNamespaces.vechain.chains?.map((scope: string) => {
             // Valid only for supported networks
             // scope example: vechain:main, vechain:test
-            if (
-                NETWORK_TYPE.MAIN.includes(scope.split(":")[1]) ||
-                NETWORK_TYPE.TEST.includes(scope.split(":")[1])
-            ) {
+            const network = scope.split(":")[1]
+
+            if (networkIdentifiers.includes(network)) {
                 connectedAccounts.push(`${scope}:${selectedAccount.address}`)
             }
         })

@@ -28,10 +28,9 @@ export const NFTImage = memo((props: Props) => {
             <FastImage
                 testID={testID}
                 style={[{ width: w, height: h }, style]}
-                fallback
                 onLoadStart={onLoadStart}
                 onLoadEnd={onLoadEnd}
-                defaultSource={require("../../../Assets/Img/NFTPlaceholder.png")}
+                defaultSource={require("../../../Assets/Img/NFTPlaceholder.png")} // not working on android dev only
                 source={{
                     uri,
                     priority: FastImage.priority.high,
