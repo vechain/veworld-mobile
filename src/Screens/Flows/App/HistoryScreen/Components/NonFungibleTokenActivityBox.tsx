@@ -48,6 +48,7 @@ export const NonFungibleTokenActivityBox: React.FC<Props> = memo(
 
         return (
             <BaseTouchable
+                haptics="Light"
                 action={() => onPress(activity)}
                 style={styles.container}>
                 <BaseView

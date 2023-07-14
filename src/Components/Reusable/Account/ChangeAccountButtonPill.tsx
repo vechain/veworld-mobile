@@ -1,6 +1,6 @@
 import React from "react"
-import { StyleSheet, TouchableOpacity, View } from "react-native"
-import { BaseIcon, BaseText, BaseView } from "~Components/Base"
+import { StyleSheet, View } from "react-native"
+import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 
@@ -14,7 +14,7 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
 
     return (
-        <TouchableOpacity onPress={action} style={themedStyles.container}>
+        <BaseTouchable action={action} style={themedStyles.container}>
             <BaseView>
                 <BaseText
                     color={theme.colors.textReversed}
@@ -34,7 +34,7 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
                 name="account-sync-outline"
                 color={theme.colors.textReversed}
             />
-        </TouchableOpacity>
+        </BaseTouchable>
     )
 }
 

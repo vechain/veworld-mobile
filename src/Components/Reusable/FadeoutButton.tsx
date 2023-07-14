@@ -48,7 +48,7 @@ export const FadeoutButton = ({
                 <BaseButton
                     disabled={disabled}
                     size="lg"
-                    haptics="medium"
+                    haptics="Medium"
                     w={100}
                     title={title}
                     action={action}

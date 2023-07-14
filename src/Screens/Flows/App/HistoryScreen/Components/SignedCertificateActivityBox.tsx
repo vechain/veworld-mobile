@@ -33,6 +33,7 @@ export const SignedCertificateActivityBox: React.FC<Props> = memo(
 
         return (
             <BaseTouchable
+                haptics="Light"
                 action={() => onPress(activity)}
                 style={styles.container}>
                 <BaseView

@@ -53,6 +53,7 @@ export const BaseButtonGroupHorizontal = ({
 
                 return (
                     <BaseButton
+                        haptics="Light"
                         key={id}
                         action={onPress(button)}
                         disabled={disableAllButtons || disabled}

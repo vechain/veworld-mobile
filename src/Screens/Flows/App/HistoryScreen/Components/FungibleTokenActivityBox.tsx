@@ -148,7 +148,8 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
 
         return (
             <BaseTouchable
-                onPress={() => onPress(activity, token)}
+                haptics="Light"
+                action={() => onPress(activity, token)}
                 style={styles.container}>
                 <BaseView
                     w={100}
