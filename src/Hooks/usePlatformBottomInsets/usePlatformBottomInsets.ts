@@ -9,15 +9,19 @@ export enum BottomInsetsEXtraPadding {
 export const usePlatformBottomInsets = (
     extraPadding?: BottomInsetsEXtraPadding,
 ) => {
-    const _paddingBottom = useBottomTabBarHeight()
+    const paddingBottom = useBottomTabBarHeight()
 
     const calculateBottomInsets: number = useMemo(() => {
-        let staticButtonExtraPadding = extraPadding ? extraPadding : 0
+        let staticButtonExtraPadding = extraPadding || 0
 
         return PlatformUtils.isIOS()
-            ? _paddingBottom + staticButtonExtraPadding
+            ? paddingBottom + staticButtonExtraPadding
             : 0
-    }, [_paddingBottom, extraPadding])
+    }, [paddingBottom, extraPadding])
 
-    return { calculateBottomInsets }
+    const tabBarAndroidBottomInsets: number = useMemo(() => {
+        return PlatformUtils.isAndroid() ? paddingBottom : 0
+    }, [paddingBottom])
+
+    return { calculateBottomInsets, tabBarAndroidBottomInsets }
 }

@@ -8,7 +8,7 @@ import {
 } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Hooks"
+import { usePlatformBottomInsets, useTheme } from "~Hooks"
 
 type Props = {
     noBackButton?: boolean
@@ -32,6 +32,8 @@ export const Layout = ({
     safeAreaTestID,
 }: Props) => {
     const theme = useTheme()
+    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
+
     const Title = () => (
         <BaseText
             typographyFont="subTitleBold"
@@ -40,6 +42,7 @@ export const Layout = ({
             {title}
         </BaseText>
     )
+
     return (
         <BaseSafeArea grow={1} testID={safeAreaTestID}>
             <BaseView h={100}>
@@ -60,7 +63,13 @@ export const Layout = ({
                         {body}
                     </BaseScrollView>
                 )}
-                {footer && <BaseView mx={noMargin ? 0 : 24}>{footer}</BaseView>}
+                {footer && (
+                    <BaseView
+                        mx={noMargin ? 0 : 24}
+                        mb={tabBarAndroidBottomInsets}>
+                        {footer}
+                    </BaseView>
+                )}
             </BaseView>
         </BaseSafeArea>
     )
