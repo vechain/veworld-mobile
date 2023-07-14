@@ -1,11 +1,15 @@
+import uuid from "react-native-uuid"
 import { DIRECTIONS, VET, chainTagToGenesisId } from "~Constants"
 import { ActivityUtils, TransactionUtils, debug } from "~Utils"
 import {
     Activity,
     ActivityStatus,
     ActivityType,
+    ConnectedAppActivity,
+    DappTxActivity,
     FungibleTokenActivity,
     NonFungibleTokenActivity,
+    SignCertActivity,
 } from "~Model"
 import {
     EventTypeResponse,
@@ -139,7 +143,9 @@ export const createPendingNFTTransferActivityFromTx = (
 /**
  * Creates a new incoming FungibleTokenActivity.
  *
- * @param meta - Metadata about the transaction, which includes the transaction ID, block number, and block timestamp.
+ * @param txID - The id of the transaction that created the activity.
+ * @param blockNumber - The block number of the transaction that created the activity.
+ * @param blockTimestamp - The block timestamp of the transaction that created the activity.
  * @param amount - The amount of tokens involved in the transaction.
  * @param recipient - The address of the recipient of the tokens.
  * @param sender - The address of the sender of the tokens.
@@ -150,15 +156,15 @@ export const createPendingNFTTransferActivityFromTx = (
  * @throws {Error} If an encoded clause cannot be created from the incoming transfer log.
  */
 export const createIncomingTransfer = (
-    meta: Connex.Thor.Filter.WithMeta["meta"],
+    txID: string,
+    blockNumber: number,
+    blockTimestamp: number,
     amount: string,
     recipient: string,
     sender: string,
     tokenAddress: string,
     thor: Connex.Thor,
 ): FungibleTokenActivity => {
-    const { txID, blockNumber, blockTimestamp } = meta
-
     const activityType =
         tokenAddress === VET.address
             ? ActivityType.VET_TRANSFER
@@ -194,6 +200,92 @@ export const createIncomingTransfer = (
         amount: Number(amount),
         tokenAddress: tokenAddress,
     }
+}
+
+/**
+ * This function creates a new connected app activity object.
+ *
+ * @param from - The origin of the activity.
+ * @param name - The name of the connected application (optional).
+ * @param linkUrl - The URL of the connected application (optional).
+ * @param description - The description of the connected application (optional).
+ * @param methods - The methods used by the connected application (optional).
+ *
+ * @returns A new connected app activity object.
+ */
+export const createConnectedAppActivity = (
+    from: string,
+    name?: string,
+    linkUrl?: string,
+    description?: string,
+    methods?: string[],
+): ConnectedAppActivity => {
+    return {
+        from,
+        id: uuid.v4().toString(),
+        type: ActivityType.CONNECTED_APP_TRANSACTION,
+        timestamp: Date.now(),
+        isTransaction: false,
+        name,
+        linkUrl,
+        description,
+        methods,
+    }
+}
+
+/**
+ * This function creates a new sign certificate activity object.
+ *
+ * @param from - The origin of the activity.
+ * @param name - The name of the certificate (optional).
+ * @param linkUrl - The URL of the certificate (optional).
+ * @param content - The content of the certificate (optional).
+ * @param purpose - The purpose of the certificate (optional).
+ * @returns A new sign certificate activity object.
+ */
+export const createSignCertificateActivity = (
+    from: string,
+    name?: string,
+    linkUrl?: string,
+    content?: string,
+    purpose?: string,
+): SignCertActivity => {
+    return {
+        from,
+        id: uuid.v4().toString(),
+        type: ActivityType.SIGN_CERT,
+        timestamp: Date.now(),
+        isTransaction: false,
+        name,
+        linkUrl,
+        content,
+        purpose,
+    }
+}
+
+/**
+ * This function creates a new pending DApp transaction activity object.
+ *
+ * @param tx - The transaction details.
+ * @param name - The name of the DApp (optional).
+ * @param linkUrl - The URL of the DApp (optional).
+ *
+ * @returns A new pending DApp transaction activity object.
+ */
+export const createPendingDappTransactionActivity = (
+    tx: Transaction,
+    name?: string,
+    linkUrl?: string,
+): Activity => {
+    const baseActivity = createBaseActivityFromTx(tx)
+
+    return processActivity(
+        baseActivity,
+        tx.body.clauses[0],
+        DIRECTIONS.UP,
+        name,
+        linkUrl,
+    )
 }
 
 /**
@@ -490,6 +582,27 @@ export const enrichActivityWithNFTData = (
 }
 
 /**
+ * This function enriches an existing activity object with DApp data.
+ *
+ * @param activity - The activity to be enriched.
+ * @param appName - The name of the DApp (optional).
+ * @param appUrl - The URL of the DApp (optional).
+ * @returns A new activity object enriched with DApp data.
+ */
+export const enrichActivityWithDappData = (
+    activity: Activity,
+    appName?: string,
+    appUrl?: string,
+): DappTxActivity => {
+    return {
+        ...activity,
+        type: ActivityType.DAPP_TRANSACTION,
+        name: appName ?? "",
+        linkUrl: appUrl ?? "",
+    }
+}
+
+/**
  * Process an activity based on its type.
  *
  * @param activity - The activity to be processed.
@@ -501,6 +614,8 @@ const processActivity = (
     activity: Activity,
     clause: Connex.VM.Clause,
     direction: DIRECTIONS,
+    appName?: string,
+    appUrl?: string,
 ): Activity => {
     switch (activity.type) {
         case ActivityType.FUNGIBLE_TOKEN:
@@ -510,7 +625,7 @@ const processActivity = (
         case ActivityType.NFT_TRANSFER:
             return enrichActivityWithNFTData(activity, clause, direction)
         default:
-            return activity
+            return enrichActivityWithDappData(activity, appName, appUrl)
     }
 }
 
@@ -549,7 +664,7 @@ export const getActivitiesFromIncomingTransfers = (
             let activity: Activity | null =
                 createBaseActivityFromIncomingTransfer(incomingTransfer, thor)
 
-            if (activity) {
+            if (activity?.clauses) {
                 activities.push(
                     processActivity(
                         activity,

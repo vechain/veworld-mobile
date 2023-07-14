@@ -3,7 +3,7 @@ import {
     ActivityType,
     ClauseType,
     ClauseWithMetadata,
-    ConnectedAppTxActivity,
+    DappTxActivity,
     SwapEvent,
     Token,
     TransactionOutcomes,
@@ -1191,9 +1191,9 @@ describe("TransactionUtils", () => {
             },
         ]
 
-        const activity: ConnectedAppTxActivity = {
+        const activity: DappTxActivity = {
             ...BASE_SAMPLE_ACTIVITY,
-            type: ActivityType.CONNECTED_APP_TRANSACTION,
+            type: ActivityType.DAPP_TRANSACTION,
             clauses: decodedClauses,
             outputs: [
                 {
@@ -1216,9 +1216,9 @@ describe("TransactionUtils", () => {
             ],
         }
 
-        const activitySwapTokensForTokens: ConnectedAppTxActivity = {
+        const activitySwapTokensForTokens: DappTxActivity = {
             ...BASE_SAMPLE_ACTIVITY,
-            type: ActivityType.CONNECTED_APP_TRANSACTION,
+            type: ActivityType.DAPP_TRANSACTION,
             clauses: decodedClauses,
             outputs: [
                 {
@@ -1275,9 +1275,9 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            const activitySwapTokensForVet: ConnectedAppTxActivity = {
+            const activitySwapTokensForVet: DappTxActivity = {
                 ...BASE_SAMPLE_ACTIVITY,
-                type: ActivityType.CONNECTED_APP_TRANSACTION,
+                type: ActivityType.DAPP_TRANSACTION,
                 clauses: decodedClauses,
                 outputs: [
                     {

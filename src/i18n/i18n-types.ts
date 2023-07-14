@@ -889,7 +889,7 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_AND: string
 	/**
-	 * n​a​m​e
+	 * N​a​m​e
 	 */
 	COMMON_LBL_NAME: string
 	/**
@@ -1449,6 +1449,14 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: string
 	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
+	 */
+	CONNECTED_APP_CONNECTION_REQUESTS: string
+	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	CONNECTED_APP_DESCRIPTION: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -1541,6 +1549,35 @@ type RootTranslation = {
 	 * C​o​n​v​e​r​t​ ​b​a​l​a​n​c​e​s​ ​t​o​ ​f​i​a​t
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: string
+	/**
+	 * O​f​f​i​c​i​a​l​ ​s​i​t​e
+	 */
+	SETTINGS_ABOUT_OFFICIAL_SITE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * @param {unknown} version
+	 */
+	SETTINGS_ABOUT_APP_VERSION: RequiredParams<'version'>
+	/**
+	 * v​e​w​o​r​l​d​.​n​e​t
+	 */
+	SETTINGS_ABOUT_WEWORLD_WEBSITE: string
+	/**
+	 * G​e​t​ ​h​e​l​p
+	 */
+	SETTINGS_ABOUT_GET_HELP: string
+	/**
+	 * R​e​p​o​r​t​ ​a​ ​b​u​g
+	 */
+	SETTINGS_ABOUT_REPORT_BUG: string
+	/**
+	 * O​u​r​ ​c​o​m​m​i​t​m​e​n​t​ ​t​o​ ​y​o​u
+	 */
+	SETTINGS_ABOUT_OUR_COMMITMENT: string
+	/**
+	 * P​r​i​v​a​c​y​ ​p​o​l​i​c​y
+	 */
+	SETTINGS_ABOUT_PRIVACY_POLICY: string
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
@@ -3002,7 +3039,7 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_AND: () => LocalizedString
 	/**
-	 * name
+	 * Name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
 	/**
@@ -3544,6 +3581,14 @@ Please, try again later.
 	 */
 	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: () => LocalizedString
 	/**
+	 * Connection requests
+	 */
+	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
+	/**
+	 * Description
+	 */
+	CONNECTED_APP_DESCRIPTION: () => LocalizedString
+	/**
 	 * Contract address
 	 */
 	CONTRACT_ADDRESS: () => LocalizedString
@@ -3635,6 +3680,34 @@ Please, try again later.
 	 * Convert balances to fiat
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: () => LocalizedString
+	/**
+	 * Official site
+	 */
+	SETTINGS_ABOUT_OFFICIAL_SITE: () => LocalizedString
+	/**
+	 * Version {version}
+	 */
+	SETTINGS_ABOUT_APP_VERSION: (arg: { version: unknown }) => LocalizedString
+	/**
+	 * veworld.net
+	 */
+	SETTINGS_ABOUT_WEWORLD_WEBSITE: () => LocalizedString
+	/**
+	 * Get help
+	 */
+	SETTINGS_ABOUT_GET_HELP: () => LocalizedString
+	/**
+	 * Report a bug
+	 */
+	SETTINGS_ABOUT_REPORT_BUG: () => LocalizedString
+	/**
+	 * Our commitment to you
+	 */
+	SETTINGS_ABOUT_OUR_COMMITMENT: () => LocalizedString
+	/**
+	 * Privacy policy
+	 */
+	SETTINGS_ABOUT_PRIVACY_POLICY: () => LocalizedString
 	/**
 	 * Transactions
 	 */
