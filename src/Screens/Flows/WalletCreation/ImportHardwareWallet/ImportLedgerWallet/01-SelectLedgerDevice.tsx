@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -8,10 +8,11 @@ import {
     BaseView,
     BluetoothStatusBottomSheet,
     DismissKeyboardView,
+    LocationStatusBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { debug } from "~Utils"
-import { PermissionsAndroid, StyleSheet, Platform, Linking } from "react-native"
+import { StyleSheet, Platform } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
@@ -22,12 +23,11 @@ import { ConnectedLedgerDevice } from "~Model"
 import Lottie from "lottie-react-native"
 import { BlePairingDark } from "~Assets/Lottie"
 import * as Haptics from "expo-haptics"
+import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const [androidPermissionsGranted, setAndroidPermissionsGranted] =
-        useState(false)
 
     const [availableDevices, setAvailableDevices] = useState<
         ConnectedLedgerDevice[]
@@ -39,6 +39,9 @@ export const SelectLedgerDevice = () => {
         setSelectedDevice(device)
     }, [])
 
+    const { androidPermissionsGranted, checkPermissions } =
+        LedgerAndroidPermissions()
+
     const onImportClick = useCallback(() => {
         if (selectedDevice) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
@@ -47,37 +50,6 @@ export const SelectLedgerDevice = () => {
             })
         }
     }, [nav, selectedDevice])
-
-    const goToSettings = useCallback(() => {
-        Linking.openSettings()
-    }, [])
-
-    const askForPermissions = useCallback(async () => {
-        if (Platform.OS === "android") {
-            const locationPermission = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            )
-            const bleConnectPermission = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-            )
-            const bleScanPermission = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-            )
-            if (
-                locationPermission === PermissionsAndroid.RESULTS.GRANTED &&
-                bleConnectPermission === PermissionsAndroid.RESULTS.GRANTED &&
-                bleScanPermission === PermissionsAndroid.RESULTS.GRANTED
-            ) {
-                setAndroidPermissionsGranted(true)
-            } else {
-                setAndroidPermissionsGranted(false)
-            }
-        }
-    }, [])
-
-    useEffect(() => {
-        askForPermissions()
-    }, [askForPermissions])
 
     /**
      * Listen for new ledger (nanox) devices if bluetooth is enabled
@@ -135,6 +107,17 @@ export const SelectLedgerDevice = () => {
 
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
+    const devicesFoundMessage = useMemo(() => {
+        if (availableDevices.length === 0) {
+            return LL.WALLET_LEDGER_NO_DEVICES_FOUND()
+        }
+        if (availableDevices.length === 1) {
+            return LL.WALLET_LEDGER_ONE_DEVICE_FOUND()
+        }
+        return LL.WALLET_LEDGER_MORE_DEVICES_FOUND({
+            count: availableDevices.length,
+        })
+    }, [LL, availableDevices.length])
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
@@ -164,9 +147,7 @@ export const SelectLedgerDevice = () => {
                             align="center"
                             typographyFont="subTitleBold"
                             my={10}>
-                            {availableDevices.length > 0
-                                ? `${availableDevices.length} devices found`
-                                : "No devices found"}
+                            {devicesFoundMessage}
                         </BaseText>
                         {availableDevices.length > 0 && (
                             <FlatList
@@ -189,7 +170,7 @@ export const SelectLedgerDevice = () => {
                             </BaseText>
                             <BaseSpacer height={16} />
                             <BaseButton
-                                action={goToSettings}
+                                action={checkPermissions}
                                 w={100}
                                 title={LL.WALLET_LEDGER_ASK_PERMISSIONS_BUTTON()}
                             />
@@ -208,6 +189,7 @@ export const SelectLedgerDevice = () => {
 
                 <BaseSpacer height={40} />
                 <BluetoothStatusBottomSheet />
+                <LocationStatusBottomSheet />
             </BaseSafeArea>
         </DismissKeyboardView>
     )
