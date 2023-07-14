@@ -14,7 +14,10 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
 
     return (
-        <BaseTouchable action={action} style={themedStyles.container}>
+        <BaseTouchable
+            action={action}
+            style={themedStyles.container}
+            haptics="Light">
             <BaseView>
                 <BaseText
                     color={theme.colors.textReversed}

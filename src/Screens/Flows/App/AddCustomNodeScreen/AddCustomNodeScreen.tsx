@@ -130,6 +130,7 @@ export const AddCustomNodeScreen = () => {
                         />
                     </BaseView>
                     <BaseButton
+                        haptics="Light"
                         action={onAddNetworkPress}
                         w={100}
                         px={20}

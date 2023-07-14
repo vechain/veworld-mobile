@@ -5,6 +5,7 @@ import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
+    BackButtonHeader,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
@@ -33,6 +34,7 @@ import {
 } from "./Components"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import HapticsService from "~Services/HapticsService"
 
 const underlaySnapPoints = [58]
 
@@ -41,8 +43,6 @@ export const ContactsScreen = () => {
     const nav = useNavigation()
 
     const theme = useTheme()
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const insets = useSafeAreaInsets()
 
@@ -107,7 +107,6 @@ export const ContactsScreen = () => {
     const onDeleteContactPress = useCallback(
         (address: string) => {
             setSelectedContactAddress(address)
-
             openRemoveContactSheet()
         },
         [openRemoveContactSheet],
@@ -150,6 +149,7 @@ export const ContactsScreen = () => {
 
     const onSwipeableItemChange = useCallback(
         (address: string) => {
+            HapticsService.triggerImpact({ level: "Light" })
             closeOtherSwipeableItems("")
             onDeleteContactPress(address)
         },
@@ -259,15 +259,8 @@ export const ContactsScreen = () => {
         <BaseSafeArea
             grow={1}
             onTouchStart={() => closeOtherSwipeableItems("")}>
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
+            <BackButtonHeader />
 
-            <BaseSpacer height={12} />
             <BaseView mx={20}>
                 <BaseView
                     flexDirection="row"
@@ -281,6 +274,7 @@ export const ContactsScreen = () => {
                     </BaseText>
                     {contacts.length > 0 && (
                         <BaseIcon
+                            haptics="Light"
                             name={"plus"}
                             size={24}
                             bg={theme.colors.secondary}

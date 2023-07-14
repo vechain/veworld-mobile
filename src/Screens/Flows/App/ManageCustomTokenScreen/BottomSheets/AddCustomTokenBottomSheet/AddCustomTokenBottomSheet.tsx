@@ -189,6 +189,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                 )}
                 <BaseSpacer height={24} />
                 <BaseButton
+                    haptics="Medium"
                     w={100}
                     title={LL.COMMON_BTN_ADD()}
                     action={handleAddCustomToken}

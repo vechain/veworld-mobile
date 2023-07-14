@@ -1,8 +1,7 @@
-import { useNavigation, useTheme } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
-    BaseIcon,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -29,10 +28,6 @@ import {
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 export const GeneralScreen = () => {
-    const nav = useNavigation()
-
-    const theme = useTheme()
-
     const { LL } = useI18nContext()
 
     const tabBarHeight = useBottomTabBarHeight()
@@ -50,7 +45,7 @@ export const GeneralScreen = () => {
     const hideTokensWithNoBalance = useAppSelector(
         selectHideTokensWithNoBalance,
     )
-    const goBack = useCallback(() => nav.goBack(), [nav])
+
     const toggleTokensHiddenSwitch = useCallback(
         (newValue: boolean) => {
             dispatch(setHideTokensWithNoBalance(newValue))
@@ -78,14 +73,8 @@ export const GeneralScreen = () => {
                     { paddingBottom: tabBarHeight },
                 ]}
                 style={baseStyles.scrollView}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-                <BaseSpacer height={12} />
+                <BackButtonHeader />
+
                 <BaseView mx={20}>
                     <BaseText typographyFont="title">
                         {LL.TITLE_GENERAL()}

@@ -45,6 +45,7 @@ export const AddUrlBottomSheet = React.forwardRef<
                 footer={
                     <BaseView flexDirection="row">
                         <BaseButton
+                            haptics="Light"
                             title={LL.COMMON_BTN_CANCEL()}
                             action={handleClose}
                             variant="outline"
@@ -52,6 +53,7 @@ export const AddUrlBottomSheet = React.forwardRef<
                         />
                         <BaseSpacer width={16} />
                         <BaseButton
+                            haptics="Light"
                             title={LL.COMMON_BTN_ADD()}
                             action={handleAddUrl}
                             disabled={!URLUtils.isValid(newUrl)}

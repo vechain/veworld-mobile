@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import {
     BaseCard,
     BaseIcon,
@@ -11,6 +11,7 @@ import { useI18nContext } from "~i18n"
 import DeviceInfo from "react-native-device-info"
 import { VeWorldLogoSVG } from "~Assets"
 import { Linking } from "react-native"
+import { LocalizedString } from "typesafe-i18n"
 
 export const AboutScreen = () => {
     const { LL } = useI18nContext()
@@ -33,9 +34,38 @@ export const AboutScreen = () => {
         },
     ]
 
-    const handleClickLink = (url: string) => () => {
-        Linking.openURL(url)
-    }
+    const renderLinks = useCallback(
+        (link: {
+            title: LocalizedString
+            subtitle: LocalizedString
+            url: string
+        }) => (
+            <BaseCard
+                key={link.url}
+                style={styles.itemCard}
+                onPress={() => Linking.openURL(link.url)}>
+                <BaseView
+                    flex={1}
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center">
+                    <BaseView>
+                        <BaseText typographyFont="subTitleBold">
+                            {link.title}
+                        </BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText typographyFont="captionRegular">
+                            {link.subtitle}
+                        </BaseText>
+                    </BaseView>
+                    <BaseView>
+                        <BaseIcon name="chevron-right" size={25} />
+                    </BaseView>
+                </BaseView>
+            </BaseCard>
+        ),
+        [],
+    )
 
     return (
         <Layout
@@ -61,37 +91,8 @@ export const AboutScreen = () => {
                         })}
                     </BaseText>
                     <BaseSpacer height={48} />
-                    {links.map((link, index) => (
-                        <>
-                            <BaseCard
-                                style={styles.itemCard}
-                                onPress={handleClickLink(link.url)}>
-                                <BaseView
-                                    key={index}
-                                    flex={1}
-                                    flexDirection="row"
-                                    justifyContent="space-between"
-                                    alignItems="center">
-                                    <BaseView>
-                                        <BaseText typographyFont="subTitleBold">
-                                            {link.title}
-                                        </BaseText>
-                                        <BaseSpacer height={8} />
-                                        <BaseText typographyFont="captionRegular">
-                                            {link.subtitle}
-                                        </BaseText>
-                                    </BaseView>
-                                    <BaseView>
-                                        <BaseIcon
-                                            name="chevron-right"
-                                            size={25}
-                                        />
-                                    </BaseView>
-                                </BaseView>
-                            </BaseCard>
-                            <BaseSpacer height={16} />
-                        </>
-                    ))}
+
+                    {links.map(link => renderLinks(link))}
                 </BaseView>
             }
         />
@@ -113,5 +114,6 @@ const styles = {
     },
     itemCard: {
         padding: 16,
+        marginBottom: 16,
     },
 }

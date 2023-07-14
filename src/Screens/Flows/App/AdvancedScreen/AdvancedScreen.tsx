@@ -1,5 +1,6 @@
 import React, { useCallback } from "react"
 import {
+    BackButtonHeader,
     BaseButton,
     BaseIcon,
     BaseSafeArea,
@@ -13,7 +14,6 @@ import { useI18nContext } from "~i18n"
 import { info } from "~Utils"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
-import { useNavigation } from "@react-navigation/native"
 import {
     selectSentryTrackingEnabled,
     setSentryTrackingEnabled,
@@ -22,12 +22,9 @@ import {
 } from "~Storage/Redux"
 
 export const AdvancedScreen = () => {
-    const nav = useNavigation()
     const theme = useTheme()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const onDownloadLogs = useCallback(() => {
         // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/756) implement download logs
@@ -44,14 +41,7 @@ export const AdvancedScreen = () => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
-            <BaseSpacer height={12} />
+            <BackButtonHeader />
 
             <BaseView mx={20}>
                 <BaseText typographyFont="title">
