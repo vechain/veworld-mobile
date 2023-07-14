@@ -12,7 +12,11 @@ export const AppConnectionRequests = ({ name, methods }: Props) => {
     const { LL } = useI18nContext()
 
     const renderRequestTransactionDescription = useMemo(() => {
-        if (methods.find(method => method === "request_transaction")) {
+        if (
+            methods.find(
+                method => method === RequestMethods.REQUEST_TRANSACTION,
+            )
+        ) {
             return (
                 <>
                     <BaseSpacer height={8} />

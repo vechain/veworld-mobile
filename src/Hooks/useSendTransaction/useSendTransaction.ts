@@ -28,9 +28,9 @@ export const useSendTransaction = (
         const type = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
 
         if (type === ActivityType.NFT_TRANSFER) {
-            dispatch(addPendingNFTtransferTransactionActivity(tx, thorClient))
+            dispatch(addPendingNFTtransferTransactionActivity(tx))
         } else {
-            dispatch(addPendingTransferTransactionActivity(tx, thorClient))
+            dispatch(addPendingTransferTransactionActivity(tx))
         }
 
         await dispatch(updateAccountBalances(thorClient, account.address))

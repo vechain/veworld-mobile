@@ -251,7 +251,7 @@ const en: BaseTranslation = {
 
     // Common Labels
     COMMON_LBL_AND: "and",
-    COMMON_LBL_NAME: "name",
+    COMMON_LBL_NAME: "Name",
     COMMON_LBL_URL: "URL",
     COMMON_LBL_ADDRESS: "Address",
     COMMON_LBL_SUCCESS: "Success",
@@ -415,6 +415,8 @@ const en: BaseTranslation = {
     
     CONNECTED_APP_DETAILS_TITLE: "Connected app",   
     CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",   
+    CONNECTED_APP_CONNECTION_REQUESTS: "Connection requests",
+    CONNECTED_APP_DESCRIPTION: "Description",
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",

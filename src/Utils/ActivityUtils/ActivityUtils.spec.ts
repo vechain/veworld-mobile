@@ -76,10 +76,10 @@ const BASE_SAMPLE_ACTIVITY = {
 }
 
 describe("getActivityTypeFromClause", () => {
-    test("should return CONNECTED_APP_TRANSACTION when there are multiple clauses", () => {
+    test("should return DAPP_TRANSACTION when there are multiple clauses", () => {
         const clauses = [contractCallClause, tokenTransferClause1]
         const type = ActivityUtils.getActivityTypeFromClause(clauses)
-        expect(type).toBe(ActivityType.CONNECTED_APP_TRANSACTION)
+        expect(type).toBe(ActivityType.DAPP_TRANSACTION)
     })
 
     test("should return FUNGIBLE_TOKEN when the clause is token transfer", () => {
@@ -94,10 +94,10 @@ describe("getActivityTypeFromClause", () => {
         expect(type).toBe(ActivityType.VET_TRANSFER)
     })
 
-    test("should return CONNECTED_APP_TRANSACTION when the clause is not vet transfer or token transfer", () => {
+    test("should return DAPP_TRANSACTION when the clause is not vet transfer or token transfer", () => {
         const clauses = [contractCallClause]
         const type = ActivityUtils.getActivityTypeFromClause(clauses)
-        expect(type).toBe(ActivityType.CONNECTED_APP_TRANSACTION)
+        expect(type).toBe(ActivityType.DAPP_TRANSACTION)
     })
 })
 
@@ -134,7 +134,7 @@ describe("isTransactionActivity", () => {
     test("should return true for a transaction activity", () => {
         const activity: Activity = {
             ...BASE_SAMPLE_ACTIVITY,
-            type: ActivityType.CONNECTED_APP_TRANSACTION,
+            type: ActivityType.DAPP_TRANSACTION,
         }
         const isTransaction = ActivityUtils.isTransactionActivity(activity)
         expect(isTransaction).toBe(true)

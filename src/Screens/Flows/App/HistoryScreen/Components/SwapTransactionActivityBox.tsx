@@ -8,7 +8,7 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import {
     Activity,
     ActivityStatus,
-    ConnectedAppTxActivity,
+    DappTxActivity,
     FungibleToken,
     TransactionOutcomes,
 } from "~Model"
@@ -17,7 +17,7 @@ import { getCalendars } from "expo-localization"
 import { ActivityStatusIndicator } from "."
 
 type Props = {
-    activity: ConnectedAppTxActivity
+    activity: DappTxActivity
     decodedClauses: TransactionOutcomes
     onPress: (
         activity: Activity,
@@ -82,12 +82,13 @@ export const SwapTransactionActivityBox: React.FC<Props> = memo(
                                         pb={5}>
                                         {LL.SWAP()}
                                     </BaseText>
-                                    {activity.status !==
-                                        ActivityStatus.SUCCESS && (
-                                        <ActivityStatusIndicator
-                                            activityStatus={activity.status}
-                                        />
-                                    )}
+                                    {activity.status &&
+                                        activity.status !==
+                                            ActivityStatus.SUCCESS && (
+                                            <ActivityStatusIndicator
+                                                activityStatus={activity.status}
+                                            />
+                                        )}
                                 </BaseView>
                                 <BaseText typographyFont="smallCaptionRegular">
                                     {dateTimeActivity}

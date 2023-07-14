@@ -6,8 +6,7 @@ import { ActivityUtils } from "~Utils"
 type ActivityKeyType =
     | "transactionActivitiesMainnet"
     | "transactionActivitiesTestnet"
-    | "nonTransactionActivitiesMainnet"
-    | "nonTransactionActivitiesTestnet"
+    | "nonTransactionActivities"
 
 /**
  * Represents the activities related to an account.
@@ -22,7 +21,6 @@ export const initialActivitiesState: ActivitiesSliceState = {}
 
 const upsertActivity = (
     transactionActivityKey: ActivityKeyType,
-    nonTransactionActivityKey: ActivityKeyType,
     state: Draft<ActivitiesSliceState>,
     action: PayloadAction<{ address: string; activity: Activity }>,
 ) => {
@@ -31,9 +29,8 @@ const upsertActivity = (
     if (!state[address]) {
         state[address] = {
             transactionActivitiesMainnet: [],
-            nonTransactionActivitiesMainnet: [],
             transactionActivitiesTestnet: [],
-            nonTransactionActivitiesTestnet: [],
+            nonTransactionActivities: [],
         }
     }
 
@@ -49,17 +46,15 @@ const upsertActivity = (
             state[address][transactionActivityKey].unshift(activity)
         }
     } else {
-        const activityIndex = state[address][
-            nonTransactionActivityKey
-        ].findIndex(
+        const activityIndex = state[address].nonTransactionActivities.findIndex(
             existingActivity =>
                 existingActivity.id.toLowerCase() === activity.id.toLowerCase(),
         )
 
         if (activityIndex !== -1) {
-            state[address][nonTransactionActivityKey][activityIndex] = activity
+            state[address].nonTransactionActivities[activityIndex] = activity
         } else {
-            state[address][nonTransactionActivityKey].unshift(activity)
+            state[address].nonTransactionActivities.unshift(activity)
         }
     }
 }
@@ -73,23 +68,13 @@ export const ActivitiesSlice = createSlice({
          * It separately handles transactional and non-transactional activities.
          */
         upsertActivityMainnet: (state, action) =>
-            upsertActivity(
-                "transactionActivitiesMainnet",
-                "nonTransactionActivitiesMainnet",
-                state,
-                action,
-            ),
+            upsertActivity("transactionActivitiesMainnet", state, action),
         /**
          * Updates or inserts a Testnet activity for the given address.
          * It separately handles transactional and non-transactional activities.
          */
         upsertActivityTestnet: (state, action) =>
-            upsertActivity(
-                "transactionActivitiesTestnet",
-                "nonTransactionActivitiesTestnet",
-                state,
-                action,
-            ),
+            upsertActivity("transactionActivitiesTestnet", state, action),
 
         updateTransactionActivitiesMainnet: (
             state,
@@ -102,9 +87,8 @@ export const ActivitiesSlice = createSlice({
             if (!existingActivities) {
                 state[address] = {
                     transactionActivitiesMainnet: newActivities,
-                    nonTransactionActivitiesMainnet: [],
                     transactionActivitiesTestnet: [],
-                    nonTransactionActivitiesTestnet: [],
+                    nonTransactionActivities: [],
                 }
             } else {
                 state[address] = {
@@ -124,9 +108,8 @@ export const ActivitiesSlice = createSlice({
             if (!existingActivities) {
                 state[address] = {
                     transactionActivitiesMainnet: [],
-                    nonTransactionActivitiesMainnet: [],
                     transactionActivitiesTestnet: newActivities,
-                    nonTransactionActivitiesTestnet: [],
+                    nonTransactionActivities: [],
                 }
             } else {
                 state[address] = {
