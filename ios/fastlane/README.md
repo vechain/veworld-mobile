@@ -15,6 +15,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios increment_version
+
+```sh
+[bundle exec] fastlane ios increment_version
+```
+
+Increment package.json, Info.plist(IOS) and build.gradle(Android) versions
+
 ### ios e2e
 
 ```sh

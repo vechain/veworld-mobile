@@ -17,6 +17,42 @@ default_platform(:ios)
 
 platform :ios do
 
+  desc "Increment package.json, Info.plist(IOS) and build.gradle(Android) versions"
+  lane :increment_version do |options|
+    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
+      sh("yarn release")
+    end
+
+    # Read the current version from package.json
+    package_json = JSON.parse(File.read("../../package.json"))
+    new_version = package_json["version"]
+
+    # Update the version in package.json
+    package_json["version"] = new_version
+    File.write("../../package.json", JSON.pretty_generate(package_json))
+
+    # Increment the version in Info.plist
+    increment_version_number(
+      xcodeproj: "VeWorld.xcodeproj",
+      version_number: new_version
+    )
+
+    # Increment the version in build.gradle
+    def increment_build_gradle_version(new_version)
+      build_gradle_file = "../../android/build.gradle" 
+
+      # Read the build.gradle file
+      build_gradle_content = File.read(build_gradle_file)
+
+      # Replace the versionName in build.gradle
+      updated_build_gradle_content = build_gradle_content.gsub(/versionName = ".*"/, "versionName = \"#{new_version}\"")
+
+      # Write the updated build.gradle file
+      File.write(build_gradle_file, updated_build_gradle_content)
+    end
+    increment_build_gradle_version(new_version)
+  end
+
   desc "Run e2e tests"
   lane :e2e do
     Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
