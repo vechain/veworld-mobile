@@ -17,6 +17,7 @@ import {
     ConnectedAppsScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
+import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -25,6 +26,7 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
     [Routes.SETTINGS_PRIVACY]: undefined
     [Routes.SETTINGS_ADVANCED]: undefined
+    [Routes.SETTINGS_ABOUT]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
     [Routes.SETTINGS_CONTACTS]: undefined
     [Routes.SETTINGS_ADD_CONTACT]: undefined
@@ -73,6 +75,11 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.SETTINGS_ADVANCED}
                     component={AdvancedScreen}
+                    options={{ headerShown: false }}
+                />
+                <Settings.Screen
+                    name={Routes.SETTINGS_ABOUT}
+                    component={AboutScreen}
                     options={{ headerShown: false }}
                 />
                 <Settings.Screen

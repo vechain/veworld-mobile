@@ -4,13 +4,13 @@ import { useTheme, useThemedStyles } from "~Hooks"
 import { DateUtils } from "~Utils"
 import { COLORS, ColorThemeType } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { Activity, ActivityStatus, ConnectedAppTxActivity } from "~Model"
+import { Activity, ActivityStatus, DappTxActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
 import { ActivityStatusIndicator } from "."
 
 type Props = {
-    activity: ConnectedAppTxActivity
+    activity: DappTxActivity
     onPress: (activity: Activity) => void
 }
 
@@ -63,12 +63,13 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
                                         pb={5}>
                                         {LL.DAPP_TRANSACTION()}
                                     </BaseText>
-                                    {activity.status !==
-                                        ActivityStatus.SUCCESS && (
-                                        <ActivityStatusIndicator
-                                            activityStatus={activity.status}
-                                        />
-                                    )}
+                                    {activity.status &&
+                                        activity.status !==
+                                            ActivityStatus.SUCCESS && (
+                                            <ActivityStatusIndicator
+                                                activityStatus={activity.status}
+                                            />
+                                        )}
                                 </BaseView>
                                 <BaseText typographyFont="smallCaptionRegular">
                                     {dateTimeActivity}

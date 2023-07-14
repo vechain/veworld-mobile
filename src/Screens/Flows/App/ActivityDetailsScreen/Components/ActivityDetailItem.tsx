@@ -19,7 +19,7 @@ export const ActivityDetailItem: React.FC<Props> = memo(
             <BaseView
                 key={activityDetail.id}
                 w={100}
-                flexDirection="row"
+                pt={12}
                 style={[
                     baseStyles.container,
                     // eslint-disable-next-line react-native/no-inline-styles
@@ -38,7 +38,9 @@ export const ActivityDetailItem: React.FC<Props> = memo(
                         action={activityDetail.onValuePress}
                         disabled={!activityDetail.onValuePress}
                         style={baseStyles.valueContainer}>
-                        <BaseText typographyFont="subSubTitle">
+                        <BaseText
+                            typographyFont="subSubTitle"
+                            underline={activityDetail.underline}>
                             {activityDetail.value}
                         </BaseText>
 
@@ -66,10 +68,11 @@ export const ActivityDetailItem: React.FC<Props> = memo(
 
 const baseStyles = StyleSheet.create({
     container: {
-        height: 65,
+        minHeight: 65,
     },
     valueContainer: {
         flexDirection: "row",
         alignItems: "center",
+        paddingBottom: 12,
     },
 })

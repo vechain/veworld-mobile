@@ -3,7 +3,7 @@ import { debug } from "~Utils/Logger"
 import {
     ClauseType,
     ClauseWithMetadata,
-    ConnectedAppTxActivity,
+    DappTxActivity,
     ConnexClause,
     SwapEvent,
     SwapResult,
@@ -560,7 +560,7 @@ export const interpretContractCall = (
             }
         }
 
-        // Check if the clause is a known contract call defined by a decoder mVETod
+        // Check if the clause is a known contract call defined by a decoder method
         let isDecodedClause = false
         if (!isTokenTransfer) {
             const decodedClause = decodeContractCall(clause)
@@ -698,7 +698,7 @@ export const validateSwapEvents = (
  */
 export const decodeSwapTransferAmounts = (
     decodedClauses: TransactionOutcomes,
-    activity: ConnectedAppTxActivity,
+    activity: DappTxActivity,
 ): SwapResult | null => {
     if (!isSwapTransaction(decodedClauses))
         throw new Error("Transaction is not a swap transaction")

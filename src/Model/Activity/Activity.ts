@@ -1,5 +1,4 @@
 import { DIRECTIONS } from "~Constants"
-import { Certificate } from "thor-devkit"
 import { ActivityStatus, ActivityType } from "./enum"
 
 export type OutputResponse = {
@@ -12,20 +11,25 @@ export type OutputResponse = {
  * The Activity interface represents a blockchain activity with necessary transaction metadata.
  */
 export interface Activity {
+    isTransaction: boolean
+    timestamp: number
+    type: ActivityType
+    id: string
     from: string
     to?: string[]
-    id: string
-    blockNumber: number
-    isTransaction: boolean
-    genesisId: string
-    type: ActivityType
-    timestamp: number
-    status: ActivityStatus
-    clauses: Connex.VM.Clause[]
+    blockNumber?: number
+    genesisId?: string
+    status?: ActivityStatus
+    clauses?: Connex.VM.Clause[]
     gasUsed?: number
     gasPayer?: string
     delegated?: boolean
     outputs?: OutputResponse[]
+}
+
+export interface NonTransactionalActivity {
+    type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
+    timestamp: number
 }
 
 /**
@@ -49,11 +53,23 @@ export interface NonFungibleTokenActivity extends Activity {
 }
 
 /**
- * The ConnectedAppTxActivity interface represents a blockchain activity related to transactions from connected applications.
+ * The DappTxActivity interface represents a blockchain activity and is a transaction on-chain.
  */
-export interface ConnectedAppTxActivity extends Activity {
-    type: ActivityType.CONNECTED_APP_TRANSACTION
+export interface DappTxActivity extends Activity {
+    type: ActivityType.DAPP_TRANSACTION
+    name?: string
     linkUrl?: string
+}
+
+/**
+ * The ConnectedAppActivity interface represents a blockchain activity related to transactions from connected applications.
+ */
+export interface ConnectedAppActivity extends Activity {
+    type: ActivityType.CONNECTED_APP_TRANSACTION
+    name?: string
+    linkUrl?: string
+    description?: string
+    methods?: string[]
 }
 
 /**
@@ -61,9 +77,9 @@ export interface ConnectedAppTxActivity extends Activity {
  */
 export interface SignCertActivity extends Activity {
     type: ActivityType.SIGN_CERT
-    certMessage?: Connex.Vendor.CertMessage
-    certOptions?: Connex.Driver.TxOptions
-    certificate: Certificate
+    name?: string
+    content?: string
+    purpose?: string
     linkUrl?: string
 }
 

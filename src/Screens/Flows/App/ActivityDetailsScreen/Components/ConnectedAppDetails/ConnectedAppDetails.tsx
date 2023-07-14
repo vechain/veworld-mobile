@@ -1,16 +1,22 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
+import { BaseSpacer } from "~Components"
 import { useI18nContext } from "~i18n"
-import { SignCertActivity } from "~Model"
-import { ActivityDetail } from "../Type"
-import { ActivityDetailItem } from "./ActivityDetailItem"
+import { ConnectedAppActivity } from "~Model"
+import { ActivityDetail } from "../../Type"
+import { ActivityDetailItem } from "../ActivityDetailItem"
 import { Linking } from "react-native"
+import { wcMethodsToRequestTranslations } from "./Helpers"
 
 type Props = {
-    activity: SignCertActivity
+    activity: ConnectedAppActivity
 }
 
-export const SignCertificateDetails: React.FC<Props> = memo(({ activity }) => {
+export const ConnectedAppDetails: React.FC<Props> = memo(({ activity }) => {
     const { LL } = useI18nContext()
+
+    const connectionRequests = useMemo(() => {
+        return wcMethodsToRequestTranslations(activity.methods ?? [], LL)
+    }, [LL, activity.methods])
 
     // Details List
     const details: Array<ActivityDetail> = [
@@ -24,7 +30,7 @@ export const SignCertificateDetails: React.FC<Props> = memo(({ activity }) => {
         {
             id: 2,
             title: LL.ORIGIN(),
-            value: `${activity.linkUrl}`,
+            value: activity.linkUrl ?? "",
             typographyFont: "subSubTitleLight",
             underline: true,
             onValuePress: async () =>
@@ -32,16 +38,16 @@ export const SignCertificateDetails: React.FC<Props> = memo(({ activity }) => {
         },
         {
             id: 3,
-            title: LL.CONNECTED_APP_SELECTED_PURPOSE_LABEL(),
-            value: `${activity.purpose ?? ""}`.toUpperCase(),
-            typographyFont: "subSubTitle",
+            title: LL.SB_DESCRIPTION(),
+            value: activity.description ?? "",
+            typographyFont: "subSubTitleLight",
             underline: false,
         },
         {
             id: 4,
-            title: LL.CONTENT(),
-            value: `${activity.content || ""}`,
-            typographyFont: "subSubTitle",
+            title: LL.CONNECTED_APP_CONNECTION_REQUESTS(),
+            value: connectionRequests,
+            typographyFont: "subSubTitleLight",
             underline: false,
         },
     ]
@@ -58,6 +64,8 @@ export const SignCertificateDetails: React.FC<Props> = memo(({ activity }) => {
                         />
                     ),
             )}
+
+            <BaseSpacer height={16} />
         </>
     )
 })

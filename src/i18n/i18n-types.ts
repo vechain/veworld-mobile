@@ -175,6 +175,10 @@ type RootTranslation = {
 	 */
 	BTN_EDIT_PIN: string
 	/**
+	 * E​n​a​b​l​e
+	 */
+	BTN_ENABLE: string
+	/**
 	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
 	 */
 	BTN_BACKUP_MENMONIC: string
@@ -889,7 +893,7 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_AND: string
 	/**
-	 * n​a​m​e
+	 * N​a​m​e
 	 */
 	COMMON_LBL_NAME: string
 	/**
@@ -1046,6 +1050,14 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​B​l​u​e​t​o​o​t​h​,​ ​w​h​i​c​h​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​u​s​e​ ​t​h​i​s​ ​f​e​a​t​u​r​e​.
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
+	/**
+	 * E​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s
+	 */
+	ALERT_TITLE_ENABLE_LOCATION: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​e​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​t​o​ ​c​o​n​t​i​n​u​e​.
+	 */
+	ALERT_MSG_ENABLE_LOCATION: string
 	/**
 	 * C​o​n​n​e​c​t​i​o​n​ ​p​r​o​b​l​e​m​s​ ​d​e​t​e​c​t​e​d​.​
 ​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
@@ -1449,6 +1461,14 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: string
 	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
+	 */
+	CONNECTED_APP_CONNECTION_REQUESTS: string
+	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	CONNECTED_APP_DESCRIPTION: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -1541,6 +1561,35 @@ type RootTranslation = {
 	 * C​o​n​v​e​r​t​ ​b​a​l​a​n​c​e​s​ ​t​o​ ​f​i​a​t
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: string
+	/**
+	 * O​f​f​i​c​i​a​l​ ​s​i​t​e
+	 */
+	SETTINGS_ABOUT_OFFICIAL_SITE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * @param {unknown} version
+	 */
+	SETTINGS_ABOUT_APP_VERSION: RequiredParams<'version'>
+	/**
+	 * v​e​w​o​r​l​d​.​n​e​t
+	 */
+	SETTINGS_ABOUT_WEWORLD_WEBSITE: string
+	/**
+	 * G​e​t​ ​h​e​l​p
+	 */
+	SETTINGS_ABOUT_GET_HELP: string
+	/**
+	 * R​e​p​o​r​t​ ​a​ ​b​u​g
+	 */
+	SETTINGS_ABOUT_REPORT_BUG: string
+	/**
+	 * O​u​r​ ​c​o​m​m​i​t​m​e​n​t​ ​t​o​ ​y​o​u
+	 */
+	SETTINGS_ABOUT_OUR_COMMITMENT: string
+	/**
+	 * P​r​i​v​a​c​y​ ​p​o​l​i​c​y
+	 */
+	SETTINGS_ABOUT_PRIVACY_POLICY: string
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
@@ -1842,11 +1891,11 @@ type RootTranslation = {
 	 */
 	WALLET_LABEL_WALLET: string
 	/**
-	 * W​e​ ​n​e​e​d​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​p​e​r​f​o​r​m​ ​b​l​u​e​t​o​o​t​h​ ​s​c​a​n​n​i​n​g
+	 * W​e​ ​n​e​e​d​ ​b​l​u​e​t​o​o​t​h​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​p​e​r​f​o​r​m​ ​b​l​u​e​t​o​o​t​h​ ​s​c​a​n​n​i​n​g
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: string
 	/**
-	 * A​l​l​o​w​ ​B​l​u​e​t​o​o​t​h
+	 * G​i​v​e​ ​p​e​r​m​i​s​s​i​o​n​s
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: string
 	/**
@@ -1854,7 +1903,20 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: string
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​a​n​d​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d
+	 * N​o​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
+	 */
+	WALLET_LEDGER_NO_DEVICES_FOUND: string
+	/**
+	 * 1​ ​d​e​v​i​c​e​ ​f​o​u​n​d
+	 */
+	WALLET_LEDGER_ONE_DEVICE_FOUND: string
+	/**
+	 * {​c​o​u​n​t​}​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
+	 * @param {number} count
+	 */
+	WALLET_LEDGER_MORE_DEVICES_FOUND: RequiredParams<'count'>
+	/**
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
@@ -2284,6 +2346,10 @@ export type TranslationFunctions = {
 	 * Edit Pin
 	 */
 	BTN_EDIT_PIN: () => LocalizedString
+	/**
+	 * Enable
+	 */
+	BTN_ENABLE: () => LocalizedString
 	/**
 	 * Backup phrase
 	 */
@@ -2997,7 +3063,7 @@ export type TranslationFunctions = {
 	 */
 	COMMON_LBL_AND: () => LocalizedString
 	/**
-	 * name
+	 * Name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
 	/**
@@ -3152,6 +3218,14 @@ export type TranslationFunctions = {
 	 * Your device does not support Bluetooth, which is required to use this feature.
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
+	/**
+	 * Enable location services
+	 */
+	ALERT_TITLE_ENABLE_LOCATION: () => LocalizedString
+	/**
+	 * Please, open the device settings and enable location services to continue.
+	 */
+	ALERT_MSG_ENABLE_LOCATION: () => LocalizedString
 	/**
 	 * Connection problems detected.
 Try reconnect your device to the internet.
@@ -3539,6 +3613,14 @@ Please, try again later.
 	 */
 	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: () => LocalizedString
 	/**
+	 * Connection requests
+	 */
+	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
+	/**
+	 * Description
+	 */
+	CONNECTED_APP_DESCRIPTION: () => LocalizedString
+	/**
 	 * Contract address
 	 */
 	CONTRACT_ADDRESS: () => LocalizedString
@@ -3630,6 +3712,34 @@ Please, try again later.
 	 * Convert balances to fiat
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: () => LocalizedString
+	/**
+	 * Official site
+	 */
+	SETTINGS_ABOUT_OFFICIAL_SITE: () => LocalizedString
+	/**
+	 * Version {version}
+	 */
+	SETTINGS_ABOUT_APP_VERSION: (arg: { version: unknown }) => LocalizedString
+	/**
+	 * veworld.net
+	 */
+	SETTINGS_ABOUT_WEWORLD_WEBSITE: () => LocalizedString
+	/**
+	 * Get help
+	 */
+	SETTINGS_ABOUT_GET_HELP: () => LocalizedString
+	/**
+	 * Report a bug
+	 */
+	SETTINGS_ABOUT_REPORT_BUG: () => LocalizedString
+	/**
+	 * Our commitment to you
+	 */
+	SETTINGS_ABOUT_OUR_COMMITMENT: () => LocalizedString
+	/**
+	 * Privacy policy
+	 */
+	SETTINGS_ABOUT_PRIVACY_POLICY: () => LocalizedString
 	/**
 	 * Transactions
 	 */
@@ -3931,11 +4041,11 @@ Please, try again later.
 	 */
 	WALLET_LABEL_WALLET: () => LocalizedString
 	/**
-	 * We need permissions to perform bluetooth scanning
+	 * We need bluetooth and location permissions to perform bluetooth scanning
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: () => LocalizedString
 	/**
-	 * Allow Bluetooth
+	 * Give permissions
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: () => LocalizedString
 	/**
@@ -3943,7 +4053,19 @@ Please, try again later.
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked and the bluetooth enabled
+	 * No devices found
+	 */
+	WALLET_LEDGER_NO_DEVICES_FOUND: () => LocalizedString
+	/**
+	 * 1 device found
+	 */
+	WALLET_LEDGER_ONE_DEVICE_FOUND: () => LocalizedString
+	/**
+	 * {count} devices found
+	 */
+	WALLET_LEDGER_MORE_DEVICES_FOUND: (arg: { count: number }) => LocalizedString
+	/**
+	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**

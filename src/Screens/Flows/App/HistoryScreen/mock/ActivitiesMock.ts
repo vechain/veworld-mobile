@@ -3,7 +3,7 @@ import {
     Activity,
     ActivityStatus,
     ActivityType,
-    ConnectedAppTxActivity,
+    DappTxActivity,
     DelegatedTransactionActivity,
     FungibleTokenActivity,
     SignCertActivity,
@@ -212,7 +212,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
     },
 ]
 
-const CONNECTED_APP_ACTIVITIES: ConnectedAppTxActivity[] = [
+const CONNECTED_APP_ACTIVITIES: DappTxActivity[] = [
     {
         // Connected App
         from: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
@@ -228,7 +228,7 @@ const CONNECTED_APP_ACTIVITIES: ConnectedAppTxActivity[] = [
         isTransaction: true,
         genesisId:
             "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.CONNECTED_APP_TRANSACTION,
+        type: ActivityType.DAPP_TRANSACTION,
         timestamp: 1382337919000,
         gasUsed: 154645,
         gasPayer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
@@ -283,7 +283,7 @@ const CONNECTED_APP_ACTIVITIES: ConnectedAppTxActivity[] = [
         isTransaction: true,
         genesisId:
             "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.CONNECTED_APP_TRANSACTION,
+        type: ActivityType.DAPP_TRANSACTION,
         timestamp: 1382337919000,
         gasUsed: 154645,
         gasPayer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
@@ -356,23 +356,6 @@ const SIGN_CERT_ACTIVITIES: SignCertActivity[] = [
         clauses: [],
 
         linkUrl: "https://app.verocket.com",
-        certificate: {
-            purpose: "",
-            payload: {
-                type: "",
-                content: "",
-            },
-            domain: "",
-            timestamp: 1682337919000,
-            signer: "",
-        },
-        certMessage: {
-            purpose: "agreement",
-            payload: {
-                type: "text",
-                content: "Sign in to use VeRocket",
-            },
-        },
         outputs: [],
     },
     {
@@ -393,23 +376,6 @@ const SIGN_CERT_ACTIVITIES: SignCertActivity[] = [
         clauses: [],
 
         linkUrl: "https://app.verocket.com",
-        certificate: {
-            purpose: "",
-            payload: {
-                type: "",
-                content: "",
-            },
-            domain: "",
-            timestamp: 1682337919000,
-            signer: "",
-        },
-        certMessage: {
-            purpose: "agreement",
-            payload: {
-                type: "text",
-                content: "Sign in to use VeRocket",
-            },
-        },
         outputs: [],
     },
 ]

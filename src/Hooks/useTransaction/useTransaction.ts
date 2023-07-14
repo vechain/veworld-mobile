@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Transaction, abi } from "thor-devkit"
 
-import { HexUtils, FormattingUtils, GasUtils } from "~Utils"
+import { HexUtils, FormattingUtils, GasUtils, error } from "~Utils"
 import { useThor } from "~Components"
 import {
     AccountWithDevice,
@@ -17,6 +17,7 @@ type UseTransactionReturnProps = {
     gas?: EstimateGasResult
     setGas: (gas: EstimateGasResult) => void
     transaction: Transaction.Body
+    loadingGas: boolean
 }
 
 type Props = {
@@ -35,6 +36,7 @@ export const useTransaction = ({
     token,
     addressTo,
 }: Props): UseTransactionReturnProps => {
+    const [loadingGas, setLoadingGas] = useState<boolean>(true)
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
     const thorClient = useThor()
@@ -81,19 +83,26 @@ export const useTransaction = ({
     useEffect(() => {
         if (account) {
             ;(async () => {
-                const estimatedGas = await GasUtils.estimateGas(
-                    thorClient,
-                    clauses ?? [],
-                    0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
-                    account.address,
-                    // NOTE: gasPayer: undefined; in extension it was not used
-                )
-                setGas(estimatedGas)
+                setLoadingGas(true)
+                try {
+                    const estimatedGas = await GasUtils.estimateGas(
+                        thorClient,
+                        clauses ?? [],
+                        0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
+                        account.address,
+                        // NOTE: gasPayer: undefined; in extension it was not used
+                    )
+                    setGas(estimatedGas)
+                } catch (e) {
+                    error(e)
+                } finally {
+                    setLoadingGas(false)
+                }
             })()
         }
     }, [account, clauses, thorClient])
 
-    return { gas, setGas, transaction }
+    return { gas, loadingGas, setGas, transaction }
 }
 
 const prepareFungibleTokenClause = (

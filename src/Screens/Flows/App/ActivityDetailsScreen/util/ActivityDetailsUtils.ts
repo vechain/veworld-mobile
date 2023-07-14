@@ -23,13 +23,15 @@ export const getActivityTitle = (
         }
         case ActivityType.SIGN_CERT:
             return LL.SIGNED_CERTIFICATE()
-        case ActivityType.CONNECTED_APP_TRANSACTION:
+        case ActivityType.DAPP_TRANSACTION:
             return isSwap ? LL.SWAP() : LL.DAPP_TRANSACTION()
         case ActivityType.NFT_TRANSFER:
             return (activity as NonFungibleTokenActivity).direction ===
                 DIRECTIONS.UP
                 ? LL.NFT_SEND()
                 : LL.NFT_RECEIVE()
+        case ActivityType.CONNECTED_APP_TRANSACTION:
+            return LL.CONNECTED_APP_TITLE()
         default:
             warn("Unknown activity type")
     }

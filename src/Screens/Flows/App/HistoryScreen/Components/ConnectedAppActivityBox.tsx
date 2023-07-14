@@ -2,39 +2,25 @@ import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { DateUtils } from "~Utils"
-import { COLORS, ColorThemeType, DIRECTIONS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { Activity, ActivityStatus, NonFungibleTokenActivity } from "~Model"
+import { Activity, ActivityStatus, ConnectedAppActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
 import { ActivityStatusIndicator } from "."
-import { HistoryReceiveNFTIconSVG, HistorySendNFTIconSVG } from "~Assets"
 
 type Props = {
-    activity: NonFungibleTokenActivity
+    activity: ConnectedAppActivity
     onPress: (activity: Activity) => void
 }
 
-export const NonFungibleTokenActivityBox: React.FC<Props> = memo(
+export const ConnectedAppActivityBox: React.FC<Props> = memo(
     ({ activity, onPress }) => {
         const theme = useTheme()
 
         const { styles } = useThemedStyles(baseStyles)
 
         const { LL, locale } = useI18nContext()
-
-        const transferDirectionText =
-            activity.direction === DIRECTIONS.UP
-                ? LL.NFT_SEND()
-                : LL.NFT_RECEIVE()
-
-        const directionIcon = useMemo(() => {
-            return activity.direction === DIRECTIONS.UP ? (
-                <HistorySendNFTIconSVG />
-            ) : (
-                <HistoryReceiveNFTIconSVG />
-            )
-        }, [activity.direction])
 
         const dateTimeActivity = useMemo(() => {
             return activity.timestamp
@@ -56,11 +42,15 @@ export const NonFungibleTokenActivityBox: React.FC<Props> = memo(
                     style={styles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
-                        <BaseView
-                            justifyContent="center"
-                            alignItems="center"
-                            style={styles.icon}>
-                            {directionIcon}
+                        <BaseView flexDirection="column" alignItems="center">
+                            <BaseIcon
+                                name="laptop"
+                                size={20}
+                                color={COLORS.DARK_PURPLE}
+                                testID="magnify"
+                                bg={COLORS.WHITE}
+                                iconPadding={4}
+                            />
                         </BaseView>
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseView pl={12}>
@@ -71,7 +61,7 @@ export const NonFungibleTokenActivityBox: React.FC<Props> = memo(
                                     <BaseText
                                         typographyFont="buttonPrimary"
                                         pb={5}>
-                                        {transferDirectionText}
+                                        {LL.CONNECTED_APP_TITLE()}
                                     </BaseText>
                                     {activity.status &&
                                         activity.status !==
@@ -109,11 +99,5 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         container: {
             width: "100%",
-        },
-        icon: {
-            backgroundColor: COLORS.WHITE,
-            width: 38,
-            height: 38,
-            borderRadius: 19,
         },
     })
