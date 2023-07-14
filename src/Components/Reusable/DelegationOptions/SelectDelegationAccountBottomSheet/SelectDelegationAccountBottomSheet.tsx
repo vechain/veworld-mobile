@@ -47,6 +47,7 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={ref}
+                useVthoBalance
             />
         )
     },

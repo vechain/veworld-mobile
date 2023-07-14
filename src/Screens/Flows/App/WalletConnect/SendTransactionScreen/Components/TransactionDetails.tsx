@@ -8,7 +8,7 @@ import {
 import { useI18nContext } from "~i18n"
 import React, { useMemo } from "react"
 import { DelegationType } from "~Model/Delegation"
-import { COLORS, VET, VTHO } from "~Constants"
+import { VET, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
 import { FormattingUtils } from "~Utils"
@@ -148,13 +148,13 @@ export const TransactionDetails = ({
                             <BaseView flexDirection="row">
                                 <BaseIcon
                                     name="alert-circle-outline"
-                                    color={COLORS.DARK_RED}
+                                    color={theme.colors.danger}
                                     size={16}
                                 />
                                 <BaseSpacer width={4} />
                                 <BaseText
                                     typographyFont="buttonSecondary"
-                                    color={COLORS.DARK_RED}>
+                                    color={theme.colors.danger}>
                                     {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance}{" "}
                                     {VTHO.symbol}
                                 </BaseText>

@@ -12546,6 +12546,11 @@ react-keyed-flatten-children@^1.3.0:
   dependencies:
     react-is "^16.8.6"
 
+react-native-android-location-enabler@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-android-location-enabler/-/react-native-android-location-enabler-1.2.2.tgz#84b8dbbda0d5198d99cf264e6be4edaa7f256ba1"
+  integrity sha512-CC5ghRoK3jkGNK8jdIiYIc3l0XZuQuMt2KEfldDpnMCkNz2aAfUWyLCoOniFLqtdD9poA3az+kCmUzTvLAyTiA==
+
 react-native-ble-plx@2.0.3, react-native-ble-plx@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-2.0.3.tgz#b0a746f33389dbf7fd7b158513330d487d5d0fbb"
@@ -12587,6 +12592,11 @@ react-native-context-menu-view@^1.9.1:
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/react-native-context-menu-view/-/react-native-context-menu-view-1.9.2.tgz#35b40808075e854950a046b172413958ca34df3e"
   integrity sha512-VIAO1fJFSlNbtyL7CIoNSaQzjlN5myR+RVzpHmJTO7cfWxFIdiuOqAULBFuOVddLRFfzblFhZ/h6MpO4UIpV8w==
+
+react-native-device-info@^10.7.0:
+  version "10.8.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.8.0.tgz#c331c94d65542f86bac197f223ee064c7e10a9ec"
+  integrity sha512-DE4/X82ZVhdcnR1Y21iTP46WSSJA/rHK3lmeqWfGGq1RKLwXTIdxmfbZZnYwryqJ+esrw2l4ND19qlgxDGby8A==
 
 react-native-dotenv@^3.4.8:
   version "3.4.9"
