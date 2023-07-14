@@ -22,6 +22,9 @@ export const handleTokenTransfers = async ({
 
     // User received token
     if (foundAccount.origin === TransactionOrigin.TO) {
+        // remove tx pending from redux
+        removeTransactionPending({ txId: transfer.txId })
+
         // inform user for successful transfer
         InformUserForIncomingToken({
             amount: transfer.value || "0",

@@ -22,17 +22,19 @@ import { getCalendars } from "expo-localization"
 import {
     ActivityStatus,
     ActivityType,
-    ConnectedAppTxActivity,
+    DappTxActivity,
     ContactType,
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
+    ConnectedAppActivity,
 } from "~Model"
 import {
     FungibleTokenTransferDetails,
     SignCertificateDetails,
     DappTransactionDetails,
     NonFungibleTokenTransferDetails,
+    ConnectedAppDetails,
 } from "./Components"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
@@ -78,13 +80,13 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         if (
             !isSwap ||
             !decodedClauses ||
-            activity.type !== ActivityType.CONNECTED_APP_TRANSACTION
+            activity.type !== ActivityType.DAPP_TRANSACTION
         )
             return undefined
 
         return TransactionUtils.decodeSwapTransferAmounts(
             decodedClauses,
-            activity as ConnectedAppTxActivity,
+            activity as DappTxActivity,
         )
     }, [activity, decodedClauses, isSwap])
 
@@ -129,12 +131,11 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     />
                 )
             }
-            case ActivityType.CONNECTED_APP_TRANSACTION: {
+            case ActivityType.DAPP_TRANSACTION: {
                 return (
                     <DappTransactionDetails
                         activity={
-                            (activityFromStore ??
-                                activity) as ConnectedAppTxActivity
+                            (activityFromStore ?? activity) as DappTxActivity
                         }
                     />
                 )
@@ -145,6 +146,16 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         activity={
                             (activityFromStore ??
                                 activity) as NonFungibleTokenActivity
+                        }
+                    />
+                )
+            }
+            case ActivityType.CONNECTED_APP_TRANSACTION: {
+                return (
+                    <ConnectedAppDetails
+                        activity={
+                            (activityFromStore ??
+                                activity) as ConnectedAppActivity
                         }
                     />
                 )
@@ -209,7 +220,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         <>
                             <TransactionStatusBox
                                 status={
-                                    activityFromStore?.status || activity.status
+                                    activityFromStore?.status ??
+                                    activity.status ??
+                                    ActivityStatus.SUCCESS
                                 }
                             />
                             <BaseSpacer height={16} />
@@ -217,24 +230,25 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     )}
 
                     {/* Transfer card shows the Address/Addresses involved in the given activity */}
-                    {activity.isTransaction &&
-                        (isSwap && swapResult ? (
-                            <SwapCard
-                                paidTokenAddress={swapResult.paidTokenAddress}
-                                paidTokenAmount={swapResult.paidAmount}
-                                receivedTokenAddress={
-                                    swapResult.receivedTokenAddress
-                                }
-                                receivedTokenAmount={swapResult.receivedAmount}
-                                onAddCustomToken={onAddCustomToken}
-                            />
-                        ) : (
+                    {isSwap && swapResult ? (
+                        <SwapCard
+                            paidTokenAddress={swapResult.paidTokenAddress}
+                            paidTokenAmount={swapResult.paidAmount}
+                            receivedTokenAddress={
+                                swapResult.receivedTokenAddress
+                            }
+                            receivedTokenAmount={swapResult.receivedAmount}
+                            onAddCustomToken={onAddCustomToken}
+                        />
+                    ) : (
+                        activity.from && (
                             <TransferCard
                                 fromAddress={activity.from}
                                 toAddresses={[...new Set(activity.to)]}
                                 onAddContactPress={onAddContactPress}
                             />
-                        ))}
+                        )
+                    )}
 
                     <BaseSpacer height={20} />
 
@@ -266,10 +280,12 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 </BaseView>
             </ScrollView>
 
-            <FadeoutButton
-                title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                action={() => {}}
-            />
+            {activity.isTransaction && (
+                <FadeoutButton
+                    title={LL.VIEW_ON_EXPLORER().toUpperCase()}
+                    action={() => {}}
+                />
+            )}
 
             <ContactManagementBottomSheet
                 ref={addContactSheet}

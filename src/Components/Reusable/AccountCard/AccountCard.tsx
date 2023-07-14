@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType, VET } from "~Constants"
+import { ColorThemeType, VET, VTHO } from "~Constants"
 import { FormattingUtils } from "~Utils"
 import {
     AccountIcon,
@@ -13,7 +13,11 @@ import {
     LedgerBadge,
 } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
-import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
+import {
+    selectVetBalanceByAccount,
+    selectVthoBalanceByAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type Props = {
     account: AccountWithDevice
@@ -22,6 +26,7 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>
     showOpacityWhenDisabled?: boolean
     showSelectAccountIcon?: boolean
+    useVthoBalance?: boolean
 }
 export const AccountCard: React.FC<Props> = memo(
     ({
@@ -31,11 +36,19 @@ export const AccountCard: React.FC<Props> = memo(
         containerStyle,
         showOpacityWhenDisabled = true,
         showSelectAccountIcon = false,
+        useVthoBalance = false,
     }: Props) => {
-        const { styles } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles)
         const vetBalance = useAppSelector(state =>
             selectVetBalanceByAccount(state, account.address),
         )
+        const vthoBalance = useAppSelector(state =>
+            selectVthoBalanceByAccount(state, account.address),
+        )
+
+        const balance = `${useVthoBalance ? vthoBalance : vetBalance} ${
+            useVthoBalance ? VTHO.symbol : VET.symbol
+        }`
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
@@ -69,7 +82,7 @@ export const AccountCard: React.FC<Props> = memo(
                     {showSelectAccountIcon ? (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseIcon
-                                color={"primary"}
+                                color={theme.colors.text}
                                 size={24}
                                 name={"chevron-right"}
                             />
@@ -84,9 +97,7 @@ export const AccountCard: React.FC<Props> = memo(
                                 )}
                             </BaseText>
                             <BaseSpacer height={4} />
-                            <BaseText fontSize={10}>
-                                {vetBalance} {VET.symbol}
-                            </BaseText>
+                            <BaseText fontSize={10}>{balance}</BaseText>
                         </BaseView>
                     )}
                 </BaseTouchableBox>

@@ -9,14 +9,15 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { ActivityStatus, ConnectedAppTxActivity } from "~Model"
+import { ActivityStatus, DappTxActivity } from "~Model"
 import { ActivityDetail } from "../../Type"
 import { useGasFee } from "../../Hooks"
 import { ClausesCarousel } from "./ClausesCarousel"
 import { ActivityDetailItem } from "../ActivityDetailItem"
+import { Linking } from "react-native"
 
 type Props = {
-    activity: ConnectedAppTxActivity
+    activity: DappTxActivity
 }
 
 export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
@@ -36,7 +37,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
     const tokens = useAppSelector(selectTokensWithInfo)
 
     const clausesMetadata = TransactionUtils.interpretClauses(
-        activity.clauses,
+        activity.clauses ?? [],
         tokens,
     )
 
@@ -65,13 +66,29 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
     const details: Array<ActivityDetail> = [
         {
             id: 1,
+            title: LL.COMMON_LBL_NAME(),
+            value: activity.name ?? "",
+            typographyFont: "subSubTitleLight",
+            underline: false,
+        },
+        {
+            id: 2,
+            title: LL.ORIGIN(),
+            value: activity.linkUrl ?? "",
+            typographyFont: "subSubTitleLight",
+            underline: true,
+            onValuePress: async () =>
+                await Linking.openURL(activity.linkUrl ?? ""),
+        },
+        {
+            id: 3,
             title: LL.STATUS(),
             value: `${txStatus}`,
             typographyFont: "subSubTitle",
             underline: true,
         },
         {
-            id: 2,
+            id: 4,
             title: LL.ORIGIN(),
             value: activity.linkUrl || "",
             typographyFont: "subSubTitleLight",
@@ -79,7 +96,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             // TODO(Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/755) onValuePress opens browser or in-app browser
         },
         {
-            id: 3,
+            id: 5,
             title: LL.GAS_FEE(),
             value: `${gasFeeInVTHOHumanReadable} ${VTHO.symbol}`,
             typographyFont: "subSubTitle",
@@ -89,7 +106,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
                 : "",
         },
         {
-            id: 4,
+            id: 6,
             title: LL.TRANSACTION_ID(),
             value: `${transactionIDshort}`,
             typographyFont: "subSubTitle",
@@ -99,14 +116,14 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
                 onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
         },
         {
-            id: 5,
+            id: 7,
             title: LL.BLOCK_NUMBER(),
             value: blockNumber ? `${blockNumber}` : "",
             typographyFont: "subSubTitle",
             underline: false,
         },
         {
-            id: 6,
+            id: 8,
             title: LL.TITLE_NETWORK(),
             value: network.toUpperCase(),
             typographyFont: "subSubTitle",
