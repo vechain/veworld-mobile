@@ -20,7 +20,7 @@ platform :ios do
   desc "Increment package.json, Info.plist(IOS) and build.gradle(Android) versions"
   lane :increment_version do |options|
     Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
-      sh("yarn release")
+      sh("yarn release:ci")
     end
 
     # Read the current version from package.json
