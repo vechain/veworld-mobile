@@ -372,7 +372,10 @@ describe("sponsorSignRequestFailedResponse", () => {
             response: {
                 id: 123,
                 jsonrpc: "2.0",
-                error: LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
+                error: {
+                    code: -32603,
+                    message: undefined,
+                },
             },
         })
         expect(
@@ -413,7 +416,10 @@ describe("sponsorSignRequestFailedResponse", () => {
             response: {
                 id: 123,
                 jsonrpc: "2.0",
-                error: LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
+                error: {
+                    code: -32603,
+                    message: undefined,
+                },
             },
         })
         expect(
@@ -519,6 +525,10 @@ describe("signMessageRequestErrorResponse", () => {
             response: {
                 id: request.id,
                 jsonrpc: "2.0",
+                error: {
+                    code: -32603,
+                    message: undefined,
+                },
             },
         })
     })

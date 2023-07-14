@@ -1463,10 +1463,11 @@ type RootTranslation = {
 	 */
 	ADD_APP: string
 	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
+	 * @param {string} alias
 	 * @param {string} name
 	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'name'>
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'alias' | 'name'>
 	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
@@ -3632,9 +3633,9 @@ Please, try again later.
 	 */
 	ADD_APP: () => LocalizedString
 	/**
-	 * Confirming this you will disconnect the {name} app
+	 * Confirming this you will disconnect the {name} app from {alias}
 	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { name: string }) => LocalizedString
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
 	/**
 	 * Connected app
 	 */

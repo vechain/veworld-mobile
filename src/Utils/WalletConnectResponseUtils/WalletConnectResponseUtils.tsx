@@ -17,6 +17,8 @@ type BaseProps = {
     LL: TranslationFunctions
 }
 
+const RCP_INTERNAL_ERROR = -32603
+
 /**
  * Success responses
  */
@@ -99,10 +101,10 @@ export const transactionRequestFailedResponse = async ({
     web3Wallet,
     LL,
 }: BaseProps) => {
-    const response = WalletConnectUtils.formatJsonRpcError(
-        request.id,
-        LL.NOTIFICATION_wallet_connect_error_on_transaction(),
-    )
+    const response = WalletConnectUtils.formatJsonRpcError(request.id, {
+        message: LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+        code: RCP_INTERNAL_ERROR,
+    })
 
     try {
         await web3Wallet?.respondSessionRequest({
@@ -124,7 +126,11 @@ export const sponsorSignRequestFailedResponse = async ({
     try {
         const formattedResponse = WalletConnectUtils.formatJsonRpcError(
             request.id,
-            LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
+            {
+                message:
+                    LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
+                code: RCP_INTERNAL_ERROR,
+            },
         )
 
         await web3Wallet?.respondSessionRequest({
@@ -144,7 +150,7 @@ export const userRejectedMethodsResponse = async ({
     try {
         const response = WalletConnectUtils.formatJsonRpcError(
             request.id,
-            getSdkError("USER_REJECTED_METHODS").message,
+            getSdkError("USER_REJECTED_METHODS"),
         )
 
         await web3Wallet?.respondSessionRequest({
@@ -162,10 +168,10 @@ export const signMessageRequestErrorResponse = async ({
     LL,
 }: BaseProps) => {
     try {
-        const response = WalletConnectUtils.formatJsonRpcError(
-            request.id,
-            LL.NOTIFICATION_wallet_connect_error_during_signing(),
-        )
+        const response = WalletConnectUtils.formatJsonRpcError(request.id, {
+            message: LL.NOTIFICATION_wallet_connect_error_during_signing(),
+            code: RCP_INTERNAL_ERROR,
+        })
 
         await web3Wallet?.respondSessionRequest({
             topic: request.topic,
