@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import { NativeModules, ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
     BaseButton,
@@ -20,6 +20,8 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails } from "~Screens"
+
+const { Minimizer } = NativeModules
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -82,6 +84,10 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     signature,
                     cert,
                 )
+
+                try {
+                    Minimizer.goBack()
+                } catch (e) {}
             } catch (err: unknown) {
                 error("SignMessageScreen:handleAccept", err)
                 await WalletConnectResponseUtils.signMessageRequestErrorResponse(

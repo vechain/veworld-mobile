@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
+import { NativeModules, StyleSheet } from "react-native"
 import {
     AccountCard,
     BaseButton,
@@ -46,6 +46,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { TransactionDetails } from "./Components"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
+
+// Minimizer module allows the app to be pushed to the background
+const { Minimizer } = NativeModules
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -153,13 +156,17 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             try {
                 const response = WalletConnectUtils.formatJsonRpcError(
                     id,
-                    getSdkError("USER_REJECTED_METHODS").message,
+                    getSdkError("USER_REJECTED_METHODS"),
                 )
 
                 await web3Wallet?.respondSessionRequest({
                     topic,
                     response,
                 })
+
+                try {
+                    Minimizer.goBack()
+                } catch (e) {}
             } catch (e) {
                 showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
             }

@@ -9,10 +9,10 @@ import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
-    WalletConnectContextProvider,
-    TranslationProvider,
     BaseToast,
     ConnexContextProvider,
+    TranslationProvider,
+    WalletConnectContextProvider,
 } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
@@ -31,10 +31,11 @@ import { info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
-import { useAppSelector, selectSentryTrackingEnabled } from "~Storage/Redux"
+import { selectSentryTrackingEnabled, useAppSelector } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import { InternetDownScreen } from "~Screens"
 import NetInfo from "@react-native-community/netinfo"
+import "react-native-url-polyfill/auto"
 
 const { fontFamily } = typography
 

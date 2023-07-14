@@ -91,9 +91,10 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         const networkIdentifiers = networks.map(network =>
             network.genesis.id.slice(-32),
         )
+
         requiredNamespaces.vechain.chains?.map((scope: string) => {
             // Valid only for supported networks
-            // scope example: vechain:main, vechain:test
+            // scope example: vechain:b1ac3413d346d43539627e6be7ec1b4a, vechain:87721b09ed2e15997f466536b20bb127
             const network = scope.split(":")[1]
 
             if (networkIdentifiers.includes(network)) {
@@ -137,7 +138,16 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             error("ConnectedAppScreen:handleAccept", err)
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
         }
-    }, [currentProposal, dispatch, LL, nav, web3Wallet, name, selectedAccount])
+    }, [
+        currentProposal,
+        dispatch,
+        LL,
+        nav,
+        web3Wallet,
+        name,
+        selectedAccount,
+        networks,
+    ])
 
     /**
      * Handle session rejection
