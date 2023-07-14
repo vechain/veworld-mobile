@@ -46,6 +46,7 @@ const en: BaseTranslation = {
     BTN_ADD_CONTACT: "Add contact",
     BTN_CREATE_CONTACT: "Create contact",
     BTN_EDIT_PIN: "Edit Pin",
+    BTN_ENABLE: "Enable",
     BTN_BACKUP_MENMONIC: "Backup phrase",
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
@@ -293,6 +294,8 @@ const en: BaseTranslation = {
     ALERT_MSG_ENABLE_BLUETOOTH: "Please, open the device settings and enable to continue.",
     ALERT_TITLE_UNSUPPORTED_BLUETOOTH: "Bluetooth is not supported",
     ALERT_MSG_UNSUPPORTED_BLUETOOTH: "Your device does not support Bluetooth, which is required to use this feature.",
+    ALERT_TITLE_ENABLE_LOCATION: "Enable location services",
+    ALERT_MSG_ENABLE_LOCATION: "Please, open the device settings and enable location services to continue.",
     ALERT_MSG_INTERNET_DOWN: "Connection problems detected.\nTry reconnect your device to the internet.",
 
 
@@ -563,10 +566,13 @@ const en: BaseTranslation = {
     // Wallet Titles
 
     // Wallet 
-    WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: "We need permissions to perform bluetooth scanning",
-    WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: "Allow Bluetooth",
+    WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: "We need bluetooth and location permissions to perform bluetooth scanning",
+    WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: "Give permissions",
     WALLET_LEDGER_SELECT_DEVICE_TITLE: "Import ledger",
-    WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked and the bluetooth enabled",
+    WALLET_LEDGER_NO_DEVICES_FOUND: "No devices found",
+    WALLET_LEDGER_ONE_DEVICE_FOUND: "1 device found",
+    WALLET_LEDGER_MORE_DEVICES_FOUND: "{count: number} devices found",
+    WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on",
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: "Enable additional settings",
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB: "in order to give you the best user experience, you need to enable some additional settings in your ledger (Contract data and Multi-clause). Please follow the instructions below to proceed",
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1: "Open the VET app on your Ledger",
