@@ -1899,6 +1899,11 @@ type RootTranslation = {
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: string
 	/**
+	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​d​o​n​t​ ​h​a​v​e​ ​a​n​y​ ​{​t​o​k​e​n​N​a​m​e​}​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * @param {string} tokenName
+	 */
+	SEND_ERROR_TOKEN_NOT_FOUND: RequiredParams<'tokenName'>
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -4064,6 +4069,10 @@ Please, try again later.
 	 * This transaction may be reverted if ypur balance is too low
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: () => LocalizedString
+	/**
+	 * It looks like you dont have any {tokenName} in your wallet
+	 */
+	SEND_ERROR_TOKEN_NOT_FOUND: (arg: { tokenName: string }) => LocalizedString
 	/**
 	 * Account
 	 */
