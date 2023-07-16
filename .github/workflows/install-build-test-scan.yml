@@ -37,7 +37,7 @@ jobs:
         env:
           NODE_OPTIONS: "--max_old_space_size=8192"
           REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
-        run: yarn test:coverage --reporter=json-summary | tee ./coverage.txt
+        run: yarn test:coverage --reporter=json-summary | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
 
       - name: Jest Coverage Comment
         if: always()
@@ -52,6 +52,7 @@ jobs:
           hide-summary: false
           coverage-title: Coverage
           coverage-path: ./coverage.txt
+          coverage-path-prefix: ./src/
           junitxml-title: Tests
           junitxml-path: junit.xml
 
