@@ -17,6 +17,7 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
     return (
         <>
             <BaseButton
+                haptics="Light"
                 action={onPress}
                 bgColor={theme.colors.secondary}
                 style={baseStyles.plusContactButton}

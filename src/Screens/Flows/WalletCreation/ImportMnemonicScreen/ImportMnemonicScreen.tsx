@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic } from "~Storage/Redux/Actions"
+import HapticsService from "~Services/HapticsService"
 
 const DEMO_MNEMONIC =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
@@ -45,18 +46,21 @@ export const ImportMnemonicScreen = () => {
                 getDeviceFromMnemonic(sanitisedMnemonic)
             } catch (e) {
                 error(e)
+                HapticsService.triggerNotification({ level: "Error" })
                 setIsError(LL.ERROR_WALLET_ALREADY_EXISTS())
                 return
             }
 
             dispatch(setMnemonic(sanitisedMnemonic))
 
+            HapticsService.triggerImpact({ level: "Medium" })
             if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
             }
         } else {
+            HapticsService.triggerNotification({ level: "Error" })
             setIsError(LL.ERROR_INCORRECT_MNEMONIC())
         }
     }
@@ -68,9 +72,11 @@ export const ImportMnemonicScreen = () => {
             let sanified = SeedUtils.sanifySeed(_seed)
             setLocalMnemonic(sanified.join(" "))
             if (sanified.length === 12) {
+                HapticsService.triggerImpact({ level: "Light" })
                 setIsDisabled(false)
                 Keyboard.dismiss()
             } else {
+                HapticsService.triggerNotification({ level: "Error" })
                 setIsDisabled(true)
                 setIsError(LL.ERROR_INCORRECT_MNEMONIC())
             }
@@ -93,6 +99,7 @@ export const ImportMnemonicScreen = () => {
     }
 
     const onClearSeed = () => {
+        HapticsService.triggerImpact({ level: "Light" })
         setLocalMnemonic("")
         setIsError("")
     }
@@ -158,6 +165,7 @@ export const ImportMnemonicScreen = () => {
 
                     <BaseView w={100}>
                         <BaseButton
+                            haptics="Light"
                             variant="ghost"
                             action={() => {}}
                             typographyFont="footNoteAccent"

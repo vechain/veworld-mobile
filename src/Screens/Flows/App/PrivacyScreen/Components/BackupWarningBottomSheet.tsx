@@ -65,7 +65,7 @@ export const BackupWarningBottomSheet = React.forwardRef<
 
                         <BaseButton
                             w={100}
-                            haptics="light"
+                            haptics="Light"
                             title={LL.COMMON_PROCEED()}
                             disabled={!isChecked}
                             action={handleOnProceed}

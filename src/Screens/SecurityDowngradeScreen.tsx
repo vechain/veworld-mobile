@@ -48,7 +48,7 @@ export const SecurityDowngradeScreen = () => {
                         action={onGoToSettings}
                         w={100}
                         title={LL.BTN_GO_TO_SETTINGS().toUpperCase()}
-                        haptics="medium"
+                        haptics="Medium"
                     />
 
                     <BaseSpacer height={16} />
@@ -58,7 +58,7 @@ export const SecurityDowngradeScreen = () => {
                         action={onResetApp}
                         w={100}
                         title={LL.BTN_RESET_APP().toUpperCase()}
-                        haptics="medium"
+                        haptics="Medium"
                     />
                 </BaseView>
 

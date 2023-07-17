@@ -28,6 +28,7 @@ import {
     selectHasOnboarded,
     selectNewLedgerDevice,
 } from "~Storage/Redux/Selectors"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -55,6 +56,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     } = useCreateWallet()
 
     const onWalletCreationError = useCallback((_error: unknown) => {
+        HapticsService.triggerNotification({ level: "Error" })
         setIsError("Error creating wallet")
         showErrorToast("Error creating wallet")
     }, [])
@@ -207,12 +209,13 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                                     {isError}
                                 </BaseText>
                             )}
+
                             <BaseButton
                                 action={onButtonPress}
                                 w={100}
                                 title={LL.BTN_WALLET_SUCCESS()}
                                 testID="GET_STARTED_BTN"
-                                haptics="medium"
+                                haptics="Success"
                             />
                         </BaseView>
                     </BaseView>

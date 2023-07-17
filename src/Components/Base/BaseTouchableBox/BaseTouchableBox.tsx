@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import {
     StyleProp,
     StyleSheet,
@@ -15,6 +15,7 @@ import {
 import { useThemedStyles } from "~Hooks"
 import { GenericTouchableProps } from "./Types"
 import { BaseView } from "../BaseView"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     children: React.ReactNode
@@ -30,6 +31,7 @@ type Props = {
     py?: number
     flex?: number
     showOpacityWhenDisabled?: boolean
+    haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
 } & Omit<TouchableOpacityProps, "style"> &
     GenericTouchableProps
 
@@ -48,6 +50,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
     py,
     flex,
     showOpacityWhenDisabled = true,
+    haptics,
     ...props
 }) => {
     const { styles } = useThemedStyles(
@@ -65,10 +68,15 @@ export const BaseTouchableBox: React.FC<Props> = ({
         }),
     )
 
+    const onButtonPress = useCallback(async () => {
+        action && action()
+        haptics && (await HapticsService.triggerHaptics({ haptics }))
+    }, [action, haptics])
+
     return (
         <BaseView style={[styles.container, containerStyle]}>
             <TouchableOpacity
-                onPress={action}
+                onPress={onButtonPress}
                 style={[styles.innerContainer, innerContainerStyle]}
                 disabled={disabled}
                 {...props}>

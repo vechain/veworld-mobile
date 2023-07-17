@@ -220,14 +220,14 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={24} />
                     <BaseButton
                         w={100}
-                        haptics="light"
+                        haptics="Light"
                         title={LL.COMMON_BTN_CONNECT()}
                         action={handleAccept}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
                         w={100}
-                        haptics="light"
+                        haptics="Light"
                         variant="outline"
                         title={LL.COMMON_BTN_CANCEL_CAPS_LOCK()}
                         action={handleReject}

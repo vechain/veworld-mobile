@@ -1,6 +1,6 @@
-import { StyleSheet, View, Pressable } from "react-native"
+import { StyleSheet, View } from "react-native"
 import React, { useCallback, useState } from "react"
-import { BaseText, BaseView } from "~Components/Base"
+import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
 
@@ -25,10 +25,11 @@ export const PressableWithUnderline = (props: Props) => {
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
             {data.map((item, index) => (
-                <Pressable
+                <BaseTouchable
+                    haptics="Light"
                     key={item.label}
                     accessibilityRole="button"
-                    onPress={() => onButtonPress(item, index)}
+                    action={() => onButtonPress(item, index)}
                     style={styles.buttonContainer}>
                     <BaseText fontSize={18}>{item.label}</BaseText>
 
@@ -39,7 +40,7 @@ export const PressableWithUnderline = (props: Props) => {
                             styles.underline,
                         ]}
                     />
-                </Pressable>
+                </BaseTouchable>
             ))}
         </BaseView>
     )

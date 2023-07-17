@@ -1,11 +1,11 @@
 import React, { useCallback } from "react"
 import { LineChart } from "react-native-wagmi-charts"
-import * as haptics from "expo-haptics"
 import { BaseSpacer, PressableWithUnderline } from "~Components"
 import { useChartData } from "../Hooks/useChartData"
 import { TokenWithCompleteInfo } from "~Model"
 import { mock_cart_data, timelineDays } from "../Mock_Chart_Data"
 import { ChartView } from "./ChartView"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -14,10 +14,10 @@ type Props = {
 export const AssetChart = ({ token }: Props) => {
     const { chartData, getChartData } = useChartData(token.symbol)
 
-    const invokeHaptic = () => {
+    const invokeHaptic = useCallback(async () => {
         if (chartData && chartData.length)
-            haptics.impactAsync(haptics.ImpactFeedbackStyle.Light)
-    }
+            await HapticsService.triggerImpact({ level: "Light" })
+    }, [chartData])
 
     const onTimelineButtonPress = useCallback(
         (button: string) => {

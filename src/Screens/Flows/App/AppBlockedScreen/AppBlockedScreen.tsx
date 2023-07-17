@@ -44,7 +44,7 @@ export const AppBlockedScreen = () => {
                         action={appReset}
                         w={100}
                         title={LL.BTN_RESET_APP().toUpperCase()}
-                        haptics="medium"
+                        haptics="Medium"
                     />
                 </BaseView>
 

@@ -23,6 +23,23 @@ const buttons: {
     },
 ]
 
+jest.mock("expo-haptics", () => {
+    return {
+        NotificationFeedbackType: {
+            Success: 0,
+            Warning: 1,
+            Error: 2,
+        },
+        ImpactFeedbackStyle: {
+            Light: 0,
+            Medium: 1,
+            Heavy: 2,
+        },
+        notificationAsync: jest.fn(),
+        impactAsync: jest.fn(),
+    }
+})
+
 const findGroupButton = async (id: string) =>
     await screen.findByTestId(`button-${id}`, {}, { timeout: 5000 })
 

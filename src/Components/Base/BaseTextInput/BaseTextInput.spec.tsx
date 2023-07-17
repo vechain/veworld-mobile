@@ -7,6 +7,23 @@ const mandatoryProps = {
     placeholder: "placeholder",
 }
 
+jest.mock("expo-haptics", () => {
+    return {
+        NotificationFeedbackType: {
+            Success: 0,
+            Warning: 1,
+            Error: 2,
+        },
+        ImpactFeedbackStyle: {
+            Light: 0,
+            Medium: 1,
+            Heavy: 2,
+        },
+        notificationAsync: jest.fn(),
+        impactAsync: jest.fn(),
+    }
+})
+
 const customPlaceholder = "CustomPlaceholder"
 const customErrorMessage = "Custom error message"
 const customValue = "Custom value"

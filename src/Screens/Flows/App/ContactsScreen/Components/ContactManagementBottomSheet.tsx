@@ -106,6 +106,7 @@ export const ContactManagementBottomSheet = React.forwardRef<
 
                     <BaseView flexDirection="row" pb={32}>
                         <BaseButton
+                            haptics="Medium"
                             action={() => onSaveContact(alias, address)}
                             w={100}
                             disabled={!isFormValid}

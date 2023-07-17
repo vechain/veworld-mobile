@@ -1,10 +1,11 @@
-import React, { FC, useMemo } from "react"
+import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
 import { useDisclosure, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { HideView } from "./HideView"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     mnemonicArray: string[]
@@ -19,9 +20,15 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
         () => (theme.isDark ? theme.colors.tertiary : theme.colors.card),
         [theme],
     )
+
+    const onPress = useCallback(async () => {
+        HapticsService.triggerImpact({ level: "Light" })
+        toggleShow()
+    }, [toggleShow])
+
     return (
         <BaseView>
-            <TouchableWithoutFeedback onPress={toggleShow}>
+            <TouchableWithoutFeedback onPress={onPress}>
                 <BaseView
                     flexDirection="row"
                     w={100}
