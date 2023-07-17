@@ -5,21 +5,22 @@ import {
     informUserForIncomingNFT,
     informUserForOutgoingNFT,
 } from "."
+import { getName } from "~Networking"
 
 export const handleNFTTransfers = async ({
     visibleAccounts,
     transfer,
     removeTransactionPending,
-    fetchCollectionName,
     stateReconciliationAction,
     informUser,
+    thor,
 }: NFTTransferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
     // Early exit if tx is not related to any of the visible accounts
     if (!foundAccount.account) return
 
-    const collectionName = await fetchCollectionName(transfer.tokenAddress)
+    const collectionName = await getName(transfer.tokenAddress, thor)
 
     // User received NFT
     if (foundAccount.origin === TransactionOrigin.TO) {

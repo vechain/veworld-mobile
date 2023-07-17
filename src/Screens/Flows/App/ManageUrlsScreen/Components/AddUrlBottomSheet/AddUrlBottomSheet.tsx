@@ -1,14 +1,14 @@
 import React, { useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { URLUtils } from "~Utils"
+import { URIUtils } from "~Utils"
 import {
     BaseButton,
     BaseSpacer,
     BaseText,
-    BaseTextInput,
     BaseView,
     ScrollViewWithFooter,
     BaseBottomSheet,
+    BaseBottomSheetTextInput,
 } from "~Components"
 import {
     addDelegationUrl,
@@ -54,7 +54,7 @@ export const AddUrlBottomSheet = React.forwardRef<
                         <BaseButton
                             title={LL.COMMON_BTN_ADD()}
                             action={handleAddUrl}
-                            disabled={!URLUtils.isValid(newUrl)}
+                            disabled={!URIUtils.isValid(newUrl)}
                             flex={1}
                         />
                     </BaseView>
@@ -67,7 +67,7 @@ export const AddUrlBottomSheet = React.forwardRef<
                     {LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}
                 </BaseText>
                 <BaseSpacer height={24} />
-                <BaseTextInput
+                <BaseBottomSheetTextInput
                     value={newUrl}
                     onChangeText={setNewUrl}
                     placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}

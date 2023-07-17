@@ -10,11 +10,7 @@ import {
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
 import { useInformUser, useStateReconciliaiton } from "./Hooks"
-import {
-    useFungibleTokenInfo,
-    useNonFungibleTokenInfo,
-    useTransactionStatus,
-} from "~Hooks"
+import { useFungibleTokenInfo, useTransactionStatus } from "~Hooks"
 import { Activity, Beat } from "~Model"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
 import {
@@ -36,8 +32,6 @@ export const TransferEventListener: React.FC = () => {
     const thor = useThor()
 
     const { fetchData } = useFungibleTokenInfo()
-
-    const { fetchData: fetchCollectionName } = useNonFungibleTokenInfo()
 
     const { removeTransactionPending } = useTransactionStatus()
 
@@ -121,9 +115,9 @@ export const TransferEventListener: React.FC = () => {
                                 visibleAccounts: relevantAccounts,
                                 transfer,
                                 removeTransactionPending,
-                                fetchCollectionName,
                                 stateReconciliationAction: updateNFTs,
                                 informUser: forNFTs,
+                                thor,
                             })
                         }),
                 )
@@ -173,7 +167,7 @@ export const TransferEventListener: React.FC = () => {
             network.type,
             blackListedCollections,
             removeTransactionPending,
-            fetchCollectionName,
+            thor,
             updateNFTs,
             forNFTs,
             fetchData,
