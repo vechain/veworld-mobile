@@ -99,7 +99,7 @@ export const ContactForm: React.FC<Props> = memo(
                 errorMessage: canShowAddressError ? addressError : "",
                 value: valueAddress,
                 onTouchStart: () => setAddressTouched(true),
-                rightIcon: !addressFieldDisabled ? "flip-horizontal" : "",
+                rightIcon: !addressFieldDisabled ? "qrcode-scan" : "",
                 onIconPress: onOpenCamera,
                 testID: "Contact-Address-Input",
                 editable: !addressFieldDisabled,

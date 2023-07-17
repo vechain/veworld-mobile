@@ -178,7 +178,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                             placeholder={LL.MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS()}
                             errorMessage={errorMessage}
                             testID="AddCustomTokenBottomSheet-TextInput-Address"
-                            rightIcon={value ? "close" : "flip-horizontal"}
+                            rightIcon={value ? "close" : "qrcode-scan"}
                             onIconPress={
                                 !value
                                     ? openScanAddressSheet

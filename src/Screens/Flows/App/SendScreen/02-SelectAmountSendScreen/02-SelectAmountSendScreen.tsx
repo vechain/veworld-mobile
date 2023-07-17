@@ -143,12 +143,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         }
         setInput(newValue)
     }
+
     const goToInsertAddress = async () => {
         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
             amount: isInputInFiat ? rawTokenInput : input,
             initialRoute: initialRoute ?? "",
-        })
+        } as any) // Todo https://github.com/vechainfoundation/veworld-mobile/issues/867
     }
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text

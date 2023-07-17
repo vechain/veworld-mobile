@@ -19,14 +19,13 @@ export const useAppReset = () => {
                 isWalletSecurityBiometrics,
             )
         })
+
         await Promise.all(promises)
     }, [devices, isWalletSecurityBiometrics])
 
     const appReset = useCallback(async () => {
         await removeEncryptionKeysFromKeychain()
-
         await dispatch(resetApp())
-
         info("App Reset Finished")
     }, [dispatch, removeEncryptionKeysFromKeychain])
 

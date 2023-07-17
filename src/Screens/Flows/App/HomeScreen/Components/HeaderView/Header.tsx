@@ -52,7 +52,7 @@ export const Header = memo(() => {
 
             <BaseView flexDirection="row">
                 <BaseIcon
-                    name={"flip-horizontal"}
+                    name={"qrcode-scan"}
                     size={24}
                     color={theme.colors.text}
                     action={openScanAddressSheet}

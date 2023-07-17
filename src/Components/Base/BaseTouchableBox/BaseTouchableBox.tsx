@@ -68,9 +68,10 @@ export const BaseTouchableBox: React.FC<Props> = ({
         }),
     )
 
-    const onButtonPress = useCallback(async () => {
-        action && action()
-        haptics && (await HapticsService.triggerHaptics({ haptics }))
+    const onButtonPress = useCallback(() => {
+        if (!action) return
+        action()
+        haptics && HapticsService.triggerHaptics({ haptics })
     }, [action, haptics])
 
     return (

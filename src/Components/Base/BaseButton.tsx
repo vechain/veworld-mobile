@@ -71,10 +71,10 @@ export const BaseButton = ({
         baseStyles(variant === "link"),
     )
 
-    const onButtonPress = useCallback(async () => {
+    const onButtonPress = useCallback(() => {
         const { haptics } = otherProps
         otherProps.action()
-        haptics && (await HapticsService.triggerHaptics({ haptics }))
+        haptics && HapticsService.triggerHaptics({ haptics })
     }, [otherProps])
 
     const bgColor = useMemo(() => {

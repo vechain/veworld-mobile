@@ -1,6 +1,6 @@
 import React from "react"
 import { TestWrapper } from "~Test"
-import { InsertAddressSendScreen } from "./03-InsertAddressSendScreen"
+import { InsertAddressSendScreen } from "./InsertAddressSendScreen"
 import { render, screen } from "@testing-library/react-native"
 import {
     RootStackParamListDiscover,
