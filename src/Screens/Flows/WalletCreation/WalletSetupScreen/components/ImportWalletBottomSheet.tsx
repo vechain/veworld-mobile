@@ -18,8 +18,7 @@ type Props = {
     onClose: () => void
 }
 
-const snapPoints = ["50%"]
-
+const snapPoints = ["50%", "70%", "90%"]
 export const ImportWalletBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
