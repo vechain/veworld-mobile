@@ -45,8 +45,12 @@ const validate = (hex: string) => {
  * @param hex - the input hex string
  * @returns boolean representing whether the input hex is valid
  */
-const isValid = (hex: string): boolean => {
-    return HEX_REGEX.test(hex)
+const isValid = (hex?: string | null): boolean => {
+    return !!hex && HEX_REGEX.test(hex)
+}
+
+const isInvalid = (hex?: string | null): boolean => {
+    return !isValid(hex)
 }
 
 /**
@@ -71,5 +75,6 @@ export default {
     addPrefix,
     validate,
     isValid,
+    isInvalid,
     generateRandom,
 }
