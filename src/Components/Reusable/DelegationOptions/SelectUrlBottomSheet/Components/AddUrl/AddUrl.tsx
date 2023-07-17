@@ -1,5 +1,5 @@
 import React from "react"
-import { URLUtils } from "~Utils"
+import { URIUtils } from "~Utils"
 import {
     BaseBottomSheetTextInput,
     BaseButton,
@@ -86,7 +86,7 @@ export const AddUrl = ({
                 <BaseButton
                     title={LL.COMMON_BTN_ADD()}
                     action={handleAddUrl}
-                    disabled={!URLUtils.isValid(newUrl)}
+                    disabled={!URIUtils.isValid(newUrl)}
                     flex={1}
                 />
             </BaseView>

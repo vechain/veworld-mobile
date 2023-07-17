@@ -102,8 +102,8 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     <BaseSpacer height={26} />
 
                     <NFTDetailImage
-                        uri={nft?.icon?.url ?? ""}
-                        mime={nft?.icon?.mime ?? ""}
+                        uri={nft?.image ?? ""}
+                        mime={nft?.mimeType ?? ""}
                         name={nft?.name ?? ""}
                         tokenId={nft?.tokenId ?? ""}
                     />
