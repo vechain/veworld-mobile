@@ -15,6 +15,7 @@
 		345FBAB16846978F3D287B74 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648782E6EE09DF1615096A3A /* ExpoModulesProvider.swift */; };
 		6270C8C2F7A22CE11989A500 /* libPods-VeWorld-VeWorldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C39DB1074A8E45ADCDD1D01 /* libPods-VeWorld-VeWorldTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		95DB4EBD2A6538A800109115 /* RCTMinimizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 95DB4EBC2A6538A800109115 /* RCTMinimizer.m */; };
 		C23C5B06FB4F636424E26C31 /* libPods-VeWorld.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18794B3A11F5AFF3A7E2F289 /* libPods-VeWorld.a */; };
 		EA9F31F52991455200D288F5 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA9F31F42991455200D288F5 /* BootSplash.storyboard */; };
 		EAFBEA542955DED50036BC15 /* SampleNativeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA532955DED50036BC15 /* SampleNativeModule.swift */; };
@@ -51,6 +52,8 @@
 		68C18228399348FD87883A5B /* Pods-VeWorld-VeWorldTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld-VeWorldTests.release.xcconfig"; path = "Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VeWorld/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8FF1A4508264CFECD3A02ACB /* Pods-VeWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld.debug.xcconfig"; path = "Target Support Files/Pods-VeWorld/Pods-VeWorld.debug.xcconfig"; sourceTree = "<group>"; };
+		95DB4EB92A6537E500109115 /* RCTMinimizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RCTMinimizer.h; path = VeWorld/NativeModules/RCTMinimizer.h; sourceTree = "<group>"; };
+		95DB4EBC2A6538A800109115 /* RCTMinimizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RCTMinimizer.m; path = VeWorld/NativeModules/RCTMinimizer.m; sourceTree = "<group>"; };
 		9CCA7E2D5AD405CE805DE8AD /* Pods-VeWorld-VeWorldTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld-VeWorldTests.debug.xcconfig"; path = "Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EA9F31F42991455200D288F5 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = VeWorld/BootSplash.storyboard; sourceTree = "<group>"; };
 		EAB8DD4729BE1B2200929DFC /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 		13B07FAE1A68108700A75B9A /* VeWorld */ = {
 			isa = PBXGroup;
 			children = (
+				95DB4EB82A6536FB00109115 /* Minimizer */,
 				EA9F31F42991455200D288F5 /* BootSplash.storyboard */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -172,6 +176,15 @@
 				CA7BA9C91006876B9C65A034 /* VeWorldTests */,
 			);
 			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		95DB4EB82A6536FB00109115 /* Minimizer */ = {
+			isa = PBXGroup;
+			children = (
+				95DB4EB92A6537E500109115 /* RCTMinimizer.h */,
+				95DB4EBC2A6538A800109115 /* RCTMinimizer.m */,
+			);
+			name = Minimizer;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -454,6 +467,7 @@
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				EAFBEA572955DEFF0036BC15 /* SampleNativeModule.m in Sources */,
 				EAFBEA542955DED50036BC15 /* SampleNativeModule.swift in Sources */,
+				95DB4EBD2A6538A800109115 /* RCTMinimizer.m in Sources */,
 				345FBAB16846978F3D287B74 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

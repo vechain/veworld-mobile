@@ -28,3 +28,4 @@ RCT_EXPORT_METHOD(goBack)
 RCT_EXPORT_MODULE();
 
 @end
+

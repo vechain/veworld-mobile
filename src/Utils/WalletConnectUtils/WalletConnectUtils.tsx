@@ -16,6 +16,7 @@ import {
     ErrorResponse,
     JsonRpcError,
 } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
+import HexUtils from "~Utils/HexUtils"
 
 let web3wallet: IWeb3Wallet
 export const core: ICore = new Core({
@@ -99,17 +100,6 @@ export function getSessionRequestAttributes(
     return attributes
 }
 
-export function getSignCertOptions(
-    requestEvent: PendingRequestTypes.Struct,
-): Connex.Driver.CertOptions {
-    try {
-        return requestEvent.params.request.params[0].options || {}
-    } catch (e) {
-        error("Failed to extract sign cert options", requestEvent, e)
-        return {}
-    }
-}
-
 export function isWalletConnectRoute(
     navState: NavigationState<ReactNavigation.RootParamList>,
 ) {
@@ -121,6 +111,17 @@ export function isWalletConnectRoute(
             route.name === Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN ||
             route.name === Routes.CONNECT_APP_SCREEN,
     )
+}
+
+export function getSignCertOptions(
+    requestEvent: PendingRequestTypes.Struct,
+): Connex.Driver.CertOptions {
+    try {
+        return requestEvent.params.request.params[0].options || {}
+    } catch (e) {
+        error("Failed to extract sign cert options", requestEvent, e)
+        return {}
+    }
 }
 
 export function getSignCertMessage(
@@ -159,8 +160,11 @@ export function getSendTxMessage(
         if (!message || message.length < 1)
             throw new Error(`Invalid message for send tx request: ${message}`)
 
-        message.map(clause => {
-            if (!clause.data && !clause.to)
+        return message.map(clause => {
+            if (
+                HexUtils.isInvalid(clause?.to) &&
+                HexUtils.isInvalid(clause?.data)
+            )
                 throw new Error(`Invalid clause: ${JSON.stringify(clause)}`)
 
             clause.data = clause.data || "0x"
@@ -169,8 +173,6 @@ export function getSendTxMessage(
 
             return clause
         })
-
-        return message
     } catch (e) {
         error("Failed to extract send tx message parameters", requestEvent, e)
     }
@@ -180,7 +182,7 @@ export function getSendTxOptions(
     requestEvent: PendingRequestTypes.Struct,
 ): Connex.Driver.CertOptions {
     try {
-        return requestEvent.params.request.params[0].options
+        return requestEvent.params.request.params[0].options || {}
     } catch (e) {
         error("Failed to extract send tx options", requestEvent, e)
         return {}

@@ -8,11 +8,18 @@ import {
     getNetworkType,
     getPairAttributes,
     getRequestEventAttributes,
+    getSendTxMessage,
+    getSendTxOptions,
     getSessionRequestAttributes,
+    getSignCertMessage,
+    getSignCertOptions,
     getTopicFromPairUri,
     isValidURI,
+    isWalletConnectRoute,
 } from "./WalletConnectUtils"
 import { NETWORK_TYPE } from "~Model"
+import { NavigationState } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 describe("getPairAttributes", () => {
     it("should return the pair attributes correctly", () => {
@@ -250,5 +257,238 @@ describe("getTopicFromPairUri", () => {
         const uri = "invalidUri"
 
         expect(() => getTopicFromPairUri(uri)).toThrowError()
+    })
+})
+
+const mockPendingRequest = (params: unknown): PendingRequestTypes.Struct => {
+    return {
+        topic: "topic",
+        id: 1,
+        params: {
+            request: {
+                method: "method",
+                params,
+            },
+            chainId: "vechain",
+        },
+    }
+}
+
+describe("getSignCertOptions", () => {
+    it("should return the sign cert options", () => {
+        const providedOptions: Connex.Driver.CertOptions = {
+            signer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
+        }
+
+        const requestEvent = mockPendingRequest([{ options: providedOptions }])
+
+        const extractedOptions = getSignCertOptions(requestEvent)
+
+        expect(extractedOptions).toEqual(providedOptions)
+    })
+
+    it("should return empty object if options are not provided", () => {
+        const requestEvent: PendingRequestTypes.Struct = {
+            topic: "topic",
+            id: 1,
+            params: {
+                request: {
+                    method: "method",
+                    params: [{}],
+                },
+                chainId: "vechain",
+            },
+        }
+
+        const extractedOptions = getSignCertOptions(requestEvent)
+
+        expect(extractedOptions).toEqual({})
+    })
+
+    it("empty object if params are empty", () => {
+        const requestEvent = mockPendingRequest([])
+
+        const extractedOptions = getSignCertOptions(requestEvent)
+
+        expect(extractedOptions).toEqual({})
+    })
+})
+
+describe("isWalletConnectRoute", () => {
+    it("should return true for a valid WalletConnect route", () => {
+        const mockState = (routeName: Routes) => {
+            const navState: NavigationState<ReactNavigation.RootParamList> = {
+                key: "key",
+                index: 0,
+                routeNames: [],
+                routes: [
+                    {
+                        key: "key",
+                        // @ts-ignore
+                        name: routeName,
+                    },
+                ],
+                type: "type",
+                stale: false,
+            }
+
+            return navState
+        }
+
+        expect(isWalletConnectRoute(mockState(Routes.CONNECT_APP_SCREEN))).toBe(
+            true,
+        )
+
+        expect(
+            isWalletConnectRoute(
+                mockState(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN),
+            ),
+        ).toBe(true)
+
+        expect(
+            isWalletConnectRoute(
+                mockState(Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN),
+            ),
+        ).toBe(true)
+
+        expect(isWalletConnectRoute(mockState(Routes.BUY))).toBe(false)
+        expect(isWalletConnectRoute(mockState(Routes.APP_SECURITY))).toBe(false)
+    })
+
+    it("should return false for undefined ", () => {
+        // @ts-ignore
+        expect(isWalletConnectRoute(undefined)).toBe(false)
+    })
+})
+
+describe("getSignCertMessage", () => {
+    it("should return the sign cert message", () => {
+        const message: Connex.Vendor.CertMessage = {
+            purpose: "identification",
+            payload: {
+                type: "text",
+                content: "message",
+            },
+        }
+
+        const requestEvent = mockPendingRequest([{ message }])
+
+        expect(getSignCertMessage(requestEvent)).toEqual(message)
+    })
+
+    it("should return undefined without message", () => {
+        const requestEvent = mockPendingRequest([{}])
+
+        expect(getSignCertMessage(requestEvent)).toEqual(undefined)
+    })
+
+    it("should return undefined without payload", () => {
+        const message = {
+            purpose: "identification",
+        }
+
+        const requestEvent = mockPendingRequest([{ message }])
+
+        expect(getSignCertMessage(requestEvent)).toEqual(undefined)
+    })
+
+    it("should return undefined without type", () => {
+        const message = {
+            purpose: "identification",
+            payload: {
+                content: "message",
+            },
+        }
+
+        const requestEvent = mockPendingRequest([{ message }])
+
+        expect(getSignCertMessage(requestEvent)).toEqual(undefined)
+    })
+
+    it("should return undefined without purpose", () => {
+        const message = {
+            payload: {
+                type: "text",
+                content: "message",
+            },
+        }
+
+        const requestEvent = mockPendingRequest([{ message }])
+
+        expect(getSignCertMessage(requestEvent)).toEqual(undefined)
+    })
+})
+
+describe("getSendTxMessage", () => {
+    it("empty data and empty value should return undefined", () => {
+        const message: Connex.Vendor.TxMessage = [
+            {
+                to: null,
+                data: "0x",
+                value: "0x",
+            },
+        ]
+
+        const requestEvent = mockPendingRequest([{ message }])
+
+        expect(getSendTxMessage(requestEvent)).toEqual(undefined)
+    })
+
+    it("valid data should return cleansed message", () => {
+        const message: Connex.Vendor.TxMessage = [
+            {
+                to: null,
+                data: "0x12341234",
+                value: "",
+            },
+        ]
+
+        const requestEvent = mockPendingRequest([{ message }])
+
+        expect(getSendTxMessage(requestEvent)).toEqual([
+            {
+                to: null,
+                data: "0x12341234",
+                value: "0x0",
+            },
+        ])
+    })
+
+    it("empty array should return undefined", () => {
+        const message: Connex.Vendor.TxMessage = []
+
+        const requestEvent = mockPendingRequest([{ message }])
+
+        expect(getSendTxMessage(requestEvent)).toEqual(undefined)
+    })
+
+    it("no message should return undefined", () => {
+        const requestEvent = mockPendingRequest([{}])
+
+        expect(getSendTxMessage(requestEvent)).toEqual(undefined)
+    })
+})
+
+describe("getSendTxOptions", () => {
+    it("should return the original tx options", () => {
+        const options: Connex.Driver.TxOptions = {
+            signer: "0x1234",
+        }
+
+        const requestEvent = mockPendingRequest([{ options }])
+
+        expect(getSendTxOptions(requestEvent)).toEqual(options)
+    })
+
+    it("no options should return empty object", () => {
+        const requestEvent = mockPendingRequest([{}])
+
+        expect(getSendTxOptions(requestEvent)).toEqual({})
+    })
+
+    it("empty array should return empty object", () => {
+        const requestEvent = mockPendingRequest([])
+
+        expect(getSendTxOptions(requestEvent)).toEqual({})
     })
 })
