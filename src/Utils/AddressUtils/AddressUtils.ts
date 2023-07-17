@@ -83,8 +83,9 @@ export const regexPattern = () => {
     return /^0x[a-fA-F0-9]{40}$/
 }
 
-export const isValid = (addr: string): boolean => {
+export const isValid = (addr: string | undefined | null): boolean => {
     try {
+        if (typeof addr !== "string") return false
         address.toChecksumed(HexUtils.addPrefix(addr))
         return true
     } catch (e) {

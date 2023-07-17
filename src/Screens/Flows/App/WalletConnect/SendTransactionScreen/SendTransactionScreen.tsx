@@ -1,39 +1,38 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
-    BaseText,
-    BaseButton,
-    BaseView,
-    useThor,
-    useWalletConnect,
-    showErrorToast,
-    BaseSpacer,
-    CloseModalButton,
     AccountCard,
-    DelegationOptions,
+    BaseButton,
     BaseCard,
     BaseSafeArea,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    CloseModalButton,
+    DelegationOptions,
+    showErrorToast,
+    useThor,
+    useWalletConnect,
 } from "~Components"
 import { Transaction } from "thor-devkit"
 import {
-    selectSelectedNetwork,
-    useAppSelector,
-    selectSelectedAccount,
-    selectVthoTokenWithBalanceByAccount,
-    selectDelegationUrls,
-    useAppDispatch,
-    addDelegationUrl,
-    selectTokensWithInfo,
     addPendingDappTransactionActivity,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    selectTokensWithInfo,
+    selectVthoTokenWithBalanceByAccount,
+    useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import {
-    HexUtils,
-    WalletConnectUtils,
-    WalletConnectResponseUtils,
+    error,
     FormattingUtils,
     GasUtils,
-    error,
+    HexUtils,
+    MinimizerUtils,
     TransactionUtils,
+    WalletConnectResponseUtils,
+    WalletConnectUtils,
 } from "~Utils"
 import { useCheckIdentity, useSignTransaction } from "~Hooks"
 import { AccountWithDevice, EstimateGasResult } from "~Model"
@@ -57,10 +56,16 @@ type Props = NativeStackScreenProps<
 >
 
 export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
-    const requestEvent = route.params.requestEvent
-    const sessionRequest = route.params.session
-    const { params, topic } =
-        WalletConnectUtils.getRequestEventAttributes(requestEvent)
+    const {
+        requestEvent,
+        session: sessionRequest,
+        message,
+        options,
+    } = route.params
+
+    //TODO: leverage all of the 'options' passed from DApp
+
+    const { topic } = WalletConnectUtils.getRequestEventAttributes(requestEvent)
 
     const { name, url } =
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
@@ -74,7 +79,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const nav = useNavigation()
-    const delegationUrls = useAppSelector(selectDelegationUrls)
     const [gas, setGas] = useState<EstimateGasResult>()
 
     const onClose = useCallback(() => {
@@ -83,20 +87,21 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     // Decoding clauses
     const tokens = useAppSelector(selectTokensWithInfo)
-    const clausesMetadata = TransactionUtils.interpretClauses(
-        params.txMessage,
-        tokens,
-    )
+    const clausesMetadata = TransactionUtils.interpretClauses(message, tokens)
 
     // Prepare Transaction
     const transactionBody: Transaction.Body = {
         chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
         blockRef: thorClient.status.head.id.slice(0, 18),
         expiration: 18,
-        clauses: params.txMessage,
+        clauses: message.map(clause => ({
+            to: clause.to,
+            value: clause.value,
+            data: clause.data || "0x",
+        })),
         gasPriceCoef: 0,
         gas: gas?.gas?.toString() || "0",
-        dependsOn: null,
+        dependsOn: options.dependsOn || null,
         nonce: HexUtils.generateRandom(8),
     }
 
@@ -155,13 +160,17 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             try {
                 const response = WalletConnectUtils.formatJsonRpcError(
                     id,
-                    getSdkError("USER_REJECTED_METHODS").message,
+                    getSdkError("USER_REJECTED_METHODS"),
                 )
 
                 await web3Wallet?.respondSessionRequest({
                     topic,
                     response,
                 })
+
+                try {
+                    MinimizerUtils.goBack()
+                } catch (e) {}
             } catch (e) {
                 showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
             }
@@ -221,17 +230,15 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     // Setup delegation option
     useEffect(() => {
-        if (isUndefined(params.delegateUrl) || isEmpty(params.delegateUrl)) {
+        if (
+            isUndefined(options.delegator?.url) ||
+            isEmpty(options.delegator?.url)
+        ) {
             setSelectedDelegationOption(DelegationType.NONE)
             setSelectedDelegationUrl(undefined)
         } else {
             setSelectedDelegationOption(DelegationType.URL)
-            setSelectedDelegationUrl(params.delegateUrl)
-
-            // Add delegation url to the list
-            if (!delegationUrls.includes(params.delegateUrl)) {
-                dispatch(addDelegationUrl(params.delegateUrl))
-            }
+            setSelectedDelegationUrl(options.delegator?.url)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -242,7 +249,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             ;(async () => {
                 const estimatedGas = await GasUtils.estimateGas(
                     thorClient,
-                    params.txMessage,
+                    message,
                     0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
                     selectedAccount.address,
                     // NOTE: gasPayer: undefined; in extension it was not used
@@ -250,7 +257,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 setGas(estimatedGas)
             })()
         }
-    }, [selectedAccount, params.txMessage, thorClient])
+    }, [selectedAccount, message, thorClient])
 
     return (
         <BaseSafeArea>
@@ -325,8 +332,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         isThereEnoughGas={isThereEnoughGas || false}
                         vthoBalance={vthoBalance}
                         sessionRequest={sessionRequest}
-                        requestEvent={requestEvent}
                         network={network}
+                        message={message}
+                        options={options}
                     />
 
                     <BaseSpacer height={44} />

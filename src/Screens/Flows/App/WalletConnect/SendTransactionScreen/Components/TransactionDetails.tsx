@@ -8,11 +8,11 @@ import {
 import { useI18nContext } from "~i18n"
 import React, { useMemo } from "react"
 import { DelegationType } from "~Model/Delegation"
-import { VTHO, VET } from "~Constants"
+import { VET, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
-import { FormattingUtils, WalletConnectUtils } from "~Utils"
-import { SessionTypes, SignClientTypes } from "@walletconnect/types"
+import { FormattingUtils } from "~Utils"
+import { SessionTypes } from "@walletconnect/types"
 import { Network } from "~Model"
 import {
     selectCurrency,
@@ -27,8 +27,9 @@ type Props = {
     isThereEnoughGas: boolean
     vthoBalance: string
     sessionRequest: SessionTypes.Struct
-    requestEvent: SignClientTypes.EventArguments["session_request"]
     network: Network
+    message: Connex.Vendor.TxMessage
+    options: Connex.Driver.TxOptions
 }
 
 export const TransactionDetails = ({
@@ -38,7 +39,8 @@ export const TransactionDetails = ({
     vthoBalance,
     sessionRequest,
     network,
-    requestEvent,
+    message,
+    options,
 }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
@@ -47,23 +49,17 @@ export const TransactionDetails = ({
     )
     const currency = useAppSelector(selectCurrency)
 
-    // Session request values
-    const { params } =
-        WalletConnectUtils.getRequestEventAttributes(requestEvent)
-    const message = params.comment || params.txMessage[0].comment
+    const comment = options.comment || message[0].comment
 
     const spendingAmount = useMemo(() => {
-        return params.txMessage.reduce(
-            (acc: BigNumber, clause: Connex.VM.Clause) => {
-                return acc.plus(clause.value)
-            },
-            new BigNumber(0),
-        )
-    }, [params.txMessage])
+        return message.reduce((acc: BigNumber, clause: Connex.VM.Clause) => {
+            return acc.plus(clause.value || "0")
+        }, new BigNumber(0))
+    }, [message])
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
-            spendingAmount || "0",
+            spendingAmount.toString(10) || "0",
             exchangeRate?.rate || 1,
             0,
         ),
@@ -194,10 +190,13 @@ export const TransactionDetails = ({
                 {LL.CONNECTED_APP_SELECTED_MESSAGE_LABEL()}
             </BaseText>
             <BaseSpacer height={6} />
-            <CompressAndExpandBaseText
-                text={message}
-                typographyFont="subSubTitle"
-            />
+
+            {comment && (
+                <CompressAndExpandBaseText
+                    text={comment}
+                    typographyFont="subSubTitle"
+                />
+            )}
         </>
     )
 }

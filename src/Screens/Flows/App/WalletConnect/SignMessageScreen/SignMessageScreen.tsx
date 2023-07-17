@@ -1,30 +1,35 @@
 import React, { FC, useCallback, useMemo } from "react"
-import { StyleSheet, ScrollView } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import {
-    BaseText,
-    BaseButton,
-    BaseView,
-    useWalletConnect,
-    BaseSpacer,
-    CloseModalButton,
     AccountCard,
+    BaseButton,
     BaseSafeArea,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    CloseModalButton,
+    useWalletConnect,
 } from "~Components"
-import { Certificate, blake2b256 } from "thor-devkit"
+import { blake2b256, Certificate } from "thor-devkit"
 import {
     addSignCertificateActivity,
     selectSelectedAccount,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { WalletConnectUtils, WalletConnectResponseUtils, error } from "~Utils"
+import {
+    error,
+    MinimizerUtils,
+    WalletConnectResponseUtils,
+    WalletConnectUtils,
+} from "~Utils"
 import { useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
-import { MessageDetails } from "./Components"
+import { MessageDetails } from "~Screens"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -32,8 +37,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
-    const requestEvent = route.params.requestEvent
-    const sessionRequest = route.params.session
+    const { requestEvent, session, message } = route.params
 
     const { web3Wallet } = useWalletConnect()
     const { LL } = useI18nContext()
@@ -45,20 +49,18 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const dispatch = useAppDispatch()
 
     // Request values
-    const { params } =
-        WalletConnectUtils.getRequestEventAttributes(requestEvent)
-    const { url } =
-        WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
+    const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
 
     // Prepare certificate to sign
     const cert: Certificate = useMemo(() => {
         return {
-            ...params,
+            purpose: message.purpose,
+            payload: message.payload,
             timestamp: Math.round(Date.now() / 1000),
-            domain: new URL(url),
+            domain: new URL(url).hostname,
             signer: selectedAccount?.address ?? "",
         }
-    }, [params, url, selectedAccount])
+    }, [message, selectedAccount, url])
 
     const payloadToSign = useMemo(() => {
         return blake2b256(Certificate.encode(cert))
@@ -91,16 +93,20 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     cert,
                 )
 
+                try {
+                    MinimizerUtils.goBack()
+                } catch (e) {}
+
                 dispatch(
                     addSignCertificateActivity(
-                        sessionRequest.peer.metadata.name,
+                        session.peer.metadata.name,
                         cert.domain,
                         cert.payload.content,
                         cert.purpose,
                     ),
                 )
             } catch (err: unknown) {
-                error(err)
+                error("SignMessageScreen:handleAccept", err)
                 await WalletConnectResponseUtils.signMessageRequestErrorResponse(
                     {
                         request: requestEvent,
@@ -120,7 +126,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
             LL,
             cert,
             dispatch,
-            sessionRequest.peer.metadata.name,
+            session.peer.metadata.name,
         ],
     )
 
@@ -181,8 +187,9 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
 
                     <BaseSpacer height={32} />
                     <MessageDetails
-                        sessionRequest={sessionRequest}
+                        sessionRequest={session}
                         requestEvent={requestEvent}
+                        message={message}
                     />
                 </BaseView>
 

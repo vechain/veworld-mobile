@@ -1,4 +1,4 @@
-import { SignClientTypes } from "@walletconnect/types"
+import { PendingRequestTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { Linking } from "react-native"
@@ -12,10 +12,12 @@ import WalletConnectUtils from "~Utils/WalletConnectUtils"
 import { TranslationFunctions } from "~i18n"
 
 type BaseProps = {
-    request: SignClientTypes.EventArguments["session_request"]
+    request: PendingRequestTypes.Struct
     web3Wallet: IWeb3Wallet | undefined
     LL: TranslationFunctions
 }
+
+const RCP_INTERNAL_ERROR = -32603
 
 /**
  * Success responses
@@ -99,10 +101,10 @@ export const transactionRequestFailedResponse = async ({
     web3Wallet,
     LL,
 }: BaseProps) => {
-    const response = WalletConnectUtils.formatJsonRpcError(
-        request.id,
-        LL.NOTIFICATION_wallet_connect_error_on_transaction(),
-    )
+    const response = WalletConnectUtils.formatJsonRpcError(request.id, {
+        message: LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+        code: RCP_INTERNAL_ERROR,
+    })
 
     try {
         await web3Wallet?.respondSessionRequest({
@@ -124,7 +126,11 @@ export const sponsorSignRequestFailedResponse = async ({
     try {
         const formattedResponse = WalletConnectUtils.formatJsonRpcError(
             request.id,
-            LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
+            {
+                message:
+                    LL.NOTIFICATION_wallet_connect_error_delegating_transaction(),
+                code: RCP_INTERNAL_ERROR,
+            },
         )
 
         await web3Wallet?.respondSessionRequest({
@@ -144,7 +150,7 @@ export const userRejectedMethodsResponse = async ({
     try {
         const response = WalletConnectUtils.formatJsonRpcError(
             request.id,
-            getSdkError("USER_REJECTED_METHODS").message,
+            getSdkError("USER_REJECTED_METHODS"),
         )
 
         await web3Wallet?.respondSessionRequest({
@@ -162,10 +168,10 @@ export const signMessageRequestErrorResponse = async ({
     LL,
 }: BaseProps) => {
     try {
-        const response = WalletConnectUtils.formatJsonRpcError(
-            request.id,
-            LL.NOTIFICATION_wallet_connect_error_during_signing(),
-        )
+        const response = WalletConnectUtils.formatJsonRpcError(request.id, {
+            message: LL.NOTIFICATION_wallet_connect_error_during_signing(),
+            code: RCP_INTERNAL_ERROR,
+        })
 
         await web3Wallet?.respondSessionRequest({
             topic: request.topic,
