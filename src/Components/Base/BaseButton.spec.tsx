@@ -63,7 +63,7 @@ describe("BaseButton", () => {
                 action={mockAction}
                 title={buttonTitle}
                 variant="outline"
-                haptics="light"
+                haptics="Light"
                 w={10}
                 h={10}
                 size={"sm"}
@@ -92,7 +92,7 @@ describe("BaseButton", () => {
                 title={buttonTitle}
                 textColor="#FF0000"
                 variant="outline"
-                haptics="medium"
+                haptics="Medium"
                 size={"md"}
             />,
             { wrapper: TestWrapper },
@@ -117,7 +117,7 @@ describe("BaseButton", () => {
                 title={buttonTitle}
                 textColor="#FF0000"
                 variant="link"
-                haptics="heavy"
+                haptics="Heavy"
                 px={10}
                 py={10}
                 typographyFont={"body"}
