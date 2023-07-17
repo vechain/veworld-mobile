@@ -1,9 +1,10 @@
-import React, { FC } from "react"
+import React, { FC, useCallback } from "react"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 import { BaseText } from "~Components/Base"
 import { useTheme } from "~Hooks"
 import { LocalizedString } from "typesafe-i18n"
 import { TFonts } from "~Constants"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     font?: TFonts
@@ -24,9 +25,17 @@ export const CheckBoxWithText: FC<Props> = ({
 }) => {
     const theme = useTheme()
 
+    const onPress = useCallback(
+        async (checked: boolean) => {
+            await HapticsService.triggerImpact({ level: "Light" })
+            checkAction(checked)
+        },
+        [checkAction],
+    )
+
     return (
         <BouncyCheckbox
-            onPress={checkAction}
+            onPress={onPress}
             size={checkSize ?? 22}
             fillColor={theme.colors.primary}
             textComponent={

@@ -76,7 +76,7 @@ export const TokenList = memo(
                     renderItem={itemParams => (
                         <AnimatedTokenCard {...itemParams} isEdit={isEdit} />
                     )}
-                    activationDistance={40}
+                    activationDistance={60}
                     showsVerticalScrollIndicator={false}
                     autoscrollThreshold={visibleHeightRef}
                     ItemSeparatorComponent={renderSeparator}

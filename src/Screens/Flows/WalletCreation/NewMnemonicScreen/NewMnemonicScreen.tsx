@@ -103,6 +103,7 @@ export const NewMnemonicScreen = () => {
                         action={onBackupPress}
                         w={100}
                         px={20}
+                        haptics="Medium"
                         title={LL.BTN_MNEMONIC_BACKUP()}
                         disabled={!isChecked}
                     />

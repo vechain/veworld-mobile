@@ -20,6 +20,7 @@ export const FastActionsBar = memo(
             (action: FastAction) => {
                 return (
                     <BaseTouchable
+                        haptics="Medium"
                         key={action.name}
                         action={action.action}
                         testID={action.testID}

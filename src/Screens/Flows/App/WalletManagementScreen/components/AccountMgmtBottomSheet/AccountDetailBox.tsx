@@ -29,6 +29,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
         return (
             <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
+                    haptics="Light"
                     action={() => {}}
                     justifyContent="space-between"
                     bg={
@@ -55,6 +56,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     </BaseView>
                 </BaseTouchableBox>
                 <BaseIcon
+                    haptics="Light"
                     size={24}
                     style={baseStyles.eyeIcon}
                     name={account.visible ? "eye-off-outline" : "eye-outline"}

@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -23,13 +22,7 @@ export const WalletManagementHeader = () => {
             </BaseText>
             <BaseView flexDirection="row">
                 <BaseIcon
-                    size={24}
-                    name="priority-low"
-                    style={styles.icon}
-                    color={theme.colors.text}
-                    disabled={true}
-                />
-                <BaseIcon
+                    haptics="Light"
                     size={24}
                     name="plus"
                     bg={theme.colors.secondary}
@@ -39,7 +32,3 @@ export const WalletManagementHeader = () => {
         </BaseView>
     )
 }
-
-const styles = StyleSheet.create({
-    icon: { marginRight: 16 },
-})

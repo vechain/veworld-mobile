@@ -10,6 +10,7 @@ import {
     warningToastStyles,
 } from "./util"
 import { ToastContent } from "./components"
+import HapticsService from "~Services/HapticsService"
 
 /**
  * Creates a toast configuration object for the given theme.
@@ -158,6 +159,7 @@ export const showErrorToast = (
     action1?: () => void,
     visibilityTime?: number,
 ) => {
+    HapticsService.triggerNotification({ level: "Error" })
     Toast.show({
         type: "error",
         text1,

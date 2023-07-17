@@ -25,6 +25,7 @@ export const DeviceBox: React.FC<Props> = ({
 
     return (
         <BaseTouchableBox
+            haptics="Light"
             action={onDeviceSelected}
             justifyContent="space-between">
             <BaseView flexDirection="row">

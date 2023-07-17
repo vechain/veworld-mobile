@@ -48,6 +48,7 @@ export const AddAccountBottomSheet = React.forwardRef<
             footerStyle={baseStyles.footerStyle}
             footer={
                 <BaseButton
+                    haptics="Medium"
                     disabled={!selectedDevice}
                     action={onCreateAccount}
                     w={100}

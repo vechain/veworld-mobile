@@ -62,6 +62,7 @@ export const BaseButtonGroup = ({
                         title={label}
                         bgColor={bgColor}
                         textColor={textColor}
+                        haptics="Light"
                         typographyFont={typographyFont}
                         style={{
                             borderTopLeftRadius: borderTopRadius,

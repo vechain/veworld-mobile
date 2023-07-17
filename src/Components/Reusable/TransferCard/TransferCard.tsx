@@ -153,6 +153,7 @@ export const TransferCard = memo(
                             {!contactName && (
                                 <BaseView pl={12}>
                                     <BaseIcon
+                                        haptics="Light"
                                         name={"account-plus-outline"}
                                         size={20}
                                         bg={COLORS.LIME_GREEN}

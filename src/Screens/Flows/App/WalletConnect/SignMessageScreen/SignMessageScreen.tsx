@@ -197,14 +197,14 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 <BaseView style={styles.footer}>
                     <BaseButton
                         w={100}
-                        haptics="light"
+                        haptics="Light"
                         title={LL.COMMON_BTN_SIGN()}
                         action={checkIdentityBeforeOpening}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
                         w={100}
-                        haptics="light"
+                        haptics="Light"
                         variant="outline"
                         title={LL.COMMON_BTN_REJECT()}
                         action={onReject}

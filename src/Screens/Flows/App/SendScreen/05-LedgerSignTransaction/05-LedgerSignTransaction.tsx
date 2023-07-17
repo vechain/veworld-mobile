@@ -286,7 +286,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             <BaseButton
                 style={styles.button}
                 mx={24}
-                haptics="light"
+                haptics="Light"
                 title={LL.COMMON_BTN_CONFIRM()}
                 disabled={!signature || isSending}
                 isLoading={isSending}

@@ -11,6 +11,23 @@ const title = "Touch me"
 const findBaseTouchableByTitle = async () =>
     await screen.findByText(title, {}, { timeout: 5000 })
 
+jest.mock("expo-haptics", () => {
+    return {
+        NotificationFeedbackType: {
+            Success: 0,
+            Warning: 1,
+            Error: 2,
+        },
+        ImpactFeedbackStyle: {
+            Light: 0,
+            Medium: 1,
+            Heavy: 2,
+        },
+        notificationAsync: jest.fn(),
+        impactAsync: jest.fn(),
+    }
+})
+
 describe("BaseTouchable", () => {
     it("renders correctly with title", async () => {
         const onPress = jest.fn()

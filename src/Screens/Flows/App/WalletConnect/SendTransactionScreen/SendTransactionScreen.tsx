@@ -347,7 +347,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <BaseView style={styles.footer}>
                     <BaseButton
                         w={100}
-                        haptics="light"
+                        haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={checkIdentityBeforeOpening}
                         disabled={!isThereEnoughGas && !isDelegated}
@@ -355,7 +355,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={16} />
                     <BaseButton
                         w={100}
-                        haptics="light"
+                        haptics="Light"
                         variant="outline"
                         title={LL.COMMON_BTN_REJECT()}
                         action={onReject}

@@ -44,6 +44,7 @@ export const DevicesList: React.FC<Props> = ({
                 : themedStyles.notSelected
             return (
                 <BaseTouchableBox
+                    haptics="Light"
                     key={item.rootAddress}
                     innerContainerStyle={style}
                     action={handleOnDevicePress(item)}>
