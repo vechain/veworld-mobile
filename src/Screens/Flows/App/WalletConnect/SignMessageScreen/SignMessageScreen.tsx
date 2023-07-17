@@ -93,9 +93,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     cert,
                 )
 
-                try {
-                    MinimizerUtils.goBack()
-                } catch (e) {}
+                MinimizerUtils.goBack()
 
                 dispatch(
                     addSignCertificateActivity(

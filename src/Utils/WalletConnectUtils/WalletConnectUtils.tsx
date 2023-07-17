@@ -6,8 +6,7 @@ import {
     SignClientTypes,
 } from "@walletconnect/types"
 import { IWeb3Wallet, Web3Wallet } from "@walletconnect/web3wallet"
-import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
-import { Network, NETWORK_TYPE } from "~Model"
+import { Network } from "~Model"
 import { error } from "~Utils/Logger"
 import { NavigationState } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -205,19 +204,19 @@ export function getSendTxOptions(
  * @returns boolean
  */
 
-export function isValidURI(uri: string): boolean {
+export function isValidURI(providedUri: string): boolean {
     try {
-        const uriObject = new URL(uri)
+        const uri = new URL(providedUri)
 
-        const protocol = uriObject.protocol
-        const symKey = uriObject.searchParams.get("symKey")
-        const relayProtocol = uriObject.searchParams.get("relay-protocol")
+        const protocol = uri.protocol
+        const symKey = uri.searchParams.get("symKey")
+        const relayProtocol = uri.searchParams.get("relay-protocol")
 
         return (
             // wc protocol
             protocol === "wc:" &&
             // version 2
-            uriObject.pathname.endsWith("@2") &&
+            uri.pathname.endsWith("@2") &&
             !!symKey &&
             !!relayProtocol
         )
@@ -237,16 +236,16 @@ export function formatJsonRpcError(
     }
 }
 
-export function getNetworkType(chainId: string): Network {
-    let network = chainId.split(":")[1]
+export function getNetwork(
+    requestEvent: PendingRequestTypes.Struct,
+    allNetworks: Network[],
+): Network | undefined {
+    const networkIdentifier = requestEvent.params.chainId.split(":")[1]
 
-    if (NETWORK_TYPE.MAIN.includes(network)) {
-        return defaultMainNetwork
-    } else if (NETWORK_TYPE.TEST.includes(network)) {
-        return defaultTestNetwork
-    }
-
-    return defaultMainNetwork
+    // Switch to the requested network
+    return allNetworks.find(
+        net => net.genesis.id.slice(-32).toLowerCase() === networkIdentifier,
+    )
 }
 
 export function getTopicFromPairUri(uri: string) {
