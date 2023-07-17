@@ -30,7 +30,24 @@ const triggerImpact = async ({
     await Haptics.impactAsync(_level)
 }
 
+const triggerHaptics = async ({
+    haptics,
+}: {
+    haptics: "Light" | "Medium" | "Heavy" | "Success" | "Warning" | "Error"
+}) => {
+    if (haptics === "Success" || haptics === "Warning" || haptics === "Error") {
+        await triggerNotification({ level: haptics })
+    } else if (
+        haptics === "Light" ||
+        haptics === "Medium" ||
+        haptics === "Heavy"
+    ) {
+        await triggerImpact({ level: haptics })
+    }
+}
+
 export default {
     triggerNotification,
     triggerImpact,
+    triggerHaptics,
 }

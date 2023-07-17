@@ -37,7 +37,7 @@ describe("BackButtonHeader", () => {
 
         const backButton = await findBackButton()
         expect(backButton).toBeVisible()
-        act(() => fireEvent(backButton, "press"))
+        act(() => fireEvent(backButton, "action"))
         expect(goBackMock).toHaveBeenCalled()
     })
 })

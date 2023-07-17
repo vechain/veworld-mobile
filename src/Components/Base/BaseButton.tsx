@@ -73,22 +73,8 @@ export const BaseButton = ({
 
     const onButtonPress = useCallback(async () => {
         const { haptics } = otherProps
-
-        if (
-            haptics === "Success" ||
-            haptics === "Warning" ||
-            haptics === "Error"
-        ) {
-            await HapticsService.triggerNotification({ level: haptics })
-        } else if (
-            haptics === "Light" ||
-            haptics === "Medium" ||
-            haptics === "Heavy"
-        ) {
-            await HapticsService.triggerImpact({ level: haptics })
-        }
-
         otherProps.action()
+        haptics && (await HapticsService.triggerHaptics({ haptics }))
     }, [otherProps])
 
     const bgColor = useMemo(() => {

@@ -31,21 +31,8 @@ export const BaseTouchable = (props: Props) => {
     } = props
 
     const onButtonPress = useCallback(async () => {
-        if (
-            haptics === "Success" ||
-            haptics === "Warning" ||
-            haptics === "Error"
-        ) {
-            await HapticsService.triggerNotification({ level: haptics })
-        } else if (
-            haptics === "Light" ||
-            haptics === "Medium" ||
-            haptics === "Heavy"
-        ) {
-            await HapticsService.triggerImpact({ level: haptics })
-        }
-
         action && action()
+        haptics && (await HapticsService.triggerHaptics({ haptics }))
     }, [action, haptics])
 
     return (
