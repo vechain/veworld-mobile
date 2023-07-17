@@ -80,6 +80,7 @@ export const ResetAppScreen = () => {
                     />
 
                     <BaseButton
+                        haptics="Warning"
                         action={appReset}
                         w={100}
                         px={20}

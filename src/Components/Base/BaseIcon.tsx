@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { memo, useMemo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import {
     TouchableOpacity,
     TouchableOpacityProps,
@@ -9,6 +9,7 @@ import {
 import { useTheme } from "~Hooks"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
+import HapticsService from "~Services/HapticsService"
 
 type Props =
     | {
@@ -23,12 +24,19 @@ type Props =
           py?: number
           borderRadius?: number
           iconPadding?: number
+          haptics?:
+              | "Success"
+              | "Warning"
+              | "Error"
+              | "Light"
+              | "Medium"
+              | "Heavy"
       } & IconProps &
           TouchableOpacityProps &
           ViewProps
 
 export const BaseIcon: React.FC<Props> = memo(props => {
-    const { color, style, borderRadius, testID, ...otherProps } = props
+    const { color, style, borderRadius, testID, haptics, ...otherProps } = props
     const theme = useTheme()
 
     const iconColor = useMemo(
@@ -42,6 +50,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
             testID={`${testID}-wrapper`}
             style={style}
             color={color}
+            haptics={haptics}
             borderRadius={borderRadius}
             {...otherProps}>
             <Icon
@@ -57,11 +66,25 @@ export const BaseIcon: React.FC<Props> = memo(props => {
 
 type BaseIconWrapperProps = Props & { children: React.ReactNode }
 const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
-    ({ style, bg, borderRadius, size, children, action, ...props }) => {
+    ({
+        style,
+        bg,
+        borderRadius,
+        size,
+        children,
+        action,
+        haptics,
+        ...props
+    }) => {
+        const onButtonPress = useCallback(async () => {
+            action && action()
+            haptics && (await HapticsService.triggerHaptics({ haptics }))
+        }, [action, haptics])
+
         if (action)
             return (
                 <TouchableOpacity
-                    onPress={action}
+                    onPress={onButtonPress}
                     style={[
                         {
                             justifyContent: "center",

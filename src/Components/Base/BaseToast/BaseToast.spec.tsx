@@ -16,6 +16,23 @@ jest.mock("react-native-toast-message", () => ({
     config: jest.fn(),
 }))
 
+jest.mock("expo-haptics", () => {
+    return {
+        NotificationFeedbackType: {
+            Success: 0,
+            Warning: 1,
+            Error: 2,
+        },
+        ImpactFeedbackStyle: {
+            Light: 0,
+            Medium: 1,
+            Heavy: 2,
+        },
+        notificationAsync: jest.fn(),
+        impactAsync: jest.fn(),
+    }
+})
+
 describe("BaseToast", () => {
     afterEach(() => {
         jest.clearAllMocks()

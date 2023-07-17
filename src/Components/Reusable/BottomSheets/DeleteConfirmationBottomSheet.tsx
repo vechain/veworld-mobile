@@ -52,6 +52,7 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<
                     alignItems="center">
                     <BaseView alignItems="center" w={100}>
                         <BaseButton
+                            haptics="Medium"
                             action={onConfirm}
                             w={100}
                             px={20}
@@ -59,6 +60,7 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<
                             bgColor={theme.colors.primary}
                         />
                         <BaseButton
+                            haptics="Medium"
                             variant="outline"
                             action={onClose}
                             w={100}

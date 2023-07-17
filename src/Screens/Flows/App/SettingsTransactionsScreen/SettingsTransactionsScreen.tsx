@@ -96,6 +96,7 @@ export const SettingsTransactionsScreen = () => {
                 </BaseText>
                 <BaseSpacer height={16} />
                 <BaseButton
+                    haptics="Light"
                     action={openManageUrls}
                     variant="link"
                     title={LL.SETTINGS_TRANSACTIONS_MANAGE_URLS()}

@@ -1,14 +1,8 @@
-import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { ScrollView, StyleSheet } from "react-native"
+import { useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
 import {
-    useBottomSheetModal,
-    useDisclosure,
-    useTheme,
-    useWalletSecurity,
-} from "~Hooks"
-import {
-    BaseIcon,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -40,10 +34,6 @@ import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
-    const nav = useNavigation()
-
-    const theme = useTheme()
-
     const { LL } = useI18nContext()
 
     const tabBarHeight = useBottomTabBarHeight()
@@ -114,8 +104,6 @@ export const PrivacyScreen = () => {
     // [END] - Hooks setup
 
     // [START] - Internal Methods
-    const goBack = useCallback(() => nav.goBack(), [nav])
-
     const toggleAppLockSwitch = useCallback(
         (newValue: boolean) => {
             dispatch(setIsAppLockActive(newValue))
@@ -144,14 +132,8 @@ export const PrivacyScreen = () => {
                     { paddingBottom: tabBarHeight },
                 ]}
                 style={baseStyles.scrollView}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-                <BaseSpacer height={12} />
+                <BackButtonHeader />
+
                 <BaseView mx={20}>
                     <BaseText typographyFont="title">
                         {LL.TITLE_PRIVACY()}
@@ -173,6 +155,7 @@ export const PrivacyScreen = () => {
                         <>
                             <BaseSpacer height={16} />
                             <BaseTouchable
+                                haptics="Light"
                                 action={handleOnEditPinPress}
                                 title={LL.BTN_EDIT_PIN()}
                                 underlined
@@ -192,6 +175,7 @@ export const PrivacyScreen = () => {
                     <BaseSpacer height={16} />
 
                     <BaseTouchable
+                        haptics="Light"
                         action={checkSecurityBeforeOpening}
                         title={LL.BTN_BACKUP_MENMONIC()}
                         underlined

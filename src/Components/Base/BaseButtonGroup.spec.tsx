@@ -4,6 +4,23 @@ import { BaseButtonGroup } from "./BaseButtonGroup"
 import { TestWrapper } from "~Test"
 import { ReactTestInstance } from "react-test-renderer"
 
+jest.mock("expo-haptics", () => {
+    return {
+        NotificationFeedbackType: {
+            Success: 0,
+            Warning: 1,
+            Error: 2,
+        },
+        ImpactFeedbackStyle: {
+            Light: 0,
+            Medium: 1,
+            Heavy: 2,
+        },
+        notificationAsync: jest.fn(),
+        impactAsync: jest.fn(),
+    }
+})
+
 const baseButtonGroupTestId = "BaseButtonGroup"
 const findBaseButtonInGroup = async (id: string) =>
     await screen.findByTestId(

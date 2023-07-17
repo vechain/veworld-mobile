@@ -54,6 +54,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
                     {LL.SB_ACCOUNT_MANAGEMENT()}
                 </BaseText>
                 <BaseIcon
+                    haptics="Light"
                     name={"plus"}
                     size={32}
                     bg={theme.colors.secondary}

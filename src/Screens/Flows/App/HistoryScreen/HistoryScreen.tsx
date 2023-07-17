@@ -9,8 +9,8 @@ import {
     BaseSafeArea,
     BaseView,
     ChangeAccountButtonPill,
-    BaseIcon,
     BaseSpacer,
+    BackButtonHeader,
 } from "~Components"
 import {
     selectSelectedAccount,
@@ -70,8 +70,6 @@ export const HistoryScreen = () => {
     // when account changes set page of activity fetching back to 0
     // and refetch otherwise we would be at the page of activities of the previous account
     const onChangeAccountPress = () => {}
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const onStartTransactingPress = useCallback(
         () =>
@@ -277,15 +275,8 @@ export const HistoryScreen = () => {
 
     return (
         <BaseSafeArea grow={1} testID="History_Screen">
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
+            <BackButtonHeader />
 
-            <BaseSpacer height={12} />
             <BaseView
                 flexDirection="row"
                 mx={20}

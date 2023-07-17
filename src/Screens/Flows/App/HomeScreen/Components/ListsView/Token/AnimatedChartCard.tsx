@@ -10,6 +10,7 @@ import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { BaseView } from "~Components"
+import HapticsService from "~Services/HapticsService"
 
 const HEIGHT = 100
 
@@ -56,6 +57,7 @@ export const AnimatedChartCard = memo(
         }, [isEdit])
 
         const onVechainTokenPress = useCallback(() => {
+            HapticsService.triggerImpact({ level: "Light" })
             if (!isEdit)
                 nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
         }, [isEdit, nav, tokenWithInfo])

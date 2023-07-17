@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { StyleSheet, Pressable } from "react-native"
+import { StyleSheet } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import { useTheme } from "~Hooks"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 
 export type RowProps = {
     title: LocalizedString
@@ -23,7 +23,10 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
     )
 
     return (
-        <Pressable onPress={onPress} style={baseStyles.container}>
+        <BaseTouchable
+            action={onPress}
+            style={baseStyles.container}
+            haptics="Light">
             <BaseView flexDirection="row">
                 <BaseIcon color={theme.colors.text} name={icon} size={24} />
                 <BaseText
@@ -39,7 +42,7 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
                 name={"chevron-right"}
                 size={24}
             />
-        </Pressable>
+        </BaseTouchable>
     )
 }
 

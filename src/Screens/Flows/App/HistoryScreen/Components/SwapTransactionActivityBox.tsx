@@ -47,6 +47,7 @@ export const SwapTransactionActivityBox: React.FC<Props> = memo(
 
         return (
             <BaseTouchable
+                haptics="Light"
                 action={() =>
                     onPress(activity, undefined, true, decodedClauses)
                 }

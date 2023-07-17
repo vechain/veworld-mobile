@@ -11,6 +11,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { ScanTarget } from "~Constants"
+import HapticsService from "~Services/HapticsService"
 
 export const Header = memo(() => {
     const theme = useTheme()
@@ -30,6 +31,7 @@ export const Header = memo(() => {
 
     const onScan = useCallback(
         (uri: string) => {
+            HapticsService.triggerImpact({ level: "Light" })
             onPair(uri)
         },
         [onPair],
@@ -55,6 +57,7 @@ export const Header = memo(() => {
                     color={theme.colors.text}
                     action={openScanAddressSheet}
                     mx={12}
+                    haptics="Light"
                 />
 
                 <BaseIcon
@@ -62,6 +65,7 @@ export const Header = memo(() => {
                     size={24}
                     bg={theme.colors.secondary}
                     action={goToWalletManagement}
+                    haptics="Light"
                 />
             </BaseView>
             <ScanBottomSheet

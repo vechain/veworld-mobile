@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
@@ -15,14 +15,20 @@ export const BackButtonHeader = ({
 }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
+
+    const onActionPress = useCallback(async () => {
+        nav.goBack()
+    }, [nav])
+
     return (
         <>
             <BaseIcon
+                haptics="Light"
                 style={backButtonHeaderStyle.backButton}
                 size={36}
                 name="chevron-left"
                 color={theme.colors.text}
-                action={nav.goBack}
+                action={onActionPress}
                 testID={iconTestID}
             />
             {hasBottomSpacer && <BaseSpacer height={16} />}
