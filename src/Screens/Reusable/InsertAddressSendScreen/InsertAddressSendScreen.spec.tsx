@@ -3,29 +3,21 @@ import { TestWrapper } from "~Test"
 import { InsertAddressSendScreen } from "./InsertAddressSendScreen"
 import { render, screen } from "@testing-library/react-native"
 import {
-    RootStackParamListDiscover,
     RootStackParamListHome,
+    RootStackParamListNFT,
     Routes,
 } from "~Navigation"
-import {
-    NativeStackNavigationProp,
-    NativeStackScreenProps,
-} from "@react-navigation/native-stack"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RouteProp } from "@react-navigation/native"
 
-type NavigationScreenPropAlias = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover,
-    Routes.INSERT_ADDRESS_SEND
->
-
 type NavigationType = NativeStackNavigationProp<
-    RootStackParamListHome & RootStackParamListDiscover,
+    RootStackParamListHome & RootStackParamListNFT,
     Routes.INSERT_ADDRESS_SEND,
     undefined
 >
 
 type RouteType = RouteProp<
-    RootStackParamListHome & RootStackParamListDiscover,
+    RootStackParamListHome & RootStackParamListNFT,
     Routes.INSERT_ADDRESS_SEND
 >
 
@@ -65,7 +57,7 @@ const route = {
     },
 }
 
-const createTestProps = (): unknown & NavigationScreenPropAlias => ({
+const createTestProps = (): any => ({
     navigation: {
         navigate: jest.fn(),
     } as unknown as NavigationType,
