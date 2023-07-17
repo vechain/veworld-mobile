@@ -7,8 +7,11 @@ import {
     setNetworkingSideEffects,
     useAppDispatch,
 } from "~Storage/Redux"
-import { debug, error } from "~Utils"
-import { getNFTdataForContract, prepareCollectionData } from "./Helpers"
+import { error } from "~Utils"
+import {
+    parseCollectionMetadataFromRegistry,
+    parseCollectionMetadataWithoutRegistry,
+} from "./Helpers"
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
@@ -48,7 +51,7 @@ export const useNFTCollections = () => {
             )
 
             try {
-                // Get contract addresses for nfts owned by ownerAddress
+                // Get contract addresses for nfts owned by selected account
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
                         network.type,
@@ -56,10 +59,6 @@ export const useNFTCollections = () => {
                         _resultsPerPage,
                         _page,
                     )
-
-                debug(
-                    `Got ${pagination.totalElements} nft contracts from indexer`,
-                )
 
                 // exit early if there are no more pages to fetch
                 if (_page >= pagination.totalPages) {
@@ -72,33 +71,32 @@ export const useNFTCollections = () => {
                     return
                 }
 
-                // Get nfts for each contract address
-                const nftResultsPerPage = 1
-                const { nftData } = await getNFTdataForContract(
-                    network,
-                    contractsForNFTs,
-                    selectedAccount,
-                    nftResultsPerPage,
-                )
-
-                const _nftCollections: NonFungibleTokenCollection[] = []
-
-                // loop over the nft collections
-                for (const nft of nftData) {
-                    // find collection from GH registry
-                    const foundCollection = registryInfo.find(
-                        col => col.address === nft.data[0].contractAddress,
+                // Parse collection metadata from registry info or the chain if needed
+                const _nftCollections: NonFungibleTokenCollection[] =
+                    await Promise.all(
+                        contractsForNFTs.map(async collection => {
+                            const regInfo = registryInfo.find(
+                                col => col.address === collection,
+                            )
+                            if (regInfo) {
+                                return parseCollectionMetadataFromRegistry(
+                                    network.type,
+                                    selectedAccount,
+                                    collection,
+                                    regInfo,
+                                    thor,
+                                )
+                            } else {
+                                return parseCollectionMetadataWithoutRegistry(
+                                    network.type,
+                                    selectedAccount,
+                                    collection,
+                                    thor,
+                                    LL.COMMON_NOT_AVAILABLE(),
+                                )
+                            }
+                        }),
                     )
-
-                    const { nftCollection } = await prepareCollectionData(
-                        nft,
-                        foundCollection,
-                        thor,
-                        LL.COMMON_NOT_AVAILABLE(),
-                    )
-
-                    _nftCollections.push(nftCollection)
-                }
 
                 // set collections to store
                 dispatch(

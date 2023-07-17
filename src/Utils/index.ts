@@ -24,7 +24,7 @@ import StringUtils from "./StringUtils"
 import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
-import URLUtils from "./URLUtils"
+import URIUtils from "./URIUtils"
 import ReanimatedUtils from "./ReanimatedUtils"
 import WalletConnectUtils from "./WalletConnectUtils"
 import WalletConnectResponseUtils from "./WalletConnectResponseUtils"
@@ -59,7 +59,7 @@ export {
     TokenUtils,
     TransactionUtils,
     TransfersUtils,
-    URLUtils,
+    URIUtils,
     ReanimatedUtils,
     WalletConnectUtils,
     WalletConnectResponseUtils,

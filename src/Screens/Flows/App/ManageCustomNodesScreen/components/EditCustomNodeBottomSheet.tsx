@@ -13,7 +13,7 @@ import {
 import { useI18nContext } from "~i18n"
 
 import { isSmallScreen } from "~Constants"
-import { URLUtils, error } from "~Utils"
+import { URIUtils, error } from "~Utils"
 import { Network } from "~Model"
 import {
     selectCustomNetworks,
@@ -87,7 +87,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
         (value: string): string => {
             if (!value) return LL.ERROR_ENTER_VALID_URL()
 
-            if (!URLUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()
+            if (!URIUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()
 
             const urlAlreadyExist = customNodes.find(
                 net => net.currentUrl === value && net.id !== network?.id,

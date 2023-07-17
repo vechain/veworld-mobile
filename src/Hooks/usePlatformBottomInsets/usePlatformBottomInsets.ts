@@ -12,7 +12,7 @@ export const usePlatformBottomInsets = (
     const paddingBottom = useBottomTabBarHeight()
 
     const calculateBottomInsets: number = useMemo(() => {
-        let staticButtonExtraPadding = extraPadding || 0
+        let staticButtonExtraPadding = extraPadding ?? 0
 
         return PlatformUtils.isIOS()
             ? paddingBottom + staticButtonExtraPadding

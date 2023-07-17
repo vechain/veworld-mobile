@@ -32,7 +32,7 @@ export const getNftsForContract = async (
     ownerAddress: string,
     resultsPerPage: number = 20,
     page: number = 0,
-): Promise<NftForContractResponse[]> => {
+): Promise<NftForContractResponse> => {
     const response = await axios.get(
         NFTS_OWNED_PER_CONTRACT(
             networkType,

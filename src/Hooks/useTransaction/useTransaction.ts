@@ -146,7 +146,7 @@ const prepareNonFungibleTokenClause = (
     addressTo: string,
 ) => {
     const clause = thorClient
-        .account(_token.belongsToCollectionAddress)
+        .account(_token.contractAddress)
         .method(abis.VIP181.transferFrom)
         .asClause(account.address, addressTo, _token.tokenId)
     //! NOTE: uncomment following line and comment out the line above to create a reverted transaction
