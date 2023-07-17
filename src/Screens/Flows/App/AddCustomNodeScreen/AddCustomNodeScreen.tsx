@@ -12,7 +12,7 @@ import {
     showErrorToast,
     DismissKeyboardView,
 } from "~Components"
-import { error, URLUtils } from "~Utils"
+import { error, URIUtils } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import {
@@ -70,7 +70,7 @@ export const AddCustomNodeScreen = () => {
         (value: string): string => {
             if (!value) return LL.ERROR_ENTER_VALID_URL()
 
-            if (!URLUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()
+            if (!URIUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()
 
             const urlAlreadyExist = customNodes.find(
                 net => net.currentUrl === value,

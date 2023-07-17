@@ -20,7 +20,7 @@ export interface BaseTransferHandlerProps {
 }
 
 export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
-    fetchCollectionName: (address: string) => Promise<string>
+    thor: Connex.Thor
 }
 
 export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {

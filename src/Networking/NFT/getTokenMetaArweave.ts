@@ -24,16 +24,3 @@ export const getTokenMetaArweave = async (uri: string) => {
         throw e
     }
 }
-
-export const getImageUrlArweave = async (uri: string) => {
-    try {
-        const id = toID(uri)
-
-        const res = await arweave.api.get<string>(id)
-
-        return res.url as string
-    } catch (e) {
-        error(e)
-        throw e
-    }
-}
