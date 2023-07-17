@@ -6,7 +6,6 @@ import {
     SignClientTypes,
 } from "@walletconnect/types"
 import { IWeb3Wallet, Web3Wallet } from "@walletconnect/web3wallet"
-import { isEmpty, isNull } from "lodash"
 import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 import { Network, NETWORK_TYPE } from "~Model"
 import { error } from "~Utils/Logger"
@@ -205,31 +204,23 @@ export function getSendTxOptions(
  *
  * @returns boolean
  */
-export function isValidURI(uri: string) {
+
+export function isValidURI(uri: string): boolean {
     try {
-        if (isNull(uri) || isEmpty(uri)) return false
+        const uriObject = new URL(uri)
 
-        // Split string by : and check if the first element is wc
-        const uriArray = uri.split(":")
-        if (uriArray[0] !== "wc") return false
+        const protocol = uriObject.protocol
+        const symKey = uriObject.searchParams.get("symKey")
+        const relayProtocol = uriObject.searchParams.get("relay-protocol")
 
-        // Split the string between @ and ? and check if the first element is the correct version
-        const version = uriArray[1].split("@")[1].split("?")[0]
-        if (version !== "2") return false
-
-        // Split the string between @ and ? and retrieve the parameters
-        const parameters = uriArray[1].split("@")[1].split("?")[1].split("&")
-
-        // Iterate over the parameters and check if the required parameters are present
-        let hasSymKey = false
-        let hasRelayProtocol = false
-        parameters.forEach(parameter => {
-            const key = parameter.split("=")[0]
-            if (key === "symKey") hasSymKey = true
-            if (key === "relay-protocol") hasRelayProtocol = true
-        })
-
-        return !(!hasSymKey || !hasRelayProtocol)
+        return (
+            // wc protocol
+            protocol === "wc:" &&
+            // version 2
+            uriObject.pathname.endsWith("@2") &&
+            !!symKey &&
+            !!relayProtocol
+        )
     } catch (e) {
         return false
     }

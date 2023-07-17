@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from "react"
-import { NativeModules, ScrollView, StyleSheet } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
     BaseButton,
@@ -17,7 +17,12 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, WalletConnectResponseUtils, WalletConnectUtils } from "~Utils"
+import {
+    error,
+    MinimizerUtils,
+    WalletConnectResponseUtils,
+    WalletConnectUtils,
+} from "~Utils"
 import { useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -25,8 +30,6 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails } from "~Screens"
-
-const { Minimizer } = NativeModules
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -91,7 +94,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 )
 
                 try {
-                    Minimizer.goBack()
+                    MinimizerUtils.goBack()
                 } catch (e) {}
 
                 dispatch(
