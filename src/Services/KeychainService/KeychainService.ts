@@ -120,7 +120,9 @@ const deleteDeviceEncryptionKey = async (
 ) => {
     const options = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: `${WALLET_KEY}_${rootAddress}`,
+        keychainService: `${WALLET_KEY}_${getAccessControl(
+            accessControl,
+        )}_${rootAddress}`,
     }
 
     try {

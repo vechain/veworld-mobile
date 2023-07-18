@@ -30,9 +30,10 @@ export const BaseTouchable = (props: Props) => {
         ...otherProps
     } = props
 
-    const onButtonPress = useCallback(async () => {
-        action && action()
-        haptics && (await HapticsService.triggerHaptics({ haptics }))
+    const onButtonPress = useCallback(() => {
+        if (!action) return
+        action()
+        haptics && HapticsService.triggerHaptics({ haptics })
     }, [action, haptics])
 
     return (

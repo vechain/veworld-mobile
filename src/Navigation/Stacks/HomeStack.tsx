@@ -47,6 +47,7 @@ export type RootStackParamListHome = {
         address: string
         initialRoute: string
     }
+
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
         transaction: Transaction.Body
@@ -73,7 +74,7 @@ const { Navigator, Group, Screen } =
 
 export const HomeStack = () => {
     return (
-        <Navigator>
+        <Navigator id="HomeStack">
             <Group>
                 <Screen
                     name={Routes.HOME}

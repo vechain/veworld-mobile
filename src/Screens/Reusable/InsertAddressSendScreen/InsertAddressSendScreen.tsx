@@ -1,15 +1,18 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet, Keyboard } from "react-native"
-import { useBottomSheetModal } from "~Hooks"
+import {
+    useBottomSheetModal,
+    useSearchContactsAndAccounts,
+    useSearchOrScanInput,
+} from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
     BaseAccordion,
     BaseSpacer,
     BaseText,
-    BaseTextInput,
     BaseView,
     ContactCard,
     FadeoutButton,
@@ -17,30 +20,21 @@ import {
     ScanBottomSheet,
 } from "~Components"
 import {
-    RootStackParamListDiscover,
     RootStackParamListHome,
+    RootStackParamListNFT,
     Routes,
 } from "~Navigation"
-import {
-    selectAccounts,
-    selectKnownContacts,
-    useAppSelector,
-} from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { CreateContactBottomSheet } from "./Components/CreateContactBottomSheet/CreateContactBottomSheet"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { ScanTarget } from "~Constants"
 
 type Props = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover,
+    RootStackParamListHome | RootStackParamListNFT,
     Routes.INSERT_ADDRESS_SEND
 >
 
 export const InsertAddressSendScreen = ({ route }: Props) => {
-    const { token, amount, initialRoute } = route.params
     const { LL } = useI18nContext()
-    const [searchText, setSearchText] = useState("")
-    const [errorMessage, setErrorMessage] = useState("")
     const [selectedAddress, setSelectedAddress] = useState("")
     const nav = useNavigation()
 
@@ -56,70 +50,43 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         onClose: closeScanAddressSheetRef,
     } = useBottomSheetModal()
 
-    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
-    const accounts = useAppSelector(selectAccounts)
-    const contacts = useAppSelector(selectKnownContacts)
-    const accountsAndContacts = useMemo(() => {
-        return [...accounts, ...contacts]
-    }, [accounts, contacts])
+    const { BaseTextInputElement, searchText, setSearchText } =
+        useSearchOrScanInput({
+            openScanAddressSheet,
+        })
 
-    //We filter the accounts and contacts based on the search text and the selected address
-    const filteredContacts = useMemo(() => {
-        if (!searchText) return contacts
-        return contacts.filter(
-            contact =>
-                (!!selectedAddress &&
-                    compareAddresses(contact.address, selectedAddress)) ||
-                contact.alias
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()) ||
-                contact.address
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()),
-        )
-    }, [selectedAddress, contacts, searchText])
-
-    const filteredAccounts = useMemo(() => {
-        if (!searchText) return accounts
-        return accounts.filter(
-            account =>
-                (!!selectedAddress &&
-                    compareAddresses(account.address, selectedAddress)) ||
-                account.alias
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()) ||
-                account.address
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()),
-        )
-    }, [selectedAddress, accounts, searchText])
-
-    const isAddressInContactsOrAccounts = useMemo(() => {
-        if (!selectedAddress) return false
-        return accountsAndContacts.some(accountOrContact =>
-            AddressUtils.compareAddresses(
-                accountOrContact.address,
-                selectedAddress,
-            ),
-        )
-    }, [accountsAndContacts, selectedAddress])
-
-    const handleSearchChange = useCallback((text: string) => {
-        const lowerCaseText = text.toLowerCase()
-        setErrorMessage("")
-        setSearchText(lowerCaseText)
-    }, [])
+    const {
+        filteredContacts,
+        filteredAccounts,
+        isAddressInContactsOrAccounts,
+        accountsAndContacts,
+        contacts,
+    } = useSearchContactsAndAccounts({ searchText, selectedAddress })
 
     const navigateNext = useCallback(
         (address: string) => {
-            nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
-                token,
-                amount,
-                address,
-                initialRoute: initialRoute ?? "",
-            })
+            if (route.params.hasOwnProperty("token")) {
+                const params =
+                    route.params as RootStackParamListHome[Routes.INSERT_ADDRESS_SEND]
+
+                nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
+                    token: params.token,
+                    amount: params.amount,
+                    address,
+                    initialRoute: params.initialRoute ?? "",
+                })
+            } else {
+                const params =
+                    route.params as RootStackParamListNFT[Routes.INSERT_ADDRESS_SEND]
+
+                nav.navigate(Routes.SEND_NFT_RECAP, {
+                    contractAddress: params.contractAddress,
+                    tokenId: params.tokenId,
+                    receiverAddress: selectedAddress,
+                })
+            }
         },
-        [nav, token, amount, initialRoute],
+        [route.params, nav, selectedAddress],
     )
 
     const onSuccessfullScan = useCallback(
@@ -130,31 +97,21 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     address,
                 ),
             )
-            if (addressExists) return navigateNext(address)
 
+            setSearchText(address)
             setSelectedAddress(address)
-            Keyboard.dismiss()
-            openCreateContactSheet()
+            if (addressExists) return navigateNext(address)
         },
-        [accountsAndContacts, openCreateContactSheet, navigateNext],
+        [accountsAndContacts, navigateNext, setSearchText],
     )
 
-    //Whenever search changes, we check if it's a valid address,
-    // eventually opening the create contact bottomsheet if needed
+    //Whenever search changes, we check if it's a valid address
     useEffect(() => {
         if (searchText && AddressUtils.isValid(searchText)) {
             setSelectedAddress(searchText)
-            if (!isAddressInContactsOrAccounts) {
-                Keyboard.dismiss()
-                openCreateContactSheet()
-            }
+            Keyboard.dismiss()
         }
     }, [searchText, isAddressInContactsOrAccounts, openCreateContactSheet])
-
-    const onTextReset = () => {
-        setSearchText("")
-        setErrorMessage("")
-    }
 
     const onNext = useCallback(() => {
         if (isAddressInContactsOrAccounts && selectedAddress) {
@@ -173,30 +130,15 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     return (
         <Layout
             safeAreaTestID="Insert_Address_Send_Screen"
-            title={LL.SEND_TOKEN_TITLE()}
+            title={LL.BTN_SEND()}
             fixedHeader={
                 <BaseView>
-                    <BaseText typographyFont="button">
-                        {LL.SEND_INSERT_ADDRESS()}
-                    </BaseText>
-                    <BaseSpacer height={8} />
                     <BaseText typographyFont="body">
                         {LL.SEND_INSERT_ADDRESS_DESCRIPTION()}
                     </BaseText>
                     <BaseSpacer height={24} />
                     <BaseView flexDirection="row" w={100}>
-                        <BaseTextInput
-                            containerStyle={baseStyles.inputContainer}
-                            value={searchText}
-                            setValue={handleSearchChange}
-                            placeholder={LL.SEND_ENTER_AN_ADDRESS()}
-                            errorMessage={errorMessage}
-                            testID="InsertAddressSendScreen_addressInput"
-                            rightIcon={searchText ? "close" : "flip-horizontal"}
-                            onIconPress={
-                                searchText ? onTextReset : openScanAddressSheet
-                            }
-                        />
+                        {BaseTextInputElement}
                     </BaseView>
                 </BaseView>
             }
