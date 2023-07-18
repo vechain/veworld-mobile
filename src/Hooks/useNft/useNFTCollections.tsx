@@ -14,6 +14,7 @@ import {
 } from "./Helpers"
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -75,8 +76,8 @@ export const useNFTCollections = () => {
                 const _nftCollections: NonFungibleTokenCollection[] =
                     await Promise.all(
                         contractsForNFTs.map(async collection => {
-                            const regInfo = registryInfo.find(
-                                col => col.address === collection,
+                            const regInfo = registryInfo.find(col =>
+                                compareAddresses(col.address, collection),
                             )
                             if (regInfo) {
                                 return parseCollectionMetadataFromRegistry(
