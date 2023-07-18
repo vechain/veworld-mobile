@@ -29,9 +29,10 @@ export const parseCollectionMetadataFromRegistry = async (
         network,
         collection,
         selectedAccount,
-        0,
+        1,
         0,
     )
+
     if (pagination.totalElements < 1)
         throw new Error("Failed to parse collection metadata from chain data")
 

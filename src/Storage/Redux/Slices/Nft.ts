@@ -14,7 +14,6 @@ import {
     NFTs,
 } from "../Types/Nft"
 import { GithubCollectionResponse, PaginationResponse } from "~Networking"
-import { debug } from "~Utils"
 
 export type NftSliceState = {
     collectionRegistryInfo: CollectionRegistryInfo
@@ -28,12 +27,7 @@ export type NftSliceState = {
 }
 
 export const initialStateNft: NftSliceState = {
-    collectionRegistryInfo: {
-        [NETWORK_TYPE.MAIN]: [],
-        [NETWORK_TYPE.TEST]: [],
-        [NETWORK_TYPE.SOLO]: [],
-        [NETWORK_TYPE.OTHER]: [],
-    },
+    collectionRegistryInfo: {},
     collectionsPerAccount: {
         [NETWORK_TYPE.MAIN]: {},
         [NETWORK_TYPE.TEST]: {},
@@ -112,16 +106,6 @@ export const NftSlice = createSlice({
             }>,
         ) => {
             const { registryInfo, network } = action.payload
-
-            if (
-                state.collectionRegistryInfo[network].length ===
-                registryInfo.length
-            )
-                return state
-
-            debug(
-                `Setting collection registry info ${registryInfo.length} for ${network}`,
-            )
 
             state.collectionRegistryInfo[network] = registryInfo
 
