@@ -168,9 +168,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     response,
                 })
 
-                try {
-                    MinimizerUtils.goBack()
-                } catch (e) {}
+                MinimizerUtils.goBack()
             } catch (e) {
                 showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
             }
@@ -196,6 +194,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 )
 
                 dispatch(addPendingDappTransactionActivity(tx, name, url))
+
+                MinimizerUtils.goBack()
             } catch (e) {
                 error(e)
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(

@@ -35,9 +35,18 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <!-- Accepts URIs that begin with "veworld://org.vechain.veworld.app” -->
+                <!-- Accepts URIs that begin with "wc://" -->
                 <data
                         android:scheme="wc"
+                />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <!-- Accepts URIs that begin with "veworld://org.vechain.veworld.app" -->
+                <data
+                        android:scheme="veworld"
                 />
             </intent-filter>
         </activity>
