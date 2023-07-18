@@ -9,6 +9,7 @@ import {
 import {
     changeSelectedNetwork,
     deleteSession,
+    selectNetworks,
     selectSelectedAccountAddress,
     selectSessionsFlat,
     selectVisibleAccounts,
@@ -21,7 +22,7 @@ import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { RequestMethods } from "~Constants"
-import { AccountWithDevice, Network } from "~Model"
+import { AccountWithDevice } from "~Model"
 import { useSetSelectedAccount } from "~Hooks"
 import { Linking } from "react-native"
 
@@ -57,6 +58,7 @@ const WalletConnectContextProvider = ({
     const nav = useNavigation()
     const accounts = useAppSelector(selectVisibleAccounts)
     const activeSessionsFlat = useAppSelector(selectSessionsFlat)
+    const networks = useAppSelector(selectNetworks)
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     /**
@@ -222,6 +224,64 @@ const WalletConnectContextProvider = ({
         [nav, LL],
     )
 
+    const switchAccount = useCallback(
+        async (session: SessionTypes.Struct) => {
+            if (!web3Wallet)
+                throw new Error("Web3Wallet is not initialized properly")
+
+            // Switch to the requested account
+            const address = session.namespaces.vechain.accounts[0].split(":")[2]
+            const selectedAccount: AccountWithDevice | undefined =
+                accounts.find(acct => {
+                    return AddressUtils.compareAddresses(address, acct.address)
+                })
+            if (!selectedAccount) {
+                await web3Wallet.disconnectSession({
+                    topic: session.topic,
+                    reason: {
+                        code: 4100,
+                        message: "Requested account not found",
+                    },
+                })
+                throw new Error("Requested account not found")
+            }
+
+            onSetSelectedAccount({ address: selectedAccount.address })
+
+            return selectedAccount.address
+        },
+        [accounts, onSetSelectedAccount, web3Wallet],
+    )
+
+    const switchNetwork = useCallback(
+        async (
+            requestEvent: PendingRequestTypes.Struct,
+            session: SessionTypes.Struct,
+        ) => {
+            if (!web3Wallet)
+                throw new Error("Web3Wallet is not initialized properly")
+
+            const network = WalletConnectUtils.getNetwork(
+                requestEvent,
+                networks,
+            )
+
+            if (!network) {
+                await web3Wallet.disconnectSession({
+                    topic: session.topic,
+                    reason: {
+                        code: -32001,
+                        message: "Requested network not found",
+                    },
+                })
+                throw new Error("Requested network not found")
+            }
+
+            dispatch(changeSelectedNetwork(network))
+        },
+        [dispatch, web3Wallet, networks],
+    )
+
     /**
      * Handle session request
      */
@@ -244,29 +304,10 @@ const WalletConnectContextProvider = ({
                 web3Wallet.engine.signClient.session.get(requestEvent.topic)
 
             // Switch to the requested account
-            const address = session.namespaces.vechain.accounts[0].split(":")[2]
-            const selectedAccount: AccountWithDevice | undefined =
-                accounts.find(acct => {
-                    return AddressUtils.compareAddresses(address, acct.address)
-                })
-            if (!selectedAccount) {
-                await web3Wallet.disconnectSession({
-                    topic: session.topic,
-                    reason: {
-                        code: 4100,
-                        message: "Requested account not found",
-                    },
-                })
-                return
-            }
-
-            onSetSelectedAccount({ address: selectedAccount.address })
+            const address = await switchAccount(session)
 
             // Switch to the requested network
-            const network: Network = WalletConnectUtils.getNetworkType(
-                requestEvent.params.chainId,
-            )
-            dispatch(changeSelectedNetwork(network))
+            await switchNetwork(requestEvent, session)
 
             // Show the screen based on the request method
             switch (requestEvent.params.request.method) {
@@ -282,10 +323,9 @@ const WalletConnectContextProvider = ({
             }
         },
         [
-            accounts,
-            onSetSelectedAccount,
+            switchAccount,
+            switchNetwork,
             web3Wallet,
-            dispatch,
             goToSendTransaction,
             goToSignMessage,
         ],
@@ -410,10 +450,10 @@ const WalletConnectContextProvider = ({
     useEffect(() => {
         activeSessionsFlat.forEach(session => {
             if (session.expiry < Date.now()) {
-                dispatch(deleteSession({ topic: session.topic }))
+                disconnect(session.topic)
             }
         })
-    }, [dispatch, activeSessionsFlat])
+    }, [disconnect, dispatch, activeSessionsFlat])
 
     // Needed for the context
     const value = useMemo(
