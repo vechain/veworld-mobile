@@ -380,10 +380,13 @@ const WalletConnectContextProvider = ({
      */
     useEffect(() => {
         ;(async () => {
-            const web3WalletInstance = await WalletConnectUtils.getWeb3Wallet()
-            setWeb3wallet(web3WalletInstance)
+            if (!web3Wallet) {
+                const web3WalletInstance =
+                    await WalletConnectUtils.getWeb3Wallet()
+                setWeb3wallet(web3WalletInstance)
+            }
         })()
-    }, [activeSessionsFlat])
+    }, [web3Wallet])
 
     /**
      * Check that we are processing session requests every 3 seconds
@@ -432,7 +435,7 @@ const WalletConnectContextProvider = ({
                 handleLinkingUrl(url)
             }
         })
-    })
+    }, [handleLinkingUrl])
 
     /**
      * Sets up a listener for DApp session proposals
@@ -442,18 +445,18 @@ const WalletConnectContextProvider = ({
             debug("WalletConnectProvider:Linking.addListener", event)
             handleLinkingUrl(event.url)
         })
-    }, [handleLinkingUrl, onPair])
+    }, [handleLinkingUrl])
 
     /**
      * Remove expired sessions
      */
     useEffect(() => {
         activeSessionsFlat.forEach(session => {
-            if (session.expiry < Date.now()) {
+            if (session.expiry < Date.now() / 1000) {
                 disconnect(session.topic)
             }
         })
-    }, [disconnect, dispatch, activeSessionsFlat])
+    }, [disconnect, activeSessionsFlat])
 
     // Needed for the context
     const value = useMemo(
