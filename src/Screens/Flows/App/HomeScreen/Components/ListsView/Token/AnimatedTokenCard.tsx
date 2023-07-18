@@ -13,10 +13,17 @@ import HapticsService from "~Services/HapticsService"
 interface IAnimatedTokenCard
     extends RenderItemParams<FungibleTokenWithBalance> {
     isEdit: boolean
+    isBalanceVisible: boolean
 }
 
 export const AnimatedTokenCard = memo(
-    ({ item, drag, isActive, isEdit }: IAnimatedTokenCard) => {
+    ({
+        item,
+        drag,
+        isActive,
+        isEdit,
+        isBalanceVisible,
+    }: IAnimatedTokenCard) => {
         const { styles } = useThemedStyles(baseStyles(isActive))
         const { animatedOpacity } = useTokenAnimations(isEdit)
 
@@ -42,6 +49,7 @@ export const AnimatedTokenCard = memo(
                             <TokenCard
                                 tokenWithBalance={item}
                                 isEdit={isEdit}
+                                isBalanceVisible={isBalanceVisible}
                             />
                         </View>
                     </Pressable>

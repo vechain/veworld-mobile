@@ -21,10 +21,16 @@ import { FungibleTokenWithBalance } from "~Model"
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
     visibleHeightRef: number
+    isBalanceVisible: boolean
 }
 
 export const TokenList = memo(
-    ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
+    ({
+        isEdit,
+        visibleHeightRef,
+        isBalanceVisible,
+        ...animatedViewProps
+    }: Props) => {
         const dispatch = useAppDispatch()
         const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
         const tokenWithInfoVET = useAppSelector(state =>
@@ -62,10 +68,12 @@ export const TokenList = memo(
                 <AnimatedChartCard
                     tokenWithInfo={tokenWithInfoVET}
                     isEdit={isEdit}
+                    isBalanceVisible={isBalanceVisible}
                 />
                 <AnimatedChartCard
                     tokenWithInfo={tokenWithInfoVTHO}
                     isEdit={isEdit}
+                    isBalanceVisible={isBalanceVisible}
                 />
 
                 <NestableDraggableFlatList
@@ -74,7 +82,11 @@ export const TokenList = memo(
                     onDragEnd={handleDragEnd}
                     keyExtractor={item => item.address}
                     renderItem={itemParams => (
-                        <AnimatedTokenCard {...itemParams} isEdit={isEdit} />
+                        <AnimatedTokenCard
+                            {...itemParams}
+                            isEdit={isEdit}
+                            isBalanceVisible={isBalanceVisible}
+                        />
                     )}
                     activationDistance={60}
                     showsVerticalScrollIndicator={false}

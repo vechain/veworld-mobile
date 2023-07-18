@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
@@ -26,7 +26,8 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>
     showOpacityWhenDisabled?: boolean
     showSelectAccountIcon?: boolean
-    useVthoBalance?: boolean
+    isVthoBalance?: boolean
+    isBalanceVisible?: boolean
 }
 export const AccountCard: React.FC<Props> = memo(
     ({
@@ -36,7 +37,8 @@ export const AccountCard: React.FC<Props> = memo(
         containerStyle,
         showOpacityWhenDisabled = true,
         showSelectAccountIcon = false,
-        useVthoBalance = false,
+        isVthoBalance = false,
+        isBalanceVisible = true,
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const vetBalance = useAppSelector(state =>
@@ -46,9 +48,20 @@ export const AccountCard: React.FC<Props> = memo(
             selectVthoBalanceByAccount(state, account.address),
         )
 
-        const balance = `${useVthoBalance ? vthoBalance : vetBalance} ${
-            useVthoBalance ? VTHO.symbol : VET.symbol
-        }`
+        const balance = useMemo(() => {
+            if (!isBalanceVisible && isVthoBalance) {
+                return "****" + VTHO.symbol
+            }
+
+            if (!isBalanceVisible && !isVthoBalance) {
+                return "**** " + VET.symbol
+            }
+
+            return `${isVthoBalance ? vthoBalance : vetBalance} ${
+                isVthoBalance ? VTHO.symbol : VET.symbol
+            }`
+        }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance])
+
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox

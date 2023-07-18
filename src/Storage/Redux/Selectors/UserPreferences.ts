@@ -27,7 +27,7 @@ export const selectLangauge = createSelector(reducer, state => {
     return state.language
 })
 
-export const getBalanceVisible = createSelector(reducer, state => {
+export const selectBalanceVisible = createSelector(reducer, state => {
     return state.balanceVisible
 })
 

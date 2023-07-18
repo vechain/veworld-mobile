@@ -5,7 +5,13 @@ import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
-export const BalanceView = ({ token }: { token: TokenWithCompleteInfo }) => {
+export const BalanceView = ({
+    token,
+    isBalanceVisible,
+}: {
+    token: TokenWithCompleteInfo
+    isBalanceVisible: boolean
+}) => {
     const { LL } = useI18nContext()
     const { fiatBalance, tokenUnitBalance } = useBalances({ token })
     const currency = useAppSelector(selectCurrency)
@@ -23,7 +29,9 @@ export const BalanceView = ({ token }: { token: TokenWithCompleteInfo }) => {
             <BaseSpacer height={4} />
 
             <BaseView flexDirection="row">
-                <BaseText>{tokenUnitBalance}</BaseText>
+                <BaseText>
+                    {isBalanceVisible ? tokenUnitBalance : "*****"}
+                </BaseText>
                 <BaseSpacer width={4} />
                 <BaseText typographyFont="bodyBold">{token.symbol}</BaseText>
             </BaseView>
