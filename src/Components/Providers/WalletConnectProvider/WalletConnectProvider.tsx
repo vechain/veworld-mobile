@@ -383,7 +383,7 @@ const WalletConnectContextProvider = ({
             const web3WalletInstance = await WalletConnectUtils.getWeb3Wallet()
             setWeb3wallet(web3WalletInstance)
         })()
-    }, [activeSessionsFlat])
+    }, [])
 
     /**
      * Check that we are processing session requests every 3 seconds
@@ -449,11 +449,11 @@ const WalletConnectContextProvider = ({
      */
     useEffect(() => {
         activeSessionsFlat.forEach(session => {
-            if (session.expiry < Date.now()) {
+            if (session.expiry < Date.now() / 1000) {
                 disconnect(session.topic)
             }
         })
-    }, [disconnect, dispatch, activeSessionsFlat])
+    }, [disconnect, activeSessionsFlat])
 
     // Needed for the context
     const value = useMemo(

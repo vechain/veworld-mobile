@@ -1,4 +1,5 @@
 import { selectAccount, useAppDispatch } from "~Storage/Redux"
+import { error } from "~Utils"
 import { useResetStacks } from "./useResetStacks"
 
 export const useSetSelectedAccount = () => {
@@ -6,7 +7,12 @@ export const useSetSelectedAccount = () => {
     const dispatch = useAppDispatch()
 
     const onSetSelectedAccount = ({ address }: { address?: string }) => {
-        resetStacks()
+        try {
+            resetStacks()
+        } catch (e) {
+            error("useSetSelectedAccount: Failed to reset stacks", e)
+        }
+
         address && dispatch(selectAccount({ address }))
     }
 
