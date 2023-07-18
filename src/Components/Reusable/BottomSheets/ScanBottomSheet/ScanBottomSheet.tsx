@@ -7,7 +7,7 @@ import {
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useCameraPermissions, useDisclosure } from "~Hooks"
+import { useDisclosure } from "~Hooks"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
 import { COLORS, ScanTarget } from "~Constants"
 import { BarCodeScanner } from "expo-barcode-scanner"
@@ -21,17 +21,14 @@ type Props = {
     onScan: (address: string) => void
     onClose: () => void
     target: ScanTarget
+    hasPerms: boolean
 }
 
 const snapPoints = ["100%"]
 
 export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onClose, onScan, target }, ref) => {
+    ({ onClose, onScan, target, hasPerms }, ref) => {
         const { LL } = useI18nContext()
-
-        const { checkPermissions, hasPerms } = useCameraPermissions({
-            onCanceled: onClose,
-        })
 
         const { isOpen, onClose: closeCamera } = useDisclosure(true)
         const { isOpen: isCameraReady, onOpen: onCameraReady } =
@@ -96,13 +93,6 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 closeCamera()
             }
         }, [closeCamera])
-
-        useEffect(() => {
-            async function init() {
-                await checkPermissions()
-            }
-            init()
-        }, [checkPermissions])
 
         return (
             <BaseBottomSheet

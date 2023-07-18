@@ -3,7 +3,6 @@ import { StyleSheet, ScrollView } from "react-native"
 import { useBottomSheetModal, useTheme } from "~Hooks"
 import {
     BackButtonHeader,
-    BaseButton,
     BaseCard,
     BaseIcon,
     BaseSafeArea,
@@ -149,6 +148,7 @@ export const ManageTokenScreen = () => {
                         <BaseSpacer height={16} />
                         {customTokens.length ? (
                             <BaseTouchableBox
+                                haptics="Light"
                                 action={navigateManageCustomTokenScreen}
                                 justifyContent="center">
                                 <BaseIcon
@@ -172,6 +172,7 @@ export const ManageTokenScreen = () => {
                             </BaseTouchableBox>
                         ) : (
                             <BaseTouchableBox
+                                haptics="Light"
                                 action={openAddCustomTokenSheet}
                                 justifyContent="center">
                                 <BaseIcon
@@ -194,18 +195,21 @@ export const ManageTokenScreen = () => {
                         {!!missingSuggestedTokens.length && (
                             <>
                                 <BaseSpacer height={16} />
-                                <BaseCard>
-                                    <BaseView>
-                                        <BaseText typographyFont="body">
+                                <BaseCard onPress={openAddSuggestedBottomSheet}>
+                                    <BaseView justifyContent="center" w={100}>
+                                        <BaseText
+                                            typographyFont="body"
+                                            align="center">
                                             {LL.MANAGE_TOKEN_SUGGESTED_TOKENS()}
                                         </BaseText>
-                                        <BaseButton
-                                            variant="link"
-                                            action={openAddSuggestedBottomSheet}
-                                            px={0}
-                                            size="md"
-                                            title={LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
-                                        />
+
+                                        <BaseText
+                                            typographyFont="body"
+                                            underline
+                                            my={4}
+                                            align="center">
+                                            {LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
+                                        </BaseText>
                                     </BaseView>
                                 </BaseCard>
                             </>

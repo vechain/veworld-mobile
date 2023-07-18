@@ -2,11 +2,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet, Keyboard } from "react-native"
-import {
-    useBottomSheetModal,
-    useSearchContactsAndAccounts,
-    useSearchOrScanInput,
-} from "~Hooks"
+import { useBottomSheetModal, useSearchOrScanInput } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
@@ -17,7 +13,6 @@ import {
     ContactCard,
     FadeoutButton,
     Layout,
-    ScanBottomSheet,
 } from "~Components"
 import {
     RootStackParamListHome,
@@ -26,7 +21,6 @@ import {
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { CreateContactBottomSheet } from "./Components/CreateContactBottomSheet/CreateContactBottomSheet"
-import { ScanTarget } from "~Constants"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome | RootStackParamListNFT,
@@ -43,25 +37,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         onOpen: openCreateContactSheet,
         onClose: closeCreateContactSheet,
     } = useBottomSheetModal()
-
-    const {
-        ref: scanAddressSheetRef,
-        onOpen: openScanAddressSheet,
-        onClose: closeScanAddressSheetRef,
-    } = useBottomSheetModal()
-
-    const { BaseTextInputElement, searchText, setSearchText } =
-        useSearchOrScanInput({
-            openScanAddressSheet,
-        })
-
-    const {
-        filteredContacts,
-        filteredAccounts,
-        isAddressInContactsOrAccounts,
-        accountsAndContacts,
-        contacts,
-    } = useSearchContactsAndAccounts({ searchText, selectedAddress })
 
     const navigateNext = useCallback(
         (address: string) => {
@@ -89,21 +64,15 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         [route.params, nav, selectedAddress],
     )
 
-    const onSuccessfullScan = useCallback(
-        (address: string) => {
-            const addressExists = accountsAndContacts.some(accountOrContact =>
-                AddressUtils.compareAddresses(
-                    accountOrContact.address,
-                    address,
-                ),
-            )
-
-            setSearchText(address)
-            setSelectedAddress(address)
-            if (addressExists) return navigateNext(address)
-        },
-        [accountsAndContacts, navigateNext, setSearchText],
-    )
+    const {
+        BaseTextInputElement,
+        searchText,
+        RenderCameraModal,
+        filteredContacts,
+        filteredAccounts,
+        isAddressInContactsOrAccounts,
+        contacts,
+    } = useSearchOrScanInput(navigateNext, setSelectedAddress, selectedAddress)
 
     //Whenever search changes, we check if it's a valid address
     useEffect(() => {
@@ -237,12 +206,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         address={selectedAddress}
                     />
 
-                    <ScanBottomSheet
-                        ref={scanAddressSheetRef}
-                        onClose={closeScanAddressSheetRef}
-                        onScan={onSuccessfullScan}
-                        target={ScanTarget.ADDRESS}
-                    />
+                    {RenderCameraModal}
                 </>
             }
         />

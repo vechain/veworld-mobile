@@ -1,12 +1,13 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { useBottomSheetModal } from "~Hooks"
+import { useCameraBottomSheet } from "~Hooks"
 import {
     BaseBottomSheetTextInput,
     BaseSpacer,
     BaseTextInput,
-    ScanBottomSheet,
 } from "~Components"
 import { ScanTarget } from "~Constants"
+import { Keyboard } from "react-native"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     titleName: string
@@ -46,16 +47,24 @@ export const ContactForm: React.FC<Props> = memo(
         const [nameTouched, setNameTouched] = useState(false)
         const [addressTouched, setAddressTouched] = useState(false)
 
-        const {
-            ref: scanAddressSheetRef,
-            onOpen: openScanAddressSheet,
-            onClose: closeScanAddressSheetRef,
-        } = useBottomSheetModal()
+        const onScan = useCallback(
+            (uri: string) => {
+                HapticsService.triggerImpact({ level: "Light" })
+                setAddress(uri)
+            },
+            [setAddress],
+        )
+
+        const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
+            onScan,
+            target: ScanTarget.ADDRESS,
+        })
 
         const onOpenCamera = useCallback(() => {
+            Keyboard.dismiss()
             setAddressTouched(true)
-            openScanAddressSheet()
-        }, [openScanAddressSheet])
+            handleOpenCamera()
+        }, [handleOpenCamera])
 
         const canShowNameError = checkTouched ? nameTouched : true
 
@@ -129,12 +138,7 @@ export const ContactForm: React.FC<Props> = memo(
 
                 {componentInputAddress}
 
-                <ScanBottomSheet
-                    ref={scanAddressSheetRef}
-                    onClose={closeScanAddressSheetRef}
-                    onScan={setAddress}
-                    target={ScanTarget.ADDRESS}
-                />
+                {RenderCameraModal}
             </>
         )
     },

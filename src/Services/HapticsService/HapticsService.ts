@@ -1,4 +1,5 @@
 import * as Haptics from "expo-haptics"
+import { PlatformUtils } from "~Utils"
 
 /**
  *
@@ -26,8 +27,10 @@ const triggerImpact = async ({
 }: {
     level: "Light" | "Medium" | "Heavy"
 }) => {
-    const _level = Haptics.ImpactFeedbackStyle[level]
-    await Haptics.impactAsync(_level)
+    if (PlatformUtils.isIOS()) {
+        const _level = Haptics.ImpactFeedbackStyle[level]
+        await Haptics.impactAsync(_level)
+    }
 }
 
 const triggerHaptics = async ({
@@ -35,14 +38,20 @@ const triggerHaptics = async ({
 }: {
     haptics: "Light" | "Medium" | "Heavy" | "Success" | "Warning" | "Error"
 }) => {
-    if (haptics === "Success" || haptics === "Warning" || haptics === "Error") {
-        await triggerNotification({ level: haptics })
-    } else if (
-        haptics === "Light" ||
-        haptics === "Medium" ||
-        haptics === "Heavy"
-    ) {
-        await triggerImpact({ level: haptics })
+    if (PlatformUtils.isIOS()) {
+        if (
+            haptics === "Success" ||
+            haptics === "Warning" ||
+            haptics === "Error"
+        ) {
+            await triggerNotification({ level: haptics })
+        } else if (
+            haptics === "Light" ||
+            haptics === "Medium" ||
+            haptics === "Heavy"
+        ) {
+            await triggerImpact({ level: haptics })
+        }
     }
 }
 
