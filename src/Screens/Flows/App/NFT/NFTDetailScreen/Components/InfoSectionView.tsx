@@ -27,7 +27,9 @@ type Props<T> = {
     isDanger?: boolean
 }
 
-export const InfoSectionView = <T extends NFTAttributeData[] | string>({
+export const InfoSectionView = <
+    T extends NFTAttributeData[] | string | React.JSX.Element,
+>({
     title,
     data,
     isLastInList,
@@ -107,6 +109,10 @@ export const InfoSectionView = <T extends NFTAttributeData[] | string>({
                     ) : null}
                 </>
             )
+        }
+
+        if (React.isValidElement(data)) {
+            return <>{data}</>
         }
     }, [action, data, theme.isDark, isDanger, LL, subTtitle])
 
