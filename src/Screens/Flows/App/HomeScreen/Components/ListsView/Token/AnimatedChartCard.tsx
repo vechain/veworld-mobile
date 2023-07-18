@@ -17,10 +17,11 @@ const HEIGHT = 100
 export type NativeTokenProps = {
     tokenWithInfo: TokenWithCompleteInfo
     isEdit: boolean
+    isBalanceVisible: boolean
 }
 
 export const AnimatedChartCard = memo(
-    ({ tokenWithInfo, isEdit }: NativeTokenProps) => {
+    ({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
         const nav = useNavigation()
         const theme = useTheme()
         usePollingChartData(tokenWithInfo.symbol as VeChainToken)
@@ -73,6 +74,7 @@ export const AnimatedChartCard = memo(
                             animatedOuterCard,
                         ]}>
                         <VechainTokenCard
+                            isBalanceVisible={isBalanceVisible}
                             tokenWithInfo={tokenWithInfo}
                             isAnimation={isEdit}
                         />

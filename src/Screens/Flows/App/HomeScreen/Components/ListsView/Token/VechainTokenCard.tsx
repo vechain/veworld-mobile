@@ -13,10 +13,11 @@ import { COLORS } from "~Constants"
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
     isAnimation: boolean
+    isBalanceVisible: boolean
 }
 
 export const VechainTokenCard = memo(
-    ({ tokenWithInfo, isAnimation }: Props) => {
+    ({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
         const theme = useTheme()
         const exchangeRate = useAppSelector(state =>
             selectCurrencyExchangeRate(state, tokenWithInfo.symbol as string),
@@ -73,7 +74,7 @@ export const VechainTokenCard = memo(
                             <BaseText
                                 typographyFont="bodyMedium"
                                 color={tokenValueLabelColor}>
-                                {tokenUnitBalance}{" "}
+                                {isBalanceVisible ? tokenUnitBalance : "*****"}{" "}
                             </BaseText>
                             <BaseText
                                 typographyFont="captionRegular"
@@ -90,7 +91,7 @@ export const VechainTokenCard = memo(
                     ]}>
                     <BaseView flexDirection="row" alignItems="baseline">
                         <BaseText typographyFont="subTitleBold">
-                            {fiatBalance}{" "}
+                            {isBalanceVisible ? fiatBalance : "****"}{" "}
                         </BaseText>
                         <BaseText typographyFont="captionRegular">
                             {currency}

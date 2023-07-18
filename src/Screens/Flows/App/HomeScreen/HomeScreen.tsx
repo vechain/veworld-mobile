@@ -16,6 +16,7 @@ import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import {
+    selectBalanceVisible,
     selectSelectedAccount,
     selectVisibleAccounts,
     useAppSelector,
@@ -25,6 +26,8 @@ import { AccountWithDevice } from "~Model"
 export const HomeScreen = () => {
     useTokenBalances()
     const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const {
         ref: accountManagementBottomSheetRef,
@@ -78,6 +81,7 @@ export const HomeScreen = () => {
                 <TokenList
                     isEdit={isEdit}
                     visibleHeightRef={visibleHeightRef.current}
+                    isBalanceVisible={isBalanceVisible}
                     entering={animateEntering}
                 />
             </NestableScrollContainer>
@@ -96,6 +100,7 @@ export const HomeScreen = () => {
                 accounts={accounts}
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
+                isBalanceVisible={isBalanceVisible}
                 ref={selectAccountBottomSheetRef}
             />
         </BaseSafeArea>
