@@ -244,7 +244,9 @@ export function getNetwork(
 
     // Switch to the requested network
     return allNetworks.find(
-        net => net.genesis.id.slice(-32).toLowerCase() === networkIdentifier,
+        net =>
+            net.genesis.id.slice(-32).toLowerCase() ===
+            networkIdentifier.toLowerCase(),
     )
 }
 
