@@ -5,7 +5,7 @@ import { Header } from "./Header"
 import { useTheme } from "~Hooks"
 import { useAppSelector } from "~Storage/Redux"
 import {
-    getBalanceVisible,
+    selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
@@ -23,7 +23,7 @@ type Props = {
 export const HeaderView = memo(
     ({ openAccountManagementSheet, openSelectAccountBottomSheet }: Props) => {
         const selectedAccount = useAppSelector(selectSelectedAccount)
-        const balanceVisible = useAppSelector(getBalanceVisible)
+        const balanceVisible = useAppSelector(selectBalanceVisible)
 
         const { LL } = useI18nContext()
         const nav = useNavigation()

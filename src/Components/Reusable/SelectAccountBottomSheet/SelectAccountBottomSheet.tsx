@@ -19,7 +19,8 @@ type Props = {
     accounts: AccountWithDevice[]
     setSelectedAccount: (account: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
-    useVthoBalance?: boolean
+    isVthoBalance?: boolean
+    isBalanceVisible?: boolean
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={16} />
@@ -38,7 +39,8 @@ export const SelectAccountBottomSheet = React.forwardRef<
             selectedAccount,
             onDismiss,
             accounts,
-            useVthoBalance = false,
+            isVthoBalance = false,
+            isBalanceVisible = true,
         },
         ref,
     ) => {
@@ -71,7 +73,8 @@ export const SelectAccountBottomSheet = React.forwardRef<
                             account={item}
                             onPress={handlePress}
                             selected={item.address === selectedAccount?.address}
-                            useVthoBalance={useVthoBalance}
+                            isVthoBalance={isVthoBalance}
+                            isBalanceVisible={isBalanceVisible}
                         />
                     )}
                     {...flatListScrollProps}

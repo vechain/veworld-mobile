@@ -25,6 +25,7 @@ import { FastAction } from "~Model"
 import { striptags } from "striptags"
 import {
     fetchVechainMarketInfo,
+    selectBalanceVisible,
     selectMarketInfoFor,
     selectSendableTokensWithBalance,
     useAppDispatch,
@@ -44,6 +45,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const marketInfo = useAppSelector(state =>
         selectMarketInfoFor(token.symbol, state),
     )
+
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const tokens = useAppSelector(selectSendableTokensWithBalance)
     const foundToken = tokens.filter(
@@ -113,7 +116,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={24} />
 
-                    <BalanceView token={token} />
+                    <BalanceView
+                        token={token}
+                        isBalanceVisible={isBalanceVisible}
+                    />
 
                     <BaseSpacer height={24} />
 

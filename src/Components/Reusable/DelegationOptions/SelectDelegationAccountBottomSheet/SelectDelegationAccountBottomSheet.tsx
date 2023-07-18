@@ -3,7 +3,11 @@ import React from "react"
 import { SelectAccountBottomSheet } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
+import {
+    selectAccountsButSelected,
+    selectBalanceVisible,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type Props = {
     onClose: () => void
@@ -30,6 +34,8 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<
     ) => {
         const accounts = useAppSelector(selectAccountsButSelected)
 
+        const isBalanceVisible = useAppSelector(selectBalanceVisible)
+
         const onDismiss = () => {
             if (
                 selectedDelegationOption === DelegationType.ACCOUNT &&
@@ -47,7 +53,8 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={ref}
-                useVthoBalance
+                isVthoBalance
+                isBalanceVisible={isBalanceVisible}
             />
         )
     },

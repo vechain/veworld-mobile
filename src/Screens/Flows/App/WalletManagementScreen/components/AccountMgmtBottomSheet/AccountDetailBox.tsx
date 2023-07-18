@@ -16,9 +16,10 @@ import { toggleAccountVisibility } from "~Storage/Redux/Actions"
 type Props = {
     account: WalletAccount
     isSelected: boolean
+    isBalanceVisible: boolean
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, isSelected }) => {
+    ({ account, isSelected, isBalanceVisible }) => {
         const theme = useTheme()
         const dispatch = useAppDispatch()
 
@@ -52,7 +53,9 @@ export const AccountDetailBox: React.FC<Props> = memo(
                         <BaseSpacer height={4} />
                         {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/770) change with a real budget */}
                         {/* eslint-disable-next-line i18next/no-literal-string  */}
-                        <BaseText fontSize={10}>1.2235 VET</BaseText>
+                        <BaseText fontSize={10}>
+                            {isBalanceVisible ? "1.2235 VET" : "***** VET"}
+                        </BaseText>
                     </BaseView>
                 </BaseTouchableBox>
                 <BaseIcon

@@ -16,6 +16,7 @@ import { BaseDevice } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import {
     selectAccountsByDevice,
+    selectBalanceVisible,
     selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
 import { StyleSheet } from "react-native"
@@ -34,6 +35,8 @@ export const AccountMgmtBottomSheet = React.forwardRef<
 >(({ device }, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const deviceAccounts = useAppSelector(state =>
         selectAccountsByDevice(state, device?.rootAddress),
@@ -89,6 +92,7 @@ export const AccountMgmtBottomSheet = React.forwardRef<
 
                             return (
                                 <AccountDetailBox
+                                    isBalanceVisible={isBalanceVisible}
                                     account={item}
                                     isSelected={isSelected}
                                 />
