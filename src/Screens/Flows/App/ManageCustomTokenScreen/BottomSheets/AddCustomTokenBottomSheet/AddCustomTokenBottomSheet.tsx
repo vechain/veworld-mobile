@@ -9,7 +9,6 @@ import {
     BaseButton,
     CustomTokenCard,
     BaseBottomSheetTextInput,
-    ScanBottomSheet,
 } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
@@ -26,7 +25,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import { useBottomSheetModal } from "~Hooks"
+import { useCameraBottomSheet } from "~Hooks"
 import { debug, error, info, AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
 import { ScanTarget } from "~Constants"
@@ -51,14 +50,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     const customTokens = useAppSelector(selectAccountCustomTokens)
     const account = useAppSelector(selectSelectedAccount)
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-    // const snapPoints = [visible ? "80%" : "35%"]
     const snapPoints = ["35%"]
-
-    const {
-        ref: scanAddressSheetRef,
-        onOpen: openScanAddressSheet,
-        onClose: closeScanAddressSheetRef,
-    } = useBottomSheetModal()
 
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
@@ -126,6 +118,11 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
         ],
     )
 
+    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
+        onScan: handleValueChange,
+        target: ScanTarget.ADDRESS,
+    })
+
     const handleOnDismissModal = () => {
         //don't reset if we are adding a token from SwapCard screen
         if (tokenAddress) return
@@ -180,9 +177,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                             testID="AddCustomTokenBottomSheet-TextInput-Address"
                             rightIcon={value ? "close" : "qrcode-scan"}
                             onIconPress={
-                                !value
-                                    ? openScanAddressSheet
-                                    : () => setValue("")
+                                !value ? handleOpenCamera : () => setValue("")
                             }
                         />
                     </BaseView>
@@ -196,12 +191,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     disabled={!newCustomToken}
                 />
             </BaseBottomSheet>
-            <ScanBottomSheet
-                ref={scanAddressSheetRef}
-                onClose={closeScanAddressSheetRef}
-                onScan={handleValueChange}
-                target={ScanTarget.ADDRESS}
-            />
+            {RenderCameraModal}
         </>
     )
 })

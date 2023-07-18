@@ -1,33 +1,17 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useBottomSheetModal, useTheme } from "~Hooks"
-import {
-    BaseIcon,
-    BaseText,
-    BaseView,
-    ScanBottomSheet,
-    useWalletConnect,
-} from "~Components"
+import { useCameraBottomSheet, useTheme } from "~Hooks"
+import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { ScanTarget } from "~Constants"
 import HapticsService from "~Services/HapticsService"
+import { ScanTarget } from "~Constants"
 
 export const Header = memo(() => {
     const theme = useTheme()
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const { onPair } = useWalletConnect()
-
-    const goToWalletManagement = useCallback(() => {
-        nav.navigate(Routes.WALLET_MANAGEMENT)
-    }, [nav])
-
-    const {
-        ref: scanAddressSheetRef,
-        onOpen: openScanAddressSheet,
-        onClose: closeScanAddressSheetRef,
-    } = useBottomSheetModal()
 
     const onScan = useCallback(
         (uri: string) => {
@@ -36,6 +20,15 @@ export const Header = memo(() => {
         },
         [onPair],
     )
+
+    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
+        onScan,
+        target: ScanTarget.WALLET_CONNECT,
+    })
+
+    const goToWalletManagement = useCallback(() => {
+        nav.navigate(Routes.WALLET_MANAGEMENT)
+    }, [nav])
 
     return (
         <BaseView
@@ -55,7 +48,7 @@ export const Header = memo(() => {
                     name={"qrcode-scan"}
                     size={24}
                     color={theme.colors.text}
-                    action={openScanAddressSheet}
+                    action={handleOpenCamera}
                     mx={12}
                     haptics="Light"
                 />
@@ -68,12 +61,8 @@ export const Header = memo(() => {
                     haptics="Light"
                 />
             </BaseView>
-            <ScanBottomSheet
-                ref={scanAddressSheetRef}
-                onClose={closeScanAddressSheetRef}
-                onScan={onScan}
-                target={ScanTarget.WALLET_CONNECT}
-            />
+
+            {RenderCameraModal}
         </BaseView>
     )
 })
