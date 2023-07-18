@@ -28,7 +28,10 @@ export const BaseCard = memo(
                     styles.container,
                     containerStyle,
                 ]}>
-                <BaseTouchable action={onPress} haptics="Light">
+                <BaseTouchable
+                    action={onPress}
+                    haptics="Light"
+                    activeOpacity={!onPress ? 1 : 0.2}>
                     <BaseView style={[styles.view, style]} testID={testID}>
                         {children}
                     </BaseView>

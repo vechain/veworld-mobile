@@ -22,6 +22,7 @@ import { MediaUtils } from "~Utils"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
 import { useI18nContext } from "~i18n"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     item: NonFungibleTokenCollection | NonFungibleToken
@@ -74,16 +75,19 @@ export const NFTView = memo(
         )
 
         const onNftPress = useCallback(
-            (nft: NonFungibleToken) =>
+            (nft: NonFungibleToken) => {
+                HapticsService.triggerImpact({ level: "Light" })
                 nav.navigate(Routes.NFT_DETAILS, {
                     collectionAddress: collection!.address,
                     nftTokenId: nft.tokenId,
-                }),
+                })
+            },
             [collection, nav],
         )
 
         const onCollectionPress = useCallback(
             (address: string) => {
+                HapticsService.triggerImpact({ level: "Light" })
                 nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
                     collectionAddress: address,
                 })

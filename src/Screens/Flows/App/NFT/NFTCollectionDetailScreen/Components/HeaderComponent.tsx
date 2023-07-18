@@ -57,6 +57,7 @@ export const HeaderComponent = memo(
 
                         <BaseView style={baseStyles.buttonWidth} mt={4}>
                             <BaseButton
+                                haptics="Light"
                                 action={onToggleCollection}
                                 size="sm"
                                 variant={isBlacklisted ? "solid" : "outline"}

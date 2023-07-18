@@ -12,6 +12,7 @@ import DeviceInfo from "react-native-device-info"
 import { VeWorldLogoSVG } from "~Assets"
 import { Linking } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
+import HapticsService from "~Services/HapticsService"
 
 export const AboutScreen = () => {
     const { LL } = useI18nContext()
@@ -43,7 +44,10 @@ export const AboutScreen = () => {
             <BaseCard
                 key={link.url}
                 style={styles.itemCard}
-                onPress={() => Linking.openURL(link.url)}>
+                onPress={() => {
+                    HapticsService.triggerImpact({ level: "Light" })
+                    Linking.openURL(link.url)
+                }}>
                 <BaseView
                     flex={1}
                     flexDirection="row"
