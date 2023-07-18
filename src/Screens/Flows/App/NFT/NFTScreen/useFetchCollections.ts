@@ -41,7 +41,10 @@ export const useFetchCollections = (
     }, [nftCollections?.collections, nftCollections?.collections?.length])
 
     useEffect(() => {
-        if (isEmpty(nftCollections?.collections)) {
+        if (
+            isEmpty(nftCollections?.collections) &&
+            registryInfo !== undefined
+        ) {
             setCollections([])
             getCollections(
                 selectedAccount.address,
