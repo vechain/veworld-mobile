@@ -1,9 +1,16 @@
 import { NativeModules } from "react-native"
+import { error } from "~Utils"
 
 const { Minimizer } = NativeModules
 
-interface IMinimizer {
-    goBack(): void
+const SafeMinimizer = {
+    goBack: () => {
+        try {
+            Minimizer.goBack()
+        } catch (e) {
+            error(e)
+        }
+    },
 }
 
-export default Minimizer as IMinimizer
+export default SafeMinimizer

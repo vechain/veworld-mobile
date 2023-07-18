@@ -5,7 +5,7 @@ import {
 } from "@walletconnect/types"
 import {
     formatJsonRpcError,
-    getNetworkType,
+    getNetwork,
     getPairAttributes,
     getRequestEventAttributes,
     getSendTxMessage,
@@ -20,6 +20,7 @@ import {
 import { NETWORK_TYPE } from "~Model"
 import { NavigationState } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 
 describe("getPairAttributes", () => {
     it("should return the pair attributes correctly", () => {
@@ -196,48 +197,56 @@ describe("formatJsonRpcError", () => {
 })
 
 describe("getNetworkType", () => {
+    const defaultNets = [defaultMainNetwork, defaultTestNetwork]
+
     it("should return defaultMainNetwork for a main network chainId", () => {
         // Define the input
-        const chainId = "vechain:main"
+        const chainId = "vechain:b1ac3413d346d43539627e6be7ec1b4a"
+
+        const request = { params: { chainId } }
 
         // Call the function
-        const result = getNetworkType(chainId)
+        const result = getNetwork(
+            request as PendingRequestTypes.Struct,
+            defaultNets,
+        )
 
         // Assertion
-        expect(result.type).toEqual(NETWORK_TYPE.MAIN)
-    })
-
-    it("should return defaultMainNetwork for a mainnet network chainId", () => {
-        // Define the input
-        const chainId = "vechain:mainnet"
-
-        // Call the function
-        const result = getNetworkType(chainId)
-
-        // Assertion
-        expect(result.type).toEqual(NETWORK_TYPE.MAIN)
+        expect(result?.type).toEqual(NETWORK_TYPE.MAIN)
     })
 
     it("should return defaultTestNetwork for a test network chainId", () => {
         // Define the input
-        const chainId = "example:test"
+        const chainId = "vechain:87721b09ed2e15997f466536b20bb127"
 
         // Call the function
-        const result = getNetworkType(chainId)
+        const request = { params: { chainId } }
+
+        // Call the function
+        const result = getNetwork(
+            request as PendingRequestTypes.Struct,
+            defaultNets,
+        )
 
         // Assertion
-        expect(result.type).toEqual(NETWORK_TYPE.TEST)
+        expect(result?.type).toEqual(NETWORK_TYPE.TEST)
     })
 
-    it("should return defaultMainNetwork for an unknown network chainId", () => {
+    it("should return undefined for an unknown network chainId", () => {
         // Define the input
         const chainId = "example:unknown"
 
         // Call the function
-        const result = getNetworkType(chainId)
+        const request = { params: { chainId } }
+
+        // Call the function
+        const result = getNetwork(
+            request as PendingRequestTypes.Struct,
+            defaultNets,
+        )
 
         // Assertion
-        expect(result.type).toEqual(NETWORK_TYPE.MAIN)
+        expect(result?.type).toBeUndefined()
     })
 })
 
