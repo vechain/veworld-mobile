@@ -19,106 +19,126 @@ type Props = {
     onClose: () => void
     openAddAccountSheet: () => void
     openQRCodeSheet: () => void
+    openRenameAccountBottomSheet: () => void
 }
 
 export const AccountManagementBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, openAddAccountSheet, openQRCodeSheet }, ref) => {
-    const theme = useTheme()
-    const { LL } = useI18nContext()
+>(
+    (
+        {
+            onClose,
+            openAddAccountSheet,
+            openQRCodeSheet,
+            openRenameAccountBottomSheet,
+        },
+        ref,
+    ) => {
+        const theme = useTheme()
+        const { LL } = useI18nContext()
 
-    const snapPoints = useMemo(() => ["50%"], [])
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+        const snapPoints = useMemo(() => ["50%"], [])
+        const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const handleSheetChanges = useCallback((index: number) => {
-        info("accountManagementSheet position changed", index)
-    }, [])
+        const handleSheetChanges = useCallback((index: number) => {
+            info("accountManagementSheet position changed", index)
+        }, [])
 
-    const onAddAccount = useCallback(() => {
-        onClose()
-        openAddAccountSheet()
-    }, [onClose, openAddAccountSheet])
+        const onAddAccount = useCallback(() => {
+            onClose()
+            openAddAccountSheet()
+        }, [onClose, openAddAccountSheet])
 
-    const { onCopyToClipboard } = useCopyClipboard()
+        const { onCopyToClipboard } = useCopyClipboard()
 
-    const handleOnQRcodePress = useCallback(() => {
-        onClose()
-        openQRCodeSheet()
-    }, [onClose, openQRCodeSheet])
+        const handleOnQRcodePress = useCallback(() => {
+            onClose()
+            openQRCodeSheet()
+        }, [onClose, openQRCodeSheet])
 
-    return (
-        <BaseBottomSheet
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            ref={ref}>
-            <BaseView
-                flexDirection="row"
-                w={100}
-                justifyContent="space-between">
-                <BaseText typographyFont="subTitleBold">
-                    {LL.SB_ACCOUNT_MANAGEMENT()}
-                </BaseText>
-                <BaseIcon
+        const handleOnRenameAccountPress = useCallback(() => {
+            onClose()
+            openRenameAccountBottomSheet()
+        }, [onClose, openRenameAccountBottomSheet])
+
+        return (
+            <BaseBottomSheet
+                snapPoints={snapPoints}
+                onChange={handleSheetChanges}
+                ref={ref}>
+                <BaseView
+                    flexDirection="row"
+                    w={100}
+                    justifyContent="space-between">
+                    <BaseText typographyFont="subTitleBold">
+                        {LL.SB_ACCOUNT_MANAGEMENT()}
+                    </BaseText>
+                    <BaseIcon
+                        haptics="Light"
+                        name={"plus"}
+                        size={32}
+                        bg={theme.colors.secondary}
+                        action={onAddAccount}
+                        testID="AccountManagementBottomSheet_addAccountButton"
+                    />
+                </BaseView>
+
+                <BaseSpacer height={24} />
+
+                <BaseTouchableBox
                     haptics="Light"
-                    name={"plus"}
-                    size={32}
-                    bg={theme.colors.secondary}
-                    action={onAddAccount}
-                    testID="AccountManagementBottomSheet_addAccountButton"
-                />
-            </BaseView>
+                    action={
+                        selectedAccount
+                            ? () =>
+                                  onCopyToClipboard(
+                                      selectedAccount.address,
+                                      LL.COMMON_LBL_ADDRESS(),
+                                  )
+                            : undefined
+                    }>
+                    <BaseIcon
+                        name={"content-copy"}
+                        size={18}
+                        color={theme.colors.text}
+                        action={onAddAccount}
+                    />
+                    <BaseText mx={8}>{LL.BTN_COPY_PUBLIC_ADDRESS()}</BaseText>
+                </BaseTouchableBox>
 
-            <BaseSpacer height={24} />
+                <BaseSpacer height={16} />
 
-            <BaseTouchableBox
-                haptics="Light"
-                action={
-                    selectedAccount
-                        ? () =>
-                              onCopyToClipboard(
-                                  selectedAccount.address,
-                                  LL.COMMON_LBL_ADDRESS(),
-                              )
-                        : undefined
-                }>
-                <BaseIcon
-                    name={"content-copy"}
-                    size={18}
-                    color={theme.colors.text}
-                    action={onAddAccount}
-                />
-                <BaseText mx={8}>{LL.BTN_COPY_PUBLIC_ADDRESS()}</BaseText>
-            </BaseTouchableBox>
+                <BaseTouchableBox action={handleOnQRcodePress} haptics="Light">
+                    <BaseIcon
+                        name={"qrcode"}
+                        size={18}
+                        color={theme.colors.text}
+                    />
+                    <BaseText mx={8}>{LL.BTN_SHOW_QR_CODE()}</BaseText>
+                </BaseTouchableBox>
 
-            <BaseSpacer height={16} />
+                <BaseSpacer height={16} />
 
-            <BaseTouchableBox action={handleOnQRcodePress} haptics="Light">
-                <BaseIcon name={"qrcode"} size={18} color={theme.colors.text} />
-                <BaseText mx={8}>{LL.BTN_SHOW_QR_CODE()}</BaseText>
-            </BaseTouchableBox>
+                <BaseTouchableBox action={handleOnRenameAccountPress}>
+                    <BaseIcon
+                        name={"account-edit"}
+                        size={18}
+                        color={theme.colors.text}
+                    />
+                    <BaseText mx={8}>{LL.BTN_RENAME_ACCOUNT()}</BaseText>
+                </BaseTouchableBox>
 
-            <BaseSpacer height={16} />
+                <BaseSpacer height={16} />
 
-            <BaseTouchableBox action={() => {}} disabled>
-                <BaseIcon
-                    name={"account-edit"}
-                    size={18}
-                    color={theme.colors.text}
-                />
-                <BaseText mx={8}>{LL.BTN_RENAME_ACCOUNT()}</BaseText>
-            </BaseTouchableBox>
-
-            <BaseSpacer height={16} />
-
-            <BaseTouchableBox action={() => {}} disabled>
-                <BaseIcon
-                    name={"trash-can-outline"}
-                    size={18}
-                    color={theme.colors.text}
-                />
-                <BaseText mx={8}>{LL.BTN_REMOVE_ACCOUNT()}</BaseText>
-            </BaseTouchableBox>
-        </BaseBottomSheet>
-    )
-})
+                <BaseTouchableBox action={() => {}} disabled>
+                    <BaseIcon
+                        name={"trash-can-outline"}
+                        size={18}
+                        color={theme.colors.text}
+                    />
+                    <BaseText mx={8}>{LL.BTN_REMOVE_ACCOUNT()}</BaseText>
+                </BaseTouchableBox>
+            </BaseBottomSheet>
+        )
+    },
+)

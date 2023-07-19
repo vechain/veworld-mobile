@@ -11,11 +11,8 @@ const BottomSheetTextInputComponent = forwardRef<
     TextInput,
     BottomSheetTextInputProps & BaseTextInputProps
 >(({ onFocus, onBlur, ...rest }, ref) => {
-    //#region hooks
     const { shouldHandleKeyboardEvents } = useBottomSheetInternal()
-    //#endregion
 
-    //#region callbacks
     const handleOnFocus = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             runOnUI(() => {
@@ -34,7 +31,6 @@ const BottomSheetTextInputComponent = forwardRef<
         },
         [onBlur, shouldHandleKeyboardEvents],
     )
-    //#endregion
 
     return (
         <BaseTextInput
