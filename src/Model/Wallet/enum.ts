@@ -34,3 +34,8 @@ export enum DEVICE_TYPE {
     LOCAL_PRIVATE_KEY = "local-pk",
     LEDGER = "ledger",
 }
+
+export enum RENAME_WALLET_TYPE {
+    ACCOUNT = "Account",
+    DEVICE = "Device",
+}
