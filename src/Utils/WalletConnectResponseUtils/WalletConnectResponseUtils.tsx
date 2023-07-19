@@ -53,7 +53,7 @@ export const transactionRequestSuccessResponse = async (
                     }/transactions/${transactionId}`,
                 )
             },
-            4_000,
+            4000,
             "transactionSuccessToast",
         )
     } catch (e) {

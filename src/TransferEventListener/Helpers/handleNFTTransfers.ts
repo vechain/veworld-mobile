@@ -1,10 +1,10 @@
 import { TransactionOrigin } from "~Model"
 import { findInvolvedAccount } from "./findInvolvedAccount"
 import {
-    NFTTransferHandlerProps,
     informUserForIncomingNFT,
     informUserForOutgoingNFT,
-} from "."
+    NFTTransferHandlerProps,
+} from "./index"
 import { getName } from "~Networking"
 
 export const handleNFTTransfers = async ({

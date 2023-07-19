@@ -20,7 +20,7 @@ import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { RootState } from "~Storage/Redux/Types"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
-import { ActivityStatusIndicator } from "."
+import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
 type Props = {
     activity: FungibleTokenActivity

@@ -112,13 +112,13 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showInfoToast(text1, text2, textLink, onPress, 7_000)
+        showInfoToast(text1, text2, textLink, onPress, 7000)
 
         expect(Toast.show).toHaveBeenCalledWith({
             type: "info",
             text1,
             text2,
-            visibilityTime: 7_000,
+            visibilityTime: 7000,
             props: { textLink, onPress },
         })
     })

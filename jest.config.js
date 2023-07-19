@@ -14,7 +14,7 @@ module.exports = {
         "clover",
         "json-summary",
     ],
-    testTimeout: 10_000,
+    testTimeout: 10000,
     transform: {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
