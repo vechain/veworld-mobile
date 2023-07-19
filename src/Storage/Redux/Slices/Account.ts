@@ -74,6 +74,7 @@ export const AccountSlice = createSlice({
             }
             state.accounts = updatedAccounts
         },
+
         renameAccount: (
             state,
             action: PayloadAction<{ address: string; alias: string }>,
@@ -85,7 +86,10 @@ export const AccountSlice = createSlice({
             if (accountExistsIndex !== -1) {
                 state.accounts[accountExistsIndex].alias = alias
             }
+
+            state.accounts[accountExistsIndex].alias = alias
         },
+
         setAccountVisibility: (
             state,
             action: PayloadAction<{ address: string; visibile: boolean }>,

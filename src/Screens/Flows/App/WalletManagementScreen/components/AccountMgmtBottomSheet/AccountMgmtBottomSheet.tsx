@@ -25,6 +25,7 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 type Props = {
     device?: BaseDevice
     onClose: () => void
+    openRenameAccountBottomSheet: () => void
 }
 
 const snapPoints = ["50%", "75%", "90%"]
@@ -32,7 +33,7 @@ const snapPoints = ["50%", "75%", "90%"]
 export const AccountMgmtBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ device }, ref) => {
+>(({ device, openRenameAccountBottomSheet, onClose }, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
@@ -52,21 +53,30 @@ export const AccountMgmtBottomSheet = React.forwardRef<
     const { flatListScrollProps, handleSheetChangePosition } =
         useScrollableBottomSheet({ data: deviceAccounts, snapPoints })
 
+    const onRenameWalletPress = useCallback(() => {
+        onClose()
+        openRenameAccountBottomSheet()
+    }, [onClose, openRenameAccountBottomSheet])
+
     return (
         <BaseBottomSheet
             snapPoints={snapPoints}
             onChange={handleSheetChangePosition}
             ref={ref}>
-            <BaseView flexDirection="row" w={100}>
+            <BaseView
+                flexDirection="row"
+                w={100}
+                justifyContent="space-between">
                 <BaseText typographyFont="subTitleBold">
                     {LL.SB_EDIT_WALLET({ name: device?.alias ?? "" })}
                 </BaseText>
 
                 <BaseIcon
+                    haptics="Light"
                     name={"pencil"}
                     size={24}
                     bg={theme.colors.secondary}
-                    disabled
+                    action={onRenameWalletPress}
                 />
             </BaseView>
             <BaseSpacer height={16} />

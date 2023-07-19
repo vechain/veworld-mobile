@@ -275,3 +275,11 @@ export const removeUrlProtocolAndPath = (url: string) => {
 
 //     return `${currency} - ${name}`
 // }
+
+export const limitChars = (text: string) => {
+    if (text.length <= 24) {
+        return text
+    } else {
+        return text.slice(0, 24)
+    }
+}
