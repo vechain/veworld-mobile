@@ -3,12 +3,12 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import {
     useCheckIdentity,
+    useSignTransaction,
     useTheme,
     useTransaction,
-    useSignTransaction,
 } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
-import { VTHO, COLORS } from "~Constants"
+import { COLORS, VTHO } from "~Constants"
 import {
     AccountCard,
     AccountIcon,
@@ -19,9 +19,9 @@ import {
     BaseText,
     BaseView,
     DelegationOptions,
-    LedgerBadge,
-    Layout,
     FadeoutButton,
+    Layout,
+    LedgerBadge,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -29,14 +29,14 @@ import {
     Routes,
 } from "~Navigation"
 import {
-    selectCurrencyExchangeRate,
-    selectCurrency,
-    selectSelectedAccount,
-    useAppSelector,
-    selectKnownContacts,
     selectAccounts,
-    selectVthoTokenWithBalanceByAccount,
+    selectCurrency,
+    selectCurrencyExchangeRate,
+    selectKnownContacts,
     selectPendingTx,
+    selectSelectedAccount,
+    selectVthoTokenWithBalanceByAccount,
+    useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -45,6 +45,7 @@ import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
+import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -97,11 +98,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         setLoadingTransaction(false)
     }, [initialRoute, nav])
 
+    const clauses = useMemo(
+        () => prepareFungibleClause(amount, token, address),
+        [amount, token, address],
+    )
+
     //build transaction
-    const { gas, transaction, loadingGas } = useTransaction({
-        token,
-        amount,
-        addressTo: address,
+    const { gas, transaction, loadingGas, setGasPayer } = useTransaction({
+        clauses,
     })
 
     const {
@@ -113,7 +117,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         setSelectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
-    } = useDelegation({ transaction })
+    } = useDelegation({ transaction, setGasPayer })
 
     const vtho = useAppSelector(state =>
         selectVthoTokenWithBalanceByAccount(

@@ -1,10 +1,13 @@
 import { abi, Transaction } from "thor-devkit"
 import { debug } from "~Utils/Logger"
 import {
+    AccountWithDevice,
     ClauseType,
     ClauseWithMetadata,
-    DappTxActivity,
     ConnexClause,
+    DappTxActivity,
+    FungibleTokenWithBalance,
+    NonFungibleToken,
     SwapEvent,
     SwapResult,
     Token,
@@ -15,6 +18,7 @@ import { BigNumber } from "bignumber.js"
 import { abis, VET } from "~Constants"
 import HexUtils from "~Utils/HexUtils"
 import axios from "axios"
+import { FormattingUtils } from "~Utils"
 
 export const TRANSFER_SIG = new abi.Function(abis.VIP180.transfer).signature
 
@@ -788,6 +792,59 @@ export const sendSignedTransaction = async (
     )
 
     return response.data.id as string
+}
+
+export const prepareNonFungibleClause = (
+    account: AccountWithDevice,
+    addressTo: string,
+    nft?: NonFungibleToken,
+): Transaction.Body["clauses"] => {
+    if (!nft) return []
+
+    const func = new abi.Function(abis.VIP181.transferFrom)
+    const data = func.encode(account.address, addressTo, nft.tokenId)
+
+    return [
+        {
+            to: nft.contractAddress,
+            value: 0,
+            data: data,
+        },
+    ]
+}
+
+export const prepareFungibleClause = (
+    amount: string,
+    _token: FungibleTokenWithBalance,
+    addressTo: string,
+): Transaction.Body["clauses"] => {
+    const scaledAmount =
+        "0x" +
+        new BigNumber(
+            FormattingUtils.scaleNumberUp(amount, _token.decimals),
+        ).toString(16)
+
+    // if vet
+    if (_token.symbol === VET.symbol) {
+        return [
+            {
+                to: addressTo,
+                value: scaledAmount,
+                data: "0x",
+            },
+        ]
+    }
+
+    const func = new abi.Function(abis.VIP180.transfer)
+    const data = func.encode(addressTo, scaledAmount)
+
+    return [
+        {
+            to: _token.address,
+            value: 0,
+            data: data,
+        },
+    ]
 }
 
 /**

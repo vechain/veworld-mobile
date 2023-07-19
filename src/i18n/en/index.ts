@@ -421,7 +421,8 @@ const en: BaseTranslation = {
   CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: "Confirming this you will disconnect the {name: string} app from {alias: string}",
 
   CONNECTED_APP_DETAILS_TITLE: "Connected app",
-  CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with", CONNECTED_APP_CONNECTION_REQUESTS: "Connection requests",
+  CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",
+  CONNECTED_APP_CONNECTION_REQUESTS: "Connection requests",
   CONNECTED_APP_DESCRIPTION: "Description",
 
   // NFT
@@ -545,14 +546,18 @@ const en: BaseTranslation = {
   SEND_CREATE_CONTACT_ADDRESS: "Contact address",
   SEND_LEDGER_TITLE: "Ledger verification",
   SEND_LEDGER_TITLE_SB: "Please follow the instructions below to sign the transaction with your Ledger",
+  LEDGER_CERT_TITLE_SB: "Please follow the instructions below to sign the certificate with your Ledger",
   SEND_LEDGER_VALIDATE_TRANSACTION: "Validate transaction",
   SEND_LEDGER_CHECK_CONNECTION: "We are checking your ledger connection",
   SEND_LEDGER_CHECK_CONNECTION_SB: "Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open",
   SEND_LEDGER_SIGN_DATA: "We are signing your transaction",
   SEND_LEDGER_SIGN_DATA_SB: "We are signing your transaction with your Ledger, please confirm the transaction on your device when required",
   SEND_LEDGER_TX_READY: "Transaction is ready",
+  LEDGER_CERTIFICATE_READ: "Certificate is ready",
   SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",
-  SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low", SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you dont have any {tokenName: string} in your wallet",
+  LEDGER_CERTIFICATE_READ_SB: "The certificate is ready to be sent to the DApp, press confirm to continue",
+  SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low",
+  SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you dont have any {tokenName: string} in your wallet",
 
   // Wallets New Local
   WALLET_LABEL_ACCOUNT: "Account",

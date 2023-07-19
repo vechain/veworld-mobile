@@ -239,7 +239,7 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 *  ​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.​ ​T​r​y​ ​a​g​a​i​n​.
+	 *  ​ ​ ​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.​ ​T​r​y​ ​a​g​a​i​n​.
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
@@ -1867,6 +1867,10 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_TITLE_SB: string
 	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	LEDGER_CERT_TITLE_SB: string
+	/**
 	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SEND_LEDGER_VALIDATE_TRANSACTION: string
@@ -1891,9 +1895,17 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_TX_READY: string
 	/**
+	 * C​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y
+	 */
+	LEDGER_CERTIFICATE_READ: string
+	/**
 	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​s​e​n​d​ ​i​t​ ​t​o​ ​t​h​e​ ​n​e​t​w​o​r​k
 	 */
 	SEND_LEDGER_TX_READY_SB: string
+	/**
+	 * T​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​ ​t​o​ ​t​h​e​ ​D​A​p​p​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	LEDGER_CERTIFICATE_READ_SB: string
 	/**
 	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​p​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
 	 */
@@ -2432,7 +2444,7 @@ export type TranslationFunctions = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 *   PIN doesn't match. Try again.
+	 *     PIN doesn't match. Try again.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
@@ -4038,6 +4050,10 @@ Please, try again later.
 	 */
 	SEND_LEDGER_TITLE_SB: () => LocalizedString
 	/**
+	 * Please follow the instructions below to sign the certificate with your Ledger
+	 */
+	LEDGER_CERT_TITLE_SB: () => LocalizedString
+	/**
 	 * Validate transaction
 	 */
 	SEND_LEDGER_VALIDATE_TRANSACTION: () => LocalizedString
@@ -4062,9 +4078,17 @@ Please, try again later.
 	 */
 	SEND_LEDGER_TX_READY: () => LocalizedString
 	/**
+	 * Certificate is ready
+	 */
+	LEDGER_CERTIFICATE_READ: () => LocalizedString
+	/**
 	 * The transaction is ready to be sent, press confirm to send it to the network
 	 */
 	SEND_LEDGER_TX_READY_SB: () => LocalizedString
+	/**
+	 * The certificate is ready to be sent to the DApp, press confirm to continue
+	 */
+	LEDGER_CERTIFICATE_READ_SB: () => LocalizedString
 	/**
 	 * This transaction may be reverted if ypur balance is too low
 	 */

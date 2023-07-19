@@ -106,7 +106,7 @@ export function isWalletConnectRoute(
     return navState.routes.some(
         route =>
             route.name === Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN ||
-            route.name === Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN ||
+            route.name === Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN ||
             route.name === Routes.CONNECT_APP_SCREEN,
     )
 }
@@ -178,7 +178,7 @@ export function getSendTxMessage(
 
 export function getSendTxOptions(
     requestEvent: PendingRequestTypes.Struct,
-): Connex.Driver.CertOptions {
+): Connex.Driver.TxOptions {
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {

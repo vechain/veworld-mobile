@@ -2,14 +2,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { Transaction } from "thor-devkit"
 import { BlePairingDark } from "~Assets"
-import {
-    useBottomSheetModal,
-    useLedger,
-    useLegderConfig,
-    useSendTransaction,
-} from "~Hooks"
+import { useBottomSheetModal, useLedger, useLegderConfig } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,
@@ -19,45 +13,38 @@ import {
     BaseView,
     BluetoothStatusBottomSheet,
     ConnectionErrorBottomSheet,
+    showErrorToast,
     Step,
     StepsProgressBar,
-    showErrorToast,
+    useWalletConnect,
 } from "~Components"
 import {
     RootStackParamListDiscover,
-    RootStackParamListHome,
+    RootStackParamListSwitch,
     Routes,
 } from "~Navigation"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { LedgerUtils, debug, error } from "~Utils"
+import { debug, error, LedgerUtils, WalletConnectResponseUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
 
 type Props = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover,
-    Routes.LEDGER_SIGN_TRANSACTION
+    RootStackParamListSwitch & RootStackParamListDiscover,
+    Routes.LEDGER_SIGN_CERTIFICATE
 >
 
-export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, transaction, initialRoute } = route.params
+export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
+    const { accountWithDevice, certificate, initialRoute, requestEvent } =
+        route.params
+
+    const { web3Wallet } = useWalletConnect()
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
-    const selectedNetwork = useAppSelector(selectSelectedNetwork)
-
-    const { sendTransactionAndPerformUpdates } = useSendTransaction(
-        selectedNetwork,
-        accountWithDevice,
-    )
-
     const [signature, setSignature] = useState<Buffer>()
-
-    // If the tx is ready and the signature has been requested to the device
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
-
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
 
@@ -156,21 +143,20 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
      * Sign the transaction when the device is connected and the clauses are enabled
      */
     useEffect(() => {
-        if (!vetApp || !clausesEnabled || !contractEnabled) return
+        if (!vetApp) return
 
-        const signTransaction = async () => {
+        const signCertificate = async () => {
             try {
                 //recreate transport to avoid DisconnectedDeviceDuringOperation error
                 await openBleConnection()
                 if (!transport) {
                     throw new Error("Transport is not defined")
                 }
-                const _signature = await LedgerUtils.signTransaction(
+                const _signature = await LedgerUtils.signCertificate(
                     accountWithDevice.index,
-                    new Transaction(transaction),
+                    certificate,
                     accountWithDevice.device,
                     transport,
-                    () => setIsAwaitingSignature(true),
                 )
                 debug("Signature OK")
                 setSignature(_signature)
@@ -181,12 +167,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 setIsAwaitingSignature(false)
             }
         }
-        signTransaction()
+        signCertificate()
     }, [
         openBleConnection,
         vetApp,
         accountWithDevice,
-        transaction,
+        certificate,
         contractEnabled,
         clausesEnabled,
         transport,
@@ -222,13 +208,21 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         try {
             if (!signature) return
             setIsSending(true)
-            const tx = new Transaction(transaction)
-            tx.signature = signature
 
-            await sendTransactionAndPerformUpdates(tx)
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success,
             )
+
+            await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
+                {
+                    request: requestEvent,
+                    web3Wallet,
+                    LL,
+                },
+                signature,
+                certificate,
+            )
+
             navigateOnFinish()
         } catch (e) {
             error(e)
@@ -239,13 +233,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         } finally {
             setIsSending(false)
         }
-    }, [
-        LL,
-        signature,
-        transaction,
-        sendTransactionAndPerformUpdates,
-        navigateOnFinish,
-    ])
+    }, [requestEvent, web3Wallet, LL, signature, certificate, navigateOnFinish])
 
     const onConnectionErrorDismiss = useCallback(() => {
         setTimerEnabled(false)
@@ -259,7 +247,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     {LL.SEND_LEDGER_TITLE()}
                 </BaseText>
                 <BaseText typographyFont="body" my={10}>
-                    {LL.SEND_LEDGER_TITLE_SB()}
+                    {LL.LEDGER_CERT_TITLE_SB()}
                 </BaseText>
                 <BaseSpacer height={20} />
                 <Lottie
@@ -276,11 +264,11 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 />
                 <BaseSpacer height={96} />
                 <BaseText typographyFont="bodyBold">
-                    {Steps[currentStep]?.title || LL.SEND_LEDGER_TX_READY()}
+                    {Steps[currentStep]?.title || LL.LEDGER_CERTIFICATE_READ()}
                 </BaseText>
                 <BaseText typographyFont="body" mt={8}>
                     {Steps[currentStep]?.subtitle ||
-                        LL.SEND_LEDGER_TX_READY_SB()}
+                        LL.LEDGER_CERTIFICATE_READ_SB()}
                 </BaseText>
             </BaseView>
             <BaseButton

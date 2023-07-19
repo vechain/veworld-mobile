@@ -37,6 +37,7 @@ import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/
 import { VTHO } from "~Constants"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
+import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -66,10 +67,19 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         nav.dispatch(StackActions.popToTop())
     }, [nav])
 
-    const { gas, transaction } = useTransaction({
-        token: nft!,
-        amount: selectedAccoount.address,
-        addressTo: route.params.receiverAddress,
+    const clauses = useMemo(
+        () =>
+            prepareNonFungibleClause(
+                selectedAccoount,
+                route.params.receiverAddress,
+                nft,
+            ),
+
+        [selectedAccoount, route.params.receiverAddress, nft],
+    )
+
+    const { gas, transaction, setGasPayer } = useTransaction({
+        clauses,
     })
 
     const {
@@ -81,7 +91,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         setSelectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
-    } = useDelegation({ transaction })
+    } = useDelegation({ transaction, setGasPayer })
 
     const { signAndSendTransaction } = useSignTransaction({
         transaction,
