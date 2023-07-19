@@ -4,7 +4,7 @@ import {
     InformUserForOutgoingVET,
     VETTransferHandlerProps,
     findInvolvedAccount,
-} from "."
+} from "./index"
 
 export const handleVETTransfers = ({
     transfer,
