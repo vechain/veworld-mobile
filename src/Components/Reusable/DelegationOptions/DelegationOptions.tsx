@@ -4,7 +4,10 @@ import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType, AccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useBottomSheetModal } from "~Hooks"
-import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
+import {
+    selectVisibleAccountsButSelected,
+    useAppSelector,
+} from "~Storage/Redux"
 import { SelectUrlBottomSheet } from "./SelectUrlBottomSheet"
 import { SelectDelegationAccountBottomSheet } from "./SelectDelegationAccountBottomSheet"
 
@@ -29,7 +32,9 @@ export const DelegationOptions = ({
     disabled,
 }: Props) => {
     const { LL } = useI18nContext()
-    const accounts = useAppSelector(selectAccountsButSelected)
+
+    const accounts = useAppSelector(selectVisibleAccountsButSelected)
+
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
@@ -84,12 +89,14 @@ export const DelegationOptions = ({
                 {LL.SEND_DELEGATION_TITLE()}
             </BaseText>
             <BaseSpacer height={15} />
+
             <BaseButtonGroupHorizontal
                 selectedButtonIds={[selectedDelegationOption]}
                 buttons={options}
                 action={handleSelectDelegationOption}
                 disabled={disabled}
             />
+
             <SelectDelegationAccountBottomSheet
                 onClose={closeSelectAccountBottonSheet}
                 ref={selectAccountBottomSheetRef}
@@ -97,6 +104,7 @@ export const DelegationOptions = ({
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
                 selectedDelegationOption={selectedDelegationOption}
+                accounts={accounts}
             />
             <SelectUrlBottomSheet
                 onClose={closeSelectDelegationUrlBottonSheet}

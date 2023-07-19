@@ -75,8 +75,8 @@ export const selectVisibleAccounts = createSelector(
 /**
  * @returns all the visibile accounts but the selected one
  */
-export const selectAccountsButSelected = createSelector(
-    selectAccounts,
+export const selectVisibleAccountsButSelected = createSelector(
+    selectVisibleAccounts,
     selectSelectedAccountAddress,
     (accounts, selectedAccountAddress) => {
         return accounts.filter(

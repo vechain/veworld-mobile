@@ -35,6 +35,36 @@ export const BaseButtonGroupHorizontal = ({
 
     const { styles } = useThemedStyles(baseStyles)
 
+    const calculateBGColor = useCallback(
+        (selected: boolean, disabledStatus: boolean | undefined) => {
+            if (disabledStatus && selected) {
+                return theme.colors.disabled
+            }
+
+            if (selected) {
+                return theme.colors.primary
+            }
+
+            return theme.colors.card
+        },
+        [theme.colors.card, theme.colors.disabled, theme.colors.primary],
+    )
+
+    const calculateTextColor = useCallback(
+        (selected: boolean, disabledStatus: boolean | undefined) => {
+            if (disabledStatus) {
+                return theme.colors.textDisabled
+            }
+
+            if (selected) {
+                return theme.colors.card
+            }
+
+            return theme.colors.text
+        },
+        [theme.colors.card, theme.colors.text, theme.colors.textDisabled],
+    )
+
     return (
         <BaseView
             justifyContent="center"
@@ -43,20 +73,23 @@ export const BaseButtonGroupHorizontal = ({
             style={styles.backgroundStyle}>
             {buttons.map((button, _) => {
                 const { id, label, disabled, icon } = button
-                const selected = selectedButtonIds.includes(id)
-                const bgColor = selected
-                    ? theme.colors.primary
-                    : theme.colors.card
-                const textIconColor = selected
-                    ? theme.colors.card
-                    : theme.colors.text
+                const disabledStatus = disableAllButtons || disabled
 
+                const selected = selectedButtonIds.includes(id)
+
+                const bgColor = calculateBGColor(selected, disabledStatus)
+
+                const textIconColor = calculateTextColor(
+                    selected,
+                    disabledStatus,
+                )
                 return (
                     <BaseButton
                         haptics="Light"
                         key={id}
+                        isDisabledTextOnly
                         action={onPress(button)}
-                        disabled={disableAllButtons || disabled}
+                        disabled={disabledStatus}
                         bgColor={bgColor}
                         typographyFont="bodyMedium"
                         w={buttonWidth}

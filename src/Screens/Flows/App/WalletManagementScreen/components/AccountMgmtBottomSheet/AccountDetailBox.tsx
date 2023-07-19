@@ -31,7 +31,6 @@ export const AccountDetailBox: React.FC<Props> = memo(
             <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
                     haptics="Light"
-                    action={() => {}}
                     justifyContent="space-between"
                     bg={
                         !account.visible

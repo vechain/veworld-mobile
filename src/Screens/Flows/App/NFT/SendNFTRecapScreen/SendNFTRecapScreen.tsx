@@ -152,9 +152,8 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={24} />
 
-                    {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/761) convert style to design specs*/}
                     <TransferCard
-                        fromAddress={selectedAccoount!.address}
+                        fromAddress={selectedAccoount.address}
                         toAddresses={[route.params.receiverAddress]}
                     />
 

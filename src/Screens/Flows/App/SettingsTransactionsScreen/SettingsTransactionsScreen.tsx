@@ -63,7 +63,9 @@ export const SettingsTransactionsScreen = () => {
                 <BaseText typographyFont="captionRegular">
                     {LL.SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION()}
                 </BaseText>
+
                 <BaseSpacer height={16} />
+
                 <DelegationOptions
                     selectedDelegationOption={selectedDelegationOption}
                     setSelectedDelegationOption={setSelectedDelegationOption}
