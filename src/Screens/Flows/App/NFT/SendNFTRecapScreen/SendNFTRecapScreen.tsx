@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
@@ -19,7 +19,6 @@ import { useI18nContext } from "~i18n"
 import {
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
-    selectVthoTokenWithBalanceByAccount,
     useAppSelector,
 } from "~Storage/Redux"
 import { NFTRecapView } from "./Components/NFTRecapView"
@@ -28,13 +27,11 @@ import { ScrollView } from "react-native-gesture-handler"
 import {
     useCheckIdentity,
     usePlatformBottomInsets,
+    useRenderGas,
     useSignTransaction,
     useTransaction,
 } from "~Hooks"
-import { FormattingUtils } from "~Utils"
-import { BigNumber } from "bignumber.js"
 import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/Hooks"
-import { VTHO } from "~Constants"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
 
@@ -66,7 +63,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         nav.dispatch(StackActions.popToTop())
     }, [nav])
 
-    const { gas, transaction } = useTransaction({
+    const { gas, transaction, loadingGas } = useTransaction({
         token: nft!,
         amount: selectedAccoount.address,
         addressTo: route.params.receiverAddress,
@@ -95,6 +92,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         token: nft!,
     })
 
+    const { RenderGas, isThereEnoughGas } = useRenderGas({
+        loadingGas,
+        selectedDelegationOption,
+        gas,
+        accountAddress:
+            selectedDelegationAccount?.address || selectedAccoount.address,
+    })
+
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: signAndSendTransaction,
@@ -111,32 +116,6 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             })
         } else checkIdentityBeforeOpening()
     }, [checkIdentityBeforeOpening, nav, selectedAccoount, transaction])
-
-    const vtho = useAppSelector(state =>
-        selectVthoTokenWithBalanceByAccount(
-            state,
-            selectedDelegationAccount?.address || selectedAccoount.address,
-        ),
-    )
-
-    const vthoBalance = FormattingUtils.scaleNumberDown(
-        vtho.balance.balance,
-        vtho.decimals,
-        2,
-    )
-
-    const vthoGas = FormattingUtils.convertToFiatBalance(
-        gas?.gas?.toString() ?? "0",
-        1,
-        5,
-    )
-
-    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/760) create a centralized hook for this where we distinguish between errors (not enough gas, error calculating gas, etc)
-    const isThereEnoughGas = useMemo(() => {
-        if (!vthoGas || vthoGas === "0.00") return false
-        let leftVtho = new BigNumber(vthoBalance)
-        return vthoGas && leftVtho.gte(vthoGas)
-    }, [vthoBalance, vthoGas])
 
     return (
         <BaseSafeArea grow={1}>
@@ -209,11 +188,10 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={24} />
 
-                    <InfoSectionView<string>
-                        isDanger={!isThereEnoughGas}
+                    <InfoSectionView<React.JSX.Element>
                         isFontReverse
                         title={"Estimated gas fee"}
-                        data={vthoGas + " " + VTHO.symbol}
+                        data={RenderGas}
                     />
 
                     <InfoSectionView<string>
@@ -222,11 +200,11 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         data={LL.SEND_LESS_THAN_1_MIN()}
                     />
 
-                    <InfoSectionView<string>
+                    <InfoSectionView<React.JSX.Element>
                         isFontReverse
                         isLastInList
                         title={"Total amount"}
-                        data={vthoGas + " " + VTHO.symbol}
+                        data={RenderGas}
                         subTtitle={"8,03 USD"} // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/762) add real price
                     />
                 </BaseView>
