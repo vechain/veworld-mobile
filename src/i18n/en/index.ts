@@ -183,6 +183,7 @@ const en: BaseTranslation = {
   TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
   TITLE_DISCOVER: "Discover",
   TITLE_BACKUP_YOUR_PHRASE: "Backup your phrase",
+  TITLE_QR_CODE_FOR_ACCOUNT: "Your QR Code for {accountAlias: string}",
 
   // SUBTITLES
   SB_IMPORT_WALLET_TYPE: "Which kind of wallet do you want to import?",

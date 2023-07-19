@@ -54,7 +54,6 @@ export const BackupMnemonicBottomSheet = React.forwardRef<
                             LL.TITLE_MNEMONIC(),
                         )
                     }
-                    w={100}
                     title={LL.BTN_MNEMONIC_CLIPBOARD()}
                     disabled={!mnemonicArray.length}
                     rightIcon={

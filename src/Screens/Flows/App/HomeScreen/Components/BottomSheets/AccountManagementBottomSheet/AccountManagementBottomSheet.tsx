@@ -18,12 +18,13 @@ import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 type Props = {
     onClose: () => void
     openAddAccountSheet: () => void
+    openQRCodeSheet: () => void
 }
 
 export const AccountManagementBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, openAddAccountSheet }, ref) => {
+>(({ onClose, openAddAccountSheet, openQRCodeSheet }, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
@@ -40,6 +41,11 @@ export const AccountManagementBottomSheet = React.forwardRef<
     }, [onClose, openAddAccountSheet])
 
     const { onCopyToClipboard } = useCopyClipboard()
+
+    const handleOnQRcodePress = useCallback(() => {
+        onClose()
+        openQRCodeSheet()
+    }, [onClose, openQRCodeSheet])
 
     return (
         <BaseBottomSheet
@@ -62,8 +68,11 @@ export const AccountManagementBottomSheet = React.forwardRef<
                     testID="AccountManagementBottomSheet_addAccountButton"
                 />
             </BaseView>
+
             <BaseSpacer height={24} />
+
             <BaseTouchableBox
+                haptics="Light"
                 action={
                     selectedAccount
                         ? () =>
@@ -81,12 +90,16 @@ export const AccountManagementBottomSheet = React.forwardRef<
                 />
                 <BaseText mx={8}>{LL.BTN_COPY_PUBLIC_ADDRESS()}</BaseText>
             </BaseTouchableBox>
+
             <BaseSpacer height={16} />
-            <BaseTouchableBox action={() => {}} disabled>
+
+            <BaseTouchableBox action={handleOnQRcodePress} haptics="Light">
                 <BaseIcon name={"qrcode"} size={18} color={theme.colors.text} />
                 <BaseText mx={8}>{LL.BTN_SHOW_QR_CODE()}</BaseText>
             </BaseTouchableBox>
+
             <BaseSpacer height={16} />
+
             <BaseTouchableBox action={() => {}} disabled>
                 <BaseIcon
                     name={"account-edit"}
@@ -95,7 +108,9 @@ export const AccountManagementBottomSheet = React.forwardRef<
                 />
                 <BaseText mx={8}>{LL.BTN_RENAME_ACCOUNT()}</BaseText>
             </BaseTouchableBox>
+
             <BaseSpacer height={16} />
+
             <BaseTouchableBox action={() => {}} disabled>
                 <BaseIcon
                     name={"trash-can-outline"}

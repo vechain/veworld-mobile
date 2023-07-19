@@ -11,7 +11,12 @@ import {
     useMemoizedAnimation,
     useSetSelectedAccount,
 } from "~Hooks"
-import { BaseSafeArea, BaseSpacer, SelectAccountBottomSheet } from "~Components"
+import {
+    BaseSafeArea,
+    BaseSpacer,
+    QRCodeBottomSheet,
+    SelectAccountBottomSheet,
+} from "~Components"
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
@@ -46,6 +51,9 @@ export const HomeScreen = () => {
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
+
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
+        useBottomSheetModal()
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -90,11 +98,14 @@ export const HomeScreen = () => {
                 ref={accountManagementBottomSheetRef}
                 onClose={closeAccountManagementSheet}
                 openAddAccountSheet={openAddAccountSheet}
+                openQRCodeSheet={openQRCodeSheet}
             />
+
             <AddAccountBottomSheet
                 ref={addAccountBottomSheetRef}
                 onClose={closeAddAccountSheet}
             />
+
             <SelectAccountBottomSheet
                 closeBottomSheet={closeSelectAccountBottonSheet}
                 accounts={accounts}
@@ -103,6 +114,8 @@ export const HomeScreen = () => {
                 isBalanceVisible={isBalanceVisible}
                 ref={selectAccountBottomSheetRef}
             />
+
+            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
         </BaseSafeArea>
     )
 }

@@ -239,7 +239,7 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 *  ​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.​ ​T​r​y​ ​a​g​a​i​n​.
+	 *  ​ ​ ​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.​ ​T​r​y​ ​a​g​a​i​n​.
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
@@ -651,6 +651,11 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
+	/**
+	 * Y​o​u​r​ ​Q​R​ ​C​o​d​e​ ​f​o​r​ ​{​a​c​c​o​u​n​t​A​l​i​a​s​}
+	 * @param {string} accountAlias
+	 */
+	TITLE_QR_CODE_FOR_ACCOUNT: RequiredParams<'accountAlias'>
 	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
@@ -2432,7 +2437,7 @@ export type TranslationFunctions = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 *   PIN doesn't match. Try again.
+	 *     PIN doesn't match. Try again.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
@@ -2843,6 +2848,10 @@ export type TranslationFunctions = {
 	 * Backup your phrase
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
+	/**
+	 * Your QR Code for {accountAlias}
+	 */
+	TITLE_QR_CODE_FOR_ACCOUNT: (arg: { accountAlias: string }) => LocalizedString
 	/**
 	 * Which kind of wallet do you want to import?
 	 */
