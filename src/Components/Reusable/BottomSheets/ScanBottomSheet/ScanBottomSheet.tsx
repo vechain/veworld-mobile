@@ -101,16 +101,18 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 snapPoints={snapPoints}
                 ref={ref}>
                 {!hasPerms ? (
-                    <BaseView
-                        style={StyleSheet.absoluteFill}
-                        bg={COLORS.DARK_PURPLE}
-                        justifyContent="center"
-                        flexGrow={1}
-                        alignItems="center">
-                        <BaseText color="white">
-                            {LL.COMMON_BTN_LOADING()}
-                        </BaseText>
-                    </BaseView>
+                    <>
+                        <BaseView
+                            style={StyleSheet.absoluteFill}
+                            bg={COLORS.DARK_PURPLE}
+                            justifyContent="center"
+                            flexGrow={1}
+                            alignItems="center">
+                            <BaseText color="white">
+                                {LL.COMMON_BTN_LOADING()}
+                            </BaseText>
+                        </BaseView>
+                    </>
                 ) : (
                     isOpen && (
                         <Camera
@@ -130,7 +132,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                                     color={COLORS.DARK_PURPLE_RBGA}
                                 />
                             )}
-                            <CameraHeader />
+                            <CameraHeader onClose={onClose} />
                             {target === ScanTarget.WALLET_CONNECT && (
                                 <CameraFooter onPaste={onPasteFromClipboard} />
                             )}
