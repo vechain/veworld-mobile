@@ -26,6 +26,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   std::shared_ptr<const facebook::react::ReactNativeConfig> _reactNativeConfig;
   facebook::react::ContextContainer::Shared _contextContainer;
 }
+
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
 restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
@@ -33,8 +34,12 @@ return [RCTLinkingManager application:application
 continueUserActivity:userActivity
 restorationHandler:restorationHandler];
 }
+
 @end
 #endif
+
+
+
 
 static void ClearKeychainIfNecessary() {
     // Checks wether or not this is the first time the app is run
