@@ -1,5 +1,5 @@
 import { Activity, ActivityStatus, ActivityType, Token } from "~Model"
-import ActivityUtils from "."
+import ActivityUtils from "./index"
 import { genesises } from "~Constants"
 
 const SHA_TOKEN: Token = {

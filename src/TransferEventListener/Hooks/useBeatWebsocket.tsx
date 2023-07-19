@@ -57,7 +57,7 @@ export const useBeatWebsocket = (
         onClose: ev => info(ev),
         shouldReconnect,
         retryOnError: true,
-        reconnectAttempts: 10_000,
-        reconnectInterval: 1_000,
+        reconnectAttempts: 10000,
+        reconnectInterval: 1000,
     })
 }

@@ -3,7 +3,7 @@ import {
     InformUserForIncomingToken,
     InformUserForOutgoingToken,
     TokenTransferHandlerProps,
-} from "."
+} from "./index"
 import { TransactionOrigin } from "~Model"
 
 export const handleTokenTransfers = async ({

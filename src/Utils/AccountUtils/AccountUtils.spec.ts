@@ -1,5 +1,5 @@
 import { TestHelpers } from "~Test"
-import AccountUtils from "."
+import AccountUtils from "./index"
 
 const accounts = [TestHelpers.data.account1D1, TestHelpers.data.account2D1]
 
