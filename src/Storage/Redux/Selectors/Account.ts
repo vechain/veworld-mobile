@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 
 export const selectAccountsState = (state: RootState) => state.accounts
 
@@ -75,10 +75,24 @@ export const selectVisibleAccounts = createSelector(
 /**
  * @returns all the visibile accounts but the selected one
  */
-export const selectAccountsButSelected = createSelector(
-    selectAccounts,
-    selectSelectedAccountAddress,
-    (accounts, selectedAccountAddress) => {
+export const selectVisibleAccountsButSelected = createSelector(
+    [
+        selectVisibleAccounts,
+        selectSelectedAccountAddress,
+        (state: RootState, isDelegating?: boolean) => isDelegating,
+    ],
+    (accounts, selectedAccountAddress, isDelegating) => {
+        // if we're requesting this info for delegation we need to also exclude ledger accounts
+        if (isDelegating) {
+            return accounts.filter(
+                account =>
+                    !AddressUtils.compareAddresses(
+                        selectedAccountAddress,
+                        account.address,
+                    ) && account.device.type !== DEVICE_TYPE.LEDGER,
+            )
+        }
+
         return accounts.filter(
             account =>
                 !AddressUtils.compareAddresses(
