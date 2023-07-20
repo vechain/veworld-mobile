@@ -8,6 +8,14 @@ import { AlertUtils } from "~Utils"
 jest.mock("../useAppState", () => ({
     useAppState: () => [AppStateType.BACKGROUND, AppStateType.ACTIVE],
 }))
+
+jest.mock("expo-camera", () => ({
+    Camera: {
+        getCameraPermissionsAsync: jest.fn(),
+        requestCameraPermissionsAsync: jest.fn(),
+    },
+}))
+
 jest.mock("react-native", () => ({
     AppState: jest.requireActual("react-native").AppState,
     Linking: {
