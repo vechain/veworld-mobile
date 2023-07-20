@@ -14,8 +14,8 @@ const findBody = async () =>
 
 const chevronTestId = "chevron"
 
-const dataLength = 12
-const itemHeight = 100
+const dataLength = 10
+const itemHeight = 90
 
 const findChevron = async () =>
     await screen.findByTestId(chevronTestId, {}, { timeout: 5000 })
