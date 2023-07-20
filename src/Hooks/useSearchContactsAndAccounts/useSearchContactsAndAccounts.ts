@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import {
-    selectAccounts,
     selectKnownContacts,
+    selectVisibleAccountsButSelected,
     useAppSelector,
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
@@ -13,7 +13,7 @@ export const useSearchContactsAndAccounts = ({
     searchText: string
     selectedAddress: string | undefined
 }) => {
-    const accounts = useAppSelector(selectAccounts)
+    const accounts = useAppSelector(selectVisibleAccountsButSelected)
     const contacts = useAppSelector(selectKnownContacts)
     const accountsAndContacts = useMemo(() => {
         return [...accounts, ...contacts]
