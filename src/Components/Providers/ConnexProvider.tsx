@@ -35,6 +35,9 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
             driver?.close()
             initConnex()
         }
+        return () => {
+            driver?.close()
+        }
     }, [initConnex, connex, selectedNetwork.genesis, driver])
 
     if (!value) {

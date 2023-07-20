@@ -1,11 +1,6 @@
 import React, { useCallback, useEffect } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import {
-    BaseText,
-    BaseView,
-    BaseBottomSheet,
-    showErrorToast,
-} from "~Components"
+import { BaseBottomSheet, showErrorToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useDisclosure } from "~Hooks"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
@@ -21,13 +16,12 @@ type Props = {
     onScan: (address: string) => void
     onClose: () => void
     target: ScanTarget
-    hasPerms: boolean
 }
 
 const snapPoints = ["100%"]
 
 export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onClose, onScan, target, hasPerms }, ref) => {
+    ({ onClose, onScan, target }, ref) => {
         const { LL } = useI18nContext()
 
         const { isOpen, onClose: closeCamera } = useDisclosure(true)
@@ -100,44 +94,27 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 noMargins={true}
                 snapPoints={snapPoints}
                 ref={ref}>
-                {!hasPerms ? (
-                    <>
-                        <BaseView
-                            style={StyleSheet.absoluteFill}
-                            bg={COLORS.DARK_PURPLE}
-                            justifyContent="center"
-                            flexGrow={1}
-                            alignItems="center">
-                            <BaseText color="white">
-                                {LL.COMMON_BTN_LOADING()}
-                            </BaseText>
-                        </BaseView>
-                    </>
-                ) : (
-                    isOpen && (
-                        <Camera
-                            style={baseStyles.camera}
-                            type={CameraType.back}
-                            onCameraReady={onCameraReady}
-                            barCodeScannerSettings={{
-                                barCodeTypes: [
-                                    BarCodeScanner.Constants.BarCodeType.qr,
-                                ],
-                            }}
-                            onBarCodeScanned={onQrScanned}
-                            onMountError={onClose}
-                            ratio={"16:9"}>
-                            {isCameraReady && (
-                                <QrScannerLayout
-                                    color={COLORS.DARK_PURPLE_RBGA}
-                                />
-                            )}
-                            <CameraHeader onClose={onClose} />
-                            {target === ScanTarget.WALLET_CONNECT && (
-                                <CameraFooter onPaste={onPasteFromClipboard} />
-                            )}
-                        </Camera>
-                    )
+                {isOpen && (
+                    <Camera
+                        style={baseStyles.camera}
+                        type={CameraType.back}
+                        onCameraReady={onCameraReady}
+                        barCodeScannerSettings={{
+                            barCodeTypes: [
+                                BarCodeScanner.Constants.BarCodeType.qr,
+                            ],
+                        }}
+                        onBarCodeScanned={onQrScanned}
+                        onMountError={onClose}
+                        ratio={"16:9"}>
+                        {isCameraReady && (
+                            <QrScannerLayout color={COLORS.DARK_PURPLE_RBGA} />
+                        )}
+                        <CameraHeader onClose={onClose} />
+                        {target === ScanTarget.WALLET_CONNECT && (
+                            <CameraFooter onPaste={onPasteFromClipboard} />
+                        )}
+                    </Camera>
                 )}
             </BaseBottomSheet>
         )
