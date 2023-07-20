@@ -14,6 +14,9 @@ const findBody = async () =>
 
 const chevronTestId = "chevron"
 
+const dataLength = 12
+const itemHeight = 100
+
 const findChevron = async () =>
     await screen.findByTestId(chevronTestId, {}, { timeout: 5000 })
 
@@ -21,6 +24,8 @@ describe("BaseAccordion", () => {
     it("renders correctly with default props", async () => {
         render(
             <BaseAccordion
+                extraData={dataLength}
+                itmeHeight={itemHeight}
                 headerComponent={
                     <View testID={headerTestId}>HeaderComponent</View>
                 }
