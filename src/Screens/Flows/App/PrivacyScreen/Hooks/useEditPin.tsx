@@ -142,6 +142,15 @@ export const useEditPin = () => {
 
     // [END] - Internal Methods
 
+    // Reset state when the edit pin prompt is closed
+    useEffect(() => {
+        if (!isEditPinPromptOpen) {
+            setOldPin("")
+            setScenario(LOCKSCREEN_SCENARIO.EDIT_OLD_PIN)
+        }
+    }, [isEditPinPromptOpen])
+
+    // set default statae on startup
     useEffect(() => {
         // clean up state
         setScenario(LOCKSCREEN_SCENARIO.EDIT_OLD_PIN)

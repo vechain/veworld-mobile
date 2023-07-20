@@ -20,7 +20,7 @@ import {
     Routes,
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { CreateContactBottomSheet } from "./Components/CreateContactBottomSheet/CreateContactBottomSheet"
+import { CreateContactBottomSheet } from "./Components"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome | RootStackParamListNFT,
@@ -71,7 +71,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         filteredContacts,
         filteredAccounts,
         isAddressInContactsOrAccounts,
-        contacts,
     } = useSearchOrScanInput(navigateNext, setSelectedAddress, selectedAddress)
 
     //Whenever search changes, we check if it's a valid address
@@ -80,7 +79,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             setSelectedAddress(searchText)
             Keyboard.dismiss()
         }
-    }, [searchText, isAddressInContactsOrAccounts, openCreateContactSheet])
+    }, [searchText, isAddressInContactsOrAccounts])
 
     const onNext = useCallback(() => {
         if (isAddressInContactsOrAccounts && selectedAddress) {
@@ -114,7 +113,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             body={
                 <BaseView mb={80}>
                     <BaseAccordion
-                        defaultIsOpen={!!contacts.length}
+                        defaultIsOpen={!!filteredContacts.length}
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>
@@ -132,6 +131,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                             contact.address,
                                             selectedAddress,
                                         )
+
                                     const onPress = () =>
                                         setSelectedAddress(contact.address)
 
@@ -151,7 +151,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         }
                     />
                     <BaseAccordion
-                        defaultIsOpen
+                        defaultIsOpen={!!filteredAccounts.length}
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>

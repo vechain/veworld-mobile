@@ -55,7 +55,8 @@ export const CreateContactBottomSheet = React.forwardRef<
 
     const closeAndSubmit = useCallback(() => {
         setAlias("")
-        setCreationMode(false)
+        // setCreationMode(false)
+        onClose()
         onClose()
         onSubmit(address)
     }, [onClose, onSubmit, address])

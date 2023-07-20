@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
@@ -10,8 +10,13 @@ import {
     BaseView,
 } from "~Components"
 import { WalletAccount } from "~Model"
-import { useAppDispatch } from "~Storage/Redux"
+import {
+    selectVetBalanceByAccount,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { toggleAccountVisibility } from "~Storage/Redux/Actions"
+import { VET } from "~Constants"
 
 type Props = {
     account: WalletAccount
@@ -22,6 +27,18 @@ export const AccountDetailBox: React.FC<Props> = memo(
     ({ account, isSelected, isBalanceVisible }) => {
         const theme = useTheme()
         const dispatch = useAppDispatch()
+
+        const vetBalance = useAppSelector(state =>
+            selectVetBalanceByAccount(state, account.address),
+        )
+
+        const balance = useMemo(() => {
+            if (!isBalanceVisible) {
+                return "**** " + VET.symbol
+            }
+
+            return `${vetBalance} ${VET.symbol}`
+        }, [isBalanceVisible, vetBalance])
 
         const toggleVisibility = useCallback(() => {
             dispatch(toggleAccountVisibility({ address: account.address }))
@@ -50,11 +67,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                             )}
                         </BaseText>
                         <BaseSpacer height={4} />
-                        {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/770) change with a real budget */}
-                        {/* eslint-disable-next-line i18next/no-literal-string  */}
-                        <BaseText fontSize={10}>
-                            {isBalanceVisible ? "1.2235 VET" : "***** VET"}
-                        </BaseText>
+                        <BaseText fontSize={10}>{balance}</BaseText>
                     </BaseView>
                 </BaseTouchableBox>
                 <BaseIcon

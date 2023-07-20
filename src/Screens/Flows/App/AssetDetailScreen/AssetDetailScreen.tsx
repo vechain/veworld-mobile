@@ -134,7 +134,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                     <BaseSpacer height={24} />
 
-                    <MarketInfoView marketInfo={marketInfo} />
+                    <MarketInfoView
+                        marketInfo={marketInfo}
+                        tokenSymbol={token.symbol}
+                    />
 
                     <BaseSpacer height={24} />
 

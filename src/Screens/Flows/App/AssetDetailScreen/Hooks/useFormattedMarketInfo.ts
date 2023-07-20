@@ -3,7 +3,10 @@ import { FormattingUtils } from "~Utils"
 import { CoinMarketInfo } from "~Storage/Redux/Types"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
-export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
+export const useFormattedMarketInfo = (
+    marketInfo: CoinMarketInfo,
+    tokenSymbol: string,
+) => {
     const currency = useAppSelector(selectCurrency)
 
     const marketCap = useMemo(() => {
@@ -18,9 +21,9 @@ export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
         return FormattingUtils.humanNumber(
             marketInfo?.total_supply || 0,
             undefined,
-            currency,
+            tokenSymbol,
         )
-    }, [currency, marketInfo?.total_supply])
+    }, [tokenSymbol, marketInfo?.total_supply])
 
     const totalVolume = useMemo(() => {
         return FormattingUtils.humanNumber(
@@ -34,15 +37,18 @@ export const useFormattedMarketInfo = (marketInfo: CoinMarketInfo) => {
         return FormattingUtils.humanNumber(
             marketInfo?.circulating_supply || 0,
             undefined,
-            currency,
+            tokenSymbol,
         )
-    }, [currency, marketInfo?.circulating_supply])
+    }, [tokenSymbol, marketInfo?.circulating_supply])
 
     return {
         marketCap: marketCap === "< 0.01 USD" ? "N/A" : marketCap,
-        totalSupply: totalSupply === "< 0.01 USD" ? "N/A" : totalSupply,
+        totalSupply:
+            totalSupply === `< 0.01 ${tokenSymbol}` ? "N/A" : totalSupply,
         totalVolume: totalVolume === "< 0.01 USD" ? "N/A" : totalVolume,
         circulatingSupply:
-            circulatingSupply === "< 0.01 USD" ? "N/A" : circulatingSupply,
+            circulatingSupply === `< 0.01 ${tokenSymbol}`
+                ? "N/A"
+                : circulatingSupply,
     }
 }
