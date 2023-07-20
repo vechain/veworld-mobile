@@ -27,6 +27,9 @@ type Props = NativeStackScreenProps<
     Routes.INSERT_ADDRESS_SEND
 >
 
+const CONTACT_CARD_DEFAULT_HIGHT = 72
+const ACCOUNT_CARD_DEFAULT_HIGHT = 86
+
 export const InsertAddressSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const [selectedAddress, setSelectedAddress] = useState("")
@@ -114,6 +117,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 <BaseView mb={80}>
                     <BaseAccordion
                         defaultIsOpen={!!filteredContacts.length}
+                        extraData={filteredContacts.length}
+                        itmeHeight={CONTACT_CARD_DEFAULT_HIGHT}
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>
@@ -152,6 +157,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     />
                     <BaseAccordion
                         defaultIsOpen={!!filteredAccounts.length}
+                        extraData={filteredAccounts.length}
+                        itmeHeight={ACCOUNT_CARD_DEFAULT_HIGHT}
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>

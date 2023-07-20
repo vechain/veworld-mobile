@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Animated, {
-    measure,
-    runOnUI,
     useAnimatedRef,
     useAnimatedStyle,
     useDerivedValue,
@@ -12,6 +10,8 @@ import Animated, {
 import { useTheme } from "~Hooks"
 import { BaseIcon } from "~Components"
 import * as Haptics from "expo-haptics"
+import { mix } from "react-native-redash"
+
 type Props = {
     headerComponent: React.ReactNode
     headerStyle?: StyleProp<ViewStyle>
@@ -22,6 +22,8 @@ type Props = {
     >
     bodyComponent: React.ReactNode
     defaultIsOpen?: boolean
+    extraData: number
+    itmeHeight: number
 }
 
 export const BaseAccordion = ({
@@ -32,26 +34,32 @@ export const BaseAccordion = ({
     chevronContainerStyle,
     bodyComponent,
     defaultIsOpen,
+    extraData,
+    itmeHeight,
 }: Props) => {
     const theme = useTheme()
     const aref = useAnimatedRef<View>()
     const open = useSharedValue(false)
     const height = useSharedValue(0)
+
     const progress = useDerivedValue(() =>
         open.value ? withTiming(1) : withTiming(0),
     )
 
+    const progress1 = useDerivedValue(() => withTiming(extraData))
+
     const computedHeaderStyle = useAnimatedStyle(() => {
-        if (open.value) return headerOpenedStyle || {}
-        return headerClosedStyle || {}
+        if (open.value) return headerOpenedStyle ?? {}
+        return headerClosedStyle ?? {}
     }, [open.value])
 
     const bodyContainerDynamicStyle = useAnimatedStyle(() => {
         return {
-            height: height.value * progress.value + 0.1,
+            // height: height.value * progress.value + 1,
+            height: mix(progress.value, 0, itmeHeight * progress1.value),
             opacity: progress.value === 0 ? 0 : 1,
         }
-    }, [height.value, progress.value])
+    }, [height.value, progress.value, progress1.value])
 
     const dynamicStyle = useAnimatedStyle(() => {
         return {
@@ -61,14 +69,11 @@ export const BaseAccordion = ({
 
     const onHeaderPress = useCallback(() => {
         if (height.value === 0) {
-            runOnUI(() => {
-                "worklet"
-                height.value = measure(aref)?.height ?? 0
-            })()
+            height.value = mix(progress.value, 0, itmeHeight * extraData)
         }
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         open.value = !open.value
-    }, [aref, height, open])
+    }, [extraData, height, itmeHeight, open, progress.value])
 
     const renderCollapseIcon = useMemo(() => {
         return (
