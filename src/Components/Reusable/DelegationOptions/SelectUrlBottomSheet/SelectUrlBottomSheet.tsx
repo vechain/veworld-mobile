@@ -10,9 +10,9 @@ const snapPoints = ["40%"]
 type Props = {
     onClose: () => void
     selectedDelegationOption: DelegationType
-    setSelectedDelegationOption: (id: DelegationType) => void
     selectedDelegationUrl?: string
-    setSelectedDelegationUrl: (string?: string) => void
+    setSelectedDelegationUrl: (string: string) => void
+    setNoDelegation: () => void
 }
 
 // component to select an account for delegation
@@ -25,7 +25,7 @@ export const SelectUrlBottomSheet = React.forwardRef<
             setSelectedDelegationUrl,
             selectedDelegationUrl,
             selectedDelegationOption,
-            setSelectedDelegationOption,
+            setNoDelegation,
             onClose,
         },
         ref,
@@ -40,7 +40,7 @@ export const SelectUrlBottomSheet = React.forwardRef<
                 selectedDelegationOption === DelegationType.URL &&
                 !selectedDelegationUrl
             ) {
-                setSelectedDelegationOption(DelegationType.NONE)
+                setNoDelegation()
             }
         }
 

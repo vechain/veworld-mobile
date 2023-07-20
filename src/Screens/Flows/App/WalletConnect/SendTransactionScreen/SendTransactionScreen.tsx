@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
+import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import {
     AccountCard,
@@ -11,10 +11,8 @@ import {
     CloseModalButton,
     DelegationOptions,
     showErrorToast,
-    useThor,
     useWalletConnect,
 } from "~Components"
-import { Transaction } from "thor-devkit"
 import {
     addPendingDappTransactionActivity,
     selectSelectedAccount,
@@ -27,22 +25,18 @@ import {
 import {
     error,
     FormattingUtils,
-    GasUtils,
-    HexUtils,
     MinimizerUtils,
     TransactionUtils,
     WalletConnectResponseUtils,
     WalletConnectUtils,
 } from "~Utils"
-import { useCheckIdentity, useSignTransaction } from "~Hooks"
-import { AccountWithDevice, EstimateGasResult } from "~Model"
+import { useCheckIdentity, useSignTransaction, useTransaction } from "~Hooks"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
-import { isEmpty, isUndefined } from "lodash"
 import { useI18nContext } from "~i18n"
 import { sendTransaction } from "~Networking"
 import { ScrollView } from "react-native-gesture-handler"
 import { useDelegation } from "~Screens/Flows/App/SendScreen/04-TransactionSummarySendScreen/Hooks"
-import { DelegationType } from "~Model/Delegation"
 import { BigNumber } from "bignumber.js"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -71,7 +65,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
 
     const { web3Wallet } = useWalletConnect()
-    const thorClient = useThor()
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount: AccountWithDevice = useAppSelector(
         selectSelectedAccount,
@@ -79,7 +72,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const nav = useNavigation()
-    const [gas, setGas] = useState<EstimateGasResult>()
 
     const onClose = useCallback(() => {
         nav.goBack()
@@ -89,39 +81,37 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const tokens = useAppSelector(selectTokensWithInfo)
     const clausesMetadata = TransactionUtils.interpretClauses(message, tokens)
 
-    // Prepare Transaction
-    const transactionBody: Transaction.Body = {
-        chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
-        blockRef: thorClient.status.head.id.slice(0, 18),
-        expiration: 18,
-        clauses: message.map(clause => ({
+    const clauses = useMemo(() => {
+        return message.map(clause => ({
             to: clause.to,
             value: clause.value,
             data: clause.data || "0x",
-        })),
-        gasPriceCoef: 0,
-        gas: gas?.gas?.toString() || "0",
-        dependsOn: options.dependsOn || null,
-        nonce: HexUtils.generateRandom(8),
-    }
+        }))
+    }, [message])
+
+    const { transaction, gas, setGasPayer } = useTransaction({
+        clauses,
+        providedGas: options.gas,
+        dependsOn: options.dependsOn,
+    })
 
     // Delegation
     const {
-        selectedDelegationOption,
-        setSelectedDelegationOption,
-        selectedDelegationAccount,
+        setNoDelegation,
         setSelectedDelegationAccount,
-        selectedDelegationUrl,
         setSelectedDelegationUrl,
+        selectedDelegationOption,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
         isDelegated,
     } = useDelegation({
-        transaction: transactionBody,
+        transaction,
+        providedUrl: options.delegator?.url,
+        setGasPayer,
     })
 
-    // TODO - add token to handle pending txs?
-    // Sign transaction
     const { signTransaction } = useSignTransaction({
-        transaction: transactionBody,
+        transaction,
         onTXFinish: onClose,
         isDelegated,
         selectedDelegationAccount,
@@ -136,16 +126,26 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             selectedDelegationAccount?.address || selectedAccount.address,
         ),
     )
-    const vthoBalance = FormattingUtils.scaleNumberDown(
-        vtho.balance.balance,
-        vtho.decimals,
-        2,
+    const vthoBalance = useMemo(
+        () =>
+            FormattingUtils.scaleNumberDown(
+                vtho.balance.balance,
+                vtho.decimals,
+                2,
+            ),
+        [vtho],
     )
-    const vthoGas = FormattingUtils.convertToFiatBalance(
-        gas?.gas?.toString() || "0",
-        1,
-        5,
+
+    const vthoGas = useMemo(
+        () =>
+            FormattingUtils.convertToFiatBalance(
+                gas?.gas?.toString() || "0",
+                1,
+                5,
+            ),
+        [gas],
     )
+
     const isThereEnoughGas = useMemo(() => {
         let leftVtho = new BigNumber(vthoBalance)
         return vthoGas && leftVtho.gte(vthoGas)
@@ -206,12 +206,12 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             }
         },
         [
+            selectedAccount,
             signTransaction,
             network,
             requestEvent,
             web3Wallet,
             LL,
-            selectedAccount.address,
             dispatch,
             name,
             url,
@@ -224,40 +224,29 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             onIdentityConfirmed: handleAccept,
         })
 
+    const signAndSend = useCallback(async () => {
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
+            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
+                transaction,
+                accountWithDevice: selectedAccount as LedgerAccountWithDevice,
+                initialRoute: Routes.HOME,
+                requestEvent,
+            })
+            return
+        } else {
+            await checkIdentityBeforeOpening()
+        }
+    }, [
+        transaction,
+        nav,
+        requestEvent,
+        selectedAccount,
+        checkIdentityBeforeOpening,
+    ])
+
     const onPressBack = useCallback(async () => {
         await onReject()
     }, [onReject])
-
-    // Setup delegation option
-    useEffect(() => {
-        if (
-            isUndefined(options.delegator?.url) ||
-            isEmpty(options.delegator?.url)
-        ) {
-            setSelectedDelegationOption(DelegationType.NONE)
-            setSelectedDelegationUrl(undefined)
-        } else {
-            setSelectedDelegationOption(DelegationType.URL)
-            setSelectedDelegationUrl(options.delegator?.url)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    // Estimate gas
-    useEffect(() => {
-        if (selectedAccount) {
-            ;(async () => {
-                const estimatedGas = await GasUtils.estimateGas(
-                    thorClient,
-                    message,
-                    0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
-                    selectedAccount.address,
-                    // NOTE: gasPayer: undefined; in extension it was not used
-                )
-                setGas(estimatedGas)
-            })()
-        }
-    }, [selectedAccount, message, thorClient])
 
     return (
         <BaseSafeArea>
@@ -299,10 +288,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <BaseSpacer height={24} />
                 <BaseView mx={20}>
                     <DelegationOptions
+                        setNoDelegation={setNoDelegation}
                         selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationOption={
-                            setSelectedDelegationOption
-                        }
                         setSelectedAccount={setSelectedDelegationAccount}
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}
@@ -349,7 +336,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
-                        action={checkIdentityBeforeOpening}
+                        action={signAndSend}
                         disabled={!isThereEnoughGas && !isDelegated}
                     />
                     <BaseSpacer height={16} />

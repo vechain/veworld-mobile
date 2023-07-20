@@ -24,7 +24,7 @@ import {
     WalletConnectUtils,
 } from "~Utils"
 import { useCheckIdentity, useSignMessage } from "~Hooks"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -33,10 +33,10 @@ import { MessageDetails } from "~Screens"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
-    Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN
+    Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN
 >
 
-export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
+export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { requestEvent, session, message } = route.params
 
     const { web3Wallet } = useWalletConnect()
@@ -78,6 +78,18 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const handleAccept = useCallback(
         async (password?: string) => {
             try {
+                if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
+                    nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
+                        requestEvent,
+                        accountWithDevice:
+                            selectedAccount as LedgerAccountWithDevice,
+                        certificate: cert,
+                        //TODO: What should initialRoute be?
+                        initialRoute: Routes.HOME,
+                    })
+                    return
+                }
+
                 const signature = await signMessage(password)
                 if (!signature) {
                     throw new Error("Signature is empty")
@@ -117,6 +129,8 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
             onClose()
         },
         [
+            selectedAccount,
+            nav,
             onClose,
             signMessage,
             requestEvent,

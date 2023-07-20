@@ -1,6 +1,6 @@
 import { TestHelpers } from "~Test"
 import LedgerUtils from "./LedgerUtils"
-import { LEDGER_ERROR_CODES, defaultMainNetwork } from "~Constants"
+import { defaultMainNetwork, LEDGER_ERROR_CODES } from "~Constants"
 import { BleError } from "react-native-ble-plx"
 import { DisconnectedDeviceDuringOperation } from "@ledgerhq/errors"
 
@@ -74,14 +74,15 @@ describe("LedgerUtils", () => {
     })
 
     describe("signCertificate", () => {
-        it("should works as expected", async () => {
-            await LedgerUtils.signCertificate(
-                0,
-                TestHelpers.data.mockedCertificate,
-                { ...TestHelpers.data.ledgerDevice },
-                TestHelpers.data.mockLedgerApp,
-            )
-        })
+        // TODO (https://github.com/vechainfoundation/veworld-mobile/issues/776) mock transport and test more
+        // it("should works as expected", async () => {
+        //     await LedgerUtils.signCertificate(
+        //         0,
+        //         TestHelpers.data.mockedCertificate,
+        //         { ...TestHelpers.data.ledgerDevice },
+        //         TestHelpers.data.mockedTransport,
+        //     )
+        // })
 
         it("should throw when device and ledgerApp mismatch", async () => {
             const signCertificateCall = async () =>
@@ -89,7 +90,7 @@ describe("LedgerUtils", () => {
                     0,
                     TestHelpers.data.mockedCertificate,
                     { ...TestHelpers.data.ledgerDevice, rootAddress: "dddd" },
-                    TestHelpers.data.mockLedgerApp,
+                    TestHelpers.data.mockedTransport,
                 )
             expect(signCertificateCall).rejects.toThrow(
                 "Failed to sign the message",

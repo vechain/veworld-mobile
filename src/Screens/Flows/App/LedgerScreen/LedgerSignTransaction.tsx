@@ -19,32 +19,44 @@ import {
     BaseView,
     BluetoothStatusBottomSheet,
     ConnectionErrorBottomSheet,
+    showErrorToast,
     Step,
     StepsProgressBar,
-    showErrorToast,
+    useWalletConnect,
 } from "~Components"
 import {
     RootStackParamListDiscover,
     RootStackParamListHome,
+    RootStackParamListSwitch,
     Routes,
 } from "~Navigation"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { LedgerUtils, debug, error } from "~Utils"
+import {
+    debug,
+    error,
+    LedgerUtils,
+    MinimizerUtils,
+    WalletConnectResponseUtils,
+} from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
 
 type Props = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover,
+    RootStackParamListHome &
+        RootStackParamListDiscover &
+        RootStackParamListSwitch,
     Routes.LEDGER_SIGN_TRANSACTION
 >
 
 export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, transaction, initialRoute } = route.params
+    const { accountWithDevice, transaction, initialRoute, requestEvent } =
+        route.params
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const { web3Wallet } = useWalletConnect()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
@@ -225,10 +237,22 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             const tx = new Transaction(transaction)
             tx.signature = signature
 
-            await sendTransactionAndPerformUpdates(tx)
+            const txId = await sendTransactionAndPerformUpdates(tx)
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success,
             )
+
+            if (requestEvent && web3Wallet) {
+                await WalletConnectResponseUtils.transactionRequestSuccessResponse(
+                    { request: requestEvent, web3Wallet, LL },
+                    txId,
+                    accountWithDevice.address,
+                    selectedNetwork,
+                )
+
+                MinimizerUtils.goBack()
+            }
+
             navigateOnFinish()
         } catch (e) {
             error(e)
@@ -240,6 +264,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             setIsSending(false)
         }
     }, [
+        web3Wallet,
+        requestEvent,
+        selectedNetwork,
+        accountWithDevice,
         LL,
         signature,
         transaction,

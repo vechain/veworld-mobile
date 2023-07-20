@@ -7,7 +7,7 @@ import { useI18nContext } from "~i18n"
 
 type Props = {
     setAddUrlMode: (s: boolean) => void
-    setSelectedDelegationUrl: (s?: string) => void
+    setSelectedDelegationUrl: (s: string) => void
     selectedDelegationUrl?: string
     onCloseBottomSheet: () => void
 }

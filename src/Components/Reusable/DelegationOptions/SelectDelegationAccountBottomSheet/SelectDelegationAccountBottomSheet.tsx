@@ -8,9 +8,9 @@ import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 type Props = {
     onClose: () => void
     selectedDelegationOption: DelegationType
-    setSelectedDelegationOption: (id: DelegationType) => void
-    setSelectedAccount: (account?: AccountWithDevice) => void
+    setSelectedAccount: (account: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
+    setNoDelegation: () => void
     accounts: AccountWithDevice[]
 }
 
@@ -22,10 +22,10 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<
     (
         {
             onClose,
-            setSelectedDelegationOption,
             setSelectedAccount,
             selectedAccount,
             selectedDelegationOption,
+            setNoDelegation,
             accounts,
         },
         ref,
@@ -37,7 +37,7 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<
                 selectedDelegationOption === DelegationType.ACCOUNT &&
                 !selectedAccount
             ) {
-                setSelectedDelegationOption(DelegationType.NONE)
+                setNoDelegation()
             }
         }
 

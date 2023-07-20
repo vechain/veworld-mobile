@@ -197,6 +197,13 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                     </BaseText>
 
+                    <BaseButton
+                        action={onConfirm}
+                        w={100}
+                        title={LL.COMMON_LBL_IMPORT()}
+                        disabled={!selectedAccountsIndex.length}
+                    />
+
                     <BaseSpacer height={20} />
                     <BaseView style={themedStyles.container} pb={20}>
                         {!!ledgerAccounts.length && (
@@ -220,14 +227,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                             />
                         )}
                     </BaseView>
-                </BaseView>
-                <BaseView w={100}>
-                    <BaseButton
-                        action={onConfirm}
-                        w={100}
-                        title={LL.COMMON_LBL_IMPORT()}
-                        disabled={!selectedAccountsIndex.length}
-                    />
                 </BaseView>
             </BaseView>
 
