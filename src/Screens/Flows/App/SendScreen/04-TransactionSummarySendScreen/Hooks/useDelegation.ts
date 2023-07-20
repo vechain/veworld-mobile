@@ -128,16 +128,17 @@ export const useDelegation = ({
 
         setSelectedDelegationAccount(selectedAccount)
         setSelectedDelegationOption(DelegationType.ACCOUNT)
+        setGasPayer(selectedAccount.address)
         setSelectedDelegationUrl(undefined)
         setUrlDelegationSignature(undefined)
     }
 
     const handleNoDelegation = () => {
         setSelectedDelegationOption(DelegationType.NONE)
+        setGasPayer(account.address)
         setSelectedDelegationAccount(undefined)
         setSelectedDelegationUrl(undefined)
         setUrlDelegationSignature(undefined)
-        setGasPayer(account.address)
     }
 
     return {
