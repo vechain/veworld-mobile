@@ -43,6 +43,12 @@ export const useTransaction = ({
     const thorClient = useThor()
 
     const nonce = useMemo(() => HexUtils.generateRandom(8), [])
+
+    /**
+     *  TODO: How should we handle the block REF if the user is slow in transacting?
+     *  - We don't want it to change in case signatures have already been generated
+     *  - Current expiration is 5 minutes below: "expiration: 30" blocks
+     */
     const blockRef = useMemo(
         () => thorClient.status.head.id.slice(0, 18),
         // eslint-disable-next-line react-hooks/exhaustive-deps
