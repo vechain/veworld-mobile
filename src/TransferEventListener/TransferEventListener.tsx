@@ -10,7 +10,7 @@ import {
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
 import { useInformUser, useStateReconciliaiton } from "./Hooks"
-import { useFungibleTokenInfo, useTransactionStatus } from "~Hooks"
+import { useFungibleTokenInfo } from "~Hooks"
 import { Activity, Beat } from "~Model"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
 import {
@@ -32,8 +32,6 @@ export const TransferEventListener: React.FC = () => {
     const thor = useThor()
 
     const { fetchData } = useFungibleTokenInfo()
-
-    const { removeTransactionPending } = useTransactionStatus()
 
     const { updateBalances, updateNFTs } = useStateReconciliaiton()
 
@@ -114,7 +112,6 @@ export const TransferEventListener: React.FC = () => {
                             await handleNFTTransfers({
                                 visibleAccounts: relevantAccounts,
                                 transfer,
-                                removeTransactionPending,
                                 stateReconciliationAction: updateNFTs,
                                 informUser: forNFTs,
                                 thor,
@@ -134,7 +131,6 @@ export const TransferEventListener: React.FC = () => {
                             await handleTokenTransfers({
                                 visibleAccounts: relevantAccounts,
                                 transfer,
-                                removeTransactionPending,
                                 fetchData,
                                 stateReconciliationAction: updateBalances,
                                 informUser: forTokens,
@@ -150,7 +146,6 @@ export const TransferEventListener: React.FC = () => {
                             handleVETTransfers({
                                 transfer,
                                 visibleAccounts,
-                                removeTransactionPending,
                                 stateReconciliationAction: updateBalances,
                                 informUser: forTokens,
                             })
@@ -166,7 +161,6 @@ export const TransferEventListener: React.FC = () => {
             pendingActivities,
             network.type,
             blackListedCollections,
-            removeTransactionPending,
             thor,
             updateNFTs,
             forNFTs,

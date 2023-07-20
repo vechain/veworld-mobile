@@ -10,7 +10,6 @@ export const handleTokenTransfers = async ({
     visibleAccounts,
     transfer,
     fetchData,
-    removeTransactionPending,
     stateReconciliationAction,
     informUser,
 }: TokenTransferHandlerProps) => {
@@ -22,9 +21,6 @@ export const handleTokenTransfers = async ({
 
     // User received token
     if (foundAccount.origin === TransactionOrigin.TO) {
-        // remove tx pending from redux
-        removeTransactionPending({ txId: transfer.txId })
-
         // inform user for successful transfer
         InformUserForIncomingToken({
             amount: transfer.value || "0",
@@ -40,9 +36,6 @@ export const handleTokenTransfers = async ({
 
     // User send token
     if (foundAccount.origin === TransactionOrigin.FROM) {
-        // remove tx pending from redux
-        removeTransactionPending({ txId: transfer.txId })
-
         // inform usr for successfull transfer
         InformUserForOutgoingToken({
             txId: transfer.txId,

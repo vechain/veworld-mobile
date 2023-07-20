@@ -16,7 +16,7 @@ import {
     Wallet,
 } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { useSendTransaction, useTransactionStatus } from "~Hooks"
+import { useSendTransaction } from "~Hooks"
 import { sponsorTransaction } from "~Networking"
 
 type Props = {
@@ -51,7 +51,6 @@ export const useSignTransaction = ({
     selectedDelegationOption,
     selectedDelegationUrl,
     onError,
-    token,
 }: Props) => {
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
@@ -59,7 +58,6 @@ export const useSignTransaction = ({
     const senderDevice = useAppSelector(state =>
         selectDevice(state, account.rootAddress),
     )
-    const { prepareTxStatus } = useTransactionStatus()
     const { sendTransactionAndPerformUpdates } = useSendTransaction(
         network,
         account,
@@ -198,8 +196,7 @@ export const useSignTransaction = ({
     const signAndSendTransaction = async (password?: string) => {
         try {
             const tx = await signTransaction(password)
-            const id = await sendTransactionAndPerformUpdates(tx)
-            if (token) await prepareTxStatus({ txId: id, token })
+            await sendTransactionAndPerformUpdates(tx)
         } catch (e) {
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
