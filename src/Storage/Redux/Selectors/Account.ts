@@ -103,15 +103,6 @@ export const selectVisibleAccountsButSelected = createSelector(
     },
 )
 
-export const selectLocalSelectedAccounts = createSelector(
-    selectAccountsButSelected,
-    accounts => {
-        return accounts.filter(
-            account => account.device.type !== DEVICE_TYPE.LEDGER,
-        )
-    },
-)
-
 /**
  *
  * @param rootAddress rootAddress of device to get accounts for
