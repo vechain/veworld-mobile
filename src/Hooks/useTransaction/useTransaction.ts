@@ -57,7 +57,8 @@ export const useTransaction = ({
         return {
             chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
             blockRef,
-            expiration: 18,
+            // 5 minutes
+            expiration: 30,
             clauses: clauses,
             gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
             gas: providedGas || gas?.gas || "0",

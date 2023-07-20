@@ -80,12 +80,12 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     })
 
     const {
-        selectedDelegationOption,
-        setSelectedDelegationOption,
-        selectedDelegationAccount,
+        setNoDelegation,
         setSelectedDelegationAccount,
-        selectedDelegationUrl,
         setSelectedDelegationUrl,
+        selectedDelegationOption,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
     } = useDelegation({ transaction, setGasPayer })
@@ -170,9 +170,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationOption={
-                            setSelectedDelegationOption
-                        }
+                        setNoDelegation={setNoDelegation}
                         setSelectedAccount={setSelectedDelegationAccount}
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}

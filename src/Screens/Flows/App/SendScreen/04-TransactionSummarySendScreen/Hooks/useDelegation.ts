@@ -1,5 +1,5 @@
 import { DelegationType } from "~Model/Delegation"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { useCallback, useEffect, useState } from "react"
 import {
     getDefaultDelegationAccount,
@@ -73,8 +73,6 @@ export const useDelegation = ({
                     onError(response.data.error)
                 }
 
-                debug(response.data)
-
                 const signature = Buffer.from(
                     response.data.signature.substr(2),
                     "hex",
@@ -88,6 +86,8 @@ export const useDelegation = ({
 
                 const gasPayer = address.fromPublicKey(publicKey)
 
+                debug("URL Delegation success: " + gasPayer)
+
                 setGasPayer(gasPayer)
             } catch (e) {
                 onError(e)
@@ -98,6 +98,7 @@ export const useDelegation = ({
 
     const handleSetSelectedDelegationUrl = async (url?: string) => {
         setSelectedDelegationUrl(url)
+        setSelectedDelegationOption(DelegationType.URL)
         if (url) {
             await fetchSignature(transaction, url, account.address)
         } else {
@@ -120,15 +121,33 @@ export const useDelegation = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [providedUrl])
 
+    const handleSetSelectedDelegationAccount = (
+        selectedAccount: AccountWithDevice,
+    ) => {
+        if (account.device.type === DEVICE_TYPE.LEDGER) return
+
+        setSelectedDelegationAccount(selectedAccount)
+        setSelectedDelegationOption(DelegationType.ACCOUNT)
+        setSelectedDelegationUrl(undefined)
+        setUrlDelegationSignature(undefined)
+    }
+
+    const handleNoDelegation = () => {
+        setSelectedDelegationOption(DelegationType.NONE)
+        setSelectedDelegationAccount(undefined)
+        setSelectedDelegationUrl(undefined)
+        setUrlDelegationSignature(undefined)
+        setGasPayer(account.address)
+    }
+
     return {
-        selectedDelegationOption,
-        setSelectedDelegationOption,
-        selectedDelegationAccount,
-        setSelectedDelegationAccount,
-        selectedDelegationUrl,
         setSelectedDelegationUrl: handleSetSelectedDelegationUrl,
+        setSelectedDelegationAccount: handleSetSelectedDelegationAccount,
+        setNoDelegation: handleNoDelegation,
+        selectedDelegationOption,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
         urlDelegationSignature,
-        setUrlDelegationSignature,
         isDelegated,
     }
 }

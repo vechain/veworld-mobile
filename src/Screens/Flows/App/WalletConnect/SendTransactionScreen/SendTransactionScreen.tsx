@@ -97,12 +97,12 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     // Delegation
     const {
-        selectedDelegationOption,
-        setSelectedDelegationOption,
-        selectedDelegationAccount,
+        setNoDelegation,
         setSelectedDelegationAccount,
-        selectedDelegationUrl,
         setSelectedDelegationUrl,
+        selectedDelegationOption,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
         isDelegated,
     } = useDelegation({
         transaction,
@@ -281,10 +281,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <BaseSpacer height={24} />
                 <BaseView mx={20}>
                     <DelegationOptions
+                        setNoDelegation={setNoDelegation}
                         selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationOption={
-                            setSelectedDelegationOption
-                        }
                         setSelectedAccount={setSelectedDelegationAccount}
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}

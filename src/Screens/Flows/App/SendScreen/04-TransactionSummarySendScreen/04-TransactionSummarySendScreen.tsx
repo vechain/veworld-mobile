@@ -107,12 +107,12 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     })
 
     const {
-        selectedDelegationOption,
-        setSelectedDelegationOption,
-        selectedDelegationAccount,
         setSelectedDelegationAccount,
-        selectedDelegationUrl,
         setSelectedDelegationUrl,
+        setNoDelegation,
+        selectedDelegationOption,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
     } = useDelegation({ transaction, setGasPayer })
@@ -291,9 +291,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationOption={
-                            setSelectedDelegationOption
-                        }
+                        setNoDelegation={setNoDelegation}
                         setSelectedAccount={setSelectedDelegationAccount}
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}

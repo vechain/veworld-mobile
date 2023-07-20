@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 
 export const selectAccountsState = (state: RootState) => state.accounts
 
@@ -85,6 +85,15 @@ export const selectAccountsButSelected = createSelector(
                     selectedAccountAddress,
                     account.address,
                 ),
+        )
+    },
+)
+
+export const selectLocalSelectedAccounts = createSelector(
+    selectAccountsButSelected,
+    accounts => {
+        return accounts.filter(
+            account => account.device.type !== DEVICE_TYPE.LEDGER,
         )
     },
 )
