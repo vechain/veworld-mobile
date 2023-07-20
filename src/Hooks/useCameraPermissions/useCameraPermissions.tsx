@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback } from "react"
 import { Linking } from "react-native"
-import { AlertUtils } from "~Utils"
-import { useAppState } from "../useAppState"
-import { AppStateType } from "~Model"
+import { AlertUtils, debug } from "~Utils"
 import { Camera } from "expo-camera"
 import { useI18nContext } from "~i18n"
 
@@ -15,37 +13,38 @@ export const useCameraPermissions = ({
     onCanceled: () => void
 }) => {
     const { LL } = useI18nContext()
-    const [hasPerms, setHasPerms] = useState(false)
-    const [previousState, currentState] = useAppState()
 
-    const requestPermissions = useCallback(async () => {
+    const requestPermissions = useCallback(async (): Promise<boolean> => {
         const status = await Camera.requestCameraPermissionsAsync()
 
-        if (status?.granted) {
-            setHasPerms(true)
-            return
+        debug(`requestPermissions: ${JSON.stringify(status)}`)
+
+        if (status.granted) {
+            return true
         }
 
-        if (!status?.canAskAgain) {
-            return onCanceled()
+        if (!status.canAskAgain) {
+            onCanceled()
         }
+
+        return false
     }, [onCanceled])
 
-    const checkPermissions = useCallback(async () => {
+    const checkPermissions = useCallback(async (): Promise<boolean> => {
         const status = await Camera.getCameraPermissionsAsync()
 
-        if (status?.granted) {
-            setHasPerms(true)
-            return
+        debug(`checkPermissions: ${JSON.stringify(status)}`)
+
+        if (status.granted) {
+            return true
         }
 
-        if (!status?.canAskAgain) {
-            let title = LL.TITLE_ALERT_CAMERA_PERMISSION()
-            let msg = LL.SB_ALERT_CAMERA_PERMISSION()
-
+        if (status.canAskAgain) {
+            return await requestPermissions()
+        } else {
             AlertUtils.showGoToSettingsAlert(
-                title,
-                msg,
+                LL.TITLE_ALERT_CAMERA_PERMISSION(),
+                LL.SB_ALERT_CAMERA_PERMISSION(),
                 () => {
                     return onCanceled()
                 },
@@ -53,25 +52,10 @@ export const useCameraPermissions = ({
                     await Linking.openSettings()
                 },
             )
-            return
         }
 
-        if (status.canAskAgain) {
-            await requestPermissions()
-        }
+        return false
     }, [LL, requestPermissions, onCanceled])
 
-    useEffect(() => {
-        async function init() {
-            if (
-                currentState === AppStateType.ACTIVE &&
-                previousState === AppStateType.BACKGROUND
-            ) {
-                checkPermissions()
-            }
-        }
-        init()
-    }, [checkPermissions, currentState, previousState])
-
-    return { checkPermissions, hasPerms }
+    return { checkPermissions }
 }
