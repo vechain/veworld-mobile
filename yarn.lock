@@ -14594,22 +14594,10 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-thor-devkit@^2.0.5:
+thor-devkit@^2.0.5, thor-devkit@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/thor-devkit/-/thor-devkit-2.0.8.tgz#fcb3ed80682c22454925fb525aaf95adf1e6ca06"
   integrity sha512-El9nbwZ/Wgf0Dp/5AvFxl29VSPimb4AJd/qtQvYXRawsbshaUX934CApD0MeI5gEHTC8bRPvZY86jZxmdYrs9A==
-  dependencies:
-    "@vechain/ethers" "^4.0.27-5"
-    bignumber.js "^7.2.1"
-    blakejs "^1.1.2"
-    elliptic "6.5.4"
-    fast-json-stable-stringify "^2.1.0"
-    js-sha3 "0.5.7"
-    rlp "^2.0.0"
-
-"thor-devkit@https://github.com/vechainfoundation/thor-devkit.js":
-  version "2.0.6"
-  resolved "https://github.com/vechainfoundation/thor-devkit.js#9cd0ca446013354402969cec108dfce3aa80f802"
   dependencies:
     "@vechain/ethers" "^4.0.27-5"
     bignumber.js "^7.2.1"
