@@ -11,7 +11,13 @@ import {
     useMemoizedAnimation,
     useSetSelectedAccount,
 } from "~Hooks"
-import { BaseSafeArea, BaseSpacer, SelectAccountBottomSheet } from "~Components"
+import {
+    BaseSafeArea,
+    BaseSpacer,
+    QRCodeBottomSheet,
+    RenameWalletBottomSheet,
+    SelectAccountBottomSheet,
+} from "~Components"
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
@@ -21,7 +27,7 @@ import {
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, RENAME_WALLET_TYPE } from "~Model"
 
 export const HomeScreen = () => {
     useTokenBalances()
@@ -45,6 +51,15 @@ export const HomeScreen = () => {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
+
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
+        useBottomSheetModal()
+
+    const {
+        ref: renameAccountBottomSheetRef,
+        onOpen: openRenameAccountBottomSheet,
+        onClose: closeRenameAccountBottonSheet,
     } = useBottomSheetModal()
 
     const accounts = useAppSelector(selectVisibleAccounts)
@@ -90,11 +105,15 @@ export const HomeScreen = () => {
                 ref={accountManagementBottomSheetRef}
                 onClose={closeAccountManagementSheet}
                 openAddAccountSheet={openAddAccountSheet}
+                openQRCodeSheet={openQRCodeSheet}
+                openRenameAccountBottomSheet={openRenameAccountBottomSheet}
             />
+
             <AddAccountBottomSheet
                 ref={addAccountBottomSheetRef}
                 onClose={closeAddAccountSheet}
             />
+
             <SelectAccountBottomSheet
                 closeBottomSheet={closeSelectAccountBottonSheet}
                 accounts={accounts}
@@ -102,6 +121,14 @@ export const HomeScreen = () => {
                 selectedAccount={selectedAccount}
                 isBalanceVisible={isBalanceVisible}
                 ref={selectAccountBottomSheetRef}
+            />
+
+            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+
+            <RenameWalletBottomSheet
+                type={RENAME_WALLET_TYPE.ACCOUNT}
+                ref={renameAccountBottomSheetRef}
+                onClose={closeRenameAccountBottonSheet}
             />
         </BaseSafeArea>
     )

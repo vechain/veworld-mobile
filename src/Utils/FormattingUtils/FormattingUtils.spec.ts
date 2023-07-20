@@ -6,6 +6,7 @@ import {
     humanNumber,
     humanUrl,
     isZero,
+    limitChars,
     removeUrlProtocolAndPath,
     scaleNumberDown,
     scaleNumberUp,
@@ -164,5 +165,14 @@ describe("removeUrlProtocolAndPath", () => {
                 "https://jestjs.io/docs/mock-function-api#mockfnmockresolvedvaluevalue",
             ),
         ).toBe("jestjs.io")
+    })
+})
+
+describe("limit charachters to 24", () => {
+    it("should return correct string length", () => {
+        expect(limitChars("qwertyuiop")).toBe("qwertyuiop")
+        expect(limitChars("qwertyuiopasdfghjklzxcvbnm")).toBe(
+            "qwertyuiopasdfghjklzxcvb",
+        )
     })
 })

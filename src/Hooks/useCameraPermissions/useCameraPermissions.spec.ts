@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react-hooks"
 import { Linking } from "react-native"
-import { useCameraPermissions } from "."
+import { useCameraPermissions } from "./useCameraPermissions"
 import { Camera } from "expo-camera"
 import { AppStateType } from "~Model"
 import { AlertUtils } from "~Utils"

@@ -652,6 +652,16 @@ type RootTranslation = {
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
 	/**
+	 * Y​o​u​r​ ​Q​R​ ​C​o​d​e​ ​f​o​r​ ​{​a​c​c​o​u​n​t​A​l​i​a​s​}
+	 * @param {string} accountAlias
+	 */
+	TITLE_QR_CODE_FOR_ACCOUNT: RequiredParams<'accountAlias'>
+	/**
+	 * R​e​n​a​m​e​ ​{​t​y​p​e​}
+	 * @param {string} type
+	 */
+	TITLE_RENAME: RequiredParams<'type'>
+	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
 	SB_IMPORT_WALLET_TYPE: string
@@ -2855,6 +2865,14 @@ export type TranslationFunctions = {
 	 * Backup your phrase
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
+	/**
+	 * Your QR Code for {accountAlias}
+	 */
+	TITLE_QR_CODE_FOR_ACCOUNT: (arg: { accountAlias: string }) => LocalizedString
+	/**
+	 * Rename {type}
+	 */
+	TITLE_RENAME: (arg: { type: string }) => LocalizedString
 	/**
 	 * Which kind of wallet do you want to import?
 	 */

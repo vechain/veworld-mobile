@@ -3,12 +3,13 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import {
     useCheckIdentity,
+    useRenderGas,
     useSignTransaction,
     useTheme,
     useTransaction,
 } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
-import { COLORS, VTHO } from "~Constants"
+import { COLORS } from "~Constants"
 import {
     AccountCard,
     AccountIcon,
@@ -35,16 +36,13 @@ import {
     selectKnownContacts,
     selectPendingTx,
     selectSelectedAccount,
-    selectVthoTokenWithBalanceByAccount,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { useDelegation } from "./Hooks"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
-import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
 type Props = NativeStackScreenProps<
@@ -119,19 +117,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         urlDelegationSignature,
     } = useDelegation({ transaction, setGasPayer })
 
-    const vtho = useAppSelector(state =>
-        selectVthoTokenWithBalanceByAccount(
-            state,
-            selectedDelegationAccount?.address || account.address,
-        ),
-    )
-
-    const vthoBalance = FormattingUtils.scaleNumberDown(
-        vtho.balance.balance,
-        vtho.decimals,
-        2,
-    )
-
     const { signAndSendTransaction } = useSignTransaction({
         transaction,
         onTXFinish,
@@ -144,25 +129,20 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onError: () => setLoadingTransaction(false),
     })
 
+    const { RenderGas, isThereEnoughGas } = useRenderGas({
+        loadingGas,
+        selectedDelegationOption,
+        gas,
+        tokenSymbol: token.symbol,
+        amount,
+        accountAddress: selectedDelegationAccount?.address || account.address,
+    })
+
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: signAndSendTransaction,
             onCancel: () => setLoadingTransaction(false),
         })
-
-    const vthoGas = FormattingUtils.convertToFiatBalance(
-        gas?.gas?.toString() || "0",
-        1,
-        5,
-    )
-
-    const isThereEnoughGas = useMemo(() => {
-        let leftVtho = new BigNumber(vthoBalance)
-        if (token.symbol === VTHO.symbol) {
-            leftVtho = leftVtho.minus(amount)
-        }
-        return vthoGas && leftVtho.gte(vthoGas)
-    }, [amount, vthoGas, token.symbol, vthoBalance])
 
     const receiverDetails = () => {
         const receiverExists = accountsAndContacts.find(_account =>
@@ -218,62 +198,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 initialRoute,
             })
         } else checkIdentityBeforeOpening()
-    }
-
-    const renderGas = () => {
-        if (loadingGas)
-            return (
-                <SkeletonContent
-                    animationDirection="horizontalLeft"
-                    boneColor={theme.colors.skeletonBoneColor}
-                    highlightColor={theme.colors.skeletonHighlightColor}
-                    layout={[
-                        {
-                            flexDirection: "column",
-                            alignItems: "flex-start",
-                            width: "100%",
-                            children: [
-                                // Line
-                                {
-                                    width: "40%",
-                                    height: 18,
-                                },
-                            ],
-                        },
-                    ]}
-                    isLoading={true}
-                />
-            )
-        return selectedDelegationOption === DelegationType.URL ? (
-            <BaseText typographyFont="subSubTitle">
-                {LL.SEND_DELEGATED_FEES()}
-            </BaseText>
-        ) : (
-            <>
-                <BaseText typographyFont="subSubTitle">
-                    {vthoGas || LL.COMMON_NOT_AVAILABLE()} {VTHO.symbol}
-                </BaseText>
-                {!isThereEnoughGas && (
-                    <>
-                        <BaseSpacer height={8} />
-                        <BaseView flexDirection="row">
-                            <BaseIcon
-                                name="alert-circle-outline"
-                                color={theme.colors.danger}
-                                size={16}
-                            />
-                            <BaseSpacer width={4} />
-                            <BaseText
-                                typographyFont="buttonSecondary"
-                                color={theme.colors.danger}>
-                                {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance}{" "}
-                                {VTHO.symbol}
-                            </BaseText>
-                        </BaseView>
-                    </>
-                )}
-            </>
-        )
     }
 
     return (
@@ -423,7 +347,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         {LL.SEND_GAS_FEE()}
                     </BaseText>
                     <BaseSpacer height={6} />
-                    {renderGas()}
+                    {RenderGas}
                     <BaseSpacer height={12} />
                     <BaseSpacer
                         height={0.5}

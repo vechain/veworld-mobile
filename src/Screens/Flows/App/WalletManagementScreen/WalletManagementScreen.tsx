@@ -9,8 +9,9 @@ import {
     BaseView,
     BaseSafeArea,
     DeviceBox,
+    RenameWalletBottomSheet,
 } from "~Components"
-import { BaseDevice } from "~Model"
+import { BaseDevice, RENAME_WALLET_TYPE } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { AccountMgmtBottomSheet, WalletManagementHeader } from "./components"
@@ -25,6 +26,12 @@ export const WalletManagementScreen = () => {
         ref: accountMgmtBottomSheetRef,
         onOpen: openAccountMgmtSheet,
         onClose: closeAccountMgmtSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: renameAccountBottomSheetRef,
+        onOpen: openRenameAccountBottomSheet,
+        onClose: closeRenameAccountBottonSheet,
     } = useBottomSheetModal()
 
     const devicesListSeparator = useCallback(
@@ -85,6 +92,13 @@ export const WalletManagementScreen = () => {
                     ref={accountMgmtBottomSheetRef}
                     onClose={closeAccountMgmtSheet}
                     device={selectedDevice}
+                    openRenameAccountBottomSheet={openRenameAccountBottomSheet}
+                />
+
+                <RenameWalletBottomSheet
+                    type={RENAME_WALLET_TYPE.DEVICE}
+                    ref={renameAccountBottomSheetRef}
+                    onClose={closeRenameAccountBottonSheet}
                 />
             </BaseView>
         </BaseSafeArea>

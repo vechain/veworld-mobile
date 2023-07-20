@@ -8,7 +8,7 @@ import {
     Token,
     TransactionOutcomes,
 } from "~Model"
-import TransactionUtils from "."
+import TransactionUtils from "./index"
 import * as logger from "~Utils/Logger/Logger"
 import { decodeTransferEvent, toDelegation } from "./TransactionUtils"
 import { Transaction } from "thor-devkit"

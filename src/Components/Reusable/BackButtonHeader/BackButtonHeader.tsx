@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ViewProps, View } from "react-native"
 import { BaseIcon, BaseSpacer } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -7,11 +7,14 @@ import { useTheme } from "~Hooks"
 type Props = {
     iconTestID?: string
     hasBottomSpacer?: boolean
-}
+    iconColor?: string
+} & ViewProps
 
 export const BackButtonHeader = ({
     iconTestID = "BackButtonHeader-BaseIcon-backButton",
     hasBottomSpacer = true,
+    iconColor,
+    ...otherProps
 }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
@@ -21,18 +24,18 @@ export const BackButtonHeader = ({
     }, [nav])
 
     return (
-        <>
+        <View {...otherProps}>
             <BaseIcon
                 haptics="Light"
                 style={backButtonHeaderStyle.backButton}
                 size={36}
                 name="chevron-left"
-                color={theme.colors.text}
+                color={iconColor ? iconColor : theme.colors.text}
                 action={onActionPress}
                 testID={iconTestID}
             />
             {hasBottomSpacer && <BaseSpacer height={16} />}
-        </>
+        </View>
     )
 }
 

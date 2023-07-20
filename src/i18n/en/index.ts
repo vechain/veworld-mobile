@@ -52,6 +52,7 @@ const en: BaseTranslation = {
   BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
 
 
+
   // BODY
   BD_GDPR:
     "By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)",
@@ -183,6 +184,8 @@ const en: BaseTranslation = {
   TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
   TITLE_DISCOVER: "Discover",
   TITLE_BACKUP_YOUR_PHRASE: "Backup your phrase",
+  TITLE_QR_CODE_FOR_ACCOUNT: "Your QR Code for {accountAlias: string}",
+  TITLE_RENAME: "Rename {type: string}",
 
   // SUBTITLES
   SB_IMPORT_WALLET_TYPE: "Which kind of wallet do you want to import?",

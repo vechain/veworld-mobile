@@ -2,7 +2,7 @@ import { debug } from "~Utils"
 import {
     getActivitiesFromIncomingTransfers,
     getActivitiesFromTransactions,
-} from "."
+} from "./ActivityHelpers"
 import { Activity } from "~Model"
 import {
     ORDER,

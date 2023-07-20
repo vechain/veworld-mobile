@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useMemo } from "react"
 import { ScrollView } from "react-native"
-import { useTheme } from "~Hooks"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import {
     BackButtonHeader,
     BaseIcon,
@@ -11,6 +11,7 @@ import {
     BaseText,
     BaseView,
     FastActionsBar,
+    QRCodeBottomSheet,
     showWarningToast,
 } from "~Components"
 import { RootStackParamListDiscover, Routes } from "~Navigation"
@@ -45,6 +46,9 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const marketInfo = useAppSelector(state =>
         selectMarketInfoFor(token.symbol, state),
     )
+
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
+        useBottomSheetModal()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -84,8 +88,15 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 ),
                 testID: "sendButton",
             },
+
+            {
+                name: LL.COMMON_RECEIVE(),
+                action: openQRCodeSheet,
+                icon: <BaseIcon color={theme.colors.text} name="qrcode" />,
+                testID: "reciveButton",
+            },
         ],
-        [LL, foundToken, nav, theme.colors.text, token.symbol],
+        [LL, foundToken, nav, openQRCodeSheet, theme.colors.text, token.symbol],
     )
 
     return (
@@ -112,7 +123,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                 <BaseView mx={20} alignItems="center">
                     <BaseSpacer height={24} />
-                    <FastActionsBar actions={Actions} paddingHorizontal={44} />
+                    <FastActionsBar actions={Actions} />
 
                     <BaseSpacer height={24} />
 
@@ -147,6 +158,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     )}
                 </BaseView>
             </ScrollView>
+
+            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
         </BaseSafeArea>
     )
 }
