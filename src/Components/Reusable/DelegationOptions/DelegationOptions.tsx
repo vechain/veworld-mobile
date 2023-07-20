@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { BaseButtonGroupHorizontal, BaseSpacer, BaseText } from "~Components"
 import { useI18nContext } from "~i18n"
-import { BaseButtonGroupHorizontalType, AccountWithDevice } from "~Model"
+import { AccountWithDevice, BaseButtonGroupHorizontalType } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useBottomSheetModal } from "~Hooks"
 import {
@@ -13,10 +13,10 @@ import { SelectDelegationAccountBottomSheet } from "./SelectDelegationAccountBot
 
 type Props = {
     selectedDelegationUrl?: string
-    setSelectedDelegationUrl: (url?: string) => void
+    setSelectedDelegationUrl: (url: string) => void
     selectedDelegationOption: DelegationType
-    setSelectedDelegationOption: (id: DelegationType) => void
-    setSelectedAccount: (account?: AccountWithDevice) => void
+    setNoDelegation: () => void
+    setSelectedAccount: (account: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
     disabled?: boolean
 }
@@ -24,8 +24,8 @@ type Props = {
 // this component shows delegation options
 export const DelegationOptions = ({
     selectedDelegationOption,
-    setSelectedDelegationOption,
     setSelectedAccount,
+    setNoDelegation,
     selectedAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
@@ -70,17 +70,12 @@ export const DelegationOptions = ({
     const handleSelectDelegationOption = (
         button: BaseButtonGroupHorizontalType,
     ) => {
-        setSelectedDelegationOption(button.id as DelegationType)
         if (button.id === DelegationType.ACCOUNT) {
             openSelectAccountBottomSheet()
-        } else {
-            setSelectedAccount(undefined)
         }
 
         if (button.id === DelegationType.URL) {
             openSelectDelegationUrlBottomSheet()
-        } else {
-            setSelectedDelegationUrl(undefined)
         }
     }
 
@@ -102,16 +97,16 @@ export const DelegationOptions = ({
             <SelectDelegationAccountBottomSheet
                 onClose={closeSelectAccountBottonSheet}
                 ref={selectAccountBottomSheetRef}
-                setSelectedDelegationOption={setSelectedDelegationOption}
+                setNoDelegation={setNoDelegation}
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
                 selectedDelegationOption={selectedDelegationOption}
                 accounts={accounts}
             />
             <SelectUrlBottomSheet
+                setNoDelegation={setNoDelegation}
                 onClose={closeSelectDelegationUrlBottonSheet}
                 ref={selectDelegationUrlBottomSheetRef}
-                setSelectedDelegationOption={setSelectedDelegationOption}
                 selectedDelegationOption={selectedDelegationOption}
                 selectedDelegationUrl={selectedDelegationUrl}
                 setSelectedDelegationUrl={setSelectedDelegationUrl}

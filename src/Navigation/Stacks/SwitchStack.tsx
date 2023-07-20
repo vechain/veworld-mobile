@@ -8,7 +8,7 @@ import {
     BlackListedCollectionsScreen,
     ConnectAppScreen,
     SendTransactionScreen,
-    SignMessageScreen,
+    SignCertificateScreen,
 } from "~Screens"
 import {
     PendingRequestTypes,
@@ -17,29 +17,47 @@ import {
 } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
+import { Certificate, Transaction } from "thor-devkit"
+import { LedgerAccountWithDevice } from "~Model"
+import {
+    LedgerSignCertificate,
+    LedgerSignTransaction,
+} from "~Screens/Flows/App/LedgerScreen"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
     TabStack: undefined
     ResetAppScreen: undefined
-    Create_Wallet_Flow: undefined
-    Blacklisted_Collections: undefined
-    Connect_App_Screen: {
+    [Routes.CREATE_WALLET_FLOW]: undefined
+    [Routes.BLACKLISTED_COLLECTIONS]: undefined
+    [Routes.CONNECT_APP_SCREEN]: {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
     }
-    Connected_App_Send_Transaction_Screen: {
+    [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct
         session: SessionTypes.Struct
         message: Connex.Vendor.TxMessage
         options: Connex.Driver.TxOptions
     }
-    Connected_App_Sign_Message_Screen: {
+    [Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct
         session: SessionTypes.Struct
         message: Connex.Vendor.CertMessage
         options: Connex.Driver.CertOptions
     }
-    Blocked_App_Screen: undefined
+    [Routes.LEDGER_SIGN_CERTIFICATE]: {
+        requestEvent: PendingRequestTypes.Struct
+        certificate: Certificate
+        accountWithDevice: LedgerAccountWithDevice
+        initialRoute: string
+    }
+    [Routes.LEDGER_SIGN_TRANSACTION]: {
+        accountWithDevice: LedgerAccountWithDevice
+        transaction: Transaction.Body
+        initialRoute: string
+        requestEvent?: PendingRequestTypes.Struct
+    }
+    [Routes.BLOCKED_APP_SCREEN]: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -93,13 +111,23 @@ export const SwitchStack = () => {
                         />
 
                         <Switch.Screen
-                            name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN}
-                            component={SignMessageScreen}
+                            name={Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN}
+                            component={SignCertificateScreen}
                         />
 
                         <Switch.Screen
                             name={Routes.BLOCKED_APP_SCREEN}
                             component={AppBlockedScreen}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.LEDGER_SIGN_CERTIFICATE}
+                            component={LedgerSignCertificate}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.LEDGER_SIGN_TRANSACTION}
+                            component={LedgerSignTransaction}
                         />
                     </Switch.Group>
                 </>

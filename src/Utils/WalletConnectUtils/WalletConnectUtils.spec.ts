@@ -356,7 +356,7 @@ describe("isWalletConnectRoute", () => {
 
         expect(
             isWalletConnectRoute(
-                mockState(Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN),
+                mockState(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN),
             ),
         ).toBe(true)
 

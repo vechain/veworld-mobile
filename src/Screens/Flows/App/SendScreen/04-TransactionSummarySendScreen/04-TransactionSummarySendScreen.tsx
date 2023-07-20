@@ -3,10 +3,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 import {
     useCheckIdentity,
+    useRenderGas,
+    useSignTransaction,
     useTheme,
     useTransaction,
-    useSignTransaction,
-    useRenderGas,
 } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { COLORS } from "~Constants"
@@ -20,9 +20,9 @@ import {
     BaseText,
     BaseView,
     DelegationOptions,
-    LedgerBadge,
-    Layout,
     FadeoutButton,
+    Layout,
+    LedgerBadge,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -30,19 +30,20 @@ import {
     Routes,
 } from "~Navigation"
 import {
-    selectCurrencyExchangeRate,
+    selectAccounts,
     selectCurrency,
+    selectCurrencyExchangeRate,
+    selectKnownContacts,
+    selectPendingTx,
     selectSelectedAccount,
     useAppSelector,
-    selectKnownContacts,
-    selectAccounts,
-    selectPendingTx,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { useDelegation } from "./Hooks"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
+import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -95,23 +96,26 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         setLoadingTransaction(false)
     }, [initialRoute, nav])
 
+    const clauses = useMemo(
+        () => prepareFungibleClause(amount, token, address),
+        [amount, token, address],
+    )
+
     //build transaction
-    const { gas, transaction, loadingGas } = useTransaction({
-        token,
-        amount,
-        addressTo: address,
+    const { gas, transaction, loadingGas, setGasPayer } = useTransaction({
+        clauses,
     })
 
     const {
-        selectedDelegationOption,
-        setSelectedDelegationOption,
-        selectedDelegationAccount,
         setSelectedDelegationAccount,
-        selectedDelegationUrl,
         setSelectedDelegationUrl,
+        setNoDelegation,
+        selectedDelegationOption,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
-    } = useDelegation({ transaction })
+    } = useDelegation({ transaction, setGasPayer })
 
     const { signAndSendTransaction } = useSignTransaction({
         transaction,
@@ -287,9 +291,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationOption={
-                            setSelectedDelegationOption
-                        }
+                        setNoDelegation={setNoDelegation}
                         setSelectedAccount={setSelectedDelegationAccount}
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}

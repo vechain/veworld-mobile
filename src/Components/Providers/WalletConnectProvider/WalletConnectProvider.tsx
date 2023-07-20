@@ -179,7 +179,7 @@ const WalletConnectContextProvider = ({
             options.signer = signingAccount
 
             if (message) {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN, {
+                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
                     requestEvent,
                     session,
                     message,

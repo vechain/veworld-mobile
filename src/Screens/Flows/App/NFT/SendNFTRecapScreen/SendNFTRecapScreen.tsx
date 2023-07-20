@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
@@ -34,6 +34,7 @@ import {
 import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/Hooks"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
+import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -63,22 +64,31 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         nav.dispatch(StackActions.popToTop())
     }, [nav])
 
-    const { gas, transaction, loadingGas } = useTransaction({
-        token: nft!,
-        amount: selectedAccoount.address,
-        addressTo: route.params.receiverAddress,
+    const clauses = useMemo(
+        () =>
+            prepareNonFungibleClause(
+                selectedAccoount.address,
+                route.params.receiverAddress,
+                nft,
+            ),
+
+        [selectedAccoount, route.params.receiverAddress, nft],
+    )
+
+    const { gas, loadingGas, transaction, setGasPayer } = useTransaction({
+        clauses,
     })
 
     const {
-        selectedDelegationOption,
-        setSelectedDelegationOption,
-        selectedDelegationAccount,
+        setNoDelegation,
         setSelectedDelegationAccount,
-        selectedDelegationUrl,
         setSelectedDelegationUrl,
+        selectedDelegationOption,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
-    } = useDelegation({ transaction })
+    } = useDelegation({ transaction, setGasPayer })
 
     const { signAndSendTransaction } = useSignTransaction({
         transaction,
@@ -159,9 +169,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationOption={
-                            setSelectedDelegationOption
-                        }
+                        setNoDelegation={setNoDelegation}
                         setSelectedAccount={setSelectedDelegationAccount}
                         selectedAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}

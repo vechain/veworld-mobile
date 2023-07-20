@@ -1,12 +1,12 @@
 import { LedgerDevice, Network } from "~Model"
 import { Mutex } from "async-mutex"
-import { Certificate, Transaction, HDNode } from "thor-devkit"
+import { Certificate, HDNode, Transaction } from "thor-devkit"
 import { AddressUtils, BalanceUtils } from "~Utils"
 import {
+    LEDGER_ERROR_CODES,
+    VET_DERIVATION_PATH,
     VETLedgerAccount,
     VETLedgerApp,
-    VET_DERIVATION_PATH,
-    LEDGER_ERROR_CODES,
 } from "~Constants"
 import { debug, error, warn } from "~Utils/Logger"
 import { Buffer } from "buffer"
@@ -88,19 +88,21 @@ export const checkLedgerConnection = async ({
  * @param index  The index of the account to sign the certificate with
  * @param cert  The certificate to sign
  * @param device  The device to sign the certificate with
- * @param vetLedger The ledger app to sign the certificate with
+ * @param transport The ledger transport
  * @returns The signed certificate
  */
 const signCertificate = async (
     index: number,
     cert: Certificate,
     device: LedgerDevice,
-    vetLedger: VETLedgerApp,
+    transport: BleTransport,
 ): Promise<Buffer> => {
     debug("Signing certificate")
 
     return await ledgerMutex.runExclusive(async () => {
         try {
+            const vetLedger = new VETLedgerApp(transport)
+
             await validateRootAddress(device.rootAddress, vetLedger)
 
             const dataToSign = Buffer.from(Certificate.encode(cert), "utf8")
@@ -111,7 +113,7 @@ const signCertificate = async (
             error(e)
             throw new Error("Failed to sign the message")
         } finally {
-            vetLedger.transport.close().catch(e => {
+            transport.close().catch(e => {
                 warn(e)
             })
         }
