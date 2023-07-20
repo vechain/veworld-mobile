@@ -10,7 +10,7 @@ import { SelectDelegationAccountBottomSheet } from "./SelectDelegationAccountBot
 
 type Props = {
     selectedDelegationUrl?: string
-    setSelectedDelegationUrl: (url?: string) => void
+    setSelectedDelegationUrl: (url: string) => void
     selectedDelegationOption: DelegationType
     setNoDelegation: () => void
     setSelectedAccount: (account: AccountWithDevice) => void

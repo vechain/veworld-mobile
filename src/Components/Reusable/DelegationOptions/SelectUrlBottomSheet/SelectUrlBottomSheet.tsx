@@ -11,7 +11,7 @@ type Props = {
     onClose: () => void
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
-    setSelectedDelegationUrl: (string?: string) => void
+    setSelectedDelegationUrl: (string: string) => void
     setNoDelegation: () => void
 }
 

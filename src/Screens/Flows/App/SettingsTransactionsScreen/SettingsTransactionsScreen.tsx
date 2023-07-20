@@ -33,14 +33,24 @@ export const SettingsTransactionsScreen = () => {
     )
     const selectedDelegationUrl = useAppSelector(getDefaultDelegationUrl)
     const dispatch = useAppDispatch()
-    const setSelectedDelegationOption = (
-        defaultDelegationOption: DelegationType,
-    ) => dispatch(setDefaultDelegationOption(defaultDelegationOption))
+    const setNoDelegationOption = () => {
+        dispatch(setDefaultDelegationOption(DelegationType.NONE))
+        dispatch(setDefaultDelegationAccount(undefined))
+        dispatch(setDefaultDelegationUrl(undefined))
+    }
     const setSelectedDelegationAccount = (
         defaultDelegationAccount?: AccountWithDevice,
-    ) => dispatch(setDefaultDelegationAccount(defaultDelegationAccount))
-    const setSelectedDelegationUrl = (defaultDelegationUrl?: string) =>
+    ) => {
+        dispatch(setDefaultDelegationAccount(defaultDelegationAccount))
+        dispatch(setDefaultDelegationOption(DelegationType.ACCOUNT))
+        dispatch(setDefaultDelegationUrl(undefined))
+    }
+    const setSelectedDelegationUrl = (defaultDelegationUrl: string) => {
+        dispatch(setDefaultDelegationOption(DelegationType.URL))
         dispatch(setDefaultDelegationUrl(defaultDelegationUrl))
+        dispatch(setDefaultDelegationAccount(undefined))
+    }
+
     const { LL } = useI18nContext()
 
     const nav = useNavigation()
@@ -66,8 +76,8 @@ export const SettingsTransactionsScreen = () => {
                 <BaseSpacer height={16} />
                 <DelegationOptions
                     selectedDelegationOption={selectedDelegationOption}
-                    setSelectedDelegationOption={setSelectedDelegationOption}
                     setSelectedAccount={setSelectedDelegationAccount}
+                    setNoDelegation={setNoDelegationOption}
                     selectedAccount={selectedDelegationAccount}
                     selectedDelegationUrl={selectedDelegationUrl}
                     setSelectedDelegationUrl={setSelectedDelegationUrl}
