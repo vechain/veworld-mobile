@@ -67,7 +67,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const clauses = useMemo(
         () =>
             prepareNonFungibleClause(
-                selectedAccoount,
+                selectedAccoount.address,
                 route.params.receiverAddress,
                 nft,
             ),

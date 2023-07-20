@@ -1,7 +1,6 @@
 import { abi, Transaction } from "thor-devkit"
 import { debug } from "~Utils/Logger"
 import {
-    AccountWithDevice,
     ClauseType,
     ClauseWithMetadata,
     ConnexClause,
@@ -795,14 +794,14 @@ export const sendSignedTransaction = async (
 }
 
 export const prepareNonFungibleClause = (
-    account: AccountWithDevice,
+    accountFrom: string,
     addressTo: string,
     nft?: NonFungibleToken,
 ): Transaction.Body["clauses"] => {
     if (!nft) return []
 
     const func = new abi.Function(abis.VIP181.transferFrom)
-    const data = func.encode(account.address, addressTo, nft.tokenId)
+    const data = func.encode(accountFrom, addressTo, nft.tokenId)
 
     return [
         {

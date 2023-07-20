@@ -183,17 +183,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const handleAccept = useCallback(
         async (password?: string) => {
             try {
-                if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
-                    nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
-                        transaction,
-                        accountWithDevice:
-                            selectedAccount as LedgerAccountWithDevice,
-                        initialRoute: Routes.HOME,
-                        requestEvent,
-                    })
-                    return
-                }
-
                 let tx = await signTransaction(password)
                 const txId = await sendTransaction(tx, network.currentUrl)
 
@@ -217,9 +206,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             }
         },
         [
-            nav,
             selectedAccount,
-            transaction,
             signTransaction,
             network,
             requestEvent,
@@ -236,6 +223,26 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         useCheckIdentity({
             onIdentityConfirmed: handleAccept,
         })
+
+    const signAndSend = useCallback(async () => {
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
+            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
+                transaction,
+                accountWithDevice: selectedAccount as LedgerAccountWithDevice,
+                initialRoute: Routes.HOME,
+                requestEvent,
+            })
+            return
+        } else {
+            await checkIdentityBeforeOpening()
+        }
+    }, [
+        transaction,
+        nav,
+        requestEvent,
+        selectedAccount,
+        checkIdentityBeforeOpening,
+    ])
 
     const onPressBack = useCallback(async () => {
         await onReject()
@@ -329,7 +336,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
-                        action={checkIdentityBeforeOpening}
+                        action={signAndSend}
                         disabled={!isThereEnoughGas && !isDelegated}
                     />
                     <BaseSpacer height={16} />
