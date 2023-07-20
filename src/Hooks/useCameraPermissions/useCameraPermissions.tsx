@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { Linking } from "react-native"
-import { AlertUtils, debug } from "~Utils"
+import { AlertUtils } from "~Utils"
 import { Camera } from "expo-camera"
 import { useI18nContext } from "~i18n"
 
@@ -17,13 +17,11 @@ export const useCameraPermissions = ({
     const requestPermissions = useCallback(async (): Promise<boolean> => {
         const status = await Camera.requestCameraPermissionsAsync()
 
-        debug(`requestPermissions: ${JSON.stringify(status)}`)
-
-        if (status.granted) {
+        if (status?.granted) {
             return true
         }
 
-        if (!status.canAskAgain) {
+        if (!status?.canAskAgain) {
             onCanceled()
         }
 
@@ -33,13 +31,11 @@ export const useCameraPermissions = ({
     const checkPermissions = useCallback(async (): Promise<boolean> => {
         const status = await Camera.getCameraPermissionsAsync()
 
-        debug(`checkPermissions: ${JSON.stringify(status)}`)
-
-        if (status.granted) {
+        if (status?.granted) {
             return true
         }
 
-        if (status.canAskAgain) {
+        if (status?.canAskAgain) {
             return await requestPermissions()
         } else {
             AlertUtils.showGoToSettingsAlert(

@@ -45,7 +45,6 @@ describe("useCameraPermissions", () => {
         expect(result.current).toEqual(
             expect.objectContaining({
                 checkPermissions: expect.any(Function),
-                hasPerms: expect.any(Boolean),
             }),
         )
     })
@@ -66,12 +65,13 @@ describe("useCameraPermissions", () => {
         })
 
         await act(async () => {
-            await result.current.checkPermissions()
+            const checkPermissionsResult =
+                await result.current.checkPermissions()
+            expect(checkPermissionsResult).toBe(true)
         })
 
         expect(Camera.getCameraPermissionsAsync).toHaveBeenCalled()
         expect(Camera.requestCameraPermissionsAsync).toHaveBeenCalled()
-        expect(result.current.hasPerms).toBe(true)
     })
 
     it("should check if it has already permissions", async () => {
@@ -85,11 +85,12 @@ describe("useCameraPermissions", () => {
         })
 
         await act(async () => {
-            await result.current.checkPermissions()
+            const checkPermissionsResult =
+                await result.current.checkPermissions()
+            expect(checkPermissionsResult).toBe(true)
         })
 
         expect(Camera.getCameraPermissionsAsync).toHaveBeenCalled()
-        expect(result.current.hasPerms).toBe(true)
     })
 
     it("should show an alert when the user has denied camera permissions and cannot be prompted again", async () => {
@@ -132,7 +133,9 @@ describe("useCameraPermissions", () => {
         })
 
         await act(async () => {
-            await result.current.checkPermissions()
+            const checkPermissionsResult =
+                await result.current.checkPermissions()
+            expect(checkPermissionsResult).toBe(false)
         })
 
         expect(onCanceled).toHaveBeenCalled()
@@ -147,7 +150,9 @@ describe("useCameraPermissions", () => {
         )
         jest.spyOn(result.current, "checkPermissions")
         await act(async () => {
-            await result.current.checkPermissions()
+            const checkPermissionsResult =
+                await result.current.checkPermissions()
+            expect(checkPermissionsResult).toBe(false)
         })
         expect(result.current.checkPermissions).toHaveBeenCalled()
     })
