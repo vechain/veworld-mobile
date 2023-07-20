@@ -9,7 +9,6 @@ import {
 export const handleVETTransfers = ({
     transfer,
     visibleAccounts,
-    removeTransactionPending,
     stateReconciliationAction,
     informUser,
 }: VETTransferHandlerProps) => {
@@ -32,9 +31,6 @@ export const handleVETTransfers = ({
 
     // User send token
     if (foundAccount.origin === TransactionOrigin.FROM) {
-        // remove tx pending from redux
-        removeTransactionPending({ txId: transfer.txId })
-
         // inform usr for successfull transfer
         InformUserForOutgoingVET({
             txId: transfer.txId,

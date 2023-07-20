@@ -10,7 +10,6 @@ import { getName } from "~Networking"
 export const handleNFTTransfers = async ({
     visibleAccounts,
     transfer,
-    removeTransactionPending,
     stateReconciliationAction,
     informUser,
     thor,
@@ -24,11 +23,6 @@ export const handleNFTTransfers = async ({
 
     // User received NFT
     if (foundAccount.origin === TransactionOrigin.TO) {
-        // remove tx pending from redux
-        removeTransactionPending({
-            txId: transfer.txId,
-        })
-
         // inform user for successful transfer
         informUserForIncomingNFT({
             collectionName,
@@ -43,11 +37,6 @@ export const handleNFTTransfers = async ({
 
     // User sent NFT
     if (foundAccount.origin === TransactionOrigin.FROM) {
-        // remove tx pending from redux
-        removeTransactionPending({
-            txId: transfer.txId,
-        })
-
         // inform user for successfull transfer
         informUserForOutgoingNFT({
             txId: transfer.txId,
