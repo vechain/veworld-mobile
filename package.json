@@ -15,7 +15,7 @@
         "ios": "react-native run-ios --simulator 'iPhone 14 Pro'",
         "ios:my-device": "react-native run-ios",
         "ios:old-device": "react-native run-ios --simulator 'iPhone SE (3rd generation)'",
-        "start": "watchman watch-del '/Users/vasileiosgkreen/vechain/veworld-mobile' ; watchman watch-project '/Users/vasileiosgkreen/vechain/veworld-mobile' && react-native start --reset-cache",
+        "start": "react-native start",
         "start:reset": "react-native start --reset-cache",
         "start:i18n": "yarn i18n & react-native start & wait",
         "test": "jest",
