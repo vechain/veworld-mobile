@@ -51,10 +51,11 @@ export const RenameWalletBottomSheet = React.forwardRef<
     )
 
     const RenderBalance = useMemo(() => {
+        if (type === RENAME_WALLET_TYPE.DEVICE) return null
         return isBalanceVisible
             ? `${vetBalance} ${VET.symbol}`
             : `***** ${VET.symbol}`
-    }, [isBalanceVisible, vetBalance])
+    }, [isBalanceVisible, vetBalance, type])
 
     const [text, setText] = useState(defaultStateValue)
 
@@ -72,11 +73,16 @@ export const RenameWalletBottomSheet = React.forwardRef<
         }
     }, [type, LL, text, selectedAccount.alias, selectedAccount.device.alias])
 
+    const RenderAccountAddress = useMemo(() => {
+        if (type === RENAME_WALLET_TYPE.DEVICE) return null
+
+        return FormattingUtils.humanAddress(selectedAccount.address, 3, 4)
+    }, [type, selectedAccount.address])
+
     const handleSheetChanges = useCallback(
         (index: number) => {
-            if (index === -1) {
-                setText(defaultStateValue)
-            }
+            if (index === 0) setText(defaultStateValue)
+            else setText("")
         },
         [defaultStateValue],
     )
@@ -121,11 +127,7 @@ export const RenameWalletBottomSheet = React.forwardRef<
                             typographyFont="captionRegular"
                             pb={2}
                             color={COLORS.GRAY}>
-                            {FormattingUtils.humanAddress(
-                                selectedAccount.address,
-                                3,
-                                4,
-                            )}
+                            {RenderAccountAddress}
                         </BaseText>
                         <BaseText typographyFont="captionRegular">
                             {RenderBalance}
