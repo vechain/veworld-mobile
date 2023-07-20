@@ -197,22 +197,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                     <InfoSectionView<React.JSX.Element>
                         isFontReverse
-                        title={"Estimated gas fee"}
+                        title={LL.ESTIMATED_GAS_FEE()}
                         data={RenderGas}
                     />
 
                     <InfoSectionView<string>
                         isFontReverse
-                        title={"Estimated time"}
+                        title={LL.ESTIMATED_TIME()}
                         data={LL.SEND_LESS_THAN_1_MIN()}
-                    />
-
-                    <InfoSectionView<React.JSX.Element>
-                        isFontReverse
-                        isLastInList
-                        title={"Total amount"}
-                        data={RenderGas}
-                        subTtitle={"8,03 USD"} // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/762) add real price
                     />
                 </BaseView>
             </ScrollView>

@@ -1572,6 +1572,14 @@ type RootTranslation = {
 	 */
 	UNKNOWN_COLLECTION: string
 	/**
+	 * E​s​t​i​m​a​t​e​d​ ​g​a​s​ ​f​e​e
+	 */
+	ESTIMATED_GAS_FEE: string
+	/**
+	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
+	 */
+	ESTIMATED_TIME: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -3771,6 +3779,14 @@ Please, try again later.
 	 * Unknown collection name
 	 */
 	UNKNOWN_COLLECTION: () => LocalizedString
+	/**
+	 * Estimated gas fee
+	 */
+	ESTIMATED_GAS_FEE: () => LocalizedString
+	/**
+	 * Estimated time
+	 */
+	ESTIMATED_TIME: () => LocalizedString
 	/**
 	 * Light
 	 */

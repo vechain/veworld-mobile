@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useFormattedMarketInfo } from "./useFormattedMarketInfo"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { TestWrapper } from "~Test"
-import { CURRENCY } from "~Constants"
+import { CURRENCY, VET } from "~Constants"
 
 const marketInfo = {
     ath: 0.280991,
@@ -38,9 +38,9 @@ const marketInfo = {
 }
 
 const results = {
-    circulatingSupply: "72,714,516,834 USD",
+    circulatingSupply: "72,714,516,834 VET",
     marketCap: "1,429,387,590 USD",
-    totalSupply: "85,985,041,177 USD",
+    totalSupply: "85,985,041,177 VET",
     totalVolume: "34,734,564 USD",
 }
 
@@ -60,7 +60,7 @@ describe("useFormattedMarketInfo", () => {
         )
 
         const { result, waitForNextUpdate } = renderHook(
-            () => useFormattedMarketInfo(marketInfo),
+            () => useFormattedMarketInfo(marketInfo, VET.symbol),
             {
                 wrapper: TestWrapper,
             },
@@ -77,7 +77,7 @@ describe("useFormattedMarketInfo", () => {
         )
 
         const { result, waitForNextUpdate } = renderHook(
-            () => useFormattedMarketInfo(marketInfo),
+            () => useFormattedMarketInfo(marketInfo, "USD"),
             {
                 wrapper: TestWrapper,
             },
@@ -94,7 +94,7 @@ describe("useFormattedMarketInfo", () => {
         )
 
         const { result, waitForNextUpdate } = renderHook(
-            () => useFormattedMarketInfo(marketInfo),
+            () => useFormattedMarketInfo(marketInfo, VET.symbol),
             {
                 wrapper: TestWrapper,
             },
@@ -111,7 +111,7 @@ describe("useFormattedMarketInfo", () => {
         )
 
         const { result, waitForNextUpdate } = renderHook(
-            () => useFormattedMarketInfo(marketInfo),
+            () => useFormattedMarketInfo(marketInfo, "USD"),
             {
                 wrapper: TestWrapper,
             },

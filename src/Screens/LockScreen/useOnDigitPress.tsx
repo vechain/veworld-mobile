@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export const useOnDigitPress = ({
     digitNumber,
@@ -10,6 +10,12 @@ export const useOnDigitPress = ({
     resetPinOnFinishTimer?: number
 }) => {
     const [pin, setPin] = useState<string[]>([])
+
+    useEffect(() => {
+        return () => {
+            setPin([])
+        }
+    }, [])
 
     const onDigitDelete = () => {
         setPin(prev => {

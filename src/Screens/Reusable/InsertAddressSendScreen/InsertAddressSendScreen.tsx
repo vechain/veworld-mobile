@@ -20,12 +20,15 @@ import {
     Routes,
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { CreateContactBottomSheet } from "./Components/CreateContactBottomSheet/CreateContactBottomSheet"
+import { CreateContactBottomSheet } from "./Components"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome | RootStackParamListNFT,
     Routes.INSERT_ADDRESS_SEND
 >
+
+const CONTACT_CARD_DEFAULT_HIGHT = 72
+const ACCOUNT_CARD_DEFAULT_HIGHT = 86
 
 export const InsertAddressSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
@@ -71,7 +74,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         filteredContacts,
         filteredAccounts,
         isAddressInContactsOrAccounts,
-        contacts,
     } = useSearchOrScanInput(navigateNext, setSelectedAddress, selectedAddress)
 
     //Whenever search changes, we check if it's a valid address
@@ -80,7 +82,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             setSelectedAddress(searchText)
             Keyboard.dismiss()
         }
-    }, [searchText, isAddressInContactsOrAccounts, openCreateContactSheet])
+    }, [searchText, isAddressInContactsOrAccounts])
 
     const onNext = useCallback(() => {
         if (isAddressInContactsOrAccounts && selectedAddress) {
@@ -114,7 +116,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             body={
                 <BaseView mb={80}>
                     <BaseAccordion
-                        defaultIsOpen={!!contacts.length}
+                        defaultIsOpen={!!filteredContacts.length}
+                        extraData={filteredContacts.length}
+                        itmeHeight={CONTACT_CARD_DEFAULT_HIGHT}
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>
@@ -132,6 +136,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                             contact.address,
                                             selectedAddress,
                                         )
+
                                     const onPress = () =>
                                         setSelectedAddress(contact.address)
 
@@ -151,7 +156,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         }
                     />
                     <BaseAccordion
-                        defaultIsOpen
+                        defaultIsOpen={!!filteredAccounts.length}
+                        extraData={filteredAccounts.length}
+                        itmeHeight={ACCOUNT_CARD_DEFAULT_HIGHT}
                         headerComponent={
                             <BaseView flexDirection="row">
                                 <BaseText>

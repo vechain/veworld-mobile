@@ -47,7 +47,6 @@ export const LockScreen: React.FC<Props> = memo(
                     })
                 } else {
                     onSuccess(pin)
-                    return
                 }
             },
             [onSuccess, validatePassword],

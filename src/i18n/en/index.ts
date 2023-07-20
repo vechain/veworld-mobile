@@ -447,6 +447,8 @@ const en: BaseTranslation = {
   RECAP: "Recap",
   COLLECTION_NAME: "Collection name",
   UNKNOWN_COLLECTION: "Unknown collection name",
+  ESTIMATED_GAS_FEE: "Estimated gas fee",
+  ESTIMATED_TIME: "Estimated time",
 
   // Onboarding
 

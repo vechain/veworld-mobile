@@ -23,7 +23,9 @@ export const BalanceView = ({
                     {LL.BD_YOUR_BALANCE()}
                 </BaseText>
                 <BaseSpacer width={4} />
-                <BaseText typographyFont="caption">{`${fiatBalance} ${currency}`}</BaseText>
+                <BaseText typographyFont="caption">{`${
+                    isBalanceVisible ? fiatBalance : "***"
+                } ${currency}`}</BaseText>
             </BaseView>
 
             <BaseSpacer height={4} />
