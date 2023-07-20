@@ -33,7 +33,9 @@ export const DelegationOptions = ({
 }: Props) => {
     const { LL } = useI18nContext()
 
-    const accounts = useAppSelector(selectVisibleAccountsButSelected)
+    const accounts = useAppSelector(state =>
+        selectVisibleAccountsButSelected(state, true),
+    )
 
     const {
         ref: selectAccountBottomSheetRef,
