@@ -3,11 +3,7 @@ import React from "react"
 import { SelectAccountBottomSheet } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import {
-    selectBalanceVisible,
-    selectLocalSelectedAccounts,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     onClose: () => void
@@ -15,6 +11,7 @@ type Props = {
     setSelectedAccount: (account: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
     setNoDelegation: () => void
+    accounts: AccountWithDevice[]
 }
 
 // component to select an account for delegation
@@ -29,11 +26,10 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<
             selectedAccount,
             selectedDelegationOption,
             setNoDelegation,
+            accounts,
         },
         ref,
     ) => {
-        const accounts = useAppSelector(selectLocalSelectedAccounts)
-
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
         const onDismiss = () => {

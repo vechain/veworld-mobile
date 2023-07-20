@@ -19,6 +19,7 @@ const { defaults: defaultTypography, ...otherTypography } = typography
 type Props = {
     action: () => void
     disabled?: boolean
+    isDisabledTextOnly?: boolean
     variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
     textColor?: string
@@ -56,6 +57,7 @@ export const BaseButton = ({
     size = "lg",
     radius = 16,
     disabled = false,
+    isDisabledTextOnly = false,
     leftIcon,
     rightIcon,
     isLoading = false,
@@ -115,11 +117,25 @@ export const BaseButton = ({
     }, [theme, invertLoaderColor])
 
     const calculateBackgroundColor = useMemo(() => {
+        if (disabled && isDisabledTextOnly) return bgColor
         if (disabled) return COLORS.DISABLED_GREY
 
         if (isSolidButton) return bgColor
         else return theme.colors.transparent
-    }, [bgColor, disabled, isSolidButton, theme.colors.transparent])
+    }, [
+        bgColor,
+        disabled,
+        isDisabledTextOnly,
+        isSolidButton,
+        theme.colors.transparent,
+    ])
+
+    const calculateTextColor = useMemo(() => {
+        return (
+            textColor ??
+            (isSolidButton ? theme.colors.background : theme.colors.text)
+        )
+    }, [isSolidButton, textColor, theme.colors.background, theme.colors.text])
 
     return (
         <TouchableOpacity
@@ -154,12 +170,7 @@ export const BaseButton = ({
             {leftIcon}
             {!isLoading ? (
                 <BaseText
-                    color={
-                        textColor ||
-                        (isSolidButton
-                            ? theme.colors.background
-                            : theme.colors.text)
-                    }
+                    color={calculateTextColor}
                     typographyFont={computedTypographyFont}
                     fontFamily={fontFamily}
                     fontWeight={fontWeight}
