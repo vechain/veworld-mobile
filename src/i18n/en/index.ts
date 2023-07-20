@@ -52,7 +52,6 @@ const en: BaseTranslation = {
   BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
 
 
-
   // BODY
   BD_GDPR:
     "By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)",
@@ -555,6 +554,8 @@ const en: BaseTranslation = {
   SEND_LEDGER_CHECK_CONNECTION_SB: "Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open",
   SEND_LEDGER_SIGN_DATA: "We are signing your transaction",
   SEND_LEDGER_SIGN_DATA_SB: "We are signing your transaction with your Ledger, please confirm the transaction on your device when required",
+  CERT_LEDGER_SIGN_DATA: "We are signing your certificate",
+  CERT_LEDGER_SIGN_DATA_SB: "We are signing your certificate with your Ledger, please confirm the signature on your device when required",
   SEND_LEDGER_TX_READY: "Transaction is ready",
   LEDGER_CERTIFICATE_READ: "Certificate is ready",
   SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",

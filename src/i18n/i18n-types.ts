@@ -1901,6 +1901,14 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_SIGN_DATA_SB: string
 	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CERT_LEDGER_SIGN_DATA: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	CERT_LEDGER_SIGN_DATA_SB: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
 	 */
 	SEND_LEDGER_TX_READY: string
@@ -4091,6 +4099,14 @@ Please, try again later.
 	 * We are signing your transaction with your Ledger, please confirm the transaction on your device when required
 	 */
 	SEND_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * We are signing your certificate
+	 */
+	CERT_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * We are signing your certificate with your Ledger, please confirm the signature on your device when required
+	 */
+	CERT_LEDGER_SIGN_DATA_SB: () => LocalizedString
 	/**
 	 * Transaction is ready
 	 */
