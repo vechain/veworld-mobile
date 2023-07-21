@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { StyleSheet, ViewProps, View } from "react-native"
+import { StyleSheet, View, ViewProps } from "react-native"
 import { BaseIcon, BaseSpacer } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -8,20 +8,23 @@ type Props = {
     iconTestID?: string
     hasBottomSpacer?: boolean
     iconColor?: string
+    beforeNavigating?: () => Promise<void>
 } & ViewProps
 
 export const BackButtonHeader = ({
     iconTestID = "BackButtonHeader-BaseIcon-backButton",
     hasBottomSpacer = true,
     iconColor,
+    beforeNavigating,
     ...otherProps
 }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
 
     const onActionPress = useCallback(async () => {
+        if (beforeNavigating) await beforeNavigating()
         nav.goBack()
-    }, [nav])
+    }, [beforeNavigating, nav])
 
     return (
         <View {...otherProps}>

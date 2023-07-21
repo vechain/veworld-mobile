@@ -90,6 +90,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         openBleConnection,
         openOrFinalizeConnection,
         transport,
+        removeLedger,
     } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
         waitFirstManualConnection: false,
@@ -242,6 +243,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 Haptics.NotificationFeedbackType.Success,
             )
 
+            await removeLedger()
+
+            //If DApp transaction
             if (requestEvent && web3Wallet) {
                 await WalletConnectResponseUtils.transactionRequestSuccessResponse(
                     { request: requestEvent, web3Wallet, LL },
@@ -264,6 +268,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             setIsSending(false)
         }
     }, [
+        removeLedger,
         web3Wallet,
         requestEvent,
         selectedNetwork,
@@ -279,9 +284,19 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         setTimerEnabled(false)
     }, [setTimerEnabled])
 
+    const beforeNavigatingBack = useCallback(async () => {
+        await removeLedger()
+        if (web3Wallet && requestEvent)
+            await WalletConnectResponseUtils.userRejectedMethodsResponse({
+                request: requestEvent,
+                web3Wallet,
+                LL,
+            })
+    }, [removeLedger, requestEvent, web3Wallet, LL])
+
     return (
         <BaseSafeArea grow={1}>
-            <BackButtonHeader />
+            <BackButtonHeader beforeNavigating={beforeNavigatingBack} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
                 <BaseText typographyFont="title">
                     {LL.SEND_LEDGER_TITLE()}

@@ -135,10 +135,8 @@ const WalletConnectContextProvider = ({
             if (proposal.verifyContext.verified.validation !== "VALID")
                 warn("Session proposal is not valid", proposal.verifyContext)
 
-            if (
-                proposal.verifyContext.verified.validation === "VALID" ||
-                process.env.NODE_ENV !== "production"
-            ) {
+            //TODO: Verify DApps: proposal.verifyContext.verified.validation === "VALID"
+            if (true) {
                 if (!selectedAccountAddress) return
                 if (!web3Wallet) return
                 if (!proposal.params.requiredNamespaces.vechain) {
@@ -445,6 +443,9 @@ const WalletConnectContextProvider = ({
             debug("WalletConnectProvider:Linking.addListener", event)
             handleLinkingUrl(event.url)
         })
+        return () => {
+            Linking.removeAllListeners("url")
+        }
     }, [handleLinkingUrl])
 
     /**

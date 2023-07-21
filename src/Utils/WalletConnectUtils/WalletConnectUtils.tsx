@@ -52,7 +52,7 @@ export function getPairAttributes(
     const chains = proposal.params.requiredNamespaces.vechain.chains
     const icon = proposal.params.proposer.metadata.icons[0]
 
-    const attributes = {
+    return {
         name,
         url,
         methods,
@@ -61,7 +61,6 @@ export function getPairAttributes(
         icon,
         description,
     }
-    return attributes
 }
 
 export function getRequestEventAttributes(
@@ -72,13 +71,12 @@ export function getRequestEventAttributes(
     const params = requestEvent.params.request.params[0]
     const topic = requestEvent.topic
 
-    const attributes = {
+    return {
         chainId,
         method,
         params,
         topic,
     }
-    return attributes
 }
 
 export function getSessionRequestAttributes(
@@ -89,13 +87,12 @@ export function getSessionRequestAttributes(
     const url = sessionRequest.peer.metadata.url
     const description = sessionRequest.peer.metadata.description
 
-    const attributes = {
+    return {
         name,
         icon,
         url,
         description,
     }
-    return attributes
 }
 
 export function isWalletConnectRoute(

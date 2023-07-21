@@ -23,7 +23,13 @@ import {
     RootStackParamListSwitch,
     Routes,
 } from "~Navigation"
-import { debug, error, LedgerUtils, WalletConnectResponseUtils } from "~Utils"
+import {
+    debug,
+    error,
+    LedgerUtils,
+    MinimizerUtils,
+    WalletConnectResponseUtils,
+} from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
@@ -58,12 +64,18 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         openConnectionErrorSheet()
     }, [openConnectionErrorSheet])
 
-    const { errorCode, setTimerEnabled, vetApp, openBleConnection, transport } =
-        useLedger({
-            deviceId: accountWithDevice.device.deviceId,
-            waitFirstManualConnection: false,
-            onConnectionError,
-        })
+    const {
+        errorCode,
+        setTimerEnabled,
+        vetApp,
+        openBleConnection,
+        transport,
+        removeLedger,
+    } = useLedger({
+        deviceId: accountWithDevice.device.deviceId,
+        waitFirstManualConnection: false,
+        onConnectionError,
+    })
 
     const ledgerErrorCode = useMemo(() => {
         if (errorCode) return errorCode
@@ -180,6 +192,10 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 certificate,
             )
 
+            await removeLedger()
+
+            MinimizerUtils.goBack()
+
             navigateOnFinish()
         } catch (e) {
             error(e)
@@ -190,15 +206,33 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         } finally {
             setIsSending(false)
         }
-    }, [requestEvent, web3Wallet, LL, signature, certificate, navigateOnFinish])
+    }, [
+        removeLedger,
+        requestEvent,
+        web3Wallet,
+        LL,
+        signature,
+        certificate,
+        navigateOnFinish,
+    ])
 
     const onConnectionErrorDismiss = useCallback(() => {
         setTimerEnabled(false)
     }, [setTimerEnabled])
 
+    const beforeNavigatingBack = useCallback(async () => {
+        await removeLedger()
+        if (web3Wallet && requestEvent)
+            await WalletConnectResponseUtils.userRejectedMethodsResponse({
+                request: requestEvent,
+                web3Wallet,
+                LL,
+            })
+    }, [removeLedger, requestEvent, web3Wallet, LL])
+
     return (
         <BaseSafeArea grow={1}>
-            <BackButtonHeader />
+            <BackButtonHeader beforeNavigating={beforeNavigatingBack} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
                 <BaseText typographyFont="title">
                     {LL.SEND_LEDGER_TITLE()}

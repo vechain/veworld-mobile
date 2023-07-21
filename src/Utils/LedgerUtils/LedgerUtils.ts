@@ -76,7 +76,7 @@ export const checkLedgerConnection = async ({
         )
         successCallback?.(app, rootAccount)
     } catch (e) {
-        error(e)
+        error("LedgerUtils:checkLedgerConnection", e)
         error(ledgerErrorHandler(e as Error))
         errorCallback?.(ledgerErrorHandler(e as Error))
     }
@@ -155,7 +155,7 @@ const signTransaction = async (
             )
         } catch (e) {
             error("signTransaction", e)
-            throw new Error("Failed to sign the message")
+            throw new Error("Failed to sign the transaction")
         } finally {
             vetLedger.transport.close().catch(e => {
                 warn(e)
