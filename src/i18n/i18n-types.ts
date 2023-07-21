@@ -239,7 +239,7 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 *  ​ ​ ​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.​ ​T​r​y​ ​a​g​a​i​n​.
+	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
@@ -2470,7 +2470,7 @@ export type TranslationFunctions = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 *     PIN doesn't match. Try again.
+	 * <><> PIN doesn't match.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**

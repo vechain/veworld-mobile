@@ -93,7 +93,7 @@ export const UserCreatePasswordScreen = () => {
                         typesetting industry
                     </BaseText>
                 </BaseView>
-                <BaseSpacer height={valueToHP[60]} />
+                <BaseSpacer height={valueToHP[40]} />
                 <PasswordPins
                     pin={pin}
                     digitNumber={digitNumber}

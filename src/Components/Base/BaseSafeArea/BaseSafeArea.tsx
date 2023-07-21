@@ -12,6 +12,7 @@ type Props = {
     transparent?: boolean
     children?: React.ReactNode
     grow?: number
+    isSafeViewNative?: boolean
 } & SafeAreaViewProps
 
 export const BaseSafeArea = ({

@@ -86,6 +86,7 @@ const baseStyles = StyleSheet.create({
         borderTopLeftRadius: 16,
         borderBottomStartRadius: 16,
         overflow: "hidden",
+        borderWidth: PlatformUtils.isAndroid() ? 1 : 0,
     },
     button: {
         flexGrow: 1,

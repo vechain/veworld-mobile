@@ -5,24 +5,15 @@ import { Routes } from "~Navigation"
 import { FlashList } from "@shopify/flash-list"
 import { StyleSheet, View } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { useScrollableList, useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType, isSmallScreen } from "~Constants"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
 
     const SCREEN_LIST = useMemo(() => getList(LL), [LL])
 
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(SCREEN_LIST, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
-
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-
-    const insets = useSafeAreaInsets()
-
-    const tabBarHeight = useBottomTabBarHeight()
 
     const renderSeparator = useCallback(
         () => <View style={themedStyles.separator} />,
@@ -44,26 +35,19 @@ export const SettingsScreen = () => {
         <BaseSafeArea grow={1}>
             <BaseText
                 typographyFont="largeTitle"
-                mx={20}
+                mx={24}
                 testID="settings-screen">
                 {LL.TITLE_SETTINGS()}
             </BaseText>
 
             <BaseSpacer height={20} />
 
-            <BaseView
-                flexDirection="row"
-                style={[
-                    themedStyles.list,
-                    { paddingBottom: tabBarHeight - insets.bottom },
-                ]}>
+            <BaseView flexDirection="row" style={[themedStyles.list]}>
                 <FlashList
                     data={SCREEN_LIST}
                     contentContainerStyle={themedStyles.contentContainerStyle}
                     ItemSeparatorComponent={renderSeparator}
-                    scrollEnabled={isListScrollable}
-                    onViewableItemsChanged={onViewableItemsChanged}
-                    viewabilityConfig={viewabilityConfig}
+                    scrollEnabled={isSmallScreen}
                     keyExtractor={item => item.screenName}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -82,7 +66,7 @@ export const SettingsScreen = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         contentContainerStyle: {
-            paddingHorizontal: 20,
+            paddingHorizontal: 24,
         },
         separator: {
             borderBottomColor: theme.colors.text,
