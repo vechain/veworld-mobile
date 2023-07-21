@@ -132,7 +132,7 @@ export const resolveMimeType = async (resource: string) => {
             return mime
         }
 
-        const res = await axios.head(resource)
+        const res = await axios.head(URIUtils.convertUriToUrl(resource))
         const contentType = res.headers["content-type"]
         return contentType ?? "image/png"
     } catch (err) {
