@@ -121,9 +121,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
-        return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${
-            activity.id
-        }`
+        if (activity.isTransaction)
+            return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${
+                activity.id
+            }`
     }, [activity, network])
 
     const renderActivityDetails = useMemo(() => {
@@ -298,7 +299,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 </BaseView>
             </ScrollView>
 
-            {activity.isTransaction && (
+            {explorerUrl && (
                 <FadeoutButton
                     title={LL.VIEW_ON_EXPLORER().toUpperCase()}
                     action={() => {
