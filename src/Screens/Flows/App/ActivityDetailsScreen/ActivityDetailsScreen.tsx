@@ -45,7 +45,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
-import HapticsService from "~Services/HapticsService"
 import {
     ExplorerLinkType,
     getExplorerLink,
@@ -303,7 +302,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 <FadeoutButton
                     title={LL.VIEW_ON_EXPLORER().toUpperCase()}
                     action={() => {
-                        HapticsService.triggerImpact({ level: "Light" })
                         Linking.openURL(explorerUrl)
                     }}
                 />
