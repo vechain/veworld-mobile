@@ -1,5 +1,5 @@
 import { address, HDNode } from "thor-devkit"
-import { XPub } from "~Model"
+import { Network, NETWORK_TYPE, XPub } from "~Model"
 import { error } from "~Utils/Logger"
 import { VET, VTHO } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
@@ -109,24 +109,24 @@ export const leftPadWithZeros = (str: string, length: number): string => {
     return `0x${paddedStr}`
 }
 
-// export enum ExplorerLinkType {
-//     TRANSACTION = "TRANSACTION",
-//     ACCOUNT = "ACCOUNT",
-// }
+export enum ExplorerLinkType {
+    TRANSACTION = "TRANSACTION",
+    ACCOUNT = "ACCOUNT",
+}
 
-// /**
-//  * Generate explorer link based on network (main/testnet) and address type
-//  * @param address
-//  * @param type
-//  */
-// export const getExplorerLink = (network?: Network, type?: ExplorerLinkType) => {
-//     const networkBaseUrl =
-//         network?.type === NETWORK_TYPE.MAIN
-//             ? process.env.REACT_APP_EXPLORER_MAIN_URL
-//             : process.env.REACT_APP_EXPLORER_TESTNET_URL
+/**
+ * Generate explorer link based on network (main/testnet) and address type
+ * @param address
+ * @param type
+ */
+export const getExplorerLink = (network?: Network, type?: ExplorerLinkType) => {
+    const networkBaseUrl =
+        network?.type === NETWORK_TYPE.MAIN
+            ? process.env.REACT_APP_EXPLORER_MAIN_URL
+            : process.env.REACT_APP_EXPLORER_TESTNET_URL
 
-//     const urlSuffix =
-//         type === ExplorerLinkType.ACCOUNT ? "accounts" : "transactions"
+    const urlSuffix =
+        type === ExplorerLinkType.ACCOUNT ? "accounts" : "transactions"
 
-//     return `${networkBaseUrl}/${urlSuffix}`
-// }
+    return `${networkBaseUrl}/${urlSuffix}`
+}
