@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
-import { useTheme } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
 import { FormattingUtils, TransactionUtils } from "~Utils"
 import {
@@ -11,10 +11,13 @@ import {
     ChangeAccountButtonPill,
     BaseSpacer,
     BackButtonHeader,
+    SelectAccountBottomSheet,
 } from "~Components"
 import {
+    selectBalanceVisible,
     selectSelectedAccount,
     selectTokensWithInfo,
+    selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -30,6 +33,7 @@ import {
     SwapTransactionActivityBox,
 } from "./Components"
 import {
+    AccountWithDevice,
     Activity,
     ActivityType,
     ConnectedAppActivity,
@@ -49,13 +53,28 @@ const SKELETON_COUNT = 12
 export const HistoryScreen = () => {
     const { LL } = useI18nContext()
 
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const setSelectedAccount = (account: AccountWithDevice) => {
+        onSetSelectedAccount({ address: account.address })
+    }
+
+    const {
+        ref: selectAccountBottomSheetRef,
+        onOpen: openSelectAccountBottomSheet,
+        onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
 
     // Pull down to refresh
     const [refreshing, setRefreshing] = React.useState(false)
 
     const { fetchActivities, activities, hasFetched, page, setPage } =
-        useAccountActivities(selectedAccount.address)
+        useAccountActivities()
 
     const nav = useNavigation()
 
@@ -65,11 +84,6 @@ export const HistoryScreen = () => {
 
     // To prevent fetching next page of activities on FlashList mount
     const [hasScrolled, setHasScrolled] = useState(false)
-
-    // TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/757)
-    // when account changes set page of activity fetching back to 0
-    // and refetch otherwise we would be at the page of activities of the previous account
-    const onChangeAccountPress = () => {}
 
     const onStartTransactingPress = useCallback(
         () =>
@@ -290,7 +304,7 @@ export const HistoryScreen = () => {
                         5,
                         4,
                     )}
-                    action={onChangeAccountPress}
+                    action={openSelectAccountBottomSheet}
                 />
             </BaseView>
 
@@ -304,6 +318,15 @@ export const HistoryScreen = () => {
 
             {/* No Activities */}
             {!activities.length && hasFetched && renderNoActivitiesButton}
+
+            <SelectAccountBottomSheet
+                closeBottomSheet={closeSelectAccountBottonSheet}
+                accounts={accounts}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                isBalanceVisible={isBalanceVisible}
+                ref={selectAccountBottomSheetRef}
+            />
         </BaseSafeArea>
     )
 }
