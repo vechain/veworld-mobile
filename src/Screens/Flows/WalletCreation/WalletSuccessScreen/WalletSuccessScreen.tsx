@@ -8,7 +8,7 @@ import {
     showErrorToast,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import { VeChainVetLogoSVG } from "~Assets"
+import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { SecurityLevelType } from "~Model"
 import { useCheckIdentity, useCreateWallet, useTheme } from "~Hooks"
@@ -197,7 +197,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         w={100}
                         flexGrow={1}>
                         <BaseView alignItems="center">
-                            <VeChainVetLogoSVG />
+                            <VeWorldLogoSVG height={200} width={200} />
                             <BaseText align="center" py={20}>
                                 {LL.BD_WALLET_SUCCESS()}
                             </BaseText>

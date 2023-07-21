@@ -13,12 +13,13 @@ import { useTheme } from "~Hooks"
 import { debug } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { isSmallScreen } from "~Constants"
 
 type Props = {
     onClose: () => void
 }
 
-const snapPoints = ["50%", "70%", "90%"]
+const snapPoints = isSmallScreen ? ["60%", "70%", "90%"] : ["50%", "70%", "90%"]
 export const ImportWalletBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props

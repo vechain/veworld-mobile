@@ -38,6 +38,7 @@ export const usePasswordUnlock = () => {
                 <LockScreen
                     onSuccess={unlockApp}
                     scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
+                    isSafeView
                 />
             )
         }

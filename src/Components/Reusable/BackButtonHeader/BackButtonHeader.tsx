@@ -8,20 +8,26 @@ type Props = {
     iconTestID?: string
     hasBottomSpacer?: boolean
     iconColor?: string
+    action?: () => void
 } & ViewProps
 
 export const BackButtonHeader = ({
     iconTestID = "BackButtonHeader-BaseIcon-backButton",
     hasBottomSpacer = true,
     iconColor,
+    action,
     ...otherProps
 }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
 
     const onActionPress = useCallback(async () => {
-        nav.goBack()
-    }, [nav])
+        if (action) {
+            action()
+        } else {
+            nav.goBack()
+        }
+    }, [nav, action])
 
     return (
         <View {...otherProps}>

@@ -8,7 +8,7 @@ import {
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { VeChainVetLogoSVG } from "~Assets"
+import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import {
     addDeviceAndAccounts,
@@ -100,7 +100,7 @@ export const WelcomeScreen = () => {
                 <BaseSpacer height={80} />
 
                 <BaseView alignItems="center" w={100} flexGrow={1}>
-                    <VeChainVetLogoSVG />
+                    <VeWorldLogoSVG height={200} width={200} />
                     <BaseSpacer height={40} />
                     <BaseText
                         align="left"
