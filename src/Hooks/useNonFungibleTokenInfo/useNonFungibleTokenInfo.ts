@@ -5,7 +5,7 @@ import { resolveMimeType } from "~Hooks/useNft/Helpers"
 import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
 import { TokenMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
-import { error } from "~Utils"
+import { URIUtils, error } from "~Utils"
 
 /**
  * `useNonFungibleTokenInfo` is a hook for fetching and managing non-fungible token (NFT) information.
@@ -79,7 +79,9 @@ export const useNonFungibleTokenInfo = (
             fetchMetadata(tokenUri)
                 .then((metadata?: TokenMetadata) => {
                     setTokenMetadata(metadata)
-                    setTokenImage(metadata?.image)
+
+                    if (metadata?.image)
+                        setTokenImage(URIUtils.convertUriToUrl(metadata.image))
 
                     setIsMediaLoading(false)
                 })
