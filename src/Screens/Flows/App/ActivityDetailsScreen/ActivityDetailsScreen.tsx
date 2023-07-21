@@ -13,7 +13,7 @@ import {
     NFTTransferCard,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { ScrollView, StyleSheet } from "react-native"
+import { Linking, ScrollView, StyleSheet } from "react-native"
 import { useBottomSheetModal, usePlatformBottomInsets } from "~Hooks"
 import { DateUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
@@ -38,8 +38,18 @@ import {
 } from "./Components"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
-import { selectActivity, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectActivity,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import HapticsService from "~Services/HapticsService"
+import {
+    ExplorerLinkType,
+    getExplorerLink,
+} from "~Utils/AddressUtils/AddressUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -48,6 +58,8 @@ type Props = NativeStackScreenProps<
 
 export const ActivityDetailsScreen = ({ route }: Props) => {
     const { activity, token, isSwap, decodedClauses } = route.params
+
+    const network = useAppSelector(selectSelectedNetwork)
 
     const { calculateBottomInsets } = usePlatformBottomInsets()
 
@@ -107,6 +119,12 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     const isNFTtransfer = useMemo(() => {
         return activity.type === ActivityType.NFT_TRANSFER
     }, [activity.type])
+
+    const explorerUrl = useMemo(() => {
+        return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${
+            activity.id
+        }`
+    }, [activity, network])
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
@@ -283,7 +301,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             {activity.isTransaction && (
                 <FadeoutButton
                     title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                    action={() => {}}
+                    action={() => {
+                        HapticsService.triggerImpact({ level: "Light" })
+                        Linking.openURL(explorerUrl)
+                    }}
                 />
             )}
 
