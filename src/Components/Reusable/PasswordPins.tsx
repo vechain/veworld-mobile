@@ -1,8 +1,8 @@
-import React, { FC, memo, useCallback, useMemo } from "react"
+import React, { FC, memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ColorThemeType, valueToHP, COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { BaseText, BaseView } from "~Components"
+import { BaseText, BaseView, WrapTranslation } from "~Components"
 import { PinVerificationErrorType, PinVerificationError } from "~Model"
 import { useI18nContext } from "~i18n"
 
@@ -33,13 +33,36 @@ export const PasswordPins: FC<Props> = memo(
             if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
 
             if (errorType === PinVerificationError.VALIDATE_PIN && errorValue)
-                return LL.BD_USER_PASSWORD_ERROR()
+                return (
+                    <WrapTranslation
+                        message={LL.BD_USER_PASSWORD_ERROR()}
+                        renderComponent={() => (
+                            <BaseView
+                                justifyContent="center"
+                                alignItems="center"
+                                style={themedStyles.danferIcon}>
+                                <BaseText
+                                    color={theme.colors.danger}
+                                    fontSize={10}>
+                                    !
+                                </BaseText>
+                            </BaseView>
+                        )}
+                    />
+                )
 
             if (errorType === PinVerificationError.EDIT_PIN && errorValue)
                 return LL.BD_USER_EDIT_PASSWORD_ERROR()
 
             return MESSAGE_FAKE_PLACEHOLDER
-        }, [LL, isPINRetype, errorValue, errorType])
+        }, [
+            isPINRetype,
+            LL,
+            errorType,
+            errorValue,
+            themedStyles.danferIcon,
+            theme.colors.danger,
+        ])
 
         const getMessageTextColor = useMemo(() => {
             if (isPINRetype) return theme.colors.text
@@ -47,14 +70,14 @@ export const PasswordPins: FC<Props> = memo(
             return undefined
         }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
 
-        const getPinMessage = useCallback(() => {
+        const getPinMessage = useMemo(() => {
             return (
                 <BaseText
                     style={themedStyles.messageTextStyle}
                     typographyFont="bodyAccent"
                     alignContainer="center"
                     color={getMessageTextColor}
-                    my={16}>
+                    my={18}>
                     {getMessageText}
                 </BaseText>
             )
@@ -80,7 +103,7 @@ export const PasswordPins: FC<Props> = memo(
                     })}
                 </BaseView>
 
-                {getPinMessage()}
+                {getPinMessage}
             </BaseView>
         )
     },
@@ -100,4 +123,11 @@ const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
             backgroundColor: COLORS.DARK_PURPLE_DISABLED,
         },
         messageTextStyle: { opacity: isMessageVisible ? 1 : 0 },
+        danferIcon: {
+            borderRadius: 16,
+            height: 16,
+            width: 16,
+            borderWidth: 1,
+            borderColor: theme.colors.danger,
+        },
     })

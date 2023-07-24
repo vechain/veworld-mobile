@@ -4,6 +4,7 @@ import { showWarningToast, useThor } from "~Components"
 import { Activity } from "~Model"
 import {
     selectCurrentActivities,
+    selectSelectedAccount,
     updateAccountTransactionActivities,
     useAppDispatch,
     useAppSelector,
@@ -14,7 +15,6 @@ import { useI18nContext } from "~i18n"
 /**
  * Custom React hook to fetch and manage account activities.
  *
- * @param {string} address - The Ethereum address for which activities will be fetched.
  * @returns {{
  *   fetchActivities: Function,
  *   activities: Activity[],
@@ -26,9 +26,11 @@ import { useI18nContext } from "~i18n"
  *     - hasFetched: A boolean indicating whether the account activities have been fetched. `true` if the fetch operation is complete, `false` otherwise.
  *     - page: The current page number for the paginated activity data. The initial page is `0`.
  */
-export const useAccountActivities = (address: string) => {
+export const useAccountActivities = () => {
     // Initialize Redux dispatch
     const dispatch = useAppDispatch()
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     // Initialize Thor context
     const thor = useThor()
@@ -53,11 +55,11 @@ export const useAccountActivities = (address: string) => {
         // Reset hasFetched flag
         setHasFetched(false)
         // Proceed if address exists
-        if (address) {
+        if (selectedAccount) {
             try {
                 // Fetch transaction activities
                 const txActivities = await fetchAccountTransactionActivities(
-                    address,
+                    selectedAccount.address,
                     page,
                     thor,
                 )
@@ -109,7 +111,7 @@ export const useAccountActivities = (address: string) => {
                 if (page === 0) setPage(prevPage => prevPage + 1)
             }
         }
-    }, [address, page, thor, dispatch, LL])
+    }, [selectedAccount, page, thor, dispatch, LL])
 
     // Helper function to increment page and set fetched flag
     const incrementPageAndSetFetchedFlag = () => {
@@ -122,7 +124,7 @@ export const useAccountActivities = (address: string) => {
         setActivities(activitiesSaved)
     }, [activitiesSaved])
 
-    // Fetch activities on initial component mount
+    // Fetch activities on initial component mount or account change
     useEffect(() => {
         const fetchOnMount = async () => {
             await fetchActivities()
@@ -135,6 +137,11 @@ export const useAccountActivities = (address: string) => {
     useEffect(() => {
         setPage(0)
     }, [thor.genesis.id])
+
+    // Reset page number on account change
+    useEffect(() => {
+        setPage(0)
+    }, [selectedAccount])
 
     return {
         fetchActivities,

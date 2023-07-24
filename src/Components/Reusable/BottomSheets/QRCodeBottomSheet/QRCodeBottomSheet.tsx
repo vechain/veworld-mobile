@@ -17,7 +17,7 @@ import QRCode from "react-native-qrcode-svg"
 import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
 import { FormattingUtils } from "~Utils"
-import { NFTPlaceholder } from "~Assets"
+import { veworldLogo } from "~Assets"
 
 const snapPoints = ["50%", "100%"]
 
@@ -56,8 +56,8 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(
                             value={selectedAccount.address}
                             size={172}
                             quietZone={10}
-                            logo={{ uri: NFTPlaceholder }} // Todo add VeWorld logo
-                            logoSize={48}
+                            logo={{ uri: veworldLogo }}
+                            logoSize={52}
                             logoBackgroundColor="transparent"
                         />
                     </BaseView>

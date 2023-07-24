@@ -76,7 +76,7 @@ const en: BaseTranslation = {
   BD_MNEMONIC_SUBTITLE:
     "Your Secret Recovery Phrase makes it easy to back up and restore your account.",
   BD_USER_PASSWORD_CONFIRM: "Confirm your PIN",
-  BD_USER_PASSWORD_ERROR: "    PIN doesn't match. Try again.",
+  BD_USER_PASSWORD_ERROR: "<><> PIN doesn't match.",
   BD_USER_EDIT_PASSWORD_ERROR: "Old PIN can't be the same as new PIN",
   BD_IMPORT_WALLET_TYPE: "Select the type of wallet you want to import",
   BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12-word recovery phrase.",

@@ -12,13 +12,14 @@ import {
 import { useI18nContext } from "~i18n"
 import { useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
+import { isSmallScreen } from "~Constants"
 
 type Props = {
     mnemonicArray: string[]
     onClose: () => void
 }
 
-const snapPoints = ["45%"]
+const snapPoints = isSmallScreen ? ["55%"] : ["45%"]
 
 export const BackupMnemonicBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
