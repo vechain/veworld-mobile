@@ -38,6 +38,7 @@ describe("useLedger", () => {
                 setTimerEnabled: expect.any(Function),
                 transport: undefined,
                 openBleConnection: expect.any(Function),
+                removeLedger: expect.any(Function),
             })
         })
 
@@ -71,6 +72,7 @@ describe("useLedger", () => {
                 setTimerEnabled: expect.any(Function),
                 transport: undefined,
                 openBleConnection: expect.any(Function),
+                removeLedger: expect.any(Function),
             })
         })
         it("call openOrFinalizeConnection - unknown error on getAppConfig", async () => {
@@ -102,6 +104,7 @@ describe("useLedger", () => {
                 setTimerEnabled: expect.any(Function),
                 transport: TestHelpers.data.mockedTransport,
                 openBleConnection: expect.any(Function),
+                removeLedger: expect.any(Function),
             })
         })
     })

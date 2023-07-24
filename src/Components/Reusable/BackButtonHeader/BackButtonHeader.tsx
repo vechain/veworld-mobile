@@ -8,7 +8,7 @@ type Props = {
     iconTestID?: string
     hasBottomSpacer?: boolean
     iconColor?: string
-    beforeNavigating?: () => Promise<void>
+    beforeNavigating?: () => Promise<void> | void
 } & ViewProps
 
 export const BackButtonHeader = ({

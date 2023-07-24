@@ -396,9 +396,8 @@ const WalletConnectContextProvider = ({
             if (pendingRequests && pendingRequests.length > 0) {
                 const nextRequest = pendingRequests[0]
                 debug("Pending request: ", nextRequest.params.request.method)
-                if (WalletConnectUtils.isWalletConnectRoute(nav.getState()))
-                    return
-                await onSessionRequest(nextRequest)
+                if (WalletConnectUtils.shouldAutoNavigate(nav.getState()))
+                    await onSessionRequest(nextRequest)
             }
         }
 
