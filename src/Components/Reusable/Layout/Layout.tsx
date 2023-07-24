@@ -20,6 +20,7 @@ type Props = {
     footer?: ReactNode
     isScrollEnabled?: boolean
     safeAreaTestID?: string
+    onTouchBody?: () => void
 }
 
 export const Layout = ({
@@ -32,9 +33,11 @@ export const Layout = ({
     footer,
     isScrollEnabled = true,
     safeAreaTestID,
+    onTouchBody,
 }: Props) => {
     const theme = useTheme()
-    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
+    const { tabBarAndroidBottomInsets, calculateBottomInsets } =
+        usePlatformBottomInsets()
 
     const Title = useCallback(
         () => (
@@ -46,7 +49,10 @@ export const Layout = ({
     )
 
     return (
-        <BaseSafeArea grow={1} testID={safeAreaTestID}>
+        <BaseSafeArea
+            grow={1}
+            testID={safeAreaTestID}
+            onTouchStart={onTouchBody}>
             <BaseView h={100}>
                 {!noBackButton && <BackButtonHeader hasBottomSpacer={false} />}
                 <BaseSpacer height={fixedHeader ? 16 : 8} />
@@ -54,13 +60,17 @@ export const Layout = ({
                     {fixedHeader && title && <Title />}
                     {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
                 </BaseView>
-                {isScrollEnabled && (
-                    <BaseSpacer height={1} background={theme.colors.card} />
-                )}
+
+                {/* Separator from header to body */}
+                <BaseSpacer height={1} background={theme.colors.card} />
+
                 {body && (
                     <BaseScrollView
                         scrollEnabled={isScrollEnabled}
-                        style={noMargin ? {} : styles.scrollView}>
+                        style={noMargin ? {} : styles.scrollView}
+                        contentContainerStyle={{
+                            paddingBottom: calculateBottomInsets,
+                        }}>
                         {!fixedHeader && title && <Title />}
                         {body}
                     </BaseScrollView>
