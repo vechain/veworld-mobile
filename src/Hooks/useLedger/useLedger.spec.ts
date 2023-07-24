@@ -32,7 +32,7 @@ describe("useLedger", () => {
             expect(result.current).toEqual({
                 vetApp: undefined,
                 rootAccount: undefined,
-                isConnecting: false,
+                isConnecting: true,
                 errorCode: undefined,
                 openOrFinalizeConnection: expect.any(Function),
                 setTimerEnabled: expect.any(Function),
@@ -66,7 +66,7 @@ describe("useLedger", () => {
             expect(result.current).toEqual({
                 vetApp: undefined,
                 rootAccount: undefined,
-                isConnecting: false,
+                isConnecting: true,
                 errorCode: LEDGER_ERROR_CODES.DISCONNECTED,
                 openOrFinalizeConnection: expect.any(Function),
                 setTimerEnabled: expect.any(Function),
