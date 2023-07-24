@@ -5,52 +5,46 @@ import { COLORS } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
-export const ImportNFTView = () => {
+type Props = {
+    onImportPress: () => void
+}
+
+export const ImportNFTView = ({ onImportPress }: Props) => {
     const { calculateBottomInsets } = usePlatformBottomInsets()
     const { LL } = useI18nContext()
 
     return (
         <BaseView
             style={{ marginBottom: calculateBottomInsets }}
-            borderRadius={16}
             mx={20}
-            bg={COLORS.WHITE}
             justifyContent="center"
             alignItems="center">
-            <BaseText pt={16}>{LL.DONT_SEE_NFTS()}</BaseText>
-
             <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
                 {/* TODO (Vas)
                 (https://github.com/vechainfoundation/veworld-mobile/issues/759)
                 add flows on BaseTouchable */}
-                <BaseTouchable action={() => {}}>
+                <BaseTouchable action={onImportPress}>
                     <BaseView
-                        my={16}
-                        bg={COLORS.LIME_GREEN}
-                        justifyContent="center"
-                        alignItems="center"
-                        borderRadius={16}
-                        style={baseStyles.quickNFTActions}>
-                        <BaseIcon name="tray-arrow-up" size={38} />
-                        <BaseText>{LL.IMPORT_NFT()}</BaseText>
-                    </BaseView>
-                </BaseTouchable>
-                {/* TODO (Vas)
-                (https://github.com/vechainfoundation/veworld-mobile/issues/759)
-                add flows on BaseTouchable */}
-                <BaseTouchable action={() => {}}>
-                    <BaseView
-                        my={16}
                         bg={COLORS.LIME_GREEN}
                         justifyContent="center"
                         alignItems="center"
                         borderRadius={16}
                         style={baseStyles.quickNFTActions}>
                         <BaseIcon name="arrow-down" size={38} />
-                        <BaseText>{LL.RECEIVE_NFT()}</BaseText>
+                        <BaseText
+                            color={COLORS.PURPLE}
+                            typographyFont="bodyMedium">
+                            {LL.RECEIVE_NFT()}
+                        </BaseText>
                     </BaseView>
                 </BaseTouchable>
             </BaseView>
+            <BaseText pt={24} typographyFont="subSubTitleLight">
+                {LL.DONT_SEE_NFTS_1()}
+            </BaseText>
+            <BaseText pt={6} typographyFont="subSubTitleLight">
+                {LL.DONT_SEE_NFTS_2()}
+            </BaseText>
         </BaseView>
     )
 }
