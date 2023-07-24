@@ -135,10 +135,8 @@ const WalletConnectContextProvider = ({
             if (proposal.verifyContext.verified.validation !== "VALID")
                 warn("Session proposal is not valid", proposal.verifyContext)
 
-            if (
-                proposal.verifyContext.verified.validation === "VALID" ||
-                process.env.NODE_ENV !== "production"
-            ) {
+            //TODO: Verify DApps: proposal.verifyContext.verified.validation === "VALID"
+            if (true) {
                 if (!selectedAccountAddress) return
                 if (!web3Wallet) return
                 if (!proposal.params.requiredNamespaces.vechain) {
@@ -398,9 +396,8 @@ const WalletConnectContextProvider = ({
             if (pendingRequests && pendingRequests.length > 0) {
                 const nextRequest = pendingRequests[0]
                 debug("Pending request: ", nextRequest.params.request.method)
-                if (WalletConnectUtils.isWalletConnectRoute(nav.getState()))
-                    return
-                await onSessionRequest(nextRequest)
+                if (WalletConnectUtils.shouldAutoNavigate(nav.getState()))
+                    await onSessionRequest(nextRequest)
             }
         }
 
@@ -445,6 +442,9 @@ const WalletConnectContextProvider = ({
             debug("WalletConnectProvider:Linking.addListener", event)
             handleLinkingUrl(event.url)
         })
+        return () => {
+            Linking.removeAllListeners("url")
+        }
     }, [handleLinkingUrl])
 
     /**

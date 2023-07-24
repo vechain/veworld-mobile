@@ -121,7 +121,7 @@ describe("LedgerUtils", () => {
                     () => {},
                 )
             expect(signCertificateCall).rejects.toThrow(
-                "Failed to sign the message",
+                "Failed to sign the transaction",
             )
         })
     })

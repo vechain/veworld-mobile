@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { VETLedgerApp, VETLedgerAccount, LEDGER_ERROR_CODES } from "~Constants"
+import { LEDGER_ERROR_CODES, VETLedgerAccount, VETLedgerApp } from "~Constants"
 
-import { error, info, warn, debug } from "~Utils/Logger"
+import { debug, error, info, warn } from "~Utils/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerUtils } from "~Utils"
+import * as LedgerLogs from "@ledgerhq/logs"
+import { useLedgerSubscription } from "~Hooks"
 
 /**
  * useLedger is a custom react hook for interacting with ledger devices
@@ -19,6 +21,7 @@ import { LedgerUtils } from "~Utils"
  * @param onDisconnect (optional) - a callback that is invoked when a "disconnect" is detected
  *
  * @returns {@link UseLedgerProps}
+ * - "removeLedger" must be invoked after the ledger action is finished
  */
 export const useLedger = ({
     deviceId,
@@ -29,21 +32,51 @@ export const useLedger = ({
     waitFirstManualConnection: boolean
     onConnectionError?: (err: LEDGER_ERROR_CODES) => void
 }): UseLedgerProps => {
-    const transport = useRef<BleTransport | undefined>()
+    useEffect(() => {
+        LedgerLogs.listen(log => {
+            debug("ledger:log", log)
+        })
+    }, [])
 
+    const { canConnect } = useLedgerSubscription({ deviceId })
+    const transport = useRef<BleTransport | undefined>()
+    const timer = useRef<NodeJS.Timeout | undefined>(undefined)
+
+    const [removed, setRemoved] = useState<boolean>(false)
     const [vetApp, setVetApp] = useState<VETLedgerApp>()
     const [isConnecting, setIsConnecting] = useState<boolean>(false)
     const [rootAccount, setRootAccount] = useState<VETLedgerAccount>()
     const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(
         undefined,
     )
-
-    const timer = useRef<NodeJS.Timeout | undefined>(undefined)
     const [timerEnabled, setTimerEnabled] = useState<boolean>(
         !waitFirstManualConnection,
     )
 
     const isReady = useMemo(() => vetApp && rootAccount, [vetApp, rootAccount])
+
+    const removeLedger = useCallback(async () => {
+        if (transport.current) {
+            try {
+                await transport.current?.device.cancelConnection()
+            } catch (e) {
+                error("ledger:cancelConnection", e)
+            }
+
+            try {
+                await transport.current?.close()
+            } catch (e) {
+                error("ledger:close", e)
+            }
+
+            setVetApp(undefined)
+            setRootAccount(undefined)
+            setErrorCode(undefined)
+            setIsConnecting(false)
+            transport.current = undefined
+            setRemoved(true)
+        }
+    }, [])
 
     const openBleConnection = useCallback(async () => {
         try {
@@ -58,6 +91,7 @@ export const useLedger = ({
 
     const onConnectionError = useCallback(
         async (err: LEDGER_ERROR_CODES) => {
+            error("onConnectionError", err)
             if (err === LEDGER_ERROR_CODES.DISCONNECTED) {
                 warn("Ledger disconnected")
                 await transport.current?.close()
@@ -81,7 +115,7 @@ export const useLedger = ({
 
     const onConnectionSuccess = useCallback(
         async (app: VETLedgerApp, account: VETLedgerAccount) => {
-            info("[ledger] - connected succesfully")
+            info("[ledger] - connected successfully")
             setVetApp(app)
             setRootAccount(account)
             //config is calculated in useEffect
@@ -91,31 +125,38 @@ export const useLedger = ({
     )
 
     const openOrFinalizeConnection = useCallback(async () => {
+        if (!canConnect) return
+
         setIsConnecting(true)
         await openBleConnection()
-        if (transport.current)
+        if (transport.current) {
             await LedgerUtils.checkLedgerConnection({
                 transport: transport.current,
                 errorCallback: onConnectionError,
                 successCallback: onConnectionSuccess,
             })
-        setIsConnecting(false)
+            setIsConnecting(false)
+        }
+
         setTimerEnabled(true)
-    }, [openBleConnection, onConnectionError, onConnectionSuccess])
+    }, [canConnect, openBleConnection, onConnectionError, onConnectionSuccess])
 
     /**
      * Attempt to connect to the ledger every 3 seconds if not connected
      */
     useEffect(() => {
+        if (!timerEnabled) return
+
+        if (!isReady && !removed) openOrFinalizeConnection()
+
         timer.current = setInterval(async () => {
-            if (!isReady && timerEnabled) await openOrFinalizeConnection()
+            if (!isReady && !removed) await openOrFinalizeConnection()
         }, 3000)
 
         return () => {
             if (timer.current) clearInterval(timer.current)
-            if (transport.current) transport.current.close()
         }
-    }, [openOrFinalizeConnection, isReady, timerEnabled])
+    }, [openOrFinalizeConnection, isReady, timerEnabled, removed])
 
     return {
         vetApp,
@@ -126,6 +167,7 @@ export const useLedger = ({
         isConnecting,
         setTimerEnabled,
         transport: transport.current,
+        removeLedger,
     }
 }
 
@@ -148,4 +190,5 @@ interface UseLedgerProps {
     isConnecting: boolean
     setTimerEnabled: (enabled: boolean) => void
     transport: BleTransport | undefined
+    removeLedger: () => Promise<void>
 }
