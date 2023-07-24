@@ -1,12 +1,10 @@
-import { abi, HDNode, secp256k1, Transaction } from "thor-devkit"
+import { abi, Transaction } from "thor-devkit"
 import { debug } from "~Utils/Logger"
 import {
-    AccountWithDevice,
     ClauseType,
     ClauseWithMetadata,
     ConnexClause,
     DappTxActivity,
-    DEVICE_TYPE,
     FungibleTokenWithBalance,
     NonFungibleToken,
     SwapEvent,
@@ -19,7 +17,7 @@ import { BigNumber } from "bignumber.js"
 import { abis, VET } from "~Constants"
 import HexUtils from "~Utils/HexUtils"
 import axios from "axios"
-import { CryptoUtils, FormattingUtils, TransactionUtils } from "~Utils"
+import { FormattingUtils } from "~Utils"
 
 export const TRANSFER_SIG = new abi.Function(abis.VIP180.transfer).signature
 
@@ -898,40 +896,4 @@ export const decodeTransferEvent = (
     }
 
     return null
-}
-
-type DelegationParams = {
-    account: AccountWithDevice
-    delegateFor: string
-    txBody: Transaction.Body
-    password?: string
-}
-export const getDelegationSignature = async (
-    params: DelegationParams,
-): Promise<string> => {
-    const { account, delegateFor, txBody, password } = params
-
-    if (account.device.type === DEVICE_TYPE.LEDGER)
-        throw new Error("Can't delegate transactions with Ledger")
-
-    const { decryptedWallet: senderWallet } = await CryptoUtils.decryptWallet(
-        account.device,
-        password,
-    )
-
-    if (!account.index && account.index !== 0)
-        throw new Error("signatureAccount index is empty")
-
-    const hdNode = HDNode.fromMnemonic(senderWallet.mnemonic)
-    const derivedNode = hdNode.derive(account.index)
-
-    const privateKey = derivedNode.privateKey as Buffer
-
-    const tx = TransactionUtils.toDelegation(txBody)
-
-    const hash = tx.signingHash(delegateFor.toLowerCase())
-
-    const signature = secp256k1.sign(hash, privateKey)
-
-    return signature.toString("hex")
 }
