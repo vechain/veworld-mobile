@@ -16,6 +16,7 @@ type Props = {
     title?: string
     fixedHeader?: ReactNode
     body?: ReactNode
+    bodyWithoutScrollView?: ReactNode
     footer?: ReactNode
     isScrollEnabled?: boolean
     safeAreaTestID?: string
@@ -27,6 +28,7 @@ export const Layout = ({
     title,
     fixedHeader,
     body,
+    bodyWithoutScrollView,
     footer,
     isScrollEnabled = true,
     safeAreaTestID,
@@ -63,6 +65,7 @@ export const Layout = ({
                         {body}
                     </BaseScrollView>
                 )}
+                {bodyWithoutScrollView}
                 {footer && (
                     <BaseView
                         mx={noMargin ? 0 : 20}
