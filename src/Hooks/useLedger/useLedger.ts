@@ -5,6 +5,7 @@ import { debug, error, info, warn } from "~Utils/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerUtils } from "~Utils"
 import * as LedgerLogs from "@ledgerhq/logs"
+import { useLedgerSubscription } from "~Hooks"
 
 /**
  * useLedger is a custom react hook for interacting with ledger devices
@@ -37,6 +38,7 @@ export const useLedger = ({
         })
     }, [])
 
+    const { canConnect } = useLedgerSubscription({ deviceId })
     const transport = useRef<BleTransport | undefined>()
     const timer = useRef<NodeJS.Timeout | undefined>(undefined)
 
@@ -123,6 +125,8 @@ export const useLedger = ({
     )
 
     const openOrFinalizeConnection = useCallback(async () => {
+        if (!canConnect) return
+
         setIsConnecting(true)
         await openBleConnection()
         if (transport.current) {
@@ -135,7 +139,7 @@ export const useLedger = ({
         }
 
         setTimerEnabled(true)
-    }, [openBleConnection, onConnectionError, onConnectionSuccess])
+    }, [canConnect, openBleConnection, onConnectionError, onConnectionSuccess])
 
     /**
      * Attempt to connect to the ledger every 3 seconds if not connected

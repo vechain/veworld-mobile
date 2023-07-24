@@ -5,8 +5,10 @@ import { TestHelpers } from "~Test"
 import { act } from "@testing-library/react-native"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LEDGER_ERROR_CODES } from "~Constants"
+import { useLedgerSubscription } from "~Hooks"
 
 jest.mock("@ledgerhq/react-native-hw-transport-ble")
+jest.mock("~Hooks/useLedgerSubscription/useLedgerSubscription")
 
 const deviceId = "testDeviceId"
 const waitFirstManualConnection = false
@@ -18,6 +20,14 @@ describe("useLedger", () => {
         jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
             default: TestHelpers.data.mockedTransport,
         }))
+        ;(
+            useLedgerSubscription as jest.MockedFunction<
+                typeof useLedgerSubscription
+            >
+        ).mockReturnValue({
+            canConnect: true,
+            availableDevices: [],
+        })
     })
     describe("waitFirstManualConnection", () => {
         it("works correctly on first call", async () => {

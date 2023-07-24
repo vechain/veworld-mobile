@@ -366,7 +366,7 @@ describe("shouldAutoNavigate", () => {
 
     it("should return false for undefined ", () => {
         // @ts-ignore
-        expect(shouldAutoNavigate(undefined)).toBe(true)
+        expect(shouldAutoNavigate(undefined)).toBe(false)
     })
 })
 
