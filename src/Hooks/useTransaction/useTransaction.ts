@@ -9,7 +9,7 @@ import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 type UseTransactionReturnProps = {
     gas?: EstimateGasResult
     setGas: (gas: EstimateGasResult) => void
-    transaction: Transaction.Body
+    transactionBody: Transaction.Body
     loadingGas: boolean
     setGasPayer: (gasPayer: string) => void
 }
@@ -58,7 +58,7 @@ export const useTransaction = ({
     /**
      * Recalculate transaction on data changes
      */
-    const transaction = useMemo((): Transaction.Body => {
+    const transactionBody = useMemo((): Transaction.Body => {
         const DEFAULT_GAS_COEFFICIENT = 0
         return {
             chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
@@ -109,5 +109,5 @@ export const useTransaction = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account.address, gasPayer, clauses])
 
-    return { gas, loadingGas, setGas, transaction, setGasPayer }
+    return { gas, loadingGas, setGas, transactionBody, setGasPayer }
 }

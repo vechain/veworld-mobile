@@ -1,5 +1,5 @@
 import { DelegationType } from "~Model/Delegation"
-import { AccountWithDevice, DEVICE_TYPE } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
 import { useCallback, useEffect, useState } from "react"
 import {
     getDefaultDelegationAccount,
@@ -15,13 +15,13 @@ import { showErrorToast } from "~Components"
 import { useI18nContext } from "~i18n"
 
 type Props = {
-    transaction: Transaction.Body
+    transactionBody: Transaction.Body
     providedUrl?: string
     setGasPayer: (gasPayer: string) => void
 }
 
 export const useDelegation = ({
-    transaction,
+    transactionBody,
     providedUrl,
     setGasPayer,
 }: Props) => {
@@ -30,7 +30,7 @@ export const useDelegation = ({
     const [selectedDelegationOption, setSelectedDelegationOption] =
         useState<DelegationType>(DelegationType.NONE)
     const [selectedDelegationAccount, setSelectedDelegationAccount] =
-        useState<AccountWithDevice>()
+        useState<LocalAccountWithDevice>()
     const [selectedDelegationUrl, setSelectedDelegationUrl] = useState<string>()
     const [urlDelegationSignature, setUrlDelegationSignature] =
         useState<Buffer>()
@@ -40,11 +40,7 @@ export const useDelegation = ({
     const defaultDelegationUrl = useAppSelector(getDefaultDelegationUrl)
 
     const fetchSignature = useCallback(
-        async (
-            txBody: Transaction.Body,
-            delegationUrl: string,
-            accountAddress: string,
-        ) => {
+        async (delegationUrl: string, accountAddress: string) => {
             debug("fetching signature from URL: " + delegationUrl)
             const onError = (e: any) => {
                 error("Failed to get signature from delegator:" + e)
@@ -55,7 +51,7 @@ export const useDelegation = ({
             }
 
             try {
-                const tx = TransactionUtils.toDelegation(txBody)
+                const tx = TransactionUtils.toDelegation(transactionBody)
                 // build hex encoded version of the transaction for signing request
                 const rawTransaction = HexUtils.addPrefix(
                     tx.encode().toString("hex"),
@@ -93,14 +89,14 @@ export const useDelegation = ({
                 onError(e)
             }
         },
-        [setGasPayer, LL],
+        [transactionBody, setGasPayer, LL],
     )
 
     const handleSetSelectedDelegationUrl = async (url?: string) => {
         setSelectedDelegationUrl(url)
         setSelectedDelegationOption(DelegationType.URL)
         if (url) {
-            await fetchSignature(transaction, url, account.address)
+            await fetchSignature(url, account.address)
         } else {
             setUrlDelegationSignature(undefined)
         }
@@ -126,7 +122,7 @@ export const useDelegation = ({
     ) => {
         if (account.device.type === DEVICE_TYPE.LEDGER) return
 
-        setSelectedDelegationAccount(selectedAccount)
+        setSelectedDelegationAccount(selectedAccount as LocalAccountWithDevice)
         setSelectedDelegationOption(DelegationType.ACCOUNT)
         setGasPayer(selectedAccount.address)
         setSelectedDelegationUrl(undefined)

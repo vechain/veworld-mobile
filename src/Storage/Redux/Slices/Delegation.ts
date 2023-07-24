@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AccountWithDevice } from "~Model"
+import { LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
+
 /**
  * Delegation State
  * @typedef {Object} DelegationState
@@ -9,7 +10,7 @@ import { DelegationType } from "~Model/Delegation"
 export interface DelegationState {
     urls: string[]
     defaultDelegationOption: DelegationType
-    defaultDelegationAccount?: AccountWithDevice
+    defaultDelegationAccount?: LocalAccountWithDevice
     defaultDelegationUrl?: string
 }
 
@@ -38,7 +39,7 @@ export const DelegationSlice = createSlice({
         },
         setDefaultDelegationAccount: (
             state,
-            action: PayloadAction<AccountWithDevice | undefined>,
+            action: PayloadAction<LocalAccountWithDevice | undefined>,
         ) => {
             state.defaultDelegationAccount = action.payload
         },
