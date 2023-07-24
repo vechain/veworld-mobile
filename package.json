@@ -79,6 +79,7 @@
         "axios": "^0.27.2",
         "babel-plugin-module-resolver": "^4.1.0",
         "buffer": "^6.0.3",
+        "eslint-plugin-es": "^4.1.0",
         "eth-rpc-errors": "^4.0.3",
         "expo": "^47.0.9",
         "expo-av": "~13.0.3",
