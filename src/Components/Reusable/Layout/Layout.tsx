@@ -36,10 +36,7 @@ export const Layout = ({
 
     const Title = useCallback(
         () => (
-            <BaseText
-                typographyFont="subTitleBold"
-                mb={24}
-                mt={fixedHeader ? 0 : 8}>
+            <BaseText typographyFont="title" mb={24} mt={fixedHeader ? 0 : 8}>
                 {title}
             </BaseText>
         ),
@@ -51,7 +48,7 @@ export const Layout = ({
             <BaseView h={100}>
                 {!noBackButton && <BackButtonHeader hasBottomSpacer={false} />}
                 <BaseSpacer height={fixedHeader ? 16 : 8} />
-                <BaseView mx={noMargin ? 0 : 24}>
+                <BaseView mx={noMargin ? 0 : 20}>
                     {fixedHeader && title && <Title />}
                     {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
                 </BaseView>
@@ -68,7 +65,7 @@ export const Layout = ({
                 )}
                 {footer && (
                     <BaseView
-                        mx={noMargin ? 0 : 24}
+                        mx={noMargin ? 0 : 20}
                         mb={tabBarAndroidBottomInsets}>
                         {footer}
                     </BaseView>
