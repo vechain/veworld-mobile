@@ -1526,7 +1526,11 @@ type RootTranslation = {
 	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
-	DONT_SEE_NFTS: string
+	DONT_SEE_NFTS_1: string
+	/**
+	 * T​r​y​ ​r​e​c​e​i​v​i​n​g​ ​o​n​e
+	 */
+	DONT_SEE_NFTS_2: string
 	/**
 	 * I​m​p​o​r​t​ ​N​F​T
 	 */
@@ -3734,7 +3738,11 @@ Please, try again later.
 	/**
 	 * Don't see your NFTs?
 	 */
-	DONT_SEE_NFTS: () => LocalizedString
+	DONT_SEE_NFTS_1: () => LocalizedString
+	/**
+	 * Try receiving one
+	 */
+	DONT_SEE_NFTS_2: () => LocalizedString
 	/**
 	 * Import NFT
 	 */
