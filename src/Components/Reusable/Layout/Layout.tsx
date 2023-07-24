@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode, useCallback } from "react"
 import {
     BaseSafeArea,
     BaseScrollView,
@@ -34,13 +34,16 @@ export const Layout = ({
     const theme = useTheme()
     const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
 
-    const Title = () => (
-        <BaseText
-            typographyFont="subTitleBold"
-            mb={24}
-            mt={fixedHeader ? 0 : 8}>
-            {title}
-        </BaseText>
+    const Title = useCallback(
+        () => (
+            <BaseText
+                typographyFont="subTitleBold"
+                mb={24}
+                mt={fixedHeader ? 0 : 8}>
+                {title}
+            </BaseText>
+        ),
+        [fixedHeader, title],
     )
 
     return (
