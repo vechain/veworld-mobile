@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { BaseSafeArea, BaseView, SelectAccountBottomSheet } from "~Components"
+import { BaseView, Layout, SelectAccountBottomSheet } from "~Components"
 import { NftScreenHeader } from "./Components"
 import { AccountWithDevice } from "~Model"
 import { isEmpty } from "lodash"
@@ -100,22 +100,28 @@ export const NFTScreen = () => {
     ])
 
     return (
-        <BaseSafeArea grow={1} testID="NFT_Screen">
-            <NftScreenHeader
-                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-            />
-
-            <BaseView flex={1} justifyContent="center">
-                {renderContent}
-            </BaseView>
-
-            <SelectAccountBottomSheet
-                closeBottomSheet={closeSelectAccountBottonSheet}
-                accounts={accounts}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
-                ref={selectAccountBottomSheetRef}
-            />
-        </BaseSafeArea>
+        <Layout
+            safeAreaTestID="NFT_Screen"
+            fixedHeader={
+                <NftScreenHeader
+                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+                />
+            }
+            bodyWithoutScrollView={
+                <>
+                    <BaseView flex={1} justifyContent="center">
+                        {renderContent}
+                    </BaseView>
+                    <SelectAccountBottomSheet
+                        closeBottomSheet={closeSelectAccountBottonSheet}
+                        accounts={accounts}
+                        setSelectedAccount={setSelectedAccount}
+                        selectedAccount={selectedAccount}
+                        ref={selectAccountBottomSheetRef}
+                    />
+                </>
+            }
+            noBackButton
+        />
     )
 }

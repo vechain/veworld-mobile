@@ -5,14 +5,13 @@ import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
 import {
     AccountCard,
-    BackButtonHeader,
     BaseCard,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     DelegationOptions,
     FadeoutButton,
+    Layout,
     TransferCard,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -23,10 +22,8 @@ import {
 } from "~Storage/Redux"
 import { NFTRecapView } from "./Components/NFTRecapView"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
-import { ScrollView } from "react-native-gesture-handler"
 import {
     useCheckIdentity,
-    usePlatformBottomInsets,
     useRenderGas,
     useSignTransaction,
     useTransaction,
@@ -44,8 +41,6 @@ type Props = NativeStackScreenProps<
 export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-
-    const { calculateBottomInsets } = usePlatformBottomInsets()
 
     const selectedAccoount = useAppSelector(selectSelectedAccount)
 
@@ -128,95 +123,98 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     }, [checkIdentityBeforeOpening, nav, selectedAccoount, transaction])
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
+        <Layout
+            safeAreaTestID="Send_NFT_Recap_Screen"
+            body={
+                <>
+                    <BaseView>
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="title">{LL.RECAP()}</BaseText>
 
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                    paddingBottom: calculateBottomInsets,
-                }}>
-                <BaseView mx={20}>
-                    <BaseText typographyFont="title">{LL.RECAP()}</BaseText>
+                        <BaseSpacer height={24} />
 
-                    <BaseSpacer height={24} />
+                        <BaseView
+                            flexDirection="row"
+                            style={baseStyles.previewContainer}>
+                            <NFTRecapView nft={nft!} />
 
-                    <BaseView
-                        flexDirection="row"
-                        style={baseStyles.previewContainer}>
-                        <NFTRecapView nft={nft!} />
-
-                        <BaseView justifyContent="flex-end" h={100} mx={16}>
-                            <BaseText
-                                typographyFont="subTitleBold"
-                                alignContainer="baseline">
-                                {nft?.name ?? LL.COMMON_NOT_AVAILABLE()}
-                            </BaseText>
-                            <BaseText
-                                typographyFont="body"
-                                alignContainer="baseline">
-                                #{nft!.tokenId}
-                            </BaseText>
-                        </BaseView>
-                    </BaseView>
-
-                    <BaseSpacer height={24} />
-
-                    <TransferCard
-                        fromAddress={selectedAccoount.address}
-                        toAddresses={[route.params.receiverAddress]}
-                    />
-
-                    <DelegationOptions
-                        selectedDelegationOption={selectedDelegationOption}
-                        setNoDelegation={setNoDelegation}
-                        setSelectedAccount={setSelectedDelegationAccount}
-                        selectedAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                        disabled={loading}
-                    />
-                    {selectedDelegationAccount && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <AccountCard account={selectedDelegationAccount} />
-                        </>
-                    )}
-                    {selectedDelegationUrl && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <BaseCard>
-                                <BaseText py={8}>
-                                    {selectedDelegationUrl}
+                            <BaseView justifyContent="flex-end" h={100} mx={16}>
+                                <BaseText
+                                    typographyFont="subTitleBold"
+                                    alignContainer="baseline">
+                                    {nft?.name ?? LL.COMMON_NOT_AVAILABLE()}
                                 </BaseText>
-                            </BaseCard>
-                        </>
-                    )}
+                                <BaseText
+                                    typographyFont="body"
+                                    alignContainer="baseline">
+                                    #{nft!.tokenId}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
 
-                    <BaseSpacer height={24} />
+                        <BaseSpacer height={24} />
 
-                    <InfoSectionView<React.JSX.Element>
-                        isFontReverse
-                        title={LL.ESTIMATED_GAS_FEE()}
-                        data={RenderGas}
-                    />
+                        <TransferCard
+                            fromAddress={selectedAccoount.address}
+                            toAddresses={[route.params.receiverAddress]}
+                        />
 
-                    <InfoSectionView<string>
-                        isFontReverse
-                        title={LL.ESTIMATED_TIME()}
-                        data={LL.SEND_LESS_THAN_1_MIN()}
-                    />
-                </BaseView>
-            </ScrollView>
+                        <DelegationOptions
+                            selectedDelegationOption={selectedDelegationOption}
+                            setNoDelegation={setNoDelegation}
+                            setSelectedAccount={setSelectedDelegationAccount}
+                            selectedAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                            disabled={loading}
+                        />
+                        {selectedDelegationAccount && (
+                            <>
+                                <BaseSpacer height={16} />
+                                <AccountCard
+                                    account={selectedDelegationAccount}
+                                />
+                            </>
+                        )}
+                        {selectedDelegationUrl && (
+                            <>
+                                <BaseSpacer height={16} />
+                                <BaseCard>
+                                    <BaseText py={8}>
+                                        {selectedDelegationUrl}
+                                    </BaseText>
+                                </BaseCard>
+                            </>
+                        )}
 
-            <ConfirmIdentityBottomSheet />
+                        <BaseSpacer height={24} />
 
-            <FadeoutButton
-                title={LL.SEND_TOKEN_TITLE().toUpperCase()}
-                action={onSendPress}
-                disabled={!isThereEnoughGas || loading}
-            />
-        </BaseSafeArea>
+                        <InfoSectionView<React.JSX.Element>
+                            isFontReverse
+                            title={LL.ESTIMATED_GAS_FEE()}
+                            data={RenderGas}
+                        />
+
+                        <InfoSectionView<string>
+                            isFontReverse
+                            title={LL.ESTIMATED_TIME()}
+                            data={LL.SEND_LESS_THAN_1_MIN()}
+                        />
+                    </BaseView>
+                    <ConfirmIdentityBottomSheet />
+                </>
+            }
+            footer={
+                <FadeoutButton
+                    title={LL.SEND_TOKEN_TITLE().toUpperCase()}
+                    action={onSendPress}
+                    disabled={!isThereEnoughGas || loading}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
+                />
+            }
+        />
     )
 }
 

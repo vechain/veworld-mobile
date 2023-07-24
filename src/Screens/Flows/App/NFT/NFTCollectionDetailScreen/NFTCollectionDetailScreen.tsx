@@ -1,11 +1,8 @@
-import { StyleSheet } from "react-native"
 import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
-import { BaseIcon, BaseSafeArea, BaseView } from "~Components"
-import { useTheme } from "~Hooks"
-import { useNavigation } from "@react-navigation/native"
+import { BaseView, Layout } from "~Components"
 import { useNFTWithMetadata } from "./Hooks/useNFTWithMetadata"
 
 import { NFTList } from "./Components"
@@ -21,15 +18,10 @@ type Props = NativeStackScreenProps<
 >
 
 export const NFTCollectionDetailScreen = ({ route }: Props) => {
-    const nav = useNavigation()
-    const theme = useTheme()
-
     const [
         onEndReachedCalledDuringMomentum,
         setEndReachedCalledDuringMomentum,
     ] = useState(true)
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const { anyCollection } = useCollectionSource(
         route.params.collectionAddress,
@@ -81,27 +73,13 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     ])
 
     return (
-        <BaseSafeArea grow={1} testID="NFT_Collection_Detail_Screen">
-            <BaseView mx={20}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-            </BaseView>
-
-            <BaseView flex={1} justifyContent="center">
-                {renderContent}
-            </BaseView>
-        </BaseSafeArea>
+        <Layout
+            safeAreaTestID="NFT_Collection_Detail_Screen"
+            bodyWithoutScrollView={
+                <BaseView flex={1} justifyContent="center">
+                    {renderContent}
+                </BaseView>
+            }
+        />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: -12,
-        alignSelf: "flex-start",
-    },
-})

@@ -6,12 +6,11 @@ import { SCREEN_WIDTH } from "~Constants"
 import { FormattingUtils, TransactionUtils } from "~Utils"
 import {
     BaseText,
-    BaseSafeArea,
     BaseView,
     ChangeAccountButtonPill,
     BaseSpacer,
-    BackButtonHeader,
     SelectAccountBottomSheet,
+    Layout,
 } from "~Components"
 import {
     selectBalanceVisible,
@@ -198,7 +197,6 @@ export const HistoryScreen = () => {
     const renderActivitiesList = useMemo(() => {
         return (
             <>
-                <BaseSpacer height={30} />
                 <BaseView flexDirection="row" style={baseStyles.list}>
                     <FlashList
                         data={activities}
@@ -254,7 +252,6 @@ export const HistoryScreen = () => {
     const renderSkeletonList = useMemo(() => {
         return (
             <>
-                <BaseSpacer height={30} />
                 <BaseView flexDirection="row" style={baseStyles.list}>
                     <FlatList
                         data={[...Array(SKELETON_COUNT)]}
@@ -288,46 +285,59 @@ export const HistoryScreen = () => {
     }, [onStartTransactingPress])
 
     return (
-        <BaseSafeArea grow={1} testID="History_Screen">
-            <BackButtonHeader />
+        <Layout
+            safeAreaTestID="History_Screen"
+            fixedHeader={
+                <>
+                    <BaseView
+                        flexDirection="row"
+                        justifyContent="space-between">
+                        <BaseText typographyFont="title">
+                            {LL.BTN_HISTORY()}
+                        </BaseText>
 
-            <BaseView
-                flexDirection="row"
-                mx={20}
-                justifyContent="space-between">
-                <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
+                        <ChangeAccountButtonPill
+                            title={
+                                selectedAccount.alias ??
+                                LL.WALLET_LABEL_ACCOUNT()
+                            }
+                            text={FormattingUtils.humanAddress(
+                                selectedAccount.address ?? "",
+                                5,
+                                4,
+                            )}
+                            action={openSelectAccountBottomSheet}
+                        />
+                    </BaseView>
+                    <BaseSpacer height={16} />
+                </>
+            }
+            bodyWithoutScrollView={
+                <>
+                    {/* Activities List */}
+                    {!!activities.length &&
+                        (page !== 0 || hasFetched) &&
+                        renderActivitiesList}
 
-                <ChangeAccountButtonPill
-                    title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                    text={FormattingUtils.humanAddress(
-                        selectedAccount.address ?? "",
-                        5,
-                        4,
-                    )}
-                    action={openSelectAccountBottomSheet}
-                />
-            </BaseView>
+                    {/* Fetching Activities shows skeleton */}
+                    {!hasFetched && page === 0 && renderSkeletonList}
 
-            {/* Activities List */}
-            {!!activities.length &&
-                (page !== 0 || hasFetched) &&
-                renderActivitiesList}
+                    {/* No Activities */}
+                    {!activities.length &&
+                        hasFetched &&
+                        renderNoActivitiesButton}
 
-            {/* Fetching Activities shows skeleton */}
-            {!hasFetched && page === 0 && renderSkeletonList}
-
-            {/* No Activities */}
-            {!activities.length && hasFetched && renderNoActivitiesButton}
-
-            <SelectAccountBottomSheet
-                closeBottomSheet={closeSelectAccountBottonSheet}
-                accounts={accounts}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
-                isBalanceVisible={isBalanceVisible}
-                ref={selectAccountBottomSheetRef}
-            />
-        </BaseSafeArea>
+                    <SelectAccountBottomSheet
+                        closeBottomSheet={closeSelectAccountBottonSheet}
+                        accounts={accounts}
+                        setSelectedAccount={setSelectedAccount}
+                        selectedAccount={selectedAccount}
+                        isBalanceVisible={isBalanceVisible}
+                        ref={selectAccountBottomSheetRef}
+                    />
+                </>
+            }
+        />
     )
 }
 

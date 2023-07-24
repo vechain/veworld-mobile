@@ -13,9 +13,13 @@ import { VeWorldLogoSVG } from "~Assets"
 import { Linking } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import HapticsService from "~Services/HapticsService"
+import { isSmallScreen } from "~Constants"
+import { useTheme } from "~Hooks"
 
 export const AboutScreen = () => {
     const { LL } = useI18nContext()
+
+    const theme = useTheme()
 
     const links = [
         {
@@ -63,41 +67,49 @@ export const AboutScreen = () => {
                         </BaseText>
                     </BaseView>
                     <BaseView>
-                        <BaseIcon name="chevron-right" size={25} />
+                        <BaseIcon
+                            name="chevron-right"
+                            size={25}
+                            color={theme.colors.text}
+                        />
                     </BaseView>
                 </BaseView>
             </BaseCard>
         ),
-        [],
+        [theme.colors.text],
     )
 
     return (
         <Layout
-            isScrollEnabled={true}
-            title={LL.TITLE_ABOUT()}
+            isScrollEnabled={isSmallScreen}
             body={
-                <BaseView h={100} alignItems="center">
-                    <BaseSpacer height={24} />
-                    <BaseCard
-                        containerStyle={styles.logoCardContainer}
-                        // @ts-ignore
-                        style={styles.logoCard}>
-                        <VeWorldLogoSVG width={90} height={62} />
-                    </BaseCard>
-                    <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.VEWORLD()}
+                <>
+                    <BaseText typographyFont="title" pt={16}>
+                        {LL.TITLE_ABOUT()}
                     </BaseText>
-                    <BaseSpacer height={8} />
-                    <BaseText typographyFont="captionRegular">
-                        {LL.SETTINGS_ABOUT_APP_VERSION({
-                            version: DeviceInfo.getVersion(), // NOTE: this can be taken from package.json too, but this seems more reliable
-                        })}
-                    </BaseText>
-                    <BaseSpacer height={48} />
+                    <BaseView h={100} alignItems="center">
+                        <BaseSpacer height={24} />
+                        <BaseCard
+                            containerStyle={styles.logoCardContainer}
+                            // @ts-ignore
+                            style={styles.logoCard}>
+                            <VeWorldLogoSVG width={90} height={62} />
+                        </BaseCard>
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="subTitleBold">
+                            {LL.VEWORLD()}
+                        </BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText typographyFont="captionRegular">
+                            {LL.SETTINGS_ABOUT_APP_VERSION({
+                                version: DeviceInfo.getVersion(), // NOTE: this can be taken from package.json too, but this seems more reliable
+                            })}
+                        </BaseText>
+                        <BaseSpacer height={48} />
 
-                    {links.map(link => renderLinks(link))}
-                </BaseView>
+                        {links.map(link => renderLinks(link))}
+                    </BaseView>
+                </>
             }
         />
     )

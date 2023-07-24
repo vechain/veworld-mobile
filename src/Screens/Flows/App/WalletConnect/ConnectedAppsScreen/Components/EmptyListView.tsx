@@ -41,13 +41,17 @@ export const EmptyListView = () => {
                         alignItems="center"
                         borderRadius={16}
                         style={baseStyles.quickNFTActions}>
-                        <BaseIcon name="plus" size={38} />
-                        <BaseText>{LL.ADD_APP()}</BaseText>
+                        <BaseIcon name="plus" size={55} />
+                        <BaseText
+                            color={COLORS.DARK_PURPLE}
+                            typographyFont="bodyMedium">
+                            {LL.ADD_APP()}
+                        </BaseText>
                     </BaseView>
                 </BaseTouchable>
             </BaseView>
             <BaseSpacer height={16} />
-            <BaseText mx={20} typographyFont="subTitleLight" align="center">
+            <BaseText mx={20} typographyFont="body" align="center">
                 {LL.CONNECTED_APPS_SCREEN_NO_CONNECTED_APP()}
             </BaseText>
             {RenderCameraModal}

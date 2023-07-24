@@ -1,12 +1,5 @@
-import { ScrollView, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
-import {
-    BackButtonHeader,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseView,
-    EnableFeature,
-} from "~Components"
+import { BaseSpacer, BaseView, EnableFeature, Layout } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -26,7 +19,7 @@ import {
     SelectNetworkBottomSheet,
 } from "./Components"
 import { Routes } from "~Navigation"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { isSmallScreen } from "~Constants"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
@@ -37,8 +30,6 @@ export const ChangeNetworkScreen = () => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const showTestNetTag = useAppSelector(selectShowTestnetTag)
-
-    const tabBarHeight = useBottomTabBarHeight()
 
     const showConversionOnOtherNets = useAppSelector(
         selectShowConversionOnOtherNets,
@@ -69,68 +60,48 @@ export const ChangeNetworkScreen = () => {
     }, [nav])
 
     return (
-        <BaseSafeArea grow={1}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={[
-                    baseStyles.scrollViewContainer,
-                    { paddingBottom: tabBarHeight },
-                ]}
-                style={baseStyles.scrollView}>
-                <BackButtonHeader />
-                <BaseSpacer height={12} />
+        <Layout
+            safeAreaTestID="NetworkScreen"
+            isScrollEnabled={isSmallScreen}
+            body={
+                <>
+                    <BaseView pt={16}>
+                        <SelectNetwork
+                            openBottomSheet={openSelectNetworkBottomSheet}
+                            selectedNetwork={selectedNetwork}
+                        />
 
-                <BaseView mx={20}>
-                    <SelectNetwork
-                        openBottomSheet={openSelectNetworkBottomSheet}
-                        selectedNetwork={selectedNetwork}
+                        <BaseSpacer height={20} />
+
+                        <CustomNodes onManageNodesClick={onManageNodesClick} />
+
+                        <BaseSpacer height={20} />
+
+                        <EnableFeature
+                            title={LL.BD_OTHER_NETWORKS_INDICATOR()}
+                            subtitle={LL.BD_OTHER_NETWORKS_INDICATOR_DESC()}
+                            onValueChange={toggleTagSwitch}
+                            value={showTestNetTag}
+                        />
+
+                        <BaseSpacer height={20} />
+
+                        <EnableFeature
+                            title={LL.BD_OTHER_NETWORKS_CONVERSION()}
+                            subtitle={LL.BD_OTHER_NETWORKS_CONVERSION_DESC()}
+                            onValueChange={toggleConversionSwitch}
+                            value={showConversionOnOtherNets}
+                        />
+
+                        <BaseSpacer height={20} />
+                    </BaseView>
+
+                    <SelectNetworkBottomSheet
+                        ref={selectNetworkBottomSheetRef}
+                        onClose={closeSelectNetworkBottonSheet}
                     />
-
-                    <BaseSpacer height={20} />
-
-                    <CustomNodes onManageNodesClick={onManageNodesClick} />
-
-                    <BaseSpacer height={20} />
-
-                    <EnableFeature
-                        title={LL.BD_OTHER_NETWORKS_INDICATOR()}
-                        subtitle={LL.BD_OTHER_NETWORKS_INDICATOR_DESC()}
-                        onValueChange={toggleTagSwitch}
-                        value={showTestNetTag}
-                    />
-
-                    <BaseSpacer height={20} />
-
-                    <EnableFeature
-                        title={LL.BD_OTHER_NETWORKS_CONVERSION()}
-                        subtitle={LL.BD_OTHER_NETWORKS_CONVERSION_DESC()}
-                        onValueChange={toggleConversionSwitch}
-                        value={showConversionOnOtherNets}
-                    />
-
-                    <BaseSpacer height={20} />
-                </BaseView>
-
-                <SelectNetworkBottomSheet
-                    ref={selectNetworkBottomSheetRef}
-                    onClose={closeSelectNetworkBottonSheet}
-                />
-            </ScrollView>
-        </BaseSafeArea>
+                </>
+            }
+        />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-    scrollViewContainer: {
-        width: "100%",
-    },
-    scrollView: {
-        width: "100%",
-    },
-})
