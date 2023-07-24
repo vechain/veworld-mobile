@@ -2,6 +2,7 @@ import { Transaction } from "thor-devkit"
 import { useThor } from "~Components"
 import { ActivityType, Network, WalletAccount } from "~Model"
 import {
+    addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
     addPendingTransferTransactionActivity,
     updateAccountBalances,
@@ -29,8 +30,13 @@ export const useSendTransaction = (
 
         if (type === ActivityType.NFT_TRANSFER) {
             dispatch(addPendingNFTtransferTransactionActivity(tx))
-        } else {
+        } else if (
+            type === ActivityType.FUNGIBLE_TOKEN ||
+            type === ActivityType.VET_TRANSFER
+        ) {
             dispatch(addPendingTransferTransactionActivity(tx))
+        } else if (type === ActivityType.DAPP_TRANSACTION) {
+            dispatch(addPendingDappTransactionActivity(tx))
         }
 
         await dispatch(updateAccountBalances(thorClient, account.address))

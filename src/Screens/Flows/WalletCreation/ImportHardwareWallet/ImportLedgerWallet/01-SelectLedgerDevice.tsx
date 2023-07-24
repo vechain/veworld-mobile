@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -11,11 +11,8 @@ import {
     LocationStatusBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { debug } from "~Utils"
-import { StyleSheet, Platform } from "react-native"
+import { Platform, StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-
-import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerDeviceBox } from "../components"
 import { FlatList } from "react-native-gesture-handler"
 import { Routes } from "~Navigation"
@@ -24,14 +21,12 @@ import Lottie from "lottie-react-native"
 import { BlePairingDark } from "~Assets/Lottie"
 import * as Haptics from "expo-haptics"
 import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
+import { useLedgerSubscription } from "~Hooks"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
-    const [availableDevices, setAvailableDevices] = useState<
-        ConnectedLedgerDevice[]
-    >([])
     const [selectedDevice, setSelectedDevice] =
         useState<ConnectedLedgerDevice>()
 
@@ -51,45 +46,16 @@ export const SelectLedgerDevice = () => {
         }
     }, [nav, selectedDevice])
 
-    /**
-     * Listen for new ledger (nanox) devices if bluetooth is enabled
-     */
-    useEffect(() => {
-        const subscription = BleTransport.listen({
-            complete: () => {
-                debug("complete")
-            },
-            next: e => {
-                debug({ e })
-                if (e.type === "add") {
-                    const { descriptor, deviceModel } = e
+    const onDevice = useCallback(
+        (device: ConnectedLedgerDevice) => {
+            if (!selectedDevice) setSelectedDevice(device)
+        },
+        [selectedDevice],
+    )
 
-                    const device: ConnectedLedgerDevice = {
-                        id: descriptor.id,
-                        isConnectable: descriptor.isConnectable,
-                        localName: descriptor.localName,
-                        name: descriptor.name,
-                        rssi: descriptor.rssi,
-                        productName: deviceModel.productName,
-                    }
-
-                    if (device)
-                        setAvailableDevices(prev => {
-                            if (prev.find(d => d.id === device.id)) return prev
-                            return [...prev, device]
-                        })
-                    if (!selectedDevice) setSelectedDevice(device)
-                }
-            },
-            error: error => {
-                debug({ error })
-            },
-        })
-
-        return () => {
-            subscription.unsubscribe()
-        }
-    }, [selectedDevice, androidPermissionsGranted])
+    const { availableDevices } = useLedgerSubscription({
+        onDevice,
+    })
 
     const renderItem = useCallback(
         ({ item }: { item: ConnectedLedgerDevice }) => {

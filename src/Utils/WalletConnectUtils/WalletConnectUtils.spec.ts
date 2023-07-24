@@ -15,7 +15,7 @@ import {
     getSignCertOptions,
     getTopicFromPairUri,
     isValidURI,
-    isWalletConnectRoute,
+    shouldAutoNavigate,
 } from "./WalletConnectUtils"
 import { NETWORK_TYPE } from "~Model"
 import { NavigationState } from "@react-navigation/native"
@@ -323,7 +323,7 @@ describe("getSignCertOptions", () => {
     })
 })
 
-describe("isWalletConnectRoute", () => {
+describe("shouldAutoNavigate", () => {
     it("should return true for a valid WalletConnect route", () => {
         const mockState = (routeName: Routes) => {
             const navState: NavigationState<ReactNavigation.RootParamList> = {
@@ -344,29 +344,29 @@ describe("isWalletConnectRoute", () => {
             return navState
         }
 
-        expect(isWalletConnectRoute(mockState(Routes.CONNECT_APP_SCREEN))).toBe(
-            true,
+        expect(shouldAutoNavigate(mockState(Routes.CONNECT_APP_SCREEN))).toBe(
+            false,
         )
 
         expect(
-            isWalletConnectRoute(
+            shouldAutoNavigate(
                 mockState(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN),
             ),
-        ).toBe(true)
+        ).toBe(false)
 
         expect(
-            isWalletConnectRoute(
+            shouldAutoNavigate(
                 mockState(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN),
             ),
-        ).toBe(true)
+        ).toBe(false)
 
-        expect(isWalletConnectRoute(mockState(Routes.BUY))).toBe(false)
-        expect(isWalletConnectRoute(mockState(Routes.APP_SECURITY))).toBe(false)
+        expect(shouldAutoNavigate(mockState(Routes.BUY))).toBe(true)
+        expect(shouldAutoNavigate(mockState(Routes.APP_SECURITY))).toBe(true)
     })
 
     it("should return false for undefined ", () => {
         // @ts-ignore
-        expect(isWalletConnectRoute(undefined)).toBe(false)
+        expect(shouldAutoNavigate(undefined)).toBe(false)
     })
 })
 

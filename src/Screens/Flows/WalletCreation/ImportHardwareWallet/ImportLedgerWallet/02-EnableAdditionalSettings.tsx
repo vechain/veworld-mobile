@@ -54,6 +54,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
         openOrFinalizeConnection,
         isConnecting,
         setTimerEnabled,
+        removeLedger,
     } = useLedger({
         deviceId: device.id,
         waitFirstManualConnection: true,
@@ -78,6 +79,8 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success,
             )
+
+            await removeLedger()
             nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS, {
                 rootAccount,
                 device,
@@ -85,7 +88,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
         }
         if (!rootAccount) return
         triggerHapticsAndNavigate()
-    }, [rootAccount, device, nav])
+    }, [removeLedger, rootAccount, device, nav])
 
     /**
      * close the bottom sheet modal when error disappears
@@ -154,7 +157,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
                 ref={ref}
                 error={errorCode}
             />
-            <BackButtonHeader />
+            <BackButtonHeader beforeNavigating={removeLedger} />
             <BaseView
                 alignItems="center"
                 justifyContent="space-between"

@@ -1,6 +1,6 @@
 import uuid from "react-native-uuid"
-import { DIRECTIONS, VET, chainTagToGenesisId } from "~Constants"
-import { ActivityUtils, TransactionUtils, debug } from "~Utils"
+import { chainTagToGenesisId, DIRECTIONS, VET } from "~Constants"
+import { ActivityUtils, debug, TransactionUtils } from "~Utils"
 import {
     Activity,
     ActivityStatus,

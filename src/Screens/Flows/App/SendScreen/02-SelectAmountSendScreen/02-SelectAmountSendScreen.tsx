@@ -1,19 +1,19 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useState, useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native"
 import { useAmountInput, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
-    BaseText,
-    BaseView,
-    BaseSpacer,
+    BaseCard,
     BaseCardGroup,
     BaseIcon,
-    BaseCard,
     BaseRange,
-    Layout,
-    FadeoutButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
     DismissKeyboardView,
+    FadeoutButton,
+    Layout,
 } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import {
@@ -22,16 +22,17 @@ import {
     Routes,
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { CURRENCY_SYMBOLS, COLORS, typography } from "~Constants"
+import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
 import {
-    selectCurrencyExchangeRate,
     selectCurrency,
+    selectCurrencyExchangeRate,
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { throttle } from "lodash"
 import { useMaxAmount } from "./Hooks/useMaxAmount"
+
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<

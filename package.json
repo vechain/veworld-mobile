@@ -16,6 +16,7 @@
         "ios:my-device": "react-native run-ios",
         "ios:old-device": "react-native run-ios --simulator 'iPhone SE (3rd generation)'",
         "start": "react-native start",
+        "start:watchman": "watchman watch-del './'; watchman watch-project './'; react-native start",
         "start:reset": "react-native start --reset-cache",
         "start:i18n": "yarn i18n & react-native start & wait",
         "test": "jest",
