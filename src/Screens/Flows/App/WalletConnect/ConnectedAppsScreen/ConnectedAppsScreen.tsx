@@ -1,11 +1,10 @@
 import React, { useCallback, useMemo, useRef } from "react"
 import {
     BaseText,
-    BackButtonHeader,
-    BaseSafeArea,
     BaseView,
     BaseSpacer,
     useWalletConnect,
+    Layout,
 } from "~Components"
 import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
@@ -16,8 +15,6 @@ import {
     ConnectedAppsHeader,
     ConfirmDisconnectBottomSheet,
 } from "./Components"
-import { ScrollView } from "react-native-gesture-handler"
-import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import SwipeableItem, {
     OpenDirection,
@@ -25,6 +22,7 @@ import SwipeableItem, {
 } from "react-native-swipeable-item"
 import { UnderlayLeft } from "../../ContactsScreen"
 import { useBottomSheetModal } from "~Hooks"
+import { isSmallScreen } from "~Constants"
 
 const underlaySnapPoints = [58]
 
@@ -152,15 +150,11 @@ export const ConnectedAppsScreen = () => {
     ])
 
     return (
-        <BaseSafeArea>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={[baseStyles.scrollViewContainer]}
-                style={baseStyles.scrollView}>
-                <BackButtonHeader />
-                <BaseView mx={20}>
+        <Layout
+            safeAreaTestID="ConnectedAppsScreen"
+            isScrollEnabled={isSmallScreen}
+            body={
+                <BaseView pt={16}>
                     <ConnectedAppsHeader showAddButton={totalSessions > 0} />
 
                     <BaseSpacer height={24} />
@@ -183,20 +177,7 @@ export const ConnectedAppsScreen = () => {
 
                     <BaseView>{renderConnectedApps}</BaseView>
                 </BaseView>
-            </ScrollView>
-        </BaseSafeArea>
+            }
+        />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-    scrollViewContainer: {
-        width: "100%",
-    },
-    scrollView: {
-        width: "100%",
-    },
-})

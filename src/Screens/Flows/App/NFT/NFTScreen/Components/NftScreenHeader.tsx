@@ -23,7 +23,7 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
             flexDirection="row"
             justifyContent="space-between"
             mx={20}
-            pb={12}>
+            pb={16}>
             <BaseText typographyFont="largeTitle">{LL.TITLE_NFTS()}</BaseText>
 
             <ChangeAccountButtonPill
