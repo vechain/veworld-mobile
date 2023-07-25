@@ -63,7 +63,7 @@ export const parseCollectionMetadataWithoutRegistry = async (
     isDarkTheme: boolean,
 ): Promise<NonFungibleTokenCollection> => {
     // Get the first NFT in the collection and use it to parse the collection metadata
-    const { data, pagination } = await getNftsForContract(
+    const { pagination } = await getNftsForContract(
         network,
         collection,
         selectedAccount,
@@ -73,20 +73,13 @@ export const parseCollectionMetadataWithoutRegistry = async (
     if (pagination.totalElements < 1)
         throw new Error("Failed to parse collection metadata from chain data")
 
-    const tokenURI = await getTokenURI(data[0].tokenId, collection, thor)
-    const tokenMetadata = await fetchMetadata(tokenURI)
-    const image = URIUtils.convertUriToUrl(
-        tokenMetadata?.image ??
-            (isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight),
-    )
-
     const nftCollection: NonFungibleTokenCollection = {
         address: collection,
         name: await getName(collection, thor),
         symbol: await getSymbol(collection, thor),
         creator: notAvailable,
-        description: tokenMetadata?.description ?? "",
-        image,
+        description: "",
+        image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         balanceOf: pagination.totalElements,
         hasCount: pagination.hasCount,
         isBlacklisted: false,

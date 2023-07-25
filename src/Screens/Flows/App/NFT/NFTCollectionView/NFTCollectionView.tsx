@@ -16,6 +16,7 @@ import {
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
 import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
+import { useCollectionMetadataResolver } from "~Hooks/useCollectionMetadataResolver"
 
 type Props = {
     collection: NonFungibleTokenCollection
@@ -33,9 +34,12 @@ export const NFTCollectionView = memo(
         const nav = useNavigation()
         const network = useAppSelector(selectSelectedNetwork)
         const dispatch = useAppDispatch()
+        const collectionWithMetadata = useCollectionMetadataResolver({
+            collection,
+        })
         const { isImage } = useMimeTypeResolver({
-            imageUrl: collection.image,
-            mimeType: collection.mimeType,
+            imageUrl: collectionWithMetadata.image,
+            mimeType: collectionWithMetadata.mimeType,
         })
 
         const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -54,9 +58,9 @@ export const NFTCollectionView = memo(
         const onCollectionPress = useCallback(() => {
             HapticsService.triggerImpact({ level: "Light" })
             nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
-                collectionAddress: collection.address,
+                collectionAddress: collectionWithMetadata.address,
             })
-        }, [nav, collection.address])
+        }, [nav, collectionWithMetadata.address])
 
         const handleOnItemLongPress = useCallback(
             (_index: number) => {
@@ -66,7 +70,7 @@ export const NFTCollectionView = memo(
                     dispatch(
                         setBlackListCollection({
                             network: network.type,
-                            collection,
+                            collection: collectionWithMetadata,
                             accountAddress: selectedAccount.address,
                         }),
                     )
@@ -75,14 +79,14 @@ export const NFTCollectionView = memo(
                     dispatch(
                         removeBlackListCollection({
                             network: network.type,
-                            collection,
+                            collection: collectionWithMetadata,
                             accountAddress: selectedAccount.address,
                         }),
                     )
             },
             [
                 CollectionItem,
-                collection,
+                collectionWithMetadata,
                 dispatch,
                 network,
                 selectedAccount.address,
@@ -108,7 +112,11 @@ export const NFTCollectionView = memo(
                     action={handleOnItemLongPress}>
                     <BaseView style={baseStyles.nftCollectionNameBarRadius}>
                         <NFTImage
-                            uri={isImage ? collection.image : NFTPlaceholder}
+                            uri={
+                                isImage
+                                    ? collectionWithMetadata.image
+                                    : NFTPlaceholder
+                            }
                             style={baseStyles.nftPreviewImage}
                         />
 
@@ -121,15 +129,15 @@ export const NFTCollectionView = memo(
                                 color={COLORS.WHITE}
                                 numberOfLines={1}
                                 w={80}>
-                                {collection.name}
+                                {collectionWithMetadata.name}
                             </BaseText>
                             <BaseView
                                 style={baseStyles.nftCounterLabel}
                                 justifyContent="center"
                                 alignItems="center">
                                 <BaseText color={COLORS.WHITE}>
-                                    {!collection.hasCount && "+"}
-                                    {collection.balanceOf}
+                                    {!collectionWithMetadata.hasCount && "+"}
+                                    {collectionWithMetadata.balanceOf}
                                 </BaseText>
                             </BaseView>
                         </BaseView>
