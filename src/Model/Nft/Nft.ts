@@ -17,7 +17,7 @@ export interface NonFungibleTokenCollection {
     creator: string
     description: string
     image: string
-    mimeType: string
+    mimeType?: string
     balanceOf: number
     hasCount: boolean
     isBlacklisted: boolean
@@ -30,7 +30,7 @@ export interface NonFungibleToken extends TokenMetadata, WithID {
     tokenId: string
     tokenURI?: string
     isBlacklisted: boolean
-    mimeType: string
+    mimeType?: string
 }
 
 export interface WithID {

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React, { memo, useMemo } from "react"
+import React, { memo, useEffect, useMemo, useState } from "react"
 import {
     BaseButton,
     BaseIcon,
@@ -16,10 +16,13 @@ import { COLORS } from "~Constants"
 import { useToggleCollection } from "./Hooks/useToggleCollection"
 import { useTheme } from "~Hooks"
 import { MediaUtils } from "~Utils"
+import { resolveMimeType } from "~Hooks/useNft/Helpers"
+import { NFTPlaceholder } from "~Assets"
 
 export const HeaderComponent = memo(
     ({ collection }: { collection: NonFungibleTokenCollection }) => {
         const { LL } = useI18nContext()
+        const [isImage, setIsImage] = useState(false)
         const theme = useTheme()
 
         const { onToggleCollection, isBlacklisted } =
@@ -35,14 +38,36 @@ export const HeaderComponent = memo(
             return COLORS.WHITE
         }, [isBlacklisted, theme])
 
+        useEffect(() => {
+            if (collection.mimeType) {
+                setIsImage(
+                    MediaUtils.isValidMimeType(collection.mimeType, [
+                        NFTMediaType.IMAGE,
+                    ]),
+                )
+            } else {
+                // Resolve mime type
+                resolveMimeType(collection.image).then(mimeType => {
+                    setIsImage(
+                        MediaUtils.isValidMimeType(mimeType, [
+                            NFTMediaType.IMAGE,
+                        ]),
+                    )
+                })
+            }
+        }, [collection])
+
         return (
             <>
                 <BaseView flexDirection="row" alignItems="flex-end">
-                    {MediaUtils.getMime(collection?.mimeType, [
-                        NFTMediaType.IMAGE,
-                    ]) && (
+                    {isImage ? (
                         <BaseImage
                             uri={collection?.image}
+                            style={baseStyles.nftHeaderImage}
+                        />
+                    ) : (
+                        <BaseImage
+                            uri={NFTPlaceholder}
                             style={baseStyles.nftHeaderImage}
                         />
                     )}

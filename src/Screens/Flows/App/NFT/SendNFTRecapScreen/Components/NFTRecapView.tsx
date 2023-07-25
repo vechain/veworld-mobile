@@ -1,28 +1,52 @@
 import { StyleSheet } from "react-native"
-import React, { useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { NFTMediaType, NonFungibleToken } from "~Model"
 import { BaseView, NFTImage } from "~Components"
 import { MediaUtils } from "~Utils"
 import { ResizeMode, Video } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
+import { resolveMimeType } from "~Hooks/useNft/Helpers"
 
 type Props = {
     nft: NonFungibleToken
 }
 
 export const NFTRecapView = ({ nft }: Props) => {
+    const [isImage, setIsImage] = useState(false)
+    const [isVideo, setIsVideo] = useState(false)
     const video = useRef(null)
+
+    useEffect(() => {
+        if (nft.mimeType) {
+            setIsImage(
+                MediaUtils.isValidMimeType(nft.mimeType, [NFTMediaType.IMAGE]),
+            )
+            setIsVideo(
+                MediaUtils.isValidMimeType(nft.mimeType, [NFTMediaType.VIDEO]),
+            )
+        } else {
+            // Resolve mime type
+            resolveMimeType(nft.image).then(mimeType => {
+                setIsImage(
+                    MediaUtils.isValidMimeType(mimeType, [NFTMediaType.IMAGE]),
+                )
+                setIsVideo(
+                    MediaUtils.isValidMimeType(mimeType, [NFTMediaType.VIDEO]),
+                )
+            })
+        }
+    }, [nft])
 
     return (
         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-            {MediaUtils.getMime(nft.mimeType, [NFTMediaType.IMAGE]) && (
+            {isImage && (
                 <NFTImage
                     uri={nft.mimeType}
                     style={baseStyles.nftPreviewImage}
                 />
             )}
 
-            {MediaUtils.getMime(nft.mimeType, [NFTMediaType.VIDEO]) && (
+            {isVideo && (
                 <BaseView style={baseStyles.nftPreviewImage}>
                     <Video
                         PosterComponent={() => (
@@ -43,13 +67,12 @@ export const NFTRecapView = ({ nft }: Props) => {
                 </BaseView>
             )}
 
-            {!MediaUtils.getMime(nft.mimeType, [NFTMediaType.IMAGE]) &&
-                !MediaUtils.getMime(nft.mimeType, [NFTMediaType.VIDEO]) && (
-                    <NFTImage
-                        uri={NFTPlaceholder}
-                        style={baseStyles.nftPreviewImage}
-                    />
-                )}
+            {!isImage && !isVideo && (
+                <NFTImage
+                    uri={NFTPlaceholder}
+                    style={baseStyles.nftPreviewImage}
+                />
+            )}
         </BaseView>
     )
 }

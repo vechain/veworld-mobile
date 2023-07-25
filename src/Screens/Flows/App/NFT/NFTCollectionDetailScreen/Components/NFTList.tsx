@@ -3,7 +3,7 @@ import { FlatList, StyleSheet } from "react-native"
 import { BaseSpacer } from "~Components"
 import { HeaderComponent } from "./HeaderComponent"
 import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
-import { NFTView } from "../../Components"
+import { NFTView } from "../../NFTView"
 import { ListFooterView } from "../../NFTScreen/Components/ListFooterView"
 
 type Props = {
@@ -30,7 +30,7 @@ export const NFTList = ({
 
     const renderItem = useCallback(
         ({ item, index }: { item: NonFungibleToken; index: number }) => (
-            <NFTView item={item} index={index} collection={collection} />
+            <NFTView nft={item} index={index} collection={collection} />
         ),
         [collection],
     )

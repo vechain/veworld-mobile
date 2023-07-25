@@ -16,6 +16,7 @@ import {
 } from "~Model"
 import { URIUtils, error } from "~Utils"
 import axios from "axios"
+import { NFT_MIME_TYPE_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 export const parseCollectionMetadataFromRegistry = async (
     network: NETWORK_TYPE,
@@ -84,7 +85,6 @@ export const parseCollectionMetadataWithoutRegistry = async (
         creator: notAvailable,
         description: tokenMetadata?.description ?? "",
         image,
-        mimeType: await resolveMimeType(image),
         balanceOf: pagination.totalElements,
         hasCount: pagination.hasCount,
         isBlacklisted: false,
@@ -117,7 +117,6 @@ export const parseNftMetadata = async (
         owner: nft.owner,
         tokenURI,
         image,
-        mimeType: await resolveMimeType(image),
         isBlacklisted: false,
     }
 
@@ -132,7 +131,10 @@ export const resolveMimeType = async (resource: string) => {
             return mime
         }
 
-        const res = await axios.head(URIUtils.convertUriToUrl(resource))
+        const res = await axios.head(URIUtils.convertUriToUrl(resource), {
+            timeout: NFT_MIME_TYPE_AXIOS_TIMEOUT,
+        })
+
         const contentType = res.headers["content-type"]
         return contentType ?? "image/png"
     } catch (err) {

@@ -1,7 +1,7 @@
 import { StyleSheet, FlatList } from "react-native"
 import React, { memo, useCallback } from "react"
 import { BaseSpacer } from "~Components"
-import { NFTView } from "../../Components"
+import { NFTCollectionView } from "../../NFTCollectionView"
 import { NonFungibleTokenCollection } from "~Model"
 import { ListFooterView } from "./ListFooterView"
 import { MathUtils } from "~Utils"
@@ -36,7 +36,7 @@ export const NFTList = memo(
 
         const renderNftCollection = useCallback(
             ({ item, index }: NFTListProps) => {
-                return <NFTView item={item} index={index} isCollection />
+                return <NFTCollectionView collection={item} index={index} />
             },
             [],
         )
