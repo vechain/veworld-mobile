@@ -37,7 +37,7 @@ platform :ios do
       version_number: new_version
     )
 
-    # TODO: move it to the android fastlane config when will be done
+    # TODO: (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/847) move it to the android fastlane config when will be done 
     # Increment the version in build.gradle
     def increment_build_gradle_version(new_version)
       build_gradle_file = "../../android/build.gradle" 
