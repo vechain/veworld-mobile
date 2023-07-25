@@ -18,7 +18,7 @@ default_platform(:ios)
 platform :ios do
 
   desc "Generate changelog, increment package.json version and update Info.plist(IOS) and build.gradle(Android) versions"
-  lane :increment_version do |options|
+  lane :increment_version do
     Dir.chdir "../.." do # Navigate to the root
       sh("yarn release:ci")
     end
@@ -37,6 +37,7 @@ platform :ios do
       version_number: new_version
     )
 
+    # TODO: move it to the android fastlane config when will be done
     # Increment the version in build.gradle
     def increment_build_gradle_version(new_version)
       build_gradle_file = "../../android/build.gradle" 
