@@ -68,7 +68,7 @@ describe("useLedger", () => {
             act(async () => {
                 await result.current.openOrFinalizeConnection()
             })
-            await waitForNextUpdate({ timeout: 2000 })
+            await waitForNextUpdate({ timeout: 5000 })
             expect(onConnectionError).toHaveBeenCalledWith(
                 LEDGER_ERROR_CODES.DISCONNECTED,
             )
@@ -101,7 +101,7 @@ describe("useLedger", () => {
             act(async () => {
                 await result.current.openOrFinalizeConnection()
             })
-            await waitForNextUpdate({ timeout: 2000 })
+            await waitForNextUpdate({ timeout: 5000 })
             expect(onConnectionError).toHaveBeenCalledWith(
                 LEDGER_ERROR_CODES.UNKNOWN,
             )

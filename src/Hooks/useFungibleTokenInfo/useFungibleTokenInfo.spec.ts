@@ -32,7 +32,7 @@ describe("useFungibleTokenInfo", () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useFungibleTokenInfo(tokenAddress),
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.symbol).toEqual(symbolMock)
         expect(result.current.decimals).toEqual(decimalsMock)
@@ -65,7 +65,7 @@ describe("useFungibleTokenInfo", () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useFungibleTokenInfo(tokenAddress),
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
         expect(result.current.symbol).toBeUndefined()

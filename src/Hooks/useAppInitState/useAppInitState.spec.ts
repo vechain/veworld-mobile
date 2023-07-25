@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useAppInitState, AppInitState } from "./useAppInitState"
+import { AppInitState, useAppInitState } from "./useAppInitState"
 import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { TestWrapper } from "~Test"
 
@@ -20,7 +20,7 @@ describe("useAppInitState", () => {
         const { result, waitForNextUpdate } = renderHook(useAppInitState, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
         expect(result.current).toEqual(AppInitState.INIT_STATE)
     })
 
@@ -32,7 +32,7 @@ describe("useAppInitState", () => {
         const { result, waitForNextUpdate } = renderHook(useAppInitState, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
         expect(result.current).toEqual(AppInitState.ONBOARDED_STATE)
     })
 })

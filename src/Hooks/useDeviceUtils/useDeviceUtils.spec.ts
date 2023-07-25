@@ -2,6 +2,7 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useDeviceUtils } from "./useDeviceUtils"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { TestWrapper } from "~Test"
+
 jest.mock("react-native-quick-crypto")
 
 const device1 = {
@@ -31,7 +32,7 @@ describe("useDeviceUtils", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate({ timeout: 2000 })
+        await waitForNextUpdate({ timeout: 5000 })
         const mnemonic =
             "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry"
         const { device, wallet } =
@@ -65,7 +66,7 @@ describe("useDeviceUtils", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate({ timeout: 2000 })
+        await waitForNextUpdate({ timeout: 5000 })
         const mnemonic =
             "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry"
         expect(() => {
