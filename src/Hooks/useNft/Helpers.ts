@@ -138,7 +138,7 @@ export const resolveMimeType = async (resource: string) => {
         const contentType = res.headers["content-type"]
         return contentType ?? "image/png"
     } catch (err) {
-        error(err)
+        error(`Failed to resolve mime type for ${resource}`, err)
     }
     return "image/png"
 }
