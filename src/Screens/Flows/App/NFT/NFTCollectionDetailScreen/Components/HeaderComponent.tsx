@@ -16,19 +16,20 @@ import { COLORS } from "~Constants"
 import { useToggleCollection } from "./Hooks/useToggleCollection"
 import { useTheme } from "~Hooks"
 import { NFTPlaceholder } from "~Assets"
-import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
+import { useCollectionMetadataResolver } from "~Hooks/useCollectionMetadataResolver"
 
 export const HeaderComponent = memo(
     ({ collection }: { collection: NonFungibleTokenCollection }) => {
         const { LL } = useI18nContext()
-        const { isImage } = useMimeTypeResolver({
-            imageUrl: collection.image,
-            mimeType: collection.mimeType,
-        })
         const theme = useTheme()
+        const { isImage, collection: collectionWithMetadata } =
+            useCollectionMetadataResolver({
+                collection,
+            })
 
-        const { onToggleCollection, isBlacklisted } =
-            useToggleCollection(collection)
+        const { onToggleCollection, isBlacklisted } = useToggleCollection(
+            collectionWithMetadata,
+        )
 
         const deriveButtonColor = useMemo(() => {
             if (!theme.isDark) {
@@ -45,7 +46,7 @@ export const HeaderComponent = memo(
                 <BaseView flexDirection="row" alignItems="flex-end">
                     {isImage ? (
                         <BaseImage
-                            uri={collection?.image}
+                            uri={collectionWithMetadata?.image}
                             style={baseStyles.nftHeaderImage}
                         />
                     ) : (
@@ -60,7 +61,7 @@ export const HeaderComponent = memo(
                             typographyFont="subTitleBold"
                             numberOfLines={2}
                             pr={96}>
-                            {collection?.name}
+                            {collectionWithMetadata?.name}
                         </BaseText>
 
                         <BaseView style={baseStyles.buttonWidth} mt={4}>
@@ -95,11 +96,11 @@ export const HeaderComponent = memo(
                 <>
                     <BaseSpacer height={24} />
 
-                    {!isEmpty(collection?.description) ? (
+                    {!isEmpty(collectionWithMetadata?.description) ? (
                         <>
                             <BaseText mb={12}>{LL.SB_DESCRIPTION()}</BaseText>
                             <BaseText typographyFont="bodyBold">
-                                {collection.description}
+                                {collectionWithMetadata.description}
                             </BaseText>
                         </>
                     ) : null}

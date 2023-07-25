@@ -90,7 +90,6 @@ export const parseCollectionMetadataWithoutRegistry = async (
 }
 
 export const parseNftMetadata = async (
-    network: NETWORK_TYPE,
     nft: NftItemResponse,
     thor: Connex.Thor,
     notAvailable: string,
@@ -114,7 +113,6 @@ export const parseNftMetadata = async (
         owner: nft.owner,
         tokenURI,
         image,
-        isBlacklisted: false,
     }
 
     return nftWithMetadata

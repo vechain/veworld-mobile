@@ -10,7 +10,7 @@ import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
 import { useI18nContext } from "~i18n"
 import HapticsService from "~Services/HapticsService"
-import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
+import { useNFTMetadataResolver } from "~Hooks/useNFTMetadataResolver"
 
 type Props = {
     nft: NonFungibleToken
@@ -20,22 +20,25 @@ type Props = {
 
 export const NFTView = memo(({ nft, index, collection }: Props) => {
     const nav = useNavigation()
-    const { isImage, isVideo } = useMimeTypeResolver({
-        imageUrl: nft.image,
-        mimeType: nft.mimeType,
-    })
+    const {
+        isImage,
+        isVideo,
+        nft: nftWithMetadata,
+    } = useNFTMetadataResolver({ nft })
     const video = useRef(null)
     const { LL } = useI18nContext()
 
-    const isPendingTx = useAppSelector(state => selectPendingTx(state, nft.id!))
+    const isPendingTx = useAppSelector(state =>
+        selectPendingTx(state, nftWithMetadata.id!),
+    )
 
     const onNftPress = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
         nav.navigate(Routes.NFT_DETAILS, {
             collectionAddress: collection.address,
-            nftTokenId: nft.tokenId,
+            nftTokenId: nftWithMetadata.tokenId,
         })
-    }, [nft, collection, nav])
+    }, [nftWithMetadata, collection, nav])
 
     const renderNFTStaticImage = useCallback(
         () => (
@@ -60,7 +63,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
             <BaseView style={baseStyles.nftCollectionNameBarRadius}>
                 {isImage && (
                     <NFTImage
-                        uri={nft.image}
+                        uri={nftWithMetadata.image}
                         style={baseStyles.nftPreviewImage}
                     />
                 )}
@@ -73,7 +76,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                             ref={video}
                             shouldPlay
                             style={baseStyles.nftPreviewImage}
-                            source={{ uri: nft.image }}
+                            source={{ uri: nftWithMetadata.image }}
                             resizeMode={ResizeMode.COVER}
                             isLooping
                             isMuted
@@ -110,7 +113,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                     alignItems="center"
                     justifyContent="space-between">
                     <BaseText color={COLORS.WHITE} numberOfLines={1} w={80}>
-                        #{nft.tokenId}
+                        #{nftWithMetadata.tokenId}
                     </BaseText>
                 </BaseView>
             </BaseView>

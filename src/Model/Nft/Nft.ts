@@ -29,7 +29,6 @@ export interface NonFungibleToken extends TokenMetadata, WithID {
     contractAddress: string
     tokenId: string
     tokenURI?: string
-    isBlacklisted: boolean
     mimeType?: string
 }
 

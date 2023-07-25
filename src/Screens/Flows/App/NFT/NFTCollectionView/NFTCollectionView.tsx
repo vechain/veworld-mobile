@@ -15,7 +15,6 @@ import {
 } from "~Storage/Redux"
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
-import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
 import { useCollectionMetadataResolver } from "~Hooks/useCollectionMetadataResolver"
 
 type Props = {
@@ -34,13 +33,10 @@ export const NFTCollectionView = memo(
         const nav = useNavigation()
         const network = useAppSelector(selectSelectedNetwork)
         const dispatch = useAppDispatch()
-        const collectionWithMetadata = useCollectionMetadataResolver({
-            collection,
-        })
-        const { isImage } = useMimeTypeResolver({
-            imageUrl: collectionWithMetadata.image,
-            mimeType: collectionWithMetadata.mimeType,
-        })
+        const { isImage, collection: collectionWithMetadata } =
+            useCollectionMetadataResolver({
+                collection,
+            })
 
         const selectedAccount = useAppSelector(selectSelectedAccount)
 

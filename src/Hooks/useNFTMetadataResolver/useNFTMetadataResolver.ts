@@ -3,7 +3,7 @@ import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import { useThor } from "~Components"
 import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
 import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
-import { NonFungibleTokenCollection } from "~Model"
+import { NonFungibleToken } from "~Model"
 import { getNftsForContract, getTokenURI } from "~Networking"
 import {
     selectSelectedAccount,
@@ -12,29 +12,29 @@ import {
 } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
-type Props = { collection: NonFungibleTokenCollection }
+type Props = { nft: NonFungibleToken }
 
 const isDefaultImage = (image: string): boolean =>
-    image === NFTPlaceholderDark || image == NFTPlaceHolderLight
+    image === NFTPlaceholderDark || image === NFTPlaceHolderLight
 
-export const useCollectionMetadataResolver = ({ collection }: Props) => {
+export const useNFTMetadataResolver = ({ nft }: Props) => {
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const thor = useThor()
 
-    const [description, setDescription] = useState(collection.description)
-    const [image, setImage] = useState(collection.image)
+    const [description, setDescription] = useState(nft.description)
+    const [image, setImage] = useState(nft.image)
 
     const { isImage, isVideo } = useMimeTypeResolver({
         imageUrl: image,
-        mimeType: collection.mimeType,
+        mimeType: nft.mimeType,
     })
 
     useEffect(() => {
         const fetchData = async () => {
             const { data } = await getNftsForContract(
                 network.type,
-                collection.address,
+                nft.contractAddress,
                 selectedAccount.address,
                 1,
                 0,
@@ -42,7 +42,7 @@ export const useCollectionMetadataResolver = ({ collection }: Props) => {
 
             const tokenURI = await getTokenURI(
                 data[0].tokenId,
-                collection.address,
+                nft.contractAddress,
                 thor,
             )
             const tokenMetadata = await fetchMetadata(tokenURI)
@@ -52,22 +52,13 @@ export const useCollectionMetadataResolver = ({ collection }: Props) => {
             if (tokenMetadata?.image)
                 setImage(URIUtils.convertUriToUrl(tokenMetadata.image))
         }
-        if (
-            thor &&
-            network &&
-            selectedAccount &&
-            isDefaultImage(collection.image)
-        )
+        if (thor && network && selectedAccount && isDefaultImage(nft.image))
             fetchData()
-    }, [thor, network, selectedAccount, collection])
+    }, [thor, network, selectedAccount, nft])
 
     return {
         isImage,
         isVideo,
-        collection: {
-            ...collection,
-            description,
-            image,
-        } as NonFungibleTokenCollection,
+        nft: { ...nft, description, image } as NonFungibleToken,
     }
 }
