@@ -35,9 +35,7 @@ export const HomeScreen = () => {
     useTokenBalances()
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
-    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets(
-        BottomInsetsEXtraPadding.TabBar,
-    )
+    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -107,6 +105,7 @@ export const HomeScreen = () => {
                     isBalanceVisible={isBalanceVisible}
                     entering={animateEntering}
                 />
+                <BaseSpacer height={BottomInsetsEXtraPadding.TabBar} />
             </NestableScrollContainer>
 
             <AccountManagementBottomSheet
