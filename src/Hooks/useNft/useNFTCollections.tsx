@@ -15,6 +15,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { useTheme } from "~Hooks"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -38,6 +39,8 @@ export const useNFTCollections = () => {
     const thor = useThor()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
+
+    const theme = useTheme()
 
     const getCollections = useCallback(
         async (
@@ -94,6 +97,7 @@ export const useNFTCollections = () => {
                                     collection,
                                     thor,
                                     LL.COMMON_NOT_AVAILABLE(),
+                                    theme.isDark,
                                 )
                             }
                         }),
@@ -127,7 +131,7 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, thor],
+        [LL, dispatch, theme.isDark, thor],
     )
 
     return { getCollections }
