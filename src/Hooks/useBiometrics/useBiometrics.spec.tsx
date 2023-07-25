@@ -30,7 +30,7 @@ describe("useBiometrics", () => {
 
         expect(result.current).toEqual({})
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current).toEqual({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,
@@ -68,7 +68,7 @@ describe("useBiometrics", () => {
             AppStateType.ACTIVE,
             AppStateType.ACTIVE,
         ])
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current).toEqual({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,

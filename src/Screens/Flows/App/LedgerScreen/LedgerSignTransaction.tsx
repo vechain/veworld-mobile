@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { Transaction } from "thor-devkit"
 import { BlePairingDark } from "~Assets"
 import {
     useBottomSheetModal,
@@ -42,6 +41,7 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
+import { Buffer } from "buffer"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome &
@@ -51,8 +51,13 @@ type Props = NativeStackScreenProps<
 >
 
 export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, transaction, initialRoute, requestEvent } =
-        route.params
+    const {
+        accountWithDevice,
+        transaction,
+        initialRoute,
+        requestEvent,
+        delegationSignature,
+    } = route.params
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -180,7 +185,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 }
                 const _signature = await LedgerUtils.signTransaction(
                     accountWithDevice.index,
-                    new Transaction(transaction),
+                    transaction,
                     accountWithDevice.device,
                     transport,
                     () => setIsAwaitingSignature(true),
@@ -235,10 +240,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         try {
             if (!signature) return
             setIsSending(true)
-            const tx = new Transaction(transaction)
-            tx.signature = signature
+            transaction.signature = delegationSignature
+                ? Buffer.concat([
+                      Buffer.from(delegationSignature, "hex"),
+                      signature,
+                  ])
+                : signature
 
-            const txId = await sendTransactionAndPerformUpdates(tx)
+            const txId = await sendTransactionAndPerformUpdates(transaction)
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success,
             )
@@ -268,6 +277,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             setIsSending(false)
         }
     }, [
+        delegationSignature,
         removeLedger,
         web3Wallet,
         requestEvent,

@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React from "react"
 import { SelectAccountBottomSheet } from "~Components"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 
@@ -9,9 +9,9 @@ type Props = {
     onClose: () => void
     selectedDelegationOption: DelegationType
     setSelectedAccount: (account: AccountWithDevice) => void
-    selectedAccount?: AccountWithDevice
+    selectedAccount?: LocalAccountWithDevice
     setNoDelegation: () => void
-    accounts: AccountWithDevice[]
+    accounts: LocalAccountWithDevice[]
 }
 
 // component to select an account for delegation

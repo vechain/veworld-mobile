@@ -41,7 +41,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { useDelegation } from "./Hooks"
-import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { DEVICE_TYPE } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
@@ -102,7 +102,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     )
 
     //build transaction
-    const { gas, transaction, loadingGas, setGasPayer } = useTransaction({
+    const { gas, transactionBody, loadingGas, setGasPayer } = useTransaction({
         clauses,
     })
 
@@ -115,10 +115,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
-    } = useDelegation({ transaction, setGasPayer })
+    } = useDelegation({ transactionBody, setGasPayer })
 
-    const { signAndSendTransaction } = useSignTransaction({
-        transaction,
+    const { signAndSendTransaction, navigateToLedger } = useSignTransaction({
+        transactionBody,
         onTXFinish,
         isDelegated,
         urlDelegationSignature,
@@ -126,6 +126,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectedDelegationOption,
         selectedDelegationUrl,
         token,
+        initialRoute: Routes.HOME,
         onError: () => setLoadingTransaction(false),
     })
 
@@ -143,6 +144,22 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             onIdentityConfirmed: signAndSendTransaction,
             onCancel: () => setLoadingTransaction(false),
         })
+
+    const onSubmit = useCallback(async () => {
+        if (
+            account.device.type === DEVICE_TYPE.LEDGER &&
+            selectedDelegationOption !== DelegationType.ACCOUNT
+        ) {
+            await navigateToLedger()
+        } else {
+            await checkIdentityBeforeOpening()
+        }
+    }, [
+        account,
+        selectedDelegationOption,
+        navigateToLedger,
+        checkIdentityBeforeOpening,
+    ])
 
     const receiverDetails = () => {
         const receiverExists = accountsAndContacts.find(_account =>
@@ -188,17 +205,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const continueButtonDisabled =
         !isThereEnoughGas && selectedDelegationOption !== DelegationType.URL
-
-    const handleOnConfirm = () => {
-        setLoadingTransaction(true)
-        if (account.device.type === DEVICE_TYPE.LEDGER) {
-            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
-                accountWithDevice: account as LedgerAccountWithDevice,
-                transaction,
-                initialRoute,
-            })
-        } else checkIdentityBeforeOpening()
-    }
 
     return (
         <Layout
@@ -365,7 +371,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             footer={
                 <FadeoutButton
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                    action={handleOnConfirm}
+                    action={onSubmit}
                     disabled={
                         continueButtonDisabled ||
                         loadingTransaction ||

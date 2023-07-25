@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Device } from "react-native-ble-plx"
 import { DeviceModel } from "@ledgerhq/devices"
 import { Subscription as TransportSubscription } from "@ledgerhq/hw-transport"
+import { Platform } from "react-native"
 
 type Props = {
     deviceId?: string
@@ -57,7 +58,12 @@ export const useLedgerSubscription = ({ deviceId, onDevice }: Props) => {
 
                     if (onDevice) onDevice(device)
 
-                    if (deviceId === device.id && descriptor?.isConnectable) {
+                    const isConnectable = Platform.select({
+                        ios: descriptor?.isConnectable,
+                        android: true,
+                    })
+
+                    if (deviceId === device.id && !!isConnectable) {
                         setCanConnect(true)
                     }
                 } else {

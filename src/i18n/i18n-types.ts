@@ -1925,6 +1925,10 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_TX_READY: string
 	/**
+	 * D​e​l​e​g​a​t​e​d​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
+	 */
+	LEDGER_DELEGATION_NOT_SUPPORTED: string
+	/**
 	 * C​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y
 	 */
 	LEDGER_CERTIFICATE_READ: string
@@ -4135,6 +4139,10 @@ Please, try again later.
 	 * Transaction is ready
 	 */
 	SEND_LEDGER_TX_READY: () => LocalizedString
+	/**
+	 * Delegated hardware wallet not supported yet
+	 */
+	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
 	 * Certificate is ready
 	 */
