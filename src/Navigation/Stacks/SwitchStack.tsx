@@ -53,7 +53,8 @@ export type RootStackParamListSwitch = {
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
-        transaction: Transaction.Body
+        delegationSignature?: string
+        transaction: Transaction
         initialRoute: string
         requestEvent?: PendingRequestTypes.Struct
     }

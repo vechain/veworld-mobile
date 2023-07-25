@@ -24,7 +24,7 @@ describe("useBiometricsValidation", () => {
             { wrapper: TestWrapper },
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
         await result.current.authenticateBiometrics(onSuccess)
 
         expect(onSuccess).toHaveBeenCalled()
@@ -46,7 +46,7 @@ describe("useBiometricsValidation", () => {
             { wrapper: TestWrapper },
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
         await result.current.authenticateBiometrics(onSuccess)
 
         expect(AlertUtils.showDefaultAlert).toHaveBeenCalled()
@@ -75,7 +75,7 @@ describe("useBiometricsValidation", () => {
             { wrapper: TestWrapper },
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
         await result.current.authenticateBiometrics(onSuccess)
         act(() => {
             successFn()

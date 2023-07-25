@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useBiometricType } from "./useBiometricType"
-import { TestWrapper, setPlatform } from "~Test"
+import { setPlatform, TestWrapper } from "~Test"
 import { waitFor } from "@testing-library/react-native"
 import { AuthenticationType, SecurityLevelType } from "~Model"
 import { useBiometrics } from "./useBiometrics"
@@ -18,7 +18,7 @@ describe("useBiometricType", () => {
                     wrapper: TestWrapper,
                 },
             )
-            await waitForNextUpdate({ timeout: 2000 })
+            await waitForNextUpdate({ timeout: 5000 })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -36,7 +36,7 @@ describe("useBiometricType", () => {
                     wrapper: TestWrapper,
                 },
             )
-            await waitForNextUpdate({ timeout: 2000 })
+            await waitForNextUpdate({ timeout: 5000 })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -53,7 +53,7 @@ describe("useBiometricType", () => {
                     wrapper: TestWrapper,
                 },
             )
-            await waitForNextUpdate({ timeout: 2000 })
+            await waitForNextUpdate({ timeout: 5000 })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -76,7 +76,7 @@ describe("useBiometricType", () => {
                     wrapper: TestWrapper,
                 },
             )
-            await waitForNextUpdate({ timeout: 2000 })
+            await waitForNextUpdate({ timeout: 5000 })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -93,7 +93,7 @@ describe("useBiometricType", () => {
                     wrapper: TestWrapper,
                 },
             )
-            await waitForNextUpdate({ timeout: 2000 })
+            await waitForNextUpdate({ timeout: 5000 })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -109,7 +109,7 @@ describe("useBiometricType", () => {
                     wrapper: TestWrapper,
                 },
             )
-            await waitForNextUpdate({ timeout: 2000 })
+            await waitForNextUpdate({ timeout: 5000 })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })

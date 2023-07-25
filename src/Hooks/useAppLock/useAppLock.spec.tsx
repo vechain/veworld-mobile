@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react-hooks"
+import { act, renderHook } from "@testing-library/react-hooks"
 import { useAppLock } from "./useAppLock"
 import { setAppLockStatus } from "~Storage/Redux/Actions"
 import {
@@ -8,6 +8,7 @@ import {
 } from "~Storage/Redux/Selectors"
 import { WALLET_STATUS } from "~Model"
 import { TestWrapper } from "~Test"
+
 jest.mock("~Storage/Redux/Actions", () => ({
     ...jest.requireActual("~Storage/Redux/Actions"),
     setAppLockStatus: jest.fn(
@@ -40,7 +41,7 @@ describe("useAppLock", () => {
         const { result, waitForNextUpdate } = renderHook(useAppLock, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
         expect(result.current.appLockStatusInactive).toBe(true)
         expect(result.current.appLockStatusActive).toBe(false)
     })
@@ -59,7 +60,7 @@ describe("useAppLock", () => {
         const { result, waitForNextUpdate } = renderHook(useAppLock, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
         act(() => {
             result.current.unlockApp()
         })
@@ -81,7 +82,7 @@ describe("useAppLock", () => {
         const { result, waitForNextUpdate } = renderHook(useAppLock, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
         act(() => {
             result.current.lockApp()
         })

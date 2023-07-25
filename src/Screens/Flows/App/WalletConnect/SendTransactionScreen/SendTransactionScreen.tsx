@@ -31,7 +31,7 @@ import {
     WalletConnectUtils,
 } from "~Utils"
 import { useCheckIdentity, useSignTransaction, useTransaction } from "~Hooks"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
 import { sendTransaction } from "~Networking"
@@ -43,6 +43,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { TransactionDetails } from "./Components"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
+import { DelegationType } from "~Model/Delegation"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -89,7 +90,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         }))
     }, [message])
 
-    const { transaction, gas, setGasPayer } = useTransaction({
+    const { transactionBody, gas, setGasPayer } = useTransaction({
         clauses,
         providedGas: options.gas,
         dependsOn: options.dependsOn,
@@ -105,18 +106,19 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         selectedDelegationUrl,
         isDelegated,
     } = useDelegation({
-        transaction,
+        transactionBody,
         providedUrl: options.delegator?.url,
         setGasPayer,
     })
 
-    const { signTransaction } = useSignTransaction({
-        transaction,
+    const { signTransaction, navigateToLedger } = useSignTransaction({
+        transactionBody,
         onTXFinish: onClose,
         isDelegated,
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
+        initialRoute: Routes.HOME,
     })
 
     // Check if there is enough gas
@@ -184,6 +186,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         async (password?: string) => {
             try {
                 let tx = await signTransaction(password)
+
+                if (!tx) return
+
                 const txId = await sendTransaction(tx, network.currentUrl)
 
                 await WalletConnectResponseUtils.transactionRequestSuccessResponse(
@@ -224,23 +229,19 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             onIdentityConfirmed: handleAccept,
         })
 
-    const signAndSend = useCallback(async () => {
-        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
-            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
-                transaction,
-                accountWithDevice: selectedAccount as LedgerAccountWithDevice,
-                initialRoute: Routes.HOME,
-                requestEvent,
-            })
-            return
+    const onSubmit = useCallback(async () => {
+        if (
+            selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
+            selectedDelegationOption !== DelegationType.ACCOUNT
+        ) {
+            await navigateToLedger()
         } else {
             await checkIdentityBeforeOpening()
         }
     }, [
-        transaction,
-        nav,
-        requestEvent,
         selectedAccount,
+        selectedDelegationOption,
+        navigateToLedger,
         checkIdentityBeforeOpening,
     ])
 
@@ -336,7 +337,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
-                        action={signAndSend}
+                        action={onSubmit}
                         disabled={!isThereEnoughGas && !isDelegated}
                     />
                     <BaseSpacer height={16} />

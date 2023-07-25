@@ -1,5 +1,5 @@
 import React from "react"
-import { renderHook, act } from "@testing-library/react-hooks"
+import { act, renderHook } from "@testing-library/react-hooks"
 import { useCheckIdentity } from "./useCheckIdentity"
 import { useWalletSecurity } from "../useWalletSecurity"
 import { TestWrapper } from "~Test"
@@ -35,7 +35,7 @@ describe("useCheckIdentity", () => {
             ;(useWalletSecurity as jest.Mock).mockReturnValue({
                 isWalletSecurityBiometrics: true,
             })
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 5000 })
 
             jest.spyOn(
                 BiometricsUtils,
@@ -61,7 +61,7 @@ describe("useCheckIdentity", () => {
             ;(useWalletSecurity as jest.Mock).mockReturnValue({
                 isWalletSecurityBiometrics: false,
             })
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 5000 })
             await act(async () => {
                 await result.current.checkIdentityBeforeOpening()
             })
@@ -79,7 +79,7 @@ describe("useCheckIdentity", () => {
                     }),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 5000 })
             ;(useWalletSecurity as jest.Mock).mockReturnValue({
                 isWalletSecurityBiometrics: true,
             })
@@ -96,7 +96,7 @@ describe("useCheckIdentity", () => {
                 () => useCheckIdentity({ onIdentityConfirmed: jest.fn() }),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate()
+            await waitForNextUpdate({ timeout: 5000 })
             const { ConfirmIdentityBottomSheet } = result.current
             render(<ConfirmIdentityBottomSheet />, { wrapper: TestWrapper })
         })

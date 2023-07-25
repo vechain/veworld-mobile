@@ -29,9 +29,10 @@ import {
     useTransaction,
 } from "~Hooks"
 import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/Hooks"
-import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { DEVICE_TYPE } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
+import { DelegationType } from "~Model/Delegation"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -70,7 +71,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         [selectedAccoount, route.params.receiverAddress, nft],
     )
 
-    const { gas, loadingGas, transaction, setGasPayer } = useTransaction({
+    const { gas, loadingGas, transactionBody, setGasPayer } = useTransaction({
         clauses,
     })
 
@@ -83,16 +84,17 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         selectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
-    } = useDelegation({ transaction, setGasPayer })
+    } = useDelegation({ transactionBody, setGasPayer })
 
-    const { signAndSendTransaction } = useSignTransaction({
-        transaction,
+    const { signAndSendTransaction, navigateToLedger } = useSignTransaction({
+        transactionBody,
         onTXFinish,
         isDelegated,
         urlDelegationSignature,
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
+        initialRoute: Routes.NFTS,
         onError: () => setLoading(false),
         token: nft!,
     })
@@ -111,16 +113,21 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             onCancel: () => setLoading(false),
         })
 
-    const onSendPress = useCallback(() => {
-        setLoading(true)
-        if (selectedAccoount.device.type === DEVICE_TYPE.LEDGER) {
-            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
-                accountWithDevice: selectedAccoount as LedgerAccountWithDevice,
-                transaction,
-                initialRoute: Routes.HOME,
-            })
-        } else checkIdentityBeforeOpening()
-    }, [checkIdentityBeforeOpening, nav, selectedAccoount, transaction])
+    const onSubmit = useCallback(async () => {
+        if (
+            selectedAccoount.device.type === DEVICE_TYPE.LEDGER &&
+            selectedDelegationOption !== DelegationType.ACCOUNT
+        ) {
+            await navigateToLedger()
+        } else {
+            await checkIdentityBeforeOpening()
+        }
+    }, [
+        selectedAccoount,
+        selectedDelegationOption,
+        navigateToLedger,
+        checkIdentityBeforeOpening,
+    ])
 
     return (
         <Layout
@@ -207,7 +214,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             footer={
                 <FadeoutButton
                     title={LL.SEND_TOKEN_TITLE().toUpperCase()}
-                    action={onSendPress}
+                    action={onSubmit}
                     disabled={!isThereEnoughGas || loading}
                     bottom={0}
                     mx={0}

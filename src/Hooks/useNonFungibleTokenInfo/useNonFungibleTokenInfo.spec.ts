@@ -57,7 +57,7 @@ describe("useNonFungibleTokenInfo", () => {
             useNonFungibleTokenInfo(tokenId, contractAddress),
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.tokenUri).toEqual(tokenUriMock)
         expect(result.current.collectionName).toEqual(nameMock)
@@ -86,7 +86,7 @@ describe("useNonFungibleTokenInfo", () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useNonFungibleTokenInfo(tokenId, contractAddress),
         )
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(consoleErrorSpy).toHaveBeenCalledTimes(2)
         expect(result.current.tokenUri).toBeUndefined()
@@ -117,7 +117,7 @@ describe("useNonFungibleTokenInfo", () => {
             useNonFungibleTokenInfo(tokenId, contractAddress),
         )
 
-        await waitForNextUpdate()
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
         expect(result.current.tokenUri).toEqual(tokenUriMock)

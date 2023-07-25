@@ -1,13 +1,14 @@
 import React, { useMemo } from "react"
 import { BaseButtonGroupHorizontal, BaseSpacer, BaseText } from "~Components"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, BaseButtonGroupHorizontalType } from "~Model"
+import {
+    AccountWithDevice,
+    BaseButtonGroupHorizontalType,
+    LocalAccountWithDevice,
+} from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useBottomSheetModal } from "~Hooks"
-import {
-    selectVisibleAccountsButSelected,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectDelegationAccounts, useAppSelector } from "~Storage/Redux"
 import { SelectUrlBottomSheet } from "./SelectUrlBottomSheet"
 import { SelectDelegationAccountBottomSheet } from "./SelectDelegationAccountBottomSheet"
 
@@ -17,7 +18,7 @@ type Props = {
     selectedDelegationOption: DelegationType
     setNoDelegation: () => void
     setSelectedAccount: (account: AccountWithDevice) => void
-    selectedAccount?: AccountWithDevice
+    selectedAccount?: LocalAccountWithDevice
     disabled?: boolean
 }
 
@@ -33,9 +34,7 @@ export const DelegationOptions = ({
 }: Props) => {
     const { LL } = useI18nContext()
 
-    const accounts = useAppSelector(state =>
-        selectVisibleAccountsButSelected(state, true),
-    )
+    const accounts = useAppSelector(selectDelegationAccounts)
 
     const {
         ref: selectAccountBottomSheetRef,
