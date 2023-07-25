@@ -134,8 +134,8 @@ export const fetchAccountTransactionActivities = async (
     )
 
     activitiesFetched = [
-        ...transactionActivities,
         ...incomingTransferActivities,
+        ...transactionActivities,
     ]
 
     return activitiesFetched.sort((a, b) => b.timestamp - a.timestamp)
