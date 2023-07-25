@@ -47,7 +47,7 @@ export const tokensMock = [token1, token2]
 
 export const NFT_Mock: NonFungibleToken = {
     attributes: [{ trait_type: "Nature", value: "100" }],
-    contractAddress: "0xa00c0b2b042b10402719cf0805054205c5c97fd2",
+    address: "0xa00c0b2b042b10402719cf0805054205c5c97fd2",
     description: "Random",
     id: "0xa00c0b2b042b10402719cf0805054205c5c97fd2190x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051",
     image: "https://ipfs.io/ipfs/QmW3m2WVPSx9Dr5pkDa14TGCV9s8zeo2sSadmonaGE86nx/",

@@ -1,9 +1,10 @@
 // Test Helpers.ts mocking calls where appropriate
 
-import { GithubCollectionResponse } from "~Networking"
+import { GithubCollectionResponse, NftItemResponse } from "~Networking"
 import {
     parseCollectionMetadataFromRegistry,
     parseCollectionMetadataWithoutRegistry,
+    parseNftMetadata,
 } from "./Helpers"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import { NETWORK_TYPE } from "~Model"
@@ -274,34 +275,33 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
     })
 })
 
-// describe("Helpers - parseNftMetadata", () => {
-//     beforeEach(() => {
-//         jest.clearAllMocks()
-//     })
+describe("Helpers - parseNftMetadata", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
 
-//     it("should parse NFT metadata", async () => {
-//         const nft: NftItemResponse = {
-//             tokenId: "1",
-//             owner: "0x123",
-//             id: "id",
-//             address: "0x0032",
-//             txId: "0x445543",
-//             blockNumber: 120,
-//             blockId: "0x34745",
-//         }
+    it("should parse NFT metadata", async () => {
+        const nft: NftItemResponse = {
+            tokenId: "1",
+            owner: "0x123",
+            id: "id",
+            contractAddress: "0x0032",
+            txId: "0x445543",
+            blockNumber: 120,
+            blockId: "0x34745",
+        }
 
-//         const result = await parseNftMetadata(nft, thor, "notAvailable", false)
+        const result = await parseNftMetadata(nft, thor, "notAvailable", false)
 
-//         expect(result).toEqual({
-//             attributes: [],
-//             address: "0x0032",
-//             description: "notAvailable",
-//             id: nft.address + nft.tokenId + nft.owner,
-//             image: NFTPlaceHolderLight,
-//             name: "notAvailable",
-//             owner: "0x123",
-//             tokenId: "1",
-//             tokenURI: "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
-//         })
-//     })
-// })
+        expect(result).toEqual({
+            address: "0x0032",
+            description: "notAvailable",
+            id: nft.contractAddress + nft.tokenId + nft.owner,
+            image: NFTPlaceHolderLight,
+            name: "notAvailable",
+            owner: "0x123",
+            tokenId: "1",
+            tokenURI: "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
+        })
+    })
+})
