@@ -1,8 +1,9 @@
-import React, { memo, useCallback, useState } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { Image, StyleSheet } from "react-native"
 import FastImage, { FastImageProps } from "react-native-fast-image"
 import { BaseView } from "~Components/Base"
 import { BlurView } from "../BlurView"
+import { useTheme } from "~Hooks"
 
 type Props = {
     uri: string
@@ -15,6 +16,8 @@ export const NFTImage = memo((props: Props) => {
     const { uri, w, h, style, testID, ...rest } = props
     const [isLoading, setIsLoading] = useState(false)
 
+    const theme = useTheme()
+
     const onLoadStart = useCallback(() => {
         setIsLoading(true)
     }, [])
@@ -23,14 +26,20 @@ export const NFTImage = memo((props: Props) => {
         setIsLoading(false)
     }, [])
 
+    const placeholderImg = useMemo(() => {
+        return theme.isDark
+            ? require("../../../Assets/Img/NFTPlaceholder_Dark.png")
+            : require("../../../Assets/Img/NFTPlaceholder_Light.png")
+    }, [theme.isDark])
+
     return (
-        <BaseView>
+        <BaseView bg={theme.colors.placeholder}>
             <FastImage
                 testID={testID}
                 style={[{ width: w, height: h }, style]}
                 onLoadStart={onLoadStart}
                 onLoadEnd={onLoadEnd}
-                defaultSource={require("../../../Assets/Img/NFTPlaceholder.png")} // not working on android dev only
+                defaultSource={placeholderImg} // not working on android dev only
                 source={{
                     uri,
                     priority: FastImage.priority.high,

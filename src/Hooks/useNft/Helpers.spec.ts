@@ -6,7 +6,7 @@ import {
     parseCollectionMetadataWithoutRegistry,
     parseNftMetadata,
 } from "./Helpers"
-import { NFTPlaceholder } from "~Assets"
+import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import { NETWORK_TYPE } from "~Model"
 
 const regInfo: GithubCollectionResponse = {
@@ -165,6 +165,7 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             collection,
             thor,
             "notAvailable",
+            false,
         )
         expect(result).toEqual({
             address: "0x456",
@@ -197,6 +198,7 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             collection,
             thor,
             "notAvailable",
+            true,
         )
 
         expect(result).toEqual({
@@ -205,7 +207,41 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             creator: "notAvailable",
             description: "",
             hasCount: true,
-            image: NFTPlaceholder,
+            image: NFTPlaceholderDark,
+            isBlacklisted: false,
+            mimeType: "image/png",
+            name: "name",
+            symbol: "symbol",
+            totalSupply: 1,
+        })
+    })
+
+    it("should parse correct placeholder image if no metadata found", async () => {
+        const network = NETWORK_TYPE.MAIN
+        const selectedAccount = "0x123"
+        const collection = "0x456"
+
+        // mock fetchMetadata and return undefined
+        ;(require("~Networking") as any).getTokenMetaIpfs.mockResolvedValueOnce(
+            undefined,
+        )
+
+        const result = await parseCollectionMetadataWithoutRegistry(
+            network,
+            selectedAccount,
+            collection,
+            thor,
+            "notAvailable",
+            false,
+        )
+
+        expect(result).toEqual({
+            address: "0x456",
+            balanceOf: 1,
+            creator: "notAvailable",
+            description: "",
+            hasCount: true,
+            image: NFTPlaceHolderLight,
             isBlacklisted: false,
             mimeType: "image/png",
             name: "name",
@@ -236,6 +272,7 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
                 collection,
                 thor,
                 "notAvailable",
+                true,
             ),
         ).rejects.toThrow("Failed to parse collection metadata from chain data")
     })
@@ -263,6 +300,7 @@ describe("Helpers - parseNftMetadata", () => {
             nft,
             thor,
             "notAvailable",
+            false,
         )
 
         expect(result).toEqual({

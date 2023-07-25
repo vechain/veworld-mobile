@@ -1,6 +1,7 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import FastImage, { FastImageProps } from "react-native-fast-image"
 import { BaseView } from "./BaseView"
+import { useTheme } from "~Hooks"
 
 type Props = {
     uri: string
@@ -12,14 +13,26 @@ type Props = {
 export const BaseImage = memo((props: Props) => {
     const { uri, w, h, style, testID, ...rest } = props
 
+    const theme = useTheme()
+
+    const placeholderImg = useMemo(() => {
+        return theme.isDark
+            ? require("../../Assets/Img/NFTPlaceholder_Dark.png")
+            : require("../../Assets/Img/NFTPlaceholder_Light.png")
+    }, [theme.isDark])
+
     return (
         <BaseView>
             <FastImage
                 testID={testID}
-                style={[{ width: w, height: h }, style]}
+                style={[
+                    { width: w, height: h },
+                    style,
+                    { backgroundColor: theme.colors.placeholder },
+                ]}
                 fallback
                 // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/749) change fallback image
-                defaultSource={require("../../Assets/Img/NFTPlaceholder.png")}
+                defaultSource={placeholderImg}
                 source={{
                     uri,
                     priority: FastImage.priority.high,
