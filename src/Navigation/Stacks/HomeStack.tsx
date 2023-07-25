@@ -1,21 +1,21 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
-    ManageTokenScreen,
-    BuyScreen,
-    HistoryScreen,
-    HomeScreen,
-    SelectTokenSendScreen,
-    SelectAmountSendScreen,
-    InsertAddressSendScreen,
-    SwapScreen,
-    WalletManagementScreen,
-    ManageCustomTokenScreen,
-    TransactionSummarySendScreen,
     ActivityDetailsScreen,
     AssetDetailScreen,
-    LedgerSignTransaction,
+    BuyScreen,
     ConnectedAppsScreen,
+    HistoryScreen,
+    HomeScreen,
+    InsertAddressSendScreen,
+    LedgerSignTransaction,
+    ManageCustomTokenScreen,
+    ManageTokenScreen,
+    SelectAmountSendScreen,
+    SelectTokenSendScreen,
+    SwapScreen,
+    TransactionSummarySendScreen,
+    WalletManagementScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
@@ -50,7 +50,8 @@ export type RootStackParamListHome = {
 
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
-        transaction: Transaction.Body
+        delegationSignature?: string
+        transaction: Transaction
         initialRoute: string
     }
     [Routes.SWAP]: undefined

@@ -1,5 +1,5 @@
-import { HDNode, Transaction, secp256k1 } from "thor-devkit"
-import { CryptoUtils, HexUtils, TransactionUtils, error } from "~Utils"
+import { HDNode, secp256k1, Transaction } from "thor-devkit"
+import { CryptoUtils, error, HexUtils, TransactionUtils } from "~Utils"
 import { showErrorToast, showWarningToast } from "~Components"
 import {
     selectDevice,
@@ -12,15 +12,19 @@ import {
     AccountWithDevice,
     DEVICE_TYPE,
     FungibleTokenWithBalance,
+    LedgerAccountWithDevice,
     NonFungibleToken,
     Wallet,
 } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useSendTransaction } from "~Hooks"
 import { sponsorTransaction } from "~Networking"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
+import { useMemo } from "react"
 
 type Props = {
-    transaction: Transaction.Body
+    transactionBody: Transaction.Body
     onTXFinish: () => void
     isDelegated: boolean
     urlDelegationSignature?: Buffer
@@ -29,6 +33,7 @@ type Props = {
     selectedDelegationUrl?: string
     onError?: (e: unknown) => void
     token?: NonFungibleToken | FungibleTokenWithBalance
+    initialRoute?: Routes
 }
 /**
  * Hooks that expose a function to sign and send a transaction performing updates on success
@@ -44,13 +49,14 @@ type Props = {
  */
 
 export const useSignTransaction = ({
-    transaction,
+    transactionBody,
     onTXFinish,
     isDelegated,
     selectedDelegationAccount,
     selectedDelegationOption,
     selectedDelegationUrl,
     onError,
+    initialRoute = Routes.HOME,
 }: Props) => {
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
@@ -58,17 +64,22 @@ export const useSignTransaction = ({
     const senderDevice = useAppSelector(state =>
         selectDevice(state, account.rootAddress),
     )
+    const nav = useNavigation()
     const { sendTransactionAndPerformUpdates } = useSendTransaction(
         network,
         account,
     )
 
+    const transaction = useMemo(
+        () => TransactionUtils.fromBody(transactionBody, isDelegated),
+        [transactionBody, isDelegated],
+    )
+
     const getSignature = async (
-        tx: Transaction,
         wallet: Wallet,
         delegateFor?: string,
         signatureAccount: AccountWithDevice = account,
-    ) => {
+    ): Promise<Buffer> => {
         if (!wallet.mnemonic)
             throw new Error("Mnemonic wallet can't have an empty mnemonic")
 
@@ -79,80 +90,90 @@ export const useSignTransaction = ({
         const derivedNode = hdNode.derive(signatureAccount.index)
 
         const privateKey = derivedNode.privateKey as Buffer
-        const hash = tx.signingHash(delegateFor?.toLowerCase())
+        const hash = transaction.signingHash(delegateFor?.toLowerCase())
         return secp256k1.sign(hash, privateKey)
     }
 
-    const getDelegationSignature = async (
-        tx: Transaction,
-        senderSignature: Buffer,
+    const getUrlDelegationSignature = async (): Promise<Buffer> => {
+        if (!selectedDelegationUrl) {
+            throw new Error(
+                "Delegation url not found when requesting delegation signature",
+            )
+        }
+
+        // build hex encoded version of the transaction for signing request
+        const rawTransaction = HexUtils.addPrefix(
+            transaction.encode().toString("hex"),
+        )
+
+        // request to send for sponsorship/fee delegation
+        const sponsorRequest = {
+            origin: account.address.toLowerCase(),
+            raw: rawTransaction,
+        }
+
+        const signature = await sponsorTransaction(
+            selectedDelegationUrl,
+            sponsorRequest,
+        )
+
+        if (!signature) {
+            throw new Error("Error getting delegator signature")
+        }
+
+        return Buffer.from(signature.substr(2), "hex")
+    }
+
+    const getAccountDelegationSignature = async (
         password?: string,
-    ) => {
+    ): Promise<Buffer> => {
+        const delegationDevice = selectedDelegationAccount?.device
+        if (!delegationDevice)
+            throw new Error(
+                "Delegation device not found when sending transaction",
+            )
+
+        if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
+            showWarningToast(
+                LL.HEADS_UP(),
+                LL.LEDGER_DELEGATION_NOT_SUPPORTED(),
+            )
+            throw new Error("Delegated hardware wallet not supported yet")
+        }
+
+        const { decryptedWallet: delegationWallet } =
+            await CryptoUtils.decryptWallet(delegationDevice, password)
+
+        return await getSignature(
+            delegationWallet,
+            account.address,
+            selectedDelegationAccount,
+        )
+    }
+
+    const getDelegationSignature = async (
+        password?: string,
+    ): Promise<Buffer | undefined> => {
         switch (selectedDelegationOption) {
             case DelegationType.URL:
-                if (!selectedDelegationUrl) {
-                    throw new Error(
-                        "Delegation url not found when requesting delegation signature",
-                    )
-                }
-
-                // build hex encoded version of the transaction for signing request
-                const rawTransaction = HexUtils.addPrefix(
-                    tx.encode().toString("hex"),
-                )
-
-                // request to send for sponsorship/fee delegation
-                const sponsorRequest = {
-                    origin: account.address.toLowerCase(),
-                    raw: rawTransaction,
-                }
-
-                const signature = await sponsorTransaction(
-                    selectedDelegationUrl,
-                    sponsorRequest,
-                )
-
-                if (!signature) {
-                    throw new Error("Error getting delegator signature")
-                }
-
-                const delegatorSignature = Buffer.from(
-                    signature.substr(2),
-                    "hex",
-                )
-
-                return Buffer.concat([senderSignature, delegatorSignature])
+                return await getUrlDelegationSignature()
             case DelegationType.ACCOUNT:
-                const delegationDevice = selectedDelegationAccount?.device
-                if (!delegationDevice)
-                    throw new Error(
-                        "Delegation device not found when sending transaction",
-                    )
-
-                // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/754) support ledger delegation
-                if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
-                    showWarningToast(
-                        "Delegated hardware wallet not supported yet",
-                    )
-                    throw new Error(
-                        "Delegated hardware wallet not supported yet",
-                    )
-                }
-
-                const { decryptedWallet: delegationWallet } =
-                    await CryptoUtils.decryptWallet(delegationDevice, password)
-
-                const accountDelegationSignature = await getSignature(
-                    tx,
-                    delegationWallet,
-                    account.address,
-                    selectedDelegationAccount,
-                )
-                return Buffer.concat([
-                    senderSignature,
-                    accountDelegationSignature,
-                ])
+                return await getAccountDelegationSignature(password)
+            default:
+                return
         }
+    }
+
+    const navigateToLedger = async (password?: string) => {
+        const delegationSignature = await getDelegationSignature(password)
+
+        nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
+            accountWithDevice:
+                selectedDelegationAccount as LedgerAccountWithDevice,
+            transaction,
+            initialRoute,
+            delegationSignature: delegationSignature?.toString("hex"),
+        })
     }
 
     /**
@@ -161,33 +182,26 @@ export const useSignTransaction = ({
     const signTransaction = async (password?: string) => {
         if (!senderDevice) throw new Error("Sender device not found")
 
-        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/753) support ledger
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
-            showWarningToast("Hardware wallet not supported yet")
-            throw new Error("Hardware wallet not supported yet")
+            return await navigateToLedger(password)
         }
 
         //local mnemonic, identity already verified via useCheckIdentity
         if (!senderDevice.wallet) {
-            // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/753) support ledger
-            showWarningToast("Hardware wallet not supported yet")
             throw new Error("Hardware wallet not supported yet")
         }
 
         const { decryptedWallet: senderWallet } =
             await CryptoUtils.decryptWallet(senderDevice, password)
 
-        const tx = isDelegated
-            ? TransactionUtils.toDelegation(transaction)
-            : new Transaction(transaction)
+        const senderSignature = await getSignature(senderWallet)
+        const delegationSignature = await getDelegationSignature(password)
 
-        const senderSignature = await getSignature(tx, senderWallet)
-
-        tx.signature = isDelegated
-            ? await getDelegationSignature(tx, senderSignature, password)
+        transaction.signature = delegationSignature
+            ? Buffer.concat([senderSignature, delegationSignature])
             : senderSignature
 
-        return tx
+        return transaction
     }
 
     /**
@@ -195,20 +209,25 @@ export const useSignTransaction = ({
      */
     const signAndSendTransaction = async (password?: string) => {
         try {
-            const tx = await signTransaction(password)
-            await sendTransactionAndPerformUpdates(tx)
+            const signedTx = await signTransaction(password)
+
+            if (!signedTx) return
+
+            await sendTransactionAndPerformUpdates(signedTx)
+
+            onTXFinish()
         } catch (e) {
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
             onError?.(e)
         }
-
-        onTXFinish()
     }
 
     return {
+        getUrlDelegationSignature,
         signAndSendTransaction,
         sendTransactionAndPerformUpdates,
         signTransaction,
+        navigateToLedger,
     }
 }

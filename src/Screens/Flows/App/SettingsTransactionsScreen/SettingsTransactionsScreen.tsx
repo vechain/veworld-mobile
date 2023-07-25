@@ -11,7 +11,7 @@ import {
     Layout,
 } from "~Components"
 import { isSmallScreen } from "~Constants"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import {
@@ -41,9 +41,18 @@ export const SettingsTransactionsScreen = () => {
     const setSelectedDelegationAccount = (
         defaultDelegationAccount?: AccountWithDevice,
     ) => {
-        dispatch(setDefaultDelegationAccount(defaultDelegationAccount))
-        dispatch(setDefaultDelegationOption(DelegationType.ACCOUNT))
-        dispatch(setDefaultDelegationUrl(undefined))
+        if (
+            defaultDelegationAccount &&
+            defaultDelegationAccount.device.type === DEVICE_TYPE.LOCAL_MNEMONIC
+        ) {
+            dispatch(
+                setDefaultDelegationAccount(
+                    defaultDelegationAccount as LocalAccountWithDevice,
+                ),
+            )
+            dispatch(setDefaultDelegationOption(DelegationType.ACCOUNT))
+            dispatch(setDefaultDelegationUrl(undefined))
+        }
     }
     const setSelectedDelegationUrl = (defaultDelegationUrl: string) => {
         dispatch(setDefaultDelegationOption(DelegationType.URL))

@@ -774,6 +774,10 @@ export const toDelegation = (txBody: Transaction.Body) => {
     return tx
 }
 
+export const fromBody = (txBody: Transaction.Body, delegate: boolean) => {
+    return delegate ? toDelegation(txBody) : new Transaction(txBody)
+}
+
 /**
  * send signed transaction with thorest apis
  */
