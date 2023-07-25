@@ -40,10 +40,7 @@ export const NFTRecapView = ({ nft }: Props) => {
     return (
         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
             {isImage && (
-                <NFTImage
-                    uri={nft.mimeType}
-                    style={baseStyles.nftPreviewImage}
-                />
+                <NFTImage uri={nft.image} style={baseStyles.nftPreviewImage} />
             )}
 
             {isVideo && (
