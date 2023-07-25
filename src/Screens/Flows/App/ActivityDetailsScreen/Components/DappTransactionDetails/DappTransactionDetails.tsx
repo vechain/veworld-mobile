@@ -42,8 +42,8 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
     )
 
     const transactionIDshort = useMemo(() => {
-        return FormattingUtils.humanAddress(activity.id, 7, 9)
-    }, [activity.id])
+        return FormattingUtils.humanAddress(activity.txId ?? "", 7, 9)
+    }, [activity.txId])
 
     const txStatus = useMemo(() => {
         switch (activity.status) {
