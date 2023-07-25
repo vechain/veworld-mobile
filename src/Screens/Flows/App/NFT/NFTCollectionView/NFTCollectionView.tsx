@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { NFTImage, BaseText, BaseView, LongPressProvider } from "~Components"
-import { NFTMediaType, NonFungibleTokenCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 import { Routes } from "~Navigation"
 import {
     removeBlackListCollection,
@@ -13,10 +13,9 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { MediaUtils } from "~Utils"
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
-import { resolveMimeType } from "~Hooks/useNft/Helpers"
+import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
 
 type Props = {
     collection: NonFungibleTokenCollection
@@ -34,7 +33,10 @@ export const NFTCollectionView = memo(
         const nav = useNavigation()
         const network = useAppSelector(selectSelectedNetwork)
         const dispatch = useAppDispatch()
-        const [isImage, setIsImage] = useState(false)
+        const { isImage } = useMimeTypeResolver({
+            imageUrl: collection.image,
+            mimeType: collection.mimeType,
+        })
 
         const selectedAccount = useAppSelector(selectSelectedAccount)
 
@@ -86,25 +88,6 @@ export const NFTCollectionView = memo(
                 selectedAccount.address,
             ],
         )
-
-        useEffect(() => {
-            if (collection.mimeType) {
-                setIsImage(
-                    MediaUtils.isValidMimeType(collection.mimeType, [
-                        NFTMediaType.IMAGE,
-                    ]),
-                )
-            } else {
-                // Resolve mime type
-                resolveMimeType(collection.image).then(mimeType => {
-                    setIsImage(
-                        MediaUtils.isValidMimeType(mimeType, [
-                            NFTMediaType.IMAGE,
-                        ]),
-                    )
-                })
-            }
-        }, [collection])
 
         return (
             <TouchableOpacity

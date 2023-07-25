@@ -1,13 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { SCREEN_WIDTH, COLORS } from "~Constants"
 import { BaseImage, BaseText, BaseView } from "~Components"
-import { MediaUtils } from "~Utils"
-import { NFTMediaType } from "~Model"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
-import { resolveMimeType } from "~Hooks/useNft/Helpers"
+import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
 
 type Props = {
     uri: string
@@ -18,26 +16,11 @@ type Props = {
 
 export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
     const theme = useTheme()
-    const [isImage, setIsImage] = useState(false)
-    const [isVideo, setIsVideo] = useState(false)
+    const { isImage, isVideo } = useMimeTypeResolver({
+        imageUrl: uri,
+        mimeType: mime,
+    })
     const video = useRef(null)
-
-    useEffect(() => {
-        if (mime !== "") {
-            setIsImage(MediaUtils.isValidMimeType(mime, [NFTMediaType.IMAGE]))
-            setIsVideo(MediaUtils.isValidMimeType(mime, [NFTMediaType.VIDEO]))
-        } else {
-            // Resolve mime type
-            resolveMimeType(uri).then(mimeType => {
-                setIsImage(
-                    MediaUtils.isValidMimeType(mimeType, [NFTMediaType.IMAGE]),
-                )
-                setIsVideo(
-                    MediaUtils.isValidMimeType(mimeType, [NFTMediaType.VIDEO]),
-                )
-            })
-        }
-    }, [uri, mime])
 
     const renderMedia = useMemo(() => {
         if (isImage) return <BaseImage uri={uri} style={baseStyles.nftImage} />

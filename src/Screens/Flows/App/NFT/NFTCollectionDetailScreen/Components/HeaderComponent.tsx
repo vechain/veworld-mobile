@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React, { memo, useEffect, useMemo, useState } from "react"
+import React, { memo, useMemo } from "react"
 import {
     BaseButton,
     BaseIcon,
@@ -10,19 +10,21 @@ import {
 } from "~Components"
 import { isEmpty } from "lodash"
 import { useI18nContext } from "~i18n"
-import { NFTMediaType, NonFungibleTokenCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 
 import { COLORS } from "~Constants"
 import { useToggleCollection } from "./Hooks/useToggleCollection"
 import { useTheme } from "~Hooks"
-import { MediaUtils } from "~Utils"
-import { resolveMimeType } from "~Hooks/useNft/Helpers"
 import { NFTPlaceholder } from "~Assets"
+import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
 
 export const HeaderComponent = memo(
     ({ collection }: { collection: NonFungibleTokenCollection }) => {
         const { LL } = useI18nContext()
-        const [isImage, setIsImage] = useState(false)
+        const { isImage } = useMimeTypeResolver({
+            imageUrl: collection.image,
+            mimeType: collection.mimeType,
+        })
         const theme = useTheme()
 
         const { onToggleCollection, isBlacklisted } =
@@ -37,25 +39,6 @@ export const HeaderComponent = memo(
             if (isBlacklisted) return COLORS.DARK_PURPLE
             return COLORS.WHITE
         }, [isBlacklisted, theme])
-
-        useEffect(() => {
-            if (collection.mimeType) {
-                setIsImage(
-                    MediaUtils.isValidMimeType(collection.mimeType, [
-                        NFTMediaType.IMAGE,
-                    ]),
-                )
-            } else {
-                // Resolve mime type
-                resolveMimeType(collection.image).then(mimeType => {
-                    setIsImage(
-                        MediaUtils.isValidMimeType(mimeType, [
-                            NFTMediaType.IMAGE,
-                        ]),
-                    )
-                })
-            }
-        }, [collection])
 
         return (
             <>

@@ -1,21 +1,16 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback, useEffect, useRef, useState } from "react"
+import React, { memo, useCallback, useRef } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { NFTImage, BaseText, BaseView } from "~Components"
-import {
-    NFTMediaType,
-    NonFungibleToken,
-    NonFungibleTokenCollection,
-} from "~Model"
+import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { Routes } from "~Navigation"
 import { selectPendingTx, useAppSelector } from "~Storage/Redux"
-import { MediaUtils } from "~Utils"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
 import { useI18nContext } from "~i18n"
 import HapticsService from "~Services/HapticsService"
-import { resolveMimeType } from "~Hooks/useNft/Helpers"
+import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
 
 type Props = {
     nft: NonFungibleToken
@@ -25,8 +20,10 @@ type Props = {
 
 export const NFTView = memo(({ nft, index, collection }: Props) => {
     const nav = useNavigation()
-    const [isImage, setIsImage] = useState(false)
-    const [isVideo, setIsVideo] = useState(false)
+    const { isImage, isVideo } = useMimeTypeResolver({
+        imageUrl: nft.image,
+        mimeType: nft.mimeType,
+    })
     const video = useRef(null)
     const { LL } = useI18nContext()
 
@@ -46,27 +43,6 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
         ),
         [],
     )
-
-    useEffect(() => {
-        if (nft.mimeType) {
-            setIsImage(
-                MediaUtils.isValidMimeType(nft.mimeType, [NFTMediaType.IMAGE]),
-            )
-            setIsVideo(
-                MediaUtils.isValidMimeType(nft.mimeType, [NFTMediaType.VIDEO]),
-            )
-        } else {
-            // Resolve mime type
-            resolveMimeType(nft.image).then(mimeType => {
-                setIsImage(
-                    MediaUtils.isValidMimeType(mimeType, [NFTMediaType.IMAGE]),
-                )
-                setIsVideo(
-                    MediaUtils.isValidMimeType(mimeType, [NFTMediaType.VIDEO]),
-                )
-            })
-        }
-    }, [nft])
 
     return (
         <TouchableOpacity

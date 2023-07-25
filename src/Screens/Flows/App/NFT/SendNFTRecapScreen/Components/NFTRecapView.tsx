@@ -1,41 +1,21 @@
 import { StyleSheet } from "react-native"
-import React, { useEffect, useRef, useState } from "react"
-import { NFTMediaType, NonFungibleToken } from "~Model"
+import React, { useRef } from "react"
+import { NonFungibleToken } from "~Model"
 import { BaseView, NFTImage } from "~Components"
-import { MediaUtils } from "~Utils"
 import { ResizeMode, Video } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
-import { resolveMimeType } from "~Hooks/useNft/Helpers"
+import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
 
 type Props = {
     nft: NonFungibleToken
 }
 
 export const NFTRecapView = ({ nft }: Props) => {
-    const [isImage, setIsImage] = useState(false)
-    const [isVideo, setIsVideo] = useState(false)
+    const { isImage, isVideo } = useMimeTypeResolver({
+        imageUrl: nft.image,
+        mimeType: nft.mimeType,
+    })
     const video = useRef(null)
-
-    useEffect(() => {
-        if (nft.mimeType) {
-            setIsImage(
-                MediaUtils.isValidMimeType(nft.mimeType, [NFTMediaType.IMAGE]),
-            )
-            setIsVideo(
-                MediaUtils.isValidMimeType(nft.mimeType, [NFTMediaType.VIDEO]),
-            )
-        } else {
-            // Resolve mime type
-            resolveMimeType(nft.image).then(mimeType => {
-                setIsImage(
-                    MediaUtils.isValidMimeType(mimeType, [NFTMediaType.IMAGE]),
-                )
-                setIsVideo(
-                    MediaUtils.isValidMimeType(mimeType, [NFTMediaType.VIDEO]),
-                )
-            })
-        }
-    }, [nft])
 
     return (
         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
