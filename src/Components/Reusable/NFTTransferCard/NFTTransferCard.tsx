@@ -9,7 +9,7 @@ import {
 import { useNonFungibleTokenInfo, useThemedStyles } from "~Hooks"
 import { NFTMediaType } from "~Model"
 import { MediaUtils } from "~Utils"
-import { NFTPlaceholder } from "~Assets"
+import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType } from "~Constants"
 import { ResizeMode, Video } from "expo-av"
@@ -37,10 +37,20 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
             : collectionName
     }, [LL, collectionName])
 
+    const placeholderImg = useMemo(() => {
+        return theme.isDark ? NFTPlaceholderDark : NFTPlaceHolderLight
+    }, [theme.isDark])
+
     const posterComponent = useCallback(() => {
         // @ts-ignore
-        return <BaseImage uri={NFTPlaceholder} style={styles.nftImage} />
-    }, [styles.nftImage])
+        return (
+            <BaseImage
+                uri={placeholderImg}
+                // @ts-ignore
+                style={styles.nftImage}
+            />
+        )
+    }, [placeholderImg, styles.nftImage])
 
     const renderMedia = useMemo(() => {
         if (isMediaLoading) return <NFTTransferCardSkeleton />
@@ -69,9 +79,16 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
         }
 
         // @ts-ignore
-        return <BaseImage uri={NFTPlaceholder} style={styles.nftImage} />
+        return (
+            <BaseImage
+                uri={placeholderImg}
+                // @ts-ignore
+                style={styles.nftImage}
+            />
+        )
     }, [
         isMediaLoading,
+        placeholderImg,
         posterComponent,
         styles.nftImage,
         tokenImage,

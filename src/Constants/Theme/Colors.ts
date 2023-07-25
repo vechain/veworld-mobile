@@ -30,6 +30,7 @@ export type Colors = {
     skeletonHighlightColor: string
     alertOrangeMedium: string
     alertRedMedium: string
+    placeholder: string
 }
 
 export enum COLORS {
@@ -97,6 +98,7 @@ const light: Colors = {
     skeletonHighlightColor: COLORS.LIGHT_GRAY,
     alertOrangeMedium: COLORS.MEDIUM_ORANGE,
     alertRedMedium: COLORS.MEDIUM_RED,
+    placeholder: COLORS.DISABLED_GREY,
 }
 
 const dark: Colors = {
@@ -131,6 +133,7 @@ const dark: Colors = {
     skeletonHighlightColor: COLORS.LIGHT_PURPLE,
     alertOrangeMedium: COLORS.PASTEL_ORANGE,
     alertRedMedium: COLORS.PASTEL_RED,
+    placeholder: COLORS.PURPLE,
 }
 
 export const colors = { light, dark }
