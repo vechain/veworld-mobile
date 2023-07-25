@@ -208,7 +208,6 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             hasCount: true,
             image: NFTPlaceholderDark,
             isBlacklisted: false,
-            mimeType: "image/png",
             name: "name",
             symbol: "symbol",
             totalSupply: 1,
