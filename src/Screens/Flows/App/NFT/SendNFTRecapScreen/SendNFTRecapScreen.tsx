@@ -151,7 +151,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             flexDirection="row"
                             style={baseStyles.previewContainer}>
                             <NFTTransferCard
-                                collectionAddress={nft!.contractAddress}
+                                collectionAddress={nft!.address}
                                 tokenId={nft!.tokenId}
                             />
                         </BaseView>

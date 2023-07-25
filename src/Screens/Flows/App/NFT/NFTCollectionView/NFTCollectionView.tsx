@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { NFTImage, BaseText, BaseView, LongPressProvider } from "~Components"
-import { NonFungibleTokenCollection } from "~Model"
+import { NFTMediaType, NonFungibleTokenCollection } from "~Model"
 import { Routes } from "~Navigation"
 import {
     removeBlackListCollection,
@@ -15,7 +15,7 @@ import {
 } from "~Storage/Redux"
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
-import { useCollectionMetadataResolver } from "~Hooks/useCollectionMetadataResolver"
+import { useNFTMetadataResolver } from "~Hooks/useNFTMetadataResolver"
 
 type Props = {
     collection: NonFungibleTokenCollection
@@ -33,9 +33,9 @@ export const NFTCollectionView = memo(
         const nav = useNavigation()
         const network = useAppSelector(selectSelectedNetwork)
         const dispatch = useAppDispatch()
-        const { isImage, collection: collectionWithMetadata } =
-            useCollectionMetadataResolver({
-                collection,
+        const { mediaType, nftWithMetadata: collectionWithMetadata } =
+            useNFTMetadataResolver({
+                nft: collection,
             })
 
         const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -109,7 +109,7 @@ export const NFTCollectionView = memo(
                     <BaseView style={baseStyles.nftCollectionNameBarRadius}>
                         <NFTImage
                             uri={
-                                isImage
+                                mediaType === NFTMediaType.IMAGE
                                     ? collectionWithMetadata.image
                                     : NFTPlaceholder
                             }

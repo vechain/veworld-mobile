@@ -284,7 +284,7 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
 //             tokenId: "1",
 //             owner: "0x123",
 //             id: "id",
-//             contractAddress: "0x0032",
+//             address: "0x0032",
 //             txId: "0x445543",
 //             blockNumber: 120,
 //             blockId: "0x34745",
@@ -294,9 +294,9 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
 
 //         expect(result).toEqual({
 //             attributes: [],
-//             contractAddress: "0x0032",
+//             address: "0x0032",
 //             description: "notAvailable",
-//             id: nft.contractAddress + nft.tokenId + nft.owner,
+//             id: nft.address + nft.tokenId + nft.owner,
 //             image: NFTPlaceHolderLight,
 //             name: "notAvailable",
 //             owner: "0x123",

@@ -6,6 +6,7 @@ import { BaseImage, BaseText, BaseView } from "~Components"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
 import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
+import { NFTMediaType } from "~Model"
 
 type Props = {
     uri: string
@@ -16,16 +17,17 @@ type Props = {
 
 export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
     const theme = useTheme()
-    const { isImage, isVideo } = useMimeTypeResolver({
+    const mediaType = useMimeTypeResolver({
         imageUrl: uri,
         mimeType: mime,
     })
     const video = useRef(null)
 
     const renderMedia = useMemo(() => {
-        if (isImage) return <BaseImage uri={uri} style={baseStyles.nftImage} />
+        if (mediaType === NFTMediaType.IMAGE)
+            return <BaseImage uri={uri} style={baseStyles.nftImage} />
 
-        if (isVideo)
+        if (mediaType === NFTMediaType.VIDEO)
             return (
                 <BaseView style={baseStyles.nftImage}>
                     <Video
@@ -48,7 +50,7 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
             )
 
         return <BaseImage uri={NFTPlaceholder} style={baseStyles.nftImage} />
-    }, [isImage, isVideo, uri])
+    }, [mediaType, uri])
 
     return (
         <BaseView>

@@ -10,21 +10,21 @@ import {
 } from "~Components"
 import { isEmpty } from "lodash"
 import { useI18nContext } from "~i18n"
-import { NonFungibleTokenCollection } from "~Model"
+import { NFTMediaType, NonFungibleTokenCollection } from "~Model"
 
 import { COLORS } from "~Constants"
 import { useToggleCollection } from "./Hooks/useToggleCollection"
 import { useTheme } from "~Hooks"
 import { NFTPlaceholder } from "~Assets"
-import { useCollectionMetadataResolver } from "~Hooks/useCollectionMetadataResolver"
+import { useNFTMetadataResolver } from "~Hooks/useNFTMetadataResolver"
 
 export const HeaderComponent = memo(
     ({ collection }: { collection: NonFungibleTokenCollection }) => {
         const { LL } = useI18nContext()
         const theme = useTheme()
-        const { isImage, collection: collectionWithMetadata } =
-            useCollectionMetadataResolver({
-                collection,
+        const { mediaType, nftWithMetadata: collectionWithMetadata } =
+            useNFTMetadataResolver({
+                nft: collection,
             })
 
         const { onToggleCollection, isBlacklisted } = useToggleCollection(
@@ -44,7 +44,7 @@ export const HeaderComponent = memo(
         return (
             <>
                 <BaseView flexDirection="row" alignItems="flex-end">
-                    {isImage ? (
+                    {mediaType === NFTMediaType.IMAGE ? (
                         <BaseImage
                             uri={collectionWithMetadata?.image}
                             style={baseStyles.nftHeaderImage}

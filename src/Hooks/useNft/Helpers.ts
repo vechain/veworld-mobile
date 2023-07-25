@@ -108,7 +108,7 @@ export const parseNftMetadata = async (
         id: nft.contractAddress + nft.tokenId + nft.owner,
         name: tokenMetadata?.name ?? notAvailable,
         description: tokenMetadata?.description ?? notAvailable,
-        contractAddress: nft.contractAddress,
+        address: nft.contractAddress,
         tokenId: nft.tokenId,
         owner: nft.owner,
         tokenURI,

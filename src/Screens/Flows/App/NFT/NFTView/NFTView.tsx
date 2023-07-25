@@ -3,7 +3,11 @@ import React, { memo, useCallback, useRef } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { NFTImage, BaseText, BaseView } from "~Components"
-import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
+import {
+    NFTMediaType,
+    NonFungibleToken,
+    NonFungibleTokenCollection,
+} from "~Model"
 import { Routes } from "~Navigation"
 import { selectPendingTx, useAppSelector } from "~Storage/Redux"
 import { Video, ResizeMode } from "expo-av"
@@ -20,11 +24,9 @@ type Props = {
 
 export const NFTView = memo(({ nft, index, collection }: Props) => {
     const nav = useNavigation()
-    const {
-        isImage,
-        isVideo,
-        nft: nftWithMetadata,
-    } = useNFTMetadataResolver({ nft })
+    const { mediaType, nftWithMetadata } = useNFTMetadataResolver({
+        nft,
+    })
     const video = useRef(null)
     const { LL } = useI18nContext()
 
@@ -61,14 +63,14 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                 },
             ]}>
             <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                {isImage && (
+                {mediaType === NFTMediaType.IMAGE && (
                     <NFTImage
                         uri={nftWithMetadata.image}
                         style={baseStyles.nftPreviewImage}
                     />
                 )}
 
-                {isVideo && (
+                {mediaType === NFTMediaType.VIDEO && (
                     <BaseView style={baseStyles.nftPreviewImage}>
                         <Video
                             PosterComponent={renderNFTStaticImage}
@@ -84,12 +86,13 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                     </BaseView>
                 )}
 
-                {!isImage && !isVideo && (
-                    <NFTImage
-                        uri={NFTPlaceholder}
-                        style={baseStyles.nftPreviewImage}
-                    />
-                )}
+                {mediaType !== NFTMediaType.IMAGE &&
+                    mediaType !== NFTMediaType.VIDEO && (
+                        <NFTImage
+                            uri={NFTPlaceholder}
+                            style={baseStyles.nftPreviewImage}
+                        />
+                    )}
 
                 {isPendingTx && (
                     <BaseView
