@@ -56,11 +56,11 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
         if (isMediaLoading) return <NFTTransferCardSkeleton />
 
         if (tokenImage && tokenMime) {
-            if (MediaUtils.getMime(tokenMime, [NFTMediaType.IMAGE]))
+            if (MediaUtils.isValidMimeType(tokenMime, [NFTMediaType.IMAGE]))
                 // @ts-ignore
                 return <BaseImage uri={tokenImage} style={styles.nftImage} />
 
-            if (MediaUtils.getMime(tokenMime, [NFTMediaType.VIDEO]))
+            if (MediaUtils.isValidMimeType(tokenMime, [NFTMediaType.VIDEO]))
                 return (
                     <BaseView style={styles.nftImage}>
                         <Video

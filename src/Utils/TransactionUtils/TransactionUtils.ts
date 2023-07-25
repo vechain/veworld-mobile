@@ -809,7 +809,7 @@ export const prepareNonFungibleClause = (
 
     return [
         {
-            to: nft.contractAddress,
+            to: nft.address,
             value: 0,
             data: data,
         },

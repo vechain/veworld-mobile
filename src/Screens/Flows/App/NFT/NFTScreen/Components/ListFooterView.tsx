@@ -4,6 +4,8 @@ import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { NftSkeleton } from "./NftSkeleton"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { selectBlackListedCollections, useAppSelector } from "~Storage/Redux"
+import { isEmpty } from "lodash"
 
 type Props = {
     onGoToBlackListed?: () => void
@@ -15,30 +17,35 @@ type Props = {
 export const ListFooterView = memo(
     ({ onGoToBlackListed, isLoading, hasNext, renderExtraSkeleton }: Props) => {
         const { LL } = useI18nContext()
+        const blackListedCollections = useAppSelector(
+            selectBlackListedCollections,
+        )
 
         return (
             <>
-                {onGoToBlackListed && !hasNext && (
-                    <BaseTouchableBox
-                        containerStyle={baseStyles.marginVertical}
-                        action={onGoToBlackListed}
-                        children={
-                            <>
-                                <BaseView
-                                    w={100}
-                                    h={100}
-                                    flexDirection="row"
-                                    justifyContent="center"
-                                    alignItems="center">
-                                    <BaseText typographyFont="bodyBold">
-                                        {LL.HIDDEN_COLLECTIONS()}
-                                    </BaseText>
-                                    <BaseIcon name="chevron-down" />
-                                </BaseView>
-                            </>
-                        }
-                    />
-                )}
+                {!isEmpty(blackListedCollections) &&
+                    onGoToBlackListed &&
+                    !hasNext && (
+                        <BaseTouchableBox
+                            containerStyle={baseStyles.marginVertical}
+                            action={onGoToBlackListed}
+                            children={
+                                <>
+                                    <BaseView
+                                        w={100}
+                                        h={100}
+                                        flexDirection="row"
+                                        justifyContent="center"
+                                        alignItems="center">
+                                        <BaseText typographyFont="bodyBold">
+                                            {LL.HIDDEN_COLLECTIONS()}
+                                        </BaseText>
+                                        <BaseIcon name="chevron-down" />
+                                    </BaseView>
+                                </>
+                            }
+                        />
+                    )}
 
                 {isLoading && (
                     <NftSkeleton

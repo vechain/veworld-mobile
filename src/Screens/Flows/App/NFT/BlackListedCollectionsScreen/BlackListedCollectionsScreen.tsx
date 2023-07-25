@@ -3,14 +3,14 @@ import { FlatList, StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
 import { BackButtonHeader, BaseSpacer, BaseText, BaseView } from "~Components"
 import { selectBlackListedCollections, useAppSelector } from "~Storage/Redux"
-import { NFTView } from "../Components"
+import { NFTCollectionView } from "../NFTCollectionView"
 import { ScrollView } from "react-native-gesture-handler"
 import { isEmpty } from "lodash"
-import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 import { useI18nContext } from "~i18n"
 
 type NFTListProps = {
-    item: NonFungibleTokenCollection | NonFungibleToken
+    item: NonFungibleTokenCollection
     index: number
 }
 
@@ -26,7 +26,7 @@ export const BlackListedCollectionsScreen = () => {
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     const renderNftCollection = useCallback(({ item, index }: NFTListProps) => {
-        return <NFTView item={item} index={index} isCollection isHidden />
+        return <NFTCollectionView collection={item} index={index} isHidden />
     }, [])
 
     return (

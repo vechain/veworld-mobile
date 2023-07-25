@@ -10,14 +10,9 @@ export interface NFTContract {
     creator?: string
 }
 
-export interface NonFungibleTokenCollection {
-    name: string
-    address: string
+export interface NonFungibleTokenCollection extends ERC721Metadata {
     symbol: string
     creator: string
-    description: string
-    image: string
-    mimeType: string
     balanceOf: number
     hasCount: boolean
     isBlacklisted: boolean
@@ -26,11 +21,7 @@ export interface NonFungibleTokenCollection {
 
 export interface NonFungibleToken extends TokenMetadata, WithID {
     owner: string
-    contractAddress: string
     tokenId: string
-    tokenURI?: string
-    isBlacklisted: boolean
-    mimeType: string
 }
 
 export interface WithID {
@@ -72,9 +63,12 @@ export interface OpenSeaMetadata {
 }
 
 export interface ERC721Metadata {
+    tokenURI?: string
+    address: string
     name: string
     description: string
     image: string
+    mimeType?: string
 }
 
 export interface SelectedNFT {
@@ -101,5 +95,6 @@ export interface NFTTransferLog {
 export enum NFTMediaType {
     IMAGE = "image",
     VIDEO = "video",
+    UNKNOWN = "unknown",
     TEXT = "text", // mp4 appears as text sometimes
 }

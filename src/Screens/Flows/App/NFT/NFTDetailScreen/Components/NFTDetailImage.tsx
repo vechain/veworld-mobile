@@ -3,10 +3,10 @@ import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { SCREEN_WIDTH, COLORS } from "~Constants"
 import { BaseImage, BaseText, BaseView } from "~Components"
-import { MediaUtils } from "~Utils"
-import { NFTMediaType } from "~Model"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
+import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
+import { NFTMediaType } from "~Model"
 
 type Props = {
     uri: string
@@ -17,13 +17,17 @@ type Props = {
 
 export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
     const theme = useTheme()
+    const mediaType = useMimeTypeResolver({
+        imageUrl: uri,
+        mimeType: mime,
+    })
     const video = useRef(null)
 
     const renderMedia = useMemo(() => {
-        if (MediaUtils.getMime(mime, [NFTMediaType.IMAGE]))
+        if (mediaType === NFTMediaType.IMAGE)
             return <BaseImage uri={uri} style={baseStyles.nftImage} />
 
-        if (MediaUtils.getMime(mime, [NFTMediaType.VIDEO]))
+        if (mediaType === NFTMediaType.VIDEO)
             return (
                 <BaseView style={baseStyles.nftImage}>
                     <Video
@@ -46,7 +50,7 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
             )
 
         return <BaseImage uri={NFTPlaceholder} style={baseStyles.nftImage} />
-    }, [mime, uri])
+    }, [mediaType, uri])
 
     return (
         <BaseView>

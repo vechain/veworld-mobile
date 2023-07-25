@@ -7,7 +7,6 @@ import {
     getTokenTotalSupply,
     getTokenURI,
 } from "~Networking"
-import { fetchMetadata } from "./fetchMeta"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import {
     NETWORK_TYPE,
@@ -16,6 +15,7 @@ import {
 } from "~Model"
 import { URIUtils, error } from "~Utils"
 import axios from "axios"
+import { NFT_MIME_TYPE_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 export const parseCollectionMetadataFromRegistry = async (
     network: NETWORK_TYPE,
@@ -62,7 +62,7 @@ export const parseCollectionMetadataWithoutRegistry = async (
     isDarkTheme: boolean,
 ): Promise<NonFungibleTokenCollection> => {
     // Get the first NFT in the collection and use it to parse the collection metadata
-    const { data, pagination } = await getNftsForContract(
+    const { pagination } = await getNftsForContract(
         network,
         collection,
         selectedAccount,
@@ -72,21 +72,13 @@ export const parseCollectionMetadataWithoutRegistry = async (
     if (pagination.totalElements < 1)
         throw new Error("Failed to parse collection metadata from chain data")
 
-    const tokenURI = await getTokenURI(data[0].tokenId, collection, thor)
-    const tokenMetadata = await fetchMetadata(tokenURI)
-    const image = URIUtils.convertUriToUrl(
-        tokenMetadata?.image ??
-            (isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight),
-    )
-
     const nftCollection: NonFungibleTokenCollection = {
         address: collection,
         name: await getName(collection, thor),
         symbol: await getSymbol(collection, thor),
         creator: notAvailable,
-        description: tokenMetadata?.description ?? "",
-        image,
-        mimeType: await resolveMimeType(image),
+        description: notAvailable,
+        image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         balanceOf: pagination.totalElements,
         hasCount: pagination.hasCount,
         isBlacklisted: false,
@@ -97,32 +89,22 @@ export const parseCollectionMetadataWithoutRegistry = async (
 }
 
 export const parseNftMetadata = async (
-    network: NETWORK_TYPE,
     nft: NftItemResponse,
     thor: Connex.Thor,
     notAvailable: string,
     isDarkTheme: boolean,
 ): Promise<NonFungibleToken> => {
     const tokenURI = await getTokenURI(nft.tokenId, nft.contractAddress, thor)
-    const tokenMetadata = await fetchMetadata(tokenURI)
-
-    const image = URIUtils.convertUriToUrl(
-        tokenMetadata?.image ??
-            (isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight),
-    )
 
     const nftWithMetadata: NonFungibleToken = {
-        ...tokenMetadata,
         id: nft.contractAddress + nft.tokenId + nft.owner,
-        name: tokenMetadata?.name ?? notAvailable,
-        description: tokenMetadata?.description ?? notAvailable,
-        contractAddress: nft.contractAddress,
+        name: notAvailable,
+        description: notAvailable,
+        address: nft.contractAddress,
         tokenId: nft.tokenId,
         owner: nft.owner,
         tokenURI,
-        image,
-        mimeType: await resolveMimeType(image),
-        isBlacklisted: false,
+        image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
     }
 
     return nftWithMetadata
@@ -136,11 +118,14 @@ export const resolveMimeType = async (resource: string) => {
             return mime
         }
 
-        const res = await axios.head(URIUtils.convertUriToUrl(resource))
+        const res = await axios.head(URIUtils.convertUriToUrl(resource), {
+            timeout: NFT_MIME_TYPE_AXIOS_TIMEOUT,
+        })
+
         const contentType = res.headers["content-type"]
         return contentType ?? "image/png"
     } catch (err) {
-        error(err)
+        error(`Failed to resolve mime type for ${resource}`, err)
     }
     return "image/png"
 }
