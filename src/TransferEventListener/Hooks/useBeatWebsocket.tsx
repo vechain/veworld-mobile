@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react"
-import { URLUtils, error, info, warn } from "~Utils"
+import { URIUtils, error, info, warn } from "~Utils"
 import useWebSocket from "react-use-websocket"
 import { updateNodeError, useAppDispatch } from "~Storage/Redux"
 import { useCounter } from "~Hooks"
@@ -44,7 +44,7 @@ export const useBeatWebsocket = (
     }, [])
 
     const wsUrlForBeat = useMemo(() => {
-        return URLUtils.toWebsocketURL(
+        return URIUtils.toWebsocketURL(
             currentNetworkUrl,
             "/subscriptions/beat2",
         )
@@ -57,7 +57,7 @@ export const useBeatWebsocket = (
         onClose: ev => info(ev),
         shouldReconnect,
         retryOnError: true,
-        reconnectAttempts: 10_000,
-        reconnectInterval: 1_000,
+        reconnectAttempts: 10000,
+        reconnectInterval: 1000,
     })
 }

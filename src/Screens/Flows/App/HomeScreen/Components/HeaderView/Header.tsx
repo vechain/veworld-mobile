@@ -1,15 +1,10 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useBottomSheetModal, useTheme } from "~Hooks"
-import {
-    BaseIcon,
-    BaseText,
-    BaseView,
-    ScanBottomSheet,
-    useWalletConnect,
-} from "~Components"
+import { useCameraBottomSheet, useTheme } from "~Hooks"
+import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import HapticsService from "~Services/HapticsService"
 import { ScanTarget } from "~Constants"
 
 export const Header = memo(() => {
@@ -18,22 +13,22 @@ export const Header = memo(() => {
     const { LL } = useI18nContext()
     const { onPair } = useWalletConnect()
 
-    const goToWalletManagement = useCallback(() => {
-        nav.navigate(Routes.WALLET_MANAGEMENT)
-    }, [nav])
-
-    const {
-        ref: scanAddressSheetRef,
-        onOpen: openScanAddressSheet,
-        onClose: closeScanAddressSheetRef,
-    } = useBottomSheetModal()
-
     const onScan = useCallback(
         (uri: string) => {
+            HapticsService.triggerImpact({ level: "Light" })
             onPair(uri)
         },
         [onPair],
     )
+
+    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
+        onScan,
+        target: ScanTarget.WALLET_CONNECT,
+    })
+
+    const goToWalletManagement = useCallback(() => {
+        nav.navigate(Routes.WALLET_MANAGEMENT)
+    }, [nav])
 
     return (
         <BaseView
@@ -50,11 +45,12 @@ export const Header = memo(() => {
 
             <BaseView flexDirection="row">
                 <BaseIcon
-                    name={"flip-horizontal"}
+                    name={"qrcode-scan"}
                     size={24}
                     color={theme.colors.text}
-                    action={openScanAddressSheet}
+                    action={handleOpenCamera}
                     mx={12}
+                    haptics="Light"
                 />
 
                 <BaseIcon
@@ -62,14 +58,11 @@ export const Header = memo(() => {
                     size={24}
                     bg={theme.colors.secondary}
                     action={goToWalletManagement}
+                    haptics="Light"
                 />
             </BaseView>
-            <ScanBottomSheet
-                ref={scanAddressSheetRef}
-                onClose={closeScanAddressSheetRef}
-                onScan={onScan}
-                target={ScanTarget.WALLET_CONNECT}
-            />
+
+            {RenderCameraModal}
         </BaseView>
     )
 })

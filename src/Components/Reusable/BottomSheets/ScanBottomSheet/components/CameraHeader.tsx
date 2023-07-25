@@ -1,19 +1,28 @@
 import React from "react"
-import { BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import PlatformUtils from "~Utils/PlatformUtils" // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/748) remove this circular dependency
+import { COLORS } from "~Constants"
 
-export const CameraHeader = () => {
+export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
     const { LL } = useI18nContext()
 
     return (
         <BaseView
             flexDirection="row"
             style={baseStyles.container}
+            alignItems="center"
             justifyContent="center"
-            w={100}
-            alignItems="center">
+            w={100}>
+            <BaseIcon
+                name="close"
+                action={onClose}
+                haptics="Light"
+                color={COLORS.WHITE}
+                style={baseStyles.icon}
+            />
+
             <BaseText typographyFont="subTitle" color="white">
                 {LL.TITLE_SCAN_QRCODE()}
             </BaseText>
@@ -27,6 +36,6 @@ const baseStyles = StyleSheet.create({
     },
     icon: {
         position: "absolute",
-        left: PlatformUtils.isIOS() ? 20 : 8,
+        left: 24,
     },
 })

@@ -50,7 +50,7 @@ const en: BaseTranslation = {
     BTN_BACKUP_MENMONIC: "Backup phrase",
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
-   
+
 
     // BODY
     BD_GDPR:
@@ -76,7 +76,7 @@ const en: BaseTranslation = {
     BD_MNEMONIC_SUBTITLE:
         "Your Secret Recovery Phrase makes it easy to back up and restore your account.",
     BD_USER_PASSWORD_CONFIRM: "Confirm your PIN",
-    BD_USER_PASSWORD_ERROR: "  PIN doesn't match. Try again.",
+    BD_USER_PASSWORD_ERROR: "<><> PIN doesn't match.",
     BD_USER_EDIT_PASSWORD_ERROR: "Old PIN can't be the same as new PIN",
     BD_IMPORT_WALLET_TYPE: "Select the type of wallet you want to import",
     BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12-word recovery phrase.",
@@ -117,8 +117,8 @@ const en: BaseTranslation = {
     BD_USD: "USD",
     BD_EUR: "EUR",
     BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
-    BD_CONTACTS_LIST: "Your contact list", 
-    BD_CONTACTS_LIST_DISCLAIMER: "Add friends and addresses you trust", 
+    BD_CONTACTS_LIST: "Your contact list",
+    BD_CONTACTS_LIST_DISCLAIMER: "Add friends and addresses you trust",
     BD_ADD_CONTACT: "Add contact details",
     BD_ADD_CONTACT_DISCLAIMER: "Insert the required data to add a new contact",
     BD_CONTACT_NAME: "Contact name",
@@ -137,7 +137,7 @@ const en: BaseTranslation = {
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
     BD_APP_BLOCKED: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
- 
+
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
     TITLE_ONBARDING_SLIDE_01: "Seamlessly manage your crypto",
@@ -183,6 +183,8 @@ const en: BaseTranslation = {
     TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
     TITLE_DISCOVER: "Discover",
     TITLE_BACKUP_YOUR_PHRASE: "Backup your phrase",
+    TITLE_QR_CODE_FOR_ACCOUNT: "Your QR Code for {accountAlias: string}",
+    TITLE_RENAME: "Rename {type: string}",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE: "Which kind of wallet do you want to import?",
@@ -201,8 +203,8 @@ const en: BaseTranslation = {
     SB_SELECT_LANGUAGE: "Select your language",
     SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
     SB_CAMERA_ANAVAILABILITY: "Your device does not support this operation.",
-    SB_YOUR_TOKENS : "Your tokens",
-    SB_YOUR_NFTS : "Your collections",
+    SB_YOUR_TOKENS: "Your tokens",
+    SB_YOUR_NFTS: "Your collections",
     SB_CONFIRM_OPERATION: "Confirm the operation?",
     SB_CONTACT_LIST_EMPTY: "Your contact list is empty",
     SB_CREATE_ONE: "Create one",
@@ -378,6 +380,10 @@ const en: BaseTranslation = {
     NOTIFICATION_warning_wallet_connect_connection_could_delay: "Connecting may take a few seconds.",
     NOTIFICATION_wallet_connect_error_pairing: "Error pairing with the app, please generate a new QR CODE.",
     NOTIFICATION_wallet_connect_incompatible_dapp: "The requested dapp is not compatible with VeWorld.",
+    NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: "The DApp is not verified on Wallet Connect",
+    NOTIFICATION_DAPP_INVALID_REQUEST: "The DApp made an invalid request",
+    NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: "The DApp requested an invalid account",
+    NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: "The DApp requested an account that was not found",
     NOTIFICATION_wallet_connect_not_initialized: "Wallet Connect not initialized.",
     NOTIFICATION_wallet_connect_successfull_connection: "Successfully connected to {name : string}.",
     NOTIFICATION_wallet_connect_sign_success: "Certificate signed successfully.",
@@ -388,7 +394,7 @@ const en: BaseTranslation = {
     NOTIFICATION_wallet_connect_error_on_transaction: "Error executing the transaction.",
     NOTIFICATION_wallet_connect_invalid_uri: "Invalid Wallet Connect URI.",
     NOTIFICATION_wallet_connect_error_during_signing: "Something went wrong while signing the message",
-   
+
     // Connected apps
     CONNECTED_APP_TITLE: "Connected app",
     CONNECTED_APP_REQUEST: "External app connection",
@@ -397,10 +403,10 @@ const en: BaseTranslation = {
     CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: "\u25CF Request transactions to send to Vechain Thor",
     CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
     CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
-    CONNECTED_APP_SIGN_REQUEST_DESCRIPTION:  "Your Signature is being requested to sign a certificate",
+    CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: "Your Signature is being requested to sign a certificate",
     CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign and Send a transaction",
     CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to sign and send a transaction",
-   
+
     CONNECTED_APP_SELECTED_ACCOUNT_LABEL: "Account",
     CONNECTED_APP_SELECTED_ORIGIN_LABEL: "Origin",
     CONNECTED_APP_SELECTED_PURPOSE_LABEL: "Purpose",
@@ -415,9 +421,9 @@ const en: BaseTranslation = {
     CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: "You have no connected apps. Once you have some, they will displayed here.",
     ADD_APP: "Add app",
     CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: "Confirming this you will disconnect the {name: string} app from {alias: string}",
-    
-    CONNECTED_APP_DETAILS_TITLE: "Connected app",   
-    CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",   
+
+    CONNECTED_APP_DETAILS_TITLE: "Connected app",
+    CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",
     CONNECTED_APP_CONNECTION_REQUESTS: "Connection requests",
     CONNECTED_APP_DESCRIPTION: "Description",
 
@@ -429,7 +435,8 @@ const en: BaseTranslation = {
     RESTORE_NFTS: "Restore your Collections or NFTs",
     COLLECTIONS: "Collections",
     NO_HIDDEN_COLLECTIONS: "You don't have any hidden {name: string}",
-    DONT_SEE_NFTS: "Don't see your NFTs?",
+    DONT_SEE_NFTS_1: "Don't see your NFTs?",
+    DONT_SEE_NFTS_2: "Try receiving one",
     IMPORT_NFT: "Import NFT",
     RECEIVE_NFT: "Receive NFT",
     NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
@@ -441,6 +448,8 @@ const en: BaseTranslation = {
     RECAP: "Recap",
     COLLECTION_NAME: "Collection name",
     UNKNOWN_COLLECTION: "Unknown collection name",
+    ESTIMATED_GAS_FEE: "Estimated gas fee",
+    ESTIMATED_TIME: "Estimated time",
 
     // Onboarding
 
@@ -456,7 +465,7 @@ const en: BaseTranslation = {
     // Settings Currencies
 
     SETTINGS_CURRENCIES_CONVERT_TO_FIAT: "Convert balances to fiat",
-    
+
     // Settings About
 
     SETTINGS_ABOUT_OFFICIAL_SITE: "Official site",
@@ -542,13 +551,19 @@ const en: BaseTranslation = {
     SEND_CREATE_CONTACT_ADDRESS: "Contact address",
     SEND_LEDGER_TITLE: "Ledger verification",
     SEND_LEDGER_TITLE_SB: "Please follow the instructions below to sign the transaction with your Ledger",
+    LEDGER_CERT_TITLE_SB: "Please follow the instructions below to sign the certificate with your Ledger",
     SEND_LEDGER_VALIDATE_TRANSACTION: "Validate transaction",
     SEND_LEDGER_CHECK_CONNECTION: "We are checking your ledger connection",
     SEND_LEDGER_CHECK_CONNECTION_SB: "Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open",
     SEND_LEDGER_SIGN_DATA: "We are signing your transaction",
     SEND_LEDGER_SIGN_DATA_SB: "We are signing your transaction with your Ledger, please confirm the transaction on your device when required",
+    CERT_LEDGER_SIGN_DATA: "We are signing your certificate",
+    CERT_LEDGER_SIGN_DATA_SB: "We are signing your certificate with your Ledger, please confirm the signature on your device when required",
     SEND_LEDGER_TX_READY: "Transaction is ready",
+    LEDGER_DELEGATION_NOT_SUPPORTED: "Delegated hardware wallet not supported yet",
+    LEDGER_CERTIFICATE_READ: "Certificate is ready",
     SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",
+    LEDGER_CERTIFICATE_READ_SB: "The certificate is ready to be sent to the DApp, press confirm to continue",
     SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low",
     SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you dont have any {tokenName: string} in your wallet",
 
@@ -566,7 +581,7 @@ const en: BaseTranslation = {
 
     // Wallet Titles
 
-    // Wallet 
+    // Wallet
     WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: "We need bluetooth and location permissions to perform bluetooth scanning",
     WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: "Give permissions",
     WALLET_LEDGER_SELECT_DEVICE_TITLE: "Import ledger",

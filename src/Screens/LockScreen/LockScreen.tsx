@@ -12,11 +12,13 @@ import { useI18nContext } from "~i18n"
 import { LOCKSCREEN_SCENARIO } from "./Enums"
 import { useOnDigitPress } from "./useOnDigitPress"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
+import { isSmallScreen } from "~Constants"
 
 type Props = {
     onSuccess: (password: string) => void
     scenario: LOCKSCREEN_SCENARIO
     isValidatePassword?: boolean
+    isSafeView?: boolean
 }
 
 type Titles = {
@@ -27,7 +29,12 @@ type Titles = {
 const digitNumber = 6
 
 export const LockScreen: React.FC<Props> = memo(
-    ({ onSuccess, scenario, isValidatePassword = true }) => {
+    ({
+        onSuccess,
+        scenario,
+        isValidatePassword = true,
+        isSafeView = false,
+    }) => {
         const { LL } = useI18nContext()
 
         const { validatePassword } = usePasswordValidation()
@@ -47,7 +54,6 @@ export const LockScreen: React.FC<Props> = memo(
                     })
                 } else {
                     onSuccess(pin)
-                    return
                 }
             },
             [onSuccess, validatePassword],
@@ -135,30 +141,50 @@ export const LockScreen: React.FC<Props> = memo(
         }, [LL, scenario])
 
         return (
-            <BaseSafeArea grow={1}>
-                <BaseSpacer height={20} />
-                <BaseView mx={20} alignItems="center">
-                    <BaseView alignSelf="flex-start">
-                        <BaseText typographyFont="title">{title}</BaseText>
+            <SafeAreaHOC
+                children={
+                    <>
+                        <BaseSpacer height={20} />
+                        <BaseView mx={24} alignItems="center">
+                            <BaseView alignSelf="flex-start">
+                                <BaseText typographyFont="title">
+                                    {title}
+                                </BaseText>
+                                <BaseText typographyFont="body" my={10}>
+                                    {subTitle}
+                                </BaseText>
+                            </BaseView>
 
-                        <BaseText typographyFont="body" my={10}>
-                            {subTitle}
-                        </BaseText>
-                    </BaseView>
-                    <BaseSpacer height={62} />
-                    <PasswordPins
-                        digitNumber={digitNumber}
-                        pin={pin}
-                        isPinError={isError}
-                    />
-                    <NumPad
-                        onDigitPress={handleOnDigitPress}
-                        onDigitDelete={onDigitDelete}
-                    />
-                </BaseView>
+                            <BaseSpacer height={isSmallScreen ? 32 : 62} />
 
-                <BaseSpacer height={40} />
-            </BaseSafeArea>
+                            <PasswordPins
+                                digitNumber={digitNumber}
+                                pin={pin}
+                                isPinError={isError}
+                            />
+                            <NumPad
+                                onDigitPress={handleOnDigitPress}
+                                onDigitDelete={onDigitDelete}
+                            />
+                        </BaseView>
+                    </>
+                }
+                isSafeView={isSafeView}
+            />
         )
     },
 )
+
+const SafeAreaHOC = ({
+    isSafeView,
+    children,
+}: {
+    isSafeView: boolean
+    children: React.ReactNode
+}) => {
+    if (isSafeView) {
+        return <BaseSafeArea grow={1}>{children}</BaseSafeArea>
+    } else {
+        return <BaseView flexGrow={1}>{children}</BaseView>
+    }
+}

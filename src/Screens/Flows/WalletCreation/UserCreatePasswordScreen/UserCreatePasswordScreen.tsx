@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
 import { usePasswordValidation } from "~Hooks"
 import { valueToHP } from "~Constants"
+import HapticsService from "~Services/HapticsService"
 
 const digitNumber = 6
 export const UserCreatePasswordScreen = () => {
@@ -34,6 +35,7 @@ export const UserCreatePasswordScreen = () => {
     const onFinishCallback = useCallback(
         async (insertedPin: string) => {
             await updatePassword(insertedPin)
+            await HapticsService.triggerNotification({ level: "Success" })
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.SECRET,
                 userPin: insertedPin,
@@ -49,20 +51,28 @@ export const UserCreatePasswordScreen = () => {
         useOnDigitPressWithConfirmation({
             digitNumber,
             onFinishCallback,
-            onConfirmationError: () =>
+            onConfirmationError: async () => {
+                await HapticsService.triggerNotification({ level: "Error" })
                 setIsConfirmationError({
                     type: PinVerificationError.VALIDATE_PIN,
                     value: true,
-                }),
+                })
+            },
         })
 
     const handleOnDigitPress = useCallback(
-        (digit: string) => {
+        async (digit: string) => {
+            await HapticsService.triggerImpact({ level: "Light" })
             setIsConfirmationError({ type: undefined, value: false })
             onDigitPress(digit)
         },
         [onDigitPress],
     )
+
+    const handleOnDigitDelete = useCallback(async () => {
+        await HapticsService.triggerNotification({ level: "Warning" })
+        onDigitDelete()
+    }, [onDigitDelete])
 
     return (
         <BaseSafeArea grow={1}>
@@ -83,7 +93,7 @@ export const UserCreatePasswordScreen = () => {
                         typesetting industry
                     </BaseText>
                 </BaseView>
-                <BaseSpacer height={valueToHP[60]} />
+                <BaseSpacer height={valueToHP[40]} />
                 <PasswordPins
                     pin={pin}
                     digitNumber={digitNumber}
@@ -92,7 +102,7 @@ export const UserCreatePasswordScreen = () => {
                 />
                 <NumPad
                     onDigitPress={handleOnDigitPress}
-                    onDigitDelete={onDigitDelete}
+                    onDigitDelete={handleOnDigitDelete}
                 />
             </BaseView>
 

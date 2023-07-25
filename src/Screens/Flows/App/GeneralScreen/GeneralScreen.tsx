@@ -1,13 +1,10 @@
-import { useNavigation, useTheme } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { ScrollView, StyleSheet } from "react-native"
 import {
-    BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     EnableFeature,
+    Layout,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
@@ -17,7 +14,7 @@ import {
     SelectLanguageBottomSheet,
 } from "./Components"
 import { useBottomSheetModal } from "~Hooks"
-import { LANGUAGE } from "~Constants"
+import { LANGUAGE, isSmallScreen } from "~Constants"
 import {
     useAppDispatch,
     useAppSelector,
@@ -26,16 +23,9 @@ import {
     setHideTokensWithNoBalance,
     setLanguage,
 } from "~Storage/Redux"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 export const GeneralScreen = () => {
-    const nav = useNavigation()
-
-    const theme = useTheme()
-
     const { LL } = useI18nContext()
-
-    const tabBarHeight = useBottomTabBarHeight()
 
     const {
         ref: selectLanguageSheetRef,
@@ -50,7 +40,7 @@ export const GeneralScreen = () => {
     const hideTokensWithNoBalance = useAppSelector(
         selectHideTokensWithNoBalance,
     )
-    const goBack = useCallback(() => nav.goBack(), [nav])
+
     const toggleTokensHiddenSwitch = useCallback(
         (newValue: boolean) => {
             dispatch(setHideTokensWithNoBalance(newValue))
@@ -68,25 +58,11 @@ export const GeneralScreen = () => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={[
-                    baseStyles.scrollViewContainer,
-                    { paddingBottom: tabBarHeight },
-                ]}
-                style={baseStyles.scrollView}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-                <BaseSpacer height={12} />
-                <BaseView mx={20}>
+        <Layout
+            safeAreaTestID="General_Screen"
+            isScrollEnabled={isSmallScreen}
+            body={
+                <BaseView pt={16}>
                     <BaseText typographyFont="title">
                         {LL.TITLE_GENERAL()}
                     </BaseText>
@@ -151,20 +127,7 @@ export const GeneralScreen = () => {
 
                     <BaseSpacer height={20} />
                 </BaseView>
-            </ScrollView>
-        </BaseSafeArea>
+            }
+        />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-    scrollViewContainer: {
-        width: "100%",
-    },
-    scrollView: {
-        width: "100%",
-    },
-})

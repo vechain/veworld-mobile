@@ -71,12 +71,21 @@ jest.mock("react-native-wagmi-charts", () => {
     }
 })
 jest.mock("expo-camera", () => ({
-    Camera: {
-        getCameraPermissionsAsync: jest.fn(),
-        requestCameraPermissionsAsync: jest.fn(),
+    Camera: componentMock,
+    CameraType: {
+        back: "back",
     },
 }))
-jest.mock("expo-barcode-scanner", () => {})
+jest.mock("expo-barcode-scanner", () => ({
+    BarCodeScanner: {
+        Constants: {
+            BarCodeType: {
+                qr: "qr",
+            },
+        },
+    },
+}))
+
 jest.mock("@react-navigation/bottom-tabs", () => ({
     ...jest.requireActual("@react-navigation/bottom-tabs"),
     useBottomTabBarHeight: jest.fn(() => 10),

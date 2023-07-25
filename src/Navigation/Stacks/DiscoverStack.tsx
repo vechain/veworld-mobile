@@ -4,7 +4,6 @@ import {
     AssetDetailScreen,
     BuyScreen,
     DiscoverScreen,
-    InsertAddressSendScreen,
     LedgerSignTransaction,
     SelectAmountSendScreen,
     SelectTokenSendScreen,
@@ -29,11 +28,6 @@ export type RootStackParamListDiscover = {
         token: FungibleTokenWithBalance
         initialRoute: string
     }
-    [Routes.INSERT_ADDRESS_SEND]: {
-        token: FungibleTokenWithBalance
-        amount: string
-        initialRoute: string
-    }
     [Routes.TRANSACTION_SUMMARY_SEND]: {
         token: FungibleTokenWithBalance
         amount: string
@@ -42,7 +36,8 @@ export type RootStackParamListDiscover = {
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
-        transaction: Transaction.Body
+        delegationSignature?: string
+        transaction: Transaction
         initialRoute: string
     }
 }
@@ -86,12 +81,6 @@ export const DiscoverStack = () => {
                 <Screen
                     name={Routes.SELECT_AMOUNT_SEND}
                     component={SelectAmountSendScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.INSERT_ADDRESS_SEND}
-                    component={InsertAddressSendScreen}
                     options={{ headerShown: false }}
                 />
 

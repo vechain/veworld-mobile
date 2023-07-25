@@ -76,6 +76,7 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                     />
                     {rightIcon && (
                         <BaseIcon
+                            haptics="Light"
                             action={onIconPress}
                             name={rightIcon}
                             size={24}

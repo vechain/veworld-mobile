@@ -1,20 +1,18 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
-    BaseView,
     SwapCard,
     FadeoutButton,
     TransferCard,
     TransactionStatusBox,
-    BackButtonHeader,
     NFTTransferCard,
+    Layout,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { ScrollView, StyleSheet } from "react-native"
-import { useBottomSheetModal, usePlatformBottomInsets } from "~Hooks"
+import { Linking } from "react-native"
+import { useBottomSheetModal } from "~Hooks"
 import { DateUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
@@ -38,8 +36,17 @@ import {
 } from "./Components"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { addContact } from "~Storage/Redux/Actions/Contacts"
-import { selectActivity, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectActivity,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import {
+    ExplorerLinkType,
+    getExplorerLink,
+} from "~Utils/AddressUtils/AddressUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -49,7 +56,7 @@ type Props = NativeStackScreenProps<
 export const ActivityDetailsScreen = ({ route }: Props) => {
     const { activity, token, isSwap, decodedClauses } = route.params
 
-    const { calculateBottomInsets } = usePlatformBottomInsets()
+    const network = useAppSelector(selectSelectedNetwork)
 
     const { LL, locale } = useI18nContext()
 
@@ -107,6 +114,13 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     const isNFTtransfer = useMemo(() => {
         return activity.type === ActivityType.NFT_TRANSFER
     }, [activity.type])
+
+    const explorerUrl = useMemo(() => {
+        if (activity.isTransaction)
+            return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${
+                activity.id
+            }`
+    }, [activity, network])
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
@@ -194,98 +208,100 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     )
 
     return (
-        <BaseSafeArea grow={1} testID="Activity_Details_Screen">
-            <BackButtonHeader hasBottomSpacer={false} />
+        <>
+            <Layout
+                safeAreaTestID="Activity_Details_Screen"
+                body={
+                    <>
+                        <BaseText typographyFont="title" pt={12}>
+                            {getActivityTitle(activity, LL, isSwap)}
+                        </BaseText>
 
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={{ paddingBottom: calculateBottomInsets }}
-                style={baseStyles.scrollView}>
-                <BaseView mx={24}>
-                    <BaseText typographyFont="title">
-                        {getActivityTitle(activity, LL, isSwap)}
-                    </BaseText>
+                        <BaseSpacer height={16} />
 
-                    <BaseSpacer height={16} />
+                        <BaseText typographyFont="subSubTitleLight">
+                            {dateTimeActivity}
+                        </BaseText>
 
-                    <BaseText typographyFont="subSubTitleLight">
-                        {dateTimeActivity}
-                    </BaseText>
+                        <BaseSpacer height={16} />
 
-                    <BaseSpacer height={16} />
+                        {isPendingOrFailedActivity && (
+                            <>
+                                <TransactionStatusBox
+                                    status={
+                                        activityFromStore?.status ??
+                                        activity.status ??
+                                        ActivityStatus.SUCCESS
+                                    }
+                                />
+                                <BaseSpacer height={16} />
+                            </>
+                        )}
 
-                    {isPendingOrFailedActivity && (
-                        <>
-                            <TransactionStatusBox
-                                status={
-                                    activityFromStore?.status ??
-                                    activity.status ??
-                                    ActivityStatus.SUCCESS
+                        {/* Transfer card shows the Address/Addresses involved in the given activity */}
+                        {isSwap && swapResult ? (
+                            <SwapCard
+                                paidTokenAddress={swapResult.paidTokenAddress}
+                                paidTokenAmount={swapResult.paidAmount}
+                                receivedTokenAddress={
+                                    swapResult.receivedTokenAddress
                                 }
+                                receivedTokenAmount={swapResult.receivedAmount}
+                                onAddCustomToken={onAddCustomToken}
                             />
-                            <BaseSpacer height={16} />
-                        </>
-                    )}
+                        ) : (
+                            activity.from && (
+                                <TransferCard
+                                    fromAddress={activity.from}
+                                    toAddresses={[...new Set(activity.to)]}
+                                    onAddContactPress={onAddContactPress}
+                                />
+                            )
+                        )}
 
-                    {/* Transfer card shows the Address/Addresses involved in the given activity */}
-                    {isSwap && swapResult ? (
-                        <SwapCard
-                            paidTokenAddress={swapResult.paidTokenAddress}
-                            paidTokenAmount={swapResult.paidAmount}
-                            receivedTokenAddress={
-                                swapResult.receivedTokenAddress
-                            }
-                            receivedTokenAmount={swapResult.receivedAmount}
-                            onAddCustomToken={onAddCustomToken}
+                        <BaseSpacer height={20} />
+
+                        {isNFTtransfer && (
+                            <>
+                                <NFTTransferCard
+                                    collectionAddress={
+                                        (activity as NonFungibleTokenActivity)
+                                            .contractAddress
+                                    }
+                                    tokenId={
+                                        (activity as NonFungibleTokenActivity)
+                                            .tokenId
+                                    }
+                                />
+
+                                <BaseSpacer height={20} />
+                            </>
+                        )}
+
+                        <BaseText typographyFont="subTitleBold">
+                            {LL.DETAILS()}
+                        </BaseText>
+
+                        <BaseSpacer height={2} />
+
+                        {/* Render Activity Details based on the 'activity.type' */}
+                        {renderActivityDetails}
+                    </>
+                }
+                footer={
+                    explorerUrl && (
+                        <FadeoutButton
+                            title={LL.VIEW_ON_EXPLORER().toUpperCase()}
+                            action={() => {
+                                Linking.openURL(explorerUrl)
+                            }}
+                            bottom={0}
+                            mx={0}
+                            width={"auto"}
                         />
-                    ) : (
-                        activity.from && (
-                            <TransferCard
-                                fromAddress={activity.from}
-                                toAddresses={[...new Set(activity.to)]}
-                                onAddContactPress={onAddContactPress}
-                            />
-                        )
-                    )}
-
-                    <BaseSpacer height={20} />
-
-                    {isNFTtransfer && (
-                        <>
-                            <NFTTransferCard
-                                collectionAddress={
-                                    (activity as NonFungibleTokenActivity)
-                                        .contractAddress
-                                }
-                                tokenId={
-                                    (activity as NonFungibleTokenActivity)
-                                        .tokenId
-                                }
-                            />
-
-                            <BaseSpacer height={20} />
-                        </>
-                    )}
-
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.DETAILS()}
-                    </BaseText>
-
-                    <BaseSpacer height={2} />
-
-                    {/* Render Activity Details based on the 'activity.type' */}
-                    {renderActivityDetails}
-                </BaseView>
-            </ScrollView>
-
-            {activity.isTransaction && (
-                <FadeoutButton
-                    title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                    action={() => {}}
-                />
-            )}
+                    )
+                }
+            />
 
             <ContactManagementBottomSheet
                 ref={addContactSheet}
@@ -305,16 +321,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 onClose={closeAddCustomTokenSheet}
                 tokenAddress={customTokenAddress}
             />
-        </BaseSafeArea>
+        </>
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-    scrollView: {
-        width: "100%",
-    },
-})

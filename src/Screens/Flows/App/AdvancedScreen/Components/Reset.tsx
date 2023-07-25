@@ -11,6 +11,11 @@ export const Reset: React.FC = () => {
     const onReset = useCallback(() => nav.navigate(Routes.RESET_APP), [nav])
 
     return (
-        <BaseTouchable action={onReset} title={LL.BTN_RESET_APP()} underlined />
+        <BaseTouchable
+            action={onReset}
+            title={LL.BTN_RESET_APP()}
+            underlined
+            haptics="Light"
+        />
     )
 }

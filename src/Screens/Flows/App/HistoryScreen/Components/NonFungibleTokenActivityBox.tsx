@@ -7,7 +7,7 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Activity, ActivityStatus, NonFungibleTokenActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
-import { ActivityStatusIndicator } from "."
+import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 import { HistoryReceiveNFTIconSVG, HistorySendNFTIconSVG } from "~Assets"
 
 type Props = {
@@ -48,6 +48,7 @@ export const NonFungibleTokenActivityBox: React.FC<Props> = memo(
 
         return (
             <BaseTouchable
+                haptics="Light"
                 action={() => onPress(activity)}
                 style={styles.container}>
                 <BaseView

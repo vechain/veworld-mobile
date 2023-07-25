@@ -38,11 +38,11 @@ export const HeaderComponent = memo(
         return (
             <>
                 <BaseView flexDirection="row" alignItems="flex-end">
-                    {MediaUtils.getMime(collection?.icon.mime!, [
+                    {MediaUtils.getMime(collection?.mimeType, [
                         NFTMediaType.IMAGE,
                     ]) && (
                         <BaseImage
-                            uri={collection!.icon.url}
+                            uri={collection?.image}
                             style={baseStyles.nftHeaderImage}
                         />
                     )}
@@ -57,6 +57,7 @@ export const HeaderComponent = memo(
 
                         <BaseView style={baseStyles.buttonWidth} mt={4}>
                             <BaseButton
+                                haptics="Light"
                                 action={onToggleCollection}
                                 size="sm"
                                 variant={isBlacklisted ? "solid" : "outline"}

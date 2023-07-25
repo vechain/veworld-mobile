@@ -8,8 +8,8 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { SecurityDowngradeScreen } from "~Screens"
-import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
+import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 
 type Props = {
     children: React.ReactNode
@@ -27,6 +27,7 @@ export const SecurityProvider = ({ children }: Props) => {
         securityDowngrade()
     }, [securityDowngrade])
 
+    // App is blocked because a critical operation has failed and the user needs to reset wallet
     if (isAppBlocked)
         return (
             <AnimatedSplashScreen playAnimation={true}>
@@ -34,6 +35,7 @@ export const SecurityProvider = ({ children }: Props) => {
             </AnimatedSplashScreen>
         )
 
+    // App is blocked and the user needs to re-enable bioemtrics or reset wallet
     if (isSecurityDowngrade)
         return (
             <AnimatedSplashScreen playAnimation={true}>
@@ -41,6 +43,7 @@ export const SecurityProvider = ({ children }: Props) => {
             </AnimatedSplashScreen>
         )
 
+    // App is locked and the user needs to unlock it
     if (showLockScreen)
         return (
             <AnimatedSplashScreen
@@ -49,6 +52,7 @@ export const SecurityProvider = ({ children }: Props) => {
             </AnimatedSplashScreen>
         )
 
+    // App is Unlocked or user is using biometrics to unlock
     return (
         <AnimatedSplashScreen
             playAnimation={isSplashHidden || isBiometricsSucceeded}>

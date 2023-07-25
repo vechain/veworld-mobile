@@ -34,6 +34,7 @@ export const NetworkBox: React.FC<Props> = ({
 
     return (
         <BaseTouchableBox
+            haptics="Light"
             flex={flex}
             activeOpacity={activeOpacity}
             action={handleOnPress}

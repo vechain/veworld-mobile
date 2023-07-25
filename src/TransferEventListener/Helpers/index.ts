@@ -14,13 +14,12 @@ import { IncomingTransferResponse } from "~Networking"
 export interface BaseTransferHandlerProps {
     visibleAccounts: AccountWithDevice[]
     transfer: IncomingTransferResponse
-    removeTransactionPending: (params: { txId: string }) => void
     informUser: (params: { accountAddress: string; txId?: string }) => void
     stateReconciliationAction: (params: { accountAddress: string }) => void
 }
 
 export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
-    fetchCollectionName: (address: string) => Promise<string>
+    thor: Connex.Thor
 }
 
 export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
@@ -32,7 +31,6 @@ export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
 export interface VETTransferHandlerProps {
     transfer: IncomingTransferResponse
     visibleAccounts: AccountWithDevice[]
-    removeTransactionPending: (params: { txId: string }) => void
     stateReconciliationAction: (params: { accountAddress: string }) => void
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }

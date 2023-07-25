@@ -97,6 +97,7 @@ export const AddContactScreen = () => {
                     <BaseSpacer height={20} />
 
                     <BaseButton
+                        haptics="Light"
                         action={onCreateContact}
                         w={100}
                         px={20}

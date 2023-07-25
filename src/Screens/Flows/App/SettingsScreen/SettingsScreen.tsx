@@ -1,28 +1,19 @@
 import React, { useCallback, useMemo } from "react"
-import { BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseText, BaseView, Layout } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { FlashList } from "@shopify/flash-list"
 import { StyleSheet, View } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { useScrollableList, useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType, isSmallScreen } from "~Constants"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
 
     const SCREEN_LIST = useMemo(() => getList(LL), [LL])
 
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(SCREEN_LIST, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
-
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-
-    const insets = useSafeAreaInsets()
-
-    const tabBarHeight = useBottomTabBarHeight()
 
     const renderSeparator = useCallback(
         () => <View style={themedStyles.separator} />,
@@ -41,48 +32,46 @@ export const SettingsScreen = () => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
-            <BaseText
-                typographyFont="largeTitle"
-                mx={20}
-                testID="settings-screen">
-                {LL.TITLE_SETTINGS()}
-            </BaseText>
-
-            <BaseSpacer height={20} />
-
-            <BaseView
-                flexDirection="row"
-                style={[
-                    themedStyles.list,
-                    { paddingBottom: tabBarHeight - insets.bottom },
-                ]}>
-                <FlashList
-                    data={SCREEN_LIST}
-                    contentContainerStyle={themedStyles.contentContainerStyle}
-                    ItemSeparatorComponent={renderSeparator}
-                    scrollEnabled={isListScrollable}
-                    onViewableItemsChanged={onViewableItemsChanged}
-                    viewabilityConfig={viewabilityConfig}
-                    keyExtractor={item => item.screenName}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={renderItem}
-                    estimatedItemSize={56}
-                    estimatedListSize={{
-                        height: 56 * SCREEN_LIST.length,
-                        width: 400,
-                    }}
-                />
-            </BaseView>
-        </BaseSafeArea>
+        <Layout
+            safeAreaTestID="SettingsScreen"
+            fixedHeader={
+                <BaseText
+                    typographyFont="largeTitle"
+                    testID="settings-screen"
+                    pb={16}>
+                    {LL.TITLE_SETTINGS()}
+                </BaseText>
+            }
+            bodyWithoutScrollView={
+                <BaseView flexDirection="row" style={[themedStyles.list]}>
+                    <FlashList
+                        data={SCREEN_LIST}
+                        contentContainerStyle={
+                            themedStyles.contentContainerStyle
+                        }
+                        ItemSeparatorComponent={renderSeparator}
+                        scrollEnabled={isSmallScreen}
+                        keyExtractor={item => item.screenName}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={renderItem}
+                        estimatedItemSize={56}
+                        estimatedListSize={{
+                            height: 56 * SCREEN_LIST.length,
+                            width: 400,
+                        }}
+                    />
+                </BaseView>
+            }
+            noBackButton
+        />
     )
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         contentContainerStyle: {
-            paddingHorizontal: 20,
+            paddingHorizontal: 24,
         },
         separator: {
             borderBottomColor: theme.colors.text,

@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useThor } from "~Components"
-import { NFTMeta, fetchMetadata } from "~Hooks/useNft/fetchMeta"
+import { resolveMimeType } from "~Hooks/useNft/Helpers"
+import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
 import { TokenMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
-import { error } from "~Utils"
+import { URIUtils, error } from "~Utils"
 
 /**
  * `useNonFungibleTokenInfo` is a hook for fetching and managing non-fungible token (NFT) information.
@@ -76,10 +77,11 @@ export const useNonFungibleTokenInfo = (
     useEffect(() => {
         if (tokenUri)
             fetchMetadata(tokenUri)
-                .then((nftMeta?: NFTMeta) => {
-                    setTokenMetadata(nftMeta?.tokenMetadata)
-                    setTokenImage(nftMeta?.imageUrl)
-                    setTokenMime(nftMeta?.imageType ?? "image/png")
+                .then((metadata?: TokenMetadata) => {
+                    setTokenMetadata(metadata)
+
+                    if (metadata?.image)
+                        setTokenImage(URIUtils.convertUriToUrl(metadata.image))
 
                     setIsMediaLoading(false)
                 })
@@ -90,13 +92,13 @@ export const useNonFungibleTokenInfo = (
                 })
     }, [tokenUri])
 
-    const fetchData = useCallback(
-        async (_tokenAddress: string) => {
-            return await getName(_tokenAddress, thor)
-        },
-        [thor],
-    )
-
+    useEffect(() => {
+        if (tokenMetadata?.image) {
+            resolveMimeType(tokenMetadata.image).then(mime =>
+                setTokenMime(mime),
+            )
+        }
+    }, [tokenMetadata])
     return {
         tokenMetadata,
         tokenUri,
@@ -104,6 +106,5 @@ export const useNonFungibleTokenInfo = (
         tokenImage,
         tokenMime,
         isMediaLoading,
-        fetchData,
     }
 }

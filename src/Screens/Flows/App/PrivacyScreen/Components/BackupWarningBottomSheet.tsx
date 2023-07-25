@@ -11,7 +11,7 @@ import {
     ScrollViewWithFooter,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { COLORS } from "~Constants"
+import { COLORS, isSmallScreen } from "~Constants"
 import { StyleSheet } from "react-native"
 import { PlatformUtils } from "~Utils"
 
@@ -44,6 +44,9 @@ export const BackupWarningBottomSheet = React.forwardRef<
         if (PlatformUtils.isAndroid() && isUpgradeSecurity) {
             return ["70%"]
         }
+
+        if (isSmallScreen) return ["80%"]
+
         return ["60%"]
     }, [isUpgradeSecurity])
 
@@ -65,7 +68,7 @@ export const BackupWarningBottomSheet = React.forwardRef<
 
                         <BaseButton
                             w={100}
-                            haptics="light"
+                            haptics="Light"
                             title={LL.COMMON_PROCEED()}
                             disabled={!isChecked}
                             action={handleOnProceed}

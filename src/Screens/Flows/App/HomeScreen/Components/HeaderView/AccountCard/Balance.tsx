@@ -50,7 +50,8 @@ export const Balance: React.FC<Props> = memo(
                         {LL.BD_YOUR_BALANCE()}
                     </BaseText>
                     <BaseIcon
-                        onPress={toggleVisible}
+                        action={toggleVisible}
+                        haptics="Light"
                         name={isVisible ? "eye-off" : "eye"}
                         color={theme.colors.textReversed}
                         size={18}

@@ -79,7 +79,7 @@ const baseStyles = StyleSheet.create({
     nftImage: {
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
-        width: SCREEN_WIDTH - 40,
+        width: "100%",
         height: SCREEN_WIDTH - 40,
         overflow: "hidden",
     },

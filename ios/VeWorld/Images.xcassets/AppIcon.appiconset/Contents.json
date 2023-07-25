@@ -43,6 +43,16 @@
       "size" : "40x40"
     },
     {
+      "idiom" : "iphone",
+      "scale" : "1x",
+      "size" : "57x57"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "57x57"
+    },
+    {
       "filename" : "Icon-App-60x60@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
@@ -55,10 +65,22 @@
       "size" : "60x60"
     },
     {
-      "filename" : "ItunesArtwork@2x.png",
+      "filename" : "AppIcon@1024 1.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
+    },
+    {
+      "filename" : "iTunesArtwork@1x.png",
+      "idiom" : "mac",
+      "scale" : "1x",
+      "size" : "512x512"
+    },
+    {
+      "filename" : "AppIcon@1024.png",
+      "idiom" : "mac",
+      "scale" : "2x",
+      "size" : "512x512"
     }
   ],
   "info" : {

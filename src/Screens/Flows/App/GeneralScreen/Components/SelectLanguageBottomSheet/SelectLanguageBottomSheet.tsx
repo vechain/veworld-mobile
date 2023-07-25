@@ -72,6 +72,7 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                     renderItem={({ item }) => {
                         return (
                             <BaseTouchableBox
+                                haptics="Light"
                                 action={() => {
                                     handleSelectLanguage(item as LANGUAGE)
                                 }}

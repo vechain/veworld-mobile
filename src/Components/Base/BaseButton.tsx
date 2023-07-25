@@ -9,16 +9,17 @@ import React, { useCallback, useMemo } from "react"
 import { ColorThemeType, typography, TFonts, COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
-import * as Haptics from "expo-haptics"
 import Lottie from "lottie-react-native"
 import { LoaderDark, LoaderLight } from "~Assets"
 import { StyleProps } from "react-native-reanimated"
+import HapticsService from "~Services/HapticsService"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     action: () => void
     disabled?: boolean
+    isDisabledTextOnly?: boolean
     variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
     textColor?: string
@@ -38,7 +39,7 @@ type Props = {
     fontWeight?: keyof typeof otherTypography.fontWeight
     fontFamily?: keyof typeof otherTypography.fontFamily
     selfAlign?: "auto" | FlexAlignType
-    haptics?: "light" | "medium" | "heavy"
+    haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
     leftIcon?: React.ReactNode
     rightIcon?: React.ReactNode
     isLoading?: boolean
@@ -56,6 +57,7 @@ export const BaseButton = ({
     size = "lg",
     radius = 16,
     disabled = false,
+    isDisabledTextOnly = false,
     leftIcon,
     rightIcon,
     isLoading = false,
@@ -71,26 +73,10 @@ export const BaseButton = ({
         baseStyles(variant === "link"),
     )
 
-    const onButtonPress = useCallback(async () => {
-        if (otherProps.haptics) {
-            switch (otherProps.haptics) {
-                case Haptics.ImpactFeedbackStyle.Light:
-                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-                    break
-
-                case Haptics.ImpactFeedbackStyle.Medium:
-                    await Haptics.impactAsync(
-                        Haptics.ImpactFeedbackStyle.Medium,
-                    )
-                    break
-
-                case Haptics.ImpactFeedbackStyle.Heavy:
-                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-                    break
-            }
-        }
-
+    const onButtonPress = useCallback(() => {
+        const { haptics } = otherProps
         otherProps.action()
+        haptics && HapticsService.triggerHaptics({ haptics })
     }, [otherProps])
 
     const bgColor = useMemo(() => {
@@ -131,11 +117,25 @@ export const BaseButton = ({
     }, [theme, invertLoaderColor])
 
     const calculateBackgroundColor = useMemo(() => {
+        if (disabled && isDisabledTextOnly) return bgColor
         if (disabled) return COLORS.DISABLED_GREY
 
         if (isSolidButton) return bgColor
         else return theme.colors.transparent
-    }, [bgColor, disabled, isSolidButton, theme.colors.transparent])
+    }, [
+        bgColor,
+        disabled,
+        isDisabledTextOnly,
+        isSolidButton,
+        theme.colors.transparent,
+    ])
+
+    const calculateTextColor = useMemo(() => {
+        return (
+            textColor ??
+            (isSolidButton ? theme.colors.background : theme.colors.text)
+        )
+    }, [isSolidButton, textColor, theme.colors.background, theme.colors.text])
 
     return (
         <TouchableOpacity
@@ -170,12 +170,7 @@ export const BaseButton = ({
             {leftIcon}
             {!isLoading ? (
                 <BaseText
-                    color={
-                        textColor ||
-                        (isSolidButton
-                            ? theme.colors.background
-                            : theme.colors.text)
-                    }
+                    color={calculateTextColor}
                     typographyFont={computedTypographyFont}
                     fontFamily={fontFamily}
                     fontWeight={fontWeight}

@@ -1,9 +1,6 @@
-import React, { memo } from "react"
+import React, { memo, useEffect } from "react"
 import { Pressable, View, StyleSheet } from "react-native"
-import {
-    RenderItemParams,
-    ShadowDecorator,
-} from "react-native-draggable-flatlist"
+import { RenderItemParams } from "react-native-draggable-flatlist"
 import Animated from "react-native-reanimated"
 import { BaseIcon } from "~Components"
 import { useThemedStyles } from "~Hooks"
@@ -11,42 +8,53 @@ import { ColorThemeType } from "~Constants"
 import { TokenCard } from "./TokenCard"
 import { useTokenAnimations } from "./useTokenAnimations"
 import { FungibleTokenWithBalance } from "~Model"
+import HapticsService from "~Services/HapticsService"
 
 interface IAnimatedTokenCard
     extends RenderItemParams<FungibleTokenWithBalance> {
     isEdit: boolean
+    isBalanceVisible: boolean
 }
 
 export const AnimatedTokenCard = memo(
-    ({ item, drag, isActive, isEdit }: IAnimatedTokenCard) => {
+    ({
+        item,
+        drag,
+        isActive,
+        isEdit,
+        isBalanceVisible,
+    }: IAnimatedTokenCard) => {
         const { styles } = useThemedStyles(baseStyles(isActive))
         const { animatedOpacity } = useTokenAnimations(isEdit)
 
+        useEffect(() => {
+            isEdit && HapticsService.triggerImpact({ level: "Light" })
+        }, [isActive, isEdit])
+
         return (
-            <ShadowDecorator>
-                <View style={styles.outerContainer}>
-                    <Animated.View>
-                        <Pressable
-                            onPressIn={isEdit ? drag : undefined}
-                            disabled={isActive}
-                            style={styles.pressable}>
-                            <View style={styles.animatedOuterContainer}>
-                                <Animated.View
-                                    style={[
-                                        animatedOpacity,
-                                        styles.animatedInnerContainer,
-                                    ]}>
-                                    <BaseIcon name={"drag"} size={28} />
-                                </Animated.View>
-                                <TokenCard
-                                    tokenWithBalance={item}
-                                    isEdit={isEdit}
-                                />
-                            </View>
-                        </Pressable>
-                    </Animated.View>
-                </View>
-            </ShadowDecorator>
+            <View style={styles.outerContainer}>
+                <Animated.View>
+                    <Pressable
+                        onPressIn={isEdit ? drag : undefined}
+                        disabled={isActive}
+                        style={styles.pressable}>
+                        <View style={styles.animatedOuterContainer}>
+                            <Animated.View
+                                style={[
+                                    animatedOpacity,
+                                    styles.animatedInnerContainer,
+                                ]}>
+                                <BaseIcon name={"drag"} size={28} />
+                            </Animated.View>
+                            <TokenCard
+                                tokenWithBalance={item}
+                                isEdit={isEdit}
+                                isBalanceVisible={isBalanceVisible}
+                            />
+                        </View>
+                    </Pressable>
+                </Animated.View>
+            </View>
         )
     },
 )

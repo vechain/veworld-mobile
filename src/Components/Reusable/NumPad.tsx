@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
 import { BaseIcon, BaseText, BaseView } from "~Components"
-import * as Haptics from "expo-haptics"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType, valueToHP } from "~Constants"
 import { widthPercentageToDP as wp } from "react-native-responsive-screen"
@@ -28,10 +27,10 @@ type Props = {
 
 export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
+
     const handleOnDigitPress = useCallback(
         (digit: string) => () => {
             onDigitPress(digit)
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         },
         [onDigitPress],
     )

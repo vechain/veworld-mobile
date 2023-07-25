@@ -1,5 +1,5 @@
 import { debug, error, warn } from "~Utils/Logger"
-import URLUtils from "../URLUtils"
+import URIUtils from "../URIUtils"
 
 /**
  * Verify a websocket connection for a given URL.
@@ -19,7 +19,7 @@ const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
 
     await new Promise<void>(function (resolve, reject) {
         setTimeout(() => reject("Node timed out"), timeout)
-        const wsUrl = URLUtils.toNodeBeatWebsocketUrl(url)
+        const wsUrl = URIUtils.toNodeBeatWebsocketUrl(url)
         const webSocket = new WebSocket(wsUrl)
 
         webSocket.onopen = () => {

@@ -7,15 +7,13 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { getNFTdataForContract } from "./Helpers"
 import { NonFungibleToken } from "~Model"
-import { getTokenURI } from "~Networking"
+import { getNftsForContract } from "~Networking"
 import { useThor } from "~Components"
-import { NFTPlaceholder } from "~Assets"
-import { fetchMetadata } from "./fetchMeta"
 import { error } from "~Utils"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
+import { parseNftMetadata } from "./Helpers"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
@@ -39,55 +37,24 @@ export const useNFTs = () => {
             )
 
             try {
-                const { nftData } = await getNFTdataForContract(
-                    network,
-                    [contractAddress],
+                const nftResponse = await getNftsForContract(
+                    network.type,
+                    contractAddress,
                     selectedAccount.address,
                     _resultsPerPage,
                     _page,
                 )
 
-                const NFTs: NonFungibleToken[] = []
-
-                for (const nfts of nftData) {
-                    //
-                    for (const nft of nfts.data) {
-                        const tokenURI = await getTokenURI(
-                            nft.tokenId,
-                            contractAddress,
+                const NFTs: NonFungibleToken[] = await Promise.all(
+                    nftResponse.data.map(async nft => {
+                        return parseNftMetadata(
+                            network.type,
+                            nft,
                             thor,
+                            LL.COMMON_NOT_AVAILABLE(),
                         )
-
-                        let _nft: NonFungibleToken
-
-                        const nftMeta = await fetchMetadata(tokenURI)
-
-                        const id =
-                            contractAddress +
-                            nft.tokenId +
-                            selectedAccount.address
-
-                        _nft = {
-                            id,
-                            tokenId: nft.tokenId,
-                            owner: selectedAccount.address,
-                            tokenURI,
-                            ...nftMeta?.tokenMetadata,
-                            icon: {
-                                url: nftMeta?.imageUrl ?? NFTPlaceholder,
-                                mime: nftMeta?.imageType ?? "image/png",
-                            },
-                            image: nftMeta?.imageUrl ?? NFTPlaceholder,
-                            belongsToCollectionAddress: contractAddress,
-                            isBlacklisted: false,
-                            name:
-                                nftMeta?.tokenMetadata.name ??
-                                LL.COMMON_NOT_AVAILABLE(),
-                        }
-
-                        NFTs.push(_nft)
-                    }
-                }
+                    }),
+                )
 
                 dispatch(
                     setNFTs({
@@ -96,7 +63,7 @@ export const useNFTs = () => {
                         collectionAddress: contractAddress,
                         NFTs: NFTs,
                         // taking first element because we are fetching only for one contract address
-                        pagination: nftData[0].pagination,
+                        pagination: nftResponse.pagination,
                     }),
                 )
 

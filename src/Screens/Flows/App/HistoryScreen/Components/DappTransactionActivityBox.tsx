@@ -7,7 +7,7 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Activity, ActivityStatus, DappTxActivity } from "~Model"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
-import { ActivityStatusIndicator } from "."
+import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
 type Props = {
     activity: DappTxActivity
@@ -34,6 +34,7 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(
 
         return (
             <BaseTouchable
+                haptics="Light"
                 action={() => onPress(activity)}
                 style={styles.container}>
                 <BaseView

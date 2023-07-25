@@ -1,11 +1,11 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
+    InsertAddressSendScreen,
     NFTCollectionDetailScreen,
     NFTDetailScreen,
     NFTScreen,
     SendNFTRecapScreen,
-    SendNFTScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 
@@ -17,7 +17,9 @@ export type RootStackParamListNFT = {
     }
     [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
-    [Routes.SEND_NFT]: { contractAddress: string; tokenId: string }
+
+    [Routes.INSERT_ADDRESS_SEND]: { contractAddress: string; tokenId: string }
+
     [Routes.SEND_NFT_RECAP]: {
         contractAddress: string
         tokenId: string
@@ -30,7 +32,7 @@ const { Navigator, Group, Screen } =
 
 export const NFTStack = () => {
     return (
-        <Navigator>
+        <Navigator id="HomeStack">
             <Group>
                 <Screen
                     name={Routes.NFTS}
@@ -51,8 +53,8 @@ export const NFTStack = () => {
                 />
 
                 <Screen
-                    name={Routes.SEND_NFT}
-                    component={SendNFTScreen}
+                    name={Routes.INSERT_ADDRESS_SEND}
+                    component={InsertAddressSendScreen}
                     options={{ headerShown: false }}
                 />
 

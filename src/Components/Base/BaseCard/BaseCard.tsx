@@ -1,14 +1,9 @@
 import React, { memo } from "react"
-import {
-    Pressable,
-    StyleProp,
-    StyleSheet,
-    ViewProps,
-    ViewStyle,
-} from "react-native"
+import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { BaseView } from "../BaseView"
+import { BaseTouchable } from "../BaseTouchable"
 
 type Props = {
     containerStyle?: StyleProp<ViewStyle>
@@ -33,11 +28,14 @@ export const BaseCard = memo(
                     styles.container,
                     containerStyle,
                 ]}>
-                <Pressable onPress={onPress}>
+                <BaseTouchable
+                    action={onPress}
+                    haptics="Light"
+                    activeOpacity={!onPress ? 1 : 0.2}>
                     <BaseView style={[styles.view, style]} testID={testID}>
                         {children}
                     </BaseView>
-                </Pressable>
+                </BaseTouchable>
             </BaseView>
         )
     },

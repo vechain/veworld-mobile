@@ -42,6 +42,7 @@ export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
 
             {customNodes.length ? (
                 <BaseTouchableBox
+                    haptics="Light"
                     action={onManageNodesClick}
                     justifyContent="center">
                     <BaseIcon name="tune" color={theme.colors.primary} />
@@ -62,6 +63,7 @@ export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
                 </BaseTouchableBox>
             ) : (
                 <BaseTouchableBox
+                    haptics="Light"
                     action={onAddCustomPress}
                     justifyContent="center">
                     <BaseIcon name="plus" color={theme.colors.text} />

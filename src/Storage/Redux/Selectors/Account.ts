@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
 
 export const selectAccountsState = (state: RootState) => state.accounts
 
@@ -75,9 +75,8 @@ export const selectVisibleAccounts = createSelector(
 /**
  * @returns all the visibile accounts but the selected one
  */
-export const selectAccountsButSelected = createSelector(
-    selectAccounts,
-    selectSelectedAccountAddress,
+export const selectVisibleAccountsButSelected = createSelector(
+    [selectVisibleAccounts, selectSelectedAccountAddress],
     (accounts, selectedAccountAddress) => {
         return accounts.filter(
             account =>
@@ -86,6 +85,15 @@ export const selectAccountsButSelected = createSelector(
                     account.address,
                 ),
         )
+    },
+)
+
+export const selectDelegationAccounts = createSelector(
+    selectAccounts,
+    accounts => {
+        return accounts.filter(
+            account => account.device.type === DEVICE_TYPE.LOCAL_MNEMONIC,
+        ) as LocalAccountWithDevice[]
     },
 )
 

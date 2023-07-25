@@ -7,6 +7,23 @@ const mandatoryProps = {
     placeholder: "placeholder",
 }
 
+jest.mock("expo-haptics", () => {
+    return {
+        NotificationFeedbackType: {
+            Success: 0,
+            Warning: 1,
+            Error: 2,
+        },
+        ImpactFeedbackStyle: {
+            Light: 0,
+            Medium: 1,
+            Heavy: 2,
+        },
+        notificationAsync: jest.fn(),
+        impactAsync: jest.fn(),
+    }
+})
+
 const customPlaceholder = "CustomPlaceholder"
 const customErrorMessage = "Custom error message"
 const customValue = "Custom value"
@@ -138,7 +155,7 @@ describe("BaseTextInput", () => {
     })
 
     it("renders rightIcon correctly when rightIcon prop is provided", async () => {
-        const rightIconName = "flip-horizontal"
+        const rightIconName = "qrcode-scan"
         const rightIconTestID = "right-icon-test-id"
 
         render(
@@ -157,7 +174,7 @@ describe("BaseTextInput", () => {
     })
 
     it("calls onIconPress prop when rightIcon is pressed", async () => {
-        const rightIconName = "flip-horizontal"
+        const rightIconName = "qrcode-scan"
         const rightIconTestID = "right-icon-test-id"
         const mockOnIconPress = jest.fn()
 

@@ -1,20 +1,22 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
-import { useTheme } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
 import { FormattingUtils, TransactionUtils } from "~Utils"
 import {
     BaseText,
-    BaseSafeArea,
     BaseView,
     ChangeAccountButtonPill,
-    BaseIcon,
     BaseSpacer,
+    SelectAccountBottomSheet,
+    Layout,
 } from "~Components"
 import {
+    selectBalanceVisible,
     selectSelectedAccount,
     selectTokensWithInfo,
+    selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -30,6 +32,7 @@ import {
     SwapTransactionActivityBox,
 } from "./Components"
 import {
+    AccountWithDevice,
     Activity,
     ActivityType,
     ConnectedAppActivity,
@@ -49,13 +52,28 @@ const SKELETON_COUNT = 12
 export const HistoryScreen = () => {
     const { LL } = useI18nContext()
 
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const setSelectedAccount = (account: AccountWithDevice) => {
+        onSetSelectedAccount({ address: account.address })
+    }
+
+    const {
+        ref: selectAccountBottomSheetRef,
+        onOpen: openSelectAccountBottomSheet,
+        onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
 
     // Pull down to refresh
     const [refreshing, setRefreshing] = React.useState(false)
 
     const { fetchActivities, activities, hasFetched, page, setPage } =
-        useAccountActivities(selectedAccount.address)
+        useAccountActivities()
 
     const nav = useNavigation()
 
@@ -65,13 +83,6 @@ export const HistoryScreen = () => {
 
     // To prevent fetching next page of activities on FlashList mount
     const [hasScrolled, setHasScrolled] = useState(false)
-
-    // TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/757)
-    // when account changes set page of activity fetching back to 0
-    // and refetch otherwise we would be at the page of activities of the previous account
-    const onChangeAccountPress = () => {}
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const onStartTransactingPress = useCallback(
         () =>
@@ -186,7 +197,6 @@ export const HistoryScreen = () => {
     const renderActivitiesList = useMemo(() => {
         return (
             <>
-                <BaseSpacer height={30} />
                 <BaseView flexDirection="row" style={baseStyles.list}>
                     <FlashList
                         data={activities}
@@ -242,7 +252,6 @@ export const HistoryScreen = () => {
     const renderSkeletonList = useMemo(() => {
         return (
             <>
-                <BaseSpacer height={30} />
                 <BaseView flexDirection="row" style={baseStyles.list}>
                     <FlatList
                         data={[...Array(SKELETON_COUNT)]}
@@ -276,44 +285,59 @@ export const HistoryScreen = () => {
     }, [onStartTransactingPress])
 
     return (
-        <BaseSafeArea grow={1} testID="History_Screen">
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
+        <Layout
+            safeAreaTestID="History_Screen"
+            fixedHeader={
+                <>
+                    <BaseView
+                        flexDirection="row"
+                        justifyContent="space-between">
+                        <BaseText typographyFont="title">
+                            {LL.BTN_HISTORY()}
+                        </BaseText>
 
-            <BaseSpacer height={12} />
-            <BaseView
-                flexDirection="row"
-                mx={20}
-                justifyContent="space-between">
-                <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
+                        <ChangeAccountButtonPill
+                            title={
+                                selectedAccount.alias ??
+                                LL.WALLET_LABEL_ACCOUNT()
+                            }
+                            text={FormattingUtils.humanAddress(
+                                selectedAccount.address ?? "",
+                                5,
+                                4,
+                            )}
+                            action={openSelectAccountBottomSheet}
+                        />
+                    </BaseView>
+                    <BaseSpacer height={16} />
+                </>
+            }
+            bodyWithoutScrollView={
+                <>
+                    {/* Activities List */}
+                    {!!activities.length &&
+                        (page !== 0 || hasFetched) &&
+                        renderActivitiesList}
 
-                <ChangeAccountButtonPill
-                    title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                    text={FormattingUtils.humanAddress(
-                        selectedAccount.address ?? "",
-                        5,
-                        4,
-                    )}
-                    action={onChangeAccountPress}
-                />
-            </BaseView>
+                    {/* Fetching Activities shows skeleton */}
+                    {!hasFetched && page === 0 && renderSkeletonList}
 
-            {/* Activities List */}
-            {!!activities.length &&
-                (page !== 0 || hasFetched) &&
-                renderActivitiesList}
+                    {/* No Activities */}
+                    {!activities.length &&
+                        hasFetched &&
+                        renderNoActivitiesButton}
 
-            {/* Fetching Activities shows skeleton */}
-            {!hasFetched && page === 0 && renderSkeletonList}
-
-            {/* No Activities */}
-            {!activities.length && hasFetched && renderNoActivitiesButton}
-        </BaseSafeArea>
+                    <SelectAccountBottomSheet
+                        closeBottomSheet={closeSelectAccountBottonSheet}
+                        accounts={accounts}
+                        setSelectedAccount={setSelectedAccount}
+                        selectedAccount={selectedAccount}
+                        isBalanceVisible={isBalanceVisible}
+                        ref={selectAccountBottomSheetRef}
+                    />
+                </>
+            }
+        />
     )
 }
 

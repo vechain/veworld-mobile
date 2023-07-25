@@ -8,7 +8,7 @@ import {
     showErrorToast,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import { VeChainVetLogoSVG } from "~Assets"
+import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { SecurityLevelType } from "~Model"
 import { useCheckIdentity, useCreateWallet, useTheme } from "~Hooks"
@@ -28,6 +28,7 @@ import {
     selectHasOnboarded,
     selectNewLedgerDevice,
 } from "~Storage/Redux/Selectors"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -55,6 +56,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     } = useCreateWallet()
 
     const onWalletCreationError = useCallback((_error: unknown) => {
+        HapticsService.triggerNotification({ level: "Error" })
         setIsError("Error creating wallet")
         showErrorToast("Error creating wallet")
     }, [])
@@ -195,7 +197,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         w={100}
                         flexGrow={1}>
                         <BaseView alignItems="center">
-                            <VeChainVetLogoSVG />
+                            <VeWorldLogoSVG height={200} width={200} />
                             <BaseText align="center" py={20}>
                                 {LL.BD_WALLET_SUCCESS()}
                             </BaseText>
@@ -207,12 +209,13 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                                     {isError}
                                 </BaseText>
                             )}
+
                             <BaseButton
                                 action={onButtonPress}
                                 w={100}
                                 title={LL.BTN_WALLET_SUCCESS()}
                                 testID="GET_STARTED_BTN"
-                                haptics="medium"
+                                haptics="Success"
                             />
                         </BaseView>
                     </BaseView>

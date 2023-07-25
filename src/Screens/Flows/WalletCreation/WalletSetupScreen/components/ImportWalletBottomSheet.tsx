@@ -13,13 +13,13 @@ import { useTheme } from "~Hooks"
 import { debug } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import * as Haptics from "expo-haptics"
+import { isSmallScreen } from "~Constants"
 
 type Props = {
     onClose: () => void
 }
 
-const snapPoints = ["50%"]
+const snapPoints = isSmallScreen ? ["60%", "70%", "90%"] : ["50%", "70%", "90%"]
 export const ImportWalletBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
@@ -33,13 +33,11 @@ export const ImportWalletBottomSheet = React.forwardRef<
     }, [])
 
     const navigateToImportLocalWallet = useCallback(() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         onClose()
         nav.navigate(Routes.IMPORT_MNEMONIC)
     }, [nav, onClose])
 
     const navigateToImportHardwareWallet = useCallback(() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         onClose()
         nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_DEVICE)
     }, [onClose, nav])
@@ -61,7 +59,10 @@ export const ImportWalletBottomSheet = React.forwardRef<
 
             <BaseSpacer height={24} />
 
-            <BaseTouchableBox action={navigateToImportLocalWallet} py={16}>
+            <BaseTouchableBox
+                action={navigateToImportLocalWallet}
+                py={16}
+                haptics="Medium">
                 <BaseIcon
                     name="wallet-plus-outline"
                     size={20}
@@ -85,7 +86,10 @@ export const ImportWalletBottomSheet = React.forwardRef<
                 />
             </BaseTouchableBox>
             <BaseSpacer height={16} />
-            <BaseTouchableBox action={navigateToImportHardwareWallet} py={16}>
+            <BaseTouchableBox
+                action={navigateToImportHardwareWallet}
+                py={16}
+                haptics="Medium">
                 <BaseIcon
                     name="bluetooth-connect"
                     size={20}

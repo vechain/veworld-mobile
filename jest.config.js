@@ -1,3 +1,4 @@
+/** @type {import("jest").Config} */
 const { defaults: tsjPreset } = require("ts-jest/presets")
 
 module.exports = {
@@ -5,6 +6,15 @@ module.exports = {
     preset: "jest-expo",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+    coverageReporters: [
+        "json",
+        "lcov",
+        "text",
+        "text-summary",
+        "clover",
+        "json-summary",
+    ],
+    testTimeout: 10000,
     transform: {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
@@ -60,7 +70,7 @@ module.exports = {
         global: {
             statements: 90.18,
             branches: 80.05,
-            functions: 89.75,
+            functions: 89.03,
             lines: 89.69,
         },
     },

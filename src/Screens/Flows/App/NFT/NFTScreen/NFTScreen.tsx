@@ -1,5 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { BaseSafeArea, BaseView, SelectAccountBottomSheet } from "~Components"
+import {
+    BaseView,
+    Layout,
+    QRCodeBottomSheet,
+    SelectAccountBottomSheet,
+} from "~Components"
 import { NftScreenHeader } from "./Components"
 import { AccountWithDevice } from "~Model"
 import { isEmpty } from "lodash"
@@ -62,6 +67,9 @@ export const NFTScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
+        useBottomSheetModal()
+
     const renderContent = useMemo(() => {
         if (!isEmpty(error) && isEmpty(collections)) return <NetworkErrorView />
 
@@ -74,7 +82,8 @@ export const NFTScreen = () => {
                 />
             )
 
-        if (isShowImportNFTs) return <ImportNFTView />
+        if (isShowImportNFTs)
+            return <ImportNFTView onImportPress={openQRCodeSheet} />
 
         if (!isEmpty(collections)) {
             return (
@@ -93,6 +102,7 @@ export const NFTScreen = () => {
         collections,
         isLoading,
         isShowImportNFTs,
+        openQRCodeSheet,
         onGoToBlackListed,
         fetchMoreCollections,
         onMomentumScrollBegin,
@@ -100,22 +110,31 @@ export const NFTScreen = () => {
     ])
 
     return (
-        <BaseSafeArea grow={1} testID="NFT_Screen">
-            <NftScreenHeader
-                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-            />
+        <Layout
+            safeAreaTestID="NFT_Screen"
+            fixedHeader={
+                <NftScreenHeader
+                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+                />
+            }
+            bodyWithoutScrollView={
+                <>
+                    <BaseView flex={1} justifyContent="center">
+                        {renderContent}
+                    </BaseView>
+                    <SelectAccountBottomSheet
+                        closeBottomSheet={closeSelectAccountBottonSheet}
+                        accounts={accounts}
+                        setSelectedAccount={setSelectedAccount}
+                        selectedAccount={selectedAccount}
+                        ref={selectAccountBottomSheetRef}
+                    />
 
-            <BaseView flex={1} justifyContent="center">
-                {renderContent}
-            </BaseView>
-
-            <SelectAccountBottomSheet
-                closeBottomSheet={closeSelectAccountBottonSheet}
-                accounts={accounts}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
-                ref={selectAccountBottomSheetRef}
-            />
-        </BaseSafeArea>
+                    {/* BOTTOM SHEETS */}
+                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                </>
+            }
+            noBackButton
+        />
     )
 }

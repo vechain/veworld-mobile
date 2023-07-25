@@ -1,16 +1,17 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React from "react"
 import { SelectAccountBottomSheet } from "~Components"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
+import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     onClose: () => void
     selectedDelegationOption: DelegationType
-    setSelectedDelegationOption: (id: DelegationType) => void
-    setSelectedAccount: (account?: AccountWithDevice) => void
-    selectedAccount?: AccountWithDevice
+    setSelectedAccount: (account: AccountWithDevice) => void
+    selectedAccount?: LocalAccountWithDevice
+    setNoDelegation: () => void
+    accounts: LocalAccountWithDevice[]
 }
 
 // component to select an account for delegation
@@ -21,21 +22,22 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<
     (
         {
             onClose,
-            setSelectedDelegationOption,
             setSelectedAccount,
             selectedAccount,
             selectedDelegationOption,
+            setNoDelegation,
+            accounts,
         },
         ref,
     ) => {
-        const accounts = useAppSelector(selectAccountsButSelected)
+        const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
         const onDismiss = () => {
             if (
                 selectedDelegationOption === DelegationType.ACCOUNT &&
                 !selectedAccount
             ) {
-                setSelectedDelegationOption(DelegationType.NONE)
+                setNoDelegation()
             }
         }
 
@@ -47,7 +49,8 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={ref}
-                useVthoBalance
+                isVthoBalance
+                isBalanceVisible={isBalanceVisible}
             />
         )
     },

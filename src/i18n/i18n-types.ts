@@ -239,7 +239,7 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 *  ​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.​ ​T​r​y​ ​a​g​a​i​n​.
+	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
@@ -651,6 +651,16 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
+	/**
+	 * Y​o​u​r​ ​Q​R​ ​C​o​d​e​ ​f​o​r​ ​{​a​c​c​o​u​n​t​A​l​i​a​s​}
+	 * @param {string} accountAlias
+	 */
+	TITLE_QR_CODE_FOR_ACCOUNT: RequiredParams<'accountAlias'>
+	/**
+	 * R​e​n​a​m​e​ ​{​t​y​p​e​}
+	 * @param {string} type
+	 */
+	TITLE_RENAME: RequiredParams<'type'>
 	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
@@ -1317,6 +1327,22 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_wallet_connect_incompatible_dapp: string
 	/**
+	 * T​h​e​ ​D​A​p​p​ ​i​s​ ​n​o​t​ ​v​e​r​i​f​i​e​d​ ​o​n​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t
+	 */
+	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: string
+	/**
+	 * T​h​e​ ​D​A​p​p​ ​m​a​d​e​ ​a​n​ ​i​n​v​a​l​i​d​ ​r​e​q​u​e​s​t
+	 */
+	NOTIFICATION_DAPP_INVALID_REQUEST: string
+	/**
+	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​i​n​v​a​l​i​d​ ​a​c​c​o​u​n​t
+	 */
+	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: string
+	/**
+	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​a​c​c​o​u​n​t​ ​t​h​a​t​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d
+	 */
+	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: string
+	/**
 	 * W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​n​o​t​ ​i​n​i​t​i​a​l​i​z​e​d​.
 	 */
 	NOTIFICATION_wallet_connect_not_initialized: string
@@ -1500,7 +1526,11 @@ type RootTranslation = {
 	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
-	DONT_SEE_NFTS: string
+	DONT_SEE_NFTS_1: string
+	/**
+	 * T​r​y​ ​r​e​c​e​i​v​i​n​g​ ​o​n​e
+	 */
+	DONT_SEE_NFTS_2: string
 	/**
 	 * I​m​p​o​r​t​ ​N​F​T
 	 */
@@ -1545,6 +1575,14 @@ type RootTranslation = {
 	 * U​n​k​n​o​w​n​ ​c​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	UNKNOWN_COLLECTION: string
+	/**
+	 * E​s​t​i​m​a​t​e​d​ ​g​a​s​ ​f​e​e
+	 */
+	ESTIMATED_GAS_FEE: string
+	/**
+	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
+	 */
+	ESTIMATED_TIME: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -1851,6 +1889,10 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_TITLE_SB: string
 	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	LEDGER_CERT_TITLE_SB: string
+	/**
 	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SEND_LEDGER_VALIDATE_TRANSACTION: string
@@ -1871,13 +1913,33 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_SIGN_DATA_SB: string
 	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CERT_LEDGER_SIGN_DATA: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	CERT_LEDGER_SIGN_DATA_SB: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
 	 */
 	SEND_LEDGER_TX_READY: string
 	/**
+	 * D​e​l​e​g​a​t​e​d​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
+	 */
+	LEDGER_DELEGATION_NOT_SUPPORTED: string
+	/**
+	 * C​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y
+	 */
+	LEDGER_CERTIFICATE_READ: string
+	/**
 	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​s​e​n​d​ ​i​t​ ​t​o​ ​t​h​e​ ​n​e​t​w​o​r​k
 	 */
 	SEND_LEDGER_TX_READY_SB: string
+	/**
+	 * T​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​ ​t​o​ ​t​h​e​ ​D​A​p​p​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	LEDGER_CERTIFICATE_READ_SB: string
 	/**
 	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​p​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
 	 */
@@ -2416,7 +2478,7 @@ export type TranslationFunctions = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 *   PIN doesn't match. Try again.
+	 * <><> PIN doesn't match.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
@@ -2827,6 +2889,14 @@ export type TranslationFunctions = {
 	 * Backup your phrase
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
+	/**
+	 * Your QR Code for {accountAlias}
+	 */
+	TITLE_QR_CODE_FOR_ACCOUNT: (arg: { accountAlias: string }) => LocalizedString
+	/**
+	 * Rename {type}
+	 */
+	TITLE_RENAME: (arg: { type: string }) => LocalizedString
 	/**
 	 * Which kind of wallet do you want to import?
 	 */
@@ -3478,6 +3548,22 @@ Please, try again later.
 	 */
 	NOTIFICATION_wallet_connect_incompatible_dapp: () => LocalizedString
 	/**
+	 * The DApp is not verified on Wallet Connect
+	 */
+	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: () => LocalizedString
+	/**
+	 * The DApp made an invalid request
+	 */
+	NOTIFICATION_DAPP_INVALID_REQUEST: () => LocalizedString
+	/**
+	 * The DApp requested an invalid account
+	 */
+	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: () => LocalizedString
+	/**
+	 * The DApp requested an account that was not found
+	 */
+	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: () => LocalizedString
+	/**
 	 * Wallet Connect not initialized.
 	 */
 	NOTIFICATION_wallet_connect_not_initialized: () => LocalizedString
@@ -3656,7 +3742,11 @@ Please, try again later.
 	/**
 	 * Don't see your NFTs?
 	 */
-	DONT_SEE_NFTS: () => LocalizedString
+	DONT_SEE_NFTS_1: () => LocalizedString
+	/**
+	 * Try receiving one
+	 */
+	DONT_SEE_NFTS_2: () => LocalizedString
 	/**
 	 * Import NFT
 	 */
@@ -3701,6 +3791,14 @@ Please, try again later.
 	 * Unknown collection name
 	 */
 	UNKNOWN_COLLECTION: () => LocalizedString
+	/**
+	 * Estimated gas fee
+	 */
+	ESTIMATED_GAS_FEE: () => LocalizedString
+	/**
+	 * Estimated time
+	 */
+	ESTIMATED_TIME: () => LocalizedString
 	/**
 	 * Light
 	 */
@@ -4006,6 +4104,10 @@ Please, try again later.
 	 */
 	SEND_LEDGER_TITLE_SB: () => LocalizedString
 	/**
+	 * Please follow the instructions below to sign the certificate with your Ledger
+	 */
+	LEDGER_CERT_TITLE_SB: () => LocalizedString
+	/**
 	 * Validate transaction
 	 */
 	SEND_LEDGER_VALIDATE_TRANSACTION: () => LocalizedString
@@ -4026,13 +4128,33 @@ Please, try again later.
 	 */
 	SEND_LEDGER_SIGN_DATA_SB: () => LocalizedString
 	/**
+	 * We are signing your certificate
+	 */
+	CERT_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * We are signing your certificate with your Ledger, please confirm the signature on your device when required
+	 */
+	CERT_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
 	 * Transaction is ready
 	 */
 	SEND_LEDGER_TX_READY: () => LocalizedString
 	/**
+	 * Delegated hardware wallet not supported yet
+	 */
+	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
+	 * Certificate is ready
+	 */
+	LEDGER_CERTIFICATE_READ: () => LocalizedString
+	/**
 	 * The transaction is ready to be sent, press confirm to send it to the network
 	 */
 	SEND_LEDGER_TX_READY_SB: () => LocalizedString
+	/**
+	 * The certificate is ready to be sent to the DApp, press confirm to continue
+	 */
+	LEDGER_CERTIFICATE_READ_SB: () => LocalizedString
 	/**
 	 * This transaction may be reverted if ypur balance is too low
 	 */

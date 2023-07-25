@@ -12,13 +12,14 @@ import {
 import { useI18nContext } from "~i18n"
 import { useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
+import { isSmallScreen } from "~Constants"
 
 type Props = {
     mnemonicArray: string[]
     onClose: () => void
 }
 
-const snapPoints = ["45%"]
+const snapPoints = isSmallScreen ? ["55%"] : ["45%"]
 
 export const BackupMnemonicBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -54,7 +55,6 @@ export const BackupMnemonicBottomSheet = React.forwardRef<
                             LL.TITLE_MNEMONIC(),
                         )
                     }
-                    w={100}
                     title={LL.BTN_MNEMONIC_CLIPBOARD()}
                     disabled={!mnemonicArray.length}
                     rightIcon={

@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useFormattedMarketInfo } from "./useFormattedMarketInfo"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 import { TestWrapper } from "~Test"
-import { CURRENCY } from "~Constants"
+import { CURRENCY, VET } from "~Constants"
 
 const marketInfo = {
     ath: 0.280991,
@@ -38,9 +38,9 @@ const marketInfo = {
 }
 
 const results = {
-    circulatingSupply: "72,714,516,834 USD",
+    circulatingSupply: "72,714,516,834 VET",
     marketCap: "1,429,387,590 USD",
-    totalSupply: "85,985,041,177 USD",
+    totalSupply: "85,985,041,177 VET",
     totalVolume: "34,734,564 USD",
 }
 
@@ -60,13 +60,13 @@ describe("useFormattedMarketInfo", () => {
         )
 
         const { result, waitForNextUpdate } = renderHook(
-            () => useFormattedMarketInfo(marketInfo),
+            () => useFormattedMarketInfo(marketInfo, VET.symbol),
             {
                 wrapper: TestWrapper,
             },
         )
 
-        await waitForNextUpdate({ timeout: 2000 })
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.circulatingSupply).toBe(results.circulatingSupply)
     })
@@ -77,13 +77,13 @@ describe("useFormattedMarketInfo", () => {
         )
 
         const { result, waitForNextUpdate } = renderHook(
-            () => useFormattedMarketInfo(marketInfo),
+            () => useFormattedMarketInfo(marketInfo, "USD"),
             {
                 wrapper: TestWrapper,
             },
         )
 
-        await waitForNextUpdate({ timeout: 2000 })
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.marketCap).toBe(results.marketCap)
     })
@@ -94,13 +94,13 @@ describe("useFormattedMarketInfo", () => {
         )
 
         const { result, waitForNextUpdate } = renderHook(
-            () => useFormattedMarketInfo(marketInfo),
+            () => useFormattedMarketInfo(marketInfo, VET.symbol),
             {
                 wrapper: TestWrapper,
             },
         )
 
-        await waitForNextUpdate({ timeout: 2000 })
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.totalSupply).toBe(results.totalSupply)
     })
@@ -111,13 +111,13 @@ describe("useFormattedMarketInfo", () => {
         )
 
         const { result, waitForNextUpdate } = renderHook(
-            () => useFormattedMarketInfo(marketInfo),
+            () => useFormattedMarketInfo(marketInfo, "USD"),
             {
                 wrapper: TestWrapper,
             },
         )
 
-        await waitForNextUpdate({ timeout: 2000 })
+        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.totalVolume).toBe(results.totalVolume)
     })

@@ -1,156 +1,113 @@
-import { useEffect, useMemo, useState } from "react"
-import { Transaction, abi } from "thor-devkit"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { Transaction } from "thor-devkit"
 
-import { HexUtils, FormattingUtils, GasUtils, error } from "~Utils"
+import { error, GasUtils, HexUtils } from "~Utils"
 import { useThor } from "~Components"
-import {
-    AccountWithDevice,
-    EstimateGasResult,
-    FungibleTokenWithBalance,
-    NonFungibleToken,
-} from "~Model"
+import { EstimateGasResult } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { BigNumber } from "bignumber.js"
-import { VET, abis } from "~Constants"
 
 type UseTransactionReturnProps = {
     gas?: EstimateGasResult
     setGas: (gas: EstimateGasResult) => void
-    transaction: Transaction.Body
+    transactionBody: Transaction.Body
     loadingGas: boolean
+    setGasPayer: (gasPayer: string) => void
 }
 
 type Props = {
-    token: FungibleTokenWithBalance | NonFungibleToken
-    amount: string
-    addressTo: string
+    clauses: Transaction.Body["clauses"]
+    providedGasPayer?: string
+    dependsOn?: string
+    providedGas?: number
 }
+
 /**
  * Hook to calculate gas and generate the transaction body based on token, amount and address
- * @param amount - the amount to send
- * @param token - the token to send
- * @param address - the address to send to
+ * @param clauses - the clauses to create the transaction with
+ * @param dependsOn - the transaction hash to depend on
+ * @param providedGas - the gas to use for the transaction
+ * @param providedGasPayer - the gas payer to use for the transaction
  */
 export const useTransaction = ({
-    amount,
-    token,
-    addressTo,
+    clauses,
+    dependsOn,
+    providedGas,
+    providedGasPayer,
 }: Props): UseTransactionReturnProps => {
     const [loadingGas, setLoadingGas] = useState<boolean>(true)
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
+    const [gasPayer, setGasPayer] = useState<string>(
+        providedGasPayer || account.address,
+    )
     const thorClient = useThor()
 
-    /**
-     * Recalculate clauses on data changes
-     */
-    const clauses = useMemo(() => {
-        // if fungible token
-        if (token.hasOwnProperty("decimals")) {
-            let _token = token as FungibleTokenWithBalance
-            return prepareFungibleTokenClause(amount, _token, addressTo)
-        }
+    const nonce = useMemo(() => HexUtils.generateRandom(8), [])
 
-        // if non fungible token
-        if (token.hasOwnProperty("tokenId")) {
-            let _token = token as NonFungibleToken
-            return prepareNonFungibleTokenClause(
-                thorClient,
-                _token,
-                account,
-                addressTo,
-            )
-        }
-    }, [account, addressTo, amount, thorClient, token])
+    /**
+     *  TODO: How should we handle the block REF if the user is slow in transacting?
+     *  - We don't want it to change in case signatures have already been generated
+     *  - Current expiration is 5 minutes below: "expiration: 30" blocks
+     */
+    const blockRef = useMemo(
+        () => thorClient.status.head.id.slice(0, 18),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    )
 
     /**
      * Recalculate transaction on data changes
      */
-    const transaction = useMemo((): Transaction.Body => {
+    const transactionBody = useMemo((): Transaction.Body => {
         const DEFAULT_GAS_COEFFICIENT = 0
         return {
             chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
-            blockRef: thorClient.status.head.id.slice(0, 18),
-            expiration: 18,
-            clauses: clauses ?? [],
+            blockRef,
+            // 5 minutes
+            expiration: 30,
+            clauses: clauses,
             gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
-            gas: gas?.gas || "0",
-            dependsOn: null, // NOTE: in extension it is null
-            nonce: HexUtils.generateRandom(8),
+            gas: providedGas || gas?.gas || "0",
+            dependsOn: dependsOn || null,
+            nonce: nonce,
         }
-    }, [clauses, thorClient.genesis.id, thorClient.status.head.id, gas?.gas])
+    }, [
+        clauses,
+        dependsOn,
+        nonce,
+        blockRef,
+        thorClient.genesis.id,
+        gas?.gas,
+        providedGas,
+    ])
+
+    const estimateGas = useCallback(
+        async (caller: string, payer: string, thor: Connex.Thor) => {
+            setLoadingGas(true)
+            try {
+                const estimatedGas = await GasUtils.estimateGas(
+                    thor,
+                    clauses,
+                    providedGas || 0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
+                    caller,
+                    payer,
+                )
+
+                setGas(estimatedGas)
+            } catch (e) {
+                error(e)
+            } finally {
+                setLoadingGas(false)
+            }
+        },
+        [clauses, providedGas],
+    )
 
     useEffect(() => {
-        if (account) {
-            ;(async () => {
-                setLoadingGas(true)
-                try {
-                    const estimatedGas = await GasUtils.estimateGas(
-                        thorClient,
-                        clauses ?? [],
-                        0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
-                        account.address,
-                        // NOTE: gasPayer: undefined; in extension it was not used
-                    )
-                    setGas(estimatedGas)
-                } catch (e) {
-                    error(e)
-                } finally {
-                    setLoadingGas(false)
-                }
-            })()
-        }
-    }, [account, clauses, thorClient])
+        estimateGas(account.address, gasPayer, thorClient)
+        // We don't want to keep recalculating gas when thor changes
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [account.address, gasPayer, clauses])
 
-    return { gas, loadingGas, setGas, transaction }
-}
-
-const prepareFungibleTokenClause = (
-    amount: string,
-    _token: FungibleTokenWithBalance,
-    addressTo: string,
-) => {
-    const scaledAmount =
-        "0x" +
-        new BigNumber(
-            FormattingUtils.scaleNumberUp(amount, _token.decimals),
-        ).toString(16)
-
-    // if vet
-    if (_token.symbol === VET.symbol) {
-        return [
-            {
-                to: addressTo,
-                value: scaledAmount,
-                data: "0x",
-            },
-        ]
-    }
-
-    const func = new abi.Function(abis.VIP180.transfer)
-    const data = func.encode(addressTo, scaledAmount)
-
-    return [
-        {
-            to: _token.address,
-            value: 0,
-            data: data,
-        },
-    ]
-}
-
-const prepareNonFungibleTokenClause = (
-    thorClient: Connex.Thor,
-    _token: NonFungibleToken,
-    account: AccountWithDevice,
-    addressTo: string,
-) => {
-    const clause = thorClient
-        .account(_token.belongsToCollectionAddress)
-        .method(abis.VIP181.transferFrom)
-        .asClause(account.address, addressTo, _token.tokenId)
-    //! NOTE: uncomment following line and comment out the line above to create a reverted transaction
-    // .asClause(account.address, addressTo, "6969420")
-
-    return [clause]
+    return { gas, loadingGas, setGas, transactionBody, setGasPayer }
 }

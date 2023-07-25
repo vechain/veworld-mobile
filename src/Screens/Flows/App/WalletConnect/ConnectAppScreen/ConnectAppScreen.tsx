@@ -5,30 +5,31 @@ import { getSdkError } from "@walletconnect/utils"
 import React, { FC, useCallback } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
+    AccountCard,
+    BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    CloseModalButton,
+    SelectAccountBottomSheet,
     showErrorToast,
     showSuccessToast,
-    BaseButton,
-    SelectAccountBottomSheet,
-    AccountCard,
-    CloseModalButton,
     useWalletConnect,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
-import { AccountWithDevice, NETWORK_TYPE } from "~Model"
+import { AccountWithDevice } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addConnectedAppActivity,
     insertSession,
+    selectNetworks,
     selectSelectedAccount,
     selectVisibleAccounts,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { WalletConnectUtils, error } from "~Utils"
+import { error, WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests } from "./Components"
 import { AppInfo } from "../Components"
@@ -52,6 +53,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const networks = useAppSelector(selectNetworks)
+
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
@@ -79,7 +82,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             return
         }
 
-        if (!currentProposal || !requiredNamespaces) {
+        if (!currentProposal || !requiredNamespaces.vechain.chains) {
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
             return
         }
@@ -87,13 +90,16 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         // Setup vechain namespaces to return to the dapp
         const namespaces: SessionTypes.Namespaces = {}
         const connectedAccounts: string[] = []
+        const networkIdentifiers = networks.map(network =>
+            network.genesis.id.slice(-32),
+        )
+
         requiredNamespaces.vechain.chains?.map((scope: string) => {
             // Valid only for supported networks
-            // scope example: vechain:main, vechain:test
-            if (
-                NETWORK_TYPE.MAIN.includes(scope.split(":")[1]) ||
-                NETWORK_TYPE.TEST.includes(scope.split(":")[1])
-            ) {
+            // scope example: vechain:b1ac3413d346d43539627e6be7ec1b4a, vechain:87721b09ed2e15997f466536b20bb127
+            const network = scope.split(":")[1]
+
+            if (networkIdentifiers.includes(network)) {
                 connectedAccounts.push(`${scope}:${selectedAccount.address}`)
             }
         })
@@ -131,7 +137,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 }),
             )
         } catch (err: unknown) {
-            error(err)
+            error("ConnectedAppScreen:handleAccept", err)
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
         }
     }, [
@@ -139,6 +145,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         web3Wallet,
         nav,
         LL,
+        networks,
         selectedAccount.address,
         dispatch,
         name,
@@ -160,7 +167,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     reason: getSdkError("USER_REJECTED_METHODS"),
                 })
             } catch (err: unknown) {
-                error(err)
+                error("ConnectedAppScreen:handleReject", err)
             } finally {
                 nav.goBack()
             }
@@ -220,14 +227,14 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={24} />
                     <BaseButton
                         w={100}
-                        haptics="light"
+                        haptics="Light"
                         title={LL.COMMON_BTN_CONNECT()}
                         action={handleAccept}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
                         w={100}
-                        haptics="light"
+                        haptics="Light"
                         variant="outline"
                         title={LL.COMMON_BTN_CANCEL_CAPS_LOCK()}
                         action={handleReject}

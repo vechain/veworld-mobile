@@ -10,16 +10,18 @@ import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { BaseView } from "~Components"
+import HapticsService from "~Services/HapticsService"
 
 const HEIGHT = 100
 
 export type NativeTokenProps = {
     tokenWithInfo: TokenWithCompleteInfo
     isEdit: boolean
+    isBalanceVisible: boolean
 }
 
 export const AnimatedChartCard = memo(
-    ({ tokenWithInfo, isEdit }: NativeTokenProps) => {
+    ({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
         const nav = useNavigation()
         const theme = useTheme()
         usePollingChartData(tokenWithInfo.symbol as VeChainToken)
@@ -56,6 +58,7 @@ export const AnimatedChartCard = memo(
         }, [isEdit])
 
         const onVechainTokenPress = useCallback(() => {
+            HapticsService.triggerImpact({ level: "Light" })
             if (!isEdit)
                 nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
         }, [isEdit, nav, tokenWithInfo])
@@ -71,6 +74,7 @@ export const AnimatedChartCard = memo(
                             animatedOuterCard,
                         ]}>
                         <VechainTokenCard
+                            isBalanceVisible={isBalanceVisible}
                             tokenWithInfo={tokenWithInfo}
                             isAnimation={isEdit}
                         />

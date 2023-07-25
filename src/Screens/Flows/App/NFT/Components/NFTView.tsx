@@ -22,6 +22,7 @@ import { MediaUtils } from "~Utils"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
 import { useI18nContext } from "~i18n"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     item: NonFungibleTokenCollection | NonFungibleToken
@@ -74,16 +75,19 @@ export const NFTView = memo(
         )
 
         const onNftPress = useCallback(
-            (nft: NonFungibleToken) =>
+            (nft: NonFungibleToken) => {
+                HapticsService.triggerImpact({ level: "Light" })
                 nav.navigate(Routes.NFT_DETAILS, {
                     collectionAddress: collection!.address,
                     nftTokenId: nft.tokenId,
-                }),
+                })
+            },
             [collection, nav],
         )
 
         const onCollectionPress = useCallback(
             (address: string) => {
+                HapticsService.triggerImpact({ level: "Light" })
                 nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
                     collectionAddress: address,
                 })
@@ -168,10 +172,10 @@ export const NFTView = memo(
                             <NFTImage
                                 uri={
                                     getIsValidMimeType(
-                                        collectionItem?.icon.mime!,
+                                        collectionItem!.mimeType,
                                         [NFTMediaType.IMAGE],
                                     )
-                                        ? collectionItem!.icon.url
+                                        ? collectionItem!.image
                                         : NFTPlaceholder
                                 }
                                 style={baseStyles.nftPreviewImage}
@@ -201,16 +205,16 @@ export const NFTView = memo(
                         </BaseView>
                     ) : (
                         <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                            {getIsValidMimeType(nftItem?.icon.mime!, [
+                            {getIsValidMimeType(nftItem!.mimeType, [
                                 NFTMediaType.IMAGE,
                             ]) && (
                                 <NFTImage
-                                    uri={nftItem!.icon.url}
+                                    uri={nftItem!.image}
                                     style={baseStyles.nftPreviewImage}
                                 />
                             )}
 
-                            {MediaUtils.getMime(nftItem?.icon.mime!, [
+                            {MediaUtils.getMime(nftItem!.mimeType, [
                                 NFTMediaType.VIDEO,
                             ]) && (
                                 <BaseView style={baseStyles.nftPreviewImage}>
@@ -220,7 +224,7 @@ export const NFTView = memo(
                                         ref={video}
                                         shouldPlay
                                         style={baseStyles.nftPreviewImage}
-                                        source={{ uri: nftItem!.icon.url }}
+                                        source={{ uri: nftItem!.image }}
                                         resizeMode={ResizeMode.COVER}
                                         isLooping
                                         isMuted
@@ -228,10 +232,10 @@ export const NFTView = memo(
                                 </BaseView>
                             )}
 
-                            {!MediaUtils.getMime(nftItem?.icon.mime!, [
+                            {!MediaUtils.getMime(nftItem!.mimeType, [
                                 NFTMediaType.IMAGE,
                             ]) &&
-                                !MediaUtils.getMime(nftItem?.icon.mime!, [
+                                !MediaUtils.getMime(nftItem!.mimeType, [
                                     NFTMediaType.VIDEO,
                                 ]) && (
                                     <NFTImage

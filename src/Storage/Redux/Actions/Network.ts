@@ -6,7 +6,7 @@ import {
     removeCustomNetwork,
     updateCustomNetwork,
 } from "../Slices/Network"
-import { debug, ConnectionUtils, URLUtils } from "~Utils"
+import { debug, ConnectionUtils, URIUtils } from "~Utils"
 import { genesises } from "~Constants"
 import axios from "axios"
 import {
@@ -26,11 +26,11 @@ const validateCustomNode = async ({
     url: string
     name: string
 }) => {
-    if (!URLUtils.isAllowed(url))
+    if (!URIUtils.isAllowed(url))
         throw new Error("URL must be secure (https or localhost)")
     try {
         //Clean the URL
-        url = URLUtils.clean(url)
+        url = URIUtils.clean(url)
 
         //Test the Websocket connection for the user's URL - throws an error if it fails
         await ConnectionUtils.verifyWebSocketConnection(url)
@@ -76,7 +76,7 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
 
             //Check if the custom network already exists
             customNetworks.forEach(net => {
-                if (net.urls.some(u => URLUtils.compareURLs(u, url)))
+                if (net.urls.some(u => URIUtils.compareURLs(u, url)))
                     throw new Error("Network already exists")
             })
 
@@ -108,7 +108,7 @@ export const validateAndUpdateCustomNode = createAppAsyncThunk(
             //Check if the custom network already exists and is not the one being updated
             customNetworks.forEach(net => {
                 if (net.id !== networkToUpdateId)
-                    if (net.urls.some(u => URLUtils.compareURLs(u, url)))
+                    if (net.urls.some(u => URIUtils.compareURLs(u, url)))
                         throw new Error("Network already exists")
             })
 

@@ -3,16 +3,15 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
 import {
-    BackButtonHeader,
-    BaseSafeArea,
     BaseSpacer,
     BaseView,
     FadeoutButton,
+    Layout,
     TransactionStatusBox,
     showErrorToast,
 } from "~Components"
-import { ScrollView, Linking } from "react-native"
-import { useCopyClipboard, usePlatformBottomInsets } from "~Hooks"
+import { Linking } from "react-native"
+import { useCopyClipboard } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
@@ -36,7 +35,6 @@ type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
 export const NFTDetailScreen = ({ route }: Props) => {
     const { LL, locale } = useI18nContext()
-    const { calculateBottomInsets } = usePlatformBottomInsets()
     const nav = useNavigation()
     const { onCopyToClipboard } = useCopyClipboard()
 
@@ -61,10 +59,10 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
     const onSendPress = useCallback(
         () =>
-            nav.navigate(Routes.SEND_NFT, {
+            nav.navigate(Routes.INSERT_ADDRESS_SEND, {
                 contractAddress: route.params.collectionAddress!,
-                tokenId: route.params.nftTokenId!,
-            }),
+                tokenId: route.params.nftTokenId,
+            } as any), // todo https://github.com/vechainfoundation/veworld-mobile/issues/867
         [nav, route.params.collectionAddress, route.params.nftTokenId],
     )
 
@@ -91,19 +89,15 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
     // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/758) add LL for headers
     return (
-        <BaseSafeArea grow={1} testID="NFT_Detail_Screen">
-            <BackButtonHeader hasBottomSpacer={false} />
-            <BaseView flex={1} mx={20}>
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{
-                        paddingBottom: calculateBottomInsets,
-                    }}>
+        <Layout
+            safeAreaTestID="NFT_Detail_Screen"
+            body={
+                <BaseView flex={1}>
                     <BaseSpacer height={26} />
 
                     <NFTDetailImage
-                        uri={nft?.icon?.url ?? ""}
-                        mime={nft?.icon?.mime ?? ""}
+                        uri={nft?.image ?? ""}
+                        mime={nft?.mimeType ?? ""}
                         name={nft?.name ?? ""}
                         tokenId={nft?.tokenId ?? ""}
                     />
@@ -221,14 +215,18 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             )}
                         />
                     )}
-                </ScrollView>
-            </BaseView>
-
-            <FadeoutButton
-                disabled={!!isPendingTx ?? false}
-                title={LL.SEND_TOKEN_TITLE().toUpperCase()}
-                action={onSendPress}
-            />
-        </BaseSafeArea>
+                </BaseView>
+            }
+            footer={
+                <FadeoutButton
+                    disabled={!!isPendingTx}
+                    title={LL.SEND_TOKEN_TITLE().toUpperCase()}
+                    action={onSendPress}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
+                />
+            }
+        />
     )
 }

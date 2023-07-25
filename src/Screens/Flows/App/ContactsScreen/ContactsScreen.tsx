@@ -6,12 +6,12 @@ import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
     BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
     DeleteConfirmationBottomSheet,
+    Layout,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -31,8 +31,7 @@ import {
     ContactManagementBottomSheet,
     UnderlayLeft,
 } from "./Components"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import HapticsService from "~Services/HapticsService"
 
 const underlaySnapPoints = [58]
 
@@ -41,12 +40,6 @@ export const ContactsScreen = () => {
     const nav = useNavigation()
 
     const theme = useTheme()
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
-
-    const insets = useSafeAreaInsets()
-
-    const tabBarHeight = useBottomTabBarHeight()
 
     const { LL } = useI18nContext()
 
@@ -107,7 +100,6 @@ export const ContactsScreen = () => {
     const onDeleteContactPress = useCallback(
         (address: string) => {
             setSelectedContactAddress(address)
-
             openRemoveContactSheet()
         },
         [openRemoveContactSheet],
@@ -150,6 +142,7 @@ export const ContactsScreen = () => {
 
     const onSwipeableItemChange = useCallback(
         (address: string) => {
+            HapticsService.triggerImpact({ level: "Light" })
             closeOtherSwipeableItems("")
             onDeleteContactPress(address)
         },
@@ -175,13 +168,7 @@ export const ContactsScreen = () => {
     const renderContactsList = useCallback(() => {
         return (
             <>
-                <BaseSpacer height={20} />
-                <BaseView
-                    flexDirection="row"
-                    style={[
-                        baseStyles.list,
-                        { paddingBottom: tabBarHeight - insets.bottom },
-                    ]}>
+                <BaseView flexDirection="row" style={[baseStyles.list]}>
                     <FlashList
                         data={contacts}
                         keyExtractor={contact => contact.address}
@@ -189,6 +176,7 @@ export const ContactsScreen = () => {
                         onViewableItemsChanged={onViewableItemsChanged}
                         viewabilityConfig={viewabilityConfig}
                         scrollEnabled={isListScrollable}
+                        ListHeaderComponent={<BaseSpacer height={20} />}
                         ListFooterComponent={<BaseSpacer height={20} />}
                         renderItem={({ item: contact }) => {
                             const contactId = `${contact.address}-${contact.alias}`
@@ -242,108 +230,102 @@ export const ContactsScreen = () => {
     }, [
         contacts,
         contactsListSeparator,
-        insets.bottom,
         isListScrollable,
         onDeleteContactPress,
         onEditContactPress,
         onSwipeableItemChange,
         onViewableItemsChanged,
         registerSwipeableItemRef,
-        tabBarHeight,
         viewabilityConfig,
     ])
 
     // [End] Render sub components
 
     return (
-        <BaseSafeArea
-            grow={1}
-            onTouchStart={() => closeOtherSwipeableItems("")}>
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
-
-            <BaseSpacer height={12} />
-            <BaseView mx={20}>
-                <BaseView
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    w={100}>
-                    <BaseText
-                        typographyFont="title"
-                        testID="contacts-screen-title">
-                        {LL.TITLE_CONTACTS()}
-                    </BaseText>
-                    {contacts.length > 0 && (
-                        <BaseIcon
-                            name={"plus"}
-                            size={24}
-                            bg={theme.colors.secondary}
-                            action={onAddContactPress}
-                            testID="Add_Contact_Button"
-                        />
-                    )}
-                </BaseView>
-                <BaseSpacer height={20} />
-
-                <BaseText typographyFont="bodyMedium" my={8}>
-                    {LL.BD_CONTACTS_LIST()}
-                </BaseText>
-                <BaseText typographyFont="caption">
-                    {LL.BD_CONTACTS_LIST_DISCLAIMER()}
-                </BaseText>
-            </BaseView>
-
-            {/* Add contact button if contacts list is empty */}
-            {!contacts.length && renderAddContactButton()}
-
-            {/* Contacts List */}
-            {!!contacts.length && renderContactsList()}
-
-            {/* Bottom Sheets */}
-            <DeleteConfirmationBottomSheet
-                ref={confirmRemoveContactSheet}
-                onClose={closeRemoveContactSheet}
-                onConfirm={handleRemoveContact}
-                title={LL.BD_CONFIRM_REMOVE_CONTACT()}
-                description={LL.BD_CONFIRM_REMOVE_CONTACT_DESC()}
-                deletingElement={
-                    <BaseView w={100} flexDirection="row">
-                        <BaseTouchableBox
-                            justifyContent="space-between"
-                            containerStyle={baseStyles.contactContainer}
-                            activeOpacity={1}>
-                            <BaseView flexDirection="column">
-                                <BaseText typographyFont="button">
-                                    {selectedContact?.alias}
-                                </BaseText>
-                                <BaseSpacer height={4} />
-                                <BaseText
-                                    fontSize={10}
-                                    typographyFont="smallCaptionRegular">
-                                    {FormattingUtils.humanAddress(
-                                        selectedContactAddress || "",
-                                        4,
-                                        6,
-                                    )}
-                                </BaseText>
-                            </BaseView>
-                        </BaseTouchableBox>
+        <Layout
+            safeAreaTestID="ContactsScreen"
+            fixedHeader={
+                <BaseView pb={16}>
+                    <BaseView
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        w={100}>
+                        <BaseText
+                            typographyFont="title"
+                            testID="contacts-screen-title">
+                            {LL.TITLE_CONTACTS()}
+                        </BaseText>
+                        {contacts.length > 0 && (
+                            <BaseIcon
+                                haptics="Light"
+                                name={"plus"}
+                                size={24}
+                                bg={theme.colors.secondary}
+                                action={onAddContactPress}
+                                testID="Add_Contact_Button"
+                            />
+                        )}
                     </BaseView>
-                }
-            />
-            <ContactManagementBottomSheet
-                ref={editContactSheet}
-                contact={selectedContact}
-                onClose={closeEditContactSheet}
-                onSaveContact={handleSaveContact}
-            />
-        </BaseSafeArea>
+                    <BaseSpacer height={20} />
+
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_CONTACTS_LIST()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">
+                        {LL.BD_CONTACTS_LIST_DISCLAIMER()}
+                    </BaseText>
+                </BaseView>
+            }
+            bodyWithoutScrollView={
+                <>
+                    {/* Add contact button if contacts list is empty */}
+                    {!contacts.length && renderAddContactButton()}
+
+                    {/* Contacts List */}
+                    {!!contacts.length && renderContactsList()}
+
+                    {/* Bottom Sheets */}
+                    <DeleteConfirmationBottomSheet
+                        ref={confirmRemoveContactSheet}
+                        onClose={closeRemoveContactSheet}
+                        onConfirm={handleRemoveContact}
+                        title={LL.BD_CONFIRM_REMOVE_CONTACT()}
+                        description={LL.BD_CONFIRM_REMOVE_CONTACT_DESC()}
+                        deletingElement={
+                            <BaseView w={100} flexDirection="row">
+                                <BaseTouchableBox
+                                    justifyContent="space-between"
+                                    containerStyle={baseStyles.contactContainer}
+                                    activeOpacity={1}>
+                                    <BaseView flexDirection="column">
+                                        <BaseText typographyFont="button">
+                                            {selectedContact?.alias}
+                                        </BaseText>
+                                        <BaseSpacer height={4} />
+                                        <BaseText
+                                            fontSize={10}
+                                            typographyFont="smallCaptionRegular">
+                                            {FormattingUtils.humanAddress(
+                                                selectedContactAddress || "",
+                                                4,
+                                                6,
+                                            )}
+                                        </BaseText>
+                                    </BaseView>
+                                </BaseTouchableBox>
+                            </BaseView>
+                        }
+                    />
+                    <ContactManagementBottomSheet
+                        ref={editContactSheet}
+                        contact={selectedContact}
+                        onClose={closeEditContactSheet}
+                        onSaveContact={handleSaveContact}
+                    />
+                </>
+            }
+        />
     )
 }
 
@@ -359,6 +341,7 @@ const baseStyles = StyleSheet.create({
     list: {
         top: 0,
         flex: 1,
+        marginBottom: 0,
     },
     contactContainer: { flex: 1 },
 })

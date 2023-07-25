@@ -1,20 +1,12 @@
-import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import { useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
 import {
-    useBottomSheetModal,
-    useDisclosure,
-    useTheme,
-    useWalletSecurity,
-} from "~Hooks"
-import {
-    BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseTouchable,
     BaseView,
     EnableFeature,
+    Layout,
     RequireUserPassword,
     SelectDeviceBottomSheet,
 } from "~Components"
@@ -34,19 +26,13 @@ import {
     setAppLockStatus,
     setIsAppLockActive,
 } from "~Storage/Redux/Actions"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
+import { isSmallScreen } from "~Constants"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
-    const nav = useNavigation()
-
-    const theme = useTheme()
-
     const { LL } = useI18nContext()
-
-    const tabBarHeight = useBottomTabBarHeight()
 
     const dispatch = useAppDispatch()
 
@@ -114,8 +100,6 @@ export const PrivacyScreen = () => {
     // [END] - Hooks setup
 
     // [START] - Internal Methods
-    const goBack = useCallback(() => nav.goBack(), [nav])
-
     const toggleAppLockSwitch = useCallback(
         (newValue: boolean) => {
             dispatch(setIsAppLockActive(newValue))
@@ -134,125 +118,100 @@ export const PrivacyScreen = () => {
     // [END] - Internal Methods
 
     return (
-        <BaseSafeArea grow={1}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={[
-                    baseStyles.scrollViewContainer,
-                    { paddingBottom: tabBarHeight },
-                ]}
-                style={baseStyles.scrollView}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-                <BaseSpacer height={12} />
-                <BaseView mx={20}>
-                    <BaseText typographyFont="title">
-                        {LL.TITLE_PRIVACY()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
+        <Layout
+            safeAreaTestID="PrivacyScreen"
+            isScrollEnabled={isSmallScreen}
+            body={
+                <>
+                    <BaseView pt={16}>
+                        <BaseText typographyFont="title">
+                            {LL.TITLE_PRIVACY()}
+                        </BaseText>
+                        <BaseSpacer height={24} />
 
-                    <EnableFeature
-                        title={LL.SB_PASSWORD_AUTH()}
-                        subtitle={LL.BD_APP_LOCK()}
-                        onValueChange={toggleAppLockSwitch}
-                        value={isAppLockActive}
+                        <EnableFeature
+                            title={LL.SB_PASSWORD_AUTH()}
+                            subtitle={LL.BD_APP_LOCK()}
+                            onValueChange={toggleAppLockSwitch}
+                            value={isAppLockActive}
+                        />
+
+                        <BaseSpacer height={24} />
+
+                        <EnableBiometrics />
+
+                        {!isWalletSecurityBiometrics && (
+                            <>
+                                <BaseSpacer height={16} />
+                                <BaseTouchable
+                                    haptics="Light"
+                                    action={handleOnEditPinPress}
+                                    title={LL.BTN_EDIT_PIN()}
+                                    underlined
+                                />
+                            </>
+                        )}
+
+                        <BaseSpacer height={24} />
+
+                        <BaseText typographyFont="bodyMedium">
+                            {LL.SB_BACKUP_MNEMONIC()}
+                        </BaseText>
+                        <BaseText typographyFont="caption">
+                            {LL.BD_BACKUP_MNEMONIC()}
+                        </BaseText>
+
+                        <BaseSpacer height={16} />
+
+                        <BaseTouchable
+                            haptics="Light"
+                            action={checkSecurityBeforeOpening}
+                            title={LL.BTN_BACKUP_MENMONIC()}
+                            underlined
+                        />
+
+                        <BaseSpacer height={24} />
+
+                        <EnableFeature
+                            title={LL.SB_ANALYTICS_TRACKING()}
+                            subtitle={LL.BD_ANALYTICS_TRACKING()}
+                            onValueChange={toggleAnalyticsTrackingSwitch}
+                            value={isAnalyticsTrackingEnabled}
+                        />
+
+                        <BackupMnemonicBottomSheet
+                            ref={BackupPhraseSheetRef}
+                            onClose={closeBackupPhraseSheet}
+                            mnemonicArray={mnemonicArray}
+                        />
+
+                        <SelectDeviceBottomSheet<LocalDevice>
+                            ref={walletMgmtBottomSheetRef}
+                            onClose={handleOnSelectedWallet}
+                            devices={devices}
+                        />
+
+                        <RequireUserPassword
+                            isOpen={isPasswordPromptOpen}
+                            onClose={closePasswordPrompt}
+                            onSuccess={onPasswordSuccess}
+                        />
+
+                        <RequireUserPassword
+                            isOpen={isEditPinPromptOpen}
+                            onClose={closeEditPinPrompt}
+                            onSuccess={onPinSuccess}
+                            scenario={lockScreenScenario}
+                            isValidatePassword={isValidatePassword}
+                        />
+                    </BaseView>
+                    <BackupWarningBottomSheet
+                        ref={backupWarningSheetRef}
+                        onConfirm={onEditPinPress}
+                        onClose={closeBackupWarningSheet}
                     />
-
-                    <BaseSpacer height={24} />
-
-                    <EnableBiometrics />
-
-                    {!isWalletSecurityBiometrics && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <BaseTouchable
-                                action={handleOnEditPinPress}
-                                title={LL.BTN_EDIT_PIN()}
-                                underlined
-                            />
-                        </>
-                    )}
-
-                    <BaseSpacer height={24} />
-
-                    <BaseText typographyFont="bodyMedium">
-                        {LL.SB_BACKUP_MNEMONIC()}
-                    </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_BACKUP_MNEMONIC()}
-                    </BaseText>
-
-                    <BaseSpacer height={16} />
-
-                    <BaseTouchable
-                        action={checkSecurityBeforeOpening}
-                        title={LL.BTN_BACKUP_MENMONIC()}
-                        underlined
-                    />
-
-                    <BaseSpacer height={24} />
-
-                    <EnableFeature
-                        title={LL.SB_ANALYTICS_TRACKING()}
-                        subtitle={LL.BD_ANALYTICS_TRACKING()}
-                        onValueChange={toggleAnalyticsTrackingSwitch}
-                        value={isAnalyticsTrackingEnabled}
-                    />
-
-                    <BackupMnemonicBottomSheet
-                        ref={BackupPhraseSheetRef}
-                        onClose={closeBackupPhraseSheet}
-                        mnemonicArray={mnemonicArray}
-                    />
-
-                    <SelectDeviceBottomSheet<LocalDevice>
-                        ref={walletMgmtBottomSheetRef}
-                        onClose={handleOnSelectedWallet}
-                        devices={devices}
-                    />
-
-                    <RequireUserPassword
-                        isOpen={isPasswordPromptOpen}
-                        onClose={closePasswordPrompt}
-                        onSuccess={onPasswordSuccess}
-                    />
-
-                    <RequireUserPassword
-                        isOpen={isEditPinPromptOpen}
-                        onClose={closeEditPinPrompt}
-                        onSuccess={onPinSuccess}
-                        scenario={lockScreenScenario}
-                        isValidatePassword={isValidatePassword}
-                    />
-                </BaseView>
-                <BaseSpacer height={20} />
-            </ScrollView>
-
-            <BackupWarningBottomSheet
-                ref={backupWarningSheetRef}
-                onConfirm={onEditPinPress}
-                onClose={closeBackupWarningSheet}
-            />
-        </BaseSafeArea>
+                </>
+            }
+        />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-    scrollViewContainer: {
-        width: "100%",
-    },
-    scrollView: {
-        width: "100%",
-    },
-})

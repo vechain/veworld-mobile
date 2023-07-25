@@ -1,27 +1,36 @@
-import React, { FC, useMemo } from "react"
+import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
-import { useDisclosure, useTheme } from "~Hooks"
+import { useDisclosure, useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { HideView } from "./HideView"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     mnemonicArray: string[]
 }
 
 export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
-    const theme = useTheme()
-
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
+
+    const { styles, theme } = useThemedStyles(
+        baseStyles(PlatformUtils.isAndroid()),
+    )
 
     const iconColor = useMemo(
         () => (theme.isDark ? theme.colors.tertiary : theme.colors.card),
         [theme],
     )
+
+    const onPress = useCallback(async () => {
+        HapticsService.triggerImpact({ level: "Light" })
+        toggleShow()
+    }, [toggleShow])
+
     return (
         <BaseView>
-            <TouchableWithoutFeedback onPress={toggleShow}>
+            <TouchableWithoutFeedback onPress={onPress}>
                 <BaseView
                     flexDirection="row"
                     w={100}
@@ -30,7 +39,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                     <BaseView
                         px={16}
                         py={12}
-                        style={baseStyles.box}
+                        style={[styles.box]}
                         flexDirection="row"
                         flexWrap="wrap"
                         w={92}
@@ -56,7 +65,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                         w={8}
                         px={16}
                         py={12}
-                        style={baseStyles.button}
+                        style={styles.button}
                         justifyContent="center"
                         alignItems="center"
                         bg={theme.colors.primary}>
@@ -64,7 +73,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                             name={isShow ? "eye-off-outline" : "eye-outline"}
                             size={18}
                             color={iconColor}
-                            style={baseStyles.icon}
+                            style={styles.icon}
                             testID="toggle-mnemonic-visibility"
                         />
                     </BaseView>
@@ -74,16 +83,18 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     )
 }
 
-const baseStyles = StyleSheet.create({
-    box: {
-        borderTopLeftRadius: 16,
-        borderBottomStartRadius: 16,
-        overflow: "hidden",
-    },
-    button: {
-        flexGrow: 1,
-        borderTopRightRadius: 16,
-        borderBottomEndRadius: 16,
-    },
-    icon: { flex: 1, width: 100 },
-})
+const baseStyles = (isAndroid: boolean) => () =>
+    StyleSheet.create({
+        box: {
+            borderTopLeftRadius: 16,
+            borderBottomStartRadius: 16,
+            overflow: "hidden",
+            borderWidth: isAndroid ? 1 : 0,
+        },
+        button: {
+            flexGrow: 1,
+            borderTopRightRadius: 16,
+            borderBottomEndRadius: 16,
+        },
+        icon: { flex: 1, width: 100 },
+    })

@@ -1,9 +1,20 @@
 import { Core } from "@walletconnect/core"
-import { ICore, SessionTypes, SignClientTypes } from "@walletconnect/types"
-import { Web3Wallet, IWeb3Wallet } from "@walletconnect/web3wallet"
-import { isEmpty, isNull } from "lodash"
-import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
-import { NETWORK_TYPE, Network } from "~Model"
+import {
+    ICore,
+    PendingRequestTypes,
+    SessionTypes,
+    SignClientTypes,
+} from "@walletconnect/types"
+import { IWeb3Wallet, Web3Wallet } from "@walletconnect/web3wallet"
+import { Network } from "~Model"
+import { error } from "~Utils/Logger"
+import { NavigationState } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import {
+    ErrorResponse,
+    JsonRpcError,
+} from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
+import HexUtils from "~Utils/HexUtils"
 
 let web3wallet: IWeb3Wallet
 export const core: ICore = new Core({
@@ -41,7 +52,7 @@ export function getPairAttributes(
     const chains = proposal.params.requiredNamespaces.vechain.chains
     const icon = proposal.params.proposer.metadata.icons[0]
 
-    const attributes = {
+    return {
         name,
         url,
         methods,
@@ -50,24 +61,22 @@ export function getPairAttributes(
         icon,
         description,
     }
-    return attributes
 }
 
 export function getRequestEventAttributes(
-    requestEvent: SignClientTypes.EventArguments["session_request"],
+    requestEvent: PendingRequestTypes.Struct,
 ) {
     const chainId = requestEvent.params.chainId.toUpperCase()
     const method = requestEvent.params.request.method
     const params = requestEvent.params.request.params[0]
     const topic = requestEvent.topic
 
-    const attributes = {
+    return {
         chainId,
         method,
         params,
         topic,
     }
-    return attributes
 }
 
 export function getSessionRequestAttributes(
@@ -78,13 +87,103 @@ export function getSessionRequestAttributes(
     const url = sessionRequest.peer.metadata.url
     const description = sessionRequest.peer.metadata.description
 
-    const attributes = {
+    return {
         name,
         icon,
         url,
         description,
     }
-    return attributes
+}
+
+export function shouldAutoNavigate(
+    navState: NavigationState<ReactNavigation.RootParamList>,
+) {
+    if (!navState || !navState.routes) return false
+
+    return !navState.routes.some(
+        route =>
+            route.name === Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN ||
+            route.name === Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN ||
+            route.name === Routes.CONNECT_APP_SCREEN ||
+            route.name === Routes.LEDGER_SIGN_TRANSACTION ||
+            route.name === Routes.LEDGER_SIGN_CERTIFICATE,
+    )
+}
+
+export function getSignCertOptions(
+    requestEvent: PendingRequestTypes.Struct,
+): Connex.Driver.CertOptions {
+    try {
+        return requestEvent.params.request.params[0].options || {}
+    } catch (e) {
+        error("Failed to extract sign cert options", requestEvent, e)
+        return {}
+    }
+}
+
+export function getSignCertMessage(
+    requestEvent: PendingRequestTypes.Struct,
+): Connex.Vendor.CertMessage | undefined {
+    try {
+        const { purpose, payload } =
+            requestEvent.params.request.params[0].message
+
+        if (!purpose)
+            throw new Error(`Invalid purpose for sign cert request: ${purpose}`)
+
+        if (!payload || !payload.type || !payload.content)
+            throw new Error(
+                `Invalid payload for sign cert request: ${JSON.stringify(
+                    purpose,
+                )}`,
+            )
+
+        return {
+            purpose,
+            payload,
+        }
+    } catch (e) {
+        error("Failed to extract sign cert message parameters", requestEvent, e)
+    }
+}
+
+export function getSendTxMessage(
+    requestEvent: PendingRequestTypes.Struct,
+): Connex.Vendor.TxMessage | undefined {
+    try {
+        const message: Connex.Vendor.TxMessage =
+            requestEvent.params.request.params[0].message
+
+        if (!message || message.length < 1)
+            throw new Error(`Invalid message for send tx request: ${message}`)
+
+        return message.map(clause => {
+            if (
+                HexUtils.isInvalid(clause?.to) &&
+                HexUtils.isInvalid(clause?.data)
+            )
+                throw new Error(`Invalid clause: ${JSON.stringify(clause)}`)
+
+            clause.data = clause.data || "0x"
+            clause.to = clause.to || null
+            clause.value = clause.value || "0x0"
+
+            return clause
+        })
+    } catch (e) {
+        error("Failed to extract send tx message parameters", requestEvent, e)
+    }
+}
+
+export function getSendTxOptions(
+    requestEvent: PendingRequestTypes.Struct,
+): Connex.Driver.TxOptions {
+    try {
+        return requestEvent.params.request.params[0].options || {}
+    } catch (e) {
+        error("Failed to extract send tx options", requestEvent, e)
+        return {}
+    }
 }
 
 /**
@@ -103,49 +202,56 @@ export function getSessionRequestAttributes(
  *
  * @returns boolean
  */
-export function isValidURI(uri: string) {
-    if (isNull(uri) || isEmpty(uri)) return false
 
-    // Split string by : and check if the first element is wc
-    const uriArray = uri.split(":")
-    if (uriArray[0] !== "wc") return false
+export function isValidURI(providedUri: string): boolean {
+    try {
+        const uri = new URL(providedUri)
 
-    // Split the string between @ and ? and check if the first element is the correct version
-    const version = uriArray[1].split("@")[1].split("?")[0]
-    if (version !== "2") return false
+        const protocol = uri.protocol
+        const symKey = uri.searchParams.get("symKey")
+        const relayProtocol = uri.searchParams.get("relay-protocol")
 
-    // Split the string between @ and ? and retrieve the parameters
-    const parameters = uriArray[1].split("@")[1].split("?")[1].split("&")
-
-    // Iterate over the parameters and check if the required parameters are present
-    let hasSymKey = false
-    let hasRelayProtocol = false
-    parameters.forEach(parameter => {
-        const key = parameter.split("=")[0]
-        if (key === "symKey") hasSymKey = true
-        if (key === "relay-protocol") hasRelayProtocol = true
-    })
-    if (!hasSymKey || !hasRelayProtocol) return false
-
-    return true
+        return (
+            // wc protocol
+            protocol === "wc:" &&
+            // version 2
+            uri.pathname.endsWith("@2") &&
+            !!symKey &&
+            !!relayProtocol
+        )
+    } catch (e) {
+        return false
+    }
 }
 
-export function formatJsonRpcError(id: number, error: any) {
+export function formatJsonRpcError(
+    id: number,
+    err: ErrorResponse,
+): JsonRpcError {
     return {
         id,
         jsonrpc: "2.0",
-        error: error,
+        error: err,
     }
 }
 
-export function getNetworkType(chainId: string): Network {
-    let network = chainId.split(":")[1]
+export function getNetwork(
+    requestEvent: PendingRequestTypes.Struct,
+    allNetworks: Network[],
+): Network | undefined {
+    const networkIdentifier = requestEvent.params.chainId.split(":")[1]
 
-    if (NETWORK_TYPE.MAIN.includes(network)) {
-        return defaultMainNetwork
-    } else if (NETWORK_TYPE.TEST.includes(network)) {
-        return defaultTestNetwork
-    }
+    // Switch to the requested network
+    return allNetworks.find(
+        net =>
+            net.genesis.id.slice(-32).toLowerCase() ===
+            networkIdentifier.toLowerCase(),
+    )
+}
 
-    return defaultMainNetwork
+export function getTopicFromPairUri(uri: string) {
+    if (!isValidURI(uri)) throw new Error("Invalid WC URI")
+
+    const uriArray = uri.split(":")
+    return uriArray[1].split("@")[0]
 }

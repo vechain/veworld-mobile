@@ -1,19 +1,19 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useState, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native"
 import { useAmountInput, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
-    BaseText,
-    BaseView,
-    BaseSpacer,
+    BaseCard,
     BaseCardGroup,
     BaseIcon,
-    BaseCard,
     BaseRange,
-    Layout,
-    FadeoutButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
     DismissKeyboardView,
+    FadeoutButton,
+    Layout,
 } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import {
@@ -22,16 +22,17 @@ import {
     Routes,
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { CURRENCY_SYMBOLS, COLORS, typography } from "~Constants"
+import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
 import {
-    selectCurrencyExchangeRate,
     selectCurrency,
+    selectCurrencyExchangeRate,
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { throttle } from "lodash"
 import { useMaxAmount } from "./Hooks/useMaxAmount"
+
 const { defaults: defaultTypography } = typography
 
 type Props = NativeStackScreenProps<
@@ -49,6 +50,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
+
+    useEffect(() => {
+        if (__DEV__) setInput("0.000001")
+    }, [setInput])
+
     const currency = useAppSelector(selectCurrency)
 
     const [isInputInFiat, setIsInputInFiat] = useState(false)
@@ -143,12 +149,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         }
         setInput(newValue)
     }
+
     const goToInsertAddress = async () => {
         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
             amount: isInputInFiat ? rawTokenInput : input,
             initialRoute: initialRoute ?? "",
-        })
+        } as any) // Todo https://github.com/vechainfoundation/veworld-mobile/issues/867
     }
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text

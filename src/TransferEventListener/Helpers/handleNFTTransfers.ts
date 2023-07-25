@@ -1,33 +1,28 @@
 import { TransactionOrigin } from "~Model"
 import { findInvolvedAccount } from "./findInvolvedAccount"
 import {
-    NFTTransferHandlerProps,
     informUserForIncomingNFT,
     informUserForOutgoingNFT,
-} from "."
+    NFTTransferHandlerProps,
+} from "./index"
+import { getName } from "~Networking"
 
 export const handleNFTTransfers = async ({
     visibleAccounts,
     transfer,
-    removeTransactionPending,
-    fetchCollectionName,
     stateReconciliationAction,
     informUser,
+    thor,
 }: NFTTransferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
     // Early exit if tx is not related to any of the visible accounts
     if (!foundAccount.account) return
 
-    const collectionName = await fetchCollectionName(transfer.tokenAddress)
+    const collectionName = await getName(transfer.tokenAddress, thor)
 
     // User received NFT
     if (foundAccount.origin === TransactionOrigin.TO) {
-        // remove tx pending from redux
-        removeTransactionPending({
-            txId: transfer.txId,
-        })
-
         // inform user for successful transfer
         informUserForIncomingNFT({
             collectionName,
@@ -42,11 +37,6 @@ export const handleNFTTransfers = async ({
 
     // User sent NFT
     if (foundAccount.origin === TransactionOrigin.FROM) {
-        // remove tx pending from redux
-        removeTransactionPending({
-            txId: transfer.txId,
-        })
-
         // inform user for successfull transfer
         informUserForOutgoingNFT({
             txId: transfer.txId,

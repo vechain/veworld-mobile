@@ -20,8 +20,6 @@ import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
 import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
-import * as Haptics from "expo-haptics"
-
 import { isSmallScreen, valueToHP } from "~Constants"
 import { ScrollView, StyleSheet } from "react-native"
 
@@ -74,14 +72,12 @@ export const ConfirmMnemonicScreen = () => {
             selectedSecondWord === mnemonicArray[secondIndex] &&
             selectedThirdWord === mnemonicArray[thirdIndex]
         ) {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
             }
         } else {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast(
                 LL.ERROR_WRONG_WORDS_COMBINATION(),
                 LL.ERROR_WRONG_WORDS_COMBINATION_DESC(),
@@ -245,6 +241,7 @@ export const ConfirmMnemonicScreen = () => {
                     </BaseView>
                     <BaseSpacer height={20} />
                     <BaseButton
+                        haptics="Medium"
                         action={onConfirmPress}
                         w={100}
                         px={20}

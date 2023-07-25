@@ -1,35 +1,41 @@
 import React, { useMemo } from "react"
 import { BaseButtonGroupHorizontal, BaseSpacer, BaseText } from "~Components"
 import { useI18nContext } from "~i18n"
-import { BaseButtonGroupHorizontalType, AccountWithDevice } from "~Model"
+import {
+    AccountWithDevice,
+    BaseButtonGroupHorizontalType,
+    LocalAccountWithDevice,
+} from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useBottomSheetModal } from "~Hooks"
-import { selectAccountsButSelected, useAppSelector } from "~Storage/Redux"
+import { selectDelegationAccounts, useAppSelector } from "~Storage/Redux"
 import { SelectUrlBottomSheet } from "./SelectUrlBottomSheet"
 import { SelectDelegationAccountBottomSheet } from "./SelectDelegationAccountBottomSheet"
 
 type Props = {
     selectedDelegationUrl?: string
-    setSelectedDelegationUrl: (url?: string) => void
+    setSelectedDelegationUrl: (url: string) => void
     selectedDelegationOption: DelegationType
-    setSelectedDelegationOption: (id: DelegationType) => void
-    setSelectedAccount: (account?: AccountWithDevice) => void
-    selectedAccount?: AccountWithDevice
+    setNoDelegation: () => void
+    setSelectedAccount: (account: AccountWithDevice) => void
+    selectedAccount?: LocalAccountWithDevice
     disabled?: boolean
 }
 
 // this component shows delegation options
 export const DelegationOptions = ({
     selectedDelegationOption,
-    setSelectedDelegationOption,
     setSelectedAccount,
+    setNoDelegation,
     selectedAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
     disabled,
 }: Props) => {
     const { LL } = useI18nContext()
-    const accounts = useAppSelector(selectAccountsButSelected)
+
+    const accounts = useAppSelector(selectDelegationAccounts)
+
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
@@ -63,17 +69,12 @@ export const DelegationOptions = ({
     const handleSelectDelegationOption = (
         button: BaseButtonGroupHorizontalType,
     ) => {
-        setSelectedDelegationOption(button.id as DelegationType)
         if (button.id === DelegationType.ACCOUNT) {
             openSelectAccountBottomSheet()
-        } else {
-            setSelectedAccount(undefined)
         }
 
         if (button.id === DelegationType.URL) {
             openSelectDelegationUrlBottomSheet()
-        } else {
-            setSelectedDelegationUrl(undefined)
         }
     }
 
@@ -84,24 +85,27 @@ export const DelegationOptions = ({
                 {LL.SEND_DELEGATION_TITLE()}
             </BaseText>
             <BaseSpacer height={15} />
+
             <BaseButtonGroupHorizontal
                 selectedButtonIds={[selectedDelegationOption]}
                 buttons={options}
                 action={handleSelectDelegationOption}
                 disabled={disabled}
             />
+
             <SelectDelegationAccountBottomSheet
                 onClose={closeSelectAccountBottonSheet}
                 ref={selectAccountBottomSheetRef}
-                setSelectedDelegationOption={setSelectedDelegationOption}
+                setNoDelegation={setNoDelegation}
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
                 selectedDelegationOption={selectedDelegationOption}
+                accounts={accounts}
             />
             <SelectUrlBottomSheet
+                setNoDelegation={setNoDelegation}
                 onClose={closeSelectDelegationUrlBottonSheet}
                 ref={selectDelegationUrlBottomSheetRef}
-                setSelectedDelegationOption={setSelectedDelegationOption}
                 selectedDelegationOption={selectedDelegationOption}
                 selectedDelegationUrl={selectedDelegationUrl}
                 setSelectedDelegationUrl={setSelectedDelegationUrl}

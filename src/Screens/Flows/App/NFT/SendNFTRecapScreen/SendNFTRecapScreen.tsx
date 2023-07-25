@@ -5,38 +5,34 @@ import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
 import {
     AccountCard,
-    BackButtonHeader,
     BaseCard,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     DelegationOptions,
     FadeoutButton,
+    Layout,
     TransferCard,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
-    selectVthoTokenWithBalanceByAccount,
     useAppSelector,
 } from "~Storage/Redux"
 import { NFTRecapView } from "./Components/NFTRecapView"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
-import { ScrollView } from "react-native-gesture-handler"
 import {
     useCheckIdentity,
-    usePlatformBottomInsets,
+    useRenderGas,
     useSignTransaction,
     useTransaction,
 } from "~Hooks"
-import { FormattingUtils } from "~Utils"
-import { BigNumber } from "bignumber.js"
 import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/Hooks"
-import { VTHO } from "~Constants"
-import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { DEVICE_TYPE } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
+import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
+import { DelegationType } from "~Model/Delegation"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -46,8 +42,6 @@ type Props = NativeStackScreenProps<
 export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-
-    const { calculateBottomInsets } = usePlatformBottomInsets()
 
     const selectedAccoount = useAppSelector(selectSelectedAccount)
 
@@ -66,33 +60,51 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         nav.dispatch(StackActions.popToTop())
     }, [nav])
 
-    const { gas, transaction } = useTransaction({
-        token: nft!,
-        amount: selectedAccoount.address,
-        addressTo: route.params.receiverAddress,
+    const clauses = useMemo(
+        () =>
+            prepareNonFungibleClause(
+                selectedAccoount.address,
+                route.params.receiverAddress,
+                nft,
+            ),
+
+        [selectedAccoount, route.params.receiverAddress, nft],
+    )
+
+    const { gas, loadingGas, transactionBody, setGasPayer } = useTransaction({
+        clauses,
     })
 
     const {
-        selectedDelegationOption,
-        setSelectedDelegationOption,
-        selectedDelegationAccount,
+        setNoDelegation,
         setSelectedDelegationAccount,
-        selectedDelegationUrl,
         setSelectedDelegationUrl,
+        selectedDelegationOption,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
         isDelegated,
         urlDelegationSignature,
-    } = useDelegation({ transaction })
+    } = useDelegation({ transactionBody, setGasPayer })
 
-    const { signAndSendTransaction } = useSignTransaction({
-        transaction,
+    const { signAndSendTransaction, navigateToLedger } = useSignTransaction({
+        transactionBody,
         onTXFinish,
         isDelegated,
         urlDelegationSignature,
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
+        initialRoute: Routes.NFTS,
         onError: () => setLoading(false),
         token: nft!,
+    })
+
+    const { RenderGas, isThereEnoughGas } = useRenderGas({
+        loadingGas,
+        selectedDelegationOption,
+        gas,
+        accountAddress:
+            selectedDelegationAccount?.address || selectedAccoount.address,
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
@@ -101,145 +113,115 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             onCancel: () => setLoading(false),
         })
 
-    const onSendPress = useCallback(() => {
-        setLoading(true)
-        if (selectedAccoount.device.type === DEVICE_TYPE.LEDGER) {
-            nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
-                accountWithDevice: selectedAccoount as LedgerAccountWithDevice,
-                transaction,
-                initialRoute: Routes.HOME,
-            })
-        } else checkIdentityBeforeOpening()
-    }, [checkIdentityBeforeOpening, nav, selectedAccoount, transaction])
-
-    const vtho = useAppSelector(state =>
-        selectVthoTokenWithBalanceByAccount(
-            state,
-            selectedDelegationAccount?.address || selectedAccoount.address,
-        ),
-    )
-
-    const vthoBalance = FormattingUtils.scaleNumberDown(
-        vtho.balance.balance,
-        vtho.decimals,
-        2,
-    )
-
-    const vthoGas = FormattingUtils.convertToFiatBalance(
-        gas?.gas?.toString() ?? "0",
-        1,
-        5,
-    )
-
-    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/760) create a centralized hook for this where we distinguish between errors (not enough gas, error calculating gas, etc)
-    const isThereEnoughGas = useMemo(() => {
-        if (!vthoGas || vthoGas === "0.00") return false
-        let leftVtho = new BigNumber(vthoBalance)
-        return vthoGas && leftVtho.gte(vthoGas)
-    }, [vthoBalance, vthoGas])
+    const onSubmit = useCallback(async () => {
+        if (
+            selectedAccoount.device.type === DEVICE_TYPE.LEDGER &&
+            selectedDelegationOption !== DelegationType.ACCOUNT
+        ) {
+            await navigateToLedger()
+        } else {
+            await checkIdentityBeforeOpening()
+        }
+    }, [
+        selectedAccoount,
+        selectedDelegationOption,
+        navigateToLedger,
+        checkIdentityBeforeOpening,
+    ])
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
+        <Layout
+            safeAreaTestID="Send_NFT_Recap_Screen"
+            body={
+                <>
+                    <BaseView>
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="title">{LL.RECAP()}</BaseText>
 
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                    paddingBottom: calculateBottomInsets,
-                }}>
-                <BaseView mx={20}>
-                    <BaseText typographyFont="title">{LL.RECAP()}</BaseText>
+                        <BaseSpacer height={24} />
 
-                    <BaseSpacer height={24} />
+                        <BaseView
+                            flexDirection="row"
+                            style={baseStyles.previewContainer}>
+                            <NFTRecapView nft={nft!} />
 
-                    <BaseView
-                        flexDirection="row"
-                        style={baseStyles.previewContainer}>
-                        <NFTRecapView nft={nft!} />
-
-                        <BaseView justifyContent="flex-end" h={100} mx={16}>
-                            <BaseText
-                                typographyFont="subTitleBold"
-                                alignContainer="baseline">
-                                {nft?.name ?? LL.COMMON_NOT_AVAILABLE()}
-                            </BaseText>
-                            <BaseText
-                                typographyFont="body"
-                                alignContainer="baseline">
-                                #{nft!.tokenId}
-                            </BaseText>
-                        </BaseView>
-                    </BaseView>
-
-                    <BaseSpacer height={24} />
-
-                    {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/761) convert style to design specs*/}
-                    <TransferCard
-                        fromAddress={selectedAccoount!.address}
-                        toAddresses={[route.params.receiverAddress]}
-                    />
-
-                    <DelegationOptions
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationOption={
-                            setSelectedDelegationOption
-                        }
-                        setSelectedAccount={setSelectedDelegationAccount}
-                        selectedAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                        disabled={loading}
-                    />
-                    {selectedDelegationAccount && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <AccountCard account={selectedDelegationAccount} />
-                        </>
-                    )}
-                    {selectedDelegationUrl && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <BaseCard>
-                                <BaseText py={8}>
-                                    {selectedDelegationUrl}
+                            <BaseView justifyContent="flex-end" h={100} mx={16}>
+                                <BaseText
+                                    typographyFont="subTitleBold"
+                                    alignContainer="baseline">
+                                    {nft?.name ?? LL.COMMON_NOT_AVAILABLE()}
                                 </BaseText>
-                            </BaseCard>
-                        </>
-                    )}
+                                <BaseText
+                                    typographyFont="body"
+                                    alignContainer="baseline">
+                                    #{nft!.tokenId}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
 
-                    <BaseSpacer height={24} />
+                        <BaseSpacer height={24} />
 
-                    <InfoSectionView<string>
-                        isDanger={!isThereEnoughGas}
-                        isFontReverse
-                        title={"Estimated gas fee"}
-                        data={vthoGas + " " + VTHO.symbol}
-                    />
+                        <TransferCard
+                            fromAddress={selectedAccoount.address}
+                            toAddresses={[route.params.receiverAddress]}
+                        />
 
-                    <InfoSectionView<string>
-                        isFontReverse
-                        title={"Estimated time"}
-                        data={LL.SEND_LESS_THAN_1_MIN()}
-                    />
+                        <DelegationOptions
+                            selectedDelegationOption={selectedDelegationOption}
+                            setNoDelegation={setNoDelegation}
+                            setSelectedAccount={setSelectedDelegationAccount}
+                            selectedAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                            disabled={loading}
+                        />
+                        {selectedDelegationAccount && (
+                            <>
+                                <BaseSpacer height={16} />
+                                <AccountCard
+                                    account={selectedDelegationAccount}
+                                />
+                            </>
+                        )}
+                        {selectedDelegationUrl && (
+                            <>
+                                <BaseSpacer height={16} />
+                                <BaseCard>
+                                    <BaseText py={8}>
+                                        {selectedDelegationUrl}
+                                    </BaseText>
+                                </BaseCard>
+                            </>
+                        )}
 
-                    <InfoSectionView<string>
-                        isFontReverse
-                        isLastInList
-                        title={"Total amount"}
-                        data={vthoGas + " " + VTHO.symbol}
-                        subTtitle={"8,03 USD"} // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/762) add real price
-                    />
-                </BaseView>
-            </ScrollView>
+                        <BaseSpacer height={24} />
 
-            <ConfirmIdentityBottomSheet />
+                        <InfoSectionView<React.JSX.Element>
+                            isFontReverse
+                            title={LL.ESTIMATED_GAS_FEE()}
+                            data={RenderGas}
+                        />
 
-            <FadeoutButton
-                title={LL.SEND_TOKEN_TITLE().toUpperCase()}
-                action={onSendPress}
-                disabled={!isThereEnoughGas || loading}
-            />
-        </BaseSafeArea>
+                        <InfoSectionView<string>
+                            isFontReverse
+                            title={LL.ESTIMATED_TIME()}
+                            data={LL.SEND_LESS_THAN_1_MIN()}
+                        />
+                    </BaseView>
+                    <ConfirmIdentityBottomSheet />
+                </>
+            }
+            footer={
+                <FadeoutButton
+                    title={LL.SEND_TOKEN_TITLE().toUpperCase()}
+                    action={onSubmit}
+                    disabled={!isThereEnoughGas || loading}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
+                />
+            }
+        />
     )
 }
 

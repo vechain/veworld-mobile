@@ -1,15 +1,17 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect, useMemo } from "react"
-import { StyleSheet, ScrollView } from "react-native"
-import { useTheme } from "~Hooks"
+import React, { useEffect, useMemo } from "react"
+import { ScrollView } from "react-native"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import {
+    BackButtonHeader,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     FastActionsBar,
+    QRCodeBottomSheet,
     showWarningToast,
 } from "~Components"
 import { RootStackParamListDiscover, Routes } from "~Navigation"
@@ -24,6 +26,7 @@ import { FastAction } from "~Model"
 import { striptags } from "striptags"
 import {
     fetchVechainMarketInfo,
+    selectBalanceVisible,
     selectMarketInfoFor,
     selectSendableTokensWithBalance,
     useAppDispatch,
@@ -44,14 +47,17 @@ export const AssetDetailScreen = ({ route }: Props) => {
         selectMarketInfoFor(token.symbol, state),
     )
 
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
+        useBottomSheetModal()
+
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
+
     const tokens = useAppSelector(selectSendableTokensWithBalance)
     const foundToken = tokens.filter(
         t =>
             t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
-
-    const goBack = useCallback(() => nav.goBack(), [nav])
 
     const dispatch = useAppDispatch()
     useEffect(() => {
@@ -82,8 +88,15 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 ),
                 testID: "sendButton",
             },
+
+            {
+                name: LL.COMMON_RECEIVE(),
+                action: openQRCodeSheet,
+                icon: <BaseIcon color={theme.colors.text} name="qrcode" />,
+                testID: "reciveButton",
+            },
         ],
-        [LL, foundToken, nav, theme.colors.text, token.symbol],
+        [LL, foundToken, nav, openQRCodeSheet, theme.colors.text, token.symbol],
     )
 
     return (
@@ -95,14 +108,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 style={{
                     backgroundColor: theme.colors.background,
                 }}>
-                <BaseIcon
-                    style={baseStyles.backIcon}
-                    size={36}
-                    name="chevron-left"
-                    color={theme.colors.text}
-                    action={goBack}
-                />
-                <BaseSpacer height={12} />
+                <BackButtonHeader />
 
                 <BaseView mx={20}>
                     <AssetHeader
@@ -117,15 +123,21 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                 <BaseView mx={20} alignItems="center">
                     <BaseSpacer height={24} />
-                    <FastActionsBar actions={Actions} paddingHorizontal={44} />
+                    <FastActionsBar actions={Actions} />
 
                     <BaseSpacer height={24} />
 
-                    <BalanceView token={token} />
+                    <BalanceView
+                        token={token}
+                        isBalanceVisible={isBalanceVisible}
+                    />
 
                     <BaseSpacer height={24} />
 
-                    <MarketInfoView marketInfo={marketInfo} />
+                    <MarketInfoView
+                        marketInfo={marketInfo}
+                        tokenSymbol={token.symbol}
+                    />
 
                     <BaseSpacer height={24} />
 
@@ -149,13 +161,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     )}
                 </BaseView>
             </ScrollView>
+
+            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
         </BaseSafeArea>
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-})

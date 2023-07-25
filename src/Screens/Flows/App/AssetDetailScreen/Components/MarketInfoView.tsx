@@ -9,13 +9,15 @@ import { useFormattedMarketInfo } from "../Hooks/useFormattedMarketInfo"
 
 export const MarketInfoView = ({
     marketInfo,
+    tokenSymbol,
 }: {
     marketInfo: CoinMarketInfo
+    tokenSymbol: string
 }) => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { marketCap, totalSupply, totalVolume, circulatingSupply } =
-        useFormattedMarketInfo(marketInfo)
+        useFormattedMarketInfo(marketInfo, tokenSymbol)
 
     return (
         <BaseView>
@@ -25,28 +27,40 @@ export const MarketInfoView = ({
                 style={styles.container}>
                 <BaseView w={50} p={12} style={styles.borderMarketCap}>
                     <BaseText>{LL.COMMON_MARKET_CAP()}</BaseText>
-                    <BaseText typographyFont="bodyBold" py={4}>
+                    <BaseText
+                        typographyFont="bodyBold"
+                        py={4}
+                        numberOfLines={1}>
                         {marketCap ?? "N/A"}
                     </BaseText>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderTotalSupply}>
                     <BaseText>{LL.COMMON_TOTAL_SUPPLY()}</BaseText>
-                    <BaseText typographyFont="bodyBold" py={4}>
+                    <BaseText
+                        typographyFont="bodyBold"
+                        py={4}
+                        numberOfLines={1}>
                         {totalSupply ?? "N/A"}
                     </BaseText>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderTotalVolume}>
                     <BaseText>{LL.COMMON_24H_VOLUME()}</BaseText>
-                    <BaseText typographyFont="bodyBold" py={4}>
+                    <BaseText
+                        typographyFont="bodyBold"
+                        py={4}
+                        numberOfLines={1}>
                         {totalVolume ?? "N/A"}
                     </BaseText>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderCirculatingSupply}>
                     <BaseText>{LL.COMMON_CIRCULATING_SUPPLY()}</BaseText>
-                    <BaseText typographyFont="bodyBold" py={4}>
+                    <BaseText
+                        typographyFont="bodyBold"
+                        py={4}
+                        numberOfLines={1}>
                         {circulatingSupply ?? "N/A"}
                     </BaseText>
                 </BaseView>

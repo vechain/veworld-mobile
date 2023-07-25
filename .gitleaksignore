@@ -2,3 +2,5 @@
 6c6b388299f5ef261566a49e757316d414f14a87:src/Screens/Flows/App/HistoryScreen/mock/ActivitiesMock.ts:generic-api-key:176
 6c6b388299f5ef261566a49e757316d414f14a87:src/Screens/Flows/App/HistoryScreen/mock/ActivitiesMock.ts:generic-api-key:122
 8735f795b7735552829d40fc6961aaae1ee3accd:src/Utils/TransactionUtils/TransactionUtils.spec.ts:generic-api-key:1340
+a216601457f7b857600ff746063fb7d4ec559469:android/sentry.properties:generic-api-key:5
+44a8da7ce76c493787584d54c7630f2845c0b6cb:android/sentry.properties:generic-api-key:4
