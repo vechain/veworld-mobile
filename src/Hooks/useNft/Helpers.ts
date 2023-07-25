@@ -8,7 +8,7 @@ import {
     getTokenURI,
 } from "~Networking"
 import { fetchMetadata } from "./fetchMeta"
-import { NFTPlaceholder } from "~Assets"
+import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import {
     NETWORK_TYPE,
     NonFungibleToken,
@@ -59,6 +59,7 @@ export const parseCollectionMetadataWithoutRegistry = async (
     collection: string,
     thor: Connex.Thor,
     notAvailable: string,
+    isDarkTheme: boolean,
 ): Promise<NonFungibleTokenCollection> => {
     // Get the first NFT in the collection and use it to parse the collection metadata
     const { data, pagination } = await getNftsForContract(
@@ -74,7 +75,8 @@ export const parseCollectionMetadataWithoutRegistry = async (
     const tokenURI = await getTokenURI(data[0].tokenId, collection, thor)
     const tokenMetadata = await fetchMetadata(tokenURI)
     const image = URIUtils.convertUriToUrl(
-        tokenMetadata?.image ?? NFTPlaceholder,
+        tokenMetadata?.image ??
+            (isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight),
     )
 
     const nftCollection: NonFungibleTokenCollection = {
@@ -99,12 +101,14 @@ export const parseNftMetadata = async (
     nft: NftItemResponse,
     thor: Connex.Thor,
     notAvailable: string,
+    isDarkTheme: boolean,
 ): Promise<NonFungibleToken> => {
     const tokenURI = await getTokenURI(nft.tokenId, nft.contractAddress, thor)
     const tokenMetadata = await fetchMetadata(tokenURI)
 
     const image = URIUtils.convertUriToUrl(
-        tokenMetadata?.image ?? NFTPlaceholder,
+        tokenMetadata?.image ??
+            (isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight),
     )
 
     const nftWithMetadata: NonFungibleToken = {

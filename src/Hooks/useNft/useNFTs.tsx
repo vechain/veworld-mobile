@@ -14,6 +14,7 @@ import { error } from "~Utils"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
 import { parseNftMetadata } from "./Helpers"
+import { useTheme } from "~Hooks"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
@@ -22,6 +23,8 @@ export const useNFTs = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const thor = useThor()
     const { LL } = useI18nContext()
+
+    const theme = useTheme()
 
     const getNFTsForCollection = useCallback(
         async (
@@ -52,6 +55,7 @@ export const useNFTs = () => {
                             nft,
                             thor,
                             LL.COMMON_NOT_AVAILABLE(),
+                            theme.isDark,
                         )
                     }),
                 )
@@ -83,7 +87,14 @@ export const useNFTs = () => {
                 error("useNFTs", e)
             }
         },
-        [LL, dispatch, selectedAccount.address, thor, network],
+        [
+            dispatch,
+            network.type,
+            selectedAccount.address,
+            thor,
+            LL,
+            theme.isDark,
+        ],
     )
 
     return { getNFTsForCollection }
