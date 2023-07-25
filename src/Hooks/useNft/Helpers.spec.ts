@@ -307,7 +307,7 @@ describe("Helpers - parseNftMetadata", () => {
             id: nft.contractAddress + nft.tokenId + nft.owner,
             image: NFTPlaceHolderLight,
             isBlacklisted: false,
-            name: "name",
+            name: "notAvailable",
             owner: "0x123",
             tokenId: "1",
             tokenURI: "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
