@@ -17,7 +17,7 @@ export const ContractCallClause: React.FC<Props> = memo(({ clause }) => {
     const { onCopyToClipboard } = useCopyClipboard()
 
     return (
-        <BaseView style={{ width: SCREEN_WIDTH - 80 }}>
+        <BaseView style={{ width: SCREEN_WIDTH - 88 }}>
             <ClauseDetail
                 title={LL.TYPE()}
                 value={LL.CONNECTED_APP_contract_call()}
