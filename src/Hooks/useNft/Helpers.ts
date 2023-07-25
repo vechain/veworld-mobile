@@ -7,7 +7,6 @@ import {
     getTokenTotalSupply,
     getTokenURI,
 } from "~Networking"
-import { fetchMetadata } from "./fetchMeta"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import {
     NETWORK_TYPE,
@@ -78,7 +77,7 @@ export const parseCollectionMetadataWithoutRegistry = async (
         name: await getName(collection, thor),
         symbol: await getSymbol(collection, thor),
         creator: notAvailable,
-        description: "",
+        description: notAvailable,
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         balanceOf: pagination.totalElements,
         hasCount: pagination.hasCount,
@@ -96,23 +95,16 @@ export const parseNftMetadata = async (
     isDarkTheme: boolean,
 ): Promise<NonFungibleToken> => {
     const tokenURI = await getTokenURI(nft.tokenId, nft.contractAddress, thor)
-    const tokenMetadata = await fetchMetadata(tokenURI)
-
-    const image = URIUtils.convertUriToUrl(
-        tokenMetadata?.image ??
-            (isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight),
-    )
 
     const nftWithMetadata: NonFungibleToken = {
-        ...tokenMetadata,
         id: nft.contractAddress + nft.tokenId + nft.owner,
-        name: tokenMetadata?.name ?? notAvailable,
-        description: tokenMetadata?.description ?? notAvailable,
+        name: notAvailable,
+        description: notAvailable,
         address: nft.contractAddress,
         tokenId: nft.tokenId,
         owner: nft.owner,
         tokenURI,
-        image,
+        image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
     }
 
     return nftWithMetadata

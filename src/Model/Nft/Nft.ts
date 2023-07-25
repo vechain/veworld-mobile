@@ -22,7 +22,6 @@ export interface NonFungibleTokenCollection extends ERC721Metadata {
 export interface NonFungibleToken extends TokenMetadata, WithID {
     owner: string
     tokenId: string
-    tokenURI?: string
 }
 
 export interface WithID {
@@ -64,6 +63,7 @@ export interface OpenSeaMetadata {
 }
 
 export interface ERC721Metadata {
+    tokenURI?: string
     address: string
     name: string
     description: string
