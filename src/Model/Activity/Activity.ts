@@ -15,6 +15,7 @@ export interface Activity {
     timestamp: number
     type: ActivityType
     id: string
+    txId?: string
     from: string
     to?: string[]
     blockNumber?: number
