@@ -149,8 +149,11 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                 <BaseText typographyFont="captionRegular">
                     {item.balance &&
                         FormattingUtils.humanNumber(
-                            item.balance?.balance,
-                            item.balance?.balance,
+                            FormattingUtils.scaleNumberDown(
+                                item.balance?.balance,
+                                VET.decimals,
+                                FormattingUtils.ROUND_DECIMAL_DEFAULT,
+                            ),
                         )}{" "}
                     {VET.symbol}
                 </BaseText>
