@@ -134,7 +134,10 @@ export const useSignTransaction = ({
             )
 
         if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
-            showWarningToast("Delegated hardware wallet not supported yet")
+            showWarningToast(
+                LL.HEADS_UP(),
+                LL.LEDGER_DELEGATION_NOT_SUPPORTED(),
+            )
             throw new Error("Delegated hardware wallet not supported yet")
         }
 
@@ -185,7 +188,6 @@ export const useSignTransaction = ({
 
         //local mnemonic, identity already verified via useCheckIdentity
         if (!senderDevice.wallet) {
-            showWarningToast("Hardware wallet not supported yet")
             throw new Error("Hardware wallet not supported yet")
         }
 

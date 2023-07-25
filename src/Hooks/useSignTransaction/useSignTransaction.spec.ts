@@ -2,7 +2,7 @@ import { TestHelpers, TestWrapper } from "~Test"
 import { useSignTransaction } from "./useSignTransaction"
 import { renderHook } from "@testing-library/react-hooks"
 import { DelegationType } from "~Model/Delegation"
-import { showErrorToast, showWarningToast } from "~Components"
+import { showErrorToast } from "~Components"
 import { CryptoUtils } from "~Utils"
 import axios from "axios"
 
@@ -207,7 +207,6 @@ describe("useSignTransaction", () => {
             })
 
             await result.current.signAndSendTransaction()
-            expect(showWarningToast).toHaveBeenCalled()
         })
     })
 
