@@ -12,6 +12,7 @@ import {
     DelegationOptions,
     FadeoutButton,
     Layout,
+    NFTTransferCard,
     TransferCard,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -20,7 +21,6 @@ import {
     selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
-import { NFTRecapView } from "./Components/NFTRecapView"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
 import {
     useCheckIdentity,
@@ -140,31 +140,21 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={24} />
 
-                        <BaseView
-                            flexDirection="row"
-                            style={baseStyles.previewContainer}>
-                            <NFTRecapView nft={nft!} />
-
-                            <BaseView justifyContent="flex-end" h={100} mx={16}>
-                                <BaseText
-                                    typographyFont="subTitleBold"
-                                    alignContainer="baseline">
-                                    {nft?.name ?? LL.COMMON_NOT_AVAILABLE()}
-                                </BaseText>
-                                <BaseText
-                                    typographyFont="body"
-                                    alignContainer="baseline">
-                                    #{nft!.tokenId}
-                                </BaseText>
-                            </BaseView>
-                        </BaseView>
-
-                        <BaseSpacer height={24} />
-
                         <TransferCard
                             fromAddress={selectedAccoount.address}
                             toAddresses={[route.params.receiverAddress]}
                         />
+
+                        <BaseSpacer height={24} />
+
+                        <BaseView
+                            flexDirection="row"
+                            style={baseStyles.previewContainer}>
+                            <NFTTransferCard
+                                collectionAddress={nft!.contractAddress}
+                                tokenId={nft!.tokenId}
+                            />
+                        </BaseView>
 
                         <DelegationOptions
                             selectedDelegationOption={selectedDelegationOption}
