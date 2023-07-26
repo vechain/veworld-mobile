@@ -47,7 +47,7 @@ platform :ios do
   lane :gh_setup_beta_before do |values|
     ensure_git_status_clean
 
-    ensure_git_branch(branch: "main")
+    # ensure_git_branch(branch: "main")
 
     github_token = values[:github_token]
     build = values[:build]
