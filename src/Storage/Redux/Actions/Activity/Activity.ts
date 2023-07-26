@@ -50,7 +50,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (updatedActivity.isTransaction) {
             const txReceipt = await thor
-                .transaction(updatedActivity.id)
+                .transaction(updatedActivity.txId?.toLowerCase() ?? "")
                 .getReceipt()
 
             updatedActivity.blockNumber = txReceipt?.meta.blockNumber ?? 0
@@ -66,6 +66,13 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                     : ActivityStatus.SUCCESS
             }
         }
+
+        // If the activity has been pending for more than 2 minutes, mark it as failed
+        if (
+            Date.now() - updatedActivity.timestamp > 120000 &&
+            updatedActivity.status === ActivityStatus.PENDING
+        )
+            updatedActivity.status = ActivityStatus.REVERTED
 
         thor.genesis.id === genesisesId.main
             ? dispatch(
