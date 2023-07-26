@@ -349,9 +349,9 @@ const baseStyles = StyleSheet.create({
     list: {
         top: 0,
         flex: 1,
-        marginBottom: PlatformUtils.isIOS()
+        marginBottom: PlatformUtils?.isIOS()
             ? 0
-            : tabbarBaseStyles.tabbar.height,
+            : tabbarBaseStyles?.tabbar?.height,
     },
     noActivitiesButton: {
         position: "absolute",
