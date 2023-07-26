@@ -39,6 +39,14 @@ Create changelog
 
 Create Release Branch on GitHub
 
+### ios gh_setup_beta_after
+
+```sh
+[bundle exec] fastlane ios gh_setup_beta_after
+```
+
+Commit latest artifacts to GitHub
+
 ### ios build_beta
 
 ```sh

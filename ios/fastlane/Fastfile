@@ -77,7 +77,7 @@ platform :ios do
     github_username = values[:github_username]
     build = values[:build]
 
-    sh("git add")
+    sh("git add .")
     sh("git commit -a -m 'build: complete'")
     # Push the branch to GitHub
     sh("git push -u origin #{branch_name}-#{build}")
