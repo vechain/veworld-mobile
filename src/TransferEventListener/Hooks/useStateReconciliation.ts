@@ -6,7 +6,7 @@ import {
     useAppDispatch,
 } from "~Storage/Redux"
 
-export const useStateReconciliaiton = () => {
+export const useStateReconciliation = () => {
     const dispatch = useAppDispatch()
     const thor = useThor()
 
@@ -18,8 +18,13 @@ export const useStateReconciliaiton = () => {
     )
 
     const updateNFTs = useCallback(
-        (params: { accountAddress: string }) => {
-            dispatch(refreshNFTs({ accountAddress: params.accountAddress }))
+        (params: { network: string; accountAddress: string }) => {
+            dispatch(
+                refreshNFTs({
+                    network: params.network,
+                    accountAddress: params.accountAddress,
+                }),
+            )
         },
         [dispatch],
     )

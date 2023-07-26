@@ -13,6 +13,13 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+fastlane_require "dotenv"
+
+before_all do
+	Dotenv.load ".env"
+end
+
+
 default_platform(:ios)
 
 platform :ios do
@@ -25,9 +32,86 @@ platform :ios do
     end
   end
 
+
+
+
+  desc "Create changelog"
+  lane :create_changelog do
+    Dir.chdir "../.." do # Navigate to the root
+      sh("yarn release")
+    end
+
+     # Read the current version from package.json
+     package_json = JSON.parse(File.read("../../package.json"))
+     new_version = package_json["version"]
+ 
+     # Update the version in package.json
+     package_json["version"] = new_version
+     File.write("../../package.json", JSON.pretty_generate(package_json))
+  end
+
+
+
+
+  desc "Create Release Branch on GitHub"
+  lane :gh_setup_beta_before do |values|
+
+    github_token = values[:github_token]
+    github_username = values[:github_username]
+    build = values[:build]
+    branch_name = "release-build"
+
+    # Create and push the branch locally
+    sh("git checkout -b #{branch_name}-#{build}")
+
+    # Set the GitHub remote URL with credentials
+    remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
+    sh("git remote set-url origin #{remote_url}")
+    sh("git commit -a -m 'build: init'")
+
+    # Push the branch to GitHub
+    sh("git push -u origin #{branch_name}-#{build}")
+  end
+
+
+   
+
+  desc "Commit latest artifacts to GitHub"
+  lane :gh_setup_beta_after do |values|
+    branch_name = "release-build"
+
+    github_token = values[:github_token]
+    github_username = values[:github_username]
+    build = values[:build]
+
+    sh("git add --all")
+    sh("git commit -a -m 'build: complete'")
+    # Push the branch to GitHub
+    sh("git push -u origin #{branch_name}-#{build}")
+  end
+
+
+
+
   desc "Push a new beta build to TestFlight"
-  lane :beta do
-    increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+  lane :build_beta do |options|
+    github_username = options[:username]
+    github_token = options[:token]
+
+    ensure_git_status_clean
+    ensure_git_branch(branch: "main")
+
+    build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+
+    gh_setup_beta_before(
+      github_username:github_username, 
+      github_token:github_token,
+      build:build
+    )
+
+    Dir.chdir "../.." do
+      sh("yarn purge && yarn install:all")
+    end
 
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
@@ -64,6 +148,30 @@ platform :ios do
     upload_to_testflight(
       skip_waiting_for_build_processing: true, 
       apple_id: "6446854569"
+    )
+
+    gh_setup_beta_after(
+      github_username:github_username, 
+      github_token:github_token,
+      build:build
+    )
+
+    create_pull_request(
+      api_token: github_token,
+      repo: "vechainfoundation/veworld-mobile",
+      title: "build: build artifacts build-#{build}",
+      base: "main",
+      api_url: "https://api.github.com"
+    )
+
+    slack(
+      message: "VeWorld build number: #{build} was successfully released!",
+      slack_url: ENV["SLACK_WEBHOOK"],
+      success: true,
+      payload: {
+        "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+        "Built by" => github_username,
+      },
     )
 
   end
