@@ -217,7 +217,9 @@
     },
     "release-it": {
         "git": {
-            "commitMessage": "chore: release v${version}"
+            "commit": false,
+            "tag": false,
+            "push": false
         },
         "github": {
             "release": true
