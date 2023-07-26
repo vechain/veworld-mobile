@@ -25,9 +25,8 @@ platform :ios do
     end
   end
 
-
   desc "Create changelog"
-  lane :changelog do
+  lane :create_changelog do
     Dir.chdir "../.." do # Navigate to the root
       sh("yarn release")
     end
@@ -40,8 +39,6 @@ platform :ios do
      package_json["version"] = new_version
      File.write("../../package.json", JSON.pretty_generate(package_json))
   end
-
-
 
   desc "Create Release Branch on GitHub"
   lane :gh_setup_beta_before do |values|
@@ -78,6 +75,8 @@ platform :ios do
       github_token:github_token,
       build:build
     )
+
+    create_changelog
 
 =begin
     get_certificates( # Create or get certificate, and install it
