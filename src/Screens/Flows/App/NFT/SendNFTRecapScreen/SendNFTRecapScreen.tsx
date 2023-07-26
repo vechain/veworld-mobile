@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native"
 import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
@@ -33,6 +32,7 @@ import { DEVICE_TYPE } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { DelegationType } from "~Model/Delegation"
+import { isEmpty } from "lodash"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -107,11 +107,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             selectedDelegationAccount?.address || selectedAccoount.address,
     })
 
-    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
-        useCheckIdentity({
-            onIdentityConfirmed: signAndSendTransaction,
-            onCancel: () => setLoading(false),
-        })
+    const {
+        ConfirmIdentityBottomSheet,
+        checkIdentityBeforeOpening,
+        biometrics,
+    } = useCheckIdentity({
+        onIdentityConfirmed: signAndSendTransaction,
+        onCancel: () => setLoading(false),
+    })
 
     const onSubmit = useCallback(async () => {
         if (
@@ -147,14 +150,10 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={24} />
 
-                        <BaseView
-                            flexDirection="row"
-                            style={baseStyles.previewContainer}>
-                            <NFTTransferCard
-                                collectionAddress={nft!.contractAddress}
-                                tokenId={nft!.tokenId}
-                            />
-                        </BaseView>
+                        <NFTTransferCard
+                            collectionAddress={nft!.contractAddress}
+                            tokenId={nft!.tokenId}
+                        />
 
                         <DelegationOptions
                             selectedDelegationOption={selectedDelegationOption}
@@ -205,30 +204,15 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                 <FadeoutButton
                     title={LL.SEND_TOKEN_TITLE().toUpperCase()}
                     action={onSubmit}
-                    disabled={!isThereEnoughGas || loading}
+                    disabled={
+                        !isThereEnoughGas || loading || isEmpty(biometrics)
+                    }
                     bottom={0}
                     mx={0}
                     width={"auto"}
+                    isLoading={loading || isEmpty(biometrics)}
                 />
             }
         />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    previewContainer: {
-        height: 130,
-    },
-    addressContainer: {
-        overflow: "visible",
-    },
-    icon: {
-        position: "absolute",
-        right: 16,
-        bottom: -32,
-        padding: 8,
-    },
-    addressView: {
-        zIndex: 2,
-    },
-})
