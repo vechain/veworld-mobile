@@ -101,6 +101,7 @@ platform :ios do
       build:build
     )
 
+=begin    
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
     )
@@ -137,11 +138,20 @@ platform :ios do
       skip_waiting_for_build_processing: true, 
       apple_id: "6446854569"
     )
+=end   
 
     gh_setup_beta_after(
       github_username:github_username, 
       github_token:github_token,
       build:build
+    )
+
+    create_pull_request(
+      api_token: github_token,
+      repo: "vechainfoundation/veworld-mobile",
+      title: "build: build artifacts build-#{build}",
+      base: "main",
+      api_url: "https://api.github.com"
     )
 
   end
