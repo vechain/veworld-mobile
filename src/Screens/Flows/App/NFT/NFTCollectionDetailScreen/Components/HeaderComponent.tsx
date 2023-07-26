@@ -42,6 +42,7 @@ export const HeaderComponent = memo(
                         NFTMediaType.IMAGE,
                     ]) && (
                         <BaseImage
+                            isNFT={true}
                             uri={collection?.image}
                             style={baseStyles.nftHeaderImage}
                         />

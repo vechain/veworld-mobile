@@ -29,6 +29,7 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
                     <Video
                         PosterComponent={() => (
                             <BaseImage
+                                isNFT={true}
                                 uri={NFTPlaceholder}
                                 style={baseStyles.nftImage}
                             />
@@ -45,7 +46,13 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
                 </BaseView>
             )
 
-        return <BaseImage uri={NFTPlaceholder} style={baseStyles.nftImage} />
+        return (
+            <BaseImage
+                uri={NFTPlaceholder}
+                style={baseStyles.nftImage}
+                isNFT={true}
+            />
+        )
     }, [mime, uri])
 
     return (

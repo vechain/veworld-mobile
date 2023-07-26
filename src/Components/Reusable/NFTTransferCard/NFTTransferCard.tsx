@@ -48,6 +48,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                 uri={placeholderImg}
                 // @ts-ignore
                 style={styles.nftImage}
+                isNFT={true}
             />
         )
     }, [placeholderImg, styles.nftImage])
@@ -58,7 +59,14 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
         if (tokenImage && tokenMime) {
             if (MediaUtils.getMime(tokenMime, [NFTMediaType.IMAGE]))
                 // @ts-ignore
-                return <BaseImage uri={tokenImage} style={styles.nftImage} />
+                return (
+                    <BaseImage
+                        uri={tokenImage}
+                        // @ts-ignore
+                        style={styles.nftImage}
+                        isNFT={true}
+                    />
+                )
 
             if (MediaUtils.getMime(tokenMime, [NFTMediaType.VIDEO]))
                 return (
@@ -84,6 +92,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                 uri={placeholderImg}
                 // @ts-ignore
                 style={styles.nftImage}
+                isNFT={true}
             />
         )
     }, [
