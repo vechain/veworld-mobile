@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useAppLock, useWalletSecurity } from "~Hooks"
-import { debug, LockScreenUtils } from "~Utils"
+import { LockScreenUtils } from "~Utils"
 import RNBootSplash from "react-native-bootsplash"
 import { LockScreen } from "~Screens"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
@@ -31,7 +31,6 @@ export const usePasswordUnlock = () => {
 
     const onUserPinSuccess = useCallback(
         (password: string) => {
-            debug("onUserPinSuccess")
             updatePinCode(password)
             unlockApp()
         },

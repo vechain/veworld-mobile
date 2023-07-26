@@ -27,7 +27,8 @@ const PinCodeContext = React.createContext<{
 type PinCodeContextProviderProps = { children: React.ReactNode }
 
 /**
- * A provider that allows to store the pin code in memory
+ * A provider that allows to store the pin code for the duration of the app session.
+ * The pin code is removed when the app is closed
  */
 export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
     const [pinCode, setPinCode] = React.useState<string | undefined>()
@@ -36,6 +37,7 @@ export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
     const dispatch = useAppDispatch()
 
+    // Reset pin code when the user changes the security setting to pin required
     useEffect(() => {
         if (isPinCodeRequired) {
             setPinCode(undefined)
