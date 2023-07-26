@@ -2,9 +2,9 @@ import React, { useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import {
     BaseView,
-    BaseImage,
     BaseText,
     NFTTransferCardSkeleton,
+    NFTImage,
 } from "~Components"
 import { useNonFungibleTokenInfo, useThemedStyles } from "~Hooks"
 import { NFTMediaType } from "~Model"
@@ -44,7 +44,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
     const posterComponent = useCallback(() => {
         // @ts-ignore
         return (
-            <BaseImage
+            <NFTImage
                 uri={placeholderImg}
                 // @ts-ignore
                 style={styles.nftImage}
@@ -60,7 +60,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
             if (MediaUtils.isValidMimeType(tokenMime, [NFTMediaType.IMAGE]))
                 // @ts-ignore
                 return (
-                    <BaseImage
+                    <NFTImage
                         uri={tokenImage}
                         // @ts-ignore
                         style={styles.nftImage}
@@ -88,7 +88,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
 
         // @ts-ignore
         return (
-            <BaseImage
+            <NFTImage
                 uri={placeholderImg}
                 // @ts-ignore
                 style={styles.nftImage}
