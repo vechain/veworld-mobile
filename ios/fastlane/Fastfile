@@ -57,9 +57,6 @@ platform :ios do
     # Set the GitHub remote URL with credentials
     remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
     sh("git remote set-url origin #{remote_url}")
-
-    create_changelog
-
     sh("git commit -S -a -m 'build: init'")
 
     # Push the branch to GitHub
@@ -80,6 +77,7 @@ platform :ios do
       build:build
     )
 
+    create_changelog
 
 =begin
 
