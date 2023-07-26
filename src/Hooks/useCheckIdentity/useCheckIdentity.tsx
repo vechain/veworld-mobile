@@ -10,7 +10,7 @@ type Props = {
  * hook used to handle reusable identity flow
  */
 export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
-    const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { isWalletSecurityBiometrics, biometrics } = useWalletSecurity()
 
     const {
         isOpen: isPasswordPromptOpen,
@@ -66,5 +66,6 @@ export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
         openPasswordPrompt,
         closePasswordPrompt,
         ConfirmIdentityBottomSheet,
+        biometrics,
     }
 }
