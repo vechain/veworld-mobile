@@ -105,13 +105,21 @@ export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
         setEncryptedPinCode(undefined)
     }, [])
 
-    const value = {
-        removePinCode,
+    const value = useMemo(() => {
+        return {
+            removePinCode,
+            updatePinCode,
+            getPinCode,
+            enablePinCodeStorage,
+            isPinRequired: isPinCodeRequired,
+        }
+    }, [
         updatePinCode,
-        getPinCode,
         enablePinCodeStorage,
-        isPinRequired: isPinCodeRequired,
-    }
+        getPinCode,
+        isPinCodeRequired,
+        removePinCode,
+    ])
 
     return (
         <PinCodeContext.Provider value={value}>
