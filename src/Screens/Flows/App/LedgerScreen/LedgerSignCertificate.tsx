@@ -87,17 +87,17 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const Steps: Step[] = useMemo(
         () => [
             {
-                isActiveText: "Connecting",
-                isNextText: "Connect",
-                isDoneText: "Connected",
+                isActiveText: LL.LEDGER_CONNECTING(),
+                isNextText: LL.LEDGER_CONNECT(),
+                isDoneText: LL.LEDGER_CONNECTED(),
                 progressPercentage: 25,
                 title: LL.SEND_LEDGER_CHECK_CONNECTION(),
                 subtitle: LL.SEND_LEDGER_CHECK_CONNECTION_SB(),
             },
             {
-                isActiveText: "Signing",
-                isNextText: "Sign data",
-                isDoneText: "Data Signed",
+                isActiveText: LL.LEDGER_SIGNING(),
+                isNextText: LL.LEDGER_SIGN_DATA(),
+                isDoneText: LL.LEDGER_DATA_SIGNED(),
                 progressPercentage: 75,
                 title: LL.CERT_LEDGER_SIGN_DATA(),
                 subtitle: LL.CERT_LEDGER_SIGN_DATA_SB(),

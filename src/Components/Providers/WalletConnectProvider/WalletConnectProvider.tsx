@@ -443,7 +443,11 @@ const WalletConnectContextProvider = ({
             handleLinkingUrl(event.url)
         })
         return () => {
-            Linking.removeAllListeners("url")
+            try {
+                Linking.removeAllListeners("url")
+            } catch (e) {
+                warn(e)
+            }
         }
     }, [handleLinkingUrl])
 

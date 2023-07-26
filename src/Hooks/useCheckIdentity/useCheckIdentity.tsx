@@ -1,6 +1,7 @@
 import React, { useCallback } from "react"
 import { useDisclosure, useWalletSecurity } from "~Hooks"
 import { RequireUserPassword } from "~Components"
+import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
 
 type Props = {
     onIdentityConfirmed: (password?: string) => void
@@ -11,6 +12,7 @@ type Props = {
  */
 export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { getPinCode } = usePinCode()
 
     const {
         isOpen: isPasswordPromptOpen,
@@ -25,12 +27,21 @@ export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
      *
      */
     const checkIdentityBeforeOpening = useCallback(async () => {
+        const pinCode = getPinCode()
+
         if (isWalletSecurityBiometrics) {
             onIdentityConfirmed()
+        } else if (pinCode) {
+            onIdentityConfirmed(pinCode)
         } else {
             openPasswordPrompt()
         }
-    }, [isWalletSecurityBiometrics, openPasswordPrompt, onIdentityConfirmed])
+    }, [
+        getPinCode,
+        isWalletSecurityBiometrics,
+        openPasswordPrompt,
+        onIdentityConfirmed,
+    ])
 
     /*
      * This function is called when the user enters the correct password. It will

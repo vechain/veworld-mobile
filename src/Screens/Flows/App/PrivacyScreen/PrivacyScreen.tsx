@@ -12,23 +12,26 @@ import {
 } from "~Components"
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
-import { EnableBiometrics, BackupMnemonicBottomSheet } from "./Components"
+import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
 import { LocalDevice, WALLET_STATUS } from "~Model"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    setIsPinCodeRequired,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import {
     selectAnalyticsTrackingEnabled,
-    selectIsAppLockActive,
     selectLocalDevices,
 } from "~Storage/Redux/Selectors"
 
 import {
     setAnalyticsTrackingEnabled,
     setAppLockStatus,
-    setIsAppLockActive,
 } from "~Storage/Redux/Actions"
 import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 import { isSmallScreen } from "~Constants"
+import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -36,7 +39,7 @@ export const PrivacyScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    const isAppLockActive = useAppSelector(selectIsAppLockActive)
+    const { isPinRequired, removePinCode, enablePinCodeStorage } = usePinCode()
 
     const isAnalyticsTrackingEnabled = useAppSelector(
         selectAnalyticsTrackingEnabled,
@@ -61,6 +64,12 @@ export const PrivacyScreen = () => {
         isOpen: isPasswordPromptOpen,
         onOpen: openPasswordPrompt,
         onClose: closePasswordPrompt,
+    } = useDisclosure()
+
+    const {
+        isOpen: isNoPinRequiredPromptOpen,
+        onOpen: openNoPinRequiredPrompt,
+        onClose: closeNoPinRequiredPrompt,
     } = useDisclosure()
 
     const {
@@ -102,10 +111,23 @@ export const PrivacyScreen = () => {
     // [START] - Internal Methods
     const toggleAppLockSwitch = useCallback(
         (newValue: boolean) => {
-            dispatch(setIsAppLockActive(newValue))
-            dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
+            if (newValue) {
+                removePinCode()
+                dispatch(setIsPinCodeRequired(newValue))
+                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
+            } else {
+                openNoPinRequiredPrompt()
+            }
         },
-        [dispatch],
+        [removePinCode, openNoPinRequiredPrompt, dispatch],
+    )
+
+    const onNoPinRequiredSuccess = useCallback(
+        (pin: string) => {
+            enablePinCodeStorage(pin)
+            closeNoPinRequiredPrompt()
+        },
+        [closeNoPinRequiredPrompt, enablePinCodeStorage],
     )
 
     const toggleAnalyticsTrackingSwitch = useCallback(
@@ -133,7 +155,7 @@ export const PrivacyScreen = () => {
                             title={LL.SB_PASSWORD_AUTH()}
                             subtitle={LL.BD_APP_LOCK()}
                             onValueChange={toggleAppLockSwitch}
-                            value={isAppLockActive}
+                            value={isPinRequired}
                         />
 
                         <BaseSpacer height={24} />
@@ -195,6 +217,12 @@ export const PrivacyScreen = () => {
                             isOpen={isPasswordPromptOpen}
                             onClose={closePasswordPrompt}
                             onSuccess={onPasswordSuccess}
+                        />
+
+                        <RequireUserPassword
+                            onSuccess={onNoPinRequiredSuccess}
+                            isOpen={isNoPinRequiredPromptOpen}
+                            onClose={closeNoPinRequiredPrompt}
                         />
 
                         <RequireUserPassword

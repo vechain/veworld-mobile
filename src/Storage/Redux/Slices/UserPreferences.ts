@@ -1,10 +1,22 @@
 import { LANGUAGE } from "../../../Constants/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { CURRENCY, ThemeEnum } from "~Constants"
+
+/**
+ * @typedef {Object} UserPreferenceState
+ * @property {ThemeEnum} theme
+ * @property {boolean} hideTokensWithNoBalance
+ * @property {boolean} isPinCodeRequired - whether the pin code is required to decrypt the wallets. Pin code will be stored in the PinCodeProvider if not.
+ * @property {boolean} balanceVisible
+ * @property {CURRENCY} currency
+ * @property {LANGUAGE} language
+ * @property {boolean} isAnalyticsTrackingEnabled
+ * @property {boolean} isSentryTrackingEnabled
+ */
 export interface UserPreferenceState {
     theme: ThemeEnum
     hideTokensWithNoBalance: boolean
-    isAppLockActive: boolean
+    isPinCodeRequired: boolean
     balanceVisible: boolean
     currency: CURRENCY
     language: LANGUAGE
@@ -15,7 +27,7 @@ export interface UserPreferenceState {
 const initialState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
     hideTokensWithNoBalance: false,
-    isAppLockActive: process.env.NODE_ENV !== "development",
+    isPinCodeRequired: process.env.NODE_ENV !== "development",
     balanceVisible: true,
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,
@@ -35,8 +47,8 @@ export const UserPreferencesSlice = createSlice({
             state.hideTokensWithNoBalance = action.payload
         },
 
-        setIsAppLockActive: (state, action: PayloadAction<boolean>) => {
-            state.isAppLockActive = action.payload
+        setIsPinCodeRequired: (state, action: PayloadAction<boolean>) => {
+            state.isPinCodeRequired = action.payload
         },
 
         setBalanceVisible: (state, action: PayloadAction<boolean>) => {
@@ -69,7 +81,7 @@ export const UserPreferencesSlice = createSlice({
 export const {
     setTheme,
     setHideTokensWithNoBalance,
-    setIsAppLockActive,
+    setIsPinCodeRequired,
     setBalanceVisible,
     setCurrency,
     setLanguage,
