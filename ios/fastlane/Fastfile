@@ -63,6 +63,7 @@ platform :ios do
     # sh("git push origin #{branch_name}-#{version}")
   end
 
+  
   desc "Push a new beta build to TestFlight"
   lane :build_beta do |options|
     github_username = options[:username]
@@ -76,6 +77,9 @@ platform :ios do
       build:build
     )
 
+
+    sh("git add .")
+    sh("git commit -S -m 'build: init'")
     create_changelog
 
 =begin
