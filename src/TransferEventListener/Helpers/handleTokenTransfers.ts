@@ -41,10 +41,8 @@ export const handleTokenTransfers = async ({
         InformUserForOutgoingToken({
             txId: transfer.txId,
             amount: transfer.value || "0",
-            symbol,
             decimals,
             transfer,
-            to: transfer.to,
             informUser,
         })
 
