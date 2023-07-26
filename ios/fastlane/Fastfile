@@ -49,9 +49,6 @@ platform :ios do
   desc "Create Release Branch on GitHub"
   lane :gh_setup_beta_before do |values|
 
-    ensure_git_status_clean
-    ensure_git_branch(branch: "main")
-
     github_token = values[:github_token]
     github_username = values[:github_username]
     build = values[:build]
@@ -92,6 +89,9 @@ platform :ios do
   lane :build_beta do |options|
     github_username = options[:username]
     github_token = options[:token]
+
+    ensure_git_status_clean
+    # ensure_git_branch(branch: "main")
 
     build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
 
