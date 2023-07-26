@@ -13,7 +13,7 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { Linking } from "react-native"
 import { useBottomSheetModal } from "~Hooks"
-import { DateUtils, TransactionUtils } from "~Utils"
+import { DateUtils, PlatformUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"
@@ -286,6 +286,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
                         {/* Render Activity Details based on the 'activity.type' */}
                         {renderActivityDetails}
+
+                        {PlatformUtils.isAndroid() && (
+                            <BaseSpacer height={64} />
+                        )}
                     </>
                 }
                 footer={
