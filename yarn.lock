@@ -3707,9 +3707,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^18.0.21":
-  version "18.2.16"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.16.tgz#403dda0e933caccac9efde569923239ac426786c"
-  integrity sha512-LLFWr12ZhBJ4YVw7neWLe6Pk7Ey5R9OCydfuMsz1L8bZxzaawJj2p06Q8/EFEHDeTBQNFLF62X+CG7B2zIyu0Q==
+  version "18.2.17"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.17.tgz#baa565b17ddb649c2dac85b5eaf9e9a1fe0f3b4e"
+  integrity sha512-u+e7OlgPPh+aryjOm5UJMX32OvB2E3QASOAqVMY6Ahs90djagxwv2ya0IctglNbNTexC12qCSMZG47KPfy1hAA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -6846,11 +6846,12 @@ enhanced-resolve@^5.0.0:
     tapable "^2.2.0"
 
 enquirer@^2.3.5:
-  version "2.3.6"
-  resolved "https://registry.yarnpkg.com/enquirer/-/enquirer-2.3.6.tgz#2a7fe5dd634a1e4125a975ec994ff5456dc3734d"
-  integrity sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/enquirer/-/enquirer-2.4.0.tgz#4f36f6c644137cc4fd2891da407ede2b1fea904a"
+  integrity sha512-ehu97t6FTYK2I3ZYtnp0BZ9vt0mvEL/cnHBds7Ct6jo9VX1VIkiFhOvVRWh6eblQqd7KOoICIQV+syZ3neXO/Q==
   dependencies:
     ansi-colors "^4.1.1"
+    strip-ansi "^6.0.1"
 
 entities@^4.2.0, entities@^4.4.0:
   version "4.5.0"
