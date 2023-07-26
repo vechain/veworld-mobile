@@ -173,5 +173,7 @@ platform :ios do
         "Built by" => github_username,
       },
     )
+
+    puts "Build finished. Bye!"
   end
 end
