@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Run e2e tests
 
+### ios create_changelog
+
+```sh
+[bundle exec] fastlane ios create_changelog
+```
+
+Create changelog
+
 ### ios gh_setup_beta_before
 
 ```sh
@@ -30,14 +38,6 @@ Run e2e tests
 ```
 
 Create Release Branch on GitHub
-
-### ios changelog
-
-```sh
-[bundle exec] fastlane ios changelog
-```
-
-Create changelog
 
 ### ios build_beta
 
