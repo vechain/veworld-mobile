@@ -8,11 +8,11 @@ import {
 } from "~Components"
 import { useNonFungibleTokenInfo, useThemedStyles } from "~Hooks"
 import { NFTMediaType } from "~Model"
-import { MediaUtils } from "~Utils"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType } from "~Constants"
 import { ResizeMode, Video } from "expo-av"
+import { isValidMimeType } from "~Utils/MediaUtils/MediaUtils"
 
 type Props = {
     collectionAddress: string
@@ -56,11 +56,11 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
         if (isMediaLoading) return <NFTTransferCardSkeleton />
 
         if (tokenImage && tokenMime) {
-            if (MediaUtils.isValidMimeType(tokenMime, [NFTMediaType.IMAGE]))
+            if (isValidMimeType(tokenMime, [NFTMediaType.IMAGE]))
                 // @ts-ignore
                 return <BaseImage uri={tokenImage} style={styles.nftImage} />
 
-            if (MediaUtils.isValidMimeType(tokenMime, [NFTMediaType.VIDEO]))
+            if (isValidMimeType(tokenMime, [NFTMediaType.VIDEO]))
                 return (
                     <BaseView style={styles.nftImage}>
                         <Video

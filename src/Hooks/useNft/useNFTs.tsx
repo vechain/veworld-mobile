@@ -4,17 +4,20 @@ import {
     selectSelectedNetwork,
     setNFTs,
     setNetworkingSideEffects,
+    updateNFT,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { NonFungibleToken } from "~Model"
-import { getNftsForContract } from "~Networking"
+import { getNftsForContract, getTokenURI } from "~Networking"
 import { useThor } from "~Components"
-import { error } from "~Utils"
+import { URIUtils, error } from "~Utils"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
-import { parseNftMetadata } from "./Helpers"
+import { initialiseNFTMetadata } from "./Helpers"
 import { useTheme } from "~Hooks"
+import { fetchMetadata } from "./fetchMeta"
+import { isDefaultImage, resolveMediaType } from "~Utils/MediaUtils/MediaUtils"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
@@ -26,7 +29,56 @@ export const useNFTs = () => {
 
     const theme = useTheme()
 
-    const getNFTsForCollection = useCallback(
+    const lazyLoadMetadata = useCallback(
+        async (
+            networkType: string,
+            address: string,
+            collectionAddress: string,
+            NFTs: NonFungibleToken[],
+        ) => {
+            await Promise.all(
+                NFTs.map(async nft => {
+                    if (isDefaultImage(nft.image)) {
+                        const tokenURI =
+                            nft.tokenURI ??
+                            (await getTokenURI(nft.tokenId, nft.address, thor))
+
+                        const tokenMetadata = await fetchMetadata(tokenURI)
+                        const image = URIUtils.convertUriToUrl(
+                            tokenMetadata?.image ?? nft.image,
+                        )
+                        const mediaType = await resolveMediaType(
+                            image,
+                            nft.mimeType,
+                        )
+
+                        if (tokenMetadata) {
+                            const updated = {
+                                ...nft,
+                                image,
+                                mediaType,
+                                name: tokenMetadata?.name ?? nft.name,
+                                description:
+                                    tokenMetadata?.description ??
+                                    nft.description,
+                            }
+                            dispatch(
+                                updateNFT({
+                                    network: networkType,
+                                    address,
+                                    collectionAddress,
+                                    NFT: updated,
+                                }),
+                            )
+                        }
+                    }
+                }),
+            )
+        },
+        [dispatch, thor],
+    )
+
+    const loadNFTsForCollection = useCallback(
         async (
             contractAddress: string,
             _page: number,
@@ -50,8 +102,10 @@ export const useNFTs = () => {
 
                 const NFTs: NonFungibleToken[] = await Promise.all(
                     nftResponse.data.map(async nft => {
-                        return parseNftMetadata(
-                            nft,
+                        return initialiseNFTMetadata(
+                            nft.tokenId,
+                            nft.contractAddress,
+                            nft.owner,
                             thor,
                             LL.COMMON_NOT_AVAILABLE(),
                             theme.isDark,
@@ -76,6 +130,13 @@ export const useNFTs = () => {
                         error: undefined,
                     }),
                 )
+
+                lazyLoadMetadata(
+                    network.type,
+                    selectedAccount.address,
+                    contractAddress,
+                    NFTs,
+                )
             } catch (e) {
                 dispatch(
                     setNetworkingSideEffects({
@@ -90,11 +151,12 @@ export const useNFTs = () => {
             dispatch,
             network.type,
             selectedAccount.address,
+            lazyLoadMetadata,
             thor,
             LL,
             theme.isDark,
         ],
     )
 
-    return { getNFTsForCollection }
+    return { loadNFTsForCollection }
 }

@@ -4,10 +4,10 @@ import { GithubCollectionResponse, NftItemResponse } from "~Networking"
 import {
     parseCollectionMetadataFromRegistry,
     parseCollectionMetadataWithoutRegistry,
-    parseNftMetadata,
+    initialiseNFTMetadata,
 } from "./Helpers"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
-import { NETWORK_TYPE } from "~Model"
+import { NETWORK_TYPE, NFTMediaType } from "~Model"
 
 const regInfo: GithubCollectionResponse = {
     name: "name",
@@ -114,6 +114,7 @@ describe("Helpers - parseCollectionMetadataFromRegistry", () => {
             description: "description",
             hasCount: true,
             image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
+            mediaType: NFTMediaType.IMAGE,
             isBlacklisted: false,
             mimeType: "image/webp",
             name: "name",
@@ -174,6 +175,7 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             description: "notAvailable",
             hasCount: true,
             image: NFTPlaceHolderLight,
+            mediaType: NFTMediaType.IMAGE,
             isBlacklisted: false,
             name: "name",
             symbol: "symbol",
@@ -207,6 +209,7 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             description: "notAvailable",
             hasCount: true,
             image: NFTPlaceholderDark,
+            mediaType: NFTMediaType.IMAGE,
             isBlacklisted: false,
             name: "name",
             symbol: "symbol",
@@ -240,6 +243,7 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             description: "notAvailable",
             hasCount: true,
             image: NFTPlaceHolderLight,
+            mediaType: NFTMediaType.IMAGE,
             isBlacklisted: false,
             name: "name",
             symbol: "symbol",
@@ -275,7 +279,7 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
     })
 })
 
-describe("Helpers - parseNftMetadata", () => {
+describe("Helpers - initialiseNFTMetadata", () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
@@ -291,13 +295,21 @@ describe("Helpers - parseNftMetadata", () => {
             blockId: "0x34745",
         }
 
-        const result = await parseNftMetadata(nft, thor, "notAvailable", false)
+        const result = await initialiseNFTMetadata(
+            nft.tokenId,
+            nft.contractAddress,
+            nft.owner,
+            thor,
+            "notAvailable",
+            false,
+        )
 
         expect(result).toEqual({
             address: "0x0032",
             description: "notAvailable",
             id: nft.contractAddress + nft.tokenId + nft.owner,
             image: NFTPlaceHolderLight,
+            mediaType: NFTMediaType.IMAGE,
             name: "notAvailable",
             owner: "0x123",
             tokenId: "1",

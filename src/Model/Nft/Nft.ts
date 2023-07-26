@@ -11,6 +11,7 @@ export interface NFTContract {
 }
 
 export interface NonFungibleTokenCollection extends ERC721Metadata {
+    address: string
     symbol: string
     creator: string
     balanceOf: number
@@ -21,6 +22,8 @@ export interface NonFungibleTokenCollection extends ERC721Metadata {
 
 export interface NonFungibleToken extends TokenMetadata, WithID {
     owner: string
+    address: string
+    tokenURI: string
     tokenId: string
 }
 
@@ -63,12 +66,11 @@ export interface OpenSeaMetadata {
 }
 
 export interface ERC721Metadata {
-    tokenURI?: string
-    address: string
     name: string
     description: string
     image: string
     mimeType?: string
+    mediaType: NFTMediaType
 }
 
 export interface SelectedNFT {

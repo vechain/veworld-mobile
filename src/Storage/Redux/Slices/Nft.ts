@@ -14,6 +14,7 @@ import {
     NFTs,
 } from "../Types/Nft"
 import { GithubCollectionResponse, PaginationResponse } from "~Networking"
+import { URIUtils } from "~Utils"
 
 export type NftSliceState = {
     collectionRegistryInfo: CollectionRegistryInfo
@@ -94,6 +95,37 @@ export const NftSlice = createSlice({
                 pagination: collectionData.pagination,
             }
 
+            return state
+        },
+
+        updateCollection: (
+            state,
+            action: PayloadAction<{
+                network: string
+                currentAccountAddress: string
+                collection: NonFungibleTokenCollection
+            }>,
+        ) => {
+            const { network, currentAccountAddress, collection } =
+                action.payload
+
+            if (
+                state.collectionsPerAccount[network][currentAccountAddress] !==
+                undefined
+            ) {
+                const existing = state.collectionsPerAccount[network][
+                    currentAccountAddress
+                ].collections?.find(
+                    col => col.address === collection.address,
+                ) as NonFungibleTokenCollection
+
+                if (existing) {
+                    existing.image = URIUtils.convertUriToUrl(collection.image)
+                    existing.name = collection.name
+                    existing.description = collection.description
+                    existing.mimeType = collection.mimeType
+                }
+            }
             return state
         },
 
@@ -236,6 +268,34 @@ export const NftSlice = createSlice({
             return state
         },
 
+        updateNFT: (
+            state,
+            action: PayloadAction<{
+                network: string
+                address: string
+                collectionAddress: string
+                NFT: NonFungibleToken
+            }>,
+        ) => {
+            const { network, address, collectionAddress, NFT } = action.payload
+
+            if (state.NFTsPerAccount[network][address] !== undefined) {
+                const existing = state.NFTsPerAccount[network][address][
+                    collectionAddress
+                ]?.NFTs?.find(
+                    nft => nft.tokenId === NFT.tokenId,
+                ) as NonFungibleToken
+
+                if (existing) {
+                    existing.image = URIUtils.convertUriToUrl(NFT.image)
+                    existing.name = NFT.name
+                    existing.description = NFT.description
+                    existing.mimeType = NFT.mimeType
+                }
+            }
+            return state
+        },
+
         // SET NETWORKING SIDE EFFECTS
         setNetworkingSideEffects: (
             state,
@@ -268,10 +328,12 @@ export const NftSlice = createSlice({
 export const {
     setBlackListCollection,
     setCollections,
+    updateCollection,
     setCollectionRegistryInfo,
     setNetworkingSideEffects,
     removeBlackListCollection,
     setNFTs,
+    updateNFT,
     resetNftState,
     refreshNFTs,
 } = NftSlice.actions

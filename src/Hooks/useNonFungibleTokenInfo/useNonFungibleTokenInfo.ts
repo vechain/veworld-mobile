@@ -1,11 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react"
 import { useThor } from "~Components"
-import { resolveMimeType } from "~Hooks/useNft/Helpers"
 import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
 import { TokenMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
 import { URIUtils, error } from "~Utils"
+import { resolveMimeType } from "~Utils/MediaUtils/MediaUtils"
 
 /**
  * `useNonFungibleTokenInfo` is a hook for fetching and managing non-fungible token (NFT) information.
@@ -28,8 +27,8 @@ import { URIUtils, error } from "~Utils"
  *
  */
 export const useNonFungibleTokenInfo = (
-    tokenId?: string,
-    contractAddress?: string,
+    tokenId: string,
+    contractAddress: string,
 ) => {
     const [tokenUri, setTokenUri] = useState<string | undefined>()
     const [tokenMetadata, setTokenMetadata] = useState<
@@ -44,61 +43,29 @@ export const useNonFungibleTokenInfo = (
     const thor = useThor()
 
     useEffect(() => {
-        if (contractAddress && tokenId) {
-            getTokenURI(tokenId, contractAddress, thor)
-                .then(tknUri => {
-                    tknUri ? setTokenUri(tknUri) : setIsMediaLoading(false)
-                })
-                .catch(e => {
-                    error("Failed to get token URI for ID: " + tokenId, e)
-
-                    setIsMediaLoading(false)
-                })
-        }
-    }, [tokenId, contractAddress])
-
-    useEffect(() => {
-        if (contractAddress && !collectionName)
-            getName(contractAddress, thor)
-                .then(name =>
-                    name ? setCollectionName(name) : setIsMediaLoading(false),
+        const load = async () => {
+            try {
+                const name = await getName(contractAddress, thor)
+                const uri = await getTokenURI(tokenId, contractAddress, thor)
+                const metadata = await fetchMetadata(uri)
+                if (!metadata) throw new Error("No metadata found")
+                const mimeType = await resolveMimeType(metadata?.image)
+                setTokenImage(URIUtils.convertUriToUrl(metadata?.image))
+                setTokenMetadata(metadata)
+                setTokenUri(uri)
+                setTokenMime(mimeType)
+                setCollectionName(name)
+                setIsMediaLoading(false)
+            } catch (e) {
+                error(
+                    `Failed to load metadata for token ${tokenId} of collection ${contractAddress}`,
                 )
-                .catch(e => {
-                    error(
-                        "Failed to get collection name for address: " +
-                            contractAddress,
-                        e,
-                    )
-
-                    setIsMediaLoading(false)
-                })
-    }, [contractAddress])
-
-    useEffect(() => {
-        if (tokenUri)
-            fetchMetadata(tokenUri)
-                .then((metadata?: TokenMetadata) => {
-                    setTokenMetadata(metadata)
-
-                    if (metadata?.image)
-                        setTokenImage(URIUtils.convertUriToUrl(metadata.image))
-
-                    setIsMediaLoading(false)
-                })
-                .catch(e => {
-                    error("Failed to get token Metadata for ID: " + tokenId, e)
-
-                    setIsMediaLoading(false)
-                })
-    }, [tokenUri])
-
-    useEffect(() => {
-        if (tokenMetadata?.image) {
-            resolveMimeType(tokenMetadata.image).then(mime =>
-                setTokenMime(mime),
-            )
+                setIsMediaLoading(false)
+            }
         }
-    }, [tokenMetadata])
+        if (tokenId && contractAddress && thor) load()
+    }, [tokenId, contractAddress, thor])
+
     return {
         tokenMetadata,
         tokenUri,

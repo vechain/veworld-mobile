@@ -1,13 +1,19 @@
 import { useCallback } from "react"
 import { useThor } from "~Components"
-import { Network, NonFungibleTokenCollection } from "~Model"
-import { GithubCollectionResponse, getContractAddresses } from "~Networking"
+import { NETWORK_TYPE, Network, NonFungibleTokenCollection } from "~Model"
+import {
+    GithubCollectionResponse,
+    getContractAddresses,
+    getNftsForContract,
+    getTokenURI,
+} from "~Networking"
 import {
     setCollections,
     setNetworkingSideEffects,
+    updateCollection,
     useAppDispatch,
 } from "~Storage/Redux"
-import { error } from "~Utils"
+import { URIUtils, error } from "~Utils"
 import {
     parseCollectionMetadataFromRegistry,
     parseCollectionMetadataWithoutRegistry,
@@ -16,6 +22,8 @@ import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useTheme } from "~Hooks"
+import { fetchMetadata } from "./fetchMeta"
+import { isDefaultImage, resolveMediaType } from "~Utils/MediaUtils/MediaUtils"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -41,6 +49,65 @@ export const useNFTCollections = () => {
     const { LL } = useI18nContext()
 
     const theme = useTheme()
+
+    const lazyLoadMetadata = useCallback(
+        async (
+            networkType: NETWORK_TYPE,
+            address: string,
+            _nftCollections: NonFungibleTokenCollection[],
+        ) => {
+            await Promise.all(
+                _nftCollections.map(async collection => {
+                    if (isDefaultImage(collection.image)) {
+                        const { data } = await getNftsForContract(
+                            networkType,
+                            collection.address,
+                            address,
+                            1,
+                            0,
+                        )
+
+                        if (data.length === 0) return
+
+                        const tokenURI = await getTokenURI(
+                            data[0].tokenId,
+                            collection.address,
+                            thor,
+                        )
+
+                        const tokenMetadata = await fetchMetadata(tokenURI)
+                        const image = URIUtils.convertUriToUrl(
+                            tokenMetadata?.image ?? collection.image,
+                        )
+                        const mediaType = await resolveMediaType(
+                            image,
+                            collection.mimeType,
+                        )
+
+                        if (tokenMetadata) {
+                            const updated = {
+                                ...collection,
+                                image,
+                                mediaType,
+                                name: tokenMetadata?.name ?? collection.name,
+                                description:
+                                    tokenMetadata?.description ??
+                                    collection.description,
+                            }
+                            dispatch(
+                                updateCollection({
+                                    network: networkType,
+                                    currentAccountAddress: address,
+                                    collection: updated,
+                                }),
+                            )
+                        }
+                    }
+                }),
+            )
+        },
+        [dispatch, thor],
+    )
 
     const getCollections = useCallback(
         async (
@@ -121,6 +188,8 @@ export const useNFTCollections = () => {
                         error: undefined,
                     }),
                 )
+
+                lazyLoadMetadata(network.type, selectedAccount, _nftCollections)
             } catch (e: unknown) {
                 dispatch(
                     setNetworkingSideEffects({
@@ -131,7 +200,7 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, theme.isDark, thor],
+        [LL, dispatch, lazyLoadMetadata, theme.isDark, thor],
     )
 
     return { getCollections }
