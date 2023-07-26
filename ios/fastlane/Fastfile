@@ -50,7 +50,7 @@ platform :ios do
     # ensure_git_branch(branch: "main")
 
     github_token = values[:github_token]
-    github_username = options[:github_username]
+    github_username = values[:github_username]
     build = values[:build]
     branch_name = "release-build"
 
