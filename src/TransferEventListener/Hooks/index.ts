@@ -1,2 +1,2 @@
-export * from "./useStateReconciliaiton"
+export * from "./useStateReconciliation"
 export * from "./useInformUser"

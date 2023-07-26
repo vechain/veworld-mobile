@@ -95,12 +95,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                 <BaseView flex={1}>
                     <BaseSpacer height={26} />
 
-                    <NFTDetailImage
-                        uri={nft?.image ?? ""}
-                        mime={nft?.mimeType ?? ""}
-                        name={nft?.name ?? ""}
-                        tokenId={nft?.tokenId ?? ""}
-                    />
+                    {nft && <NFTDetailImage nft={nft} />}
 
                     <BaseSpacer height={26} />
 
@@ -187,7 +182,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                         />
                     )}
 
-                    {nft && nft.rarity && nft.rarity !== 0 ? (
+                    {nft?.rarity && nft?.rarity !== 0 ? (
                         <InfoSectionView<string>
                             title={"Rarity"}
                             data={nft?.rarity?.toString()}

@@ -15,7 +15,6 @@ import {
 } from "~Storage/Redux"
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
-import { useNFTMetadataResolver } from "~Hooks/useNFTMetadataResolver"
 
 type Props = {
     collection: NonFungibleTokenCollection
@@ -33,10 +32,6 @@ export const NFTCollectionView = memo(
         const nav = useNavigation()
         const network = useAppSelector(selectSelectedNetwork)
         const dispatch = useAppDispatch()
-        const { mediaType, nftWithMetadata: collectionWithMetadata } =
-            useNFTMetadataResolver({
-                nft: collection,
-            })
 
         const selectedAccount = useAppSelector(selectSelectedAccount)
 
@@ -54,9 +49,9 @@ export const NFTCollectionView = memo(
         const onCollectionPress = useCallback(() => {
             HapticsService.triggerImpact({ level: "Light" })
             nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
-                collectionAddress: collectionWithMetadata.address,
+                collectionAddress: collection.address,
             })
-        }, [nav, collectionWithMetadata.address])
+        }, [nav, collection.address])
 
         const handleOnItemLongPress = useCallback(
             (_index: number) => {
@@ -66,7 +61,7 @@ export const NFTCollectionView = memo(
                     dispatch(
                         setBlackListCollection({
                             network: network.type,
-                            collection: collectionWithMetadata,
+                            collection: collection,
                             accountAddress: selectedAccount.address,
                         }),
                     )
@@ -75,14 +70,14 @@ export const NFTCollectionView = memo(
                     dispatch(
                         removeBlackListCollection({
                             network: network.type,
-                            collection: collectionWithMetadata,
+                            collection: collection,
                             accountAddress: selectedAccount.address,
                         }),
                     )
             },
             [
                 CollectionItem,
-                collectionWithMetadata,
+                collection,
                 dispatch,
                 network,
                 selectedAccount.address,
@@ -109,8 +104,8 @@ export const NFTCollectionView = memo(
                     <BaseView style={baseStyles.nftCollectionNameBarRadius}>
                         <NFTImage
                             uri={
-                                mediaType === NFTMediaType.IMAGE
-                                    ? collectionWithMetadata.image
+                                collection.mediaType === NFTMediaType.IMAGE
+                                    ? collection.image
                                     : NFTPlaceholder
                             }
                             style={baseStyles.nftPreviewImage}
@@ -125,15 +120,15 @@ export const NFTCollectionView = memo(
                                 color={COLORS.WHITE}
                                 numberOfLines={1}
                                 w={80}>
-                                {collectionWithMetadata.name}
+                                {collection.name}
                             </BaseText>
                             <BaseView
                                 style={baseStyles.nftCounterLabel}
                                 justifyContent="center"
                                 alignItems="center">
                                 <BaseText color={COLORS.WHITE}>
-                                    {!collectionWithMetadata.hasCount && "+"}
-                                    {collectionWithMetadata.balanceOf}
+                                    {!collection.hasCount && "+"}
+                                    {collection.balanceOf}
                                 </BaseText>
                             </BaseView>
                         </BaseView>

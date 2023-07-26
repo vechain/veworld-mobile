@@ -70,11 +70,16 @@ const generateRandom = (size: number): string => {
     return `${PREFIX}${randBuffer.toString("hex").substring(0, size)}`
 }
 
+const normalize = (hex: string): string => {
+    return addPrefix(hex.toLowerCase().trim())
+}
+
 export default {
     removePrefix,
     addPrefix,
     validate,
     isValid,
     isInvalid,
+    normalize,
     generateRandom,
 }
