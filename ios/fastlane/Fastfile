@@ -13,6 +13,13 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+fastlane_require "dotenv"
+
+before_all do
+	Dotenv.load ".env.secret"
+end
+
+
 default_platform(:ios)
 
 platform :ios do
@@ -155,6 +162,16 @@ platform :ios do
       title: "build: build artifacts build-#{build}",
       base: "main",
       api_url: "https://api.github.com"
+    )
+
+    slack(
+      message: "VeWorld build number: #{build} was successfully released!",
+      slack_url: ENV["SLACK_WEBHOOK"],
+      success: true,
+      payload: {
+        "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+        "Built by" => github_username,
+      },
     )
 
   end
