@@ -11,7 +11,7 @@ type Props = {
 } & FastImageProps
 
 export const BaseImage = memo((props: Props) => {
-    const { uri, w, h, style, testID, ...rest } = props
+    const { uri, w, h, style, testID, isNFT, ...rest } = props
 
     const theme = useTheme()
 
@@ -28,7 +28,11 @@ export const BaseImage = memo((props: Props) => {
                 style={[
                     { width: w, height: h },
                     style,
-                    { backgroundColor: theme.colors.placeholder },
+                    {
+                        backgroundColor: isNFT
+                            ? theme.colors.placeholder
+                            : undefined,
+                    },
                 ]}
                 fallback
                 // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/749) change fallback image
