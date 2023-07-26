@@ -60,7 +60,7 @@ platform :ios do
     # Set the GitHub remote URL with credentials
     remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
     sh("git remote set-url origin #{remote_url}")
-    sh("git commit -S -a -m 'build: init'")
+    sh("git commit -a -m 'build: init'")
 
     # Push the branch to GitHub
     sh("git push -u origin #{branch_name}-#{build}")
@@ -77,7 +77,7 @@ platform :ios do
     github_username = values[:github_username]
     build = values[:build]
 
-    sh("git commit -S -a -m 'build: complete'")
+    sh("git commit -a -m 'build: complete'")
     # Push the branch to GitHub
     sh("git push -u origin #{branch_name}-#{build}")
   end
@@ -139,6 +139,8 @@ platform :ios do
       apple_id: "6446854569"
     )
 =end   
+
+    File.write("../../test.md", JSON.pretty_generate("TEST FILE"))
 
     gh_setup_beta_after(
       github_username:github_username, 
