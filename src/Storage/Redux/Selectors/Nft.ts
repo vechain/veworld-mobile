@@ -4,6 +4,7 @@ import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
 import { selectSelectedAccount } from "./Account"
 import { isEmpty } from "lodash"
 import { selectSelectedNetwork } from "./Network"
+import { AddressUtils, HexUtils } from "~Utils"
 
 const selectNftState = (state: RootState) => state.nft
 
@@ -31,13 +32,14 @@ export const selectNftCollections = createSelector(
     selectSelectedAccount,
     selectBlackListedCollections,
     (state, network, account, blackListedCollectionsPerAccount) => {
+        const normalizedAcct = HexUtils.normalize(account.address)
         const collections =
-            state.collectionsPerAccount[network.type][account.address]
+            state.collectionsPerAccount[network.type][normalizedAcct]
                 ?.collections
 
         if (collections && blackListedCollectionsPerAccount) {
             const pagination =
-                state.collectionsPerAccount[network.type][account.address]
+                state.collectionsPerAccount[network.type][normalizedAcct]
                     ?.pagination
 
             const filteredCollections = removeMatchingElements(
@@ -98,8 +100,8 @@ export const selectCollectionWithContractAddress = createSelector(
         (state: RootState, contractAddress: string) => contractAddress,
     ],
     (collections, contractAddress) => {
-        return collections?.collections?.find(
-            collection => collection.address === contractAddress,
+        return collections?.collections?.find(collection =>
+            AddressUtils.compareAddresses(collection.address, contractAddress),
         )
     },
 )
@@ -113,8 +115,9 @@ export const selectNFTWithAddressAndTokenId = createSelector(
         (state: RootState, contractAddress: string, tokenId: string) => tokenId,
     ],
     (state, network, account, contractAddress, tokenId) => {
-        if (state.NFTsPerAccount[network.type][account.address] !== undefined) {
-            return state.NFTsPerAccount[network.type][account.address][
+        const normalizedAcct = HexUtils.normalize(account.address)
+        if (state.NFTsPerAccount[network.type][normalizedAcct] !== undefined) {
+            return state.NFTsPerAccount[network.type][normalizedAcct][
                 contractAddress
             ].NFTs.find(nft => nft.tokenId === tokenId) as NonFungibleToken
         }
@@ -129,11 +132,13 @@ export const selectNFTsForCollection = createSelector(
         (state: RootState, collectionAddress: string) => collectionAddress,
     ],
     (nftState, network, account, collectionAddress) => {
+        const normalizedAcct = HexUtils.normalize(account.address)
+        const normalizedCollection = HexUtils.normalize(collectionAddress)
         if (
-            nftState.NFTsPerAccount[network.type][account.address] !== undefined
+            nftState.NFTsPerAccount[network.type][normalizedAcct] !== undefined
         ) {
-            return nftState.NFTsPerAccount[network.type][account.address][
-                collectionAddress
+            return nftState.NFTsPerAccount[network.type][normalizedAcct][
+                normalizedCollection
             ]
         }
 
@@ -157,7 +162,9 @@ export const selectBlackListedCollectionByAddress = createSelector(
         (state, collectionAddress: string) => collectionAddress,
     ],
     (state, blackListedCollections, collectionAddress: string) =>
-        blackListedCollections.find(col => col.address === collectionAddress),
+        blackListedCollections.find(col =>
+            AddressUtils.compareAddresses(col.address, collectionAddress),
+        ),
 )
 
 // HELPERS

@@ -12,6 +12,7 @@ export const handleTokenTransfers = async ({
     fetchData,
     stateReconciliationAction,
     informUser,
+    network,
 }: TokenTransferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
@@ -31,7 +32,7 @@ export const handleTokenTransfers = async ({
             informUser,
         })
 
-        stateReconciliationAction({ accountAddress: transfer.to })
+        stateReconciliationAction({ network, accountAddress: transfer.to })
     }
 
     // User send token
@@ -46,10 +47,12 @@ export const handleTokenTransfers = async ({
         })
 
         stateReconciliationAction({
+            network,
             accountAddress: transfer.from,
         })
 
         stateReconciliationAction({
+            network,
             accountAddress: transfer.to,
         })
     }
