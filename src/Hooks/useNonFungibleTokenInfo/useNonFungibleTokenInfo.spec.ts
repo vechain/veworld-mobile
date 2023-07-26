@@ -38,11 +38,11 @@ describe("useNonFungibleTokenInfo", () => {
 
     it("should fetch NFT info correctly", async () => {
         const tokenId = "tokenId1"
-        const contractAddress = "contractAddress1"
         const thor = "thor"
         const tokenUriMock = "http://token.uri"
         const nameMock = "NFT Collection"
         const nftMetaMock: TokenMetadata = {
+            address: "contractAddress1",
             name: "NFT Name",
             description: "NFT Description",
             image: "http://nft.image",
@@ -54,7 +54,7 @@ describe("useNonFungibleTokenInfo", () => {
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() =>
-            useNonFungibleTokenInfo(tokenId, contractAddress),
+            useNonFungibleTokenInfo(tokenId, nftMetaMock.address),
         )
 
         await waitForNextUpdate({ timeout: 5000 })
@@ -65,8 +65,12 @@ describe("useNonFungibleTokenInfo", () => {
         expect(result.current.tokenImage).toEqual(nftMetaMock.image)
         expect(result.current.tokenMime).toEqual("image/jpg")
         expect(result.current.isMediaLoading).toBeFalsy()
-        expect(getTokenURI).toHaveBeenCalledWith(tokenId, contractAddress, thor)
-        expect(getName).toHaveBeenCalledWith(contractAddress, thor)
+        expect(getTokenURI).toHaveBeenCalledWith(
+            tokenId,
+            nftMetaMock.address,
+            thor,
+        )
+        expect(getName).toHaveBeenCalledWith(nftMetaMock.address, thor)
         expect(fetchMetadata).toHaveBeenCalledWith(tokenUriMock)
     })
 

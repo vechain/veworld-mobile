@@ -171,11 +171,10 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             address: "0x456",
             balanceOf: 1,
             creator: "notAvailable",
-            description: "description",
+            description: "notAvailable",
             hasCount: true,
-            image: "http://google.com/image.png",
+            image: NFTPlaceHolderLight,
             isBlacklisted: false,
-            mimeType: "image/jpg",
             name: "name",
             symbol: "symbol",
             totalSupply: 1,
@@ -205,11 +204,10 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             address: "0x456",
             balanceOf: 1,
             creator: "notAvailable",
-            description: "",
+            description: "notAvailable",
             hasCount: true,
             image: NFTPlaceholderDark,
             isBlacklisted: false,
-            mimeType: "image/png",
             name: "name",
             symbol: "symbol",
             totalSupply: 1,
@@ -239,11 +237,10 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             address: "0x456",
             balanceOf: 1,
             creator: "notAvailable",
-            description: "",
+            description: "notAvailable",
             hasCount: true,
             image: NFTPlaceHolderLight,
             isBlacklisted: false,
-            mimeType: "image/png",
             name: "name",
             symbol: "symbol",
             totalSupply: 1,
@@ -284,7 +281,6 @@ describe("Helpers - parseNftMetadata", () => {
     })
 
     it("should parse NFT metadata", async () => {
-        const network = NETWORK_TYPE.MAIN
         const nft: NftItemResponse = {
             tokenId: "1",
             owner: "0x123",
@@ -295,23 +291,14 @@ describe("Helpers - parseNftMetadata", () => {
             blockId: "0x34745",
         }
 
-        const result = await parseNftMetadata(
-            network,
-            nft,
-            thor,
-            "notAvailable",
-            false,
-        )
+        const result = await parseNftMetadata(nft, thor, "notAvailable", false)
 
         expect(result).toEqual({
-            attributes: [],
-            contractAddress: "0x0032",
-            description: "description",
+            address: "0x0032",
+            description: "notAvailable",
             id: nft.contractAddress + nft.tokenId + nft.owner,
-            image: "http://google.com/image.png",
-            isBlacklisted: false,
-            mimeType: "image/jpg",
-            name: "name",
+            image: NFTPlaceHolderLight,
+            name: "notAvailable",
             owner: "0x123",
             tokenId: "1",
             tokenURI: "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",

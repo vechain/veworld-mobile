@@ -151,7 +151,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         <BaseSpacer height={24} />
 
                         <NFTTransferCard
-                            collectionAddress={nft!.contractAddress}
+                            collectionAddress={nft!.address}
                             tokenId={nft!.tokenId}
                         />
 

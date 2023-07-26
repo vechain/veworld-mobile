@@ -7,8 +7,10 @@ import {
     EditTokensBar,
 } from "./Components"
 import {
+    BottomInsetsEXtraPadding,
     useBottomSheetModal,
     useMemoizedAnimation,
+    usePlatformBottomInsets,
     useSetSelectedAccount,
 } from "~Hooks"
 import {
@@ -32,6 +34,8 @@ import { AccountWithDevice, RENAME_WALLET_TYPE } from "~Model"
 export const HomeScreen = () => {
     useTokenBalances()
     const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -79,7 +83,9 @@ export const HomeScreen = () => {
     const visibleHeightRef = useRef<number>(0)
 
     return (
-        <BaseSafeArea grow={1}>
+        <BaseSafeArea
+            grow={1}
+            style={{ marginBottom: tabBarAndroidBottomInsets }}>
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 onContentSizeChange={visibleHeight => {
@@ -99,6 +105,7 @@ export const HomeScreen = () => {
                     isBalanceVisible={isBalanceVisible}
                     entering={animateEntering}
                 />
+                <BaseSpacer height={BottomInsetsEXtraPadding.TabBar} />
             </NestableScrollContainer>
 
             <AccountManagementBottomSheet

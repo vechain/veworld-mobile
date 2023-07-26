@@ -51,7 +51,6 @@ export const useNFTs = () => {
                 const NFTs: NonFungibleToken[] = await Promise.all(
                     nftResponse.data.map(async nft => {
                         return parseNftMetadata(
-                            network.type,
                             nft,
                             thor,
                             LL.COMMON_NOT_AVAILABLE(),
