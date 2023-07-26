@@ -1,6 +1,6 @@
 import { Linking } from "react-native"
 import { showErrorToast, showSuccessToast } from "~Components"
-import { VET, defaultMainNetwork } from "~Constants"
+import { defaultMainNetwork, VET } from "~Constants"
 import { Network } from "~Model"
 import { FormattingUtils } from "~Utils"
 import * as i18n from "~i18n"
@@ -99,7 +99,6 @@ export const InformUserForIncomingToken = ({
             FormattingUtils.ROUND_DECIMAL_DEFAULT,
         ),
         amount,
-        symbol,
     )
 
     showSuccessToast(
@@ -119,27 +118,21 @@ export const InformUserForIncomingToken = ({
 type InformUserForOutgoingTokenProps = {
     txId: string
     amount: string
-    symbol: string
     decimals: number
     transfer: IncomingTransferResponse
-    to: string
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
 export const InformUserForOutgoingToken = ({
     txId,
     amount,
-    symbol,
     decimals,
-    to,
     transfer,
     informUser,
 }: InformUserForOutgoingTokenProps) => {
     const locale = i18n.detectLocale()
 
     const formattedTo = ""
-
-    FormattingUtils.humanAddress(to, 4, 5)
 
     const formattedAmmount = FormattingUtils.humanNumber(
         FormattingUtils.scaleNumberDown(
@@ -148,7 +141,6 @@ export const InformUserForOutgoingToken = ({
             FormattingUtils.ROUND_DECIMAL_DEFAULT,
         ),
         amount,
-        symbol,
     )
 
     showSuccessToast(
@@ -179,16 +171,20 @@ export const InformUserForIncomingVET = ({
 }: InformUserForIncomingVETProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedAmmount = FormattingUtils.scaleNumberDown(
+    const formattedAmount = FormattingUtils.humanNumber(
+        FormattingUtils.scaleNumberDown(
+            amount,
+            VET.decimals,
+            FormattingUtils.ROUND_DECIMAL_DEFAULT,
+        ),
         amount,
-        VET.decimals,
     )
 
     showSuccessToast(
         i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
         i18n.i18n()[locale].NOTIFICATION_found_token_transfer({
             token: VET.symbol,
-            amount: formattedAmmount,
+            amount: formattedAmount,
             alias,
         }),
         i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
@@ -215,15 +211,19 @@ export const InformUserForOutgoingVET = ({
     const locale = i18n.detectLocale()
 
     const fomattedTo = FormattingUtils.humanAddress(to, 4, 5)
-    const formattedAmmount = FormattingUtils.scaleNumberDown(
+    const formattedAmount = FormattingUtils.humanNumber(
+        FormattingUtils.scaleNumberDown(
+            amount,
+            VET.decimals,
+            FormattingUtils.ROUND_DECIMAL_DEFAULT,
+        ),
         amount,
-        VET.decimals,
     )
 
     showSuccessToast(
         i18n.i18n()[locale].SUCCESS_GENERIC(),
         i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY({
-            amount: formattedAmmount,
+            amount: formattedAmount,
             to: fomattedTo,
         }),
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
