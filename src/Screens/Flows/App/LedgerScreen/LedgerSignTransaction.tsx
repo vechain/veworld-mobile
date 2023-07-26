@@ -30,13 +30,7 @@ import {
     Routes,
 } from "~Navigation"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import {
-    debug,
-    error,
-    LedgerUtils,
-    MinimizerUtils,
-    WalletConnectResponseUtils,
-} from "~Utils"
+import { debug, error, LedgerUtils, WalletConnectResponseUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
@@ -263,7 +257,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     selectedNetwork,
                 )
 
-                MinimizerUtils.goBack()
+                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
+                // MinimizerUtils.goBack()
             }
 
             navigateOnFinish()

@@ -17,12 +17,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import {
-    error,
-    MinimizerUtils,
-    WalletConnectResponseUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { error, WalletConnectResponseUtils, WalletConnectUtils } from "~Utils"
 import { useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -30,6 +25,7 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails } from "~Screens"
+import { isEmpty } from "lodash"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -105,7 +101,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     cert,
                 )
 
-                MinimizerUtils.goBack()
+                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
+                // MinimizerUtils.goBack()
 
                 dispatch(
                     addSignCertificateActivity(
@@ -154,10 +151,13 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         onClose()
     }, [requestEvent, web3Wallet, LL, onClose])
 
-    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
-        useCheckIdentity({
-            onIdentityConfirmed: handleAccept,
-        })
+    const {
+        ConfirmIdentityBottomSheet,
+        checkIdentityBeforeOpening,
+        biometrics,
+    } = useCheckIdentity({
+        onIdentityConfirmed: handleAccept,
+    })
 
     const onPressBack = useCallback(async () => {
         await onReject()
@@ -212,6 +212,9 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN()}
                         action={checkIdentityBeforeOpening}
+                        /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
+                        isLoading={isEmpty(biometrics)}
+                        disabled={isEmpty(biometrics)}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
