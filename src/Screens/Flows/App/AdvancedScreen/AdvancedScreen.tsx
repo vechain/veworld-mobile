@@ -48,13 +48,17 @@ export const AdvancedScreen = () => {
                     <BaseSpacer height={16} />
                     <Reset />
 
-                    <BaseSpacer height={24} />
-                    <EnableFeature
-                        title={LL.BD_HELP_IMPROVE()}
-                        subtitle={LL.BD_HELP_IMPROVE_DISCLAIMER()}
-                        onValueChange={toggleSentryTrackingSwitch}
-                        value={sentryTrackingEnabled}
-                    />
+                    {__DEV__ && (
+                        <>
+                            <BaseSpacer height={24} />
+                            <EnableFeature
+                                title={LL.BD_HELP_IMPROVE()}
+                                subtitle={LL.BD_HELP_IMPROVE_DISCLAIMER()}
+                                onValueChange={toggleSentryTrackingSwitch}
+                                value={sentryTrackingEnabled}
+                            />
+                        </>
+                    )}
                 </BaseView>
             }
         />

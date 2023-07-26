@@ -12,7 +12,7 @@ import {
 } from "~Components"
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
-import { EnableBiometrics, BackupMnemonicBottomSheet } from "./Components"
+import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
 import { LocalDevice, WALLET_STATUS } from "~Model"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -172,12 +172,18 @@ export const PrivacyScreen = () => {
 
                         <BaseSpacer height={24} />
 
-                        <EnableFeature
-                            title={LL.SB_ANALYTICS_TRACKING()}
-                            subtitle={LL.BD_ANALYTICS_TRACKING()}
-                            onValueChange={toggleAnalyticsTrackingSwitch}
-                            value={isAnalyticsTrackingEnabled}
-                        />
+                        {__DEV__ && (
+                            <>
+                                <EnableFeature
+                                    title={LL.SB_ANALYTICS_TRACKING()}
+                                    subtitle={LL.BD_ANALYTICS_TRACKING()}
+                                    onValueChange={
+                                        toggleAnalyticsTrackingSwitch
+                                    }
+                                    value={isAnalyticsTrackingEnabled}
+                                />
+                            </>
+                        )}
 
                         <BackupMnemonicBottomSheet
                             ref={BackupPhraseSheetRef}

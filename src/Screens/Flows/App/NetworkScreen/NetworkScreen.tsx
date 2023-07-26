@@ -77,23 +77,31 @@ export const ChangeNetworkScreen = () => {
 
                         <BaseSpacer height={20} />
 
-                        <EnableFeature
-                            title={LL.BD_OTHER_NETWORKS_INDICATOR()}
-                            subtitle={LL.BD_OTHER_NETWORKS_INDICATOR_DESC()}
-                            onValueChange={toggleTagSwitch}
-                            value={showTestNetTag}
-                        />
+                        {__DEV__ && (
+                            <>
+                                <EnableFeature
+                                    title={LL.BD_OTHER_NETWORKS_INDICATOR()}
+                                    subtitle={LL.BD_OTHER_NETWORKS_INDICATOR_DESC()}
+                                    onValueChange={toggleTagSwitch}
+                                    value={showTestNetTag}
+                                />
 
-                        <BaseSpacer height={20} />
+                                <BaseSpacer height={20} />
+                            </>
+                        )}
 
-                        <EnableFeature
-                            title={LL.BD_OTHER_NETWORKS_CONVERSION()}
-                            subtitle={LL.BD_OTHER_NETWORKS_CONVERSION_DESC()}
-                            onValueChange={toggleConversionSwitch}
-                            value={showConversionOnOtherNets}
-                        />
+                        {__DEV__ && (
+                            <>
+                                <EnableFeature
+                                    title={LL.BD_OTHER_NETWORKS_CONVERSION()}
+                                    subtitle={LL.BD_OTHER_NETWORKS_CONVERSION_DESC()}
+                                    onValueChange={toggleConversionSwitch}
+                                    value={showConversionOnOtherNets}
+                                />
 
-                        <BaseSpacer height={20} />
+                                <BaseSpacer height={20} />
+                            </>
+                        )}
                     </BaseView>
 
                     <SelectNetworkBottomSheet
