@@ -8,7 +8,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
-import { CryptoUtils, debug, HexUtils, warn } from "~Utils"
+import { CryptoUtils, HexUtils, warn } from "~Utils"
 
 const PinCodeContext = React.createContext<{
     removePinCode: () => void
@@ -40,17 +40,13 @@ export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
      */
     const encryptionKey = useMemo(() => HexUtils.generateRandom(256), [])
 
-    const [encryptedPinCode, setEncryptedPinCode] = React.useState<
-        string | undefined
-    >()
-
     const isPinCodeRequired = useAppSelector(selectIsPinCodeRequired)
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        debug("PinCodeProvider: encryptedPinCode", encryptedPinCode)
-    }, [encryptedPinCode])
+    const [encryptedPinCode, setEncryptedPinCode] = React.useState<
+        string | undefined
+    >()
 
     // Reset pin code when the user changes the security setting to pin required
     useEffect(() => {
