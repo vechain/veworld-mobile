@@ -50,7 +50,7 @@ platform :ios do
     # ensure_git_branch(branch: "main")
 
     github_token = values[:github_token]
-    timestamp = values[:timestamp]
+    timestamp = values[:time]
     branch_name = "release-build"
 
     # Create and push the branch locally
@@ -72,11 +72,11 @@ platform :ios do
     github_token = options[:token]
 
     time = Time.new
-      
+
     gh_setup_beta_before(
       github_username:github_username, 
       github_token:github_token,
-      timestamp:formatTime
+      time:time
     )
 
 =begin
