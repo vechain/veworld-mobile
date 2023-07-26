@@ -26,33 +26,6 @@ platform :ios do
   end
 
 
-
-  desc "Create Release Branch on GitHub"
-  lane :gh_setup_beta_before do |values|
-    ensure_git_status_clean
-    git pull
-    ensure_git_branch(branch: "main")
-
-    github_username = values[:github_username]
-    github_token = values[:github_token]
-    build = values[:build]
-    repo_name = "veworld-mobile"
-    branch_name = "release-build"
-
-    # Create and push the branch locally
-    sh("git checkout -b #{branch_name}-#{build}")
-
-    # Set the GitHub remote URL with credentials
-    remote_url = "https://#{github_username}:#{github_token}@github.com/#{github_username}/#{repo_name}.git"
-    sh("git remote set-url origin #{remote_url}")
-
-
-    #reset_git_repo(force: true)
-    # Push the branch to GitHub
-    #sh("git push origin #{branch_name}-#{version}")
-  end
-
-
   desc "Create changelog"
   lane :changelog do
     Dir.chdir "../.." do # Navigate to the root
@@ -70,6 +43,28 @@ platform :ios do
 
 
 
+  desc "Create Release Branch on GitHub"
+  lane :gh_setup_beta_before do |values|
+    ensure_git_status_clean
+
+    ensure_git_branch(branch: "main")
+
+    github_token = values[:github_token]
+    build = values[:build]
+    branch_name = "release-build"
+
+    # Create and push the branch locally
+    sh("git checkout -b #{branch_name}-#{build}")
+
+    # Set the GitHub remote URL with credentials
+    remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
+    sh("git remote set-url origin #{remote_url}")
+
+    reset_git_repo(force: true)
+    
+    # Push the branch to GitHub
+    sh("git push origin #{branch_name}-#{version}")
+  end
 
   desc "Push a new beta build to TestFlight"
   lane :build_beta do |options|
