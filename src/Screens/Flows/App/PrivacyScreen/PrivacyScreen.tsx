@@ -46,7 +46,8 @@ export const PrivacyScreen = () => {
     )
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
 
-    const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { isWalletSecurityBiometrics, isWalletSecurityPassword } =
+        useWalletSecurity()
 
     const {
         ref: BackupPhraseSheetRef,
@@ -151,14 +152,18 @@ export const PrivacyScreen = () => {
                         </BaseText>
                         <BaseSpacer height={24} />
 
-                        <EnableFeature
-                            title={LL.SB_PASSWORD_AUTH()}
-                            subtitle={LL.BD_APP_LOCK()}
-                            onValueChange={toggleAppLockSwitch}
-                            value={isPinRequired}
-                        />
+                        {isWalletSecurityPassword && (
+                            <>
+                                <EnableFeature
+                                    title={LL.SB_PASSWORD_AUTH()}
+                                    subtitle={LL.BD_APP_LOCK()}
+                                    onValueChange={toggleAppLockSwitch}
+                                    value={isPinRequired}
+                                />
 
-                        <BaseSpacer height={24} />
+                                <BaseSpacer height={24} />
+                            </>
+                        )}
 
                         <EnableBiometrics />
 

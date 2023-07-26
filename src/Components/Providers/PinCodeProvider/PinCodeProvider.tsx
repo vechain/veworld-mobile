@@ -8,7 +8,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
-import { warn } from "~Utils"
+import { CryptoUtils, debug, HexUtils, warn } from "~Utils"
 
 const PinCodeContext = React.createContext<{
     removePinCode: () => void
@@ -26,31 +26,60 @@ const PinCodeContext = React.createContext<{
 
 type PinCodeContextProviderProps = { children: React.ReactNode }
 
+type PinCodeData = {
+    pinCode: string
+}
+
 /**
  * A provider that allows to store the pin code for the duration of the app session.
  * The pin code is removed when the app is closed
  */
 export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
-    const [pinCode, setPinCode] = React.useState<string | undefined>()
+    /**
+     * Generate a new random encryption key for every session
+     */
+    const encryptionKey = useMemo(() => HexUtils.generateRandom(256), [])
+
+    const [encryptedPinCode, setEncryptedPinCode] = React.useState<
+        string | undefined
+    >()
 
     const isPinCodeRequired = useAppSelector(selectIsPinCodeRequired)
     const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
     const dispatch = useAppDispatch()
 
+    useEffect(() => {
+        debug("PinCodeProvider: encryptedPinCode", encryptedPinCode)
+    }, [encryptedPinCode])
+
     // Reset pin code when the user changes the security setting to pin required
     useEffect(() => {
         if (isPinCodeRequired) {
-            setPinCode(undefined)
+            setEncryptedPinCode(undefined)
         }
-    }, [isPinCodeRequired])
+    }, [encryptionKey, isPinCodeRequired])
+
+    const updatePinCode = useCallback(
+        (unencryptedPin: string) => {
+            const data: PinCodeData = {
+                pinCode: unencryptedPin,
+            }
+
+            const encryptedData = CryptoUtils.encrypt(data, encryptionKey)
+
+            setEncryptedPinCode(encryptedData)
+        },
+        [encryptionKey],
+    )
 
     const enablePinCodeStorage = useCallback(
         (pin: string) => {
             dispatch(setIsPinCodeRequired(false))
             dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
-            setPinCode(pin)
+
+            updatePinCode(pin)
         },
-        [dispatch],
+        [updatePinCode, dispatch],
     )
 
     const pinCodeStorageEnabled = useMemo(
@@ -66,16 +95,23 @@ export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
             return
         }
 
-        return pinCode
-    }, [pinCode, pinCodeStorageEnabled])
+        if (!encryptedPinCode) return
+
+        const decrypted = CryptoUtils.decrypt<PinCodeData>(
+            encryptedPinCode,
+            encryptionKey,
+        )
+
+        return decrypted.pinCode
+    }, [encryptionKey, encryptedPinCode, pinCodeStorageEnabled])
 
     const removePinCode = useCallback(() => {
-        setPinCode(undefined)
+        setEncryptedPinCode(undefined)
     }, [])
 
     const value = {
         removePinCode,
-        updatePinCode: setPinCode,
+        updatePinCode,
         getPinCode,
         enablePinCodeStorage,
         isPinRequired: isPinCodeRequired,

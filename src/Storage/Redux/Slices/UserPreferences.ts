@@ -27,7 +27,7 @@ export interface UserPreferenceState {
 const initialState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
     hideTokensWithNoBalance: false,
-    isPinCodeRequired: process.env.NODE_ENV !== "development",
+    isPinCodeRequired: true,
     balanceVisible: true,
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,

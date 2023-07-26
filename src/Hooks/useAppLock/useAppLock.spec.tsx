@@ -4,7 +4,7 @@ import { setAppLockStatus } from "~Storage/Redux/Actions"
 import {
     selectAppLockStatus,
     selectHasOnboarded,
-    selectIsAppLockActive,
+    selectIsPinCodeRequired,
 } from "~Storage/Redux/Selectors"
 import { WALLET_STATUS } from "~Model"
 import { TestWrapper } from "~Test"
@@ -19,7 +19,7 @@ jest.mock("~Storage/Redux/Selectors", () => ({
     ...jest.requireActual("~Storage/Redux/Selectors"),
     selectAppLockStatus: jest.fn(),
     selectHasOnboarded: jest.fn(),
-    selectIsAppLockActive: jest.fn(),
+    selectIsPinCodeRequired: jest.fn(),
 }))
 
 describe("useAppLock", () => {
@@ -31,7 +31,7 @@ describe("useAppLock", () => {
         ;(selectHasOnboarded as unknown as jest.Mock).mockImplementation(
             () => false,
         )
-        ;(selectIsAppLockActive as unknown as jest.Mock).mockImplementation(
+        ;(selectIsPinCodeRequired as unknown as jest.Mock).mockImplementation(
             () => false,
         )
         ;(selectAppLockStatus as unknown as jest.Mock).mockImplementation(
@@ -50,7 +50,7 @@ describe("useAppLock", () => {
         ;(selectHasOnboarded as unknown as jest.Mock).mockImplementation(
             () => true,
         )
-        ;(selectIsAppLockActive as unknown as jest.Mock).mockImplementation(
+        ;(selectIsPinCodeRequired as unknown as jest.Mock).mockImplementation(
             () => true,
         )
         ;(selectAppLockStatus as unknown as jest.Mock).mockImplementation(
@@ -72,7 +72,7 @@ describe("useAppLock", () => {
         ;(selectHasOnboarded as unknown as jest.Mock).mockImplementation(
             () => true,
         )
-        ;(selectIsAppLockActive as unknown as jest.Mock).mockImplementation(
+        ;(selectIsPinCodeRequired as unknown as jest.Mock).mockImplementation(
             () => true,
         )
         ;(selectAppLockStatus as unknown as jest.Mock).mockImplementation(
