@@ -25,6 +25,9 @@ platform :ios do
     end
   end
 
+
+
+
   desc "Create changelog"
   lane :create_changelog do
     Dir.chdir "../.." do # Navigate to the root
@@ -40,11 +43,14 @@ platform :ios do
      File.write("../../package.json", JSON.pretty_generate(package_json))
   end
 
+
+
+
   desc "Create Release Branch on GitHub"
   lane :gh_setup_beta_before do |values|
 
-    # ensure_git_status_clean
-    # ensure_git_branch(branch: "main")
+    ensure_git_status_clean
+    ensure_git_branch(branch: "main")
 
     github_token = values[:github_token]
     github_username = values[:github_username]
@@ -64,6 +70,24 @@ platform :ios do
   end
 
 
+   
+
+  desc "Commit latest artifacts to GitHub"
+  lane :gh_setup_beta_after do |values|
+    branch_name = "release-build"
+
+    github_token = values[:github_token]
+    github_username = values[:github_username]
+    build = values[:build]
+
+    sh("git commit -S -a -m 'build: complete'")
+    # Push the branch to GitHub
+    sh("git push -u origin #{branch_name}-#{build}")
+  end
+
+
+
+
   desc "Push a new beta build to TestFlight"
   lane :build_beta do |options|
     github_username = options[:username]
@@ -76,10 +100,6 @@ platform :ios do
       github_token:github_token,
       build:build
     )
-
-    create_changelog
-
-=begin
 
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
@@ -117,9 +137,12 @@ platform :ios do
       skip_waiting_for_build_processing: true, 
       apple_id: "6446854569"
     )
-=end
 
-
+    gh_setup_beta_after(
+      github_username:github_username, 
+      github_token:github_token,
+      build:build
+    )
 
   end
 end
