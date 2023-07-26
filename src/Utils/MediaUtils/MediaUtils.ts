@@ -5,7 +5,7 @@ import { NFTMediaType } from "~Model"
 import { error } from "~Utils/Logger"
 import URIUtils from "~Utils/URIUtils"
 
-export const isValidMimeType = (mime: string, type: NFTMediaType[]) => {
+const isValidMimeType = (mime: string, type: NFTMediaType[]) => {
     const found = type.find(t => {
         if (mime?.split("/")[0] === t) {
             return true
@@ -15,7 +15,7 @@ export const isValidMimeType = (mime: string, type: NFTMediaType[]) => {
     return !!found
 }
 
-export const resolveMimeType = async (resource: string) => {
+const resolveMimeType = async (resource: string) => {
     try {
         // If it's a data URI parse from the string
         if (resource.startsWith("data:")) {
@@ -35,7 +35,7 @@ export const resolveMimeType = async (resource: string) => {
     return "image/png"
 }
 
-export const resolveMediaType = async (
+const resolveMediaType = async (
     imageUrl: string,
     mimeType?: string,
 ): Promise<NFTMediaType> => {
@@ -48,5 +48,11 @@ export const resolveMediaType = async (
     return NFTMediaType.UNKNOWN
 }
 
-export const isDefaultImage = (image: string): boolean =>
+const isDefaultImage = (image: string): boolean =>
     image === NFTPlaceholderDark || image === NFTPlaceHolderLight
+
+export default {
+    resolveMediaType,
+    resolveMimeType,
+    isDefaultImage,
+}

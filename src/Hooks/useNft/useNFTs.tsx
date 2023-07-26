@@ -11,13 +11,12 @@ import {
 import { NonFungibleToken } from "~Model"
 import { getNftsForContract, getTokenURI } from "~Networking"
 import { useThor } from "~Components"
-import { URIUtils, error } from "~Utils"
+import { MediaUtils, URIUtils, error } from "~Utils"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
 import { initialiseNFTMetadata } from "./Helpers"
 import { useTheme } from "~Hooks"
 import { fetchMetadata } from "./fetchMeta"
-import { isDefaultImage, resolveMediaType } from "~Utils/MediaUtils/MediaUtils"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
@@ -38,7 +37,7 @@ export const useNFTs = () => {
         ) => {
             await Promise.all(
                 NFTs.map(async nft => {
-                    if (isDefaultImage(nft.image)) {
+                    if (MediaUtils.isDefaultImage(nft.image)) {
                         const tokenURI =
                             nft.tokenURI ??
                             (await getTokenURI(nft.tokenId, nft.address, thor))
@@ -47,7 +46,7 @@ export const useNFTs = () => {
                         const image = URIUtils.convertUriToUrl(
                             tokenMetadata?.image ?? nft.image,
                         )
-                        const mediaType = await resolveMediaType(
+                        const mediaType = await MediaUtils.resolveMediaType(
                             image,
                             nft.mimeType,
                         )

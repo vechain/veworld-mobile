@@ -12,7 +12,6 @@ import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType } from "~Constants"
 import { ResizeMode, Video } from "expo-av"
-import { isValidMimeType } from "~Utils/MediaUtils/MediaUtils"
 
 type Props = {
     collectionAddress: string
@@ -20,7 +19,7 @@ type Props = {
 }
 
 export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
-    const { isMediaLoading, tokenImage, collectionName, tokenMime } =
+    const { isMediaLoading, tokenImage, collectionName, tokenMediaType } =
         useNonFungibleTokenInfo(tokenId, collectionAddress)
 
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -55,28 +54,26 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
     const renderMedia = useMemo(() => {
         if (isMediaLoading) return <NFTTransferCardSkeleton />
 
-        if (tokenImage && tokenMime) {
-            if (isValidMimeType(tokenMime, [NFTMediaType.IMAGE]))
-                // @ts-ignore
-                return <BaseImage uri={tokenImage} style={styles.nftImage} />
+        if (tokenMediaType === NFTMediaType.IMAGE)
+            // @ts-ignore
+            return <BaseImage uri={tokenImage} style={styles.nftImage} />
 
-            if (isValidMimeType(tokenMime, [NFTMediaType.VIDEO]))
-                return (
-                    <BaseView style={styles.nftImage}>
-                        <Video
-                            PosterComponent={posterComponent}
-                            usePoster
-                            ref={video}
-                            shouldPlay
-                            useNativeControls
-                            style={styles.nftImage}
-                            source={{ uri: tokenImage }}
-                            resizeMode={ResizeMode.COVER}
-                            isLooping
-                        />
-                    </BaseView>
-                )
-        }
+        if (tokenMediaType === NFTMediaType.VIDEO && tokenImage)
+            return (
+                <BaseView style={styles.nftImage}>
+                    <Video
+                        PosterComponent={posterComponent}
+                        usePoster
+                        ref={video}
+                        shouldPlay
+                        useNativeControls
+                        style={styles.nftImage}
+                        source={{ uri: tokenImage }}
+                        resizeMode={ResizeMode.COVER}
+                        isLooping
+                    />
+                </BaseView>
+            )
 
         // @ts-ignore
         return (
@@ -92,7 +89,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
         posterComponent,
         styles.nftImage,
         tokenImage,
-        tokenMime,
+        tokenMediaType,
     ])
 
     return (

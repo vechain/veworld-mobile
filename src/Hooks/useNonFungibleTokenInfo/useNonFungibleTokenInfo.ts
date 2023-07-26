@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react"
 import { useThor } from "~Components"
 import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
-import { TokenMetadata } from "~Model"
+import { NFTMediaType, TokenMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
-import { URIUtils, error } from "~Utils"
-import { resolveMimeType } from "~Utils/MediaUtils/MediaUtils"
+import { MediaUtils, URIUtils, error } from "~Utils"
 
 /**
  * `useNonFungibleTokenInfo` is a hook for fetching and managing non-fungible token (NFT) information.
@@ -35,7 +34,7 @@ export const useNonFungibleTokenInfo = (
         TokenMetadata | undefined
     >()
     const [tokenImage, setTokenImage] = useState<string | undefined>()
-    const [tokenMime, setTokenMime] = useState<string | undefined>()
+    const [tokenMediaType, setTokenMediaType] = useState(NFTMediaType.UNKNOWN)
     const [collectionName, setCollectionName] = useState<string | undefined>()
 
     const [isMediaLoading, setIsMediaLoading] = useState<boolean>(true)
@@ -46,15 +45,18 @@ export const useNonFungibleTokenInfo = (
         const load = async () => {
             try {
                 const name = await getName(contractAddress, thor)
+                setCollectionName(name)
                 const uri = await getTokenURI(tokenId, contractAddress, thor)
+                setTokenUri(uri)
                 const metadata = await fetchMetadata(uri)
                 if (!metadata) throw new Error("No metadata found")
-                const mimeType = await resolveMimeType(metadata?.image)
-                setTokenImage(URIUtils.convertUriToUrl(metadata?.image))
                 setTokenMetadata(metadata)
-                setTokenUri(uri)
-                setTokenMime(mimeType)
-                setCollectionName(name)
+                const mediaType = await MediaUtils.resolveMediaType(
+                    metadata.image,
+                )
+
+                setTokenMediaType(mediaType)
+                setTokenImage(URIUtils.convertUriToUrl(metadata?.image))
                 setIsMediaLoading(false)
             } catch (e) {
                 error(
@@ -71,7 +73,7 @@ export const useNonFungibleTokenInfo = (
         tokenUri,
         collectionName,
         tokenImage,
-        tokenMime,
+        tokenMediaType,
         isMediaLoading,
     }
 }
