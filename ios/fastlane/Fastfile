@@ -99,7 +99,7 @@ platform :ios do
     github_token = options[:token]
 
     ensure_git_status_clean
-    # ensure_git_branch(branch: "main")
+    ensure_git_branch(branch: "main")
 
     build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
 
@@ -109,7 +109,6 @@ platform :ios do
       build:build
     )
 
-=begin    
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
     )
@@ -146,9 +145,6 @@ platform :ios do
       skip_waiting_for_build_processing: true, 
       apple_id: "6446854569"
     )
-=end   
-
-    File.write("../../test.md", JSON.pretty_generate("TEST FILE"))
 
     gh_setup_beta_after(
       github_username:github_username, 
