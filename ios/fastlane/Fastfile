@@ -16,7 +16,7 @@
 fastlane_require "dotenv"
 
 before_all do
-	Dotenv.load ".env.secret"
+	Dotenv.load ".env"
 end
 
 
