@@ -174,5 +174,7 @@ platform :ios do
       },
     )
 
+    puts "Build finished. Bye!"
+
   end
 end
