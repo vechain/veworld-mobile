@@ -57,7 +57,7 @@ platform :ios do
     # Set the GitHub remote URL with credentials
     remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
     sh("git remote set-url origin #{remote_url}")
-
+    sh("git branch --unset-upstream")
     sh("git add .")
     sh("git commit -S -m 'build: init'")
 
