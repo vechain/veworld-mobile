@@ -50,11 +50,11 @@ platform :ios do
     # ensure_git_branch(branch: "main")
 
     github_token = values[:github_token]
-    build = values[:build]
+    timestamp = values[:timestamp]
     branch_name = "release-build"
 
     # Create and push the branch locally
-    sh("git checkout -b #{branch_name}-#{build}")
+    sh("git checkout -b #{branch_name}-#{timestamp}")
 
     # Set the GitHub remote URL with credentials
     remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
@@ -71,12 +71,13 @@ platform :ios do
     github_username = options[:username]
     github_token = options[:token]
 
-    build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+    time = Time.new
+    formatTime = time.strftime("%d/%m/%Y %H:%M")
   
     gh_setup_beta_before(
       github_username:github_username, 
       github_token:github_token,
-      build:build
+      timestamp:formatTime
     )
 
 =begin
