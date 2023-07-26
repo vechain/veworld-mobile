@@ -78,6 +78,7 @@ coverage
 .env.production.local
 .env.production
 .env.test.local
+.env.secret
 
 junit.xml
 
