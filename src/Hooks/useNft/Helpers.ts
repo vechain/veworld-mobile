@@ -1,6 +1,5 @@
 import {
     GithubCollectionResponse,
-    NftItemResponse,
     getName,
     getNftsForContract,
     getSymbol,
@@ -10,12 +9,10 @@ import {
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import {
     NETWORK_TYPE,
+    NFTMediaType,
     NonFungibleToken,
     NonFungibleTokenCollection,
 } from "~Model"
-import { URIUtils, error } from "~Utils"
-import axios from "axios"
-import { NFT_MIME_TYPE_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 
 export const parseCollectionMetadataFromRegistry = async (
     network: NETWORK_TYPE,
@@ -44,6 +41,7 @@ export const parseCollectionMetadataFromRegistry = async (
         description: regInfo.description,
         image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
         mimeType: "image/webp",
+        mediaType: NFTMediaType.IMAGE,
         balanceOf: pagination.totalElements,
         hasCount: pagination.hasCount,
         isBlacklisted: false,
@@ -79,6 +77,7 @@ export const parseCollectionMetadataWithoutRegistry = async (
         creator: notAvailable,
         description: notAvailable,
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
+        mediaType: NFTMediaType.IMAGE,
         balanceOf: pagination.totalElements,
         hasCount: pagination.hasCount,
         isBlacklisted: false,
@@ -88,44 +87,27 @@ export const parseCollectionMetadataWithoutRegistry = async (
     return nftCollection
 }
 
-export const parseNftMetadata = async (
-    nft: NftItemResponse,
+export const initialiseNFTMetadata = async (
+    tokenId: string,
+    contractAddress: string,
+    owner: string,
     thor: Connex.Thor,
     notAvailable: string,
     isDarkTheme: boolean,
 ): Promise<NonFungibleToken> => {
-    const tokenURI = await getTokenURI(nft.tokenId, nft.contractAddress, thor)
+    const tokenURI = await getTokenURI(tokenId, contractAddress, thor)
 
     const nftWithMetadata: NonFungibleToken = {
-        id: nft.contractAddress + nft.tokenId + nft.owner,
+        id: contractAddress + tokenId + owner,
         name: notAvailable,
         description: notAvailable,
-        address: nft.contractAddress,
-        tokenId: nft.tokenId,
-        owner: nft.owner,
+        address: contractAddress,
+        tokenId: tokenId,
+        owner: owner,
         tokenURI,
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
+        mediaType: NFTMediaType.IMAGE,
     }
 
     return nftWithMetadata
-}
-
-export const resolveMimeType = async (resource: string) => {
-    try {
-        // If it's a data URI parse from the string
-        if (resource.startsWith("data:")) {
-            const mime = resource.split(";")[0].split(":")[1]
-            return mime
-        }
-
-        const res = await axios.head(URIUtils.convertUriToUrl(resource), {
-            timeout: NFT_MIME_TYPE_AXIOS_TIMEOUT,
-        })
-
-        const contentType = res.headers["content-type"]
-        return contentType ?? "image/png"
-    } catch (err) {
-        error(`Failed to resolve mime type for ${resource}`, err)
-    }
-    return "image/png"
 }

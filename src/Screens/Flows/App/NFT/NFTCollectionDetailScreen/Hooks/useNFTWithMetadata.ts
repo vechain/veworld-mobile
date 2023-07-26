@@ -23,7 +23,7 @@ export const useNFTWithMetadata = (
 
     const { fetchWithPagination } = usePagination()
 
-    const { getNFTsForCollection } = useNFTs()
+    const { loadNFTsForCollection } = useNFTs()
 
     const nftNetworkingSideEffects = useAppSelector(
         selectNftNetworkingSideEffects,
@@ -36,7 +36,7 @@ export const useNFTWithMetadata = (
                 nftForCollection?.NFTs?.length,
                 nftNetworkingSideEffects.isLoading,
                 async page => {
-                    await getNFTsForCollection(collectionAddress, page)
+                    await loadNFTsForCollection(collectionAddress, page)
                 },
             )
 
@@ -45,7 +45,7 @@ export const useNFTWithMetadata = (
     }, [
         collectionAddress,
         fetchWithPagination,
-        getNFTsForCollection,
+        loadNFTsForCollection,
         nftForCollection?.NFTs?.length,
         nftForCollection?.pagination.totalElements,
         nftNetworkingSideEffects.isLoading,
@@ -55,7 +55,7 @@ export const useNFTWithMetadata = (
 
     useEffect(() => {
         const init = async () => {
-            await getNFTsForCollection(collectionAddress, 0)
+            await loadNFTsForCollection(collectionAddress, 0)
         }
 
         init()
