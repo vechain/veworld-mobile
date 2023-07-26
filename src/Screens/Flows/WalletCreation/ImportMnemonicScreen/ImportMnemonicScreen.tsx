@@ -12,7 +12,7 @@ import {
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { useDeviceUtils, useTheme } from "~Hooks"
-import { CryptoUtils, SeedUtils, error } from "~Utils"
+import { CryptoUtils, error, SeedUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic } from "~Storage/Redux/Actions"
 import HapticsService from "~Services/HapticsService"
+import { DEV_FEATURES } from "../../../../../index"
 
 const DEMO_MNEMONIC =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
@@ -118,7 +119,7 @@ export const ImportMnemonicScreen = () => {
                             <BaseText typographyFont="title">
                                 {LL.TITLE_WALLET_IMPORT_LOCAL()}
                             </BaseText>
-                            {__DEV__ && (
+                            {DEV_FEATURES && (
                                 <BaseButton
                                     size="md"
                                     variant="link"

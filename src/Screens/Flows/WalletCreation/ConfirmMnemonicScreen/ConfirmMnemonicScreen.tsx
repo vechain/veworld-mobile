@@ -19,9 +19,10 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { useAppSelector } from "~Storage/Redux"
-import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
+import { selectHasOnboarded, selectMnemonic } from "~Storage/Redux/Selectors"
 import { isSmallScreen, valueToHP } from "~Constants"
 import { ScrollView, StyleSheet } from "react-native"
+import { DEV_FEATURES } from "../../../../../index"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
@@ -183,7 +184,7 @@ export const ConfirmMnemonicScreen = () => {
                             <BaseText align="left" typographyFont="title">
                                 {LL.TITLE_CONFIRM_MNEMONIC()}
                             </BaseText>
-                            {__DEV__ && (
+                            {DEV_FEATURES && (
                                 <BaseButton
                                     px={0}
                                     py={0}

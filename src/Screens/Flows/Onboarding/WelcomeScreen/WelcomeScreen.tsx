@@ -23,6 +23,7 @@ import { CryptoUtils } from "~Utils"
 import { useDeviceUtils } from "~Hooks"
 import { SettingsConstants } from "~Constants"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
+import { DEV_FEATURES } from "../../../../../index"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -123,7 +124,7 @@ export const WelcomeScreen = () => {
                         haptics="Medium"
                     />
                 </BaseView>
-                {__DEV__ && (
+                {DEV_FEATURES && (
                     <BaseButton
                         size="md"
                         variant="link"

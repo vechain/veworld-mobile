@@ -20,6 +20,7 @@ import {
 } from "./Components"
 import { Routes } from "~Navigation"
 import { isSmallScreen } from "~Constants"
+import { DEV_FEATURES } from "../../../../../index"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
@@ -77,7 +78,7 @@ export const ChangeNetworkScreen = () => {
 
                         <BaseSpacer height={20} />
 
-                        {__DEV__ && (
+                        {DEV_FEATURES && (
                             <>
                                 <EnableFeature
                                     title={LL.BD_OTHER_NETWORKS_INDICATOR()}
@@ -90,7 +91,7 @@ export const ChangeNetworkScreen = () => {
                             </>
                         )}
 
-                        {__DEV__ && (
+                        {DEV_FEATURES && (
                             <>
                                 <EnableFeature
                                     title={LL.BD_OTHER_NETWORKS_CONVERSION()}

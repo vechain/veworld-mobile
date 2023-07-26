@@ -29,6 +29,7 @@ import {
 import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 import { isSmallScreen } from "~Constants"
+import { DEV_FEATURES } from "../../../../../index"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -172,7 +173,7 @@ export const PrivacyScreen = () => {
 
                         <BaseSpacer height={24} />
 
-                        {__DEV__ && (
+                        {DEV_FEATURES && (
                             <>
                                 <EnableFeature
                                     title={LL.SB_ANALYTICS_TRACKING()}

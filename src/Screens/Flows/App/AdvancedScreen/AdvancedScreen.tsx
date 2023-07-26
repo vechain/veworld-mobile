@@ -15,6 +15,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { isSmallScreen } from "~Constants"
+import { DEV_FEATURES } from "../../../../../index"
 
 export const AdvancedScreen = () => {
     const { LL } = useI18nContext()
@@ -48,7 +49,7 @@ export const AdvancedScreen = () => {
                     <BaseSpacer height={16} />
                     <Reset />
 
-                    {__DEV__ && (
+                    {DEV_FEATURES && (
                         <>
                             <BaseSpacer height={24} />
                             <EnableFeature

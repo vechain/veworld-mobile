@@ -23,6 +23,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { DEV_FEATURES } from "../../../../../index"
 
 export const GeneralScreen = () => {
     const { LL } = useI18nContext()
@@ -95,7 +96,7 @@ export const GeneralScreen = () => {
 
                     <BaseSpacer height={20} />
 
-                    {__DEV__ && (
+                    {DEV_FEATURES && (
                         <>
                             <EnableFeature
                                 title={LL.BD_HIDE_TOKENS()}
@@ -108,7 +109,7 @@ export const GeneralScreen = () => {
                         </>
                     )}
 
-                    {__DEV__ && (
+                    {DEV_FEATURES && (
                         <>
                             <BaseText typographyFont="bodyMedium" my={8}>
                                 {LL.BD_APP_LANGUAGE()}

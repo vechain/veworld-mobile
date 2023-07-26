@@ -7,6 +7,7 @@ import { StyleSheet, View } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
+import { DEV_FEATURES } from "../../../../../index"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
@@ -130,7 +131,7 @@ const getList = (LL: TranslationFunctions) => {
         },
     ]
 
-    if (__DEV__) {
+    if (DEV_FEATURES) {
         settingsList.push({
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,

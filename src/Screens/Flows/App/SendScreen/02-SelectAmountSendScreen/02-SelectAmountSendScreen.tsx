@@ -32,6 +32,7 @@ import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { throttle } from "lodash"
 import { useMaxAmount } from "./Hooks/useMaxAmount"
+import { DEV_FEATURES } from "../../../../../../index"
 
 const { defaults: defaultTypography } = typography
 
@@ -52,7 +53,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     )
 
     useEffect(() => {
-        if (__DEV__) setInput("0.000001")
+        if (DEV_FEATURES) setInput("0.000001")
     }, [setInput])
 
     const currency = useAppSelector(selectCurrency)
