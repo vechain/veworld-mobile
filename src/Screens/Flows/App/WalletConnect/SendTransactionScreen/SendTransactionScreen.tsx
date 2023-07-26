@@ -43,7 +43,6 @@ import { useNavigation } from "@react-navigation/native"
 import { TransactionDetails } from "./Components"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { DelegationType } from "~Model/Delegation"
-import { isEmpty } from "lodash"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -229,7 +228,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const {
         ConfirmIdentityBottomSheet,
         checkIdentityBeforeOpening,
-        biometrics,
+        isBiometricsEmpty,
     } = useCheckIdentity({
         onIdentityConfirmed: handleAccept,
     })
@@ -345,9 +344,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         action={onSubmit}
                         disabled={
                             (!isThereEnoughGas && !isDelegated) ||
-                            isEmpty(biometrics)
+                            isBiometricsEmpty
                         }
-                        isLoading={isEmpty(biometrics)}
+                        isLoading={isBiometricsEmpty}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

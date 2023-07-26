@@ -25,7 +25,6 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails } from "~Screens"
-import { isEmpty } from "lodash"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -154,7 +153,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const {
         ConfirmIdentityBottomSheet,
         checkIdentityBeforeOpening,
-        biometrics,
+        isBiometricsEmpty,
     } = useCheckIdentity({
         onIdentityConfirmed: handleAccept,
     })
@@ -213,8 +212,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         title={LL.COMMON_BTN_SIGN()}
                         action={checkIdentityBeforeOpening}
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
-                        isLoading={isEmpty(biometrics)}
-                        disabled={isEmpty(biometrics)}
+                        isLoading={isBiometricsEmpty}
+                        disabled={isBiometricsEmpty}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

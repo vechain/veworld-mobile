@@ -44,7 +44,6 @@ import { useDelegation } from "./Hooks"
 import { DEVICE_TYPE } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
-import { isEmpty } from "lodash"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -143,7 +142,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const {
         ConfirmIdentityBottomSheet,
         checkIdentityBeforeOpening,
-        biometrics,
+        isBiometricsEmpty,
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
         onCancel: () => setLoadingTransaction(false),
@@ -380,9 +379,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         continueButtonDisabled ||
                         loadingTransaction ||
                         loadingGas ||
-                        isEmpty(biometrics)
+                        isBiometricsEmpty
                     }
-                    isLoading={loadingTransaction || isEmpty(biometrics)}
+                    isLoading={loadingTransaction || isBiometricsEmpty}
                     bottom={0}
                     mx={0}
                     width={"auto"}

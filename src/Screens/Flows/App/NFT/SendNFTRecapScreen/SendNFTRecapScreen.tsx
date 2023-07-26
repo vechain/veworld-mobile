@@ -32,7 +32,6 @@ import { DEVICE_TYPE } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { DelegationType } from "~Model/Delegation"
-import { isEmpty } from "lodash"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -110,7 +109,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const {
         ConfirmIdentityBottomSheet,
         checkIdentityBeforeOpening,
-        biometrics,
+        isBiometricsEmpty,
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
         onCancel: () => setLoading(false),
@@ -204,13 +203,11 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                 <FadeoutButton
                     title={LL.SEND_TOKEN_TITLE().toUpperCase()}
                     action={onSubmit}
-                    disabled={
-                        !isThereEnoughGas || loading || isEmpty(biometrics)
-                    }
+                    disabled={!isThereEnoughGas || loading || isBiometricsEmpty}
                     bottom={0}
                     mx={0}
                     width={"auto"}
-                    isLoading={loading || isEmpty(biometrics)}
+                    isLoading={loading || isBiometricsEmpty}
                 />
             }
         />

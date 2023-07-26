@@ -29,7 +29,6 @@ import {
     selectNewLedgerDevice,
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
-import { isEmpty } from "lodash"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -109,7 +108,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const {
         ConfirmIdentityBottomSheet,
         checkIdentityBeforeOpening,
-        biometrics,
+        isBiometricsEmpty,
     } = useCheckIdentity({ onIdentityConfirmed })
     /**
      * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
@@ -220,8 +219,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                                 title={LL.BTN_WALLET_SUCCESS()}
                                 testID="GET_STARTED_BTN"
                                 haptics="Success"
-                                isLoading={isEmpty(biometrics)}
-                                disabled={isEmpty(biometrics)}
+                                isLoading={isBiometricsEmpty}
+                                disabled={isBiometricsEmpty}
                             />
                         </BaseView>
                     </BaseView>
