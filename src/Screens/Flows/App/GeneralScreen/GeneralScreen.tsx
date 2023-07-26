@@ -119,13 +119,13 @@ export const GeneralScreen = () => {
                             </BaseText>
 
                             <BaseSpacer height={20} />
+
+                            <ChangeLanguage
+                                language={selectedLanguage}
+                                onPress={openSelectLanguageSheet}
+                            />
                         </>
                     )}
-
-                    <ChangeLanguage
-                        language={selectedLanguage}
-                        onPress={openSelectLanguageSheet}
-                    />
 
                     <SelectLanguageBottomSheet
                         ref={selectLanguageSheetRef}
