@@ -72,8 +72,7 @@ platform :ios do
     github_token = options[:token]
 
     time = Time.new
-    formatTime = time.strftime("%d/%m/%Y %H:%M")
-  
+      
     gh_setup_beta_before(
       github_username:github_username, 
       github_token:github_token,
