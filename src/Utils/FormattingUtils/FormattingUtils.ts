@@ -5,7 +5,6 @@ import { error } from "../Logger"
 // import VeWorldErrors from "common/errors/VeWorldErrors"
 // import { error } from "common/logging/Logger"
 // import { detectLocale } from "i18n"
-
 // import { CURRENCY } from "popup/model/Settings/enums"
 import RoundingMode = BigNumber.RoundingMode
 

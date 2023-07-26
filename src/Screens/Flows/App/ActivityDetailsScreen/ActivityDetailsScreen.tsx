@@ -13,7 +13,7 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { Linking } from "react-native"
 import { useBottomSheetModal } from "~Hooks"
-import { DateUtils, TransactionUtils } from "~Utils"
+import { DateUtils, HexUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
 import { getCalendars } from "expo-localization"
@@ -116,10 +116,11 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
-        if (activity.isTransaction)
-            return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${
-                activity.id
-            }`
+        if (activity.isTransaction && activity.txId)
+            return `${getExplorerLink(
+                network,
+                ExplorerLinkType.TRANSACTION,
+            )}/${HexUtils.addPrefix(activity.txId)}`
     }, [activity, network])
 
     const renderActivityDetails = useMemo(() => {

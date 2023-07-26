@@ -14,7 +14,6 @@ import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
 import { useI18nContext } from "~i18n"
 import HapticsService from "~Services/HapticsService"
-import { useNFTMetadataResolver } from "~Hooks/useNFTMetadataResolver"
 
 type Props = {
     nft: NonFungibleToken
@@ -24,23 +23,18 @@ type Props = {
 
 export const NFTView = memo(({ nft, index, collection }: Props) => {
     const nav = useNavigation()
-    const { mediaType, nftWithMetadata } = useNFTMetadataResolver({
-        nft,
-    })
     const video = useRef(null)
     const { LL } = useI18nContext()
 
-    const isPendingTx = useAppSelector(state =>
-        selectPendingTx(state, nftWithMetadata.id!),
-    )
+    const isPendingTx = useAppSelector(state => selectPendingTx(state, nft.id))
 
     const onNftPress = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
         nav.navigate(Routes.NFT_DETAILS, {
             collectionAddress: collection.address,
-            nftTokenId: nftWithMetadata.tokenId,
+            nftTokenId: nft.tokenId,
         })
-    }, [nftWithMetadata, collection, nav])
+    }, [nft, collection, nav])
 
     const renderNFTStaticImage = useCallback(
         () => (
@@ -63,14 +57,14 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                 },
             ]}>
             <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                {mediaType === NFTMediaType.IMAGE && (
+                {nft.mediaType === NFTMediaType.IMAGE && (
                     <NFTImage
-                        uri={nftWithMetadata.image}
+                        uri={nft.image}
                         style={baseStyles.nftPreviewImage}
                     />
                 )}
 
-                {mediaType === NFTMediaType.VIDEO && (
+                {nft.mediaType === NFTMediaType.VIDEO && (
                     <BaseView style={baseStyles.nftPreviewImage}>
                         <Video
                             PosterComponent={renderNFTStaticImage}
@@ -78,7 +72,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                             ref={video}
                             shouldPlay
                             style={baseStyles.nftPreviewImage}
-                            source={{ uri: nftWithMetadata.image }}
+                            source={{ uri: nft.image }}
                             resizeMode={ResizeMode.COVER}
                             isLooping
                             isMuted
@@ -86,13 +80,12 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                     </BaseView>
                 )}
 
-                {mediaType !== NFTMediaType.IMAGE &&
-                    mediaType !== NFTMediaType.VIDEO && (
-                        <NFTImage
-                            uri={NFTPlaceholder}
-                            style={baseStyles.nftPreviewImage}
-                        />
-                    )}
+                {nft.mediaType === NFTMediaType.UNKNOWN && (
+                    <NFTImage
+                        uri={NFTPlaceholder}
+                        style={baseStyles.nftPreviewImage}
+                    />
+                )}
 
                 {isPendingTx && (
                     <BaseView
@@ -116,7 +109,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                     alignItems="center"
                     justifyContent="space-between">
                     <BaseText color={COLORS.WHITE} numberOfLines={1} w={80}>
-                        #{nftWithMetadata.tokenId}
+                        #{nft.tokenId}
                     </BaseText>
                 </BaseView>
             </BaseView>

@@ -1,9 +1,9 @@
 import { TransactionOrigin } from "~Model"
 import {
+    findInvolvedAccount,
     InformUserForIncomingVET,
     InformUserForOutgoingVET,
     VETTransferHandlerProps,
-    findInvolvedAccount,
 } from "./index"
 
 export const handleVETTransfers = ({

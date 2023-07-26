@@ -1,13 +1,19 @@
 import { useCallback } from "react"
 import { useThor } from "~Components"
-import { Network, NonFungibleTokenCollection } from "~Model"
-import { GithubCollectionResponse, getContractAddresses } from "~Networking"
+import { NETWORK_TYPE, Network, NonFungibleTokenCollection } from "~Model"
+import {
+    GithubCollectionResponse,
+    getContractAddresses,
+    getNftsForContract,
+    getTokenURI,
+} from "~Networking"
 import {
     setCollections,
     setNetworkingSideEffects,
+    updateCollection,
     useAppDispatch,
 } from "~Storage/Redux"
-import { error } from "~Utils"
+import { MediaUtils, URIUtils, error } from "~Utils"
 import {
     parseCollectionMetadataFromRegistry,
     parseCollectionMetadataWithoutRegistry,
@@ -16,6 +22,7 @@ import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useTheme } from "~Hooks"
+import { fetchMetadata } from "./fetchMeta"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -24,14 +31,14 @@ import { useTheme } from "~Hooks"
  *
  * Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
  *
- * @returns {object} The object returned contains a `getCollections` function that can be invoked to fetch NFT collections.
+ * @returns {object} The object returned contains a `loadCollections` function that can be invoked to fetch NFT collections.
  *
  * @example
- * const { getCollections } = useNFTCollections();
- * getCollections(1, 10);  // fetches the first 10 NFT collections
+ * const { loadCollections } = useNFTCollections();
+ * loadCollections(1, 10);  // fetches the first 10 NFT collections
  *
  * @method
- * getCollections(_page: number, _resultsPerPage: number = 10)
+ * loadCollections(_page: number, _resultsPerPage: number = 10)
  * An async function that fetches the NFT collections for the selected account.
  */
 
@@ -42,7 +49,66 @@ export const useNFTCollections = () => {
 
     const theme = useTheme()
 
-    const getCollections = useCallback(
+    const lazyLoadMetadata = useCallback(
+        async (
+            networkType: NETWORK_TYPE,
+            address: string,
+            _nftCollections: NonFungibleTokenCollection[],
+        ) => {
+            await Promise.all(
+                _nftCollections.map(async collection => {
+                    if (MediaUtils.isDefaultImage(collection.image)) {
+                        const { data } = await getNftsForContract(
+                            networkType,
+                            collection.address,
+                            address,
+                            1,
+                            0,
+                        )
+
+                        if (data.length === 0) return
+
+                        const tokenURI = await getTokenURI(
+                            data[0].tokenId,
+                            collection.address,
+                            thor,
+                        )
+
+                        const tokenMetadata = await fetchMetadata(tokenURI)
+                        const image = URIUtils.convertUriToUrl(
+                            tokenMetadata?.image ?? collection.image,
+                        )
+                        const mediaType = await MediaUtils.resolveMediaType(
+                            image,
+                            collection.mimeType,
+                        )
+
+                        if (tokenMetadata) {
+                            const updated = {
+                                ...collection,
+                                image,
+                                mediaType,
+                                name: tokenMetadata?.name ?? collection.name,
+                                description:
+                                    tokenMetadata?.description ??
+                                    collection.description,
+                            }
+                            dispatch(
+                                updateCollection({
+                                    network: networkType,
+                                    currentAccountAddress: address,
+                                    collection: updated,
+                                }),
+                            )
+                        }
+                    }
+                }),
+            )
+        },
+        [dispatch, thor],
+    )
+
+    const loadCollections = useCallback(
         async (
             selectedAccount: string,
             network: Network,
@@ -121,6 +187,8 @@ export const useNFTCollections = () => {
                         error: undefined,
                     }),
                 )
+
+                lazyLoadMetadata(network.type, selectedAccount, _nftCollections)
             } catch (e: unknown) {
                 dispatch(
                     setNetworkingSideEffects({
@@ -131,8 +199,8 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, theme.isDark, thor],
+        [LL, dispatch, lazyLoadMetadata, theme.isDark, thor],
     )
 
-    return { getCollections }
+    return { loadCollections }
 }
