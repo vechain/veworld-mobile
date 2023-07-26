@@ -60,7 +60,7 @@ platform :ios do
     sh("git commit -S -a -m 'build: init'")
 
     # Push the branch to GitHub
-    sh("git push origin #{branch_name}-#{version}")
+    sh("git push origin #{branch_name}-#{build}")
   end
 
 
