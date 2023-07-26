@@ -23,10 +23,26 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Run e2e tests
 
-### ios beta
+### ios gh_setup_beta_before
 
 ```sh
-[bundle exec] fastlane ios beta
+[bundle exec] fastlane ios gh_setup_beta_before
+```
+
+Create Release Branch on GitHub
+
+### ios changelog
+
+```sh
+[bundle exec] fastlane ios changelog
+```
+
+Create changelog
+
+### ios build_beta
+
+```sh
+[bundle exec] fastlane ios build_beta
 ```
 
 Push a new beta build to TestFlight
