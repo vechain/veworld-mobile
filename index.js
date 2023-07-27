@@ -31,7 +31,11 @@ import { info, AnalyticsUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
-import { selectSentryTrackingEnabled, useAppSelector } from "~Storage/Redux"
+import {
+    selectAnalyticsTrackingEnabled,
+    selectSentryTrackingEnabled,
+    useAppSelector,
+} from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import { InternetDownScreen } from "~Screens"
 import NetInfo from "@react-native-community/netinfo"
@@ -80,10 +84,14 @@ const Main = () => {
         }
     }, [sentryTrackingEnabled])
 
+    const isAnalyticsEnabled = useAppSelector(selectAnalyticsTrackingEnabled)
+
     useEffect(() => {
-        // init mixpanel analytics
-        AnalyticsUtils.initialize()
-    }, [])
+        if (isAnalyticsEnabled) {
+            // init mixpanel analytics
+            AnalyticsUtils.initialize()
+        }
+    }, [isAnalyticsEnabled])
 
     if (!fontsLoaded) return
 
