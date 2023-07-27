@@ -79,9 +79,6 @@ platform :ios do
   desc "Commit latest artifacts to GitHub"
   lane :gh_setup_after do |values|
     branch_name = "release-build"
-
-    github_token = values[:github_token]
-    github_username = values[:github_username]
     build_or_version_number = values[:build_or_version_number]
 
     sh("git add --all")
