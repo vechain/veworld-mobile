@@ -17,11 +17,12 @@ import {
     Wallet,
 } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { useSendTransaction } from "~Hooks"
+import { useAnalyticTracking, useSendTransaction } from "~Hooks"
 import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useMemo } from "react"
+import { AnalyticsEvent } from "~Constants"
 
 type Props = {
     transactionBody: Transaction.Body
@@ -59,6 +60,7 @@ export const useSignTransaction = ({
     initialRoute = Routes.HOME,
 }: Props) => {
     const { LL } = useI18nContext()
+    const track = useAnalyticTracking()
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state =>
@@ -214,10 +216,11 @@ export const useSignTransaction = ({
             if (!signedTx) return
 
             await sendTransactionAndPerformUpdates(signedTx)
-
+            track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
             onTXFinish()
         } catch (e) {
             error("[signTransaction]", e)
+            track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
             onError?.(e)
         }

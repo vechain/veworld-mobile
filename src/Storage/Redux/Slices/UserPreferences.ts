@@ -21,7 +21,7 @@ const initialState: UserPreferenceState = {
     balanceVisible: true,
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,
-    isAnalyticsTrackingEnabled: false,
+    isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
     isSentryTrackingEnabled: true,
     devFeaturesEnabled: __DEV__,
 }

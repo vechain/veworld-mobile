@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
-import { useTheme } from "~Hooks"
+import { useAnalyticTracking, useTheme } from "~Hooks"
 import { CryptoUtils } from "~Utils"
 import {
     BackButtonHeader,
@@ -20,7 +20,7 @@ import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
 import { selectHasOnboarded, selectMnemonic } from "~Storage/Redux/Selectors"
-import { isSmallScreen, valueToHP } from "~Constants"
+import { AnalyticsEvent, isSmallScreen, valueToHP } from "~Constants"
 import { ScrollView, StyleSheet } from "react-native"
 
 export const ConfirmMnemonicScreen = () => {
@@ -28,6 +28,7 @@ export const ConfirmMnemonicScreen = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
+    const track = useAnalyticTracking()
 
     const [selectedFirstWord, setSelectedFirstWord] = useState<string | null>(
         null,
@@ -68,17 +69,22 @@ export const ConfirmMnemonicScreen = () => {
     }, [mnemonicArray, firstIndex, secondIndex, thirdIndex])
 
     const onConfirmPress = () => {
+        track(AnalyticsEvent.NEW_WALLET_VERIFICATION_ATTEMPTED)
         if (
             selectedFirstWord === mnemonicArray[firstIndex] &&
             selectedSecondWord === mnemonicArray[secondIndex] &&
             selectedThirdWord === mnemonicArray[thirdIndex]
         ) {
+            track(AnalyticsEvent.NEW_WALLET_VERIFICATION_SUCCESS)
+
             if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
                 nav.navigate(Routes.APP_SECURITY)
             }
         } else {
+            track(AnalyticsEvent.NEW_WALLET_VERIFICATION_FAILED)
+
             showErrorToast(
                 LL.ERROR_WRONG_WORDS_COMBINATION(),
                 LL.ERROR_WRONG_WORDS_COMBINATION_DESC(),

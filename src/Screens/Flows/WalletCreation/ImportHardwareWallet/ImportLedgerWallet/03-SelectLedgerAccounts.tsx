@@ -11,8 +11,8 @@ import {
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useThemedStyles } from "~Hooks"
-import { ColorThemeType, VET } from "~Constants"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, ColorThemeType, VET } from "~Constants"
 import { FormattingUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
@@ -48,6 +48,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const { styles: themedStyles, theme } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const track = useAnalyticTracking()
 
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
@@ -66,9 +67,9 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     const onConfirm = useCallback(async () => {
         try {
+            track(AnalyticsEvent.IMPORT_HW_USER_SUBMITTED_ACCOUNTS)
             if (selectedAccountsIndex.length > 0 && rootAccount) {
                 // set device in the store we can use it in walletSuccess
-
                 dispatch(
                     setNewLedgerDevice({
                         deviceId: device.id,
@@ -80,10 +81,19 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                 navigateNext()
             }
         } catch (e) {
+            track(AnalyticsEvent.IMPORT_HW_FAILED_TO_IMPORT)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast(e as string)
         }
-    }, [selectedAccountsIndex, rootAccount, device, dispatch, navigateNext])
+    }, [
+        track,
+        selectedAccountsIndex,
+        rootAccount,
+        dispatch,
+        device.id,
+        device.localName,
+        navigateNext,
+    ])
 
     /**
      * When the root account changes, fetch the accounts and balances
