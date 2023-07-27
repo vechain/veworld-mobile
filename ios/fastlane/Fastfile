@@ -44,7 +44,6 @@ platform :ios do
 
     version = values[:version]
 
-    # Read the current version from package.json
     package_json = JSON.parse(File.read("../../package.json"))
     package_json["version"] = version
     File.write("../../package.json", JSON.pretty_generate(package_json))
@@ -180,7 +179,7 @@ platform :ios do
     create_pull_request(
       api_token: github_token,
       repo: "vechainfoundation/veworld-mobile",
-      title: "build: build artifacts build-#{build}",
+      title: version.nil? ? "build: build artifacts build-#{build}" : "version: build artifacts version-#{version}", 
       base: "main",
       api_url: "https://api.github.com"
     )
