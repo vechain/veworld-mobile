@@ -8,20 +8,21 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
-    ChangeTheme,
     ChangeCurrency,
     ChangeLanguage,
+    ChangeTheme,
     SelectLanguageBottomSheet,
 } from "./Components"
 import { useBottomSheetModal } from "~Hooks"
-import { LANGUAGE, isSmallScreen } from "~Constants"
+import { isSmallScreen, LANGUAGE } from "~Constants"
 import {
-    useAppDispatch,
-    useAppSelector,
+    selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
     selectLangauge,
     setHideTokensWithNoBalance,
     setLanguage,
+    useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 
 export const GeneralScreen = () => {
@@ -36,6 +37,7 @@ export const GeneralScreen = () => {
     const dispatch = useAppDispatch()
 
     const selectedLanguage = useAppSelector(selectLangauge)
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const hideTokensWithNoBalance = useAppSelector(
         selectHideTokensWithNoBalance,
@@ -95,28 +97,36 @@ export const GeneralScreen = () => {
 
                     <BaseSpacer height={20} />
 
-                    <EnableFeature
-                        title={LL.BD_HIDE_TOKENS()}
-                        subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
-                        onValueChange={toggleTokensHiddenSwitch}
-                        value={hideTokensWithNoBalance}
-                    />
+                    {devFeaturesEnabled && (
+                        <>
+                            <EnableFeature
+                                title={LL.BD_HIDE_TOKENS()}
+                                subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
+                                onValueChange={toggleTokensHiddenSwitch}
+                                value={hideTokensWithNoBalance}
+                            />
 
-                    <BaseSpacer height={20} />
+                            <BaseSpacer height={20} />
+                        </>
+                    )}
 
-                    <BaseText typographyFont="bodyMedium" my={8}>
-                        {LL.BD_APP_LANGUAGE()}
-                    </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_APP_LANGUAGE_DISCLAIMER()}
-                    </BaseText>
+                    {devFeaturesEnabled && (
+                        <>
+                            <BaseText typographyFont="bodyMedium" my={8}>
+                                {LL.BD_APP_LANGUAGE()}
+                            </BaseText>
+                            <BaseText typographyFont="caption">
+                                {LL.BD_APP_LANGUAGE_DISCLAIMER()}
+                            </BaseText>
 
-                    <BaseSpacer height={20} />
+                            <BaseSpacer height={20} />
 
-                    <ChangeLanguage
-                        language={selectedLanguage}
-                        onPress={openSelectLanguageSheet}
-                    />
+                            <ChangeLanguage
+                                language={selectedLanguage}
+                                onPress={openSelectLanguageSheet}
+                            />
+                        </>
+                    )}
 
                     <SelectLanguageBottomSheet
                         ref={selectLanguageSheetRef}
