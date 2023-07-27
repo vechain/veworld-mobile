@@ -127,7 +127,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
                 flexDirection="row"
                 alignItems="center"
                 justifyContent="flex-start"
-                w={100}>
+                w={90}>
                 <BaseText
                     bg={theme.colors.text}
                     color={theme.colors.textReversed}
