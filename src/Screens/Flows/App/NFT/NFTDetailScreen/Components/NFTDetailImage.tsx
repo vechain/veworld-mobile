@@ -20,7 +20,7 @@ export const NFTDetailImage = ({ nft }: Props) => {
             return (
                 <NFTImage
                     isNFT={true}
-                    uri={uri ?? ""}
+                    uri={nft.image}
                     style={baseStyles.nftImage}
                 />
             )
