@@ -41,7 +41,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { useDelegation } from "./Hooks"
-import { DEVICE_TYPE } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
@@ -139,18 +139,21 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         accountAddress: selectedDelegationAccount?.address || account.address,
     })
 
-    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
-        useCheckIdentity({
-            onIdentityConfirmed: signAndSendTransaction,
-            onCancel: () => setLoadingTransaction(false),
-        })
+    const {
+        ConfirmIdentityBottomSheet,
+        checkIdentityBeforeOpening,
+        isBiometricsEmpty,
+    } = useCheckIdentity({
+        onIdentityConfirmed: signAndSendTransaction,
+        onCancel: () => setLoadingTransaction(false),
+    })
 
     const onSubmit = useCallback(async () => {
         if (
             account.device.type === DEVICE_TYPE.LEDGER &&
             selectedDelegationOption !== DelegationType.ACCOUNT
         ) {
-            await navigateToLedger()
+            await navigateToLedger(account as LedgerAccountWithDevice)
         } else {
             await checkIdentityBeforeOpening()
         }
@@ -375,9 +378,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     disabled={
                         continueButtonDisabled ||
                         loadingTransaction ||
-                        loadingGas
+                        loadingGas ||
+                        isBiometricsEmpty
                     }
-                    isLoading={loadingTransaction}
+                    isLoading={loadingTransaction || isBiometricsEmpty}
                     bottom={0}
                     mx={0}
                     width={"auto"}

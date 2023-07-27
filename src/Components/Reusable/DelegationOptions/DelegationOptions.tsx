@@ -69,11 +69,11 @@ export const DelegationOptions = ({
     const handleSelectDelegationOption = (
         button: BaseButtonGroupHorizontalType,
     ) => {
-        if (button.id === DelegationType.ACCOUNT) {
+        if (button.id === DelegationType.NONE) {
+            setNoDelegation()
+        } else if (button.id === DelegationType.ACCOUNT) {
             openSelectAccountBottomSheet()
-        }
-
-        if (button.id === DelegationType.URL) {
+        } else if (button.id === DelegationType.URL) {
             openSelectDelegationUrlBottomSheet()
         }
     }

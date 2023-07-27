@@ -202,6 +202,7 @@ const baseStyles = (isLink: boolean) => (theme: ColorThemeType) =>
         // ratio width:hight is 2:1
         lottie: {
             width: 60,
-            height: 30,
+            height: 20,
+            marginVertical: -2,
         },
     })

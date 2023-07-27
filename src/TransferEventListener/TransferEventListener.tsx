@@ -72,6 +72,13 @@ export const TransferEventListener: React.FC = () => {
                     ),
                 )
 
+                debug(
+                    `Bloom filter: ${relevantAccounts.length} of ${visibleAccounts.length} accounts are relevant in block ${beat.number}`,
+                )
+
+                //Update the pending transactions cache
+                await updateActivities(pendingActivities)
+
                 if (relevantAccounts.length === 0) return
 
                 // Delay for 5 seconds to allow for the block to be indexed
@@ -84,9 +91,6 @@ export const TransferEventListener: React.FC = () => {
                     0,
                     network.type,
                 )
-
-                //Update the pending transactions cache
-                await updateActivities(pendingActivities)
 
                 debug(
                     `Found ${transfers.pagination.totalElements} transfers in block ${beat.number}`,

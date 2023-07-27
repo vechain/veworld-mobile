@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { SCREEN_WIDTH, COLORS } from "~Constants"
-import { BaseImage, BaseText, BaseView } from "~Components"
+import { BaseText, BaseView, NFTImage } from "~Components"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
 import { NFTMediaType, NonFungibleToken } from "~Model"
@@ -17,14 +17,21 @@ export const NFTDetailImage = ({ nft }: Props) => {
 
     const renderMedia = useMemo(() => {
         if (nft.mediaType === NFTMediaType.IMAGE)
-            return <BaseImage uri={nft.image} style={baseStyles.nftImage} />
+            return (
+                <NFTImage
+                    isNFT={true}
+                    uri={nft.image}
+                    style={baseStyles.nftImage}
+                />
+            )
 
         if (nft.mediaType === NFTMediaType.VIDEO)
             return (
                 <BaseView style={baseStyles.nftImage}>
                     <Video
                         PosterComponent={() => (
-                            <BaseImage
+                            <NFTImage
+                                isNFT={true}
                                 uri={NFTPlaceholder}
                                 style={baseStyles.nftImage}
                             />
@@ -41,8 +48,14 @@ export const NFTDetailImage = ({ nft }: Props) => {
                 </BaseView>
             )
 
-        return <BaseImage uri={NFTPlaceholder} style={baseStyles.nftImage} />
-    }, [nft.mediaType, nft.image])
+        return (
+            <NFTImage
+                uri={NFTPlaceholder}
+                style={baseStyles.nftImage}
+                isNFT={true}
+            />
+        )
+    }, [nft.image, nft.mediaType])
 
     return (
         <BaseView>
