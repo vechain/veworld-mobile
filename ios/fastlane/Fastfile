@@ -39,7 +39,7 @@ platform :ios do
   lane :create_changelog do |values|
 
     Dir.chdir "../.." do # Navigate to the root
-      sh("yarn release")
+      sh("yarn release:ci")
     end
 
     version = values[:version]
