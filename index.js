@@ -78,10 +78,12 @@ const Main = () => {
         } else {
             Sentry.close()
         }
+    }, [sentryTrackingEnabled])
 
+    useEffect(() => {
         // init mixpanel analytics
         AnalyticsUtils.initialize()
-    }, [sentryTrackingEnabled])
+    }, [])
 
     if (!fontsLoaded) return
 
