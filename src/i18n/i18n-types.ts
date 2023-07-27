@@ -690,6 +690,10 @@ type RootTranslation = {
 	 */
 	SB_EDIT_NEW_PIN: string
 	/**
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​n​e​w​ ​p​i​n
+	 */
+	SB_EDIT_NEW_PIN_CONFIRM: string
+	/**
 	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
 	 */
 	SB_ACCOUNT_MANAGEMENT: string
@@ -2961,6 +2965,10 @@ export type TranslationFunctions = {
 	 * Insert your new pin
 	 */
 	SB_EDIT_NEW_PIN: () => LocalizedString
+	/**
+	 * Confirm your new pin
+	 */
+	SB_EDIT_NEW_PIN_CONFIRM: () => LocalizedString
 	/**
 	 * Account management
 	 */
