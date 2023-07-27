@@ -111,12 +111,15 @@ platform :ios do
     ensure_git_branch(branch: "main")
 
     build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
-    version = increment_version_number_in_xcodeproj(bump_type: versionType)
+
+    if !versionType.nil 
+      version = increment_version_number_in_xcodeproj(bump_type: versionType)
+    end
 
     gh_setup_before(
       github_username:github_username, 
       github_token:github_token,
-      build_or_version_number: version.nil? ? build : version
+      build_or_version_number: versionType.nil? ? build : version
     )
 
     Dir.chdir "../.." do
@@ -160,7 +163,7 @@ platform :ios do
       apple_id: "6446854569"
     )
 
-    if !version.nil?
+    if !versionType.nil?
       create_changelog(version:version)
 
       add_git_tag(
@@ -173,19 +176,19 @@ platform :ios do
     gh_setup_after(
       github_username:github_username, 
       github_token:github_token,
-      build_or_version_number: version.nil? ? build : version
+      build_or_version_number: versionType.nil? ? build : version
     )
 
     create_pull_request(
       api_token: github_token,
       repo: "vechainfoundation/veworld-mobile",
-      title: version.nil? ? "build: build artifacts build-#{build}" : "version: build artifacts version-#{version}", 
+      title: versionType.nil? ? "build: build artifacts build-#{build}" : "version: build artifacts version-#{version}", 
       base: "main",
       api_url: "https://api.github.com"
     )
 
     slack(
-      message: version.nil? ? "VeWorld build number: #{build} was successfully released!" : "VeWorld version number: #{version} was successfully released!",
+      message: versionType.nil? ? "VeWorld build number: #{build} was successfully released!" : "VeWorld version number: #{version} was successfully released!",
       slack_url: ENV["SLACK_WEBHOOK"],
       success: true,
       payload: {
