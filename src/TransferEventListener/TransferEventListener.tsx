@@ -9,7 +9,7 @@ import {
     selectActivitiesWithoutFinality,
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
-import { useInformUser, useStateReconciliaiton } from "./Hooks"
+import { useInformUser, useStateReconciliation } from "./Hooks"
 import { useFungibleTokenInfo } from "~Hooks"
 import { Activity, Beat } from "~Model"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
@@ -33,7 +33,7 @@ export const TransferEventListener: React.FC = () => {
 
     const { fetchData } = useFungibleTokenInfo()
 
-    const { updateBalances, updateNFTs } = useStateReconciliaiton()
+    const { updateBalances, updateNFTs } = useStateReconciliation()
 
     const { forTokens, forNFTs } = useInformUser({ network })
 
@@ -114,6 +114,7 @@ export const TransferEventListener: React.FC = () => {
                                 transfer,
                                 stateReconciliationAction: updateNFTs,
                                 informUser: forNFTs,
+                                network: network.type,
                                 thor,
                             })
                         }),
@@ -134,6 +135,7 @@ export const TransferEventListener: React.FC = () => {
                                 fetchData,
                                 stateReconciliationAction: updateBalances,
                                 informUser: forTokens,
+                                network: network.type,
                             })
                         }),
                 )

@@ -20,7 +20,7 @@ export const useFetchCollections = (
         React.SetStateAction<boolean>
     >,
 ) => {
-    const { getCollections } = useNFTCollections()
+    const { loadCollections } = useNFTCollections()
     const { fetchWithPagination } = usePagination()
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -46,7 +46,7 @@ export const useFetchCollections = (
             registryInfo !== undefined
         ) {
             setCollections([])
-            getCollections(
+            loadCollections(
                 selectedAccount.address,
                 network,
                 registryInfo,
@@ -60,7 +60,7 @@ export const useFetchCollections = (
         selectedAccount,
         network,
         registryInfo,
-        getCollections,
+        loadCollections,
         nftCollections?.collections?.length,
     ])
 
@@ -71,7 +71,7 @@ export const useFetchCollections = (
                 nftCollections?.collections?.length,
                 nftNetworkingSideEffects?.isLoading,
                 async page => {
-                    await getCollections(
+                    await loadCollections(
                         selectedAccount.address,
                         network,
                         registryInfo,
@@ -86,7 +86,7 @@ export const useFetchCollections = (
     }, [
         blackListedCollections?.length,
         fetchWithPagination,
-        getCollections,
+        loadCollections,
         network,
         nftCollections?.collections?.length,
         nftCollections?.pagination?.totalElements,

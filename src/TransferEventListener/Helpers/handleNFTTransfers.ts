@@ -12,6 +12,7 @@ export const handleNFTTransfers = async ({
     transfer,
     stateReconciliationAction,
     informUser,
+    network,
     thor,
 }: NFTTransferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
@@ -27,17 +28,18 @@ export const handleNFTTransfers = async ({
         informUserForIncomingNFT({
             collectionName,
             from: transfer.from,
-            alias: foundAccount.account!.alias, // this should be read by typescript as it is already checked on line 21
+            alias: foundAccount.account.alias, // this should be read by typescript as it is already checked on line 21
             transfer,
             informUser,
         })
 
-        stateReconciliationAction({ accountAddress: transfer.to })
+        stateReconciliationAction({ network, accountAddress: transfer.to })
+        stateReconciliationAction({ network, accountAddress: transfer.from })
     }
 
     // User sent NFT
     if (foundAccount.origin === TransactionOrigin.FROM) {
-        // inform user for successfull transfer
+        // inform user for successful transfer
         informUserForOutgoingNFT({
             txId: transfer.txId,
             to: transfer.to,
@@ -46,7 +48,7 @@ export const handleNFTTransfers = async ({
             informUser,
         })
 
-        stateReconciliationAction({ accountAddress: transfer.to })
-        stateReconciliationAction({ accountAddress: transfer.from })
+        stateReconciliationAction({ network, accountAddress: transfer.to })
+        stateReconciliationAction({ network, accountAddress: transfer.from })
     }
 }

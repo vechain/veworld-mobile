@@ -15,7 +15,11 @@ export interface BaseTransferHandlerProps {
     visibleAccounts: AccountWithDevice[]
     transfer: IncomingTransferResponse
     informUser: (params: { accountAddress: string; txId?: string }) => void
-    stateReconciliationAction: (params: { accountAddress: string }) => void
+    stateReconciliationAction: (params: {
+        network: string
+        accountAddress: string
+    }) => void
+    network: string
 }
 
 export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {

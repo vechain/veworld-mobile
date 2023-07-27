@@ -42,7 +42,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
-    const selectedAccoount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const nft = useAppSelector(state =>
         selectNFTWithAddressAndTokenId(
@@ -62,12 +62,12 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const clauses = useMemo(
         () =>
             prepareNonFungibleClause(
-                selectedAccoount.address,
+                selectedAccount.address,
                 route.params.receiverAddress,
                 nft,
             ),
 
-        [selectedAccoount, route.params.receiverAddress, nft],
+        [selectedAccount, route.params.receiverAddress, nft],
     )
 
     const { gas, loadingGas, transactionBody, setGasPayer } = useTransaction({
@@ -103,7 +103,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         selectedDelegationOption,
         gas,
         accountAddress:
-            selectedDelegationAccount?.address || selectedAccoount.address,
+            selectedDelegationAccount?.address ?? selectedAccount.address,
     })
 
     const {
@@ -117,7 +117,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
     const onSubmit = useCallback(async () => {
         if (
-            selectedAccoount.device.type === DEVICE_TYPE.LEDGER &&
+            selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
             selectedDelegationOption !== DelegationType.ACCOUNT
         ) {
             await navigateToLedger()
@@ -125,7 +125,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             await checkIdentityBeforeOpening()
         }
     }, [
-        selectedAccoount,
+        selectedAccount,
         selectedDelegationOption,
         navigateToLedger,
         checkIdentityBeforeOpening,
@@ -143,16 +143,18 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         <BaseSpacer height={24} />
 
                         <TransferCard
-                            fromAddress={selectedAccoount.address}
+                            fromAddress={selectedAccount.address}
                             toAddresses={[route.params.receiverAddress]}
                         />
 
                         <BaseSpacer height={24} />
 
-                        <NFTTransferCard
-                            collectionAddress={nft!.address}
-                            tokenId={nft!.tokenId}
-                        />
+                        {nft && (
+                            <NFTTransferCard
+                                collectionAddress={nft.address}
+                                tokenId={nft.tokenId}
+                            />
+                        )}
 
                         <DelegationOptions
                             selectedDelegationOption={selectedDelegationOption}

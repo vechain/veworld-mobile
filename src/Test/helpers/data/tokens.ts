@@ -1,4 +1,9 @@
-import { FungibleTokenWithBalance, NonFungibleToken, Token } from "~Model"
+import {
+    FungibleTokenWithBalance,
+    NFTMediaType,
+    NonFungibleToken,
+    Token,
+} from "~Model"
 import { account1D1 } from "./accounts"
 import { VET, VTHO, defaultMainNetwork } from "~Constants"
 
@@ -56,4 +61,5 @@ export const NFT_Mock: NonFungibleToken = {
     tokenId: "19",
     tokenURI: "ipfs://QmegDncWdw5XqZLmQai39tbpjwPriMRngzsmc51T89zQDy/19",
     mimeType: "image/png",
+    mediaType: NFTMediaType.IMAGE,
 }

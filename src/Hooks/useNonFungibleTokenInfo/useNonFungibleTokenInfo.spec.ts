@@ -4,7 +4,7 @@ import { useThor } from "~Components"
 import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
 import { getName, getTokenURI } from "~Networking"
 import * as logger from "~Utils/Logger/Logger"
-import { TokenMetadata } from "~Model"
+import { NFTMediaType, TokenMetadata } from "~Model"
 
 jest.mock("~Networking", () => ({
     getName: jest.fn(),
@@ -41,11 +41,12 @@ describe("useNonFungibleTokenInfo", () => {
         const thor = "thor"
         const tokenUriMock = "http://token.uri"
         const nameMock = "NFT Collection"
+        const address = "contractAddress1"
         const nftMetaMock: TokenMetadata = {
-            address: "contractAddress1",
             name: "NFT Name",
             description: "NFT Description",
             image: "http://nft.image",
+            mediaType: NFTMediaType.IMAGE,
         }
 
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
@@ -54,7 +55,7 @@ describe("useNonFungibleTokenInfo", () => {
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() =>
-            useNonFungibleTokenInfo(tokenId, nftMetaMock.address),
+            useNonFungibleTokenInfo(tokenId, address),
         )
 
         await waitForNextUpdate({ timeout: 5000 })
@@ -63,14 +64,10 @@ describe("useNonFungibleTokenInfo", () => {
         expect(result.current.collectionName).toEqual(nameMock)
         expect(result.current.tokenMetadata).toEqual(nftMetaMock)
         expect(result.current.tokenImage).toEqual(nftMetaMock.image)
-        expect(result.current.tokenMime).toEqual("image/jpg")
+        expect(result.current.tokenMediaType).toBe(NFTMediaType.IMAGE)
         expect(result.current.isMediaLoading).toBeFalsy()
-        expect(getTokenURI).toHaveBeenCalledWith(
-            tokenId,
-            nftMetaMock.address,
-            thor,
-        )
-        expect(getName).toHaveBeenCalledWith(nftMetaMock.address, thor)
+        expect(getTokenURI).toHaveBeenCalledWith(tokenId, address, thor)
+        expect(getName).toHaveBeenCalledWith(address, thor)
         expect(fetchMetadata).toHaveBeenCalledWith(tokenUriMock)
     })
 
@@ -92,12 +89,12 @@ describe("useNonFungibleTokenInfo", () => {
         )
         await waitForNextUpdate({ timeout: 5000 })
 
-        expect(consoleErrorSpy).toHaveBeenCalledTimes(2)
+        expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
         expect(result.current.tokenUri).toBeUndefined()
         expect(result.current.collectionName).toBeUndefined()
         expect(result.current.tokenMetadata).toBeUndefined()
         expect(result.current.tokenImage).toBeUndefined()
-        expect(result.current.tokenMime).toBeUndefined()
+        expect(result.current.tokenMediaType).toBe(NFTMediaType.UNKNOWN)
         expect(result.current.isMediaLoading).toBeFalsy()
     })
 
@@ -128,7 +125,7 @@ describe("useNonFungibleTokenInfo", () => {
         expect(result.current.collectionName).toEqual(nameMock)
         expect(result.current.tokenMetadata).toBeUndefined()
         expect(result.current.tokenImage).toBeUndefined()
-        expect(result.current.tokenMime).toBeUndefined()
+        expect(result.current.tokenMediaType).toBe(NFTMediaType.UNKNOWN)
         expect(result.current.isMediaLoading).toBeFalsy()
         expect(getTokenURI).toHaveBeenCalledWith(tokenId, contractAddress, thor)
         expect(getName).toHaveBeenCalledWith(contractAddress, thor)

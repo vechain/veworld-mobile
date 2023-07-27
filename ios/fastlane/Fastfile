@@ -109,6 +109,10 @@ platform :ios do
       build:build
     )
 
+    Dir.chdir "../.." do
+      sh("yarn purge && yarn install:all")
+    end
+
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
     )
@@ -169,6 +173,5 @@ platform :ios do
         "Built by" => github_username,
       },
     )
-
   end
 end

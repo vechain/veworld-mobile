@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native"
 import { useAmountInput, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
@@ -50,10 +50,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
-
-    useEffect(() => {
-        if (__DEV__) setInput("0.000001")
-    }, [setInput])
 
     const currency = useAppSelector(selectCurrency)
 

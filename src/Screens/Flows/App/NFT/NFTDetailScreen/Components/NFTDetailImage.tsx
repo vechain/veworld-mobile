@@ -5,29 +5,27 @@ import { SCREEN_WIDTH, COLORS } from "~Constants"
 import { BaseText, BaseView, NFTImage } from "~Components"
 import { Video, ResizeMode } from "expo-av"
 import { NFTPlaceholder } from "~Assets"
-import { useMimeTypeResolver } from "~Hooks/useMimeTypeResolver"
-import { NFTMediaType } from "~Model"
+import { NFTMediaType, NonFungibleToken } from "~Model"
 
 type Props = {
-    uri: string
-    mime: string
-    name: string
-    tokenId: string
+    nft: NonFungibleToken
 }
 
-export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
+export const NFTDetailImage = ({ nft }: Props) => {
     const theme = useTheme()
-    const mediaType = useMimeTypeResolver({
-        imageUrl: uri,
-        mimeType: mime,
-    })
     const video = useRef(null)
 
     const renderMedia = useMemo(() => {
-        if (mediaType === NFTMediaType.IMAGE)
-            return <NFTImage uri={uri} style={baseStyles.nftImage} />
+        if (nft.mediaType === NFTMediaType.IMAGE)
+            return (
+                <NFTImage
+                    isNFT={true}
+                    uri={uri ?? ""}
+                    style={baseStyles.nftImage}
+                />
+            )
 
-        if (mediaType === NFTMediaType.VIDEO)
+        if (nft.mediaType === NFTMediaType.VIDEO)
             return (
                 <BaseView style={baseStyles.nftImage}>
                     <Video
@@ -43,7 +41,7 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
                         shouldPlay
                         useNativeControls
                         style={baseStyles.nftImage}
-                        source={{ uri: uri }}
+                        source={{ uri: nft.image }}
                         resizeMode={ResizeMode.COVER}
                         isLooping
                     />
@@ -57,7 +55,7 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
                 isNFT={true}
             />
         )
-    }, [mediaType, uri])
+    }, [nft.image, nft.mediaType])
 
     return (
         <BaseView>
@@ -77,9 +75,9 @@ export const NFTDetailImage = ({ uri, mime, name, tokenId }: Props) => {
                         numberOfLines={1}
                         typographyFont="subTitleBold"
                         color={COLORS.WHITE}>
-                        {name}
+                        {nft.name}
                     </BaseText>
-                    <BaseText color={COLORS.WHITE}># {tokenId}</BaseText>
+                    <BaseText color={COLORS.WHITE}># {nft.tokenId}</BaseText>
                 </BaseView>
             </BaseView>
         </BaseView>
