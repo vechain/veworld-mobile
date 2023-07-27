@@ -113,15 +113,15 @@ platform :ios do
       version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
     end
 
+    Dir.chdir "../.." do
+      sh("yarn purge && yarn install:all")
+    end
+
     gh_setup_before(
       github_username:github_username, 
       github_token:github_token,
       build_or_version_number: versionType.nil? ? build : version
     )
-
-    Dir.chdir "../.." do
-      sh("yarn purge && yarn install:all")
-    end
 
 =begin
     get_certificates( # Create or get certificate, and install it
