@@ -31,26 +31,26 @@ Run e2e tests
 
 Create changelog
 
-### ios gh_setup_beta_before
+### ios gh_setup_before
 
 ```sh
-[bundle exec] fastlane ios gh_setup_beta_before
+[bundle exec] fastlane ios gh_setup_before
 ```
 
-Create Release Branch on GitHub
+Create Release Branch on GitHub for Beta
 
-### ios gh_setup_beta_after
+### ios gh_setup_after
 
 ```sh
-[bundle exec] fastlane ios gh_setup_beta_after
+[bundle exec] fastlane ios gh_setup_after
 ```
 
 Commit latest artifacts to GitHub
 
-### ios build_beta
+### ios build
 
 ```sh
-[bundle exec] fastlane ios build_beta
+[bundle exec] fastlane ios build
 ```
 
 Push a new beta build to TestFlight
