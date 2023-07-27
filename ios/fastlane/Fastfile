@@ -100,7 +100,7 @@ platform :ios do
   #
   # @param {string} options[:username] - The GitHub username for authentication.
   # @param {string} options[:token] - The GitHub personal token for authentication.
-  # @param {string} options[:version] - The version type for the build (e.g., "patch", "minor", "major", "2.1.1").
+  # @param optional {string} options[:version] - The version type for the build (e.g., "patch", "minor", "major", "2.1.1").
   #
   desc "Push a new beta build to TestFlight"
   lane :build do |options|
