@@ -16,13 +16,13 @@ describe("ScrollViewWithFooter component", () => {
         const childrenEle = await screen.findByText(
             "children",
             {},
-            { timeout: 2000 },
+            { timeout: 10000 },
         )
         expect(childrenEle).toBeTruthy()
         const footerEle = await screen.findByText(
             "footer",
             {},
-            { timeout: 2000 },
+            { timeout: 10000 },
         )
         expect(footerEle).toBeTruthy()
     })

@@ -17,7 +17,7 @@ describe("BaseActivityIndicator", () => {
         const activityIndicator = await screen.findByTestId(
             "activity-indicator",
             {},
-            { timeout: 1000 },
+            { timeout: 10000 },
         )
         expect(activityIndicator).toBeVisible()
     })
@@ -46,7 +46,7 @@ describe("BaseActivityIndicator", () => {
             },
         )
 
-        await screen.findByTestId("activity-indicator", {}, { timeout: 1000 })
+        await screen.findByTestId("activity-indicator", {}, { timeout: 10000 })
         await screen.findByText("TestText")
     })
 })

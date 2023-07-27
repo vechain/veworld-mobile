@@ -12,12 +12,16 @@ import {
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { useDeviceUtils, useTheme } from "~Hooks"
-import { CryptoUtils, SeedUtils, error } from "~Utils"
+import { CryptoUtils, error, SeedUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
 import { useNavigation } from "@react-navigation/native"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic } from "~Storage/Redux/Actions"
 import HapticsService from "~Services/HapticsService"
@@ -32,6 +36,7 @@ export const ImportMnemonicScreen = () => {
     const theme = useTheme()
 
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const areDevFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
@@ -118,7 +123,7 @@ export const ImportMnemonicScreen = () => {
                             <BaseText typographyFont="title">
                                 {LL.TITLE_WALLET_IMPORT_LOCAL()}
                             </BaseText>
-                            {__DEV__ && (
+                            {areDevFeaturesEnabled && (
                                 <BaseButton
                                     size="md"
                                     variant="link"
