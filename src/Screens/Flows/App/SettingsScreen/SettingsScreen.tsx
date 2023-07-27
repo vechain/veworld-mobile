@@ -94,11 +94,6 @@ const getList = (LL: TranslationFunctions, devEnabled: boolean) => {
             icon: "cog-outline",
         },
         {
-            title: LL.TITLE_ADVANCED(),
-            screenName: Routes.SETTINGS_ADVANCED,
-            icon: "format-list-bulleted",
-        },
-        {
             title: LL.TITLE_MANAGE_WALLET(),
             screenName: Routes.WALLET_MANAGEMENT,
             icon: "wallet-outline",
