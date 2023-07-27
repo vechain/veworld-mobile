@@ -27,7 +27,7 @@ import {
     Mono_Regular,
 } from "~Assets"
 import { typography } from "~Constants"
-import { info } from "~Utils"
+import { info, AnalyticsUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
@@ -78,6 +78,9 @@ const Main = () => {
         } else {
             Sentry.close()
         }
+
+        // init mixpanel analytics
+        AnalyticsUtils.initialize()
     }, [sentryTrackingEnabled])
 
     if (!fontsLoaded) return

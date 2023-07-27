@@ -31,6 +31,7 @@ import WalletConnectUtils from "./WalletConnectUtils"
 import WalletConnectResponseUtils from "./WalletConnectResponseUtils"
 import MediaUtils from "./MediaUtils"
 import MathUtils from "./MathUtils"
+import AnalyticsUtils from "./AnalyticsUtils"
 
 export * from "./Logger"
 
@@ -68,4 +69,5 @@ export {
     MediaUtils,
     MathUtils,
     MinimizerUtils,
+    AnalyticsUtils,
 }
