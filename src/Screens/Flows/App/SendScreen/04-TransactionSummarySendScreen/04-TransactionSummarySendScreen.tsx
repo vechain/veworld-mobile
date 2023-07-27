@@ -139,11 +139,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         accountAddress: selectedDelegationAccount?.address || account.address,
     })
 
-    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
-        useCheckIdentity({
-            onIdentityConfirmed: signAndSendTransaction,
-            onCancel: () => setLoadingTransaction(false),
-        })
+    const {
+        ConfirmIdentityBottomSheet,
+        checkIdentityBeforeOpening,
+        isBiometricsEmpty,
+    } = useCheckIdentity({
+        onIdentityConfirmed: signAndSendTransaction,
+        onCancel: () => setLoadingTransaction(false),
+    })
 
     const onSubmit = useCallback(async () => {
         if (
@@ -375,9 +378,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     disabled={
                         continueButtonDisabled ||
                         loadingTransaction ||
-                        loadingGas
+                        loadingGas ||
+                        isBiometricsEmpty
                     }
-                    isLoading={loadingTransaction}
+                    isLoading={loadingTransaction || isBiometricsEmpty}
                     bottom={0}
                     mx={0}
                     width={"auto"}

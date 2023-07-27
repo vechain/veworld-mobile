@@ -113,9 +113,9 @@ export const selectCurrentActivities = createSelector(
  * Get all activities that aren't finalised
  */
 export const selectActivitiesWithoutFinality = createSelector(
-    selectAllActivities,
-    allActivities =>
-        allActivities.filter(
+    selectCurrentActivities,
+    activities =>
+        activities.filter(
             activity =>
                 activity.isTransaction &&
                 activity.status === ActivityStatus.PENDING,

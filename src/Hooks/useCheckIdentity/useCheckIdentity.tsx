@@ -1,6 +1,7 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { useDisclosure, useWalletSecurity } from "~Hooks"
 import { RequireUserPassword } from "~Components"
+import { isEmpty } from "lodash"
 
 type Props = {
     onIdentityConfirmed: (password?: string) => void
@@ -10,7 +11,11 @@ type Props = {
  * hook used to handle reusable identity flow
  */
 export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
-    const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { isWalletSecurityBiometrics, biometrics } = useWalletSecurity()
+
+    const isBiometricsEmpty = useMemo(() => {
+        return isEmpty(biometrics)
+    }, [biometrics])
 
     const {
         isOpen: isPasswordPromptOpen,
@@ -66,5 +71,6 @@ export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
         openPasswordPrompt,
         closePasswordPrompt,
         ConfirmIdentityBottomSheet,
+        isBiometricsEmpty,
     }
 }

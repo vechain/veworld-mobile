@@ -105,8 +105,11 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         ],
     )
 
-    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
-        useCheckIdentity({ onIdentityConfirmed })
+    const {
+        ConfirmIdentityBottomSheet,
+        checkIdentityBeforeOpening,
+        isBiometricsEmpty,
+    } = useCheckIdentity({ onIdentityConfirmed })
     /**
      * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
      */
@@ -216,6 +219,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                                 title={LL.BTN_WALLET_SUCCESS()}
                                 testID="GET_STARTED_BTN"
                                 haptics="Success"
+                                isLoading={isBiometricsEmpty}
+                                disabled={isBiometricsEmpty}
                             />
                         </BaseView>
                     </BaseView>

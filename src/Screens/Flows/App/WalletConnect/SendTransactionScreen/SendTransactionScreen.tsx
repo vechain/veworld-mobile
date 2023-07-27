@@ -25,7 +25,6 @@ import {
 import {
     error,
     FormattingUtils,
-    MinimizerUtils,
     TransactionUtils,
     WalletConnectResponseUtils,
     WalletConnectUtils,
@@ -170,7 +169,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     response,
                 })
 
-                MinimizerUtils.goBack()
+                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
+                // MinimizerUtils.goBack()
             } catch (e) {
                 showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
             }
@@ -200,7 +200,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
                 dispatch(addPendingDappTransactionActivity(tx, name, url))
 
-                MinimizerUtils.goBack()
+                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
+                // MinimizerUtils.goBack()
             } catch (e) {
                 error(e)
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
@@ -224,10 +225,13 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         ],
     )
 
-    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
-        useCheckIdentity({
-            onIdentityConfirmed: handleAccept,
-        })
+    const {
+        ConfirmIdentityBottomSheet,
+        checkIdentityBeforeOpening,
+        isBiometricsEmpty,
+    } = useCheckIdentity({
+        onIdentityConfirmed: handleAccept,
+    })
 
     const onSubmit = useCallback(async () => {
         if (
@@ -338,7 +342,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={onSubmit}
-                        disabled={!isThereEnoughGas && !isDelegated}
+                        disabled={
+                            (!isThereEnoughGas && !isDelegated) ||
+                            isBiometricsEmpty
+                        }
+                        isLoading={isBiometricsEmpty}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
@@ -349,6 +357,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         action={onReject}
                     />
                 </BaseView>
+
+                <BaseSpacer height={16} />
             </ScrollView>
 
             <ConfirmIdentityBottomSheet />

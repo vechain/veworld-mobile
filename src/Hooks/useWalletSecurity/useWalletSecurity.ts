@@ -50,5 +50,6 @@ export const useWalletSecurity = () => {
         isWalletSecurityBiometrics,
         isWalletSecurityPassword,
         isWalletSecurityNone,
+        biometrics,
     }
 }
