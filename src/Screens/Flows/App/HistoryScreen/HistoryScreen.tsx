@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
-import { FormattingUtils, TransactionUtils } from "~Utils"
+import { FormattingUtils, PlatformUtils, TransactionUtils } from "~Utils"
 import {
     BaseText,
     BaseView,
@@ -43,7 +43,7 @@ import {
     SignCertActivity,
     TransactionOutcomes,
 } from "~Model"
-import { Routes } from "~Navigation"
+import { Routes, tabbarBaseStyles } from "~Navigation"
 import { useAccountActivities } from "./Hooks"
 
 // Number of Skeleton Activity boxes to show when fetching first page of activities
@@ -349,7 +349,9 @@ const baseStyles = StyleSheet.create({
     list: {
         top: 0,
         flex: 1,
-        marginBottom: 0,
+        marginBottom: PlatformUtils?.isIOS()
+            ? 0
+            : tabbarBaseStyles?.tabbar?.height,
     },
     noActivitiesButton: {
         position: "absolute",
