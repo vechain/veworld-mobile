@@ -1,5 +1,4 @@
 import { HDNode, secp256k1 } from "thor-devkit"
-import { showWarningToast } from "~Components"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import {
     selectDevice,
@@ -35,18 +34,12 @@ export const useSignMessage = ({ hash }: Props) => {
     const signMessage = async (password?: string) => {
         if (!senderDevice) return
 
-        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/753) support ledger
-        if (senderDevice.type === DEVICE_TYPE.LEDGER) {
-            showWarningToast("Hardware wallet not supported yet")
-            throw new Error("Hardware wallet not supported yet")
-        }
+        if (senderDevice.type === DEVICE_TYPE.LEDGER)
+            throw new Error("Ledger devices not supported in this hook")
 
         //local mnemonic, identity already verified via useCheckIdentity
-        if (!senderDevice.wallet) {
-            // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/753) support ledger
-            showWarningToast("Hardware wallet not supported yet")
-            throw new Error("Hardware wallet not supported yet")
-        }
+        if (!senderDevice.wallet)
+            throw new Error("The device doesn't have a wallet")
 
         const { decryptedWallet: senderWallet } =
             await CryptoUtils.decryptWallet(senderDevice, password)

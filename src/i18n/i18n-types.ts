@@ -1950,6 +1950,42 @@ type RootTranslation = {
 	 */
 	SEND_ERROR_TOKEN_NOT_FOUND: RequiredParams<'tokenName'>
 	/**
+	 * C​o​n​n​e​c​t​i​n​g
+	 */
+	LEDGER_CONNECTING: string
+	/**
+	 * C​o​n​n​e​c​t
+	 */
+	LEDGER_CONNECT: string
+	/**
+	 * C​o​n​n​e​c​t​e​d
+	 */
+	LEDGER_CONNECTED: string
+	/**
+	 * S​i​g​n​i​n​g
+	 */
+	LEDGER_SIGNING: string
+	/**
+	 * S​i​g​n​ ​d​a​t​a
+	 */
+	LEDGER_SIGN_DATA: string
+	/**
+	 * D​a​t​a​ ​s​i​g​n​e​d
+	 */
+	LEDGER_DATA_SIGNED: string
+	/**
+	 * C​h​e​c​k​i​n​g
+	 */
+	LEDGER_CHECKING: string
+	/**
+	 * C​h​e​c​k​ ​s​t​a​t​u​s
+	 */
+	LEDGER_CHECK_STATUS: string
+	/**
+	 * S​t​a​t​u​s​ ​O​K
+	 */
+	LEDGER_STATUS_OK: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -4163,6 +4199,42 @@ Please, try again later.
 	 * It looks like you dont have any {tokenName} in your wallet
 	 */
 	SEND_ERROR_TOKEN_NOT_FOUND: (arg: { tokenName: string }) => LocalizedString
+	/**
+	 * Connecting
+	 */
+	LEDGER_CONNECTING: () => LocalizedString
+	/**
+	 * Connect
+	 */
+	LEDGER_CONNECT: () => LocalizedString
+	/**
+	 * Connected
+	 */
+	LEDGER_CONNECTED: () => LocalizedString
+	/**
+	 * Signing
+	 */
+	LEDGER_SIGNING: () => LocalizedString
+	/**
+	 * Sign data
+	 */
+	LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * Data signed
+	 */
+	LEDGER_DATA_SIGNED: () => LocalizedString
+	/**
+	 * Checking
+	 */
+	LEDGER_CHECKING: () => LocalizedString
+	/**
+	 * Check status
+	 */
+	LEDGER_CHECK_STATUS: () => LocalizedString
+	/**
+	 * Status OK
+	 */
+	LEDGER_STATUS_OK: () => LocalizedString
 	/**
 	 * Account
 	 */

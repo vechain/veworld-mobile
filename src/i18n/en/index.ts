@@ -567,6 +567,19 @@ const en: BaseTranslation = {
     SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low",
     SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you dont have any {tokenName: string} in your wallet",
 
+    LEDGER_CONNECTING: "Connecting",
+    LEDGER_CONNECT: "Connect",
+    LEDGER_CONNECTED: "Connected",
+
+    LEDGER_SIGNING: "Signing",
+    LEDGER_SIGN_DATA: "Sign data",
+    LEDGER_DATA_SIGNED: "Data signed",
+
+    LEDGER_CHECKING: "Checking",
+    LEDGER_CHECK_STATUS: "Check status",
+    LEDGER_STATUS_OK: "Status OK",
+
+
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",
     WALLET_LABEL_WALLET: "Wallet",

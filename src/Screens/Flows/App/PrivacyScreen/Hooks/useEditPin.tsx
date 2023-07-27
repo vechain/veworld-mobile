@@ -10,6 +10,7 @@ import {
     useSecurityTransactions,
 } from "./useSecurityTransactions"
 import { CryptoUtils } from "~Utils"
+import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
 
 /**
  * `useEditPin` is a custom React hook that handles the process of editing the Pin for the wallet.
@@ -43,6 +44,7 @@ import { CryptoUtils } from "~Utils"
 export const useEditPin = () => {
     // [START] - Hooks
     const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { updatePinCode } = usePinCode()
 
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
 
@@ -113,8 +115,14 @@ export const useEditPin = () => {
             }
 
             await executeTransactions(operations, _oldPin)
+            updatePinCode(newPin)
         },
-        [devices, executeTransactions, isWalletSecurityBiometrics],
+        [
+            updatePinCode,
+            devices,
+            executeTransactions,
+            isWalletSecurityBiometrics,
+        ],
     )
 
     const onPinSuccess = useCallback(
