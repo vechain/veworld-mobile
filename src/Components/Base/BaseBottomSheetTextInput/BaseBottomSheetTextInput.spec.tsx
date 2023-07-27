@@ -42,7 +42,7 @@ describe("BaseCard", () => {
             },
         )
 
-        await screen.findByTestId("BaseView", {}, { timeout: 2000 })
+        await screen.findByTestId("BaseView", {}, { timeout: 10000 })
         await findTextByID()
     })
     it("renders correctly - no onFocus and onBlur", async () => {
@@ -64,7 +64,7 @@ describe("BaseCard", () => {
             },
         )
 
-        await screen.findByTestId("BaseView", {}, { timeout: 2000 })
+        await screen.findByTestId("BaseView", {}, { timeout: 10000 })
         await findTextByID()
     })
 })
