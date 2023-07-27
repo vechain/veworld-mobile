@@ -41,7 +41,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { useDelegation } from "./Hooks"
-import { DEVICE_TYPE } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
@@ -150,7 +150,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             account.device.type === DEVICE_TYPE.LEDGER &&
             selectedDelegationOption !== DelegationType.ACCOUNT
         ) {
-            await navigateToLedger()
+            await navigateToLedger(account as LedgerAccountWithDevice)
         } else {
             await checkIdentityBeforeOpening()
         }

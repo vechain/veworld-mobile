@@ -47,7 +47,6 @@ export type RootStackParamListHome = {
         address: string
         initialRoute: string
     }
-
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
         delegationSignature?: string
