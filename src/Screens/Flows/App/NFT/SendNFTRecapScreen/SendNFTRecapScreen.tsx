@@ -28,7 +28,7 @@ import {
     useTransaction,
 } from "~Hooks"
 import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/Hooks"
-import { DEVICE_TYPE } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { DelegationType } from "~Model/Delegation"
@@ -120,7 +120,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
             selectedDelegationOption !== DelegationType.ACCOUNT
         ) {
-            await navigateToLedger()
+            await navigateToLedger(selectedAccount as LedgerAccountWithDevice)
         } else {
             await checkIdentityBeforeOpening()
         }
