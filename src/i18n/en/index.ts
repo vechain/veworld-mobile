@@ -194,6 +194,7 @@ const en: BaseTranslation = {
     SB_CONFIRM_PIN: "Insert the pin you created in order to perform the requested operation.",
     SB_EDIT_OLD_PIN: "Insert your old pin",
     SB_EDIT_NEW_PIN: "Insert your new pin",
+    SB_EDIT_NEW_PIN_CONFIRM: "Confirm your new pin",
     SB_ACCOUNT_MANAGEMENT: "Account management",
     SB_CHOOSE_A_WALLET: "Choose a wallet",
     SB_EDIT_WALLET: "Edit wallet {name: string}",
