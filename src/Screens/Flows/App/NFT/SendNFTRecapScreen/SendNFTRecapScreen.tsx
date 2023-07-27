@@ -104,7 +104,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         selectedDelegationOption,
         gas,
         accountAddress:
-            selectedDelegationAccount?.address || selectedAccount.address,
+            selectedDelegationAccount?.address ?? selectedAccount.address,
     })
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
