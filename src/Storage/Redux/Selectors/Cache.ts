@@ -14,3 +14,7 @@ export const selectNewLedgerDevice = createSelector(reducer, state => {
 export const selectAppLockStatus = createSelector(reducer, state => {
     return state.appLockStatus
 })
+
+export const selectIsAppLoading = createSelector(reducer, state => {
+    return state.isAppLoading
+})
