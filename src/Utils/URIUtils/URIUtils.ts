@@ -124,7 +124,7 @@ const convertUriToUrl = (uri: string) => {
         case "ipfs":
             if (!validateIpfsUri(uri))
                 throw new Error(`Invalid IPFS URI ${uri}`)
-            return `https://ipfs.io/ipfs/${uriWithoutProtocol}`
+            return `http://192.168.1.95:4444/ipfs/${uriWithoutProtocol}`
         case "ar":
             return `https://arweave.net/${uriWithoutProtocol}`
         default:

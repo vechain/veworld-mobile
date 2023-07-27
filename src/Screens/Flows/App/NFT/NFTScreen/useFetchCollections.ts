@@ -48,7 +48,6 @@ export const useFetchCollections = (
             setCollections([])
             loadCollections(
                 selectedAccount.address,
-                network,
                 registryInfo,
                 0,
                 FIRST_TIME_COLLECTIONS_TO_FETCH,
@@ -73,7 +72,6 @@ export const useFetchCollections = (
                 async page => {
                     await loadCollections(
                         selectedAccount.address,
-                        network,
                         registryInfo,
                         page,
                     )
@@ -87,7 +85,6 @@ export const useFetchCollections = (
         blackListedCollections?.length,
         fetchWithPagination,
         loadCollections,
-        network,
         nftCollections?.collections?.length,
         nftCollections?.pagination?.totalElements,
         nftNetworkingSideEffects?.isLoading,
