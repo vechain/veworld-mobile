@@ -5,6 +5,8 @@ import {
     selectDevice,
     selectSelectedAccount,
     selectSelectedNetwork,
+    setIsAppLoading,
+    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -69,6 +71,8 @@ export const useSignTransaction = ({
         network,
         account,
     )
+
+    const dispatch = useAppDispatch()
 
     const transaction = useMemo(
         () => TransactionUtils.fromBody(transactionBody, isDelegated),
@@ -225,6 +229,8 @@ export const useSignTransaction = ({
             error("[signTransaction]", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
             onError?.(e)
+
+            dispatch(setIsAppLoading(false))
         }
     }
 

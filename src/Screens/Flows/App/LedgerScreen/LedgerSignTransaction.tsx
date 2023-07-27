@@ -29,7 +29,12 @@ import {
     RootStackParamListSwitch,
     Routes,
 } from "~Navigation"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import {
+    selectSelectedNetwork,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { debug, error, LedgerUtils, WalletConnectResponseUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -56,6 +61,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { web3Wallet } = useWalletConnect()
+
+    const dispatch = useAppDispatch()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
@@ -219,6 +226,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     /** Effects */
 
     const navigateOnFinish = useCallback(() => {
+        dispatch(setIsAppLoading(false))
         switch (initialRoute) {
             case Routes.DISCOVER:
                 nav.navigate(Routes.DISCOVER)
@@ -228,12 +236,15 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 nav.navigate(Routes.HOME)
                 break
         }
-    }, [initialRoute, nav])
+    }, [dispatch, initialRoute, nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {
             if (!signature) return
             setIsSending(true)
+
+            dispatch(setIsAppLoading(true))
+
             transaction.signature = delegationSignature
                 ? Buffer.concat([
                       Buffer.from(delegationSignature, "hex"),
@@ -272,17 +283,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             setIsSending(false)
         }
     }, [
-        delegationSignature,
-        removeLedger,
-        web3Wallet,
-        requestEvent,
-        selectedNetwork,
-        accountWithDevice,
-        LL,
         signature,
+        dispatch,
         transaction,
+        delegationSignature,
         sendTransactionAndPerformUpdates,
+        removeLedger,
+        requestEvent,
+        web3Wallet,
         navigateOnFinish,
+        LL,
+        accountWithDevice.address,
+        selectedNetwork,
     ])
 
     const onConnectionErrorDismiss = useCallback(() => {

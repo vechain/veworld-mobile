@@ -5,6 +5,7 @@ import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
     addPendingTransferTransactionActivity,
+    setIsAppLoading,
     updateAccountBalances,
     useAppDispatch,
 } from "~Storage/Redux"
@@ -25,6 +26,8 @@ export const useSendTransaction = (
     const thorClient = useThor()
 
     const sendTransactionAndPerformUpdates = async (tx: Transaction) => {
+        dispatch(setIsAppLoading(true))
+
         const id = await sendTransaction(tx, network.currentUrl)
         const type = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
 

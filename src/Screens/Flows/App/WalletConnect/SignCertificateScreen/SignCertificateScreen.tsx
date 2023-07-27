@@ -14,6 +14,7 @@ import { blake2b256, Certificate } from "thor-devkit"
 import {
     addSignCertificateActivity,
     selectSelectedAccount,
+    setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -90,6 +91,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     throw new Error("Signature is empty")
                 }
 
+                dispatch(setIsAppLoading(true))
+
                 await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
                     {
                         request: requestEvent,
@@ -111,8 +114,13 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         cert.purpose,
                     ),
                 )
+
+                dispatch(setIsAppLoading(true))
             } catch (err: unknown) {
                 error("SignMessageScreen:handleAccept", err)
+
+                dispatch(setIsAppLoading(true))
+
                 await WalletConnectResponseUtils.signMessageRequestErrorResponse(
                     {
                         request: requestEvent,
