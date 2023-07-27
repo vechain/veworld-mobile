@@ -31,7 +31,7 @@ import {
     WalletConnectUtils,
 } from "~Utils"
 import { useCheckIdentity, useSignTransaction, useTransaction } from "~Hooks"
-import { AccountWithDevice, DEVICE_TYPE } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
 import { sendTransaction } from "~Networking"
@@ -234,7 +234,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
             selectedDelegationOption !== DelegationType.ACCOUNT
         ) {
-            await navigateToLedger()
+            await navigateToLedger(selectedAccount as LedgerAccountWithDevice)
         } else {
             await checkIdentityBeforeOpening()
         }
