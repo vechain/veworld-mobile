@@ -47,7 +47,8 @@
         "build:android:release": "./scripts/build-release-apk.sh",
         "prepare": "husky install",
         "check-circular-dependencies": "npx madge --circular --warning --extensions js,jsx,ts,tsx .",
-        "release": "release-it"
+        "release": "release-it",
+        "release:ci": "release-it --ci"
     },
     "dependencies": {
         "@craftzdog/react-native-buffer": "^6.0.5",
