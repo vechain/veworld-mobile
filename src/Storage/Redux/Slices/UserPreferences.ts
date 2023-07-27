@@ -13,6 +13,7 @@ import { CURRENCY, ThemeEnum } from "~Constants"
  * @property {boolean} isAnalyticsTrackingEnabled
  * @property {boolean} isSentryTrackingEnabled
  */
+
 export interface UserPreferenceState {
     theme: ThemeEnum
     hideTokensWithNoBalance: boolean
@@ -22,6 +23,7 @@ export interface UserPreferenceState {
     language: LANGUAGE
     isAnalyticsTrackingEnabled: boolean
     isSentryTrackingEnabled: boolean
+    devFeaturesEnabled: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -33,6 +35,7 @@ const initialState: UserPreferenceState = {
     language: LANGUAGE.ENGLISH,
     isAnalyticsTrackingEnabled: false,
     isSentryTrackingEnabled: true,
+    devFeaturesEnabled: __DEV__,
 }
 
 export const UserPreferencesSlice = createSlice({

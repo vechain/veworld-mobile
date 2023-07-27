@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 
 /**
  * hook to handle the amount input, filtering out non-numeric characters and duplicate decimal separators
@@ -7,13 +7,13 @@ import { useState } from "react"
 export const useAmountInput = (initialValue: string = "") => {
     const [input, setInput] = useState(initialValue)
 
-    const handleChangeInput = (text: string) => {
+    const handleChangeInput = useCallback((text: string) => {
         const filteredText = text
             .replace(",", ".") // Replace comma with dot
             .replace(new RegExp("[^\\d\\.]", "g"), "") // Filter out non-numeric characters except for decimal separator
             .replace(new RegExp("\\.(?=.*\\.)", "g"), "") // Filter out duplicate decimal separators
         setInput(filteredText)
-    }
+    }, [])
 
     return { input, setInput: handleChangeInput }
 }

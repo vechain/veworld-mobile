@@ -3,7 +3,11 @@ import { BaseSpacer, BaseView, EnableFeature, Layout } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import {
     selectSelectedNetwork,
     selectShowConversionOnOtherNets,
@@ -28,6 +32,8 @@ export const ChangeNetworkScreen = () => {
     const dispatch = useAppDispatch()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const showTestNetTag = useAppSelector(selectShowTestnetTag)
 
@@ -77,23 +83,31 @@ export const ChangeNetworkScreen = () => {
 
                         <BaseSpacer height={20} />
 
-                        <EnableFeature
-                            title={LL.BD_OTHER_NETWORKS_INDICATOR()}
-                            subtitle={LL.BD_OTHER_NETWORKS_INDICATOR_DESC()}
-                            onValueChange={toggleTagSwitch}
-                            value={showTestNetTag}
-                        />
+                        {devFeaturesEnabled && (
+                            <>
+                                <EnableFeature
+                                    title={LL.BD_OTHER_NETWORKS_INDICATOR()}
+                                    subtitle={LL.BD_OTHER_NETWORKS_INDICATOR_DESC()}
+                                    onValueChange={toggleTagSwitch}
+                                    value={showTestNetTag}
+                                />
 
-                        <BaseSpacer height={20} />
+                                <BaseSpacer height={20} />
+                            </>
+                        )}
 
-                        <EnableFeature
-                            title={LL.BD_OTHER_NETWORKS_CONVERSION()}
-                            subtitle={LL.BD_OTHER_NETWORKS_CONVERSION_DESC()}
-                            onValueChange={toggleConversionSwitch}
-                            value={showConversionOnOtherNets}
-                        />
+                        {devFeaturesEnabled && (
+                            <>
+                                <EnableFeature
+                                    title={LL.BD_OTHER_NETWORKS_CONVERSION()}
+                                    subtitle={LL.BD_OTHER_NETWORKS_CONVERSION_DESC()}
+                                    onValueChange={toggleConversionSwitch}
+                                    value={showConversionOnOtherNets}
+                                />
 
-                        <BaseSpacer height={20} />
+                                <BaseSpacer height={20} />
+                            </>
+                        )}
                     </BaseView>
 
                     <SelectNetworkBottomSheet

@@ -25,11 +25,7 @@ export const BaseImage = memo((props: Props) => {
         <BaseView>
             <FastImage
                 testID={testID}
-                style={[
-                    { width: w, height: h },
-                    style,
-                    { backgroundColor: theme.colors.placeholder },
-                ]}
+                style={[{ width: w, height: h }, style]}
                 fallback
                 // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/749) change fallback image
                 defaultSource={placeholderImg}

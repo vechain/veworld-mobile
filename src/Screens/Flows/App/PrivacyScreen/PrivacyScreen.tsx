@@ -16,6 +16,7 @@ import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
 import { LocalDevice, WALLET_STATUS } from "~Model"
 import {
     setIsPinCodeRequired,
+    selectAreDevFeaturesEnabled,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -40,6 +41,7 @@ export const PrivacyScreen = () => {
     const dispatch = useAppDispatch()
 
     const { isPinRequired, removePinCode, enablePinCodeStorage } = usePinCode()
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const isAnalyticsTrackingEnabled = useAppSelector(
         selectAnalyticsTrackingEnabled,
@@ -199,12 +201,18 @@ export const PrivacyScreen = () => {
 
                         <BaseSpacer height={24} />
 
-                        <EnableFeature
-                            title={LL.SB_ANALYTICS_TRACKING()}
-                            subtitle={LL.BD_ANALYTICS_TRACKING()}
-                            onValueChange={toggleAnalyticsTrackingSwitch}
-                            value={isAnalyticsTrackingEnabled}
-                        />
+                        {devFeaturesEnabled && (
+                            <>
+                                <EnableFeature
+                                    title={LL.SB_ANALYTICS_TRACKING()}
+                                    subtitle={LL.BD_ANALYTICS_TRACKING()}
+                                    onValueChange={
+                                        toggleAnalyticsTrackingSwitch
+                                    }
+                                    value={isAnalyticsTrackingEnabled}
+                                />
+                            </>
+                        )}
 
                         <BackupMnemonicBottomSheet
                             ref={BackupPhraseSheetRef}

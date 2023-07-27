@@ -9,6 +9,7 @@ import {
 import { Reset } from "./Components/Reset"
 import { useI18nContext } from "~i18n"
 import {
+    selectAreDevFeaturesEnabled,
     selectSentryTrackingEnabled,
     setSentryTrackingEnabled,
     useAppDispatch,
@@ -19,6 +20,7 @@ import { isSmallScreen } from "~Constants"
 export const AdvancedScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
     const toggleSentryTrackingSwitch = useCallback(
@@ -48,13 +50,17 @@ export const AdvancedScreen = () => {
                     <BaseSpacer height={16} />
                     <Reset />
 
-                    <BaseSpacer height={24} />
-                    <EnableFeature
-                        title={LL.BD_HELP_IMPROVE()}
-                        subtitle={LL.BD_HELP_IMPROVE_DISCLAIMER()}
-                        onValueChange={toggleSentryTrackingSwitch}
-                        value={sentryTrackingEnabled}
-                    />
+                    {devFeaturesEnabled && (
+                        <>
+                            <BaseSpacer height={24} />
+                            <EnableFeature
+                                title={LL.BD_HELP_IMPROVE()}
+                                subtitle={LL.BD_HELP_IMPROVE_DISCLAIMER()}
+                                onValueChange={toggleSentryTrackingSwitch}
+                                value={sentryTrackingEnabled}
+                            />
+                        </>
+                    )}
                 </BaseView>
             }
         />
