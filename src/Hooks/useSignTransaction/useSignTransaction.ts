@@ -222,7 +222,7 @@ export const useSignTransaction = ({
 
             onTXFinish()
         } catch (e) {
-            error("[signTransaction]", e)
+            error("Error when signing and sending transaction", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
             onError?.(e)
         }

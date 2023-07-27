@@ -40,6 +40,15 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
         }
     }, [initConnex, connex, selectedNetwork.genesis, driver])
 
+    // Every 2 minutes we need to reinitialize the driver
+    // This is to keep the head value up to date
+    useEffect(() => {
+        const interval = setInterval(() => {
+            initConnex()
+        }, 120000)
+        return () => clearInterval(interval)
+    }, [initConnex])
+
     if (!value) {
         return <></>
     }
@@ -63,9 +72,7 @@ const initThor = (currentDriver: Driver) => {
 const useThor = () => {
     const context = React.useContext(ConnexContext)
     if (!context) {
-        throw new Error(
-            "useThorContext must be used within a UserContextProvider",
-        )
+        throw new Error("useThor must be used within a ConnexContextProvider")
     }
 
     return context

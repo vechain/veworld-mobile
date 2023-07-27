@@ -38,7 +38,7 @@ export const useTransaction = ({
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
     const [gasPayer, setGasPayer] = useState<string>(
-        providedGasPayer || account.address,
+        providedGasPayer ?? account.address,
     )
     const thorClient = useThor()
 
@@ -51,8 +51,8 @@ export const useTransaction = ({
      */
     const blockRef = useMemo(
         () => thorClient.status.head.id.slice(0, 18),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
+
+        [thorClient.status.head.id],
     )
 
     /**
@@ -67,8 +67,8 @@ export const useTransaction = ({
             expiration: 30,
             clauses: clauses,
             gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
-            gas: providedGas || gas?.gas || "0",
-            dependsOn: dependsOn || null,
+            gas: providedGas ?? gas?.gas ?? "0",
+            dependsOn: dependsOn ?? null,
             nonce: nonce,
         }
     }, [
