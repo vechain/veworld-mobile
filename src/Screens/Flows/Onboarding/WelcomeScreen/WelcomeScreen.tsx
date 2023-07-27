@@ -14,21 +14,24 @@ import {
     addDeviceAndAccounts,
     fetchTokensWithInfo,
     selectAccount,
+    selectAreDevFeaturesEnabled,
     setAppLockStatus,
     setPinValidationString,
     setUserSelectedSecurity,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import { CryptoUtils } from "~Utils"
 import { useDeviceUtils } from "~Hooks"
 import { SettingsConstants } from "~Constants"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
-import { DEV_FEATURES } from "../../../../../index"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
+
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.WALLET_SETUP)
@@ -124,7 +127,7 @@ export const WelcomeScreen = () => {
                         haptics="Medium"
                     />
                 </BaseView>
-                {DEV_FEATURES && (
+                {devFeaturesEnabled && (
                     <BaseButton
                         size="md"
                         variant="link"

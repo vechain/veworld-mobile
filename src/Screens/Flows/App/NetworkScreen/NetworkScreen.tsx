@@ -3,7 +3,11 @@ import { BaseSpacer, BaseView, EnableFeature, Layout } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import {
     selectSelectedNetwork,
     selectShowConversionOnOtherNets,
@@ -20,7 +24,6 @@ import {
 } from "./Components"
 import { Routes } from "~Navigation"
 import { isSmallScreen } from "~Constants"
-import { DEV_FEATURES } from "../../../../../index"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
@@ -29,6 +32,8 @@ export const ChangeNetworkScreen = () => {
     const dispatch = useAppDispatch()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const showTestNetTag = useAppSelector(selectShowTestnetTag)
 
@@ -78,7 +83,7 @@ export const ChangeNetworkScreen = () => {
 
                         <BaseSpacer height={20} />
 
-                        {DEV_FEATURES && (
+                        {devFeaturesEnabled && (
                             <>
                                 <EnableFeature
                                     title={LL.BD_OTHER_NETWORKS_INDICATOR()}
@@ -91,7 +96,7 @@ export const ChangeNetworkScreen = () => {
                             </>
                         )}
 
-                        {DEV_FEATURES && (
+                        {devFeaturesEnabled && (
                             <>
                                 <EnableFeature
                                     title={LL.BD_OTHER_NETWORKS_CONVERSION()}

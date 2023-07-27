@@ -9,17 +9,18 @@ import {
 import { Reset } from "./Components/Reset"
 import { useI18nContext } from "~i18n"
 import {
+    selectAreDevFeaturesEnabled,
     selectSentryTrackingEnabled,
     setSentryTrackingEnabled,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { isSmallScreen } from "~Constants"
-import { DEV_FEATURES } from "../../../../../index"
 
 export const AdvancedScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
     const toggleSentryTrackingSwitch = useCallback(
@@ -49,7 +50,7 @@ export const AdvancedScreen = () => {
                     <BaseSpacer height={16} />
                     <Reset />
 
-                    {DEV_FEATURES && (
+                    {devFeaturesEnabled && (
                         <>
                             <BaseSpacer height={24} />
                             <EnableFeature

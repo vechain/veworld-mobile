@@ -7,12 +7,17 @@ import { StyleSheet, View } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
-import { DEV_FEATURES } from "../../../../../index"
+import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
 
-    const SCREEN_LIST = useMemo(() => getList(LL), [LL])
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
+
+    const SCREEN_LIST = useMemo(
+        () => getList(LL, devFeaturesEnabled),
+        [devFeaturesEnabled, LL],
+    )
 
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
@@ -81,7 +86,7 @@ const baseStyles = (theme: ColorThemeType) =>
         list: { flex: 1 },
     })
 
-const getList = (LL: TranslationFunctions) => {
+const getList = (LL: TranslationFunctions, devEnabled: boolean) => {
     const settingsList = [
         {
             title: LL.TITLE_GENERAL(),
@@ -131,7 +136,7 @@ const getList = (LL: TranslationFunctions) => {
         },
     ]
 
-    if (DEV_FEATURES) {
+    if (devEnabled) {
         settingsList.push({
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,

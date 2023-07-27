@@ -14,7 +14,11 @@ import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
 import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
 import { LocalDevice, WALLET_STATUS } from "~Model"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import {
     selectAnalyticsTrackingEnabled,
     selectIsAppLockActive,
@@ -29,7 +33,6 @@ import {
 import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 import { isSmallScreen } from "~Constants"
-import { DEV_FEATURES } from "../../../../../index"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -38,6 +41,7 @@ export const PrivacyScreen = () => {
     const dispatch = useAppDispatch()
 
     const isAppLockActive = useAppSelector(selectIsAppLockActive)
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const isAnalyticsTrackingEnabled = useAppSelector(
         selectAnalyticsTrackingEnabled,
@@ -173,7 +177,7 @@ export const PrivacyScreen = () => {
 
                         <BaseSpacer height={24} />
 
-                        {DEV_FEATURES && (
+                        {devFeaturesEnabled && (
                             <>
                                 <EnableFeature
                                     title={LL.SB_ANALYTICS_TRACKING()}

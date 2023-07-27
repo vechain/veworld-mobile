@@ -42,8 +42,6 @@ const { fontFamily } = typography
 // immer setup
 enableAllPlugins()
 
-export const DEV_FEATURES = __DEV__
-
 const isHermes = () => !!global.HermesInternal
 info("is Hermes active : ", isHermes())
 

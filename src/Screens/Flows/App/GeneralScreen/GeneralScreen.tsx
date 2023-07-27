@@ -16,6 +16,7 @@ import {
 import { useBottomSheetModal } from "~Hooks"
 import { isSmallScreen, LANGUAGE } from "~Constants"
 import {
+    selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
     selectLangauge,
     setHideTokensWithNoBalance,
@@ -23,7 +24,6 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { DEV_FEATURES } from "../../../../../index"
 
 export const GeneralScreen = () => {
     const { LL } = useI18nContext()
@@ -37,6 +37,7 @@ export const GeneralScreen = () => {
     const dispatch = useAppDispatch()
 
     const selectedLanguage = useAppSelector(selectLangauge)
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const hideTokensWithNoBalance = useAppSelector(
         selectHideTokensWithNoBalance,
@@ -96,7 +97,7 @@ export const GeneralScreen = () => {
 
                     <BaseSpacer height={20} />
 
-                    {DEV_FEATURES && (
+                    {devFeaturesEnabled && (
                         <>
                             <EnableFeature
                                 title={LL.BD_HIDE_TOKENS()}
@@ -109,7 +110,7 @@ export const GeneralScreen = () => {
                         </>
                     )}
 
-                    {DEV_FEATURES && (
+                    {devFeaturesEnabled && (
                         <>
                             <BaseText typographyFont="bodyMedium" my={8}>
                                 {LL.BD_APP_LANGUAGE()}

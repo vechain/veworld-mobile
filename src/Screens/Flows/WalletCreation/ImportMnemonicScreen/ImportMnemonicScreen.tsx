@@ -17,11 +17,14 @@ import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
 import { useNavigation } from "@react-navigation/native"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic } from "~Storage/Redux/Actions"
 import HapticsService from "~Services/HapticsService"
-import { DEV_FEATURES } from "../../../../../index"
 
 const DEMO_MNEMONIC =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
@@ -33,6 +36,7 @@ export const ImportMnemonicScreen = () => {
     const theme = useTheme()
 
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const areDevFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
@@ -119,7 +123,7 @@ export const ImportMnemonicScreen = () => {
                             <BaseText typographyFont="title">
                                 {LL.TITLE_WALLET_IMPORT_LOCAL()}
                             </BaseText>
-                            {DEV_FEATURES && (
+                            {areDevFeaturesEnabled && (
                                 <BaseButton
                                     size="md"
                                     variant="link"
