@@ -18,8 +18,8 @@ import {
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
-import { useAppSelector } from "~Storage/Redux"
-import { selectMnemonic, selectHasOnboarded } from "~Storage/Redux/Selectors"
+import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
+import { selectHasOnboarded, selectMnemonic } from "~Storage/Redux/Selectors"
 import { isSmallScreen, valueToHP } from "~Constants"
 import { ScrollView, StyleSheet } from "react-native"
 
@@ -27,6 +27,7 @@ export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const [selectedFirstWord, setSelectedFirstWord] = useState<string | null>(
         null,
@@ -183,7 +184,7 @@ export const ConfirmMnemonicScreen = () => {
                             <BaseText align="left" typographyFont="title">
                                 {LL.TITLE_CONFIRM_MNEMONIC()}
                             </BaseText>
-                            {__DEV__ && (
+                            {devFeaturesEnabled && (
                                 <BaseButton
                                     px={0}
                                     py={0}

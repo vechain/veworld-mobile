@@ -1,6 +1,7 @@
 import { LANGUAGE } from "../../../Constants/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { CURRENCY, ThemeEnum } from "~Constants"
+
 export interface UserPreferenceState {
     theme: ThemeEnum
     hideTokensWithNoBalance: boolean
@@ -10,6 +11,7 @@ export interface UserPreferenceState {
     language: LANGUAGE
     isAnalyticsTrackingEnabled: boolean
     isSentryTrackingEnabled: boolean
+    devFeaturesEnabled: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -21,6 +23,7 @@ const initialState: UserPreferenceState = {
     language: LANGUAGE.ENGLISH,
     isAnalyticsTrackingEnabled: false,
     isSentryTrackingEnabled: true,
+    devFeaturesEnabled: __DEV__,
 }
 
 export const UserPreferencesSlice = createSlice({
