@@ -173,6 +173,5 @@ platform :ios do
         "Built by" => github_username,
       },
     )
-
   end
 end
