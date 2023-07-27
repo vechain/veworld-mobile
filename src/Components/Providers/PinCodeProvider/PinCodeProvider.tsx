@@ -93,12 +93,16 @@ export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
 
         if (!encryptedPinCode) return
 
-        const decrypted = CryptoUtils.decrypt<PinCodeData>(
-            encryptedPinCode,
-            encryptionKey,
-        )
+        try {
+            const decrypted = CryptoUtils.decrypt<PinCodeData>(
+                encryptedPinCode,
+                encryptionKey,
+            )
 
-        return decrypted.pinCode
+            return decrypted.pinCode
+        } catch (e) {
+            warn("getPinCode: Error decrypting pin code", e)
+        }
     }, [encryptionKey, encryptedPinCode, pinCodeStorageEnabled])
 
     const removePinCode = useCallback(() => {
