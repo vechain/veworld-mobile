@@ -79,9 +79,6 @@ platform :ios do
   desc "Commit latest artifacts to GitHub"
   lane :gh_setup_after do |values|
     branch_name = "release-build"
-
-    github_token = values[:github_token]
-    github_username = values[:github_username]
     build_or_version_number = values[:build_or_version_number]
 
     sh("git add --all")
@@ -112,8 +109,8 @@ platform :ios do
 
     build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
 
-    if !versionType.nil 
-      version = increment_version_number_in_xcodeproj(bump_type: versionType)
+    if !versionType.nil? 
+      version = increment_version_number_in_xcodeproj(bump_type: versionType.downcase)
     end
 
     gh_setup_before(
