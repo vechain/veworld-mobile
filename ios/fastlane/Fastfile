@@ -41,7 +41,7 @@ platform :ios do
 
 
   desc "Get certificates"
-  lane :get_certificates do
+  lane :fetch_certificates_from_gh do
     sync_code_signing(
       type: "appstore",
       app_identifier: ENV["APP_IDENTIFIER"],
@@ -151,7 +151,7 @@ platform :ios do
       build_or_version_number: versionType.nil? ? build : version
     )
 
-    get_certificates
+    fetch_certificates_from_gh
 
     build_app(
       workspace: "VeWorld.xcworkspace", 
