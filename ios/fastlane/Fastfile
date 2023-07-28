@@ -153,11 +153,10 @@ platform :ios do
 
     get_certificates
 
-    build_app(workspace: "VeWorld.xcworkspace", scheme: "VeWorld", 
-      clean: true,
-      export_method: "app-store",
-      build_path: "./builds",
-      output_directory: "./builds"
+    build_app(
+      workspace: "VeWorld.xcworkspace", 
+      scheme: "VeWorld", 
+      clean: true
     )
       
     upload_to_testflight(
