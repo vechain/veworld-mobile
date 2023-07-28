@@ -1,14 +1,12 @@
 import { Net } from "@vechain/connex-driver/dist/interfaces"
 import { SimpleNet } from "@vechain/connex-driver"
 
-export class CustomNet implements Net {
-    private readonly simpleNet: SimpleNet
-
-    constructor(readonly baseURL: string) {
-        this.simpleNet = new SimpleNet(baseURL)
+export class CustomNet extends SimpleNet {
+    constructor(baseURL: string, timeout?: number, wsTimeout?: number) {
+        super(baseURL, timeout, wsTimeout)
     }
 
-    public async http(
+    public override async http(
         method: "GET" | "POST",
         path: string,
         params?: Net.Params,
@@ -20,10 +18,6 @@ export class CustomNet implements Net {
             "X-Project-Id": "veworld-mobile",
         }
 
-        return this.simpleNet.http(method, path, params)
-    }
-
-    public openWebSocketReader(path: string): Net.WebSocketReader {
-        return this.simpleNet.openWebSocketReader(path)
+        return super.http(method, path, params)
     }
 }
