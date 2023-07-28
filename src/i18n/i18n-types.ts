@@ -147,6 +147,10 @@ type RootTranslation = {
 	 */
 	BTN_HISTORY: string
 	/**
+	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
+	 */
+	BTN_REMOVE_WALLET: string
+	/**
 	 * G​o​ ​t​o​ ​s​e​t​t​i​n​g​s
 	 */
 	BTN_GO_TO_SETTINGS: string
@@ -238,6 +242,10 @@ type RootTranslation = {
 	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​i​t​'​s​ ​a​s​s​o​c​i​a​t​e​d​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​.​ ​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e
+	 */
+	BD_WALLET_REMOVAL: string
 	/**
 	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
 	 */
@@ -702,7 +710,7 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
-	 * E​d​i​t​ ​w​a​l​l​e​t​ ​{​n​a​m​e​}
+	 * E​d​i​t​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
 	SB_EDIT_WALLET: RequiredParams<'name'>
@@ -2426,6 +2434,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_HISTORY: () => LocalizedString
 	/**
+	 * Remove wallet
+	 */
+	BTN_REMOVE_WALLET: () => LocalizedString
+	/**
 	 * Go to settings
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
@@ -2517,6 +2529,10 @@ export type TranslationFunctions = {
 	 * Confirm your PIN
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
+	/**
+	 * Your wallet and all of it's associated accounts will be removed. This action is irreversible
+	 */
+	BD_WALLET_REMOVAL: () => LocalizedString
 	/**
 	 * <><> PIN doesn't match.
 	 */
@@ -2978,7 +2994,7 @@ export type TranslationFunctions = {
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
-	 * Edit wallet {name}
+	 * Edit {name}
 	 */
 	SB_EDIT_WALLET: (arg: { name: string }) => LocalizedString
 	/**

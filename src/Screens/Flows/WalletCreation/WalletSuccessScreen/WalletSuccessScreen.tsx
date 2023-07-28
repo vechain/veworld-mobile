@@ -24,8 +24,8 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import {
-    selectMnemonic,
     selectHasOnboarded,
+    selectMnemonic,
     selectNewLedgerDevice,
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
@@ -109,7 +109,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         ConfirmIdentityBottomSheet,
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
-    } = useCheckIdentity({ onIdentityConfirmed })
+    } = useCheckIdentity({ onIdentityConfirmed, allowAutoPassword: true })
     /**
      * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
      */

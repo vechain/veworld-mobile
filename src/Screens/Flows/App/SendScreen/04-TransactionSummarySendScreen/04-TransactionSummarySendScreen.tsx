@@ -149,6 +149,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
         onCancel: () => setLoadingTransaction(false),
+        allowAutoPassword: true,
     })
 
     const onSubmit = useCallback(async () => {
