@@ -46,6 +46,7 @@ platform :ios do
       type: "appstore",
       app_identifier: ENV["APP_IDENTIFIER"],
       readonly: true,
+      git_branch: "main",
       verbose: true
     )
   end
