@@ -130,6 +130,11 @@ export const HomeScreen = () => {
         ],
     )
 
+    const closeRemoveAccountBottomSheet = useCallback(() => {
+        closeRemoveAccountSheet()
+        openAccountManagementSheet()
+    }, [closeRemoveAccountSheet, openAccountManagementSheet])
+
     const onRemoveAccount = useCallback(() => {
         closeRemoveAccountWarningBottomSheet()
         openAccountManagementSheet()
@@ -223,6 +228,7 @@ export const HomeScreen = () => {
                 isBalanceVisible={isBalanceVisible}
                 onDismiss={closeRemoveAccountSheet}
                 ref={removeAccountBottomSheetRef}
+                closeBottomSheet={closeRemoveAccountBottomSheet}
             />
 
             <RemoveAccountWarning
