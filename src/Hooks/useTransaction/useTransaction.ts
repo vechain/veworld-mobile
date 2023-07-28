@@ -1,15 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Transaction } from "thor-devkit"
 
-import { error, GasUtils, HexUtils } from "~Utils"
+import { debug, error, GasUtils, HexUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult } from "~Model"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import {
+    selectChainTag,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
+import { selectBlockRef } from "~Storage/Redux/Selectors/Beat"
 
 type UseTransactionReturnProps = {
     gas?: EstimateGasResult
     setGas: (gas: EstimateGasResult) => void
-    transactionBody: Transaction.Body
+    createTransactionBody: () => Transaction.Body
     loadingGas: boolean
     setGasPayer: (gasPayer: string) => void
 }
@@ -38,48 +43,31 @@ export const useTransaction = ({
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
     const [gasPayer, setGasPayer] = useState<string>(
-        providedGasPayer || account.address,
+        providedGasPayer ?? account.address,
     )
+    const blockRef = useAppSelector(selectBlockRef)
+    const chainTag = useAppSelector(selectChainTag)
     const thorClient = useThor()
 
     const nonce = useMemo(() => HexUtils.generateRandom(8), [])
 
     /**
-     *  TODO: How should we handle the block REF if the user is slow in transacting?
-     *  - We don't want it to change in case signatures have already been generated
-     *  - Current expiration is 5 minutes below: "expiration: 30" blocks
-     */
-    const blockRef = useMemo(
-        () => thorClient.status.head.id.slice(0, 18),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
-    )
-
-    /**
      * Recalculate transaction on data changes
      */
-    const transactionBody = useMemo((): Transaction.Body => {
+    const createTransactionBody = useCallback((): Transaction.Body => {
         const DEFAULT_GAS_COEFFICIENT = 0
         return {
-            chainTag: parseInt(thorClient.genesis.id.slice(-2), 16),
+            chainTag,
             blockRef,
             // 5 minutes
             expiration: 30,
             clauses: clauses,
             gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
-            gas: providedGas || gas?.gas || "0",
-            dependsOn: dependsOn || null,
+            gas: providedGas ?? gas?.gas ?? "0",
+            dependsOn: dependsOn ?? null,
             nonce: nonce,
         }
-    }, [
-        clauses,
-        dependsOn,
-        nonce,
-        blockRef,
-        thorClient.genesis.id,
-        gas?.gas,
-        providedGas,
-    ])
+    }, [clauses, dependsOn, nonce, blockRef, chainTag, gas?.gas, providedGas])
 
     const estimateGas = useCallback(
         async (caller: string, payer: string, thor: Connex.Thor) => {
@@ -88,7 +76,7 @@ export const useTransaction = ({
                 const estimatedGas = await GasUtils.estimateGas(
                     thor,
                     clauses,
-                    providedGas || 0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
+                    providedGas ?? 0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
                     caller,
                     payer,
                 )
@@ -104,10 +92,9 @@ export const useTransaction = ({
     )
 
     useEffect(() => {
+        debug("Estimating Gas")
         estimateGas(account.address, gasPayer, thorClient)
-        // We don't want to keep recalculating gas when thor changes
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [account.address, gasPayer, clauses])
+    }, [account.address, gasPayer, clauses, estimateGas, thorClient])
 
-    return { gas, loadingGas, setGas, transactionBody, setGasPayer }
+    return { gas, loadingGas, setGas, createTransactionBody, setGasPayer }
 }

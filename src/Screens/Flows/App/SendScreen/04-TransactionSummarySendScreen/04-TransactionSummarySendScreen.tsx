@@ -117,9 +117,12 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     )
 
     //build transaction
-    const { gas, transactionBody, loadingGas, setGasPayer } = useTransaction({
-        clauses,
-    })
+    const { gas, createTransactionBody, loadingGas, setGasPayer } =
+        useTransaction({
+            clauses,
+        })
+
+    const transactionBody = createTransactionBody()
 
     const {
         setSelectedDelegationAccount,
