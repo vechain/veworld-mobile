@@ -16,3 +16,4 @@ builds/*
 
 .env
 .env.secret
+.env.default
