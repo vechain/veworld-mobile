@@ -7,6 +7,7 @@ import {
     validateAndUpsertActivity,
     useAppDispatch,
     selectActivitiesWithoutFinality,
+    updateBeat,
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
 import { useInformUser, useStateReconciliation } from "./Hooks"
@@ -72,6 +73,16 @@ export const TransferEventListener: React.FC = () => {
                     ),
                 )
 
+                debug(
+                    `Bloom filter: ${relevantAccounts.length} of ${visibleAccounts.length} accounts are relevant in block ${beat.number}`,
+                )
+
+                // Update the pending transactions cache
+                await updateActivities(pendingActivities)
+
+                // Store the beat in the cache for use in other parts of the app
+                dispatch(updateBeat(beat))
+
                 if (relevantAccounts.length === 0) return
 
                 // Delay for 5 seconds to allow for the block to be indexed
@@ -84,9 +95,6 @@ export const TransferEventListener: React.FC = () => {
                     0,
                     network.type,
                 )
-
-                //Update the pending transactions cache
-                await updateActivities(pendingActivities)
 
                 debug(
                     `Found ${transfers.pagination.totalElements} transfers in block ${beat.number}`,
@@ -157,11 +165,12 @@ export const TransferEventListener: React.FC = () => {
             visibleAccounts,
             updateActivities,
             pendingActivities,
+            dispatch,
             network.type,
             blackListedCollections,
-            thor,
             updateNFTs,
             forNFTs,
+            thor,
             fetchData,
             updateBalances,
             forTokens,

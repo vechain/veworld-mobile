@@ -36,33 +36,32 @@ platform :ios do
 
 
   desc "Create changelog"
-  lane :create_changelog do
+  lane :create_changelog do |values|
+
     Dir.chdir "../.." do # Navigate to the root
-      sh("yarn release")
+      sh("yarn release:ci")
     end
 
-     # Read the current version from package.json
-     package_json = JSON.parse(File.read("../../package.json"))
-     new_version = package_json["version"]
- 
-     # Update the version in package.json
-     package_json["version"] = new_version
-     File.write("../../package.json", JSON.pretty_generate(package_json))
+    version = values[:version]
+
+    package_json = JSON.parse(File.read("../../package.json"))
+    package_json["version"] = version
+    File.write("../../package.json", JSON.pretty_generate(package_json))
   end
 
 
 
 
-  desc "Create Release Branch on GitHub"
-  lane :gh_setup_beta_before do |values|
+  desc "Create Release Branch on GitHub for Beta"
+  lane :gh_setup_before do |values|
 
     github_token = values[:github_token]
     github_username = values[:github_username]
-    build = values[:build]
+    build_or_version_number = values[:build_or_version_number]
     branch_name = "release-build"
 
     # Create and push the branch locally
-    sh("git checkout -b #{branch_name}-#{build}")
+    sh("git checkout -b #{branch_name}-#{build_or_version_number}")
 
     # Set the GitHub remote URL with credentials
     remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
@@ -70,48 +69,59 @@ platform :ios do
     sh("git commit -a -m 'build: init'")
 
     # Push the branch to GitHub
-    sh("git push -u origin #{branch_name}-#{build}")
+    sh("git push -u origin #{branch_name}-#{build_or_version_number}")
   end
+
 
 
    
 
   desc "Commit latest artifacts to GitHub"
-  lane :gh_setup_beta_after do |values|
+  lane :gh_setup_after do |values|
     branch_name = "release-build"
-
-    github_token = values[:github_token]
-    github_username = values[:github_username]
-    build = values[:build]
+    build_or_version_number = values[:build_or_version_number]
 
     sh("git add --all")
     sh("git commit -a -m 'build: complete'")
     # Push the branch to GitHub
-    sh("git push -u origin #{branch_name}-#{build}")
+    sh("git push -u origin #{branch_name}-#{build_or_version_number}")
   end
 
 
 
 
+
+
+  # Builds the app using specified options.
+  #
+  # @param {string} options[:username] - The GitHub username for authentication.
+  # @param {string} options[:token] - The GitHub personal token for authentication.
+  # @param optional {string} options[:version] - The version type for the build (e.g., "patch", "minor", "major", "2.1.1").
+  #
   desc "Push a new beta build to TestFlight"
-  lane :build_beta do |options|
+  lane :build do |options|
     github_username = options[:username]
     github_token = options[:token]
+    versionType = options[:version]
 
     ensure_git_status_clean
-    ensure_git_branch(branch: "main")
+    #ensure_git_branch(branch: "main")
 
     build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
 
-    gh_setup_beta_before(
-      github_username:github_username, 
-      github_token:github_token,
-      build:build
-    )
+    if !versionType.nil? 
+      version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+    end
 
     Dir.chdir "../.." do
       sh("yarn purge && yarn install:all")
     end
+
+    gh_setup_before(
+      github_username:github_username, 
+      github_token:github_token,
+      build_or_version_number: versionType.nil? ? build : version
+    )
 
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
@@ -150,22 +160,32 @@ platform :ios do
       apple_id: "6446854569"
     )
 
-    gh_setup_beta_after(
+    if !versionType.nil?
+      create_changelog(version:version)
+
+      add_git_tag(
+        tag: "v#{version}"
+      )
+
+      push_git_tags
+    end
+
+    gh_setup_after(
       github_username:github_username, 
       github_token:github_token,
-      build:build
+      build_or_version_number: versionType.nil? ? build : version
     )
 
     create_pull_request(
       api_token: github_token,
       repo: "vechainfoundation/veworld-mobile",
-      title: "build: build artifacts build-#{build}",
+      title: versionType.nil? ? "build: build artifacts build-#{build}" : "version: build artifacts version-#{version}", 
       base: "main",
       api_url: "https://api.github.com"
     )
 
     slack(
-      message: "VeWorld build number: #{build} was successfully released!",
+      message: versionType.nil? ? "VeWorld build number: #{build} was successfully released!" : "VeWorld version number: #{version} was successfully released!",
       slack_url: ENV["SLACK_WEBHOOK"],
       success: true,
       payload: {

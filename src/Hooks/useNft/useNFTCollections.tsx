@@ -1,6 +1,6 @@
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
 import { useThor } from "~Components"
-import { NETWORK_TYPE, Network, NonFungibleTokenCollection } from "~Model"
+import { NETWORK_TYPE, NonFungibleTokenCollection } from "~Model"
 import {
     GithubCollectionResponse,
     getContractAddresses,
@@ -8,10 +8,13 @@ import {
     getTokenURI,
 } from "~Networking"
 import {
+    clearNFTCache,
+    selectSelectedNetwork,
     setCollections,
     setNetworkingSideEffects,
     updateCollection,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import { MediaUtils, URIUtils, error } from "~Utils"
 import {
@@ -46,8 +49,14 @@ export const useNFTCollections = () => {
     const thor = useThor()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
+    const network = useAppSelector(selectSelectedNetwork)
 
     const theme = useTheme()
+
+    // Clear caches on network change
+    useEffect(() => {
+        dispatch(clearNFTCache())
+    }, [dispatch, network])
 
     const lazyLoadMetadata = useCallback(
         async (
@@ -95,7 +104,6 @@ export const useNFTCollections = () => {
                             }
                             dispatch(
                                 updateCollection({
-                                    network: networkType,
                                     currentAccountAddress: address,
                                     collection: updated,
                                 }),
@@ -111,7 +119,6 @@ export const useNFTCollections = () => {
     const loadCollections = useCallback(
         async (
             selectedAccount: string,
-            network: Network,
             registryInfo: GithubCollectionResponse[],
             _page: number,
             _resultsPerPage: number = NFT_PAGE_SIZE,
@@ -172,7 +179,6 @@ export const useNFTCollections = () => {
                 // set collections to store
                 dispatch(
                     setCollections({
-                        network: network.type,
                         currentAccountAddress: selectedAccount,
                         collectionData: {
                             collections: _nftCollections,
@@ -199,7 +205,7 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, lazyLoadMetadata, theme.isDark, thor],
+        [LL, dispatch, lazyLoadMetadata, network.type, theme.isDark, thor],
     )
 
     return { loadCollections }

@@ -164,12 +164,14 @@ export const useSignTransaction = ({
         }
     }
 
-    const navigateToLedger = async (password?: string) => {
+    const navigateToLedger = async (
+        ledgerAccount: LedgerAccountWithDevice,
+        password?: string,
+    ) => {
         const delegationSignature = await getDelegationSignature(password)
 
         nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
-            accountWithDevice:
-                selectedDelegationAccount as LedgerAccountWithDevice,
+            accountWithDevice: ledgerAccount,
             transaction,
             initialRoute,
             delegationSignature: delegationSignature?.toString("hex"),
@@ -183,7 +185,10 @@ export const useSignTransaction = ({
         if (!senderDevice) throw new Error("Sender device not found")
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
-            return await navigateToLedger(password)
+            return await navigateToLedger(
+                account as LedgerAccountWithDevice,
+                password,
+            )
         }
 
         //local mnemonic, identity already verified via useCheckIdentity

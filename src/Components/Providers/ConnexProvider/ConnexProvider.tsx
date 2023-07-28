@@ -1,9 +1,10 @@
-import { Driver, SimpleNet } from "@vechain/connex-driver"
+import { Driver } from "@vechain/connex-driver"
 import { newThor } from "@vechain/connex-framework/dist/thor"
-import React, { useState, useEffect, useMemo, useCallback } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { error } from "~Utils/Logger"
 import { useAppSelector } from "~Storage/Redux"
 import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { CustomNet } from "~Components/Providers/ConnexProvider/CustomNet"
 
 type ConnexContextProviderProps = { children: React.ReactNode }
 const ConnexContext = React.createContext<Connex.Thor | undefined>(undefined)
@@ -52,7 +53,7 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
 }
 
 const initDriver = async (url: string) => {
-    return await Driver.connect(new SimpleNet(url))
+    return await Driver.connect(new CustomNet(url))
 }
 
 const initThor = (currentDriver: Driver) => {

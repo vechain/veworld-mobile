@@ -9,6 +9,7 @@ import {
 import { BackButtonHeader } from "../BackButtonHeader"
 import { StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useTheme } from "~Hooks"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     noBackButton?: boolean
@@ -73,6 +74,9 @@ export const Layout = ({
                         }}>
                         {!fixedHeader && title && <Title />}
                         {body}
+                        {footer && PlatformUtils.isAndroid() && (
+                            <BaseSpacer height={tabBarAndroidBottomInsets} />
+                        )}
                     </BaseScrollView>
                 )}
                 {bodyWithoutScrollView}

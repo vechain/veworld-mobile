@@ -3,6 +3,9 @@ import { ReactNode } from "react"
 import "whatwg-fetch"
 
 import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
+// @ts-ignore
+import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
+
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
@@ -23,6 +26,10 @@ jest.mock("react-native-quick-crypto", () => ({
         }),
     })),
 }))
+
+process.env = Object.assign(process.env, {
+    REACT_APP_LOG_LEVEL: "debug",
+})
 
 jest.mock("react-native-blob-util", () => ({
     PolyfillBlob: jest.fn(),
@@ -122,6 +129,4 @@ jest.mock("mixpanel-react-native", () => ({
     })),
 }))
 
-// @ts-ignore
-import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
 jest.mock("react-native-device-info", () => mockRNDeviceInfo)
