@@ -32,6 +32,7 @@ import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { DelegationType } from "~Model/Delegation"
+import { TransactionType } from "~Constants"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -99,6 +100,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         initialRoute: Routes.NFTS,
         onError: () => setLoading(false),
         token: nft!,
+        transactionType: TransactionType.NFT,
     })
 
     const { RenderGas, isThereEnoughGas } = useRenderGas({

@@ -22,7 +22,7 @@ import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useMemo } from "react"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, TransactionType } from "~Constants"
 
 type Props = {
     transactionBody: Transaction.Body
@@ -35,7 +35,7 @@ type Props = {
     onError?: (e: unknown) => void
     token?: NonFungibleToken | FungibleTokenWithBalance
     initialRoute?: Routes
-    isNFT?: boolean
+    transactionType: string
 }
 /**
  * Hooks that expose a function to sign and send a transaction performing updates on success
@@ -47,7 +47,7 @@ type Props = {
  * @param selectedDelegationOption the delegation option
  * @param selectedDelegationUrl the delegation url
  * @param onError on transaction error callback
- * @param isNFT whether the transaction is an NFT
+ * @param transactionType transaction type
  * @returns {signAndSendTransaction} the function to sign and send the transaction
  */
 
@@ -60,7 +60,7 @@ export const useSignTransaction = ({
     selectedDelegationUrl,
     onError,
     initialRoute = Routes.HOME,
-    isNFT = false,
+    transactionType,
 }: Props) => {
     const { LL } = useI18nContext()
     const track = useAnalyticTracking()
@@ -224,19 +224,26 @@ export const useSignTransaction = ({
             if (!signedTx) return
 
             await sendTransactionAndPerformUpdates(signedTx)
-            if (isNFT) {
-                track(AnalyticsEvent.SEND_NFT_SENT)
-            } else {
-                track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
+            switch (transactionType) {
+                case TransactionType.NFT:
+                    track(AnalyticsEvent.SEND_NFT_SENT)
+                    break
+                case TransactionType.FungibleToken:
+                    track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
+                    break
             }
             onTXFinish()
         } catch (e) {
             error("[signTransaction]", e)
-            if (isNFT) {
-                track(AnalyticsEvent.SEND_NFT_FAILED_TO_SEND)
-            } else {
-                track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
+            switch (transactionType) {
+                case TransactionType.NFT:
+                    track(AnalyticsEvent.SEND_NFT_FAILED_TO_SEND)
+                    break
+                case TransactionType.FungibleToken:
+                    track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
+                    break
             }
+
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
             onError?.(e)
         }

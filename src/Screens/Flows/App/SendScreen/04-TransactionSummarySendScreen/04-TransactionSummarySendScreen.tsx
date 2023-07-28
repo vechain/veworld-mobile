@@ -9,7 +9,7 @@ import {
     useTransaction,
 } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
-import { COLORS } from "~Constants"
+import { COLORS, TransactionType } from "~Constants"
 import {
     AccountCard,
     AccountIcon,
@@ -131,6 +131,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         token,
         initialRoute: Routes.HOME,
         onError: () => setLoadingTransaction(false),
+        transactionType: TransactionType.FungibleToken,
     })
 
     const { RenderGas, isThereEnoughGas } = useRenderGas({

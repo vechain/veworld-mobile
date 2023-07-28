@@ -48,7 +48,7 @@ import { useNavigation } from "@react-navigation/native"
 import { TransactionDetails } from "./Components"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { DelegationType } from "~Model/Delegation"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, TransactionType } from "~Constants"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -127,6 +127,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         selectedDelegationOption,
         selectedDelegationUrl,
         initialRoute: Routes.HOME,
+        transactionType: TransactionType.Dapp,
     })
 
     // Check if there is enough gas
