@@ -34,6 +34,7 @@ module.exports = {
             "|stream-browserify" +
             "|@craftzdog/react-native-buffer" +
             "|react-native-svg" +
+            "|mixpanel-react-native" +
             ")",
     ],
     moduleNameMapper: {
@@ -65,6 +66,7 @@ module.exports = {
         "index.ts",
         "<rootDir>/src/Hooks/useAppReset/useAppReset.tsx",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
+        "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
     ],
     coverageThreshold: {
         global: {
