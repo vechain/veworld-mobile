@@ -52,6 +52,7 @@ const isDefaultImage = (image: string): boolean =>
     image === NFTPlaceholderDark || image === NFTPlaceHolderLight
 
 export default {
+    isValidMimeType,
     resolveMediaType,
     resolveMimeType,
     isDefaultImage,

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -17,8 +17,8 @@ import {
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
-import { usePasswordValidation } from "~Hooks"
-import { valueToHP } from "~Constants"
+import { useAnalyticTracking, usePasswordValidation } from "~Hooks"
+import { AnalyticsEvent, valueToHP } from "~Constants"
 import HapticsService from "~Services/HapticsService"
 
 const digitNumber = 6
@@ -26,6 +26,7 @@ export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
     const { updatePassword } = usePasswordValidation()
     const nav = useNavigation()
+    const track = useAnalyticTracking()
 
     /**
      * Called by `useOnDigitPressWithConfirmation` when the user has finished typing the pin
@@ -36,12 +37,13 @@ export const UserCreatePasswordScreen = () => {
         async (insertedPin: string) => {
             await updatePassword(insertedPin)
             await HapticsService.triggerNotification({ level: "Success" })
+            track(AnalyticsEvent.PASSWORD_SETUP_SUBMITTED)
             nav.navigate(Routes.WALLET_SUCCESS, {
                 securityLevelSelected: SecurityLevelType.SECRET,
                 userPin: insertedPin,
             })
         },
-        [updatePassword, nav],
+        [updatePassword, nav, track],
     )
 
     const [isConfirmationError, setIsConfirmationError] =
@@ -73,6 +75,11 @@ export const UserCreatePasswordScreen = () => {
         await HapticsService.triggerNotification({ level: "Warning" })
         onDigitDelete()
     }, [onDigitDelete])
+
+    useEffect(() => {
+        track(AnalyticsEvent.PAGE_LOADED_SETUP_PASSWORD)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <BaseSafeArea grow={1}>

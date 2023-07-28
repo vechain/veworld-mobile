@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -21,11 +21,13 @@ import Lottie from "lottie-react-native"
 import { BlePairingDark } from "~Assets/Lottie"
 import * as Haptics from "expo-haptics"
 import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
-import { useLedgerSubscription } from "~Hooks"
+import { useAnalyticTracking, useLedgerSubscription } from "~Hooks"
+import { AnalyticsEvent } from "~Constants"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const track = useAnalyticTracking()
 
     const [selectedDevice, setSelectedDevice] =
         useState<ConnectedLedgerDevice>()
@@ -43,8 +45,9 @@ export const SelectLedgerDevice = () => {
             nav.navigate(Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS, {
                 device: selectedDevice,
             })
+            track(AnalyticsEvent.IMPORT_HW_SELECTED_LEDGER)
         }
-    }, [nav, selectedDevice])
+    }, [nav, selectedDevice, track])
 
     const onDevice = useCallback(
         (device: ConnectedLedgerDevice) => {
@@ -84,6 +87,11 @@ export const SelectLedgerDevice = () => {
             count: availableDevices.length,
         })
     }, [LL, availableDevices.length])
+
+    useEffect(() => {
+        track(AnalyticsEvent.IMPORT_HW_PAGE_LOADED)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
