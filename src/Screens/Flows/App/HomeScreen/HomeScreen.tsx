@@ -25,24 +25,21 @@ import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import {
-    removeAccount,
     selectAccounts,
     selectBalanceVisible,
     selectSelectedAccount,
     selectVisibleAccounts,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountWithDevice, RENAME_WALLET_TYPE } from "~Model"
 import { RemoveAccountWarning } from "~Screens/Flows/App/HomeScreen/Components/BottomSheets/RemoveAccountWarning"
-import { AddressUtils } from "~Utils"
+import { useAccountDelete } from "~Screens/Flows/App/HomeScreen/Hooks/useAccountDelete"
 import { useI18nContext } from "~i18n"
 
 export const HomeScreen = () => {
     useTokenBalances()
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
-    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
     const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
@@ -96,20 +93,12 @@ export const HomeScreen = () => {
         onSetSelectedAccount({ address: account.address })
     }
 
-    const [accountToRemove, setAccountToRemove] = useState<
-        AccountWithDevice | undefined
-    >(undefined)
-
-    const isOnlyAccount = useCallback(
-        (rootAddress: string) => {
-            const sameDeviceAccounts = allAccounts.filter(acc =>
-                AddressUtils.compareAddresses(acc.rootAddress, rootAddress),
-            )
-
-            return sameDeviceAccounts.length <= 1
-        },
-        [allAccounts],
-    )
+    const {
+        setAccountToRemove,
+        accountToRemove,
+        deleteAccount,
+        isOnlyAccount,
+    } = useAccountDelete()
 
     const openConfirmRemoveAccountWarning = useCallback(
         (account: AccountWithDevice) => {
@@ -123,6 +112,7 @@ export const HomeScreen = () => {
             openRemoveAccountWarningBottomSheet()
         },
         [
+            setAccountToRemove,
             LL,
             isOnlyAccount,
             closeRemoveAccountSheet,
@@ -151,11 +141,10 @@ export const HomeScreen = () => {
                 10000,
             )
 
-        // [START] - Remove account
-        dispatch(removeAccount(accountToRemove))
+        deleteAccount()
     }, [
         openAccountManagementSheet,
-        dispatch,
+        deleteAccount,
         isOnlyAccount,
         closeRemoveAccountWarningBottomSheet,
         accountToRemove,
