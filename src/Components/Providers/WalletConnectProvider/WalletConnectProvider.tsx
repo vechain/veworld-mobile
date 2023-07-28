@@ -21,9 +21,9 @@ import { useI18nContext } from "~i18n"
 import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
-import { RequestMethods } from "~Constants"
+import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { AccountWithDevice } from "~Model"
-import { useSetSelectedAccount } from "~Hooks"
+import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
 import { Linking } from "react-native"
 
 /**
@@ -60,6 +60,7 @@ const WalletConnectContextProvider = ({
     const activeSessionsFlat = useAppSelector(selectSessionsFlat)
     const networks = useAppSelector(selectNetworks)
     const { onSetSelectedAccount } = useSetSelectedAccount()
+    const track = useAnalyticTracking()
 
     /**
      * A pairing between the DApp and the wallet needs to be established in order to make
@@ -177,6 +178,7 @@ const WalletConnectContextProvider = ({
             options.signer = signingAccount
 
             if (message) {
+                track(AnalyticsEvent.DAPP_REQUEST_CERTIFICATE)
                 nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
                     requestEvent,
                     session,
@@ -187,7 +189,7 @@ const WalletConnectContextProvider = ({
                 showErrorToast(LL.NOTIFICATION_DAPP_INVALID_REQUEST())
             }
         },
-        [nav, LL],
+        [LL, track, nav],
     )
 
     const goToSendTransaction = useCallback(
@@ -209,6 +211,7 @@ const WalletConnectContextProvider = ({
             options.signer = signingAccount
 
             if (message) {
+                track(AnalyticsEvent.DAPP_TX_REQUESTED)
                 nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                     requestEvent,
                     session,
@@ -219,7 +222,7 @@ const WalletConnectContextProvider = ({
                 showErrorToast(LL.NOTIFICATION_DAPP_INVALID_REQUEST())
             }
         },
-        [nav, LL],
+        [LL, track, nav],
     )
 
     const switchAccount = useCallback(

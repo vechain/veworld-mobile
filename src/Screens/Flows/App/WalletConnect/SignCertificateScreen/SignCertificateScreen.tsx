@@ -23,13 +23,14 @@ import {
     WalletConnectResponseUtils,
     WalletConnectUtils,
 } from "~Utils"
-import { useCheckIdentity, useSignMessage } from "~Hooks"
+import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails } from "~Screens"
+import { AnalyticsEvent } from "~Constants"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -45,7 +46,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const selectedAccount: AccountWithDevice = useAppSelector(
         selectSelectedAccount,
     )
-
+    const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
     // Request values
@@ -115,7 +116,9 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         cert.purpose,
                     ),
                 )
+                track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
             } catch (err: unknown) {
+                track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
                 error("SignMessageScreen:handleAccept", err)
                 await WalletConnectResponseUtils.signMessageRequestErrorResponse(
                     {
@@ -129,9 +132,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             onClose()
         },
         [
-            selectedAccount,
-            nav,
             onClose,
+            selectedAccount,
             signMessage,
             requestEvent,
             web3Wallet,
@@ -139,6 +141,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             cert,
             dispatch,
             session.peer.metadata.name,
+            track,
+            nav,
         ],
     )
 
@@ -150,9 +154,9 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 LL,
             })
         }
-
+        track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
         onClose()
-    }, [requestEvent, web3Wallet, LL, onClose])
+    }, [requestEvent, track, onClose, web3Wallet, LL])
 
     const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
         useCheckIdentity({

@@ -35,6 +35,7 @@ type Props = {
     onError?: (e: unknown) => void
     token?: NonFungibleToken | FungibleTokenWithBalance
     initialRoute?: Routes
+    isNFT?: boolean
 }
 /**
  * Hooks that expose a function to sign and send a transaction performing updates on success
@@ -46,6 +47,7 @@ type Props = {
  * @param selectedDelegationOption the delegation option
  * @param selectedDelegationUrl the delegation url
  * @param onError on transaction error callback
+ * @param isNFT whether the transaction is an NFT
  * @returns {signAndSendTransaction} the function to sign and send the transaction
  */
 
@@ -58,6 +60,7 @@ export const useSignTransaction = ({
     selectedDelegationUrl,
     onError,
     initialRoute = Routes.HOME,
+    isNFT = false,
 }: Props) => {
     const { LL } = useI18nContext()
     const track = useAnalyticTracking()
@@ -216,11 +219,19 @@ export const useSignTransaction = ({
             if (!signedTx) return
 
             await sendTransactionAndPerformUpdates(signedTx)
-            track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
+            if (isNFT) {
+                track(AnalyticsEvent.SEND_NFT_SENT)
+            } else {
+                track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
+            }
             onTXFinish()
         } catch (e) {
             error("[signTransaction]", e)
-            track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
+            if (isNFT) {
+                track(AnalyticsEvent.SEND_NFT_FAILED_TO_SEND)
+            } else {
+                track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
+            }
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
             onError?.(e)
         }
