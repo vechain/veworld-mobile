@@ -17,7 +17,7 @@ import {
     BaseSafeArea,
     BaseSpacer,
     QRCodeBottomSheet,
-    RenameWalletBottomSheet,
+    RenameAccountBottomSheet,
     SelectAccountBottomSheet,
 } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
@@ -29,7 +29,7 @@ import {
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice, RENAME_WALLET_TYPE } from "~Model"
+import { AccountWithDevice } from "~Model"
 
 export const HomeScreen = () => {
     useTokenBalances()
@@ -132,9 +132,9 @@ export const HomeScreen = () => {
 
             <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
 
-            <RenameWalletBottomSheet
-                type={RENAME_WALLET_TYPE.ACCOUNT}
+            <RenameAccountBottomSheet
                 ref={renameAccountBottomSheetRef}
+                account={selectedAccount}
                 onClose={closeRenameAccountBottonSheet}
             />
         </BaseSafeArea>

@@ -6,7 +6,7 @@ import { info, warn } from "~Utils/Logger"
 let isInitialized = false
 let mixpanel: Mixpanel
 
-export interface Properties {
+export interface AnalyticsProperties {
     [key: string]: unknown
 }
 
@@ -25,7 +25,7 @@ const initialize = () => {
 }
 
 const trackEvent =
-    (event: string, properties?: Properties): AppThunk<void> =>
+    (event: string, properties?: AnalyticsProperties): AppThunk<void> =>
     (_, getState) => {
         try {
             const isAnalyticsEnabled = selectAnalyticsTrackingEnabled(

@@ -1,5 +1,7 @@
 import { useCallback } from "react"
 import { Linking } from "react-native"
+import { AnalyticsEvent } from "~Constants"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { AlertUtils, BiometricsUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -8,6 +10,7 @@ import { useI18nContext } from "~i18n"
  */
 export const useBiometricsValidation = () => {
     const { LL } = useI18nContext()
+    const track = useAnalyticTracking()
 
     const authenticateBiometrics = useCallback(
         async (onSuccess: () => void) => {
@@ -19,6 +22,7 @@ export const useBiometricsValidation = () => {
             // system_cancel
 
             if (result.success) {
+                track(AnalyticsEvent.APP_BIOMETRICS_UNLOCKED)
                 onSuccess()
             } else {
                 if (result.error === "not_enrolled") {
@@ -43,7 +47,7 @@ export const useBiometricsValidation = () => {
                 }
             }
         },
-        [LL],
+        [LL, track],
     )
 
     return { authenticateBiometrics }

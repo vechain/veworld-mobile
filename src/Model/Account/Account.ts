@@ -22,8 +22,10 @@ export interface WalletAccount extends Account {
 }
 
 export interface AccountWithDevice extends WalletAccount {
-    device: LedgerDevice | LocalDevice
+    device: Device
 }
+
+export type Device = LedgerDevice | LocalDevice
 
 export interface LocalAccountWithDevice extends WalletAccount {
     device: LocalDevice
