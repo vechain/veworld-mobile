@@ -55,7 +55,6 @@ export const useTransaction = ({
      * Recalculate transaction on data changes
      */
     const createTransactionBody = useCallback((): Transaction.Body => {
-        if (!blockRef) throw new Error("Block ref not found")
         const DEFAULT_GAS_COEFFICIENT = 0
         return {
             chainTag,
