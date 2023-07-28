@@ -120,4 +120,13 @@ jest.mock("@walletconnect/web3wallet", () => ({
 
 jest.mock("react-native/Libraries/EventEmitter/NativeEventEmitter")
 
+jest.mock("mixpanel-react-native", () => ({
+    __esModule: true,
+    default: () => jest.fn(),
+    Mixpanel: jest.fn(() => ({
+        init: jest.fn(),
+        track: jest.fn(),
+    })),
+}))
+
 jest.mock("react-native-device-info", () => mockRNDeviceInfo)

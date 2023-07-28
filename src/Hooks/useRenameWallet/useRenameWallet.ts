@@ -1,25 +1,20 @@
 import { useCallback } from "react"
-import {
-    renameDevice,
-    selectSelectedAccount,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { Device } from "~Model"
+import { renameDevice, useAppDispatch } from "~Storage/Redux"
 
-export const useRenameWallet = () => {
+export const useRenameWallet = (device: Device) => {
     const dispatch = useAppDispatch()
-    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const changeDeviceAlias = useCallback(
         ({ newAlias }: { newAlias: string }) => {
             dispatch(
                 renameDevice({
-                    rootAddress: selectedAccount.device.rootAddress,
+                    rootAddress: device.rootAddress,
                     alias: newAlias,
                 }),
             )
         },
-        [dispatch, selectedAccount.device.rootAddress],
+        [dispatch, device.rootAddress],
     )
 
     return { changeDeviceAlias }

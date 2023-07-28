@@ -17,7 +17,7 @@ import {
     BaseSafeArea,
     BaseSpacer,
     QRCodeBottomSheet,
-    RenameWalletBottomSheet,
+    RenameAccountBottomSheet,
     SelectAccountBottomSheet,
     showWarningToast,
 } from "~Components"
@@ -31,7 +31,7 @@ import {
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice, RENAME_WALLET_TYPE } from "~Model"
+import { AccountWithDevice } from "~Model"
 import { RemoveAccountWarning } from "~Screens/Flows/App/HomeScreen/Components/BottomSheets/RemoveAccountWarning"
 import { useAccountDelete } from "~Screens/Flows/App/HomeScreen/Hooks/useAccountDelete"
 import { useI18nContext } from "~i18n"
@@ -228,9 +228,9 @@ export const HomeScreen = () => {
 
             <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
 
-            <RenameWalletBottomSheet
-                type={RENAME_WALLET_TYPE.ACCOUNT}
+            <RenameAccountBottomSheet
                 ref={renameAccountBottomSheetRef}
+                account={selectedAccount}
                 onClose={closeRenameAccountBottonSheet}
             />
         </BaseSafeArea>
