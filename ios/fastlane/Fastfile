@@ -141,9 +141,11 @@ platform :ios do
       version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
     end
 
+=begin
     Dir.chdir "../.." do
       sh("yarn purge && yarn install:all")
     end
+=end
 
     gh_setup_before(
       github_username:github_username, 
