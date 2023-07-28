@@ -8,9 +8,7 @@ export type CollectionWithPagination = {
 }
 
 export type Collections = {
-    [network: string]: {
-        [accountAddress: string]: CollectionWithPagination
-    }
+    [accountAddress: string]: CollectionWithPagination
 }
 
 // Collection Registry Info
@@ -20,12 +18,10 @@ export type CollectionRegistryInfo = {
 
 // NFTS
 export type NFTs = {
-    [network: string]: {
-        [accountAddress: string]: {
-            [collectionAddress: string]: {
-                NFTs: NonFungibleToken[]
-                pagination: PaginationResponse
-            }
+    [accountAddress: string]: {
+        [collectionAddress: string]: {
+            NFTs: NonFungibleToken[]
+            pagination: PaginationResponse
         }
     }
 }

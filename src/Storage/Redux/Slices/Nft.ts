@@ -2,9 +2,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { uniqBy } from "lodash"
 import {
+    NETWORK_TYPE,
     NonFungibleToken,
     NonFungibleTokenCollection,
-    NETWORK_TYPE,
 } from "~Model"
 import {
     BlackListedCollections,
@@ -14,7 +14,7 @@ import {
     NFTs,
 } from "../Types/Nft"
 import { GithubCollectionResponse, PaginationResponse } from "~Networking"
-import { debug, HexUtils, URIUtils } from "~Utils"
+import { HexUtils, URIUtils } from "~Utils"
 
 export type NftSliceState = {
     collectionRegistryInfo: CollectionRegistryInfo
@@ -29,18 +29,8 @@ export type NftSliceState = {
 
 export const initialStateNft: NftSliceState = {
     collectionRegistryInfo: {},
-    collectionsPerAccount: {
-        [NETWORK_TYPE.MAIN]: {},
-        [NETWORK_TYPE.TEST]: {},
-        [NETWORK_TYPE.SOLO]: {},
-        [NETWORK_TYPE.OTHER]: {},
-    },
-    NFTsPerAccount: {
-        [NETWORK_TYPE.MAIN]: {},
-        [NETWORK_TYPE.TEST]: {},
-        [NETWORK_TYPE.SOLO]: {},
-        [NETWORK_TYPE.OTHER]: {},
-    },
+    collectionsPerAccount: {},
+    NFTsPerAccount: {},
     blackListedCollectionsPerAccount: {
         [NETWORK_TYPE.MAIN]: {},
         [NETWORK_TYPE.TEST]: {},
@@ -62,18 +52,16 @@ export const NftSlice = createSlice({
         setCollections: (
             state,
             action: PayloadAction<{
-                network: string
                 currentAccountAddress: string
                 collectionData: CollectionWithPagination
             }>,
         ) => {
-            const { network, collectionData, currentAccountAddress } =
-                action.payload
+            const { collectionData, currentAccountAddress } = action.payload
 
             const normalizedAcct = HexUtils.normalize(currentAccountAddress)
 
-            if (!state.collectionsPerAccount[network][normalizedAcct]) {
-                state.collectionsPerAccount[network][normalizedAcct] = {
+            if (!state.collectionsPerAccount[normalizedAcct]) {
+                state.collectionsPerAccount[normalizedAcct] = {
                     collections: [],
                     pagination: {
                         countLimit: 0,
@@ -86,13 +74,12 @@ export const NftSlice = createSlice({
             }
 
             let uniqueCollections = [
-                ...state.collectionsPerAccount[network][normalizedAcct]
-                    .collections,
+                ...state.collectionsPerAccount[normalizedAcct].collections,
                 ...collectionData.collections,
             ]
 
             const allUnique = uniqBy(uniqueCollections, "address")
-            state.collectionsPerAccount[network][normalizedAcct] = {
+            state.collectionsPerAccount[normalizedAcct] = {
                 collections: allUnique,
                 pagination: collectionData.pagination,
             }
@@ -103,21 +90,16 @@ export const NftSlice = createSlice({
         updateCollection: (
             state,
             action: PayloadAction<{
-                network: string
                 currentAccountAddress: string
                 collection: NonFungibleTokenCollection
             }>,
         ) => {
-            const { network, currentAccountAddress, collection } =
-                action.payload
+            const { currentAccountAddress, collection } = action.payload
 
             const normalizedAcct = HexUtils.normalize(currentAccountAddress)
 
-            if (
-                state.collectionsPerAccount[network][normalizedAcct] !==
-                undefined
-            ) {
-                const existing = state.collectionsPerAccount[network][
+            if (state.collectionsPerAccount[normalizedAcct] !== undefined) {
+                const existing = state.collectionsPerAccount[
                     normalizedAcct
                 ].collections?.find(
                     col => col.address === collection.address,
@@ -219,22 +201,21 @@ export const NftSlice = createSlice({
         setNFTs: (
             state,
             action: PayloadAction<{
-                network: string
                 address: string
                 collectionAddress: string
                 NFTs: NonFungibleToken[]
                 pagination: PaginationResponse
             }>,
         ) => {
-            const { network, address, collectionAddress, NFTs, pagination } =
+            const { address, collectionAddress, NFTs, pagination } =
                 action.payload
 
             const normalizedAcct = HexUtils.normalize(address)
             const normalizedCollection = HexUtils.normalize(collectionAddress)
 
             // comes the first time
-            if (!state.NFTsPerAccount[network][normalizedAcct]) {
-                state.NFTsPerAccount[network][normalizedAcct] = {
+            if (!state.NFTsPerAccount[normalizedAcct]) {
+                state.NFTsPerAccount[normalizedAcct] = {
                     [normalizedCollection]: {
                         NFTs: [],
                         pagination: {
@@ -249,14 +230,8 @@ export const NftSlice = createSlice({
             }
 
             // comes every time the users loads NFTs from a new collection
-            if (
-                !state.NFTsPerAccount[network][normalizedAcct][
-                    normalizedCollection
-                ]
-            ) {
-                state.NFTsPerAccount[network][normalizedAcct][
-                    normalizedCollection
-                ] = {
+            if (!state.NFTsPerAccount[normalizedAcct][normalizedCollection]) {
+                state.NFTsPerAccount[normalizedAcct][normalizedCollection] = {
                     NFTs: [],
                     pagination: {
                         countLimit: 0,
@@ -269,18 +244,16 @@ export const NftSlice = createSlice({
             }
 
             let uniqueNFTs = [
-                ...state.NFTsPerAccount[network][normalizedAcct][
-                    normalizedCollection
-                ].NFTs,
+                ...state.NFTsPerAccount[normalizedAcct][normalizedCollection]
+                    .NFTs,
                 ...NFTs,
             ]
 
             const allUnique = uniqBy(uniqueNFTs, "id")
-            state.NFTsPerAccount[network][normalizedAcct][
-                normalizedCollection
-            ].NFTs = allUnique
+            state.NFTsPerAccount[normalizedAcct][normalizedCollection].NFTs =
+                allUnique
 
-            state.NFTsPerAccount[network][normalizedAcct][
+            state.NFTsPerAccount[normalizedAcct][
                 normalizedCollection
             ].pagination = pagination
 
@@ -290,19 +263,18 @@ export const NftSlice = createSlice({
         updateNFT: (
             state,
             action: PayloadAction<{
-                network: string
                 address: string
                 collectionAddress: string
                 NFT: NonFungibleToken
             }>,
         ) => {
-            const { network, address, collectionAddress, NFT } = action.payload
+            const { address, collectionAddress, NFT } = action.payload
 
             const normalizedAcct = HexUtils.normalize(address)
             const normalizedCollection = HexUtils.normalize(collectionAddress)
 
-            if (state.NFTsPerAccount[network][normalizedAcct] !== undefined) {
-                const existing = state.NFTsPerAccount[network][normalizedAcct][
+            if (state.NFTsPerAccount[normalizedAcct] !== undefined) {
+                const existing = state.NFTsPerAccount[normalizedAcct][
                     normalizedCollection
                 ]?.NFTs?.find(
                     nft => nft.tokenId === NFT.tokenId,
@@ -334,18 +306,21 @@ export const NftSlice = createSlice({
         // TODO.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/808
         refreshNFTs: (
             state,
-            action: PayloadAction<{ network: string; accountAddress: string }>,
+            action: PayloadAction<{ accountAddress: string }>,
         ) => {
-            const { network, accountAddress } = action.payload
+            const { accountAddress } = action.payload
 
             const normalizedAcct = HexUtils.normalize(accountAddress)
 
-            debug(
-                `Cleaning out collections and nfts for ${network} and ${normalizedAcct}`,
-            )
+            delete state.collectionsPerAccount[normalizedAcct]
+            delete state.NFTsPerAccount[normalizedAcct]
 
-            delete state.collectionsPerAccount[network][normalizedAcct]
-            delete state.NFTsPerAccount[network][normalizedAcct]
+            return state
+        },
+
+        clearNFTCache: state => {
+            state.collectionsPerAccount = {}
+            state.NFTsPerAccount = {}
 
             return state
         },
@@ -364,5 +339,6 @@ export const {
     setNFTs,
     updateNFT,
     resetNftState,
+    clearNFTCache,
     refreshNFTs,
 } = NftSlice.actions

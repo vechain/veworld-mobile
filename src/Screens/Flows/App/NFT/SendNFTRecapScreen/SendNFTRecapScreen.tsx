@@ -70,9 +70,12 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         [selectedAccount, route.params.receiverAddress, nft],
     )
 
-    const { gas, loadingGas, transactionBody, setGasPayer } = useTransaction({
-        clauses,
-    })
+    const { gas, loadingGas, createTransactionBody, setGasPayer } =
+        useTransaction({
+            clauses,
+        })
+
+    const transactionBody = createTransactionBody()
 
     const {
         setNoDelegation,

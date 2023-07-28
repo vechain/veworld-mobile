@@ -15,6 +15,7 @@ import {
     NftSlice,
     WalletConnectSessionsSlice,
     PendingSlice,
+    BeatSlice,
 } from "./Slices"
 import { nftPersistConfig } from "./Helpers"
 import { persistReducer } from "redux-persist"
@@ -32,7 +33,8 @@ export const reducer = combineReducers({
     [ContactsSlice.name]: ContactsSlice.reducer,
     [ActivitiesSlice.name]: ActivitiesSlice.reducer,
     [DelegationSlice.name]: DelegationSlice.reducer,
-    [NftSlice.name]: persistReducer(nftPersistConfig, NftSlice.reducer), // persist specific keys fron a reducer
+    [NftSlice.name]: persistReducer(nftPersistConfig, NftSlice.reducer), // persist specific keys from a reducer
     [WalletConnectSessionsSlice.name]: WalletConnectSessionsSlice.reducer,
     [PendingSlice.name]: PendingSlice.reducer,
+    [BeatSlice.name]: BeatSlice.reducer,
 })
