@@ -130,11 +130,16 @@ platform :ios do
     github_username = options[:username]
     github_token = options[:token]
     versionType = options[:version]
+    buildNumber = options[:buildNumber]
 
     ensure_git_status_clean
     # ensure_git_branch(branch: "main")
 
-    build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+    if !buildNumber.nil? 
+      build = increment_build_number(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
+    else
+      build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+    end
 
     if !versionType.nil? 
       version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
