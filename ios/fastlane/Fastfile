@@ -24,6 +24,34 @@ default_platform(:ios)
 
 platform :ios do
 
+
+  desc "Generate new certificates"
+  lane :generate_new_certificates do
+    sync_code_signing(
+      type: "appstore",
+      app_identifier: ENV["APP_IDENTIFIER"],
+      force_for_new_devices: true,
+      readonly: false,
+      git_branch: "main",
+      skip_docs: true,
+      verbose: true
+    )
+  end
+
+
+
+  desc "Get certificates"
+  lane :get_certificates do
+    sync_code_signing(
+      type: "appstore",
+      app_identifier: ENV["APP_IDENTIFIER"],
+      readonly: true
+    )
+  end
+
+
+
+
   desc "Run e2e tests"
   lane :e2e do
     Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
@@ -96,7 +124,7 @@ platform :ios do
   #
   # @param {string} options[:username] - The GitHub username for authentication.
   # @param {string} options[:token] - The GitHub personal token for authentication.
-  # @param optional {string} options[:version] - The version type for the build (e.g., "patch", "minor", "major", "2.1.1").
+  # @param optional {string} options[:version] - The version type for the build (e.g., "patch", "minor", "major").
   #
   desc "Push a new beta build to TestFlight"
   lane :build do |options|
@@ -123,36 +151,12 @@ platform :ios do
       build_or_version_number: versionType.nil? ? build : version
     )
 
-    get_certificates( # Create or get certificate, and install it
-      output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
-    )
+    get_certificates
 
-    get_provisioning_profile( # Create or get provisioning profile
-      output_path: "./builds",  # Download provisioning profile in the build folder
-      filename: "provisioning.mobileprovision" # Rename the local provisioning profile
-    )
-
-    update_project_provisioning( # Set the project provisioning profile (related in Xcode to the General > Signing Release section)
-      xcodeproj: "VeWorld.xcodeproj",
-      target_filter: "VeWorld", # Name of your project
-      profile: "./builds/provisioning.mobileprovision",
-      build_configuration: "Release"
-    )
-
-    update_project_team( # Set the right team on your project
-      teamid: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
-    )
-
-    build_app(workspace: "VeWorld.xcworkspace", scheme: "VeWorld", 
-      clean: true,
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-            CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) + " AppStore" # Value of this parameter is the name of the Provisioning Profile. By default, it will be "{bundleId} AppStore"
-        }
-      },
-      build_path: "./builds",
-      output_directory: "./builds"
+    build_app(
+      workspace: "VeWorld.xcworkspace", 
+      scheme: "VeWorld", 
+      clean: true
     )
       
     upload_to_testflight(
