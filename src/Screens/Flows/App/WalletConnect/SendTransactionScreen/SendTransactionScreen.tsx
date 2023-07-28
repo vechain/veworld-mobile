@@ -89,11 +89,13 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         }))
     }, [message])
 
-    const { transactionBody, gas, setGasPayer } = useTransaction({
+    const { createTransactionBody, gas, setGasPayer } = useTransaction({
         clauses,
         providedGas: options.gas,
         dependsOn: options.dependsOn,
     })
+
+    const transactionBody = createTransactionBody()
 
     // Delegation
     const {
