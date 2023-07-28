@@ -9,20 +9,13 @@ import {
     BaseView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useRenameAccount, useRenameWallet } from "~Hooks"
-import { RENAME_WALLET_TYPE } from "~Model"
-import {
-    selectBalanceVisible,
-    selectVetBalanceByAccount,
-    useAppSelector,
-} from "~Storage/Redux"
-import { COLORS, VET } from "~Constants"
+import { useRenameWallet } from "~Hooks"
+import { Device } from "~Model"
 import { FormattingUtils } from "~Utils"
-import { StyleSheet } from "react-native"
 
 type Props = {
-    type: string
     onClose: () => void
+    device: Device
 }
 
 const snapPoints = ["34%"]
@@ -30,72 +23,31 @@ const snapPoints = ["34%"]
 export const RenameWalletBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ type, onClose }, ref) => {
+>(({ onClose, device }, ref) => {
     const { LL } = useI18nContext()
 
-    const { changeAccountAlias, selectedAccount } = useRenameAccount()
-    const { changeDeviceAlias } = useRenameWallet()
+    const { changeDeviceAlias } = useRenameWallet(device)
 
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
-
-    const vetBalance = useAppSelector(state =>
-        selectVetBalanceByAccount(state, selectedAccount.address),
-    )
-
-    const defaultStateValue = useMemo(
-        () =>
-            type === RENAME_WALLET_TYPE.ACCOUNT
-                ? selectedAccount.alias
-                : selectedAccount.device.alias,
-        [selectedAccount.alias, selectedAccount.device.alias, type],
-    )
-
-    const RenderBalance = useMemo(() => {
-        if (type === RENAME_WALLET_TYPE.DEVICE) return null
-        return isBalanceVisible
-            ? `${vetBalance} ${VET.symbol}`
-            : `***** ${VET.symbol}`
-    }, [isBalanceVisible, vetBalance, type])
-
-    const [text, setText] = useState(defaultStateValue)
+    const [text, setText] = useState(device.alias)
 
     const RenderTitle = useMemo(() => {
-        if (type === RENAME_WALLET_TYPE.ACCOUNT) {
-            return LL.TITLE_RENAME({
-                type: text.length ? text : selectedAccount.alias,
-            })
-        }
-
-        if (type === RENAME_WALLET_TYPE.DEVICE) {
-            return LL.TITLE_RENAME({
-                type: text.length ? text : selectedAccount.device.alias,
-            })
-        }
-    }, [type, LL, text, selectedAccount.alias, selectedAccount.device.alias])
-
-    const RenderAccountAddress = useMemo(() => {
-        if (type === RENAME_WALLET_TYPE.DEVICE) return null
-
-        return FormattingUtils.humanAddress(selectedAccount.address, 3, 4)
-    }, [type, selectedAccount.address])
+        return LL.TITLE_RENAME({
+            type: text,
+        })
+    }, [LL, text])
 
     const handleSheetChanges = useCallback(
         (index: number) => {
-            if (index === 0) setText(defaultStateValue)
+            if (index === 0) setText(device.alias)
             else setText("")
         },
-        [defaultStateValue],
+        [device.alias],
     )
 
-    const onRenameAccount = useCallback(() => {
-        if (type === RENAME_WALLET_TYPE.ACCOUNT)
-            changeAccountAlias({ newAlias: text })
-
-        if (type === RENAME_WALLET_TYPE.DEVICE)
-            changeDeviceAlias({ newAlias: text })
-
+    const onRenameWallet = useCallback(() => {
+        changeDeviceAlias({ newAlias: text })
         onClose()
-    }, [type, changeAccountAlias, text, changeDeviceAlias, onClose])
+    }, [text, changeDeviceAlias, onClose])
 
     const handleOnChangeText = useCallback((_text: string) => {
         const newText = FormattingUtils.limitChars(_text)
@@ -117,28 +69,12 @@ export const RenameWalletBottomSheet = React.forwardRef<
                         onChangeText={handleOnChangeText}
                         autoCapitalize="words"
                     />
-
-                    <BaseView
-                        alignItems="flex-end"
-                        style={baseStyles.inputContainer}
-                        pt={8}
-                        pr={12}>
-                        <BaseText
-                            typographyFont="captionRegular"
-                            pb={2}
-                            color={COLORS.GRAY}>
-                            {RenderAccountAddress}
-                        </BaseText>
-                        <BaseText typographyFont="captionRegular">
-                            {RenderBalance}
-                        </BaseText>
-                    </BaseView>
                 </BaseView>
 
                 <BaseButton
                     haptics="Medium"
                     disabled={!text.length}
-                    action={onRenameAccount}
+                    action={onRenameWallet}
                     w={100}
                     title={LL.COMMON_BTN_SAVE().toUpperCase()}
                 />
@@ -147,11 +83,4 @@ export const RenameWalletBottomSheet = React.forwardRef<
             <BaseSpacer height={18} />
         </BaseBottomSheet>
     )
-})
-
-const baseStyles = StyleSheet.create({
-    inputContainer: {
-        position: "absolute",
-        right: 0,
-    },
 })

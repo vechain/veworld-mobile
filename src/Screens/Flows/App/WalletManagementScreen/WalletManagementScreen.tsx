@@ -10,14 +10,14 @@ import {
     RenameWalletBottomSheet,
     Layout,
 } from "~Components"
-import { BaseDevice, RENAME_WALLET_TYPE } from "~Model"
+import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
-import { AccountMgmtBottomSheet, WalletManagementHeader } from "./components"
+import { WalletMgmtBottomSheet, WalletManagementHeader } from "./components"
 
 export const WalletManagementScreen = () => {
     const devices = useAppSelector(selectDevices)
-    const [selectedDevice, setSelectedDevice] = useState<BaseDevice>()
+    const [selectedDevice, setSelectedDevice] = useState<Device>()
 
     const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
         useScrollableList(devices, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
@@ -30,8 +30,8 @@ export const WalletManagementScreen = () => {
 
     const {
         ref: renameAccountBottomSheetRef,
-        onOpen: openRenameAccountBottomSheet,
-        onClose: closeRenameAccountBottonSheet,
+        onOpen: openRenameWalletBottomSheet,
+        onClose: closeRenameWalletBottonSheet,
     } = useBottomSheetModal()
 
     const devicesListSeparator = useCallback(
@@ -40,7 +40,7 @@ export const WalletManagementScreen = () => {
     )
 
     const onDeviceSelected = useCallback(
-        (device: BaseDevice) => () => {
+        (device: Device) => () => {
             setSelectedDevice(device)
             openAccountMgmtSheet()
         },
@@ -85,20 +85,22 @@ export const WalletManagementScreen = () => {
                         }}
                         ListFooterComponent={<BaseSpacer height={16} />}
                     />
-                    <AccountMgmtBottomSheet
+                    <WalletMgmtBottomSheet
                         ref={accountMgmtBottomSheetRef}
                         onClose={closeAccountMgmtSheet}
                         device={selectedDevice}
-                        openRenameAccountBottomSheet={
-                            openRenameAccountBottomSheet
+                        openRenameWalletBottomSheet={
+                            openRenameWalletBottomSheet
                         }
                     />
 
-                    <RenameWalletBottomSheet
-                        type={RENAME_WALLET_TYPE.DEVICE}
-                        ref={renameAccountBottomSheetRef}
-                        onClose={closeRenameAccountBottonSheet}
-                    />
+                    {selectedDevice && (
+                        <RenameWalletBottomSheet
+                            ref={renameAccountBottomSheetRef}
+                            device={selectedDevice}
+                            onClose={closeRenameWalletBottonSheet}
+                        />
+                    )}
                 </BaseView>
             }
         />
