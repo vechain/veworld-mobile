@@ -1,5 +1,5 @@
 import { AddressUtils } from "~Utils"
-import { useAppSelector } from "~Storage/Redux"
+import { getNextDeviceIndex, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { getNodes } from "../useCreateWallet/Helpers"
 
@@ -10,7 +10,7 @@ export const useDeviceUtils = () => {
      * @param mnemonic
      */
     const getDeviceFromMnemonic = (mnemonic: string) => {
-        const deviceIndex = devices.length
+        const deviceIndex = getNextDeviceIndex(devices)
         const aliasIndex = deviceIndex + 1
         const { device, wallet } = getNodes(
             mnemonic.split(" "),

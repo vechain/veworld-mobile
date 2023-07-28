@@ -111,6 +111,10 @@ type RootTranslation = {
 	 */
 	BTN_REMOVE_ACCOUNT: string
 	/**
+	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
+	 */
+	BTN_REMOVE_WALLET: string
+	/**
 	 * A​d​d​ ​a​c​c​o​u​n​t
 	 */
 	BTN_ADD_ACCOUNT: string
@@ -294,6 +298,10 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
 	 */
 	BD_ACCOUNT_REMOVAL: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​i​t​'​s​ ​a​s​s​o​c​i​a​t​e​d​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​.​ ​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e
+	 */
+	BD_WALLET_REMOVAL: string
 	/**
 	 * Y​o​u​r​ ​b​a​l​a​n​c​e
 	 */
@@ -706,7 +714,7 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
-	 * E​d​i​t​ ​w​a​l​l​e​t​ ​{​n​a​m​e​}
+	 * E​d​i​t​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
 	SB_EDIT_WALLET: RequiredParams<'name'>
@@ -2406,6 +2414,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_REMOVE_ACCOUNT: () => LocalizedString
 	/**
+	 * Remove wallet
+	 */
+	BTN_REMOVE_WALLET: () => LocalizedString
+	/**
 	 * Add account
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
@@ -2589,6 +2601,10 @@ export type TranslationFunctions = {
 	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
 	 */
 	BD_ACCOUNT_REMOVAL: () => LocalizedString
+	/**
+	 * Your wallet and all of it's associated accounts will be removed. This action is irreversible
+	 */
+	BD_WALLET_REMOVAL: () => LocalizedString
 	/**
 	 * Your balance
 	 */
@@ -2998,7 +3014,7 @@ export type TranslationFunctions = {
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
-	 * Edit wallet {name}
+	 * Edit {name}
 	 */
 	SB_EDIT_WALLET: (arg: { name: string }) => LocalizedString
 	/**

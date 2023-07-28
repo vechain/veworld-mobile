@@ -3,21 +3,23 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import {
     BaseBottomSheet,
     BaseButton,
+    BaseIcon,
     BaseSpacer,
     BaseText,
     BaseView,
     ScrollViewWithFooter,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { isSmallScreen } from "~Constants"
+import { COLORS, isSmallScreen } from "~Constants"
 import { PlatformUtils } from "~Utils"
+import { StyleSheet } from "react-native"
 
 type Props = {
     onClose: () => void
     onConfirm: () => void
 }
 
-export const RemoveAccountWarning = React.forwardRef<
+export const RemoveWalletWarning = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose, onConfirm }, ref) => {
@@ -57,14 +59,47 @@ export const RemoveAccountWarning = React.forwardRef<
                 isScrollEnabled={false}>
                 <BaseView>
                     <BaseText typographyFont="subTitleBold">
-                        {LL.BTN_REMOVE_ACCOUNT()}
+                        {LL.BTN_REMOVE_WALLET()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="subSubTitleLight">
-                        {LL.BD_ACCOUNT_REMOVAL()}
+                        {LL.BD_WALLET_REMOVAL()}
                     </BaseText>
+
+                    <BaseSpacer height={24} />
+
+                    {/* Warning ICON */}
+                    <BaseView justifyContent="center" alignItems="center">
+                        <BaseView
+                            justifyContent="center"
+                            bg={COLORS.PASTEL_ORANGE}
+                            style={baseStyles.warningIcon}>
+                            <BaseIcon
+                                my={8}
+                                size={55}
+                                name="alert-outline"
+                                color={COLORS.MEDIUM_ORANGE}
+                            />
+                        </BaseView>
+                    </BaseView>
+
+                    <BaseSpacer height={24} />
+
+                    {PlatformUtils.isAndroid() && (
+                        <BaseText typographyFont="subSubTitle" pt={4}>
+                            {LL.SB_UPGRADE_SECURITY_WARNING_ANDROID()}
+                        </BaseText>
+                    )}
                 </BaseView>
             </ScrollViewWithFooter>
         </BaseBottomSheet>
     )
+})
+
+const baseStyles = StyleSheet.create({
+    warningIcon: {
+        width: 120,
+        height: 120,
+        borderRadius: 24,
+    },
 })

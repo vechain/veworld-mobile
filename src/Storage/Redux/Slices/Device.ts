@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Utils"
-import { LocalDevice, LedgerDevice } from "~Model"
+import { BaseDevice, LedgerDevice, LocalDevice } from "~Model"
 
 type Device = LedgerDevice | LocalDevice
 export const initialDeviceState: Device[] = []
@@ -60,6 +60,16 @@ export const DeviceSlice = createSlice({
                 state[deviceExistsIndex] = device
             })
         },
+        removeDevice: (state, action: PayloadAction<BaseDevice>) => {
+            const { rootAddress } = action.payload
+
+            const deviceExistsIndex = state.findIndex(device =>
+                AddressUtils.compareAddresses(device.rootAddress, rootAddress),
+            )
+            if (deviceExistsIndex === -1) return
+
+            state.splice(deviceExistsIndex, 1)
+        },
         removeDeviceByIndex: (
             state,
             action: PayloadAction<{ index: number }>,
@@ -78,6 +88,7 @@ export const DeviceSlice = createSlice({
 })
 
 export const {
+    removeDevice,
     renameDevice,
     addDevice,
     updateDevice,

@@ -23,7 +23,7 @@ type Props = {
     isSelected: boolean
     isBalanceVisible: boolean
 }
-export const AccountDetailBox: React.FC<Props> = memo(
+export const WalletDetailBox: React.FC<Props> = memo(
     ({ account, isSelected, isBalanceVisible }) => {
         const theme = useTheme()
         const dispatch = useAppDispatch()

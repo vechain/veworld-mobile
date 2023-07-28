@@ -1,2 +1,3 @@
 export * from "./WalletManagementHeader"
-export * from "./AccountMgmtBottomSheet/AccountMgmtBottomSheet"
+export * from "./RemoveWalletWarning"
+export * from "./EditWalletBottomSheet"

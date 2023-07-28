@@ -2,18 +2,24 @@ import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useState } from "react"
 
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useScrollableList } from "~Hooks"
+import {
+    useBottomSheetModal,
+    useCheckIdentity,
+    useScrollableList,
+} from "~Hooks"
 import {
     BaseSpacer,
     BaseView,
     DeviceBox,
-    RenameWalletBottomSheet,
     Layout,
+    RenameWalletBottomSheet,
 } from "~Components"
 import { BaseDevice, RENAME_WALLET_TYPE } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
-import { AccountMgmtBottomSheet, WalletManagementHeader } from "./components"
+import { EditWalletBottomSheet, WalletManagementHeader } from "./components"
+import { RemoveWalletWarning } from "~Screens/Flows/App/WalletManagementScreen/components/RemoveWalletWarning"
+import { useWalletDeletion } from "~Screens/Flows/App/WalletManagementScreen/hooks/useWalletDeletion"
 
 export const WalletManagementScreen = () => {
     const devices = useAppSelector(selectDevices)
@@ -21,6 +27,14 @@ export const WalletManagementScreen = () => {
 
     const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
         useScrollableList(devices, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
+
+    const { deleteWallet } = useWalletDeletion(selectedDevice)
+
+    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
+        useCheckIdentity({
+            onIdentityConfirmed: deleteWallet,
+            allowAutoPassword: false,
+        })
 
     const {
         ref: accountMgmtBottomSheetRef,
@@ -32,6 +46,12 @@ export const WalletManagementScreen = () => {
         ref: renameAccountBottomSheetRef,
         onOpen: openRenameAccountBottomSheet,
         onClose: closeRenameAccountBottonSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: removeWalletBottomSheetRef,
+        onOpen: openRemoveWalletBottomSheet,
+        onClose: closeRemoveWalletBottomSheet,
     } = useBottomSheetModal()
 
     const devicesListSeparator = useCallback(
@@ -85,12 +105,16 @@ export const WalletManagementScreen = () => {
                         }}
                         ListFooterComponent={<BaseSpacer height={16} />}
                     />
-                    <AccountMgmtBottomSheet
+                    <EditWalletBottomSheet
+                        devices={devices}
                         ref={accountMgmtBottomSheetRef}
                         onClose={closeAccountMgmtSheet}
                         device={selectedDevice}
                         openRenameAccountBottomSheet={
                             openRenameAccountBottomSheet
+                        }
+                        openRemoveWalletBottomSheet={
+                            openRemoveWalletBottomSheet
                         }
                     />
 
@@ -99,6 +123,14 @@ export const WalletManagementScreen = () => {
                         ref={renameAccountBottomSheetRef}
                         onClose={closeRenameAccountBottonSheet}
                     />
+
+                    <RemoveWalletWarning
+                        onConfirm={checkIdentityBeforeOpening}
+                        onClose={closeRemoveWalletBottomSheet}
+                        ref={removeWalletBottomSheetRef}
+                    />
+
+                    <ConfirmIdentityBottomSheet />
                 </BaseView>
             }
         />
