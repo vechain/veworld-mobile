@@ -616,7 +616,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = org.vechain.veworld.app;
 				PRODUCT_NAME = VeWorld;
-				PROVISIONING_PROFILE = "9de97804-2767-45ed-87e2-46939a4d4e02";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore org.vechain.veworld.app";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore org.vechain.veworld.app";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
