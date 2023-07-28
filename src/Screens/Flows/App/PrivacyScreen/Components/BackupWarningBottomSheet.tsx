@@ -11,9 +11,10 @@ import {
     ScrollViewWithFooter,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { COLORS, isSmallScreen } from "~Constants"
+import { AnalyticsEvent, COLORS, isSmallScreen } from "~Constants"
 import { StyleSheet } from "react-native"
 import { PlatformUtils } from "~Utils"
+import { useAnalyticTracking } from "~Hooks"
 
 type Props = {
     onClose: () => void
@@ -26,15 +27,17 @@ export const BackupWarningBottomSheet = React.forwardRef<
     Props
 >(({ onClose, onConfirm, isUpgradeSecurity = false }, ref) => {
     const { LL } = useI18nContext()
+    const track = useAnalyticTracking()
 
     // Holds the state of the user's acknowledgement of the warning
     const [isChecked, setChecked] = React.useState(false)
 
     const handleOnProceed = useCallback(() => {
+        track(AnalyticsEvent.NEW_WALLET_PROCEED_TO_VERIFY)
         onConfirm()
         onClose()
         setChecked(false)
-    }, [onClose, onConfirm])
+    }, [onClose, onConfirm, track])
 
     const onDismiss = useCallback(() => {
         setChecked(false)

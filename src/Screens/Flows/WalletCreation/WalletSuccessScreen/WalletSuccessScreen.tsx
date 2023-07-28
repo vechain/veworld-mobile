@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from "react"
+import React, { FC, useCallback, useEffect, useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -11,7 +11,12 @@ import { useNavigation } from "@react-navigation/native"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { SecurityLevelType } from "~Model"
-import { useCheckIdentity, useCreateWallet, useTheme } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useCheckIdentity,
+    useCreateWallet,
+    useTheme,
+} from "~Hooks"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
     RootStackParamListCreateWalletApp,
@@ -29,6 +34,7 @@ import {
     selectNewLedgerDevice,
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
+import { AnalyticsEvent } from "~Constants"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -46,6 +52,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     //we have a device and a selected account
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const track = useAnalyticTracking()
 
     const mnemonic = useAppSelector(selectMnemonic)
     const newLedger = useAppSelector(selectNewLedgerDevice)
@@ -178,6 +185,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         mnemonic,
         newLedger,
     ])
+
+    useEffect(() => {
+        track(AnalyticsEvent.COMPLETED_WALLET_SCREEN)
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

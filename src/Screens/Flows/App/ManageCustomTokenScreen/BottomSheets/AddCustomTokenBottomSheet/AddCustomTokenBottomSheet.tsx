@@ -25,10 +25,10 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import { useCameraBottomSheet } from "~Hooks"
+import { useAnalyticTracking, useCameraBottomSheet } from "~Hooks"
 import { debug, error, info, AddressUtils } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
-import { ScanTarget } from "~Constants"
+import { AnalyticsEvent, ScanTarget } from "~Constants"
 
 type Props = {
     tokenAddress?: string
@@ -41,6 +41,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 >(({ tokenAddress, onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const track = useAnalyticTracking()
     const network = useAppSelector(selectSelectedNetwork)
     const thorClient = useThor()
     const [newCustomToken, setNewCustomToken] = useState<FungibleToken>()
@@ -144,6 +145,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
             }),
         )
         dispatch(updateAccountBalances(thorClient, account.address))
+        track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
+
         onClose()
     }
 

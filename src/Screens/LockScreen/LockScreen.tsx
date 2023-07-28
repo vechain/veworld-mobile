@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { usePasswordValidation } from "~Hooks"
+import { useAnalyticTracking, usePasswordValidation } from "~Hooks"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -12,7 +12,7 @@ import { useI18nContext } from "~i18n"
 import { LOCKSCREEN_SCENARIO } from "./Enums"
 import { useOnDigitPress } from "./useOnDigitPress"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
-import { isSmallScreen } from "~Constants"
+import { AnalyticsEvent, isSmallScreen } from "~Constants"
 
 type Props = {
     onSuccess: (password: string) => void
@@ -38,6 +38,7 @@ export const LockScreen: React.FC<Props> = memo(
         const { LL } = useI18nContext()
 
         const { validatePassword } = usePasswordValidation()
+        const track = useAnalyticTracking()
 
         const [firstPin, setFirstPin] = useState<string>()
 
@@ -102,8 +103,11 @@ export const LockScreen: React.FC<Props> = memo(
 
                 const isValid = await validatePassword(userPin)
 
-                if (isValid) onSuccess(userPin)
-                else {
+                if (isValid) {
+                    track(AnalyticsEvent.APP_PIN_UNLOCKED)
+                    onSuccess(userPin)
+                } else {
+                    track(AnalyticsEvent.APP_WRONG_PIN)
                     setIsError({
                         type: PinVerificationError.VALIDATE_PIN,
                         value: true,
@@ -116,6 +120,7 @@ export const LockScreen: React.FC<Props> = memo(
                 isOldPinSameAsNewPin,
                 isValidatePassword,
                 onSuccess,
+                track,
                 validatePassword,
             ],
         )
