@@ -152,11 +152,13 @@ platform :ios do
     end
 =end
 
+=begin
     gh_setup_before(
       github_username:github_username, 
       github_token:github_token,
       build_or_version_number: versionType.nil? ? build : version
     )
+=end
 
     fetch_certificates_from_gh
 
@@ -171,6 +173,7 @@ platform :ios do
       apple_id: "6446854569"
     )
 
+=begin
     if !versionType.nil?
       create_changelog(version:version)
 
@@ -204,5 +207,6 @@ platform :ios do
         "Built by" => github_username,
       },
     )
+=end
   end
 end
