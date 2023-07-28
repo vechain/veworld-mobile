@@ -62,6 +62,20 @@ export const selectSelectedAccount = createSelector(
     },
 )
 
+export const selectOtherAccounts = createSelector(
+    selectAccounts,
+    selectSelectedAccount,
+    (allAccounts, currentAccount) => {
+        return allAccounts.filter(
+            _account =>
+                !AddressUtils.compareAddresses(
+                    _account.address,
+                    currentAccount.address,
+                ),
+        )
+    },
+)
+
 /**
  * @returns all the visibile accounts
  */

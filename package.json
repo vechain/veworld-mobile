@@ -155,7 +155,8 @@
     "thor-devkit": "^2.0.8",
     "url": "^0.11.0",
     "util": "^0.12.5",
-    "whatwg-fetch": "^3.6.2"
+    "whatwg-fetch": "^3.6.2",
+    "mixpanel-react-native": "^2.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -12,7 +12,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
-import { BaseDevice } from "~Model"
+import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import {
     selectAccountsByDevice,
@@ -23,17 +23,17 @@ import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
-    device?: BaseDevice
+    device?: Device
     onClose: () => void
-    openRenameAccountBottomSheet: () => void
+    openRenameWalletBottomSheet: () => void
 }
 
 const snapPoints = ["50%", "75%", "90%"]
 
-export const AccountMgmtBottomSheet = React.forwardRef<
+export const WalletMgmtBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ device, openRenameAccountBottomSheet, onClose }, ref) => {
+>(({ device, openRenameWalletBottomSheet, onClose }, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
@@ -55,8 +55,8 @@ export const AccountMgmtBottomSheet = React.forwardRef<
 
     const onRenameWalletPress = useCallback(() => {
         onClose()
-        openRenameAccountBottomSheet()
-    }, [onClose, openRenameAccountBottomSheet])
+        openRenameWalletBottomSheet()
+    }, [onClose, openRenameWalletBottomSheet])
 
     return (
         <BaseBottomSheet
