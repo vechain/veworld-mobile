@@ -40,12 +40,15 @@ platform :ios do
 
 
 
+  # To be called (by everyone) whernever a new dev is onboarded to the project
   desc "Get certificates"
-  lane :get_certificates do
+  lane :fetch_certificates_from_gh do
     sync_code_signing(
       type: "appstore",
       app_identifier: ENV["APP_IDENTIFIER"],
-      readonly: true
+      readonly: true,
+      git_branch: "main",
+      verbose: true
     )
   end
 
@@ -118,8 +121,6 @@ platform :ios do
 
 
 
-
-
   # Builds the app using specified options.
   #
   # @param {string} options[:username] - The GitHub username for authentication.
@@ -131,39 +132,59 @@ platform :ios do
     github_username = options[:username]
     github_token = options[:token]
     versionType = options[:version]
+    buildNumber = options[:build]
 
+    #prepare git
     ensure_git_status_clean
-    #ensure_git_branch(branch: "main")
+    ensure_git_branch(branch: "main")
 
-    build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
-
-    if !versionType.nil? 
-      version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+    # check if spceicifed build number
+    if !buildNumber.nil? 
+      build = increment_build_number(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
+    else
+      build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
     end
 
+    # check if spceicifed version number
+    if !versionType.nil? 
+      if versionType.downcase != "patch" && versionType.downcase != "minor" && versionType.downcase != "major"
+        version = increment_version_number(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+      else 
+        version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+      end
+    end
+
+
+    # update yarn packages and pods
     Dir.chdir "../.." do
       sh("yarn purge && yarn install:all")
     end
 
+    # create new branch and push to github
     gh_setup_before(
       github_username:github_username, 
       github_token:github_token,
       build_or_version_number: versionType.nil? ? build : version
     )
 
-    get_certificates
+    # fetch certificates from github
+    fetch_certificates_from_gh
 
+    # build app
     build_app(
       workspace: "VeWorld.xcworkspace", 
       scheme: "VeWorld", 
-      clean: true
+      clean: true,
+      output_directory: "./build",
     )
       
+    # upload to testflight
     upload_to_testflight(
       skip_waiting_for_build_processing: true, 
       apple_id: "6446854569"
     )
 
+    # create changelog and tag if version is specified
     if !versionType.nil?
       create_changelog(version:version)
 
@@ -174,12 +195,14 @@ platform :ios do
       push_git_tags
     end
 
+    # push to github latest artifacts
     gh_setup_after(
       github_username:github_username, 
       github_token:github_token,
       build_or_version_number: versionType.nil? ? build : version
     )
 
+    # create pull request
     create_pull_request(
       api_token: github_token,
       repo: "vechainfoundation/veworld-mobile",
@@ -188,6 +211,7 @@ platform :ios do
       api_url: "https://api.github.com"
     )
 
+    # send slack message
     slack(
       message: versionType.nil? ? "VeWorld build number: #{build} was successfully released!" : "VeWorld version number: #{version} was successfully released!",
       slack_url: ENV["SLACK_WEBHOOK"],
@@ -197,5 +221,9 @@ platform :ios do
         "Built by" => github_username,
       },
     )
+
+    # clean build artifacts if any
+    clean_build_artifacts
+
   end
 end
