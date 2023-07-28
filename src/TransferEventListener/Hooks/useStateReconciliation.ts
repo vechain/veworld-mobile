@@ -21,7 +21,6 @@ export const useStateReconciliation = () => {
         (params: { network: string; accountAddress: string }) => {
             dispatch(
                 refreshNFTs({
-                    network: params.network,
                     accountAddress: params.accountAddress,
                 }),
             )

@@ -17,12 +17,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import {
-    error,
-    MinimizerUtils,
-    WalletConnectResponseUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { error, WalletConnectResponseUtils, WalletConnectUtils } from "~Utils"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -106,7 +101,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     cert,
                 )
 
-                MinimizerUtils.goBack()
+                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
+                // MinimizerUtils.goBack()
 
                 dispatch(
                     addSignCertificateActivity(
@@ -158,10 +154,13 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         onClose()
     }, [requestEvent, track, onClose, web3Wallet, LL])
 
-    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
-        useCheckIdentity({
-            onIdentityConfirmed: handleAccept,
-        })
+    const {
+        ConfirmIdentityBottomSheet,
+        checkIdentityBeforeOpening,
+        isBiometricsEmpty,
+    } = useCheckIdentity({
+        onIdentityConfirmed: handleAccept,
+    })
 
     const onPressBack = useCallback(async () => {
         await onReject()
@@ -216,6 +215,9 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN()}
                         action={checkIdentityBeforeOpening}
+                        /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
+                        isLoading={isBiometricsEmpty}
+                        disabled={isBiometricsEmpty}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

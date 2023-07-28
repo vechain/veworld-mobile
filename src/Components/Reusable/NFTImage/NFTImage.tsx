@@ -33,10 +33,16 @@ export const NFTImage = memo((props: Props) => {
     }, [theme.isDark])
 
     return (
-        <BaseView bg={theme.colors.placeholder}>
+        <BaseView>
             <FastImage
                 testID={testID}
-                style={[{ width: w, height: h }, style]}
+                style={[
+                    { width: w, height: h },
+                    style,
+                    {
+                        backgroundColor: theme.colors.placeholder,
+                    },
+                ]}
                 onLoadStart={onLoadStart}
                 onLoadEnd={onLoadEnd}
                 defaultSource={placeholderImg} // not working on android dev only

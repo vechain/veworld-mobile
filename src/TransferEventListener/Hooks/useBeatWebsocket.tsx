@@ -1,14 +1,17 @@
-import { useCallback, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { URIUtils, error, info, warn } from "~Utils"
-import useWebSocket from "react-use-websocket"
+import useWebSocket, { ReadyState } from "react-use-websocket"
 import { updateNodeError, useAppDispatch } from "~Storage/Redux"
 import { useCounter } from "~Hooks"
+import { Beat } from "~Model"
 
+const BASE_PATH = "/subscriptions/beat2"
 export const useBeatWebsocket = (
     currentNetworkUrl: string,
     onMessage: (ev: WebSocketMessageEvent) => void,
 ) => {
     const dispatch = useAppDispatch()
+    const [wsPath, setWsPath] = useState(BASE_PATH)
     const { count, increment } = useCounter()
 
     const onOpen = () => {
@@ -44,13 +47,10 @@ export const useBeatWebsocket = (
     }, [])
 
     const wsUrlForBeat = useMemo(() => {
-        return URIUtils.toWebsocketURL(
-            currentNetworkUrl,
-            "/subscriptions/beat2",
-        )
-    }, [currentNetworkUrl])
+        return URIUtils.toWebsocketURL(currentNetworkUrl, wsPath)
+    }, [currentNetworkUrl, wsPath])
 
-    useWebSocket(wsUrlForBeat, {
+    const { readyState, lastMessage } = useWebSocket(wsUrlForBeat, {
         onMessage: onMessage,
         onOpen: onOpen,
         onError: onError,
@@ -60,4 +60,21 @@ export const useBeatWebsocket = (
         reconnectAttempts: 10000,
         reconnectInterval: 1000,
     })
+
+    useEffect(() => {
+        setWsPath(BASE_PATH)
+    }, [currentNetworkUrl])
+
+    useEffect(() => {
+        if (readyState === ReadyState.CLOSED && lastMessage) {
+            try {
+                const message = JSON.parse(lastMessage.data) as Beat
+
+                // Change the URL before the reconnect happens
+                setWsPath(`${BASE_PATH}?pos=${message.id}`)
+            } catch (e) {
+                error("Error parsing lastMessage.data", e)
+            }
+        }
+    }, [readyState, lastMessage])
 }

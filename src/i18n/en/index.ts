@@ -194,6 +194,7 @@ const en: BaseTranslation = {
     SB_CONFIRM_PIN: "Insert the pin you created in order to perform the requested operation.",
     SB_EDIT_OLD_PIN: "Insert your old pin",
     SB_EDIT_NEW_PIN: "Insert your new pin",
+    SB_EDIT_NEW_PIN_CONFIRM: "Confirm your new pin",
     SB_ACCOUNT_MANAGEMENT: "Account management",
     SB_CHOOSE_A_WALLET: "Choose a wallet",
     SB_EDIT_WALLET: "Edit wallet {name: string}",
@@ -566,6 +567,19 @@ const en: BaseTranslation = {
     LEDGER_CERTIFICATE_READ_SB: "The certificate is ready to be sent to the DApp, press confirm to continue",
     SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low",
     SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you dont have any {tokenName: string} in your wallet",
+
+    LEDGER_CONNECTING: "Connecting",
+    LEDGER_CONNECT: "Connect",
+    LEDGER_CONNECTED: "Connected",
+
+    LEDGER_SIGNING: "Signing",
+    LEDGER_SIGN_DATA: "Sign data",
+    LEDGER_DATA_SIGNED: "Data signed",
+
+    LEDGER_CHECKING: "Checking",
+    LEDGER_CHECK_STATUS: "Check status",
+    LEDGER_STATUS_OK: "Status OK",
+
 
     // Wallets New Local
     WALLET_LABEL_ACCOUNT: "Account",

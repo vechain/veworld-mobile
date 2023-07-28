@@ -12,7 +12,7 @@ export const selectDefaultNetworks = createSelector(
     },
 )
 
-// is type reduntant? should we check for genesisid directly?
+// is type redundant? should we check for genesisid directly?
 export const selectNetworksByType = (type: NETWORK_TYPE) =>
     createSelector(selectNetworks, state => {
         return state.filter(net => net.type === type)
@@ -37,8 +37,12 @@ export const selectSelectedNetwork = createSelector(
     selectNetworksState,
     selectNetworks,
     (state, networks) =>
-        networks.find(net => net.id === state.selectedNetwork) ||
+        networks.find(net => net.id === state.selectedNetwork) ??
         defaultMainNetwork,
+)
+
+export const selectChainTag = createSelector(selectSelectedNetwork, network =>
+    parseInt(network.genesis.id.slice(-2), 16),
 )
 
 export const selectNetworkById = createSelector(

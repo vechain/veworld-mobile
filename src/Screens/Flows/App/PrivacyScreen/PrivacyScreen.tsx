@@ -15,24 +15,24 @@ import { useI18nContext } from "~i18n"
 import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
 import { LocalDevice, WALLET_STATUS } from "~Model"
 import {
+    setIsPinCodeRequired,
     selectAreDevFeaturesEnabled,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import {
     selectAnalyticsTrackingEnabled,
-    selectIsAppLockActive,
     selectLocalDevices,
 } from "~Storage/Redux/Selectors"
 
 import {
     setAnalyticsTrackingEnabled,
     setAppLockStatus,
-    setIsAppLockActive,
 } from "~Storage/Redux/Actions"
 import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 import { isSmallScreen } from "~Constants"
+import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -40,7 +40,7 @@ export const PrivacyScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    const isAppLockActive = useAppSelector(selectIsAppLockActive)
+    const { isPinRequired, removePinCode, enablePinCodeStorage } = usePinCode()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const isAnalyticsTrackingEnabled = useAppSelector(
@@ -48,7 +48,8 @@ export const PrivacyScreen = () => {
     )
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
 
-    const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { isWalletSecurityBiometrics, isWalletSecurityPassword } =
+        useWalletSecurity()
 
     const {
         ref: BackupPhraseSheetRef,
@@ -66,6 +67,12 @@ export const PrivacyScreen = () => {
         isOpen: isPasswordPromptOpen,
         onOpen: openPasswordPrompt,
         onClose: closePasswordPrompt,
+    } = useDisclosure()
+
+    const {
+        isOpen: isNoPinRequiredPromptOpen,
+        onOpen: openNoPinRequiredPrompt,
+        onClose: closeNoPinRequiredPrompt,
     } = useDisclosure()
 
     const {
@@ -107,10 +114,23 @@ export const PrivacyScreen = () => {
     // [START] - Internal Methods
     const toggleAppLockSwitch = useCallback(
         (newValue: boolean) => {
-            dispatch(setIsAppLockActive(newValue))
-            dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
+            if (newValue) {
+                removePinCode()
+                dispatch(setIsPinCodeRequired(newValue))
+                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
+            } else {
+                openNoPinRequiredPrompt()
+            }
         },
-        [dispatch],
+        [removePinCode, openNoPinRequiredPrompt, dispatch],
+    )
+
+    const onNoPinRequiredSuccess = useCallback(
+        (pin: string) => {
+            enablePinCodeStorage(pin)
+            closeNoPinRequiredPrompt()
+        },
+        [closeNoPinRequiredPrompt, enablePinCodeStorage],
     )
 
     const toggleAnalyticsTrackingSwitch = useCallback(
@@ -134,14 +154,18 @@ export const PrivacyScreen = () => {
                         </BaseText>
                         <BaseSpacer height={24} />
 
-                        <EnableFeature
-                            title={LL.SB_PASSWORD_AUTH()}
-                            subtitle={LL.BD_APP_LOCK()}
-                            onValueChange={toggleAppLockSwitch}
-                            value={isAppLockActive}
-                        />
+                        {isWalletSecurityPassword && (
+                            <>
+                                <EnableFeature
+                                    title={LL.SB_PASSWORD_AUTH()}
+                                    subtitle={LL.BD_APP_LOCK()}
+                                    onValueChange={toggleAppLockSwitch}
+                                    value={isPinRequired}
+                                />
 
-                        <BaseSpacer height={24} />
+                                <BaseSpacer height={24} />
+                            </>
+                        )}
 
                         <EnableBiometrics />
 
@@ -206,6 +230,12 @@ export const PrivacyScreen = () => {
                             isOpen={isPasswordPromptOpen}
                             onClose={closePasswordPrompt}
                             onSuccess={onPasswordSuccess}
+                        />
+
+                        <RequireUserPassword
+                            onSuccess={onNoPinRequiredSuccess}
+                            isOpen={isNoPinRequiredPromptOpen}
+                            onClose={closeNoPinRequiredPrompt}
                         />
 
                         <RequireUserPassword

@@ -3,10 +3,10 @@ import React, { memo, useMemo } from "react"
 import {
     BaseButton,
     BaseIcon,
-    BaseImage,
     BaseSpacer,
     BaseText,
     BaseView,
+    NFTImage,
 } from "~Components"
 import { isEmpty } from "lodash"
 import { useI18nContext } from "~i18n"
@@ -39,12 +39,14 @@ export const HeaderComponent = memo(
             <>
                 <BaseView flexDirection="row" alignItems="flex-end">
                     {collection.mediaType === NFTMediaType.IMAGE ? (
-                        <BaseImage
-                            uri={collection.image}
+                        <NFTImage
+                            isNFT={true}
+                            uri={collection?.image}
                             style={baseStyles.nftHeaderImage}
                         />
                     ) : (
-                        <BaseImage
+                        <NFTImage
+                            isNFT={true}
                             uri={NFTPlaceholder}
                             style={baseStyles.nftHeaderImage}
                         />

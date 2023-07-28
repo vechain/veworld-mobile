@@ -39,6 +39,9 @@ export const LockScreen: React.FC<Props> = memo(
 
         const { validatePassword } = usePasswordValidation()
         const track = useAnalyticTracking()
+
+        const [firstPin, setFirstPin] = useState<string>()
+
         const [isError, setIsError] = useState<PinVerificationErrorType>({
             type: undefined,
             value: false,
@@ -59,6 +62,23 @@ export const LockScreen: React.FC<Props> = memo(
             [onSuccess, validatePassword],
         )
 
+        const handleEditPin = useCallback(
+            (userPin: string) => {
+                //User has confirmed the pin code
+                if (firstPin === userPin) return onSuccess(userPin)
+
+                //User has entered the first pin
+                if (!firstPin) return setFirstPin(userPin)
+
+                //User entered a different confirmation
+                setIsError({
+                    type: PinVerificationError.VALIDATE_PIN,
+                    value: true,
+                })
+            },
+            [onSuccess, firstPin],
+        )
+
         /**
          * Called by `useOnDigitPress` when the user has finished typing the pin
          * Validates the user pin and calls `onSuccess` if the pin is valid
@@ -66,8 +86,12 @@ export const LockScreen: React.FC<Props> = memo(
          */
         const validateUserPin = useCallback(
             async (userPin: string) => {
+                if (scenario === LOCKSCREEN_SCENARIO.EDIT_NEW_PIN) {
+                    return handleEditPin(userPin)
+                }
+
                 /*
-                    If this (isValidatePassword) prop is false means that the user is trying to 
+                    If this (isValidatePassword) prop is false means that the user is trying to
                     edit an existing pin, and we should not validate against the old password, but validate that the password is not the same.
                     If "validatePassword()" succeeeds means that the new pin is the same as the old one and
                     we can throw an error
@@ -91,6 +115,8 @@ export const LockScreen: React.FC<Props> = memo(
                 }
             },
             [
+                scenario,
+                handleEditPin,
                 isOldPinSameAsNewPin,
                 isValidatePassword,
                 onSuccess,
@@ -133,7 +159,9 @@ export const LockScreen: React.FC<Props> = memo(
                 case LOCKSCREEN_SCENARIO.EDIT_NEW_PIN:
                     return {
                         title: LL.TITLE_USER_PIN(),
-                        subTitle: LL.SB_EDIT_NEW_PIN(),
+                        subTitle: firstPin
+                            ? LL.SB_EDIT_NEW_PIN_CONFIRM()
+                            : LL.SB_EDIT_NEW_PIN(),
                     }
 
                 default:
@@ -142,7 +170,7 @@ export const LockScreen: React.FC<Props> = memo(
                         subTitle: LL.SB_UNLOCK_WALLET_PIN(),
                     }
             }
-        }, [LL, scenario])
+        }, [firstPin, LL, scenario])
 
         return (
             <SafeAreaHOC
