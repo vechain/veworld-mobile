@@ -17,7 +17,7 @@ type Props = {
     onConfirm: () => void
 }
 
-export const RemoveAccountWarning = React.forwardRef<
+export const RemoveAccountWarningBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose, onConfirm }, ref) => {
@@ -35,7 +35,7 @@ export const RemoveAccountWarning = React.forwardRef<
 
         if (isSmallScreen) return ["80%"]
 
-        return ["60%"]
+        return ["50%"]
     }, [])
 
     return (

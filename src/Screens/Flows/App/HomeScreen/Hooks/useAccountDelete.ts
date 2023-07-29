@@ -48,9 +48,25 @@ export const useAccountDelete = () => {
         dispatch(removeAccount(accountToRemove))
     }, [LL, isOnlyAccount, accountToRemove, dispatch])
 
+    const handleAccountToRemove = useCallback(
+        (account: AccountWithDevice) => {
+            if (isOnlyAccount(account.rootAddress))
+                return showWarningToast(
+                    LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
+                    undefined,
+                    undefined,
+                    undefined,
+                    10000,
+                )
+
+            setAccountToRemove(account)
+        },
+        [LL, isOnlyAccount],
+    )
+
     return {
         accountToRemove,
-        setAccountToRemove,
+        setAccountToRemove: handleAccountToRemove,
         isOnlyAccount,
         deleteAccount,
     }

@@ -32,7 +32,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountWithDevice } from "~Model"
-import { RemoveAccountWarning } from "~Screens/Flows/App/HomeScreen/Components/BottomSheets/RemoveAccountWarning"
+import { RemoveAccountWarningBottomSheet } from "~Screens/Flows/App/HomeScreen/Components/BottomSheets/RemoveAccountWarningBottomSheet"
 import { useAccountDelete } from "~Screens/Flows/App/HomeScreen/Hooks/useAccountDelete"
 import { useI18nContext } from "~i18n"
 
@@ -93,12 +93,8 @@ export const HomeScreen = () => {
         onSetSelectedAccount({ address: account.address })
     }
 
-    const {
-        setAccountToRemove,
-        accountToRemove,
-        deleteAccount,
-        isOnlyAccount,
-    } = useAccountDelete()
+    const { setAccountToRemove, deleteAccount, isOnlyAccount } =
+        useAccountDelete()
 
     const openConfirmRemoveAccountWarning = useCallback(
         (account: AccountWithDevice) => {
@@ -120,35 +116,14 @@ export const HomeScreen = () => {
         ],
     )
 
-    const closeRemoveAccountBottomSheet = useCallback(() => {
-        closeRemoveAccountSheet()
-        openAccountManagementSheet()
-    }, [closeRemoveAccountSheet, openAccountManagementSheet])
-
     const onRemoveAccount = useCallback(() => {
         closeRemoveAccountWarningBottomSheet()
         openAccountManagementSheet()
-
-        if (!accountToRemove)
-            return showWarningToast(LL.NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT())
-
-        if (isOnlyAccount(accountToRemove.rootAddress))
-            return showWarningToast(
-                LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
-                undefined,
-                undefined,
-                undefined,
-                10000,
-            )
-
         deleteAccount()
     }, [
+        closeRemoveAccountWarningBottomSheet,
         openAccountManagementSheet,
         deleteAccount,
-        isOnlyAccount,
-        closeRemoveAccountWarningBottomSheet,
-        accountToRemove,
-        LL,
     ])
 
     const { animateEntering } = useMemoizedAnimation({
@@ -217,10 +192,9 @@ export const HomeScreen = () => {
                 isBalanceVisible={isBalanceVisible}
                 onDismiss={closeRemoveAccountSheet}
                 ref={removeAccountBottomSheetRef}
-                closeBottomSheet={closeRemoveAccountBottomSheet}
             />
 
-            <RemoveAccountWarning
+            <RemoveAccountWarningBottomSheet
                 onClose={openAccountManagementSheet}
                 onConfirm={onRemoveAccount}
                 ref={removeAccountWarningBottomSheetRef}

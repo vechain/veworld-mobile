@@ -16,7 +16,7 @@ import { useI18nContext } from "~i18n"
  */
 type Props = {
     onDismiss?: () => void
-    closeBottomSheet: () => void
+    closeBottomSheet?: () => void
     accounts: AccountWithDevice[]
     setSelectedAccount: (account: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
@@ -49,7 +49,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
 
         const handlePress = (account: AccountWithDevice) => {
             setSelectedAccount(account)
-            closeBottomSheet()
+            if (closeBottomSheet) closeBottomSheet()
         }
 
         const { flatListScrollProps, handleSheetChangePosition } =
