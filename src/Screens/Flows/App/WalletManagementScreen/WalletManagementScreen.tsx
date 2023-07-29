@@ -17,9 +17,12 @@ import {
 import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
-import { WalletManagementHeader, WalletMgmtBottomSheet } from "./components"
-import { useWalletDeletion } from "~Screens/Flows/App/WalletManagementScreen/components/hooks/useWalletDeletion"
-import { RemoveWalletWarning } from "~Screens/Flows/App/WalletManagementScreen/components/RemoveWalletWarning"
+import {
+    RemoveWalletWarningBottomSheet,
+    useWalletDeletion,
+    WalletManagementHeader,
+    WalletMgmtBottomSheet,
+} from "./components"
 
 export const WalletManagementScreen = () => {
     const devices = useAppSelector(selectDevices)
@@ -126,7 +129,7 @@ export const WalletManagementScreen = () => {
                         />
                     )}
 
-                    <RemoveWalletWarning
+                    <RemoveWalletWarningBottomSheet
                         onConfirm={checkIdentityBeforeOpening}
                         onClose={closeRemoveWalletBottomSheet}
                         ref={removeWalletBottomSheetRef}

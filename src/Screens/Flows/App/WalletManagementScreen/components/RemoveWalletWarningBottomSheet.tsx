@@ -7,6 +7,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    CheckBoxWithText,
     ScrollViewWithFooter,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -19,11 +20,14 @@ type Props = {
     onConfirm: () => void
 }
 
-export const RemoveWalletWarning = React.forwardRef<
+export const RemoveWalletWarningBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ onClose, onConfirm }, ref) => {
     const { LL } = useI18nContext()
+
+    // Holds the state of the user's acknowledgement of the warning
+    const [isChecked, setChecked] = React.useState(false)
 
     const handleOnProceed = useCallback(() => {
         onConfirm()
@@ -45,12 +49,19 @@ export const RemoveWalletWarning = React.forwardRef<
             <ScrollViewWithFooter
                 footer={
                     <BaseView>
+                        <CheckBoxWithText
+                            text={LL.BTN_WALLET_CONFRIM_DELETION()}
+                            checkAction={setChecked}
+                            testID="security-operation-app-checkbox"
+                        />
+
                         <BaseSpacer height={4} />
 
                         <BaseButton
                             w={100}
                             haptics="Light"
                             title={LL.COMMON_PROCEED()}
+                            disabled={!isChecked}
                             action={handleOnProceed}
                         />
                         <BaseSpacer height={16} />

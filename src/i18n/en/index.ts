@@ -51,6 +51,7 @@ const en: BaseTranslation = {
     BTN_BACKUP_MENMONIC: "Backup phrase",
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
+    BTN_WALLET_CONFRIM_DELETION: "I state that I want to delete this wallet",
 
 
     // BODY

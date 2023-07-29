@@ -195,6 +195,10 @@ type RootTranslation = {
 	 */
 	BTN_SECURITY_OPERATION_CHECKBOX: string
 	/**
+	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 */
+	BTN_WALLET_CONFRIM_DELETION: string
+	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
 	BD_GDPR: string
@@ -2481,6 +2485,10 @@ export type TranslationFunctions = {
 	 * I state that I have backed up my secret phrase
 	 */
 	BTN_SECURITY_OPERATION_CHECKBOX: () => LocalizedString
+	/**
+	 * I state that I want to delete this wallet
+	 */
+	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
