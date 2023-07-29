@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
     BackButtonHeader,
     BaseIcon,
@@ -11,24 +11,33 @@ import {
 } from "~Components"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import { ImportWalletBottomSheet } from "./components"
 import { WalletSetupSvg } from "~Assets"
+import { AnalyticsEvent } from "~Constants"
 
 export const WalletSetupScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const track = useAnalyticTracking()
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     const onCreateWallet = useCallback(async () => {
+        track(AnalyticsEvent.SELECT_WALLET_CREATE_WALLET)
         nav.navigate(Routes.NEW_MNEMONIC)
-    }, [nav])
+    }, [nav, track])
 
     const onImportWallet = useCallback(async () => {
+        track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
         onOpen()
-    }, [onOpen])
+    }, [onOpen, track])
+
+    useEffect(() => {
+        track(AnalyticsEvent.PAGE_LOADED_IMPORT_OR_CREATE)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <BaseSafeArea grow={1}>

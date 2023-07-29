@@ -65,15 +65,18 @@ module.exports = {
     coveragePathIgnorePatterns: [
         "index.ts",
         "<rootDir>/src/Hooks/useAppReset/useAppReset.tsx",
+        "<rootDir>/src/Hooks/useSignMessage/useSignMessage.ts",
+        "<rootDir>/src/Hooks/useSignTransaction/useSignTransaction.ts",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
         "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
+        "<rootDir>/src/Utils/MinimizerUtils/MinimizerUtils.ts",
     ],
     coverageThreshold: {
         global: {
-            statements: 89.1,
-            branches: 79.1,
-            functions: 87.9,
-            lines: 89.0,
+            statements: 91.33,
+            branches: 81.51,
+            functions: 89.51,
+            lines: 91.43,
         },
     },
     maxWorkers: 2,

@@ -14,6 +14,8 @@ import {
 import { selectAccountsState } from "~Storage/Redux/Selectors"
 import { error } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
+import { AnalyticsEvent } from "~Constants"
 /**
  * useCreateWallet is a hook that allows you to create a wallet and store it in the store
  * @example const { onCreateWallet, accessControl, isComplete } = useCreateWallet()
@@ -27,7 +29,7 @@ export const useCreateWallet = () => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
     const [isComplete, setIsComplete] = useState(false)
-
+    const track = useAnalyticTracking()
     /**
      * Insert new wallet in store
      * if userPassword is provided, encrypt the wallet with it and store the hash
@@ -75,12 +77,14 @@ export const useCreateWallet = () => {
                     dispatch(selectAccount({ address: newAccount.address }))
 
                 setIsComplete(true)
+                track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
             } catch (e) {
                 error("CREATE WALLET ERROR : ", e)
+                track(AnalyticsEvent.WALLET_ADD_LOCAL_ERROR)
                 onError?.(e)
             }
         },
-        [dispatch, biometrics, getDeviceFromMnemonic, selectedAccount],
+        [dispatch, biometrics, getDeviceFromMnemonic, selectedAccount, track],
     )
     //* [END] - Create Wallet
 
@@ -111,12 +115,14 @@ export const useCreateWallet = () => {
                     dispatch(selectAccount({ address: accounts[0]?.address }))
 
                 setIsComplete(true)
+                track(AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS)
             } catch (e) {
                 error("CREATE HW WALLET ERROR : ", e)
+                track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
                 onError?.(e)
             }
         },
-        [dispatch, selectedAccount],
+        [dispatch, selectedAccount, track],
     )
     //* [END] - Create Wallet
 

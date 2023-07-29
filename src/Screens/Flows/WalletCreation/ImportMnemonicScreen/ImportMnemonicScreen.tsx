@@ -11,7 +11,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import { useDeviceUtils, useTheme } from "~Hooks"
+import { useAnalyticTracking, useDeviceUtils, useTheme } from "~Hooks"
 import { CryptoUtils, error, SeedUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
@@ -25,6 +25,7 @@ import {
 import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic } from "~Storage/Redux/Actions"
 import HapticsService from "~Services/HapticsService"
+import { AnalyticsEvent } from "~Constants"
 
 const DEMO_MNEMONIC =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
@@ -34,6 +35,7 @@ export const ImportMnemonicScreen = () => {
     const dispatch = useAppDispatch()
     const nav = useNavigation()
     const theme = useTheme()
+    const track = useAnalyticTracking()
 
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const areDevFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
@@ -59,6 +61,7 @@ export const ImportMnemonicScreen = () => {
             dispatch(setMnemonic(sanitisedMnemonic))
 
             HapticsService.triggerImpact({ level: "Medium" })
+            track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
             if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
             } else {
@@ -67,6 +70,7 @@ export const ImportMnemonicScreen = () => {
         } else {
             HapticsService.triggerNotification({ level: "Error" })
             setIsError(LL.ERROR_INCORRECT_MNEMONIC())
+            track(AnalyticsEvent.IMPORT_MNEMONIC_FAILED)
         }
     }
 

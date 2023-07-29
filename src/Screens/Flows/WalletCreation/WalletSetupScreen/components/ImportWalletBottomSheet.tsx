@@ -9,11 +9,11 @@ import {
     BaseTouchableBox,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useTheme } from "~Hooks"
+import { useAnalyticTracking, useTheme } from "~Hooks"
 import { debug } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { isSmallScreen } from "~Constants"
+import { AnalyticsEvent, isSmallScreen } from "~Constants"
 
 type Props = {
     onClose: () => void
@@ -27,20 +27,23 @@ export const ImportWalletBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const theme = useTheme()
+    const track = useAnalyticTracking()
 
     const handleSheetChanges = useCallback((index: number) => {
         debug("ImportWalletBottomSheet position changed", index)
     }, [])
 
     const navigateToImportLocalWallet = useCallback(() => {
+        track(AnalyticsEvent.SELECT_WALLET_IMPORT_MNEMONIC)
         onClose()
         nav.navigate(Routes.IMPORT_MNEMONIC)
-    }, [nav, onClose])
+    }, [nav, onClose, track])
 
     const navigateToImportHardwareWallet = useCallback(() => {
+        track(AnalyticsEvent.SELECT_WALLET_IMPORT_HARDWARE)
         onClose()
         nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_DEVICE)
-    }, [onClose, nav])
+    }, [track, onClose, nav])
 
     return (
         <BaseBottomSheet
