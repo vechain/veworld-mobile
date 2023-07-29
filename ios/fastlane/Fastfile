@@ -140,20 +140,23 @@ platform :ios do
 
     # check if spceicifed build number
     if !buildNumber.nil? 
-      build = increment_build_number(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
+      build = increment_build_number_in_plist(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number_in_xcodeproj(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
     else
-      build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+      build = increment_build_number_in_plist(xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number_in_xcodeproj(xcodeproj: "VeWorld.xcodeproj")
     end
 
     # check if spceicifed version number
     if !versionType.nil? 
       if versionType.downcase != "patch" && versionType.downcase != "minor" && versionType.downcase != "major"
-        version = increment_version_number(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+        version = increment_version_number_in_plist(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number_in_xcodeproj(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
       else 
-        version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+        version = increment_version_number_in_plist(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number_in_xcodeproj(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
       end
     end
-
 
     # update yarn packages and pods
     Dir.chdir "../.." do
@@ -174,14 +177,17 @@ platform :ios do
     build_app(
       workspace: "VeWorld.xcworkspace", 
       scheme: "VeWorld", 
+      export_method: "app-store",
       clean: true,
+      build_path: "./build",
       output_directory: "./build",
     )
       
     # upload to testflight
     upload_to_testflight(
       skip_waiting_for_build_processing: true, 
-      apple_id: "6446854569"
+      apple_id: "6446854569",
+      ipa: "./build/VeWorld.ipa",
     )
 
     # create changelog and tag if version is specified
