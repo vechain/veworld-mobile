@@ -7,6 +7,7 @@ import { error } from "../Logger"
 // import { detectLocale } from "i18n"
 // import { CURRENCY } from "popup/model/Settings/enums"
 import RoundingMode = BigNumber.RoundingMode
+import { isNumber } from "lodash"
 
 export const ROUND_DECIMAL_DEFAULT = 2
 export const ROUND_DECIMAL_PRECISE = 6
@@ -281,4 +282,43 @@ export const limitChars = (text: string) => {
     } else {
         return text.slice(0, 24)
     }
+}
+
+/**
+ * Function to validate an array of strings representing percentages.
+ *
+ * This function takes in an array of strings, each of which is expected to represent a percentage.
+ * Each string should be in the format "<number>%", where "<number>" can be any value between 0 and 100.
+ * The function returns `true` if all strings in the array conform to this format and the numbers are within the valid range.
+ * It returns `false` otherwise.
+ *
+ * Note that this function does not check whether the sum of the percentages exceeds 100%.
+ *
+ * @example
+ * ```typescript
+ * console.log(validateStringPercentages(["50%", "60%"]));  // Returns true
+ * console.log(validateStringPercentages(["50", "60%"]));  // Returns false
+ * console.log(validateStringPercentages(["150%", "60%"]));  // Returns false
+ * ```
+ *
+ * @param percentages - An array of strings to be validated.
+ *
+ * @returns A boolean value indicating whether all strings in the input array are valid percentages.
+ */
+export const validateStringPercentages = (percentages: string[]): boolean => {
+    for (const percentage of percentages) {
+        // Check if string ends with '%'
+        if (!percentage.endsWith("%")) {
+            return false
+        }
+
+        // Check if the prefix is a valid number between 0 and 100
+        let value = Number(percentage.slice(0, -1))
+        if (!isNumber(value) || value < 0 || value > 100) {
+            return false
+        }
+    }
+
+    // If we made it this far, all strings are valid percentages
+    return true
 }
