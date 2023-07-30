@@ -25,7 +25,7 @@ type Props = {
     account: Account
 }
 
-const snapPoints = ["34%"]
+const snapPoints = ["40%"]
 
 export const RenameAccountBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -83,6 +83,7 @@ export const RenameAccountBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet
             snapPoints={snapPoints}
+            ignoreMinimumSnapPoint
             ref={ref}
             onChange={handleSheetChanges}>
             <BaseText typographyFont="subTitleBold">{RenderTitle}</BaseText>
