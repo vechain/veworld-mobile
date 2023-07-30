@@ -138,6 +138,9 @@ platform :ios do
     ensure_git_status_clean
     ensure_git_branch(branch: "main")
 
+    # clean build artifacts if any
+    clean_build_artifacts
+
     # check if spceicifed build number
     if !buildNumber.nil? 
       build = increment_build_number_in_plist(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
@@ -163,73 +166,106 @@ platform :ios do
       sh("yarn purge && yarn install:all")
     end
 
-    # create new branch and push to github
-    gh_setup_before(
-      github_username:github_username, 
-      github_token:github_token,
-      build_or_version_number: versionType.nil? ? build : version
-    )
 
-    # fetch certificates from github
-    fetch_certificates_from_gh
-
-    # build app
-    build_app(
-      workspace: "VeWorld.xcworkspace", 
-      scheme: "VeWorld", 
-      export_method: "app-store",
-      clean: true,
-      build_path: "./build",
-      output_directory: "./build",
-    )
+    # begin -> rescure == try -> catch
+    begin
       
-    # upload to testflight
-    upload_to_testflight(
-      skip_waiting_for_build_processing: true, 
-      apple_id: "6446854569",
-      ipa: "./build/VeWorld.ipa",
-    )
-
-    # create changelog and tag if version is specified
-    if !versionType.nil?
-      create_changelog(version:version)
-
-      add_git_tag(
-        tag: "v#{version}"
-      )
-
-      push_git_tags
-
-      # push to github latest artifacts
-      gh_setup_after(
+      # create new branch and push to github
+      gh_setup_before(
         github_username:github_username, 
         github_token:github_token,
-        build_or_version_number:version
+        build_or_version_number: versionType.nil? ? build : version
       )
+
+      # fetch certificates from github
+      fetch_certificates_from_gh
+
+      # build app
+      build_app(
+        workspace: "VeWorld.xcworkspace", 
+        scheme: "VeWorld", 
+        export_method: "app-store",
+        clean: true,
+        build_path: "./build",
+        output_directory: "./build",
+      )
+        
+      # upload to testflight
+      upload_to_testflight(
+        skip_waiting_for_build_processing: true, 
+        apple_id: "6446854569",
+        ipa: "./build/VeWorld.ipa",
+      )
+
+      # create changelog and tag if version is specified
+      if !versionType.nil?
+        create_changelog(version:version)
+
+        add_git_tag(
+          tag: "v#{version}"
+        )
+
+        push_git_tags
+
+        # push to github latest artifacts
+        gh_setup_after(
+          github_username:github_username, 
+          github_token:github_token,
+          build_or_version_number:version
+        )
+      end
+
+      # create pull request
+      create_pull_request(
+        api_token: github_token,
+        repo: "vechainfoundation/veworld-mobile",
+        title: versionType.nil? ? "build: build artifacts build-#{build}" : "version: build artifacts version-#{version}", 
+        base: "main",
+        api_url: "https://api.github.com"
+      )
+
+      # send slack message
+      slack(
+        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released!" : "VeWorld version number: #{version} was successfully released!",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: true,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
+
+      # clean build artifacts if any
+      clean_build_artifacts
+
+    rescue => exception # catch
+      puts exception
+      
+      # send slack message
+      slack(
+        message: versionType.nil? ? "Error releasing VeWorld build number: #{build}" : "Error releasing VeWorld version number: #{version}",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: false,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
+
+      # clean build artifacts if any
+      clean_build_artifacts
+
+      # clean git 
+      reset_git_repo
+
+      # checkout main
+      sh("git checkout main")
+
+      # delete branch locally
+      sh("git branch -D release-build-#{versionType.nil? ? build : version}")
+
+      # delete branch remotely
+      sh("git push origin --d release-build-#{versionType.nil? ? build : version}")
     end
-
-    # create pull request
-    create_pull_request(
-      api_token: github_token,
-      repo: "vechainfoundation/veworld-mobile",
-      title: versionType.nil? ? "build: build artifacts build-#{build}" : "version: build artifacts version-#{version}", 
-      base: "main",
-      api_url: "https://api.github.com"
-    )
-
-    # send slack message
-    slack(
-      message: versionType.nil? ? "VeWorld build number: #{build} was successfully released!" : "VeWorld version number: #{version} was successfully released!",
-      slack_url: ENV["SLACK_WEBHOOK"],
-      success: true,
-      payload: {
-        "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-        "Built by" => github_username,
-      },
-    )
-
-    # clean build artifacts if any
-    clean_build_artifacts
-
   end
 end
