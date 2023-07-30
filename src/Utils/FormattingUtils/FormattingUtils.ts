@@ -7,7 +7,7 @@ import { error } from "../Logger"
 // import { detectLocale } from "i18n"
 // import { CURRENCY } from "popup/model/Settings/enums"
 import RoundingMode = BigNumber.RoundingMode
-import { isNumber } from "lodash"
+import { isFinite } from "lodash"
 
 export const ROUND_DECIMAL_DEFAULT = 2
 export const ROUND_DECIMAL_PRECISE = 6
@@ -306,6 +306,9 @@ export const limitChars = (text: string) => {
  * @returns A boolean value indicating whether all strings in the input array are valid percentages.
  */
 export const validateStringPercentages = (percentages: string[]): boolean => {
+    // Check if percentages is a non-empty array
+    if (percentages.length === 0) return false
+
     for (const percentage of percentages) {
         // Check if string ends with '%'
         if (!percentage.endsWith("%")) {
@@ -314,7 +317,7 @@ export const validateStringPercentages = (percentages: string[]): boolean => {
 
         // Check if the prefix is a valid number between 0 and 100
         let value = Number(percentage.slice(0, -1))
-        if (!isNumber(value) || value < 0 || value > 100) {
+        if (!isFinite(value) || value < 0 || value > 100) {
             return false
         }
     }
