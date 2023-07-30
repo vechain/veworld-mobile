@@ -65,7 +65,7 @@ export const AppLoader = ({ children }: Props) => {
     })
 
     return (
-        <View style={styles.container}>
+        <View style={StyleSheet.absoluteFill}>
             {children}
             <Animated.View
                 style={[styles.overlay, animatedStyle]}
@@ -83,10 +83,6 @@ export const AppLoader = ({ children }: Props) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        position: "relative",
-    },
     overlay: {
         position: "absolute",
         top: 0,
