@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import {
     BottomSheetBackdrop,
@@ -10,11 +10,14 @@ import {
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, isSmallScreen } from "~Constants"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
+import { FormattingUtils } from "~Utils"
 
-type Props = BottomSheetModalProps & {
+type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
+    snapPoints?: string[]
+    ignoreMinimumSnapPoint?: boolean
     contentStyle?: StyleProp<ViewStyle>
     noMargins?: boolean
     footerStyle?: StyleProp<ViewStyle>
@@ -22,10 +25,27 @@ type Props = BottomSheetModalProps & {
     onPressOutside?: BackdropPressBehavior
 }
 
+/**
+ * `BaseBottomSheet` component. This is a wrapper around the `BottomSheetModal`
+ * component from `@gorhom/bottom-sheet` library with some additional features.
+ *
+ * @component
+ * @prop {(React.ReactNode)} children - The content of the modal.
+ * @prop {(string[]|undefined)} snapPoints - Snap points for the bottom sheet. They should be an array of strings, each representing a percentage.
+ * @prop {(boolean|undefined)} ignoreMinimumSnapPoint - If `true`, the minimum snap point is not enforced to 55% of the screen height.
+ * @prop {(StyleProp<ViewStyle>|undefined)} contentStyle - Styles for the content view.
+ * @prop {(boolean|undefined)} noMargins - If `true`, the content does not have horizontal or vertical margins.
+ * @prop {(StyleProp<ViewStyle>|undefined)} footerStyle - Styles for the footer view.
+ * @prop {(React.ReactNode|undefined)} footer - The footer of the modal.
+ * @prop {(BackdropPressBehavior|undefined)} onPressOutside - Determines the behavior when the backdrop is pressed.
+ * @returns {React.ElementType} Returns a `BottomSheetModal` element with the provided props and calculated snap points.
+ */
 export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     (
         {
             contentStyle,
+            snapPoints,
+            ignoreMinimumSnapPoint = false,
             footerStyle,
             noMargins = false,
             footer,
@@ -58,6 +78,34 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             [styles],
         )
 
+        /**
+         * `snapPoints` should be an array of strings, each representing a percentage.
+         *
+         * If `snapPoints` is not provided or the values do not represent valid percentages,
+         * `snappoints` will default to `["60%"]`.
+         *
+         * If the screen size is small (`isSmallScreen` is true) and the first value in
+         * `snapPoints` is less than 60%, it will be overwritten to `60%` to ensure that
+         * the minimum snap point is at least 60% of the screen height.
+         */
+        const snappoints = useMemo(() => {
+            if (
+                !snapPoints ||
+                !FormattingUtils.validateStringPercentages(snapPoints)
+            )
+                return ["60%"]
+
+            if (
+                isSmallScreen &&
+                !ignoreMinimumSnapPoint &&
+                Number(snapPoints[0].slice(0, -1)) < 60
+            ) {
+                snapPoints[0] = "55%"
+            }
+
+            return snapPoints
+        }, [ignoreMinimumSnapPoint, snapPoints])
+
         return (
             <BottomSheetModal
                 stackBehavior="push"
@@ -69,6 +117,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 handleComponent={renderHandle}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
+                snapPoints={snappoints}
                 {...props}>
                 <BaseView
                     w={100}
