@@ -29,7 +29,12 @@ import {
     WalletConnectResponseUtils,
     WalletConnectUtils,
 } from "~Utils"
-import { useCheckIdentity, useSignTransaction, useTransaction } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useCheckIdentity,
+    useSignTransaction,
+    useTransaction,
+} from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
@@ -43,6 +48,7 @@ import { useNavigation } from "@react-navigation/native"
 import { TransactionDetails } from "./Components"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { DelegationType } from "~Model/Delegation"
+import { AnalyticsEvent } from "~Constants"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -56,6 +62,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         message,
         options,
     } = route.params
+    const track = useAnalyticTracking()
 
     //TODO: leverage all of the 'options' passed from DApp
 
@@ -201,10 +208,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 )
 
                 dispatch(addPendingDappTransactionActivity(tx, name, url))
-
+                track(AnalyticsEvent.DAPP_TX_SENT)
                 // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
                 // MinimizerUtils.goBack()
             } catch (e) {
+                track(AnalyticsEvent.DAPP_TX_FAILED_TO_SEND)
                 error(e)
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
                     { request: requestEvent, web3Wallet, LL },
@@ -214,15 +222,16 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             }
         },
         [
-            selectedAccount,
             signTransaction,
             network,
             requestEvent,
             web3Wallet,
             LL,
+            selectedAccount.address,
             dispatch,
             name,
             url,
+            track,
             onClose,
         ],
     )
