@@ -93,6 +93,7 @@ const en: BaseTranslation = {
     BD_RESET_APP_01: "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).",
     BD_RESET_APP_02: "Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.",
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
+    BD_ACCOUNT_REMOVAL: "Your account will be removed, but you can still access it by adding new accounts to the wallet.",
     BD_YOUR_BALANCE: "Your balance",
     BD_SELECT_WORD: "Select word {number: number}",
     BD_SELECT_NETWORK: "Select a network",
@@ -278,6 +279,7 @@ const en: BaseTranslation = {
     COMMON_PRICE: "Price",
     COMMON_TODAY: "Today",
     COMMON_SELECT_ACCOUNT: "Select account",
+    COMMON_SELECT_ACCOUNT_TO_REMOVE: "Select account to remove",
     COMMON_MARKET_CAP: "Market Cap",
     COMMON_TOTAL_SUPPLY: "Total Supply",
     COMMON_24H_VOLUME: "24h Volume",
@@ -377,6 +379,9 @@ const en: BaseTranslation = {
     NOTIFICATION_OUTGOING_NFT_BODY: "{collectionName: string} NFT was succesfully sent to {to: string}.",
     NOTIFIACTION_OUTGOING_TOKEN_BODY: "{amount: string} was succesfully sent to {to: string}.",
     NOTIFICATION_VIEW_ACCOUNT: "View account",
+
+    NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: "Failed to remove account",
+    NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: "The associated wallet only has 1 account. Please remove the wallet to remove this account",
 
     // Wallet connect notifications
     NOTIFICATION_wallet_connect_disconnected_from_remote: "A connected app successfully disconnected from this wallet.",

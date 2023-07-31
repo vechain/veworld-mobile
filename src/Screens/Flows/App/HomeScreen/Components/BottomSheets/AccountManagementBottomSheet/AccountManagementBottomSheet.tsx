@@ -3,12 +3,12 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { useCopyClipboard, useTheme } from "~Hooks"
 import { info } from "~Utils"
 import {
+    BaseBottomSheet,
     BaseIcon,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
-    BaseBottomSheet,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
@@ -20,6 +20,7 @@ type Props = {
     openAddAccountSheet: () => void
     openQRCodeSheet: () => void
     openRenameAccountBottomSheet: () => void
+    openRemoveAccountBottomSheet: () => void
 }
 
 export const AccountManagementBottomSheet = React.forwardRef<
@@ -32,6 +33,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
             openAddAccountSheet,
             openQRCodeSheet,
             openRenameAccountBottomSheet,
+            openRemoveAccountBottomSheet,
         },
         ref,
     ) => {
@@ -61,6 +63,11 @@ export const AccountManagementBottomSheet = React.forwardRef<
             onClose()
             openRenameAccountBottomSheet()
         }, [onClose, openRenameAccountBottomSheet])
+
+        const handleOnRemoveAccountPress = useCallback(() => {
+            onClose()
+            openRemoveAccountBottomSheet()
+        }, [onClose, openRemoveAccountBottomSheet])
 
         return (
             <BaseBottomSheet
@@ -130,7 +137,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
 
                 <BaseSpacer height={16} />
 
-                <BaseTouchableBox action={() => {}} disabled>
+                <BaseTouchableBox action={handleOnRemoveAccountPress}>
                     <BaseIcon
                         name={"trash-can-outline"}
                         size={18}
