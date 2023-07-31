@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios nuke_appstore_sertificates
 ```
 
-
+Revoke certificates from Apple Developer Portal
 
 ### ios remove_certificates_from_gh
 
@@ -29,7 +29,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios remove_certificates_from_gh
 ```
 
-
+Remove certificates from GitHub
 
 ### ios generate_new_certificates
 
@@ -45,7 +45,7 @@ Generate new certificates
 [bundle exec] fastlane ios rotate_certificates
 ```
 
-
+Rotate certificates
 
 ### ios fetch_certificates_from_gh
 
