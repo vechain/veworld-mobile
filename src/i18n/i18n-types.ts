@@ -1885,7 +1885,7 @@ type RootTranslation = {
 	 */
 	SEND_DELEGATION_ADD_URL_PLACEHOLDER: string
 	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​r​e​a​c​h​ ​t​h​i​s​ ​U​R​L​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 * F​a​i​l​e​d​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​p​r​o​v​i​d​e​d​ ​U​R​L
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: string
 	/**
@@ -4168,7 +4168,7 @@ Please, try again later.
 	 */
 	SEND_DELEGATION_ADD_URL_PLACEHOLDER: () => LocalizedString
 	/**
-	 * Failed to reach this URL. Please try again.
+	 * Failed to delegate the transaction with the provided URL
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
 	/**

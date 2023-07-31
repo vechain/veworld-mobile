@@ -1,20 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Transaction } from "thor-devkit"
 
-import { debug, error, GasUtils, HexUtils } from "~Utils"
+import { debug, error, GasUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult } from "~Model"
-import {
-    selectChainTag,
-    selectSelectedAccount,
-    useAppSelector,
-} from "~Storage/Redux"
-import { selectBlockRef } from "~Storage/Redux/Selectors/Beat"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 type UseTransactionReturnProps = {
     gas?: EstimateGasResult
     setGas: (gas: EstimateGasResult) => void
-    createTransactionBody: () => Transaction.Body
     loadingGas: boolean
     setGasPayer: (gasPayer: string) => void
 }
@@ -33,9 +27,8 @@ type Props = {
  * @param providedGas - the gas to use for the transaction
  * @param providedGasPayer - the gas payer to use for the transaction
  */
-export const useTransaction = ({
+export const useTransactionGas = ({
     clauses,
-    dependsOn,
     providedGas,
     providedGasPayer,
 }: Props): UseTransactionReturnProps => {
@@ -45,29 +38,7 @@ export const useTransaction = ({
     const [gasPayer, setGasPayer] = useState<string>(
         providedGasPayer ?? account.address,
     )
-    const blockRef = useAppSelector(selectBlockRef)
-    const chainTag = useAppSelector(selectChainTag)
     const thorClient = useThor()
-
-    const nonce = useMemo(() => HexUtils.generateRandom(8), [])
-
-    /**
-     * Recalculate transaction on data changes
-     */
-    const createTransactionBody = useCallback((): Transaction.Body => {
-        const DEFAULT_GAS_COEFFICIENT = 0
-        return {
-            chainTag,
-            blockRef,
-            // 5 minutes
-            expiration: 30,
-            clauses: clauses,
-            gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
-            gas: providedGas ?? gas?.gas ?? "0",
-            dependsOn: dependsOn ?? null,
-            nonce: nonce,
-        }
-    }, [clauses, dependsOn, nonce, blockRef, chainTag, gas?.gas, providedGas])
 
     const estimateGas = useCallback(
         async (caller: string, payer: string, thor: Connex.Thor) => {
@@ -96,5 +67,5 @@ export const useTransaction = ({
         estimateGas(account.address, gasPayer, thorClient)
     }, [account.address, gasPayer, clauses, estimateGas, thorClient])
 
-    return { gas, loadingGas, setGas, createTransactionBody, setGasPayer }
+    return { gas, loadingGas, setGas, setGasPayer }
 }

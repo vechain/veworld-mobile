@@ -40,6 +40,7 @@ describe("useSendTransaction", () => {
         })
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: vetTransaction1.id },
+            status: 200,
         })
         await result.current.sendTransactionAndPerformUpdates(vetTransaction1)
     })

@@ -33,7 +33,7 @@ import {
     useAnalyticTracking,
     useCheckIdentity,
     useSignTransaction,
-    useTransaction,
+    useTransactionGas,
 } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { getSdkError } from "@walletconnect/utils"
@@ -96,16 +96,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         }))
     }, [message])
 
-    const { createTransactionBody, gas, setGasPayer } = useTransaction({
+    const { gas, setGasPayer } = useTransactionGas({
         clauses,
         providedGas: options.gas,
         dependsOn: options.dependsOn,
     })
-
-    const transactionBody = useMemo(
-        () => createTransactionBody(),
-        [createTransactionBody],
-    )
 
     // Delegation
     const {
@@ -117,20 +112,23 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         selectedDelegationUrl,
         isDelegated,
     } = useDelegation({
-        transactionBody,
         providedUrl: options.delegator?.url,
         setGasPayer,
     })
 
-    const { signTransaction, navigateToLedger } = useSignTransaction({
-        transactionBody,
-        onTXFinish: onClose,
-        isDelegated,
-        selectedDelegationAccount,
-        selectedDelegationOption,
-        selectedDelegationUrl,
-        initialRoute: Routes.HOME,
-    })
+    const { signTransaction, navigateToLedger, buildTransaction } =
+        useSignTransaction({
+            clauses,
+            gas,
+            providedGas: options.gas,
+            dependsOn: options.dependsOn,
+            onTXFinish: onClose,
+            isDelegated,
+            selectedDelegationAccount,
+            selectedDelegationOption,
+            selectedDelegationUrl,
+            initialRoute: Routes.HOME,
+        })
 
     // Check if there is enough gas
     const vtho = useAppSelector(state =>
@@ -253,11 +251,16 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
             selectedDelegationOption !== DelegationType.ACCOUNT
         ) {
-            await navigateToLedger(selectedAccount as LedgerAccountWithDevice)
+            const tx = buildTransaction()
+            await navigateToLedger(
+                tx,
+                selectedAccount as LedgerAccountWithDevice,
+            )
         } else {
             await checkIdentityBeforeOpening()
         }
     }, [
+        buildTransaction,
         selectedAccount,
         selectedDelegationOption,
         navigateToLedger,
