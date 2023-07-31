@@ -18,7 +18,7 @@ type Props = {
     device: Device
 }
 
-const snapPoints = ["34%"]
+const snapPoints = ["40%"]
 
 export const RenameWalletBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -57,6 +57,7 @@ export const RenameWalletBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet
             snapPoints={snapPoints}
+            ignoreMinimumSnapPoint
             ref={ref}
             onChange={handleSheetChanges}>
             <BaseText typographyFont="subTitleBold">{RenderTitle}</BaseText>

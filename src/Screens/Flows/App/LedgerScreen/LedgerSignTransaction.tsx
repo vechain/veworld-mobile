@@ -281,6 +281,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             )
         } finally {
             setIsSending(false)
+            dispatch(setIsAppLoading(false))
         }
     }, [
         signature,

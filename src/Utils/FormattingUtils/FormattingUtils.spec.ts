@@ -10,6 +10,7 @@ import {
     removeUrlProtocolAndPath,
     scaleNumberDown,
     scaleNumberUp,
+    validateStringPercentages,
 } from "./FormattingUtils"
 import { BigNumber } from "bignumber.js"
 
@@ -174,5 +175,37 @@ describe("limit charachters to 24", () => {
         expect(limitChars("qwertyuiopasdfghjklzxcvbnm")).toBe(
             "qwertyuiopasdfghjklzxcvb",
         )
+    })
+})
+
+describe("validateStringPercentages", () => {
+    it("should return true for valid percentages", () => {
+        const percentages = ["10%", "50%", "100%"]
+        expect(validateStringPercentages(percentages)).toBe(true)
+    })
+
+    it("should return false for percentages exceeding 100", () => {
+        const percentages = ["10%", "150%", "100%"]
+        expect(validateStringPercentages(percentages)).toBe(false)
+    })
+
+    it("should return false for negative percentages", () => {
+        const percentages = ["10%", "-50%", "100%"]
+        expect(validateStringPercentages(percentages)).toBe(false)
+    })
+
+    it("should return false for percentages without the '%' sign", () => {
+        const percentages = ["10", "50%", "100%"]
+        expect(validateStringPercentages(percentages)).toBe(false)
+    })
+
+    it("should return false for non-numeric percentages", () => {
+        const percentages = ["ten%", "50%", "100%"]
+        expect(validateStringPercentages(percentages)).toBe(false)
+    })
+
+    it("should return true for an empty array", () => {
+        const percentages: string[] = []
+        expect(validateStringPercentages(percentages)).toBe(false)
     })
 })
