@@ -286,4 +286,20 @@ describe("URIUtils", () => {
             expect(URIUtils.isValid("http://www.google.com")).toBe(true)
         })
     })
+
+    describe("convertUriToUrl", () => {
+        it("should return IPFS URL", () => {
+            expect(URIUtils.convertUriToUrl("ipfs://QmZ1YXJzZS5jb20")).toBe(
+                "https://ipfs.io/ipfs/QmZ1YXJzZS5jb20",
+            )
+        })
+
+        it("should return arweave URL", () => {
+            expect(
+                URIUtils.convertUriToUrl(
+                    "ar://QmZ1YXJzZS5jb20?contentType=text/html",
+                ),
+            ).toBe("https://arweave.net/QmZ1YXJzZS5jb20?contentType=text/html")
+        })
+    })
 })
