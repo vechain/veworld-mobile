@@ -84,8 +84,9 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
          * If `snapPoints` is not provided or the values do not represent valid percentages,
          * `snappoints` will default to `["60%"]`.
          *
-         * If the screen size is small (`isSmallScreen` is true) and the first value in
-         * `snapPoints` is less than 60%, it will be overwritten to `60%` to ensure that
+         * If the screen size is small (`isSmallScreen` is true), the first value in
+         * `snapPoints` is less than 60% and we are not ignoring minimum snap point assertion,
+         * it will be overwritten to `60%` to ensure that
          * the minimum snap point is at least 60% of the screen height.
          */
         const snappoints = useMemo(() => {
