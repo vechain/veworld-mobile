@@ -137,8 +137,6 @@ const WalletConnectContextProvider = ({
             if (proposal.verifyContext.verified.validation !== "VALID")
                 warn("Session proposal is not valid", proposal.verifyContext)
 
-            debug("Session proposal: ", JSON.stringify(proposal))
-
             //TODO: Verify DApps: proposal.verifyContext.verified.validation === "VALID"
             if (true) {
                 if (!selectedAccountAddress) return
