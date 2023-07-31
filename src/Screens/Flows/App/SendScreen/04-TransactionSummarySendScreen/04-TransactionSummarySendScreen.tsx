@@ -107,7 +107,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             clauses,
         })
 
-    const transactionBody = createTransactionBody()
+    const transactionBody = useMemo(
+        () => createTransactionBody(),
+        [createTransactionBody],
+    )
 
     const {
         setSelectedDelegationAccount,

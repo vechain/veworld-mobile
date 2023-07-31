@@ -102,7 +102,10 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         dependsOn: options.dependsOn,
     })
 
-    const transactionBody = createTransactionBody()
+    const transactionBody = useMemo(
+        () => createTransactionBody(),
+        [createTransactionBody],
+    )
 
     // Delegation
     const {

@@ -75,7 +75,10 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             clauses,
         })
 
-    const transactionBody = createTransactionBody()
+    const transactionBody = useMemo(
+        () => createTransactionBody(),
+        [createTransactionBody],
+    )
 
     const {
         setNoDelegation,

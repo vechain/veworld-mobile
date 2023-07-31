@@ -3,9 +3,11 @@ import { useSendTransaction } from "./useSendTransaction"
 import { TestHelpers, TestWrapper } from "~Test"
 import { defaultTestNetwork } from "~Constants"
 import axios from "axios"
+
 jest.mock("axios")
 
-const { vetTransaction1, account1D1 } = TestHelpers.data
+const { vetTransaction1, account1D1, dappTransaction1, nftTransaction1 } =
+    TestHelpers.data
 describe("useSendTransaction", () => {
     it("should render correctly", async () => {
         const { result, waitForNextUpdate } = renderHook(
@@ -40,5 +42,39 @@ describe("useSendTransaction", () => {
             data: { id: vetTransaction1.id },
         })
         await result.current.sendTransactionAndPerformUpdates(vetTransaction1)
+    })
+
+    it("should handle dapp tx", async () => {
+        const { result, waitForNextUpdate } = renderHook(
+            () => useSendTransaction(defaultTestNetwork, account1D1),
+            { wrapper: TestWrapper },
+        )
+        await waitForNextUpdate({
+            timeout: 5000,
+        })
+        expect(result.current).toEqual({
+            sendTransactionAndPerformUpdates: expect.any(Function),
+        })
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: dappTransaction1.id },
+        })
+        await result.current.sendTransactionAndPerformUpdates(dappTransaction1)
+    })
+
+    it("should handle NFT tx", async () => {
+        const { result, waitForNextUpdate } = renderHook(
+            () => useSendTransaction(defaultTestNetwork, account1D1),
+            { wrapper: TestWrapper },
+        )
+        await waitForNextUpdate({
+            timeout: 5000,
+        })
+        expect(result.current).toEqual({
+            sendTransactionAndPerformUpdates: expect.any(Function),
+        })
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: nftTransaction1.id },
+        })
+        await result.current.sendTransactionAndPerformUpdates(nftTransaction1)
     })
 })
