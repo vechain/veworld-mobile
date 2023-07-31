@@ -56,6 +56,19 @@ platform :ios do
     )
   end
 
+  desc "Get certificates"
+  lane :fetch_certificates_from_gh do # Get the certificates from GitHub.
+    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
+      type: "appstore", # The type of code signing identity to generate.
+      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      readonly: true, # If true, will only print out the commands it would run, without actually running them.
+      git_branch: "main", # The branch to commit the code signing files to.
+      verbose: true # If true, will print out extra information and debugging info.
+    )
+  end
+
+
+
   desc "Rotate certificates"
   lane :rotate_certificates do
     sh("./rotate_match_password.sh") # Generate new password for the certificates.
@@ -63,21 +76,6 @@ platform :ios do
     remove_certificates_from_gh # Remove the certificates from GitHub.
     generate_new_certificates # Generate new certificates.
   end
-
-
-
-
-  desc "Get certificates"
-  lane :fetch_certificates_from_gh do
-    sync_code_signing(
-      type: "appstore",
-      app_identifier: ENV["APP_IDENTIFIER"],
-      readonly: true,
-      git_branch: "main",
-      verbose: true
-    )
-  end
-
 
 
 
@@ -94,9 +92,6 @@ platform :ios do
     package_json["version"] = version
     File.write("../../package.json", JSON.pretty_generate(package_json))
   end
-
-
-
 
 
 
@@ -121,8 +116,6 @@ platform :ios do
   end
 
 
-
-   
 
   desc "Commit latest artifacts to GitHub"
   lane :gh_setup_after do |values|
