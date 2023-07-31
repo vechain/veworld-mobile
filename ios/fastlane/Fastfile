@@ -33,6 +33,7 @@ platform :ios do
   end
 
   lane :remove_certificates_from_gh do
+    sh("cd")
     sh("git clone https://github.com/vechainfoundation/veworld-mobile-ios-cert.git")
     sh("cd veworld-mobile-ios-cert")
     sh("rm -rf certs/distribution")
