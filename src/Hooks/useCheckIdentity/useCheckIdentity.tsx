@@ -7,11 +7,16 @@ import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvide
 type Props = {
     onIdentityConfirmed: (password?: string) => void
     onCancel?: () => void
+    allowAutoPassword: boolean
 }
 /**
  * hook used to handle reusable identity flow
  */
-export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
+export const useCheckIdentity = ({
+    onIdentityConfirmed,
+    onCancel,
+    allowAutoPassword,
+}: Props) => {
     const { isWalletSecurityBiometrics, biometrics } = useWalletSecurity()
 
     const { getPinCode } = usePinCode()
@@ -37,12 +42,13 @@ export const useCheckIdentity = ({ onIdentityConfirmed, onCancel }: Props) => {
 
         if (isWalletSecurityBiometrics) {
             onIdentityConfirmed()
-        } else if (pinCode) {
+        } else if (pinCode && allowAutoPassword) {
             onIdentityConfirmed(pinCode)
         } else {
             openPasswordPrompt()
         }
     }, [
+        allowAutoPassword,
         getPinCode,
         isWalletSecurityBiometrics,
         openPasswordPrompt,

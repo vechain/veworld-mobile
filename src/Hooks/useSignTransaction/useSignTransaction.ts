@@ -6,6 +6,8 @@ import {
     selectDevice,
     selectSelectedAccount,
     selectSelectedNetwork,
+    setIsAppLoading,
+    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -84,6 +86,8 @@ export const useSignTransaction = ({
     )
     const blockRef = useAppSelector(selectBlockRef)
     const chainTag = useAppSelector(selectChainTag)
+
+    const dispatch = useAppDispatch()
 
     const buildTransaction = useCallback(() => {
         const nonce = HexUtils.generateRandom(8)
@@ -293,6 +297,8 @@ export const useSignTransaction = ({
             }
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
             onError?.(e)
+
+            dispatch(setIsAppLoading(false))
         }
     }
 

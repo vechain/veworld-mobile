@@ -19,6 +19,8 @@ jest.mock("../useDisclosure", () => ({
     onOpen: jest.fn(),
     onClose: jest.fn(),
 })
+const allowAutoPassword = true
+
 describe("useCheckIdentity", () => {
     afterEach(() => {
         jest.clearAllMocks()
@@ -28,7 +30,11 @@ describe("useCheckIdentity", () => {
         it("calls onIdentityConfirmed without password when biometric is correct", async () => {
             const onIdentityConfirmed = jest.fn()
             const { result, waitForNextUpdate } = renderHook(
-                () => useCheckIdentity({ onIdentityConfirmed }),
+                () =>
+                    useCheckIdentity({
+                        onIdentityConfirmed,
+                        allowAutoPassword,
+                    }),
                 { wrapper: TestWrapper },
             )
 
@@ -54,7 +60,11 @@ describe("useCheckIdentity", () => {
     describe("Biometrics disabled", () => {
         it("opens password prompt when biometrics is not enabled", async () => {
             const { result, waitForNextUpdate } = renderHook(
-                () => useCheckIdentity({ onIdentityConfirmed: jest.fn() }),
+                () =>
+                    useCheckIdentity({
+                        onIdentityConfirmed: jest.fn(),
+                        allowAutoPassword,
+                    }),
                 { wrapper: TestWrapper },
             )
 
@@ -76,6 +86,7 @@ describe("useCheckIdentity", () => {
                 () =>
                     useCheckIdentity({
                         onIdentityConfirmed: mockedOnIdentityConfirmed,
+                        allowAutoPassword,
                     }),
                 { wrapper: TestWrapper },
             )
@@ -93,7 +104,11 @@ describe("useCheckIdentity", () => {
 
         it("should render correctly ConfirmIdentityBottomSheet", async () => {
             const { result, waitForNextUpdate } = renderHook(
-                () => useCheckIdentity({ onIdentityConfirmed: jest.fn() }),
+                () =>
+                    useCheckIdentity({
+                        onIdentityConfirmed: jest.fn(),
+                        allowAutoPassword,
+                    }),
                 { wrapper: TestWrapper },
             )
             await waitForNextUpdate({ timeout: 5000 })

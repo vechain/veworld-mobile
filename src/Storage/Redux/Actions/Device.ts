@@ -1,49 +1,22 @@
-import { AddressUtils, AccountUtils, debug, error } from "~Utils"
+import { AccountUtils, AddressUtils, debug, error } from "~Utils"
 import {
+    BaseDevice,
     DEVICE_TYPE,
-    LocalDevice,
     LedgerDevice,
-    WalletAccount,
+    LocalDevice,
     NewLedgerDevice,
+    WalletAccount,
 } from "~Model"
-import { selectDevices, selectSelectedAccount } from "../Selectors"
+import { selectDevices } from "../Selectors"
 import {
     addDevice,
-    removeDeviceByIndex,
+    bulkUpdateDevices,
     renameDevice,
     updateDevice,
-    bulkUpdateDevices,
 } from "../Slices/Device"
 import { AppThunk, createAppAsyncThunk } from "../Types"
-import { addAccountForDevice, removeAccountsByDevice } from "./Account"
+import { addAccountForDevice } from "./Account"
 import { addAccount } from "../Slices"
-
-/**
- * Remove the specified device and its accounts
- * @param rootAddress rootAddress of device to remove
- * @throws Error if the device to remove is the selected account's device
- * @returns
- */
-const removeDevice =
-    (rootAddress: string): AppThunk =>
-    (dispatch, getState) => {
-        const { devices } = getState()
-        const selectedAccount = selectSelectedAccount(getState())
-        const isSelectedAccountInDevice = AddressUtils.compareAddresses(
-            rootAddress,
-            selectedAccount.rootAddress,
-        )
-        if (isSelectedAccountInDevice)
-            throw new Error("Cannot delete the selected account's device!")
-
-        dispatch(removeAccountsByDevice({ rootAddress }))
-        const deviceIndex = devices.findIndex(
-            device => device.rootAddress === rootAddress,
-        )
-        if (deviceIndex !== -1) {
-            dispatch(removeDeviceByIndex({ index: deviceIndex }))
-        }
-    }
 
 /**
  *  Add a device and its first account
@@ -59,6 +32,15 @@ const addDeviceAndAccounts =
 
         return account
     }
+
+export const getNextDeviceIndex = (devices: BaseDevice[]) => {
+    let index = 0
+    const deviceIndexes = devices.map(acc => acc.index)
+    while (deviceIndexes.includes(index)) {
+        index++
+    }
+    return index
+}
 
 const addLedgerDeviceAndAccounts = createAppAsyncThunk(
     "device/addLedgerDeviceAndAccounts",
@@ -91,7 +73,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
                     publicKey: rootAccount.publicKey,
                     chainCode: rootAccount.chainCode,
                 },
-                index: devices.length,
+                index: getNextDeviceIndex(devices),
                 rootAddress: rootAccount.address,
                 type: DEVICE_TYPE.LEDGER,
                 alias,
@@ -119,7 +101,6 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
 
 export {
     renameDevice,
-    removeDevice,
     addDeviceAndAccounts,
     addLedgerDeviceAndAccounts,
     updateDevice,

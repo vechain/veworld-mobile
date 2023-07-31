@@ -92,4 +92,34 @@ const vetTransactionBody1: Transaction.Body = {
     nonce: "0xc64a13b1",
 }
 
+const nftTransactionBody1: Transaction.Body = {
+    blockRef: "0x00f48ca6ad3dbcd2",
+    chainTag: 74,
+    clauses: [
+        {
+            data: "0x23b872dd0000000000000000000000008d66da6448c6144e894b7cd91fa1ae65310a48550000000000000000000000009e7e737b23dcbdf1cc48d8b7f40fc3b2e3808c960000000000000000000000000000000000000000000000000000000000000021",
+            to: "0x21d458a0ac7dc22ee56048a34aa54dcccb541b72",
+            value: 0,
+        },
+    ],
+    dependsOn: null,
+    expiration: 30,
+    gas: 128346,
+    gasPriceCoef: 0,
+    nonce: "0xc7d8dc04",
+}
+
 export const vetTransaction1: Transaction = new Transaction(vetTransactionBody1)
+
+export const dappTransaction1: Transaction = new Transaction({
+    chainTag: 39,
+    blockRef: "0x00cfde3b1f486b72",
+    expiration: 18,
+    clauses: connexTransactionStub.clauses,
+    gasPriceCoef: 0,
+    gas: 21000,
+    dependsOn: null,
+    nonce: "0xc64a13b1",
+})
+
+export const nftTransaction1: Transaction = new Transaction(nftTransactionBody1)

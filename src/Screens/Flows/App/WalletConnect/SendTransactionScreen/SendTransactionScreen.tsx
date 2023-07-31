@@ -243,6 +243,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         isBiometricsEmpty,
     } = useCheckIdentity({
         onIdentityConfirmed: handleAccept,
+        allowAutoPassword: true,
     })
 
     const onSubmit = useCallback(async () => {

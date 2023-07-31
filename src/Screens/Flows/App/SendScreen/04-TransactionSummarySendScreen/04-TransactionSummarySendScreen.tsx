@@ -36,6 +36,8 @@ import {
     selectKnownContacts,
     selectPendingTx,
     selectSelectedAccount,
+    setIsAppLoading,
+    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -52,19 +54,30 @@ type Props = NativeStackScreenProps<
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
     const [loadingTransaction, setLoadingTransaction] = useState(false)
+
     const nav = useNavigation()
+
     const { token, amount, address, initialRoute } = route.params
+
     const { LL } = useI18nContext()
+
     const theme = useTheme()
+
+    const dispatch = useAppDispatch()
+
     const account = useAppSelector(selectSelectedAccount)
+
     const currency = useAppSelector(selectCurrency)
+
     const exchangeRate = useAppSelector(state =>
         selectCurrencyExchangeRate(state, token.symbol),
     )
 
     // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
     const accounts = useAppSelector(selectAccounts)
+
     const contacts = useAppSelector(selectKnownContacts)
+
     const accountsAndContacts = useMemo(
         () => [...accounts, ...contacts],
         [accounts, contacts],
@@ -94,7 +107,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 break
         }
         setLoadingTransaction(false)
-    }, [initialRoute, nav])
+
+        dispatch(setIsAppLoading(false))
+    }, [dispatch, initialRoute, nav])
 
     const clauses = useMemo(
         () => prepareFungibleClause(amount, token, address),
@@ -105,7 +120,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
     })
-
     const {
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
@@ -146,6 +160,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
         onCancel: () => setLoadingTransaction(false),
+        allowAutoPassword: true,
     })
 
     const onSubmit = useCallback(async () => {
