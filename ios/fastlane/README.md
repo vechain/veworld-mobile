@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Generate new certificates
 
+### ios fetch_certificates_from_gh
+
+```sh
+[bundle exec] fastlane ios fetch_certificates_from_gh
+```
+
+Get certificates
+
 ### ios e2e
 
 ```sh
