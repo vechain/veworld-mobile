@@ -81,11 +81,10 @@ export const useLedgerSubscription = ({ deviceId, onDevice }: Props) => {
         startSubscription()
 
         return () => {
-            if (deviceSubscription.current) {
-                if (PlatformUtils.isIOS())
-                    deviceSubscription.current.unsubscribe()
+            debug("useLedgerSubscription - endSubscription")
 
-                debug("useLedgerSubscription - endSubscription")
+            if (deviceSubscription.current && PlatformUtils.isIOS()) {
+                deviceSubscription.current.unsubscribe()
             }
         }
     }, [startSubscription])
