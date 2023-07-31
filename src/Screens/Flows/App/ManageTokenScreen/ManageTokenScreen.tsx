@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useTheme } from "~Hooks"
 import {
@@ -25,7 +25,11 @@ import {
     selectAccountCustomTokens,
     selectSuggestedTokens,
 } from "~Storage/Redux/Selectors"
-import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
+import {
+    addTokenBalance,
+    removeTokenBalance,
+    setIsAppLoading,
+} from "~Storage/Redux/Slices"
 import {
     updateAccountBalances,
     useAppDispatch,
@@ -124,6 +128,13 @@ export const ManageTokenScreen = () => {
     const navigateManageCustomTokenScreen = () => {
         nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
     }
+
+    // On mount set app loading to false
+    useEffect(() => {
+        setTimeout(() => {
+            dispatch(setIsAppLoading(false))
+        }, 200)
+    }, [dispatch])
 
     return (
         <DismissKeyboardView>

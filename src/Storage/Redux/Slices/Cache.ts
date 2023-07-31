@@ -12,12 +12,14 @@ export interface CacheState {
     mnemonic?: string
     newLedgerDevice?: NewLedgerDevice
     appLockStatus: WALLET_STATUS
+    isAppLoading: boolean
 }
 
 const initialState: CacheState = {
     mnemonic: undefined,
     newLedgerDevice: undefined,
     appLockStatus: WALLET_STATUS.LOCKED,
+    isAppLoading: false,
 }
 
 export const CacheSlice = createSlice({
@@ -36,6 +38,9 @@ export const CacheSlice = createSlice({
         setAppLockStatus: (state, action: PayloadAction<WALLET_STATUS>) => {
             state.appLockStatus = action.payload
         },
+        setIsAppLoading: (state, action: PayloadAction<boolean>) => {
+            state.isAppLoading = action.payload
+        },
         resetCacheState: () => initialState,
     },
 })
@@ -44,5 +49,6 @@ export const {
     setMnemonic,
     setNewLedgerDevice,
     setAppLockStatus,
+    setIsAppLoading,
     resetCacheState,
 } = CacheSlice.actions

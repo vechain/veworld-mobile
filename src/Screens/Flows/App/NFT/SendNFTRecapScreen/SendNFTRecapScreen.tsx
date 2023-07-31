@@ -18,6 +18,8 @@ import { useI18nContext } from "~i18n"
 import {
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
+    setIsAppLoading,
+    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
@@ -42,6 +44,8 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
+    const dispatch = useAppDispatch()
+
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const nft = useAppSelector(state =>
@@ -56,8 +60,11 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
     const onTXFinish = useCallback(() => {
         setLoading(false)
+
+        dispatch(setIsAppLoading(false))
+
         nav.dispatch(StackActions.popToTop())
-    }, [nav])
+    }, [dispatch, nav])
 
     const clauses = useMemo(
         () =>
