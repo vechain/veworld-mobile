@@ -303,6 +303,10 @@ type RootTranslation = {
 	 */
 	BD_RESET_APP_DISCLAIMER: string
 	/**
+	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
+	 */
+	BD_ACCOUNT_REMOVAL: string
+	/**
 	 * Y​o​u​r​ ​b​a​l​a​n​c​e
 	 */
 	BD_YOUR_BALANCE: string
@@ -1001,6 +1005,10 @@ type RootTranslation = {
 	 */
 	COMMON_SELECT_ACCOUNT: string
 	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​ ​t​o​ ​r​e​m​o​v​e
+	 */
+	COMMON_SELECT_ACCOUNT_TO_REMOVE: string
+	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
 	COMMON_MARKET_CAP: string
@@ -1322,6 +1330,14 @@ type RootTranslation = {
 	 * V​i​e​w​ ​a​c​c​o​u​n​t
 	 */
 	NOTIFICATION_VIEW_ACCOUNT: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​r​e​m​o​v​e​ ​a​c​c​o​u​n​t
+	 */
+	NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: string
+	/**
+	 * T​h​e​ ​a​s​s​o​c​i​a​t​e​d​ ​w​a​l​l​e​t​ ​o​n​l​y​ ​h​a​s​ ​1​ ​a​c​c​o​u​n​t​.​ ​P​l​e​a​s​e​ ​r​e​m​o​v​e​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​a​c​c​o​u​n​t
+	 */
+	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
 	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
 	 */
@@ -2594,6 +2610,10 @@ export type TranslationFunctions = {
 	 */
 	BD_RESET_APP_DISCLAIMER: () => LocalizedString
 	/**
+	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
+	 */
+	BD_ACCOUNT_REMOVAL: () => LocalizedString
+	/**
 	 * Your balance
 	 */
 	BD_YOUR_BALANCE: () => LocalizedString
@@ -3286,6 +3306,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_SELECT_ACCOUNT: () => LocalizedString
 	/**
+	 * Select account to remove
+	 */
+	COMMON_SELECT_ACCOUNT_TO_REMOVE: () => LocalizedString
+	/**
 	 * Market Cap
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
@@ -3595,6 +3619,14 @@ Please, try again later.
 	 * View account
 	 */
 	NOTIFICATION_VIEW_ACCOUNT: () => LocalizedString
+	/**
+	 * Failed to remove account
+	 */
+	NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: () => LocalizedString
+	/**
+	 * The associated wallet only has 1 account. Please remove the wallet to remove this account
+	 */
+	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
 	/**
 	 * A connected app successfully disconnected from this wallet.
 	 */

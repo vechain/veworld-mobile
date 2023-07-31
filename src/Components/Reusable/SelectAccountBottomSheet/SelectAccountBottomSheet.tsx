@@ -5,6 +5,7 @@ import { useScrollableBottomSheet } from "~Hooks"
 import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
+
 /**
  * @typedef {object} Props
  * @prop {() => void} onDismiss - called on the bottom sheet dismiss
@@ -15,7 +16,7 @@ import { useI18nContext } from "~i18n"
  */
 type Props = {
     onDismiss?: () => void
-    closeBottomSheet: () => void
+    closeBottomSheet?: () => void
     accounts: AccountWithDevice[]
     setSelectedAccount: (account: AccountWithDevice) => void
     selectedAccount?: AccountWithDevice
@@ -48,7 +49,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
 
         const handlePress = (account: AccountWithDevice) => {
             setSelectedAccount(account)
-            closeBottomSheet()
+            if (closeBottomSheet) closeBottomSheet()
         }
 
         const { flatListScrollProps, handleSheetChangePosition } =

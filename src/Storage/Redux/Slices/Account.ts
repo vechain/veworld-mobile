@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Utils"
-import { WalletAccount } from "~Model"
+import { AccountWithDevice, WalletAccount } from "~Model"
 
 /**
  * The state of the account slice
@@ -28,6 +28,46 @@ export const AccountSlice = createSlice({
             )
             if (accountExists) {
                 state.selectedAccount = address
+            }
+        },
+        //Should remove the account from the list of accounts, and change to the first account on the device if the selected account is the one being removed
+        removeAccount: (state, action: PayloadAction<AccountWithDevice>) => {
+            const { address, rootAddress } = action.payload
+
+            if (state.accounts.length <= 1) {
+                throw new Error("Cannot delete the last account!")
+            }
+
+            const deviceAccounts = state.accounts.filter(account =>
+                AddressUtils.compareAddresses(account.rootAddress, rootAddress),
+            )
+
+            if (deviceAccounts.length <= 1) {
+                throw new Error("Cannot delete the last account on the device!")
+            }
+
+            //Change the selected account if the selected account is the one being removed
+            if (
+                state.selectedAccount &&
+                AddressUtils.compareAddresses(state.selectedAccount, address)
+            ) {
+                const otherAccounts = state.accounts.filter(
+                    account =>
+                        !AddressUtils.compareAddresses(
+                            account.address,
+                            address,
+                        ),
+                )
+                state.selectedAccount = otherAccounts[0].address
+            }
+
+            const accountExistsIndex = state.accounts.findIndex(account =>
+                AddressUtils.compareAddresses(account.address, address),
+            )
+
+            //Remove the account
+            if (accountExistsIndex !== -1) {
+                state.accounts.splice(accountExistsIndex, 1)
             }
         },
         addAccount: (
@@ -120,6 +160,7 @@ export const AccountSlice = createSlice({
 })
 
 export const {
+    removeAccount,
     selectAccount,
     addAccount,
     renameAccount,
