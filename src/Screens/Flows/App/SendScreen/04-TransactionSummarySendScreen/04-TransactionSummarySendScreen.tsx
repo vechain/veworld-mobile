@@ -122,7 +122,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             clauses,
         })
 
-    const transactionBody = createTransactionBody()
+    const transactionBody = useMemo(
+        () => createTransactionBody(),
+        [createTransactionBody],
+    )
 
     const {
         setSelectedDelegationAccount,
@@ -164,6 +167,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
         onCancel: () => setLoadingTransaction(false),
+        allowAutoPassword: true,
     })
 
     const onSubmit = useCallback(async () => {

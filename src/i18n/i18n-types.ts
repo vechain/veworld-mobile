@@ -147,6 +147,10 @@ type RootTranslation = {
 	 */
 	BTN_HISTORY: string
 	/**
+	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
+	 */
+	BTN_REMOVE_WALLET: string
+	/**
 	 * G​o​ ​t​o​ ​s​e​t​t​i​n​g​s
 	 */
 	BTN_GO_TO_SETTINGS: string
@@ -190,6 +194,10 @@ type RootTranslation = {
 	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​m​y​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e
 	 */
 	BTN_SECURITY_OPERATION_CHECKBOX: string
+	/**
+	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 */
+	BTN_WALLET_CONFRIM_DELETION: string
 	/**
 	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
 	 */
@@ -238,6 +246,10 @@ type RootTranslation = {
 	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​i​t​'​s​ ​a​s​s​o​c​i​a​t​e​d​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​.​ ​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e
+	 */
+	BD_WALLET_REMOVAL: string
 	/**
 	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
 	 */
@@ -702,7 +714,7 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
-	 * E​d​i​t​ ​w​a​l​l​e​t​ ​{​n​a​m​e​}
+	 * E​d​i​t​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
 	SB_EDIT_WALLET: RequiredParams<'name'>
@@ -2426,6 +2438,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_HISTORY: () => LocalizedString
 	/**
+	 * Remove wallet
+	 */
+	BTN_REMOVE_WALLET: () => LocalizedString
+	/**
 	 * Go to settings
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
@@ -2469,6 +2485,10 @@ export type TranslationFunctions = {
 	 * I state that I have backed up my secret phrase
 	 */
 	BTN_SECURITY_OPERATION_CHECKBOX: () => LocalizedString
+	/**
+	 * I state that I want to delete this wallet
+	 */
+	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
 	/**
 	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
 	 */
@@ -2517,6 +2537,10 @@ export type TranslationFunctions = {
 	 * Confirm your PIN
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
+	/**
+	 * Your wallet and all of it's associated accounts will be removed. This action is irreversible
+	 */
+	BD_WALLET_REMOVAL: () => LocalizedString
 	/**
 	 * <><> PIN doesn't match.
 	 */
@@ -2978,7 +3002,7 @@ export type TranslationFunctions = {
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
-	 * Edit wallet {name}
+	 * Edit {name}
 	 */
 	SB_EDIT_WALLET: (arg: { name: string }) => LocalizedString
 	/**

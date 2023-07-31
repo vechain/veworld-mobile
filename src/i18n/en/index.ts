@@ -39,6 +39,7 @@ const en: BaseTranslation = {
     BTN_SEND: "Send",
     BTN_SWAP: "Swap",
     BTN_HISTORY: "History",
+    BTN_REMOVE_WALLET: "Remove wallet",
     BTN_GO_TO_SETTINGS: "Go to settings",
     BTN_GO_BACK: "Go back",
     BTN_PASTE_ADDRESS: "Paste Address",
@@ -50,6 +51,7 @@ const en: BaseTranslation = {
     BTN_BACKUP_MENMONIC: "Backup phrase",
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
+    BTN_WALLET_CONFRIM_DELETION: "I state that I want to delete this wallet",
 
 
     // BODY
@@ -76,6 +78,7 @@ const en: BaseTranslation = {
     BD_MNEMONIC_SUBTITLE:
         "Your Secret Recovery Phrase makes it easy to back up and restore your account.",
     BD_USER_PASSWORD_CONFIRM: "Confirm your PIN",
+    BD_WALLET_REMOVAL: "Your wallet and all of it's associated accounts will be removed. This action is irreversible",
     BD_USER_PASSWORD_ERROR: "<><> PIN doesn't match.",
     BD_USER_EDIT_PASSWORD_ERROR: "Old PIN can't be the same as new PIN",
     BD_IMPORT_WALLET_TYPE: "Select the type of wallet you want to import",
@@ -197,7 +200,7 @@ const en: BaseTranslation = {
     SB_EDIT_NEW_PIN_CONFIRM: "Confirm your new pin",
     SB_ACCOUNT_MANAGEMENT: "Account management",
     SB_CHOOSE_A_WALLET: "Choose a wallet",
-    SB_EDIT_WALLET: "Edit wallet {name: string}",
+    SB_EDIT_WALLET: "Edit {name: string}",
     SB_RENAME_WALLET: "Rename wallet",
     SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
     SB_ENTER_LANGUAGE: "Enter your language",

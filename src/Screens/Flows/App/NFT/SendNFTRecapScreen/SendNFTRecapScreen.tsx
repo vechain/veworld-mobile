@@ -82,7 +82,10 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             clauses,
         })
 
-    const transactionBody = createTransactionBody()
+    const transactionBody = useMemo(
+        () => createTransactionBody(),
+        [createTransactionBody],
+    )
 
     const {
         setNoDelegation,
@@ -123,6 +126,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
         onCancel: () => setLoading(false),
+        allowAutoPassword: true,
     })
 
     const onSubmit = useCallback(async () => {
