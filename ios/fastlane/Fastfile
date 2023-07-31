@@ -193,14 +193,14 @@ platform :ios do
       )
 
       push_git_tags
-    end
 
-    # push to github latest artifacts
-    gh_setup_after(
-      github_username:github_username, 
-      github_token:github_token,
-      build_or_version_number: versionType.nil? ? build : version
-    )
+      # push to github latest artifacts
+      gh_setup_after(
+        github_username:github_username, 
+        github_token:github_token,
+        build_or_version_number:version
+      )
+    end
 
     # create pull request
     create_pull_request(
