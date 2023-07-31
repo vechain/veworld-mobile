@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useAppStateTransitions } from "~Hooks"
 import { useAppDispatch } from "~Storage/Redux"
 import { debug } from "~Utils"
 import RNRestart from "react-native-restart"
 
 type ProviderProps = { children: React.ReactNode }
+
+const AutoLogoutContext = React.createContext(null)
 
 export const AutoLogoutProvider = ({ children }: ProviderProps) => {
     const dispatch = useAppDispatch()
@@ -28,5 +30,9 @@ export const AutoLogoutProvider = ({ children }: ProviderProps) => {
         }
     }, [dispatch, activeToBackground, backgroundToActive, inactivityStartTime])
 
-    return children
+    return (
+        <AutoLogoutContext.Provider value={null}>
+            {children}
+        </AutoLogoutContext.Provider>
+    )
 }
