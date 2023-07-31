@@ -47,22 +47,6 @@ Generate new certificates
 
 Rotate certificates
 
-### ios fetch_certificates_from_gh
-
-```sh
-[bundle exec] fastlane ios fetch_certificates_from_gh
-```
-
-Get certificates
-
-### ios e2e
-
-```sh
-[bundle exec] fastlane ios e2e
-```
-
-Run e2e tests
-
 ### ios create_changelog
 
 ```sh

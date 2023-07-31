@@ -67,6 +67,18 @@ platform :ios do
 
 
 
+  desc "Get certificates"
+  lane :fetch_certificates_from_gh do
+    sync_code_signing(
+      type: "appstore",
+      app_identifier: ENV["APP_IDENTIFIER"],
+      readonly: true,
+      git_branch: "main",
+      verbose: true
+    )
+  end
+
+
 
 
   desc "Create changelog"
@@ -142,8 +154,8 @@ platform :ios do
     buildNumber = options[:build]
 
     #prepare git
-    # ensure_git_status_clean
-    # ensure_git_branch(branch: "main")
+    ensure_git_status_clean
+    ensure_git_branch(branch: "main")
 
     # clean build artifacts if any
     clean_build_artifacts
@@ -184,8 +196,15 @@ platform :ios do
         build_or_version_number: versionType.nil? ? build : version
       )
 
-      # rotate certificates
-      rotate_certificates
+
+      # if new version is specified rotate certificates
+      if !versionType.nil? 
+        # rotate certificates
+        rotate_certificates
+      else 
+        # use same certificates get them from github
+        fetch_certificates_from_gh
+      end
 
       # build app
       build_app(
@@ -285,19 +304,6 @@ end
 
 
 =begin
-
-  # To be called (by everyone) whernever a new dev is onboarded to the project
-  desc "Get certificates"
-  lane :fetch_certificates_from_gh do
-    sync_code_signing(
-      type: "appstore",
-      app_identifier: ENV["APP_IDENTIFIER"],
-      readonly: true,
-      git_branch: "main",
-      verbose: true
-    )
-  end
-
   desc "Run e2e tests"
   lane :e2e do
     Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
@@ -305,5 +311,4 @@ end
       sh("detox test --configuration ios.sim.debug --loglevel trace --record-logs all")
     end
   end
-
 =end
