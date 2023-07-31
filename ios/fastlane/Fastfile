@@ -142,8 +142,8 @@ platform :ios do
     buildNumber = options[:build]
 
     #prepare git
-    ensure_git_status_clean
-    ensure_git_branch(branch: "main")
+    # ensure_git_status_clean
+    # ensure_git_branch(branch: "main")
 
     # clean build artifacts if any
     clean_build_artifacts
