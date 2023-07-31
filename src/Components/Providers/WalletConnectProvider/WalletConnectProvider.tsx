@@ -61,6 +61,7 @@ const WalletConnectContextProvider = ({
     const networks = useAppSelector(selectNetworks)
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const track = useAnalyticTracking()
+    const [linkingUrls, setLinkingUrls] = useState<string[]>([])
 
     /**
      * A pairing between the DApp and the wallet needs to be established in order to make
@@ -135,6 +136,8 @@ const WalletConnectContextProvider = ({
         (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
             if (proposal.verifyContext.verified.validation !== "VALID")
                 warn("Session proposal is not valid", proposal.verifyContext)
+
+            debug("Session proposal: ", JSON.stringify(proposal))
 
             //TODO: Verify DApps: proposal.verifyContext.verified.validation === "VALID"
             if (true) {
@@ -439,20 +442,24 @@ const WalletConnectContextProvider = ({
 
     /**
      * Sets up a listener for DApp session proposals
+     * - Don't set any dependencies here, otherwise the listener will be added multiple times (there was trouble removing, screen crashes etc.)
      */
     useEffect(() => {
         Linking.addListener("url", event => {
             debug("WalletConnectProvider:Linking.addListener", event)
-            handleLinkingUrl(event.url)
+            setLinkingUrls(prev => [...prev, event.url])
         })
-        return () => {
-            try {
-                Linking.removeAllListeners("url")
-            } catch (e) {
-                warn(e)
-            }
+    }, [])
+
+    useEffect(() => {
+        if (linkingUrls.length > 0) {
+            const firstUrl = linkingUrls[0]
+
+            handleLinkingUrl(firstUrl).then(() => {
+                setLinkingUrls(prev => prev.filter(url => url !== firstUrl))
+            })
         }
-    }, [handleLinkingUrl])
+    }, [handleLinkingUrl, linkingUrls])
 
     /**
      * Remove expired sessions

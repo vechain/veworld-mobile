@@ -3,6 +3,7 @@ import { useSendTransaction } from "./useSendTransaction"
 import { TestHelpers, TestWrapper } from "~Test"
 import { defaultTestNetwork } from "~Constants"
 import axios from "axios"
+
 jest.mock("axios")
 
 const { vetTransaction1, account1D1 } = TestHelpers.data
@@ -38,6 +39,7 @@ describe("useSendTransaction", () => {
         })
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: vetTransaction1.id },
+            status: 200,
         })
         await result.current.sendTransactionAndPerformUpdates(vetTransaction1)
     })

@@ -1,4 +1,4 @@
-import { useTransaction } from "./useTransaction"
+import { useTransactionGas } from "./useTransactionGas"
 import { renderHook } from "@testing-library/react-hooks"
 import { TestHelpers, TestWrapper } from "~Test"
 import {
@@ -13,7 +13,7 @@ describe("useTransaction", () => {
     it("VET - should render correctly", async () => {
         const { result, waitForNextUpdate } = renderHook(
             () =>
-                useTransaction({
+                useTransactionGas({
                     clauses: prepareFungibleClause(
                         "1",
                         VETWithBalance,
@@ -31,7 +31,7 @@ describe("useTransaction", () => {
     it("VTHO - should render correctly", async () => {
         const { result, waitForNextUpdate } = renderHook(
             () =>
-                useTransaction({
+                useTransactionGas({
                     clauses: prepareFungibleClause(
                         "1",
                         VTHOWithBalance,
@@ -50,7 +50,7 @@ describe("useTransaction", () => {
     it("NFT - should render correctly", async () => {
         const { result, waitForNextUpdate } = renderHook(
             () =>
-                useTransaction({
+                useTransactionGas({
                     clauses: prepareNonFungibleClause(
                         account1D1.address,
                         account2D1.address,

@@ -2,6 +2,7 @@ import { HDNode, secp256k1, Transaction } from "thor-devkit"
 import { CryptoUtils, error, HexUtils, TransactionUtils } from "~Utils"
 import { showErrorToast, showWarningToast } from "~Components"
 import {
+    selectChainTag,
     selectDevice,
     selectSelectedAccount,
     selectSelectedNetwork,
@@ -11,6 +12,7 @@ import { useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
     DEVICE_TYPE,
+    EstimateGasResult,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
     NonFungibleToken,
@@ -21,14 +23,17 @@ import { useAnalyticTracking, useSendTransaction } from "~Hooks"
 import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
-import { useMemo } from "react"
 import { AnalyticsEvent } from "~Constants"
+import { useCallback } from "react"
+import { selectBlockRef } from "~Storage/Redux/Selectors/Beat"
 
 type Props = {
-    transactionBody: Transaction.Body
+    providedGas?: number
+    gas?: EstimateGasResult
+    clauses: Transaction.Body["clauses"]
     onTXFinish: () => void
     isDelegated: boolean
-    urlDelegationSignature?: Buffer
+    dependsOn?: string
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
@@ -37,12 +42,12 @@ type Props = {
     initialRoute?: Routes
     isNFT?: boolean
 }
+
 /**
  * Hooks that expose a function to sign and send a transaction performing updates on success
  * @param transaction the transaction to sign and send
  * @param onTXFinish callback to call when the transaction is finished
  * @param isDelegated whether the transaction is a delegation
- * @param urlDelegationSignature the signature of the delegation url
  * @param selectedDelegationAccount the account to delegate to
  * @param selectedDelegationOption the delegation option
  * @param selectedDelegationUrl the delegation url
@@ -52,7 +57,10 @@ type Props = {
  */
 
 export const useSignTransaction = ({
-    transactionBody,
+    providedGas,
+    gas,
+    dependsOn,
+    clauses,
     onTXFinish,
     isDelegated,
     selectedDelegationAccount,
@@ -74,13 +82,34 @@ export const useSignTransaction = ({
         network,
         account,
     )
+    const blockRef = useAppSelector(selectBlockRef)
+    const chainTag = useAppSelector(selectChainTag)
 
-    const transaction = useMemo(
-        () => TransactionUtils.fromBody(transactionBody, isDelegated),
-        [transactionBody, isDelegated],
-    )
+    const buildTransaction = useCallback(() => {
+        const nonce = HexUtils.generateRandom(8)
+
+        const txGas = providedGas ?? gas?.gas
+
+        if (!txGas) throw new Error("Transaction gas is not ready")
+
+        const DEFAULT_GAS_COEFFICIENT = 0
+        const txBody: Transaction.Body = {
+            chainTag,
+            blockRef,
+            // 5 minutes
+            expiration: 30,
+            clauses: clauses,
+            gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
+            gas: txGas,
+            dependsOn: dependsOn ?? null,
+            nonce: nonce,
+        }
+
+        return TransactionUtils.fromBody(txBody, isDelegated)
+    }, [isDelegated, clauses, dependsOn, gas, providedGas, blockRef, chainTag])
 
     const getSignature = async (
+        transaction: Transaction,
         wallet: Wallet,
         delegateFor?: string,
         signatureAccount: AccountWithDevice = account,
@@ -99,7 +128,9 @@ export const useSignTransaction = ({
         return secp256k1.sign(hash, privateKey)
     }
 
-    const getUrlDelegationSignature = async (): Promise<Buffer> => {
+    const getUrlDelegationSignature = async (
+        transaction: Transaction,
+    ): Promise<Buffer> => {
         if (!selectedDelegationUrl) {
             throw new Error(
                 "Delegation url not found when requesting delegation signature",
@@ -130,6 +161,7 @@ export const useSignTransaction = ({
     }
 
     const getAccountDelegationSignature = async (
+        transaction: Transaction,
         password?: string,
     ): Promise<Buffer> => {
         const delegationDevice = selectedDelegationAccount?.device
@@ -150,6 +182,7 @@ export const useSignTransaction = ({
             await CryptoUtils.decryptWallet(delegationDevice, password)
 
         return await getSignature(
+            transaction,
             delegationWallet,
             account.address,
             selectedDelegationAccount,
@@ -157,23 +190,38 @@ export const useSignTransaction = ({
     }
 
     const getDelegationSignature = async (
+        transaction: Transaction,
         password?: string,
     ): Promise<Buffer | undefined> => {
         switch (selectedDelegationOption) {
             case DelegationType.URL:
-                return await getUrlDelegationSignature()
+                return await getUrlDelegationSignature(transaction)
             case DelegationType.ACCOUNT:
-                return await getAccountDelegationSignature(password)
+                return await getAccountDelegationSignature(
+                    transaction,
+                    password,
+                )
             default:
                 return
         }
     }
 
     const navigateToLedger = async (
+        transaction: Transaction,
         ledgerAccount: LedgerAccountWithDevice,
         password?: string,
     ) => {
-        const delegationSignature = await getDelegationSignature(password)
+        let delegationSignature
+
+        try {
+            delegationSignature = await getDelegationSignature(
+                transaction,
+                password,
+            )
+        } catch (e) {
+            showErrorToast(LL.ERROR(), LL.SEND_DELEGATION_ERROR_SIGNATURE())
+            return
+        }
 
         nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
             accountWithDevice: ledgerAccount,
@@ -189,8 +237,11 @@ export const useSignTransaction = ({
     const signTransaction = async (password?: string) => {
         if (!senderDevice) throw new Error("Sender device not found")
 
+        const transaction = buildTransaction()
+
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
             return await navigateToLedger(
+                transaction,
                 account as LedgerAccountWithDevice,
                 password,
             )
@@ -204,8 +255,11 @@ export const useSignTransaction = ({
         const { decryptedWallet: senderWallet } =
             await CryptoUtils.decryptWallet(senderDevice, password)
 
-        const senderSignature = await getSignature(senderWallet)
-        const delegationSignature = await getDelegationSignature(password)
+        const senderSignature = await getSignature(transaction, senderWallet)
+        const delegationSignature = await getDelegationSignature(
+            transaction,
+            password,
+        )
 
         transaction.signature = delegationSignature
             ? Buffer.concat([senderSignature, delegationSignature])
@@ -248,5 +302,6 @@ export const useSignTransaction = ({
         sendTransactionAndPerformUpdates,
         signTransaction,
         navigateToLedger,
+        buildTransaction,
     }
 }

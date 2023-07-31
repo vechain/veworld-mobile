@@ -25,7 +25,7 @@ import {
     useCheckIdentity,
     useRenderGas,
     useSignTransaction,
-    useTransaction,
+    useTransactionGas,
 } from "~Hooks"
 import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/Hooks"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
@@ -70,12 +70,9 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         [selectedAccount, route.params.receiverAddress, nft],
     )
 
-    const { gas, loadingGas, createTransactionBody, setGasPayer } =
-        useTransaction({
-            clauses,
-        })
-
-    const transactionBody = createTransactionBody()
+    const { gas, loadingGas, setGasPayer } = useTransactionGas({
+        clauses,
+    })
 
     const {
         setNoDelegation,
@@ -85,21 +82,21 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         selectedDelegationAccount,
         selectedDelegationUrl,
         isDelegated,
-        urlDelegationSignature,
-    } = useDelegation({ transactionBody, setGasPayer })
+    } = useDelegation({ setGasPayer })
 
-    const { signAndSendTransaction, navigateToLedger } = useSignTransaction({
-        transactionBody,
-        onTXFinish,
-        isDelegated,
-        urlDelegationSignature,
-        selectedDelegationAccount,
-        selectedDelegationOption,
-        selectedDelegationUrl,
-        initialRoute: Routes.NFTS,
-        onError: () => setLoading(false),
-        token: nft!,
-    })
+    const { signAndSendTransaction, navigateToLedger, buildTransaction } =
+        useSignTransaction({
+            gas,
+            clauses,
+            onTXFinish,
+            isDelegated,
+            selectedDelegationAccount,
+            selectedDelegationOption,
+            selectedDelegationUrl,
+            initialRoute: Routes.NFTS,
+            onError: () => setLoading(false),
+            token: nft!,
+        })
 
     const { RenderGas, isThereEnoughGas } = useRenderGas({
         loadingGas,
@@ -123,11 +120,16 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
             selectedDelegationOption !== DelegationType.ACCOUNT
         ) {
-            await navigateToLedger(selectedAccount as LedgerAccountWithDevice)
+            const tx = buildTransaction()
+            await navigateToLedger(
+                tx,
+                selectedAccount as LedgerAccountWithDevice,
+            )
         } else {
             await checkIdentityBeforeOpening()
         }
     }, [
+        buildTransaction,
         selectedAccount,
         selectedDelegationOption,
         navigateToLedger,

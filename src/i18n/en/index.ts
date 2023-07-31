@@ -543,7 +543,7 @@ const en: BaseTranslation = {
     SEND_DELEGATION_ADD_URL: "Add delegation URL",
     SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
     SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",
-    SEND_DELEGATION_ERROR_SIGNATURE: "Failed to reach this URL. Please try again.",
+    SEND_DELEGATION_ERROR_SIGNATURE: "Failed to delegate the transaction with the provided URL",
     SEND_CREATE_CONTACT_TITLE: "Create contact",
     SEND_CREATE_CONTACT_SUBTITLE: "We noticed that the address you entered is not associated with any saved contacts, would you like to create one?",
     SEND_CREATE_CONTACT_CREATE_BUTTON: "CREATE CONTACT",
