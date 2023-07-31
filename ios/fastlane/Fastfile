@@ -24,6 +24,24 @@ default_platform(:ios)
 
 platform :ios do
 
+  lane :nuke_appstore_sertificates do
+    match_nuke(
+      type: "appstore", 
+      app_identifier: ENV["APP_IDENTIFIER"],
+      readonly: false,
+    )
+  end
+
+  lane :remove_certificates_from_gh do
+    sh("git clone https://github.com/vechainfoundation/veworld-mobile-ios-cert.git")
+    sh("cd veworld-mobile-ios-cert")
+    sh("rm -rf certs/distribution")
+    sh("rm -rf profiles/appstore")
+    sh("git add --all")
+    sh("git commit -a -m 'chore: remove certificates'")
+    sh("git push -u origin main")
+    sh("rm -rf temp_git_certificates")
+  end
 
   desc "Generate new certificates"
   lane :generate_new_certificates do
@@ -36,6 +54,12 @@ platform :ios do
       skip_docs: true,
       verbose: true
     )
+  end
+
+  lane :rotate_certificates do
+    nuke_appstore_sertificates
+    remove_certificates_from_gh
+    generate_new_certificates
   end
 
 
@@ -117,6 +141,8 @@ platform :ios do
     # Push the branch to GitHub
     sh("git push -u origin #{branch_name}-#{build_or_version_number}")
   end
+
+
 
 
 

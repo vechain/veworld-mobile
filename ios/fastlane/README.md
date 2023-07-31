@@ -15,6 +15,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios nuke_appstore_sertificates
+
+```sh
+[bundle exec] fastlane ios nuke_appstore_sertificates
+```
+
+
+
+### ios remove_certificates_from_gh
+
+```sh
+[bundle exec] fastlane ios remove_certificates_from_gh
+```
+
+
+
 ### ios generate_new_certificates
 
 ```sh
@@ -22,6 +38,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 ```
 
 Generate new certificates
+
+### ios rotate_certificates
+
+```sh
+[bundle exec] fastlane ios rotate_certificates
+```
+
+
 
 ### ios fetch_certificates_from_gh
 
