@@ -11,6 +11,7 @@ import {
     BaseTouchableBox,
     BaseView,
     DeleteConfirmationBottomSheet,
+    DeleteUnderlay,
     Layout,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -29,7 +30,6 @@ import {
     AddContactButton,
     ContactDetailBox,
     ContactManagementBottomSheet,
-    UnderlayLeft,
 } from "./Components"
 import HapticsService from "~Services/HapticsService"
 
@@ -97,13 +97,14 @@ export const ContactsScreen = () => {
         })
     }, [])
 
-    const onDeleteContactPress = useCallback(
-        (address: string) => {
-            setSelectedContactAddress(address)
-            openRemoveContactSheet()
-        },
-        [openRemoveContactSheet],
-    )
+    const onSwipe = useCallback((address: string) => {
+        setSelectedContactAddress(address)
+    }, [])
+
+    const onClickTrashIcon = useCallback(() => {
+        closeOtherSwipeableItems("") // Pass an empty string to close all items
+        openRemoveContactSheet()
+    }, [closeOtherSwipeableItems, openRemoveContactSheet])
 
     const onEditContactPress = useCallback(
         (name: string, address: string) => {
@@ -143,10 +144,10 @@ export const ContactsScreen = () => {
     const onSwipeableItemChange = useCallback(
         (address: string) => {
             HapticsService.triggerImpact({ level: "Light" })
-            closeOtherSwipeableItems("")
-            onDeleteContactPress(address)
+            closeOtherSwipeableItems(address)
+            onSwipe(address)
         },
-        [closeOtherSwipeableItems, onDeleteContactPress],
+        [closeOtherSwipeableItems, onSwipe],
     )
 
     // [End] Methods
@@ -202,8 +203,8 @@ export const ContactsScreen = () => {
                                                 )
                                         }}
                                         renderUnderlayLeft={() => (
-                                            <UnderlayLeft
-                                                onDelete={onDeleteContactPress}
+                                            <DeleteUnderlay
+                                                onPress={onClickTrashIcon}
                                             />
                                         )}
                                         snapPointsLeft={underlaySnapPoints}>
@@ -230,13 +231,13 @@ export const ContactsScreen = () => {
     }, [
         contacts,
         contactsListSeparator,
-        isListScrollable,
-        onDeleteContactPress,
-        onEditContactPress,
-        onSwipeableItemChange,
         onViewableItemsChanged,
-        registerSwipeableItemRef,
         viewabilityConfig,
+        isListScrollable,
+        onEditContactPress,
+        registerSwipeableItemRef,
+        onSwipeableItemChange,
+        onClickTrashIcon,
     ])
 
     // [End] Render sub components
