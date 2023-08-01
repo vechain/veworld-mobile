@@ -376,7 +376,7 @@ PODS:
     - React-Core
   - react-native-blur (4.3.2):
     - React-Core
-  - react-native-context-menu-view (1.10.0):
+  - react-native-context-menu-view (1.11.0):
     - React
   - react-native-flipper (0.163.0):
     - React-Core
@@ -903,7 +903,7 @@ SPEC CHECKSUMS:
   react-native-ble-plx: f10240444452dfb2d2a13a0e4f58d7783e92d76e
   react-native-blob-util: 2d36383bb52c15c5451be81cb7ddf22bc34a12a6
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
-  react-native-context-menu-view: 4cd5ecaabd2cbb420018b3242ca1eef5efa0a629
+  react-native-context-menu-view: c13b66d44f85b7e7d791a6fbc1e6218c6047eb90
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
