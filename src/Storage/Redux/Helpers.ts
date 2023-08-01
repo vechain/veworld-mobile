@@ -32,7 +32,6 @@ import {
     UserPreferencesSlice,
     WalletConnectSessionsSlice,
 } from "./Slices"
-import { PersistConfig } from "redux-persist/es/types"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
 
@@ -48,7 +47,7 @@ export const nftPersistConfig = {
  *
  * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
  */
-export const getPersistorConfig = async (): Promise<PersistConfig<unknown>> => {
+export const getPersistorConfig = async () => {
     const key = await initEncryption()
 
     const encryptor = encryptTransform({
