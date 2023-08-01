@@ -2,18 +2,15 @@ import { warn } from "~Utils"
 import { encryptTransform, initEncryption } from "./EncryptionService"
 import { storage } from "./Storage"
 import {
-    CurrencySlice,
-    TokenSlice,
-    UserPreferencesSlice,
-    ConfigSlice,
-    DeviceSlice,
     AccountSlice,
-    NetworkSlice,
-    BalanceSlice,
-    ContactsSlice,
     ActivitiesSlice,
+    BalanceSlice,
+    ConfigSlice,
+    ContactsSlice,
+    CurrencySlice,
     DelegationSlice,
-    WalletConnectSessionsSlice,
+    DeviceSlice,
+    NetworkSlice,
     NftSlice,
     PendingSlice,
     resetAccountState,
@@ -27,11 +24,17 @@ import {
     resetDeviceState,
     resetNetworkState,
     resetNftState,
+    resetPendingState,
     resetTokensState,
     resetUserPreferencesState,
     resetWalletConnectState,
-    resetPendingState,
+    TokenSlice,
+    UserPreferencesSlice,
+    WalletConnectSessionsSlice,
 } from "./Slices"
+import { PersistConfig } from "redux-persist/es/types"
+import { migrationUpdates } from "~Storage/Redux/Migrations"
+import { createMigrate } from "redux-persist"
 
 export const nftPersistConfig = {
     key: NftSlice.name,
@@ -45,7 +48,7 @@ export const nftPersistConfig = {
  *
  * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
  */
-export const getPersistorConfig = async () => {
+export const getPersistorConfig = async (): Promise<PersistConfig<unknown>> => {
     const key = await initEncryption()
 
     const encryptor = encryptTransform({
@@ -55,10 +58,10 @@ export const getPersistorConfig = async () => {
         },
     })
 
-    const persistConfig = {
+    return {
         key: "root",
         storage,
-        version: 1,
+        version: 2,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,
@@ -74,10 +77,9 @@ export const getPersistorConfig = async () => {
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
         ],
+        migrate: createMigrate(migrationUpdates, { debug: false }),
         transforms: [encryptor],
     }
-
-    return persistConfig
 }
 
 /**

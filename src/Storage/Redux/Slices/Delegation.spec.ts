@@ -1,15 +1,16 @@
 import { DelegationType } from "~Model/Delegation"
 import {
+    addDelegationUrl,
     DelegationSlice,
     DelegationState,
-    addDelegationUrl,
 } from "./Delegation"
+import { defaultMainNetwork } from "~Constants"
 
 describe("DelegationSlice", () => {
-    let initialState: DelegationState
+    let initialState: Record<string, DelegationState> = {}
 
     beforeEach(() => {
-        initialState = {
+        initialState[defaultMainNetwork.genesis.id] = {
             urls: [],
             defaultDelegationOption: DelegationType.NONE,
             defaultDelegationAccount: undefined,
@@ -21,8 +22,8 @@ describe("DelegationSlice", () => {
         const url = "https://example.com"
         const nextState = DelegationSlice.reducer(
             initialState,
-            addDelegationUrl(url),
+            addDelegationUrl({ url, genesisId: defaultMainNetwork.genesis.id }),
         )
-        expect(nextState.urls).toContain(url)
+        expect(nextState[defaultMainNetwork.genesis.id].urls).toContain(url)
     })
 })

@@ -4,10 +4,10 @@ import { PersistPartial } from "redux-persist/es/persistReducer"
 
 import {
     AnyAction,
-    MiddlewareArray,
-    ThunkDispatch,
-    ThunkAction,
     createAsyncThunk,
+    MiddlewareArray,
+    ThunkAction,
+    ThunkDispatch,
 } from "@reduxjs/toolkit"
 
 export type PersistedState = RootState & PersistPartial

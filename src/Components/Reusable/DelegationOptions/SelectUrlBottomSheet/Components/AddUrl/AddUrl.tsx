@@ -6,13 +6,9 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    useThor,
 } from "~Components"
-import {
-    addDelegationUrl,
-    selectDelegationUrls,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { addDelegationUrl, useAppDispatch } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
 /**
@@ -41,12 +37,11 @@ export const AddUrl = ({
     onCloseBottomSheet,
 }: Props) => {
     const dispatch = useAppDispatch()
-    const delegationUrls = useAppSelector(selectDelegationUrls)
     const { LL } = useI18nContext()
+    const thor = useThor()
     const handleAddUrl = () => {
-        if (!delegationUrls.includes(newUrl)) {
-            dispatch(addDelegationUrl(newUrl))
-        }
+        dispatch(addDelegationUrl({ url: newUrl, genesisId: thor.genesis.id }))
+
         setSelectedDelegationUrl(newUrl)
         onCloseBottomSheet()
     }

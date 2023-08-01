@@ -1,24 +1,40 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
+import { selectSelectedNetwork } from "./Network"
+import { DelegationType } from "~Model/Delegation"
 
 export const selectDelegationState = (state: RootState) => state.delegation
 
 export const selectDelegationUrls = createSelector(
+    selectSelectedNetwork,
     selectDelegationState,
-    delegation => delegation.urls,
+    (network, delegation) => {
+        if (!delegation[network.genesis.id]) return []
+
+        return delegation[network.genesis.id].urls
+    },
 )
 
 export const getDefaultDelegationOption = createSelector(
+    selectSelectedNetwork,
     selectDelegationState,
-    delegation => delegation.defaultDelegationOption,
+    (network, delegation) => {
+        if (!delegation[network.genesis.id]) return DelegationType.NONE
+
+        return delegation[network.genesis.id].defaultDelegationOption
+    },
 )
 
 export const getDefaultDelegationAccount = createSelector(
+    selectSelectedNetwork,
     selectDelegationState,
-    delegation => delegation.defaultDelegationAccount,
+    (network, delegation) =>
+        delegation[network.genesis.id]?.defaultDelegationAccount,
 )
 
 export const getDefaultDelegationUrl = createSelector(
+    selectSelectedNetwork,
     selectDelegationState,
-    delegation => delegation.defaultDelegationUrl,
+    (network, delegation) =>
+        delegation[network.genesis.id]?.defaultDelegationUrl,
 )
