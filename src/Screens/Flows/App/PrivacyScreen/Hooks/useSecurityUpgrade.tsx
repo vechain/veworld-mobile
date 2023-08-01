@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { useWalletSecurity } from "~Hooks"
 import { LocalDevice } from "~Model"
-import { CryptoUtils, error } from "~Utils"
+import { CryptoUtils, debug, error } from "~Utils"
 import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
 import {
     Operation,
@@ -30,7 +30,7 @@ import {
  * const runSecurityUpgrade = useSecurityUpgrade();
  *
  * runSecurityUpgrade('password', () => {
- *   console.log('Security upgrade completed');
+ *   console.log("Security upgrade completed");
  * });
  * ```
  *
@@ -53,6 +53,8 @@ export const useSecurityUpgrade = () => {
             const operations: Operation[] = []
 
             try {
+                debug("SECURITY UPGRADE START")
+
                 for (const device of devices) {
                     const { decryptedWallet } = await CryptoUtils.decryptWallet(
                         device,
@@ -73,6 +75,8 @@ export const useSecurityUpgrade = () => {
                 await executeTransactions(operations, password)
 
                 onSuccessCallback?.()
+
+                debug("SECURITY UPGRADE SUCCESS")
             } catch (e) {
                 error("SECURITY UPGRADE ERROR", e)
             }
