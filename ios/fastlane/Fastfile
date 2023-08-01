@@ -13,7 +13,7 @@ default_platform(:ios)
 platform :ios do
 
   desc "Revoke certificates from Apple Developer Portal" # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
-  lane :nuke_appstore_sertificates do
+  lane :nuke_appstore_certificates do
     match_nuke( # https://docs.fastlane.tools/actions/match_nuke/
       type: "appstore", # The type of code signing identity to revoke.
       app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
@@ -72,7 +72,7 @@ platform :ios do
   desc "Rotate certificates"
   lane :rotate_certificates do
     sh("./rotate_match_password.sh") # Generate new password for the certificates.
-    nuke_appstore_sertificates # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
+    nuke_appstore_certificates # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
     remove_certificates_from_gh # Remove the certificates from GitHub.
     generate_new_certificates # Generate new certificates.
   end

@@ -1,5 +1,4 @@
-fastlane documentation
-----
+## fastlane documentation
 
 # Installation
 
@@ -15,10 +14,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios nuke_appstore_sertificates
+### ios nuke_appstore_certificates
 
 ```sh
-[bundle exec] fastlane ios nuke_appstore_sertificates
+[bundle exec] fastlane ios nuke_appstore_certificates
 ```
 
 Revoke certificates from Apple Developer Portal
@@ -79,7 +78,7 @@ Commit latest artifacts to GitHub
 
 Push a new beta build to TestFlight
 
-----
+---
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 
