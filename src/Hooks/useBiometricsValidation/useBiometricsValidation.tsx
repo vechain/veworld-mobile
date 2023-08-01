@@ -35,8 +35,8 @@ export const useBiometricsValidation = () => {
 
                 if (result.error === "not_available") {
                     AlertUtils.showGoToSettingsAlert(
-                        LL.ALERT_TITLE_BIO_PREVIOUSLY_DENIED(),
-                        LL.ALERT_MSG_BIO_PREVIOUSLY_DENIED(),
+                        LL.ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE(),
+                        LL.ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE(),
                         () => {
                             return
                         },

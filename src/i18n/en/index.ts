@@ -294,8 +294,8 @@ const en: BaseTranslation = {
     // Alerts
     ALERT_TITLE_NOT_ENROLLED: "Biometrics not available",
     ALERT_MSG_NOT_ENROLLED: "You have not enrolled any biometric authentication method.",
-    ALERT_TITLE_BIO_PREVIOUSLY_DENIED: "Biometrics previously denied",
-    ALERT_MSG_BIO_PREVIOUSLY_DENIED: "You have previously denied biometric authentication. Please enable it in your device settings.",
+    ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: "Biometrics previously denied or unavailable",
+    ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: "You have previously denied biometric authentication or it's unavailable on this device. Please enable it in your device settings.",
     ALERT_TITLE_AUTHORIZE_BLUETOOTH: "Authorize Bluetooth",
     ALERT_MSG_AUTHORIZE_BLUETOOTH: "Please, open app settings and authorize Bluetooth to continue.",
     ALERT_TITLE_ENABLE_BLUETOOTH: "Enable bluetooth",

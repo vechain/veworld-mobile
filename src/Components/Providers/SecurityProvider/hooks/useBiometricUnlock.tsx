@@ -24,7 +24,7 @@ export const useBiometricUnlock = () => {
                     await appReset()
                 },
                 async () => {
-                    return await recursiveBiometricsUnlock()
+                    return recursiveBiometricsUnlock()
                 },
             )
         } else {
