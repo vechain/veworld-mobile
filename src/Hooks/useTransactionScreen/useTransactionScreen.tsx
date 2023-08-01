@@ -35,7 +35,7 @@ import { Routes } from "~Navigation"
 type Props = {
     clauses: Transaction.Body["clauses"]
     onTransactionSuccess: (transaction: Transaction, txId: string) => void
-    onTransactionFailure: () => void
+    onTransactionFailure: (error: unknown) => void
     initialRoute: Routes
     options?: Connex.Driver.TxOptions
 }
@@ -120,8 +120,8 @@ export const useTransactionScreen = ({
                         await sendTransaction(transaction)
                 }
             } catch (e) {
-                error(e)
-                onTransactionFailure()
+                error("signAndSendTransaction", e)
+                onTransactionFailure(e)
             } finally {
                 setLoading(false)
                 dispatch(setIsAppLoading(false))
@@ -147,14 +147,21 @@ export const useTransactionScreen = ({
             selectedDelegationOption !== DelegationType.ACCOUNT
         ) {
             const tx = buildTransaction()
-            await navigateToLedger(
-                tx,
-                selectedAccount as LedgerAccountWithDevice,
-            )
+
+            try {
+                await navigateToLedger(
+                    tx,
+                    selectedAccount as LedgerAccountWithDevice,
+                )
+            } catch (e) {
+                error("onSubmit:navigateToLedger", e)
+                onTransactionFailure(e)
+            }
         } else {
             await checkIdentityBeforeOpening()
         }
     }, [
+        onTransactionFailure,
         buildTransaction,
         selectedAccount,
         selectedDelegationOption,

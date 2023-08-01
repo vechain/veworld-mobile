@@ -177,7 +177,7 @@ export const useSignTransaction = ({
             )
         } catch (e) {
             showErrorToast(LL.ERROR(), LL.SEND_DELEGATION_ERROR_SIGNATURE())
-            return
+            throw e
         }
 
         nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {

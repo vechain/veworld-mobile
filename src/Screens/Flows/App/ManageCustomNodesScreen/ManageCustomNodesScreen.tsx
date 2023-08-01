@@ -12,12 +12,12 @@ import {
     NetworkBox,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { NETWORK_TYPE, Network } from "~Model"
+import { Network, NETWORK_TYPE } from "~Model"
 import {
-    StyleSheet,
+    SectionList,
     SectionListData,
     SectionListRenderItemInfo,
-    SectionList,
+    StyleSheet,
     ViewToken,
 } from "react-native"
 import {
@@ -129,7 +129,7 @@ export const ManageCustomNodesScreen = () => {
             closeDeleteConfirmationSheet()
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
         } catch (e) {
-            error(e)
+            error("onDeleteNetworkConfirm", e)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         }
     }, [closeDeleteConfirmationSheet, networkToEditDeleteId, dispatch])

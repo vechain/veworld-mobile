@@ -86,7 +86,7 @@ export const signMessageRequestSuccessResponse = async (
         })
         showSuccessToast(LL.NOTIFICATION_wallet_connect_sign_success())
     } catch (err: unknown) {
-        error(err)
+        error("signMessageRequestSuccessResponse", err)
         showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
     }
 }

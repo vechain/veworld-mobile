@@ -8,6 +8,7 @@ import {
     TokenInfoResponse,
 } from "~Storage/Redux/Types"
 import { selectCurrency } from "~Storage/Redux/Selectors"
+
 const allSettled = require("promise.allsettled")
 
 /**
@@ -38,6 +39,6 @@ export const fetchExchangeRates =
 
             dispatch(updateExchangeRate(exchangeRates))
         } catch (e) {
-            error(e)
+            error("fetchExchangeRate", e)
         }
     }

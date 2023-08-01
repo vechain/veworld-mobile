@@ -12,7 +12,7 @@ import {
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { useAnalyticTracking, useDeviceUtils, useTheme } from "~Hooks"
-import { CryptoUtils, error, SeedUtils } from "~Utils"
+import { CryptoUtils, SeedUtils, warn } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportMnemonicInput } from "./Components/ImportMnemonicInput"
@@ -52,7 +52,7 @@ export const ImportMnemonicScreen = () => {
             try {
                 getDeviceFromMnemonic(sanitisedMnemonic)
             } catch (e) {
-                error(e)
+                warn("onVerify", e)
                 HapticsService.triggerNotification({ level: "Error" })
                 setIsError(LL.ERROR_WALLET_ALREADY_EXISTS())
                 return

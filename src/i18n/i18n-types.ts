@@ -1053,13 +1053,13 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_NOT_ENROLLED: string
 	/**
-	 * B​i​o​m​e​t​r​i​c​s​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d
+	 * B​i​o​m​e​t​r​i​c​s​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​o​r​ ​u​n​a​v​a​i​l​a​b​l​e
 	 */
-	ALERT_TITLE_BIO_PREVIOUSLY_DENIED: string
+	ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
 	/**
-	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
+	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​o​r​ ​i​t​'​s​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
 	 */
-	ALERT_MSG_BIO_PREVIOUSLY_DENIED: string
+	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
 	/**
 	 * A​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h
 	 */
@@ -1097,6 +1097,10 @@ type RootTranslation = {
 ​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
 	 */
 	ALERT_MSG_INTERNET_DOWN: string
+	/**
+	 * Y​o​u​ ​c​a​n​'​t​ ​v​i​e​w​ ​a​ ​l​e​d​g​e​r​ ​m​n​e​m​o​n​i​c
+	 */
+	ALERT_CANT_BACKUP_LEDGER: string
 	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
@@ -3354,13 +3358,13 @@ export type TranslationFunctions = {
 	 */
 	ALERT_MSG_NOT_ENROLLED: () => LocalizedString
 	/**
-	 * Biometrics previously denied
+	 * Biometrics previously denied or unavailable
 	 */
-	ALERT_TITLE_BIO_PREVIOUSLY_DENIED: () => LocalizedString
+	ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
 	/**
-	 * You have previously denied biometric authentication. Please enable it in your device settings.
+	 * You have previously denied biometric authentication or it's unavailable on this device. Please enable it in your device settings.
 	 */
-	ALERT_MSG_BIO_PREVIOUSLY_DENIED: () => LocalizedString
+	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
 	/**
 	 * Authorize Bluetooth
 	 */
@@ -3398,6 +3402,10 @@ export type TranslationFunctions = {
 Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
+	/**
+	 * You can't view a ledger mnemonic
+	 */
+	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */
