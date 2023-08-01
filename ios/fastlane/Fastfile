@@ -1,15 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
@@ -24,45 +12,70 @@ default_platform(:ios)
 
 platform :ios do
 
+  desc "Revoke certificates from Apple Developer Portal" # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
+  lane :nuke_appstore_certificates do
+    match_nuke( # https://docs.fastlane.tools/actions/match_nuke/
+      type: "appstore", # The type of code signing identity to revoke.
+      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      readonly: false, # If true, will only print out the commands it would run, without actually running them.
+    )
+  end
+
+  desc "Remove certificates from GitHub"
+  lane :remove_certificates_from_gh do
+    Dir.chdir "../../.." do # Navigate to outside of the project as not have conflicts with this git repo. 
+      puts Dir.pwd # Print the current working directory.
+
+      repo_name = ENV['CERTIFICATES_REPO']
+      sh("git clone #{repo_name}") # Clone the repo with the certificates.
+      Dir.chdir "veworld-mobile-ios-cert" # Navigate to the repo with the certificates.
+
+      puts Dir.pwd # Print the current working directory.
+
+      sh("rm -rf certs/distribution/*") # Remove the certificates.
+      sh("rm -rf profiles/appstore/*") # Remove the profiles.
+      sh("git add --all") # Add the changes.
+      sh("git commit -a -m 'chore: remove certificates'") # Commit the changes.
+      sh("git push -u origin main") # Push the changes to GitHub.
+
+      Dir.chdir ".." # Navigate back outside of the repo.
+      sh("rm -rf veworld-mobile-ios-cert") # Remove the repo folder.
+    end  
+  end
 
   desc "Generate new certificates"
   lane :generate_new_certificates do
-    sync_code_signing(
-      type: "appstore",
-      app_identifier: ENV["APP_IDENTIFIER"],
-      force_for_new_devices: true,
-      readonly: false,
-      git_branch: "main",
-      skip_docs: true,
-      verbose: true
+    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
+      type: "appstore", # The type of code signing identity to generate.
+      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
+      readonly: false, # If true, will only print out the commands it would run, without actually running them.
+      git_branch: "main", # The branch to commit the code signing files to.
+      skip_docs: true, # If true, will skip the creation of a README.md file.
+      verbose: true # If true, will print out extra information and debugging info.
     )
   end
 
-
-
-  # To be called (by everyone) whernever a new dev is onboarded to the project
   desc "Get certificates"
-  lane :fetch_certificates_from_gh do
-    sync_code_signing(
-      type: "appstore",
-      app_identifier: ENV["APP_IDENTIFIER"],
-      readonly: true,
-      git_branch: "main",
-      verbose: true
+  lane :fetch_certificates_from_gh do # Get the certificates from GitHub.
+    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
+      type: "appstore", # The type of code signing identity to generate.
+      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      readonly: true, # If true, will only print out the commands it would run, without actually running them.
+      git_branch: "main", # The branch to commit the code signing files to.
+      verbose: true # If true, will print out extra information and debugging info.
     )
   end
 
 
 
-
-  desc "Run e2e tests"
-  lane :e2e do
-    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
-      sh("detox build --configuration ios.sim.debug")
-      sh("detox test --configuration ios.sim.debug --loglevel trace --record-logs all")
-    end
+  desc "Rotate certificates"
+  lane :rotate_certificates do
+    sh("./rotate_match_password.sh") # Generate new password for the certificates.
+    nuke_appstore_certificates # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
+    remove_certificates_from_gh # Remove the certificates from GitHub.
+    generate_new_certificates # Generate new certificates.
   end
-
 
 
 
@@ -79,7 +92,6 @@ platform :ios do
     package_json["version"] = version
     File.write("../../package.json", JSON.pretty_generate(package_json))
   end
-
 
 
 
@@ -105,8 +117,6 @@ platform :ios do
 
 
 
-   
-
   desc "Commit latest artifacts to GitHub"
   lane :gh_setup_after do |values|
     branch_name = "release-build"
@@ -117,6 +127,8 @@ platform :ios do
     # Push the branch to GitHub
     sh("git push -u origin #{branch_name}-#{build_or_version_number}")
   end
+
+
 
 
 
@@ -177,8 +189,15 @@ platform :ios do
         build_or_version_number: versionType.nil? ? build : version
       )
 
-      # fetch certificates from github
-      fetch_certificates_from_gh
+
+      # if new version is specified rotate certificates
+      if !versionType.nil? 
+        # rotate certificates
+        rotate_certificates
+      else 
+        # use same certificates get them from github
+        fetch_certificates_from_gh
+      end
 
       # build app
       build_app(
@@ -269,3 +288,20 @@ platform :ios do
     end
   end
 end
+
+
+
+
+
+
+
+
+=begin
+  desc "Run e2e tests"
+  lane :e2e do
+    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
+      sh("detox build --configuration ios.sim.debug")
+      sh("detox test --configuration ios.sim.debug --loglevel trace --record-logs all")
+    end
+  end
+=end
