@@ -77,7 +77,7 @@ export const getPersistorConfig = async (): Promise<PersistConfig<unknown>> => {
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
         ],
-        migrate: createMigrate(migrationUpdates, { debug: false }),
+        migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
     }
 }
