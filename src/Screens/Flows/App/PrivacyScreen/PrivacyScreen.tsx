@@ -13,10 +13,11 @@ import {
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
 import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
-import { LocalDevice, WALLET_STATUS } from "~Model"
+import { DEVICE_TYPE, LocalDevice, WALLET_STATUS } from "~Model"
 import {
-    setIsPinCodeRequired,
     selectAreDevFeaturesEnabled,
+    selectSelectedAccount,
+    setIsPinCodeRequired,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -47,6 +48,8 @@ export const PrivacyScreen = () => {
         selectAnalyticsTrackingEnabled,
     )
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { isWalletSecurityBiometrics, isWalletSecurityPassword } =
         useWalletSecurity()
@@ -214,11 +217,14 @@ export const PrivacyScreen = () => {
                             </>
                         )}
 
-                        <BackupMnemonicBottomSheet
-                            ref={BackupPhraseSheetRef}
-                            onClose={closeBackupPhraseSheet}
-                            mnemonicArray={mnemonicArray}
-                        />
+                        {selectedAccount.device.type ===
+                            DEVICE_TYPE.LOCAL_MNEMONIC && (
+                            <BackupMnemonicBottomSheet
+                                ref={BackupPhraseSheetRef}
+                                onClose={closeBackupPhraseSheet}
+                                mnemonicArray={mnemonicArray}
+                            />
+                        )}
 
                         <SelectDeviceBottomSheet<LocalDevice>
                             ref={walletMgmtBottomSheetRef}
