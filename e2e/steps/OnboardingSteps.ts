@@ -2,7 +2,7 @@
 import { Given, Then, When } from "@cucumber/cucumber"
 import { waitFor, element } from "detox"
 import {
-    AdvancedSettingsFlow,
+    GeneralSettingsFlow,
     BiometricsScreen,
     ConfirmMnemonicScreen,
     HomeFlows,
@@ -81,8 +81,8 @@ Given(
     async () => {
         if (!(await WelcomeScreen.isActive())) {
             await HomeFlows.goToSettings()
-            await SettingsFlows.goToAdvancedSettings()
-            await AdvancedSettingsFlow.resetApp()
+            await SettingsFlows.goToGeneralSettings()
+            await GeneralSettingsFlow.resetApp()
         }
     },
 )

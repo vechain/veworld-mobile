@@ -9,7 +9,7 @@ import {
 } from "@cucumber/cucumber"
 import detox from "detox/internals"
 import {
-    AdvancedSettingsFlow,
+    GeneralSettingsFlow,
     HomeFlows,
     SettingsFlows,
     isPresentId,
@@ -47,8 +47,8 @@ After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     // reset app after each test
     if (await isPresentId("settings-tab")) {
         await HomeFlows.goToSettings()
-        await SettingsFlows.goToAdvancedSettings()
-        await AdvancedSettingsFlow.resetApp()
+        await SettingsFlows.goToGeneralSettings()
+        await GeneralSettingsFlow.resetApp()
     } else {
         console.log("Cannot reset app for test: " + pickle.name)
     }

@@ -1,7 +1,7 @@
 import { clickByText, isPresentText } from "../common"
 
-export const goToAdvancedSettings = async () => {
-    await clickByText("Advanced")
+export const goToGeneralSettings = async () => {
+    await clickByText("General")
 }
 
 export const goToTransactionsSettings = async () => {

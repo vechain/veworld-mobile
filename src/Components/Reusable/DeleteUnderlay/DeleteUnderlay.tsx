@@ -17,6 +17,7 @@ export const DeleteUnderlay: React.FC<Props> = ({ onPress }) => {
                     bg={theme.colors.danger}
                     color={theme.colors.card}
                     style={styles.deleteIcon}
+                    testID="DeleteUnderlay_DeleteIcon"
                 />
             </BaseTouchable>
         </BaseView>

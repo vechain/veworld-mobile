@@ -5,7 +5,7 @@ Feature: The user can manage tokens
     * Open with demo account
     * The user go to tokens management screen
 
-  Scenario: User select an official token
+  Scenario: User selects an official token
     When The user selects "<token>" token from the unselected tokens list
     Then The user should see "<token>" token balance in home screen
 
@@ -13,7 +13,7 @@ Feature: The user can manage tokens
       | token |
       | Plair |
 
-  Scenario: User select multiple official tokens
+  Scenario: User selects multiple official tokens
     When The user selects "<token>" and "<token2>" tokens from the unselected tokens list
     Then The user should see "<token>" and "<token2>" token balances in home screen
 

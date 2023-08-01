@@ -23,6 +23,7 @@ import {
     FadeoutButton,
     Layout,
     LedgerBadge,
+    RequireUserPassword,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -130,6 +131,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         isDelegated,
     } = useDelegation({ setGasPayer })
 
+    const onCancelCheckIdentity = useCallback(() => {
+        setLoadingTransaction(false)
+    }, [])
+
     const { signAndSendTransaction, navigateToLedger, buildTransaction } =
         useSignTransaction({
             gas,
@@ -141,7 +146,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             selectedDelegationUrl,
             token,
             initialRoute: Routes.HOME,
-            onError: () => setLoadingTransaction(false),
+            onError: onCancelCheckIdentity,
         })
 
     const { RenderGas, isThereEnoughGas } = useRenderGas({
@@ -154,12 +159,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     })
 
     const {
-        ConfirmIdentityBottomSheet,
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
-        onCancel: () => setLoadingTransaction(false),
+        onCancel: onCancelCheckIdentity,
         allowAutoPassword: true,
     })
 
@@ -313,7 +320,11 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         </>
                     )}
 
-                    <ConfirmIdentityBottomSheet />
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={handleClosePasswordModal}
+                        onSuccess={onPasswordSuccess}
+                    />
 
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}

@@ -13,6 +13,7 @@ import {
     DeviceBox,
     Layout,
     RenameWalletBottomSheet,
+    RequireUserPassword,
 } from "~Components"
 import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
@@ -33,11 +34,15 @@ export const WalletManagementScreen = () => {
 
     const { deleteWallet } = useWalletDeletion(selectedDevice)
 
-    const { ConfirmIdentityBottomSheet, checkIdentityBeforeOpening } =
-        useCheckIdentity({
-            onIdentityConfirmed: deleteWallet,
-            allowAutoPassword: false,
-        })
+    const {
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
+        checkIdentityBeforeOpening,
+    } = useCheckIdentity({
+        onIdentityConfirmed: deleteWallet,
+        allowAutoPassword: false,
+    })
 
     const {
         ref: accountMgmtBottomSheetRef,
@@ -135,7 +140,11 @@ export const WalletManagementScreen = () => {
                         ref={removeWalletBottomSheetRef}
                     />
 
-                    <ConfirmIdentityBottomSheet />
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={handleClosePasswordModal}
+                        onSuccess={onPasswordSuccess}
+                    />
                 </BaseView>
             }
         />

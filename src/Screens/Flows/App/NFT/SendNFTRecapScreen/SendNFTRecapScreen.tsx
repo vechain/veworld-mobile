@@ -12,6 +12,7 @@ import {
     FadeoutButton,
     Layout,
     NFTTransferCard,
+    RequireUserPassword,
     TransferCard,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -114,9 +115,11 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     })
 
     const {
-        ConfirmIdentityBottomSheet,
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
         onCancel: () => setLoading(false),
@@ -211,7 +214,11 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             data={LL.SEND_LESS_THAN_1_MIN()}
                         />
                     </BaseView>
-                    <ConfirmIdentityBottomSheet />
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={handleClosePasswordModal}
+                        onSuccess={onPasswordSuccess}
+                    />
                 </>
             }
             footer={

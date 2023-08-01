@@ -39,17 +39,18 @@ export const pasteMnemonic = async (mnemonic: string) => {
     await element(by.text("Verify")).tap()
 }
 
+export const insertPassword = async (password: string) => {
+    for (let i = 0; i < password.length; i++) {
+        await element(by.text(password.charAt(i))).tap()
+    }
+}
+
 export const chooseAndConfirmPassword = async (
     password: string,
     confirmPassword: string,
 ) => {
-    for (let i = 0; i < password.length; i++) {
-        await element(by.text(password.charAt(i))).tap()
-    }
-
-    for (let i = 0; i < confirmPassword.length; i++) {
-        await element(by.text(confirmPassword.charAt(i))).tap()
-    }
+    await insertPassword(password)
+    await insertPassword(confirmPassword)
 }
 
 export const protectWithBiometrics = async () => {

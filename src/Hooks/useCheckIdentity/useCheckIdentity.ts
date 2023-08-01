@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { useDisclosure, useWalletSecurity } from "~Hooks"
-import { RequireUserPassword } from "~Components"
 import { isEmpty } from "lodash"
 import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
 
@@ -69,18 +68,10 @@ export const useCheckIdentity = ({
         [closePasswordPrompt, onIdentityConfirmed],
     )
 
-    const handleClose = () => {
+    const handleClosePasswordModal = useCallback(() => {
         onCancel?.()
         closePasswordPrompt()
-    }
-
-    const ConfirmIdentityBottomSheet = () => (
-        <RequireUserPassword
-            isOpen={isPasswordPromptOpen}
-            onClose={handleClose}
-            onSuccess={onPasswordSuccess}
-        />
-    )
+    }, [closePasswordPrompt, onCancel])
 
     return {
         onPasswordSuccess,
@@ -88,7 +79,7 @@ export const useCheckIdentity = ({
         isPasswordPromptOpen,
         openPasswordPrompt,
         closePasswordPrompt,
-        ConfirmIdentityBottomSheet,
         isBiometricsEmpty,
+        handleClosePasswordModal,
     }
 }

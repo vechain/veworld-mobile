@@ -85,11 +85,11 @@ export const getPersistorConfig = async () => {
  * Remember to add new reset actions here of any new persisted Slice.
  */
 export const resetActions = [
-    resetTokensState,
     resetCurrencyState,
-    resetAccountState,
     resetActivityState,
     resetBalancesState,
+    resetTokensState,
+    resetAccountState,
     resetCacheState,
     resetContactsState,
     resetDelegationState,

@@ -18,7 +18,7 @@ Feature: The user send tokens in test net
     And The user can click next button to go to the next screen
     And The user can click confirm button
     And The user inserts password "<password>"
-    Then The user should see success message
+    Then The user should see successfully sent message for the token "<token>"
 
     Examples:
       | token | amount | address                                    | password |
@@ -35,14 +35,14 @@ Feature: The user send tokens in test net
     And The user selects the account "<delegationAccount>" from the list
     And The user can click confirm button
     And The user inserts password "<password>"
-    Then The user should see success message
+    Then The user should see successfully sent message for the token "<token>"
 
     Examples:
       | token | amount | address                                    | password | delegationAccount |
       | VET   | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111   | Account 2         |
       | VTHO  | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111   | Account 2         |
 
-  @Dev
+
   Scenario: User should be able to send tokens delegating with url method
     When The user selects "<token>" token to be sent
     And The user inserts the amount "<amount>" to be sent
@@ -53,7 +53,7 @@ Feature: The user send tokens in test net
     And The user inserts a new url "<url>"
     And The user can click confirm button
     And The user inserts password "<password>"
-    Then The user should see success message
+    Then The user should see successfully sent message for the token "<token>"
 
     Examples:
       | token | amount | address                                    | password | url                                           |
@@ -73,7 +73,7 @@ Feature: The user send tokens in test net
     And The user can click next button to go to the next screen
     And The user can click confirm button
     And The user inserts password "<password>"
-    Then The user should see success message
+    Then The user should see successfully sent message for the token "<token>"
 
     Examples:
       | token | amount | address                                    | tokenAddress                               | password |
@@ -90,9 +90,27 @@ Feature: The user send tokens in test net
     And The user can click next button to go to the next screen
     And The user can click confirm button
     And The user inserts password "<password>"
-    Then The user should see success message
+    Then The user should see successfully received message for the token "<token>"
 
     Examples:
       | token | amount | address                                    | password |
       | VET   | 3      | 0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa | 111111   |
       | VTHO  | 3      | 0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa | 111111   |
+
+  Scenario: User should not get error for small amount (#557) on the send flow
+    When The user selects "<token>" token to be sent
+    And The user inserts a very small amount to be sent
+    Then The user can click next button to go to the next screen
+
+    Examples:
+      | token   |
+      | Vechain |
+
+  Scenario: User should should be able to insert comma (#561) on the send flow
+    When The user selects "<token>" token to be sent
+    And The user inserts a comma on the amount to be sent
+    Then The user sees the amount with the comma converted to a dot
+
+    Examples:
+      | token   |
+      | Vechain |

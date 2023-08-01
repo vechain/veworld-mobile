@@ -288,9 +288,6 @@ export const ManageTokenScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    scrollView: {
-        paddingHorizontal: 20,
-    },
     counter: {
         borderRadius: 6,
         paddingVertical: 2,

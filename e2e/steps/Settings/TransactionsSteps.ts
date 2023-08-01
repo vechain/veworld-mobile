@@ -91,11 +91,11 @@ When(
 )
 
 When(
-    "The user delete the delegation url {string} with index {string}",
+    "The user delete the delegation url {string}",
     { timeout: -1 },
-    async (url: string, index: string) => {
+    async (url: string) => {
         await swipeLeftByText(url)
-        await clickById(`BaseUnderlay_deleteIcon-${index}`)
+        await clickById("DeleteUnderlay_DeleteIcon")
     },
 )
 

@@ -67,17 +67,16 @@ Feature: The user can manage transactions settings
       | url1                                          | url2                                          |
       | https://sponsor-testnet.vechain.energy/by/218 | https://sponsor-testnet.vechain.energy/by/219 |
 
-
   Scenario: User can delete delegation URLs
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
     And The user inserts a new url "<url1>"
     And The user click the plus icon to add a new delegation url
     And The user inserts a new url "<url2>"
-    And The user delete the delegation url "<url1>" with index "<index1>"
+    And The user delete the delegation url "<url1>"
     Then The user should see the delegation url "<url2>" card
     Then The user should not see the delegation url "<url1>" card
 
     Examples:
-      | url1                                          | index1 | url2                                          |
-      | https://sponsor-testnet.vechain.energy/by/218 | 0      | https://sponsor-testnet.vechain.energy/by/219 |
+      | url1                                          | url2                                          |
+      | https://sponsor-testnet.vechain.energy/by/218 | https://sponsor-testnet.vechain.energy/by/219 |
