@@ -1,5 +1,5 @@
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
-import { debug } from "~Utils"
+import { debug, PlatformUtils } from "~Utils"
 import { ConnectedLedgerDevice } from "~Model"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Device } from "react-native-ble-plx"
@@ -81,10 +81,10 @@ export const useLedgerSubscription = ({ deviceId, onDevice }: Props) => {
         startSubscription()
 
         return () => {
-            if (deviceSubscription.current) {
+            debug("useLedgerSubscription - endSubscription")
+
+            if (deviceSubscription.current && PlatformUtils.isIOS()) {
                 deviceSubscription.current.unsubscribe()
-                deviceSubscription.current = undefined
-                debug("useLedgerSubscription - endSubscription")
             }
         }
     }, [startSubscription])
