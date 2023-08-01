@@ -1,21 +1,18 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
 import {
-    AccountCard,
-    BaseCard,
     BaseSpacer,
     BaseText,
     BaseView,
-    DelegationOptions,
-    FadeoutButton,
     Layout,
     NFTTransferCard,
     TransferCard,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
+    addPendingNFTtransferTransactionActivity,
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
     setIsAppLoading,
@@ -23,17 +20,11 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
-import {
-    useCheckIdentity,
-    useRenderGas,
-    useSignTransaction,
-    useTransactionGas,
-} from "~Hooks"
-import { useDelegation } from "../../SendScreen/04-TransactionSummarySendScreen/Hooks"
-import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { useAnalyticTracking, useTransactionScreen } from "~Hooks"
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
-import { DelegationType } from "~Model/Delegation"
+import { Transaction } from "thor-devkit"
+import { AnalyticsEvent } from "~Constants"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -43,11 +34,10 @@ type Props = NativeStackScreenProps<
 export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-
+    const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
-
     const nft = useAppSelector(state =>
         selectNFTWithAddressAndTokenId(
             state,
@@ -55,16 +45,6 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             route.params.tokenId,
         ),
     )
-
-    const [loading, setLoading] = useState(false)
-
-    const onTXFinish = useCallback(() => {
-        setLoading(false)
-
-        dispatch(setIsAppLoading(false))
-
-        nav.dispatch(StackActions.popToTop())
-    }, [dispatch, nav])
 
     const clauses = useMemo(
         () =>
@@ -77,72 +57,34 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         [selectedAccount, route.params.receiverAddress, nft],
     )
 
-    const { gas, loadingGas, setGasPayer } = useTransactionGas({
-        clauses,
-    })
+    const onFinish = useCallback(
+        (success: boolean) => {
+            if (success) track(AnalyticsEvent.SEND_NFT_SENT)
+            else track(AnalyticsEvent.SEND_NFT_FAILED_TO_SEND)
 
-    const {
-        setNoDelegation,
-        setSelectedDelegationAccount,
-        setSelectedDelegationUrl,
-        selectedDelegationOption,
-        selectedDelegationAccount,
-        selectedDelegationUrl,
-        isDelegated,
-    } = useDelegation({ setGasPayer })
+            dispatch(setIsAppLoading(false))
+            nav.dispatch(StackActions.popToTop())
+        },
+        [track, dispatch, nav],
+    )
 
-    const { signAndSendTransaction, navigateToLedger, buildTransaction } =
-        useSignTransaction({
-            gas,
+    const onTransactionSuccess = useCallback(
+        (transaction: Transaction) => {
+            dispatch(addPendingNFTtransferTransactionActivity(transaction))
+            onFinish(true)
+        },
+        [onFinish, dispatch],
+    )
+
+    const onTransactionFailure = useCallback(() => onFinish(false), [onFinish])
+
+    const { ConfirmIdentityBottomSheet, Delegation, RenderGas, SubmitButton } =
+        useTransactionScreen({
             clauses,
-            onTXFinish,
-            isDelegated,
-            selectedDelegationAccount,
-            selectedDelegationOption,
-            selectedDelegationUrl,
-            initialRoute: Routes.NFTS,
-            onError: () => setLoading(false),
-            token: nft!,
+            onTransactionSuccess,
+            onTransactionFailure,
+            initialRoute: Routes.HOME,
         })
-
-    const { RenderGas, isThereEnoughGas } = useRenderGas({
-        loadingGas,
-        selectedDelegationOption,
-        gas,
-        accountAddress:
-            selectedDelegationAccount?.address ?? selectedAccount.address,
-    })
-
-    const {
-        ConfirmIdentityBottomSheet,
-        checkIdentityBeforeOpening,
-        isBiometricsEmpty,
-    } = useCheckIdentity({
-        onIdentityConfirmed: signAndSendTransaction,
-        onCancel: () => setLoading(false),
-        allowAutoPassword: true,
-    })
-
-    const onSubmit = useCallback(async () => {
-        if (
-            selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
-            selectedDelegationOption !== DelegationType.ACCOUNT
-        ) {
-            const tx = buildTransaction()
-            await navigateToLedger(
-                tx,
-                selectedAccount as LedgerAccountWithDevice,
-            )
-        } else {
-            await checkIdentityBeforeOpening()
-        }
-    }, [
-        buildTransaction,
-        selectedAccount,
-        selectedDelegationOption,
-        navigateToLedger,
-        checkIdentityBeforeOpening,
-    ])
 
     return (
         <Layout
@@ -169,40 +111,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             />
                         )}
 
-                        <DelegationOptions
-                            selectedDelegationOption={selectedDelegationOption}
-                            setNoDelegation={setNoDelegation}
-                            setSelectedAccount={setSelectedDelegationAccount}
-                            selectedAccount={selectedDelegationAccount}
-                            selectedDelegationUrl={selectedDelegationUrl}
-                            setSelectedDelegationUrl={setSelectedDelegationUrl}
-                            disabled={loading}
-                        />
-                        {selectedDelegationAccount && (
-                            <>
-                                <BaseSpacer height={16} />
-                                <AccountCard
-                                    account={selectedDelegationAccount}
-                                />
-                            </>
-                        )}
-                        {selectedDelegationUrl && (
-                            <>
-                                <BaseSpacer height={16} />
-                                <BaseCard>
-                                    <BaseText py={8}>
-                                        {selectedDelegationUrl}
-                                    </BaseText>
-                                </BaseCard>
-                            </>
-                        )}
+                        <Delegation />
 
                         <BaseSpacer height={24} />
 
                         <InfoSectionView<React.JSX.Element>
                             isFontReverse
                             title={LL.ESTIMATED_GAS_FEE()}
-                            data={RenderGas}
+                            data={<RenderGas />}
                         />
 
                         <InfoSectionView<string>
@@ -214,17 +130,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                     <ConfirmIdentityBottomSheet />
                 </>
             }
-            footer={
-                <FadeoutButton
-                    title={LL.SEND_TOKEN_TITLE().toUpperCase()}
-                    action={onSubmit}
-                    disabled={!isThereEnoughGas || loading || isBiometricsEmpty}
-                    bottom={0}
-                    mx={0}
-                    width={"auto"}
-                    isLoading={loading || isBiometricsEmpty}
-                />
-            }
+            footer={<SubmitButton />}
         />
     )
 }

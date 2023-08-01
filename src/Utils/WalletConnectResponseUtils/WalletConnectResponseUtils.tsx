@@ -25,7 +25,7 @@ const RCP_INTERNAL_ERROR = -32603
 
 export const transactionRequestSuccessResponse = async (
     { request, web3Wallet, LL }: BaseProps,
-    transactionId: number,
+    transactionId: string,
     signer: string,
     network: Network,
 ) => {

@@ -4,8 +4,8 @@ import { FormattingUtils } from "~Utils"
 import { VTHO } from "~Constants"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import {
-    useAppSelector,
     selectVthoTokenWithBalanceByAccount,
+    useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { EstimateGasResult } from "~Model"
@@ -55,7 +55,7 @@ export const useRenderGas = ({
         return vthoGas && leftVtho.gte(vthoGas)
     }, [amount, vthoGas, tokenSymbol, vthoBalance])
 
-    const RenderGas = useMemo(() => {
+    const RenderGas = () => {
         if (loadingGas) {
             return (
                 <SkeletonContent
@@ -114,17 +114,7 @@ export const useRenderGas = ({
                 </>
             )
         }
-    }, [
-        LL,
-        isThereEnoughGas,
-        loadingGas,
-        selectedDelegationOption,
-        theme.colors.danger,
-        theme.colors.skeletonBoneColor,
-        theme.colors.skeletonHighlightColor,
-        vthoBalance,
-        vthoGas,
-    ])
+    }
 
-    return { RenderGas, isThereEnoughGas }
+    return { RenderGas, isThereEnoughGas, vthoGas, vthoBalance }
 }

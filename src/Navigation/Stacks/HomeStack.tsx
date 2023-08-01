@@ -39,19 +39,19 @@ export type RootStackParamListHome = {
     [Routes.INSERT_ADDRESS_SEND]: {
         token: FungibleTokenWithBalance
         amount: string
-        initialRoute: string
+        initialRoute: Routes
     }
     [Routes.TRANSACTION_SUMMARY_SEND]: {
         token: FungibleTokenWithBalance
         amount: string
         address: string
-        initialRoute: string
+        initialRoute: Routes
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
         delegationSignature?: string
         transaction: Transaction
-        initialRoute: string
+        initialRoute: Routes
     }
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined
