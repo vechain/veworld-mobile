@@ -1,5 +1,5 @@
 import axios from "axios"
-import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
+import { NFTPlaceholderDark, NFTPlaceHolderLight } from "~Assets"
 import { NFT_MIME_TYPE_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { NFTMediaType } from "~Model"
 import { error } from "~Utils/Logger"
@@ -19,8 +19,7 @@ const resolveMimeType = async (resource: string) => {
     try {
         // If it's a data URI parse from the string
         if (resource.startsWith("data:")) {
-            const mime = resource.split(";")[0].split(":")[1]
-            return mime
+            return resource.split(";")[0].split(":")[1]
         }
 
         const res = await axios.head(URIUtils.convertUriToUrl(resource), {

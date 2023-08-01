@@ -54,7 +54,7 @@ export const useTransactionGas = ({
 
                 setGas(estimatedGas)
             } catch (e) {
-                error(e)
+                error("estimateGas", e)
             } finally {
                 setLoadingGas(false)
             }

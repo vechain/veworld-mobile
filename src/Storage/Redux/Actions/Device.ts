@@ -93,7 +93,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
 
             return { device: newDevice, accounts: newAccounts }
         } catch (e) {
-            error(e)
+            error("addLedgerDeviceAndAccounts", e)
             return rejectWithValue("Failed to add ledger device")
         }
     },

@@ -8,11 +8,11 @@ import {
     BaseText,
     BaseTextInput,
     BaseView,
+    DismissKeyboardView,
     hideToast,
     showErrorToast,
-    DismissKeyboardView,
 } from "~Components"
-import { error, URIUtils } from "~Utils"
+import { URIUtils, warn } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import {
@@ -57,7 +57,7 @@ export const AddCustomNodeScreen = () => {
             )
             goBack()
         } catch (e) {
-            error(e)
+            warn("onAddNetworkPress", e)
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
