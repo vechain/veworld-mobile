@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { SettingsConstants } from "~Constants"
-import { error } from "~Utils/Logger"
+import { warn } from "~Utils/Logger"
 import { CryptoUtils } from "~Utils"
 import {
     setPinValidationString,
@@ -23,7 +23,7 @@ export const usePasswordValidation = () => {
 
                 return decryptedString === SettingsConstants.VALIDATION_STRING
             } catch (e) {
-                error(e)
+                warn("usePasswordValidation", e)
                 return false
             }
         },

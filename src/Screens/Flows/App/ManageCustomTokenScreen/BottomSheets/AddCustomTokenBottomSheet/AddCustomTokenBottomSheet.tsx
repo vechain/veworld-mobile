@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
+    BaseBottomSheet,
+    BaseBottomSheetTextInput,
+    BaseButton,
     BaseSpacer,
     BaseText,
-    BaseBottomSheet,
     BaseView,
-    useThor,
-    BaseButton,
     CustomTokenCard,
-    BaseBottomSheetTextInput,
+    useThor,
 } from "~Components"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
@@ -26,7 +26,7 @@ import {
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
 import { useAnalyticTracking, useCameraBottomSheet } from "~Hooks"
-import { debug, error, info, AddressUtils } from "~Utils"
+import { AddressUtils, debug, info, warn } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
 import { AnalyticsEvent, ScanTarget } from "~Constants"
 
@@ -100,7 +100,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                         )
                     }
                 } catch (e) {
-                    error(e)
+                    warn("handleValueChange", e)
                     setErrorMessage(
                         LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS(),
                     )

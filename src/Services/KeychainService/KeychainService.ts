@@ -58,7 +58,7 @@ const getDeviceEncryptionKey = async (
             )}_${rootAddress}`,
         )
     } catch (err) {
-        error(err)
+        error("getDeviceEncryptionKey", err)
     }
 }
 
@@ -105,7 +105,7 @@ const setDeviceEncryptionKey = async (
             )}_${rootAddress}`,
         )
     } catch (err) {
-        error(err)
+        error("setDeviceEncryptionKey", err)
         throw new Error("Error setting encryption key")
     }
 }
@@ -131,7 +131,7 @@ const deleteDeviceEncryptionKey = async (
             options,
         )
     } catch (err) {
-        error(err)
+        error("deleteDeviceEncryptionKey", err)
     }
 }
 
@@ -144,7 +144,7 @@ const getReduxKey = async () => {
     try {
         return await Keychain.get(options, REDUX_KEY)
     } catch (err) {
-        error(err)
+        error("getReduxKey", err)
     }
 }
 
@@ -157,7 +157,7 @@ const setReduxKey = async (Enckey: string) => {
     try {
         await Keychain.set(Enckey, options, REDUX_KEY)
     } catch (err) {
-        error(err)
+        error("setReduxKey", err)
     }
 }
 

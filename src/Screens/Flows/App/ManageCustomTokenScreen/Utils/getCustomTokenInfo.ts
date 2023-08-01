@@ -1,4 +1,4 @@
-import { error } from "~Utils"
+import { warn } from "~Utils"
 import { address } from "thor-devkit"
 import { Network } from "~Model"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
@@ -31,6 +31,6 @@ export const getCustomTokenInfo = async ({
             icon: "",
         }
     } catch (e) {
-        error(e)
+        warn("getCustomTokenInfo", e)
     }
 }

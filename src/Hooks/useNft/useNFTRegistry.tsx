@@ -24,7 +24,7 @@ export const useNFTRegistry = () => {
                 )
             })
             .catch(e => {
-                error(e)
+                error("useNFTRegistry", e)
             })
     }, [dispatch, network])
 }

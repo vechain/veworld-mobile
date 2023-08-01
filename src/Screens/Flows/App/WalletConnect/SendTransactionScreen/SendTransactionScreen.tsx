@@ -214,7 +214,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 // MinimizerUtils.goBack()
             } catch (e) {
                 track(AnalyticsEvent.DAPP_TX_FAILED_TO_SEND)
-                error(e)
+                error("SendTransactionScreen:handleAccept", e)
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
                     { request: requestEvent, web3Wallet, LL },
                 )

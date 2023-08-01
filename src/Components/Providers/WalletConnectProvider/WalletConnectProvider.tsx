@@ -320,7 +320,10 @@ const WalletConnectContextProvider = ({
                     goToSendTransaction(requestEvent, session, address)
                     break
                 default:
-                    error("Wallet Connect Session Request Invalid Method")
+                    error(
+                        "Wallet Connect Session Request Invalid Method",
+                        requestEvent.params.request.method,
+                    )
                     break
             }
         },

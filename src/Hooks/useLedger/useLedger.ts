@@ -83,7 +83,7 @@ export const useLedger = ({
             debug("[Ledger] Connecting to device")
             transport.current = await BleTransport.open(deviceId)
         } catch (e) {
-            error("[Ledger] - Error opening connection", e)
+            warn("[Ledger] - Error opening connection", e)
             setErrorCode(LEDGER_ERROR_CODES.DISCONNECTED)
             handleOnConnectionError?.(LEDGER_ERROR_CODES.DISCONNECTED)
         }
@@ -91,7 +91,7 @@ export const useLedger = ({
 
     const onConnectionError = useCallback(
         async (err: LEDGER_ERROR_CODES) => {
-            error("onConnectionError", err)
+            warn("onConnectionError", err)
             if (err === LEDGER_ERROR_CODES.DISCONNECTED) {
                 warn("Ledger disconnected")
                 await transport.current?.close()
