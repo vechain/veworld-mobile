@@ -154,8 +154,6 @@ export const useSecurityTransactions = ({
      */
     const executeTransactions = useCallback(
         async (operations: Operation[], currentPassword: string) => {
-            if (operations.length === 0) return
-
             const rollbackOperations: Operation[] = []
 
             try {
