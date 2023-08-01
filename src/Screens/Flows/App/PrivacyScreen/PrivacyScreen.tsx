@@ -9,6 +9,7 @@ import {
     Layout,
     RequireUserPassword,
     SelectDeviceBottomSheet,
+    showWarningToast,
 } from "~Components"
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
@@ -109,8 +110,14 @@ export const PrivacyScreen = () => {
     } = useBottomSheetModal()
 
     const handleOnEditPinPress = useCallback(() => {
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
+            return showWarningToast(
+                LL.HEADS_UP(),
+                LL.ALERT_CANT_BACKUP_LEDGER(),
+            )
+        }
         openBackupWarningSheet()
-    }, [openBackupWarningSheet])
+    }, [selectedAccount, LL, openBackupWarningSheet])
 
     // [END] - Hooks setup
 
@@ -217,14 +224,11 @@ export const PrivacyScreen = () => {
                             </>
                         )}
 
-                        {selectedAccount.device.type ===
-                            DEVICE_TYPE.LOCAL_MNEMONIC && (
-                            <BackupMnemonicBottomSheet
-                                ref={BackupPhraseSheetRef}
-                                onClose={closeBackupPhraseSheet}
-                                mnemonicArray={mnemonicArray}
-                            />
-                        )}
+                        <BackupMnemonicBottomSheet
+                            ref={BackupPhraseSheetRef}
+                            onClose={closeBackupPhraseSheet}
+                            mnemonicArray={mnemonicArray}
+                        />
 
                         <SelectDeviceBottomSheet<LocalDevice>
                             ref={walletMgmtBottomSheetRef}

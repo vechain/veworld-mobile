@@ -1098,6 +1098,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_INTERNET_DOWN: string
 	/**
+	 * Y​o​u​ ​c​a​n​'​t​ ​v​i​e​w​ ​a​ ​l​e​d​g​e​r​ ​m​n​e​m​o​n​i​c
+	 */
+	ALERT_CANT_BACKUP_LEDGER: string
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
@@ -3398,6 +3402,10 @@ export type TranslationFunctions = {
 Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
+	/**
+	 * You can't view a ledger mnemonic
+	 */
+	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */

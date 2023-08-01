@@ -305,6 +305,7 @@ const en: BaseTranslation = {
     ALERT_TITLE_ENABLE_LOCATION: "Enable location services",
     ALERT_MSG_ENABLE_LOCATION: "Please, open the device settings and enable location services to continue.",
     ALERT_MSG_INTERNET_DOWN: "Connection problems detected.\nTry reconnect your device to the internet.",
+    ALERT_CANT_BACKUP_LEDGER: "You can't view a ledger mnemonic",
 
 
     // Errors
