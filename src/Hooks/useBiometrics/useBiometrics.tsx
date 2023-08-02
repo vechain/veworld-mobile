@@ -15,7 +15,7 @@ const {
  * hook that returns the biometrics state
  */
 export const useBiometrics = () => {
-    const [previousState, currentState] = useAppState()
+    const { previousState, currentState } = useAppState()
     const [biometrics, setBiometrics] = useState<BiometricState | undefined>()
 
     const init = useCallback(async () => {
