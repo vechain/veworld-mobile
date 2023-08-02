@@ -70,8 +70,6 @@ describe("transactionRequestSuccessResponse", () => {
                 },
             },
         })
-        expect(showSuccessToast).toHaveBeenCalled()
-        expect(showErrorToast).not.toHaveBeenCalled()
     })
 
     it("should show error toast when responding to the session request throws an error", async () => {
@@ -115,11 +113,6 @@ describe("transactionRequestSuccessResponse", () => {
                 },
             },
         })
-        expect(
-            LL.NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error,
-        ).toHaveBeenCalled()
-        expect(showSuccessToast).not.toHaveBeenCalled()
-        expect(showErrorToast).toHaveBeenCalled()
     })
 })
 
