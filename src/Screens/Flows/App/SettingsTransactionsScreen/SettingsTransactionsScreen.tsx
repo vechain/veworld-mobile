@@ -9,6 +9,7 @@ import {
     BaseView,
     DelegationOptions,
     Layout,
+    useThor,
 } from "~Components"
 import { isSmallScreen } from "~Constants"
 import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
@@ -27,6 +28,9 @@ import {
 import { useI18nContext } from "~i18n"
 
 export const SettingsTransactionsScreen = () => {
+    const {
+        genesis: { id: genesisId },
+    } = useThor()
     const selectedDelegationOption = useAppSelector(getDefaultDelegationOption)
     const selectedDelegationAccount = useAppSelector(
         getDefaultDelegationAccount,
@@ -34,9 +38,24 @@ export const SettingsTransactionsScreen = () => {
     const selectedDelegationUrl = useAppSelector(getDefaultDelegationUrl)
     const dispatch = useAppDispatch()
     const setNoDelegationOption = () => {
-        dispatch(setDefaultDelegationOption(DelegationType.NONE))
-        dispatch(setDefaultDelegationAccount(undefined))
-        dispatch(setDefaultDelegationUrl(undefined))
+        dispatch(
+            setDefaultDelegationOption({
+                type: DelegationType.NONE,
+                genesisId,
+            }),
+        )
+        dispatch(
+            setDefaultDelegationAccount({
+                delegationAccount: undefined,
+                genesisId,
+            }),
+        )
+        dispatch(
+            setDefaultDelegationUrl({
+                url: undefined,
+                genesisId,
+            }),
+        )
     }
     const setSelectedDelegationAccount = (
         defaultDelegationAccount?: AccountWithDevice,
@@ -46,18 +65,39 @@ export const SettingsTransactionsScreen = () => {
             defaultDelegationAccount.device.type === DEVICE_TYPE.LOCAL_MNEMONIC
         ) {
             dispatch(
-                setDefaultDelegationAccount(
-                    defaultDelegationAccount as LocalAccountWithDevice,
-                ),
+                setDefaultDelegationAccount({
+                    delegationAccount:
+                        defaultDelegationAccount as LocalAccountWithDevice,
+                    genesisId,
+                }),
             )
-            dispatch(setDefaultDelegationOption(DelegationType.ACCOUNT))
-            dispatch(setDefaultDelegationUrl(undefined))
+            dispatch(
+                setDefaultDelegationOption({
+                    type: DelegationType.ACCOUNT,
+                    genesisId,
+                }),
+            )
+            dispatch(
+                setDefaultDelegationUrl({
+                    url: undefined,
+                    genesisId,
+                }),
+            )
         }
     }
     const setSelectedDelegationUrl = (defaultDelegationUrl: string) => {
-        dispatch(setDefaultDelegationOption(DelegationType.URL))
-        dispatch(setDefaultDelegationUrl(defaultDelegationUrl))
-        dispatch(setDefaultDelegationAccount(undefined))
+        dispatch(
+            setDefaultDelegationOption({ type: DelegationType.URL, genesisId }),
+        )
+        dispatch(
+            setDefaultDelegationUrl({ url: defaultDelegationUrl, genesisId }),
+        )
+        dispatch(
+            setDefaultDelegationAccount({
+                delegationAccount: undefined,
+                genesisId,
+            }),
+        )
     }
 
     const { LL } = useI18nContext()

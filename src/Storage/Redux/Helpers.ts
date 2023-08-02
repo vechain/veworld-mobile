@@ -32,6 +32,8 @@ import {
     UserPreferencesSlice,
     WalletConnectSessionsSlice,
 } from "./Slices"
+import { migrationUpdates } from "~Storage/Redux/Migrations"
+import { createMigrate } from "redux-persist"
 
 export const nftPersistConfig = {
     key: NftSlice.name,
@@ -55,10 +57,10 @@ export const getPersistorConfig = async () => {
         },
     })
 
-    const persistConfig = {
+    return {
         key: "root",
         storage,
-        version: 1,
+        version: 2,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,
@@ -74,10 +76,9 @@ export const getPersistorConfig = async () => {
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
         ],
+        migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
     }
-
-    return persistConfig
 }
 
 /**
