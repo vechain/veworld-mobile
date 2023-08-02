@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 
 /**
  * Delegation State
@@ -14,40 +15,105 @@ export interface DelegationState {
     defaultDelegationUrl?: string
 }
 
-const initialState: DelegationState = {
-    urls: [],
-    defaultDelegationOption: DelegationType.NONE,
-    defaultDelegationAccount: undefined,
-    defaultDelegationUrl: undefined,
+const initialState: Record<string, DelegationState> = {
+    [defaultMainNetwork.genesis.id]: {
+        urls: [],
+        defaultDelegationOption: DelegationType.NONE,
+    },
+    [defaultTestNetwork.genesis.id]: {
+        urls: [],
+        defaultDelegationOption: DelegationType.NONE,
+    },
 }
 
 export const DelegationSlice = createSlice({
     name: "delegation",
     initialState,
     reducers: {
-        addDelegationUrl: (state, action: PayloadAction<string>) => {
-            state.urls.push(action.payload)
+        addDelegationUrl: (
+            state,
+            action: PayloadAction<{ url: string; genesisId: string }>,
+        ) => {
+            const { url, genesisId } = action.payload
+
+            if (!state[genesisId]) {
+                state[genesisId] = {
+                    urls: [url],
+                    defaultDelegationOption: DelegationType.NONE,
+                }
+            }
+
+            if (!state[genesisId].urls.includes(url)) {
+                state[genesisId].urls.push(url)
+            }
         },
-        deleteDelegationUrl: (state, action: PayloadAction<string>) => {
-            state.urls = state.urls.filter(url => url !== action.payload)
+        deleteDelegationUrl: (
+            state,
+            action: PayloadAction<{ url: string; genesisId: string }>,
+        ) => {
+            const { url, genesisId } = action.payload
+
+            if (!state[genesisId]) {
+                state[genesisId] = {
+                    urls: [],
+                    defaultDelegationOption: DelegationType.NONE,
+                }
+            } else {
+                state[genesisId].urls = state[genesisId].urls.filter(
+                    _url => _url !== url,
+                )
+            }
         },
         setDefaultDelegationOption: (
             state,
-            action: PayloadAction<DelegationType>,
+            action: PayloadAction<{ type: DelegationType; genesisId: string }>,
         ) => {
-            state.defaultDelegationOption = action.payload
+            const { type, genesisId } = action.payload
+
+            if (!state[genesisId]) {
+                state[genesisId] = {
+                    urls: [],
+                    defaultDelegationOption: type,
+                }
+            }
+
+            state[genesisId].defaultDelegationOption = type
         },
         setDefaultDelegationAccount: (
             state,
-            action: PayloadAction<LocalAccountWithDevice | undefined>,
+            action: PayloadAction<{
+                delegationAccount: LocalAccountWithDevice | undefined
+                genesisId: string
+            }>,
         ) => {
-            state.defaultDelegationAccount = action.payload
+            const { delegationAccount, genesisId } = action.payload
+
+            if (!state[genesisId]) {
+                state[genesisId] = {
+                    urls: [],
+                    defaultDelegationOption: DelegationType.NONE,
+                }
+            }
+
+            state[genesisId].defaultDelegationAccount = delegationAccount
         },
         setDefaultDelegationUrl: (
             state,
-            action: PayloadAction<string | undefined>,
+            action: PayloadAction<{
+                url: string | undefined
+                genesisId: string
+            }>,
         ) => {
-            state.defaultDelegationUrl = action.payload
+            const { url, genesisId } = action.payload
+
+            if (!state[genesisId]) {
+                state[genesisId] = {
+                    urls: url ? [url] : [],
+                    defaultDelegationOption: DelegationType.NONE,
+                }
+            }
+
+            state[genesisId].defaultDelegationUrl = url
         },
         resetDelegationState: () => initialState,
     },

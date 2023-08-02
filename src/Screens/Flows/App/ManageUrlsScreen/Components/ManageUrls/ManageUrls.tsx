@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react"
-import { FlatList, StyleSheet, View, ListRenderItem } from "react-native"
+import { FlatList, ListRenderItem, StyleSheet, View } from "react-native"
 import { useTheme } from "~Hooks"
 import {
     BaseCard,
@@ -8,6 +8,7 @@ import {
     BaseText,
     BaseView,
     DeleteUnderlay,
+    useThor,
 } from "~Components"
 import {
     deleteDelegationUrl,
@@ -30,13 +31,14 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
     const theme = useTheme()
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const dispatch = useAppDispatch()
+    const thor = useThor()
     const swipeableItemRefs = useRef<(SwipeableItemImperativeRef | null)[]>([])
 
     const deleteUrl = useCallback(
         (url: string) => () => {
-            dispatch(deleteDelegationUrl(url))
+            dispatch(deleteDelegationUrl({ url, genesisId: thor.genesis.id }))
         },
-        [dispatch],
+        [dispatch, thor.genesis.id],
     )
 
     const closeOtherSwipeableItems = useCallback((index: number) => {
