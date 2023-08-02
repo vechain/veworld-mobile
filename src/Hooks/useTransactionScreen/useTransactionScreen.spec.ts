@@ -105,7 +105,6 @@ describe("useTransactionScreen", () => {
         await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current).toEqual({
-            ConfirmIdentityBottomSheet: expect.any(Function),
             Delegation: expect.any(Function),
             SubmitButton: expect.any(Function),
             RenderGas: expect.any(Function),
@@ -116,6 +115,9 @@ describe("useTransactionScreen", () => {
             onSubmit: expect.any(Function),
             isLoading: true,
             continueNotAllowed: false,
+            handleClosePasswordModal: expect.any(Function),
+            isPasswordPromptOpen: false,
+            onPasswordSuccess: expect.any(Function),
         })
     })
 
