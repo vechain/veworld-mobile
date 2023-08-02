@@ -102,4 +102,23 @@ describe("useDelegation", () => {
         expect(result.current.selectedDelegationAccount).toEqual(account)
         expect(result.current.selectedDelegationUrl).toBeUndefined()
     })
+
+    it("using provided URL should automatically set delegation option", async () => {
+        const url = "https://test.com"
+
+        const { result, waitForNextUpdate } = renderHook(
+            () => useDelegation({ setGasPayer, providedUrl: url }),
+            {
+                wrapper: TestWrapper,
+            },
+        )
+
+        await waitForNextUpdate()
+
+        expect(result.current.isDelegated).toBeTruthy()
+        expect(result.current.selectedDelegationOption).toEqual(
+            DelegationType.URL,
+        )
+        expect(result.current.selectedDelegationUrl).toEqual(url)
+    })
 })
