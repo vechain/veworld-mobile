@@ -1,26 +1,56 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { URIUtils, error, info, warn } from "~Utils"
-import useWebSocket, { ReadyState } from "react-use-websocket"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { URIUtils, debug, error, warn } from "~Utils"
+import WebSocket, { CloseEvent, ErrorEvent, MessageEvent } from "isomorphic-ws"
 import { updateNodeError, useAppDispatch } from "~Storage/Redux"
-import { useCounter } from "~Hooks"
-import { Beat } from "~Model"
+import { useAppState, useCounter } from "~Hooks"
+import { AppStateType, Beat } from "~Model"
 
 const BASE_PATH = "/subscriptions/beat2"
 export const useBeatWebsocket = (
     currentNetworkUrl: string,
-    onMessage: (ev: WebSocketMessageEvent) => void,
+    onMessage: (beat: Beat) => void,
 ) => {
     const dispatch = useAppDispatch()
-    const [wsPath, setWsPath] = useState(BASE_PATH)
+    const { currentState, previousState } = useAppState()
+    const ws = useRef<WebSocket>()
+    const lastMessageId = useRef<Map<string, string>>(new Map())
     const { count, increment } = useCounter()
+    const [retryTimeoutId, setRetryTimeoutId] = useState<NodeJS.Timeout | null>(
+        null,
+    )
 
-    const onOpen = () => {
+    const onOpen = useCallback(() => {
         dispatch(updateNodeError(false))
-    }
+    }, [dispatch])
+
+    const onMessageWrapper = useCallback(
+        (ev: MessageEvent) => {
+            const message = JSON.parse(ev.data.toString()) as Beat
+            onMessage(message)
+            lastMessageId.current?.set(currentNetworkUrl, message.id)
+        },
+        [currentNetworkUrl, onMessage],
+    )
+
+    const onClose = useCallback(
+        (ev: CloseEvent) => {
+            error("Websocket closed", ev)
+
+            if (currentState === AppStateType.ACTIVE) {
+                setRetryTimeoutId(
+                    setTimeout(
+                        () => ws.current?.close(100, "Restarting websocket"),
+                        10000,
+                    ),
+                )
+            }
+        },
+        [currentState],
+    )
 
     const onError = useCallback(
-        (ev: WebSocketErrorEvent) => {
-            error("Error in VET Transfer WS: ", ev)
+        (ev: ErrorEvent) => {
+            error("Error in Beat WebSocket ", ev)
 
             if (count > 3) {
                 warn("Trouble connecting to useBeatWebsocket.")
@@ -32,49 +62,60 @@ export const useBeatWebsocket = (
         [count, dispatch, increment],
     )
 
-    const shouldReconnect = useCallback((closeEvent: WebSocketCloseEvent) => {
-        const log = closeEvent.isTrusted ? info : warn
-        log("Will attempt to reconnect web socket after closure", closeEvent)
-
-        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/747) Attempt to use another node if the current one has issues
-        //Not doing async because the result should not affect this function
-        // if (!closeEvent.wasClean && network.defaultNet) {
-        //     dispatch(changeSelectedNetwork(network.id))
-        //         .then(e => info(e))
-        //         .catch(e => warn(e))
-        // }
-        return true
-    }, [])
-
-    const wsUrlForBeat = useMemo(() => {
-        return URIUtils.toWebsocketURL(currentNetworkUrl, wsPath)
-    }, [currentNetworkUrl, wsPath])
-
-    const { readyState, lastMessage } = useWebSocket(wsUrlForBeat, {
-        onMessage: onMessage,
-        onOpen: onOpen,
-        onError: onError,
-        onClose: ev => info(ev),
-        shouldReconnect,
-        retryOnError: true,
-        reconnectAttempts: 10000,
-        reconnectInterval: 1000,
-    })
-
+    // Effect for opening and closing WebSocket connection
     useEffect(() => {
-        setWsPath(BASE_PATH)
-    }, [currentNetworkUrl])
+        if (currentState === AppStateType.ACTIVE) {
+            debug("Opening websocket")
+            ws.current?.close(1000, "Restarting websocket")
 
-    useEffect(() => {
-        if (readyState === ReadyState.CLOSED && lastMessage) {
-            try {
-                const message = JSON.parse(lastMessage.data) as Beat
-
-                // Change the URL before the reconnect happens
-                setWsPath(`${BASE_PATH}?pos=${message.id}`)
-            } catch (e) {
-                error("Error parsing lastMessage.data", e)
+            const url = new URL(
+                URIUtils.toWebsocketURL(currentNetworkUrl, BASE_PATH),
+            )
+            const messageId = lastMessageId.current?.get(currentNetworkUrl)
+            if (messageId) {
+                url.searchParams.append("pos", messageId)
+            }
+            ws.current = new WebSocket(url.toString())
+        } else if (
+            currentState === AppStateType.BACKGROUND &&
+            previousState === AppStateType.ACTIVE
+        ) {
+            debug("Closing websocket")
+            ws.current?.close(1001, "App is in background")
+            if (retryTimeoutId) {
+                clearTimeout(retryTimeoutId)
             }
         }
-    }, [readyState, lastMessage])
+        return () => {
+            ws.current?.close(1002, "Unmounting component")
+            if (retryTimeoutId) {
+                clearTimeout(retryTimeoutId)
+            }
+        }
+    }, [currentNetworkUrl, currentState, previousState, retryTimeoutId])
+
+    useEffect(() => {
+        // Reset lastMessageId when currentNetworkUrl changes
+        lastMessageId.current = new Map()
+    }, [currentNetworkUrl])
+
+    // Effect for attaching and detaching event listeners
+    useEffect(() => {
+        if (ws.current) {
+            ws.current.onmessage = onMessageWrapper
+            ws.current.onerror = onError
+            ws.current.onopen = onOpen
+            ws.current.onclose = onClose
+
+            return () => {
+                if (ws.current) {
+                    ws.current.onmessage = null
+                    ws.current.onerror = null
+                    ws.current.onopen = null
+                    ws.current.onclose = null
+                }
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onClose, onError, onMessageWrapper, onOpen, ws.current])
 }

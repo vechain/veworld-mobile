@@ -19,7 +19,6 @@
 		EA9F31F52991455200D288F5 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA9F31F42991455200D288F5 /* BootSplash.storyboard */; };
 		EAFBEA542955DED50036BC15 /* SampleNativeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA532955DED50036BC15 /* SampleNativeModule.swift */; };
 		EAFBEA572955DEFF0036BC15 /* SampleNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFBEA562955DEFF0036BC15 /* SampleNativeModule.m */; };
-		EC1987CC1FF157A428C02ECE /* libPods-VeWorld-VeWorldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46F9B9BDB8436913A7E53B7D /* libPods-VeWorld-VeWorldTests.a */; };
 		F12EE6F0073A253A9D1C8167 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F33240CF19E97FC49A2DC2 /* ExpoModulesProvider.swift */; };
 		FB2B079D450051DCA03ABCE6 /* libPods-VeWorld-VeWorldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FDFFC41AC741458C3FD4ACC /* libPods-VeWorld-VeWorldTests.a */; };
 /* End PBXBuildFile section */

@@ -7,6 +7,7 @@
         "jsx": "react",
         "skipLibCheck": true,
         "types": ["node", "jest"],
+        "esModuleInterop": true,
         "typeRoots": ["./node_modules/@types", "./src/@types"],
         "paths": {
             "~*": ["./src/*"],
