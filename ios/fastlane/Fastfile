@@ -101,7 +101,7 @@ platform :ios do
     github_token = values[:github_token]
     github_username = values[:github_username]
     build_or_version_number = values[:build_or_version_number]
-    branch_name = "release-build"
+    branch_name = "release-build-ios"
 
     # Create and push the branch locally
     sh("git checkout -b #{branch_name}-#{build_or_version_number}")
@@ -119,7 +119,7 @@ platform :ios do
 
   desc "Commit latest artifacts to GitHub"
   lane :gh_setup_after do |values|
-    branch_name = "release-build"
+    branch_name = "release-build-ios"
     build_or_version_number = values[:build_or_version_number]
 
     sh("git add --all")
@@ -221,7 +221,7 @@ platform :ios do
         create_changelog(version:version)
 
         add_git_tag(
-          tag: "v#{version}"
+          tag: "v#{version}-ios"
         )
 
         push_git_tags
@@ -238,14 +238,14 @@ platform :ios do
       create_pull_request(
         api_token: github_token,
         repo: "vechainfoundation/veworld-mobile",
-        title: versionType.nil? ? "build: build artifacts build-#{build}" : "version: build artifacts version-#{version}", 
+        title: versionType.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
         base: "main",
         api_url: "https://api.github.com"
       )
 
       # send slack message
       slack(
-        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released!" : "VeWorld version number: #{version} was successfully released!",
+        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: true,
         payload: {
@@ -262,7 +262,7 @@ platform :ios do
       
       # send slack message
       slack(
-        message: versionType.nil? ? "Error releasing VeWorld build number: #{build}" : "Error releasing VeWorld version number: #{version}",
+        message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {
@@ -281,10 +281,10 @@ platform :ios do
       sh("git checkout main")
 
       # delete branch locally
-      sh("git branch -D release-build-#{versionType.nil? ? build : version}")
+      sh("git branch -D release-build-ios-#{versionType.nil? ? build : version}")
 
       # delete branch remotely
-      sh("git push origin --d release-build-#{versionType.nil? ? build : version}")
+      sh("git push origin --d release-build-ios-#{versionType.nil? ? build : version}")
     end
   end
 end

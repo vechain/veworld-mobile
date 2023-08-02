@@ -10,11 +10,7 @@ fastlane/screenshots
 # scan temporary files
 fastlane/test_output
 
-# fastlane builds
-builds/*
+# Fastlane builds
 build/*
-*.xcarchive
-
+pc-api-4895632399891248889-903-c30062a54347.json
 .env
-.env.secret
-.env.default
