@@ -37,6 +37,7 @@ export const informUserForIncomingNFT = ({
         i18n.i18n()[locale].NOTIFIACTION_INCOMING_NFT_ACTION(),
         () => informUser({ accountAddress: transfer.to }),
         10000,
+        "informUserForIncomingNFTSuccessToast",
     )
 }
 
@@ -69,6 +70,7 @@ export const informUserForOutgoingNFT = ({
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
         () => informUser({ txId, accountAddress: from }),
         10000,
+        "informUserForOutgoingNFTSuccessToast",
     )
 }
 
@@ -111,6 +113,7 @@ export const InformUserForIncomingToken = ({
         i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
         () => informUser({ accountAddress: transfer.to }),
         7000,
+        "informUserForIncomingTokenSuccessToast",
     )
 }
 
@@ -152,6 +155,7 @@ export const InformUserForOutgoingToken = ({
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
         () => informUser({ accountAddress: transfer.from, txId }),
         7000,
+        "informUserForOutgoingTokenSuccessToast",
     )
 }
 
@@ -189,6 +193,8 @@ export const InformUserForIncomingVET = ({
         }),
         i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
         () => informUser({ accountAddress: to }),
+        7000,
+        "informUserForIncomingVETSuccessToast",
     )
 }
 
@@ -228,6 +234,8 @@ export const InformUserForOutgoingVET = ({
         }),
         i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
         () => informUser({ accountAddress: from, txId }),
+        7000,
+        "InformUserForOutgoingVETSuccessToast",
     )
 }
 

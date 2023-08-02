@@ -2,7 +2,7 @@ Feature: The user can manage contacts
 
   Background:
     * The app is opened
-    * The user has previously onboarded
+    * Open with demo account
     * The user is in the contacts management screen
 
   Scenario: User creates a new contact

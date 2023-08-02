@@ -55,19 +55,21 @@ describe("useBiometrics", () => {
             BiometricsUtils.getBiometricTypeAvailable as jest.Mock
         ).mockResolvedValue("touch")
 
-        const mockUseAppState = jest.fn(() => [
-            AppStateType.ACTIVE,
-            AppStateType.INACTIVE,
-        ])
+        const mockUseAppState = jest.fn(() => {
+            return {
+                previousState: AppStateType.ACTIVE,
+                currentState: AppStateType.INACTIVE,
+            }
+        })
 
         const { result, waitForNextUpdate } = renderHook(() => useBiometrics())
 
         expect(result.current).toEqual({})
 
-        mockUseAppState.mockReturnValue([
-            AppStateType.ACTIVE,
-            AppStateType.ACTIVE,
-        ])
+        mockUseAppState.mockReturnValue({
+            previousState: AppStateType.ACTIVE,
+            currentState: AppStateType.ACTIVE,
+        })
         await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current).toEqual({

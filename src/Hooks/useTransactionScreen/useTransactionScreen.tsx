@@ -131,9 +131,11 @@ export const useTransactionScreen = ({
     )
 
     const {
-        ConfirmIdentityBottomSheet,
+        onPasswordSuccess,
         checkIdentityBeforeOpening,
+        isPasswordPromptOpen,
         isBiometricsEmpty,
+        handleClosePasswordModal,
     } = useCheckIdentity({
         onIdentityConfirmed: signAndSendTransaction,
         onCancel: () => setLoading(false),
@@ -220,7 +222,6 @@ export const useTransactionScreen = ({
     )
 
     return {
-        ConfirmIdentityBottomSheet,
         Delegation,
         SubmitButton,
         RenderGas,
@@ -231,5 +232,8 @@ export const useTransactionScreen = ({
         onSubmit,
         isLoading,
         continueNotAllowed,
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
     }
 }

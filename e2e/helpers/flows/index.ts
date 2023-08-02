@@ -1,6 +1,6 @@
 export * as OnboardingFlows from "./OnboardingFlows"
 export * as ContactsManagementFlows from "./ContactsManagementFlows"
 export * as HomeFlows from "./HomeFlows"
-export * as AdvancedSettingsFlow from "./AdvancedSettingsFlow"
+export * as GeneralSettingsFlow from "./GeneralSettingsFlow"
 export * as SettingsFlows from "./SettingsFlows"
 export * as TabFlows from "./TabFlows"

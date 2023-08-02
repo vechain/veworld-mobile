@@ -198,52 +198,5 @@ describe("useTransactionScreen", () => {
                 { timeout: 10000 },
             )
         }, 20000)
-        //
-        // it("using ledger account with delegation should navigate with signature", async () => {
-        //     const accWithDevice = {
-        //         ...firstLedgerAccount,
-        //         device: ledgerDevice,
-        //     }
-        //
-        //     mockAccount(accWithDevice)
-        //     ;(axios.post as jest.Mock).mockResolvedValueOnce({
-        //         //signature is hex, representing 65 bytes
-        //         data: { signature: "0x12341234" },
-        //     })
-        //
-        //     const { result, waitForNextUpdate } = renderHook(
-        //         () =>
-        //             useTransactionScreen({
-        //                 clauses: vetTransaction1.body.clauses,
-        //                 initialRoute,
-        //                 onTransactionSuccess,
-        //                 onTransactionFailure,
-        //                 options: {
-        //                     gas: 210000,
-        //                 },
-        //             }),
-        //         {
-        //             wrapper: TestWrapper,
-        //         },
-        //     )
-        //     await waitForNextUpdate({ timeout: 5000 })
-        //
-        //     await act(async () => await result.current.onSubmit())
-        //
-        //     await waitFor(
-        //         () => {
-        //             expect(mockNav).toHaveBeenCalledWith(
-        //                 Routes.LEDGER_SIGN_TRANSACTION,
-        //                 {
-        //                     accountWithDevice: accWithDevice,
-        //                     transaction: expect.any(Transaction),
-        //                     initialRoute: expect.any(String),
-        //                     delegationSignature: "0x12341234",
-        //                 },
-        //             )
-        //         },
-        //         { timeout: 10000 },
-        //     )
-        // })
     })
 })

@@ -8,6 +8,7 @@ import {
     BaseView,
     Layout,
     NFTTransferCard,
+    RequireUserPassword,
     TransferCard,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -78,13 +79,19 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
     const onTransactionFailure = useCallback(() => onFinish(false), [onFinish])
 
-    const { ConfirmIdentityBottomSheet, Delegation, RenderGas, SubmitButton } =
-        useTransactionScreen({
-            clauses,
-            onTransactionSuccess,
-            onTransactionFailure,
-            initialRoute: Routes.HOME,
-        })
+    const {
+        Delegation,
+        RenderGas,
+        SubmitButton,
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
+    } = useTransactionScreen({
+        clauses,
+        onTransactionSuccess,
+        onTransactionFailure,
+        initialRoute: Routes.HOME,
+    })
 
     return (
         <Layout
@@ -127,7 +134,11 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             data={LL.SEND_LESS_THAN_1_MIN()}
                         />
                     </BaseView>
-                    <ConfirmIdentityBottomSheet />
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={handleClosePasswordModal}
+                        onSuccess={onPasswordSuccess}
+                    />
                 </>
             }
             footer={<SubmitButton />}

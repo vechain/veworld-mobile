@@ -6,7 +6,7 @@ import { useAppState } from "../useAppState"
  * hook that returns whether the app state transitioned from one state to another
  */
 export const useAppStateTransitions = () => {
-    const [previousState, currentState] = useAppState()
+    const { previousState, currentState } = useAppState()
 
     const activeToBackground = useMemo(
         () =>

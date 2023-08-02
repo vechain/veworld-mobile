@@ -8,6 +8,7 @@ import {
     BaseText,
     BaseView,
     CloseModalButton,
+    RequireUserPassword,
     showErrorToast,
     useWalletConnect,
 } from "~Components"
@@ -154,7 +155,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     }, [requestEvent, web3Wallet, topic, LL, nav])
 
     const {
-        ConfirmIdentityBottomSheet,
         Delegation,
         onSubmit,
         vthoBalance,
@@ -163,6 +163,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         vthoGas,
         continueNotAllowed,
         isLoading,
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -253,7 +256,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <BaseSpacer height={16} />
             </ScrollView>
 
-            <ConfirmIdentityBottomSheet />
+            <RequireUserPassword
+                isOpen={isPasswordPromptOpen}
+                onClose={handleClosePasswordModal}
+                onSuccess={onPasswordSuccess}
+            />
         </BaseSafeArea>
     )
 }

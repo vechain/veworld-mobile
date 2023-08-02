@@ -1,0 +1,297 @@
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+
+  lane :rotate_keystore do
+    new_password = `sh /rotate_keystore_password.sh`.strip
+    Dir.chdir "../" do
+      sh("rm -rf release.keystore")
+      sh("keytool -genkey -v -keystore release.keystore -alias veworldreleasehero -storepass #{new_password} -keypass #{new_password} -keyalg RSA -keysize 2048 -validity 10000 -dname CN=mrveworld")
+    end
+  end
+
+
+  desc "bumps version with specific semantics or exacto version"
+  lane :bump_version do |options|
+    version_name = options[:version_name]
+    old_version_string = options[:old_version]
+
+    # Split the version string into components using '.'
+    components = old_version_string.split('.')
+
+    if version_name.downcase == "patch"
+      # Convert the third component to an integer and increment it
+      components[2] = (components[2].to_i + 1).to_s
+      # Join the components back into a new version string
+      new_version_string = components.join('.')
+      puts new_version_string
+    elsif version_name.downcase == "minor"
+      # Convert the third component to an integer and increment it
+      components[1] = (components[1].to_i + 1).to_s
+      # Join the components back into a new version string
+      new_version_string = components.join('.')
+      puts new_version_string
+    elsif version_name.downcase == "major"
+      # Convert the third component to an integer and increment it
+      components[0] = (components[0].to_i + 1).to_s
+      # Join the components back into a new version string
+      new_version_string = components.join('.')
+      puts new_version_string
+    else
+      new_version_string = version_name
+      puts new_version_string
+    end
+  end
+
+  
+  desc "Create changelog for Android"
+  lane :create_changelog do |values|
+    version = values[:version]
+
+    tag = last_git_tag(pattern:"v\d+\.\d+\.\d+-android")
+    tag = last_git_tag
+
+    changelog = changelog_from_git_commits(
+      between: [tag, "HEAD"],  # Optional, lets you specify a revision/tag range between which to collect commit info
+      pretty: "- (%ae) %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
+      date_format: "short",# Optional, lets you provide an additional date format to dates within the pretty-formatted string
+      match_lightweight_tag: false,  # Optional, lets you ignore lightweight (non-annotated) tags when searching for the last tag
+      merge_commit_filtering: "exclude_merges" # Optional, lets you filter out merge commits
+    )
+
+    File.write("metadata/android/en-US/changelogs/#{version}.txt", changelog)
+
+    Dir.chdir "../.." do # Navigate to the root
+      package_json = JSON.parse(File.read("./package.json"))
+      package_json["version"] = version
+      File.write("./package.json", JSON.pretty_generate(package_json))
+    end
+  end
+
+
+
+  desc "Create Release Branch on GitHub for Beta"
+  lane :gh_setup_before do |values|
+
+    github_token = values[:github_token]
+    github_username = values[:github_username]
+    build_or_version_number = values[:build_or_version_number]
+    branch_name = "release-build-android"
+
+    # Create and push the branch locally
+    sh("git checkout -b #{branch_name}-#{build_or_version_number}")
+
+    # Set the GitHub remote URL with credentials
+    remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
+    sh("git remote set-url origin #{remote_url}")
+    sh("git commit -a -m 'build: init'")
+
+    # Push the branch to GitHub
+    sh("git push -u origin #{branch_name}-#{build_or_version_number}")
+  end
+
+
+
+  desc "Commit latest artifacts to GitHub"
+  lane :gh_setup_after do |values|
+    branch_name = "release-build-android"
+    build_or_version_number = values[:build_or_version_number]
+
+    sh("git add --all")
+    sh("git commit -a -m 'build: complete'")
+    # Push the branch to GitHub
+    sh("git push -u origin #{branch_name}-#{build_or_version_number}")
+  end
+
+
+  desc "Validate the keystore and credentials"
+  lane :validate do
+    validate_play_store_json_key(
+      json_key: "./pc-api-4895632399891248889-903-c30062a54347.json"
+    )
+  end
+
+  desc "Get last version codes"
+  lane :get_version_code do
+    previous_build_number = android_get_version_code(gradle_file: "app/build.gradle")
+    puts previous_build_number
+  end
+
+
+  desc "Get last version name"
+  lane :get_version_name do
+    previous_build_number = android_get_version_name(gradle_file: "app/build.gradle")
+    puts previous_build_number
+  end
+
+
+  
+
+  
+  # @param {object} options - The options for the build process.
+  # @param {string} options.username - The GitHub username for authentication.
+  # @param {string} options.token - The GitHub token for authentication.
+  # @param {string} options.version_name - The version name of the build. Possible values: "patch", "minor", "major" or specific version "1.0.0".
+  # @param {string} options.version_code - The version code of the build.
+  # @param {string} options.track - The track for releasing the build (e.g., 'alpha', 'beta', 'production').
+  desc "Submit a new Beta Build to Play Store"
+  lane :build_android do |options|
+    store_password = ENV["STORE_PASSWORD"]
+    key_password = ENV["KEY_PASSWORD"]
+
+    github_username = options[:username]
+    github_token = options[:token]
+    version_name = options[:version_name]
+    version_code = options[:version_code]
+    track = options[:track]
+
+    # prepare git
+    ensure_git_status_clean
+    ensure_git_branch(branch: "main")
+
+    # clean build artifacts if any
+    clean_build_artifacts
+
+    # check if spceicifed build number
+    if !version_code.nil?
+      code = version_code
+    else
+      code = get_version_code + 1
+    end
+
+    # check if spceicifed version number
+    if !version_name.nil? 
+      if versionType.downcase != "patch" && versionType.downcase != "minor" && versionType.downcase != "major"
+        version = version_name # version name is exact version
+      else
+        version = bump_version(
+          version_type:version_name, 
+          old_version: get_version_name
+        )
+      end
+    else 
+      version = get_version_name # get last version name
+    end
+
+    # update yarn packages and pods
+    Dir.chdir "../.." do
+      sh("yarn purge:android && yarn install")
+    end
+
+    begin
+      # create new branch and push to github
+      gh_setup_before(
+        github_username:github_username, 
+        github_token:github_token,
+        code_or_version_name: version_name.nil? ? code : version
+      )
+
+      # rotate keystore if version is specified
+      if !version_name.nil? 
+        rotate_keystore
+      end
+
+      releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+
+      gradle(task: 'clean')
+  
+      gradle(
+        task: 'bundle',
+        build_type: 'Release',
+        print_command: false,
+  
+        properties: {
+          "android.injected.version.code" => code, # Manually increment this value before each release
+          "android.injected.version.name" => version, # Manually increment this value before each release
+          "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
+          "android.injected.signing.store.password" => store_password, # Keystore password
+          "android.injected.signing.key.alias" => ENV["KEY_ALIAS"], # Key alias
+          "android.injected.signing.key.password" => key_password, # Key password
+        }
+      )
+  
+      upload_to_play_store(
+        verbose: true,
+        track: track,
+      )
+
+      # create changelog and tag if version is specified
+      if !version_name.nil?
+        create_changelog(version:version)
+
+        add_git_tag(
+          tag: "v#{version}-android"
+        )
+
+        push_git_tags
+
+        # push to github latest artifacts
+        gh_setup_after(
+          github_username:github_username, 
+          github_token:github_token,
+          code_or_version_name:version
+        )
+      end
+
+
+      # create pull request
+      create_pull_request(
+        api_token: github_token,
+        repo: "vechainfoundation/veworld-mobile",
+        title: version_name.nil? ? "build: build artifacts build-#{build} [Android]" : "version: build artifacts version-#{version} [Android]", 
+        base: "main",
+        api_url: "https://api.github.com"
+      )
+
+      # send slack message
+      slack(
+        message: version_name.nil? ? "VeWorld build number: #{build} was successfully released! [Android]" : "VeWorld version number: #{version} was successfully released! [Android]",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: true,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
+
+      # clean build artifacts if any
+      clean_build_artifacts
+      
+      
+    rescue => exception
+
+      puts exception
+      
+      # send slack message
+      slack(
+        message: version_name.nil? ? "Error releasing VeWorld build number: #{build} [Android]" : "Error releasing VeWorld version number: #{version} [Android]",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: false,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
+
+      # clean build artifacts if any
+      clean_build_artifacts
+
+      # clean git 
+      reset_git_repo
+
+      # checkout main
+      sh("git checkout main")
+
+      # delete branch locally
+      sh("git branch -D release-build-android-#{version_name.nil? ? build : version}")
+
+      # delete branch remotely
+      sh("git push origin --d release-build-android-#{version_name.nil? ? build : version}")
+      
+    end
+  end
+end

@@ -13,6 +13,7 @@ import {
     BaseView,
     Layout,
     LedgerBadge,
+    RequireUserPassword,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -118,15 +119,21 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onFinish(false)
     }, [onFinish])
 
-    const { ConfirmIdentityBottomSheet, Delegation, RenderGas, SubmitButton } =
-        useTransactionScreen({
-            clauses,
-            onTransactionSuccess,
-            onTransactionFailure,
-            initialRoute: Routes.HOME,
-        })
+    const {
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
+        Delegation,
+        RenderGas,
+        SubmitButton,
+    } = useTransactionScreen({
+        clauses,
+        onTransactionSuccess,
+        onTransactionFailure,
+        initialRoute: Routes.HOME,
+    })
 
-    const receiverDetails = () => {
+    const ReceiverDetails = () => {
         const receiverExists = accountsAndContacts.find(_account =>
             AddressUtils.compareAddresses(_account.address, address),
         )
@@ -237,7 +244,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                         <BaseView flexDirection="row">
                                             <AccountIcon address={address} />
                                             <BaseSpacer width={8} />
-                                            {receiverDetails()}
+                                            <ReceiverDetails />
                                         </BaseView>
                                     </BaseView>
                                 ),
@@ -255,7 +262,11 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         </>
                     )}
 
-                    <ConfirmIdentityBottomSheet />
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={handleClosePasswordModal}
+                        onSuccess={onPasswordSuccess}
+                    />
 
                     <Delegation />
 

@@ -3,7 +3,7 @@
 
 generate_random_password() {
     length=${1:-12}
-    special_chars="@#$%^&*()_-+=~"
+    special_chars="@#$%^&*_-+=~"
     all_chars="[:alnum:]${special_chars}"
     password=$(LC_ALL=C tr -dc "$all_chars" < /dev/urandom | fold -w "$length" | head -n 1)
     echo "$password"
