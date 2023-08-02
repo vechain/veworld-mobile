@@ -213,7 +213,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
                 <BaseSpacer height={24} />
                 <BaseView mx={20}>
-                    <Delegation />
+                    {Delegation()}
 
                     <BaseSpacer height={44} />
                     <TransactionDetails

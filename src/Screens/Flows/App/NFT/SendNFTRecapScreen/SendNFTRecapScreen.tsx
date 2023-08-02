@@ -118,14 +118,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             />
                         )}
 
-                        <Delegation />
+                        {Delegation()}
 
                         <BaseSpacer height={24} />
 
                         <InfoSectionView<React.JSX.Element>
                             isFontReverse
                             title={LL.ESTIMATED_GAS_FEE()}
-                            data={<RenderGas />}
+                            data={RenderGas()}
                         />
 
                         <InfoSectionView<string>
@@ -141,7 +141,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                     />
                 </>
             }
-            footer={<SubmitButton />}
+            footer={SubmitButton()}
         />
     )
 }

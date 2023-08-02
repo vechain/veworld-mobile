@@ -244,7 +244,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                         <BaseView flexDirection="row">
                                             <AccountIcon address={address} />
                                             <BaseSpacer width={8} />
-                                            <ReceiverDetails />
+                                            {ReceiverDetails()}
                                         </BaseView>
                                     </BaseView>
                                 ),
@@ -268,7 +268,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         onSuccess={onPasswordSuccess}
                     />
 
-                    <Delegation />
+                    {Delegation()}
 
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="subTitleBold">
@@ -302,7 +302,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                     <BaseSpacer height={6} />
 
-                    <RenderGas />
+                    {RenderGas()}
 
                     <BaseSpacer height={12} />
                     <BaseSpacer
@@ -320,7 +320,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                 </BaseView>
             }
-            footer={<SubmitButton />}
+            footer={SubmitButton()}
         />
     )
 }
