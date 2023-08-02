@@ -10,6 +10,7 @@ import {
 import { SecurityDowngradeScreen } from "~Screens"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
+import { AutoLogoutProvider } from "../AutoLogoutProvider"
 
 type Props = {
     children: React.ReactNode
@@ -54,9 +55,11 @@ export const SecurityProvider = ({ children }: Props) => {
 
     // App is Unlocked or user is using biometrics to unlock
     return (
-        <AnimatedSplashScreen
-            playAnimation={isSplashHidden || isBiometricsSucceeded}>
-            {children}
-        </AnimatedSplashScreen>
+        <AutoLogoutProvider>
+            <AnimatedSplashScreen
+                playAnimation={isSplashHidden || isBiometricsSucceeded}>
+                {children}
+            </AnimatedSplashScreen>
+        </AutoLogoutProvider>
     )
 }

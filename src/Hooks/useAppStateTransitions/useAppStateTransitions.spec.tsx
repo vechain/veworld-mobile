@@ -11,10 +11,10 @@ describe("useAppStateTransitions", () => {
     >
 
     beforeEach(() => {
-        mockUseAppState.mockReturnValue([
-            AppStateType.ACTIVE,
-            AppStateType.ACTIVE,
-        ])
+        mockUseAppState.mockReturnValue({
+            previousState: AppStateType.ACTIVE,
+            currentState: AppStateType.ACTIVE,
+        })
     })
 
     afterEach(() => {
@@ -30,10 +30,10 @@ describe("useAppStateTransitions", () => {
     })
 
     it("should return true for 'activeToBackground' transition when the previous state was 'active' and current state is 'background'", () => {
-        mockUseAppState.mockReturnValueOnce([
-            AppStateType.ACTIVE,
-            AppStateType.BACKGROUND,
-        ])
+        mockUseAppState.mockReturnValueOnce({
+            previousState: AppStateType.ACTIVE,
+            currentState: AppStateType.BACKGROUND,
+        })
 
         const { result } = renderHook(() => useAppStateTransitions())
 
@@ -43,10 +43,10 @@ describe("useAppStateTransitions", () => {
     })
 
     it("should return true for 'backgroundToActive' transition when the previous state was 'background' and current state is 'active'", () => {
-        mockUseAppState.mockReturnValueOnce([
-            AppStateType.BACKGROUND,
-            AppStateType.ACTIVE,
-        ])
+        mockUseAppState.mockReturnValueOnce({
+            previousState: AppStateType.BACKGROUND,
+            currentState: AppStateType.ACTIVE,
+        })
 
         const { result } = renderHook(() => useAppStateTransitions())
 
@@ -56,10 +56,10 @@ describe("useAppStateTransitions", () => {
     })
 
     it("should return true for 'closedToActive' transition when the previous state was 'unknown' and current state is 'active'", () => {
-        mockUseAppState.mockReturnValueOnce([
-            AppStateType.UNKNOWN,
-            AppStateType.ACTIVE,
-        ])
+        mockUseAppState.mockReturnValueOnce({
+            previousState: AppStateType.UNKNOWN,
+            currentState: AppStateType.ACTIVE,
+        })
 
         const { result } = renderHook(() => useAppStateTransitions())
 

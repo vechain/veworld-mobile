@@ -60,10 +60,8 @@ export const TransferEventListener: React.FC = () => {
     )
 
     const onBeatMessage = useCallback(
-        async (ev: WebSocketMessageEvent) => {
+        async (beat: Beat) => {
             try {
-                const beat: Beat = JSON.parse(ev.data)
-
                 // Filter out accounts we are not interested in
                 const relevantAccounts = visibleAccounts.filter(acc =>
                     BloomUtils.testBloomForAddress(

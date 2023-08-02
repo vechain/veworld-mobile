@@ -32,5 +32,5 @@ export const useAppState = () => {
         }
     }, [])
 
-    return [previousState, currentState]
+    return { previousState, currentState }
 }

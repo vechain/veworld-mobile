@@ -161,7 +161,7 @@ export const useSecurityTransactions = ({
                     `[START] - Executing ${
                         operationType === OperationType.EDIT_PIN
                             ? "Edit pin"
-                            : "Upgrade Secuity"
+                            : "Upgrade Security"
                     } transactions`,
                 )
 
@@ -207,7 +207,7 @@ export const useSecurityTransactions = ({
                     `[END] - Executing ${
                         operationType === OperationType.EDIT_PIN
                             ? "Edit pin"
-                            : "Upgrade Secuity"
+                            : "Upgrade Security"
                     } transactions`,
                 )
             } catch (e) {
@@ -215,7 +215,7 @@ export const useSecurityTransactions = ({
                     `[FAILED] - Executing ${
                         operationType === OperationType.EDIT_PIN
                             ? "Edit pin"
-                            : "Upgrade Secuity"
+                            : "Upgrade Security"
                     } transactions`,
                 )
 
