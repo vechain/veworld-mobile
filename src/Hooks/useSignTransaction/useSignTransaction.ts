@@ -167,16 +167,14 @@ export const useSignTransaction = ({
         ledgerAccount: LedgerAccountWithDevice,
         password?: string,
     ) => {
-        let delegationSignature
+        const delegationSignature = await getDelegationSignature(
+            transaction,
+            password,
+        )
 
-        try {
-            delegationSignature = await getDelegationSignature(
-                transaction,
-                password,
-            )
-        } catch (e) {
+        if (delegationSignature === SignStatus.DELEGATION_FAILURE) {
             showErrorToast(LL.ERROR(), LL.SEND_DELEGATION_ERROR_SIGNATURE())
-            throw e
+            return
         }
 
         nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {

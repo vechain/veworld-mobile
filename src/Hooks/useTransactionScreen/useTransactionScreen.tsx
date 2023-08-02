@@ -140,7 +140,6 @@ export const useTransactionScreen = ({
         allowAutoPassword: true,
     })
 
-    //TODO: Fix this for delegation errors
     const onSubmit = useCallback(async () => {
         if (
             selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
