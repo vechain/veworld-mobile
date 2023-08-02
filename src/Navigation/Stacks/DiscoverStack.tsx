@@ -26,19 +26,19 @@ export type RootStackParamListDiscover = {
     [Routes.SELECT_TOKEN_SEND]: { initialRoute: string }
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
-        initialRoute: string
+        initialRoute: Routes
     }
     [Routes.TRANSACTION_SUMMARY_SEND]: {
         token: FungibleTokenWithBalance
         amount: string
         address: string
-        initialRoute: string
+        initialRoute: Routes
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
         delegationSignature?: string
         transaction: Transaction
-        initialRoute: string
+        initialRoute: Routes
     }
 }
 

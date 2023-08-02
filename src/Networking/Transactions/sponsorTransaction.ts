@@ -16,12 +16,12 @@ export const sponsorTransaction = async (
     try {
         response = await axios.post(delegateUrl, sponsorRequest)
     } catch (e) {
-        if (e instanceof Error && "isAxiosError" in e) {
+        if (e instanceof Object && "isAxiosError" in e && e.isAxiosError) {
             const axiosError = e as AxiosError
 
             error(
                 "sponsorTransaction error",
-                JSON.stringify(axiosError.response),
+                JSON.stringify(axiosError.toJSON()),
             )
         } else {
             error("sponsorTransaction error", e)

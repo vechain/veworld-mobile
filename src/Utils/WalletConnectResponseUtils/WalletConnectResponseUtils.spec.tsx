@@ -46,7 +46,7 @@ describe("transactionRequestSuccessResponse", () => {
                 },
             },
         }
-        const transactionId = 456
+        const transactionId = "0x11341234"
         const signer = "example-signer"
 
         const network: Network = {
@@ -79,7 +79,7 @@ describe("transactionRequestSuccessResponse", () => {
                 id: 123,
                 jsonrpc: "2.0",
                 result: {
-                    txid: 456,
+                    txid: transactionId,
                     signer: "example-signer",
                 },
             },
@@ -103,7 +103,7 @@ describe("transactionRequestSuccessResponse", () => {
             topic: "example-topic",
             id: 123,
         }
-        const transactionId = 456
+        const transactionId = "0x12341234"
         const signer = "example-signer"
 
         const network: Network = {
@@ -136,7 +136,7 @@ describe("transactionRequestSuccessResponse", () => {
                 id: 123,
                 jsonrpc: "2.0",
                 result: {
-                    txid: 456,
+                    txid: transactionId,
                     signer: "example-signer",
                 },
             },

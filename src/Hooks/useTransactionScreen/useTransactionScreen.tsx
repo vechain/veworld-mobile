@@ -7,6 +7,7 @@ import {
     useRenderGas,
     useSendTransaction,
     useSignTransaction,
+    useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -17,7 +18,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useDelegation } from "~Screens/Flows/App/SendScreen/04-TransactionSummarySendScreen/Hooks"
-import { useTransactionBuilder } from "~Hooks/useTransactionBuilder/useTransactionBuilder"
 import {
     AccountCard,
     BaseCard,
@@ -70,7 +70,7 @@ export const useTransactionScreen = ({
     } = useDelegation({ setGasPayer, providedUrl: options?.delegator?.url })
 
     // 3. Build transaction
-    const buildTransaction = useTransactionBuilder({
+    const { buildTransaction } = useTransactionBuilder({
         clauses,
         gas,
         isDelegated,

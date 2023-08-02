@@ -41,12 +41,12 @@ export const useSendTransaction = (
                 encodedRawTx,
             )
         } catch (e) {
-            if (e instanceof Error && "isAxiosError" in e) {
+            if (e instanceof Object && "isAxiosError" in e && e.isAxiosError) {
                 const axiosError = e as AxiosError
 
                 error(
                     "sendTransaction error",
-                    JSON.stringify(axiosError.response),
+                    JSON.stringify(axiosError.toJSON()),
                 )
             } else {
                 error("sendTransaction error", e)

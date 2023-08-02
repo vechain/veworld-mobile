@@ -23,7 +23,7 @@ export const useTransactionBuilder = ({
     const blockRef = useAppSelector(selectBlockRef)
     const chainTag = useAppSelector(selectChainTag)
 
-    return useCallback(() => {
+    const buildTransaction = useCallback(() => {
         const nonce = HexUtils.generateRandom(8)
 
         const txGas = providedGas ?? gas?.gas
@@ -45,4 +45,8 @@ export const useTransactionBuilder = ({
 
         return TransactionUtils.fromBody(txBody, isDelegated)
     }, [isDelegated, clauses, dependsOn, gas, providedGas, blockRef, chainTag])
+
+    return {
+        buildTransaction,
+    }
 }

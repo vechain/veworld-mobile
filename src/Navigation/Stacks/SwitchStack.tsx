@@ -49,13 +49,13 @@ export type RootStackParamListSwitch = {
         requestEvent: PendingRequestTypes.Struct
         certificate: Certificate
         accountWithDevice: LedgerAccountWithDevice
-        initialRoute: string
+        initialRoute: Routes
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
         delegationSignature?: string
         transaction: Transaction
-        initialRoute: string
+        initialRoute: Routes
         requestEvent?: PendingRequestTypes.Struct
     }
     [Routes.BLOCKED_APP_SCREEN]: undefined

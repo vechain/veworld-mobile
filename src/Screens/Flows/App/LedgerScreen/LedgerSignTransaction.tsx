@@ -58,24 +58,15 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         delegationSignature,
     } = route.params
 
-    const { LL } = useI18nContext()
     const nav = useNavigation()
-    const { web3Wallet } = useWalletConnect()
-
+    const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const { web3Wallet } = useWalletConnect()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
-    const { sendTransactionAndPerformUpdates } = useSendTransaction(
-        selectedNetwork,
-        accountWithDevice,
-    )
-
     const [signature, setSignature] = useState<Buffer>()
-
-    // If the tx is ready and the signature has been requested to the device
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
-
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
 
@@ -103,10 +94,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onConnectionError,
     })
 
+    const onTransactionSuccess = useCallback(() => {}, [])
+
     const { config, clausesEnabled, contractEnabled } = useLegderConfig({
         app: vetApp,
         onGetLedgerConfigError: openOrFinalizeConnection,
     })
+
+    const { sendTransaction } = useSendTransaction(onTransactionSuccess)
 
     // errorCode + validate signature
     const ledgerErrorCode = useMemo(() => {
@@ -251,7 +246,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                   ])
                 : signature
 
-            const txId = await sendTransactionAndPerformUpdates(transaction)
+            const txId = await sendTransaction(transaction)
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success,
             )
@@ -278,6 +273,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
+            if (requestEvent && web3Wallet) {
+                await WalletConnectResponseUtils.transactionRequestFailedResponse(
+                    {
+                        request: requestEvent,
+                        web3Wallet,
+                        LL,
+                    },
+                )
+
+                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
+                // MinimizerUtils.goBack()
+            }
         } finally {
             setIsSending(false)
             dispatch(setIsAppLoading(false))
@@ -287,7 +294,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         dispatch,
         transaction,
         delegationSignature,
-        sendTransactionAndPerformUpdates,
+        sendTransaction,
         removeLedger,
         requestEvent,
         web3Wallet,
