@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { VTHO } from "~Constants"
@@ -55,7 +55,7 @@ export const useRenderGas = ({
         return vthoGas && leftVtho.gte(vthoGas)
     }, [amount, vthoGas, tokenSymbol, vthoBalance])
 
-    const RenderGas = () => {
+    const RenderGas = useCallback(() => {
         if (loadingGas) {
             return (
                 <SkeletonContent
@@ -114,7 +114,15 @@ export const useRenderGas = ({
                 </>
             )
         }
-    }
+    }, [
+        vthoBalance,
+        LL,
+        theme,
+        loadingGas,
+        selectedDelegationOption,
+        vthoGas,
+        isThereEnoughGas,
+    ])
 
     return { RenderGas, isThereEnoughGas, vthoGas, vthoBalance }
 }

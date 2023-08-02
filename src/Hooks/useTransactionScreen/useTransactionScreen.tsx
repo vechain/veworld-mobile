@@ -182,43 +182,56 @@ export const useTransactionScreen = ({
         [loading, loadingGas, isBiometricsEmpty],
     )
 
-    const SubmitButton = () => (
-        <FadeoutButton
-            title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-            action={onSubmit}
-            disabled={continueNotAllowed || isLoading}
-            isLoading={isLoading}
-            bottom={0}
-            mx={0}
-            width={"auto"}
-        />
+    const SubmitButton = useCallback(
+        () => (
+            <FadeoutButton
+                title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
+                action={onSubmit}
+                disabled={continueNotAllowed || isLoading}
+                isLoading={isLoading}
+                bottom={0}
+                mx={0}
+                width={"auto"}
+            />
+        ),
+        [LL, onSubmit, continueNotAllowed, isLoading],
     )
 
-    const Delegation = () => (
-        <>
-            <DelegationOptions
-                setNoDelegation={setNoDelegation}
-                selectedDelegationOption={selectedDelegationOption}
-                setSelectedAccount={setSelectedDelegationAccount}
-                selectedAccount={selectedDelegationAccount}
-                selectedDelegationUrl={selectedDelegationUrl}
-                setSelectedDelegationUrl={setSelectedDelegationUrl}
-            />
-            {selectedDelegationAccount && (
-                <>
-                    <BaseSpacer height={16} />
-                    <AccountCard account={selectedDelegationAccount} />
-                </>
-            )}
-            {selectedDelegationUrl && (
-                <>
-                    <BaseSpacer height={16} />
-                    <BaseCard>
-                        <BaseText py={8}>{selectedDelegationUrl}</BaseText>
-                    </BaseCard>
-                </>
-            )}
-        </>
+    const Delegation = useCallback(
+        () => (
+            <>
+                <DelegationOptions
+                    setNoDelegation={setNoDelegation}
+                    selectedDelegationOption={selectedDelegationOption}
+                    setSelectedAccount={setSelectedDelegationAccount}
+                    selectedAccount={selectedDelegationAccount}
+                    selectedDelegationUrl={selectedDelegationUrl}
+                    setSelectedDelegationUrl={setSelectedDelegationUrl}
+                />
+                {selectedDelegationAccount && (
+                    <>
+                        <BaseSpacer height={16} />
+                        <AccountCard account={selectedDelegationAccount} />
+                    </>
+                )}
+                {selectedDelegationUrl && (
+                    <>
+                        <BaseSpacer height={16} />
+                        <BaseCard>
+                            <BaseText py={8}>{selectedDelegationUrl}</BaseText>
+                        </BaseCard>
+                    </>
+                )}
+            </>
+        ),
+        [
+            selectedDelegationAccount,
+            selectedDelegationOption,
+            selectedDelegationUrl,
+            setNoDelegation,
+            setSelectedDelegationAccount,
+            setSelectedDelegationUrl,
+        ],
     )
 
     return {

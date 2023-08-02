@@ -133,7 +133,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         initialRoute: Routes.HOME,
     })
 
-    const ReceiverDetails = () => {
+    const ReceiverDetails = useCallback(() => {
         const receiverExists = accountsAndContacts.find(_account =>
             AddressUtils.compareAddresses(_account.address, address),
         )
@@ -173,7 +173,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 </BaseText>
             </BaseView>
         )
-    }
+    }, [accountsAndContacts, address, accounts])
 
     return (
         <Layout
