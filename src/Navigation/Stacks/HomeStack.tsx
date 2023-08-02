@@ -34,7 +34,7 @@ export type RootStackParamListHome = {
     [Routes.SELECT_TOKEN_SEND]: { initialRoute: string }
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
-        initialRoute: string
+        initialRoute: Routes
     }
     [Routes.INSERT_ADDRESS_SEND]: {
         token: FungibleTokenWithBalance
