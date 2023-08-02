@@ -1,5 +1,4 @@
-fastlane documentation
-----
+## fastlane documentation
 
 # Installation
 
@@ -15,6 +14,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios nuke_appstore_certificates
+
+```sh
+[bundle exec] fastlane ios nuke_appstore_certificates
+```
+
+Revoke certificates from Apple Developer Portal
+
+### ios remove_certificates_from_gh
+
+```sh
+[bundle exec] fastlane ios remove_certificates_from_gh
+```
+
+Remove certificates from GitHub
+
 ### ios generate_new_certificates
 
 ```sh
@@ -23,21 +38,13 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Generate new certificates
 
-### ios fetch_certificates_from_gh
+### ios rotate_certificates
 
 ```sh
-[bundle exec] fastlane ios fetch_certificates_from_gh
+[bundle exec] fastlane ios rotate_certificates
 ```
 
-Get certificates
-
-### ios e2e
-
-```sh
-[bundle exec] fastlane ios e2e
-```
-
-Run e2e tests
+Rotate certificates
 
 ### ios create_changelog
 
@@ -71,7 +78,7 @@ Commit latest artifacts to GitHub
 
 Push a new beta build to TestFlight
 
-----
+---
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 

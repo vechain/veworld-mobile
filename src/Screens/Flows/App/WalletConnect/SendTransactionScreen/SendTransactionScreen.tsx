@@ -10,6 +10,7 @@ import {
     BaseView,
     CloseModalButton,
     DelegationOptions,
+    RequireUserPassword,
     showErrorToast,
     useWalletConnect,
 } from "~Components"
@@ -214,7 +215,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 // MinimizerUtils.goBack()
             } catch (e) {
                 track(AnalyticsEvent.DAPP_TX_FAILED_TO_SEND)
-                error(e)
+                error("SendTransactionScreen:handleAccept", e)
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
                     { request: requestEvent, web3Wallet, LL },
                 )
@@ -238,7 +239,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     )
 
     const {
-        ConfirmIdentityBottomSheet,
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
     } = useCheckIdentity({
@@ -379,7 +382,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <BaseSpacer height={16} />
             </ScrollView>
 
-            <ConfirmIdentityBottomSheet />
+            <RequireUserPassword
+                isOpen={isPasswordPromptOpen}
+                onClose={handleClosePasswordModal}
+                onSuccess={onPasswordSuccess}
+            />
         </BaseSafeArea>
     )
 }

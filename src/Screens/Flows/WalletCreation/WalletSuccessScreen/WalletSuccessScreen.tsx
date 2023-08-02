@@ -5,6 +5,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    RequireUserPassword,
     showErrorToast,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
@@ -113,7 +114,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     )
 
     const {
-        ConfirmIdentityBottomSheet,
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
     } = useCheckIdentity({ onIdentityConfirmed, allowAutoPassword: true })
@@ -192,7 +195,11 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     return (
         <>
-            <ConfirmIdentityBottomSheet />
+            <RequireUserPassword
+                isOpen={isPasswordPromptOpen}
+                onClose={handleClosePasswordModal}
+                onSuccess={onPasswordSuccess}
+            />
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
 

@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import {
     BackButtonHeader,
     BaseIcon,
     BaseSafeArea,
-    BaseSpacer,
     BaseText,
     BaseView,
     CustomTokenCard,
     DeleteConfirmationBottomSheet,
+    DeleteUnderlay,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
@@ -23,13 +22,14 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import SwipeableItem, {
+    OpenDirection,
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
 import { useNavigation } from "@react-navigation/native"
 
 export const ManageCustomTokenScreen = () => {
     const theme = useTheme()
-    const swipeableItemRef = useRef<(SwipeableItemImperativeRef | null)[]>([])
+    const swipeableItemRefs = useRef<(SwipeableItemImperativeRef | null)[]>([])
     const { LL } = useI18nContext()
     const customTokens = useAppSelector(selectAccountCustomTokens)
     const dispatch = useAppDispatch()
@@ -48,35 +48,53 @@ export const ManageCustomTokenScreen = () => {
         onClose: closeRemoveCustomTokenSheet,
     } = useBottomSheetModal()
 
+    const closeOtherSwipeableItems = useCallback((index?: number) => {
+        swipeableItemRefs?.current.forEach((ref, id) => {
+            if (id !== index) {
+                ref?.close()
+            }
+        })
+    }, [])
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleSwipe =
         (item: FungibleToken, index: number) =>
         ({ openDirection }: { openDirection: string }) => {
-            setSelectedToken(item)
-            setSelectedIndex(index)
-            if (openDirection !== "none") {
-                openRemoveCustomTokenSheet()
+            if (openDirection === OpenDirection.LEFT) {
+                closeOtherSwipeableItems(index)
+                setSelectedToken(item)
+                setSelectedIndex(index)
             }
         }
+
+    const onTrashIconPress = useCallback(() => {
+        closeOtherSwipeableItems()
+        openRemoveCustomTokenSheet()
+    }, [closeOtherSwipeableItems, openRemoveCustomTokenSheet])
 
     const renderItem: ListRenderItem<FungibleToken> = useCallback(
         ({ item, index }) => {
             const customStyle = index === 0 ? { marginTop: 20 } : {}
             return (
-                <SwipeableItem
-                    ref={el => (swipeableItemRef.current[index] = el)}
-                    item={item}
-                    renderUnderlayLeft={() => <UnderlayLeft index={index} />}
-                    snapPointsLeft={[50]}
-                    onChange={handleSwipe(item, index)}>
-                    <CustomTokenCard
-                        token={item}
-                        containerStyle={[styles.card, customStyle]}
-                    />
-                </SwipeableItem>
+                <BaseView
+                    flexDirection="row"
+                    mx={20}
+                    my={8}
+                    style={customStyle}>
+                    <SwipeableItem
+                        ref={el => (swipeableItemRefs.current[index] = el)}
+                        item={item}
+                        renderUnderlayLeft={() => (
+                            <DeleteUnderlay onPress={onTrashIconPress} />
+                        )}
+                        snapPointsLeft={[58]}
+                        onChange={handleSwipe(item, index)}>
+                        <CustomTokenCard token={item} />
+                    </SwipeableItem>
+                </BaseView>
             )
         },
-        [handleSwipe],
+        [handleSwipe, onTrashIconPress],
     )
 
     const handleDelete = () => {
@@ -96,7 +114,7 @@ export const ManageCustomTokenScreen = () => {
     }
 
     const handleCloseDeleteModal = () => {
-        swipeableItemRef.current?.[selectedIndex!!]?.close?.()
+        swipeableItemRefs.current?.[selectedIndex!!]?.close?.()
         closeRemoveCustomTokenSheet()
     }
 
@@ -157,48 +175,4 @@ const styles = StyleSheet.create({
         width: "100%",
         marginBottom: 60,
     },
-    card: {
-        paddingHorizontal: 20,
-        marginVertical: 8,
-    },
-    underlayContainer: {
-        flexDirection: "row",
-    },
 })
-
-const UnderlayLeft = ({ index }: { index: number }) => {
-    const theme = useTheme()
-    const { styles: underlayStyles } = useThemedStyles(
-        baseUnderlayStyles(index),
-    )
-    return (
-        <View style={styles.underlayContainer}>
-            <BaseSpacer width={20} />
-            <View style={underlayStyles.underlayLeft}>
-                <BaseIcon
-                    name={"delete"}
-                    size={20}
-                    bg={theme.colors.danger}
-                    color={theme.colors.card}
-                />
-            </View>
-            <BaseSpacer width={20} />
-        </View>
-    )
-}
-
-const baseUnderlayStyles = (index: number) => (theme: ColorThemeType) =>
-    StyleSheet.create({
-        underlayLeft: {
-            flexDirection: "row",
-            alignItems: "center",
-            flex: 1,
-            justifyContent: "flex-end",
-            borderRadius: 16,
-            height: 64,
-            marginVertical: 8,
-            paddingRight: 10,
-            backgroundColor: theme.colors.danger,
-            marginTop: index === 0 ? 20 : 8,
-        },
-    })

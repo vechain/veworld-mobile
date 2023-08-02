@@ -1,6 +1,6 @@
 import { address, HDNode } from "thor-devkit"
 import { Network, NETWORK_TYPE, XPub } from "~Model"
-import { error } from "~Utils/Logger"
+import { error, warn } from "~Utils/Logger"
 import { VET, VTHO } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
 import HexUtils from "../HexUtils"
@@ -16,8 +16,8 @@ export const getAddressFromXPub = (xPub: XPub, index: number): string => {
         const hdNode = CryptoUtils.hdNodeFromXPub(xPub)
         return getAddressFromHdNode(hdNode, index)
     } catch (e) {
-        error(e)
-        throw new Error("Invalid XPub")
+        error("getAddressFromXPub", e)
+        throw new Error("getAddressFromXPub: Invalid XPub")
     }
 }
 
@@ -32,8 +32,8 @@ export const getAddressFromHdNode = (hdNode: HDNode, index: number): string => {
         const account = hdNode.derive(index)
         return address.toChecksumed(account.address)
     } catch (e) {
-        error(e)
-        throw new Error("Invalid XPub")
+        error("getAddressFromHdNode", e)
+        throw new Error("getAddressFromHdNode: Invalid XPub")
     }
 }
 
@@ -67,7 +67,7 @@ export const compareAddresses = (
             address.toChecksumed(address2 as string)
         )
     } catch (e) {
-        error(
+        warn(
             "Got error:",
             e,
             "Trying to compare address1:",
@@ -89,7 +89,7 @@ export const isValid = (addr: string | undefined | null): boolean => {
         address.toChecksumed(HexUtils.addPrefix(addr))
         return true
     } catch (e) {
-        error(e)
+        warn("AddressUtils:isValid", e)
         return false
     }
 }

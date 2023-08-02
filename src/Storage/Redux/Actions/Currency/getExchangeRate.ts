@@ -24,7 +24,7 @@ export const getExchangeRate = async (
 
             return exchange
         } catch (e) {
-            error(e)
+            error("getExchangeRate", e)
         }
     }
     throw new Error("Failed to get exchange rate from any provider")

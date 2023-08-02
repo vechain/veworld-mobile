@@ -5,6 +5,7 @@ import {
     BaseSpacer,
     useWalletConnect,
     Layout,
+    DeleteUnderlay,
 } from "~Components"
 import { useAppSelector, selectSessions, selectAccounts } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
@@ -20,7 +21,6 @@ import SwipeableItem, {
     OpenDirection,
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
-import { UnderlayLeft } from "../../ContactsScreen"
 import { useBottomSheetModal } from "~Hooks"
 import { isSmallScreen } from "~Constants"
 
@@ -46,7 +46,7 @@ export const ConnectedAppsScreen = () => {
         onClose: closeConfirmDisconnectDetailsSheet,
     } = useBottomSheetModal()
 
-    const closeOtherSwipeableItems = useCallback((currentTopic: string) => {
+    const closeOtherSwipeableItems = useCallback((currentTopic?: string) => {
         swipeableItemRefs?.current.forEach((ref, topic) => {
             if (topic !== currentTopic) {
                 ref?.close()
@@ -54,12 +54,13 @@ export const ConnectedAppsScreen = () => {
         })
     }, [])
 
-    const onSwipeableItemChange = useCallback(() => {
-        // Close all the swipable items
-        closeOtherSwipeableItems("")
-        // Trigger the disconnect for the item that was swiped
-        openConfirmDisconnectDetailsSheet()
-    }, [closeOtherSwipeableItems, openConfirmDisconnectDetailsSheet])
+    const onSwipeableItemChange = useCallback(
+        (currentTopic: string) => () => {
+            // Close all the swipable items
+            closeOtherSwipeableItems(currentTopic)
+        },
+        [closeOtherSwipeableItems],
+    )
 
     // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
@@ -72,6 +73,11 @@ export const ConnectedAppsScreen = () => {
         },
         [],
     )
+
+    const handleTrashIconPress = useCallback(() => {
+        closeOtherSwipeableItems()
+        openConfirmDisconnectDetailsSheet()
+    }, [closeOtherSwipeableItems, openConfirmDisconnectDetailsSheet])
 
     const renderConnectedApps = useMemo(() => {
         return accounts.map((account, index) => {
@@ -89,7 +95,7 @@ export const ConnectedAppsScreen = () => {
                         <BaseSpacer height={16} />
                         {activeSessions[account.address].map(session => {
                             return (
-                                <BaseView key={session.topic}>
+                                <BaseView key={session.topic} my={8}>
                                     <SwipeableItem
                                         ref={ref =>
                                             registerSwipeableItemRef(
@@ -104,14 +110,14 @@ export const ConnectedAppsScreen = () => {
                                                 openDirection !==
                                                 OpenDirection.NONE
                                             ) {
-                                                onSwipeableItemChange()
+                                                onSwipeableItemChange(
+                                                    session.topic,
+                                                )
                                             }
                                         }}
                                         renderUnderlayLeft={() => (
-                                            <UnderlayLeft
-                                                onDelete={() =>
-                                                    openConfirmDisconnectDetailsSheet()
-                                                }
+                                            <DeleteUnderlay
+                                                onPress={handleTrashIconPress}
                                             />
                                         )}
                                         snapPointsLeft={underlaySnapPoints}>
@@ -141,12 +147,12 @@ export const ConnectedAppsScreen = () => {
     }, [
         accounts,
         activeSessions,
-        onSwipeableItemChange,
-        registerSwipeableItemRef,
         confirmDisconnectBottomSheetRef,
         closeConfirmDisconnectDetailsSheet,
+        registerSwipeableItemRef,
+        onSwipeableItemChange,
+        handleTrashIconPress,
         disconnect,
-        openConfirmDisconnectDetailsSheet,
     ])
 
     return (

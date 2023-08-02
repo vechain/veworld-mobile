@@ -9,14 +9,16 @@ import {
     Layout,
     RequireUserPassword,
     SelectDeviceBottomSheet,
+    showWarningToast,
 } from "~Components"
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
 import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
-import { LocalDevice, WALLET_STATUS } from "~Model"
+import { DEVICE_TYPE, LocalDevice, WALLET_STATUS } from "~Model"
 import {
-    setIsPinCodeRequired,
     selectAreDevFeaturesEnabled,
+    selectSelectedAccount,
+    setIsPinCodeRequired,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -47,6 +49,8 @@ export const PrivacyScreen = () => {
         selectAnalyticsTrackingEnabled,
     )
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { isWalletSecurityBiometrics, isWalletSecurityPassword } =
         useWalletSecurity()
@@ -106,8 +110,14 @@ export const PrivacyScreen = () => {
     } = useBottomSheetModal()
 
     const handleOnEditPinPress = useCallback(() => {
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
+            return showWarningToast(
+                LL.HEADS_UP(),
+                LL.ALERT_CANT_BACKUP_LEDGER(),
+            )
+        }
         openBackupWarningSheet()
-    }, [openBackupWarningSheet])
+    }, [selectedAccount, LL, openBackupWarningSheet])
 
     // [END] - Hooks setup
 
