@@ -4,6 +4,7 @@ import {
     SignStatus,
     SignTransactionResponse,
     useCheckIdentity,
+    useDelegation,
     useRenderGas,
     useSendTransaction,
     useSignTransaction,
@@ -17,7 +18,6 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { useDelegation } from "~Screens/Flows/App/SendScreen/04-TransactionSummarySendScreen/Hooks"
 import {
     AccountCard,
     BaseCard,
