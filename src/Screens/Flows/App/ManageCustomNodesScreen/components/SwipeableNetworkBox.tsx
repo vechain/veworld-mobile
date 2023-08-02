@@ -10,6 +10,7 @@ type Props = {
     network: Network
     onPress: () => void
     onSwipe: () => void
+    onDelete: () => void
     registerSwipeable: (
         networkId: string,
         ref: SwipeableItemImperativeRef | null,
@@ -22,6 +23,7 @@ const underlaySnapPoints = [58]
 export const SwipeableNetworkBox: React.FC<Props> = ({
     network,
     onPress,
+    onDelete,
     onSwipe,
     registerSwipeable,
     closeSwipeables,
@@ -33,11 +35,11 @@ export const SwipeableNetworkBox: React.FC<Props> = ({
             item={network}
             onChange={({ openDirection }) => {
                 if (openDirection !== OpenDirection.NONE) {
-                    closeSwipeables(true)
                     onSwipe()
+                    closeSwipeables()
                 }
             }}
-            renderUnderlayLeft={() => <DeleteUnderlay />}
+            renderUnderlayLeft={() => <DeleteUnderlay onPress={onDelete} />}
             snapPointsLeft={underlaySnapPoints}>
             <NetworkBox
                 activeOpacity={1}

@@ -21,6 +21,7 @@ type Props = {
     footer?: ReactNode
     isScrollEnabled?: boolean
     safeAreaTestID?: string
+    scrollViewTestID?: string
     onTouchBody?: () => void
 }
 
@@ -35,6 +36,7 @@ export const Layout = ({
     isScrollEnabled = true,
     safeAreaTestID,
     onTouchBody,
+    scrollViewTestID,
 }: Props) => {
     const theme = useTheme()
     const { tabBarAndroidBottomInsets, calculateBottomInsets } =
@@ -67,6 +69,7 @@ export const Layout = ({
 
                 {body && (
                     <BaseScrollView
+                        testID={scrollViewTestID || "Layout_ScrollView"}
                         scrollEnabled={isScrollEnabled}
                         style={noMargin ? {} : styles.scrollView}
                         contentContainerStyle={{

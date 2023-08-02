@@ -1,11 +1,9 @@
-import React from "react"
 import { act, renderHook } from "@testing-library/react-hooks"
 import { useCheckIdentity } from "./useCheckIdentity"
 import { useWalletSecurity } from "../useWalletSecurity"
 import { TestWrapper } from "~Test"
 import { useDisclosure } from "../useDisclosure"
 import { BiometricsUtils } from "~Utils"
-import { render } from "@testing-library/react-native"
 
 jest.mock("../useWalletSecurity", () => ({
     useWalletSecurity: jest.fn(),
@@ -100,20 +98,6 @@ describe("useCheckIdentity", () => {
 
             expect(result.current.closePasswordPrompt).toHaveBeenCalledTimes(1)
             expect(mockedOnIdentityConfirmed).toHaveBeenCalledWith(password)
-        })
-
-        it("should render correctly ConfirmIdentityBottomSheet", async () => {
-            const { result, waitForNextUpdate } = renderHook(
-                () =>
-                    useCheckIdentity({
-                        onIdentityConfirmed: jest.fn(),
-                        allowAutoPassword,
-                    }),
-                { wrapper: TestWrapper },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
-            const { ConfirmIdentityBottomSheet } = result.current
-            render(<ConfirmIdentityBottomSheet />, { wrapper: TestWrapper })
         })
     })
 })

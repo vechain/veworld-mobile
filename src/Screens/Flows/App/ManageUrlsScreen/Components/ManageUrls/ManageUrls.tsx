@@ -6,8 +6,8 @@ import {
     BaseIcon,
     BaseSpacer,
     BaseText,
-    SwipeableUnderlay,
     BaseView,
+    DeleteUnderlay,
 } from "~Components"
 import {
     deleteDelegationUrl,
@@ -17,6 +17,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import SwipeableItem, {
+    OpenDirection,
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
 
@@ -29,7 +30,7 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
     const theme = useTheme()
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const dispatch = useAppDispatch()
-    const swipeableItemRef = useRef<(SwipeableItemImperativeRef | null)[]>([])
+    const swipeableItemRefs = useRef<(SwipeableItemImperativeRef | null)[]>([])
 
     const deleteUrl = useCallback(
         (url: string) => () => {
@@ -38,28 +39,48 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
         [dispatch],
     )
 
+    const closeOtherSwipeableItems = useCallback((index: number) => {
+        swipeableItemRefs?.current.forEach((ref, id) => {
+            if (id !== index) {
+                ref?.close()
+            }
+        })
+    }, [])
+
+    const handleSwipe = useCallback(
+        (index: number) =>
+            ({ openDirection }: { openDirection: string }) => {
+                if (openDirection === OpenDirection.LEFT) {
+                    closeOtherSwipeableItems(index)
+                }
+            },
+        [closeOtherSwipeableItems],
+    )
+
     const renderItem: ListRenderItem<string> = useCallback(
         ({ item, index }) => {
+            const customStyle = index === 0 ? { marginTop: 20 } : {}
+
             return (
-                <SwipeableItem
-                    ref={el => (swipeableItemRef.current[index] = el)}
-                    item={item}
-                    renderUnderlayLeft={() => (
-                        <SwipeableUnderlay
-                            action={deleteUrl(item)}
-                            index={index}
-                        />
-                    )}
-                    snapPointsLeft={[50]}>
-                    <BaseCard containerStyle={styles.card}>
-                        <BaseText typographyFont="bodyBold" w={100} py={8}>
-                            {item}
-                        </BaseText>
-                    </BaseCard>
-                </SwipeableItem>
+                <BaseView mx={20} my={8} style={customStyle}>
+                    <SwipeableItem
+                        ref={el => (swipeableItemRefs.current[index] = el)}
+                        item={item}
+                        renderUnderlayLeft={() => (
+                            <DeleteUnderlay onPress={deleteUrl(item)} />
+                        )}
+                        onChange={handleSwipe(index)}
+                        snapPointsLeft={[50]}>
+                        <BaseCard>
+                            <BaseText typographyFont="bodyBold" w={100} py={8}>
+                                {item}
+                            </BaseText>
+                        </BaseCard>
+                    </SwipeableItem>
+                </BaseView>
             )
         },
-        [deleteUrl],
+        [deleteUrl, handleSwipe],
     )
 
     return (
@@ -68,7 +89,7 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
                 flexDirection="row"
                 justifyContent="space-between"
                 alignItems="center"
-                w={100}>
+                mx={20}>
                 <BaseText typographyFont="subTitleBold">
                     {LL.SEND_DELEGATION_MANAGE_URL()}
                 </BaseText>
@@ -97,8 +118,5 @@ const styles = StyleSheet.create({
         flex: 1,
         width: "100%",
         marginBottom: 60,
-    },
-    card: {
-        marginVertical: 8,
     },
 })

@@ -71,6 +71,54 @@ Then(
     },
 )
 
-Then("The user should see success message", { timeout: -1 }, async function () {
-    await idShouldExist("transactionSuccessToast")
-})
+Then(
+    "The user should see successfully received message for the token {string}",
+    { timeout: -1 },
+    async function (token: string) {
+        if (token === "VET") {
+            await idShouldExist("informUserForIncomingVETSuccessToast", {
+                timeout: 20000,
+            })
+        } else {
+            await idShouldExist("informUserForIncomingTokenSuccessToast", {
+                timeout: 20000,
+            })
+        }
+    },
+)
+
+Then(
+    "The user should see successfully sent message for the token {string}",
+    { timeout: -1 },
+    async function (token: string) {
+        if (token === "VET") {
+            await idShouldExist("InformUserForOutgoingVETSuccessToast", {
+                timeout: 20000,
+            })
+        } else {
+            await idShouldExist("informUserForOutgoingTokenSuccessToast", {
+                timeout: 20000,
+            })
+        }
+    },
+)
+
+Then(
+    "The user should see NFT sent with success message",
+    { timeout: -1 },
+    async function () {
+        await idShouldExist("informUserForOutgoingNFTSuccessToast", {
+            timeout: 20000,
+        })
+    },
+)
+
+Then(
+    "The user should see NFT incoming with success message",
+    { timeout: -1 },
+    async function () {
+        await idShouldExist("informUserForIncomingNFTSuccessToast", {
+            timeout: 20000,
+        })
+    },
+)

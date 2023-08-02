@@ -1,6 +1,6 @@
 import { waitFor, element } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../constants"
-import { clickById, clickByText } from "../common"
+import { clickById, clickByText, isPresentText } from "../common"
 
 export const goToContactsManagement = async () => {
     await waitFor(element(by.id("settings-tab")))
@@ -26,4 +26,8 @@ export const goToSettings = async () => {
 
 export const goToSend = async () => {
     await clickByText("Send")
+}
+
+export const isPinRequested = async () => {
+    return await isPresentText("Insert your 6-digit PIN")
 }

@@ -113,13 +113,13 @@ export const ManageCustomNodesScreen = () => {
         [openEditNetworkSheet],
     )
 
-    const onDeleteNetworkClick = useCallback(
-        (network: Network) => {
-            setNetworkToEditDeleteId(network.id)
-            openDeleteConfirmationSheet()
-        },
-        [openDeleteConfirmationSheet],
-    )
+    const onDeleteNetworkClick = useCallback(() => {
+        openDeleteConfirmationSheet()
+    }, [openDeleteConfirmationSheet])
+
+    const onSwipeNetwork = useCallback((network: Network) => {
+        setNetworkToEditDeleteId(network.id)
+    }, [])
 
     const onDeleteNetworkConfirm = useCallback(() => {
         try {
@@ -168,9 +168,9 @@ export const ManageCustomNodesScreen = () => {
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
             const onPress = () => onEditNetworkClick(item)
-            const onSwipe = () => onDeleteNetworkClick(item)
-            const closeSwipeables = (closeSelf?: boolean) =>
-                closeOtherSwipeableItems(closeSelf ? undefined : item)
+            const onSwipe = () => onSwipeNetwork(item)
+            const onDelete = () => onDeleteNetworkClick()
+            const closeSwipeables = () => closeOtherSwipeableItems(item)
 
             return (
                 <BaseView flexDirection="row" mx={20}>
@@ -178,6 +178,7 @@ export const ManageCustomNodesScreen = () => {
                         network={item}
                         onPress={onPress}
                         onSwipe={onSwipe}
+                        onDelete={onDelete}
                         registerSwipeable={registerSwipeableItemRef}
                         closeSwipeables={closeSwipeables}
                     />
@@ -185,9 +186,10 @@ export const ManageCustomNodesScreen = () => {
             )
         },
         [
-            onEditNetworkClick,
-            onDeleteNetworkClick,
             registerSwipeableItemRef,
+            onEditNetworkClick,
+            onSwipeNetwork,
+            onDeleteNetworkClick,
             closeOtherSwipeableItems,
         ],
     )

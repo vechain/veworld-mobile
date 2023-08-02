@@ -1,7 +1,7 @@
 import { waitFor, element } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../constants"
 import { ContactsScreen } from "../screens"
-import { clickByText } from "../common"
+import { clickById, clickByText } from "../common"
 
 export const goToAddContactScreen = async () => {
     if (await ContactsScreen.isContactsListEmpty()) {
@@ -40,7 +40,7 @@ export const deleteContact = async (name: string) => {
         .withTimeout(DEFAULT_TIMEOUT)
 
     await element(by.id(`${name}-contact-box`)).swipe("left", "slow", 0.4)
-
+    await clickById("DeleteUnderlay_DeleteIcon")
     await waitFor(element(by.text("REMOVE")))
         .toBeVisible()
         .withTimeout(LONG_TIMEOUT)
