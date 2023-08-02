@@ -40,7 +40,6 @@ export type SignTransactionResponse = Transaction | SignStatus
  * @param selectedDelegationOption the delegation option
  * @param selectedDelegationUrl the delegation url
  * @param initialRoute the initial route to navigate to
- * @returns {signAndSendTransaction} the function to sign and send the transaction
  */
 
 export const useSignTransaction = ({

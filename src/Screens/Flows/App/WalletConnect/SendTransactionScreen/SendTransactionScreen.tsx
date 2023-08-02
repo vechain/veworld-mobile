@@ -100,7 +100,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 { request: requestEvent, web3Wallet, LL },
                 id,
                 selectedAccount.address,
-                network,
             )
 
             dispatch(addPendingDappTransactionActivity(transaction, name, url))
@@ -114,7 +113,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             web3Wallet,
             LL,
             selectedAccount.address,
-            network,
             dispatch,
             name,
         ],

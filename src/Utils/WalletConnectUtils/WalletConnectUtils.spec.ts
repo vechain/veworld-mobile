@@ -5,6 +5,7 @@ import {
 } from "@walletconnect/types"
 import {
     formatJsonRpcError,
+    getNameAndUrl,
     getNetwork,
     getPairAttributes,
     getRequestEventAttributes,
@@ -21,6 +22,7 @@ import { NETWORK_TYPE } from "~Model"
 import { NavigationState } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
+import { IWeb3Wallet } from "@walletconnect/web3wallet"
 
 describe("getPairAttributes", () => {
     it("should return the pair attributes correctly", () => {
@@ -499,5 +501,49 @@ describe("getSendTxOptions", () => {
         const requestEvent = mockPendingRequest([])
 
         expect(getSendTxOptions(requestEvent)).toEqual({})
+    })
+})
+
+describe("getNameAndUrl", () => {
+    it("should return no name or url", () => {
+        expect(getNameAndUrl(undefined, undefined)).toEqual({})
+    })
+
+    it("should return name and url", () => {
+        const requestEvent = {
+            params: {
+                chainId: "vechain",
+                request: {
+                    method: "methodName",
+                    params: ["param1", "param2"],
+                },
+            },
+            topic: "eventTopic",
+        } as PendingRequestTypes.Struct
+
+        const web3Wallet = {
+            getActiveSessions: () => {
+                return {
+                    [requestEvent.topic]: {
+                        peer: {
+                            metadata: {
+                                name: "VeWorld Mobile Wallet",
+                                icons: [
+                                    "https://avatars.githubusercontent.com/u/37784886",
+                                ],
+                                url: "https://walletconnect.com/",
+                            },
+                        },
+                    },
+                }
+            },
+        } as any as IWeb3Wallet
+
+        expect(getNameAndUrl(web3Wallet, requestEvent)).toEqual({
+            name: "VeWorld Mobile Wallet",
+            url: "https://walletconnect.com/",
+            description: undefined,
+            icon: "https://avatars.githubusercontent.com/u/37784886",
+        })
     })
 })

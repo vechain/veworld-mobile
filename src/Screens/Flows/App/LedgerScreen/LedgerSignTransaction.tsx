@@ -34,10 +34,8 @@ import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
     addPendingTransferTransactionActivity,
-    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
-    useAppSelector,
 } from "~Storage/Redux"
 import {
     ActivityUtils,
@@ -76,8 +74,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const { web3Wallet } = useWalletConnect()
-
-    const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const [signature, setSignature] = useState<Buffer>()
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
@@ -309,7 +305,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     { request: requestEvent, web3Wallet, LL },
                     txId,
                     accountWithDevice.address,
-                    selectedNetwork,
                 )
 
                 // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
@@ -353,7 +348,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         navigateOnFinish,
         LL,
         accountWithDevice.address,
-        selectedNetwork,
     ])
 
     const onConnectionErrorDismiss = useCallback(() => {

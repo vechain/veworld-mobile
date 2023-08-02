@@ -8,8 +8,6 @@ import {
 } from "./WalletConnectResponseUtils"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { Certificate } from "thor-devkit"
-import { Network, NETWORK_TYPE } from "~Model"
-import { genesises } from "~Constants"
 import { PendingRequestTypes } from "@walletconnect/types"
 
 // Mock the dependencies
@@ -49,17 +47,6 @@ describe("transactionRequestSuccessResponse", () => {
         const transactionId = "0x11341234"
         const signer = "example-signer"
 
-        const network: Network = {
-            id: "123",
-            defaultNet: true,
-            name: "Mock Network",
-            type: NETWORK_TYPE.TEST,
-            currentUrl: "https://mock-network.com",
-            urls: ["https://mock-network.com"],
-            explorerUrl: "https://mock-explorer.com",
-            genesis: genesises.test,
-        }
-
         // Call the function
         await transactionRequestSuccessResponse(
             { request, web3Wallet, LL } as {
@@ -69,7 +56,6 @@ describe("transactionRequestSuccessResponse", () => {
             },
             transactionId,
             signer,
-            network,
         )
 
         // Assertions
@@ -106,17 +92,6 @@ describe("transactionRequestSuccessResponse", () => {
         const transactionId = "0x12341234"
         const signer = "example-signer"
 
-        const network: Network = {
-            id: "123",
-            defaultNet: true,
-            name: "Mock Network",
-            type: NETWORK_TYPE.TEST,
-            currentUrl: "https://mock-network.com",
-            urls: ["https://mock-network.com"],
-            explorerUrl: "https://mock-explorer.com",
-            genesis: genesises.test,
-        }
-
         // Call the function
         await transactionRequestSuccessResponse(
             { request, web3Wallet, LL } as {
@@ -126,7 +101,6 @@ describe("transactionRequestSuccessResponse", () => {
             },
             transactionId,
             signer,
-            network,
         )
 
         // Assertions

@@ -1,5 +1,5 @@
 import { Transaction } from "thor-devkit"
-import { useThor } from "~Components"
+import { showSuccessToast, useThor } from "~Components"
 import {
     selectSelectedAccount,
     selectSelectedNetwork,
@@ -10,6 +10,9 @@ import {
 } from "~Storage/Redux"
 import { error, HexUtils } from "~Utils"
 import axios, { AxiosError, AxiosResponse } from "axios"
+import { Linking } from "react-native"
+import { defaultMainNetwork } from "~Constants"
+import { useI18nContext } from "~i18n"
 
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
@@ -21,6 +24,7 @@ export const useSendTransaction = (
 ) => {
     const dispatch = useAppDispatch()
     const thorClient = useThor()
+    const { LL } = useI18nContext()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
@@ -58,6 +62,22 @@ export const useSendTransaction = (
         const { id } = response.data
 
         await onSuccess(signedTransaction, id)
+
+        showSuccessToast(
+            LL.SUCCESS_GENERIC(),
+            LL.SUCCESS_GENERIC_OPERATION(),
+            LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+            async () => {
+                await Linking.openURL(
+                    `${
+                        selectedNetwork.explorerUrl ??
+                        defaultMainNetwork.explorerUrl
+                    }/transactions/${id}`,
+                )
+            },
+            4000,
+            "transactionSuccessToast",
+        )
 
         await dispatch(
             updateAccountBalances(thorClient, selectedAccount.address),
