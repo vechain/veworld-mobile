@@ -23,7 +23,7 @@ export type RootStackParamListDiscover = {
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.BUY]: undefined
     [Routes.SWAP]: undefined
-    [Routes.SELECT_TOKEN_SEND]: { initialRoute: string }
+    [Routes.SELECT_TOKEN_SEND]: { initialRoute: Routes }
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
         initialRoute: Routes

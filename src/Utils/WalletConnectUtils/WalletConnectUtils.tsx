@@ -79,6 +79,21 @@ export function getRequestEventAttributes(
     }
 }
 
+export function getNameAndUrl(
+    web3Wallet?: IWeb3Wallet,
+    requestEvent?: PendingRequestTypes.Struct,
+): { name?: string; url?: string } {
+    if (!requestEvent || !web3Wallet) return {}
+
+    const { topic } = getRequestEventAttributes(requestEvent)
+
+    const session = web3Wallet.getActiveSessions()[topic]
+
+    if (!session) return {}
+
+    return getSessionRequestAttributes(session)
+}
+
 export function getSessionRequestAttributes(
     sessionRequest: SessionTypes.Struct,
 ) {

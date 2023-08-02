@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
 import {
+    useAnalyticTracking,
     useBottomSheetModal,
     useLedger,
     useLegderConfig,
@@ -30,17 +31,29 @@ import {
     Routes,
 } from "~Navigation"
 import {
+    addPendingDappTransactionActivity,
+    addPendingNFTtransferTransactionActivity,
+    addPendingTransferTransactionActivity,
     selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, LedgerUtils, WalletConnectResponseUtils } from "~Utils"
+import {
+    ActivityUtils,
+    debug,
+    error,
+    LedgerUtils,
+    WalletConnectResponseUtils,
+    WalletConnectUtils,
+} from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { LEDGER_ERROR_CODES } from "~Constants"
+import { AnalyticsEvent, LEDGER_ERROR_CODES } from "~Constants"
 import { Buffer } from "buffer"
+import { Transaction } from "thor-devkit"
+import { ActivityType } from "~Model"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome &
@@ -59,6 +72,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     } = route.params
 
     const nav = useNavigation()
+    const track = useAnalyticTracking()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const { web3Wallet } = useWalletConnect()
@@ -94,7 +108,43 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onConnectionError,
     })
 
-    const onTransactionSuccess = useCallback(() => {}, [])
+    const onTransactionSuccess = useCallback(
+        (tx: Transaction) => {
+            const activity = ActivityUtils.getActivityTypeFromClause(
+                tx.body.clauses,
+            )
+
+            track(AnalyticsEvent.LEDGER_TX_SENT)
+
+            switch (activity) {
+                case ActivityType.VET_TRANSFER:
+                case ActivityType.FUNGIBLE_TOKEN:
+                    dispatch(addPendingTransferTransactionActivity(tx))
+                    track(AnalyticsEvent.SEND_FUNGIBLE_SENT, {
+                        accountType: accountWithDevice.device.type,
+                    })
+                    break
+                case ActivityType.NFT_TRANSFER:
+                    track(AnalyticsEvent.SEND_NFT_SENT, {
+                        accountType: accountWithDevice.device.type,
+                    })
+                    dispatch(addPendingNFTtransferTransactionActivity(tx))
+                    break
+                case ActivityType.DAPP_TRANSACTION:
+                    track(AnalyticsEvent.DAPP_TX_SENT, {
+                        accountType: accountWithDevice.device.type,
+                    })
+
+                    const { name, url } = WalletConnectUtils.getNameAndUrl(
+                        web3Wallet,
+                        requestEvent,
+                    )
+
+                    dispatch(addPendingDappTransactionActivity(tx, name, url))
+            }
+        },
+        [track, dispatch, accountWithDevice, web3Wallet, requestEvent],
+    )
 
     const { config, clausesEnabled, contractEnabled } = useLegderConfig({
         app: vetApp,
@@ -270,6 +320,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         } catch (e) {
             error("LedgerSignTransaction:handleOnConfirm", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
+            track(AnalyticsEvent.LEDGER_TX_FAILED_TO_SEND)
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
@@ -290,6 +341,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             dispatch(setIsAppLoading(false))
         }
     }, [
+        track,
         signature,
         dispatch,
         transaction,

@@ -2,12 +2,12 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import {
+    BaseSearchInput,
+    BaseSpacer,
     BaseText,
     BaseView,
-    BaseSpacer,
-    BaseSearchInput,
-    OfficialTokenCard,
     Layout,
+    OfficialTokenCard,
 } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
 import {
@@ -36,7 +36,7 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
     const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
         nav.navigate(Routes.SELECT_AMOUNT_SEND, {
             token,
-            initialRoute: route.params.initialRoute ?? "",
+            initialRoute: route.params.initialRoute,
         })
     }
 
