@@ -149,7 +149,7 @@ platform :android do
     version_code = options[:version_code]
     track = options[:track]
 
-    #prepare git
+    # prepare git
     ensure_git_status_clean
     ensure_git_branch(branch: "main")
 
