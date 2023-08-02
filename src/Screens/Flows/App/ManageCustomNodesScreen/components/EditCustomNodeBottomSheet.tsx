@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
+    BaseBottomSheet,
+    BaseBottomSheetTextInput,
+    BaseButton,
     BaseSpacer,
     BaseText,
     BaseView,
-    BaseBottomSheet,
-    BaseButton,
     hideToast,
     showErrorToast,
-    BaseBottomSheetTextInput,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
 import { isSmallScreen } from "~Constants"
-import { URIUtils, error } from "~Utils"
+import { URIUtils, warn } from "~Utils"
 import { Network } from "~Model"
 import {
     selectCustomNetworks,
@@ -66,7 +66,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
             )
             onClose()
         } catch (e) {
-            error(e)
+            warn("onEditNetworkPress", e)
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )

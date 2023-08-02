@@ -181,9 +181,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             try {
                 //recreate transport to avoid DisconnectedDeviceDuringOperation error
                 await openBleConnection()
-                if (!transport) {
-                    throw new Error("Transport is not defined")
-                }
+                if (!transport) return
+
                 const _signature = await LedgerUtils.signTransaction(
                     accountWithDevice.index,
                     transaction,
@@ -194,7 +193,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 debug("Signature OK")
                 setSignature(_signature)
             } catch (e) {
-                error(e)
+                error("LedgerSignTransaction:signTransaction", e)
                 setSigningError(true)
             } finally {
                 setIsAwaitingSignature(false)
@@ -274,7 +273,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             navigateOnFinish()
         } catch (e) {
-            error(e)
+            error("LedgerSignTransaction:handleOnConfirm", e)
             showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,

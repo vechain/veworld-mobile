@@ -2,18 +2,15 @@ import { warn } from "~Utils"
 import { encryptTransform, initEncryption } from "./EncryptionService"
 import { storage } from "./Storage"
 import {
-    CurrencySlice,
-    TokenSlice,
-    UserPreferencesSlice,
-    ConfigSlice,
-    DeviceSlice,
     AccountSlice,
-    NetworkSlice,
-    BalanceSlice,
-    ContactsSlice,
     ActivitiesSlice,
+    BalanceSlice,
+    ConfigSlice,
+    ContactsSlice,
+    CurrencySlice,
     DelegationSlice,
-    WalletConnectSessionsSlice,
+    DeviceSlice,
+    NetworkSlice,
     NftSlice,
     PendingSlice,
     resetAccountState,
@@ -27,10 +24,13 @@ import {
     resetDeviceState,
     resetNetworkState,
     resetNftState,
+    resetPendingState,
     resetTokensState,
     resetUserPreferencesState,
     resetWalletConnectState,
-    resetPendingState,
+    TokenSlice,
+    UserPreferencesSlice,
+    WalletConnectSessionsSlice,
 } from "./Slices"
 
 export const nftPersistConfig = {
@@ -51,7 +51,7 @@ export const getPersistorConfig = async () => {
     const encryptor = encryptTransform({
         secretKey: key,
         onError: function (error) {
-            warn(error)
+            warn("encryptor", error)
         },
     })
 

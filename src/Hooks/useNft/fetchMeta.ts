@@ -1,5 +1,5 @@
 import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
-import { error, warn } from "~Utils"
+import { warn } from "~Utils"
 import { TokenMetadata } from "~Model"
 import axios from "axios"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
@@ -40,6 +40,6 @@ export const fetchMetadata = async (
                 return undefined
         }
     } catch (e) {
-        error(`Error fetching metadata ${uri}`, e)
+        warn(`Error fetching metadata ${uri}`, e)
     }
 }

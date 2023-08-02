@@ -20,7 +20,6 @@ export const getIsDeviceEnrolled = async () => {
 
 export const getBiometricTypeAvailable = async () => {
     const types = await LocalAuthentication.supportedAuthenticationTypesAsync()
-    // TODO (Erik) (src/Utils/BiometricsUtils/Biometrics.ts) support multiple biometric types (edge case, mostly on Android)
     const type = types[0]
     return LocalAuthentication.AuthenticationType[type] as TAuthentication
 }

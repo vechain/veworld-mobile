@@ -1,13 +1,13 @@
 import React, { useCallback } from "react"
 import {
+    selectActivitiesWithoutFinality,
+    selectBlackListedCollections,
     selectSelectedNetwork,
     selectVisibleAccounts,
-    useAppSelector,
-    selectBlackListedCollections,
-    validateAndUpsertActivity,
-    useAppDispatch,
-    selectActivitiesWithoutFinality,
     updateBeat,
+    useAppDispatch,
+    useAppSelector,
+    validateAndUpsertActivity,
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
 import { useInformUser, useStateReconciliation } from "./Hooks"
@@ -156,7 +156,7 @@ export const TransferEventListener: React.FC = () => {
                         }),
                 )
             } catch (e) {
-                error(e)
+                error("onBeatMessage", e)
             }
         },
         [

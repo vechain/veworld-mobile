@@ -45,7 +45,6 @@ export const ledgerErrorHandler = (err: Error) => {
         return LEDGER_ERROR_CODES.OFF_OR_LOCKED
     }
     if (err.name.includes("Disconnected")) {
-        // error("[Ledger] - Disconnected Error")
         return LEDGER_ERROR_CODES.DISCONNECTED
     }
 
@@ -76,8 +75,8 @@ export const checkLedgerConnection = async ({
         )
         successCallback?.(app, rootAccount)
     } catch (e) {
-        error("LedgerUtils:checkLedgerConnection", e)
-        error(ledgerErrorHandler(e as Error))
+        warn("LedgerUtils:checkLedgerConnection", e)
+        warn(ledgerErrorHandler(e as Error))
         errorCallback?.(ledgerErrorHandler(e as Error))
     }
 }
@@ -110,11 +109,11 @@ const signCertificate = async (
             const path = `${VET_DERIVATION_PATH}/${index}`
             return await vetLedger.signJSON(path, dataToSign)
         } catch (e) {
-            error(e)
+            warn("signCertificate", e)
             throw new Error("Failed to sign the message")
         } finally {
             transport.close().catch(e => {
-                warn(e)
+                warn("signCertificate:closeTransport", e)
             })
         }
     })
@@ -154,11 +153,11 @@ const signTransaction = async (
                 onProgressUpdate,
             )
         } catch (e) {
-            error("signTransaction", e)
+            warn("signTransaction", e)
             throw new Error("Failed to sign the transaction")
         } finally {
             vetLedger.transport.close().catch(e => {
-                warn(e)
+                warn("Ledger:signTransaction", e)
             })
         }
     })

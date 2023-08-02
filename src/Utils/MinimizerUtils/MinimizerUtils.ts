@@ -8,7 +8,7 @@ const SafeMinimizer = {
         try {
             Minimizer.goBack()
         } catch (e) {
-            error(e)
+            error("SafeMinimizer", e)
         }
     },
 }

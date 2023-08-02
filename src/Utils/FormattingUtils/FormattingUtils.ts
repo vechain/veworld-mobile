@@ -1,5 +1,6 @@
 import { BigNumber } from "bignumber.js"
 import { error } from "../Logger"
+import { isFinite } from "lodash"
 // import dayjs from "dayjs"
 // import RelativeTime from "dayjs/plugin/relativeTime"
 // import VeWorldErrors from "common/errors/VeWorldErrors"
@@ -7,7 +8,6 @@ import { error } from "../Logger"
 // import { detectLocale } from "i18n"
 // import { CURRENCY } from "popup/model/Settings/enums"
 import RoundingMode = BigNumber.RoundingMode
-import { isFinite } from "lodash"
 
 export const ROUND_DECIMAL_DEFAULT = 2
 export const ROUND_DECIMAL_PRECISE = 6
@@ -41,7 +41,7 @@ export const scaleNumberUp = (
 
         return amount.toFixed(roundDecimal, roundingStrategy)
     } catch (e) {
-        error(e)
+        error("scaleNumberUp", e)
         throw e
         // throw VeWorldErrors.internal(`Failed to scale number up (${val})`, e)
     }
@@ -75,7 +75,7 @@ export const scaleNumberDown = (
 
         return amount.toFixed(roundDecimal, roundingStrategy)
     } catch (e) {
-        error(e)
+        error("scaleNumberDown", e)
         throw e
         // throw VeWorldErrors.internal(`Failed to scale number down (${val})`, e)
     }
