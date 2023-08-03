@@ -146,18 +146,15 @@ export const useNFTs = () => {
                     _page,
                 )
 
-                const NFTs: NonFungibleToken[] = await Promise.all(
-                    nftResponse.data.map(async nft => {
-                        return initialiseNFTMetadata(
-                            nft.tokenId,
-                            nft.contractAddress,
-                            nft.owner,
-                            thor,
-                            LL.COMMON_NOT_AVAILABLE(),
-                            theme.isDark,
-                        )
-                    }),
-                )
+                const NFTs: NonFungibleToken[] = nftResponse.data.map(nft => {
+                    return initialiseNFTMetadata(
+                        nft.tokenId,
+                        nft.contractAddress,
+                        nft.owner,
+                        LL.COMMON_NOT_AVAILABLE(),
+                        theme.isDark,
+                    )
+                })
 
                 dispatch(
                     setNFTs({
@@ -185,7 +182,7 @@ export const useNFTs = () => {
                 error("useNFTs", e)
             }
         },
-        [dispatch, network.type, currentAddress, thor, LL, theme.isDark],
+        [dispatch, network.type, currentAddress, LL, theme.isDark],
     )
 
     return { loadNFTsForCollection }

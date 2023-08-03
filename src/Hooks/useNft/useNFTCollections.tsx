@@ -221,30 +221,28 @@ export const useNFTCollections = () => {
 
                 // Parse collection metadata from registry info or the chain if needed
                 const _nftCollections: NonFungibleTokenCollection[] =
-                    await Promise.all(
-                        contractsForNFTs.map(async collection => {
-                            const regInfo = registryInfo.find(col =>
-                                compareAddresses(col.address, collection),
+                    contractsForNFTs.map(collection => {
+                        const regInfo = registryInfo.find(col =>
+                            compareAddresses(col.address, collection),
+                        )
+                        if (regInfo) {
+                            return initCollectionMetadataFromRegistry(
+                                network.type,
+                                currentAddress,
+                                collection,
+                                regInfo,
+                                LL.COMMON_NOT_AVAILABLE(),
                             )
-                            if (regInfo) {
-                                return initCollectionMetadataFromRegistry(
-                                    network.type,
-                                    currentAddress,
-                                    collection,
-                                    regInfo,
-                                    LL.COMMON_NOT_AVAILABLE(),
-                                )
-                            } else {
-                                return initCollectionMetadataWithoutRegistry(
-                                    network.type,
-                                    currentAddress,
-                                    collection,
-                                    LL.COMMON_NOT_AVAILABLE(),
-                                    theme.isDark,
-                                )
-                            }
-                        }),
-                    )
+                        } else {
+                            return initCollectionMetadataWithoutRegistry(
+                                network.type,
+                                currentAddress,
+                                collection,
+                                LL.COMMON_NOT_AVAILABLE(),
+                                theme.isDark,
+                            )
+                        }
+                    })
 
                 // set collections to store
                 dispatch(

@@ -56,7 +56,6 @@ export const initialiseNFTMetadata = (
     tokenId: string,
     contractAddress: string,
     owner: string,
-    thor: Connex.Thor,
     notAvailable: string,
     isDarkTheme: boolean,
 ): NonFungibleToken => {
