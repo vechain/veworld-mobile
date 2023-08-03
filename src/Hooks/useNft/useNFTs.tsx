@@ -19,7 +19,7 @@ import { initialiseNFTMetadata } from "./Helpers"
 import { useTheme } from "~Hooks"
 import { fetchMetadata } from "./fetchMeta"
 
-const MAX_RETRIES = 3
+const MAX_RETRIES = 10
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
@@ -81,13 +81,16 @@ export const useNFTs = () => {
                         NFT: updated,
                     }),
                 )
-            } catch (e: unknown) {
-                error("lazyLoadMetadata for NFT", e)
-            } finally {
                 metadataLoading.current.set(nft.id, {
                     isLoading: false,
-                    count: newStatus?.count ?? 0,
+                    count: 0,
                 })
+            } catch (e: unknown) {
+                metadataLoading.current.set(nft.id, {
+                    isLoading: false,
+                    count: newStatus.count,
+                })
+                error("lazyLoadMetadata for NFT", e)
             }
         },
         [dispatch, thor],

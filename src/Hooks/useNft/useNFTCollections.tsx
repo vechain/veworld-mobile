@@ -32,7 +32,7 @@ import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useTheme } from "~Hooks"
 import { fetchMetadata } from "./fetchMeta"
 
-const MAX_RETRIES = 3
+const MAX_RETRIES = 10
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -145,13 +145,16 @@ export const useNFTCollections = () => {
                         collection: updated,
                     }),
                 )
-            } catch (e: unknown) {
-                error("lazyLoadMetadata for collection", e)
-            } finally {
                 metadataLoading.current.set(collection.address, {
                     isLoading: false,
-                    count: newStatus?.count ?? 0,
+                    count: 0,
                 })
+            } catch (e: unknown) {
+                metadataLoading.current.set(collection.address, {
+                    isLoading: false,
+                    count: newStatus.count,
+                })
+                error("lazyLoadMetadata for collection", e)
             }
         },
         [dispatch, thor],
