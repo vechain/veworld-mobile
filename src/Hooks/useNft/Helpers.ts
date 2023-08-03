@@ -1,4 +1,4 @@
-import { GithubCollectionResponse, getTokenURI } from "~Networking"
+import { GithubCollectionResponse } from "~Networking"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import {
     NETWORK_TYPE,
@@ -52,16 +52,14 @@ export const initCollectionMetadataWithoutRegistry = (
     return nftCollection
 }
 
-export const initialiseNFTMetadata = async (
+export const initialiseNFTMetadata = (
     tokenId: string,
     contractAddress: string,
     owner: string,
     thor: Connex.Thor,
     notAvailable: string,
     isDarkTheme: boolean,
-): Promise<NonFungibleToken> => {
-    const tokenURI = await getTokenURI(tokenId, contractAddress, thor)
-
+): NonFungibleToken => {
     const nftWithMetadata: NonFungibleToken = {
         id: contractAddress + tokenId + owner,
         name: notAvailable,
@@ -69,7 +67,6 @@ export const initialiseNFTMetadata = async (
         address: contractAddress,
         tokenId: tokenId,
         owner: owner,
-        tokenURI,
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         mediaType: NFTMediaType.IMAGE,
     }

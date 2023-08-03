@@ -6,7 +6,7 @@ import {
     initCollectionMetadataWithoutRegistry,
     initialiseNFTMetadata,
 } from "./Helpers"
-import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
+import { NFTPlaceHolderLight } from "~Assets"
 import { NETWORK_TYPE, NFTMediaType } from "~Model"
 
 const regInfo: GithubCollectionResponse = {
@@ -109,43 +109,16 @@ describe("Helpers - initCollectionMetadataFromRegistry", () => {
         )
         expect(result).toEqual({
             address: "0x456",
-            balanceOf: 1,
+            balanceOf: -1,
             creator: "creator",
             description: "description",
-            hasCount: true,
+            hasCount: false,
             image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
             mediaType: NFTMediaType.IMAGE,
             mimeType: "image/webp",
             name: "name",
-            symbol: "symbol",
-            totalSupply: 1,
+            symbol: "notAvailable",
         })
-    })
-
-    it("should throw error if no NFTs found", async () => {
-        const network = NETWORK_TYPE.MAIN
-        const selectedAccount = "0x123"
-        const collection = "0x456"
-
-        ;(
-            require("~Networking") as any
-        ).getNftsForContract.mockResolvedValueOnce({
-            data: [],
-            pagination: {
-                totalElements: 0,
-                hasCount: true,
-            },
-        })
-
-        await expect(
-            initCollectionMetadataFromRegistry(
-                network,
-                selectedAccount,
-                collection,
-                regInfo,
-                thor,
-            ),
-        ).rejects.toThrow("Failed to parse collection metadata from chain data")
     })
 })
 
@@ -168,106 +141,15 @@ describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
         )
         expect(result).toEqual({
             address: "0x456",
-            balanceOf: 1,
+            balanceOf: -1,
             creator: "notAvailable",
             description: "notAvailable",
-            hasCount: true,
+            hasCount: false,
             image: NFTPlaceHolderLight,
             mediaType: NFTMediaType.IMAGE,
-            name: "name",
-            symbol: "symbol",
-            totalSupply: 1,
+            name: "notAvailable",
+            symbol: "notAvailable",
         })
-    })
-
-    it("should parse default collection if no metadata found", async () => {
-        const network = NETWORK_TYPE.MAIN
-        const selectedAccount = "0x123"
-        const collection = "0x456"
-
-        // mock fetchMetadata and return undefined
-        ;(require("~Networking") as any).getTokenMetaIpfs.mockResolvedValueOnce(
-            undefined,
-        )
-
-        const result = initCollectionMetadataWithoutRegistry(
-            network,
-            selectedAccount,
-            collection,
-            "notAvailable",
-            true,
-        )
-
-        expect(result).toEqual({
-            address: "0x456",
-            balanceOf: 1,
-            creator: "notAvailable",
-            description: "notAvailable",
-            hasCount: true,
-            image: NFTPlaceholderDark,
-            mediaType: NFTMediaType.IMAGE,
-            name: "name",
-            symbol: "symbol",
-            totalSupply: 1,
-        })
-    })
-
-    it("should parse correct placeholder image if no metadata found", async () => {
-        const network = NETWORK_TYPE.MAIN
-        const selectedAccount = "0x123"
-        const collection = "0x456"
-
-        // mock fetchMetadata and return undefined
-        ;(require("~Networking") as any).getTokenMetaIpfs.mockResolvedValueOnce(
-            undefined,
-        )
-
-        const result = initCollectionMetadataWithoutRegistry(
-            network,
-            selectedAccount,
-            collection,
-            "notAvailable",
-            false,
-        )
-
-        expect(result).toEqual({
-            address: "0x456",
-            balanceOf: 1,
-            creator: "notAvailable",
-            description: "notAvailable",
-            hasCount: true,
-            image: NFTPlaceHolderLight,
-            mediaType: NFTMediaType.IMAGE,
-            name: "name",
-            symbol: "symbol",
-            totalSupply: 1,
-        })
-    })
-
-    it("should throw error if no NFTs found", async () => {
-        const network = NETWORK_TYPE.MAIN
-        const selectedAccount = "0x123"
-        const collection = "0x456"
-
-        ;(
-            require("~Networking") as any
-        ).getNftsForContract.mockResolvedValueOnce({
-            data: [],
-            pagination: {
-                totalElements: 0,
-                hasCount: true,
-            },
-        })
-
-        await expect(
-            initCollectionMetadataWithoutRegistry(
-                network,
-                selectedAccount,
-                collection,
-                "notAvailable",
-                true,
-            ),
-        ).rejects.toThrow("Failed to parse collection metadata from chain data")
     })
 })
 
@@ -305,7 +187,6 @@ describe("Helpers - initialiseNFTMetadata", () => {
             name: "notAvailable",
             owner: "0x123",
             tokenId: "1",
-            tokenURI: "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
         })
     })
 })

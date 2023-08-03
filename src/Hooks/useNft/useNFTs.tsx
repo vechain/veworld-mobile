@@ -70,6 +70,7 @@ export const useNFTs = () => {
                     ...nft,
                     image,
                     mediaType,
+                    tokenURI,
                     name: tokenMetadata?.name ?? nft.name,
                     description: tokenMetadata?.description ?? nft.description,
                 }
