@@ -15,6 +15,7 @@ export const initCollectionMetadataFromRegistry = (
     notAvailable: string,
 ): NonFungibleTokenCollection => {
     const nftCollection: NonFungibleTokenCollection = {
+        id: collection,
         address: collection,
         name: regInfo.name,
         symbol: notAvailable,
@@ -25,6 +26,7 @@ export const initCollectionMetadataFromRegistry = (
         mediaType: NFTMediaType.IMAGE,
         balanceOf: -1,
         hasCount: false,
+        updated: false,
     }
 
     return nftCollection
@@ -38,6 +40,7 @@ export const initCollectionMetadataWithoutRegistry = (
     isDarkTheme: boolean,
 ): NonFungibleTokenCollection => {
     const nftCollection: NonFungibleTokenCollection = {
+        id: collection,
         address: collection,
         name: notAvailable,
         symbol: notAvailable,
@@ -47,6 +50,7 @@ export const initCollectionMetadataWithoutRegistry = (
         mediaType: NFTMediaType.IMAGE,
         balanceOf: -1,
         hasCount: false,
+        updated: false,
     }
 
     return nftCollection
@@ -68,6 +72,7 @@ export const initialiseNFTMetadata = (
         owner: owner,
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         mediaType: NFTMediaType.IMAGE,
+        updated: false,
     }
 
     return nftWithMetadata

@@ -53,6 +53,7 @@ describe("Helpers - initCollectionMetadataFromRegistry", () => {
             "notAvailable",
         )
         expect(result).toEqual({
+            id: "0x456",
             address: "0x456",
             balanceOf: -1,
             creator: "creator",
@@ -85,6 +86,7 @@ describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
             false,
         )
         expect(result).toEqual({
+            id: "0x456",
             address: "0x456",
             balanceOf: -1,
             creator: "notAvailable",

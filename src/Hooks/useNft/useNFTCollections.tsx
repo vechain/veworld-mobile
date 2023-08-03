@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect } from "react"
 import { useThor } from "~Components"
-import { NETWORK_TYPE, NonFungibleTokenCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 import {
     GithubCollectionResponse,
     getContractAddresses,
@@ -31,8 +31,7 @@ import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useTheme } from "~Hooks"
 import { fetchMetadata } from "./fetchMeta"
-
-const MAX_RETRIES = 10
+import { useLazyLoader } from "./useLazyLoader"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -59,10 +58,6 @@ export const useNFTCollections = () => {
     const network = useAppSelector(selectSelectedNetwork)
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
     const nftCollections = useAppSelector(selectNftCollections)
-    const [triggerRefresh, setTriggerRefresh] = useState(0)
-    const metadataLoading = useRef(
-        new Map<string, { isLoading: boolean; count: number }>(),
-    )
 
     const theme = useTheme()
 
@@ -72,123 +67,70 @@ export const useNFTCollections = () => {
     }, [dispatch, network])
 
     const lazyLoadMetadata = useCallback(
-        async (
-            collection: NonFungibleTokenCollection,
-            address: string,
-            networkType: NETWORK_TYPE,
-        ) => {
-            const loadingStatus = metadataLoading.current.get(
+        async (collection: NonFungibleTokenCollection) => {
+            // Exit if currentAddress.address is not set
+            if (!currentAddress) return
+
+            debug(`Lazy loading metadata for collection ${collection.address}`)
+
+            const { data, pagination } = await getNftsForContract(
+                network.type,
                 collection.address,
+                currentAddress,
+                1,
+                0,
             )
-            if (
-                loadingStatus &&
-                (loadingStatus.isLoading || loadingStatus.count > MAX_RETRIES)
+            if (data.length === 0) return
+
+            const tokenURI = await getTokenURI(
+                data[0].tokenId,
+                collection.address,
+                thor,
             )
-                return
 
-            const newStatus = {
-                isLoading: true,
-                count: (loadingStatus?.count ?? 0) + 1,
-            }
-            try {
-                debug(
-                    `Lazy loading metadata for collection ${collection.address}`,
-                )
-                metadataLoading.current.set(collection.address, newStatus)
-                const { data, pagination } = await getNftsForContract(
-                    networkType,
-                    collection.address,
-                    address,
-                    1,
-                    0,
-                )
-                if (data.length === 0) return
+            const tokenMetadata = await fetchMetadata(tokenURI)
+            const name =
+                tokenMetadata?.name ?? (await getName(collection.address, thor))
+            const image = URIUtils.convertUriToUrl(
+                tokenMetadata?.image ?? collection.image,
+            )
+            const mediaType = await MediaUtils.resolveMediaType(
+                image,
+                collection.mimeType,
+            )
+            const description =
+                tokenMetadata?.description ?? collection.description
 
-                const tokenURI = await getTokenURI(
-                    data[0].tokenId,
+            const updated = {
+                ...collection,
+                balanceOf: pagination.totalElements,
+                hasCount: pagination.hasCount,
+                image,
+                mediaType,
+                name,
+                description,
+                updated: true,
+                symbol: await getSymbol(collection.address, thor),
+                totalSupply: await getTokenTotalSupply(
                     collection.address,
                     thor,
-                )
-
-                const tokenMetadata = await fetchMetadata(tokenURI)
-                const name =
-                    tokenMetadata?.name ??
-                    (await getName(collection.address, thor))
-                const image = URIUtils.convertUriToUrl(
-                    tokenMetadata?.image ?? collection.image,
-                )
-                const mediaType = await MediaUtils.resolveMediaType(
-                    image,
-                    collection.mimeType,
-                )
-                const description =
-                    tokenMetadata?.description ?? collection.description
-
-                const updated = {
-                    ...collection,
-                    balanceOf: pagination.totalElements,
-                    hasCount: pagination.hasCount,
-                    image,
-                    mediaType,
-                    name,
-                    description,
-                    symbol: await getSymbol(collection.address, thor),
-                    totalSupply: await getTokenTotalSupply(
-                        collection.address,
-                        thor,
-                    ),
-                }
-
-                dispatch(
-                    updateCollection({
-                        currentAccountAddress: address,
-                        collection: updated,
-                    }),
-                )
-                metadataLoading.current.set(collection.address, {
-                    isLoading: false,
-                    count: 0,
-                })
-            } catch (e: unknown) {
-                metadataLoading.current.set(collection.address, {
-                    isLoading: false,
-                    count: newStatus.count,
-                })
-                error("lazyLoadMetadata for collection", e)
+                ),
             }
+
+            dispatch(
+                updateCollection({
+                    currentAccountAddress: currentAddress,
+                    collection: updated,
+                }),
+            )
         },
-        [dispatch, thor],
+        [currentAddress, dispatch, network.type, thor],
     )
 
-    // Trigger lazy loading of metadata
-    useEffect(() => {
-        if (!currentAddress) return
-
-        // Try to get metadata for collections that don't have it
-        nftCollections.collections?.forEach(collection => {
-            if (
-                collection.balanceOf < 0 &&
-                !metadataLoading.current.get(collection.address)
-            )
-                lazyLoadMetadata(collection, currentAddress, network.type)
-        })
-    }, [
-        currentAddress,
-        dispatch,
-        lazyLoadMetadata,
-        network.type,
-        nftCollections,
-        triggerRefresh,
-        thor,
-    ])
-
-    // Trigger a metadata refresh every 30 seconds
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTriggerRefresh(Date.now())
-        }, 30000)
-        return () => clearInterval(interval)
-    }, [])
+    useLazyLoader({
+        payload: nftCollections?.collections ?? [],
+        loader: lazyLoadMetadata,
+    })
 
     const loadCollections = useCallback(
         async (

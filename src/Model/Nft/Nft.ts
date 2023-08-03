@@ -10,7 +10,10 @@ export interface NFTContract {
     creator?: string
 }
 
-export interface NonFungibleTokenCollection extends ERC721Metadata {
+export interface NonFungibleTokenCollection
+    extends ERC721Metadata,
+        WithID,
+        MetadataUpdated {
     address: string
     symbol: string
     creator: string
@@ -19,11 +22,18 @@ export interface NonFungibleTokenCollection extends ERC721Metadata {
     totalSupply?: number
 }
 
-export interface NonFungibleToken extends TokenMetadata, WithID {
+export interface NonFungibleToken
+    extends TokenMetadata,
+        WithID,
+        MetadataUpdated {
     owner: string
     address: string
     tokenURI?: string
     tokenId: string
+}
+
+export interface MetadataUpdated {
+    updated: boolean
 }
 
 export interface WithID {
