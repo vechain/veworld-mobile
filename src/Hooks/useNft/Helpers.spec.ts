@@ -64,6 +64,7 @@ describe("Helpers - initCollectionMetadataFromRegistry", () => {
             mimeType: "image/webp",
             name: "name",
             symbol: "notAvailable",
+            updated: false,
         })
     })
 })
@@ -96,6 +97,7 @@ describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
             mediaType: NFTMediaType.IMAGE,
             name: "notAvailable",
             symbol: "notAvailable",
+            updated: false,
         })
     })
 })
@@ -133,6 +135,7 @@ describe("Helpers - initialiseNFTMetadata", () => {
             name: "notAvailable",
             owner: "0x123",
             tokenId: "1",
+            updated: false,
         })
     })
 })
