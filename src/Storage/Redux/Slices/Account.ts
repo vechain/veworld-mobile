@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, HexUtils } from "~Utils"
 import { AccountWithDevice, WalletAccount } from "~Model"
 
 /**
@@ -78,8 +78,14 @@ export const AccountSlice = createSlice({
             if (!Array.isArray(action.payload)) newAccounts.push(action.payload)
             else newAccounts.push(...action.payload)
 
+            const newNormalizedAccounts = newAccounts.map(account => ({
+                ...account,
+                address: HexUtils.normalize(account.address),
+                rootAddress: HexUtils.normalize(account.rootAddress),
+            }))
+
             const accountsToInsert: WalletAccount[] = []
-            newAccounts.forEach(newAcc => {
+            newNormalizedAccounts.forEach(newAcc => {
                 const accountExists = state.accounts.find(account =>
                     AddressUtils.compareAddresses(
                         account.address,

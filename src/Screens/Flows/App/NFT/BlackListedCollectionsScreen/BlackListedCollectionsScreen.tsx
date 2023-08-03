@@ -26,7 +26,7 @@ export const BlackListedCollectionsScreen = () => {
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     const renderNftCollection = useCallback(({ item, index }: NFTListProps) => {
-        return <NFTCollectionView collection={item} index={index} isHidden />
+        return <NFTCollectionView collection={item} index={index} />
     }, [])
 
     return (

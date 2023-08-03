@@ -1,25 +1,17 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback, useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { NFTImage, BaseText, BaseView, LongPressProvider } from "~Components"
 import { NFTMediaType, NonFungibleTokenCollection } from "~Model"
 import { Routes } from "~Navigation"
-import {
-    removeBlackListCollection,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    setBlackListCollection,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
+import { useToggleCollection } from "../NFTCollectionDetailScreen/Components/Hooks/useToggleCollection"
 
 type Props = {
     collection: NonFungibleTokenCollection
     index: number
-    isHidden?: boolean
 }
 
 enum ItemTitle {
@@ -27,101 +19,65 @@ enum ItemTitle {
     SHOW_COLLECTION = "Show collection",
 }
 
-export const NFTCollectionView = memo(
-    ({ collection, index, isHidden = false }: Props) => {
-        const nav = useNavigation()
-        const network = useAppSelector(selectSelectedNetwork)
-        const dispatch = useAppDispatch()
+export const NFTCollectionView = ({ collection, index }: Props) => {
+    const nav = useNavigation()
 
-        const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { onToggleCollection, isBlacklisted } =
+        useToggleCollection(collection)
 
-        const CollectionItem = useMemo(
-            () => [
-                {
-                    title: isHidden
-                        ? ItemTitle.SHOW_COLLECTION
-                        : ItemTitle.HIDE_COLLECTION,
-                },
-            ],
-            [isHidden],
-        )
-
-        const onCollectionPress = useCallback(() => {
-            HapticsService.triggerImpact({ level: "Light" })
-            nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
-                collectionAddress: collection.address,
-            })
-        }, [nav, collection.address])
-
-        const handleOnItemLongPress = useCallback(
-            (_index: number) => {
-                const itemAction = CollectionItem[_index]?.title
-
-                if (itemAction === ItemTitle.HIDE_COLLECTION)
-                    dispatch(
-                        setBlackListCollection({
-                            network: network.type,
-                            collection: collection,
-                            accountAddress: selectedAccount.address,
-                        }),
-                    )
-
-                if (itemAction === ItemTitle.SHOW_COLLECTION)
-                    dispatch(
-                        removeBlackListCollection({
-                            network: network.type,
-                            collection: collection,
-                            accountAddress: selectedAccount.address,
-                        }),
-                    )
+    const CollectionItem = useMemo(
+        () => [
+            {
+                title: isBlacklisted
+                    ? ItemTitle.SHOW_COLLECTION
+                    : ItemTitle.HIDE_COLLECTION,
             },
-            [
-                CollectionItem,
-                collection,
-                dispatch,
-                network,
-                selectedAccount.address,
-            ],
-        )
+        ],
+        [isBlacklisted],
+    )
 
-        return (
-            <TouchableOpacity
-                activeOpacity={0.6}
-                // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
-                onLongPress={() => {}}
-                onPress={onCollectionPress}
-                style={[
-                    baseStyles.nftContainer,
-                    // eslint-disable-next-line react-native/no-inline-styles
-                    {
-                        justifyContent:
-                            index % 2 === 0 ? "flex-start" : "flex-end",
-                    },
-                ]}>
-                <LongPressProvider
-                    items={CollectionItem}
-                    action={handleOnItemLongPress}>
-                    <BaseView style={baseStyles.nftCollectionNameBarRadius}>
-                        <NFTImage
-                            uri={
-                                collection.mediaType === NFTMediaType.IMAGE
-                                    ? collection.image
-                                    : NFTPlaceholder
-                            }
-                            style={baseStyles.nftPreviewImage}
-                        />
+    const onCollectionPress = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
+            collectionAddress: collection.address,
+        })
+    }, [nav, collection.address])
 
-                        <BaseView
-                            style={baseStyles.nftCollectionNameBar}
-                            flexDirection="row"
-                            alignItems="center"
-                            justifyContent="space-between">
-                            <BaseText
-                                color={COLORS.WHITE}
-                                numberOfLines={1}
-                                w={80}>
-                                {collection.name}
-                            </BaseText>
+    return (
+        <TouchableOpacity
+            activeOpacity={0.6}
+            // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
+            onLongPress={() => {}}
+            onPress={onCollectionPress}
+            style={[
+                baseStyles.nftContainer,
+                // eslint-disable-next-line react-native/no-inline-styles
+                {
+                    justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
+                },
+            ]}>
+            <LongPressProvider
+                items={CollectionItem}
+                action={onToggleCollection}>
+                <BaseView style={baseStyles.nftCollectionNameBarRadius}>
+                    <NFTImage
+                        uri={
+                            collection.mediaType === NFTMediaType.IMAGE
+                                ? collection.image
+                                : NFTPlaceholder
+                        }
+                        style={baseStyles.nftPreviewImage}
+                    />
+
+                    <BaseView
+                        style={baseStyles.nftCollectionNameBar}
+                        flexDirection="row"
+                        alignItems="center"
+                        justifyContent="space-between">
+                        <BaseText color={COLORS.WHITE} numberOfLines={1} w={80}>
+                            {collection.name}
+                        </BaseText>
+                        {collection.balanceOf > 0 && (
                             <BaseView
                                 style={baseStyles.nftCounterLabel}
                                 justifyContent="center"
@@ -131,13 +87,13 @@ export const NFTCollectionView = memo(
                                     {collection.balanceOf}
                                 </BaseText>
                             </BaseView>
-                        </BaseView>
+                        )}
                     </BaseView>
-                </LongPressProvider>
-            </TouchableOpacity>
-        )
-    },
-)
+                </BaseView>
+            </LongPressProvider>
+        </TouchableOpacity>
+    )
+}
 
 const baseStyles = StyleSheet.create({
     nftContainer: {
