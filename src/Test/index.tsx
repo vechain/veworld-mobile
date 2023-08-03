@@ -7,11 +7,12 @@ import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
 import { reducer } from "~Storage/Redux"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-export { default as TestHelpers } from "./helpers"
 import { configureStore } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { Platform } from "react-native"
+
+export { default as TestHelpers } from "./helpers"
 
 const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
@@ -88,7 +89,15 @@ const getStore = (preloadedState: Partial<RootState>) =>
                         publicKey:
                             "0494c3ff1acb0cf8e842c54a2bf109b7549d8f800895576892a4ea67eff584a427904a4b2545cf84569be87387bc5fe221c20d1ba5f23d278468faa98f54ddedbe",
                     },
-                    wallet: "",
+                    wallet: JSON.stringify({
+                        mnemonic:
+                            "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(
+                                " ",
+                            ),
+                        rootAddress:
+                            "0x0c1a60341e1064bebb94e8769bd508b11ca2a27d",
+                        nonce: "nonce",
+                    }),
                 },
             ],
             ...preloadedState,

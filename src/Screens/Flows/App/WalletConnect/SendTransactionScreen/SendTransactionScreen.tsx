@@ -1,15 +1,13 @@
 import React, { FC, useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
     BaseButton,
-    BaseCard,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     CloseModalButton,
-    DelegationOptions,
     RequireUserPassword,
     showErrorToast,
     useWalletConnect,
@@ -19,36 +17,24 @@ import {
     selectSelectedAccount,
     selectSelectedNetwork,
     selectTokensWithInfo,
-    selectVthoTokenWithBalanceByAccount,
+    setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import {
-    error,
-    FormattingUtils,
     TransactionUtils,
     WalletConnectResponseUtils,
     WalletConnectUtils,
 } from "~Utils"
-import {
-    useAnalyticTracking,
-    useCheckIdentity,
-    useSignTransaction,
-    useTransactionGas,
-} from "~Hooks"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { useAnalyticTracking, useTransactionScreen } from "~Hooks"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
-import { sendTransaction } from "~Networking"
-import { ScrollView } from "react-native-gesture-handler"
-import { useDelegation } from "~Screens/Flows/App/SendScreen/04-TransactionSummarySendScreen/Hooks"
-import { BigNumber } from "bignumber.js"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
-import { TransactionDetails } from "./Components"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
-import { DelegationType } from "~Model/Delegation"
+import { Transaction } from "thor-devkit"
+import { TransactionDetails } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 
 type Props = NativeStackScreenProps<
@@ -63,31 +49,31 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         message,
         options,
     } = route.params
-    const track = useAnalyticTracking()
-
-    //TODO: leverage all of the 'options' passed from DApp
-
-    const { topic } = WalletConnectUtils.getRequestEventAttributes(requestEvent)
-
-    const { name, url } =
-        WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
 
     const { web3Wallet } = useWalletConnect()
-    const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount: AccountWithDevice = useAppSelector(
-        selectSelectedAccount,
-    )
-    const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const { LL } = useI18nContext()
     const nav = useNavigation()
+    const track = useAnalyticTracking()
 
-    const onClose = useCallback(() => {
-        nav.goBack()
-    }, [nav])
-
-    // Decoding clauses
+    const network = useAppSelector(selectSelectedNetwork)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const tokens = useAppSelector(selectTokensWithInfo)
-    const clausesMetadata = TransactionUtils.interpretClauses(message, tokens)
+
+    const { topic } = useMemo(
+        () => WalletConnectUtils.getRequestEventAttributes(requestEvent),
+        [requestEvent],
+    )
+
+    const { name, url } = useMemo(
+        () => WalletConnectUtils.getSessionRequestAttributes(sessionRequest),
+        [sessionRequest],
+    )
+
+    const clausesMetadata = useMemo(
+        () => TransactionUtils.interpretClauses(message, tokens),
+        [message, tokens],
+    )
 
     const clauses = useMemo(() => {
         return message.map(clause => ({
@@ -97,182 +83,97 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         }))
     }, [message])
 
-    const { gas, setGasPayer } = useTransactionGas({
-        clauses,
-        providedGas: options.gas,
-        dependsOn: options.dependsOn,
-    })
+    const onFinish = useCallback(
+        (sucess: boolean) => {
+            if (sucess) track(AnalyticsEvent.DAPP_TX_SENT)
+            else track(AnalyticsEvent.SEND_NFT_FAILED_TO_SEND)
 
-    // Delegation
-    const {
-        setNoDelegation,
-        setSelectedDelegationAccount,
-        setSelectedDelegationUrl,
-        selectedDelegationOption,
-        selectedDelegationAccount,
-        selectedDelegationUrl,
-        isDelegated,
-    } = useDelegation({
-        providedUrl: options.delegator?.url,
-        setGasPayer,
-    })
+            dispatch(setIsAppLoading(false))
 
-    const { signTransaction, navigateToLedger, buildTransaction } =
-        useSignTransaction({
-            clauses,
-            gas,
-            providedGas: options.gas,
-            dependsOn: options.dependsOn,
-            onTXFinish: onClose,
-            isDelegated,
-            selectedDelegationAccount,
-            selectedDelegationOption,
-            selectedDelegationUrl,
-            initialRoute: Routes.HOME,
-        })
-
-    // Check if there is enough gas
-    const vtho = useAppSelector(state =>
-        selectVthoTokenWithBalanceByAccount(
-            state,
-            selectedDelegationAccount?.address || selectedAccount.address,
-        ),
-    )
-    const vthoBalance = useMemo(
-        () =>
-            FormattingUtils.scaleNumberDown(
-                vtho.balance.balance,
-                vtho.decimals,
-                2,
-            ),
-        [vtho],
+            nav.goBack()
+        },
+        [nav, track, dispatch],
     )
 
-    const vthoGas = useMemo(
-        () =>
-            FormattingUtils.convertToFiatBalance(
-                gas?.gas?.toString() || "0",
-                1,
-                5,
-            ),
-        [gas],
-    )
+    const onTransactionSuccess = useCallback(
+        async (transaction: Transaction, id: string) => {
+            await WalletConnectResponseUtils.transactionRequestSuccessResponse(
+                { request: requestEvent, web3Wallet, LL },
+                id,
+                selectedAccount.address,
+            )
 
-    const isThereEnoughGas = useMemo(() => {
-        let leftVtho = new BigNumber(vthoBalance)
-        return vthoGas && leftVtho.gte(vthoGas)
-    }, [vthoGas, vthoBalance])
+            dispatch(addPendingDappTransactionActivity(transaction, name, url))
 
-    /**
-     * Rejects the request and closes the modal
-     */
-    const onReject = useCallback(async () => {
-        if (requestEvent) {
-            const { id } = requestEvent
-            try {
-                const response = WalletConnectUtils.formatJsonRpcError(
-                    id,
-                    getSdkError("USER_REJECTED_METHODS"),
-                )
-
-                await web3Wallet?.respondSessionRequest({
-                    topic,
-                    response,
-                })
-
-                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
-                // MinimizerUtils.goBack()
-            } catch (e) {
-                showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
-            }
-        }
-
-        onClose()
-    }, [requestEvent, web3Wallet, topic, LL, onClose])
-
-    /**
-     * Signs the transaction and sends it to the blockchain
-     */
-    const handleAccept = useCallback(
-        async (password?: string) => {
-            try {
-                let tx = await signTransaction(password)
-
-                if (!tx) return
-
-                const txId = await sendTransaction(tx, network.currentUrl)
-
-                await WalletConnectResponseUtils.transactionRequestSuccessResponse(
-                    { request: requestEvent, web3Wallet, LL },
-                    txId,
-                    selectedAccount.address,
-                    network,
-                )
-
-                dispatch(addPendingDappTransactionActivity(tx, name, url))
-                track(AnalyticsEvent.DAPP_TX_SENT)
-                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
-                // MinimizerUtils.goBack()
-            } catch (e) {
-                track(AnalyticsEvent.DAPP_TX_FAILED_TO_SEND)
-                error("SendTransactionScreen:handleAccept", e)
-                await WalletConnectResponseUtils.transactionRequestFailedResponse(
-                    { request: requestEvent, web3Wallet, LL },
-                )
-            } finally {
-                onClose()
-            }
+            onFinish(true)
         },
         [
-            signTransaction,
-            network,
+            onFinish,
+            url,
             requestEvent,
             web3Wallet,
             LL,
             selectedAccount.address,
             dispatch,
             name,
-            url,
-            track,
-            onClose,
         ],
     )
 
+    const onTransactionFailure = useCallback(async () => {
+        await WalletConnectResponseUtils.transactionRequestFailedResponse({
+            request: requestEvent,
+            web3Wallet,
+            LL,
+        })
+
+        onFinish(false)
+    }, [requestEvent, web3Wallet, LL, onFinish])
+
+    /**
+     * Rejects the request and closes the modal
+     */
+    const onReject = useCallback(async () => {
+        const { id } = requestEvent
+        try {
+            const response = WalletConnectUtils.formatJsonRpcError(
+                id,
+                getSdkError("USER_REJECTED_METHODS"),
+            )
+
+            await web3Wallet?.respondSessionRequest({
+                topic,
+                response,
+            })
+
+            // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
+            // MinimizerUtils.goBack()
+        } catch (e) {
+            showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+        } finally {
+            nav.goBack()
+        }
+    }, [requestEvent, web3Wallet, topic, LL, nav])
+
     const {
+        Delegation,
+        onSubmit,
+        vthoBalance,
+        selectedDelegationOption,
+        isThereEnoughGas,
+        vthoGas,
+        continueNotAllowed,
+        isLoading,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
-        checkIdentityBeforeOpening,
-        isBiometricsEmpty,
-    } = useCheckIdentity({
-        onIdentityConfirmed: handleAccept,
-        allowAutoPassword: true,
+    } = useTransactionScreen({
+        clauses,
+        onTransactionSuccess,
+        onTransactionFailure,
+        initialRoute: Routes.HOME,
+        options,
+        requestEvent,
     })
-
-    const onSubmit = useCallback(async () => {
-        if (
-            selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
-            selectedDelegationOption !== DelegationType.ACCOUNT
-        ) {
-            const tx = buildTransaction()
-            await navigateToLedger(
-                tx,
-                selectedAccount as LedgerAccountWithDevice,
-            )
-        } else {
-            await checkIdentityBeforeOpening()
-        }
-    }, [
-        buildTransaction,
-        selectedAccount,
-        selectedDelegationOption,
-        navigateToLedger,
-        checkIdentityBeforeOpening,
-    ])
-
-    const onPressBack = useCallback(async () => {
-        await onReject()
-    }, [onReject])
 
     return (
         <BaseSafeArea>
@@ -282,7 +183,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
-                <CloseModalButton onPress={onPressBack} />
+                <CloseModalButton onPress={onReject} />
 
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
@@ -313,30 +214,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
                 <BaseSpacer height={24} />
                 <BaseView mx={20}>
-                    <DelegationOptions
-                        setNoDelegation={setNoDelegation}
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedAccount={setSelectedDelegationAccount}
-                        selectedAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                    />
-                    {selectedDelegationAccount && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <AccountCard account={selectedDelegationAccount} />
-                        </>
-                    )}
-                    {selectedDelegationUrl && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <BaseCard>
-                                <BaseText py={8}>
-                                    {selectedDelegationUrl}
-                                </BaseText>
-                            </BaseCard>
-                        </>
-                    )}
+                    {Delegation()}
 
                     <BaseSpacer height={44} />
                     <TransactionDetails
@@ -363,11 +241,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={onSubmit}
-                        disabled={
-                            (!isThereEnoughGas && !isDelegated) ||
-                            isBiometricsEmpty
-                        }
-                        isLoading={isBiometricsEmpty}
+                        disabled={isLoading || continueNotAllowed}
+                        isLoading={isLoading}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

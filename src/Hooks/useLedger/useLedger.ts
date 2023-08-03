@@ -4,7 +4,6 @@ import { LEDGER_ERROR_CODES, VETLedgerAccount, VETLedgerApp } from "~Constants"
 import { debug, error, info, warn } from "~Utils/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerUtils } from "~Utils"
-import * as LedgerLogs from "@ledgerhq/logs"
 import { useLedgerSubscription } from "~Hooks"
 
 /**
@@ -32,11 +31,11 @@ export const useLedger = ({
     waitFirstManualConnection: boolean
     onConnectionError?: (err: LEDGER_ERROR_CODES) => void
 }): UseLedgerProps => {
-    useEffect(() => {
-        LedgerLogs.listen(log => {
-            debug("ledger:log", log)
-        })
-    }, [])
+    // useEffect(() => {
+    //     LedgerLogs.listen(log => {
+    //         debug("ledger:log", log)
+    //     })
+    // }, [])
 
     const { canConnect } = useLedgerSubscription({ deviceId })
     const transport = useRef<BleTransport | undefined>()

@@ -22,6 +22,12 @@ export enum AnalyticsEvent {
     DAPP_CERTIFICATE_REJECTED = "DAPP_CERTIFICATE_REJECTED",
 
     /**
+     * Ledger
+     */
+    LEDGER_TX_SENT = "LEDGER_TX_SENT",
+    LEDGER_TX_FAILED_TO_SEND = "LEDGER_TX_FAILED_TO_SEND",
+
+    /**
      * Tokens
      */
     TOKENS_CUSTOM_TOKEN_ADDED = "TOKENS_CUSTOM_TOKEN_ADDED",

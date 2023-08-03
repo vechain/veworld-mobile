@@ -1,11 +1,8 @@
 import { PendingRequestTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
-import { Linking } from "react-native"
 import { Certificate } from "thor-devkit"
 import { showErrorToast, showSuccessToast } from "~Components"
-import { defaultMainNetwork } from "~Constants"
-import { Network } from "~Model"
 import HexUtils from "~Utils/HexUtils"
 import { error } from "~Utils/Logger"
 import WalletConnectUtils from "~Utils/WalletConnectUtils"
@@ -25,9 +22,8 @@ const RCP_INTERNAL_ERROR = -32603
 
 export const transactionRequestSuccessResponse = async (
     { request, web3Wallet, LL }: BaseProps,
-    transactionId: number,
+    transactionId: string,
     signer: string,
-    network: Network,
 ) => {
     try {
         await web3Wallet?.respondSessionRequest({
@@ -41,21 +37,6 @@ export const transactionRequestSuccessResponse = async (
                 },
             },
         })
-
-        showSuccessToast(
-            LL.SUCCESS_GENERIC(),
-            LL.SUCCESS_GENERIC_OPERATION(),
-            LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-            async () => {
-                await Linking.openURL(
-                    `${
-                        network.explorerUrl ?? defaultMainNetwork.explorerUrl
-                    }/transactions/${transactionId}`,
-                )
-            },
-            4000,
-            "transactionSuccessToast",
-        )
     } catch (e) {
         showErrorToast(
             LL.NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error(),

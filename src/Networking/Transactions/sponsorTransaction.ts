@@ -1,4 +1,5 @@
-import axios from "axios"
+import axios, { AxiosError, AxiosResponse } from "axios"
+import { error } from "~Utils"
 
 /**
  * ask the sponsor url to sign the transaction
@@ -9,7 +10,25 @@ export const sponsorTransaction = async (
         origin: string
         raw: string
     },
-) => {
-    const response = await axios.post(delegateUrl, sponsorRequest)
+): Promise<string> => {
+    let response: AxiosResponse
+
+    try {
+        response = await axios.post(delegateUrl, sponsorRequest)
+    } catch (e) {
+        if (e instanceof Object && "isAxiosError" in e && e.isAxiosError) {
+            const axiosError = e as AxiosError
+
+            error(
+                "sponsorTransaction error",
+                JSON.stringify(axiosError.toJSON()),
+            )
+        } else {
+            error("sponsorTransaction error", e)
+        }
+
+        throw e
+    }
+
     return response.data.signature
 }

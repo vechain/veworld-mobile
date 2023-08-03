@@ -117,14 +117,10 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     ),
                 )
 
-                dispatch(setIsAppLoading(true))
-
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
                 error("SignMessageScreen:handleAccept", err)
-
-                dispatch(setIsAppLoading(true))
 
                 await WalletConnectResponseUtils.signMessageRequestErrorResponse(
                     {
@@ -133,6 +129,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         LL,
                     },
                 )
+            } finally {
+                dispatch(setIsAppLoading(false))
             }
 
             onClose()
