@@ -63,10 +63,10 @@ Commit latest artifacts to GitHub
 
 Validate the keystore and credentials
 
-### android get_version_code
+### android set_version_code
 
 ```sh
-[bundle exec] fastlane android get_version_code
+[bundle exec] fastlane android set_version_code
 ```
 
 Get last version codes
