@@ -1,11 +1,4 @@
-import {
-    GithubCollectionResponse,
-    getName,
-    getNftsForContract,
-    getSymbol,
-    getTokenTotalSupply,
-    getTokenURI,
-} from "~Networking"
+import { GithubCollectionResponse, getTokenURI } from "~Networking"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import {
     NETWORK_TYPE,
@@ -14,74 +7,46 @@ import {
     NonFungibleTokenCollection,
 } from "~Model"
 
-export const parseCollectionMetadataFromRegistry = async (
+export const initCollectionMetadataFromRegistry = (
     network: NETWORK_TYPE,
     selectedAccount: string,
     collection: string,
     regInfo: GithubCollectionResponse,
-    thor: Connex.Thor,
-): Promise<NonFungibleTokenCollection> => {
-    // Call to the indexer to get the NFT count for the collection
-    const { pagination } = await getNftsForContract(
-        network,
-        collection,
-        selectedAccount,
-        1,
-        0,
-    )
-
-    if (pagination.totalElements < 1)
-        throw new Error("Failed to parse collection metadata from chain data")
-
+    notAvailable: string,
+): NonFungibleTokenCollection => {
     const nftCollection: NonFungibleTokenCollection = {
         address: collection,
         name: regInfo.name,
-        symbol: await getSymbol(collection, thor),
+        symbol: notAvailable,
         creator: regInfo.creator,
         description: regInfo.description,
         image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
         mimeType: "image/webp",
         mediaType: NFTMediaType.IMAGE,
-        balanceOf: pagination.totalElements,
-        hasCount: pagination.hasCount,
-        isBlacklisted: false,
-        totalSupply: await getTokenTotalSupply(collection, thor),
+        balanceOf: -1,
+        hasCount: false,
     }
 
     return nftCollection
 }
 
-export const parseCollectionMetadataWithoutRegistry = async (
+export const initCollectionMetadataWithoutRegistry = (
     network: NETWORK_TYPE,
     selectedAccount: string,
     collection: string,
-    thor: Connex.Thor,
     notAvailable: string,
     isDarkTheme: boolean,
-): Promise<NonFungibleTokenCollection> => {
-    // Get the first NFT in the collection and use it to parse the collection metadata
-    const { pagination } = await getNftsForContract(
-        network,
-        collection,
-        selectedAccount,
-        1,
-        0,
-    )
-    if (pagination.totalElements < 1)
-        throw new Error("Failed to parse collection metadata from chain data")
-
+): NonFungibleTokenCollection => {
     const nftCollection: NonFungibleTokenCollection = {
         address: collection,
-        name: await getName(collection, thor),
-        symbol: await getSymbol(collection, thor),
+        name: notAvailable,
+        symbol: notAvailable,
         creator: notAvailable,
         description: notAvailable,
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         mediaType: NFTMediaType.IMAGE,
-        balanceOf: pagination.totalElements,
-        hasCount: pagination.hasCount,
-        isBlacklisted: false,
-        totalSupply: await getTokenTotalSupply(collection, thor),
+        balanceOf: -1,
+        hasCount: false,
     }
 
     return nftCollection

@@ -16,7 +16,6 @@ export interface NonFungibleTokenCollection extends ERC721Metadata {
     creator: string
     balanceOf: number
     hasCount: boolean
-    isBlacklisted: boolean
     totalSupply?: number
 }
 

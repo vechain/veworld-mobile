@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import { NonFungibleTokenCollection } from "~Model"
 import {
     removeBlackListCollection,
+    isBlacklistedCollection,
     selectSelectedAccount,
     selectSelectedNetwork,
     setBlackListCollection,
@@ -12,14 +13,12 @@ import {
 export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
-
+    const isBlacklisted = useAppSelector(state =>
+        isBlacklistedCollection(state, collection.address),
+    )
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const [isBlacklisted, setIsBlacklisted] = useState(collection.isBlacklisted)
-
     const onToggleCollection = useCallback(() => {
-        setIsBlacklisted(prev => !prev)
-
         if (isBlacklisted) {
             dispatch(
                 removeBlackListCollection({

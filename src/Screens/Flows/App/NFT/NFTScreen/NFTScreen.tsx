@@ -14,6 +14,7 @@ import { useFetchCollections } from "./useFetchCollections"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import {
+    selectBlackListedCollections,
     selectCollectionListIsEmpty,
     selectSelectedAccount,
     selectVisibleAccounts,
@@ -25,6 +26,7 @@ import { NFTList } from "./Components/NFTList"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { MathUtils } from "~Utils"
 import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
+import { ListFooterView } from "./Components/ListFooterView"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
@@ -41,6 +43,8 @@ export const NFTScreen = () => {
             onEndReachedCalledDuringMomentum,
             setEndReachedCalledDuringMomentum,
         )
+
+    const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
     const accounts = useAppSelector(selectVisibleAccounts)
 
@@ -83,9 +87,23 @@ export const NFTScreen = () => {
             )
 
         if (isShowImportNFTs)
-            return <ImportNFTView onImportPress={openQRCodeSheet} />
+            return (
+                <>
+                    <ImportNFTView onImportPress={openQRCodeSheet} />
 
-        if (!isEmpty(collections)) {
+                    {(!isEmpty(collections) ||
+                        !isEmpty(blackListedCollections)) && (
+                        <ListFooterView
+                            onGoToBlackListed={onGoToBlackListed}
+                            hasNext={false}
+                            isLoading={false}
+                            renderExtraSkeleton={false}
+                        />
+                    )}
+                </>
+            )
+
+        if (!isEmpty(collections) || !isEmpty(blackListedCollections))
             return (
                 <NFTList
                     collections={collections}
@@ -96,10 +114,10 @@ export const NFTScreen = () => {
                     hasNext={hasNext}
                 />
             )
-        }
     }, [
         error,
         collections,
+        blackListedCollections,
         isLoading,
         isShowImportNFTs,
         openQRCodeSheet,

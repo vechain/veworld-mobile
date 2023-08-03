@@ -1,29 +1,26 @@
-import { useCallback, useRef } from "react"
+import { useCallback } from "react"
+import { PaginationResponse } from "~Networking"
+import { debug } from "~Utils"
 
-export const usePagination = (startPage: number = 0) => {
-    const counter = useRef(startPage)
-
+export const usePagination = () => {
     const fetchWithPagination = useCallback(
-        (
-            totalElements: number,
-            totalElementsReceived: number = 0,
-            isLoading: boolean,
-            cb: (page: number) => void,
-            blackListedCollections?: number,
+        async (
+            pagination: PaginationResponse,
+            totalReceived: number,
+            pageSize: number,
+            cb: (page: number) => Promise<void>,
         ) => {
-            if (isLoading) return
+            debug(
+                `totalElements: ${pagination?.totalElements}, totalReceived: ${totalReceived}, pageSize: ${pageSize}`,
+            )
 
-            const presentedElements = blackListedCollections
-                ? totalElementsReceived + blackListedCollections
-                : totalElementsReceived
-
-            if (presentedElements >= totalElements) {
+            if (
+                totalReceived >= pagination?.totalElements ||
+                totalReceived % pageSize !== 0
+            )
                 return
-            }
 
-            counter.current += 1
-
-            cb(counter.current)
+            await cb(totalReceived / pageSize)
         },
         [],
     )

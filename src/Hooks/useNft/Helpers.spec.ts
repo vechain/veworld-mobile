@@ -2,8 +2,8 @@
 
 import { GithubCollectionResponse, NftItemResponse } from "~Networking"
 import {
-    parseCollectionMetadataFromRegistry,
-    parseCollectionMetadataWithoutRegistry,
+    initCollectionMetadataFromRegistry,
+    initCollectionMetadataWithoutRegistry,
     initialiseNFTMetadata,
 } from "./Helpers"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
@@ -90,7 +90,7 @@ const thor = {
     account: jest.fn(),
 } as any
 
-describe("Helpers - parseCollectionMetadataFromRegistry", () => {
+describe("Helpers - initCollectionMetadataFromRegistry", () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
@@ -100,7 +100,7 @@ describe("Helpers - parseCollectionMetadataFromRegistry", () => {
         const selectedAccount = "0x123"
         const collection = "0x456"
 
-        const result = await parseCollectionMetadataFromRegistry(
+        const result = initCollectionMetadataFromRegistry(
             network,
             selectedAccount,
             collection,
@@ -115,7 +115,6 @@ describe("Helpers - parseCollectionMetadataFromRegistry", () => {
             hasCount: true,
             image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
             mediaType: NFTMediaType.IMAGE,
-            isBlacklisted: false,
             mimeType: "image/webp",
             name: "name",
             symbol: "symbol",
@@ -139,7 +138,7 @@ describe("Helpers - parseCollectionMetadataFromRegistry", () => {
         })
 
         await expect(
-            parseCollectionMetadataFromRegistry(
+            initCollectionMetadataFromRegistry(
                 network,
                 selectedAccount,
                 collection,
@@ -150,7 +149,7 @@ describe("Helpers - parseCollectionMetadataFromRegistry", () => {
     })
 })
 
-describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
+describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
@@ -160,11 +159,10 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
         const selectedAccount = "0x123"
         const collection = "0x456"
 
-        const result = await parseCollectionMetadataWithoutRegistry(
+        const result = initCollectionMetadataWithoutRegistry(
             network,
             selectedAccount,
             collection,
-            thor,
             "notAvailable",
             false,
         )
@@ -176,7 +174,6 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             hasCount: true,
             image: NFTPlaceHolderLight,
             mediaType: NFTMediaType.IMAGE,
-            isBlacklisted: false,
             name: "name",
             symbol: "symbol",
             totalSupply: 1,
@@ -193,11 +190,10 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             undefined,
         )
 
-        const result = await parseCollectionMetadataWithoutRegistry(
+        const result = initCollectionMetadataWithoutRegistry(
             network,
             selectedAccount,
             collection,
-            thor,
             "notAvailable",
             true,
         )
@@ -210,7 +206,6 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             hasCount: true,
             image: NFTPlaceholderDark,
             mediaType: NFTMediaType.IMAGE,
-            isBlacklisted: false,
             name: "name",
             symbol: "symbol",
             totalSupply: 1,
@@ -227,11 +222,10 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             undefined,
         )
 
-        const result = await parseCollectionMetadataWithoutRegistry(
+        const result = initCollectionMetadataWithoutRegistry(
             network,
             selectedAccount,
             collection,
-            thor,
             "notAvailable",
             false,
         )
@@ -244,7 +238,6 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
             hasCount: true,
             image: NFTPlaceHolderLight,
             mediaType: NFTMediaType.IMAGE,
-            isBlacklisted: false,
             name: "name",
             symbol: "symbol",
             totalSupply: 1,
@@ -267,11 +260,10 @@ describe("Helpers - parseCollectionMetadataWithoutRegistry", () => {
         })
 
         await expect(
-            parseCollectionMetadataWithoutRegistry(
+            initCollectionMetadataWithoutRegistry(
                 network,
                 selectedAccount,
                 collection,
-                thor,
                 "notAvailable",
                 true,
             ),
