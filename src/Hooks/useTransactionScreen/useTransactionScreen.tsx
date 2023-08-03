@@ -31,6 +31,7 @@ import { error } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
+import { PendingRequestTypes } from "@walletconnect/types"
 
 type Props = {
     clauses: Transaction.Body["clauses"]
@@ -38,6 +39,7 @@ type Props = {
     onTransactionFailure: (error: unknown) => void
     initialRoute: Routes
     options?: Connex.Driver.TxOptions
+    requestEvent?: PendingRequestTypes.Struct
 }
 
 export const useTransactionScreen = ({
@@ -46,6 +48,7 @@ export const useTransactionScreen = ({
     onTransactionFailure,
     initialRoute,
     options,
+    requestEvent,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -85,6 +88,7 @@ export const useTransactionScreen = ({
         selectedDelegationOption,
         selectedDelegationUrl,
         initialRoute,
+        requestEvent,
     })
 
     // 5. Send transaction
@@ -153,6 +157,7 @@ export const useTransactionScreen = ({
                 await navigateToLedger(
                     tx,
                     selectedAccount as LedgerAccountWithDevice,
+                    undefined,
                 )
             } catch (e) {
                 error("onSubmit:navigateToLedger", e)

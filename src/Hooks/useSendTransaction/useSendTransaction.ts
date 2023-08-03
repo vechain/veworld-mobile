@@ -52,6 +52,8 @@ export const useSendTransaction = (
                     "sendTransaction error",
                     JSON.stringify(axiosError.toJSON()),
                 )
+
+                error(axiosError.response?.data)
             } else {
                 error("sendTransaction error", e)
             }

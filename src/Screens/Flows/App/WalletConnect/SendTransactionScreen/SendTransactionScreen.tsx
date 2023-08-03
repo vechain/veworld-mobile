@@ -172,6 +172,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         onTransactionFailure,
         initialRoute: Routes.HOME,
         options,
+        requestEvent,
     })
 
     return (
