@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import {
-    selectAllVisibleNFTs,
+    selectAllVisibleNFTsWithoutMetadata,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     setNFTs,
@@ -17,15 +17,16 @@ import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
 import { initialiseNFTMetadata } from "./Helpers"
 import { useTheme } from "~Hooks"
-import { fetchMetadata } from "./fetchMeta"
 import { useLazyLoader } from "./useLazyLoader"
+import { useTokenMetadata } from "~Hooks/useTokenMetadata"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
-    const nfts = useAppSelector(selectAllVisibleNFTs)
+    const nfts = useAppSelector(selectAllVisibleNFTsWithoutMetadata)
+    const { fetchMetadata } = useTokenMetadata()
     const thor = useThor()
     const { LL } = useI18nContext()
 
@@ -62,11 +63,11 @@ export const useNFTs = () => {
                 updateNFT({
                     address: currentAddress,
                     collectionAddress: nft.address,
-                    NFT: updated,
+                    nft: updated,
                 }),
             )
         },
-        [currentAddress, dispatch, thor],
+        [currentAddress, dispatch, fetchMetadata, thor],
     )
 
     useLazyLoader({
