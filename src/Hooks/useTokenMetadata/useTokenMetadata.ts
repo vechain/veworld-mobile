@@ -5,7 +5,7 @@ import { TokenMetadata } from "~Model"
 import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
 import {
     addMetadataEntry,
-    getEntryFromMetadataCache,
+    selectEntryFromMetadataCache,
     selectMetadataCacheState,
     useAppDispatch,
     useAppSelector,
@@ -32,7 +32,7 @@ export const useTokenMetadata = () => {
                 switch (protocol) {
                     case URIProtocol.IPFS:
                     case URIProtocol.ARWEAVE: {
-                        const cachedData = getEntryFromMetadataCache(
+                        const cachedData = selectEntryFromMetadataCache(
                             metadata,
                             uri,
                         )

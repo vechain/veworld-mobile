@@ -4,7 +4,7 @@ import { createKey } from "~Utils/CacheKeyUtils/CacheKeyUtils"
 export const selectMetadataCacheState = (state: RootState) =>
     state.metadataCache
 
-export const getEntryFromMetadataCache = (
+export const selectEntryFromMetadataCache = (
     state: MetadataCacheState,
     seed: string,
 ) => {
