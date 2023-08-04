@@ -30,8 +30,8 @@ import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useTheme } from "~Hooks"
-import { fetchMetadata } from "./fetchMeta"
 import { useLazyLoader } from "./useLazyLoader"
+import { useTokenMetadata } from "~Hooks/useTokenMetadata"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -58,6 +58,7 @@ export const useNFTCollections = () => {
     const network = useAppSelector(selectSelectedNetwork)
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
     const nftCollections = useAppSelector(selectNftCollectionsWithoutMetadata)
+    const { fetchMetadata } = useTokenMetadata()
 
     const theme = useTheme()
 
@@ -124,7 +125,7 @@ export const useNFTCollections = () => {
                 }),
             )
         },
-        [currentAddress, dispatch, network.type, thor],
+        [currentAddress, dispatch, fetchMetadata, network.type, thor],
     )
 
     useLazyLoader({
