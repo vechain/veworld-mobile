@@ -10,6 +10,7 @@ import {
     CurrencySlice,
     DelegationSlice,
     DeviceSlice,
+    MetadataCacheSlice,
     NetworkSlice,
     NftSlice,
     PendingSlice,
@@ -22,6 +23,7 @@ import {
     resetCurrencyState,
     resetDelegationState,
     resetDeviceState,
+    resetMetadataCacheState,
     resetNetworkState,
     resetNftState,
     resetPendingState,
@@ -75,6 +77,7 @@ export const getPersistorConfig = async () => {
             ActivitiesSlice.name,
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
+            MetadataCacheSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -100,6 +103,7 @@ export const resetActions = [
     resetUserPreferencesState,
     resetWalletConnectState,
     resetPendingState,
+    resetMetadataCacheState,
 
     // Config reset always comes last
     resetConfigState,

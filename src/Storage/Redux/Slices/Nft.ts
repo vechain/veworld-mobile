@@ -14,7 +14,7 @@ import {
     NFTs,
 } from "../Types/Nft"
 import { GithubCollectionResponse, PaginationResponse } from "~Networking"
-import { AddressUtils, HexUtils, URIUtils } from "~Utils"
+import { AddressUtils, HexUtils } from "~Utils"
 
 export type NftSliceState = {
     collectionRegistryInfo: CollectionRegistryInfo
@@ -269,10 +269,10 @@ export const NftSlice = createSlice({
             action: PayloadAction<{
                 address: string
                 collectionAddress: string
-                NFT: NonFungibleToken
+                nft: NonFungibleToken
             }>,
         ) => {
-            const { address, collectionAddress, NFT } = action.payload
+            const { address, collectionAddress, nft } = action.payload
 
             const normalizedAcct = HexUtils.normalize(address)
             const normalizedCollection = HexUtils.normalize(collectionAddress)
@@ -281,14 +281,12 @@ export const NftSlice = createSlice({
                 const existing = state.NFTsPerAccount[normalizedAcct][
                     normalizedCollection
                 ]?.NFTs?.find(
-                    nft => nft.tokenId === NFT.tokenId,
+                    n => n.tokenId === nft.tokenId,
                 ) as NonFungibleToken
 
                 if (existing) {
-                    existing.image = URIUtils.convertUriToUrl(NFT.image)
-                    existing.name = NFT.name
-                    existing.description = NFT.description
-                    existing.mimeType = NFT.mimeType
+                    // Replace all field values of existing collection with the new collection recursively
+                    Object.assign(existing, nft)
                 }
             }
             return state
