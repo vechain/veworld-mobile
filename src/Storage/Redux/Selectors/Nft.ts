@@ -72,6 +72,11 @@ export const selectNftCollections = createSelector(
     },
 )
 
+export const selectNftCollectionsWithoutMetadata = createSelector(
+    selectNftCollections,
+    collections => collections?.collections?.filter(col => !col.updated) ?? [],
+)
+
 export const selectCollectionRegistryInfo = createSelector(
     selectNftState,
     selectSelectedNetwork,
@@ -137,6 +142,11 @@ export const selectAllVisibleNFTs = createSelector(
             }, [] as NonFungibleToken[]) ?? []
         )
     },
+)
+
+export const selectAllVisibleNFTsWithoutMetadata = createSelector(
+    selectAllVisibleNFTs,
+    allVisible => allVisible.filter(nft => !nft.updated),
 )
 
 export const selectNFTWithAddressAndTokenId = createSelector(

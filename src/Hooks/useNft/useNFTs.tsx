@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import {
-    selectAllVisibleNFTs,
+    selectAllVisibleNFTsWithoutMetadata,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     setNFTs,
@@ -25,7 +25,7 @@ export const useNFTs = () => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
-    const nfts = useAppSelector(selectAllVisibleNFTs)
+    const nfts = useAppSelector(selectAllVisibleNFTsWithoutMetadata)
     const thor = useThor()
     const { LL } = useI18nContext()
 
@@ -62,7 +62,7 @@ export const useNFTs = () => {
                 updateNFT({
                     address: currentAddress,
                     collectionAddress: nft.address,
-                    NFT: updated,
+                    nft: updated,
                 }),
             )
         },

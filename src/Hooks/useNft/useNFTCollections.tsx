@@ -12,7 +12,7 @@ import {
 } from "~Networking"
 import {
     clearNFTCache,
-    selectNftCollections,
+    selectNftCollectionsWithoutMetadata,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     setCollections,
@@ -57,7 +57,7 @@ export const useNFTCollections = () => {
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
-    const nftCollections = useAppSelector(selectNftCollections)
+    const nftCollections = useAppSelector(selectNftCollectionsWithoutMetadata)
 
     const theme = useTheme()
 
@@ -128,7 +128,7 @@ export const useNFTCollections = () => {
     )
 
     useLazyLoader({
-        payload: nftCollections?.collections ?? [],
+        payload: nftCollections,
         loader: lazyLoadMetadata,
     })
 
