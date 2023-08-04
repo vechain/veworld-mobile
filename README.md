@@ -60,7 +60,7 @@ Follow the official React Native [documentation](https://reactnative.dev/docs/en
 
 # MAC OS X - M2 Processors additional setup
 
-When configuring the WeWorld mobile app for Android on a MAC with an M2 processor you should also make sure that Rosetta 2 is installed.
+When configuring the WeWorld mobile app for Android on a MAC with an M2 processor, you should also make sure that Rosetta 2 is installed.
 
 If Rosetta is not installed, you can install it by running:
 
