@@ -15,22 +15,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
-### android rotate_keystore
-
-```sh
-[bundle exec] fastlane android rotate_keystore
-```
-
-
-
-### android bump_version
-
-```sh
-[bundle exec] fastlane android bump_version
-```
-
-bumps version with specific semantics or exacto version
-
 ### android create_changelog
 
 ```sh
@@ -63,21 +47,13 @@ Commit latest artifacts to GitHub
 
 Validate the keystore and credentials
 
-### android get_version_code
+### android set_version_code
 
 ```sh
-[bundle exec] fastlane android get_version_code
+[bundle exec] fastlane android set_version_code
 ```
 
 Get last version codes
-
-### android get_version_name
-
-```sh
-[bundle exec] fastlane android get_version_name
-```
-
-Get last version name
 
 ### android build_android
 
