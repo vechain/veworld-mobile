@@ -57,29 +57,22 @@ platform :android do
   end
 =end
   
-  desc "Create changelog for Android"
+  desc "Create changelog"
   lane :create_changelog do |values|
-    version = values[:version]
-
-    # tag = last_git_tag(pattern:"v\d+\.\d+\.\d+-android")
-    tag = last_git_tag
-
-    changelog = changelog_from_git_commits(
-      between: [tag, "HEAD"],  # Optional, lets you specify a revision/tag range between which to collect commit info
-      pretty: "- (%ae) %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
-      date_format: "short",# Optional, lets you provide an additional date format to dates within the pretty-formatted string
-      match_lightweight_tag: false,  # Optional, lets you ignore lightweight (non-annotated) tags when searching for the last tag
-      merge_commit_filtering: "exclude_merges" # Optional, lets you filter out merge commits
-    )
-
-    File.write("metadata/android/en-US/changelogs/#{version}.txt", changelog)
 
     Dir.chdir "../.." do # Navigate to the root
-      package_json = JSON.parse(File.read("./package.json"))
-      package_json["version"] = version
-      File.write("./package.json", JSON.pretty_generate(package_json))
+      sh("yarn release:ci")
     end
+
+    version = values[:version]
+
+    package_json = JSON.parse(File.read("../../package.json"))
+    package_json["version"] = version
+    File.write("../../package.json", JSON.pretty_generate(package_json))
+
+
   end
+
 
 
 
@@ -176,7 +169,7 @@ platform :android do
       end
 =end
 
-      create_changelog(version:version_name)
+      # create_changelog(version:version_name)
 
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
@@ -201,6 +194,12 @@ platform :android do
         verbose: true,
         track: track,
       )
+
+      add_git_tag(
+        tag: "v#{version_name}-android"
+      )
+
+      push_git_tags
 
 
 =begin
@@ -235,7 +234,7 @@ platform :android do
 
       # send slack message
       slack(
-        message: version_name.nil? ? "VeWorld build number: #{code} was successfully released! [Android]" : "VeWorld version number: #{version} was successfully released! [Android]",
+        message: version_name.nil? ? "VeWorld build number: #{code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: true,
         payload: {
@@ -250,7 +249,7 @@ platform :android do
       
       # send slack message
       slack(
-        message: version_name.nil? ? "Error releasing VeWorld build number: #{code} [Android]" : "Error releasing VeWorld version number: #{version} [Android]",
+        message: version_name.nil? ? "Error releasing VeWorld build number: #{code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {
