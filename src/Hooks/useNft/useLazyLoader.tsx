@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { WithID, MetadataUpdated } from "~Model"
-import { debug, error } from "~Utils"
+import { error } from "~Utils"
 
 const MAX_RETRIES = 10
 
@@ -21,19 +21,13 @@ export const useLazyLoader = <T extends WithID & MetadataUpdated>({
     const triggerLoader = useCallback(
         async (item: T) => {
             if (item.updated) return
-            debug("Attempting lazy load")
             const loadingStatus = metadataLoading.current.get(item.id)
             if (
                 loadingStatus &&
                 (loadingStatus.isLoading || loadingStatus.count > MAX_RETRIES)
-            ) {
-                debug(
-                    `Exiting early loading status: ${JSON.stringify(
-                        loadingStatus,
-                    )}`,
-                )
+            )
                 return
-            }
+
             const newStatus = {
                 isLoading: true,
                 count: (loadingStatus?.count ?? 0) + 1,
