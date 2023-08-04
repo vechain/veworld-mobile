@@ -18,6 +18,8 @@ new_password=$(generate_random_password)
 
 # Check if the .env file exists
 env_file=".env.default"
+properties_file="../keystore.properties"
+
 if [ ! -f "$env_file" ]; then
     echo "The .env file does not exist. Please create one first."
     exit 1
@@ -27,10 +29,17 @@ fi
 backup_file="$env_file.bak"
 cp "$env_file" "$backup_file"
 
+backup_properties_file="$properties_file.bak"
+cp "$properties_file" "$backup_properties_file"
+
 # Modify the .env file using 'sed' for each variable
 awk -v pass="$new_password" '{sub(/^STORE_PASSWORD=.*/, "STORE_PASSWORD=" pass)} {sub(/^KEY_PASSWORD=.*/, "KEY_PASSWORD=" pass)} 1' "$backup_file" > "$env_file"
 
+awk -v pass="$new_password" '{sub(/^storePassword=.*/, "storePassword=" pass)} {sub(/^keyPassword=.*/, "keyPassword=" pass)} 1' "$backup_properties_file" > "$properties_file"
+
+
 rm .env.default.bak
+rm ../keystore.properties.bak
 
 echo "$new_password"
 
