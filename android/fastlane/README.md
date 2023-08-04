@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane android create_changelog
 ```
 
-Create changelog for Android
+Create changelog
 
 ### android gh_setup_before
 
