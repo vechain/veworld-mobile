@@ -26,7 +26,7 @@ export const selectAllNFTCollections = createSelector(
     selectSelectedAccount,
     (state, account) => {
         const normalizedAcct = HexUtils.normalize(account.address)
-        return state.collectionsPerAccount[normalizedAcct]?.collections ?? []
+        return state.collectionsPerAccount[normalizedAcct]?.collections
     },
 )
 
