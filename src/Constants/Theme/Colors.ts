@@ -64,6 +64,7 @@ export enum COLORS {
     DARK_ORANGE_ALERT = "#AF4F0A",
     MEDIUM_ORANGE = "#FA710E",
     DISABLED_GREY = "#E5E5E5",
+    MEDIUM_GRAY = "#C4C4C4",
 }
 
 const light: Colors = {
@@ -94,7 +95,7 @@ const light: Colors = {
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.DARK_PURPLE_RBGA,
     switcher: COLORS.DARK_PURPLE_DISABLED,
-    skeletonBoneColor: COLORS.DARK_PURPLE_DISABLED,
+    skeletonBoneColor: COLORS.MEDIUM_GRAY,
     skeletonHighlightColor: COLORS.LIGHT_GRAY,
     alertOrangeMedium: COLORS.MEDIUM_ORANGE,
     alertRedMedium: COLORS.MEDIUM_RED,
