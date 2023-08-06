@@ -35,23 +35,35 @@ type Props = {
     onClose: () => void
 }
 
+const snapPoints = ["40%"]
+
 export const AddCustomTokenBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
 >(({ tokenAddress, onClose }, ref) => {
     const { LL } = useI18nContext()
+
     const dispatch = useAppDispatch()
+
     const track = useAnalyticTracking()
+
     const network = useAppSelector(selectSelectedNetwork)
+
     const thorClient = useThor()
+
     const [newCustomToken, setNewCustomToken] = useState<FungibleToken>()
+
     const [value, setValue] = useState("")
+
     const [errorMessage, setErrorMessage] = useState("")
+
     const officialTokens = useAppSelector(selectFungibleTokens)
+
     const customTokens = useAppSelector(selectAccountCustomTokens)
+
     const account = useAppSelector(selectSelectedAccount)
+
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-    const snapPoints = ["35%"]
 
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
@@ -133,15 +145,24 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     }
 
     const handleAddCustomToken = () => {
-        dispatch(addOrUpdateCustomToken(newCustomToken!!))
+        dispatch(
+            addOrUpdateCustomToken({
+                accountAddress: account.address,
+                newToken: newCustomToken!!,
+            }),
+        )
         dispatch(
             addTokenBalance({
-                balance: "0",
                 accountAddress: account.address,
-                tokenAddress: newCustomToken!!.address,
-                timeUpdated: new Date().toISOString(),
-                position: tokenBalances.length,
-                genesisId: network.genesis.id,
+                balance: {
+                    balance: "0",
+                    accountAddress: account.address,
+                    tokenAddress: newCustomToken!!.address,
+                    timeUpdated: new Date().toISOString(),
+                    position: tokenBalances.length,
+                    genesisId: network.genesis.id,
+                    isCustomToken: true,
+                },
             }),
         )
         dispatch(updateAccountBalances(thorClient, account.address))
@@ -165,6 +186,9 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                 onDismiss={handleOnDismissModal}>
                 <BaseText typographyFont="subTitleBold">
                     {LL.MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE()}
+                </BaseText>
+                <BaseText typographyFont="subSubTitleLight" pt={12}>
+                    {LL.MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION()}
                 </BaseText>
                 <BaseSpacer height={24} />
                 {newCustomToken ? (
