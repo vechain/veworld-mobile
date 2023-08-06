@@ -1,8 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { selectSelectedNetwork } from "./Network"
 import { Balance, FungibleToken, TokenWithCompleteInfo } from "~Model"
-import { selectAllExchangeRates } from "./Currency"
 import { DEFAULT_VECHAIN_TOKENS, VET, VTHO } from "~Constants"
 import { LocaleUtils, TokenUtils } from "~Utils"
 import { uniqBy } from "lodash"
@@ -10,16 +8,23 @@ import {
     selectVetTokenWithBalance,
     selectVthoTokenWithBalance,
 } from "./Balances"
+import { selectSelectedNetwork } from "./Network"
+import { selectSelectedAccount } from "./Account"
+import { selectAllExchangeRates } from "./Currency"
 
 const selectTokenState = (state: RootState) => state.tokens
 
 export const selectCustomTokens = createSelector(
     selectTokenState,
     selectSelectedNetwork,
-    (tokens, network) =>
-        tokens.custom.filter(
+    selectSelectedAccount,
+    (tokens, network, account) => {
+        if (!tokens.custom[account.address]) return []
+
+        return tokens.custom[account.address].filter(
             (token: FungibleToken) => token.genesisId === network.genesis.id,
-        ),
+        )
+    },
 )
 
 const DEFAULT_CHART_DATA = [

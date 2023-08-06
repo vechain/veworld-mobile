@@ -8,6 +8,7 @@ import {
     ConnectedAppActivity,
     DappTxActivity,
     FungibleTokenActivity,
+    Network,
     NonFungibleTokenActivity,
     SignCertActivity,
 } from "~Model"
@@ -418,7 +419,7 @@ export const eventTypeToActivityType = (
  */
 export const createBaseActivityFromIncomingTransfer = (
     incomingTransfer: IncomingTransferResponse,
-    thor: Connex.Thor,
+    network: Network,
 ): Activity | null => {
     // Destructure needed properties from transaction
 
@@ -459,7 +460,7 @@ export const createBaseActivityFromIncomingTransfer = (
         txId,
         blockNumber,
         isTransaction: true,
-        genesisId: thor.genesis.id,
+        genesisId: network.genesis.id,
         type: ActivityUtils.getActivityTypeFromClause(clauses),
         timestamp: blockTimestamp * 1000, // Convert to milliseconds
         status: ActivityStatus.SUCCESS,
@@ -662,12 +663,15 @@ export const getActivitiesFromTransactions = (
  */
 export const getActivitiesFromIncomingTransfers = (
     incomingTransfers: IncomingTransferResponse[],
-    thor: Connex.Thor,
+    network: Network,
 ): Activity[] => {
     return incomingTransfers.reduce(
         (activities: Activity[], incomingTransfer) => {
             let activity: Activity | null =
-                createBaseActivityFromIncomingTransfer(incomingTransfer, thor)
+                createBaseActivityFromIncomingTransfer(
+                    incomingTransfer,
+                    network,
+                )
 
             if (activity?.clauses) {
                 activities.push(
