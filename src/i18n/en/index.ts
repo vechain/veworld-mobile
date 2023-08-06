@@ -224,6 +224,7 @@ const en: BaseTranslation = {
     SB_BACKUP_YOUR_PHRASE: "Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to",
     SB_BACKUP_YOUR_PHRASE_2: "RESET the App!",
     SB_UPGRADE_SECURITY_WARNING_ANDROID: "Also, you will be asked to use your biometrics security method for each wallet!",
+    SB_YOUR_TOKENS_EMPTY: "Your tokens will appear here",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -520,6 +521,7 @@ const en: BaseTranslation = {
     MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: "The address entered is incorrect or can't be added to this network",
     MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: "This is an official token, please select it from the previous list",
     MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: "This custom token is already present",
+    MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: "Receive tokens",
 
     // Send Token
     SEND_TOKEN_TITLE: "Send",

@@ -15,6 +15,8 @@ export const initialTokenState: TokensState = {
     officialTokens: [],
     suggestedTokens: [],
     coinGeckoTokens: [],
+    hasFetchedOfficialTokensMainnet: {},
+    hasFetchedOfficialTokensTestnet: {},
 }
 
 export const TokenSlice = createSlice({
@@ -141,6 +143,28 @@ export const TokenSlice = createSlice({
             state.coinGeckoTokens = action.payload
         },
 
+        setHasFetchedOfficialTokensMainnet: (
+            state,
+            action: PayloadAction<{
+                accountAddress: string
+                hasFetched: boolean
+            }>,
+        ) => {
+            const { accountAddress, hasFetched } = action.payload
+            state.hasFetchedOfficialTokensMainnet[accountAddress] = hasFetched
+        },
+
+        setHasFetchedOfficialTokensTestnet: (
+            state,
+            action: PayloadAction<{
+                accountAddress: string
+                hasFetched: boolean
+            }>,
+        ) => {
+            const { accountAddress, hasFetched } = action.payload
+            state.hasFetchedOfficialTokensTestnet[accountAddress] = hasFetched
+        },
+
         resetTokensState: () => initialTokenState,
     },
 })
@@ -153,6 +177,8 @@ export const {
     setAssertDetailChartData,
     setCoinGeckoTokens,
     setSuggestedTokens,
-    setCoinMarketInfo,
     resetTokensState,
+    setHasFetchedOfficialTokensMainnet,
+    setHasFetchedOfficialTokensTestnet,
+    setCoinMarketInfo,
 } = TokenSlice.actions

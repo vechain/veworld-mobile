@@ -10,11 +10,13 @@ import { error } from "~Utils/Logger"
 import { BalanceUtils } from "~Utils"
 import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Constants"
 import {
+    setHasFetchedOfficialTokensMainnet,
+    setHasFetchedOfficialTokensTestnet,
     setIsTokensOwnedLoading,
     updateTokenBalances,
     upsertTokenBalances,
 } from "~Storage/Redux/Slices"
-import { Balance } from "~Model"
+import { Balance, NETWORK_TYPE } from "~Model"
 
 export const upsertTokenBalance =
     (thorClient: Connex.Thor, accountAddress: string, tokenAddress: string) =>
@@ -111,6 +113,20 @@ export const updateOfficialTokensBalances =
                     newBalances: officialTokensBalances,
                 }),
             )
+
+            network.type === NETWORK_TYPE.MAIN
+                ? dispatch(
+                      setHasFetchedOfficialTokensMainnet({
+                          accountAddress,
+                          hasFetched: true,
+                      }),
+                  )
+                : dispatch(
+                      setHasFetchedOfficialTokensTestnet({
+                          accountAddress,
+                          hasFetched: true,
+                      }),
+                  )
 
             dispatch(setIsTokensOwnedLoading(false))
         } catch (e) {

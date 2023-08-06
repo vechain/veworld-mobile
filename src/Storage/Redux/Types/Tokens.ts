@@ -12,6 +12,8 @@ export interface TokensState {
     officialTokens: TokenWithCompleteInfo[]
     suggestedTokens: FungibleTokenWithBalance[]
     coinGeckoTokens: TokenInfoResponse[]
+    hasFetchedOfficialTokensMainnet: Record<string, boolean>
+    hasFetchedOfficialTokensTestnet: Record<string, boolean>
 }
 
 export type TokenInfoResponse = {

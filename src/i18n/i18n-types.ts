@@ -811,6 +811,10 @@ type RootTranslation = {
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
 	/**
+	 * Y​o​u​r​ ​t​o​k​e​n​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
+	 */
+	SB_YOUR_TOKENS_EMPTY: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -1768,6 +1772,10 @@ type RootTranslation = {
 	 * T​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​i​s​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
+	/**
+	 * R​e​c​e​i​v​e​ ​t​o​k​e​n​s
+	 */
+	MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: string
 	/**
 	 * S​e​n​d
 	 */
@@ -3122,6 +3130,10 @@ export type TranslationFunctions = {
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
 	/**
+	 * Your tokens will appear here
+	 */
+	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -4059,6 +4071,10 @@ Please, try again later.
 	 * This custom token is already present
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
+	/**
+	 * Receive tokens
+	 */
+	MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: () => LocalizedString
 	/**
 	 * Send
 	 */

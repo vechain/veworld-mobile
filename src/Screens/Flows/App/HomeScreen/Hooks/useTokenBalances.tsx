@@ -11,9 +11,9 @@ import {
     selectSelectedAccount,
     getTokensFromGithub,
     addOfficialTokens,
-    selectFungibleTokens,
     updateOfficialTokensBalances,
     selectNonVechainTokensWithBalances,
+    selectHasFetchedOfficialTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useCallback, useEffect } from "react"
@@ -45,11 +45,13 @@ export const useTokenBalances = () => {
         selectNonVechainTokensWithBalances,
     )
 
+    const hasFetchedOfficialTokens = useAppSelector(
+        selectHasFetchedOfficialTokens,
+    )
+
     const thorClient = useThor()
 
     const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
-
-    const officialTokens = useAppSelector(selectFungibleTokens)
 
     // fetch official tokens from github
     useEffect(() => {
@@ -78,7 +80,7 @@ export const useTokenBalances = () => {
                 updateAccountBalances(thorClient, selectedAccount.address),
             )
 
-            if (nonVechainBalances.length <= 0) {
+            if (nonVechainBalances.length <= 0 && !hasFetchedOfficialTokens) {
                 await dispatch(
                     updateOfficialTokensBalances(
                         thorClient,
@@ -96,6 +98,7 @@ export const useTokenBalances = () => {
     }, [
         balances.length,
         dispatch,
+        hasFetchedOfficialTokens,
         nonVechainBalances.length,
         selectedAccount.address,
         thorClient,
@@ -105,6 +108,9 @@ export const useTokenBalances = () => {
      * keep balances up to date
      */
     useEffect(() => {
+        // if genesis id is not the same, it means thorClient is not updated yet
+        if (thorClient.genesis.id !== network.genesis.id) return
+
         updateBalances()
 
         const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
@@ -116,7 +122,6 @@ export const useTokenBalances = () => {
         thorClient,
         network,
         selectedAccount,
-        officialTokens,
         nonVechainBalances.length,
         balances.length,
     ])
