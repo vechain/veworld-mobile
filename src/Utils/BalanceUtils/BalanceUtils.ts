@@ -4,6 +4,7 @@ import { error } from "~Utils/Logger"
 import { Network, Balance } from "~Model"
 import AddressUtils from "../AddressUtils"
 import FormattingUtils from "../FormattingUtils"
+import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
 
 /**
  * Calls out to external sources to get the balance
@@ -47,6 +48,47 @@ const getBalanceFromBlockchain = async (
     } catch (e) {
         error(e)
         throw new Error("Failed to get balance from external service")
+    }
+}
+
+/**
+ * Retrieves both the balance and token details of an account from external sources.
+ *
+ * @param tokenAddress - Address of the token.
+ * @param accountAddress - Address of the account.
+ * @param network - Network details.
+ * @param thor - Connex instance.
+ * @returns An object containing balance, token details and related info.
+ */
+const getBalanceAndTokenInfoFromBlockchain = async (
+    tokenAddress: string,
+    accountAddress: string,
+    network: Network,
+    thor: Connex.Thor,
+): Promise<Balance> => {
+    try {
+        const balance: Balance = await getBalanceFromBlockchain(
+            tokenAddress,
+            accountAddress,
+            network,
+            thor,
+        )
+
+        const tokenName = await getTokenName(tokenAddress, thor)
+        const tokenSymbol = await getTokenSymbol(tokenAddress, thor)
+        const tokenDecimals = await getTokenDecimals(tokenAddress, thor)
+
+        return {
+            ...balance,
+            tokenName,
+            tokenSymbol,
+            tokenDecimals,
+        }
+    } catch (e) {
+        error(e)
+        throw new Error(
+            "Failed to get balance and token info from external service",
+        )
     }
 }
 
@@ -109,4 +151,5 @@ export default {
     getTokenBalanceFromBlockchain,
     getFiatBalance,
     getTokenUnitBalance,
+    getBalanceAndTokenInfoFromBlockchain,
 }
