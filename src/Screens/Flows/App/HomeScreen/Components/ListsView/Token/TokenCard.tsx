@@ -1,11 +1,19 @@
 import { Image, StyleSheet } from "react-native"
-import React, { memo } from "react"
-import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
+import React, { memo, useMemo } from "react"
+import {
+    BaseText,
+    BaseCard,
+    BaseView,
+    BaseSpacer,
+    BaseCustomTokenIcon,
+} from "~Components"
 import { COLORS } from "~Constants"
-import { PlaceholderSVG } from "~Assets"
 import { useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
+import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
+import SkeletonContent from "react-native-skeleton-content-nonexpo"
+import { address } from "thor-devkit"
 
 type Props = {
     tokenWithBalance: FungibleTokenWithBalance
@@ -16,34 +24,48 @@ type Props = {
 export const TokenCard = memo(
     ({ tokenWithBalance, isEdit, isBalanceVisible }: Props) => {
         const theme = useTheme()
+
+        const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
+
         const styles = baseStyles(isEdit)
+
         const icon = tokenWithBalance.icon
+
         const tokenValueLabelColor = theme.isDark
             ? COLORS.WHITE_DISABLED
             : COLORS.DARK_PURPLE_DISABLED
-        const tokenBalanceRaw = FormattingUtils.scaleNumberDown(
-            tokenWithBalance.balance.balance,
-            tokenWithBalance.decimals,
-            4,
+
+        const tokenBalance = useMemo(
+            () =>
+                BalanceUtils.getTokenUnitBalance(
+                    tokenWithBalance.balance.balance,
+                    tokenWithBalance.decimals ?? 0,
+                ),
+            [tokenWithBalance.balance.balance, tokenWithBalance.decimals],
         )
-        const tokenBalance = FormattingUtils.humanNumber(
-            tokenBalanceRaw,
-            tokenBalanceRaw,
-        )
+
         return (
             <BaseView style={styles.innerRow}>
-                <BaseCard
-                    style={[
-                        styles.imageContainer,
-                        { backgroundColor: COLORS.WHITE },
-                    ]}
-                    containerStyle={styles.imageShadow}>
-                    {icon ? (
+                {icon && (
+                    <BaseCard
+                        style={[
+                            styles.imageContainer,
+                            { backgroundColor: COLORS.WHITE },
+                        ]}
+                        containerStyle={styles.imageShadow}>
                         <Image source={{ uri: icon }} style={styles.image} />
-                    ) : (
-                        <PlaceholderSVG />
-                    )}
-                </BaseCard>
+                    </BaseCard>
+                )}
+                {!icon && (
+                    <BaseCustomTokenIcon
+                        style={styles.icon}
+                        tokenSymbol={tokenWithBalance.symbol}
+                        tokenAddress={address.toChecksumed(
+                            tokenWithBalance.address,
+                        )}
+                    />
+                )}
+
                 <BaseSpacer width={16} />
                 <BaseView w={75}>
                     <BaseText
@@ -56,16 +78,55 @@ export const TokenCard = memo(
                         flexDirection="row"
                         alignItems="baseline"
                         justifyContent="flex-start">
-                        <BaseText
-                            typographyFont="bodyMedium"
-                            color={tokenValueLabelColor}>
-                            {isBalanceVisible ? tokenBalance : "*****"}{" "}
-                        </BaseText>
-                        <BaseText
-                            typographyFont="captionRegular"
-                            color={tokenValueLabelColor}>
-                            {tokenWithBalance.symbol}
-                        </BaseText>
+                        {isTokensOwnedLoading && isBalanceVisible ? (
+                            <BaseView
+                                w={100}
+                                flexDirection="row"
+                                alignItems="center"
+                                py={2}>
+                                <SkeletonContent
+                                    containerStyle={styles.skeleton}
+                                    animationDirection="horizontalLeft"
+                                    boneColor={theme.colors.skeletonBoneColor}
+                                    highlightColor={
+                                        theme.colors.skeletonHighlightColor
+                                    }
+                                    layout={[
+                                        {
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            children: [
+                                                // Line
+                                                {
+                                                    width: "100%",
+                                                    height: 12,
+                                                },
+                                            ],
+                                        },
+                                    ]}
+                                    isLoading={true}
+                                />
+                                <BaseText
+                                    typographyFont="captionRegular"
+                                    color={tokenValueLabelColor}
+                                    pl={4}>
+                                    {tokenWithBalance.symbol}
+                                </BaseText>
+                            </BaseView>
+                        ) : (
+                            <BaseView flexDirection="row" alignItems="center">
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    color={tokenValueLabelColor}>
+                                    {isBalanceVisible ? tokenBalance : "••••"}{" "}
+                                </BaseText>
+                                <BaseText
+                                    typographyFont="captionRegular"
+                                    color={tokenValueLabelColor}>
+                                    {tokenWithBalance.symbol}
+                                </BaseText>
+                            </BaseView>
+                        )}
                     </BaseView>
                 </BaseView>
             </BaseView>
@@ -91,5 +152,15 @@ const baseStyles = (isEdit: boolean) =>
             // flexGrow: 1,
             paddingHorizontal: 12,
             paddingLeft: isEdit ? 44 : 12,
+        },
+        skeleton: {
+            width: 40,
+        },
+        icon: {
+            width: 40,
+            height: 40,
+            borderRadius: 40 / 2,
+            alignItems: "center",
+            justifyContent: "center",
         },
     })
