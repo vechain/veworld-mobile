@@ -1,10 +1,20 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
-import { BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    Layout,
+    QRCodeBottomSheet,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-import { CustomTokenBox, SkeletonCustomTokenBox } from "./Components"
+import {
+    CustomTokenBox,
+    NoTokensButton,
+    SkeletonCustomTokenBox,
+} from "./Components"
 import { PlatformUtils } from "~Utils"
 import { tabbarBaseStyles } from "~Navigation"
 import { SkeletonActivityBox } from "../HistoryScreen/Components"
@@ -38,6 +48,9 @@ export const ManageCustomTokenScreen = () => {
         onOpen: openAddCustomTokenSheet,
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
+
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
+        useBottomSheetModal()
 
     const onAddCustomToken = useCallback(
         (tokenAddress: string) => {
@@ -165,6 +178,18 @@ export const ManageCustomTokenScreen = () => {
         )
     }, [])
 
+    const renderNoTokensButton = useMemo(() => {
+        return (
+            <BaseView
+                justifyContent="center"
+                alignItems="center"
+                w={100}
+                style={styles.noTokensButton}>
+                <NoTokensButton onPress={openQRCodeSheet} />
+            </BaseView>
+        )
+    }, [openQRCodeSheet])
+
     return (
         <Layout
             safeAreaTestID="History_Screen"
@@ -183,11 +208,16 @@ export const ManageCustomTokenScreen = () => {
                     {/* Fetching Tokens shows skeleton */}
                     {!hasFetched && page === 0 && renderSkeletonList}
 
+                    {/* No Tokens owned */}
+                    {!tokens.length && hasFetched && renderNoTokensButton}
+
                     <AddCustomTokenBottomSheet
                         ref={addCustomTokenSheetRef}
                         onClose={closeAddCustomTokenSheet}
                         tokenAddress={customTokenAddress}
                     />
+
+                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                 </>
             }
         />
@@ -208,5 +238,9 @@ const styles = StyleSheet.create({
         marginBottom: PlatformUtils?.isIOS()
             ? 0
             : tabbarBaseStyles?.tabbar?.height,
+    },
+    noTokensButton: {
+        position: "absolute",
+        bottom: "50%",
     },
 })
