@@ -1,9 +1,15 @@
 import React, { memo } from "react"
 import { Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
-import { PlaceholderSVG } from "~Assets"
 import { COLORS } from "~Constants"
-import { BaseText, BaseCard, BaseSpacer, BaseView } from "~Components"
+import {
+    BaseText,
+    BaseCard,
+    BaseSpacer,
+    BaseView,
+    BaseCustomTokenIcon,
+} from "~Components"
 import { FungibleToken } from "~Model"
+import { address } from "thor-devkit"
 
 type Props = {
     token: FungibleToken
@@ -11,26 +17,30 @@ type Props = {
 }
 
 export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
+    const hasIcon = Boolean(token.icon)
+
     return (
         <BaseCard containerStyle={containerStyle}>
-            <BaseCard
-                style={[
-                    styles.imageContainer,
-                    { backgroundColor: COLORS.WHITE },
-                ]}
-                containerStyle={styles.imageShadow}>
-                {token.icon ? (
-                    <Image
-                        source={{
-                            uri: token.icon,
-                        }}
-                        style={styles.image}
-                    />
-                ) : (
-                    <PlaceholderSVG />
-                )}
-            </BaseCard>
-            <BaseSpacer width={16} />
+            {hasIcon && (
+                <BaseCard
+                    style={[
+                        styles.imageContainer,
+                        {
+                            backgroundColor: COLORS.WHITE,
+                        },
+                    ]}
+                    containerStyle={styles.imageShadow}>
+                    <Image source={{ uri: token.icon }} style={styles.image} />
+                </BaseCard>
+            )}
+            {!hasIcon && (
+                <BaseCustomTokenIcon
+                    style={styles.icon}
+                    tokenSymbol={token.symbol}
+                    tokenAddress={address.toChecksumed(token.address)}
+                />
+            )}
+            <BaseSpacer width={8} />
             <BaseView flexDirection="column" justifyContent="center" w={75}>
                 <BaseText
                     typographyFont="buttonPrimary"
@@ -54,5 +64,12 @@ const styles = StyleSheet.create({
     },
     imageShadow: {
         width: "auto",
+    },
+    icon: {
+        width: 38,
+        height: 38,
+        borderRadius: 38 / 2,
+        alignItems: "center",
+        justifyContent: "center",
     },
 })
