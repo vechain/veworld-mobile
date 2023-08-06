@@ -343,6 +343,7 @@ const en: BaseTranslation = {
     // Warning
     HEADS_UP: "Heads up!",
     ACTIVITIES_NOT_UP_TO_DATE: "Activities might not be up-to-date. Check your internet connection or try later",
+    CUSTOM_TOKENS_NOT_AVAIABLE: "Custom tokens are not available at the moment. Check your internet connection or try later",
 
 
     // Placeholders
@@ -499,7 +500,7 @@ const en: BaseTranslation = {
     MANAGE_TOKEN_TITLE: "Manage Tokens",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: "Select your official tokens or add a new custom one",
-    MANAGE_TOKEN_MANAGE_CUSTOM: "Manage custom tokens",
+    MANAGE_TOKEN_MANAGE_CUSTOM: "Add custom tokens owned",
     MANAGE_TOKEN_ADD_CUSTOM: "Add custom token",
     MANAGE_TOKEN_SELECTED: "Selected",
     MANAGE_TOKEN_UNSELECTED: "Unselected",
@@ -514,6 +515,7 @@ const en: BaseTranslation = {
     MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: "Confirm custom token",
     MANAGE_CUSTOM_TOKENS_DELETE_TITLE: "Remove custom token",
     MANAGE_CUSTOM_TOKENS_DELETE_DESC: "Are you sure you want to remove this custom token?",
+    MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: "Are you sure you want to add the selected token?",
 
     MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: "The address entered is incorrect or can't be added to this network",
     MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: "This is an official token, please select it from the previous list",

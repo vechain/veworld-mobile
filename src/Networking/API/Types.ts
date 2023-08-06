@@ -75,3 +75,8 @@ export type FetchBlockResponse = {
     isFinalized: boolean
     transactions: FetchTransactionsResponse[]
 }
+
+export type FetchFungibleTokensContractsResponse = {
+    data: string[]
+    pagination: PaginationResponse
+}

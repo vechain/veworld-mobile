@@ -34,7 +34,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
 
         const balance = useMemo(() => {
             if (!isBalanceVisible) {
-                return "**** " + VET.symbol
+                return "•••• " + VET.symbol
             }
 
             return `${vetBalance} ${VET.symbol}`

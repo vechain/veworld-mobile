@@ -5,7 +5,7 @@ import {
 } from "~Model"
 
 export interface TokensState {
-    custom: FungibleToken[]
+    custom: Record<string, FungibleToken[]>
     dashboardChartData: { [key: string]: number[][] }
     assetDetailChartData: { [key: string]: number[][] }
     coinMarketInfo: { [key: string]: CoinMarketInfo }

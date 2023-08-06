@@ -32,6 +32,7 @@ import WalletConnectResponseUtils from "./WalletConnectResponseUtils"
 import MediaUtils from "./MediaUtils"
 import MathUtils from "./MathUtils"
 import AnalyticsUtils from "./AnalyticsUtils"
+import ColorUtils from "./ColorUtils"
 
 export * from "./Logger"
 
@@ -70,4 +71,5 @@ export {
     MathUtils,
     MinimizerUtils,
     AnalyticsUtils,
+    ColorUtils,
 }

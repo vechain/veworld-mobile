@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react"
 import { error, info } from "~Utils"
-import { showWarningToast, useThor } from "~Components"
+import { showWarningToast } from "~Components"
 import { Activity } from "~Model"
 import {
     selectCurrentActivities,
     selectSelectedAccount,
+    selectSelectedNetwork,
     updateAccountTransactionActivities,
     useAppDispatch,
     useAppSelector,
@@ -32,8 +33,8 @@ export const useAccountActivities = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    // Initialize Thor context
-    const thor = useThor()
+    // Select network from Redux state
+    const network = useAppSelector(selectSelectedNetwork)
 
     // Initialize internationalization context
     const { LL } = useI18nContext()
@@ -61,7 +62,7 @@ export const useAccountActivities = () => {
                 const txActivities = await fetchAccountTransactionActivities(
                     selectedAccount.address,
                     page,
-                    thor,
+                    network,
                 )
 
                 // If first page, update Redux state and set activities state
@@ -111,7 +112,7 @@ export const useAccountActivities = () => {
                 if (page === 0) setPage(prevPage => prevPage + 1)
             }
         }
-    }, [selectedAccount, page, thor, dispatch, LL])
+    }, [page, selectedAccount, network, dispatch, LL])
 
     // Helper function to increment page and set fetched flag
     const incrementPageAndSetFetchedFlag = () => {
@@ -133,15 +134,10 @@ export const useAccountActivities = () => {
         if (page === 0) fetchOnMount()
     }, [fetchActivities, page])
 
-    // Reset page number on network change
+    // Reset page number on network change or on account change
     useEffect(() => {
         setPage(0)
-    }, [thor.genesis.id])
-
-    // Reset page number on account change
-    useEffect(() => {
-        setPage(0)
-    }, [selectedAccount])
+    }, [network.type, selectedAccount])
 
     return {
         fetchActivities,

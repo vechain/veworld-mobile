@@ -8,6 +8,7 @@ import {
     useAppDispatch,
     selectActivitiesWithoutFinality,
     updateBeat,
+    selectNonVechainTokensWithBalances,
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
 import { useInformUser, useStateReconciliation } from "./Hooks"
@@ -39,6 +40,8 @@ export const TransferEventListener: React.FC = () => {
     const { forTokens, forNFTs } = useInformUser({ network })
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
+
+    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
 
     const dispatch = useAppDispatch()
 
@@ -116,10 +119,10 @@ export const TransferEventListener: React.FC = () => {
                             await handleNFTTransfers({
                                 visibleAccounts: relevantAccounts,
                                 transfer,
+                                network: network,
+                                thorClient: thor,
                                 stateReconciliationAction: updateNFTs,
                                 informUser: forNFTs,
-                                network: network.type,
-                                thor,
                             })
                         }),
                 )
@@ -136,10 +139,13 @@ export const TransferEventListener: React.FC = () => {
                             await handleTokenTransfers({
                                 visibleAccounts: relevantAccounts,
                                 transfer,
+                                network,
+                                tokenBalances,
+                                thorClient: thor,
                                 fetchData,
                                 stateReconciliationAction: updateBalances,
                                 informUser: forTokens,
-                                network: network.type,
+                                dispatch,
                             })
                         }),
                 )
@@ -166,11 +172,12 @@ export const TransferEventListener: React.FC = () => {
             updateActivities,
             pendingActivities,
             dispatch,
-            network.type,
+            network,
             blackListedCollections,
             updateNFTs,
             forNFTs,
             thor,
+            tokenBalances,
             fetchData,
             updateBalances,
             forTokens,
