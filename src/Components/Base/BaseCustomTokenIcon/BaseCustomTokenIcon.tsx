@@ -8,6 +8,7 @@ type Props = {
     tokenAddress: string
     tokenSymbol: string
     style?: StyleProp<ViewStyle>
+    testID?: string
 }
 
 /**
@@ -19,6 +20,7 @@ type Props = {
  * @prop {string} tokenAddress - The address of the token. Used to generate a unique color for the token icon.
  * @prop {string} tokenSymbol - The symbol of the token. Displayed on the icon.
  * @prop {StyleProp<ViewStyle>} [style] - Optional styling to be applied to the icon component.
+ * @prop {string} [testID] - Optional testID to be applied to the icon component.
  *
  * Example usage:
  * ```
@@ -29,6 +31,7 @@ export const BaseCustomTokenIcon: React.FC<Props> = ({
     tokenAddress,
     tokenSymbol,
     style,
+    testID,
 }) => {
     const [iconColor, isColorLight] = useMemo(() => {
         return ColorUtils.generateColor(tokenAddress)
@@ -41,7 +44,7 @@ export const BaseCustomTokenIcon: React.FC<Props> = ({
     }, [tokenSymbol])
 
     return (
-        <BaseView bg={iconColor} style={style}>
+        <BaseView bg={iconColor} style={style} testID={testID}>
             <BaseText
                 color={isColorLight ? COLORS.DARK_PURPLE : COLORS.WHITE}
                 fontSize={shortenedTokenSymbol.length > 3 ? 10 : 14}
