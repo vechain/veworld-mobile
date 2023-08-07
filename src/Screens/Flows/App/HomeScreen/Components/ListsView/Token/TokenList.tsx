@@ -163,7 +163,8 @@ export const TokenList = memo(
                                 <UnderlayLeft onDelete={onRemoveToken} />
                             </BaseView>
                         )}
-                        snapPointsLeft={underlaySnapPoints}>
+                        snapPointsLeft={underlaySnapPoints}
+                        swipeEnabled={!isEdit}>
                         <AnimatedTokenCard
                             {...itemParams}
                             isEdit={isEdit}

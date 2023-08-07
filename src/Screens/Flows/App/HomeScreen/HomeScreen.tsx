@@ -3,6 +3,7 @@ import {
     AccountManagementBottomSheet,
     AddAccountBottomSheet,
     EditTokensBar,
+    Header,
     HeaderView,
     TokenList,
 } from "./Components"
@@ -155,6 +156,7 @@ export const HomeScreen = () => {
         <BaseSafeArea
             grow={1}
             style={{ marginBottom: tabBarAndroidBottomInsets }}>
+            <Header />
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 onContentSizeChange={visibleHeight => {
