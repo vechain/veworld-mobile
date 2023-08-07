@@ -2,6 +2,7 @@ import React, { useMemo } from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { ICustomViewStyle } from "react-native-skeleton-content-nonexpo/lib/Constants"
+import { BaseView } from "~Components"
 
 type Props = {
     boneColor: string
@@ -20,6 +21,7 @@ type Props = {
     height?: number
     width?: number
     alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline"
+    testID?: string
 }
 
 /**
@@ -59,6 +61,7 @@ export const BaseSkeleton = ({
     height = 20,
     width,
     alignItems = "center",
+    testID,
 }: Props) => {
     const computedContainerStyle = useMemo(() => {
         if (containerStyle) {
@@ -89,13 +92,15 @@ export const BaseSkeleton = ({
     }, [alignItems, height, layout])
 
     return (
-        <SkeletonContent
-            containerStyle={computedContainerStyle}
-            animationDirection={animationDirection}
-            boneColor={boneColor}
-            highlightColor={highlightColor}
-            layout={renderSkeletonContent}
-            isLoading={true}
-        />
+        <BaseView testID={testID}>
+            <SkeletonContent
+                containerStyle={computedContainerStyle}
+                animationDirection={animationDirection}
+                boneColor={boneColor}
+                highlightColor={highlightColor}
+                layout={renderSkeletonContent}
+                isLoading={true}
+            />
+        </BaseView>
     )
 }
