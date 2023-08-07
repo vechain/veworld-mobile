@@ -38,25 +38,21 @@ export const BalanceSlice = createSlice({
 
             const existingBalances = state[accountAddress]
 
-            // Remove existing balances that are also in newBalances
-            newBalances.forEach(newBalance => {
-                const balanceIndex = existingBalances.findIndex(
-                    oldBalance =>
-                        AddressUtils.compareAddresses(
-                            newBalance.tokenAddress,
-                            oldBalance.tokenAddress,
-                        ) && newBalance.genesisId === oldBalance.genesisId,
-                )
-
-                if (balanceIndex >= 0) {
-                    existingBalances.splice(balanceIndex, 1)
-                }
-            })
+            // Remove existing balances from newBalances
+            const filteredNewBalances = newBalances.filter(
+                newBalance =>
+                    !existingBalances.find(
+                        existingBalance =>
+                            AddressUtils.compareAddresses(
+                                existingBalance.tokenAddress,
+                                newBalance.tokenAddress,
+                            ) &&
+                            existingBalance.genesisId === newBalance.genesisId,
+                    ),
+            )
 
             // Add new balances
-            newBalances.forEach(newBalance => {
-                existingBalances.push(newBalance)
-            })
+            existingBalances.push(...filteredNewBalances)
         },
         updateTokenBalances: (
             state: Draft<BalanceState>,
