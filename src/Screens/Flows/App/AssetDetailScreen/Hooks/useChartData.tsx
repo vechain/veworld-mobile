@@ -15,7 +15,7 @@ export const useChartData = (symbol: string) => {
     const dispatch = useAppDispatch()
 
     const getChartData = useCallback(
-        (days: number = 1, interval: string = "hourly") => {
+        (days: number = 7, interval: string = "daily") => {
             dispatch(
                 fetchChartData({
                     symbol: symbol,
