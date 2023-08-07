@@ -20,7 +20,7 @@ export const getTokenMetaArweave = async (uri: string) => {
         const response = await arweave.api.get<TokenMetadata>(id)
         return response.data
     } catch (e) {
-        error(e)
+        error("getTokenMetaArweave", e)
         throw e
     }
 }

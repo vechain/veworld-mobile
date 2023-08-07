@@ -62,4 +62,5 @@ export const NFT_Mock: NonFungibleToken = {
     tokenURI: "ipfs://QmegDncWdw5XqZLmQai39tbpjwPriMRngzsmc51T89zQDy/19",
     mimeType: "image/png",
     mediaType: NFTMediaType.IMAGE,
+    updated: true,
 }

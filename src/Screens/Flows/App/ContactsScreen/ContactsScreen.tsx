@@ -11,6 +11,7 @@ import {
     BaseTouchableBox,
     BaseView,
     DeleteConfirmationBottomSheet,
+    DeleteUnderlay,
     Layout,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -29,7 +30,6 @@ import {
     AddContactButton,
     ContactDetailBox,
     ContactManagementBottomSheet,
-    UnderlayLeft,
 } from "./Components"
 
 const underlaySnapPoints = [58]
@@ -96,13 +96,10 @@ export const ContactsScreen = () => {
         })
     }, [])
 
-    const onDeleteContactPress = useCallback(
-        (address: string) => {
-            setSelectedContactAddress(address)
-            openRemoveContactSheet()
-        },
-        [openRemoveContactSheet],
-    )
+    const onClickTrashIcon = useCallback(() => {
+        closeOtherSwipeableItems("") // Pass an empty string to close all items
+        openRemoveContactSheet()
+    }, [closeOtherSwipeableItems, openRemoveContactSheet])
 
     const onEditContactPress = useCallback(
         (name: string, address: string) => {
@@ -141,6 +138,7 @@ export const ContactsScreen = () => {
 
     const onSwipeableItemChange = useCallback(
         (address: string) => {
+            setSelectedContactAddress(address)
             closeOtherSwipeableItems(address)
         },
         [closeOtherSwipeableItems],
@@ -199,8 +197,8 @@ export const ContactsScreen = () => {
                                                 )
                                         }}
                                         renderUnderlayLeft={() => (
-                                            <UnderlayLeft
-                                                onDelete={onDeleteContactPress}
+                                            <DeleteUnderlay
+                                                onPress={onClickTrashIcon}
                                             />
                                         )}
                                         snapPointsLeft={underlaySnapPoints}>
@@ -227,13 +225,13 @@ export const ContactsScreen = () => {
     }, [
         contacts,
         contactsListSeparator,
-        isListScrollable,
-        onDeleteContactPress,
-        onEditContactPress,
-        onSwipeableItemChange,
         onViewableItemsChanged,
-        registerSwipeableItemRef,
         viewabilityConfig,
+        isListScrollable,
+        onEditContactPress,
+        registerSwipeableItemRef,
+        onSwipeableItemChange,
+        onClickTrashIcon,
     ])
 
     // [End] Render sub components

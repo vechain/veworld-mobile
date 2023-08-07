@@ -37,10 +37,7 @@ When(
     { timeout: -1 },
     async (token: string, token2: string) => {
         await clickByText(token)
-        await scrollUntilTextVisible(
-            token2,
-            "ManageTokenScreen_ScrollView_tokensScrollView",
-        )
+        await scrollUntilTextVisible(token2, "Layout_ScrollView")
         await clickByText(token2)
     },
 )
@@ -147,6 +144,7 @@ When(
     async (token1: string) => {
         await clickByText("Manage custom tokens")
         await swipeLeftByText(token1)
+        await clickById("DeleteUnderlay_DeleteIcon")
         await clickByText("REMOVE")
         await goBack()
     },

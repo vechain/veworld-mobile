@@ -13,11 +13,20 @@ export const selectBlackListedCollections = createSelector(
     selectSelectedNetwork,
     selectSelectedAccount,
     (state, network, account) => {
+        const normalizedAcct = HexUtils.normalize(account.address)
         return (
-            state.blackListedCollectionsPerAccount[network.type][
-                account.address
-            ]?.collections || []
+            state.blackListedCollectionsPerAccount[network.type][normalizedAcct]
+                ?.collections ?? []
         )
+    },
+)
+
+export const selectAllNFTCollections = createSelector(
+    selectNftState,
+    selectSelectedAccount,
+    (state, account) => {
+        const normalizedAcct = HexUtils.normalize(account.address)
+        return state.collectionsPerAccount[normalizedAcct]?.collections
     },
 )
 
@@ -63,6 +72,11 @@ export const selectNftCollections = createSelector(
     },
 )
 
+export const selectNftCollectionsWithoutMetadata = createSelector(
+    selectNftCollections,
+    collections => collections?.collections?.filter(col => !col.updated) ?? [],
+)
+
 export const selectCollectionRegistryInfo = createSelector(
     selectNftState,
     selectSelectedNetwork,
@@ -101,6 +115,38 @@ export const selectCollectionWithContractAddress = createSelector(
             AddressUtils.compareAddresses(collection.address, contractAddress),
         )
     },
+)
+
+export const selectAllVisibleNFTs = createSelector(
+    selectNftState,
+    selectSelectedAccount,
+    selectBlackListedCollections,
+    (state, account, blackListedCollections) => {
+        const normalizedAcct = HexUtils.normalize(account.address)
+        const blackListedAddresses = blackListedCollections.map(col =>
+            HexUtils.normalize(col.address),
+        )
+
+        const nftsForUser = state.NFTsPerAccount[normalizedAcct]
+        if (!nftsForUser) return []
+        return (
+            Object.values(nftsForUser)?.reduce((prev, curr) => {
+                return prev.concat(
+                    curr.NFTs.filter(
+                        nft =>
+                            blackListedAddresses.indexOf(
+                                HexUtils.normalize(nft.address),
+                            ) === -1,
+                    ),
+                )
+            }, [] as NonFungibleToken[]) ?? []
+        )
+    },
+)
+
+export const selectAllVisibleNFTsWithoutMetadata = createSelector(
+    selectAllVisibleNFTs,
+    allVisible => allVisible.filter(nft => !nft.updated),
 )
 
 export const selectNFTWithAddressAndTokenId = createSelector(
@@ -146,7 +192,7 @@ export const selectNFTsForCollection = createSelector(
     },
 )
 
-export const selectBlackListedCollectionByAddress = createSelector(
+export const selectBlacklistedCollectionByAddress = createSelector(
     [
         selectNftState,
         selectBlackListedCollections,
@@ -158,11 +204,29 @@ export const selectBlackListedCollectionByAddress = createSelector(
         ),
 )
 
+export const isBlacklistedCollection = createSelector(
+    [
+        selectBlackListedCollections,
+        (state, collectionAddress: string) => collectionAddress,
+    ],
+    (blackListedCollections, collectionAddress: string) => {
+        return (
+            blackListedCollections.findIndex(col =>
+                AddressUtils.compareAddresses(col.address, collectionAddress),
+            ) !== -1
+        )
+    },
+)
+
 // HELPERS
 function removeMatchingElements<T extends NonFungibleTokenCollection>(
     elLeft?: T[],
     elRight?: T[],
 ) {
-    const elementsToRemove = elRight?.map(obj => obj.address)
-    return elLeft?.filter(obj => !elementsToRemove?.includes(obj.address))
+    const elementsToRemove = elRight?.map(obj =>
+        HexUtils.normalize(obj.address),
+    )
+    return elLeft?.filter(
+        obj => !elementsToRemove?.includes(HexUtils.normalize(obj.address)),
+    )
 }

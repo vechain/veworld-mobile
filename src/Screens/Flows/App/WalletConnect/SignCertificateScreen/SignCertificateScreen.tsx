@@ -8,6 +8,7 @@ import {
     BaseText,
     BaseView,
     CloseModalButton,
+    RequireUserPassword,
     useWalletConnect,
 } from "~Components"
 import { blake2b256, Certificate } from "thor-devkit"
@@ -116,14 +117,10 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     ),
                 )
 
-                dispatch(setIsAppLoading(true))
-
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
                 error("SignMessageScreen:handleAccept", err)
-
-                dispatch(setIsAppLoading(true))
 
                 await WalletConnectResponseUtils.signMessageRequestErrorResponse(
                     {
@@ -132,6 +129,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         LL,
                     },
                 )
+            } finally {
+                dispatch(setIsAppLoading(false))
             }
 
             onClose()
@@ -164,7 +163,9 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     }, [requestEvent, track, onClose, web3Wallet, LL])
 
     const {
-        ConfirmIdentityBottomSheet,
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
     } = useCheckIdentity({
@@ -239,7 +240,11 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     />
                 </BaseView>
             </ScrollView>
-            <ConfirmIdentityBottomSheet />
+            <RequireUserPassword
+                isOpen={isPasswordPromptOpen}
+                onClose={handleClosePasswordModal}
+                onSuccess={onPasswordSuccess}
+            />
         </BaseSafeArea>
     )
 }

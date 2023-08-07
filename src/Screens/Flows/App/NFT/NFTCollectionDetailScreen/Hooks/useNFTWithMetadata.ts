@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import {
     selectNFTsForCollection,
     selectNftNetworkingSideEffects,
@@ -7,6 +7,7 @@ import {
 } from "~Storage/Redux"
 import { usePagination } from "../../usePagination"
 import { useNFTs } from "~Hooks"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 
 export const useNFTWithMetadata = (
     collectionAddress: string,
@@ -29,12 +30,20 @@ export const useNFTWithMetadata = (
         selectNftNetworkingSideEffects,
     )
 
-    const fetchMoreNFTs = useCallback(() => {
-        if (onEndReachedCalledDuringMomentum) {
-            fetchWithPagination(
-                nftForCollection?.pagination.totalElements,
+    const hasNext = useMemo(
+        () => nftForCollection?.pagination.hasNext ?? false,
+        [nftForCollection?.pagination.hasNext],
+    )
+
+    const fetchMoreNFTs = useCallback(async () => {
+        if (
+            onEndReachedCalledDuringMomentum &&
+            !nftNetworkingSideEffects.isLoading
+        ) {
+            await fetchWithPagination(
+                nftForCollection?.pagination,
                 nftForCollection?.NFTs?.length,
-                nftNetworkingSideEffects.isLoading,
+                NFT_PAGE_SIZE,
                 async page => {
                     await loadNFTsForCollection(collectionAddress, page)
                 },
@@ -47,7 +56,7 @@ export const useNFTWithMetadata = (
         fetchWithPagination,
         loadNFTsForCollection,
         nftForCollection?.NFTs?.length,
-        nftForCollection?.pagination.totalElements,
+        nftForCollection?.pagination,
         nftNetworkingSideEffects.isLoading,
         onEndReachedCalledDuringMomentum,
         setEndReachedCalledDuringMomentum,
@@ -68,8 +77,6 @@ export const useNFTWithMetadata = (
         fetchMoreNFTs,
         isLoading: nftNetworkingSideEffects.isLoading,
         error: nftNetworkingSideEffects.error,
-        hasNext:
-            nftForCollection?.pagination?.totalElements !==
-            nftForCollection?.NFTs?.length,
+        hasNext,
     }
 }

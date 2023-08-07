@@ -1,14 +1,19 @@
 import { useCallback, useEffect } from "react"
 import { useThor } from "~Components"
-import { NETWORK_TYPE, NonFungibleTokenCollection } from "~Model"
+import { NonFungibleTokenCollection } from "~Model"
 import {
     GithubCollectionResponse,
     getContractAddresses,
+    getName,
     getNftsForContract,
+    getSymbol,
+    getTokenTotalSupply,
     getTokenURI,
 } from "~Networking"
 import {
     clearNFTCache,
+    selectNftCollectionsWithoutMetadata,
+    selectSelectedAccountAddress,
     selectSelectedNetwork,
     setCollections,
     setNetworkingSideEffects,
@@ -16,16 +21,17 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { MediaUtils, URIUtils, error } from "~Utils"
+import { MediaUtils, URIUtils, debug, error } from "~Utils"
 import {
-    parseCollectionMetadataFromRegistry,
-    parseCollectionMetadataWithoutRegistry,
+    initCollectionMetadataFromRegistry,
+    initCollectionMetadataWithoutRegistry,
 } from "./Helpers"
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useTheme } from "~Hooks"
-import { fetchMetadata } from "./fetchMeta"
+import { useLazyLoader } from "./useLazyLoader"
+import { useTokenMetadata } from "~Hooks/useTokenMetadata"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -50,6 +56,9 @@ export const useNFTCollections = () => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
+    const currentAddress = useAppSelector(selectSelectedAccountAddress)
+    const nftCollections = useAppSelector(selectNftCollectionsWithoutMetadata)
+    const { fetchMetadata } = useTokenMetadata()
 
     const theme = useTheme()
 
@@ -59,70 +68,78 @@ export const useNFTCollections = () => {
     }, [dispatch, network])
 
     const lazyLoadMetadata = useCallback(
-        async (
-            networkType: NETWORK_TYPE,
-            address: string,
-            _nftCollections: NonFungibleTokenCollection[],
-        ) => {
-            await Promise.all(
-                _nftCollections.map(async collection => {
-                    if (MediaUtils.isDefaultImage(collection.image)) {
-                        const { data } = await getNftsForContract(
-                            networkType,
-                            collection.address,
-                            address,
-                            1,
-                            0,
-                        )
+        async (collection: NonFungibleTokenCollection) => {
+            // Exit if currentAddress.address is not set
+            if (!currentAddress) return
 
-                        if (data.length === 0) return
+            debug(`Lazy loading metadata for collection ${collection.address}`)
 
-                        const tokenURI = await getTokenURI(
-                            data[0].tokenId,
-                            collection.address,
-                            thor,
-                        )
+            const { data, pagination } = await getNftsForContract(
+                network.type,
+                collection.address,
+                currentAddress,
+                1,
+                0,
+            )
+            if (data.length === 0) return
 
-                        const tokenMetadata = await fetchMetadata(tokenURI)
-                        const image = URIUtils.convertUriToUrl(
-                            tokenMetadata?.image ?? collection.image,
-                        )
-                        const mediaType = await MediaUtils.resolveMediaType(
-                            image,
-                            collection.mimeType,
-                        )
+            const tokenURI = await getTokenURI(
+                data[0].tokenId,
+                collection.address,
+                thor,
+            )
 
-                        if (tokenMetadata) {
-                            const updated = {
-                                ...collection,
-                                image,
-                                mediaType,
-                                name: tokenMetadata?.name ?? collection.name,
-                                description:
-                                    tokenMetadata?.description ??
-                                    collection.description,
-                            }
-                            dispatch(
-                                updateCollection({
-                                    currentAccountAddress: address,
-                                    collection: updated,
-                                }),
-                            )
-                        }
-                    }
+            const tokenMetadata = await fetchMetadata(tokenURI)
+            const name =
+                tokenMetadata?.name ?? (await getName(collection.address, thor))
+            const image = URIUtils.convertUriToUrl(
+                tokenMetadata?.image ?? collection.image,
+            )
+            const mediaType = await MediaUtils.resolveMediaType(
+                image,
+                collection.mimeType,
+            )
+            const description =
+                tokenMetadata?.description ?? collection.description
+
+            const updated = {
+                ...collection,
+                balanceOf: pagination.totalElements,
+                hasCount: pagination.hasCount,
+                image,
+                mediaType,
+                name,
+                description,
+                updated: true,
+                symbol: await getSymbol(collection.address, thor),
+                totalSupply: await getTokenTotalSupply(
+                    collection.address,
+                    thor,
+                ),
+            }
+
+            dispatch(
+                updateCollection({
+                    currentAccountAddress: currentAddress,
+                    collection: updated,
                 }),
             )
         },
-        [dispatch, thor],
+        [currentAddress, dispatch, fetchMetadata, network.type, thor],
     )
+
+    useLazyLoader({
+        payload: nftCollections,
+        loader: lazyLoadMetadata,
+    })
 
     const loadCollections = useCallback(
         async (
-            selectedAccount: string,
             registryInfo: GithubCollectionResponse[],
             _page: number,
             _resultsPerPage: number = NFT_PAGE_SIZE,
         ) => {
+            if (!currentAddress) return
             dispatch(
                 setNetworkingSideEffects({ isLoading: true, error: undefined }),
             )
@@ -132,7 +149,7 @@ export const useNFTCollections = () => {
                 const { data: contractsForNFTs, pagination } =
                     await getContractAddresses(
                         network.type,
-                        selectedAccount,
+                        currentAddress,
                         _resultsPerPage,
                         _page,
                     )
@@ -150,36 +167,33 @@ export const useNFTCollections = () => {
 
                 // Parse collection metadata from registry info or the chain if needed
                 const _nftCollections: NonFungibleTokenCollection[] =
-                    await Promise.all(
-                        contractsForNFTs.map(async collection => {
-                            const regInfo = registryInfo.find(col =>
-                                compareAddresses(col.address, collection),
+                    contractsForNFTs.map(collection => {
+                        const regInfo = registryInfo.find(col =>
+                            compareAddresses(col.address, collection),
+                        )
+                        if (regInfo) {
+                            return initCollectionMetadataFromRegistry(
+                                network.type,
+                                currentAddress,
+                                collection,
+                                regInfo,
+                                LL.COMMON_NOT_AVAILABLE(),
                             )
-                            if (regInfo) {
-                                return parseCollectionMetadataFromRegistry(
-                                    network.type,
-                                    selectedAccount,
-                                    collection,
-                                    regInfo,
-                                    thor,
-                                )
-                            } else {
-                                return parseCollectionMetadataWithoutRegistry(
-                                    network.type,
-                                    selectedAccount,
-                                    collection,
-                                    thor,
-                                    LL.COMMON_NOT_AVAILABLE(),
-                                    theme.isDark,
-                                )
-                            }
-                        }),
-                    )
+                        } else {
+                            return initCollectionMetadataWithoutRegistry(
+                                network.type,
+                                currentAddress,
+                                collection,
+                                LL.COMMON_NOT_AVAILABLE(),
+                                theme.isDark,
+                            )
+                        }
+                    })
 
                 // set collections to store
                 dispatch(
                     setCollections({
-                        currentAccountAddress: selectedAccount,
+                        currentAccountAddress: currentAddress,
                         collectionData: {
                             collections: _nftCollections,
                             pagination,
@@ -193,8 +207,6 @@ export const useNFTCollections = () => {
                         error: undefined,
                     }),
                 )
-
-                lazyLoadMetadata(network.type, selectedAccount, _nftCollections)
             } catch (e: unknown) {
                 dispatch(
                     setNetworkingSideEffects({
@@ -205,7 +217,7 @@ export const useNFTCollections = () => {
                 error("useNFTCollections", e)
             }
         },
-        [LL, dispatch, lazyLoadMetadata, network.type, theme.isDark, thor],
+        [LL, dispatch, currentAddress, network.type, theme.isDark],
     )
 
     return { loadCollections }

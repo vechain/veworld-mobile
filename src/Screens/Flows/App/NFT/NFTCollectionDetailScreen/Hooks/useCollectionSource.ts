@@ -2,7 +2,7 @@ import { isEmpty } from "lodash"
 import { useMemo } from "react"
 
 import {
-    selectBlackListedCollectionByAddress,
+    selectBlacklistedCollectionByAddress,
     selectCollectionWithContractAddress,
     useAppSelector,
 } from "~Storage/Redux"
@@ -13,7 +13,7 @@ export const useCollectionSource = (collectionAddress: string) => {
     )
 
     const blacklistedCollection = useAppSelector(state =>
-        selectBlackListedCollectionByAddress(state, collectionAddress),
+        selectBlacklistedCollectionByAddress(state, collectionAddress),
     )
 
     const anyCollection = useMemo(() => {

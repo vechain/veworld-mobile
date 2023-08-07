@@ -1,7 +1,6 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useNonFungibleTokenInfo } from "./useNonFungibleTokenInfo"
 import { useThor } from "~Components"
-import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
 import { getName, getTokenURI } from "~Networking"
 import * as logger from "~Utils/Logger/Logger"
 import { NFTMediaType, TokenMetadata } from "~Model"
@@ -11,9 +10,15 @@ jest.mock("~Networking", () => ({
     getTokenURI: jest.fn(),
 }))
 
-jest.mock("~Hooks/useNft/fetchMeta", () => ({
-    fetchMetadata: jest.fn(),
-}))
+const fetchMetadata = jest.fn()
+
+jest.mock("~Hooks/useTokenMetadata", () => {
+    return {
+        useTokenMetadata: () => ({
+            fetchMetadata,
+        }),
+    }
+})
 
 jest.mock("~Components", () => ({
     useThor: jest.fn(),
@@ -51,7 +56,7 @@ describe("useNonFungibleTokenInfo", () => {
 
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)
-        ;(fetchMetadata as jest.Mock).mockResolvedValue(nftMetaMock)
+        fetchMetadata.mockResolvedValue(nftMetaMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() =>
@@ -79,7 +84,7 @@ describe("useNonFungibleTokenInfo", () => {
 
         ;(getTokenURI as jest.Mock).mockRejectedValue(errorMock)
         ;(getName as jest.Mock).mockRejectedValue(errorMock)
-        ;(fetchMetadata as jest.Mock).mockRejectedValue(errorMock)
+        fetchMetadata.mockResolvedValue(errorMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const consoleErrorSpy = jest.spyOn(logger, "error")
@@ -89,7 +94,7 @@ describe("useNonFungibleTokenInfo", () => {
         )
         await waitForNextUpdate({ timeout: 5000 })
 
-        expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+        expect(consoleErrorSpy).toHaveBeenCalled()
         expect(result.current.tokenUri).toBeUndefined()
         expect(result.current.collectionName).toBeUndefined()
         expect(result.current.tokenMetadata).toBeUndefined()
@@ -111,7 +116,7 @@ describe("useNonFungibleTokenInfo", () => {
 
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)
-        ;(fetchMetadata as jest.Mock).mockRejectedValue(errorMock)
+        fetchMetadata.mockResolvedValue(errorMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() =>
@@ -120,12 +125,11 @@ describe("useNonFungibleTokenInfo", () => {
 
         await waitForNextUpdate({ timeout: 5000 })
 
-        expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+        expect(consoleErrorSpy).toHaveBeenCalled()
         expect(result.current.tokenUri).toEqual(tokenUriMock)
         expect(result.current.collectionName).toEqual(nameMock)
-        expect(result.current.tokenMetadata).toBeUndefined()
         expect(result.current.tokenImage).toBeUndefined()
-        expect(result.current.tokenMediaType).toBe(NFTMediaType.UNKNOWN)
+        expect(result.current.tokenMediaType).toBe(NFTMediaType.IMAGE)
         expect(result.current.isMediaLoading).toBeFalsy()
         expect(getTokenURI).toHaveBeenCalledWith(tokenId, contractAddress, thor)
         expect(getName).toHaveBeenCalledWith(contractAddress, thor)

@@ -2,20 +2,16 @@ import React, { useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { URIUtils } from "~Utils"
 import {
+    BaseBottomSheet,
+    BaseBottomSheetTextInput,
     BaseButton,
     BaseSpacer,
     BaseText,
     BaseView,
     ScrollViewWithFooter,
-    BaseBottomSheet,
-    BaseBottomSheetTextInput,
+    useThor,
 } from "~Components"
-import {
-    addDelegationUrl,
-    selectDelegationUrls,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { addDelegationUrl, useAppDispatch } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
 const snapPoints = ["50%"]
@@ -30,12 +26,10 @@ export const AddUrlBottomSheet = React.forwardRef<
 >(({ handleClose }, ref) => {
     const [newUrl, setNewUrl] = useState("")
     const dispatch = useAppDispatch()
-    const delegationUrls = useAppSelector(selectDelegationUrls)
     const { LL } = useI18nContext()
+    const thor = useThor()
     const handleAddUrl = () => {
-        if (!delegationUrls.includes(newUrl)) {
-            dispatch(addDelegationUrl(newUrl))
-        }
+        dispatch(addDelegationUrl({ url: newUrl, genesisId: thor.genesis.id }))
         setNewUrl("")
         handleClose()
     }

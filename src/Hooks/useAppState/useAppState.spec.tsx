@@ -13,9 +13,9 @@ describe("useAppState", () => {
         )
         const { result } = renderHook(() => useAppState())
 
-        expect(result.current[0]).toBe("unknown")
-        expect(result.current[1]).toBe("active")
+        expect(result.current.previousState).toBe("unknown")
+        expect(result.current.currentState).toBe("active")
         act(() => addEventListener("background"))
-        expect(result.current[1]).toBe("background")
+        expect(result.current.currentState).toBe("background")
     })
 })

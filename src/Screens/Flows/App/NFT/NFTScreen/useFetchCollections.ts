@@ -1,18 +1,16 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { useNFTCollections } from "~Hooks"
-import { usePagination } from "../usePagination"
 import {
-    selectBlackListedCollections,
+    selectAllNFTCollections,
     selectCollectionRegistryInfo,
     selectNftCollections,
     selectNftNetworkingSideEffects,
-    selectSelectedAccount,
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
 import { isEmpty } from "lodash"
-
-const FIRST_TIME_COLLECTIONS_TO_FETCH = 10
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { usePagination } from "../usePagination"
 
 export const useFetchCollections = (
     onEndReachedCalledDuringMomentum: boolean,
@@ -23,87 +21,62 @@ export const useFetchCollections = (
     const { loadCollections } = useNFTCollections()
     const { fetchWithPagination } = usePagination()
     const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
     const registryInfo = useAppSelector(selectCollectionRegistryInfo)
+    const allNFTCollections = useAppSelector(selectAllNFTCollections)
     const nftCollections = useAppSelector(selectNftCollections)
-    const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
     const nftNetworkingSideEffects = useAppSelector(
         selectNftNetworkingSideEffects,
     )
 
-    const [collections, setCollections] = useState(
-        nftCollections?.collections ?? [],
+    const hasNext = useMemo(
+        () =>
+            (allNFTCollections?.length ?? 0) <
+            nftCollections?.pagination.totalElements,
+
+        [allNFTCollections?.length, nftCollections?.pagination.totalElements],
     )
 
     useEffect(() => {
-        setCollections(nftCollections?.collections ?? [])
-    }, [nftCollections?.collections, nftCollections?.collections?.length])
-
-    useEffect(() => {
-        if (
-            isEmpty(nftCollections?.collections) &&
-            registryInfo !== undefined
-        ) {
-            setCollections([])
-            loadCollections(
-                selectedAccount.address,
-                registryInfo,
-                0,
-                FIRST_TIME_COLLECTIONS_TO_FETCH,
-            )
+        if (isEmpty(allNFTCollections) && registryInfo !== undefined) {
+            loadCollections(registryInfo, 0)
         }
+    }, [network, registryInfo, loadCollections, allNFTCollections])
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        selectedAccount,
-        network,
-        registryInfo,
-        loadCollections,
-        nftCollections?.collections?.length,
-    ])
-
-    const fetchMoreCollections = useCallback(() => {
-        if (onEndReachedCalledDuringMomentum) {
+    const fetchMoreCollections = useCallback(async () => {
+        if (
+            onEndReachedCalledDuringMomentum &&
+            !nftNetworkingSideEffects?.isLoading
+        ) {
             fetchWithPagination(
-                nftCollections?.pagination?.totalElements,
-                nftCollections?.collections?.length,
-                nftNetworkingSideEffects?.isLoading,
+                nftCollections?.pagination,
+                allNFTCollections?.length ?? 0,
+                NFT_PAGE_SIZE,
                 async page => {
-                    await loadCollections(
-                        selectedAccount.address,
-                        registryInfo,
-                        page,
-                    )
+                    await loadCollections(registryInfo, page)
                 },
-                blackListedCollections?.length,
             )
 
             setEndReachedCalledDuringMomentum(false)
         }
     }, [
-        blackListedCollections?.length,
+        allNFTCollections?.length,
         fetchWithPagination,
         loadCollections,
-        nftCollections?.collections?.length,
-        nftCollections?.pagination?.totalElements,
+        nftCollections?.pagination,
         nftNetworkingSideEffects?.isLoading,
         onEndReachedCalledDuringMomentum,
         registryInfo,
-        selectedAccount.address,
         setEndReachedCalledDuringMomentum,
     ])
 
     return {
-        selectedAccount,
         network,
         registryInfo,
         fetchMoreCollections,
-        hasNext:
-            nftCollections?.pagination.totalElements !==
-            collections.length + blackListedCollections?.length,
+        hasNext,
         isLoading: nftNetworkingSideEffects.isLoading,
         error: nftNetworkingSideEffects.error,
-        collections,
+        collections: nftCollections?.collections ?? [],
     }
 }

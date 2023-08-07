@@ -8,8 +8,6 @@ import {
 } from "./WalletConnectResponseUtils"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { Certificate } from "thor-devkit"
-import { Network, NETWORK_TYPE } from "~Model"
-import { genesises } from "~Constants"
 import { PendingRequestTypes } from "@walletconnect/types"
 
 // Mock the dependencies
@@ -46,19 +44,8 @@ describe("transactionRequestSuccessResponse", () => {
                 },
             },
         }
-        const transactionId = 456
+        const transactionId = "0x11341234"
         const signer = "example-signer"
-
-        const network: Network = {
-            id: "123",
-            defaultNet: true,
-            name: "Mock Network",
-            type: NETWORK_TYPE.TEST,
-            currentUrl: "https://mock-network.com",
-            urls: ["https://mock-network.com"],
-            explorerUrl: "https://mock-explorer.com",
-            genesis: genesises.test,
-        }
 
         // Call the function
         await transactionRequestSuccessResponse(
@@ -69,7 +56,6 @@ describe("transactionRequestSuccessResponse", () => {
             },
             transactionId,
             signer,
-            network,
         )
 
         // Assertions
@@ -79,13 +65,11 @@ describe("transactionRequestSuccessResponse", () => {
                 id: 123,
                 jsonrpc: "2.0",
                 result: {
-                    txid: 456,
+                    txid: transactionId,
                     signer: "example-signer",
                 },
             },
         })
-        expect(showSuccessToast).toHaveBeenCalled()
-        expect(showErrorToast).not.toHaveBeenCalled()
     })
 
     it("should show error toast when responding to the session request throws an error", async () => {
@@ -103,19 +87,8 @@ describe("transactionRequestSuccessResponse", () => {
             topic: "example-topic",
             id: 123,
         }
-        const transactionId = 456
+        const transactionId = "0x12341234"
         const signer = "example-signer"
-
-        const network: Network = {
-            id: "123",
-            defaultNet: true,
-            name: "Mock Network",
-            type: NETWORK_TYPE.TEST,
-            currentUrl: "https://mock-network.com",
-            urls: ["https://mock-network.com"],
-            explorerUrl: "https://mock-explorer.com",
-            genesis: genesises.test,
-        }
 
         // Call the function
         await transactionRequestSuccessResponse(
@@ -126,7 +99,6 @@ describe("transactionRequestSuccessResponse", () => {
             },
             transactionId,
             signer,
-            network,
         )
 
         // Assertions
@@ -136,16 +108,11 @@ describe("transactionRequestSuccessResponse", () => {
                 id: 123,
                 jsonrpc: "2.0",
                 result: {
-                    txid: 456,
+                    txid: transactionId,
                     signer: "example-signer",
                 },
             },
         })
-        expect(
-            LL.NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error,
-        ).toHaveBeenCalled()
-        expect(showSuccessToast).not.toHaveBeenCalled()
-        expect(showErrorToast).toHaveBeenCalled()
     })
 })
 

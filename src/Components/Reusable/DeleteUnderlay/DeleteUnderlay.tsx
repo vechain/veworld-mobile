@@ -8,23 +8,18 @@ type Props = { onPress?: () => void }
 export const DeleteUnderlay: React.FC<Props> = ({ onPress }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const handlePress = () => {
-        onPress && onPress()
-    }
-
     return (
         <BaseView style={styles.underlayContainer}>
-            <BaseView style={styles.underlayLeft}>
-                <BaseTouchable action={handlePress}>
-                    <BaseIcon
-                        name={"delete"}
-                        size={24}
-                        bg={theme.colors.danger}
-                        color={theme.colors.card}
-                        style={styles.deleteIcon}
-                    />
-                </BaseTouchable>
-            </BaseView>
+            <BaseTouchable action={onPress} style={styles.underlayLeft}>
+                <BaseIcon
+                    name={"delete"}
+                    size={24}
+                    bg={theme.colors.danger}
+                    color={theme.colors.card}
+                    style={styles.deleteIcon}
+                    testID="DeleteUnderlay_DeleteIcon"
+                />
+            </BaseTouchable>
         </BaseView>
     )
 }

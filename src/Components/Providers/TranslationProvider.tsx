@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const TranslationProvider = ({ children }: Props) => {
-    const [, currentState] = useAppState()
+    const { currentState } = useAppState()
     const [localeLoaded, setLocaleLoaded] = useState<Locales | null>(null)
 
     useEffect(() => {

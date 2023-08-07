@@ -1,7 +1,7 @@
-import { VET, VTHO, abis } from "~Constants"
+import { abis, VET, VTHO } from "~Constants"
 import axios from "axios"
 import { error } from "~Utils/Logger"
-import { Network, Balance } from "~Model"
+import { Balance, Network } from "~Model"
 import AddressUtils from "../AddressUtils"
 import FormattingUtils from "../FormattingUtils"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
@@ -46,7 +46,7 @@ const getBalanceFromBlockchain = async (
             timeUpdated: new Date().toISOString(),
         }
     } catch (e) {
-        error(e)
+        error("getBalanceFromBlockchain", e)
         throw new Error("Failed to get balance from external service")
     }
 }
@@ -122,7 +122,7 @@ const getTokenBalanceFromBlockchain = async (
 
         return res.decoded[0]
     } catch (e) {
-        error(e)
+        error("getTokenBalanceFromBlockchain", e)
         throw new Error(
             "Failed to get data from contract. Wrong network/ Contract address? ",
         )

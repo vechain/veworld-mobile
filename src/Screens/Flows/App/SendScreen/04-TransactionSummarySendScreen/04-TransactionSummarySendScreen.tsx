@@ -1,28 +1,19 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
-import {
-    useCheckIdentity,
-    useRenderGas,
-    useSignTransaction,
-    useTheme,
-    useTransactionGas,
-} from "~Hooks"
+import { useAnalyticTracking, useTheme, useTransactionScreen } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
-import { COLORS } from "~Constants"
+import { AnalyticsEvent, COLORS } from "~Constants"
 import {
-    AccountCard,
     AccountIcon,
-    BaseCard,
     BaseCardGroup,
     BaseIcon,
     BaseSpacer,
     BaseText,
     BaseView,
-    DelegationOptions,
-    FadeoutButton,
     Layout,
     LedgerBadge,
+    RequireUserPassword,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -30,6 +21,7 @@ import {
     Routes,
 } from "~Navigation"
 import {
+    addPendingTransferTransactionActivity,
     selectAccounts,
     selectCurrency,
     selectCurrencyExchangeRate,
@@ -42,10 +34,9 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { useDelegation } from "./Hooks"
-import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
-import { DelegationType } from "~Model/Delegation"
+import { DEVICE_TYPE } from "~Model"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
+import { Transaction } from "thor-devkit"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -53,135 +44,96 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const [loadingTransaction, setLoadingTransaction] = useState(false)
-
-    const nav = useNavigation()
-
     const { token, amount, address, initialRoute } = route.params
 
     const { LL } = useI18nContext()
-
     const theme = useTheme()
-
     const dispatch = useAppDispatch()
-
-    const account = useAppSelector(selectSelectedAccount)
-
-    const currency = useAppSelector(selectCurrency)
-
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol),
-    )
+    const track = useAnalyticTracking()
+    const nav = useNavigation()
 
     // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
     const accounts = useAppSelector(selectAccounts)
-
     const contacts = useAppSelector(selectKnownContacts)
+    const account = useAppSelector(selectSelectedAccount)
+    const currency = useAppSelector(selectCurrency)
+    const exchangeRate = useAppSelector(state =>
+        selectCurrencyExchangeRate(state, token.symbol),
+    )
+    const pendingTransaction = useAppSelector(state =>
+        selectPendingTx(state, token.address),
+    )
 
     const accountsAndContacts = useMemo(
         () => [...accounts, ...contacts],
         [accounts, contacts],
     )
 
-    const formattedFiatAmount = FormattingUtils.humanNumber(
-        FormattingUtils.convertToFiatBalance(
-            amount || "0",
-            exchangeRate?.rate || 1,
-            0,
-        ),
-        amount,
+    const formattedFiatAmount = useMemo(
+        () =>
+            FormattingUtils.humanNumber(
+                FormattingUtils.convertToFiatBalance(
+                    amount || "0",
+                    exchangeRate?.rate || 1,
+                    0,
+                ),
+                amount,
+            ),
+        [amount, exchangeRate],
     )
-
-    const pendingTransaction = useAppSelector(state =>
-        selectPendingTx(state, token.address),
-    )
-
-    const onTXFinish = useCallback(() => {
-        switch (initialRoute) {
-            case Routes.DISCOVER:
-                nav.navigate(Routes.DISCOVER)
-                break
-            case Routes.HOME:
-            default:
-                nav.navigate(Routes.HOME)
-                break
-        }
-        setLoadingTransaction(false)
-
-        dispatch(setIsAppLoading(false))
-    }, [dispatch, initialRoute, nav])
 
     const clauses = useMemo(
         () => prepareFungibleClause(amount, token, address),
         [amount, token, address],
     )
 
-    //build transaction
-    const { gas, loadingGas, setGasPayer } = useTransactionGas({
+    const onFinish = useCallback(
+        (success: boolean) => {
+            if (success) track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
+            else track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
+
+            dispatch(setIsAppLoading(false))
+
+            switch (initialRoute) {
+                case Routes.DISCOVER:
+                    nav.navigate(Routes.DISCOVER)
+                    break
+                case Routes.HOME:
+                default:
+                    nav.navigate(Routes.HOME)
+                    break
+            }
+        },
+        [track, dispatch, nav, initialRoute],
+    )
+
+    const onTransactionSuccess = useCallback(
+        async (transaction: Transaction) => {
+            dispatch(addPendingTransferTransactionActivity(transaction))
+            onFinish(true)
+        },
+        [dispatch, onFinish],
+    )
+
+    const onTransactionFailure = useCallback(() => {
+        onFinish(false)
+    }, [onFinish])
+
+    const {
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
+        Delegation,
+        RenderGas,
+        SubmitButton,
+    } = useTransactionScreen({
         clauses,
-    })
-    const {
-        setSelectedDelegationAccount,
-        setSelectedDelegationUrl,
-        setNoDelegation,
-        selectedDelegationOption,
-        selectedDelegationAccount,
-        selectedDelegationUrl,
-        isDelegated,
-    } = useDelegation({ setGasPayer })
-
-    const { signAndSendTransaction, navigateToLedger, buildTransaction } =
-        useSignTransaction({
-            gas,
-            clauses,
-            onTXFinish,
-            isDelegated,
-            selectedDelegationAccount,
-            selectedDelegationOption,
-            selectedDelegationUrl,
-            token,
-            initialRoute: Routes.HOME,
-            onError: () => setLoadingTransaction(false),
-        })
-
-    const { RenderGas, isThereEnoughGas } = useRenderGas({
-        loadingGas,
-        selectedDelegationOption,
-        gas,
-        tokenSymbol: token.symbol,
-        amount,
-        accountAddress: selectedDelegationAccount?.address || account.address,
+        onTransactionSuccess,
+        onTransactionFailure,
+        initialRoute: Routes.HOME,
     })
 
-    const {
-        ConfirmIdentityBottomSheet,
-        checkIdentityBeforeOpening,
-        isBiometricsEmpty,
-    } = useCheckIdentity({
-        onIdentityConfirmed: signAndSendTransaction,
-        onCancel: () => setLoadingTransaction(false),
-        allowAutoPassword: true,
-    })
-
-    const onSubmit = useCallback(async () => {
-        if (
-            account.device.type === DEVICE_TYPE.LEDGER &&
-            selectedDelegationOption !== DelegationType.ACCOUNT
-        ) {
-            const tx = buildTransaction()
-            await navigateToLedger(tx, account as LedgerAccountWithDevice)
-        } else {
-            await checkIdentityBeforeOpening()
-        }
-    }, [
-        buildTransaction,
-        account,
-        selectedDelegationOption,
-        navigateToLedger,
-        checkIdentityBeforeOpening,
-    ])
-
-    const receiverDetails = () => {
+    const ReceiverDetails = useCallback(() => {
         const receiverExists = accountsAndContacts.find(_account =>
             AddressUtils.compareAddresses(_account.address, address),
         )
@@ -221,10 +173,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 </BaseText>
             </BaseView>
         )
-    }
-
-    const continueButtonDisabled =
-        !isThereEnoughGas && selectedDelegationOption !== DelegationType.URL
+    }, [accountsAndContacts, address, accounts])
 
     return (
         <Layout
@@ -295,7 +244,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                                         <BaseView flexDirection="row">
                                             <AccountIcon address={address} />
                                             <BaseSpacer width={8} />
-                                            {receiverDetails()}
+                                            {ReceiverDetails()}
                                         </BaseView>
                                     </BaseView>
                                 ),
@@ -313,33 +262,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         </>
                     )}
 
-                    <ConfirmIdentityBottomSheet />
-
-                    <DelegationOptions
-                        selectedDelegationOption={selectedDelegationOption}
-                        setNoDelegation={setNoDelegation}
-                        setSelectedAccount={setSelectedDelegationAccount}
-                        selectedAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                        disabled={loadingTransaction}
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={handleClosePasswordModal}
+                        onSuccess={onPasswordSuccess}
                     />
-                    {selectedDelegationAccount && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <AccountCard account={selectedDelegationAccount} />
-                        </>
-                    )}
-                    {selectedDelegationUrl && (
-                        <>
-                            <BaseSpacer height={16} />
-                            <BaseCard>
-                                <BaseText py={8}>
-                                    {selectedDelegationUrl}
-                                </BaseText>
-                            </BaseCard>
-                        </>
-                    )}
+
+                    {Delegation()}
+
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="subTitleBold">
                         {LL.SEND_DETAILS()}
@@ -371,7 +301,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         {LL.SEND_GAS_FEE()}
                     </BaseText>
                     <BaseSpacer height={6} />
-                    {RenderGas}
+
+                    {RenderGas()}
+
                     <BaseSpacer height={12} />
                     <BaseSpacer
                         height={0.5}
@@ -388,22 +320,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                 </BaseView>
             }
-            footer={
-                <FadeoutButton
-                    title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                    action={onSubmit}
-                    disabled={
-                        continueButtonDisabled ||
-                        loadingTransaction ||
-                        loadingGas ||
-                        isBiometricsEmpty
-                    }
-                    isLoading={loadingTransaction || isBiometricsEmpty}
-                    bottom={0}
-                    mx={0}
-                    width={"auto"}
-                />
-            }
+            footer={SubmitButton()}
         />
     )
 }

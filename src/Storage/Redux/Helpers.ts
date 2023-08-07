@@ -2,18 +2,16 @@ import { warn } from "~Utils"
 import { encryptTransform, initEncryption } from "./EncryptionService"
 import { storage } from "./Storage"
 import {
-    CurrencySlice,
-    TokenSlice,
-    UserPreferencesSlice,
-    ConfigSlice,
-    DeviceSlice,
     AccountSlice,
-    NetworkSlice,
-    BalanceSlice,
-    ContactsSlice,
     ActivitiesSlice,
+    BalanceSlice,
+    ConfigSlice,
+    ContactsSlice,
+    CurrencySlice,
     DelegationSlice,
-    WalletConnectSessionsSlice,
+    DeviceSlice,
+    MetadataCacheSlice,
+    NetworkSlice,
     NftSlice,
     PendingSlice,
     resetAccountState,
@@ -25,13 +23,19 @@ import {
     resetCurrencyState,
     resetDelegationState,
     resetDeviceState,
+    resetMetadataCacheState,
     resetNetworkState,
     resetNftState,
+    resetPendingState,
     resetTokensState,
     resetUserPreferencesState,
     resetWalletConnectState,
-    resetPendingState,
+    TokenSlice,
+    UserPreferencesSlice,
+    WalletConnectSessionsSlice,
 } from "./Slices"
+import { migrationUpdates } from "~Storage/Redux/Migrations"
+import { createMigrate } from "redux-persist"
 
 export const nftPersistConfig = {
     key: NftSlice.name,
@@ -51,14 +55,14 @@ export const getPersistorConfig = async () => {
     const encryptor = encryptTransform({
         secretKey: key,
         onError: function (error) {
-            warn(error)
+            warn("encryptor", error)
         },
     })
 
-    const persistConfig = {
+    return {
         key: "root",
         storage,
-        version: 1,
+        version: 2,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,
@@ -73,11 +77,11 @@ export const getPersistorConfig = async () => {
             ActivitiesSlice.name,
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
+            MetadataCacheSlice.name,
         ],
+        migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
     }
-
-    return persistConfig
 }
 
 /**
@@ -85,11 +89,11 @@ export const getPersistorConfig = async () => {
  * Remember to add new reset actions here of any new persisted Slice.
  */
 export const resetActions = [
-    resetTokensState,
     resetCurrencyState,
-    resetAccountState,
     resetActivityState,
     resetBalancesState,
+    resetTokensState,
+    resetAccountState,
     resetCacheState,
     resetContactsState,
     resetDelegationState,
@@ -99,6 +103,7 @@ export const resetActions = [
     resetUserPreferencesState,
     resetWalletConnectState,
     resetPendingState,
+    resetMetadataCacheState,
 
     // Config reset always comes last
     resetConfigState,

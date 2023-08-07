@@ -7,7 +7,7 @@ import {
 } from "@walletconnect/types"
 import { IWeb3Wallet, Web3Wallet } from "@walletconnect/web3wallet"
 import { Network } from "~Model"
-import { error } from "~Utils/Logger"
+import { error, warn } from "~Utils/Logger"
 import { NavigationState } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import {
@@ -79,6 +79,21 @@ export function getRequestEventAttributes(
     }
 }
 
+export function getNameAndUrl(
+    web3Wallet?: IWeb3Wallet,
+    requestEvent?: PendingRequestTypes.Struct,
+): { name?: string; url?: string } {
+    if (!requestEvent || !web3Wallet) return {}
+
+    const { topic } = getRequestEventAttributes(requestEvent)
+
+    const session = web3Wallet.getActiveSessions()[topic]
+
+    if (!session) return {}
+
+    return getSessionRequestAttributes(session)
+}
+
 export function getSessionRequestAttributes(
     sessionRequest: SessionTypes.Struct,
 ) {
@@ -116,7 +131,7 @@ export function getSignCertOptions(
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
-        error("Failed to extract sign cert options", requestEvent, e)
+        warn("Failed to extract sign cert options", requestEvent, e)
         return {}
     }
 }
@@ -143,7 +158,7 @@ export function getSignCertMessage(
             payload,
         }
     } catch (e) {
-        error("Failed to extract sign cert message parameters", requestEvent, e)
+        warn("Failed to extract sign cert message parameters", requestEvent, e)
     }
 }
 
@@ -181,7 +196,7 @@ export function getSendTxOptions(
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
-        error("Failed to extract send tx options", requestEvent, e)
+        warn("Failed to extract send tx options", requestEvent, e)
         return {}
     }
 }

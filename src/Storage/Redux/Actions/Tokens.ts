@@ -3,15 +3,15 @@ import axios from "axios"
 import {
     COINGECKO_LIST,
     COINGECKO_MARKET_CHART_ENDPOINT,
-    EXCHANGE_CLIENT_AXIOS_OPTS,
-    COINGECKO_TOKEN_ENDPOINT,
-    getCoinGeckoIdBySymbol,
     COINGECKO_MARKET_INFO_ENDPOINT,
+    COINGECKO_TOKEN_ENDPOINT,
+    EXCHANGE_CLIENT_AXIOS_OPTS,
+    getCoinGeckoIdBySymbol,
     VET,
     VTHO,
 } from "~Constants"
-import { TokenUtils, error } from "~Utils"
-import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
+import { error, TokenUtils } from "~Utils"
+import { FungibleToken, Network, NETWORK_TYPE } from "~Model"
 import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
 import {
     setAssertDetailChartData,
@@ -25,8 +25,9 @@ import {
     RootState,
     TokenInfoResponse,
 } from "../Types"
-const allSettled = require("promise.allsettled")
 import { fetchExchangeRates } from "./Currency"
+
+const allSettled = require("promise.allsettled")
 
 type CoinMarketChartResponse = {
     prices: number[][]
@@ -79,7 +80,7 @@ export const fetchChartData =
                 dispatch(setAssertDetailChartData({ symbol, data: prices }))
             }
         } catch (e) {
-            error(e)
+            error("fetchChartData", e)
         }
     }
 
@@ -208,6 +209,6 @@ export const fetchVechainMarketInfo =
             const marketInfo = pricesResponse.data
             dispatch(setCoinMarketInfo({ data: marketInfo }))
         } catch (e) {
-            error(e)
+            error("fetchVechainMarketInfo", e)
         }
     }

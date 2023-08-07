@@ -26,7 +26,7 @@ export const useDelegation = ({ providedUrl, setGasPayer }: Props) => {
     const defaultDelegationAccount = useAppSelector(getDefaultDelegationAccount)
     const defaultDelegationUrl = useAppSelector(getDefaultDelegationUrl)
 
-    const handleSetSelectedDelegationUrl = async (url: string) => {
+    const handleSetSelectedDelegationUrl = (url: string) => {
         setSelectedDelegationUrl(url)
         setSelectedDelegationOption(DelegationType.URL)
     }

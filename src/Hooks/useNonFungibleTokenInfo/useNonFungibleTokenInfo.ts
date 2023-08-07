@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useThor } from "~Components"
-import { fetchMetadata } from "~Hooks/useNft/fetchMeta"
+import { useTokenMetadata } from "~Hooks/useTokenMetadata"
 import { NFTMediaType, TokenMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
 import { MediaUtils, URIUtils, error } from "~Utils"
@@ -29,6 +29,7 @@ export const useNonFungibleTokenInfo = (
     tokenId: string,
     contractAddress: string,
 ) => {
+    const { fetchMetadata } = useTokenMetadata()
     const [tokenUri, setTokenUri] = useState<string | undefined>()
     const [tokenMetadata, setTokenMetadata] = useState<
         TokenMetadata | undefined
@@ -66,7 +67,7 @@ export const useNonFungibleTokenInfo = (
             }
         }
         if (tokenId && contractAddress && thor) load()
-    }, [tokenId, contractAddress, thor])
+    }, [tokenId, contractAddress, thor, fetchMetadata])
 
     return {
         tokenMetadata,

@@ -27,8 +27,8 @@ export const mock_cart_data = [
 ]
 
 export const timelineDays = [
-    { label: "1D", value: 1, secondaryValue: "hourly" },
-    { label: "1W", value: 7, secondaryValue: "hourly" },
+    { label: "1W", value: 7, secondaryValue: "daily" },
     { label: "1M", value: 30, secondaryValue: "daily" },
     { label: "3M", value: 90, secondaryValue: "daily" },
+    { label: "6M", value: 180, secondaryValue: "daily" },
 ]

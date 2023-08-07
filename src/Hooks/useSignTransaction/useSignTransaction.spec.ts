@@ -1,14 +1,16 @@
 import { TestHelpers, TestWrapper } from "~Test"
-import { useSignTransaction } from "./useSignTransaction"
+import { SignStatus, useSignTransaction } from "./useSignTransaction"
 import { renderHook } from "@testing-library/react-hooks"
 import { DelegationType } from "~Model/Delegation"
-import { showErrorToast } from "~Components"
 import { CryptoUtils } from "~Utils"
 import axios from "axios"
+import { Routes } from "~Navigation"
+import { Transaction } from "thor-devkit"
 
 jest.mock("axios")
 
-const { vetTransaction1, wallet1, device1, account1D1 } = TestHelpers.data
+const { vetTransaction1, wallet1, device1, account1D1, wallet2 } =
+    TestHelpers.data
 
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     ...jest.requireActual("~Components/Base/BaseToast/BaseToast"),
@@ -17,6 +19,13 @@ jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     showWarningToast: jest.fn(),
 }))
 
+const defaultProps = {
+    buildTransaction: () => {
+        return vetTransaction1
+    },
+    initialRoute: Routes.HOME,
+    selectedDelegationOption: DelegationType.NONE,
+}
 describe("useSignTransaction", () => {
     beforeEach(() => {
         jest.clearAllMocks()
@@ -24,65 +33,41 @@ describe("useSignTransaction", () => {
 
     it("should render correctly", async () => {
         const { result, waitForNextUpdate } = renderHook(
-            () =>
-                useSignTransaction({
-                    clauses: vetTransaction1.body.clauses,
-                    isDelegated: false,
-                    onTXFinish: jest.fn(),
-                    selectedDelegationOption: DelegationType.NONE,
-                }),
+            () => useSignTransaction(defaultProps),
             { wrapper: TestWrapper },
         )
         await waitForNextUpdate({
             timeout: 5000,
         })
         expect(result.current).toEqual({
-            buildTransaction: expect.any(Function),
-            signTransaction: expect.any(Function),
-            signAndSendTransaction: expect.any(Function),
-            sendTransactionAndPerformUpdates: expect.any(Function),
             getUrlDelegationSignature: expect.any(Function),
+            getAccountDelegationSignature: expect.any(Function),
+            signTransaction: expect.any(Function),
             navigateToLedger: expect.any(Function),
         })
     })
 
     it("signAndSendTransaction - throws error (not mocked decryptWallet)", async () => {
         const { result, waitForNextUpdate } = renderHook(
-            () =>
-                useSignTransaction({
-                    clauses: vetTransaction1.body.clauses,
-                    isDelegated: false,
-                    onTXFinish: jest.fn(),
-                    selectedDelegationOption: DelegationType.NONE,
-                    onError: jest.fn(),
-                }),
+            () => useSignTransaction(defaultProps),
             { wrapper: TestWrapper },
         )
         await waitForNextUpdate({
             timeout: 5000,
         })
         expect(result.current).toEqual({
-            signTransaction: expect.any(Function),
-            signAndSendTransaction: expect.any(Function),
-            sendTransactionAndPerformUpdates: expect.any(Function),
             getUrlDelegationSignature: expect.any(Function),
+            getAccountDelegationSignature: expect.any(Function),
+            signTransaction: expect.any(Function),
             navigateToLedger: expect.any(Function),
-            buildTransaction: expect.any(Function),
         })
 
-        await result.current.signAndSendTransaction()
-        expect(showErrorToast).toHaveBeenCalled()
+        await expect(result.current.signTransaction()).rejects.toThrow()
     })
 
     it("signAndSendTransaction - no delegation works as expected", async () => {
         const { result, waitForNextUpdate } = renderHook(
-            () =>
-                useSignTransaction({
-                    clauses: vetTransaction1.body.clauses,
-                    isDelegated: false,
-                    onTXFinish: jest.fn(),
-                    selectedDelegationOption: DelegationType.NONE,
-                }),
+            () => useSignTransaction(defaultProps),
             { wrapper: TestWrapper },
         )
         await waitForNextUpdate({
@@ -90,23 +75,22 @@ describe("useSignTransaction", () => {
         })
 
         expect(result.current).toEqual({
-            signTransaction: expect.any(Function),
-            signAndSendTransaction: expect.any(Function),
-            sendTransactionAndPerformUpdates: expect.any(Function),
             getUrlDelegationSignature: expect.any(Function),
+            getAccountDelegationSignature: expect.any(Function),
+            signTransaction: expect.any(Function),
             navigateToLedger: expect.any(Function),
-            buildTransaction: expect.any(Function),
         })
         jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
             decryptedWallet: wallet1,
             encryptionKey: "encryptionKey",
         })
-        ;(axios.post as jest.Mock).mockResolvedValueOnce({
-            data: { id: vetTransaction1.id },
-            status: 200,
-        })
 
-        await result.current.signAndSendTransaction()
+        const signedTransaction =
+            (await result.current.signTransaction()) as Transaction
+
+        expect(signedTransaction).toBeInstanceOf(Transaction)
+        expect(signedTransaction.signature).toBeInstanceOf(Buffer)
+        expect(signedTransaction.signature?.length).toEqual(65)
     })
 
     describe("signAndSendTransaction - account delegation", () => {
@@ -114,9 +98,7 @@ describe("useSignTransaction", () => {
             const { result, waitForNextUpdate } = renderHook(
                 () =>
                     useSignTransaction({
-                        clauses: vetTransaction1.body.clauses,
-                        isDelegated: true,
-                        onTXFinish: jest.fn(),
+                        ...defaultProps,
                         selectedDelegationOption: DelegationType.ACCOUNT,
                         selectedDelegationAccount: {
                             ...account1D1,
@@ -130,32 +112,34 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
-                signTransaction: expect.any(Function),
-                signAndSendTransaction: expect.any(Function),
-                sendTransactionAndPerformUpdates: expect.any(Function),
                 getUrlDelegationSignature: expect.any(Function),
+                getAccountDelegationSignature: expect.any(Function),
+                signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
-                buildTransaction: expect.any(Function),
             })
-            jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
-                decryptedWallet: wallet1,
-                encryptionKey: "encryptionKey",
-            })
-            ;(axios.post as jest.Mock).mockResolvedValueOnce({
-                data: { id: vetTransaction1.id },
-                status: 200,
-            })
+            jest.spyOn(CryptoUtils, "decryptWallet")
+                .mockResolvedValue({
+                    decryptedWallet: wallet1,
+                    encryptionKey: "encryptionKey",
+                })
+                .mockResolvedValueOnce({
+                    decryptedWallet: wallet2,
+                    encryptionKey: "encryptionKey",
+                })
 
-            await result.current.signAndSendTransaction()
+            const signedTransaction =
+                (await result.current.signTransaction()) as Transaction
+
+            expect(signedTransaction).toBeInstanceOf(Transaction)
+            expect(signedTransaction.signature).toBeInstanceOf(Buffer)
+            expect(signedTransaction.signature?.length).toEqual(130)
         })
 
         it("no account throws error", async () => {
             const { result, waitForNextUpdate } = renderHook(
                 () =>
                     useSignTransaction({
-                        clauses: vetTransaction1.body.clauses,
-                        isDelegated: true,
-                        onTXFinish: jest.fn(),
+                        ...defaultProps,
                         selectedDelegationOption: DelegationType.ACCOUNT,
                     }),
                 { wrapper: TestWrapper },
@@ -165,58 +149,18 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
-                signTransaction: expect.any(Function),
-                signAndSendTransaction: expect.any(Function),
-                sendTransactionAndPerformUpdates: expect.any(Function),
                 getUrlDelegationSignature: expect.any(Function),
+                getAccountDelegationSignature: expect.any(Function),
+                signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
-                buildTransaction: expect.any(Function),
             })
             jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
                 decryptedWallet: wallet1,
                 encryptionKey: "encryptionKey",
             })
-            ;(axios.post as jest.Mock).mockResolvedValueOnce({
-                data: { id: vetTransaction1.id },
-                status: 200,
-            })
 
-            await result.current.signAndSendTransaction()
-            expect(showErrorToast).toHaveBeenCalled()
-        })
-        it("ledger account shows warning", async () => {
-            const { result, waitForNextUpdate } = renderHook(
-                () =>
-                    useSignTransaction({
-                        clauses: vetTransaction1.body.clauses,
-                        isDelegated: true,
-                        onTXFinish: jest.fn(),
-                        selectedDelegationOption: DelegationType.ACCOUNT,
-                    }),
-                { wrapper: TestWrapper },
-            )
-            await waitForNextUpdate({
-                timeout: 5000,
-            })
-
-            expect(result.current).toEqual({
-                signTransaction: expect.any(Function),
-                signAndSendTransaction: expect.any(Function),
-                sendTransactionAndPerformUpdates: expect.any(Function),
-                getUrlDelegationSignature: expect.any(Function),
-                navigateToLedger: expect.any(Function),
-                buildTransaction: expect.any(Function),
-            })
-            jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
-                decryptedWallet: wallet1,
-                encryptionKey: "encryptionKey",
-            })
-            ;(axios.post as jest.Mock).mockResolvedValueOnce({
-                data: { id: vetTransaction1.id },
-                status: 200,
-            })
-
-            await result.current.signAndSendTransaction()
+            const res = await result.current.signTransaction()
+            expect(res).toEqual(SignStatus.DELEGATION_FAILURE)
         })
     })
 
@@ -225,9 +169,7 @@ describe("useSignTransaction", () => {
             const { result, waitForNextUpdate } = renderHook(
                 () =>
                     useSignTransaction({
-                        clauses: vetTransaction1.body.clauses,
-                        isDelegated: true,
-                        onTXFinish: jest.fn(),
+                        ...defaultProps,
                         selectedDelegationOption: DelegationType.URL,
                         selectedDelegationUrl: "https://vechainstats.com",
                     }),
@@ -238,11 +180,9 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
-                buildTransaction: expect.any(Function),
-                signTransaction: expect.any(Function),
-                signAndSendTransaction: expect.any(Function),
-                sendTransactionAndPerformUpdates: expect.any(Function),
                 getUrlDelegationSignature: expect.any(Function),
+                getAccountDelegationSignature: expect.any(Function),
+                signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
             })
             jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
@@ -250,22 +190,26 @@ describe("useSignTransaction", () => {
                 encryptionKey: "encryptionKey",
             })
             ;(axios.post as jest.Mock).mockResolvedValueOnce({
-                data: { id: vetTransaction1.id },
-                status: 200,
+                data: {
+                    signature:
+                        "0x5b977f9e1a383e6e277c3e1745d9334da966cd9028f5d1f4f98a00dafb1975614edcb547635ca6fcd49114d02b1c1b4de8106fb89ae32b8e7cf02a6e62af53fb01",
+                },
             })
 
-            await result.current.signAndSendTransaction()
+            const signedTransaction =
+                (await result.current.signTransaction()) as Transaction
+
+            expect(signedTransaction).toBeInstanceOf(Transaction)
+            expect(signedTransaction.signature).toBeInstanceOf(Buffer)
+            expect(signedTransaction.signature?.length).toEqual(130)
         })
 
         it("no url throws error", async () => {
             const { result, waitForNextUpdate } = renderHook(
                 () =>
                     useSignTransaction({
-                        clauses: vetTransaction1.body.clauses,
-                        isDelegated: true,
-                        onTXFinish: jest.fn(),
+                        ...defaultProps,
                         selectedDelegationOption: DelegationType.URL,
-                        selectedDelegationUrl: undefined,
                     }),
                 { wrapper: TestWrapper },
             )
@@ -274,24 +218,19 @@ describe("useSignTransaction", () => {
             })
 
             expect(result.current).toEqual({
-                signTransaction: expect.any(Function),
-                signAndSendTransaction: expect.any(Function),
-                sendTransactionAndPerformUpdates: expect.any(Function),
                 getUrlDelegationSignature: expect.any(Function),
+                getAccountDelegationSignature: expect.any(Function),
+                signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
-                buildTransaction: expect.any(Function),
             })
             jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
                 decryptedWallet: wallet1,
                 encryptionKey: "encryptionKey",
             })
-            ;(axios.post as jest.Mock).mockResolvedValueOnce({
-                data: { id: vetTransaction1.id },
-                status: 200,
-            })
 
-            await result.current.signAndSendTransaction()
-            expect(showErrorToast).toHaveBeenCalled()
+            const res = await result.current.signTransaction()
+
+            expect(res).toEqual(SignStatus.DELEGATION_FAILURE)
         })
     })
 })
