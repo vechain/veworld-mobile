@@ -5,6 +5,7 @@ import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { BaseIcon, BaseView } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     onDelete: (token: FungibleTokenWithBalance) => void
@@ -20,6 +21,9 @@ export const UnderlayLeft = ({ onDelete }: Props) => {
 
     const handleDelete = useCallback(() => {
         onDelete(token)
+
+        HapticsService.triggerImpact({ level: "Light" })
+
         close()
     }, [close, onDelete, token])
 

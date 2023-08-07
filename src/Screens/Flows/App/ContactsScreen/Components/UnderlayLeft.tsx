@@ -6,6 +6,7 @@ import { ColorThemeType } from "~Constants"
 
 import { BaseIcon, BaseView } from "~Components"
 import { Contact } from "~Model"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     onDelete: (address: string) => void
@@ -19,6 +20,7 @@ export const UnderlayLeft = ({ onDelete }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
 
     const handleDelete = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
         onDelete(contact.address)
         close()
     }, [close, contact.address, onDelete])

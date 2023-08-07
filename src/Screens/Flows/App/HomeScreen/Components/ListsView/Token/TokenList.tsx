@@ -23,7 +23,6 @@ import {
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
 import { RemoveCustomTokenBottomSheet } from "../../RemoveCustomTokenBottomSheet"
-import HapticsService from "~Services/HapticsService"
 import SwipeableItem, {
     OpenDirection,
     SwipeableItemImperativeRef,
@@ -131,11 +130,9 @@ export const TokenList = memo(
 
         const onSwipeableItemChange = useCallback(
             (token: FungibleTokenWithBalance) => {
-                HapticsService.triggerImpact({ level: "Light" })
-                closeOtherSwipeableItems("")
-                onRemoveToken(token)
+                closeOtherSwipeableItems(token.address)
             },
-            [closeOtherSwipeableItems, onRemoveToken],
+            [closeOtherSwipeableItems],
         )
 
         const registerSwipeableItemRef = useCallback(
@@ -200,6 +197,7 @@ export const TokenList = memo(
 
                     <NestableDraggableFlatList
                         data={tokenBalances}
+                        onTouchStart={() => closeOtherSwipeableItems("")}
                         extraData={isEdit}
                         onDragEnd={handleDragEnd}
                         keyExtractor={item => item.address}
