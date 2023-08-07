@@ -46,7 +46,7 @@ export const TokenCard = memo(
 
         return (
             <BaseView style={styles.innerRow}>
-                {icon && (
+                {icon !== "" && (
                     <BaseCard
                         style={[
                             styles.imageContainer,
