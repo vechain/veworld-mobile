@@ -8,7 +8,7 @@ export * from "./handleVETTransfers"
 export * from "./handleNFTTransfers"
 export * from "./fetchTransfersForBlock"
 
-import { AccountWithDevice, FungibleTokenWithBalance, Network } from "~Model"
+import { AccountWithDevice, Network } from "~Model"
 import { IncomingTransferResponse } from "~Networking"
 import { AppThunkDispatch } from "~Storage/Redux/Types"
 
@@ -25,7 +25,6 @@ export interface BaseTransferHandlerProps {
 }
 
 export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
-    tokenBalances: FungibleTokenWithBalance[]
     fetchData: (
         address: string,
     ) => Promise<{ name: string; symbol: string; decimals: number }>

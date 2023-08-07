@@ -8,7 +8,6 @@ import {
     useAppDispatch,
     selectActivitiesWithoutFinality,
     updateBeat,
-    selectNonVechainTokensWithBalances,
 } from "~Storage/Redux"
 import { BloomUtils, debug, error } from "~Utils"
 import { useInformUser, useStateReconciliation } from "./Hooks"
@@ -40,8 +39,6 @@ export const TransferEventListener: React.FC = () => {
     const { forTokens, forNFTs } = useInformUser({ network })
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
-
-    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
 
     const dispatch = useAppDispatch()
 
@@ -140,7 +137,6 @@ export const TransferEventListener: React.FC = () => {
                                 visibleAccounts: relevantAccounts,
                                 transfer,
                                 network,
-                                tokenBalances,
                                 thorClient: thor,
                                 fetchData,
                                 stateReconciliationAction: updateBalances,
@@ -177,7 +173,6 @@ export const TransferEventListener: React.FC = () => {
             updateNFTs,
             forNFTs,
             thor,
-            tokenBalances,
             fetchData,
             updateBalances,
             forTokens,

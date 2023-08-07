@@ -1,7 +1,7 @@
 import {
     addOrUpdateCustomToken,
-    addTokenBalance,
     updateAccountBalances,
+    upsertTokenBalance,
 } from "~Storage/Redux"
 import { findInvolvedAccount } from "./findInvolvedAccount"
 import {
@@ -16,7 +16,6 @@ export const handleTokenTransfers = async ({
     visibleAccounts,
     transfer,
     network,
-    tokenBalances,
     thorClient,
     fetchData,
     stateReconciliationAction,
@@ -41,7 +40,7 @@ export const handleTokenTransfers = async ({
             informUser,
         })
 
-        await dispatch(
+        dispatch(
             addOrUpdateCustomToken({
                 accountAddress: foundAccount.account.address,
                 newToken: {
@@ -57,18 +56,11 @@ export const handleTokenTransfers = async ({
         )
 
         await dispatch(
-            addTokenBalance({
-                accountAddress: foundAccount.account.address,
-                balance: {
-                    balance: "0",
-                    accountAddress: foundAccount.account.address,
-                    tokenAddress: transfer.tokenAddress,
-                    timeUpdated: new Date().toISOString(),
-                    position: tokenBalances.length,
-                    genesisId: network.genesis.id,
-                    isCustomToken: false,
-                },
-            }),
+            upsertTokenBalance(
+                thorClient,
+                foundAccount.account.address,
+                transfer.tokenAddress,
+            ),
         )
 
         await dispatch(
