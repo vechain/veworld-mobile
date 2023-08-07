@@ -85,3 +85,10 @@ junit.xml
 artifacts
 keystore.properties
 sentry.properties
+
+
+main.jsbundle
+main.jsbundle.map
+main.jsbundle.hbc.map
+main.jsbundle.packager.map
+```
