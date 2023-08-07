@@ -1,6 +1,12 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
-import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
+import {
+    BaseText,
+    BaseCard,
+    BaseView,
+    BaseSpacer,
+    BaseSkeleton,
+} from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { useBalances, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
@@ -12,7 +18,6 @@ import {
 import { TokenWithCompleteInfo } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -85,7 +90,7 @@ export const VechainTokenCard = memo(
                                 <BaseView
                                     flexDirection="row"
                                     alignItems="center">
-                                    <SkeletonContent
+                                    <BaseSkeleton
                                         containerStyle={
                                             baseStyles.skeletonBalance
                                         }
@@ -96,20 +101,7 @@ export const VechainTokenCard = memo(
                                         highlightColor={
                                             theme.colors.skeletonHighlightColor
                                         }
-                                        layout={[
-                                            {
-                                                flexDirection: "row",
-                                                alignItems: "center",
-                                                children: [
-                                                    // Line
-                                                    {
-                                                        width: "100%",
-                                                        height: 14,
-                                                    },
-                                                ],
-                                            },
-                                        ]}
-                                        isLoading={true}
+                                        height={14}
                                     />
                                     <BaseText
                                         typographyFont="captionRegular"
@@ -147,8 +139,7 @@ export const VechainTokenCard = memo(
                     <BaseView flexDirection="row" alignItems="center">
                         {isTokensOwnedLoading ? (
                             <BaseView flexDirection="row" alignItems="center">
-                                <SkeletonContent
-                                    // eslint-disable-next-line react-native/no-inline-styles
+                                <BaseSkeleton
                                     containerStyle={
                                         baseStyles.skeletonBalanceValue
                                     }
@@ -157,20 +148,7 @@ export const VechainTokenCard = memo(
                                     highlightColor={
                                         theme.colors.skeletonHighlightColor
                                     }
-                                    layout={[
-                                        {
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            children: [
-                                                // Line
-                                                {
-                                                    width: "100%",
-                                                    height: 18,
-                                                },
-                                            ],
-                                        },
-                                    ]}
-                                    isLoading={true}
+                                    height={18}
                                 />
                             </BaseView>
                         ) : (

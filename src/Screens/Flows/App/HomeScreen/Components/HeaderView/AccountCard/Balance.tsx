@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { COLORS, VET } from "~Constants"
 import { useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseSkeleton, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import BigNumber from "bignumber.js"
 import {
@@ -12,7 +12,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { WalletAccount } from "~Model"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 type Props = {
     isVisible: boolean
@@ -66,8 +65,7 @@ export const Balance: React.FC<Props> = memo(
                 <BaseView flexDirection="row" alignItems="baseline">
                     {isTokensOwnedLoading ? (
                         <BaseView pt={4}>
-                            <SkeletonContent
-                                containerStyle={baseStyles.skeleton}
+                            <BaseSkeleton
                                 animationDirection="horizontalLeft"
                                 boneColor={
                                     theme.isDark
@@ -75,20 +73,8 @@ export const Balance: React.FC<Props> = memo(
                                         : COLORS.DARK_PURPLE
                                 }
                                 highlightColor={COLORS.LIGHT_PURPLE}
-                                layout={[
-                                    {
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        children: [
-                                            // Line
-                                            {
-                                                width: "100%",
-                                                height: 45,
-                                            },
-                                        ],
-                                    },
-                                ]}
-                                isLoading={true}
+                                height={45}
+                                width={140}
                             />
                         </BaseView>
                     ) : (
@@ -114,8 +100,5 @@ export const Balance: React.FC<Props> = memo(
 const baseStyles = StyleSheet.create({
     marginLeft: {
         marginLeft: 8,
-    },
-    skeleton: {
-        width: 140,
     },
 })

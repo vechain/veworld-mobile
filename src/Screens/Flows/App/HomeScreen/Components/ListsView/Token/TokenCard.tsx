@@ -6,13 +6,13 @@ import {
     BaseView,
     BaseSpacer,
     BaseCustomTokenIcon,
+    BaseSkeleton,
 } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { address } from "thor-devkit"
 
 type Props = {
@@ -84,27 +84,14 @@ export const TokenCard = memo(
                                 flexDirection="row"
                                 alignItems="center"
                                 py={2}>
-                                <SkeletonContent
-                                    containerStyle={styles.skeleton}
+                                <BaseSkeleton
                                     animationDirection="horizontalLeft"
                                     boneColor={theme.colors.skeletonBoneColor}
                                     highlightColor={
                                         theme.colors.skeletonHighlightColor
                                     }
-                                    layout={[
-                                        {
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            children: [
-                                                // Line
-                                                {
-                                                    width: "100%",
-                                                    height: 12,
-                                                },
-                                            ],
-                                        },
-                                    ]}
-                                    isLoading={true}
+                                    height={12}
+                                    width={40}
                                 />
                                 <BaseText
                                     typographyFont="captionRegular"

@@ -1,15 +1,13 @@
 import React from "react"
 import { useBalances, useTheme } from "~Hooks"
 import { TokenWithCompleteInfo } from "~Model"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
     selectCurrency,
     selectIsTokensOwnedLoading,
     useAppSelector,
 } from "~Storage/Redux"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
-import { StyleSheet } from "react-native"
 
 export const BalanceView = ({
     token,
@@ -35,25 +33,12 @@ export const BalanceView = ({
                 <BaseSpacer width={4} />
                 {isTokensOwnedLoading ? (
                     <BaseView flexDirection="row" alignItems="center">
-                        <SkeletonContent
-                            containerStyle={baseStyles.skeletonBalanceValue}
+                        <BaseSkeleton
                             animationDirection="horizontalLeft"
                             boneColor={theme.colors.skeletonBoneColor}
                             highlightColor={theme.colors.skeletonHighlightColor}
-                            layout={[
-                                {
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    children: [
-                                        // Line
-                                        {
-                                            width: "100%",
-                                            height: 14,
-                                        },
-                                    ],
-                                },
-                            ]}
-                            isLoading={true}
+                            height={14}
+                            width={60}
                         />
                     </BaseView>
                 ) : (
@@ -68,25 +53,12 @@ export const BalanceView = ({
             <BaseView flexDirection="row">
                 {isTokensOwnedLoading ? (
                     <BaseView flexDirection="row" alignItems="center">
-                        <SkeletonContent
-                            containerStyle={baseStyles.skeletonBalanceValue}
+                        <BaseSkeleton
                             animationDirection="horizontalLeft"
                             boneColor={theme.colors.skeletonBoneColor}
                             highlightColor={theme.colors.skeletonHighlightColor}
-                            layout={[
-                                {
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    children: [
-                                        // Line
-                                        {
-                                            width: "100%",
-                                            height: 14,
-                                        },
-                                    ],
-                                },
-                            ]}
-                            isLoading={true}
+                            height={14}
+                            width={60}
                         />
                     </BaseView>
                 ) : (
@@ -100,9 +72,3 @@ export const BalanceView = ({
         </BaseView>
     )
 }
-
-const baseStyles = StyleSheet.create({
-    skeletonBalanceValue: {
-        width: 60,
-    },
-})
