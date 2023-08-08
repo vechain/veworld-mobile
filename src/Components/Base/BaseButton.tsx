@@ -6,7 +6,7 @@ import {
     StyleSheet,
 } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { ColorThemeType, typography, TFonts, COLORS } from "~Constants"
+import { ColorThemeType, typography, TFonts } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
 import Lottie from "lottie-react-native"
@@ -118,7 +118,7 @@ export const BaseButton = ({
 
     const calculateBackgroundColor = useMemo(() => {
         if (disabled && isDisabledTextOnly) return bgColor
-        if (disabled) return COLORS.DISABLED_GREY
+        if (disabled) return theme.colors.disabledButton
 
         if (isSolidButton) return bgColor
         else return theme.colors.transparent
@@ -127,6 +127,7 @@ export const BaseButton = ({
         disabled,
         isDisabledTextOnly,
         isSolidButton,
+        theme.colors.disabledButton,
         theme.colors.transparent,
     ])
 
