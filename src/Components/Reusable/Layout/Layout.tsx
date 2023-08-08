@@ -10,6 +10,7 @@ import { BackButtonHeader } from "../BackButtonHeader"
 import { StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
+import { SelectedNetworkViewer } from "~Navigation/Stacks/Components/NetworkBadge/SelectedNetworkViewer"
 
 type Props = {
     noBackButton?: boolean
@@ -57,6 +58,7 @@ export const Layout = ({
             testID={safeAreaTestID}
             onTouchStart={onTouchBody}>
             <BaseView h={100}>
+                <SelectedNetworkViewer />
                 {!noBackButton && <BackButtonHeader hasBottomSpacer={false} />}
                 <BaseSpacer height={fixedHeader ? 16 : 8} />
                 <BaseView mx={noMargin ? 0 : 20}>
