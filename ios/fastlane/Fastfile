@@ -170,7 +170,7 @@ platform :ios do
     buildNumber = options[:build]
 
     #prepare git
-    ensure_git_status_clean
+    # ensure_git_status_clean
     ensure_git_branch(branch: "main")
 
     # clean build artifacts if any
@@ -299,9 +299,6 @@ platform :ios do
 
       # clean build artifacts if any
       clean_build_artifacts
-
-      # clean git 
-      reset_git_repo
 
       # checkout main
       sh("git checkout main")
