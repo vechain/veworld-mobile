@@ -10,7 +10,7 @@ import { BackButtonHeader } from "../BackButtonHeader"
 import { StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
-import { SelectedNetworkViewer } from "~Navigation/Stacks/Components/NetworkBadge/SelectedNetworkViewer"
+import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer/SelectedNetworkViewer"
 
 type Props = {
     noBackButton?: boolean

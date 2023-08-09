@@ -22,6 +22,7 @@ import {
     validateAndAddCustomNode,
 } from "~Storage/Redux"
 import * as Haptics from "expo-haptics"
+import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 
 export const AddCustomNodeScreen = () => {
     const { LL } = useI18nContext()
@@ -91,6 +92,7 @@ export const AddCustomNodeScreen = () => {
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
+                <SelectedNetworkViewer />
                 <BackButtonHeader />
                 <BaseSpacer height={12} />
                 <BaseView

@@ -24,7 +24,7 @@ export const SelectedNetworkViewer = () => {
                         style={styles.networkViewerNetworkIcon}
                     />
                     <BaseText style={styles.networkViewerNetworkNameText}>
-                        {network.type}
+                        {network.name}
                     </BaseText>
                 </BaseView>
             </BaseView>
@@ -41,7 +41,6 @@ const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
         },
         networkViewer: {
             height: 25,
-            width: 120,
             borderRadius: 10,
             backgroundColor: theme.colors.card,
             justifyContent: "center",
@@ -49,6 +48,8 @@ const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
         networkViewerIconText: {
             flexDirection: "row",
             justifyContent: "center",
+            paddingLeft: 15,
+            paddingRight: 15,
         },
         networkViewerNetworkNameText: {
             paddingLeft: 5,
