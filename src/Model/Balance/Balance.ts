@@ -15,6 +15,10 @@ export interface Balance {
     genesisId: string
     timeUpdated: string
     position?: number
+    tokenName?: string
+    tokenSymbol?: string
+    tokenDecimals?: number
+    isCustomToken?: boolean
 }
 
 export type DenormalizedAccountTokenBalance = Balance & {

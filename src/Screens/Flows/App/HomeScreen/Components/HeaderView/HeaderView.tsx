@@ -1,7 +1,5 @@
 import React, { memo, useMemo } from "react"
 import { BaseIcon, BaseSpacer, BaseView, FastActionsBar } from "~Components"
-import { Header } from "./Header"
-
 import { useTheme } from "~Hooks"
 import { useAppSelector } from "~Storage/Redux"
 import {
@@ -59,7 +57,6 @@ export const HeaderView = memo(
         return (
             <>
                 <BaseView alignItems="center">
-                    <Header />
                     <BaseSpacer height={20} />
                     <AccountCard
                         balanceVisible={balanceVisible}

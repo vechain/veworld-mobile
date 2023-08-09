@@ -4,6 +4,7 @@ import { error } from "~Utils/Logger"
 import { Balance, Network } from "~Model"
 import AddressUtils from "../AddressUtils"
 import FormattingUtils from "../FormattingUtils"
+import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
 
 /**
  * Calls out to external sources to get the balance
@@ -16,10 +17,10 @@ const getBalanceFromBlockchain = async (
     accountAddress: string,
     network: Network,
     thor: Connex.Thor,
-): Promise<Balance> => {
+): Promise<Balance | undefined> => {
     try {
         // We get the balance differently depending on whether it's a VIP180 or VET/VTHO
-        let balance: string
+        let balance: string | undefined
         if (AddressUtils.compareAddresses(tokenAddress, VET.address))
             balance = await getVetAndVthoBalancesFromBlockchain(
                 accountAddress,
@@ -37,6 +38,8 @@ const getBalanceFromBlockchain = async (
                 thor,
             )
 
+        if (!balance) throw new Error("Failed to get balance")
+
         return {
             balance,
             accountAddress,
@@ -47,6 +50,48 @@ const getBalanceFromBlockchain = async (
     } catch (e) {
         error("getBalanceFromBlockchain", e)
         throw new Error("Failed to get balance from external service")
+    }
+}
+
+/**
+ * Retrieves both the balance and token details of an account from external sources.
+ *
+ * @param tokenAddress - Address of the token.
+ * @param accountAddress - Address of the account.
+ * @param network - Network details.
+ * @param thor - Connex instance.
+ * @returns An object containing balance, token details and related info.
+ */
+const getBalanceAndTokenInfoFromBlockchain = async (
+    tokenAddress: string,
+    accountAddress: string,
+    network: Network,
+    thor: Connex.Thor,
+): Promise<Balance | undefined> => {
+    try {
+        const balance: Balance | undefined = await getBalanceFromBlockchain(
+            tokenAddress,
+            accountAddress,
+            network,
+            thor,
+        )
+
+        if (!balance) return undefined
+
+        const [tokenName, tokenSymbol, tokenDecimals] = await Promise.all([
+            getTokenName(tokenAddress, thor),
+            getTokenSymbol(tokenAddress, thor),
+            getTokenDecimals(tokenAddress, thor),
+        ])
+
+        return {
+            ...balance,
+            tokenName,
+            tokenSymbol,
+            tokenDecimals,
+        }
+    } catch (e) {
+        error("Failed to get balance and token info from external service", e)
     }
 }
 
@@ -71,7 +116,7 @@ const getTokenBalanceFromBlockchain = async (
     accountAddress: string,
     tokenAddress: string,
     thor: Connex.Thor,
-): Promise<string> => {
+): Promise<string | undefined> => {
     try {
         const res = await thor
             .account(tokenAddress)
@@ -81,9 +126,6 @@ const getTokenBalanceFromBlockchain = async (
         return res.decoded[0]
     } catch (e) {
         error("getTokenBalanceFromBlockchain", e)
-        throw new Error(
-            "Failed to get data from contract. Wrong network/ Contract address? ",
-        )
     }
 }
 
@@ -109,4 +151,5 @@ export default {
     getTokenBalanceFromBlockchain,
     getFiatBalance,
     getTokenUnitBalance,
+    getBalanceAndTokenInfoFromBlockchain,
 }

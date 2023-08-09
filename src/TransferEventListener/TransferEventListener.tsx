@@ -114,10 +114,10 @@ export const TransferEventListener: React.FC = () => {
                             await handleNFTTransfers({
                                 visibleAccounts: relevantAccounts,
                                 transfer,
+                                network: network,
+                                thorClient: thor,
                                 stateReconciliationAction: updateNFTs,
                                 informUser: forNFTs,
-                                network: network.type,
-                                thor,
                             })
                         }),
                 )
@@ -134,10 +134,12 @@ export const TransferEventListener: React.FC = () => {
                             await handleTokenTransfers({
                                 visibleAccounts: relevantAccounts,
                                 transfer,
+                                network,
+                                thorClient: thor,
                                 fetchData,
                                 stateReconciliationAction: updateBalances,
                                 informUser: forTokens,
-                                network: network.type,
+                                dispatch,
                             })
                         }),
                 )
@@ -164,7 +166,7 @@ export const TransferEventListener: React.FC = () => {
             updateActivities,
             pendingActivities,
             dispatch,
-            network.type,
+            network,
             blackListedCollections,
             updateNFTs,
             forNFTs,

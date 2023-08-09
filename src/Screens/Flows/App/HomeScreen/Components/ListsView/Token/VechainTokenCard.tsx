@@ -1,11 +1,20 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo } from "react"
-import { BaseText, BaseCard, BaseView, BaseSpacer } from "~Components"
+import {
+    BaseText,
+    BaseCard,
+    BaseView,
+    BaseSpacer,
+    BaseSkeleton,
+} from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { useBalances, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
-import { selectCurrency } from "~Storage/Redux/Selectors"
+import {
+    selectCurrency,
+    selectIsTokensOwnedLoading,
+} from "~Storage/Redux/Selectors"
 import { TokenWithCompleteInfo } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
@@ -19,11 +28,17 @@ type Props = {
 export const VechainTokenCard = memo(
     ({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
         const theme = useTheme()
+
         const exchangeRate = useAppSelector(state =>
             selectCurrencyExchangeRate(state, tokenWithInfo.symbol as string),
         )
+
         const currency = useAppSelector(selectCurrency)
+
+        const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
+
         const isPositive24hChange = (exchangeRate?.change || 0) > 0
+
         const change24h =
             (isPositive24hChange ? "+" : "") +
             FormattingUtils.humanNumber(
@@ -71,16 +86,48 @@ export const VechainTokenCard = memo(
                             flexDirection="row"
                             alignItems="baseline"
                             justifyContent="flex-start">
-                            <BaseText
-                                typographyFont="bodyMedium"
-                                color={tokenValueLabelColor}>
-                                {isBalanceVisible ? tokenUnitBalance : "*****"}{" "}
-                            </BaseText>
-                            <BaseText
-                                typographyFont="captionRegular"
-                                color={tokenValueLabelColor}>
-                                {tokenWithInfo.symbol}
-                            </BaseText>
+                            {isTokensOwnedLoading ? (
+                                <BaseView
+                                    flexDirection="row"
+                                    alignItems="center">
+                                    <BaseSkeleton
+                                        containerStyle={
+                                            baseStyles.skeletonBalance
+                                        }
+                                        animationDirection="horizontalLeft"
+                                        boneColor={
+                                            theme.colors.skeletonBoneColor
+                                        }
+                                        highlightColor={
+                                            theme.colors.skeletonHighlightColor
+                                        }
+                                        height={14}
+                                    />
+                                    <BaseText
+                                        typographyFont="captionRegular"
+                                        color={tokenValueLabelColor}
+                                        pl={4}>
+                                        {tokenWithInfo.symbol}
+                                    </BaseText>
+                                </BaseView>
+                            ) : (
+                                <BaseView
+                                    flexDirection="row"
+                                    alignItems="center">
+                                    <BaseText
+                                        typographyFont="bodyMedium"
+                                        color={tokenValueLabelColor}>
+                                        {isBalanceVisible
+                                            ? tokenUnitBalance
+                                            : "•••••"}{" "}
+                                    </BaseText>
+                                    <BaseText
+                                        typographyFont="captionRegular"
+                                        color={tokenValueLabelColor}>
+                                        {tokenWithInfo.symbol}
+                                    </BaseText>
+                                </BaseView>
+                            )}
                         </BaseView>
                     </BaseView>
                 </BaseView>
@@ -89,15 +136,34 @@ export const VechainTokenCard = memo(
                         animatedOpacityReverse,
                         baseStyles.balancesContainer,
                     ]}>
-                    <BaseView flexDirection="row" alignItems="baseline">
-                        <BaseText typographyFont="subTitleBold">
-                            {isBalanceVisible ? fiatBalance : "****"}{" "}
-                        </BaseText>
+                    <BaseView flexDirection="row" alignItems="center">
+                        {isTokensOwnedLoading ? (
+                            <BaseView flexDirection="row" alignItems="center">
+                                <BaseSkeleton
+                                    containerStyle={
+                                        baseStyles.skeletonBalanceValue
+                                    }
+                                    animationDirection="horizontalLeft"
+                                    boneColor={theme.colors.skeletonBoneColor}
+                                    highlightColor={
+                                        theme.colors.skeletonHighlightColor
+                                    }
+                                    height={18}
+                                />
+                            </BaseView>
+                        ) : (
+                            <BaseText typographyFont="subTitleBold">
+                                {isBalanceVisible ? fiatBalance : "••••"}
+                            </BaseText>
+                        )}
                         <BaseText typographyFont="captionRegular">
+                            {" "}
                             {currency}
                         </BaseText>
                     </BaseView>
+
                     <BaseSpacer height={3} />
+
                     <BaseText
                         typographyFont="captionBold"
                         color={
@@ -140,5 +206,14 @@ const baseStyles = StyleSheet.create({
     },
     balancesContainer: {
         alignItems: "flex-end",
+    },
+    skeletonBalance: { width: 50, paddingVertical: 2 },
+    skeletonPercentChange: {
+        width: 40,
+        paddingVertical: 1,
+    },
+    skeletonBalanceValue: {
+        width: 60,
+        paddingVertical: 2,
     },
 })

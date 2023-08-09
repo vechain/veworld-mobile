@@ -8,13 +8,15 @@ import { CoinMarketInfo, TokenInfoResponse, TokensState } from "../Types"
 import { AddressUtils } from "~Utils"
 
 export const initialTokenState: TokensState = {
-    custom: [],
+    custom: {},
     dashboardChartData: {},
     assetDetailChartData: {},
     coinMarketInfo: {},
     officialTokens: [],
     suggestedTokens: [],
     coinGeckoTokens: [],
+    hasFetchedOfficialTokensMainnet: {},
+    hasFetchedOfficialTokensTestnet: {},
 }
 
 export const TokenSlice = createSlice({
@@ -23,10 +25,18 @@ export const TokenSlice = createSlice({
     reducers: {
         addOrUpdateCustomToken: (
             state,
-            action: PayloadAction<FungibleToken>,
+            action: PayloadAction<{
+                accountAddress: string
+                newToken: FungibleToken
+            }>,
         ) => {
-            const newToken = action.payload
-            const filteredTokens = state.custom.filter(
+            const { accountAddress, newToken } = action.payload
+
+            if (!state.custom[accountAddress]) {
+                state.custom[accountAddress] = []
+            }
+
+            const filteredTokens = state.custom[accountAddress].filter(
                 oldToken =>
                     !AddressUtils.compareAddresses(
                         oldToken.address,
@@ -37,8 +47,43 @@ export const TokenSlice = createSlice({
                         newToken.genesisId,
                     ),
             )
-            filteredTokens.push(action.payload)
-            state.custom = filteredTokens
+
+            filteredTokens.push(newToken)
+
+            state.custom[accountAddress] = filteredTokens
+        },
+
+        addOrUpdateCustomTokens: (
+            state,
+            action: PayloadAction<{
+                accountAddress: string
+                newTokens: FungibleToken[]
+            }>,
+        ) => {
+            const { accountAddress, newTokens } = action.payload
+
+            if (!state.custom[accountAddress]) {
+                state.custom[accountAddress] = []
+            }
+
+            const filteredTokens = state.custom[accountAddress].filter(
+                oldToken =>
+                    !newTokens.find(
+                        newToken =>
+                            AddressUtils.compareAddresses(
+                                oldToken.address,
+                                newToken.address,
+                            ) &&
+                            AddressUtils.compareAddresses(
+                                oldToken.genesisId,
+                                newToken.genesisId,
+                            ),
+                    ),
+            )
+
+            filteredTokens.push(...newTokens)
+
+            state.custom[accountAddress] = filteredTokens
         },
 
         setDashboardChartData: (
@@ -98,17 +143,42 @@ export const TokenSlice = createSlice({
             state.coinGeckoTokens = action.payload
         },
 
+        setHasFetchedOfficialTokensMainnet: (
+            state,
+            action: PayloadAction<{
+                accountAddress: string
+                hasFetched: boolean
+            }>,
+        ) => {
+            const { accountAddress, hasFetched } = action.payload
+            state.hasFetchedOfficialTokensMainnet[accountAddress] = hasFetched
+        },
+
+        setHasFetchedOfficialTokensTestnet: (
+            state,
+            action: PayloadAction<{
+                accountAddress: string
+                hasFetched: boolean
+            }>,
+        ) => {
+            const { accountAddress, hasFetched } = action.payload
+            state.hasFetchedOfficialTokensTestnet[accountAddress] = hasFetched
+        },
+
         resetTokensState: () => initialTokenState,
     },
 })
 
 export const {
     addOrUpdateCustomToken,
+    addOrUpdateCustomTokens,
     setDashboardChartData,
     addOfficialTokens,
     setAssertDetailChartData,
     setCoinGeckoTokens,
     setSuggestedTokens,
-    setCoinMarketInfo,
     resetTokensState,
+    setHasFetchedOfficialTokensMainnet,
+    setHasFetchedOfficialTokensTestnet,
+    setCoinMarketInfo,
 } = TokenSlice.actions

@@ -31,6 +31,9 @@ export const useSuggestedTokens = (selectedTokenSymbols: string[]) => {
                         network,
                         thorClient,
                     )
+
+                    if (!balance) continue
+
                     if (!new BigNumber(balance.balance).isZero()) {
                         newSuggestedTokens.push({
                             ...token,

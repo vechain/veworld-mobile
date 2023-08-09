@@ -1,8 +1,8 @@
 import React, { useMemo } from "react"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { useThemedStyles } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
 import { StyleSheet } from "react-native"
+import { BaseSkeleton } from "~Components"
 
 export const NftSkeleton = ({
     numberOfChildren,
@@ -128,7 +128,7 @@ export const NftSkeleton = ({
     }, [isNFT, showMargin])
 
     return (
-        <SkeletonContent
+        <BaseSkeleton
             containerStyle={styles.container}
             animationDirection="horizontalLeft"
             boneColor={theme.colors.skeletonBoneColor}
@@ -151,7 +151,6 @@ export const NftSkeleton = ({
                     ],
                 },
             ]}
-            isLoading={true}
         />
     )
 }

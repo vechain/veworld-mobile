@@ -50,11 +50,11 @@ export const AccountCard: React.FC<Props> = memo(
 
         const balance = useMemo(() => {
             if (!isBalanceVisible && isVthoBalance) {
-                return "****" + VTHO.symbol
+                return "••••" + VTHO.symbol
             }
 
             if (!isBalanceVisible && !isVthoBalance) {
-                return "**** " + VET.symbol
+                return "•••• " + VET.symbol
             }
 
             return `${isVthoBalance ? vthoBalance : vetBalance} ${

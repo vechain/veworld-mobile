@@ -1,178 +1,246 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import React, { useCallback, useMemo, useState } from "react"
+import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import {
-    BackButtonHeader,
-    BaseIcon,
-    BaseSafeArea,
+    BaseSpacer,
     BaseText,
     BaseView,
-    CustomTokenCard,
-    DeleteConfirmationBottomSheet,
-    DeleteUnderlay,
+    Layout,
+    QRCodeBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { FungibleToken } from "~Model"
-import { AddCustomTokenBottomSheet } from "./BottomSheets"
-import { ListRenderItem, StyleSheet, View, FlatList } from "react-native"
+import { FlatList, RefreshControl, StyleSheet } from "react-native"
+import { FlashList } from "@shopify/flash-list"
 import {
-    removeTokenBalance,
-    selectAccountCustomTokens,
-    selectSelectedAccount,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import SwipeableItem, {
-    OpenDirection,
-    SwipeableItemImperativeRef,
-} from "react-native-swipeable-item"
-import { useNavigation } from "@react-navigation/native"
+    CustomTokenBox,
+    NoTokensButton,
+    SkeletonCustomTokenBox,
+} from "./Components"
+import { PlatformUtils } from "~Utils"
+import { tabbarBaseStyles } from "~Navigation"
+import { SkeletonActivityBox } from "../HistoryScreen/Components"
+import { AddCustomTokenBottomSheet } from "./BottomSheets"
+import { useTokensOwned } from "./Hooks"
+
+// Number of Skeleton Token boxes to show when fetching first page of custom tokens owned.
+const SKELETON_COUNT = 12
 
 export const ManageCustomTokenScreen = () => {
+    // Pull down to refresh
+    const [refreshing, setRefreshing] = useState(false)
+
+    // To prevent fetching next page of activities on FlashList mount
+    const [hasScrolled, setHasScrolled] = useState(false)
+
+    // Address of the custom token the user wants to add to the home screen.
+    const [customTokenAddress, setCustomTokenAddress] = useState<string>()
+
     const theme = useTheme()
-    const swipeableItemRefs = useRef<(SwipeableItemImperativeRef | null)[]>([])
+
     const { LL } = useI18nContext()
-    const customTokens = useAppSelector(selectAccountCustomTokens)
-    const dispatch = useAppDispatch()
-    const account = useAppSelector(selectSelectedAccount)
+
+    const { tokens, hasFetched, page, setPage, fetchTokens } = useTokensOwned()
+
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
+        useScrollableList(tokens, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
+
     const {
         ref: addCustomTokenSheetRef,
         onOpen: openAddCustomTokenSheet,
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
-    const [selectedToken, setSelectedToken] = useState<FungibleToken>()
-    const [selectedIndex, setSelectedIndex] = useState<number>()
-    const nav = useNavigation()
-    const {
-        ref: removeCustomTokenSheetRef,
-        onOpen: openRemoveCustomTokenSheet,
-        onClose: closeRemoveCustomTokenSheet,
-    } = useBottomSheetModal()
 
-    const closeOtherSwipeableItems = useCallback((index?: number) => {
-        swipeableItemRefs?.current.forEach((ref, id) => {
-            if (id !== index) {
-                ref?.close()
-            }
-        })
-    }, [])
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
+        useBottomSheetModal()
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const handleSwipe =
-        (item: FungibleToken, index: number) =>
-        ({ openDirection }: { openDirection: string }) => {
-            if (openDirection === OpenDirection.LEFT) {
-                closeOtherSwipeableItems(index)
-                setSelectedToken(item)
-                setSelectedIndex(index)
-            }
-        }
+    const onAddCustomToken = useCallback(
+        (tokenAddress: string) => {
+            setCustomTokenAddress(tokenAddress)
 
-    const onTrashIconPress = useCallback(() => {
-        closeOtherSwipeableItems()
-        openRemoveCustomTokenSheet()
-    }, [closeOtherSwipeableItems, openRemoveCustomTokenSheet])
-
-    const renderItem: ListRenderItem<FungibleToken> = useCallback(
-        ({ item, index }) => {
-            const customStyle = index === 0 ? { marginTop: 20 } : {}
-            return (
-                <BaseView
-                    flexDirection="row"
-                    mx={20}
-                    my={8}
-                    style={customStyle}>
-                    <SwipeableItem
-                        ref={el => (swipeableItemRefs.current[index] = el)}
-                        item={item}
-                        renderUnderlayLeft={() => (
-                            <DeleteUnderlay onPress={onTrashIconPress} />
-                        )}
-                        snapPointsLeft={[58]}
-                        onChange={handleSwipe(item, index)}>
-                        <CustomTokenCard token={item} />
-                    </SwipeableItem>
-                </BaseView>
-            )
+            openAddCustomTokenSheet()
         },
-        [handleSwipe, onTrashIconPress],
+        [openAddCustomTokenSheet],
     )
 
-    const handleDelete = () => {
-        if (selectedToken?.address) {
-            dispatch(
-                removeTokenBalance({
-                    accountAddress: account.address,
-                    tokenAddress: selectedToken.address,
-                }),
-            )
-            closeRemoveCustomTokenSheet()
-        } else {
-            throw new Error(
-                "Trying to unselect an official token without an account selected",
-            )
-        }
-    }
+    const onScroll = useCallback(() => {
+        setHasScrolled(true)
+    }, [])
 
-    const handleCloseDeleteModal = () => {
-        swipeableItemRefs.current?.[selectedIndex!!]?.close?.()
-        closeRemoveCustomTokenSheet()
-    }
-
-    useEffect(() => {
-        if (customTokens.length === 0) {
-            nav.goBack()
+    const onEndReached = useCallback(async () => {
+        if (hasScrolled) {
+            await fetchTokens()
         }
-    }, [customTokens.length, nav])
+    }, [fetchTokens, hasScrolled])
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+
+        setHasScrolled(false)
+        setPage(0)
+
+        setRefreshing(false)
+    }, [setPage])
+
+    const tokensListSeparator = useCallback(
+        () => <BaseSpacer height={16} />,
+        [],
+    )
+
+    const renderCustomTokensList = useMemo(() => {
+        return (
+            <>
+                <BaseView flexDirection="row" style={[styles.list]}>
+                    <FlashList
+                        data={tokens}
+                        keyExtractor={token => token.tokenAddress}
+                        ItemSeparatorComponent={tokensListSeparator}
+                        onViewableItemsChanged={onViewableItemsChanged}
+                        viewabilityConfig={viewabilityConfig}
+                        scrollEnabled={isListScrollable}
+                        ListHeaderComponent={<BaseSpacer height={8} />}
+                        ListFooterComponent={
+                            hasFetched ? (
+                                <BaseSpacer height={20} />
+                            ) : (
+                                <BaseView mr={20} ml={36} pt={12}>
+                                    <SkeletonActivityBox />
+                                </BaseView>
+                            )
+                        }
+                        renderItem={({ item: token }) => {
+                            const tokenId = `${token.tokenAddress}`
+
+                            return (
+                                <BaseView mx={20} testID={tokenId}>
+                                    <CustomTokenBox
+                                        tokenBalance={token}
+                                        onTogglePress={onAddCustomToken}
+                                    />
+                                </BaseView>
+                            )
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        estimatedItemSize={80}
+                        estimatedListSize={{
+                            height: 80 * tokens.length,
+                            width: 400,
+                        }}
+                        onScroll={onScroll}
+                        onEndReachedThreshold={0.5}
+                        onEndReached={onEndReached}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                                tintColor={theme.colors.border}
+                            />
+                        }
+                        testID="contacts-list"
+                    />
+                </BaseView>
+            </>
+        )
+    }, [
+        hasFetched,
+        isListScrollable,
+        onAddCustomToken,
+        onEndReached,
+        onRefresh,
+        onScroll,
+        onViewableItemsChanged,
+        refreshing,
+        theme.colors.border,
+        tokens,
+        tokensListSeparator,
+        viewabilityConfig,
+    ])
+
+    const renderSkeletonList = useMemo(() => {
+        return (
+            <>
+                <BaseView flexDirection="row" style={styles.list}>
+                    <FlatList
+                        data={[...Array(SKELETON_COUNT)]}
+                        keyExtractor={(_, index) => `skeleton-${index}`}
+                        ListFooterComponent={<BaseSpacer height={20} />}
+                        renderItem={() => {
+                            return (
+                                <BaseView mx={20}>
+                                    <SkeletonCustomTokenBox />
+                                </BaseView>
+                            )
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </BaseView>
+            </>
+        )
+    }, [])
+
+    const renderNoTokensButton = useMemo(() => {
+        return (
+            <BaseView
+                justifyContent="center"
+                alignItems="center"
+                w={100}
+                style={styles.noTokensButton}>
+                <NoTokensButton onPress={openQRCodeSheet} />
+            </BaseView>
+        )
+    }, [openQRCodeSheet])
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <BaseView
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                mx={20}>
-                <BaseText typographyFont="subTitleBold">
+        <Layout
+            safeAreaTestID="History_Screen"
+            fixedHeader={
+                <BaseText typographyFont="subTitleBold" pb={8}>
                     {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
                 </BaseText>
-                <BaseIcon
-                    name={"plus"}
-                    bg={theme.colors.secondary}
-                    action={openAddCustomTokenSheet}
-                    testID="ManageCustomTokenScreen_plusIcon"
-                />
-            </BaseView>
-            <View style={styles.flatListContainer}>
-                <FlatList
-                    keyExtractor={_token => _token.address}
-                    data={customTokens}
-                    renderItem={renderItem}
-                />
-            </View>
-            <AddCustomTokenBottomSheet
-                ref={addCustomTokenSheetRef}
-                onClose={closeAddCustomTokenSheet}
-            />
-            <DeleteConfirmationBottomSheet
-                ref={removeCustomTokenSheetRef}
-                onClose={handleCloseDeleteModal}
-                title={LL.MANAGE_CUSTOM_TOKENS_DELETE_TITLE()}
-                description={LL.MANAGE_CUSTOM_TOKENS_DELETE_DESC()}
-                onConfirm={handleDelete}
-                deletingElement={
-                    <BaseView flexDirection="row">
-                        <CustomTokenCard token={selectedToken!!} />
-                    </BaseView>
-                }
-            />
-        </BaseSafeArea>
+            }
+            bodyWithoutScrollView={
+                <>
+                    {/* Tokens List */}
+                    {!!tokens.length &&
+                        (page !== 0 || hasFetched) &&
+                        renderCustomTokensList}
+
+                    {/* Fetching Tokens shows skeleton */}
+                    {!hasFetched && page === 0 && renderSkeletonList}
+
+                    {/* No Tokens owned */}
+                    {!tokens.length && hasFetched && renderNoTokensButton}
+
+                    <AddCustomTokenBottomSheet
+                        ref={addCustomTokenSheetRef}
+                        onClose={closeAddCustomTokenSheet}
+                        tokenAddress={customTokenAddress}
+                    />
+
+                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                </>
+            }
+        />
     )
 }
 
 const styles = StyleSheet.create({
-    flatListContainer: {
+    card: {
+        paddingHorizontal: 20,
+        marginVertical: 8,
+    },
+    underlayContainer: {
+        flexDirection: "row",
+    },
+    list: {
+        top: 0,
         flex: 1,
-        width: "100%",
-        marginBottom: 60,
+        marginBottom: PlatformUtils?.isIOS()
+            ? 0
+            : tabbarBaseStyles?.tabbar?.height,
+    },
+    noTokensButton: {
+        position: "absolute",
+        bottom: "50%",
     },
 })

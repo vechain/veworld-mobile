@@ -1,13 +1,14 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useFungibleTokenInfo } from "./useFungibleTokenInfo"
 import { VET } from "~Constants"
-import { getTokenDecimals, getTokenSymbol } from "~Networking"
+import { getTokenDecimals, getTokenSymbol, getTokenName } from "~Networking"
 import { useThor } from "~Components"
 import * as logger from "~Utils/Logger/Logger"
 
 jest.mock("~Networking", () => ({
     getTokenDecimals: jest.fn(),
     getTokenSymbol: jest.fn(),
+    getTokenName: jest.fn(),
 }))
 
 jest.mock("~Components", () => ({
@@ -24,10 +25,12 @@ describe("useFungibleTokenInfo", () => {
         const thor = "thor"
         const symbolMock = "SYMBOL"
         const decimalsMock = 18
+        const nameMock = "NAME"
 
         ;(getTokenDecimals as jest.Mock).mockResolvedValue(decimalsMock)
         ;(getTokenSymbol as jest.Mock).mockResolvedValue(symbolMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
+        ;(getTokenName as jest.Mock).mockResolvedValue(nameMock)
 
         const { result, waitForNextUpdate } = renderHook(() =>
             useFungibleTokenInfo(tokenAddress),
@@ -38,6 +41,7 @@ describe("useFungibleTokenInfo", () => {
         expect(result.current.decimals).toEqual(decimalsMock)
         expect(getTokenSymbol).toHaveBeenCalledWith(tokenAddress, thor)
         expect(getTokenDecimals).toHaveBeenCalledWith(tokenAddress, thor)
+        expect(getTokenName).toHaveBeenCalledWith(tokenAddress, thor)
     })
 
     it("should not fetch token symbol and decimals if token address is VET", () => {
@@ -49,6 +53,7 @@ describe("useFungibleTokenInfo", () => {
         expect(result.current.decimals).toBeUndefined()
         expect(getTokenSymbol).not.toHaveBeenCalled()
         expect(getTokenDecimals).not.toHaveBeenCalled()
+        expect(getTokenName).not.toHaveBeenCalled()
     })
 
     it("should handle error when fetching token info", async () => {
@@ -58,6 +63,7 @@ describe("useFungibleTokenInfo", () => {
 
         ;(getTokenDecimals as jest.Mock).mockRejectedValue(errorMock)
         ;(getTokenSymbol as jest.Mock).mockRejectedValue(errorMock)
+        ;(getTokenName as jest.Mock).mockRejectedValue(errorMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const consoleErrorSpy = jest.spyOn(logger, "error")
@@ -70,6 +76,31 @@ describe("useFungibleTokenInfo", () => {
         expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
         expect(result.current.symbol).toBeUndefined()
         expect(result.current.decimals).toBeUndefined()
+        expect(result.current.name).toBeUndefined()
         expect(result.current.error).toEqual(errorMock)
+    })
+
+    it("fetchData should correctly fetch token info for a provided address", async () => {
+        const tokenAddress = "tokenAddress2"
+        const thor = "thor"
+        const symbolMock = "SYMBOL2"
+        const decimalsMock = 8
+        const nameMock = "NAME2"
+
+        ;(getTokenDecimals as jest.Mock).mockResolvedValue(decimalsMock)
+        ;(getTokenSymbol as jest.Mock).mockResolvedValue(symbolMock)
+        ;(getTokenName as jest.Mock).mockResolvedValue(nameMock)
+        ;(useThor as jest.Mock).mockReturnValue(thor)
+
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useFungibleTokenInfo(tokenAddress),
+        )
+        await waitForNextUpdate({ timeout: 5000 })
+
+        const fetchedData = await result.current.fetchData(tokenAddress)
+
+        expect(fetchedData.symbol).toEqual(symbolMock)
+        expect(fetchedData.decimals).toEqual(decimalsMock)
+        expect(fetchedData.name).toEqual(nameMock)
     })
 })

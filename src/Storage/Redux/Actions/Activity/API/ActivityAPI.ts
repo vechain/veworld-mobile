@@ -3,7 +3,7 @@ import {
     getActivitiesFromIncomingTransfers,
     getActivitiesFromTransactions,
 } from "./ActivityHelpers"
-import { Activity } from "~Model"
+import { Activity, NETWORK_TYPE, Network } from "~Model"
 import {
     ORDER,
     getIncomingTransfersOrigin,
@@ -30,14 +30,14 @@ import {
 export const fetchTransactions = async (
     address: string,
     page: number,
-    thor: Connex.Thor,
+    networkType: NETWORK_TYPE,
 ): Promise<FetchTransactionsResponse> => {
     debug(`Fetching transactions for ${address}`)
 
     try {
         return await fetchFromEndpoint<FetchTransactionsResponse>(
             getTransactionsOrigin(
-                thor,
+                networkType,
                 address,
                 page,
                 DEFAULT_PAGE_SIZE,
@@ -63,14 +63,14 @@ export const fetchTransactions = async (
 export const fetchIncomingTransfers = async (
     address: string,
     page: number,
-    thor: Connex.Thor,
+    networkType: NETWORK_TYPE,
 ): Promise<FetchIncomingTransfersResponse> => {
     debug(`Fetching incoming transfers for ${address}`)
 
     try {
         return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
             getIncomingTransfersOrigin(
-                thor,
+                networkType,
                 address,
                 page,
                 DEFAULT_PAGE_SIZE,
@@ -110,17 +110,17 @@ export const fetchBlock = async (blockId: string, thor: Connex.Thor) => {
 export const fetchAccountTransactionActivities = async (
     address: string,
     page: number,
-    thor: Connex.Thor,
+    network: Network,
 ): Promise<Activity[]> => {
     // Fetch transactions for the account address
     const transactions: FetchTransactionsResponse = await fetchTransactions(
         address,
         page,
-        thor,
+        network.type,
     )
 
     const incomingTransfers: FetchIncomingTransfersResponse =
-        await fetchIncomingTransfers(address, page, thor)
+        await fetchIncomingTransfers(address, page, network.type)
 
     let activitiesFetched: Activity[] = []
 
@@ -130,7 +130,7 @@ export const fetchAccountTransactionActivities = async (
 
     const incomingTransferActivities = getActivitiesFromIncomingTransfers(
         incomingTransfers.data,
-        thor,
+        network,
     )
 
     activitiesFetched = [
