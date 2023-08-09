@@ -1,12 +1,7 @@
-import { FlashList, ListRenderItem } from "@shopify/flash-list"
 import React, { useCallback, useRef, useState } from "react"
 
-import { StyleSheet } from "react-native"
-import {
-    useBottomSheetModal,
-    useCheckIdentity,
-    useScrollableList,
-} from "~Hooks"
+import { Pressable, StyleSheet } from "react-native"
+import { useBottomSheetModal, useCheckIdentity } from "~Hooks"
 import {
     BaseSpacer,
     BaseView,
@@ -26,13 +21,12 @@ import {
     WalletMgmtBottomSheet,
 } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
 
 export const WalletManagementScreen = () => {
     const devices = useAppSelector(selectDevices)
     const [selectedDevice, setSelectedDevice] = useState<Device>()
-
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(devices, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
+    const [isEdit, setIsEdit] = useState(false)
 
     const { deleteWallet } = useWalletDeletion(selectedDevice)
 
@@ -75,8 +69,9 @@ export const WalletManagementScreen = () => {
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
         new Map(),
     )
-    const renderItem: ListRenderItem<Device> = useCallback(
-        ({ item, index }) => {
+    const renderItem: RenderItem<Device> = useCallback(
+        ({ item, getIndex, drag, isActive }) => {
+            const index = getIndex() || 0
             return (
                 <SwipeableRow
                     item={item}
@@ -85,14 +80,20 @@ export const WalletManagementScreen = () => {
                     swipeableItemRefs={swipeableItemRefs}
                     onOpenDeleteItemBottomSheet={openRemoveWalletBottomSheet}
                     setSelectedItem={setSelectedDevice}>
-                    <DeviceBox
-                        device={item}
-                        onDeviceSelected={onDeviceSelected(item)}
-                    />
+                    <Pressable
+                        onPressIn={isEdit ? drag : undefined}
+                        disabled={isActive}>
+                        <DeviceBox
+                            device={item}
+                            onDeviceSelected={
+                                isEdit ? undefined : onDeviceSelected(item)
+                            }
+                        />
+                    </Pressable>
                 </SwipeableRow>
             )
         },
-        [onDeviceSelected, openRemoveWalletBottomSheet],
+        [isEdit, onDeviceSelected, openRemoveWalletBottomSheet],
     )
 
     return (
@@ -100,30 +101,23 @@ export const WalletManagementScreen = () => {
             safeAreaTestID="Wallet_Management_Screen"
             fixedHeader={
                 <>
-                    <WalletManagementHeader />
+                    <WalletManagementHeader
+                        isEdit={isEdit}
+                        setIsEdit={setIsEdit}
+                    />
                     <BaseSpacer height={16} />
                 </>
             }
             bodyWithoutScrollView={
                 <BaseView style={styles.view}>
-                    <FlashList
+                    <DraggableFlatList
                         data={devices}
-                        scrollEnabled={isListScrollable}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                        viewabilityConfig={viewabilityConfig}
+                        extraData={() => {}}
+                        onDragEnd={() => {}}
                         keyExtractor={device => device.rootAddress}
-                        ListHeaderComponent={<BaseSpacer height={16} />}
                         renderItem={renderItem}
+                        activationDistance={60}
                         showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        estimatedItemSize={152}
-                        estimatedListSize={{
-                            height: 184,
-                            width:
-                                152 * devices.length +
-                                (devices.length - 1) * 16,
-                        }}
-                        ListFooterComponent={<BaseSpacer height={16} />}
                     />
                     <WalletMgmtBottomSheet
                         ref={accountMgmtBottomSheetRef}

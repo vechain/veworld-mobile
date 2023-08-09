@@ -15,6 +15,7 @@ export interface BaseDevice {
     type: DEVICE_TYPE
     alias: string
     index: number
+    position?: number
 }
 
 /**
@@ -24,7 +25,6 @@ export interface BaseDevice {
 export interface LocalDevice extends BaseDevice {
     wallet: string
     readonly type: DEVICE_TYPE.LOCAL_MNEMONIC
-    position: number
 }
 
 /**
@@ -33,5 +33,4 @@ export interface LocalDevice extends BaseDevice {
 export interface LedgerDevice extends BaseDevice {
     deviceId: string
     readonly type: DEVICE_TYPE.LEDGER
-    position: number
 }

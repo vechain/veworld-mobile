@@ -12,7 +12,7 @@ import { BaseDevice, DEVICE_TYPE } from "~Model"
 
 type Props = {
     device: BaseDevice
-    onDeviceSelected: () => void
+    onDeviceSelected?: () => void
     isIconVisible?: boolean
 }
 

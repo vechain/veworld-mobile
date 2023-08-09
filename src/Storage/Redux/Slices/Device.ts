@@ -22,7 +22,10 @@ export const DeviceSlice = createSlice({
             }
         },
         addDevice: (state, action: PayloadAction<Device>) => {
-            state.push(action.payload)
+            state.push({
+                position: state.length,
+                ...action.payload,
+            })
         },
         updateDevice: (
             state,
