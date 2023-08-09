@@ -40,7 +40,13 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
     }, [nft, collection, nav])
 
     const renderNFTStaticImage = useCallback(
-        () => <NFTImage uri={NFTPlaceholder} style={styles.nftPreviewImage} />,
+        () => (
+            <NFTImage
+                uri={NFTPlaceholder}
+                // @ts-ignore
+                style={styles.nftPreviewImage}
+            />
+        ),
         [styles.nftPreviewImage],
     )
 
@@ -51,6 +57,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                     {nft.mediaType === NFTMediaType.IMAGE && (
                         <NFTImage
                             uri={nft.image}
+                            // @ts-ignore
                             style={styles.nftPreviewImage}
                         />
                     )}
@@ -74,6 +81,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                     {nft.mediaType === NFTMediaType.UNKNOWN && (
                         <NFTImage
                             uri={NFTPlaceholder}
+                            // @ts-ignore
                             style={styles.nftPreviewImage}
                         />
                     )}

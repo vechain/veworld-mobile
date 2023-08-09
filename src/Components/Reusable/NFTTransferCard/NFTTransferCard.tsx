@@ -47,7 +47,6 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                 uri={placeholderImg}
                 // @ts-ignore
                 style={styles.nftImage}
-                isNFT={true}
             />
         )
     }, [placeholderImg, styles.nftImage])
@@ -62,7 +61,6 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                     uri={tokenImage ?? ""}
                     // @ts-ignore
                     style={styles.nftImage}
-                    isNFT={true}
                 />
             )
 
@@ -89,7 +87,6 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                 uri={placeholderImg}
                 // @ts-ignore
                 style={styles.nftImage}
-                isNFT={true}
             />
         )
     }, [

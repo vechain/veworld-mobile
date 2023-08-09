@@ -17,13 +17,7 @@ export const NFTDetailImage = ({ nft }: Props) => {
 
     const renderMedia = useMemo(() => {
         if (nft.mediaType === NFTMediaType.IMAGE)
-            return (
-                <NFTImage
-                    isNFT={true}
-                    uri={nft.image}
-                    style={baseStyles.nftImage}
-                />
-            )
+            return <NFTImage uri={nft.image} style={baseStyles.nftImage} />
 
         if (nft.mediaType === NFTMediaType.VIDEO)
             return (
@@ -31,7 +25,6 @@ export const NFTDetailImage = ({ nft }: Props) => {
                     <Video
                         PosterComponent={() => (
                             <NFTImage
-                                isNFT={true}
                                 uri={NFTPlaceholder}
                                 style={baseStyles.nftImage}
                             />
@@ -48,13 +41,7 @@ export const NFTDetailImage = ({ nft }: Props) => {
                 </BaseView>
             )
 
-        return (
-            <NFTImage
-                uri={NFTPlaceholder}
-                style={baseStyles.nftImage}
-                isNFT={true}
-            />
-        )
+        return <NFTImage uri={NFTPlaceholder} style={baseStyles.nftImage} />
     }, [nft.image, nft.mediaType])
 
     return (

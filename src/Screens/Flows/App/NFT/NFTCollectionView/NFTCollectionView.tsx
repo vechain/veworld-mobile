@@ -56,6 +56,7 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                                 ? collection.image
                                 : NFTPlaceholder
                         }
+                        // @ts-ignore
                         style={styles.nftPreviewImage}
                     />
 
