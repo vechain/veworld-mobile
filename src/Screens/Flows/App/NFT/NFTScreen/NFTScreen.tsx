@@ -153,6 +153,7 @@ export const NFTScreen = () => {
                 </>
             }
             noBackButton
+            showSelectedNetwork={false}
         />
     )
 }

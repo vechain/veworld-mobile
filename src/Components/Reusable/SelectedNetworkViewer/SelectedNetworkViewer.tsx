@@ -6,6 +6,7 @@ import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Network } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { capitalize } from "~Utils/StringUtils/StringUtils"
 
 export const SelectedNetworkViewer = () => {
     const network: Network = useAppSelector(selectSelectedNetwork)
@@ -13,20 +14,18 @@ export const SelectedNetworkViewer = () => {
     const { styles } = useThemedStyles(selectedNetworkViewerStyle)
 
     return (
-        <BaseView style={styles.networkRow}>
-            <BaseView style={styles.networkViewer}>
-                <BaseView style={styles.networkViewerIconText}>
-                    <BaseIcon
-                        name={"web"}
-                        color={theme.colors.text}
-                        size={12}
-                        testID={"web"}
-                        style={styles.networkViewerNetworkIcon}
-                    />
-                    <BaseText style={styles.networkViewerNetworkNameText}>
-                        {network.name}
-                    </BaseText>
-                </BaseView>
+        <BaseView style={styles.networkViewer}>
+            <BaseView style={styles.networkViewerIconText}>
+                <BaseIcon
+                    name={"web"}
+                    color={theme.colors.text}
+                    size={15}
+                    testID={"web"}
+                    style={styles.networkViewerNetworkIcon}
+                />
+                <BaseText style={styles.networkViewerNetworkNameText}>
+                    {capitalize(network.name)}
+                </BaseText>
             </BaseView>
         </BaseView>
     )
@@ -34,11 +33,6 @@ export const SelectedNetworkViewer = () => {
 
 const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
-        networkRow: {
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-        },
         networkViewer: {
             height: 25,
             borderRadius: 10,
@@ -55,6 +49,6 @@ const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
             paddingLeft: 5,
         },
         networkViewerNetworkIcon: {
-            paddingTop: 2,
+            paddingTop: 1,
         },
     })

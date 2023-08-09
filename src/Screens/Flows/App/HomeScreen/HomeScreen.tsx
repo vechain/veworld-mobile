@@ -35,7 +35,6 @@ import { AccountWithDevice } from "~Model"
 import { RemoveAccountWarningBottomSheet } from "~Screens/Flows/App/HomeScreen/Components/BottomSheets/RemoveAccountWarningBottomSheet"
 import { useAccountDelete } from "~Screens/Flows/App/HomeScreen/Hooks/useAccountDelete"
 import { useI18nContext } from "~i18n"
-import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 
 export const HomeScreen = () => {
     useTokenBalances()
@@ -140,7 +139,6 @@ export const HomeScreen = () => {
         <BaseSafeArea
             grow={1}
             style={{ marginBottom: tabBarAndroidBottomInsets }}>
-            <SelectedNetworkViewer />
             <BaseSpacer height={10} />
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}

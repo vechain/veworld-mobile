@@ -23,6 +23,7 @@ type Props = {
     isScrollEnabled?: boolean
     safeAreaTestID?: string
     scrollViewTestID?: string
+    showSelectedNetwork?: boolean
     onTouchBody?: () => void
 }
 
@@ -38,6 +39,7 @@ export const Layout = ({
     safeAreaTestID,
     onTouchBody,
     scrollViewTestID,
+    showSelectedNetwork = true,
 }: Props) => {
     const theme = useTheme()
     const { tabBarAndroidBottomInsets, calculateBottomInsets } =
@@ -58,14 +60,23 @@ export const Layout = ({
             testID={safeAreaTestID}
             onTouchStart={onTouchBody}>
             <BaseView h={100}>
-                <SelectedNetworkViewer />
-                {!noBackButton && <BackButtonHeader hasBottomSpacer={false} />}
-                <BaseSpacer height={fixedHeader ? 16 : 8} />
-                <BaseView mx={noMargin ? 0 : 20}>
-                    {fixedHeader && title && <Title />}
-                    {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
+                <BaseView>
+                    {!noBackButton && (
+                        <BackButtonHeader hasBottomSpacer={false} />
+                    )}
+                    <BaseView>
+                        <BaseView mx={noMargin ? 0 : 20}>
+                            {fixedHeader && title && <Title />}
+                            {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
+                        </BaseView>
+                    </BaseView>
+                    {showSelectedNetwork && (
+                        <BaseView style={styles.selectedNetworkViewerView}>
+                            <SelectedNetworkViewer />
+                        </BaseView>
+                    )}
+                    {!fixedHeader && <BaseSpacer height={8} />}
                 </BaseView>
-
                 {/* Separator from header to body */}
                 <BaseSpacer height={1} background={theme.colors.card} />
 
@@ -100,5 +111,10 @@ export const Layout = ({
 const styles = StyleSheet.create({
     scrollView: {
         paddingHorizontal: 24,
+    },
+    selectedNetworkViewerView: {
+        position: "absolute",
+        right: 22,
+        top: 5,
     },
 })
