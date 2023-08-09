@@ -7,6 +7,7 @@ export type Colors = {
     secondary: string
     tertiary: string
     disabled: string
+    disabledButton: string
     danger: string
     success: string
     successMedium: string
@@ -76,6 +77,7 @@ const light: Colors = {
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
+    disabledButton: COLORS.DARK_PURPLE_DISABLED,
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
     successMedium: COLORS.WHITE,
@@ -111,6 +113,7 @@ const dark: Colors = {
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
+    disabledButton: COLORS.LIME_GREEN_DISABLED,
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
     successMedium: COLORS.MEDIUM_GREEN,

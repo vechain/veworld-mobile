@@ -104,6 +104,7 @@
     "json-stringify-safe": "^5.0.1",
     "lodash": "^4.17.21",
     "lottie-react-native": "6.0.1",
+    "mixpanel-react-native": "^2.3.1",
     "moment": "^2.29.4",
     "patch-package": "^6.5.1",
     "promise.allsettled": "^1.0.6",
