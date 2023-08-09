@@ -56,8 +56,9 @@ export const useNFTs = () => {
                 mediaType,
                 tokenURI,
                 updated: true,
-                name: tokenMetadata?.name ?? nft.name,
-                description: tokenMetadata?.description ?? nft.description,
+                name: tokenMetadata?.name ?? LL.COMMON_NOT_AVAILABLE(),
+                description:
+                    tokenMetadata?.description ?? LL.COMMON_NOT_AVAILABLE(),
             }
             dispatch(
                 updateNFT({
@@ -67,7 +68,7 @@ export const useNFTs = () => {
                 }),
             )
         },
-        [currentAddress, dispatch, fetchMetadata, thor],
+        [LL, currentAddress, dispatch, fetchMetadata, thor],
     )
 
     useLazyLoader({
@@ -88,6 +89,7 @@ export const useNFTs = () => {
                     error: undefined,
                 }),
             )
+            let err
 
             try {
                 const nftResponse = await getNftsForContract(
@@ -103,7 +105,6 @@ export const useNFTs = () => {
                         nft.tokenId,
                         nft.contractAddress,
                         nft.owner,
-                        LL.COMMON_NOT_AVAILABLE(),
                         theme.isDark,
                     )
                 })
@@ -117,24 +118,19 @@ export const useNFTs = () => {
                         pagination: nftResponse.pagination,
                     }),
                 )
-
-                dispatch(
-                    setNetworkingSideEffects({
-                        isLoading: false,
-                        error: undefined,
-                    }),
-                )
             } catch (e) {
+                err = e?.toString() as string
+                error("useNFTs", e)
+            } finally {
                 dispatch(
                     setNetworkingSideEffects({
                         isLoading: false,
-                        error: e?.toString() as string,
+                        error: err,
                     }),
                 )
-                error("useNFTs", e)
             }
         },
-        [dispatch, network.type, currentAddress, LL, theme.isDark],
+        [dispatch, network.type, currentAddress, theme.isDark],
     )
 
     return { loadNFTsForCollection }

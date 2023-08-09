@@ -12,13 +12,12 @@ export const initCollectionMetadataFromRegistry = (
     selectedAccount: string,
     collection: string,
     regInfo: GithubCollectionResponse,
-    notAvailable: string,
 ): NonFungibleTokenCollection => {
     const nftCollection: NonFungibleTokenCollection = {
         id: collection,
         address: collection,
         name: regInfo.name,
-        symbol: notAvailable,
+        symbol: "",
         creator: regInfo.creator,
         description: regInfo.description,
         image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
@@ -42,8 +41,8 @@ export const initCollectionMetadataWithoutRegistry = (
     const nftCollection: NonFungibleTokenCollection = {
         id: collection,
         address: collection,
-        name: notAvailable,
-        symbol: notAvailable,
+        name: "",
+        symbol: "",
         creator: notAvailable,
         description: notAvailable,
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
@@ -60,13 +59,12 @@ export const initialiseNFTMetadata = (
     tokenId: string,
     contractAddress: string,
     owner: string,
-    notAvailable: string,
     isDarkTheme: boolean,
 ): NonFungibleToken => {
     const nftWithMetadata: NonFungibleToken = {
         id: contractAddress + tokenId + owner,
-        name: notAvailable,
-        description: notAvailable,
+        name: "",
+        description: "",
         address: contractAddress,
         tokenId: tokenId,
         owner: owner,

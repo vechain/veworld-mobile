@@ -8,7 +8,7 @@ import {
 import { NftScreenHeader } from "./Components"
 import { AccountWithDevice } from "~Model"
 import { isEmpty } from "lodash"
-import { NftSkeleton } from "./Components/NftSkeleton"
+import { NftLoader } from "./Components/NftLoader"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { useFetchCollections } from "./useFetchCollections"
 import { useNavigation } from "@react-navigation/native"
@@ -23,10 +23,7 @@ import {
 import { ImportNFTView } from "./Components/ImportNFTView"
 import { NetworkErrorView } from "./Components/NetworkErrorView"
 import { NFTList } from "./Components/NFTList"
-import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
-import { MathUtils } from "~Utils"
 import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
-import { ListFooterView } from "./Components/ListFooterView"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
@@ -74,35 +71,12 @@ export const NFTScreen = () => {
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
         useBottomSheetModal()
 
-    const renderContent = useMemo(() => {
-        if (!isEmpty(error) && isEmpty(collections)) return <NetworkErrorView />
-
-        if (isLoading && isEmpty(collections))
-            return (
-                <NftSkeleton
-                    numberOfChildren={NFT_PAGE_SIZE}
-                    showMargin
-                    renderExtra={MathUtils.getOdd(collections.length)}
-                />
-            )
-
+    const renderImportNftView = useMemo(() => {
         if (isShowImportNFTs)
-            return (
-                <>
-                    <ImportNFTView onImportPress={openQRCodeSheet} />
+            return <ImportNFTView onImportPress={openQRCodeSheet} />
+    }, [isShowImportNFTs, openQRCodeSheet])
 
-                    {(!isEmpty(collections) ||
-                        !isEmpty(blackListedCollections)) && (
-                        <ListFooterView
-                            onGoToBlackListed={onGoToBlackListed}
-                            hasNext={false}
-                            isLoading={false}
-                            renderExtraSkeleton={false}
-                        />
-                    )}
-                </>
-            )
-
+    const renderNFTList = useMemo(() => {
         if (!isEmpty(collections) || !isEmpty(blackListedCollections))
             return (
                 <NFTList
@@ -115,17 +89,25 @@ export const NFTScreen = () => {
                 />
             )
     }, [
-        error,
         collections,
         blackListedCollections,
         isLoading,
-        isShowImportNFTs,
-        openQRCodeSheet,
         onGoToBlackListed,
         fetchMoreCollections,
         onMomentumScrollBegin,
         hasNext,
     ])
+
+    const renderContent = useMemo(() => {
+        if (!isEmpty(error) && isEmpty(collections)) return <NetworkErrorView />
+
+        return (
+            <NftLoader isLoading={isLoading && isEmpty(collections)}>
+                {renderImportNftView}
+                {renderNFTList}
+            </NftLoader>
+        )
+    }, [error, collections, isLoading, renderImportNftView, renderNFTList])
 
     return (
         <Layout
