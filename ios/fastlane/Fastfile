@@ -170,8 +170,8 @@ platform :ios do
     buildNumber = options[:build]
 
     #prepare git
-    ensure_git_status_clean
-    ensure_git_branch(branch: "main")
+    # ensure_git_status_clean
+    # ensure_git_branch(branch: "main")
 
     # clean build artifacts if any
     clean_build_artifacts
@@ -307,7 +307,7 @@ platform :ios do
       sh("git branch -D release-build-ios-#{versionType.nil? ? build : version}")
 
       # delete branch remotely
-      sh("git push origin --d release-build-ios-#{versionType.nil? ? build : version}")
+      sh("git push origin --delete release-build-ios-#{versionType.nil? ? build : version}")
     end
   end
 end
