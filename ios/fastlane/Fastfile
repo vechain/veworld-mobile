@@ -149,7 +149,7 @@ platform :ios do
       sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
 
       # upload source maps to sentry with cli
-      sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map main.jsbundle.hbc.map main.jsbundle.packager.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
+      sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
     end
   end
 
@@ -170,7 +170,7 @@ platform :ios do
     buildNumber = options[:build]
 
     #prepare git
-    # ensure_git_status_clean
+    ensure_git_status_clean
     ensure_git_branch(branch: "main")
 
     # clean build artifacts if any
