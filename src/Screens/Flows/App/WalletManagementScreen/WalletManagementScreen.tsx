@@ -1,5 +1,5 @@
-import { FlashList } from "@shopify/flash-list"
-import React, { useCallback, useState } from "react"
+import { FlashList, ListRenderItem } from "@shopify/flash-list"
+import React, { useCallback, useRef, useState } from "react"
 
 import { StyleSheet } from "react-native"
 import {
@@ -14,6 +14,7 @@ import {
     Layout,
     RenameWalletBottomSheet,
     RequireUserPassword,
+    SwipeableRow,
 } from "~Components"
 import { Device } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
@@ -24,6 +25,7 @@ import {
     WalletManagementHeader,
     WalletMgmtBottomSheet,
 } from "./components"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 export const WalletManagementScreen = () => {
     const devices = useAppSelector(selectDevices)
@@ -62,17 +64,35 @@ export const WalletManagementScreen = () => {
         onClose: closeRenameWalletBottonSheet,
     } = useBottomSheetModal()
 
-    const devicesListSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
-    )
-
     const onDeviceSelected = useCallback(
         (device: Device) => () => {
             setSelectedDevice(device)
             openAccountMgmtSheet()
         },
         [openAccountMgmtSheet, setSelectedDevice],
+    )
+
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
+        new Map(),
+    )
+    const renderItem: ListRenderItem<Device> = useCallback(
+        ({ item, index }) => {
+            return (
+                <SwipeableRow
+                    item={item}
+                    index={index}
+                    itemKey={String(index)}
+                    swipeableItemRefs={swipeableItemRefs}
+                    onOpenDeleteItemBottomSheet={openRemoveWalletBottomSheet}
+                    setSelectedItem={setSelectedDevice}>
+                    <DeviceBox
+                        device={item}
+                        onDeviceSelected={onDeviceSelected(item)}
+                    />
+                </SwipeableRow>
+            )
+        },
+        [onDeviceSelected, openRemoveWalletBottomSheet],
     )
 
     return (
@@ -85,23 +105,15 @@ export const WalletManagementScreen = () => {
                 </>
             }
             bodyWithoutScrollView={
-                <BaseView style={styles.view} mx={20}>
+                <BaseView style={styles.view}>
                     <FlashList
                         data={devices}
                         scrollEnabled={isListScrollable}
                         onViewableItemsChanged={onViewableItemsChanged}
                         viewabilityConfig={viewabilityConfig}
                         keyExtractor={device => device.rootAddress}
-                        ItemSeparatorComponent={devicesListSeparator}
                         ListHeaderComponent={<BaseSpacer height={16} />}
-                        renderItem={({ item }) => {
-                            return (
-                                <DeviceBox
-                                    device={item}
-                                    onDeviceSelected={onDeviceSelected(item)}
-                                />
-                            )
-                        }}
+                        renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
                         estimatedItemSize={152}

@@ -1,9 +1,11 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "../Types"
+import sortBy from "lodash/sortBy"
 
 const selectAll = (state: RootState) => state
-export const selectDevicesState = (state: RootState) => state.devices
+export const selectDevicesState = (state: RootState) =>
+    sortBy(state.devices, "position")
 
 /**
  *
