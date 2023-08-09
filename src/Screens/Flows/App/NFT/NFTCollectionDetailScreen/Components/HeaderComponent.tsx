@@ -40,13 +40,11 @@ export const HeaderComponent = memo(
                 <BaseView flexDirection="row" alignItems="flex-end">
                     {collection.mediaType === NFTMediaType.IMAGE ? (
                         <NFTImage
-                            isNFT={true}
                             uri={collection?.image}
                             style={baseStyles.nftHeaderImage}
                         />
                     ) : (
                         <NFTImage
-                            isNFT={true}
                             uri={NFTPlaceholder}
                             style={baseStyles.nftHeaderImage}
                         />

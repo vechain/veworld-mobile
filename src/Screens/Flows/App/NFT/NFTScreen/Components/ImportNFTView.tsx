@@ -15,7 +15,10 @@ export const ImportNFTView = ({ onImportPress }: Props) => {
 
     return (
         <BaseView
-            style={{ marginBottom: calculateBottomInsets }}
+            style={{
+                ...baseStyles.importNFTView,
+                marginBottom: calculateBottomInsets,
+            }}
             mx={20}
             justifyContent="center"
             alignItems="center">
@@ -53,5 +56,9 @@ const baseStyles = StyleSheet.create({
     quickNFTActions: {
         width: 140,
         height: 100,
+    },
+    importNFTView: {
+        marginTop: 100,
+        top: 80,
     },
 })

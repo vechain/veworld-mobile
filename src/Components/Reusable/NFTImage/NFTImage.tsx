@@ -9,7 +9,6 @@ type Props = {
     uri: string
     w?: number
     h?: number
-    isNFT?: boolean
 } & FastImageProps
 
 export const NFTImage = memo((props: Props) => {
