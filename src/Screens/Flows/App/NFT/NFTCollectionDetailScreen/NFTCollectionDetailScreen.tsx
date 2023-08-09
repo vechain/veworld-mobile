@@ -9,8 +9,7 @@ import { NFTList } from "./Components"
 import { isEmpty } from "lodash"
 import { NetworkErrorView } from "../NFTScreen/Components/NetworkErrorView"
 import { useCollectionSource } from "./Hooks/useCollectionSource"
-import { NftSkeleton } from "../NFTScreen/Components/NftSkeleton"
-import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { NftLoader } from "../NFTScreen/Components/NftLoader"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -38,18 +37,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
         setEndReachedCalledDuringMomentum(true)
     }, [])
 
-    const renderContent = useMemo(() => {
-        if (!isEmpty(error) && isEmpty(NFTs)) return <NetworkErrorView />
-
-        if (isLoading && isEmpty(NFTs))
-            return (
-                <NftSkeleton
-                    numberOfChildren={NFT_PAGE_SIZE}
-                    showMargin
-                    isNFT
-                />
-            )
-
+    const renderNftList = useMemo(() => {
         if (!isEmpty(NFTs) && !isEmpty(anyCollection)) {
             return (
                 <NFTList
@@ -65,12 +53,21 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     }, [
         NFTs,
         anyCollection,
-        error,
-        fetchMoreNFTs,
         isLoading,
-        hasNext,
+        fetchMoreNFTs,
         onMomentumScrollBegin,
+        hasNext,
     ])
+
+    const renderContent = useMemo(() => {
+        if (!isEmpty(error) && isEmpty(NFTs)) return <NetworkErrorView />
+
+        return (
+            <NftLoader isLoading={isLoading && isEmpty(NFTs)}>
+                {renderNftList}
+            </NftLoader>
+        )
+    }, [error, NFTs, isLoading, renderNftList])
 
     return (
         <Layout

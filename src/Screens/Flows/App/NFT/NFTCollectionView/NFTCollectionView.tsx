@@ -8,6 +8,8 @@ import { Routes } from "~Navigation"
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
 import { useToggleCollection } from "../NFTCollectionDetailScreen/Components/Hooks/useToggleCollection"
+import { useThemedStyles } from "~Hooks"
+import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 type Props = {
     collection: NonFungibleTokenCollection
@@ -20,6 +22,7 @@ enum ItemTitle {
 }
 
 export const NFTCollectionView = ({ collection, index }: Props) => {
+    const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
     const { onToggleCollection, isBlacklisted } =
@@ -43,34 +46,21 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
         })
     }, [nav, collection.address])
 
-    return (
-        <TouchableOpacity
-            activeOpacity={0.6}
-            // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
-            onLongPress={() => {}}
-            onPress={onCollectionPress}
-            style={[
-                baseStyles.nftContainer,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {
-                    justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
-                },
-            ]}>
-            <LongPressProvider
-                items={CollectionItem}
-                action={onToggleCollection}>
-                <BaseView style={baseStyles.nftCollectionNameBarRadius}>
+    const renderCollection = useMemo(() => {
+        if (collection.updated)
+            return (
+                <BaseView style={styles.nftCollectionNameBarRadius}>
                     <NFTImage
                         uri={
                             collection.mediaType === NFTMediaType.IMAGE
                                 ? collection.image
                                 : NFTPlaceholder
                         }
-                        style={baseStyles.nftPreviewImage}
+                        style={styles.nftPreviewImage}
                     />
 
                     <BaseView
-                        style={baseStyles.nftCollectionNameBar}
+                        style={styles.nftCollectionNameBar}
                         flexDirection="row"
                         alignItems="center"
                         justifyContent="space-between">
@@ -79,7 +69,7 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                         </BaseText>
                         {collection.balanceOf > 0 && (
                             <BaseView
-                                style={baseStyles.nftCounterLabel}
+                                style={styles.nftCounterLabel}
                                 justifyContent="center"
                                 alignItems="center">
                                 <BaseText color={COLORS.WHITE}>
@@ -90,43 +80,91 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                         )}
                     </BaseView>
                 </BaseView>
+            )
+    }, [
+        collection,
+        styles.nftCollectionNameBar,
+        styles.nftCollectionNameBarRadius,
+        styles.nftCounterLabel,
+        styles.nftPreviewImage,
+    ])
+
+    const renderSkeleton = useMemo(() => {
+        if (!collection.updated)
+            return (
+                <SkeletonContent
+                    containerStyle={styles.nftPreviewImage}
+                    animationDirection="horizontalLeft"
+                    boneColor={theme.colors.skeletonBoneColor}
+                    highlightColor={theme.colors.skeletonHighlightColor}
+                    // @ts-ignore
+                    layout={[{ ...styles.nftPreviewImage, opacity: 0.1 }]}
+                    isLoading={true}
+                />
+            )
+    }, [
+        collection,
+        styles.nftPreviewImage,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+    ])
+
+    return (
+        <TouchableOpacity
+            activeOpacity={0.6}
+            // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
+            onLongPress={() => {}}
+            onPress={onCollectionPress}
+            style={[
+                styles.nftContainer,
+                // eslint-disable-next-line react-native/no-inline-styles
+                {
+                    justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
+                },
+            ]}>
+            <LongPressProvider
+                items={CollectionItem}
+                action={onToggleCollection}>
+                {renderCollection}
+                {renderSkeleton}
             </LongPressProvider>
         </TouchableOpacity>
     )
 }
 
-const baseStyles = StyleSheet.create({
-    nftContainer: {
-        flexWrap: "wrap",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "50%",
-    },
+const baseStyles = () =>
+    StyleSheet.create({
+        nftContainer: {
+            flexWrap: "wrap",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "50%",
+        },
 
-    nftPreviewImage: {
-        width: SCREEN_WIDTH / 2 - 30,
-        height: 164,
-        borderRadius: 13,
-    },
+        nftPreviewImage: {
+            width: SCREEN_WIDTH / 2 - 30,
+            height: 164,
+            borderRadius: 13,
+        },
 
-    nftCollectionNameBar: {
-        position: "absolute",
-        height: 34,
-        bottom: 0,
-        left: 0,
-        width: SCREEN_WIDTH / 2 - 30,
-        backgroundColor: COLORS.DARK_PURPLE_RBGA,
-        paddingHorizontal: 12,
-    },
-    nftCollectionNameBarRadius: {
-        overflow: "hidden",
-        borderRadius: 13,
-    },
-    nftCounterLabel: {
-        minWidth: 20,
-        height: 20,
-        paddingHorizontal: 4,
-        borderRadius: 13,
-        backgroundColor: COLORS.DARK_PURPLE,
-    },
-})
+        nftCollectionNameBar: {
+            position: "absolute",
+            height: 34,
+            bottom: 0,
+            left: 0,
+            width: SCREEN_WIDTH / 2 - 30,
+            backgroundColor: COLORS.DARK_PURPLE_RBGA,
+            paddingHorizontal: 12,
+        },
+        nftCollectionNameBarRadius: {
+            overflow: "hidden",
+            borderRadius: 13,
+        },
+        nftCounterLabel: {
+            minWidth: 20,
+            height: 20,
+            paddingHorizontal: 4,
+            borderRadius: 13,
+            backgroundColor: COLORS.DARK_PURPLE,
+        },
+    })
