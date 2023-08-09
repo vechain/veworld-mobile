@@ -5,7 +5,7 @@ import {
     RenderItemParams,
 } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
-import { BaseSpacer, BaseView } from "~Components"
+import { BaseSpacer, BaseView, DeleteUnderlay } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
@@ -27,7 +27,6 @@ import SwipeableItem, {
     OpenDirection,
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
-import { UnderlayLeft } from "./UnderlayLeft"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -77,14 +76,9 @@ export const TokenList = memo(
             [],
         )
 
-        const onRemoveToken = useCallback(
-            (token: FungibleTokenWithBalance) => {
-                setTokenToRemove(token)
-
-                openRemoveCustomTokenBottomSheet()
-            },
-            [openRemoveCustomTokenBottomSheet],
-        )
+        const onRemoveToken = useCallback(() => {
+            openRemoveCustomTokenBottomSheet()
+        }, [openRemoveCustomTokenBottomSheet])
 
         const onConfirmRemoveToken = useCallback(() => {
             if (tokenToRemove) {
@@ -130,6 +124,7 @@ export const TokenList = memo(
 
         const onSwipeableItemChange = useCallback(
             (token: FungibleTokenWithBalance) => {
+                setTokenToRemove(token)
                 closeOtherSwipeableItems(token.address)
             },
             [closeOtherSwipeableItems],
@@ -160,7 +155,7 @@ export const TokenList = memo(
                         }}
                         renderUnderlayLeft={() => (
                             <BaseView mx={20}>
-                                <UnderlayLeft onDelete={onRemoveToken} />
+                                <DeleteUnderlay onPress={onRemoveToken} />
                             </BaseView>
                         )}
                         snapPointsLeft={underlaySnapPoints}
