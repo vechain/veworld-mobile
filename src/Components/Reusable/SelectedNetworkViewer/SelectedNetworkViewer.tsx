@@ -6,7 +6,10 @@ import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Network } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { capitalize } from "~Utils/StringUtils/StringUtils"
+import {
+    capitalize,
+    truncateTextIfSizeIsGreaterThan,
+} from "~Utils/StringUtils/StringUtils"
 
 export const SelectedNetworkViewer = () => {
     const network: Network = useAppSelector(selectSelectedNetwork)
@@ -24,7 +27,10 @@ export const SelectedNetworkViewer = () => {
                     style={styles.networkViewerNetworkIcon}
                 />
                 <BaseText style={styles.networkViewerNetworkNameText}>
-                    {capitalize(network.name)}
+                    {network.name &&
+                        capitalize(
+                            truncateTextIfSizeIsGreaterThan(10, network.name),
+                        )}
                 </BaseText>
             </BaseView>
         </BaseView>
