@@ -32,6 +32,9 @@ export const getTokenBalancesAndInfoFromTokenAddresses = async (
                 network,
                 thorClient,
             )
+
+        if (!tokenBalance) continue
+
         tokenBalances.push(tokenBalance)
     }
 

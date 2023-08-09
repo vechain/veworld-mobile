@@ -118,13 +118,6 @@ export const selectTokensWithBalances = createSelector(
         selectAccountCustomTokens,
     ],
     (balances, tokens, customTokens): FungibleTokenWithBalance[] => {
-        /* console.log(
-            JSON.stringify({
-                balances: balances,
-                customTokens: customTokens,
-            }),
-        ) */
-
         return balances.map(balance => {
             const balanceToken = [...tokens, ...customTokens].find(token =>
                 AddressUtils.compareAddresses(

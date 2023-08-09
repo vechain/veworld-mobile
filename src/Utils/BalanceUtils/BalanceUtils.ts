@@ -17,10 +17,10 @@ const getBalanceFromBlockchain = async (
     accountAddress: string,
     network: Network,
     thor: Connex.Thor,
-): Promise<Balance> => {
+): Promise<Balance | undefined> => {
     try {
         // We get the balance differently depending on whether it's a VIP180 or VET/VTHO
-        let balance: string
+        let balance: string | undefined
         if (AddressUtils.compareAddresses(tokenAddress, VET.address))
             balance = await getVetAndVthoBalancesFromBlockchain(
                 accountAddress,
@@ -37,6 +37,8 @@ const getBalanceFromBlockchain = async (
                 tokenAddress,
                 thor,
             )
+
+        if (!balance) return undefined
 
         return {
             balance,
@@ -65,14 +67,16 @@ const getBalanceAndTokenInfoFromBlockchain = async (
     accountAddress: string,
     network: Network,
     thor: Connex.Thor,
-): Promise<Balance> => {
+): Promise<Balance | undefined> => {
     try {
-        const balance: Balance = await getBalanceFromBlockchain(
+        const balance: Balance | undefined = await getBalanceFromBlockchain(
             tokenAddress,
             accountAddress,
             network,
             thor,
         )
+
+        if (!balance) return undefined
 
         const tokenName = await getTokenName(tokenAddress, thor)
         const tokenSymbol = await getTokenSymbol(tokenAddress, thor)
@@ -85,10 +89,7 @@ const getBalanceAndTokenInfoFromBlockchain = async (
             tokenDecimals,
         }
     } catch (e) {
-        error(e)
-        throw new Error(
-            "Failed to get balance and token info from external service",
-        )
+        error("Failed to get balance and token info from external service", e)
     }
 }
 
@@ -113,7 +114,7 @@ const getTokenBalanceFromBlockchain = async (
     accountAddress: string,
     tokenAddress: string,
     thor: Connex.Thor,
-): Promise<string> => {
+): Promise<string | undefined> => {
     try {
         const res = await thor
             .account(tokenAddress)
@@ -123,9 +124,6 @@ const getTokenBalanceFromBlockchain = async (
         return res.decoded[0]
     } catch (e) {
         error("getTokenBalanceFromBlockchain", e)
-        throw new Error(
-            "Failed to get data from contract. Wrong network/ Contract address? ",
-        )
     }
 }
 
