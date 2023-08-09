@@ -118,6 +118,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 )
 
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
+
+                dispatch(setIsAppLoading(false))
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
                 error("SignMessageScreen:handleAccept", err)
@@ -129,6 +131,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         LL,
                     },
                 )
+
+                dispatch(setIsAppLoading(false))
             } finally {
                 dispatch(setIsAppLoading(false))
             }
