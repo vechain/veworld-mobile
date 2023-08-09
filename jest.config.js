@@ -57,26 +57,19 @@ module.exports = {
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
 
-    collectCoverageFrom: [
-        "src/Utils/**/*.{js,jsx,ts,tsx}",
-        "src/Hooks/**/*.{js,jsx,ts,tsx}",
-        "src/Components/Base/**/*.{js,jsx,ts,tsx}",
-    ],
+    collectCoverageFrom: ["src/Utils/**/*.{js,jsx,ts,tsx}"],
     coveragePathIgnorePatterns: [
         "index.ts",
-        "<rootDir>/src/Hooks/useAppReset/useAppReset.tsx",
-        "<rootDir>/src/Hooks/useSignMessage/useSignMessage.ts",
-        "<rootDir>/src/Hooks/useSignTransaction/useSignTransaction.ts",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
         "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
         "<rootDir>/src/Utils/MinimizerUtils/MinimizerUtils.ts",
     ],
     coverageThreshold: {
         global: {
-            statements: 90.5,
-            branches: 79.4,
-            functions: 89,
-            lines: 90.9,
+            statements: 96.64,
+            branches: 89.37,
+            functions: 96.29,
+            lines: 97.22,
         },
     },
     maxWorkers: 2,
