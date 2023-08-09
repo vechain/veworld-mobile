@@ -42,7 +42,7 @@ describe("BalanceUtils", () => {
             thorClient,
         )
 
-        expect(balance.balance).toEqual(mockedBalance.balance)
+        expect(balance?.balance).toEqual(mockedBalance.balance)
     })
 
     it("VTHO - should return the correct balance", async () => {
@@ -57,7 +57,7 @@ describe("BalanceUtils", () => {
             thorClient,
         )
 
-        expect(balance.balance).toEqual(mockedBalance.energy)
+        expect(balance?.balance).toEqual(mockedBalance.energy)
     })
 
     it("VTHO - should throw network error", async () => {
@@ -86,7 +86,7 @@ describe("BalanceUtils", () => {
             thorClient,
         )
 
-        expect(balance.balance).toEqual(decodedTokenBalance)
+        expect(balance?.balance).toEqual(decodedTokenBalance)
     })
     it("SHA Token - should return the correct balance", async () => {
         const balance = await BalanceUtils.getBalanceFromBlockchain(
@@ -96,7 +96,7 @@ describe("BalanceUtils", () => {
             thorClient,
         )
 
-        expect(balance.balance).toEqual(decodedTokenBalance)
+        expect(balance?.balance).toEqual(decodedTokenBalance)
     })
 
     it("SHA token - should throw an error", async () => {

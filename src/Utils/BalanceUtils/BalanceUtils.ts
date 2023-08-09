@@ -38,7 +38,7 @@ const getBalanceFromBlockchain = async (
                 thor,
             )
 
-        if (!balance) return undefined
+        if (!balance) throw new Error("Failed to get balance")
 
         return {
             balance,
@@ -78,9 +78,11 @@ const getBalanceAndTokenInfoFromBlockchain = async (
 
         if (!balance) return undefined
 
-        const tokenName = await getTokenName(tokenAddress, thor)
-        const tokenSymbol = await getTokenSymbol(tokenAddress, thor)
-        const tokenDecimals = await getTokenDecimals(tokenAddress, thor)
+        const [tokenName, tokenSymbol, tokenDecimals] = await Promise.all([
+            getTokenName(tokenAddress, thor),
+            getTokenSymbol(tokenAddress, thor),
+            getTokenDecimals(tokenAddress, thor),
+        ])
 
         return {
             ...balance,

@@ -30,6 +30,8 @@ export const upsertTokenBalance =
             thorClient,
         )
 
+        if (!balance) return
+
         dispatch(
             upsertTokenBalances({ accountAddress, newBalances: [balance] }),
         )
@@ -61,6 +63,8 @@ export const updateAccountBalances =
                     network,
                     thorClient,
                 )
+
+                if (!balance) continue
 
                 balances.push({
                     ...balance,
@@ -102,7 +106,7 @@ export const updateOfficialTokensBalances =
                     thorClient,
                 )
 
-                if (balance.balance === "0") continue
+                if (!balance || balance.balance === "0") continue
 
                 officialTokensBalances.push(balance)
             }
