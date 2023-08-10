@@ -82,6 +82,7 @@ export const AboutScreen = () => {
     return (
         <Layout
             isScrollEnabled={isSmallScreen}
+            showSelectedNetwork={false}
             body={
                 <>
                     <BaseText typographyFont="title" pt={16}>

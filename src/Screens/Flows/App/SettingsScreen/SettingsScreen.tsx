@@ -40,6 +40,7 @@ export const SettingsScreen = () => {
     return (
         <Layout
             safeAreaTestID="SettingsScreen"
+            showSelectedNetwork={false}
             fixedHeader={
                 <BaseText
                     typographyFont="largeTitle"
