@@ -27,7 +27,7 @@ export const SelectedNetworkViewer = () => {
                     style={styles.networkViewerNetworkIcon}
                 />
                 <BaseText style={styles.networkViewerNetworkNameText}>
-                    {network.name && formatNetworkName(network.name)}
+                    {network.name.length > 0 && formatNetworkName(network.name)}
                 </BaseText>
             </BaseView>
         </BaseView>
