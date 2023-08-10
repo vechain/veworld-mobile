@@ -18,9 +18,7 @@ import HexUtils from "~Utils/HexUtils"
 
 let web3wallet: IWeb3Wallet
 export const core: ICore = new Core({
-    projectId: __DEV__
-        ? process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID_DEV
-        : process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID_PROD,
+    projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
 })
 
 export async function getWeb3Wallet() {
