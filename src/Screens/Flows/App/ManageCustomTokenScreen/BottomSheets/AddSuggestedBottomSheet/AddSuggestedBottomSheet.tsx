@@ -21,6 +21,8 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { useAnalyticTracking } from "~Hooks"
+import { AnalyticsEvent } from "~Constants"
 
 type Props = {
     onClose: () => void
@@ -35,12 +37,20 @@ export const AddSuggestedBottomSheet = React.forwardRef<
     Props
 >(({ onClose, missingSuggestedTokens, setSelectedTokenSymbols }, ref) => {
     const [selectedTokens, setSelectedTokens] = useState<string[]>([])
+
     const { LL } = useI18nContext()
+
     const dispatch = useAppDispatch()
+
     const account = useAppSelector(selectSelectedAccount)
+
     const network = useAppSelector(selectSelectedNetwork)
+
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+
     const thorClient = useThor()
+
+    const track = useAnalyticTracking()
 
     const toggleToken = (token: FungibleTokenWithBalance) => () => {
         if (selectedTokens.includes(token.symbol)) {
@@ -71,15 +81,21 @@ export const AddSuggestedBottomSheet = React.forwardRef<
 
             dispatch(
                 addTokenBalance({
-                    balance: "0",
                     accountAddress: account.address,
-                    tokenAddress: token.address,
-                    timeUpdated: new Date().toISOString(),
-                    position: tokenBalances.length,
-                    genesisId: network.genesis.id,
+                    balance: {
+                        balance: "0",
+                        accountAddress: account.address,
+                        tokenAddress: token.address,
+                        timeUpdated: new Date().toISOString(),
+                        position: tokenBalances.length,
+                        genesisId: network.genesis.id,
+                        isCustomToken: true,
+                    },
                 }),
             )
             await dispatch(updateAccountBalances(thorClient, account.address))
+
+            track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
 
             handleDismiss()
         }

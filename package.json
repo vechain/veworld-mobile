@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -103,7 +103,7 @@
     "jsdoc": "^4.0.0",
     "json-stringify-safe": "^5.0.1",
     "lodash": "^4.17.21",
-    "lottie-react-native": "^6.0.0-rc.3",
+    "lottie-react-native": "6.0.1",
     "mixpanel-react-native": "^2.3.1",
     "moment": "^2.29.4",
     "patch-package": "^6.5.1",

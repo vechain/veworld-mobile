@@ -31,7 +31,6 @@ import {
     ContactDetailBox,
     ContactManagementBottomSheet,
 } from "./Components"
-import HapticsService from "~Services/HapticsService"
 
 const underlaySnapPoints = [58]
 
@@ -97,10 +96,6 @@ export const ContactsScreen = () => {
         })
     }, [])
 
-    const onSwipe = useCallback((address: string) => {
-        setSelectedContactAddress(address)
-    }, [])
-
     const onClickTrashIcon = useCallback(() => {
         closeOtherSwipeableItems("") // Pass an empty string to close all items
         openRemoveContactSheet()
@@ -143,11 +138,10 @@ export const ContactsScreen = () => {
 
     const onSwipeableItemChange = useCallback(
         (address: string) => {
-            HapticsService.triggerImpact({ level: "Light" })
+            setSelectedContactAddress(address)
             closeOtherSwipeableItems(address)
-            onSwipe(address)
         },
-        [closeOtherSwipeableItems, onSwipe],
+        [closeOtherSwipeableItems],
     )
 
     // [End] Methods
@@ -245,6 +239,7 @@ export const ContactsScreen = () => {
     return (
         <Layout
             safeAreaTestID="ContactsScreen"
+            onTouchBody={() => closeOtherSwipeableItems("")}
             fixedHeader={
                 <BaseView pb={16}>
                     <BaseView

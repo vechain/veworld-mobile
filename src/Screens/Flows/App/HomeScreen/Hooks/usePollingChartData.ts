@@ -7,8 +7,8 @@ const TOKEN_BALANCE_SYNC_PERIOD = Number(
 
 export const usePollingChartData = (
     symbol: string,
-    days: string | number = 1,
-    interval: string = "hourly",
+    days: string | number = 7,
+    interval: string = "daily",
 ) => {
     const dispatch = useAppDispatch()
 

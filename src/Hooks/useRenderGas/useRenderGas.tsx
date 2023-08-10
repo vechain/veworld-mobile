@@ -2,7 +2,13 @@ import React, { useCallback, useMemo } from "react"
 import { useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { VTHO } from "~Constants"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseIcon,
+    BaseSkeleton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import {
     selectVthoTokenWithBalanceByAccount,
     useAppSelector,
@@ -11,7 +17,6 @@ import { useI18nContext } from "~i18n"
 import { EstimateGasResult } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 export const useRenderGas = ({
     loadingGas,
@@ -58,7 +63,7 @@ export const useRenderGas = ({
     const RenderGas = useCallback(() => {
         if (loadingGas) {
             return (
-                <SkeletonContent
+                <BaseSkeleton
                     animationDirection="horizontalLeft"
                     boneColor={theme.colors.skeletonBoneColor}
                     highlightColor={theme.colors.skeletonHighlightColor}
@@ -75,7 +80,6 @@ export const useRenderGas = ({
                             ],
                         },
                     ]}
-                    isLoading={true}
                 />
             )
         }

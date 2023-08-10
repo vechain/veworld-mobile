@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import {
     BaseCard,
     BaseIcon,
@@ -22,7 +21,6 @@ import {
     selectSelectedAccount,
     selectNonVechainTokensWithBalances,
     selectSelectedNetwork,
-    selectAccountCustomTokens,
     selectSuggestedTokens,
 } from "~Storage/Redux/Selectors"
 import {
@@ -42,33 +40,48 @@ import {
     AddSuggestedBottomSheet,
 } from "../ManageCustomTokenScreen/BottomSheets"
 import { useSuggestedTokens } from "./useSuggestedTokens"
+import { AnalyticsEvent } from "~Constants"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
+
     const nav = useNavigation()
+
     const { LL } = useI18nContext()
+
     const dispatch = useAppDispatch()
+
     const account = useAppSelector(selectSelectedAccount)
-    const [tokenQuery, setTokenQuery] = useState<string>("")
-    const tokens = useAppSelector(selectNonVechainFungibleTokens)
+
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+
+    const tokens = useAppSelector(selectNonVechainFungibleTokens)
+
+    const currentNetwork = useAppSelector(selectSelectedNetwork)
+
+    const track = useAnalyticTracking()
+
+    const [tokenQuery, setTokenQuery] = useState<string>("")
     const [selectedTokenSymbols, setSelectedTokenSymbols] = useState<string[]>(
         tokenBalances.map(tokenWithBalance => tokenWithBalance.symbol),
     )
-    const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const customTokens = useAppSelector(selectAccountCustomTokens)
+
     const {
         ref: addCustomTokenSheetRef,
         onOpen: openAddCustomTokenSheet,
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
+
     const {
         ref: addSuggestedBottomSheet,
         onOpen: openAddSuggestedBottomSheet,
         onClose: closeAddSuggestedBottomSheet,
     } = useBottomSheetModal()
+
     useSuggestedTokens(selectedTokenSymbols)
+
     const suggestedTokens = useAppSelector(selectSuggestedTokens)
+
     const missingSuggestedTokens =
         suggestedTokens?.filter(
             token => !selectedTokenSymbols.includes(token.symbol),
@@ -93,17 +106,25 @@ export const ManageTokenScreen = () => {
 
     const selectToken = async (token: FungibleToken) => {
         setSelectedTokenSymbols(tokenSymbols => [...tokenSymbols, token.symbol])
+
         dispatch(
             addTokenBalance({
-                balance: "0",
                 accountAddress: account.address,
-                tokenAddress: token.address,
-                timeUpdated: new Date().toISOString(),
-                position: selectedTokenSymbols.length,
-                genesisId: currentNetwork.genesis.id,
+                balance: {
+                    balance: "0",
+                    accountAddress: account.address,
+                    tokenAddress: token.address,
+                    timeUpdated: new Date().toISOString(),
+                    position: selectedTokenSymbols.length,
+                    genesisId: currentNetwork.genesis.id,
+                    isCustomToken: false,
+                },
             }),
         )
-        await dispatch(updateAccountBalances(thorClient, account.address))
+
+        dispatch(updateAccountBalances(thorClient, account.address))
+
+        track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
     }
     const unselectToken = (token: FungibleToken) => {
         setSelectedTokenSymbols(tokenSymbols =>
@@ -143,9 +164,26 @@ export const ManageTokenScreen = () => {
                 body={
                     <>
                         <BaseView>
-                            <BaseText typographyFont="title" pt={16}>
-                                {LL.MANAGE_TOKEN_TITLE()}
-                            </BaseText>
+                            <BaseView
+                                flexDirection="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                w={100}
+                                pt={16}>
+                                <BaseText
+                                    typographyFont="title"
+                                    testID="contacts-screen-title">
+                                    {LL.MANAGE_TOKEN_TITLE()}
+                                </BaseText>
+                                <BaseIcon
+                                    haptics="Light"
+                                    name={"plus"}
+                                    size={24}
+                                    bg={theme.colors.secondary}
+                                    action={openAddCustomTokenSheet}
+                                    testID="Add_Custom_Token_Button"
+                                />
+                            </BaseView>
                             <BaseSpacer height={24} />
                             <BaseText typographyFont="button">
                                 {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE()}
@@ -155,47 +193,21 @@ export const ManageTokenScreen = () => {
                                 {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}
                             </BaseText>
                             <BaseSpacer height={16} />
-                            {customTokens.length ? (
-                                <BaseTouchableBox
-                                    haptics="Light"
-                                    action={navigateManageCustomTokenScreen}
-                                    justifyContent="center">
-                                    <BaseIcon
-                                        name="tune"
-                                        color={theme.colors.primary}
-                                    />
-                                    <BaseSpacer width={8} />
-                                    <BaseText typographyFont="bodyMedium">
-                                        {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
-                                    </BaseText>
-                                    <BaseSpacer width={8} />
-                                    <BaseView
-                                        bg={theme.colors.primary}
-                                        style={styles.counter}>
-                                        <BaseText
-                                            color={theme.colors.textReversed}
-                                            typographyFont="smallCaptionMedium">
-                                            {customTokens.length}
-                                        </BaseText>
-                                    </BaseView>
-                                </BaseTouchableBox>
-                            ) : (
-                                <BaseTouchableBox
-                                    haptics="Light"
-                                    action={openAddCustomTokenSheet}
-                                    justifyContent="center">
-                                    <BaseIcon
-                                        name="plus"
-                                        color={theme.colors.primary}
-                                    />
-                                    <BaseSpacer width={8} />
-                                    <BaseText
-                                        py={3}
-                                        typographyFont="bodyMedium">
-                                        {LL.MANAGE_TOKEN_ADD_CUSTOM()}
-                                    </BaseText>
-                                </BaseTouchableBox>
-                            )}
+
+                            <BaseTouchableBox
+                                haptics="Light"
+                                action={navigateManageCustomTokenScreen}
+                                justifyContent="center">
+                                <BaseIcon
+                                    name="tune"
+                                    color={theme.colors.primary}
+                                />
+                                <BaseSpacer width={8} />
+                                <BaseText typographyFont="bodyMedium">
+                                    {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
+                                </BaseText>
+                                <BaseSpacer width={8} />
+                            </BaseTouchableBox>
                             <BaseSpacer height={16} />
                             <BaseSearchInput
                                 value={tokenQuery}
@@ -286,11 +298,3 @@ export const ManageTokenScreen = () => {
         </DismissKeyboardView>
     )
 }
-
-const styles = StyleSheet.create({
-    counter: {
-        borderRadius: 6,
-        paddingVertical: 2,
-        paddingHorizontal: 4,
-    },
-})

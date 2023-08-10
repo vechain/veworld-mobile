@@ -3,6 +3,7 @@ import {
     AccountManagementBottomSheet,
     AddAccountBottomSheet,
     EditTokensBar,
+    Header,
     HeaderView,
     TokenList,
 } from "./Components"
@@ -12,6 +13,7 @@ import {
     useMemoizedAnimation,
     usePlatformBottomInsets,
     useSetSelectedAccount,
+    useTheme,
 } from "~Hooks"
 import {
     BaseSafeArea,
@@ -35,12 +37,19 @@ import { AccountWithDevice } from "~Model"
 import { RemoveAccountWarningBottomSheet } from "~Screens/Flows/App/HomeScreen/Components/BottomSheets/RemoveAccountWarningBottomSheet"
 import { useAccountDelete } from "~Screens/Flows/App/HomeScreen/Hooks/useAccountDelete"
 import { useI18nContext } from "~i18n"
+import { RefreshControl } from "react-native"
 
 export const HomeScreen = () => {
-    useTokenBalances()
+    const { updateBalances } = useTokenBalances()
+
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const { LL } = useI18nContext()
+
+    // Pull down to refresh
+    const [refreshing, setRefreshing] = React.useState(false)
+
+    const theme = useTheme()
 
     const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
 
@@ -126,6 +135,14 @@ export const HomeScreen = () => {
         deleteAccount,
     ])
 
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+
+        updateBalances()
+
+        setRefreshing(false)
+    }, [updateBalances])
+
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),
         enteringDelay: 50,
@@ -139,12 +156,19 @@ export const HomeScreen = () => {
         <BaseSafeArea
             grow={1}
             style={{ marginBottom: tabBarAndroidBottomInsets }}>
-            <BaseSpacer height={10} />
+            <Header />
             <NestableScrollContainer
                 showsVerticalScrollIndicator={false}
                 onContentSizeChange={visibleHeight => {
                     visibleHeightRef.current = visibleHeight
-                }}>
+                }}
+                refreshControl={
+                    <RefreshControl
+                        onRefresh={onRefresh}
+                        tintColor={theme.colors.border}
+                        refreshing={refreshing}
+                    />
+                }>
                 <HeaderView
                     openAccountManagementSheet={openAccountManagementSheet}
                     openSelectAccountBottomSheet={openSelectAccountBottomSheet}

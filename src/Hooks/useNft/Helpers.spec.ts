@@ -50,7 +50,6 @@ describe("Helpers - initCollectionMetadataFromRegistry", () => {
             selectedAccount,
             collection,
             regInfo,
-            "notAvailable",
         )
         expect(result).toEqual({
             id: "0x456",
@@ -63,7 +62,7 @@ describe("Helpers - initCollectionMetadataFromRegistry", () => {
             mediaType: NFTMediaType.IMAGE,
             mimeType: "image/webp",
             name: "name",
-            symbol: "notAvailable",
+            symbol: "",
             updated: false,
         })
     })
@@ -95,8 +94,8 @@ describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
             hasCount: false,
             image: NFTPlaceHolderLight,
             mediaType: NFTMediaType.IMAGE,
-            name: "notAvailable",
-            symbol: "notAvailable",
+            name: "",
+            symbol: "",
             updated: false,
         })
     })
@@ -122,17 +121,16 @@ describe("Helpers - initialiseNFTMetadata", () => {
             nft.tokenId,
             nft.contractAddress,
             nft.owner,
-            "notAvailable",
             false,
         )
 
         expect(result).toEqual({
             address: "0x0032",
-            description: "notAvailable",
+            description: "",
             id: nft.contractAddress + nft.tokenId + nft.owner,
             image: NFTPlaceHolderLight,
             mediaType: NFTMediaType.IMAGE,
-            name: "notAvailable",
+            name: "",
             owner: "0x123",
             tokenId: "1",
             updated: false,

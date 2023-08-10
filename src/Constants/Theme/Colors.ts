@@ -7,6 +7,7 @@ export type Colors = {
     secondary: string
     tertiary: string
     disabled: string
+    disabledButton: string
     danger: string
     success: string
     successMedium: string
@@ -64,6 +65,7 @@ export enum COLORS {
     DARK_ORANGE_ALERT = "#AF4F0A",
     MEDIUM_ORANGE = "#FA710E",
     DISABLED_GREY = "#E5E5E5",
+    MEDIUM_GRAY = "#C4C4C4",
 }
 
 const light: Colors = {
@@ -75,6 +77,7 @@ const light: Colors = {
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
+    disabledButton: COLORS.DARK_PURPLE_DISABLED,
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
     successMedium: COLORS.WHITE,
@@ -94,7 +97,7 @@ const light: Colors = {
     transparent: COLORS.TRANSPARENT,
     separator: COLORS.DARK_PURPLE_RBGA,
     switcher: COLORS.DARK_PURPLE_DISABLED,
-    skeletonBoneColor: COLORS.DARK_PURPLE_DISABLED,
+    skeletonBoneColor: COLORS.MEDIUM_GRAY,
     skeletonHighlightColor: COLORS.LIGHT_GRAY,
     alertOrangeMedium: COLORS.MEDIUM_ORANGE,
     alertRedMedium: COLORS.MEDIUM_RED,
@@ -110,6 +113,7 @@ const dark: Colors = {
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
+    disabledButton: COLORS.LIME_GREEN_DISABLED,
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
     successMedium: COLORS.MEDIUM_GREEN,

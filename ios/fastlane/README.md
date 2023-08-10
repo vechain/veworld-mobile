@@ -1,4 +1,5 @@
-## fastlane documentation
+fastlane documentation
+----
 
 # Installation
 
@@ -38,6 +39,14 @@ Remove certificates from GitHub
 
 Generate new certificates
 
+### ios fetch_certificates_from_gh
+
+```sh
+[bundle exec] fastlane ios fetch_certificates_from_gh
+```
+
+Get certificates
+
 ### ios rotate_certificates
 
 ```sh
@@ -70,6 +79,14 @@ Create Release Branch on GitHub for Beta
 
 Commit latest artifacts to GitHub
 
+### ios upload_source_maps_to_sentry
+
+```sh
+[bundle exec] fastlane ios upload_source_maps_to_sentry
+```
+
+
+
 ### ios build
 
 ```sh
@@ -78,7 +95,7 @@ Commit latest artifacts to GitHub
 
 Push a new beta build to TestFlight
 
----
+----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 

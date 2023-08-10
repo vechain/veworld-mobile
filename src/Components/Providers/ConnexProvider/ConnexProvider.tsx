@@ -41,6 +41,17 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
         }
     }, [initConnex, connex, selectedNetwork.genesis, driver])
 
+    // Every 2 minutes we need to reinitialize the driver
+    // This is to keep the head value up to date
+    useEffect(() => {
+        const interval = setInterval(() => {
+            initConnex()
+        }, 120000)
+        return () => clearInterval(interval)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     if (!value) {
         return <></>
     }

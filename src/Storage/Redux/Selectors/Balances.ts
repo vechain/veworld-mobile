@@ -6,7 +6,7 @@ import { RootState } from "~Storage/Redux/Types"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
-import { FungibleToken, FungibleTokenWithBalance } from "~Model"
+import { Balance, FungibleToken, FungibleTokenWithBalance } from "~Model"
 import {
     selectCustomTokensForNetwork,
     selectFungibleTokensAll,
@@ -19,8 +19,17 @@ export const selectBalancesState = (state: RootState) => state.balances
  */
 export const selectSelectedNetworkBalances = createSelector(
     [selectBalancesState, selectSelectedNetwork],
-    (balances, network) =>
-        balances.filter(balance => network.genesis.id === balance?.genesisId),
+    (balances, network) => {
+        let allBalances: Balance[] = []
+
+        Object.values(balances).forEach(balance => {
+            allBalances = [...allBalances, ...balance]
+        })
+
+        return allBalances.filter(
+            balance => network.genesis.id === balance?.genesisId,
+        )
+    },
 )
 
 /**
@@ -28,14 +37,13 @@ export const selectSelectedNetworkBalances = createSelector(
  */
 export const selectSelectedAccountBalances = createSelector(
     [selectBalancesState, selectSelectedAccount, selectSelectedNetwork],
-    (balances, account, network) =>
-        balances.filter(
-            balance =>
-                AddressUtils.compareAddresses(
-                    balance.accountAddress,
-                    account.address,
-                ) && network.genesis.id === balance?.genesisId,
-        ),
+    (balances, account, network) => {
+        if (!balances[account.address]) return []
+
+        return balances[account.address].filter(
+            balance => network.genesis.id === balance?.genesisId,
+        )
+    },
 )
 
 /**
@@ -47,14 +55,13 @@ export const selectAccountBalances = createSelector(
         selectSelectedNetwork,
         (_: RootState, accountAddress: string) => accountAddress,
     ],
-    (balances, network, accountAddress) =>
-        balances.filter(
-            balance =>
-                AddressUtils.compareAddresses(
-                    balance.accountAddress,
-                    accountAddress,
-                ) && network.genesis.id === balance?.genesisId,
-        ),
+    (balances, network, accountAddress) => {
+        if (!balances[accountAddress]) return []
+
+        return balances[accountAddress].filter(
+            balance => network.genesis.id === balance?.genesisId,
+        )
+    },
 )
 
 export const selectAccountCustomTokens = createSelector(
@@ -79,8 +86,10 @@ export const selectAllAccountsTokensWithBalances = createSelector(
         selectFungibleTokensAll,
         selectCustomTokensForNetwork,
     ],
-    (balances, tokens, customTokens): FungibleTokenWithBalance[] =>
-        balances.map(balance => {
+    (balances, tokens, customTokens): FungibleTokenWithBalance[] => {
+        const allBalances = Object.values(balances).flat()
+
+        return allBalances.map(balance => {
             const balanceToken = [...tokens, ...customTokens].find(token =>
                 AddressUtils.compareAddresses(
                     token.address,
@@ -96,7 +105,8 @@ export const selectAllAccountsTokensWithBalances = createSelector(
                 ...balanceToken,
                 balance,
             }
-        }),
+        })
+    },
 )
 /**
  * Get balances with related token data for selected account
@@ -107,8 +117,8 @@ export const selectTokensWithBalances = createSelector(
         selectFungibleTokensAll,
         selectAccountCustomTokens,
     ],
-    (balances, tokens, customTokens): FungibleTokenWithBalance[] =>
-        balances.map(balance => {
+    (balances, tokens, customTokens): FungibleTokenWithBalance[] => {
+        return balances.map(balance => {
             const balanceToken = [...tokens, ...customTokens].find(token =>
                 AddressUtils.compareAddresses(
                     token.address,
@@ -124,7 +134,8 @@ export const selectTokensWithBalances = createSelector(
                 ...balanceToken,
                 balance,
             }
-        }),
+        })
+    },
 )
 
 /**
@@ -250,6 +261,7 @@ export const selectVetTokenWithBalanceByAccount = createSelector(
                     accountAddress,
                     tokenAddress: vetToken.address,
                     genesisId: network.genesis.id,
+                    isCustomToken: false,
                 },
             }
         }
@@ -297,6 +309,7 @@ export const selectVthoTokenWithBalanceByAccount = createSelector(
                     accountAddress,
                     tokenAddress: vthoToken.address,
                     genesisId: network.genesis.id,
+                    isCustomToken: false,
                 },
             }
         }

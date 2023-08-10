@@ -14,12 +14,16 @@ export const getTokenSymbol = async (
     contractAddress: string,
     thor: Connex.Thor,
 ) => {
-    const res = await thor
-        .account(contractAddress)
-        .method(abis.VIP180.symbol)
-        .call()
+    try {
+        const res = await thor
+            .account(contractAddress)
+            .method(abis.VIP180.symbol)
+            .call()
 
-    return res.decoded[0]
+        return res.decoded[0]
+    } catch (e) {
+        throw new Error("Failed to call or decode getTokenSymbol: " + e)
+    }
 }
 
 /**
@@ -36,12 +40,16 @@ export const getTokenDecimals = async (
     contractAddress: string,
     thor: Connex.Thor,
 ) => {
-    const res = await thor
-        .account(contractAddress)
-        .method(abis.VIP180.decimals)
-        .call()
+    try {
+        const res = await thor
+            .account(contractAddress)
+            .method(abis.VIP180.decimals)
+            .call()
 
-    return res.decoded[0]
+        return res.decoded[0]
+    } catch (e) {
+        throw new Error("Failed to call or decode getTokenDecimals: " + e)
+    }
 }
 
 /**
@@ -58,10 +66,14 @@ export const getTokenName = async (
     contractAddress: string,
     thor: Connex.Thor,
 ) => {
-    const res = await thor
-        .account(contractAddress)
-        .method(abis.VIP180.name)
-        .call()
+    try {
+        const res = await thor
+            .account(contractAddress)
+            .method(abis.VIP180.name)
+            .call()
 
-    return res.decoded[0]
+        return res.decoded[0]
+    } catch (e) {
+        throw new Error("Failed to call or decode getTokenName: " + e)
+    }
 }
