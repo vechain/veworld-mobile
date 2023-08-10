@@ -78,7 +78,6 @@ export const WalletManagementScreen = () => {
     return (
         <Layout
             safeAreaTestID="Wallet_Management_Screen"
-            showSelectedNetwork={false}
             fixedHeader={
                 <>
                     <WalletManagementHeader />

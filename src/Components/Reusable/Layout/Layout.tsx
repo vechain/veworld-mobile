@@ -39,7 +39,7 @@ export const Layout = ({
     safeAreaTestID,
     onTouchBody,
     scrollViewTestID,
-    showSelectedNetwork = true,
+    showSelectedNetwork = false,
 }: Props) => {
     const theme = useTheme()
     const { tabBarAndroidBottomInsets, calculateBottomInsets } =

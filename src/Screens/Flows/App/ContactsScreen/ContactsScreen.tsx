@@ -245,7 +245,6 @@ export const ContactsScreen = () => {
     return (
         <Layout
             safeAreaTestID="ContactsScreen"
-            showSelectedNetwork={false}
             fixedHeader={
                 <BaseView pb={16}>
                     <BaseView
