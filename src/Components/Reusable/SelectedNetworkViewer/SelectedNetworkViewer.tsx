@@ -27,14 +27,15 @@ export const SelectedNetworkViewer = () => {
                     style={styles.networkViewerNetworkIcon}
                 />
                 <BaseText style={styles.networkViewerNetworkNameText}>
-                    {network.name &&
-                        capitalize(
-                            truncateTextIfSizeIsGreaterThan(10, network.name),
-                        )}
+                    {network.name && formatNetworkName(network.name)}
                 </BaseText>
             </BaseView>
         </BaseView>
     )
+}
+
+const formatNetworkName = (networkName: string) => {
+    return capitalize(truncateTextIfSizeIsGreaterThan(10, networkName))
 }
 
 const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
