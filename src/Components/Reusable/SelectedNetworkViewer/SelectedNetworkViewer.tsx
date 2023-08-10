@@ -35,7 +35,7 @@ export const SelectedNetworkViewer = () => {
 }
 
 const formatNetworkName = (networkName: string) => {
-    return capitalize(truncateTextIfSizeIsGreaterThan(10, networkName))
+    return capitalize(truncateTextIfSizeIsGreaterThan(8, networkName))
 }
 
 const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
@@ -49,8 +49,8 @@ const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
         networkViewerIconText: {
             flexDirection: "row",
             justifyContent: "center",
-            paddingLeft: 15,
-            paddingRight: 15,
+            paddingLeft: 10,
+            paddingRight: 10,
         },
         networkViewerNetworkNameText: {
             paddingLeft: 5,
