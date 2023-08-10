@@ -65,6 +65,7 @@ export const Layout = ({
                         <BackButtonHeader hasBottomSpacer={false} />
                     )}
                     <BaseView>
+                        <BaseSpacer height={fixedHeader ? 16 : 8} />
                         <BaseView mx={noMargin ? 0 : 20}>
                             {fixedHeader && title && <Title />}
                             {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
