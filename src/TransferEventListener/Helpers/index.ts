@@ -8,28 +8,27 @@ export * from "./handleVETTransfers"
 export * from "./handleNFTTransfers"
 export * from "./fetchTransfersForBlock"
 
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, Network } from "~Model"
 import { IncomingTransferResponse } from "~Networking"
+import { AppThunkDispatch } from "~Storage/Redux/Types"
 
 export interface BaseTransferHandlerProps {
     visibleAccounts: AccountWithDevice[]
     transfer: IncomingTransferResponse
+    network: Network
+    thorClient: Connex.Thor
     informUser: (params: { accountAddress: string; txId?: string }) => void
     stateReconciliationAction: (params: {
         network: string
         accountAddress: string
     }) => void
-    network: string
-}
-
-export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
-    thor: Connex.Thor
 }
 
 export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
     fetchData: (
         address: string,
-    ) => Promise<{ symbol: string; decimals: number }>
+    ) => Promise<{ name: string; symbol: string; decimals: number }>
+    dispatch: AppThunkDispatch
 }
 
 export interface VETTransferHandlerProps {

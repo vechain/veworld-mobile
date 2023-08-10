@@ -143,6 +143,7 @@ export const useNFTCollections = () => {
             dispatch(
                 setNetworkingSideEffects({ isLoading: true, error: undefined }),
             )
+            let err
 
             try {
                 // Get contract addresses for nfts owned by selected account
@@ -155,15 +156,7 @@ export const useNFTCollections = () => {
                     )
 
                 // exit early if there are no more pages to fetch
-                if (_page >= pagination.totalPages) {
-                    dispatch(
-                        setNetworkingSideEffects({
-                            isLoading: false,
-                            error: undefined,
-                        }),
-                    )
-                    return
-                }
+                if (_page >= pagination.totalPages) return
 
                 // Parse collection metadata from registry info or the chain if needed
                 const _nftCollections: NonFungibleTokenCollection[] =
@@ -177,7 +170,6 @@ export const useNFTCollections = () => {
                                 currentAddress,
                                 collection,
                                 regInfo,
-                                LL.COMMON_NOT_AVAILABLE(),
                             )
                         } else {
                             return initCollectionMetadataWithoutRegistry(
@@ -208,13 +200,15 @@ export const useNFTCollections = () => {
                     }),
                 )
             } catch (e: unknown) {
+                err = e?.toString() as string
+                error("useNFTCollections", e)
+            } finally {
                 dispatch(
                     setNetworkingSideEffects({
                         isLoading: false,
-                        error: e?.toString() as string,
+                        error: err,
                     }),
                 )
-                error("useNFTCollections", e)
             }
         },
         [LL, dispatch, currentAddress, network.type, theme.isDark],

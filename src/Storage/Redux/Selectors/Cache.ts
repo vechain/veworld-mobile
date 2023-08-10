@@ -18,3 +18,7 @@ export const selectAppLockStatus = createSelector(reducer, state => {
 export const selectIsAppLoading = createSelector(reducer, state => {
     return state.isAppLoading
 })
+
+export const selectIsTokensOwnedLoading = createSelector(reducer, state => {
+    return state.isTokensOwnedLoading
+})

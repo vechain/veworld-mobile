@@ -143,6 +143,7 @@ platform :android do
     version_name = options[:version_name]
     version_code = options[:version_code]
     track = options[:track]
+    release_status = options[:release_status]
 
     # prepare git
     # ensure_git_status_clean
@@ -192,6 +193,7 @@ platform :android do
   
       upload_to_play_store(
         verbose: true,
+        release_status: release_status,
         track: track,
       )
 

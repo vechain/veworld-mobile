@@ -224,6 +224,7 @@ const en: BaseTranslation = {
     SB_BACKUP_YOUR_PHRASE: "Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to",
     SB_BACKUP_YOUR_PHRASE_2: "RESET the App!",
     SB_UPGRADE_SECURITY_WARNING_ANDROID: "Also, you will be asked to use your biometrics security method for each wallet!",
+    SB_YOUR_TOKENS_EMPTY: "Your tokens will appear here",
 
     // ELEMENTS
     FACE_ID: "Face ID",
@@ -344,6 +345,7 @@ const en: BaseTranslation = {
     // Warning
     HEADS_UP: "Heads up!",
     ACTIVITIES_NOT_UP_TO_DATE: "Activities might not be up-to-date. Check your internet connection or try later",
+    CUSTOM_TOKENS_NOT_AVAIABLE: "Custom tokens are not available at the moment. Check your internet connection or try later",
 
 
     // Placeholders
@@ -500,7 +502,7 @@ const en: BaseTranslation = {
     MANAGE_TOKEN_TITLE: "Manage Tokens",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: "Select your official tokens or add a new custom one",
-    MANAGE_TOKEN_MANAGE_CUSTOM: "Manage custom tokens",
+    MANAGE_TOKEN_MANAGE_CUSTOM: "Add custom tokens owned",
     MANAGE_TOKEN_ADD_CUSTOM: "Add custom token",
     MANAGE_TOKEN_SELECTED: "Selected",
     MANAGE_TOKEN_UNSELECTED: "Unselected",
@@ -515,10 +517,12 @@ const en: BaseTranslation = {
     MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: "Confirm custom token",
     MANAGE_CUSTOM_TOKENS_DELETE_TITLE: "Remove custom token",
     MANAGE_CUSTOM_TOKENS_DELETE_DESC: "Are you sure you want to remove this custom token?",
+    MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: "Are you sure you want to add the selected token?",
 
     MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: "The address entered is incorrect or can't be added to this network",
     MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: "This is an official token, please select it from the previous list",
     MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: "This custom token is already present",
+    MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: "Receive tokens",
 
     // Send Token
     SEND_TOKEN_TITLE: "Send",

@@ -3,24 +3,24 @@ import { findInvolvedAccount } from "./findInvolvedAccount"
 import {
     informUserForIncomingNFT,
     informUserForOutgoingNFT,
-    NFTTransferHandlerProps,
+    BaseTransferHandlerProps,
 } from "./index"
 import { getName } from "~Networking"
 
 export const handleNFTTransfers = async ({
     visibleAccounts,
     transfer,
+    network,
+    thorClient,
     stateReconciliationAction,
     informUser,
-    network,
-    thor,
-}: NFTTransferHandlerProps) => {
+}: BaseTransferHandlerProps) => {
     const foundAccount = findInvolvedAccount(visibleAccounts, transfer)
 
     // Early exit if tx is not related to any of the visible accounts
     if (!foundAccount.account) return
 
-    const collectionName = await getName(transfer.tokenAddress, thor)
+    const collectionName = await getName(transfer.tokenAddress, thorClient)
 
     // User received NFT
     if (foundAccount.origin === TransactionOrigin.TO) {
@@ -33,8 +33,14 @@ export const handleNFTTransfers = async ({
             informUser,
         })
 
-        stateReconciliationAction({ network, accountAddress: transfer.to })
-        stateReconciliationAction({ network, accountAddress: transfer.from })
+        stateReconciliationAction({
+            network: network.type,
+            accountAddress: transfer.to,
+        })
+        stateReconciliationAction({
+            network: network.type,
+            accountAddress: transfer.from,
+        })
     }
 
     // User sent NFT
@@ -48,7 +54,13 @@ export const handleNFTTransfers = async ({
             informUser,
         })
 
-        stateReconciliationAction({ network, accountAddress: transfer.to })
-        stateReconciliationAction({ network, accountAddress: transfer.from })
+        stateReconciliationAction({
+            network: network.type,
+            accountAddress: transfer.to,
+        })
+        stateReconciliationAction({
+            network: network.type,
+            accountAddress: transfer.from,
+        })
     }
 }

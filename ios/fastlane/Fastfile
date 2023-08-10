@@ -171,7 +171,7 @@ platform :ios do
 
     #prepare git
     ensure_git_status_clean
-    ensure_git_branch(branch: "main")
+    # ensure_git_branch(branch: "main")
 
     # clean build artifacts if any
     clean_build_artifacts
@@ -240,7 +240,7 @@ platform :ios do
       )
 
       # upload source maps to sentry
-      upload_source_maps_to_sentry(build:build)
+      # upload_source_maps_to_sentry(build:build)
 
       # create changelog and tag if version is specified
       if !versionType.nil?
@@ -307,7 +307,7 @@ platform :ios do
       sh("git branch -D release-build-ios-#{versionType.nil? ? build : version}")
 
       # delete branch remotely
-      sh("git push origin --d release-build-ios-#{versionType.nil? ? build : version}")
+      sh("git push origin --delete release-build-ios-#{versionType.nil? ? build : version}")
     end
   end
 end

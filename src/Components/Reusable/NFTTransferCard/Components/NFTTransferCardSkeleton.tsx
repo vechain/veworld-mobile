@@ -1,13 +1,13 @@
 import React from "react"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
+import { BaseSkeleton } from "~Components/Base"
 
 export const NFTTransferCardSkeleton = () => {
     const theme = useTheme()
 
     return (
-        <SkeletonContent
+        <BaseSkeleton
             containerStyle={baseStyles.container}
             animationDirection="horizontalLeft"
             boneColor={theme.colors.skeletonBoneColor}
@@ -57,7 +57,6 @@ export const NFTTransferCardSkeleton = () => {
                     ],
                 },
             ]}
-            isLoading={true}
         />
     )
 }

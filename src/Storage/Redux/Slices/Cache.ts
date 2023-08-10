@@ -13,6 +13,7 @@ export interface CacheState {
     newLedgerDevice?: NewLedgerDevice
     appLockStatus: WALLET_STATUS
     isAppLoading: boolean
+    isTokensOwnedLoading: boolean
 }
 
 const initialState: CacheState = {
@@ -20,6 +21,7 @@ const initialState: CacheState = {
     newLedgerDevice: undefined,
     appLockStatus: WALLET_STATUS.LOCKED,
     isAppLoading: false,
+    isTokensOwnedLoading: false,
 }
 
 export const CacheSlice = createSlice({
@@ -41,6 +43,9 @@ export const CacheSlice = createSlice({
         setIsAppLoading: (state, action: PayloadAction<boolean>) => {
             state.isAppLoading = action.payload
         },
+        setIsTokensOwnedLoading: (state, action: PayloadAction<boolean>) => {
+            state.isTokensOwnedLoading = action.payload
+        },
         resetCacheState: () => initialState,
     },
 })
@@ -50,5 +55,6 @@ export const {
     setNewLedgerDevice,
     setAppLockStatus,
     setIsAppLoading,
+    setIsTokensOwnedLoading,
     resetCacheState,
 } = CacheSlice.actions

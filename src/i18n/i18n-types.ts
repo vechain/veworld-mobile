@@ -811,6 +811,10 @@ type RootTranslation = {
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
 	/**
+	 * Y​o​u​r​ ​t​o​k​e​n​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
+	 */
+	SB_YOUR_TOKENS_EMPTY: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -1214,6 +1218,10 @@ type RootTranslation = {
 	 * A​c​t​i​v​i​t​i​e​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​u​p​-​t​o​-​d​a​t​e​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
 	 */
 	ACTIVITIES_NOT_UP_TO_DATE: string
+	/**
+	 * C​u​s​t​o​m​ ​t​o​k​e​n​s​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​a​t​ ​t​h​e​ ​m​o​m​e​n​t​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
+	 */
+	CUSTOM_TOKENS_NOT_AVAIABLE: string
 	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
@@ -1701,7 +1709,7 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
 	/**
-	 * M​a​n​a​g​e​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
+	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s​ ​o​w​n​e​d
 	 */
 	MANAGE_TOKEN_MANAGE_CUSTOM: string
 	/**
@@ -1753,6 +1761,10 @@ type RootTranslation = {
 	 */
 	MANAGE_CUSTOM_TOKENS_DELETE_DESC: string
 	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: string
+	/**
 	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t​ ​o​r​ ​c​a​n​'​t​ ​b​e​ ​a​d​d​e​d​ ​t​o​ ​t​h​i​s​ ​n​e​t​w​o​r​k
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: string
@@ -1764,6 +1776,10 @@ type RootTranslation = {
 	 * T​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​i​s​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
+	/**
+	 * R​e​c​e​i​v​e​ ​t​o​k​e​n​s
+	 */
+	MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: string
 	/**
 	 * S​e​n​d
 	 */
@@ -3118,6 +3134,10 @@ export type TranslationFunctions = {
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
 	/**
+	 * Your tokens will appear here
+	 */
+	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -3519,6 +3539,10 @@ Please, try again later.
 	 * Activities might not be up-to-date. Check your internet connection or try later
 	 */
 	ACTIVITIES_NOT_UP_TO_DATE: () => LocalizedString
+	/**
+	 * Custom tokens are not available at the moment. Check your internet connection or try later
+	 */
+	CUSTOM_TOKENS_NOT_AVAIABLE: () => LocalizedString
 	/**
 	 * Search a token
 	 */
@@ -3988,7 +4012,7 @@ Please, try again later.
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
 	/**
-	 * Manage custom tokens
+	 * Add custom tokens owned
 	 */
 	MANAGE_TOKEN_MANAGE_CUSTOM: () => LocalizedString
 	/**
@@ -4040,6 +4064,10 @@ Please, try again later.
 	 */
 	MANAGE_CUSTOM_TOKENS_DELETE_DESC: () => LocalizedString
 	/**
+	 * Are you sure you want to add the selected token?
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: () => LocalizedString
+	/**
 	 * The address entered is incorrect or can't be added to this network
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: () => LocalizedString
@@ -4051,6 +4079,10 @@ Please, try again later.
 	 * This custom token is already present
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
+	/**
+	 * Receive tokens
+	 */
+	MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: () => LocalizedString
 	/**
 	 * Send
 	 */

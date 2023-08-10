@@ -2,13 +2,13 @@ import React from "react"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
+import { BaseSkeleton } from "~Components"
 
 export const SkeletonActivityBox = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     return (
-        <SkeletonContent
+        <BaseSkeleton
             containerStyle={styles.container}
             animationDirection="horizontalLeft"
             boneColor={theme.colors.skeletonBoneColor}
@@ -47,7 +47,6 @@ export const SkeletonActivityBox = () => {
                     ],
                 },
             ]}
-            isLoading={true}
         />
     )
 }

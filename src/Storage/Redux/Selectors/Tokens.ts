@@ -1,8 +1,11 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { selectSelectedNetwork } from "./Network"
-import { Balance, FungibleToken, TokenWithCompleteInfo } from "~Model"
-import { selectAllExchangeRates } from "./Currency"
+import {
+    Balance,
+    FungibleToken,
+    NETWORK_TYPE,
+    TokenWithCompleteInfo,
+} from "~Model"
 import { DEFAULT_VECHAIN_TOKENS, VET, VTHO } from "~Constants"
 import { LocaleUtils, TokenUtils } from "~Utils"
 import { uniqBy } from "lodash"
@@ -10,16 +13,23 @@ import {
     selectVetTokenWithBalance,
     selectVthoTokenWithBalance,
 } from "./Balances"
+import { selectSelectedNetwork } from "./Network"
+import { selectSelectedAccount } from "./Account"
+import { selectAllExchangeRates } from "./Currency"
 
 const selectTokenState = (state: RootState) => state.tokens
 
 export const selectCustomTokens = createSelector(
     selectTokenState,
     selectSelectedNetwork,
-    (tokens, network) =>
-        tokens.custom.filter(
+    selectSelectedAccount,
+    (tokens, network, account) => {
+        if (!tokens.custom[account.address]) return []
+
+        return tokens.custom[account.address].filter(
             (token: FungibleToken) => token.genesisId === network.genesis.id,
-        ),
+        )
+    },
 )
 
 const DEFAULT_CHART_DATA = [
@@ -217,5 +227,24 @@ export const selectMarketInfoFor = createSelector(
     [(_, state) => selectTokenState(state), symbol => symbol],
     (tokens, symbol) => {
         return tokens.coinMarketInfo[symbol.toLowerCase()]
+    },
+)
+
+export const selectHasFetchedOfficialTokens = createSelector(
+    selectTokenState,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    (state, account, network) => {
+        if (network.type === NETWORK_TYPE.MAIN) {
+            if (!state.hasFetchedOfficialTokensMainnet[account.address])
+                return false
+
+            return state.hasFetchedOfficialTokensMainnet[account.address]
+        } else {
+            if (!state.hasFetchedOfficialTokensTestnet[account.address])
+                return false
+
+            return state.hasFetchedOfficialTokensTestnet[account.address]
+        }
     },
 )

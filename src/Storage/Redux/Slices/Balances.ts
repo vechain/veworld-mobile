@@ -3,9 +3,9 @@ import { VET, VTHO } from "~Constants"
 import { AddressUtils } from "~Utils"
 import { Balance } from "~Model"
 
-export type BalanceState = Balance[]
+export type BalanceState = Record<string, Balance[]>
 
-export const initialState: BalanceState = []
+export const initialState: BalanceState = {}
 
 export const BalanceSlice = createSlice({
     name: "balances",
@@ -13,51 +13,69 @@ export const BalanceSlice = createSlice({
     reducers: {
         addTokenBalance: (
             state: Draft<BalanceState>,
-            action: PayloadAction<Balance>,
+            action: PayloadAction<{ accountAddress: string; balance: Balance }>,
         ) => {
-            state.push(action.payload)
+            const { accountAddress, balance } = action.payload
+
+            if (!state[accountAddress]) {
+                state[accountAddress] = []
+            }
+
+            state[accountAddress].push(balance)
         },
         upsertTokenBalances: (
             state: Draft<BalanceState>,
-            action: PayloadAction<Balance[]>,
+            action: PayloadAction<{
+                accountAddress: string
+                newBalances: Balance[]
+            }>,
         ) => {
-            const newBalances = action.payload
-            const newState = state.filter(
-                oldBalance =>
-                    !newBalances.find(
-                        newBalance =>
+            const { accountAddress, newBalances } = action.payload
+
+            if (!state[accountAddress]) {
+                state[accountAddress] = []
+            }
+
+            const existingBalances = state[accountAddress]
+
+            // Remove existing balances from newBalances
+            const filteredNewBalances = newBalances.filter(
+                newBalance =>
+                    !existingBalances.find(
+                        existingBalance =>
                             AddressUtils.compareAddresses(
-                                newBalance.accountAddress,
-                                oldBalance.accountAddress,
-                            ) &&
-                            AddressUtils.compareAddresses(
+                                existingBalance.tokenAddress,
                                 newBalance.tokenAddress,
-                                oldBalance.tokenAddress,
                             ) &&
-                            newBalance.genesisId === oldBalance.genesisId,
+                            existingBalance.genesisId === newBalance.genesisId,
                     ),
             )
-            newState.push(...newBalances)
-            return newState
+
+            // Add new balances
+            existingBalances.push(...filteredNewBalances)
         },
         updateTokenBalances: (
             state: Draft<BalanceState>,
-            action: PayloadAction<Balance[]>,
+            action: PayloadAction<{
+                accountAddress: string
+                newBalances: Balance[]
+            }>,
         ) => {
-            const newBalances = action.payload
-            return state.map(oldBalance => {
+            const { accountAddress, newBalances } = action.payload
+
+            if (!state[accountAddress]) {
+                state[accountAddress] = []
+            }
+
+            state[accountAddress] = state[accountAddress].map(oldBalance => {
                 const newBalance = newBalances.find(
                     _newBalance =>
                         AddressUtils.compareAddresses(
-                            _newBalance.accountAddress,
-                            oldBalance.accountAddress,
-                        ) &&
-                        AddressUtils.compareAddresses(
                             _newBalance.tokenAddress,
                             oldBalance.tokenAddress,
-                        ) &&
-                        _newBalance.genesisId === oldBalance.genesisId,
+                        ) && _newBalance.genesisId === oldBalance.genesisId,
                 )
+
                 return newBalance ? newBalance : oldBalance
             })
         },
@@ -71,7 +89,7 @@ export const BalanceSlice = createSlice({
             const { accountAddress, tokenAddress } = action.payload
 
             let position = 0
-            return state
+            state[accountAddress] = state[accountAddress]
                 .filter(
                     // remove deleted element
                     balance =>
@@ -101,12 +119,21 @@ export const BalanceSlice = createSlice({
                     return balance
                 })
         },
+
         changeBalancePosition: (
             state: Draft<BalanceState>,
-            action: PayloadAction<Balance[]>, // tokenBalances with updated position fields
+            action: PayloadAction<{
+                accountAddress: string
+                updatedAccountBalances: Balance[]
+            }>,
         ) => {
-            const updatedAccountBalances = action.payload
-            return state.map(balance => {
+            const { accountAddress, updatedAccountBalances } = action.payload
+
+            if (!state[accountAddress]) {
+                state[accountAddress] = []
+            }
+
+            state[accountAddress] = state[accountAddress].map(balance => {
                 const updatedBalance = updatedAccountBalances.find(
                     updatedAccountBalance =>
                         balance.tokenAddress ===
@@ -114,9 +141,11 @@ export const BalanceSlice = createSlice({
                         balance.accountAddress ===
                             updatedAccountBalance.accountAddress,
                 )
+
                 return updatedBalance ? updatedBalance : balance
             })
         },
+
         resetBalancesState: () => initialState,
     },
 })

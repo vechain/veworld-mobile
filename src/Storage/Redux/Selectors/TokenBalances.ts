@@ -4,6 +4,7 @@ import { TokenUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"
 import { FungibleToken } from "~Model"
+import { selectSelectedAccount } from "./Account"
 
 const selectTokenState = (state: RootState) => state.tokens
 
@@ -20,8 +21,12 @@ export const selectFungibleTokensAll = createSelector(
 export const selectCustomTokensForNetwork = createSelector(
     selectTokenState,
     selectSelectedNetwork,
-    (tokens, network) =>
-        tokens.custom.filter(
+    selectSelectedAccount,
+    (tokens, network, account) => {
+        if (!tokens.custom[account.address]) return []
+
+        return tokens.custom[account.address].filter(
             (token: FungibleToken) => token.genesisId === network.genesis.id,
-        ),
+        )
+    },
 )
