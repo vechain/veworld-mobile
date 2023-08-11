@@ -212,6 +212,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         <>
             <Layout
                 safeAreaTestID="Activity_Details_Screen"
+                showSelectedNetwork={true}
                 body={
                     <>
                         <BaseText typographyFont="title" pt={12}>
