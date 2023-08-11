@@ -11,7 +11,7 @@ import { StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
-import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer/SelectedNetworkViewer"
+import { SelectedNetworkViewer } from "~Components"
 
 type Props = {
     noBackButton?: boolean
