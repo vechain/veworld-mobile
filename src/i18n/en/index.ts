@@ -501,15 +501,17 @@ const en: BaseTranslation = {
     // Manage Token
     MANAGE_TOKEN_TITLE: "Manage Tokens",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
-    MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: "Select your official tokens or add a new custom one",
-    MANAGE_TOKEN_MANAGE_CUSTOM: "Add custom tokens owned",
+    MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: "Select a token from the registry or add a custom token",
+    MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: "Find my custom tokens",
     MANAGE_TOKEN_ADD_CUSTOM: "Add custom token",
     MANAGE_TOKEN_SELECTED: "Selected",
     MANAGE_TOKEN_UNSELECTED: "Unselected",
-    MANAGE_TOKEN_SEARCH_TOKEN: "Search a token",
+    MANAGE_TOKEN_SEARCH_TOKEN: "Search a token from the registry",
     MANAGE_TOKEN_SUGGESTED_TOKENS: "We have noticed that you have tokens with balance, add them directly from here",
     MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: "Add tokens",
     MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: "Suggested token",
+    MANAGE_TOKEN_TITLE_YOUR_TOKENS: "Your custom tokens",
+    MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: "Select custom tokens for your dashboard",
 
     // Manage Custom tokens
     MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: "Add custom token",
