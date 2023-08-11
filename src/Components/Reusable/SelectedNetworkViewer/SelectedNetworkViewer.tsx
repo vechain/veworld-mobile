@@ -2,8 +2,7 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
-import { useBlockchainNetwork } from "~Hooks/useBlockchainNetwork"
+import { useThemedStyles, useBlockchainNetwork } from "~Hooks"
 import {
     capitalize,
     truncateTextIfSizeIsGreaterThan,
