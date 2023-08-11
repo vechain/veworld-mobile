@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { BaseText, BaseView, Layout } from "~Components"
+import { BaseSafeArea, BaseText, BaseView } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { FlashList } from "@shopify/flash-list"
@@ -38,39 +38,33 @@ export const SettingsScreen = () => {
     )
 
     return (
-        <Layout
-            safeAreaTestID="SettingsScreen"
-            fixedHeader={
-                <BaseText
-                    typographyFont="largeTitle"
-                    testID="settings-screen"
-                    pb={16}>
-                    {LL.TITLE_SETTINGS()}
-                </BaseText>
-            }
-            bodyWithoutScrollView={
-                <BaseView flexDirection="row" style={[themedStyles.list]}>
-                    <FlashList
-                        data={SCREEN_LIST}
-                        contentContainerStyle={
-                            themedStyles.contentContainerStyle
-                        }
-                        ItemSeparatorComponent={renderSeparator}
-                        scrollEnabled={isSmallScreen}
-                        keyExtractor={item => item.screenName}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={renderItem}
-                        estimatedItemSize={56}
-                        estimatedListSize={{
-                            height: 56 * SCREEN_LIST.length,
-                            width: 400,
-                        }}
-                    />
-                </BaseView>
-            }
-            noBackButton
-        />
+        <BaseSafeArea>
+            <BaseText
+                mx={24}
+                typographyFont="largeTitle"
+                testID="settings-screen"
+                pb={16}>
+                {LL.TITLE_SETTINGS()}
+            </BaseText>
+
+            <BaseView flexDirection="row" style={[themedStyles.list]}>
+                <FlashList
+                    data={SCREEN_LIST}
+                    contentContainerStyle={themedStyles.contentContainerStyle}
+                    ItemSeparatorComponent={renderSeparator}
+                    scrollEnabled={isSmallScreen}
+                    keyExtractor={item => item.screenName}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={renderItem}
+                    estimatedItemSize={56}
+                    estimatedListSize={{
+                        height: 56 * SCREEN_LIST.length,
+                        width: 400,
+                    }}
+                />
+            </BaseView>
+        </BaseSafeArea>
     )
 }
 
