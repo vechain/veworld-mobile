@@ -4,33 +4,39 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { Network } from "~Model"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { useBlockchainNetwork } from "~Hooks/useBlockchainNetwork"
 import {
     capitalize,
     truncateTextIfSizeIsGreaterThan,
 } from "~Utils/StringUtils/StringUtils"
 
-export const SelectedNetworkViewer = () => {
-    const network: Network = useAppSelector(selectSelectedNetwork)
+type Props = {
+    showEvenIfMainnet?: boolean
+}
+
+export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
+    const { network, isMainnet } = useBlockchainNetwork()
     const theme = useTheme()
     const { styles } = useThemedStyles(selectedNetworkViewerStyle)
 
     return (
-        <BaseView style={styles.networkViewer}>
-            <BaseView style={styles.networkViewerIconText}>
-                <BaseIcon
-                    name={"web"}
-                    color={theme.colors.text}
-                    size={15}
-                    testID={"web"}
-                    style={styles.networkViewerNetworkIcon}
-                />
-                <BaseText style={styles.networkViewerNetworkNameText}>
-                    {network.name.length > 0 && formatNetworkName(network.name)}
-                </BaseText>
+        (showEvenIfMainnet || !isMainnet) && (
+            <BaseView style={styles.networkViewer}>
+                <BaseView style={styles.networkViewerIconText}>
+                    <BaseIcon
+                        name={"web"}
+                        color={theme.colors.text}
+                        size={15}
+                        testID={"web"}
+                        style={styles.networkViewerNetworkIcon}
+                    />
+                    <BaseText style={styles.networkViewerNetworkNameText}>
+                        {network.name.length > 0 &&
+                            formatNetworkName(network.name)}
+                    </BaseText>
+                </BaseView>
             </BaseView>
-        </BaseView>
+        )
     )
 }
 
