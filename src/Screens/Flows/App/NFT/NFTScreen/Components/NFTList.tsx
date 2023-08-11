@@ -5,6 +5,7 @@ import { NFTCollectionView } from "../../NFTCollectionView"
 import { NonFungibleTokenCollection } from "~Model"
 import { ListFooterView } from "./ListFooterView"
 import { MathUtils } from "~Utils"
+import { usePlatformBottomInsets } from "~Hooks"
 
 type NFTListProps = {
     item: NonFungibleTokenCollection
@@ -30,6 +31,8 @@ export const NFTList = ({
 }: Props) => {
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
+    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
+
     const renderNftCollection = useCallback(
         ({ item, index }: NFTListProps) => (
             <NFTCollectionView collection={item} index={index} />
@@ -41,7 +44,10 @@ export const NFTList = ({
         <FlatList
             data={collections}
             extraData={collections}
-            contentContainerStyle={baseStyles.listContainer}
+            contentContainerStyle={[
+                baseStyles.listContainer,
+                { paddingBottom: tabBarAndroidBottomInsets },
+            ]}
             numColumns={2}
             keyExtractor={item => String(item.address)}
             ItemSeparatorComponent={renderSeparator}
