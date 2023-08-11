@@ -30,7 +30,7 @@ const en: BaseTranslation = {
     BTN_SHOW_QR_CODE: "Show QR code",
     BTN_RENAME_ACCOUNT: "Rename account",
     BTN_REMOVE_ACCOUNT: "Remove account",
-    BTN_ADD_ACCOUNT: "Add account",
+    BTN_ADD_ACCOUNT: "ADD ACCOUNT",
     BTN_ADD_CUSTOM_NODE: "Add a custom node",
     BTN_EDIT_CUSTOM_NODE: "Edit custom node",
     BTN_DOWNLOAD_LOGS: "Download logs",
@@ -78,7 +78,7 @@ const en: BaseTranslation = {
     BD_MNEMONIC_SUBTITLE:
         "Your Secret Recovery Phrase makes it easy to back up and restore your account.",
     BD_USER_PASSWORD_CONFIRM: "Confirm your PIN",
-    BD_WALLET_REMOVAL: "Your wallet and all of it's associated accounts will be removed. This action is irreversible",
+    BD_WALLET_REMOVAL: "Are you sure you want to remove this wallet from VeWorld?",
     BD_USER_PASSWORD_ERROR: "<><> PIN doesn't match.",
     BD_USER_EDIT_PASSWORD_ERROR: "Old PIN can't be the same as new PIN",
     BD_IMPORT_WALLET_TYPE: "Select the type of wallet you want to import",
@@ -203,7 +203,7 @@ const en: BaseTranslation = {
     SB_CHOOSE_A_WALLET: "Choose a wallet",
     SB_EDIT_WALLET: "Edit {name: string}",
     SB_RENAME_WALLET: "Rename wallet",
-    SB_RENAME_REORDER_ACCOUNTS: "Rename or reorder accounts ",
+    SB_ACCOUNT_VISIBILITY: "Account visibility",
     SB_ENTER_LANGUAGE: "Enter your language",
     SB_SELECT_LANGUAGE: "Select your language",
     SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
@@ -496,6 +496,14 @@ const en: BaseTranslation = {
     SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: "Delegation URLs",
     SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: "Add or delete a delegation URL so you can select it when sending transactions",
     SETTINGS_TRANSACTIONS_MANAGE_URLS: "Manage URLs",
+
+    // MANAGE_WALLET
+
+    ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: "What do you want to do?",
+    ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: "Do you want to add either a wallet or an account?",
+    ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: "Add a new account",
+    ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: "Add a new wallet",
+    WALLET_MANAGEMENT_WALLET_NAME: "Wallet name",
 
 
     // Manage Token

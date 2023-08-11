@@ -1,19 +1,27 @@
-import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React from "react"
 import { useTheme } from "~Hooks"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import {
+    BaseButton,
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import { useI18nContext } from "~i18n"
-import { Routes } from "~Navigation"
+import { COLORS } from "~Constants"
 
-export const WalletManagementHeader = () => {
+type Props = {
+    isEdit: boolean
+    setIsEdit: (s: boolean) => void
+    openCreateWalletOrAccountBottomSheet: () => void
+}
+export const WalletManagementHeader = ({
+    isEdit,
+    setIsEdit,
+    openCreateWalletOrAccountBottomSheet,
+}: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-
-    const nav = useNavigation()
-
-    const goToCreateWalletFlow = useCallback(() => {
-        nav.navigate(Routes.CREATE_WALLET_FLOW)
-    }, [nav])
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
@@ -21,13 +29,43 @@ export const WalletManagementHeader = () => {
                 {LL.TITLE_WALLET_MANAGEMENT()}
             </BaseText>
             <BaseView flexDirection="row">
-                <BaseIcon
-                    haptics="Light"
-                    size={24}
-                    name="plus"
-                    bg={theme.colors.secondary}
-                    action={goToCreateWalletFlow}
-                />
+                {isEdit ? (
+                    <BaseButton
+                        haptics="Light"
+                        action={() => setIsEdit(false)}
+                        bgColor={COLORS.LIME_GREEN}
+                        textColor={COLORS.DARK_PURPLE}
+                        radius={30}
+                        py={10}
+                        leftIcon={
+                            <BaseIcon
+                                name="check"
+                                size={20}
+                                color={COLORS.DARK_PURPLE}
+                            />
+                        }>
+                        <BaseSpacer width={8} />
+                        {LL.COMMON_BTN_SAVE()}
+                    </BaseButton>
+                ) : (
+                    <>
+                        <BaseIcon
+                            haptics="Light"
+                            name="priority-low"
+                            action={() => setIsEdit(true)}
+                            size={24}
+                            color={theme.colors.text}
+                        />
+                        <BaseSpacer width={16} />
+                        <BaseIcon
+                            haptics="Light"
+                            size={24}
+                            name="plus"
+                            bg={theme.colors.secondary}
+                            action={openCreateWalletOrAccountBottomSheet}
+                        />
+                    </>
+                )}
             </BaseView>
         </BaseView>
     )

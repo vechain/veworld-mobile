@@ -200,7 +200,7 @@ export const TokenList = memo(
                         renderItem={itemParams => (
                             <BaseView>{renderToken(itemParams)}</BaseView>
                         )}
-                        activationDistance={60}
+                        activationDistance={10}
                         showsVerticalScrollIndicator={false}
                         autoscrollThreshold={visibleHeightRef}
                         ItemSeparatorComponent={renderSeparator}
