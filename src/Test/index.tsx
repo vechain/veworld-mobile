@@ -98,6 +98,7 @@ const getStore = (preloadedState: Partial<RootState>) =>
                             "0x0c1a60341e1064bebb94e8769bd508b11ca2a27d",
                         nonce: "nonce",
                     }),
+                    position: 0,
                 },
             ],
             ...preloadedState,

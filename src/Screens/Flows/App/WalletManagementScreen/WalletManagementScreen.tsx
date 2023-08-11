@@ -1,39 +1,37 @@
-import { FlashList } from "@shopify/flash-list"
-import React, { useCallback, useState } from "react"
-
-import { StyleSheet } from "react-native"
+import React, { useCallback, useRef, useState } from "react"
 import {
-    useBottomSheetModal,
-    useCheckIdentity,
-    useScrollableList,
-} from "~Hooks"
-import {
+    AddAccountBottomSheet,
     BaseSpacer,
     BaseView,
     DeviceBox,
     Layout,
-    RenameWalletBottomSheet,
     RequireUserPassword,
+    SwipeableRow,
 } from "~Components"
 import { Device } from "~Model"
-import { useAppSelector } from "~Storage/Redux"
+import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import {
+    CreateWalletOrAccountBottomSheet,
     RemoveWalletWarningBottomSheet,
     useWalletDeletion,
     WalletManagementHeader,
     WalletMgmtBottomSheet,
 } from "./components"
+import { Pressable, StyleSheet } from "react-native"
+import { useBottomSheetModal, useCheckIdentity, useThemedStyles } from "~Hooks"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
+import { useNavigation } from "@react-navigation/native"
+import { useDispatch } from "react-redux"
+import { ColorThemeType } from "~Constants"
 
 export const WalletManagementScreen = () => {
     const devices = useAppSelector(selectDevices)
     const [selectedDevice, setSelectedDevice] = useState<Device>()
-
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(devices, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
-
     const { deleteWallet } = useWalletDeletion(selectedDevice)
-
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
     const {
         isPasswordPromptOpen,
         handleClosePasswordModal,
@@ -43,12 +41,22 @@ export const WalletManagementScreen = () => {
         onIdentityConfirmed: deleteWallet,
         allowAutoPassword: false,
     })
+    const { styles } = useThemedStyles(baseStyles)
 
     const {
-        ref: accountMgmtBottomSheetRef,
-        onOpen: openAccountMgmtSheet,
-        onClose: closeAccountMgmtSheet,
+        ref: createWalletOrAccountBottomSheetRef,
+        onOpen: openCreateWalletOrAccountBottomSheet,
+        onClose: closeCreateWalletOrAccountBottomSheet,
     } = useBottomSheetModal()
+
+    const {
+        ref: addAccountBottomSheetRef,
+        onOpen: openAddAccountBottomSheet,
+        onClose: closeAddAccountBottomSheet,
+    } = useBottomSheetModal()
+
+    const { ref: walletMgmtBottomSheetRef, onOpen: openWalletMgmtSheet } =
+        useBottomSheetModal()
 
     const {
         ref: removeWalletBottomSheetRef,
@@ -56,88 +64,137 @@ export const WalletManagementScreen = () => {
         onClose: closeRemoveWalletBottomSheet,
     } = useBottomSheetModal()
 
-    const {
-        ref: renameAccountBottomSheetRef,
-        onOpen: openRenameWalletBottomSheet,
-        onClose: closeRenameWalletBottonSheet,
-    } = useBottomSheetModal()
+    const [isEdit, _setIsEdit] = useState(false)
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
+        new Map(),
+    )
+    const closeOtherSwipeableItems = useCallback(() => {
+        swipeableItemRefs?.current.forEach(ref => {
+            ref?.close()
+        })
+    }, [swipeableItemRefs])
 
-    const devicesListSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
+    const setIsEdit = useCallback(
+        (_isEdit: boolean) => {
+            if (_isEdit) {
+                closeOtherSwipeableItems()
+                _setIsEdit(true)
+            } else {
+                _setIsEdit(false)
+            }
+        },
+        [closeOtherSwipeableItems],
     )
 
     const onDeviceSelected = useCallback(
         (device: Device) => () => {
+            closeOtherSwipeableItems()
             setSelectedDevice(device)
-            openAccountMgmtSheet()
+            openWalletMgmtSheet()
         },
-        [openAccountMgmtSheet, setSelectedDevice],
+        [closeOtherSwipeableItems, openWalletMgmtSheet],
     )
+
+    const renderItem: RenderItem<Device> = useCallback(
+        ({ item, getIndex, drag, isActive }) => {
+            const index = getIndex() || 0
+            return (
+                <SwipeableRow
+                    item={item}
+                    index={index}
+                    itemKey={item.rootAddress}
+                    swipeableItemRefs={swipeableItemRefs}
+                    onOpenDeleteItemBottomSheet={openRemoveWalletBottomSheet}
+                    setSelectedItem={setSelectedDevice}
+                    swipeEnabled={!isEdit && devices.length > 1}>
+                    <Pressable
+                        onPressIn={isEdit ? drag : undefined}
+                        disabled={isActive}
+                        style={styles.deviceBoxPressable}>
+                        <DeviceBox
+                            device={item}
+                            onDeviceSelected={
+                                isEdit ? undefined : onDeviceSelected(item)
+                            }
+                            isEdit={isEdit}
+                        />
+                    </Pressable>
+                </SwipeableRow>
+            )
+        },
+        [
+            devices.length,
+            isEdit,
+            onDeviceSelected,
+            openRemoveWalletBottomSheet,
+            styles.deviceBoxPressable,
+        ],
+    )
+
+    const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
+        closeAddAccountBottomSheet()
+        navigation.goBack()
+    }, [closeAddAccountBottomSheet, navigation])
+
+    const handleDragEnd = ({ data }: { data: Device[] }) => {
+        dispatch(
+            setDeviceState({
+                updatedDevices: data.map((device, index) => ({
+                    ...device,
+                    position: index,
+                })),
+            }),
+        )
+    }
 
     return (
         <Layout
             safeAreaTestID="Wallet_Management_Screen"
             fixedHeader={
                 <>
-                    <WalletManagementHeader />
+                    <WalletManagementHeader
+                        openCreateWalletOrAccountBottomSheet={
+                            openCreateWalletOrAccountBottomSheet
+                        }
+                        isEdit={isEdit}
+                        setIsEdit={setIsEdit}
+                    />
                     <BaseSpacer height={16} />
                 </>
             }
             bodyWithoutScrollView={
-                <BaseView style={styles.view} mx={20}>
-                    <FlashList
+                <BaseView style={styles.view}>
+                    <DraggableFlatList<Device>
                         data={devices}
-                        scrollEnabled={isListScrollable}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                        viewabilityConfig={viewabilityConfig}
+                        extraData={isEdit}
+                        onDragEnd={handleDragEnd}
                         keyExtractor={device => device.rootAddress}
-                        ItemSeparatorComponent={devicesListSeparator}
-                        ListHeaderComponent={<BaseSpacer height={16} />}
-                        renderItem={({ item }) => {
-                            return (
-                                <DeviceBox
-                                    device={item}
-                                    onDeviceSelected={onDeviceSelected(item)}
-                                />
-                            )
-                        }}
+                        renderItem={renderItem}
+                        activationDistance={10}
                         showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        estimatedItemSize={152}
-                        estimatedListSize={{
-                            height: 184,
-                            width:
-                                152 * devices.length +
-                                (devices.length - 1) * 16,
-                        }}
-                        ListFooterComponent={<BaseSpacer height={16} />}
+                        containerStyle={styles.draggableFlatListContainer}
                     />
                     <WalletMgmtBottomSheet
-                        ref={accountMgmtBottomSheetRef}
-                        onClose={closeAccountMgmtSheet}
+                        ref={walletMgmtBottomSheetRef}
                         device={selectedDevice}
-                        openRenameWalletBottomSheet={
-                            openRenameWalletBottomSheet
-                        }
-                        openRemoveWalletBottomSheet={
-                            openRemoveWalletBottomSheet
-                        }
-                        canRemoveWallet={devices.length > 1}
                     />
-
-                    {selectedDevice && (
-                        <RenameWalletBottomSheet
-                            ref={renameAccountBottomSheetRef}
-                            device={selectedDevice}
-                            onClose={closeRenameWalletBottonSheet}
-                        />
-                    )}
 
                     <RemoveWalletWarningBottomSheet
                         onConfirm={checkIdentityBeforeOpening}
                         onClose={closeRemoveWalletBottomSheet}
+                        selectedDevice={selectedDevice}
                         ref={removeWalletBottomSheetRef}
+                    />
+
+                    <CreateWalletOrAccountBottomSheet
+                        onCreateAccount={openAddAccountBottomSheet}
+                        onClose={closeCreateWalletOrAccountBottomSheet}
+                        ref={createWalletOrAccountBottomSheetRef}
+                    />
+
+                    <AddAccountBottomSheet
+                        ref={addAccountBottomSheetRef}
+                        onSuccess={handleOnSuccessAddAccountBottomSheet}
                     />
 
                     <RequireUserPassword
@@ -151,6 +208,12 @@ export const WalletManagementScreen = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    view: { top: 0, flex: 1, marginBottom: 0 },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        view: { top: 0, flexGrow: 1, marginBottom: 0 },
+        draggableFlatListContainer: { flexGrow: 1 },
+        deviceBoxPressable: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
+        },
+    })
