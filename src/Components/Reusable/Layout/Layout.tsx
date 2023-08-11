@@ -10,6 +10,7 @@ import { BackButtonHeader } from "../BackButtonHeader"
 import { StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     noBackButton?: boolean
@@ -39,8 +40,7 @@ export const Layout = ({
     scrollViewTestID,
 }: Props) => {
     const theme = useTheme()
-    const { tabBarAndroidBottomInsets, calculateBottomInsets } =
-        usePlatformBottomInsets()
+    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
 
     const Title = useCallback(
         () => (
@@ -73,7 +73,9 @@ export const Layout = ({
                         scrollEnabled={isScrollEnabled}
                         style={noMargin ? {} : styles.scrollView}
                         contentContainerStyle={{
-                            paddingBottom: calculateBottomInsets,
+                            paddingBottom: isAndroid()
+                                ? tabBarAndroidBottomInsets
+                                : undefined,
                         }}>
                         {!fixedHeader && title && <Title />}
                         {body}

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import {
+    BaseSafeArea,
     BaseView,
-    Layout,
     QRCodeBottomSheet,
     SelectAccountBottomSheet,
 } from "~Components"
@@ -110,31 +110,25 @@ export const NFTScreen = () => {
     }, [error, collections, isLoading, renderImportNftView, renderNFTList])
 
     return (
-        <Layout
-            safeAreaTestID="NFT_Screen"
-            fixedHeader={
-                <NftScreenHeader
-                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-                />
-            }
-            bodyWithoutScrollView={
-                <>
-                    <BaseView flex={1} justifyContent="center">
-                        {renderContent}
-                    </BaseView>
-                    <SelectAccountBottomSheet
-                        closeBottomSheet={closeSelectAccountBottonSheet}
-                        accounts={accounts}
-                        setSelectedAccount={setSelectedAccount}
-                        selectedAccount={selectedAccount}
-                        ref={selectAccountBottomSheetRef}
-                    />
+        <BaseSafeArea>
+            <NftScreenHeader
+                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+            />
 
-                    {/* BOTTOM SHEETS */}
-                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-                </>
-            }
-            noBackButton
-        />
+            <BaseView flex={1} justifyContent="center">
+                {renderContent}
+            </BaseView>
+
+            {/* BOTTOM SHEETS */}
+            <SelectAccountBottomSheet
+                closeBottomSheet={closeSelectAccountBottonSheet}
+                accounts={accounts}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBottomSheetRef}
+            />
+
+            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+        </BaseSafeArea>
     )
 }
