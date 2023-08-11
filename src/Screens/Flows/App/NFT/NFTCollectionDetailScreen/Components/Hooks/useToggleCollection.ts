@@ -1,16 +1,15 @@
 import { useCallback } from "react"
-import { NonFungibleTokenCollection } from "~Model"
+import { NftCollection } from "~Model"
 import {
-    removeBlackListCollection,
-    isBlacklistedCollection,
+    toggleBlackListCollection,
     selectSelectedAccount,
     selectSelectedNetwork,
-    setBlackListCollection,
     useAppDispatch,
     useAppSelector,
+    isBlacklistedCollection,
 } from "~Storage/Redux"
 
-export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
+export const useToggleCollection = (collection: NftCollection) => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const isBlacklisted = useAppSelector(state =>
@@ -18,25 +17,17 @@ export const useToggleCollection = (collection: NonFungibleTokenCollection) => {
     )
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const onToggleCollection = useCallback(() => {
-        if (isBlacklisted) {
+    const onToggleCollection = useCallback(
+        () =>
             dispatch(
-                removeBlackListCollection({
+                toggleBlackListCollection({
                     network: network.type,
                     collection,
                     accountAddress: selectedAccount.address,
                 }),
-            )
-        } else {
-            dispatch(
-                setBlackListCollection({
-                    network: network.type,
-                    collection,
-                    accountAddress: selectedAccount.address,
-                }),
-            )
-        }
-    }, [collection, network, dispatch, isBlacklisted, selectedAccount.address])
+            ),
+        [collection, network, dispatch, selectedAccount.address],
+    )
 
     return { onToggleCollection, isBlacklisted }
 }

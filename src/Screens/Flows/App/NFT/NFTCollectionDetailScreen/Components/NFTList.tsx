@@ -2,13 +2,13 @@ import React, { useCallback } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { BaseSpacer } from "~Components"
 import { HeaderComponent } from "./HeaderComponent"
-import { NonFungibleToken, NonFungibleTokenCollection } from "~Model"
+import { NonFungibleToken, NftCollection } from "~Model"
 import { NFTView } from "../../NFTView"
 import { ListFooterView } from "../../NFTScreen/Components/ListFooterView"
 
 type Props = {
-    collection: NonFungibleTokenCollection
-    NFTs: NonFungibleToken[]
+    collection: NftCollection
+    nfts: NonFungibleToken[]
     isLoading: boolean
     fetchMoreNFTs: () => void
     onMomentumScrollBegin: () => void
@@ -17,7 +17,7 @@ type Props = {
 
 export const NFTList = ({
     collection,
-    NFTs,
+    nfts,
     fetchMoreNFTs,
     isLoading,
     onMomentumScrollBegin,
@@ -38,7 +38,7 @@ export const NFTList = ({
     return (
         <FlatList
             ListHeaderComponent={<HeaderComponent collection={collection} />}
-            data={NFTs}
+            data={nfts}
             initialNumToRender={6}
             ItemSeparatorComponent={contactsListSeparator}
             numColumns={2}
