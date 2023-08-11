@@ -38,6 +38,7 @@ export const getNodes = (
         rootAddress: hdNode.address,
         type: DEVICE_TYPE.LOCAL_MNEMONIC,
         index: deviceIndex,
+        position: 0, // this will be updated when the device is added to the redux store
     }
 
     return { wallet, device }

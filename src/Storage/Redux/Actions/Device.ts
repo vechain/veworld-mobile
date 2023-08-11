@@ -77,6 +77,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
                 rootAddress: rootAccount.address,
                 type: DEVICE_TYPE.LEDGER,
                 alias,
+                position: 0, // this will be updated when the device is added to the redux store
             }
 
             dispatch(addDevice(newDevice))
