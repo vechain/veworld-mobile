@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react"
 import { useThor } from "~Components"
-import { NonFungibleTokenCollection } from "~Model"
+import { NftCollection } from "~Model"
 import {
     GithubCollectionResponse,
     getContractAddresses,
@@ -68,7 +68,7 @@ export const useNFTCollections = () => {
     }, [dispatch, network])
 
     const lazyLoadMetadata = useCallback(
-        async (collection: NonFungibleTokenCollection) => {
+        async (collection: NftCollection) => {
             // Exit if currentAddress.address is not set
             if (!currentAddress) return
 
@@ -159,8 +159,8 @@ export const useNFTCollections = () => {
                 if (_page >= pagination.totalPages) return
 
                 // Parse collection metadata from registry info or the chain if needed
-                const _nftCollections: NonFungibleTokenCollection[] =
-                    contractsForNFTs.map(collection => {
+                const _nftCollections: NftCollection[] = contractsForNFTs.map(
+                    collection => {
                         const regInfo = registryInfo.find(col =>
                             compareAddresses(col.address, collection),
                         )
@@ -180,7 +180,8 @@ export const useNFTCollections = () => {
                                 theme.isDark,
                             )
                         }
-                    })
+                    },
+                )
 
                 // set collections to store
                 dispatch(

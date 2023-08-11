@@ -31,10 +31,13 @@ export const useFetchCollections = (
 
     const hasNext = useMemo(
         () =>
-            (allNFTCollections?.length ?? 0) <
-            nftCollections?.pagination.totalElements,
+            (allNFTCollections?.collections.length ?? 0) <
+            allNFTCollections?.pagination.totalElements,
 
-        [allNFTCollections?.length, nftCollections?.pagination.totalElements],
+        [
+            allNFTCollections?.collections.length,
+            allNFTCollections?.pagination.totalElements,
+        ],
     )
 
     useEffect(() => {
@@ -49,8 +52,8 @@ export const useFetchCollections = (
             !nftNetworkingSideEffects?.isLoading
         ) {
             fetchWithPagination(
-                nftCollections?.pagination,
-                allNFTCollections?.length ?? 0,
+                allNFTCollections?.pagination,
+                allNFTCollections?.collections.length ?? 0,
                 NFT_PAGE_SIZE,
                 async page => {
                     await loadCollections(registryInfo, page)
@@ -60,10 +63,9 @@ export const useFetchCollections = (
             setEndReachedCalledDuringMomentum(false)
         }
     }, [
-        allNFTCollections?.length,
+        allNFTCollections,
         fetchWithPagination,
         loadCollections,
-        nftCollections?.pagination,
         nftNetworkingSideEffects?.isLoading,
         onEndReachedCalledDuringMomentum,
         registryInfo,

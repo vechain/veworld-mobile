@@ -42,7 +42,7 @@ export const useNFTWithMetadata = (
         ) {
             await fetchWithPagination(
                 nftForCollection?.pagination,
-                nftForCollection?.NFTs?.length,
+                nftForCollection?.nfts?.length,
                 NFT_PAGE_SIZE,
                 async page => {
                     await loadNFTsForCollection(collectionAddress, page)
@@ -55,7 +55,7 @@ export const useNFTWithMetadata = (
         collectionAddress,
         fetchWithPagination,
         loadNFTsForCollection,
-        nftForCollection?.NFTs?.length,
+        nftForCollection?.nfts?.length,
         nftForCollection?.pagination,
         nftNetworkingSideEffects.isLoading,
         onEndReachedCalledDuringMomentum,
@@ -73,7 +73,7 @@ export const useNFTWithMetadata = (
     }, [selectedAccount])
 
     return {
-        NFTs: nftForCollection?.NFTs,
+        nfts: nftForCollection?.nfts,
         fetchMoreNFTs,
         isLoading: nftNetworkingSideEffects.isLoading,
         error: nftNetworkingSideEffects.error,

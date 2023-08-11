@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import {
-    selectAllVisibleNFTsWithoutMetadata,
+    selectAllNftsWithoutMetadata,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     setNFTs,
@@ -25,7 +25,7 @@ export const useNFTs = () => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
-    const nfts = useAppSelector(selectAllVisibleNFTsWithoutMetadata)
+    const visibleNfts = useAppSelector(selectAllNftsWithoutMetadata)
     const { fetchMetadata } = useTokenMetadata()
     const thor = useThor()
     const { LL } = useI18nContext()
@@ -72,7 +72,7 @@ export const useNFTs = () => {
     )
 
     useLazyLoader({
-        payload: nfts,
+        payload: visibleNfts,
         loader: lazyLoadMetadata,
     })
 
@@ -100,7 +100,7 @@ export const useNFTs = () => {
                     _page,
                 )
 
-                const NFTs: NonFungibleToken[] = nftResponse.data.map(nft => {
+                const nfts: NonFungibleToken[] = nftResponse.data.map(nft => {
                     return initialiseNFTMetadata(
                         nft.tokenId,
                         nft.contractAddress,
@@ -113,7 +113,7 @@ export const useNFTs = () => {
                     setNFTs({
                         address: currentAddress,
                         collectionAddress: contractAddress,
-                        NFTs: NFTs,
+                        nfts: nfts,
                         // taking first element because we are fetching only for one contract address
                         pagination: nftResponse.pagination,
                     }),

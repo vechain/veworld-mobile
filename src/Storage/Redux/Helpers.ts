@@ -40,7 +40,7 @@ import { createMigrate } from "redux-persist"
 export const nftPersistConfig = {
     key: NftSlice.name,
     storage: storage,
-    whitelist: ["blackListedCollectionsPerAccount"],
+    whitelist: ["blackListedCollections"],
 }
 
 /**
