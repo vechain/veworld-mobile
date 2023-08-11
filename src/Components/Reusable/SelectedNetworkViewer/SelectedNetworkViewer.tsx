@@ -19,25 +19,22 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
     const theme = useTheme()
     const { styles } = useThemedStyles(selectedNetworkViewerStyle)
 
-    return (
-        (showEvenIfMainnet || !isMainnet) && (
-            <BaseView style={styles.networkViewer}>
-                <BaseView style={styles.networkViewerIconText}>
-                    <BaseIcon
-                        name={"web"}
-                        color={theme.colors.text}
-                        size={15}
-                        testID={"web"}
-                        style={styles.networkViewerNetworkIcon}
-                    />
-                    <BaseText style={styles.networkViewerNetworkNameText}>
-                        {network.name.length > 0 &&
-                            formatNetworkName(network.name)}
-                    </BaseText>
-                </BaseView>
+    return showEvenIfMainnet || !isMainnet ? (
+        <BaseView style={styles.networkViewer}>
+            <BaseView style={styles.networkViewerIconText}>
+                <BaseIcon
+                    name={"web"}
+                    color={theme.colors.text}
+                    size={15}
+                    testID={"web"}
+                    style={styles.networkViewerNetworkIcon}
+                />
+                <BaseText style={styles.networkViewerNetworkNameText}>
+                    {network.name.length > 0 && formatNetworkName(network.name)}
+                </BaseText>
             </BaseView>
-        )
-    )
+        </BaseView>
+    ) : null
 }
 
 const formatNetworkName = (networkName: string) => {
