@@ -15,6 +15,7 @@ export interface BaseDevice {
     type: DEVICE_TYPE
     alias: string
     index: number
+    position: number
 }
 
 /**

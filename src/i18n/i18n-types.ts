@@ -111,7 +111,7 @@ type RootTranslation = {
 	 */
 	BTN_REMOVE_ACCOUNT: string
 	/**
-	 * A​d​d​ ​a​c​c​o​u​n​t
+	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
 	BTN_ADD_ACCOUNT: string
 	/**
@@ -247,7 +247,7 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 * Y​o​u​r​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​i​t​'​s​ ​a​s​s​o​c​i​a​t​e​d​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​.​ ​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​V​e​W​o​r​l​d​?
 	 */
 	BD_WALLET_REMOVAL: string
 	/**
@@ -727,9 +727,9 @@ type RootTranslation = {
 	 */
 	SB_RENAME_WALLET: string
 	/**
-	 * R​e​n​a​m​e​ ​o​r​ ​r​e​o​r​d​e​r​ ​a​c​c​o​u​n​t​s​ 
+	 * A​c​c​o​u​n​t​ ​v​i​s​i​b​i​l​i​t​y
 	 */
-	SB_RENAME_REORDER_ACCOUNTS: string
+	SB_ACCOUNT_VISIBILITY: string
 	/**
 	 * E​n​t​e​r​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
 	 */
@@ -1697,6 +1697,26 @@ type RootTranslation = {
 	 */
 	SETTINGS_TRANSACTIONS_MANAGE_URLS: string
 	/**
+	 * W​h​a​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​d​o​?
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: string
+	/**
+	 * D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​e​i​t​h​e​r​ ​a​ ​w​a​l​l​e​t​ ​o​r​ ​a​n​ ​a​c​c​o​u​n​t​?
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: string
+	/**
+	 * A​d​d​ ​a​ ​n​e​w​ ​a​c​c​o​u​n​t
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: string
+	/**
+	 * A​d​d​ ​a​ ​n​e​w​ ​w​a​l​l​e​t
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: string
+	/**
+	 * W​a​l​l​e​t​ ​n​a​m​e
+	 */
+	WALLET_MANAGEMENT_WALLET_NAME: string
+	/**
 	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
 	 */
 	MANAGE_TOKEN_TITLE: string
@@ -2446,7 +2466,7 @@ export type TranslationFunctions = {
 	 */
 	BTN_REMOVE_ACCOUNT: () => LocalizedString
 	/**
-	 * Add account
+	 * ADD ACCOUNT
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
 	/**
@@ -2582,7 +2602,7 @@ export type TranslationFunctions = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 * Your wallet and all of it's associated accounts will be removed. This action is irreversible
+	 * Are you sure you want to remove this wallet from VeWorld?
 	 */
 	BD_WALLET_REMOVAL: () => LocalizedString
 	/**
@@ -3058,9 +3078,9 @@ export type TranslationFunctions = {
 	 */
 	SB_RENAME_WALLET: () => LocalizedString
 	/**
-	 * Rename or reorder accounts 
+	 * Account visibility
 	 */
-	SB_RENAME_REORDER_ACCOUNTS: () => LocalizedString
+	SB_ACCOUNT_VISIBILITY: () => LocalizedString
 	/**
 	 * Enter your language
 	 */
@@ -4007,6 +4027,26 @@ Please, try again later.
 	 * Manage URLs
 	 */
 	SETTINGS_TRANSACTIONS_MANAGE_URLS: () => LocalizedString
+	/**
+	 * What do you want to do?
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Do you want to add either a wallet or an account?
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: () => LocalizedString
+	/**
+	 * Add a new account
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: () => LocalizedString
+	/**
+	 * Add a new wallet
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: () => LocalizedString
+	/**
+	 * Wallet name
+	 */
+	WALLET_MANAGEMENT_WALLET_NAME: () => LocalizedString
 	/**
 	 * Manage Tokens
 	 */
