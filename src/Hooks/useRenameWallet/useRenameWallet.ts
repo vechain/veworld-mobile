@@ -2,11 +2,14 @@ import { useCallback } from "react"
 import { Device } from "~Model"
 import { renameDevice, useAppDispatch } from "~Storage/Redux"
 
-export const useRenameWallet = (device: Device) => {
+export const useRenameWallet = (device?: Device) => {
     const dispatch = useAppDispatch()
 
     const changeDeviceAlias = useCallback(
         ({ newAlias }: { newAlias: string }) => {
+            if (!device) {
+                throw new Error("Device not found when renaming it")
+            }
             dispatch(
                 renameDevice({
                     rootAddress: device.rootAddress,
@@ -14,7 +17,7 @@ export const useRenameWallet = (device: Device) => {
                 }),
             )
         },
-        [dispatch, device.rootAddress],
+        [device, dispatch],
     )
 
     return { changeDeviceAlias }

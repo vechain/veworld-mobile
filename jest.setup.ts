@@ -1,10 +1,10 @@
 import "@testing-library/jest-native/extend-expect"
-import { ReactNode } from "react"
 import "whatwg-fetch"
 
 import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
 // @ts-ignore
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
+import { ReactNode } from "react"
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
@@ -65,6 +65,8 @@ jest.mock("react-native-linear-gradient", () => "LinearGradient")
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,
+    __esModule: true,
+    default: componentMock,
 }))
 jest.mock("react-native-wagmi-charts", () => {
     let LineChart = ({ children }: { children: ReactNode }) => children
