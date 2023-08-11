@@ -32,6 +32,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListDiscover,
@@ -153,12 +154,13 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             </BaseText>
 
                             <BaseText>
-                                {striptags(token.desc, {
+                                {striptags(token.desc.trim(), {
                                     allowedTags: new Set(["strong"]),
                                 })}
                             </BaseText>
                         </>
                     )}
+                    <BaseSpacer height={isAndroid() ? 85 : 20} />
                 </BaseView>
             </ScrollView>
 
