@@ -1725,13 +1725,13 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: string
 	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​s​ ​o​r​ ​a​d​d​ ​a​ ​n​e​w​ ​c​u​s​t​o​m​ ​o​n​e
+	 * S​e​l​e​c​t​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y​ ​o​r​ ​a​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
 	/**
-	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s​ ​o​w​n​e​d
+	 * F​i​n​d​ ​m​y​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
 	 */
-	MANAGE_TOKEN_MANAGE_CUSTOM: string
+	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: string
 	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
@@ -1745,7 +1745,7 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_UNSELECTED: string
 	/**
-	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
+	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: string
 	/**
@@ -1760,6 +1760,14 @@ type RootTranslation = {
 	 * S​u​g​g​e​s​t​e​d​ ​t​o​k​e​n
 	 */
 	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: string
+	/**
+	 * Y​o​u​r​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_TITLE_YOUR_TOKENS: string
+	/**
+	 * S​e​l​e​c​t​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s​ ​f​o​r​ ​y​o​u​r​ ​d​a​s​h​b​o​a​r​d
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: string
 	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
@@ -4048,13 +4056,13 @@ Please, try again later.
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: () => LocalizedString
 	/**
-	 * Select your official tokens or add a new custom one
+	 * Select a token from the registry or add a custom token
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
 	/**
-	 * Add custom tokens owned
+	 * Find my custom tokens
 	 */
-	MANAGE_TOKEN_MANAGE_CUSTOM: () => LocalizedString
+	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: () => LocalizedString
 	/**
 	 * Add custom token
 	 */
@@ -4068,7 +4076,7 @@ Please, try again later.
 	 */
 	MANAGE_TOKEN_UNSELECTED: () => LocalizedString
 	/**
-	 * Search a token
+	 * Search a token from the registry
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
 	/**
@@ -4083,6 +4091,14 @@ Please, try again later.
 	 * Suggested token
 	 */
 	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Your custom tokens
+	 */
+	MANAGE_TOKEN_TITLE_YOUR_TOKENS: () => LocalizedString
+	/**
+	 * Select custom tokens for your dashboard
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: () => LocalizedString
 	/**
 	 * Add custom token
 	 */

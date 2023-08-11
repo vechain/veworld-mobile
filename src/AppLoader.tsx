@@ -1,8 +1,8 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
 import { AppLoader as AppLoaderAnimation } from "~Assets"
-import { BlurView } from "~Components"
+import { BaseView, BlurView } from "~Components"
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import Animated, {
     useAnimatedStyle,
@@ -10,6 +10,8 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import { useAppSelector, selectIsAppLoading } from "~Storage/Redux"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { useTheme } from "~Hooks"
 
 type Props = {
     children: React.ReactNode
@@ -51,6 +53,7 @@ type Props = {
  */
 export const AppLoader = ({ children }: Props) => {
     const isAppLoading = useAppSelector(selectIsAppLoading)
+    const theme = useTheme()
 
     const opacity = useSharedValue(isAppLoading ? 1 : 0)
 
@@ -64,13 +67,30 @@ export const AppLoader = ({ children }: Props) => {
         }
     })
 
+    const RenderBackdrop = useMemo(() => {
+        if (isAndroid())
+            return (
+                <BaseView
+                    style={[
+                        styles.overlay,
+                        styles.backdropOpacity,
+                        {
+                            backgroundColor: theme.colors.background,
+                        },
+                    ]}
+                />
+            )
+
+        return <BlurView style={StyleSheet.absoluteFill} blurAmount={2} />
+    }, [theme.colors.background])
+
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
             <Animated.View
                 style={[styles.overlay, animatedStyle]}
                 pointerEvents={isAppLoading ? "auto" : "none"}>
-                <BlurView style={StyleSheet.absoluteFill} blurAmount={2} />
+                {RenderBackdrop}
                 <LottieView
                     source={AppLoaderAnimation} // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
                     autoPlay={isAppLoading} // Prevent the animation from playing when it's not visible
@@ -83,6 +103,7 @@ export const AppLoader = ({ children }: Props) => {
 }
 
 const styles = StyleSheet.create({
+    backdropOpacity: { opacity: 0.7 },
     overlay: {
         position: "absolute",
         top: 0,

@@ -6,6 +6,7 @@ import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { getTabbar } from "../Helpers/getTabbar"
 import { SafeAreaView } from "./SafeAreaView"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     bg?: string
@@ -75,6 +76,7 @@ const baseStyles =
     (theme: ColorThemeType) =>
         StyleSheet.create({
             container: {
+                marginTop: isAndroid() ? 12 : 0,
                 paddingBottom: isTab ? calculateBottomInsets : 0,
                 flexGrow,
                 backgroundColor: bgTransparent

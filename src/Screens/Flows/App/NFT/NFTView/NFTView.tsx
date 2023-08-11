@@ -3,11 +3,7 @@ import React, { memo, useCallback, useMemo, useRef } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { NFTImage, BaseText, BaseView } from "~Components"
-import {
-    NFTMediaType,
-    NonFungibleToken,
-    NonFungibleTokenCollection,
-} from "~Model"
+import { NFTMediaType, NonFungibleToken, NftCollection } from "~Model"
 import { Routes } from "~Navigation"
 import { selectPendingTx, useAppSelector } from "~Storage/Redux"
 import { Video, ResizeMode } from "expo-av"
@@ -20,7 +16,7 @@ import { useThemedStyles } from "~Hooks"
 type Props = {
     nft: NonFungibleToken
     index: number
-    collection: NonFungibleTokenCollection
+    collection: NftCollection
 }
 
 export const NFTView = memo(({ nft, index, collection }: Props) => {

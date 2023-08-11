@@ -58,17 +58,18 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const { styles } = useThemedStyles(baseStyles)
 
         const renderBackdrop = useCallback(
-            (pressBehavior?: BackdropPressBehavior) =>
-                (props_: BottomSheetBackdropProps) =>
-                    (
-                        <BottomSheetBackdrop
-                            {...props_}
-                            pressBehavior={pressBehavior}
-                            opacity={0.5}
-                            disappearsOnIndex={-1}
-                        />
-                    ),
-            [],
+            (props_: BottomSheetBackdropProps) => {
+                return (
+                    <BottomSheetBackdrop
+                        {...props_}
+                        pressBehavior={onPressOutside}
+                        opacity={0.5}
+                        disappearsOnIndex={-1}
+                    />
+                )
+            },
+
+            [onPressOutside],
         )
 
         const renderHandle = useCallback(
@@ -114,7 +115,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 enablePanDownToClose={true}
                 index={0}
                 backgroundStyle={[styles.backgroundStyle]}
-                backdropComponent={renderBackdrop(onPressOutside)}
+                backdropComponent={renderBackdrop}
                 handleComponent={renderHandle}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"

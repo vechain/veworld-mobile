@@ -184,10 +184,6 @@ export const ManageTokenScreen = () => {
                                     testID="Add_Custom_Token_Button"
                                 />
                             </BaseView>
-                            <BaseSpacer height={24} />
-                            <BaseText typographyFont="button">
-                                {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE()}
-                            </BaseText>
                             <BaseSpacer height={8} />
                             <BaseText typographyFont="body">
                                 {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}
@@ -204,7 +200,7 @@ export const ManageTokenScreen = () => {
                                 />
                                 <BaseSpacer width={8} />
                                 <BaseText typographyFont="bodyMedium">
-                                    {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
+                                    {LL.MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED()}
                                 </BaseText>
                                 <BaseSpacer width={8} />
                             </BaseTouchableBox>

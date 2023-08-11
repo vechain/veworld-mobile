@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { NFTImage, BaseText, BaseView, LongPressProvider } from "~Components"
-import { NFTMediaType, NonFungibleTokenCollection } from "~Model"
+import { NFTMediaType, NftCollection } from "~Model"
 import { Routes } from "~Navigation"
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
@@ -12,7 +12,7 @@ import { useThemedStyles } from "~Hooks"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 type Props = {
-    collection: NonFungibleTokenCollection
+    collection: NftCollection
     index: number
 }
 
