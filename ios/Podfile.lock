@@ -138,9 +138,9 @@ PODS:
   - MixpanelReactNative (2.3.1):
     - Mixpanel-swift (= 4.1.3)
     - React-Core
-  - MMKV (1.3.0):
-    - MMKVCore (~> 1.3.0)
-  - MMKVCore (1.3.0)
+  - MMKV (1.3.1):
+    - MMKVCore (~> 1.3.1)
+  - MMKVCore (1.3.1)
   - MultiplatformBleAdapter (0.1.9)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -881,8 +881,8 @@ SPEC CHECKSUMS:
   lottie-react-native: 646955b3212c448d59cf1895a0cb485a0a7be3cf
   Mixpanel-swift: d7c7c6a2f7c65f735af3cb4746ed61a5aab0e551
   MixpanelReactNative: 07c808338a1eb69b0c9077668e3acfb0b2dd6689
-  MMKV: 9c6c3fa4ddd849f28c7b9a5c9d23aab84f14ee35
-  MMKVCore: 9bb7440b170181ac5b81f542ac258103542e693d
+  MMKV: 5a07930c70c70b86cd87761a42c8f3836fb681d7
+  MMKVCore: e50135dbd33235b6ab390635991bab437ab873c0
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
@@ -949,4 +949,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 46e602853ef400c822958c486fa6231b795daffc
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1
