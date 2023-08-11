@@ -1,4 +1,3 @@
-import { useTheme } from "@react-navigation/native"
 import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
@@ -16,8 +15,7 @@ type Props = {
 
 export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
     const { network, isMainnet } = useBlockchainNetwork()
-    const theme = useTheme()
-    const { styles } = useThemedStyles(selectedNetworkViewerStyle)
+    const { styles, theme } = useThemedStyles(selectedNetworkViewerStyle)
 
     return showEvenIfMainnet || !isMainnet ? (
         <BaseView style={styles.networkViewer}>
@@ -29,7 +27,7 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
                     testID={"web"}
                     style={styles.networkViewerNetworkIcon}
                 />
-                <BaseText style={styles.networkViewerNetworkNameText}>
+                <BaseText pl={5}>
                     {network.name.length > 0 && formatNetworkName(network.name)}
                 </BaseText>
             </BaseView>
@@ -54,9 +52,6 @@ const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
             justifyContent: "center",
             paddingLeft: 10,
             paddingRight: 10,
-        },
-        networkViewerNetworkNameText: {
-            paddingLeft: 5,
         },
         networkViewerNetworkIcon: {
             paddingTop: 1,
