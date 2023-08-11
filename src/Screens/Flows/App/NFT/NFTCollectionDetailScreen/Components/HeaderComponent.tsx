@@ -10,7 +10,7 @@ import {
 } from "~Components"
 import { isEmpty } from "lodash"
 import { useI18nContext } from "~i18n"
-import { NFTMediaType, NonFungibleTokenCollection } from "~Model"
+import { NFTMediaType, NftCollection } from "~Model"
 
 import { COLORS } from "~Constants"
 import { useToggleCollection } from "./Hooks/useToggleCollection"
@@ -18,7 +18,7 @@ import { useTheme } from "~Hooks"
 import { NFTPlaceholder } from "~Assets"
 
 export const HeaderComponent = memo(
-    ({ collection }: { collection: NonFungibleTokenCollection }) => {
+    ({ collection }: { collection: NftCollection }) => {
         const { LL } = useI18nContext()
         const theme = useTheme()
 

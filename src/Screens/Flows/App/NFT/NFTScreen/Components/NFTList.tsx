@@ -2,18 +2,18 @@ import { StyleSheet, FlatList } from "react-native"
 import React, { useCallback } from "react"
 import { BaseSpacer } from "~Components"
 import { NFTCollectionView } from "../../NFTCollectionView"
-import { NonFungibleTokenCollection } from "~Model"
+import { NftCollection } from "~Model"
 import { ListFooterView } from "./ListFooterView"
 import { MathUtils } from "~Utils"
 import { usePlatformBottomInsets } from "~Hooks"
 
 type NFTListProps = {
-    item: NonFungibleTokenCollection
+    item: NftCollection
     index: number
 }
 
 type Props = {
-    collections: NonFungibleTokenCollection[]
+    collections: NftCollection[]
     isLoading: boolean
     onGoToBlackListed: () => void
     fetchMoreCollections: () => void

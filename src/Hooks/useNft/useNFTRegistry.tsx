@@ -6,7 +6,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error } from "~Utils"
+import { error } from "~Utils"
 
 export const useNFTRegistry = () => {
     const dispatch = useAppDispatch()
@@ -15,7 +15,6 @@ export const useNFTRegistry = () => {
     useEffect(() => {
         getCollectionInfo(network.type)
             .then(data => {
-                debug("Got collection registry info from GitHub")
                 dispatch(
                     setCollectionRegistryInfo({
                         network: network.type,

@@ -4,7 +4,7 @@ import {
     NETWORK_TYPE,
     NFTMediaType,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NftCollection,
 } from "~Model"
 
 export const initCollectionMetadataFromRegistry = (
@@ -12,8 +12,8 @@ export const initCollectionMetadataFromRegistry = (
     selectedAccount: string,
     collection: string,
     regInfo: GithubCollectionResponse,
-): NonFungibleTokenCollection => {
-    const nftCollection: NonFungibleTokenCollection = {
+): NftCollection => {
+    const nftCollection: NftCollection = {
         id: collection,
         address: collection,
         name: regInfo.name,
@@ -37,8 +37,8 @@ export const initCollectionMetadataWithoutRegistry = (
     collection: string,
     notAvailable: string,
     isDarkTheme: boolean,
-): NonFungibleTokenCollection => {
-    const nftCollection: NonFungibleTokenCollection = {
+): NftCollection => {
+    const nftCollection: NftCollection = {
         id: collection,
         address: collection,
         name: "",
