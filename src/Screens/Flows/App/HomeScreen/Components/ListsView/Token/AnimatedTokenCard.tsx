@@ -88,7 +88,6 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         },
         pressable: {
             borderRadius: 10,
-            marginHorizontal: 20,
         },
         animatedOuterContainer: {
             backgroundColor: theme.colors.card,

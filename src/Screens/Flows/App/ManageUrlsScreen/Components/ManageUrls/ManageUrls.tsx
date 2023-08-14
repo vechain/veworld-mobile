@@ -7,7 +7,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    DeleteUnderlay,
+    SwipeableRow,
     useThor,
 } from "~Components"
 import {
@@ -17,10 +17,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import SwipeableItem, {
-    OpenDirection,
-    SwipeableItemImperativeRef,
-} from "react-native-swipeable-item"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 type Props = {
     openAddUrl: () => void
@@ -32,57 +29,35 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const dispatch = useAppDispatch()
     const thor = useThor()
-    const swipeableItemRefs = useRef<(SwipeableItemImperativeRef | null)[]>([])
 
     const deleteUrl = useCallback(
-        (url: string) => () => {
+        (url: string) => {
             dispatch(deleteDelegationUrl({ url, genesisId: thor.genesis.id }))
         },
         [dispatch, thor.genesis.id],
     )
 
-    const closeOtherSwipeableItems = useCallback((index: number) => {
-        swipeableItemRefs?.current.forEach((ref, id) => {
-            if (id !== index) {
-                ref?.close()
-            }
-        })
-    }, [])
-
-    const handleSwipe = useCallback(
-        (index: number) =>
-            ({ openDirection }: { openDirection: string }) => {
-                if (openDirection === OpenDirection.LEFT) {
-                    closeOtherSwipeableItems(index)
-                }
-            },
-        [closeOtherSwipeableItems],
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
+        new Map(),
     )
 
     const renderItem: ListRenderItem<string> = useCallback(
         ({ item, index }) => {
-            const customStyle = index === 0 ? { marginTop: 20 } : {}
-
             return (
-                <BaseView mx={20} my={8} style={customStyle}>
-                    <SwipeableItem
-                        ref={el => (swipeableItemRefs.current[index] = el)}
-                        item={item}
-                        renderUnderlayLeft={() => (
-                            <DeleteUnderlay onPress={deleteUrl(item)} />
-                        )}
-                        onChange={handleSwipe(index)}
-                        snapPointsLeft={[50]}>
-                        <BaseCard>
-                            <BaseText typographyFont="bodyBold" w={100} py={8}>
-                                {item}
-                            </BaseText>
-                        </BaseCard>
-                    </SwipeableItem>
-                </BaseView>
+                <SwipeableRow
+                    item={item}
+                    itemKey={String(index)}
+                    swipeableItemRefs={swipeableItemRefs}
+                    handleTrashIconPress={deleteUrl}>
+                    <BaseCard>
+                        <BaseText typographyFont="bodyBold" w={100} py={8}>
+                            {item}
+                        </BaseText>
+                    </BaseCard>
+                </SwipeableRow>
             )
         },
-        [deleteUrl, handleSwipe],
+        [deleteUrl],
     )
 
     return (

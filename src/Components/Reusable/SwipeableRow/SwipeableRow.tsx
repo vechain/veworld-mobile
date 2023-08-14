@@ -1,10 +1,4 @@
-import React, {
-    Dispatch,
-    MutableRefObject,
-    ReactNode,
-    SetStateAction,
-    useCallback,
-} from "react"
+import React, { MutableRefObject, ReactNode, useCallback } from "react"
 import { BaseView } from "~Components/Base"
 import SwipeableItem, {
     OpenDirection,
@@ -14,25 +8,27 @@ import { DeleteUnderlay } from "../DeleteUnderlay"
 
 type Props<T> = {
     item: T
-    index: number
     children: ReactNode
     itemKey: string
-    onOpenDeleteItemBottomSheet: () => void
+    handleTrashIconPress: (item: T) => void
     swipeEnabled?: boolean
-    setSelectedItem: Dispatch<SetStateAction<T | undefined>>
+    setSelectedItem?: (item: T) => void
     swipeableItemRefs: MutableRefObject<Map<string, SwipeableItemImperativeRef>>
+    testID?: string
+    xMargins?: number
 }
 
 // this component is used to wrap the item in the list and uniform the logic with swipeable items
 export const SwipeableRow = <T,>({
     item,
-    index,
     children,
     itemKey,
-    onOpenDeleteItemBottomSheet,
+    handleTrashIconPress,
     setSelectedItem,
     swipeableItemRefs,
     swipeEnabled = true,
+    testID,
+    xMargins = 20,
 }: Props<T>) => {
     const closeOtherSwipeableItems = useCallback(
         (all = false) => {
@@ -52,18 +48,17 @@ export const SwipeableRow = <T,>({
     const handleSwipe = ({ openDirection }: { openDirection: string }) => {
         if (openDirection === OpenDirection.LEFT) {
             closeOtherSwipeableItems()
-            setSelectedItem(item)
+            setSelectedItem?.(item)
         }
     }
 
     const onTrashIconPress = useCallback(() => {
         closeOtherSwipeableItems(true) // close all swipeable items
-        onOpenDeleteItemBottomSheet()
-    }, [closeOtherSwipeableItems, onOpenDeleteItemBottomSheet])
+        handleTrashIconPress(item)
+    }, [closeOtherSwipeableItems, handleTrashIconPress, item])
 
-    const customStyle = index === 0 ? { marginTop: 20 } : {}
     return (
-        <BaseView flexDirection="row" mx={20} my={8} style={customStyle}>
+        <BaseView flexDirection="row" mx={xMargins} my={8} testID={testID}>
             <SwipeableItem
                 ref={el => {
                     el && swipeableItemRefs.current.set(itemKey, el)
