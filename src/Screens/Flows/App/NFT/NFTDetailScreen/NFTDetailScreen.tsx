@@ -11,7 +11,7 @@ import {
     showErrorToast,
 } from "~Components"
 import { Linking } from "react-native"
-import { useCopyClipboard } from "~Hooks"
+import { useCopyClipboard, usePlatformBottomInsets } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
@@ -37,6 +37,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const { LL, locale } = useI18nContext()
     const nav = useNavigation()
     const { onCopyToClipboard } = useCopyClipboard()
+    const { calculateBottomInsets } = usePlatformBottomInsets()
 
     const collection = useAppSelector(state =>
         selectCollectionWithContractAddress(
@@ -212,6 +213,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     )}
                 </BaseView>
             }
+            _calculateBottomInsets={calculateBottomInsets}
             footer={
                 <FadeoutButton
                     disabled={!!isPendingTx}

@@ -26,6 +26,7 @@ type Props = {
     scrollViewTestID?: string
     showSelectedNetwork?: boolean
     onTouchBody?: () => void
+    _calculateBottomInsets?: number
 }
 
 export const Layout = ({
@@ -40,6 +41,7 @@ export const Layout = ({
     safeAreaTestID,
     onTouchBody,
     scrollViewTestID,
+    _calculateBottomInsets,
     showSelectedNetwork = false,
 }: Props) => {
     const theme = useTheme()
@@ -89,7 +91,7 @@ export const Layout = ({
                         contentContainerStyle={{
                             paddingBottom: isAndroid()
                                 ? tabBarAndroidBottomInsets
-                                : undefined,
+                                : _calculateBottomInsets,
                         }}>
                         {!fixedHeader && title && <Title />}
                         {body}
