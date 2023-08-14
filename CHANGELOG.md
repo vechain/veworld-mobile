@@ -1,5 +1,18 @@
 
 
+## [0.1.3](https://github.com/vechainfoundation/veworld-mobile/compare/v0.1.1-android...v0.1.3) (2023-08-14)
+
+
+### Bug Fixes
+
+* android blur bug ([#1093](https://github.com/vechainfoundation/veworld-mobile/issues/1093)) ([48f4ed1](https://github.com/vechainfoundation/veworld-mobile/commit/48f4ed1b29d8bf4da0ca66722763cbf143319bae))
+* bottom sheets rerendering and flickering on android ([#1089](https://github.com/vechainfoundation/veworld-mobile/issues/1089)) ([9fccf85](https://github.com/vechainfoundation/veworld-mobile/commit/9fccf85bc81b904caaa119684e648cb9d025329b))
+* broken main ([#1098](https://github.com/vechainfoundation/veworld-mobile/issues/1098)) ([c374043](https://github.com/vechainfoundation/veworld-mobile/commit/c374043d52c3402e2bb05e60a21f84f3f3186e2e))
+* env variables and move them to 1password ([#1088](https://github.com/vechainfoundation/veworld-mobile/issues/1088)) ([908d1e5](https://github.com/vechainfoundation/veworld-mobile/commit/908d1e5a654078f0306971aadc78a5ea0d290ac6))
+* list bottom padding fixes and other minor ui fixes on Android ([#1090](https://github.com/vechainfoundation/veworld-mobile/issues/1090)) ([d6d8fa8](https://github.com/vechainfoundation/veworld-mobile/commit/d6d8fa82188238d6fcce01ea1b7889f5ce316db3))
+* list paddings ([#1100](https://github.com/vechainfoundation/veworld-mobile/issues/1100)) ([6fa9903](https://github.com/vechainfoundation/veworld-mobile/commit/6fa9903e1749ca3d263af010f26bf3be019fbf1a))
+* refactor wallet management flow ([#1096](https://github.com/vechainfoundation/veworld-mobile/issues/1096)) ([91f3db3](https://github.com/vechainfoundation/veworld-mobile/commit/91f3db334fd4ff087cef9c2a87f6413a2d7d9bc9))
+
 ## [0.1.2](https://github.com/vechainfoundation/veworld-mobile/compare/v0.1.1-android...v0.1.2) (2023-08-11)
 
 
