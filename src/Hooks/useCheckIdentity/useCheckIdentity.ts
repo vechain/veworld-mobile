@@ -2,6 +2,8 @@ import { useCallback, useMemo } from "react"
 import { useDisclosure, useWalletSecurity } from "~Hooks"
 import { isEmpty } from "lodash"
 import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
+import { selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
+import { DEVICE_TYPE } from "~Model"
 
 type Props = {
     onIdentityConfirmed: (password?: string) => void
@@ -19,6 +21,8 @@ export const useCheckIdentity = ({
     const { isWalletSecurityBiometrics, biometrics } = useWalletSecurity()
 
     const { getPinCode } = usePinCode()
+
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
 
     const isBiometricsEmpty = useMemo(() => {
         return isEmpty(biometrics)
@@ -39,7 +43,14 @@ export const useCheckIdentity = ({
     const checkIdentityBeforeOpening = useCallback(async () => {
         const pinCode = getPinCode()
 
-        if (isWalletSecurityBiometrics) {
+        // If: we're using biometrics, or we allow auto access to ledger
+        // Else If: the pin code is stored in the app
+        // Else: Open the password prompt
+        if (
+            isWalletSecurityBiometrics ||
+            (allowAutoPassword &&
+                selectedAccount?.device.type === DEVICE_TYPE.LEDGER)
+        ) {
             onIdentityConfirmed()
         } else if (pinCode && allowAutoPassword) {
             onIdentityConfirmed(pinCode)
@@ -47,6 +58,7 @@ export const useCheckIdentity = ({
             openPasswordPrompt()
         }
     }, [
+        selectedAccount,
         allowAutoPassword,
         getPinCode,
         isWalletSecurityBiometrics,

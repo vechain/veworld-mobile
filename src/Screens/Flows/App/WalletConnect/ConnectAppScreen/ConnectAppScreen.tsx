@@ -29,7 +29,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, WalletConnectUtils } from "~Utils"
+import { error, WalletConnectUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests } from "./Components"
 import { AppInfo } from "../Components"
@@ -83,6 +83,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         }
 
         if (!currentProposal || !requiredNamespaces.vechain.chains) {
+            warn("ConnectedAppScreen - session not valid")
             showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
             return
         }
