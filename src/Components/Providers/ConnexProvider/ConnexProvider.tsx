@@ -20,8 +20,9 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
 
         return newThor(driver.current)
     }, [selectedNetwork])
-    const [status, setStatus] = useState<Connex.Thor.Status>(thor.status)
 
+    // "thor.status" is a getter function, so it has a constant reference, we need to use a state to trigger re-renders
+    const [status, setStatus] = useState<Connex.Thor.Status>(thor.status)
     useEffect(() => {
         const interval = setInterval(() => {
             if (thor.status.head !== status.head) {
