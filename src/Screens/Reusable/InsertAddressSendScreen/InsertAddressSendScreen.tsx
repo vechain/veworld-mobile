@@ -102,6 +102,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         <Layout
             safeAreaTestID="Insert_Address_Send_Screen"
             title={LL.BTN_SEND()}
+            showSelectedNetwork={true}
             fixedHeader={
                 <BaseView>
                     <BaseText typographyFont="body">

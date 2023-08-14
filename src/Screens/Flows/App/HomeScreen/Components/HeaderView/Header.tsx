@@ -6,6 +6,7 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { ScanTarget } from "~Constants"
+import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 
 export const Header = memo(() => {
     const theme = useTheme()
@@ -44,6 +45,7 @@ export const Header = memo(() => {
             </BaseView>
 
             <BaseView flexDirection="row">
+                <SelectedNetworkViewer />
                 <BaseIcon
                     name={"qrcode-scan"}
                     size={24}

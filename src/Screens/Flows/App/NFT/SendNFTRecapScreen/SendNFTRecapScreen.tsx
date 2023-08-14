@@ -96,6 +96,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     return (
         <Layout
             safeAreaTestID="Send_NFT_Recap_Screen"
+            showSelectedNetwork={true}
             body={
                 <>
                     <BaseView>
