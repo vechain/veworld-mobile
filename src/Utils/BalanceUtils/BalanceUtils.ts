@@ -1,10 +1,11 @@
 import { abis, VET, VTHO } from "~Constants"
 import axios from "axios"
 import { error } from "~Utils/Logger"
-import { Balance, Network } from "~Model"
+import { Balance, FungibleTokenWithBalance, Network } from "~Model"
 import AddressUtils from "../AddressUtils"
 import FormattingUtils from "../FormattingUtils"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
+import { BigNumber } from "bignumber.js"
 
 /**
  * Calls out to external sources to get the balance
@@ -145,7 +146,11 @@ const getTokenUnitBalance = (balance: string, decimals: number) =>
         balance,
     )
 
+const getIsTokenWithBalance = (token: FungibleTokenWithBalance) =>
+    !new BigNumber(token.balance.balance).isZero()
+
 export default {
+    getIsTokenWithBalance,
     getBalanceFromBlockchain,
     getVetAndVthoBalancesFromBlockchain,
     getTokenBalanceFromBlockchain,
