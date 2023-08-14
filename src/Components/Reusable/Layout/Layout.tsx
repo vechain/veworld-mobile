@@ -11,6 +11,7 @@ import { StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { SelectedNetworkViewer } from "~Components"
 
 type Props = {
     noBackButton?: boolean
@@ -23,6 +24,7 @@ type Props = {
     isScrollEnabled?: boolean
     safeAreaTestID?: string
     scrollViewTestID?: string
+    showSelectedNetwork?: boolean
     onTouchBody?: () => void
     _calculateBottomInsets?: number
 }
@@ -40,6 +42,7 @@ export const Layout = ({
     onTouchBody,
     scrollViewTestID,
     _calculateBottomInsets,
+    showSelectedNetwork = false,
 }: Props) => {
     const theme = useTheme()
     const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
@@ -59,13 +62,24 @@ export const Layout = ({
             testID={safeAreaTestID}
             onTouchStart={onTouchBody}>
             <BaseView h={100}>
-                {!noBackButton && <BackButtonHeader hasBottomSpacer={false} />}
-                <BaseSpacer height={fixedHeader ? 16 : 8} />
-                <BaseView mx={noMargin ? 0 : 20}>
-                    {fixedHeader && title && <Title />}
-                    {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
+                <BaseView>
+                    {!noBackButton && (
+                        <BackButtonHeader hasBottomSpacer={false} />
+                    )}
+                    <BaseView>
+                        <BaseSpacer height={fixedHeader ? 16 : 8} />
+                        <BaseView mx={noMargin ? 0 : 20}>
+                            {fixedHeader && title && <Title />}
+                            {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
+                        </BaseView>
+                    </BaseView>
+                    {showSelectedNetwork && (
+                        <BaseView style={styles.selectedNetworkViewerView}>
+                            <SelectedNetworkViewer />
+                        </BaseView>
+                    )}
+                    {!fixedHeader && <BaseSpacer height={8} />}
                 </BaseView>
-
                 {/* Separator from header to body */}
                 <BaseSpacer height={1} background={theme.colors.card} />
 
@@ -102,5 +116,10 @@ export const Layout = ({
 const styles = StyleSheet.create({
     scrollView: {
         paddingHorizontal: 24,
+    },
+    selectedNetworkViewerView: {
+        position: "absolute",
+        right: 22,
+        top: 5,
     },
 })

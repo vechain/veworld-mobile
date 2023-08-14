@@ -179,6 +179,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         <Layout
             safeAreaTestID="Transaction_Summary_Send_Screen"
             title={LL.SEND_TOKEN_TITLE()}
+            showSelectedNetwork={true}
             body={
                 <BaseView mb={80} mt={8}>
                     {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/767) CHange BaseCardGroup with TransferCard */}
