@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import { FlashList } from "@shopify/flash-list"
+import { FlashList, ListRenderItem } from "@shopify/flash-list"
 import React, { useCallback, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
@@ -11,8 +11,8 @@ import {
     BaseTouchableBox,
     BaseView,
     DeleteConfirmationBottomSheet,
-    DeleteUnderlay,
     Layout,
+    SwipeableRow,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -22,17 +22,13 @@ import {
     selectContactByAddress,
     selectContacts,
 } from "~Storage/Redux/Selectors"
-import SwipeableItem, {
-    OpenDirection,
-    SwipeableItemImperativeRef,
-} from "react-native-swipeable-item"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {
     AddContactButton,
     ContactDetailBox,
     ContactManagementBottomSheet,
 } from "./Components"
-
-const underlaySnapPoints = [58]
+import { Contact } from "~Model"
 
 export const ContactsScreen = () => {
     // [Start] Hooks
@@ -83,11 +79,6 @@ export const ContactsScreen = () => {
         [nav],
     )
 
-    const contactsListSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
-    )
-
     const closeOtherSwipeableItems = useCallback((currentAddress: string) => {
         swipeableItemRefs?.current.forEach((ref, address) => {
             if (address !== currentAddress) {
@@ -96,20 +87,10 @@ export const ContactsScreen = () => {
         })
     }, [])
 
-    const onClickTrashIcon = useCallback(() => {
+    const onEditContactPress = useCallback(() => {
+        openEditContactSheet()
         closeOtherSwipeableItems("") // Pass an empty string to close all items
-        openRemoveContactSheet()
-    }, [closeOtherSwipeableItems, openRemoveContactSheet])
-
-    const onEditContactPress = useCallback(
-        (name: string, address: string) => {
-            setSelectedContactAddress(address)
-
-            openEditContactSheet()
-            closeOtherSwipeableItems("") // Pass an empty string to close all items
-        },
-        [closeOtherSwipeableItems, openEditContactSheet],
-    )
+    }, [closeOtherSwipeableItems, openEditContactSheet])
 
     const handleRemoveContact = useCallback(() => {
         if (selectedContactAddress) {
@@ -129,21 +110,6 @@ export const ContactsScreen = () => {
         [closeEditContactSheet, dispatch, selectedContactAddress],
     )
 
-    const registerSwipeableItemRef = useCallback(
-        (address: string, ref: SwipeableItemImperativeRef | null) => {
-            if (ref) swipeableItemRefs.current.set(address, ref)
-        },
-        [],
-    )
-
-    const onSwipeableItemChange = useCallback(
-        (address: string) => {
-            setSelectedContactAddress(address)
-            closeOtherSwipeableItems(address)
-        },
-        [closeOtherSwipeableItems],
-    )
-
     // [End] Methods
 
     // [Start] Render sub components
@@ -160,79 +126,29 @@ export const ContactsScreen = () => {
         )
     }, [onAddContactPress])
 
-    const renderContactsList = useCallback(() => {
-        return (
-            <>
-                <BaseView flexDirection="row" style={[baseStyles.list]}>
-                    <FlashList
-                        data={contacts}
-                        keyExtractor={contact => contact.address}
-                        ItemSeparatorComponent={contactsListSeparator}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                        viewabilityConfig={viewabilityConfig}
-                        scrollEnabled={isListScrollable}
-                        ListHeaderComponent={<BaseSpacer height={20} />}
-                        ListFooterComponent={<BaseSpacer height={20} />}
-                        renderItem={({ item: contact }) => {
-                            const contactId = `${contact.address}-${contact.alias}`
+    const renderItem: ListRenderItem<Contact> = useCallback(
+        ({ item }) => {
+            const contactId = `${item.address}-${item.alias}`
 
-                            return (
-                                <BaseView mx={20} testID={contactId}>
-                                    <SwipeableItem
-                                        ref={ref =>
-                                            registerSwipeableItemRef(
-                                                contact.address,
-                                                ref,
-                                            )
-                                        }
-                                        key={contact.address}
-                                        item={contact}
-                                        onChange={({ openDirection }) => {
-                                            if (
-                                                openDirection !==
-                                                OpenDirection.NONE
-                                            )
-                                                onSwipeableItemChange(
-                                                    contact.address,
-                                                )
-                                        }}
-                                        renderUnderlayLeft={() => (
-                                            <DeleteUnderlay
-                                                onPress={onClickTrashIcon}
-                                            />
-                                        )}
-                                        snapPointsLeft={underlaySnapPoints}>
-                                        <ContactDetailBox
-                                            contact={contact}
-                                            onEditPress={onEditContactPress}
-                                        />
-                                    </SwipeableItem>
-                                </BaseView>
-                            )
-                        }}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        estimatedItemSize={80}
-                        estimatedListSize={{
-                            height: 80 * contacts.length,
-                            width: 400,
-                        }}
-                        testID="contacts-list"
+            return (
+                <SwipeableRow
+                    testID={contactId}
+                    item={item}
+                    itemKey={item.address}
+                    swipeableItemRefs={swipeableItemRefs}
+                    handleTrashIconPress={openRemoveContactSheet}
+                    setSelectedItem={(contact: Contact) =>
+                        setSelectedContactAddress(contact.address)
+                    }>
+                    <ContactDetailBox
+                        contact={item}
+                        onEditPress={onEditContactPress}
                     />
-                </BaseView>
-            </>
-        )
-    }, [
-        contacts,
-        contactsListSeparator,
-        onViewableItemsChanged,
-        viewabilityConfig,
-        isListScrollable,
-        onEditContactPress,
-        registerSwipeableItemRef,
-        onSwipeableItemChange,
-        onClickTrashIcon,
-    ])
+                </SwipeableRow>
+            )
+        },
+        [onEditContactPress, openRemoveContactSheet],
+    )
 
     // [End] Render sub components
 
@@ -279,7 +195,28 @@ export const ContactsScreen = () => {
                     {!contacts.length && renderAddContactButton()}
 
                     {/* Contacts List */}
-                    {!!contacts.length && renderContactsList()}
+                    {!!contacts.length && (
+                        <BaseView flexDirection="row" style={[baseStyles.list]}>
+                            <FlashList
+                                data={contacts}
+                                keyExtractor={contact => contact.address}
+                                onViewableItemsChanged={onViewableItemsChanged}
+                                viewabilityConfig={viewabilityConfig}
+                                scrollEnabled={isListScrollable}
+                                ListHeaderComponent={<BaseSpacer height={20} />}
+                                ListFooterComponent={<BaseSpacer height={20} />}
+                                renderItem={renderItem}
+                                showsVerticalScrollIndicator={false}
+                                showsHorizontalScrollIndicator={false}
+                                estimatedItemSize={80}
+                                estimatedListSize={{
+                                    height: 80 * contacts.length,
+                                    width: 400,
+                                }}
+                                testID="contacts-list"
+                            />
+                        </BaseView>
+                    )}
 
                     {/* Bottom Sheets */}
                     <DeleteConfirmationBottomSheet

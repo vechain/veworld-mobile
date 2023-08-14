@@ -96,15 +96,13 @@ export const WalletManagementScreen = () => {
     )
 
     const renderItem: RenderItem<Device> = useCallback(
-        ({ item, getIndex, drag, isActive }) => {
-            const index = getIndex() || 0
+        ({ item, drag, isActive }) => {
             return (
                 <SwipeableRow
                     item={item}
-                    index={index}
                     itemKey={item.rootAddress}
                     swipeableItemRefs={swipeableItemRefs}
-                    onOpenDeleteItemBottomSheet={openRemoveWalletBottomSheet}
+                    handleTrashIconPress={openRemoveWalletBottomSheet}
                     setSelectedItem={setSelectedDevice}
                     swipeEnabled={!isEdit && devices.length > 1}>
                     <Pressable
@@ -211,7 +209,7 @@ export const WalletManagementScreen = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         view: { top: 0, flexGrow: 1, marginBottom: 0 },
-        draggableFlatListContainer: { flexGrow: 1 },
+        draggableFlatListContainer: { flexGrow: 1, marginTop: 12 },
         deviceBoxPressable: {
             backgroundColor: theme.colors.card,
             borderRadius: 16,
