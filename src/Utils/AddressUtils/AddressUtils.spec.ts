@@ -7,8 +7,8 @@ import {
     getAddressFromXPub,
     isValid,
     isVechainToken,
-    regexPattern,
     leftPadWithZeros,
+    regexPattern,
 } from "./AddressUtils"
 
 const validMnemonicPhrase = [
@@ -170,6 +170,11 @@ describe("Is Valid Address", () => {
             false,
         )
     })
+
+    test("not a string", () => {
+        // @ts-ignore
+        expect(isValid(1234)).toBe(false)
+    })
 })
 
 describe("regexPattern", () => {
@@ -197,5 +202,11 @@ describe("Check vechain address", () => {
         expect(leftPadWithZeros(address1, 64)).toBe(
             "0x000000000000000000000000" + address1NoHex,
         )
+    })
+
+    test("left pad with too many zeros", () => {
+        expect(() => {
+            leftPadWithZeros(address1, 5)
+        }).toThrow()
     })
 })
