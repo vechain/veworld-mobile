@@ -17,6 +17,7 @@ jest.mock("~Storage/Redux/Selectors", () => ({
     getDefaultDelegationAccount: jest.fn(),
     getDefaultDelegationUrl: jest.fn(),
 }))
+
 describe("useDelegation", () => {
     beforeEach(() => {
         jest.resetAllMocks()
@@ -32,14 +33,9 @@ describe("useDelegation", () => {
     })
 
     it("should render", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDelegation({ setGasPayer }),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        await waitForNextUpdate()
+        const { result } = renderHook(() => useDelegation({ setGasPayer }), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current).toEqual({
             setSelectedDelegationUrl: expect.any(Function),
@@ -55,14 +51,9 @@ describe("useDelegation", () => {
     it("should set selected delegation url", async () => {
         const url = "https://test.com"
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDelegation({ setGasPayer }),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        await waitForNextUpdate()
+        const { result } = renderHook(() => useDelegation({ setGasPayer }), {
+            wrapper: TestWrapper,
+        })
 
         await result.current.setSelectedDelegationUrl(url)
 
@@ -79,14 +70,9 @@ describe("useDelegation", () => {
             device: device1,
         }
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDelegation({ setGasPayer }),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        await waitForNextUpdate()
+        const { result } = renderHook(() => useDelegation({ setGasPayer }), {
+            wrapper: TestWrapper,
+        })
 
         await result.current.setSelectedDelegationAccount({
             ...account1D1,
@@ -107,14 +93,9 @@ describe("useDelegation", () => {
             device: device1,
         }
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDelegation({ setGasPayer }),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        await waitForNextUpdate()
+        const { result } = renderHook(() => useDelegation({ setGasPayer }), {
+            wrapper: TestWrapper,
+        })
 
         await result.current.setSelectedDelegationUrl(url)
         await result.current.setSelectedDelegationAccount(account)
@@ -130,14 +111,12 @@ describe("useDelegation", () => {
     it("using provided URL should automatically set delegation option", async () => {
         const url = "https://test.com"
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () => useDelegation({ setGasPayer, providedUrl: url }),
             {
                 wrapper: TestWrapper,
             },
         )
-
-        await waitForNextUpdate()
 
         expect(result.current.isDelegated).toBeTruthy()
         expect(result.current.selectedDelegationOption).toEqual(
@@ -147,14 +126,9 @@ describe("useDelegation", () => {
     })
 
     it("should reset all delegation", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDelegation({ setGasPayer }),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        await waitForNextUpdate()
+        const { result } = renderHook(() => useDelegation({ setGasPayer }), {
+            wrapper: TestWrapper,
+        })
 
         result.current.setSelectedDelegationUrl("https://test.com")
 
@@ -184,14 +158,9 @@ describe("useDelegation", () => {
             DelegationType.ACCOUNT,
         )
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDelegation({ setGasPayer }),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        await waitForNextUpdate()
+        const { result } = renderHook(() => useDelegation({ setGasPayer }), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current.isDelegated).toBeTruthy()
         expect(result.current.selectedDelegationOption).toEqual(
@@ -210,14 +179,9 @@ describe("useDelegation", () => {
             DelegationType.URL,
         )
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDelegation({ setGasPayer }),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        await waitForNextUpdate()
+        const { result } = renderHook(() => useDelegation({ setGasPayer }), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current.isDelegated).toBeTruthy()
         expect(result.current.selectedDelegationOption).toEqual(

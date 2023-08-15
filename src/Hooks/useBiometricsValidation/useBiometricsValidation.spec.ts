@@ -19,12 +19,10 @@ describe("useBiometricsValidation", () => {
             success: true,
         })
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useBiometricsValidation(),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useBiometricsValidation(), {
+            wrapper: TestWrapper,
+        })
 
-        await waitForNextUpdate({ timeout: 5000 })
         await result.current.authenticateBiometrics(onSuccess)
 
         expect(onSuccess).toHaveBeenCalled()
@@ -41,12 +39,10 @@ describe("useBiometricsValidation", () => {
             error: "not_enrolled",
         })
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useBiometricsValidation(),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useBiometricsValidation(), {
+            wrapper: TestWrapper,
+        })
 
-        await waitForNextUpdate({ timeout: 5000 })
         await result.current.authenticateBiometrics(onSuccess)
 
         expect(AlertUtils.showDefaultAlert).toHaveBeenCalled()
@@ -70,12 +66,10 @@ describe("useBiometricsValidation", () => {
                 successFn = _success
             },
         )
-        const { result, waitForNextUpdate } = renderHook(
-            () => useBiometricsValidation(),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useBiometricsValidation(), {
+            wrapper: TestWrapper,
+        })
 
-        await waitForNextUpdate({ timeout: 5000 })
         await result.current.authenticateBiometrics(onSuccess)
         act(() => {
             successFn()

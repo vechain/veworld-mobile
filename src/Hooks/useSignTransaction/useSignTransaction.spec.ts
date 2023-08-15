@@ -32,13 +32,10 @@ describe("useSignTransaction", () => {
     })
 
     it("should render correctly", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSignTransaction(defaultProps),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSignTransaction(defaultProps), {
+            wrapper: TestWrapper,
         })
+
         expect(result.current).toEqual({
             getUrlDelegationSignature: expect.any(Function),
             getAccountDelegationSignature: expect.any(Function),
@@ -48,12 +45,8 @@ describe("useSignTransaction", () => {
     })
 
     it("signAndSendTransaction - throws error (not mocked decryptWallet)", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSignTransaction(defaultProps),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSignTransaction(defaultProps), {
+            wrapper: TestWrapper,
         })
         expect(result.current).toEqual({
             getUrlDelegationSignature: expect.any(Function),
@@ -66,12 +59,8 @@ describe("useSignTransaction", () => {
     })
 
     it("signAndSendTransaction - no delegation works as expected", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSignTransaction(defaultProps),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSignTransaction(defaultProps), {
+            wrapper: TestWrapper,
         })
 
         expect(result.current).toEqual({
@@ -95,7 +84,7 @@ describe("useSignTransaction", () => {
 
     describe("signAndSendTransaction - account delegation", () => {
         it("works as expected", async () => {
-            const { result, waitForNextUpdate } = renderHook(
+            const { result } = renderHook(
                 () =>
                     useSignTransaction({
                         ...defaultProps,
@@ -107,9 +96,6 @@ describe("useSignTransaction", () => {
                     }),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate({
-                timeout: 5000,
-            })
 
             expect(result.current).toEqual({
                 getUrlDelegationSignature: expect.any(Function),
@@ -136,7 +122,7 @@ describe("useSignTransaction", () => {
         })
 
         it("no account throws error", async () => {
-            const { result, waitForNextUpdate } = renderHook(
+            const { result } = renderHook(
                 () =>
                     useSignTransaction({
                         ...defaultProps,
@@ -144,10 +130,6 @@ describe("useSignTransaction", () => {
                     }),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate({
-                timeout: 5000,
-            })
-
             expect(result.current).toEqual({
                 getUrlDelegationSignature: expect.any(Function),
                 getAccountDelegationSignature: expect.any(Function),
@@ -166,7 +148,7 @@ describe("useSignTransaction", () => {
 
     describe("signAndSendTransaction - url delegation", () => {
         it("works as expected", async () => {
-            const { result, waitForNextUpdate } = renderHook(
+            const { result } = renderHook(
                 () =>
                     useSignTransaction({
                         ...defaultProps,
@@ -175,9 +157,6 @@ describe("useSignTransaction", () => {
                     }),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate({
-                timeout: 5000,
-            })
 
             expect(result.current).toEqual({
                 getUrlDelegationSignature: expect.any(Function),
@@ -205,7 +184,7 @@ describe("useSignTransaction", () => {
         })
 
         it("no url throws error", async () => {
-            const { result, waitForNextUpdate } = renderHook(
+            const { result } = renderHook(
                 () =>
                     useSignTransaction({
                         ...defaultProps,
@@ -213,9 +192,6 @@ describe("useSignTransaction", () => {
                     }),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate({
-                timeout: 5000,
-            })
 
             expect(result.current).toEqual({
                 getUrlDelegationSignature: expect.any(Function),

@@ -38,10 +38,9 @@ describe("useAppLock", () => {
             () => WALLET_STATUS.LOCKED,
         )
 
-        const { result, waitForNextUpdate } = renderHook(useAppLock, {
+        const { result } = renderHook(useAppLock, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate({ timeout: 5000 })
         expect(result.current.appLockStatusInactive).toBe(true)
         expect(result.current.appLockStatusActive).toBe(false)
     })
@@ -57,10 +56,9 @@ describe("useAppLock", () => {
             () => WALLET_STATUS.LOCKED,
         )
 
-        const { result, waitForNextUpdate } = renderHook(useAppLock, {
+        const { result } = renderHook(useAppLock, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate({ timeout: 5000 })
         act(() => {
             result.current.unlockApp()
         })
@@ -79,10 +77,9 @@ describe("useAppLock", () => {
             () => WALLET_STATUS.UNLOCKED,
         )
 
-        const { result, waitForNextUpdate } = renderHook(useAppLock, {
+        const { result } = renderHook(useAppLock, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate({ timeout: 5000 })
         act(() => {
             result.current.lockApp()
         })

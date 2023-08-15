@@ -1,60 +1,46 @@
 import { Driver } from "@vechain/connex-driver"
 import { newThor } from "@vechain/connex-framework/dist/thor"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { error } from "~Utils/Logger"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useAppSelector } from "~Storage/Redux"
 import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { CustomNet } from "~Components/Providers/ConnexProvider/CustomNet"
+import { Network } from "~Model"
 
 type ConnexContextProviderProps = { children: React.ReactNode }
-const ConnexContext = React.createContext<Connex.Thor | undefined>(undefined)
+export const ConnexContext = React.createContext<Connex.Thor | undefined>(
+    undefined,
+)
 
 const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
-    const [connex, setConnex] = useState<Connex.Thor>()
-    const [driver, setDriver] = useState<Driver | null>(null)
-    const value = useMemo(() => (connex ? connex : undefined), [connex])
-
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-
-    const initConnex = useCallback(async () => {
-        if (selectedNetwork) {
-            try {
-                const driverInstance = await initDriver(
-                    selectedNetwork.currentUrl,
-                )
-                const thorInstance = initThor(driverInstance)
-                setDriver(driverInstance)
-                setConnex(thorInstance)
-            } catch (e) {
-                error(`Error initializing Thor Driver - !! ${e} !!`)
-            }
+    const driver = useRef<Driver>(createDriver(selectedNetwork))
+    const thor = useMemo(() => {
+        if (driver.current.genesis.id !== selectedNetwork.genesis.id) {
+            driver.current.close()
+            driver.current = createDriver(selectedNetwork)
         }
+
+        return newThor(driver.current)
     }, [selectedNetwork])
 
-    useEffect(() => {
-        if (connex?.genesis.id !== selectedNetwork.genesis.id) {
-            driver?.close()
-            initConnex()
-        }
-        return () => {
-            driver?.close()
-        }
-    }, [initConnex, connex, selectedNetwork.genesis, driver])
-
-    // Every 2 minutes we need to reinitialize the driver
-    // This is to keep the head value up to date
+    // "thor.status" is a getter function, so it has a constant reference, we need to use a state to trigger re-renders
+    const [status, setStatus] = useState<Connex.Thor.Status>(thor.status)
     useEffect(() => {
         const interval = setInterval(() => {
-            initConnex()
-        }, 120000)
+            if (thor.status.head !== status.head) {
+                setStatus(thor.status)
+            }
+        }, 200)
+
         return () => clearInterval(interval)
+    }, [thor, status])
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    if (!value) {
-        return <></>
-    }
+    const value = useMemo(() => {
+        return {
+            ...thor,
+            status,
+        }
+    }, [thor, status])
 
     return (
         <ConnexContext.Provider value={value}>
@@ -63,14 +49,8 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     )
 }
 
-const initDriver = async (url: string) => {
-    return await Driver.connect(new CustomNet(url))
-}
-
-const initThor = (currentDriver: Driver) => {
-    const driver = newThor(currentDriver)
-    return driver
-}
+const createDriver = (network: Network) =>
+    new Driver(new CustomNet(network.currentUrl), network.genesis)
 
 const useThor = () => {
     const context = React.useContext(ConnexContext)

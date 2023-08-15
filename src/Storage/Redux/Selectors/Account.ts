@@ -45,18 +45,29 @@ export const selectSelectedAccountAddress = createSelector(
 )
 
 /**
- * @returns the selected account
+ * @returns the selected account if there is one
  */
-export const selectSelectedAccount = createSelector(
+export const selectSelectedAccountOrNull = createSelector(
     selectAccounts,
     selectSelectedAccountAddress,
     (accounts, selectedAccountAddress) => {
-        const selectedAccount = accounts.find(account =>
+        return accounts.find(account =>
             AddressUtils.compareAddresses(
                 selectedAccountAddress,
                 account.address,
             ),
         )
+    },
+)
+
+/**
+ * @returns the selected account
+ * @throws if there is no selected account
+ */
+export const selectSelectedAccount = createSelector(
+    selectSelectedAccountOrNull,
+    selectSelectedAccountAddress,
+    (selectedAccount, selectedAccountAddress) => {
         if (!selectedAccount) {
             throw new Error(
                 `No account found for address ${selectedAccountAddress}`,

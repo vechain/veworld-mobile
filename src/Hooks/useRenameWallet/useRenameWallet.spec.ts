@@ -6,14 +6,9 @@ const { device1 } = TestHelpers.data
 
 describe("useRenameWallet", () => {
     it("should render correctly", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useRenameWallet(device1),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        await waitForNextUpdate()
+        const { result } = renderHook(() => useRenameWallet(device1), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current).toBeDefined()
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast, ConnexContextProvider } from "~Components"
+import { BaseToast, ConnexContext } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -11,6 +11,7 @@ import { configureStore } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { Platform } from "react-native"
+import TestHelpers from "./helpers"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -104,6 +105,7 @@ const getStore = (preloadedState: Partial<RootState>) =>
             ...preloadedState,
         },
     })
+
 export const TestWrapper = ({
     children,
     preloadedState,
@@ -114,7 +116,8 @@ export const TestWrapper = ({
     return (
         <Provider store={getStore(preloadedState)}>
             <GestureHandlerRootView>
-                <ConnexContextProvider>
+                <ConnexContext.Provider
+                    value={TestHelpers.thor.mockThorInstance({})}>
                     <BottomSheetModalProvider>
                         <NavigationProvider>
                             <TestTranslationProvider>
@@ -123,7 +126,7 @@ export const TestWrapper = ({
                         </NavigationProvider>
                     </BottomSheetModalProvider>
                     <BaseToast />
-                </ConnexContextProvider>
+                </ConnexContext.Provider>
             </GestureHandlerRootView>
         </Provider>
     )

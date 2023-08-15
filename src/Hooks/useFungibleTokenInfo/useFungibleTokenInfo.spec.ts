@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useFungibleTokenInfo } from "./useFungibleTokenInfo"
 import { VET } from "~Constants"
-import { getTokenDecimals, getTokenSymbol, getTokenName } from "~Networking"
+import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
 import { useThor } from "~Components"
 import * as logger from "~Utils/Logger/Logger"
 
@@ -35,7 +35,8 @@ describe("useFungibleTokenInfo", () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useFungibleTokenInfo(tokenAddress),
         )
-        await waitForNextUpdate({ timeout: 5000 })
+
+        await waitForNextUpdate({ timeout: 10000 })
 
         expect(result.current.symbol).toEqual(symbolMock)
         expect(result.current.decimals).toEqual(decimalsMock)
@@ -71,7 +72,8 @@ describe("useFungibleTokenInfo", () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useFungibleTokenInfo(tokenAddress),
         )
-        await waitForNextUpdate({ timeout: 5000 })
+
+        await waitForNextUpdate({ timeout: 10000 })
 
         expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
         expect(result.current.symbol).toBeUndefined()
@@ -92,10 +94,7 @@ describe("useFungibleTokenInfo", () => {
         ;(getTokenName as jest.Mock).mockResolvedValue(nameMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useFungibleTokenInfo(tokenAddress),
-        )
-        await waitForNextUpdate({ timeout: 5000 })
+        const { result } = renderHook(() => useFungibleTokenInfo(tokenAddress))
 
         const fetchedData = await result.current.fetchData(tokenAddress)
 

@@ -8,12 +8,8 @@ jest.mock("axios")
 const { vetTransaction1, dappTransaction1, nftTransaction1 } = TestHelpers.data
 describe("useSendTransaction", () => {
     it("should render correctly", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSendTransaction(jest.fn()),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
         })
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
@@ -22,12 +18,8 @@ describe("useSendTransaction", () => {
     })
 
     it("sendTransactionAndPerformUpdates should works as expected", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSendTransaction(jest.fn()),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
         })
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
@@ -40,12 +32,8 @@ describe("useSendTransaction", () => {
     })
 
     it("should handle dapp tx", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSendTransaction(jest.fn()),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
         })
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
@@ -57,12 +45,8 @@ describe("useSendTransaction", () => {
     })
 
     it("should handle NFT tx", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSendTransaction(jest.fn()),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
         })
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
@@ -74,13 +58,10 @@ describe("useSendTransaction", () => {
     })
 
     it("axios throws 403", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSendTransaction(jest.fn()),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
         })
+
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
         })
@@ -94,12 +75,8 @@ describe("useSendTransaction", () => {
     })
 
     it("axios throws unknown error", async () => {
-        const { result, waitForNextUpdate } = renderHook(
-            () => useSendTransaction(jest.fn()),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({
-            timeout: 5000,
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
         })
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),

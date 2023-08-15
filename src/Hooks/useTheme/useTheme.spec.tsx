@@ -10,56 +10,55 @@ describe("useTheme", () => {
         const preloadedState = {
             userPreferences: { theme: ThemeEnum.SYSTEM } as any,
         }
-        const { result, waitForNextUpdate } = renderHook(() => useTheme(), {
+        const { result } = renderHook(() => useTheme(), {
             wrapper: (({ children }: { children: React.ReactNode }) => (
                 <TestWrapper preloadedState={preloadedState}>
                     {children}
                 </TestWrapper>
             )) as any,
         })
-        await waitForNextUpdate({ timeout: 5000 })
         expect(result.current).toEqual(ColorTheme("light"))
     })
     it("should return the correct dark theme", async () => {
         const preloadedState = {
             userPreferences: { theme: ThemeEnum.DARK } as any,
         }
-        const { result, waitForNextUpdate } = renderHook(() => useTheme(), {
+        const { result } = renderHook(() => useTheme(), {
             wrapper: (({ children }: { children: React.ReactNode }) => (
                 <TestWrapper preloadedState={preloadedState}>
                     {children}
                 </TestWrapper>
             )) as any,
         })
-        await waitForNextUpdate({ timeout: 5000 })
+
         expect(result.current).toEqual(ColorTheme("dark"))
     })
     it("should return the correct light theme", async () => {
         const preloadedState = {
             userPreferences: { theme: ThemeEnum.LIGHT } as any,
         }
-        const { result, waitForNextUpdate } = renderHook(() => useTheme(), {
+        const { result } = renderHook(() => useTheme(), {
             wrapper: (({ children }: { children: React.ReactNode }) => (
                 <TestWrapper preloadedState={preloadedState}>
                     {children}
                 </TestWrapper>
             )) as any,
         })
-        await waitForNextUpdate({ timeout: 5000 })
+
         expect(result.current).toEqual(ColorTheme("light"))
     })
     it("should return the correct light theme if theme is null", async () => {
         const preloadedState = {
             userPreferences: { theme: null } as any,
         }
-        const { result, waitForNextUpdate } = renderHook(() => useTheme(), {
+        const { result } = renderHook(() => useTheme(), {
             wrapper: (({ children }: { children: React.ReactNode }) => (
                 <TestWrapper preloadedState={preloadedState}>
                     {children}
                 </TestWrapper>
             )) as any,
         })
-        await waitForNextUpdate({ timeout: 5000 })
+
         expect(result.current).toEqual(ColorTheme("light"))
     })
 })
@@ -72,11 +71,9 @@ describe("useThemedStyles", () => {
             },
         })
 
-        const { result, waitForNextUpdate } = renderHook(
-            () => useThemedStyles(mockStyles),
-            { wrapper: TestWrapper },
-        )
-        await waitForNextUpdate({ timeout: 5000 })
+        const { result } = renderHook(() => useThemedStyles(mockStyles), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current.styles).toEqual({
             container: {
