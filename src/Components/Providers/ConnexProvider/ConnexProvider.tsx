@@ -7,7 +7,9 @@ import { CustomNet } from "~Components/Providers/ConnexProvider/CustomNet"
 import { Network } from "~Model"
 
 type ConnexContextProviderProps = { children: React.ReactNode }
-const ConnexContext = React.createContext<Connex.Thor | undefined>(undefined)
+export const ConnexContext = React.createContext<Connex.Thor | undefined>(
+    undefined,
+)
 
 const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)

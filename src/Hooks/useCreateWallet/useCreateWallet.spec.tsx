@@ -99,11 +99,9 @@ jest.mock("~Storage/Redux/Selectors", () => ({
 describe("useCreateWallet", () => {
     describe("onCreateWallet", () => {
         it("should create a wallet with biometrics", async () => {
-            const { result, waitForNextUpdate } = renderHook(
-                () => useCreateWallet(),
-                { wrapper: TestWrapper },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useCreateWallet(), {
+                wrapper: TestWrapper,
+            })
             const { onCreateWallet } = result.current
 
             await onCreateWallet({ mnemonic: mnemonic.join(" ") })
@@ -129,11 +127,9 @@ describe("useCreateWallet", () => {
         })
 
         it("should create wallet with password", async () => {
-            const { result, waitForNextUpdate } = renderHook(
-                () => useCreateWallet(),
-                { wrapper: TestWrapper },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useCreateWallet(), {
+                wrapper: TestWrapper,
+            })
             const onCreateWallet = result.current.onCreateWallet
             await onCreateWallet({
                 mnemonic: mnemonic.join(" "),
@@ -162,11 +158,9 @@ describe("useCreateWallet", () => {
 
     describe("onCreateLedgerWallet", () => {
         it("should create wallet with Ledger", async () => {
-            const { result, waitForNextUpdate } = renderHook(
-                () => useCreateWallet(),
-                { wrapper: TestWrapper },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useCreateWallet(), {
+                wrapper: TestWrapper,
+            })
             const { onCreateLedgerWallet } = result.current
             await onCreateLedgerWallet({
                 newLedger: ledger,

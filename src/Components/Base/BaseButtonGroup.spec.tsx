@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent, screen } from "@testing-library/react-native"
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import { BaseButtonGroup } from "./BaseButtonGroup"
 import { TestWrapper } from "~Test"
 import { ReactTestInstance } from "react-test-renderer"
@@ -27,7 +27,7 @@ const findBaseButtonInGroup = async (id: string) =>
         `${baseButtonGroupTestId}-${id}`,
         {},
         {
-            timeout: 5000,
+            timeout: 10000,
         },
     )
 

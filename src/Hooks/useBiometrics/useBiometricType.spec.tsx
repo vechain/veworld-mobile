@@ -12,13 +12,9 @@ jest.mock("./useBiometrics", () => ({
 describe("useBiometricType", () => {
     describe("iOS", () => {
         it("should returns Biometrics", async () => {
-            const { result, waitForNextUpdate } = renderHook(
-                () => useBiometricType(),
-                {
-                    wrapper: TestWrapper,
-                },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useBiometricType(), {
+                wrapper: TestWrapper,
+            })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -30,13 +26,9 @@ describe("useBiometricType", () => {
                 authTypeAvailable: AuthenticationType.FACIAL_RECOGNITION,
             })
 
-            const { result, waitForNextUpdate } = renderHook(
-                () => useBiometricType(),
-                {
-                    wrapper: TestWrapper,
-                },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useBiometricType(), {
+                wrapper: TestWrapper,
+            })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -47,13 +39,9 @@ describe("useBiometricType", () => {
                 currentSecurityLevel: SecurityLevelType.BIOMETRIC,
                 authTypeAvailable: AuthenticationType.FINGERPRINT,
             })
-            const { result, waitForNextUpdate } = renderHook(
-                () => useBiometricType(),
-                {
-                    wrapper: TestWrapper,
-                },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useBiometricType(), {
+                wrapper: TestWrapper,
+            })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -70,13 +58,9 @@ describe("useBiometricType", () => {
                 currentSecurityLevel: SecurityLevelType.BIOMETRIC,
                 authTypeAvailable: AuthenticationType.FINGERPRINT,
             })
-            const { result, waitForNextUpdate } = renderHook(
-                () => useBiometricType(),
-                {
-                    wrapper: TestWrapper,
-                },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useBiometricType(), {
+                wrapper: TestWrapper,
+            })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -87,13 +71,9 @@ describe("useBiometricType", () => {
                 currentSecurityLevel: SecurityLevelType.BIOMETRIC,
                 authTypeAvailable: AuthenticationType.FACIAL_RECOGNITION,
             })
-            const { result, waitForNextUpdate } = renderHook(
-                () => useBiometricType(),
-                {
-                    wrapper: TestWrapper,
-                },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useBiometricType(), {
+                wrapper: TestWrapper,
+            })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })
@@ -103,13 +83,9 @@ describe("useBiometricType", () => {
             ;(useBiometrics as jest.Mock).mockReturnValueOnce({
                 currentSecurityLevel: SecurityLevelType.SECRET,
             })
-            const { result, waitForNextUpdate } = renderHook(
-                () => useBiometricType(),
-                {
-                    wrapper: TestWrapper,
-                },
-            )
-            await waitForNextUpdate({ timeout: 5000 })
+            const { result } = renderHook(() => useBiometricType(), {
+                wrapper: TestWrapper,
+            })
             await waitFor(() => {
                 return expect(result.current).toBeTruthy()
             })

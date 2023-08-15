@@ -26,13 +26,10 @@ describe("useDeviceUtils", () => {
             device1,
             device2,
         ])
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDeviceUtils(),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-        await waitForNextUpdate({ timeout: 5000 })
+        const { result } = renderHook(() => useDeviceUtils(), {
+            wrapper: TestWrapper,
+        })
+
         const mnemonic =
             "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry"
         const { device, wallet } =
@@ -60,13 +57,10 @@ describe("useDeviceUtils", () => {
                 index: 2,
             },
         ])
-        const { result, waitForNextUpdate } = renderHook(
-            () => useDeviceUtils(),
-            {
-                wrapper: TestWrapper,
-            },
-        )
-        await waitForNextUpdate({ timeout: 5000 })
+        const { result } = renderHook(() => useDeviceUtils(), {
+            wrapper: TestWrapper,
+        })
+
         const mnemonic =
             "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry"
         expect(() => {

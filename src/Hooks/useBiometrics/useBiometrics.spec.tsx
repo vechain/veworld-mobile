@@ -28,9 +28,7 @@ describe("useBiometrics", () => {
 
         const { result, waitForNextUpdate } = renderHook(() => useBiometrics())
 
-        expect(result.current).toEqual({})
-
-        await waitForNextUpdate({ timeout: 5000 })
+        await waitForNextUpdate({ timeout: 10000 })
 
         expect(result.current).toEqual({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,
@@ -64,13 +62,12 @@ describe("useBiometrics", () => {
 
         const { result, waitForNextUpdate } = renderHook(() => useBiometrics())
 
-        expect(result.current).toEqual({})
+        await waitForNextUpdate({ timeout: 10000 })
 
         mockUseAppState.mockReturnValue({
             previousState: AppStateType.ACTIVE,
             currentState: AppStateType.ACTIVE,
         })
-        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current).toEqual({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,

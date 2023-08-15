@@ -17,10 +17,9 @@ describe("useAppInitState", () => {
             () => false,
         )
 
-        const { result, waitForNextUpdate } = renderHook(useAppInitState, {
+        const { result } = renderHook(useAppInitState, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate({ timeout: 5000 })
         expect(result.current).toEqual(AppInitState.INIT_STATE)
     })
 
@@ -29,10 +28,9 @@ describe("useAppInitState", () => {
             () => true,
         )
 
-        const { result, waitForNextUpdate } = renderHook(useAppInitState, {
+        const { result } = renderHook(useAppInitState, {
             wrapper: TestWrapper,
         })
-        await waitForNextUpdate({ timeout: 5000 })
         expect(result.current).toEqual(AppInitState.ONBOARDED_STATE)
     })
 })

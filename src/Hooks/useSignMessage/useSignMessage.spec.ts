@@ -51,16 +51,13 @@ describe("useSignMessage", () => {
         mockAccount(account1D1)
         mockDevice(device1)
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useSignMessage({
                     hash: messageToSign,
                 }),
             { wrapper: TestWrapper },
         )
-        await waitForNextUpdate({
-            timeout: 5000,
-        })
         expect(result.current).toEqual({
             signMessage: expect.any(Function),
         })
@@ -74,15 +71,13 @@ describe("useSignMessage", () => {
         mockAccount(firstLedgerAccount)
         mockDevice(ledgerDevice)
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useSignMessage({
                     hash: messageToSign,
                 }),
             { wrapper: TestWrapper },
         )
-
-        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current).toEqual({
             signMessage: expect.any(Function),
@@ -100,7 +95,7 @@ describe("useSignMessage", () => {
             wallet: "",
         })
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useSignMessage({
                     hash: messageToSign,
@@ -108,8 +103,6 @@ describe("useSignMessage", () => {
 
             { wrapper: TestWrapper },
         )
-
-        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current).toEqual({
             signMessage: expect.any(Function),
