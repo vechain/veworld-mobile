@@ -32,7 +32,11 @@ describe("useFungibleTokenInfo", () => {
         ;(useThor as jest.Mock).mockReturnValue(thor)
         ;(getTokenName as jest.Mock).mockResolvedValue(nameMock)
 
-        const { result } = renderHook(() => useFungibleTokenInfo(tokenAddress))
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useFungibleTokenInfo(tokenAddress),
+        )
+
+        await waitForNextUpdate({ timeout: 10000 })
 
         expect(result.current.symbol).toEqual(symbolMock)
         expect(result.current.decimals).toEqual(decimalsMock)
@@ -65,7 +69,11 @@ describe("useFungibleTokenInfo", () => {
 
         const consoleErrorSpy = jest.spyOn(logger, "error")
 
-        const { result } = renderHook(() => useFungibleTokenInfo(tokenAddress))
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useFungibleTokenInfo(tokenAddress),
+        )
+
+        await waitForNextUpdate({ timeout: 10000 })
 
         expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
         expect(result.current.symbol).toBeUndefined()
