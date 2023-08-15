@@ -8,6 +8,7 @@ import { Subscription as TransportSubscription } from "@ledgerhq/hw-transport"
 import { Platform } from "react-native"
 
 type Props = {
+    readyToScan?: boolean
     deviceId?: string
     onDevice?: (device: ConnectedLedgerDevice) => void
 }
@@ -17,7 +18,11 @@ type SubscriptionEvent = {
     descriptor: Device | null
     deviceModel: DeviceModel
 }
-export const useLedgerSubscription = ({ deviceId, onDevice }: Props) => {
+export const useLedgerSubscription = ({
+    deviceId,
+    onDevice,
+    readyToScan = true,
+}: Props) => {
     const deviceSubscription = useRef<TransportSubscription | undefined>(
         undefined,
     )
@@ -78,6 +83,8 @@ export const useLedgerSubscription = ({ deviceId, onDevice }: Props) => {
     }, [])
 
     useEffect(() => {
+        if (!readyToScan) return
+
         startSubscription()
 
         return () => {
@@ -87,7 +94,7 @@ export const useLedgerSubscription = ({ deviceId, onDevice }: Props) => {
                 deviceSubscription.current.unsubscribe()
             }
         }
-    }, [startSubscription])
+    }, [startSubscription, readyToScan])
 
     return {
         availableDevices,

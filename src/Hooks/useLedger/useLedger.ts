@@ -5,6 +5,7 @@ import { debug, error, info, warn } from "~Utils/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerUtils } from "~Utils"
 import { useLedgerSubscription } from "~Hooks"
+// import { listen } from "@ledgerhq/logs"
 
 /**
  * useLedger is a custom react hook for interacting with ledger devices
@@ -32,7 +33,7 @@ export const useLedger = ({
     onConnectionError?: (err: LEDGER_ERROR_CODES) => void
 }): UseLedgerProps => {
     // useEffect(() => {
-    //     LedgerLogs.listen(log => {
+    //     listen(log => {
     //         debug("ledger:log", log)
     //     })
     // }, [])

@@ -23,6 +23,7 @@ import * as Haptics from "expo-haptics"
 import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
 import { useAnalyticTracking, useLedgerSubscription } from "~Hooks"
 import { AnalyticsEvent } from "~Constants"
+import { PlatformUtils } from "~Utils"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
@@ -56,8 +57,15 @@ export const SelectLedgerDevice = () => {
         [selectedDevice],
     )
 
+    const readyToScan = useMemo(() => {
+        if (PlatformUtils.isAndroid()) {
+            return androidPermissionsGranted
+        } else return true
+    }, [androidPermissionsGranted])
+
     const { availableDevices } = useLedgerSubscription({
         onDevice,
+        readyToScan,
     })
 
     const renderItem = useCallback(
