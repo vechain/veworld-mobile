@@ -12,8 +12,6 @@ type Props = {
     testID?: string
 }
 
-const SLIDER_OFFSET = 3
-
 export const BaseRange = ({
     value,
     onChange,
@@ -33,12 +31,8 @@ export const BaseRange = ({
                 let percentage = (markValue / maximumValue) * 100
                 let left: number | string = `${percentage}%`
                 let right: number | string = "auto"
-                if (percentage === 0) {
-                    left = SLIDER_OFFSET
-                }
-                if (percentage === 100) {
-                    left = "auto"
-                    right = SLIDER_OFFSET
+                if (percentage === 0 || percentage === 100) {
+                    return null
                 }
                 return (
                     <View

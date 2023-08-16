@@ -547,7 +547,7 @@ const en: BaseTranslation = {
     SEND_TOKEN_SUBTITLE: "Send your token",
     SEND_TOKEN_SELECT_ASSET: "Select the asset that you want to transfer",
     SEND_CURRENT_BALANCE: "Currency balance",
-    SEND_BALANCE_PERCENTAGE: "Balance percentage",
+    SEND_BALANCE_PERCENTAGE: "Balance percentage: {percentage: string}",
     SEND_RANGE_ZERO: "0%",
     SEND_RANGE_MAX: "MAX",
     SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
