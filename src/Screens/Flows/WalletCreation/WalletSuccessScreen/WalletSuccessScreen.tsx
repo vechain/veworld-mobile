@@ -80,7 +80,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         }
     }, [nav])
 
-    // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/772) do not authenticate user if ledger ?
     const onIdentityConfirmed = useCallback(
         async (userPassword?: string) => {
             if (!mnemonic && !newLedger)
