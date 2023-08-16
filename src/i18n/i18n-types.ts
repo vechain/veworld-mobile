@@ -1853,9 +1853,10 @@ type RootTranslation = {
 	 */
 	SEND_CURRENT_BALANCE: string
 	/**
-	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e
+	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e​:​ ​{​p​e​r​c​e​n​t​a​g​e​}
+	 * @param {string} percentage
 	 */
-	SEND_BALANCE_PERCENTAGE: string
+	SEND_BALANCE_PERCENTAGE: RequiredParams<'percentage'>
 	/**
 	 * 0​%
 	 */
@@ -4212,9 +4213,9 @@ Please, try again later.
 	 */
 	SEND_CURRENT_BALANCE: () => LocalizedString
 	/**
-	 * Balance percentage
+	 * Balance percentage: {percentage}
 	 */
-	SEND_BALANCE_PERCENTAGE: () => LocalizedString
+	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
 	/**
 	 * 0%
 	 */
